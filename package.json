@@ -19,9 +19,9 @@
     "remove:ios:build": "cd ios && rm -rf build",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "ios:iPad:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
-    "ios:iPad:11": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
-    "ios:iPad:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\""
+    "ios:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
+    "ios:11": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
+    "ios:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\""
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",

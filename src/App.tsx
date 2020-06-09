@@ -1,19 +1,21 @@
-import React, { Fragment } from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import React from "react";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-declare const global: { HermesInternal: null | {} };
+import { RootNavigator } from "./Navigator";
+import { flexChild } from "./styles";
 
-const App = () => {
+export const App = () => {
   return (
-    <Fragment>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <View>
-          <Text>KenangaMobile</Text>
-        </View>
-      </SafeAreaView>
-    </Fragment>
+    <SafeAreaProvider>
+      {Platform.select({
+        android: <RootNavigator />,
+        ios: (
+          <KeyboardAvoidingView behavior="padding" style={flexChild}>
+            <RootNavigator />
+          </KeyboardAvoidingView>
+        ),
+      })}
+    </SafeAreaProvider>
   );
 };
-
-export default App;

@@ -1,1 +1,1 @@
-export * from './family';
+export * from "./family";

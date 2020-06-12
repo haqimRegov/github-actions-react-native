@@ -17,16 +17,17 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* KenangaMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* KenangaMobileTests.m */; };
-		AC0BBF7F56D0C7A89AA3C2B9 /* libPods-KenangaMobile-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C461A08DA8E0511E2886CCF /* libPods-KenangaMobile-tvOSTests.a */; };
-		BDD16E87B10D36FAB0F66B08 /* libPods-KenangaMobile-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850E2BA5023943AD500A7D58 /* libPods-KenangaMobile-tvOS.a */; };
-		F36032F1754858EF1ADFC30B /* libPods-KenangaMobile-KenangaMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F298DCA68CF27D826B708234 /* libPods-KenangaMobile-KenangaMobileTests.a */; };
-		3997ABD1A24446E8BF98E2F9 /* NunitoSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88CA82F9767A48D3A7B629B3 /* NunitoSans-Black.ttf */; };
-		C3180AFA60FD455CB59C09D6 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD319FF31E7B4B0CB564EE70 /* NunitoSans-Bold.ttf */; };
 		2EAD7B6A431742D2A90E5201 /* NunitoSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA16E07325C148EAB67FA8A1 /* NunitoSans-ExtraBold.ttf */; };
-		E80BFD93E7F6450B9278BE99 /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55FD8C1CDCC04560B5A4A76E /* NunitoSans-ExtraLight.ttf */; };
+		3997ABD1A24446E8BF98E2F9 /* NunitoSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88CA82F9767A48D3A7B629B3 /* NunitoSans-Black.ttf */; };
+		5D350AD4DB3F402F985A2EA1 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 80E41ADA8E0940E8B292D2A1 /* icomoon.ttf */; };
 		88282E28B5D54ADFA5679BCA /* NunitoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62A1E703C12C4E6EB85AA15A /* NunitoSans-Light.ttf */; };
 		9DD906FBF0ED455E8EB232AF /* NunitoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD4D1DEF13BF4E2F8BDEE5D4 /* NunitoSans-Regular.ttf */; };
+		AC0BBF7F56D0C7A89AA3C2B9 /* libPods-KenangaMobile-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C461A08DA8E0511E2886CCF /* libPods-KenangaMobile-tvOSTests.a */; };
+		BDD16E87B10D36FAB0F66B08 /* libPods-KenangaMobile-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850E2BA5023943AD500A7D58 /* libPods-KenangaMobile-tvOS.a */; };
+		C3180AFA60FD455CB59C09D6 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD319FF31E7B4B0CB564EE70 /* NunitoSans-Bold.ttf */; };
+		E80BFD93E7F6450B9278BE99 /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55FD8C1CDCC04560B5A4A76E /* NunitoSans-ExtraLight.ttf */; };
 		EBAC35E44ACF47E48E35C57C /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 085148C9D2104ADBAC091FFE /* NunitoSans-SemiBold.ttf */; };
+		F36032F1754858EF1ADFC30B /* libPods-KenangaMobile-KenangaMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F298DCA68CF27D826B708234 /* libPods-KenangaMobile-KenangaMobileTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		00E356EE1AD99517003FC87E /* KenangaMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KenangaMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* KenangaMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KenangaMobileTests.m; sourceTree = "<group>"; };
+		085148C9D2104ADBAC091FFE /* NunitoSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-SemiBold.ttf"; path = "../assets/fonts/NunitoSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		12729651AA24AC0DF6B36418 /* Pods-KenangaMobile-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KenangaMobile-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-KenangaMobile-tvOS/Pods-KenangaMobile-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* KenangaMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KenangaMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = KenangaMobile/AppDelegate.h; sourceTree = "<group>"; };
@@ -65,22 +67,22 @@
 		2D02E4901E0B4A5D006451C7 /* KenangaMobile-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KenangaMobile-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47E2618B2A676C0625DFA1AD /* Pods-KenangaMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KenangaMobile.debug.xcconfig"; path = "Target Support Files/Pods-KenangaMobile/Pods-KenangaMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		4C461A08DA8E0511E2886CCF /* libPods-KenangaMobile-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KenangaMobile-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55FD8C1CDCC04560B5A4A76E /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraLight.ttf"; path = "../assets/fonts/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
+		62A1E703C12C4E6EB85AA15A /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Light.ttf"; path = "../assets/fonts/NunitoSans-Light.ttf"; sourceTree = "<group>"; };
 		7442B3F1D392F0B43AE4FFCD /* Pods-KenangaMobile-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KenangaMobile-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-KenangaMobile-tvOSTests/Pods-KenangaMobile-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		748FA29FF3552CE48C49A742 /* libPods-KenangaMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KenangaMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		80E41ADA8E0940E8B292D2A1 /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = ../assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		850E2BA5023943AD500A7D58 /* libPods-KenangaMobile-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KenangaMobile-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		88CA82F9767A48D3A7B629B3 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Black.ttf"; path = "../assets/fonts/NunitoSans-Black.ttf"; sourceTree = "<group>"; };
 		A858C96AADF7F63E8AEF2E74 /* Pods-KenangaMobile-KenangaMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KenangaMobile-KenangaMobileTests.release.xcconfig"; path = "Target Support Files/Pods-KenangaMobile-KenangaMobileTests/Pods-KenangaMobile-KenangaMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		BD319FF31E7B4B0CB564EE70 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Bold.ttf"; path = "../assets/fonts/NunitoSans-Bold.ttf"; sourceTree = "<group>"; };
 		C69B14C83E8181E942C67F40 /* Pods-KenangaMobile-KenangaMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KenangaMobile-KenangaMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-KenangaMobile-KenangaMobileTests/Pods-KenangaMobile-KenangaMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DA16E07325C148EAB67FA8A1 /* NunitoSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraBold.ttf"; path = "../assets/fonts/NunitoSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		E2349F656F8600919D9F1666 /* Pods-KenangaMobile-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KenangaMobile-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-KenangaMobile-tvOSTests/Pods-KenangaMobile-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F298DCA68CF27D826B708234 /* libPods-KenangaMobile-KenangaMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KenangaMobile-KenangaMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		88CA82F9767A48D3A7B629B3 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Black.ttf"; path = "../assets/fonts/NunitoSans-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BD319FF31E7B4B0CB564EE70 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Bold.ttf"; path = "../assets/fonts/NunitoSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DA16E07325C148EAB67FA8A1 /* NunitoSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "NunitoSans-ExtraBold.ttf"; path = "../assets/fonts/NunitoSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		55FD8C1CDCC04560B5A4A76E /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; name = "NunitoSans-ExtraLight.ttf"; path = "../assets/fonts/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		62A1E703C12C4E6EB85AA15A /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Light.ttf"; path = "../assets/fonts/NunitoSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FD4D1DEF13BF4E2F8BDEE5D4 /* NunitoSans-Regular.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Regular.ttf"; path = "../assets/fonts/NunitoSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		085148C9D2104ADBAC091FFE /* NunitoSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "NunitoSans-SemiBold.ttf"; path = "../assets/fonts/NunitoSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FD4D1DEF13BF4E2F8BDEE5D4 /* NunitoSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Regular.ttf"; path = "../assets/fonts/NunitoSans-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,7 +215,7 @@
 			sourceTree = "<group>";
 		};
 		99C1744F36DF471689265084 /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				88CA82F9767A48D3A7B629B3 /* NunitoSans-Black.ttf */,
 				BD319FF31E7B4B0CB564EE70 /* NunitoSans-Bold.ttf */,
@@ -222,10 +224,11 @@
 				62A1E703C12C4E6EB85AA15A /* NunitoSans-Light.ttf */,
 				FD4D1DEF13BF4E2F8BDEE5D4 /* NunitoSans-Regular.ttf */,
 				085148C9D2104ADBAC091FFE /* NunitoSans-SemiBold.ttf */,
+				80E41ADA8E0940E8B292D2A1 /* icomoon.ttf */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
 			path = "";
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -238,6 +241,7 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
+				9D459E44A375BE3066A77F8B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -259,6 +263,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				864EF58F8957D8F19B59B91D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -376,6 +381,7 @@
 				88282E28B5D54ADFA5679BCA /* NunitoSans-Light.ttf in Resources */,
 				9DD906FBF0ED455E8EB232AF /* NunitoSans-Regular.ttf in Resources */,
 				EBAC35E44ACF47E48E35C57C /* NunitoSans-SemiBold.ttf in Resources */,
+				5D350AD4DB3F402F985A2EA1 /* icomoon.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +495,102 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		864EF58F8957D8F19B59B91D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KenangaMobile/Pods-KenangaMobile-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KenangaMobile/Pods-KenangaMobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9D459E44A375BE3066A77F8B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KenangaMobile-KenangaMobileTests/Pods-KenangaMobile-KenangaMobileTests-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KenangaMobile-KenangaMobileTests/Pods-KenangaMobile-KenangaMobileTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CF8BBB8D85223C95DA2AD2B5 /* [CP] Check Pods Manifest.lock */ = {

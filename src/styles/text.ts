@@ -1,6 +1,6 @@
 import { TextStyle } from "react-native";
 
-import { RobotoSemiBold } from "../constants/fonts";
+import { NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorWhite } from "./colors";
 import { sh12, sh13, sh14, sh16, sh20, sh24, sh32 } from "./sizes";
 
@@ -15,14 +15,14 @@ export const fsUnderline: TextStyle = {
 // TODO change to proper font
 export const fs12MedBlack: TextStyle = {
   color: colorBlack._1,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh12,
 };
 
 // TODO change to proper font
 export const fs13MedBlue2: TextStyle = {
   color: colorBlue._2,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh13,
   lineHeight: sh16,
 };
@@ -30,7 +30,7 @@ export const fs13MedBlue2: TextStyle = {
 // TODO change to proper font
 export const fs14MedWhite: TextStyle = {
   color: colorWhite._1,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh14,
   lineHeight: sh20,
 };
@@ -38,7 +38,7 @@ export const fs14MedWhite: TextStyle = {
 // TODO change to proper font
 export const fs24MedBlack: TextStyle = {
   color: colorBlack._1,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh24,
   lineHeight: sh32,
 };

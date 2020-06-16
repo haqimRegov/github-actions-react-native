@@ -1,16 +1,18 @@
 {
   "cSpell.words": [
+    "FATCA",
     "Kenanga",
-    "NRIC",
     "Nunito",
-    "Roboto",
     "Touchables",
     "animatable",
     "downlevel",
     "esnext",
+    "gradlew",
+    "icomoon",
     "plusplus",
     "tslib"
   ],
+    "NRIC",
   "editor.formatOnSave": true,
   "javascript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.quoteStyle": "double",

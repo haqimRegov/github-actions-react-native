@@ -12,10 +12,10 @@ import {
   colorWhite,
   flexChild,
   flexRow,
+  fs13SemiBoldBlue2,
+  fs24SemiBoldBlack,
   fs12MedBlack,
-  fs13MedBlue2,
   fs16MedBlack,
-  fs24MedBlack,
   fsAlignCenter,
   px,
   sh10,
@@ -70,7 +70,12 @@ const SAMPLE_CLIENT_DETAILS: ISampleClientDetails[] = [
     output: OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
   },
 ];
-export const LoginPage = () => {
+
+interface LoginPageProps {
+  navigation: StackNavigationProp<RootNavigatorType>;
+}
+
+export const LoginPage = ({ navigation }: LoginPageProps) => {
   const container: ViewStyle = { ...centerHV, ...flexChild, backgroundColor: colorWhite._1 };
   const formContainer: ViewStyle = { ...px(sw80), ...shadow, backgroundColor: colorWhite._1 };
   const inputStyle: ViewStyle = { minWidth: sw304 };
@@ -90,6 +95,17 @@ export const LoginPage = () => {
     Alert.alert("PrivacyTerms");
   };
 
+
+  const handleLogin = () => {
+    navigation.navigate("Onboarding");
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{ name: "Dashboard" }],
+    //   }),
+    // );
+  };
+
   return (
     <SafeAreaPage>
       <ScrollView contentContainerStyle={container} keyboardShouldPersistTaps="handled">
@@ -97,9 +113,9 @@ export const LoginPage = () => {
           <CustomSpacer space={sh23} />
           <Image source={LocalAssets.logo.kib} style={logoStyle} />
           <CustomSpacer space={sh11} />
-          <Text style={{ ...fs24MedBlack, ...fsAlignCenter }}>{TITLE}</Text>
+          <Text style={{ ...fs24SemiBoldBlack, ...fsAlignCenter }}>{TITLE}</Text>
           <CustomSpacer space={sh10} />
-          <LinkText onPress={handlePrivacyTerms} style={{ ...fs13MedBlue2, ...fsAlignCenter }} text={PRIVACY_TERMS} />
+          <LinkText onPress={handlePrivacyTerms} style={{ ...fs13SemiBoldBlue2, ...fsAlignCenter }} text={PRIVACY_TERMS} />
           <CustomSpacer space={sh44} />
           <CustomTextInput placeholder={INPUT_AGENT_CODE} viewStyle={inputStyle} />
           <CustomSpacer space={sh24} />

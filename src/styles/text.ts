@@ -30,7 +30,7 @@ export const fs13MedBlue2: TextStyle = {
 // TODO change to proper font
 export const fs14MedBlack: TextStyle = {
   color: colorBlack._1,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh14,
   lineHeight: sh20,
 };
@@ -46,7 +46,7 @@ export const fs14MedWhite: TextStyle = {
 // TODO change to proper font
 export const fs20MedWhite: TextStyle = {
   color: colorWhite._1,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh20,
   lineHeight: sh24,
 };
@@ -54,7 +54,7 @@ export const fs20MedWhite: TextStyle = {
 // TODO change to proper font
 export const fs20MedBlack: TextStyle = {
   color: colorBlack._1,
-  fontFamily: RobotoSemiBold,
+  fontFamily: NunitoSemiBold,
   fontSize: sh20,
   lineHeight: sh24,
 };

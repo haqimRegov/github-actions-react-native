@@ -21,5 +21,3 @@ export const colorRed = {
 export const colorWhite = {
   _1: "#FFFFFF",
 };
-
-

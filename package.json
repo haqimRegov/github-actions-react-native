@@ -10,7 +10,7 @@
     "build": "npm run tsc",
     "build:android:debug": "cd android && ./gradlew assembleDebug",
     "build:android:release": "cd android && ./gradlew assembleRelease",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/fredAustralia/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/KenangaMobile/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
     "clean:android": "cd android/app && rm -rf build",
     "clean:pods": "cd ios && rm -rf pods && pod install",
     "clean:ios": "npm run clean:pods && cd ios && rm -rf build",
@@ -21,7 +21,8 @@
     "ios": "react-native run-ios",
     "ios:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
     "ios:11": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
-    "ios:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\""
+    "ios:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\"",
+    "fix:collapsible": "cp ./fixes/react-native-collapsible ./node_modules/react-native-collapsible/Collapsible.js"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
@@ -29,6 +30,7 @@
     "@react-navigation/stack": "^5.4.1",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-collapsible": "^1.5.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal": "^11.5.6",
     "react-native-reanimated": "^1.9.0",

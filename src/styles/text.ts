@@ -44,6 +44,13 @@ export const fs14MedWhite: TextStyle = {
 };
 
 // TODO change to proper font
+export const fs16MedBlack: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+  // lineHeight: sh20,
+};
+// TODO change to proper font
 export const fs20MedWhite: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoSemiBold,

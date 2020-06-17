@@ -7,3 +7,5 @@ export const IcoMoon = createIconSetFromIcoMoon(IcoMoonSelection, "icomoon", "ic
 export const listIconNames = () => {
   return IcoMoonSelection.icons.map((icon) => icon.properties.name);
 };
+
+// TODO fingerprint icon not working in android

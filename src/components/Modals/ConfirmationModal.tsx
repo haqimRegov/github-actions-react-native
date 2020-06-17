@@ -28,7 +28,12 @@ interface ModalProps {
 }
 
 export const ConformationModal = ({ buttons, children, title, visible, handleClose }: ModalProps) => {
-  const ModelContainer: ViewStyle = { backgroundColor: colorGray._2, width: sw482, height: sw539, borderRadius: sw5 };
+  const modelContainer: ViewStyle = {
+    backgroundColor: colorGray._2,
+    borderRadius: sw5,
+    height: sw539,
+    width: sw482,
+  };
   const padding: ViewStyle = {
     ...py(sh24),
     ...px(sw24),
@@ -43,7 +48,7 @@ export const ConformationModal = ({ buttons, children, title, visible, handleClo
   };
   return (
     <Modal isVisible={visible} style={centerHV}>
-      <View style={ModelContainer}>
+      <View style={modelContainer}>
         <View style={padding}>
           <View style={flexRow}>
             <Text style={fs16MedBlack}>{title}</Text>

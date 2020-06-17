@@ -1,12 +1,17 @@
 export const english = {
   PAGE: {
     LOGIN: {
-      BUTTON_LOGIN: "Login",
+      BUTTON_LOGIN: "Login Now",
       FORGOT_PASSWORD: "Forgot Password?",
-      INPUT_AGENT_CODE: "Enter Agent Code",
-      INPUT_PASSWORD: "Enter your Password",
-      PRIVACY_TERMS: "Privacy Terms",
-      TITLE: "Login into your account",
+      HEADING: "Welcome!",
+      LABEL_AGENT_CODE: "Agent Code",
+      LABEL_PASSWORD: "Password",
+      LANGUAGE_BAHASA: "BM",
+      LANGUAGE_ENGLISH: "EN",
+      PRIVACY_POLICY: "Privacy Policy",
+      REMEMBER_ME: "Remember Me",
+      SUBHEADING: "Let's login to your account.",
+      TERMS_AND_CONDITIONS: "Terms & Conditions",
     },
     MODAL: {
       BUTTON_CONFIRM: "Confirm",

@@ -30,7 +30,6 @@ import {
   sw304,
   sw80,
   sw205,
-  sh48,
 } from "../styles";
 
 const { INPUT_AGENT_CODE, INPUT_PASSWORD, BUTTON_LOGIN, FORGOT_PASSWORD, TITLE, PRIVACY_TERMS } = Language.PAGE.LOGIN;
@@ -49,27 +48,27 @@ const {
 } = Language.PAGE.MODAL;
 const SAMPLE_CLIENT_DETAILS = [
   {
-    Data: {
-      Title: OUTPUT_FULL_NAME,
-      Output: OUTPUT_FULL_NAME_PLACEHOLDER,
+    data: {
+      title: OUTPUT_FULL_NAME,
+      output: OUTPUT_FULL_NAME_PLACEHOLDER,
     },
   },
   {
-    Data: {
-      Title: OUTPUT_NRIC_PASSPORT,
-      Output: OUTPUT_NRIC_PASSPORT_PLACEHOLDER,
+    data: {
+      title: OUTPUT_NRIC_PASSPORT,
+      output: OUTPUT_NRIC_PASSPORT_PLACEHOLDER,
     },
   },
   {
-    Data: {
-      Title: OUTPUT_GENDER,
-      Output: OUTPUT_GENDER_PLACEHOLDER,
+    data: {
+      title: OUTPUT_GENDER,
+      output: OUTPUT_GENDER_PLACEHOLDER,
     },
   },
   {
-    Data: {
-      Title: OUTPUT_DATE_OF_BIRTH,
-      Output: OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
+    data: {
+      title: OUTPUT_DATE_OF_BIRTH,
+      output: OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
     },
   },
 ];
@@ -78,16 +77,12 @@ export const LoginPage = () => {
   const formContainer: ViewStyle = { ...px(sw80), ...shadow, backgroundColor: colorWhite._1 };
   const inputStyle: ViewStyle = { minWidth: sw304 };
   const logoStyle: ImageStyle = { ...alignSelfCenter, height: sh80, resizeMode: "contain", width: sw200 };
-  const [ModalVisible, setModalVisible] = useState<boolean>(false);
-  const buttonStyle: ViewStyle = { width: sw205, height: sh48 };
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const buttonStyle: ViewStyle = { width: sw205 };
 
-  const handleModel = () => {
-    setModalVisible(!ModalVisible);
+  const handleModal = () => {
+    setModalVisible(!modalVisible);
   };
-
-  // const handleLogin = () => {
-  //   Alert.alert("Login");
-  // };
 
   const handleForgotPassword = () => {
     Alert.alert("ForgotPassword");
@@ -115,24 +110,24 @@ export const LoginPage = () => {
           <View style={{ ...flexRow, ...centerVertical }}>
             <LinkText onPress={handleForgotPassword} text={FORGOT_PASSWORD} />
             <CustomFlexSpacer />
-            <RoundedButton onPress={handleModel} text={BUTTON_LOGIN} />
+            <RoundedButton onPress={handleModal} text={BUTTON_LOGIN} />
           </View>
           <CustomSpacer space={sh80} />
         </View>
       </ScrollView>
       <ConformationModal
-        visible={ModalVisible}
-        handleClose={handleModel}
         buttons={[
-          { onPress: handleModel, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: buttonStyle },
-          { onPress: handleModel, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
+          { onPress: handleModal, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: buttonStyle },
+          { onPress: handleModal, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
         ]}
-        title={CONFIRM_YOUR_DETAILS}>
+        handleClose={handleModal}
+        title={CONFIRM_YOUR_DETAILS}
+        visible={modalVisible}>
         <Fragment>
-          {SAMPLE_CLIENT_DETAILS.map(({ Data }) => (
+          {SAMPLE_CLIENT_DETAILS.map(({ data }) => (
             <Fragment>
-              <Text style={fs12MedBlack}>{Data.Title}</Text>
-              <Text style={fs16MedBlack}>{Data.Output}</Text>
+              <Text style={fs12MedBlack}>{data.title}</Text>
+              <Text style={fs16MedBlack}>{data.output}</Text>
               <CustomSpacer space={sh24} />
             </Fragment>
           ))}

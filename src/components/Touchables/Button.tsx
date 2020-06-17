@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
+  blueShadow,
   border,
   centerHV,
   colorBlack,
@@ -20,6 +21,7 @@ import {
 export interface CustomButtonProps {
   buttonStyle?: ViewStyle;
   disabled?: boolean;
+  noShadow?: boolean;
   onPress: () => void;
   secondary?: boolean;
   text: string;
@@ -33,13 +35,17 @@ export interface RoundedButtonProps extends CustomButtonProps {
 export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   buttonStyle,
   disabled,
+  noShadow,
   onPress,
   secondary,
   text,
   textStyle,
 }: CustomButtonProps) => {
+  const buttonShadow = noShadow === true ? {} : blueShadow;
+
   const defaultButtonStyle: ViewStyle = {
     ...border(colorBlue._1, sw2),
+    ...buttonShadow,
     ...centerHV,
     ...px(sw40),
     backgroundColor: secondary ? colorWhite._1 : colorBlue._1,

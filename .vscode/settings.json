@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "NRIC",
     "FATCA",
     "Kenanga",
     "Nunito",
@@ -12,7 +13,6 @@
     "plusplus",
     "tslib"
   ],
-    "NRIC",
   "editor.formatOnSave": true,
   "javascript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.quoteStyle": "double",

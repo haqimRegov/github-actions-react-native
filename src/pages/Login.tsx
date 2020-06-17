@@ -1,3 +1,4 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
 import { Alert, Image, ImageStyle, Text, View, ViewStyle } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -12,10 +13,10 @@ import {
   colorWhite,
   flexChild,
   flexRow,
+  fs12SemiBoldBlack2,
   fs13SemiBoldBlue2,
+  fs16BoldBlack2,
   fs24SemiBoldBlack,
-  fs12MedBlack,
-  fs16MedBlack,
   fsAlignCenter,
   px,
   sh10,
@@ -95,8 +96,8 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     Alert.alert("PrivacyTerms");
   };
 
-
   const handleLogin = () => {
+    handleModal();
     navigation.navigate("Onboarding");
     // navigation.dispatch(
     //   CommonActions.reset({
@@ -132,7 +133,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
       <ConformationModal
         buttons={[
           { onPress: handleModal, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: buttonStyle },
-          { onPress: handleModal, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
+          { onPress: handleLogin, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
         ]}
         handleClose={handleModal}
         title={CONFIRM_YOUR_DETAILS}
@@ -140,8 +141,8 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
         <Fragment>
           {SAMPLE_CLIENT_DETAILS.map((items: ISampleClientDetails, index: number) => (
             <Fragment key={index}>
-              <Text style={fs12MedBlack}>{items.title}</Text>
-              <Text style={fs16MedBlack}>{items.output}</Text>
+              <Text style={fs12SemiBoldBlack2}>{items.title}</Text>
+              <Text style={fs16BoldBlack2}>{items.output}</Text>
               <CustomSpacer space={sh24} />
             </Fragment>
           ))}

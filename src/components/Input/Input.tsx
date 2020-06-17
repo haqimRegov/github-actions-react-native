@@ -3,18 +3,17 @@ import { Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from "rea
 
 import {
   centerVertical,
-  colorBlue,
+  colorBlack,
   colorGray,
   colorWhite,
   flexChild,
   flexRow,
-  fs13SemiBoldBlue2,
-  px,
-  sh16,
-  sh48,
-  sw14,
-  sw2,
-  sw5,
+  fs16SemiBoldBlack2,
+  sh4,
+  sh40,
+  sw1,
+  sw12,
+  sw20,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -23,24 +22,36 @@ export interface ITextInputProps extends TextInputProps {
   labelStyle?: TextStyle;
   onPressLabel?: () => void;
   setRef?: (ref: TextInput | null) => void;
+  spaceToBottom?: number;
+  spaceToTop?: number;
   viewStyle?: ViewStyle;
 }
 
-export const CustomTextInput = ({ label, labelStyle, onPressLabel, setRef, viewStyle, ...rest }: ITextInputProps) => {
+export const CustomTextInput = ({
+  label,
+  labelStyle,
+  onPressLabel,
+  setRef,
+  spaceToBottom,
+  spaceToTop,
+  viewStyle,
+  ...rest
+}: ITextInputProps) => {
   const [inputFocus, setInputFocus] = useState<boolean>(false);
 
-  const borderColor: ViewStyle = inputFocus ? { borderColor: colorBlue._1 } : { borderColor: colorGray._2 };
-  const defaultLabelStyle: TextStyle = { ...fs13SemiBoldBlue2, ...labelStyle };
+  // TODO proper color for border color on focus
+  const borderColor: ViewStyle = inputFocus ? { borderColor: colorBlack._2 } : { borderColor: colorBlack._2 };
+  const defaultLabelStyle: TextStyle = { ...fs16SemiBoldBlack2, ...labelStyle };
   const textInputStyle: ViewStyle = {
     ...centerVertical,
     ...flexRow,
-    ...px(sw14),
     ...borderColor,
-    borderWidth: sw2,
-    borderRadius: sw5,
+    borderWidth: sw1,
+    borderRadius: sw20,
+    height: sh40,
     ...viewStyle,
   };
-  const textStyle: TextStyle = { ...flexChild, height: sh48 };
+  const textStyle: TextStyle = { ...flexChild, ...fs16SemiBoldBlack2, height: sh40 };
 
   const handleFocus = () => {
     setInputFocus(true);
@@ -52,12 +63,16 @@ export const CustomTextInput = ({ label, labelStyle, onPressLabel, setRef, viewS
 
   return (
     <Fragment>
+      {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
-          <CustomSpacer space={sh16} />
-          <Text onPress={onPressLabel} style={defaultLabelStyle}>
-            {label}
-          </Text>
+          <View style={flexRow}>
+            <CustomSpacer isHorizontal={true} space={sw12} />
+            <Text onPress={onPressLabel} style={defaultLabelStyle}>
+              {label}
+            </Text>
+          </View>
+          <CustomSpacer space={sh4} />
         </Fragment>
       )}
       <View style={textInputStyle}>
@@ -72,6 +87,7 @@ export const CustomTextInput = ({ label, labelStyle, onPressLabel, setRef, viewS
           {...rest}
         />
       </View>
+      {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
     </Fragment>
   );
 };

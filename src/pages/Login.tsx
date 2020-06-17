@@ -1,9 +1,9 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Alert, Image, ImageStyle, Text, View, ViewStyle } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { LocalAssets } from "../assets/LocalAssets";
-import { CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, RoundedButton, SafeAreaPage, ConformationModal } from "../components";
+import { ConformationModal, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, RoundedButton, SafeAreaPage } from "../components";
 import { Language } from "../constants";
 import {
   alignSelfCenter,
@@ -27,9 +27,9 @@ import {
   sh80,
   shadow,
   sw200,
+  sw205,
   sw304,
   sw80,
-  sw205,
 } from "../styles";
 
 const { INPUT_AGENT_CODE, INPUT_PASSWORD, BUTTON_LOGIN, FORGOT_PASSWORD, TITLE, PRIVACY_TERMS } = Language.PAGE.LOGIN;
@@ -46,30 +46,28 @@ const {
   BUTTON_RE_UPLOAD,
   BUTTON_CONFIRM,
 } = Language.PAGE.MODAL;
-const SAMPLE_CLIENT_DETAILS = [
+
+interface ISampleClientDetails {
+  title: string;
+  output: string;
+}
+
+const SAMPLE_CLIENT_DETAILS: ISampleClientDetails[] = [
   {
-    data: {
-      title: OUTPUT_FULL_NAME,
-      output: OUTPUT_FULL_NAME_PLACEHOLDER,
-    },
+    title: OUTPUT_FULL_NAME,
+    output: OUTPUT_FULL_NAME_PLACEHOLDER,
   },
   {
-    data: {
-      title: OUTPUT_NRIC_PASSPORT,
-      output: OUTPUT_NRIC_PASSPORT_PLACEHOLDER,
-    },
+    title: OUTPUT_NRIC_PASSPORT,
+    output: OUTPUT_NRIC_PASSPORT_PLACEHOLDER,
   },
   {
-    data: {
-      title: OUTPUT_GENDER,
-      output: OUTPUT_GENDER_PLACEHOLDER,
-    },
+    title: OUTPUT_GENDER,
+    output: OUTPUT_GENDER_PLACEHOLDER,
   },
   {
-    data: {
-      title: OUTPUT_DATE_OF_BIRTH,
-      output: OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
-    },
+    title: OUTPUT_DATE_OF_BIRTH,
+    output: OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
   },
 ];
 export const LoginPage = () => {
@@ -124,10 +122,10 @@ export const LoginPage = () => {
         title={CONFIRM_YOUR_DETAILS}
         visible={modalVisible}>
         <Fragment>
-          {SAMPLE_CLIENT_DETAILS.map(({ data }) => (
-            <Fragment>
-              <Text style={fs12MedBlack}>{data.title}</Text>
-              <Text style={fs16MedBlack}>{data.output}</Text>
+          {SAMPLE_CLIENT_DETAILS.map((items: ISampleClientDetails, index: number) => (
+            <Fragment key={index}>
+              <Text style={fs12MedBlack}>{items.title}</Text>
+              <Text style={fs16MedBlack}>{items.output}</Text>
               <CustomSpacer space={sh24} />
             </Fragment>
           ))}

@@ -2,19 +2,19 @@ import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
+  border,
   centerHV,
+  colorBlack,
   colorBlue,
-  fs14MedWhite,
+  colorWhite,
+  fs15BoldWhite,
   fsAlignCenter,
   fsCapitalize,
   px,
   sh48,
   sw100,
-  sw40,
-  border,
-  colorWhite,
-  colorBlack,
   sw2,
+  sw40,
 } from "../../styles";
 
 export interface CustomButtonProps {
@@ -39,16 +39,16 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   textStyle,
 }: CustomButtonProps) => {
   const defaultButtonStyle: ViewStyle = {
-    ...border(colorBlue._4, sw2),
+    ...border(colorBlue._1, sw2),
     ...centerHV,
     ...px(sw40),
-    backgroundColor: secondary ? colorWhite._1 : colorBlue._4,
+    backgroundColor: secondary ? colorWhite._1 : colorBlue._1,
     height: sh48,
     opacity: disabled === true ? 0.5 : 1,
     ...buttonStyle,
   };
   const textColor = secondary ? { color: colorBlack._1 } : { color: colorWhite._1 };
-  const defaultTextStyle: TextStyle = { ...fs14MedWhite, ...fsAlignCenter, ...fsCapitalize, ...textColor, ...textStyle };
+  const defaultTextStyle: TextStyle = { ...fs15BoldWhite, ...fsAlignCenter, ...fsCapitalize, ...textColor, ...textStyle };
 
   return (
     <TouchableWithoutFeedback onPress={disabled === true ? undefined : onPress}>

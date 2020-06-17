@@ -8,7 +8,7 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs13MedBlue2,
+  fs13SemiBoldBlue2,
   px,
   sh16,
   sh48,
@@ -29,8 +29,8 @@ export interface ITextInputProps extends TextInputProps {
 export const CustomTextInput = ({ label, labelStyle, onPressLabel, setRef, viewStyle, ...rest }: ITextInputProps) => {
   const [inputFocus, setInputFocus] = useState<boolean>(false);
 
-  const borderColor: ViewStyle = inputFocus ? { borderColor: colorBlue._3 } : { borderColor: colorGray._2 };
-  const defaultLabelStyle: TextStyle = { ...fs13MedBlue2, ...labelStyle };
+  const borderColor: ViewStyle = inputFocus ? { borderColor: colorBlue._1 } : { borderColor: colorGray._2 };
+  const defaultLabelStyle: TextStyle = { ...fs13SemiBoldBlue2, ...labelStyle };
   const textInputStyle: ViewStyle = {
     ...centerVertical,
     ...flexRow,

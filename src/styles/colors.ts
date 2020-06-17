@@ -7,6 +7,7 @@ export const colorBlue = {
   _1: "#0C66FF",
   _2: "#0D55CF",
   _3: "#007fff",
+  _4: "#0091ff",
 };
 
 export const colorGray = {

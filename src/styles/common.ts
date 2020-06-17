@@ -30,6 +30,14 @@ export const fullWidth = { width: "100%" } as const;
 export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
+export const borderRadiusBottom = {};
+
+export const border = (color: string, width: number, radius?: number, style?: "solid" | "dotted" | "dashed") => ({
+  borderColor: color,
+  borderRadius: radius,
+  borderStyle: style !== undefined ? style : "solid",
+  borderWidth: width,
+});
 
 export const circle = (height: number, backgroundColor?: string) => ({
   height: height,

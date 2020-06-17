@@ -1,5 +1,16 @@
 {
-  "cSpell.words": ["Kenanga", "Nunito", "Touchables", "animatable", "downlevel", "esnext", "icomoon", "plusplus", "tslib"],
+  "cSpell.words": [
+    "Kenanga",
+    "NRIC",
+    "Nunito",
+    "Roboto",
+    "Touchables",
+    "animatable",
+    "downlevel",
+    "esnext",
+    "plusplus",
+    "tslib"
+  ],
   "editor.formatOnSave": true,
   "javascript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.quoteStyle": "double",

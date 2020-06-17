@@ -29,6 +29,8 @@ import {
   sw200,
   sw304,
   sw80,
+  sw205,
+  sh48,
 } from "../styles";
 
 const { INPUT_AGENT_CODE, INPUT_PASSWORD, BUTTON_LOGIN, FORGOT_PASSWORD, TITLE, PRIVACY_TERMS } = Language.PAGE.LOGIN;
@@ -77,6 +79,7 @@ export const LoginPage = () => {
   const inputStyle: ViewStyle = { minWidth: sw304 };
   const logoStyle: ImageStyle = { ...alignSelfCenter, height: sh80, resizeMode: "contain", width: sw200 };
   const [ModalVisible, setModalVisible] = useState<boolean>(false);
+  const buttonStyle: ViewStyle = { width: sw205, height: sh48 };
 
   const handleModel = () => {
     setModalVisible(!ModalVisible);
@@ -121,8 +124,8 @@ export const LoginPage = () => {
         visible={ModalVisible}
         handleClose={handleModel}
         buttons={[
-          { onPress: handleModel, text: BUTTON_RE_UPLOAD, secondary: true },
-          { onPress: handleModel, text: BUTTON_CONFIRM },
+          { onPress: handleModel, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: buttonStyle },
+          { onPress: handleModel, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
         ]}
         title={CONFIRM_YOUR_DETAILS}>
         <Fragment>

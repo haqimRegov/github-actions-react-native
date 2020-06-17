@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from "react";
-import { Alert, Image, ImageStyle, Text, View, ViewStyle, TextStyle } from "react-native";
+import { Alert, Image, ImageStyle, Text, View, ViewStyle } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { LocalAssets } from "../assets/LocalAssets";
-import { CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, RoundedButton, SafeAreaPage } from "../components";
+import { CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, RoundedButton, SafeAreaPage, ConformationModal } from "../components";
 import { Language } from "../constants";
 import {
   alignSelfCenter,
@@ -12,7 +12,9 @@ import {
   colorWhite,
   flexChild,
   flexRow,
+  fs12MedBlack,
   fs13MedBlue2,
+  fs16MedBlack,
   fs24MedBlack,
   fsAlignCenter,
   px,
@@ -23,15 +25,11 @@ import {
   sh32,
   sh44,
   sh80,
-  fs14MedBlack,
   shadow,
   sw200,
   sw304,
   sw80,
-  sh28,
-  fs20MedBlack,
 } from "../styles";
-import { CustomModal } from "./CustomModal";
 
 const { INPUT_AGENT_CODE, INPUT_PASSWORD, BUTTON_LOGIN, FORGOT_PASSWORD, TITLE, PRIVACY_TERMS } = Language.PAGE.LOGIN;
 const {
@@ -47,8 +45,7 @@ const {
   BUTTON_RE_UPLOAD,
   BUTTON_CONFIRM,
 } = Language.PAGE.MODAL;
-const buttonLR: string[] = [BUTTON_RE_UPLOAD, BUTTON_CONFIRM];
-const ModalInfo = [
+const SAMPLE_CLIENT_DETAILS = [
   {
     Data: {
       Title: OUTPUT_FULL_NAME,
@@ -79,8 +76,6 @@ export const LoginPage = () => {
   const formContainer: ViewStyle = { ...px(sw80), ...shadow, backgroundColor: colorWhite._1 };
   const inputStyle: ViewStyle = { minWidth: sw304 };
   const logoStyle: ImageStyle = { ...alignSelfCenter, height: sh80, resizeMode: "contain", width: sw200 };
-  const groupHeight: TextStyle = { marginBottom: sh28, ...fs20MedBlack };
-  const groupHeightSmall: TextStyle = { ...fs14MedBlack };
   const [ModalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleModel = () => {
@@ -97,15 +92,6 @@ export const LoginPage = () => {
 
   const handlePrivacyTerms = () => {
     Alert.alert("PrivacyTerms");
-  };
-
-  const ModalContent = () => {
-    return ModalInfo.map(({ Data }) => (
-      <Fragment>
-        <Text style={groupHeightSmall}>{Data.Title}</Text>
-        <Text style={groupHeight}>{Data.Output}</Text>
-      </Fragment>
-    ));
   };
 
   return (
@@ -131,13 +117,24 @@ export const LoginPage = () => {
           <CustomSpacer space={sh80} />
         </View>
       </ScrollView>
-      <CustomModal
+      <ConformationModal
         visible={ModalVisible}
         handleClose={handleModel}
-        buttonLR={buttonLR}
-        content={ModalContent}
-        Title={CONFIRM_YOUR_DETAILS}
-      />
+        buttons={[
+          { onPress: handleModel, text: BUTTON_RE_UPLOAD, secondary: true },
+          { onPress: handleModel, text: BUTTON_CONFIRM },
+        ]}
+        title={CONFIRM_YOUR_DETAILS}>
+        <Fragment>
+          {SAMPLE_CLIENT_DETAILS.map(({ Data }) => (
+            <Fragment>
+              <Text style={fs12MedBlack}>{Data.Title}</Text>
+              <Text style={fs16MedBlack}>{Data.Output}</Text>
+              <CustomSpacer space={sh24} />
+            </Fragment>
+          ))}
+        </Fragment>
+      </ConformationModal>
     </SafeAreaPage>
   );
 };

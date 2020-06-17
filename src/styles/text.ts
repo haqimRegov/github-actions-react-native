@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorWhite } from "./colors";
-import { sh12, sh13, sh14, sh16, sh24, sh39 } from "./sizes";
+import { sh12, sh13, sh15, sh16, sh24 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsUppercase: TextStyle = {
@@ -17,9 +17,16 @@ export const fsUnderline: TextStyle = {
 };
 
 // TODO change to proper lineHeight
-export const fs12SemiBoldBlack3: TextStyle = {
+export const fs12SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
+  fontSize: sh12,
+};
+
+// TODO change to proper lineHeight
+export const fs12RegBlue: TextStyle = {
+  color: colorBlue._1,
+  fontFamily: NunitoRegular,
   fontSize: sh12,
 };
 
@@ -30,67 +37,44 @@ export const fs13SemiBoldBlue2: TextStyle = {
   fontSize: sh13,
 };
 
-// TODO change to proper font
-export const fs14SemiBoldBlack: TextStyle = {
-  color: colorBlack._1,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh14,
+// TODO change to proper lineHeight
+export const fs15BoldWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoBold,
+  fontSize: sh15,
 };
 
 // TODO change to proper lineHeight
-export const fs14SemiBoldWhite: TextStyle = {
-  color: colorWhite._1,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh14,
-};
-
-export const fs16BoldBlack3: TextStyle = {
+export const fs16BoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoBold,
   fontSize: sh16,
-  lineHeight: sh39,
 };
 
-export const fs16RegBlack3: TextStyle = {
+// TODO change to proper lineHeight
+export const fs16RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
   fontSize: sh16,
-  lineHeight: sh39,
 };
 
 // TODO change to proper font
-export const fs20MedWhite: TextStyle = {
-  color: colorWhite._1,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh20,
-  lineHeight: sh24,
-};
-
-// TODO change to proper font
-export const fs20MedBlack: TextStyle = {
-  color: colorBlack._1,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh20,
-  lineHeight: sh24,
-};
-
 export const fs24SemiBoldBlack: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh24,
-  lineHeight: sh39,
 };
 
-export const fs24RegBlack3: TextStyle = {
+// TODO change to proper font
+export const fs24RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
   fontSize: sh24,
-  lineHeight: sh39,
 };
 
+// TODO change to proper font
 export const fs24RegBlack: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoRegular,
   fontSize: sh24,
-  lineHeight: sh39,
 };

@@ -13,7 +13,6 @@ import {
   sw40,
   border,
   colorWhite,
-  fs14MedBlack,
   colorBlack,
   sw2,
 } from "../../styles";

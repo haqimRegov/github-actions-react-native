@@ -4,7 +4,6 @@ import Modal from "react-native-modal";
 
 import { RoundedButton, CustomFlexSpacer, CustomButtonProps, CustomSpacer } from "..";
 import {
-  borderRadiusBottom,
   centerHV,
   colorGray,
   colorWhite,
@@ -12,9 +11,9 @@ import {
   fs16MedBlack,
   px,
   py,
-  sh20,
   sh24,
   spaceAroundHorizontal,
+  sw24,
   sw482,
   sw5,
   sw539,
@@ -30,22 +29,22 @@ interface ModalProps {
 
 export const ConformationModal = ({ buttons, children, title, visible, handleClose }: ModalProps) => {
   const ModelContainer: ViewStyle = { backgroundColor: colorGray._2, width: sw482, height: sw539, borderRadius: sw5 };
-  const displayInfoContainer: ViewStyle = {
-    ...py(sh20),
-    ...px(sh20),
+  const padding: ViewStyle = {
+    ...py(sh24),
+    ...px(sw24),
   };
   const ButtonContainer: ViewStyle = {
     ...flexRow,
+    ...padding,
     ...spaceAroundHorizontal,
     backgroundColor: colorWhite._1,
-    width: "100%",
-    padding: 20,
-    ...borderRadiusBottom,
+    borderBottomLeftRadius: sw5,
+    borderBottomRightRadius: sw5,
   };
   return (
     <Modal isVisible={visible} style={centerHV}>
       <View style={ModelContainer}>
-        <View style={displayInfoContainer}>
+        <View style={padding}>
           <View style={flexRow}>
             <Text style={fs16MedBlack}>{title}</Text>
             <CustomFlexSpacer />

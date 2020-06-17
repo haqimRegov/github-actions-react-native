@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextStyle } from "react-native";
 
-import { fs13SemiBoldBlue2, fsAlignCenter, fsCapitalize } from "../../styles";
+import { fs12RegBlue, fsAlignCenter, fsCapitalize } from "../../styles";
 
 interface LinkTextProps {
   onPress?: () => void;
@@ -10,7 +10,7 @@ interface LinkTextProps {
 }
 
 export const LinkText = ({ onPress, style, text }: LinkTextProps) => {
-  const textLinkStyle: TextStyle = { ...fs13SemiBoldBlue2, ...fsAlignCenter, ...fsCapitalize, ...style };
+  const textLinkStyle: TextStyle = { ...fs12RegBlue, ...fsAlignCenter, ...fsCapitalize, ...style };
 
   return (
     <Text onPress={onPress} style={textLinkStyle}>

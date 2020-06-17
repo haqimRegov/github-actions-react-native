@@ -1,39 +1,72 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
-import { Alert, Image, ImageStyle, Text, View, ViewStyle } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Alert, Image, ImageStyle, ScrollView, Text, View, ViewStyle } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 
 import { LocalAssets } from "../assets/LocalAssets";
-import { ConformationModal, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, RoundedButton, SafeAreaPage } from "../components";
+import {
+  CheckBox,
+  ConformationModal,
+  CustomFlexSpacer,
+  CustomSpacer,
+  CustomTextInput,
+  IconButton,
+  LinkText,
+  LinkTextGroup,
+  LinkTextProps,
+  RoundedButton,
+} from "../components";
 import { Language } from "../constants";
 import {
-  alignSelfCenter,
-  centerHV,
   centerVertical,
+  circle,
+  colorBlack,
   colorWhite,
+  DEVICE,
   flexChild,
+  flexGrow,
   flexRow,
+  fs12RegBlack2,
+  fs12RegBlue,
   fs12SemiBoldBlack2,
-  fs13SemiBoldBlue2,
   fs16BoldBlack2,
-  fs24SemiBoldBlack,
-  fsAlignCenter,
+  fs24RegBlack2,
+  fs36SemiBoldBlack2,
+  fsUppercase,
   px,
-  sh10,
-  sh11,
+  scaleHeight,
+  sh12,
+  sh14,
+  sh16,
   sh23,
   sh24,
-  sh32,
-  sh44,
-  sh80,
-  shadow,
-  sw200,
+  sh30,
+  sh56,
+  sh70,
+  sw16,
   sw205,
-  sw304,
-  sw80,
+  sw24,
+  sw278,
+  sw350,
+  sw4,
+  sw56,
+  sw590,
+  sw73,
 } from "../styles";
 
-const { INPUT_AGENT_CODE, INPUT_PASSWORD, BUTTON_LOGIN, FORGOT_PASSWORD, TITLE, PRIVACY_TERMS } = Language.PAGE.LOGIN;
+const {
+  BUTTON_LOGIN,
+  FORGOT_PASSWORD,
+  HEADING,
+  LABEL_AGENT_CODE,
+  LABEL_PASSWORD,
+  LANGUAGE_ENGLISH,
+  LANGUAGE_BAHASA,
+  PRIVACY_POLICY,
+  REMEMBER_ME,
+  SUBHEADING,
+  TERMS_AND_CONDITIONS,
+} = Language.PAGE.LOGIN;
 const {
   CONFIRM_YOUR_DETAILS,
   OUTPUT_FULL_NAME,
@@ -77,12 +110,15 @@ interface LoginPageProps {
 }
 
 export const LoginPage = ({ navigation }: LoginPageProps) => {
-  const container: ViewStyle = { ...centerHV, ...flexChild, backgroundColor: colorWhite._1 };
-  const formContainer: ViewStyle = { ...px(sw80), ...shadow, backgroundColor: colorWhite._1 };
-  const inputStyle: ViewStyle = { minWidth: sw304 };
-  const logoStyle: ImageStyle = { ...alignSelfCenter, height: sh80, resizeMode: "contain", width: sw200 };
+  const { top } = useSafeArea();
+
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [inputAgentCode, setInputAgentCode] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
+
+  const topPadding = scaleHeight(sh56 - top);
   const buttonStyle: ViewStyle = { width: sw205 };
+  const inputStyle: ViewStyle = { width: sw350 };
 
   const handleModal = () => {
     setModalVisible(!modalVisible);
@@ -92,8 +128,20 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     Alert.alert("ForgotPassword");
   };
 
-  const handlePrivacyTerms = () => {
-    Alert.alert("PrivacyTerms");
+  const handlePrivacyPolicy = () => {
+    Alert.alert("PrivacyPolicy");
+  };
+
+  const handleTermsAndConditions = () => {
+    Alert.alert("TermsAndConditions");
+  };
+
+  const handleFingerprint = () => {
+    Alert.alert("handleFingerprint");
+  };
+
+  const handleLanguageChange = () => {
+    Alert.alert("handleLanguageChange");
   };
 
   const handleLogin = () => {
@@ -106,28 +154,84 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     //   }),
     // );
   };
+  const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
+  const logoStyle: ImageStyle = { height: sh70 };
+  const topLinks: LinkTextProps[] = [
+    {
+      onPress: handleLanguageChange,
+      style: fsUppercase,
+      text: LANGUAGE_BAHASA,
+    },
+    {
+      onPress: handleLanguageChange,
+      style: fsUppercase,
+      text: LANGUAGE_ENGLISH,
+    },
+  ];
+  const bottomLinks: LinkTextProps[] = [
+    {
+      onPress: handlePrivacyPolicy,
+      text: PRIVACY_POLICY,
+    },
+    {
+      onPress: handleTermsAndConditions,
+      text: TERMS_AND_CONDITIONS,
+    },
+  ];
 
   return (
-    <SafeAreaPage>
-      <ScrollView contentContainerStyle={container} keyboardShouldPersistTaps="handled">
-        <View style={formContainer}>
-          <CustomSpacer space={sh23} />
-          <Image source={LocalAssets.logo.kib} style={logoStyle} />
-          <CustomSpacer space={sh11} />
-          <Text style={{ ...fs24SemiBoldBlack, ...fsAlignCenter }}>{TITLE}</Text>
-          <CustomSpacer space={sh10} />
-          <LinkText onPress={handlePrivacyTerms} style={{ ...fs13SemiBoldBlue2, ...fsAlignCenter }} text={PRIVACY_TERMS} />
-          <CustomSpacer space={sh44} />
-          <CustomTextInput placeholder={INPUT_AGENT_CODE} viewStyle={inputStyle} />
-          <CustomSpacer space={sh24} />
-          <CustomTextInput placeholder={INPUT_PASSWORD} secureTextEntry={true} viewStyle={inputStyle} />
-          <CustomSpacer space={sh32} />
-          <View style={{ ...flexRow, ...centerVertical }}>
-            <LinkText onPress={handleForgotPassword} text={FORGOT_PASSWORD} />
-            <CustomFlexSpacer />
-            <RoundedButton onPress={handleModal} text={BUTTON_LOGIN} />
+    <Fragment>
+      <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
+          <View>
+            <Image source={LocalAssets.login.background} style={backgroundStyle} />
           </View>
-          <CustomSpacer space={sh80} />
+          <View style={{ ...flexChild, ...px(sw56) }}>
+            <CustomSpacer space={topPadding} />
+            <View style={flexRow}>
+              <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+              <CustomFlexSpacer />
+              <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
+                <LinkTextGroup divider={<View style={circle(sw4, colorBlack._3)} />} links={topLinks} spaceToDivider={sw4} />
+              </View>
+            </View>
+            <View style={px(sw16)}>
+              <CustomSpacer space={sh56} />
+              <Text style={fs36SemiBoldBlack2}>{HEADING}</Text>
+              <Text style={fs24RegBlack2}>{SUBHEADING}</Text>
+              <CustomTextInput
+                label={LABEL_AGENT_CODE}
+                onChangeText={setInputAgentCode}
+                spaceToTop={sh14}
+                value={inputAgentCode}
+                viewStyle={inputStyle}
+              />
+              <CustomTextInput
+                label={LABEL_PASSWORD}
+                onChangeText={setInputPassword}
+                spaceToTop={sh12}
+                spaceToBottom={sh30}
+                value={inputPassword}
+                viewStyle={inputStyle}
+              />
+              <View style={flexRow}>
+                <RoundedButton onPress={handleModal} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
+                <CustomSpacer isHorizontal={true} space={sw24} />
+                <IconButton name="fingerprint" onPress={handleFingerprint} />
+              </View>
+              <CustomSpacer space={sh23} />
+              <View style={flexRow}>
+                <CheckBox label={REMEMBER_ME} toggle={false} />
+                <CustomSpacer isHorizontal={true} space={sw73} />
+                <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={FORGOT_PASSWORD} />
+              </View>
+            </View>
+            <CustomFlexSpacer />
+            <View style={flexRow}>
+              <LinkTextGroup divider={<Text style={fs12RegBlue}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
+            </View>
+            <CustomSpacer space={sh56} />
+          </View>
         </View>
       </ScrollView>
       <ConformationModal
@@ -148,6 +252,6 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
           ))}
         </Fragment>
       </ConformationModal>
-    </SafeAreaPage>
+    </Fragment>
   );
 };

@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorWhite } from "./colors";
-import { sh12, sh13, sh15, sh16, sh24 } from "./sizes";
+import { sh12, sh13, sh15, sh16, sh24, sh36 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsUppercase: TextStyle = {
@@ -20,6 +20,20 @@ export const fsUnderline: TextStyle = {
 export const fs12SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
+  fontSize: sh12,
+};
+
+// TODO change to proper lineHeight
+export const fs12RegBlack: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+};
+
+// TODO change to proper lineHeight
+export const fs12RegBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoRegular,
   fontSize: sh12,
 };
 
@@ -58,6 +72,13 @@ export const fs16RegBlack2: TextStyle = {
   fontSize: sh16,
 };
 
+// TODO change to proper lineHeight
+export const fs16SemiBoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+};
+
 // TODO change to proper font
 export const fs24SemiBoldBlack: TextStyle = {
   color: colorBlack._1,
@@ -77,4 +98,10 @@ export const fs24RegBlack: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoRegular,
   fontSize: sh24,
+};
+// TODO change to proper font
+export const fs36SemiBoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh36,
 };

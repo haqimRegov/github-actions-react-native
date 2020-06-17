@@ -1,5 +1,7 @@
 import { Dimensions } from "react-native";
 
+import { colorBlue } from "./colors";
+
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
 export const alignSelfCenter = { alignSelf: "center" } as const;
 export const centerHorizontal = { justifyContent: "center" } as const;
@@ -75,6 +77,19 @@ export const shadow = {
   },
   shadowOpacity: 0.15,
   shadowRadius: 3,
+} as const;
+
+export const blueShadow = {
+  // shadow for android
+  elevation: 5,
+  // shadow for ios
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 5,
+  },
+  shadowOpacity: 0.35,
+  shadowRadius: 5,
 } as const;
 
 export interface DeviceSizeType {

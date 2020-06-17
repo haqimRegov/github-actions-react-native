@@ -1,6 +1,7 @@
 export const colorBlack = {
   _1: "#000000",
   _2: "#4d4d4d",
+  _3: "#515151",
 };
 
 export const colorBlue = {

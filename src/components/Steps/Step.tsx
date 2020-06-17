@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerHV, circleBorder, colorBlack, colorBlue, colorWhite, fs12SemiBoldBlack3, sw1, sw24 } from "../../styles";
+import { centerHV, circleBorder, colorBlack, colorBlue, colorWhite, fs12SemiBoldBlack2, sw1, sw24 } from "../../styles";
 
 interface StepProps {
   active: boolean;
@@ -19,7 +19,7 @@ export const Step = ({ active, step, visited }: StepProps) => {
   const container: ViewStyle = { ...stepOpacity, ...stepColor, ...centerHV };
 
   const labelColor: TextStyle = active ? { color: colorWhite._1 } : {};
-  const textStyle: TextStyle = { ...fs12SemiBoldBlack3, ...labelColor, ...stepOpacity };
+  const textStyle: TextStyle = { ...fs12SemiBoldBlack2, ...labelColor, ...stepOpacity };
 
   return (
     <View style={container}>

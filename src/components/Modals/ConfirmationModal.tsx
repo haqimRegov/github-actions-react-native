@@ -1,8 +1,7 @@
 import React from "react";
-import { Text, View, ViewStyle, TouchableWithoutFeedback } from "react-native";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Modal from "react-native-modal";
 
-import { RoundedButton, CustomFlexSpacer, CustomButtonProps, CustomSpacer } from "..";
 import {
   centerHV,
   colorGray,
@@ -18,6 +17,8 @@ import {
   sw5,
   sw539,
 } from "../../styles";
+import { CustomButtonProps, RoundedButton } from "../Touchables";
+import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
 interface ModalProps {
   buttons: CustomButtonProps[];

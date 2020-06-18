@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { centerVertical, circleBorder, colorBlue, colorGray, colorWhite, flexRow, fs13RegBlack3, sw1, sw12, sw20, sw5 } from "../../styles";
+import { centerVertical, circleBorder, colorBlue, colorGray, colorWhite, flexRow, fs13RegBlack2, sw1, sw12, sw20, sw5 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 interface RadioButtonProps {
@@ -20,7 +20,7 @@ export const RadioButton = ({ label, selected, setSelection }: RadioButtonProps)
       <View style={{ ...flexRow, ...centerVertical }}>
         <View style={radioStyle} />
         <CustomSpacer space={sw12} isHorizontal={true} />
-        <Text style={fs13RegBlack3}>{label}</Text>
+        <Text style={fs13RegBlack2}>{label}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

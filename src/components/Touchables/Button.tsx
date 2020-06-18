@@ -33,6 +33,7 @@ export interface RoundedButtonProps extends CustomButtonProps {
 }
 
 export const CustomButton: FunctionComponent<CustomButtonProps> = ({
+  secondary,
   buttonStyle,
   disabled,
   noShadow,

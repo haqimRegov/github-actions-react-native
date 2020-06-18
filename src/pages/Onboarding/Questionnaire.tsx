@@ -6,7 +6,6 @@ import { LocalAssets } from "../../assets/LocalAssets";
 import { CustomSpacer, Question, RadioButtonGroup, RoundedButton } from "../../components";
 import {
   colorGray,
-  colorWhite,
   flexChild,
   flexCol,
   flexGrow,

@@ -100,13 +100,6 @@ export const fs16BoldBlack2: TextStyle = {
 };
 
 // TODO change to proper lineHeight
-export const fs16RegBlack2: TextStyle = {
-  color: colorBlack._2,
-  fontFamily: NunitoRegular,
-  fontSize: sh16,
-};
-
-// TODO change to proper lineHeight
 export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,

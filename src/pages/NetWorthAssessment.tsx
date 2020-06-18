@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, View, ViewStyle, Image, Alert } from "react-native";
 
-import { useSafeArea } from "react-native-safe-area-context";
+// import { useSafeArea } from "react-native-safe-area-context";
 import { LocalAssets } from "../assets/LocalAssets";
 import {
   colorGray,

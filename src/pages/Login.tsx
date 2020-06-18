@@ -110,13 +110,16 @@ interface LoginPageProps {
 }
 
 export const LoginPage = ({ navigation }: LoginPageProps) => {
-  const { top } = useSafeArea();
+  const { bottom, top } = useSafeArea();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [inputAgentCode, setInputAgentCode] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
-  const topPadding = scaleHeight(sh56 - top);
+  // TODO check why sizes cannot be imported here
+  const sh32 = scaleHeight(32);
+  const bottomPadding = sh32 + bottom;
+  const topPadding = sh32 + top;
   const buttonStyle: ViewStyle = { width: sw205 };
   const inputStyle: ViewStyle = { width: sw350 };
 
@@ -230,7 +233,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
             <View style={flexRow}>
               <LinkTextGroup divider={<Text style={fs12RegBlue}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
             </View>
-            <CustomSpacer space={sh56} />
+            <CustomSpacer space={bottomPadding} />
           </View>
         </View>
       </ScrollView>

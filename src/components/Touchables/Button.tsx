@@ -14,7 +14,7 @@ import {
   px,
   sh48,
   sw100,
-  sw2,
+  sw1,
   sw40,
 } from "../../styles";
 
@@ -33,7 +33,6 @@ export interface RoundedButtonProps extends CustomButtonProps {
 }
 
 export const CustomButton: FunctionComponent<CustomButtonProps> = ({
-  secondary,
   buttonStyle,
   disabled,
   noShadow,
@@ -45,7 +44,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   const buttonShadow = noShadow === true ? {} : blueShadow;
 
   const defaultButtonStyle: ViewStyle = {
-    ...border(colorBlue._1, sw2),
+    ...border(colorBlue._1, sw1),
     ...buttonShadow,
     ...centerHV,
     ...px(sw40),

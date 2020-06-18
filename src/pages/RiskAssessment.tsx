@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, Image, ImageStyle, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../assets/LocalAssets";
-import { CustomSpacer, Question, RadioButtonGroup, RoundedButton, SafeAreaPage, SliderWithLabels } from "../components";
+import { CustomSpacer, Question, RadioButtonGroup, RoundedButton, SafeAreaPage } from "../components";
 import { Language } from "../constants";
 import {
   colorGray,

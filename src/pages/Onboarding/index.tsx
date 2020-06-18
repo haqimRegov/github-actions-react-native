@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { OnboardingSteps, SafeAreaPage } from "../../components";
+import { ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingContent } from "./Content";
 
 export const OnboardingPage = () => {
@@ -11,31 +12,31 @@ export const OnboardingPage = () => {
   const onboardingContent: IAccordionContent[] = [
     {
       content: [
-        { title: "Questionnaire", route: "Questionnaire" },
-        { title: "Funding Options & FEA Status", route: "FundingOptions" },
+        { title: "Questionnaire", route: ONBOARDING_ROUTES.Questionnaire },
+        { title: "Funding Options & FEA Status", route: ONBOARDING_ROUTES.FundingOptions },
       ],
       label: "Risk Assessment",
     },
     {
       label: "Product Recommendation",
-      route: "ProductRecommendation",
+      route: ONBOARDING_ROUTES.ProductRecommendation,
     },
     {
       content: [
-        { title: "Proof of Address", route: "Address" },
-        { title: "Contact Details", route: "ContactDetails" },
-        { title: "Employment Details", route: "EmploymentDetails" },
-        { title: "FATCA & CRS Declaration", route: "Declaration" },
+        { title: "Proof of Address", route: ONBOARDING_ROUTES.Address },
+        { title: "Contact Details", route: ONBOARDING_ROUTES.ContactDetails },
+        { title: "Employment Details", route: ONBOARDING_ROUTES.EmploymentDetails },
+        { title: "FATCA & CRS Declaration", route: ONBOARDING_ROUTES.Declaration },
       ],
       label: "Personal Information",
     },
     {
       label: "Confirmation",
-      route: "Confirmation",
+      route: ONBOARDING_ROUTES.Confirmation,
     },
     {
       label: "Payment",
-      route: "Payment",
+      route: ONBOARDING_ROUTES.Payment,
     },
   ];
 

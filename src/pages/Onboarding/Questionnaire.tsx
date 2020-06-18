@@ -2,8 +2,8 @@ import React from "react";
 import { Text, View } from "react-native";
 
 import { CustomButton } from "../../components";
+import { ONBOARDING_ROUTES } from "../../constants";
 import { flexChild } from "../../styles";
-import { ONBOARDING_ROUTES } from "./Content";
 
 interface QuestionnaireContentProps {
   handleNextStep: (route: string) => void;

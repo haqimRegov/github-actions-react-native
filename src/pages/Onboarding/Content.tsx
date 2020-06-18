@@ -1,5 +1,6 @@
 import React from "react";
 
+import { ONBOARDING_ROUTES } from "../../constants";
 import { Address } from "./Address";
 import { Confirmation } from "./Confirmation";
 import { ContactDetails } from "./ContactDetails";
@@ -14,18 +15,6 @@ interface OnboardingContentProps {
   route: string;
   handleNextStep: (route: string) => void;
 }
-
-export const ONBOARDING_ROUTES = {
-  Address: "Address",
-  Confirmation: "Confirmation",
-  ContactDetails: "ContactDetails",
-  Declaration: "Declaration",
-  EmploymentDetails: "EmploymentDetails",
-  FundingOptions: "FundingOptions",
-  Payment: "Payment",
-  ProductRecommendation: "ProductRecommendation",
-  Questionnaire: "Questionnaire",
-};
 
 export const OnboardingContent = ({ route, handleNextStep }: OnboardingContentProps) => {
   switch (route) {

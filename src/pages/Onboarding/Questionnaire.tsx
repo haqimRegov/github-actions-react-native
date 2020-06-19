@@ -22,40 +22,41 @@ import {
   sh78,
   sw140,
   sw16,
+  sw240,
   sw282,
   sw96,
-  sw97,
+  sh20,
 } from "../../styles";
 
 const {
-  RISK_ASSESSMENT,
+  BUTTON_CANCEL,
+  BUTTON_CONTINUE,
+  HEADING,
   LABEL_QUESTION_1,
-  QUESTION_1,
+  LABEL_QUESTION_2,
+  LABEL_QUESTION_3,
+  LABEL_QUESTION_4,
   Q1_OPTION_1,
   Q1_OPTION_2,
   Q1_OPTION_3,
   Q1_OPTION_4,
-  LABEL_QUESTION_2,
-  QUESTION_2,
   Q2_OPTION_1,
   Q2_OPTION_2,
   Q2_OPTION_3,
   Q2_OPTION_4,
-  LABEL_QUESTION_3,
-  QUESTION_3,
   Q3_OPTION_1,
   Q3_OPTION_2,
   Q3_OPTION_3,
   Q3_OPTION_4,
-  LABEL_QUESTION_4,
-  QUESTION_4,
   Q4_OPTION_1,
   Q4_OPTION_2,
   Q4_OPTION_3,
   Q4_OPTION_4,
   Q4_OPTION_5,
-  BUTTON_CANCEL,
-  BUTTON_CONTINUE,
+  QUESTION_1,
+  QUESTION_2,
+  QUESTION_3,
+  QUESTION_4,
 } = Language.PAGE.RISK_ASSESSMENT;
 
 interface QuestionnaireContentProps {
@@ -78,7 +79,7 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
     ...px(sw96),
     backgroundColor: colorGray._3,
   };
-  const buttonContainer: ViewStyle = { ...px(sw97) };
+  const buttonContainer: ViewStyle = { width: sw240 };
   const handleCancel = () => {
     Alert.alert("Cancel");
   };
@@ -90,7 +91,7 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
     <ScrollView style={scrollStyle}>
       <View style={container}>
         <CustomSpacer space={sh55} />
-        <Text style={fs24RegBlack}>{RISK_ASSESSMENT}</Text>
+        <Text style={fs24RegBlack}>{HEADING}</Text>
         <CustomSpacer space={sh24} />
         <Question label={LABEL_QUESTION_1} options={Q1_OPTIONS} selected={q1} setSelected={setQ1} title={QUESTION_1}>
           <Text>Slider</Text>
@@ -103,7 +104,7 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
         <Question
           label={LABEL_QUESTION_3}
           options={Q3_OPTIONS}
-          right={<Image source={LocalAssets.graph.risk_assessment_graph_1} style={{ height: sh143, width: sw140 }} />}
+          right={<Image source={LocalAssets.graph.risk_assessment_graph_1} style={{ height: sh143, width: sw140, bottom: sh20 }} />}
           selected={q3}
           setSelected={setQ3}
           title={QUESTION_3}
@@ -112,7 +113,7 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
         <Question
           label={LABEL_QUESTION_4}
           options={Q4_OPTIONS}
-          right={<Image source={LocalAssets.graph.risk_assessment_graph_2} style={{ height: sh189, width: sw282 }} />}
+          right={<Image source={LocalAssets.graph.risk_assessment_graph_2} style={{ height: sh189, width: sw282, bottom: sh24 }} />}
           selected={q4}
           setSelected={setQ4}
           title={QUESTION_4}

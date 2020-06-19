@@ -7,16 +7,16 @@ import { CustomSpacer } from "../Views/Spacer";
 interface RadioButtonProps {
   label: string;
   selected: boolean;
-  setSelection: () => void;
+  setSelected: () => void;
 }
 
-export const RadioButton = ({ label, selected, setSelection }: RadioButtonProps) => {
+export const RadioButton = ({ label, selected, setSelected }: RadioButtonProps) => {
   const borderColor = selected ? colorBlue._4 : colorGray._5;
   const borderWidth = selected ? sw5 : sw1;
   const radioStyle: ViewStyle = { ...circleBorder(sw20, borderWidth, borderColor, colorWhite._1) };
 
   return (
-    <TouchableWithoutFeedback onPress={setSelection}>
+    <TouchableWithoutFeedback onPress={setSelected}>
       <View style={{ ...flexRow, ...centerVertical }}>
         <View style={radioStyle} />
         <CustomSpacer space={sw12} isHorizontal={true} />

@@ -17,7 +17,8 @@ const {
   TITLE_QUESTIONNAIRE,
   TITLE_RISK_ASSESSMENT,
 } = Language.PAGE.ONBOARDING;
-const ONBOARDING: IOnboarding[] = [
+
+export const ONBOARDING: IOnboarding[] = [
   {
     content: [
       { title: TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire },

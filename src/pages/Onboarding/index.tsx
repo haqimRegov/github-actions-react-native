@@ -1,54 +1,66 @@
 import React, { useEffect, useState } from "react";
 
 import { OnboardingSteps, SafeAreaPage } from "../../components";
-import { ONBOARDING_ROUTES } from "../../constants";
+import { ONBOARDING_ROUTES, Language } from "../../constants";
 import { OnboardingContent } from "./Content";
+
+const {
+  TITLE_CONFORMATION,
+  TITLE_CONTACT_DETAILS,
+  TITLE_EMPLOYMENT_DETAILS,
+  TITLE_FATCA,
+  TITLE_FUNDING_OPTIONS,
+  TITLE_PAYMENT,
+  TITLE_PERSONAL_INFORMATION,
+  TITLE_PRODUCT_RECOMMENDATION,
+  TITLE_PROOF_OF_ADDRESS,
+  TITLE_QUESTIONNAIRE,
+  TITLE_RISK_ASSESSMENT,
+} = Language.PAGE.ONBOARDING;
+const ONBOARDING: IOnboarding[] = [
+  {
+    content: [
+      { title: TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire },
+      { title: TITLE_FUNDING_OPTIONS, route: ONBOARDING_ROUTES.FundingOptions },
+    ],
+    label: TITLE_RISK_ASSESSMENT,
+  },
+  {
+    label: TITLE_PRODUCT_RECOMMENDATION,
+    route: ONBOARDING_ROUTES.ProductRecommendation,
+  },
+  {
+    content: [
+      { title: TITLE_PROOF_OF_ADDRESS, route: ONBOARDING_ROUTES.Address },
+      { title: TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.ContactDetails },
+      { title: TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
+      { title: TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
+    ],
+    label: TITLE_PERSONAL_INFORMATION,
+  },
+  {
+    label: TITLE_CONFORMATION,
+    route: ONBOARDING_ROUTES.Confirmation,
+  },
+  {
+    label: TITLE_PAYMENT,
+    route: ONBOARDING_ROUTES.Payment,
+  },
+];
 
 export const OnboardingPage = () => {
   const [activeSection, setActiveSection] = useState(0);
-  const [activeContent, setActiveContent] = useState<IContentItem | IAccordionContent | undefined>(undefined);
+  const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(undefined);
   const [finishedStep, setFinishedStep] = useState<number[]>([]);
 
-  const onboardingContent: IAccordionContent[] = [
-    {
-      content: [
-        { title: "Questionnaire", route: ONBOARDING_ROUTES.Questionnaire },
-        { title: "Funding Options & FEA Status", route: ONBOARDING_ROUTES.FundingOptions },
-      ],
-      label: "Risk Assessment",
-    },
-    {
-      label: "Product Recommendation",
-      route: ONBOARDING_ROUTES.ProductRecommendation,
-    },
-    {
-      content: [
-        { title: "Proof of Address", route: ONBOARDING_ROUTES.Address },
-        { title: "Contact Details", route: ONBOARDING_ROUTES.ContactDetails },
-        { title: "Employment Details", route: ONBOARDING_ROUTES.EmploymentDetails },
-        { title: "FATCA & CRS Declaration", route: ONBOARDING_ROUTES.Declaration },
-      ],
-      label: "Personal Information",
-    },
-    {
-      label: "Confirmation",
-      route: ONBOARDING_ROUTES.Confirmation,
-    },
-    {
-      label: "Payment",
-      route: ONBOARDING_ROUTES.Payment,
-    },
-  ];
-
-  const handleContentChange = (item: IContentItem | IAccordionContent) => {
+  const handleContentChange = (item: IContentItem | IOnboarding) => {
     setActiveContent(item);
   };
 
   useEffect(() => {
-    if (onboardingContent[0].content !== undefined) {
-      setActiveContent(onboardingContent[0].content[0]);
+    if (ONBOARDING[0].content !== undefined) {
+      setActiveContent(ONBOARDING[0].content[0]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ACTIVE_CONTENT = activeContent !== undefined ? activeContent.route || "" : "Questionnaire";
@@ -63,7 +75,7 @@ export const OnboardingPage = () => {
         setActiveContent={setActiveContent}
         setActiveSection={setActiveSection}
         setFinishedStep={setFinishedStep}
-        steps={onboardingContent}
+        steps={ONBOARDING}
         visitedSections={finishedStep}
       />
     </SafeAreaPage>

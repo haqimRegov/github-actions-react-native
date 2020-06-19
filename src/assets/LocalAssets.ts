@@ -1,3 +1,5 @@
+import uploadICSmall from "./getting_started/document.png";
+import uploadICBig from "./getting_started/papers.png";
 import klView from "./kl_view/kl_view.png";
 import logoKenanga from "./logo_kenanga/logo_kenanga.png";
 import kib from "./logo_kib/logo_kib.png";
@@ -7,7 +9,6 @@ import onboardingPeople from "./onboarding_people/onboarding_people.png";
 
 export const LocalAssets = {
   logo: {
-    kib: kib,
     kenanga: logoKenanga,
   },
   login: {
@@ -19,5 +20,9 @@ export const LocalAssets = {
   },
   onboarding: {
     people: onboardingPeople,
+  },
+  newClient: {
+    uploadICSmall: uploadICSmall,
+    uploadICBig: uploadICBig,
   },
 };

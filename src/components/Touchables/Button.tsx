@@ -14,7 +14,7 @@ import {
   px,
   sh48,
   sw100,
-  sw2,
+  sw1,
   sw40,
 } from "../../styles";
 
@@ -44,7 +44,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   const buttonShadow = noShadow === true ? {} : blueShadow;
 
   const defaultButtonStyle: ViewStyle = {
-    ...border(colorBlue._1, sw2),
+    ...border(colorBlue._1, sw1),
     ...buttonShadow,
     ...centerHV,
     ...px(sw40),
@@ -53,7 +53,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
     opacity: disabled === true ? 0.5 : 1,
     ...buttonStyle,
   };
-  const textColor = secondary ? { color: colorBlack._1 } : { color: colorWhite._1 };
+  const textColor = secondary ? { color: colorBlack._4 } : { color: colorWhite._1 };
   const defaultTextStyle: TextStyle = { ...fs15BoldWhite, ...fsAlignCenter, ...fsCapitalize, ...textColor, ...textStyle };
 
   return (

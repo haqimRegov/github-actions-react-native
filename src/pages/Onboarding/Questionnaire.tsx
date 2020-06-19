@@ -29,16 +29,31 @@ import {
 
 const {
   RISK_ASSESSMENT,
+  LABEL_QUESTION_1,
   QUESTION_1,
-  Q1,
+  Q1_OPTION_1,
+  Q1_OPTION_2,
+  Q1_OPTION_3,
+  Q1_OPTION_4,
+  LABEL_QUESTION_2,
   QUESTION_2,
-  Q2,
+  Q2_OPTION_1,
+  Q2_OPTION_2,
+  Q2_OPTION_3,
+  Q2_OPTION_4,
+  LABEL_QUESTION_3,
   QUESTION_3,
-  Q3,
-  OPTIONS_3,
+  Q3_OPTION_1,
+  Q3_OPTION_2,
+  Q3_OPTION_3,
+  Q3_OPTION_4,
+  LABEL_QUESTION_4,
   QUESTION_4,
-  Q4,
-  OPTIONS_4,
+  Q4_OPTION_1,
+  Q4_OPTION_2,
+  Q4_OPTION_3,
+  Q4_OPTION_4,
+  Q4_OPTION_5,
   BUTTON_CANCEL,
   BUTTON_CONTINUE,
 } = Language.PAGE.RISK_ASSESSMENT;
@@ -48,6 +63,14 @@ interface QuestionnaireContentProps {
 }
 
 export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentProps) => {
+  const [q1, setQ1] = useState<string>("");
+  const [q2, setQ2] = useState<string>("");
+  const [q3, setQ3] = useState<string>("");
+  const [q4, setQ4] = useState<string>("");
+  const Q1_OPTIONS = [Q1_OPTION_1, Q1_OPTION_2, Q1_OPTION_3, Q1_OPTION_4];
+  const Q2_OPTIONS = [Q2_OPTION_1, Q2_OPTION_2, Q2_OPTION_3, Q2_OPTION_4];
+  const Q3_OPTIONS = [Q3_OPTION_1, Q3_OPTION_2, Q3_OPTION_3, Q3_OPTION_4];
+  const Q4_OPTIONS = [Q4_OPTION_1, Q4_OPTION_2, Q4_OPTION_3, Q4_OPTION_4, Q4_OPTION_5];
   const scrollStyle: ViewStyle = { ...flexGrow };
   const container: ViewStyle = {
     ...flexChild,
@@ -56,10 +79,6 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
     backgroundColor: colorGray._3,
   };
   const buttonContainer: ViewStyle = { ...px(sw97) };
-  const [q1, setQ1] = useState<string>("");
-  const [q2, setQ2] = useState<string>("");
-  const [q3, setQ3] = useState<string>("");
-  const [q4, setQ4] = useState<string>("");
   const handleCancel = () => {
     Alert.alert("Cancel");
   };
@@ -73,30 +92,30 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
         <CustomSpacer space={sh55} />
         <Text style={fs24RegBlack}>{RISK_ASSESSMENT}</Text>
         <CustomSpacer space={sh24} />
-        <Question label={QUESTION_1} title={Q1} selected={q1} setSelected={setQ1}>
+        <Question label={LABEL_QUESTION_1} options={Q1_OPTIONS} selected={q1} setSelected={setQ1} title={QUESTION_1}>
           <Text>Slider</Text>
         </Question>
         <CustomSpacer space={sh36} />
-        <Question label={QUESTION_2} title={Q2} selected={q2} setSelected={setQ2}>
+        <Question label={LABEL_QUESTION_2} options={Q2_OPTIONS} selected={q2} setSelected={setQ2} title={QUESTION_2}>
           <Text>Slider</Text>
         </Question>
         <CustomSpacer space={sh36} />
         <Question
-          label={QUESTION_3}
-          options={OPTIONS_3}
+          label={LABEL_QUESTION_3}
+          options={Q3_OPTIONS}
           right={<Image source={LocalAssets.graph.risk_assessment_graph_1} style={{ height: sh143, width: sw140 }} />}
           selected={q3}
           setSelected={setQ3}
-          title={Q3}
+          title={QUESTION_3}
         />
         <CustomSpacer space={sh35} />
         <Question
-          label={QUESTION_4}
-          options={OPTIONS_4}
+          label={LABEL_QUESTION_4}
+          options={Q4_OPTIONS}
           right={<Image source={LocalAssets.graph.risk_assessment_graph_2} style={{ height: sh189, width: sw282 }} />}
           selected={q4}
           setSelected={setQ4}
-          title={Q4}
+          title={QUESTION_4}
         />
         <CustomSpacer space={sh78} />
         <View style={flexRow}>

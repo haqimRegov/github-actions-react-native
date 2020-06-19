@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Alert, Image, ImageStyle, ScrollView, Text, View, ViewStyle } from "react-native";
+import { Alert, Image, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import { ONBOARDING_ROUTES, Language } from "../../constants";
 import { LocalAssets } from "../../assets/LocalAssets";
-import { CustomSpacer, Question, RadioButtonGroup, RoundedButton } from "../../components";
+import { CustomSpacer, Question, RoundedButton } from "../../components";
 import {
   colorGray,
   flexChild,
@@ -56,9 +56,8 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
     backgroundColor: colorGray._3,
   };
   const buttonContainer: ViewStyle = { ...px(sw97) };
-  const containerStyle: ViewStyle = { ...flexRow, justifyContent: "space-between" };
-  const graph1Style: ImageStyle = { height: sh143, width: sw140 };
-  const graph2Style: ImageStyle = { height: sh189, width: sw282 };
+  const [q1, setQ1] = useState<string>("");
+  const [q2, setQ2] = useState<string>("");
   const [q3, setQ3] = useState<string>("");
   const [q4, setQ4] = useState<string>("");
   const handleCancel = () => {
@@ -74,23 +73,31 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
         <CustomSpacer space={sh55} />
         <Text style={fs24RegBlack}>{RISK_ASSESSMENT}</Text>
         <CustomSpacer space={sh24} />
-        <Question title={QUESTION_1} subtitle={Q1}>
-          <CustomSpacer space={sh24} />
+        <Question label={QUESTION_1} title={Q1} selected={q1} setSelected={setQ1}>
+          <Text>Slider</Text>
         </Question>
         <CustomSpacer space={sh36} />
-        <Question title={QUESTION_2} subtitle={Q2}>
-          <CustomSpacer space={sh24} />
+        <Question label={QUESTION_2} title={Q2} selected={q2} setSelected={setQ2}>
+          <Text>Slider</Text>
         </Question>
         <CustomSpacer space={sh36} />
-        <Question title={QUESTION_3} subtitle={Q3} containerStyle={containerStyle}>
-          <RadioButtonGroup labels={OPTIONS_3} selected={q3} setSelection={setQ3} />
-          <Image source={LocalAssets.graph.risk_assessment_graph_1} style={graph1Style} />
-        </Question>
+        <Question
+          label={QUESTION_3}
+          options={OPTIONS_3}
+          right={<Image source={LocalAssets.graph.risk_assessment_graph_1} style={{ height: sh143, width: sw140 }} />}
+          selected={q3}
+          setSelected={setQ3}
+          title={Q3}
+        />
         <CustomSpacer space={sh35} />
-        <Question title={QUESTION_4} subtitle={Q4} containerStyle={containerStyle}>
-          <RadioButtonGroup labels={OPTIONS_4} selected={q4} setSelection={setQ4} />
-          <Image source={LocalAssets.graph.risk_assessment_graph_2} style={graph2Style} />
-        </Question>
+        <Question
+          label={QUESTION_4}
+          options={OPTIONS_4}
+          right={<Image source={LocalAssets.graph.risk_assessment_graph_2} style={{ height: sh189, width: sw282 }} />}
+          selected={q4}
+          setSelected={setQ4}
+          title={Q4}
+        />
         <CustomSpacer space={sh78} />
         <View style={flexRow}>
           <RoundedButton buttonStyle={buttonContainer} secondary={true} onPress={handleCancel} text={BUTTON_CANCEL} />

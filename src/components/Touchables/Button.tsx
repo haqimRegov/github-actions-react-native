@@ -53,7 +53,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
     opacity: disabled === true ? 0.5 : 1,
     ...buttonStyle,
   };
-  const textColor = secondary ? { color: colorBlack._5 } : { color: colorWhite._1 };
+  const textColor = secondary ? { color: colorBlack._4 } : { color: colorWhite._1 };
   const defaultTextStyle: TextStyle = { ...fs15BoldWhite, ...fsAlignCenter, ...fsCapitalize, ...textColor, ...textStyle };
 
   return (

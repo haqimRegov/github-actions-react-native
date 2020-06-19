@@ -89,6 +89,7 @@ export const english = {
       NAME_LABEL: "Full Name as per NRIC",
       NRIC: "NRIC",
       NRIC_LABEL: "NRIC Number",
+      OR: "OR",
       PASSPORT: "Passport",
       UPLOAD_DOCUMENT: "Upload your document",
       UPLOAD_DOCUMENT_GUIDE: "Document Upload Guidelines",

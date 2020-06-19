@@ -65,6 +65,7 @@ export const english = {
       BUTTON_TAKE_RISK_ASSESSMENT: "Take Risk Assessment",
       HELLO: "Hello",
       QUESTION: "Do you fall under any of the following categories,",
+      STEP: "Step",
     },
     ONBOARDING: {
       HEADING: "Your financial freedom in just 5 simple steps",

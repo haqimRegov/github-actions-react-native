@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { View } from "react-native";
 
-import { RadioButton } from "../../components";
+import { RadioButton } from "../../components/RadioButton/RadioButton";
 import { flexCol, flexRow, sh12, sw12 } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 
 export interface RadioButtonGroupProps {
   direction?: "row" | "column";

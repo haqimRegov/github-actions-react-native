@@ -54,7 +54,7 @@ export const english = {
       QUESTION_1: "How would you describe your knowledge of investments as?",
       QUESTION_2: "When are you planning to withdraw money form your investments?",
       QUESTION_3: "If your portfolio falls along with the market, what would you do?",
-      QUESTION_4: "If you could choose only one for the five hypothetical portfolios characterized below, which would you select?",
+      QUESTION_4: "If you could choose only one of the five hypothetical portfolios characterized below, which would you select?",
     },
   },
 };

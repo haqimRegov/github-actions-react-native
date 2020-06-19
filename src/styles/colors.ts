@@ -2,8 +2,8 @@ export const colorBlack = {
   _1: "#000000",
   _2: "#4d4d4d",
   _3: "#515151",
-  _4: "#0a1f44",
-  _5: "#202020",
+  _4: "#202020",
+  _5: "#0a1f44",
 };
 
 export const colorBlue = {
@@ -11,7 +11,6 @@ export const colorBlue = {
   _2: "#0D55CF",
   _3: "#007fff",
   _4: "#0072ff",
-  _6: "#4098f6",
 };
 
 export const colorGray = {

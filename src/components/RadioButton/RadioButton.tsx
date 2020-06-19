@@ -17,7 +17,7 @@ export const RadioButton = ({ label, selected, setSelected }: RadioButtonProps) 
 
   return (
     <TouchableWithoutFeedback onPress={setSelected}>
-      <View style={{ ...flexRow, ...centerVertical }}>
+      <View style={{ ...centerVertical, ...flexRow }}>
         <View style={radioStyle} />
         <CustomSpacer space={sw12} isHorizontal={true} />
         <Text style={fs13RegBlack2}>{label}</Text>

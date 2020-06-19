@@ -43,7 +43,7 @@ const {
   BUTTON_TAKE_RISK_ASSESSMENT,
   HELLO,
   QUESTION,
-} = Language.PAGE.RISK_ASSESSMENT;
+} = Language.PAGE.NET_WORTH_ASSESSMENT;
 const USER_NAME: string = "Edgar";
 const HELLO_USER: string = `${HELLO} ${USER_NAME}`;
 const STEP_INFO = ["Risk Assessment", "Product Recommendation", "Personal Information", "Conformation", "Payment"];

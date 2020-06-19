@@ -16,6 +16,13 @@ export const fsUnderline: TextStyle = {
   textDecorationLine: "underline",
 };
 
+// TODO change to proper lineHeight
+export const fs8SemiBoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh8,
+};
+
 // TODO change to proper color
 export const fs12BoldBlack2: TextStyle = {
   color: colorBlack._2,
@@ -132,6 +139,27 @@ export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
+};
+
+// TODO change to proper lineHeight
+export const fs16SemiBoldGrey6: TextStyle = {
+  color: colorGray._6,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+};
+
+// TODO change to proper lineHeight
+export const fs16SemiBoldWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+};
+
+// TODO change to proper lineHeight
+export const fs18SemiBoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh18,
 };
 
 // TODO change to proper font

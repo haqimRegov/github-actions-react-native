@@ -1,22 +1,38 @@
 import React, { Fragment, ReactNode } from "react";
-import { ViewStyle } from "react-native";
+import { View } from "react-native";
 
-import { CustomSpacer, TitleAndSub, AnswerContent } from "../../components";
-import { sh16 } from "../../styles";
+import { CustomSpacer, LabeledTitle, RadioButtonGroup } from "../../components";
+import { sh16, flexRow } from "../../styles";
+import { CustomFlexSpacer } from "./Spacer";
 
 export interface QuestionProps {
+  children?: ReactNode;
+  options?: string[];
+  right?: ReactNode;
+  selected: string;
+  setSelected: (name: string) => void;
   title: string;
-  subtitle: string;
-  containerStyle?: ViewStyle;
-  children: ReactNode;
+  label: string;
 }
 
-export const Question = ({ children, title, subtitle, containerStyle }: QuestionProps) => {
+export const Question = ({ children, label, options, right, selected, setSelected, title }: QuestionProps) => {
   return (
     <Fragment>
-      <TitleAndSub title={title} subtitle={subtitle} />
+      <LabeledTitle label={label} title={title} />
       <CustomSpacer space={sh16} />
-      <AnswerContent containerStyle={containerStyle}>{children}</AnswerContent>
+      {children !== undefined ? (
+        children
+      ) : (
+        <Fragment>
+          <View style={flexRow}>
+            {options !== undefined ? (
+              <RadioButtonGroup labels={options} selected={selected} setSelected={setSelected} direction="column" />
+            ) : null}
+            <CustomFlexSpacer />
+            {right !== undefined ? right : null}
+          </View>
+        </Fragment>
+      )}
     </Fragment>
   );
 };

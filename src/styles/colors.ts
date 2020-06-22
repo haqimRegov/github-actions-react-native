@@ -11,6 +11,8 @@ export const colorBlue = {
   _2: "#0D55CF",
   _3: "#007fff",
   _4: "#377bff",
+  _5: "#0072ff",
+  _6: "#0676ed",
 };
 
 export const colorGray = {
@@ -22,6 +24,7 @@ export const colorGray = {
   _6: "#dae1ed",
   _7: "#fafcfd",
   _8: "#9e9e9e",
+  _9: "#e9edf4",
 };
 
 export const colorWhite = {

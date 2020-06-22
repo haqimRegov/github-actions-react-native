@@ -1,21 +1,19 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
+import React, { useState } from "react";
 import { Image, ImageStyle, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../assets/LocalAssets";
-import { CustomSpacer, CustomTextInput, RoundedButton, SafeAreaPage } from "../components";
+import { CustomSpacer, CustomTextInput, RadioButton, RoundedButton, SafeAreaPage } from "../components";
 import { Language } from "../constants";
 import {
   centerHV,
   centerVertical,
   circle,
-  circleBorder,
   colorBlue,
   colorGray,
   colorWhite,
   flexChild,
   flexRow,
-  fs12RegBlack2,
   fs12SemiBoldBlack2,
   fs16SemiBoldBlack2,
   fs16SemiBoldGray8,
@@ -25,30 +23,27 @@ import {
   fs36SemiBoldBlack2,
   px,
   py,
-  sh1,
   sh10,
-  sh12,
+  sh16,
   sh20,
   sh24,
   sh273,
   sh30,
+  sh32,
   sh376,
-  sh4,
-  sh50,
   sh56,
+  sh60,
   sh70,
-  sh90,
+  sh8,
   sh96,
   sw10,
-  sw150,
+  sw12,
+  sw126,
   sw16,
-  sw18,
   sw20,
-  sw278,
-  sw30,
-  sw433,
+  sw32,
+  sw36,
   sw498,
-  sw70,
   sw96,
 } from "../styles";
 
@@ -59,57 +54,47 @@ interface PageProps {
 const pageTexts = Language.PAGE.NEW_CLIENT;
 
 export const NewClientPage = ({ navigation }: PageProps) => {
+  const [radioNRIC, setRadioNRIC] = useState<boolean>(true);
+  const [radioPassport, setRadioPassport] = useState<boolean>(false);
+
   // Stylings
-  const logoStyle: ImageStyle = {
-    height: sh50,
-    marginLeft: sw18,
-    resizeMode: "contain",
-    width: sw150,
-  };
+  const logoStyle: ImageStyle = { height: sh60, resizeMode: "contain", width: sw126 };
 
   const uploadIconBigStyle: ImageStyle = {
-    height: sh90,
-    marginLeft: sw10,
     resizeMode: "contain",
-    width: sw70,
+    width: sw96,
   };
 
   const uploadIconSmallStyle: ImageStyle = {
     height: sh20,
-    marginLeft: sw10,
     resizeMode: "contain",
     width: sw16,
   };
 
   const cardStyle: ViewStyle = {
-    ...px(sw30),
-    ...py(sh30),
+    ...px(sw32),
+    ...py(sh32),
     backgroundColor: colorWhite._1,
     borderRadius: sh10,
     height: sh376,
-    width: sw498,
   };
   const cardInfoStyle: ViewStyle = {
     ...centerVertical,
     ...flexRow,
-    ...px(sw20),
-    ...py(sh20),
+    ...px(sw36),
     backgroundColor: colorWhite._1,
     borderRadius: sh10,
     height: sh70,
-    width: sw498,
   };
+
   const innerCardStyle: ViewStyle = {
     ...centerHV,
-    ...px(sw20),
-    ...py(sh20),
     backgroundColor: colorGray._7,
     borderColor: colorGray._8,
     borderRadius: sh10,
     borderStyle: "dashed",
     borderWidth: 1,
     height: sh273,
-    width: sw433,
   };
 
   // Handlers
@@ -117,70 +102,68 @@ export const NewClientPage = ({ navigation }: PageProps) => {
     navigation.navigate("Onboarding");
   };
 
+  const handleNric = () => {
+    setRadioNRIC(!radioNRIC);
+  };
+
+  const handlePassport = () => {
+    setRadioPassport(!radioPassport);
+  };
+
   return (
-    <SafeAreaPage>
+    <SafeAreaPage bottomBackgroundColor={colorGray._3} topBackgroundColor={colorGray._3}>
       <View style={{ ...flexChild, backgroundColor: colorGray._3 }}>
         <CustomSpacer space={sh30} />
-        <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+        <View style={px(sw36)}>
+          <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+        </View>
         <CustomSpacer space={sh96} />
         <View style={{ ...flexRow, ...px(sw96) }}>
           <View>
-            <View style={flexChild}>
-              <Text style={fs36SemiBoldBlack2}>{pageTexts.HELLO}</Text>
-              <Text style={fs24RegBlack2}>{pageTexts.HELLO_LINE2}</Text>
-              <CustomSpacer space={sh24} />
+            <Text style={fs36SemiBoldBlack2}>{pageTexts.HELLO}</Text>
+            <Text style={fs24RegBlack2}>{pageTexts.HELLO_LINE2}</Text>
+            <CustomSpacer space={sh24} />
+            <View style={px(sw12)}>
               <Text style={fs12SemiBoldBlack2}>{pageTexts.ID_TYPE}</Text>
+              <CustomSpacer space={sh8} />
               <View style={{ ...centerVertical, ...flexRow }}>
-                <View style={{ ...circleBorder(sh20, sh4, colorBlue._1, colorWhite._1) }} />
-                <CustomSpacer space={sw10} isHorizontal={true} />
-                <Text style={{ ...fs12RegBlack2, ...py(sh10) }}>{pageTexts.NRIC}</Text>
+                <RadioButton selected={radioNRIC} setSelected={handleNric} label={pageTexts.NRIC} />
                 <CustomSpacer isHorizontal={true} space={sh56} />
-                <View style={{ ...circleBorder(sh20, sh1, colorGray._1, colorWhite._1) }} />
-                <CustomSpacer space={sw10} isHorizontal={true} />
-                <Text style={{ ...fs12RegBlack2, ...py(sh10) }}>{pageTexts.PASSPORT}</Text>
+                <RadioButton selected={radioPassport} setSelected={handlePassport} label={pageTexts.NRIC} />
               </View>
-              <CustomTextInput
-                label={pageTexts.NAME_LABEL}
-                labelStyle={fs12SemiBoldBlack2}
-                onChangeText={undefined}
-                spaceToLabel={sh10}
-                spaceToTop={sh12}
-              />
-              <CustomTextInput
-                label={pageTexts.NRIC_LABEL}
-                labelStyle={fs12SemiBoldBlack2}
-                onChangeText={undefined}
-                spaceToLabel={sh10}
-                spaceToTop={sh20}
-              />
-              <CustomSpacer space={sh30} />
-              <RoundedButton onPress={handleStart} buttonStyle={{ width: sw278 }} text={pageTexts.BUTTON_TEXT} />
             </View>
+            <CustomSpacer space={sh16} />
+            <CustomTextInput label={pageTexts.NAME_LABEL} labelStyle={fs12SemiBoldBlack2} onChangeText={undefined} spaceToLabel={sh10} />
+            <CustomSpacer space={sh20} />
+            <CustomTextInput label={pageTexts.NRIC_LABEL} labelStyle={fs12SemiBoldBlack2} onChangeText={undefined} spaceToLabel={sh10} />
+            <CustomSpacer space={sh30} />
+            <RoundedButton onPress={handleStart} text={pageTexts.BUTTON_TEXT} />
           </View>
-          <View style={{ ...flexChild, ...flexRow, ...centerHV }}>
+          <View style={{ ...centerHV, ...flexChild, ...flexRow }}>
             <Text style={fs18SemiBoldBlack2}>{pageTexts.OR}</Text>
           </View>
-          <View>
+          <View style={{ width: sw498 }}>
             <View style={cardStyle}>
               <View style={{ ...flexChild, ...flexRow }}>
+                <CustomSpacer isHorizontal={true} space={sw10} />
                 <Image source={LocalAssets.newClient.uploadICSmall} style={uploadIconSmallStyle} />
-                <CustomSpacer space={sh20} isHorizontal={true} />
+                <CustomSpacer isHorizontal={true} space={sh20} />
                 <Text style={fs16SemiBoldBlack2}>{pageTexts.UPLOAD_IC}</Text>
               </View>
               <View style={innerCardStyle}>
                 <Image source={LocalAssets.newClient.uploadICBig} style={uploadIconBigStyle} />
-                <CustomSpacer space={sh30} />
+                <CustomSpacer space={sh32} />
                 <Text style={fs16SemiBoldBlack2}>{pageTexts.UPLOAD_DOCUMENT}</Text>
-                <CustomSpacer space={sh20} />
+                <CustomSpacer space={sh8} />
                 <Text style={fs16SemiBoldGray8}>{pageTexts.UPLOAD_DOCUMENT_HINT}</Text>
               </View>
             </View>
             <CustomSpacer space={sh30} />
             <View style={cardInfoStyle}>
-              <View style={{ ...circle(sw20, colorBlue._4), ...centerHV }}>
-                <Text style={fs16SemiBoldWhite}>{"i"}</Text>
+              <View style={{ ...centerHV, ...circle(sw20, colorBlue._4) }}>
+                <Text style={fs16SemiBoldWhite}>i</Text>
               </View>
-              <CustomSpacer space={sw10} isHorizontal={true} />
+              <CustomSpacer isHorizontal={true} space={sw10} />
               <Text style={fs16SemiBoldBlack2}>{pageTexts.UPLOAD_DOCUMENT_GUIDE}</Text>
             </View>
           </View>

@@ -19,9 +19,9 @@ export const colorGray = {
   _3: "#f2f4f6",
   _4: "#8f9bb3",
   _5: "#c8c9cc",
-  _4: "#dae1ed",
-  _5: "#fafcfd",
-  _6: "#9e9e9e",
+  _6: "#dae1ed",
+  _7: "#fafcfd",
+  _8: "#9e9e9e",
 };
 
 export const colorWhite = {

@@ -47,7 +47,6 @@ import {
   sw205,
   sw24,
   sw278,
-  sw350,
   sw4,
   sw56,
   sw590,
@@ -121,8 +120,10 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   const bottomPadding = sh32 + bottom;
   const topPadding = sh32 + top;
   const buttonStyle: ViewStyle = { width: sw205 };
-  const inputStyle: ViewStyle = { width: sw350 };
+  const logoStyle: ImageStyle = { height: sh70 };
+  const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
 
+  // Handlers
   const handleModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -157,11 +158,15 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     //   }),
     // );
   };
-  const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
-  const logoStyle: ImageStyle = { height: sh70 };
+
+  const handleTest = () => {
+    navigation.navigate("NewClient");
+  };
+
   const topLinks: LinkTextProps[] = [
     {
-      onPress: handleLanguageChange,
+      // onPress: handleLanguageChange,
+      onPress: handleTest,
       style: fsUppercase,
       text: LANGUAGE_BAHASA,
     },
@@ -202,21 +207,9 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
               <CustomSpacer space={sh56} />
               <Text style={fs36SemiBoldBlack2}>{HEADING}</Text>
               <Text style={fs24RegBlack2}>{SUBHEADING}</Text>
-              <CustomTextInput
-                label={LABEL_AGENT_CODE}
-                onChangeText={setInputAgentCode}
-                spaceToTop={sh14}
-                value={inputAgentCode}
-                viewStyle={inputStyle}
-              />
-              <CustomTextInput
-                label={LABEL_PASSWORD}
-                onChangeText={setInputPassword}
-                spaceToTop={sh12}
-                spaceToBottom={sh30}
-                value={inputPassword}
-                viewStyle={inputStyle}
-              />
+              <CustomTextInput label={LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
+              <CustomTextInput label={LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
+              <CustomSpacer space={sh30} />
               <View style={flexRow}>
                 <RoundedButton onPress={handleModal} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
                 <CustomSpacer isHorizontal={true} space={sw24} />

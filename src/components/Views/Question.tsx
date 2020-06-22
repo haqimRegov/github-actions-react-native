@@ -6,10 +6,15 @@ import { RadioButtonGroup } from "../RadioButton/RadioButtonGroup";
 import { sh16, flexRow } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 
+export interface QuestionContentProps {
+  contentOptions?: string[];
+  selected: string;
+  setSelectedOption: (name: string) => void;
+}
 export interface QuestionProps {
-  children?: ReactNode;
   label: string;
   options?: string[];
+  RenderContent?: (props: QuestionContentProps) => JSX.Element;
   right?: ReactNode;
   selected: string;
   setSelected: (name: string) => void;
@@ -17,13 +22,13 @@ export interface QuestionProps {
   title: string;
 }
 
-export const Question = ({ children, label, options, right, selected, setSelected, spaceToContent, title }: QuestionProps) => {
+export const Question = ({ label, options, RenderContent, right, selected, setSelected, spaceToContent, title }: QuestionProps) => {
   return (
     <Fragment>
       <LabeledTitle label={label} title={title} />
       <CustomSpacer space={spaceToContent === undefined ? sh16 : spaceToContent} />
-      {children !== undefined ? (
-        children
+      {RenderContent !== undefined ? (
+        <RenderContent contentOptions={options} selected={selected} setSelectedOption={setSelected} />
       ) : (
         <View style={flexRow}>
           {options !== undefined ? (

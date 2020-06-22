@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { OnboardingSteps, SafeAreaPage } from "../../components";
-import { ONBOARDING_ROUTES, Language } from "../../constants";
+import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingContent } from "./Content";
 
 const {
-  TITLE_CONFORMATION,
+  TITLE_CONFIRMATION,
   TITLE_CONTACT_DETAILS,
   TITLE_EMPLOYMENT_DETAILS,
   TITLE_FATCA,
@@ -40,7 +40,7 @@ export const ONBOARDING: IOnboarding[] = [
     label: TITLE_PERSONAL_INFORMATION,
   },
   {
-    label: TITLE_CONFORMATION,
+    label: TITLE_CONFIRMATION,
     route: ONBOARDING_ROUTES.Confirmation,
   },
   {

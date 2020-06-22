@@ -208,13 +208,8 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
               <Text style={fs36SemiBoldBlack2}>{HEADING}</Text>
               <Text style={fs24RegBlack2}>{SUBHEADING}</Text>
               <CustomTextInput label={LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
-              <CustomTextInput
-                label={LABEL_PASSWORD}
-                onChangeText={setInputPassword}
-                spaceToTop={sh12}
-                spaceToBottom={sh30}
-                value={inputPassword}
-              />
+              <CustomTextInput label={LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
+              <CustomSpacer space={sh30} />
               <View style={flexRow}>
                 <RoundedButton onPress={handleModal} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
                 <CustomSpacer isHorizontal={true} space={sw24} />

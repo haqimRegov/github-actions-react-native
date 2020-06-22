@@ -1,9 +1,8 @@
-import * as React from "react";
-import { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Alert, Image, ImageStyle, Text, View } from "react-native";
 
 import { LocalAssets } from "../assets/LocalAssets";
-import { CheckBox, CustomFlexSpacer, CustomSpacer, RoundedButton } from "../components";
+import { CheckBox, CheckBoxProps, CustomFlexSpacer, CustomSpacer, RoundedButton } from "../components";
 import { Language } from "../constants";
 import {
   centerVertical,
@@ -52,11 +51,33 @@ const {
 } = Language.PAGE.NET_WORTH_ASSESSMENT;
 const USER_NAME: string = "Edgar";
 const HELLO_USER: string = `${HELLO} ${USER_NAME}.`;
-const RISK_ASSESSMENT_ANSWER = [ANSWER_1, ANSWER_2, ANSWER_3];
 
 export const NetWorthAssessment = () => {
+  const [assessment1, setAssessment1] = useState<boolean>(false);
+  const [assessment2, setAssessment2] = useState<boolean>(false);
+  const [assessment3, setAssessment3] = useState<boolean>(false);
+
   const logoStyle: ImageStyle = { height: sh60, resizeMode: "contain", width: sw126 };
+
   const handlePress = () => Alert.alert("alert");
+
+  const handleAssessment1 = () => {
+    setAssessment1(!assessment1);
+  };
+
+  const handleAssessment2 = () => {
+    setAssessment2(!assessment2);
+  };
+
+  const handleAssessment3 = () => {
+    setAssessment3(!assessment3);
+  };
+
+  const options: CheckBoxProps[] = [
+    { label: ANSWER_1, onPress: handleAssessment1, toggle: assessment1 },
+    { label: ANSWER_2, onPress: handleAssessment2, toggle: assessment2 },
+    { label: ANSWER_3, onPress: handleAssessment3, toggle: assessment3 },
+  ];
 
   return (
     <View style={{ ...flexRow, ...fullHeight }}>
@@ -88,9 +109,9 @@ export const NetWorthAssessment = () => {
         <CustomSpacer space={sh8} />
         <Text style={fs16RegBlack2}>{QUESTION}</Text>
         <CustomSpacer space={sh24} />
-        {RISK_ASSESSMENT_ANSWER.map((option: string, index: number) => (
+        {options.map((option: CheckBoxProps, index: number) => (
           <Fragment key={index}>
-            <CheckBox label={option} toggle={true} style={fs16RegBlack2} />
+            <CheckBox {...option} style={fs16RegBlack2} />
             <CustomSpacer space={sh16} />
           </Fragment>
         ))}

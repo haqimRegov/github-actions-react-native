@@ -3,7 +3,7 @@ import { Alert, Image, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import { ONBOARDING_ROUTES, Language } from "../../constants";
 import { LocalAssets } from "../../assets/LocalAssets";
-import { CustomSpacer, Question, RoundedButton, QuestionContentProps, LabeledTitle } from "../../components";
+import { CustomSpacer, Question, RoundedButton, LabeledTitle } from "../../components";
 import { SliderComponent } from "../../components/Slider/Slider";
 import {
   colorGray,
@@ -88,7 +88,8 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
     Alert.alert("Cancel");
   };
   const handleContinue = () => {
-    Alert.alert(` q1: ${q1} , q2: ${q2}, q3: ${q3} , q4: ${q4}`);
+    Alert.alert(`q1: ${q1}, q2: ${q2}, q3: ${q3}, q4: ${q4}`);
+    handleNextStep(ONBOARDING_ROUTES.FundingOptions);
   };
 
   return (

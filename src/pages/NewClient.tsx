@@ -18,7 +18,7 @@ import {
   fs12RegBlack2,
   fs12SemiBoldBlack2,
   fs16SemiBoldBlack2,
-  fs16SemiBoldGrey6,
+  fs16SemiBoldGray8,
   fs16SemiBoldWhite,
   fs18SemiBoldBlack2,
   fs24RegBlack2,
@@ -103,8 +103,8 @@ export const NewClientPage = ({ navigation }: PageProps) => {
     ...centerHV,
     ...px(sw20),
     ...py(sh20),
-    backgroundColor: colorGray._5,
-    borderColor: colorGray._4,
+    backgroundColor: colorGray._7,
+    borderColor: colorGray._8,
     borderRadius: sh10,
     borderStyle: "dashed",
     borderWidth: 1,
@@ -172,7 +172,7 @@ export const NewClientPage = ({ navigation }: PageProps) => {
                 <CustomSpacer space={sh30} />
                 <Text style={fs16SemiBoldBlack2}>{pageTexts.UPLOAD_DOCUMENT}</Text>
                 <CustomSpacer space={sh20} />
-                <Text style={fs16SemiBoldGrey6}>{pageTexts.UPLOAD_DOCUMENT_HINT}</Text>
+                <Text style={fs16SemiBoldGray8}>{pageTexts.UPLOAD_DOCUMENT_HINT}</Text>
               </View>
             </View>
             <CustomSpacer space={sh30} />

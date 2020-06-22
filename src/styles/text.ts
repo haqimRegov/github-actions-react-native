@@ -134,6 +134,13 @@ export const fs16SemiBoldBlack2: TextStyle = {
   fontSize: sh16,
 };
 
+// TODO change to proper font
+export const fs16SemiBoldBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+};
+
 // TODO change to proper color
 export const fs24RegBlack: TextStyle = {
   color: colorBlack._3,

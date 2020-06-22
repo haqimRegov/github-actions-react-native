@@ -6,7 +6,7 @@ import { useSafeArea } from "react-native-safe-area-context";
 import { LocalAssets } from "../assets/LocalAssets";
 import {
   CheckBox,
-  ConformationModal,
+  ConfirmationModal,
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
@@ -237,7 +237,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
           </View>
         </View>
       </ScrollView>
-      <ConformationModal
+      <ConfirmationModal
         buttons={[
           { onPress: handleModal, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: buttonStyle },
           { onPress: handleLogin, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
@@ -254,7 +254,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
             </Fragment>
           ))}
         </Fragment>
-      </ConformationModal>
+      </ConfirmationModal>
     </Fragment>
   );
 };

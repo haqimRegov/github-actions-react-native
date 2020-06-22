@@ -7,7 +7,7 @@ import {
   colorGray,
   colorWhite,
   flexRow,
-  fs16MedBlack,
+  fs16SemiBoldBlack4,
   px,
   py,
   sh24,
@@ -28,7 +28,7 @@ interface ModalProps {
   visible: boolean;
 }
 
-export const ConformationModal = ({ buttons, children, title, visible, handleClose }: ModalProps) => {
+export const ConfirmationModal = ({ buttons, children, title, visible, handleClose }: ModalProps) => {
   const modelContainer: ViewStyle = {
     backgroundColor: colorGray._2,
     borderRadius: sw5,
@@ -52,10 +52,10 @@ export const ConformationModal = ({ buttons, children, title, visible, handleClo
       <View style={modelContainer}>
         <View style={padding}>
           <View style={flexRow}>
-            <Text style={fs16MedBlack}>{title}</Text>
+            <Text style={fs16SemiBoldBlack4}>{title}</Text>
             <CustomFlexSpacer />
             <TouchableWithoutFeedback onPress={handleClose}>
-              <Text style={fs16MedBlack}>x</Text>
+              <Text style={fs16SemiBoldBlack4}>x</Text>
             </TouchableWithoutFeedback>
           </View>
           <CustomSpacer space={sh24} />

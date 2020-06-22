@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorWhite } from "./colors";
-import { sh12, sh13, sh15, sh16, sh24, sh36 } from "./sizes";
+import { sh12, sh13, sh15, sh16, sh24, sh32, sh36 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsUppercase: TextStyle = {
@@ -22,6 +22,12 @@ export const fs12BoldBlack2: TextStyle = {
   fontFamily: NunitoBold,
   fontSize: sh12,
 };
+// TODO change to proper lineHeight
+export const fs12BoldBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoBold,
+  fontSize: sh12,
+};
 
 // TODO change to proper font
 export const fs12BoldGray4: TextStyle = {
@@ -37,7 +43,7 @@ export const fs12RegBlack: TextStyle = {
   fontSize: sh12,
 };
 
-// TODO change to proper color
+// TODO change to proper lineHeight
 export const fs12RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
@@ -107,7 +113,14 @@ export const fs16BoldBlack2: TextStyle = {
   fontSize: sh16,
 };
 
-// TODO change to proper font
+// TODO change to proper lineHeight
+export const fs16RegBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoRegular,
+  fontSize: sh16,
+};
+
+// TODO change to proper lineHeight
 export const fs16RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
@@ -117,6 +130,13 @@ export const fs16RegBlack2: TextStyle = {
 // TODO change to proper font
 export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+};
+
+// TODO change to proper font
+export const fs16SemiBoldBlack4: TextStyle = {
+  color: colorBlack._4,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
 };
@@ -140,6 +160,13 @@ export const fs24SemiBoldBlack: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh24,
+};
+
+// TODO change to proper lineHeight
+export const fs32SemiBoldBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh32,
 };
 
 // TODO change to proper font

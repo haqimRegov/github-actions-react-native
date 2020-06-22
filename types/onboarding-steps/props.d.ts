@@ -3,13 +3,13 @@ declare interface RenderContentProps {
 }
 
 declare interface OnboardingStepsProps {
-  activeContent?: IContentItem | IAccordionContent;
+  activeContent?: IContentItem | IOnboarding;
   activeSection: number;
-  handleContentChange: (item: IContentItem | IAccordionContent) => void;
+  handleContentChange: (item: IContentItem | IOnboarding) => void;
   RenderContent: (props: RenderContentProps) => JSX.Element;
-  setActiveContent: (content: IContentItem | IAccordionContent) => void;
+  setActiveContent: (content: IContentItem | IOnboarding) => void;
   setActiveSection: (section: any) => void;
   setFinishedStep: (step: number[]) => void;
-  steps: IAccordionContent[];
+  steps: IOnboarding[];
   visitedSections: number[];
 }

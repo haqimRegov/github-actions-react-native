@@ -38,7 +38,7 @@ export const OnboardingSteps = ({
   const headerContainer: ViewStyle = { backgroundColor: colorWhite._1, ...py(sh8), ...flexRow, ...centerVertical };
   const contentContainer: ViewStyle = { backgroundColor: colorWhite._1 };
 
-  const accordionHeader = (step: IAccordionContent, stepIndex: number, isActive: boolean) => {
+  const accordionHeader = (step: IOnboarding, stepIndex: number, isActive: boolean) => {
     const currentStep = (stepIndex + 1).toString();
     const visited = visitedSections.some((visitedStep) => visitedStep === stepIndex);
     const labelOpacity = isActive || !visited ? { opacity: 1 } : { opacity: 0.5 };
@@ -52,7 +52,7 @@ export const OnboardingSteps = ({
     );
   };
 
-  const accordionContent = (step: IAccordionContent) => {
+  const accordionContent = (step: IOnboarding) => {
     const activeContainer: ViewStyle = { ...contentContainer };
     if (step.content === undefined) {
       return <View />;
@@ -92,14 +92,14 @@ export const OnboardingSteps = ({
 
   const handleNextStep = (nextRoute: string) => {
     let newIndex: number = 0;
-    const parentRoute = steps.filter((item: IAccordionContent, index: number) => {
+    const parentRoute = steps.filter((item: IOnboarding, index: number) => {
       if (item.route === nextRoute) {
         newIndex = index;
       }
       return item.route === nextRoute;
     });
 
-    const childRoute = steps.map((item: IAccordionContent) => {
+    const childRoute = steps.map((item: IOnboarding) => {
       if (item.content !== undefined) {
         return item.content.filter((contentItem: IContentItem) => {
           const newChildRoute = contentItem.route === nextRoute ? contentItem.route : "";

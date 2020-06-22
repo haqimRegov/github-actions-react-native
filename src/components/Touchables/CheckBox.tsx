@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerVertical, colorBlack, flexRow, fs12RegBlack2, fsAlignCenter, fsCapitalize, sh18, sw10, sw18, sw2 } from "../../styles";
+import { centerVertical, colorBlack, flexRow, fs12RegBlack2, fsAlignCenter, sh18, sw10, sw18, sw2 } from "../../styles";
 import { CustomSpacer } from "../Views";
 
 interface CheckBoxProps {
@@ -13,7 +13,7 @@ interface CheckBoxProps {
 }
 
 export const CheckBox = ({ onPress, spaceToLabel, style, label, toggle }: CheckBoxProps) => {
-  const labelStyle: TextStyle = { ...fs12RegBlack2, ...fsAlignCenter, ...fsCapitalize, ...style };
+  const labelStyle: TextStyle = { ...fs12RegBlack2, ...fsAlignCenter, ...style };
   // TODO proper design for toggle
   const toggleStyle: ViewStyle = toggle ? { ...flexRow, ...centerVertical } : { ...flexRow, ...centerVertical };
   const defaultSpace = spaceToLabel !== undefined ? spaceToLabel : sw10;

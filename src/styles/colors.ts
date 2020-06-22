@@ -23,4 +23,5 @@ export const colorGray = {
 
 export const colorWhite = {
   _1: "#FFFFFF",
+  _2: "#fdfefe",
 };

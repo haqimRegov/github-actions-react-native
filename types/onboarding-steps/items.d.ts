@@ -3,7 +3,7 @@ declare interface IContentItem {
   route: string;
 }
 
-declare interface IAccordionContent {
+declare interface IOnboarding {
   content?: IContentItem[];
   label: string;
   route?: string;

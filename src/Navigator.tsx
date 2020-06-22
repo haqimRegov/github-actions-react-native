@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import { LoginPage, OnboardingPage, NetWorthAssessment, NewClientPage } from "./pages";
+import { AddClientPage, LoginPage, NetWorthAssessment, OnboardingPage } from "./pages";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -14,7 +14,7 @@ export const RootNavigator = () => {
       <Navigator initialRouteName="Login" headerMode="none">
         <Screen name="Login" component={LoginPage} />
         <Screen name="Onboarding" component={OnboardingPage} />
-        <Screen name="NewClient" component={NewClientPage} />
+        <Screen name="AddClient" component={AddClientPage} />
         <Screen name="NetWorthAssessment" component={NetWorthAssessment} />
       </Navigator>
     </NavigationContainer>

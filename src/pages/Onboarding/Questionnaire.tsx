@@ -3,9 +3,11 @@ import { Alert, Image, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import { ONBOARDING_ROUTES, Language } from "../../constants";
 import { LocalAssets } from "../../assets/LocalAssets";
-import { CustomSpacer, Question, RoundedButton } from "../../components";
+import { CustomSpacer, Question, RoundedButton, QuestionContentProps, LabeledTitle } from "../../components";
+import { SliderComponent } from "../../components/Slider/Slider";
 import {
   colorGray,
+  colorWhite,
   flexChild,
   flexCol,
   flexGrow,
@@ -14,6 +16,8 @@ import {
   px,
   sh143,
   sh189,
+  sh16,
+  sh20,
   sh24,
   sh35,
   sh36,
@@ -25,7 +29,6 @@ import {
   sw240,
   sw282,
   sw96,
-  sh20,
 } from "../../styles";
 
 const {
@@ -79,12 +82,13 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
     ...px(sw96),
     backgroundColor: colorGray._3,
   };
+  const sliderContainer: ViewStyle = { backgroundColor: colorWhite._1, borderRadius: 10, elevation: 10 };
   const buttonContainer: ViewStyle = { width: sw240 };
   const handleCancel = () => {
     Alert.alert("Cancel");
   };
   const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.FundingOptions);
+    Alert.alert(` q1: ${q1} , q2: ${q2}, q3: ${q3} , q4: ${q4}`);
   };
 
   return (
@@ -93,13 +97,25 @@ export const QuestionnaireContent = ({ handleNextStep }: QuestionnaireContentPro
         <CustomSpacer space={sh55} />
         <Text style={fs24RegBlack}>{HEADING}</Text>
         <CustomSpacer space={sh24} />
-        <Question label={LABEL_QUESTION_1} options={Q1_OPTIONS} selected={q1} setSelected={setQ1} title={QUESTION_1}>
-          <Text>Slider</Text>
-        </Question>
+        <LabeledTitle label={LABEL_QUESTION_1} title={QUESTION_1} />
+        <CustomSpacer space={sh16} />
+        <View style={sliderContainer}>
+          <CustomSpacer space={sh24} />
+          <View style={{ ...px(sh24) }}>
+            <SliderComponent disabled={true} options={Q1_OPTIONS} setSelected={setQ1} />
+          </View>
+          <CustomSpacer space={sh24} />
+        </View>
         <CustomSpacer space={sh36} />
-        <Question label={LABEL_QUESTION_2} options={Q2_OPTIONS} selected={q2} setSelected={setQ2} title={QUESTION_2}>
-          <Text>Slider</Text>
-        </Question>
+        <LabeledTitle label={LABEL_QUESTION_2} title={QUESTION_2} />
+        <CustomSpacer space={sh16} />
+        <View style={sliderContainer}>
+          <CustomSpacer space={sh24} />
+          <View style={{ ...px(sh24) }}>
+            <SliderComponent disabled={true} options={Q2_OPTIONS} setSelected={setQ2} />
+          </View>
+          <CustomSpacer space={sh24} />
+        </View>
         <CustomSpacer space={sh36} />
         <Question
           label={LABEL_QUESTION_3}

@@ -4,7 +4,6 @@ export const sh1 = scaleHeight(1);
 export const sh4 = scaleHeight(4);
 export const sh6 = scaleHeight(6);
 export const sh8 = scaleHeight(8);
-
 export const sh10 = scaleHeight(10);
 export const sh11 = scaleHeight(11);
 export const sh12 = scaleHeight(12);

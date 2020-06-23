@@ -10,7 +10,7 @@ export interface SliderProps {
   setSelected: (result: string) => void;
 }
 
-export const CustomSlider = ({ disabled, options, setSelected }) => {
+export const CustomSlider = ({ disabled, options, setSelected }: SliderProps) => {
   const [value, setValue] = useState<number>(0);
 
   const handleChange = (update: number[]) => {

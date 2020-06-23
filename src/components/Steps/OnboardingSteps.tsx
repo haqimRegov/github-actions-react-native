@@ -4,7 +4,6 @@ import Accordion from "react-native-collapsible/Accordion";
 
 import {
   centerVertical,
-  colorGray,
   colorWhite,
   flexChild,
   flexRow,
@@ -17,9 +16,9 @@ import {
   sh24,
   sh8,
   sw16,
-  sw398,
   sw40,
 } from "../../styles";
+import { SideMenu } from "../Nav";
 import { CustomSpacer } from "../Views";
 import { Step } from "./Step";
 
@@ -34,7 +33,7 @@ export const OnboardingSteps = ({
   steps,
   visitedSections,
 }: OnboardingStepsProps) => {
-  const stepsContainer: ViewStyle = { width: sw398, ...px(sw40), backgroundColor: colorWhite._1 };
+  const container: ViewStyle = { ...fullHW, ...flexRow, backgroundColor: colorWhite._1 };
   const headerContainer: ViewStyle = { backgroundColor: colorWhite._1, ...py(sh8), ...flexRow, ...centerVertical };
   const contentContainer: ViewStyle = { backgroundColor: colorWhite._1 };
 
@@ -126,11 +125,9 @@ export const OnboardingSteps = ({
     setFinishedStep([]);
   };
 
-  const pageContainer: ViewStyle = { ...flexChild, backgroundColor: colorGray._1 };
-  const container: ViewStyle = { ...fullHW, ...flexRow, backgroundColor: colorWhite._1 };
   return (
     <View style={container}>
-      <View style={stepsContainer}>
+      <SideMenu>
         <Accordion
           activeSections={[activeSection]}
           duration={400}
@@ -140,8 +137,8 @@ export const OnboardingSteps = ({
           sections={steps}
           touchableComponent={TouchableWithoutFeedback}
         />
-      </View>
-      <View style={pageContainer}>
+      </SideMenu>
+      <View style={flexChild}>
         <RenderContent handleNextStep={handleNextStep} />
       </View>
     </View>

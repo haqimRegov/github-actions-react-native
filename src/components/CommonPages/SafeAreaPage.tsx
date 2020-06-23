@@ -1,7 +1,7 @@
 import React, { Fragment, ReactNode } from "react";
 import { SafeAreaView, StatusBar, StatusBarStyle, ViewStyle } from "react-native";
 
-import { colorWhite, flexChild, flexNone } from "../../styles";
+import { colorGray, flexChild, flexNone } from "../../styles";
 
 interface SafeArePageProps {
   barStyle?: StatusBarStyle;
@@ -15,12 +15,12 @@ export const SafeAreaPage = ({ barStyle, bottomBackgroundColor, children, topBac
 
   const safeAreaTopStyle: ViewStyle = {
     ...flexNone,
-    backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorWhite._1,
+    backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorGray._3,
   };
 
   const safeAreaBottomStyle: ViewStyle = {
     ...flexChild,
-    backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorWhite._1,
+    backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorGray._3,
   };
 
   return (

@@ -19,13 +19,14 @@ import {
   fs36SemiBoldBlack2,
   px,
   sh10,
+  sh12,
   sh16,
   sh20,
   sh24,
   sh30,
   sh60,
   sh8,
-  sh96,
+  sh92,
   sw12,
   sw126,
   sw36,
@@ -80,14 +81,14 @@ export const AddClientPage = ({ navigation }: PageProps) => {
   const logoStyle: ImageStyle = { height: sh60, resizeMode: "contain", width: sw126 };
 
   return (
-    <SafeAreaPage bottomBackgroundColor={colorGray._3} topBackgroundColor={colorGray._3}>
+    <SafeAreaPage>
       <ScrollView bounces={false}>
         <View style={{ ...flexChild, backgroundColor: colorGray._3 }}>
-          <CustomSpacer space={sh30} />
+          <CustomSpacer space={sh12} />
           <View style={px(sw36)}>
             <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
           </View>
-          <CustomSpacer space={sh96} />
+          <CustomSpacer space={sh92} />
           <View style={{ ...flexRow, ...px(sw96) }}>
             <View>
               <Text style={fs36SemiBoldBlack2}>{ADD_CLIENT.HEADING}</Text>
@@ -123,6 +124,7 @@ export const AddClientPage = ({ navigation }: PageProps) => {
               title={ADD_CLIENT.UPLOAD_DOCUMENT}
             />
           </View>
+          <CustomSpacer space={sh16} />
         </View>
       </ScrollView>
     </SafeAreaPage>

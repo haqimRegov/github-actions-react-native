@@ -1,3 +1,4 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 
 import { OnboardingSteps, SafeAreaPage } from "../../components";
@@ -49,7 +50,11 @@ export const ONBOARDING: IOnboarding[] = [
   },
 ];
 
-export const OnboardingPage = () => {
+interface OnboardingProps {
+  navigation: StackNavigationProp<RootNavigatorType>;
+}
+
+export const OnboardingPage = ({ navigation }: OnboardingProps) => {
   const [activeSection, setActiveSection] = useState(0);
   const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(undefined);
   const [finishedStep, setFinishedStep] = useState<number[]>([]);
@@ -67,18 +72,20 @@ export const OnboardingPage = () => {
   const ACTIVE_CONTENT = activeContent !== undefined ? activeContent.route || "" : "Questionnaire";
 
   return (
-    <SafeAreaPage>
-      <OnboardingSteps
-        activeContent={activeContent}
-        activeSection={activeSection}
-        handleContentChange={handleContentChange}
-        RenderContent={({ handleNextStep }) => <OnboardingContent route={ACTIVE_CONTENT} handleNextStep={handleNextStep} />}
-        setActiveContent={setActiveContent}
-        setActiveSection={setActiveSection}
-        setFinishedStep={setFinishedStep}
-        steps={ONBOARDING}
-        visitedSections={finishedStep}
-      />
-    </SafeAreaPage>
+    <OnboardingSteps
+      activeContent={activeContent}
+      activeSection={activeSection}
+      handleContentChange={handleContentChange}
+      RenderContent={({ handleNextStep }) => (
+        <SafeAreaPage>
+          <OnboardingContent route={ACTIVE_CONTENT} handleNextStep={handleNextStep} navigation={navigation} />
+        </SafeAreaPage>
+      )}
+      setActiveContent={setActiveContent}
+      setActiveSection={setActiveSection}
+      setFinishedStep={setFinishedStep}
+      steps={ONBOARDING}
+      visitedSections={finishedStep}
+    />
   );
 };

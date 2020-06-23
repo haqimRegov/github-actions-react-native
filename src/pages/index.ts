@@ -1,4 +1,4 @@
 export * from "./AddClient";
 export * from "./Login";
-export * from "./NetWorthAssessment";
+export * from "./RiskAppetite";
 export * from "./Onboarding";

@@ -2,8 +2,8 @@ import React, { Fragment, ReactNode } from "react";
 import { View } from "react-native";
 
 import { LabeledTitle } from "../../components/Views/LabeledTitle";
+import { flexRow, sh16 } from "../../styles";
 import { RadioButtonGroup } from "../RadioButton/RadioButtonGroup";
-import { sh16, flexRow } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 
 export interface QuestionContentProps {

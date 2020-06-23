@@ -1,7 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
-import { Alert, Image, ImageStyle, ScrollView, Text, View, ViewStyle } from "react-native";
-import { useSafeArea } from "react-native-safe-area-context";
+import { Alert, Image, ImageStyle, ScrollView, Text, View } from "react-native";
 
 import { LocalAssets } from "../assets/LocalAssets";
 import {
@@ -15,6 +14,7 @@ import {
   LinkTextGroup,
   LinkTextProps,
   RoundedButton,
+  SafeAreaPage,
 } from "../components";
 import { Language } from "../constants";
 import {
@@ -34,13 +34,14 @@ import {
   fs36SemiBoldBlack2,
   fsUppercase,
   px,
-  scaleHeight,
+  py,
   sh12,
   sh14,
   sh16,
   sh23,
   sh24,
   sh30,
+  sh32,
   sh56,
   sh70,
   sw16,
@@ -110,19 +111,13 @@ interface LoginPageProps {
 }
 
 export const LoginPage = ({ navigation }: LoginPageProps) => {
-  const { bottom, top } = useSafeArea();
-
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [inputAgentCode, setInputAgentCode] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
   // TODO check why sizes cannot be imported here
-  const sh32 = scaleHeight(32);
-  const bottomPadding = sh32 + bottom;
-  const topPadding = sh32 + top;
 
-  const buttonStyle: ViewStyle = { width: sw205 };
   const logoStyle: ImageStyle = { height: sh70, width: sw167, resizeMode: "contain" };
   const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
 
@@ -132,7 +127,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   };
 
   const handleForgotPassword = () => {
-    Alert.alert("ForgotPassword");
+    navigation.navigate("Onboarding");
   };
 
   const handlePrivacyPolicy = () => {
@@ -167,7 +162,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   };
 
   const handleRiskAssessment = () => {
-    navigation.navigate("NetWorthAssessment");
+    navigation.navigate("RiskAppetite");
   };
 
   const topLinks: LinkTextProps[] = [
@@ -200,46 +195,46 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
           <View>
             <Image source={LocalAssets.login.background} style={backgroundStyle} />
           </View>
-          <View style={{ ...flexChild, ...px(sw56) }}>
-            <CustomSpacer space={topPadding} />
-            <View style={flexRow}>
-              <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+          <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
+            <View style={{ ...flexChild, ...px(sw56), ...py(sh32) }}>
+              <View style={flexRow}>
+                <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+                <CustomFlexSpacer />
+                <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
+                  <LinkTextGroup divider={<View style={circle(sw4, colorBlack._3)} />} links={topLinks} spaceToDivider={sw4} />
+                </View>
+              </View>
+              <View style={px(sw16)}>
+                <CustomSpacer space={sh56} />
+                <Text style={fs36SemiBoldBlack2}>{HEADING}</Text>
+                <Text style={fs24RegBlack2}>{SUBHEADING}</Text>
+                <CustomTextInput label={LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
+                <CustomTextInput label={LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
+                <CustomSpacer space={sh30} />
+                <View style={flexRow}>
+                  <RoundedButton onPress={handleModal} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
+                  <CustomSpacer isHorizontal={true} space={sw24} />
+                  <IconButton name="fingerprint" onPress={handleFingerprint} />
+                </View>
+                <CustomSpacer space={sh23} />
+                <View style={flexRow}>
+                  <CheckBox label={REMEMBER_ME} onPress={handleRememberMe} toggle={rememberMe} />
+                  <CustomSpacer isHorizontal={true} space={sw73} />
+                  <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={FORGOT_PASSWORD} />
+                </View>
+              </View>
               <CustomFlexSpacer />
-              <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-                <LinkTextGroup divider={<View style={circle(sw4, colorBlack._3)} />} links={topLinks} spaceToDivider={sw4} />
-              </View>
-            </View>
-            <View style={px(sw16)}>
-              <CustomSpacer space={sh56} />
-              <Text style={fs36SemiBoldBlack2}>{HEADING}</Text>
-              <Text style={fs24RegBlack2}>{SUBHEADING}</Text>
-              <CustomTextInput label={LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
-              <CustomTextInput label={LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
-              <CustomSpacer space={sh30} />
               <View style={flexRow}>
-                <RoundedButton onPress={handleModal} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
-                <CustomSpacer isHorizontal={true} space={sw24} />
-                <IconButton name="fingerprint" onPress={handleFingerprint} />
-              </View>
-              <CustomSpacer space={sh23} />
-              <View style={flexRow}>
-                <CheckBox label={REMEMBER_ME} onPress={handleRememberMe} toggle={rememberMe} />
-                <CustomSpacer isHorizontal={true} space={sw73} />
-                <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={FORGOT_PASSWORD} />
+                <LinkTextGroup divider={<Text style={fs12RegBlue}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
               </View>
             </View>
-            <CustomFlexSpacer />
-            <View style={flexRow}>
-              <LinkTextGroup divider={<Text style={fs12RegBlue}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
-            </View>
-            <CustomSpacer space={bottomPadding} />
-          </View>
+          </SafeAreaPage>
         </View>
       </ScrollView>
       <ConfirmationModal
         buttons={[
-          { onPress: handleModal, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: buttonStyle },
-          { onPress: handleLogin, text: BUTTON_CONFIRM, buttonStyle: buttonStyle },
+          { onPress: handleModal, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: { width: sw205 } },
+          { onPress: handleLogin, text: BUTTON_CONFIRM, buttonStyle: { width: sw205 } },
         ]}
         handleClose={handleModal}
         title={CONFIRM_YOUR_DETAILS}

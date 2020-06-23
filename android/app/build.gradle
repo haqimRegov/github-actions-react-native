@@ -132,6 +132,8 @@ android {
         applicationId "com.kenangamobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        // for react-native-image-crop-picker
+        vectorDrawables.useSupportLibrary = true
         versionCode 1
         versionName "1.0"
     }

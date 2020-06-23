@@ -44,6 +44,7 @@ import {
   sh56,
   sh70,
   sw16,
+  sw167,
   sw205,
   sw24,
   sw278,
@@ -112,6 +113,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   const { bottom, top } = useSafeArea();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [inputAgentCode, setInputAgentCode] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
@@ -119,8 +121,9 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   const sh32 = scaleHeight(32);
   const bottomPadding = sh32 + bottom;
   const topPadding = sh32 + top;
+
   const buttonStyle: ViewStyle = { width: sw205 };
-  const logoStyle: ImageStyle = { height: sh70 };
+  const logoStyle: ImageStyle = { height: sh70, width: sw167, resizeMode: "contain" };
   const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
 
   // Handlers
@@ -144,8 +147,8 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     Alert.alert("handleFingerprint");
   };
 
-  const handleLanguageChange = () => {
-    Alert.alert("handleLanguageChange");
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
   };
 
   const handleLogin = () => {
@@ -159,19 +162,22 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     // );
   };
 
-  const handleTest = () => {
-    navigation.navigate("NewClient");
+  const handleAddClient = () => {
+    navigation.navigate("AddClient");
+  };
+
+  const handleRiskAssessment = () => {
+    navigation.navigate("NetWorthAssessment");
   };
 
   const topLinks: LinkTextProps[] = [
     {
-      // onPress: handleLanguageChange,
-      onPress: handleTest,
+      onPress: handleAddClient,
       style: fsUppercase,
       text: LANGUAGE_BAHASA,
     },
     {
-      onPress: handleLanguageChange,
+      onPress: handleRiskAssessment,
       style: fsUppercase,
       text: LANGUAGE_ENGLISH,
     },
@@ -217,7 +223,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
               </View>
               <CustomSpacer space={sh23} />
               <View style={flexRow}>
-                <CheckBox label={REMEMBER_ME} toggle={false} />
+                <CheckBox label={REMEMBER_ME} onPress={handleRememberMe} toggle={rememberMe} />
                 <CustomSpacer isHorizontal={true} space={sw73} />
                 <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={FORGOT_PASSWORD} />
               </View>

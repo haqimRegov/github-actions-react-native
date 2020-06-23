@@ -5,7 +5,6 @@ import {
   centerVertical,
   colorBlack,
   colorGray,
-  colorWhite,
   flexChild,
   flexRow,
   fs16SemiBoldBlack2,
@@ -81,14 +80,16 @@ export const CustomTextInput = ({
         </Fragment>
       )}
       <View style={textInputStyle}>
+        <CustomSpacer isHorizontal={true} space={sw12} />
         <TextInput
           ref={setRef}
           onBlur={handleBlur}
           onFocus={handleFocus}
+          selectionColor={colorBlack._2}
           style={textStyle}
           placeholder={rest.placeholder}
           placeholderTextColor={colorGray._1}
-          underlineColorAndroid={colorWhite._1}
+          underlineColorAndroid={"rgba(0,0,0,0)"}
           {...rest}
         />
       </View>

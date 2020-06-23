@@ -91,14 +91,14 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
 
   return (
     <View style={{ width: sw498 }}>
-      <TouchableWithoutFeedback onPress={onPress}>
-        <View style={container}>
-          <View style={{ ...flexChild, ...flexRow }}>
-            <CustomSpacer isHorizontal={true} space={sw10} />
-            <Image source={LocalAssets.addClient.paper} style={iconStyle} />
-            <CustomSpacer isHorizontal={true} space={sh20} />
-            <Text style={fs16SemiBoldBlack2}>{label}</Text>
-          </View>
+      <View style={container}>
+        <View style={{ ...flexChild, ...flexRow }}>
+          <CustomSpacer isHorizontal={true} space={sw10} />
+          <Image source={LocalAssets.addClient.paper} style={iconStyle} />
+          <CustomSpacer isHorizontal={true} space={sh20} />
+          <Text style={fs16SemiBoldBlack2}>{label}</Text>
+        </View>
+        <TouchableWithoutFeedback onPress={onPress}>
           <View style={uploadContainer}>
             {data !== undefined ? (
               <View>
@@ -116,8 +116,8 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
               </Fragment>
             )}
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </View>
       <CustomSpacer space={sh30} />
       {/** TODO to be enhanced */}
       {guidelines === undefined ? null : (

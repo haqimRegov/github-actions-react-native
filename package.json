@@ -25,6 +25,7 @@
     "fix:collapsible": "cp ./fixes/react-native-collapsible ./node_modules/react-native-collapsible/Collapsible.js"
   },
   "dependencies": {
+    "@miblanchard/react-native-slider": "^1.2.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.5.0",
     "@react-navigation/stack": "^5.4.1",

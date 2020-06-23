@@ -1,3 +1,4 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 
 import { ONBOARDING_ROUTES } from "../../constants";
@@ -14,28 +15,29 @@ import { QuestionnaireContent } from "./Questionnaire";
 interface OnboardingContentProps {
   route: string;
   handleNextStep: (route: string) => void;
+  navigation: StackNavigationProp<RootNavigatorType>;
 }
 
-export const OnboardingContent = ({ route, handleNextStep }: OnboardingContentProps) => {
-  switch (route) {
+export const OnboardingContent = (props: OnboardingContentProps) => {
+  switch (props.route) {
     case ONBOARDING_ROUTES.Questionnaire:
-      return <QuestionnaireContent handleNextStep={handleNextStep} />;
+      return <QuestionnaireContent {...props} />;
     case ONBOARDING_ROUTES.FundingOptions:
-      return <FundingOptionsContent handleNextStep={handleNextStep} />;
+      return <FundingOptionsContent {...props} />;
     case ONBOARDING_ROUTES.ProductRecommendation:
-      return <ProductRecommendation handleNextStep={handleNextStep} />;
+      return <ProductRecommendation {...props} />;
     case ONBOARDING_ROUTES.Address:
-      return <Address handleNextStep={handleNextStep} />;
+      return <Address {...props} />;
     case ONBOARDING_ROUTES.ContactDetails:
-      return <ContactDetails handleNextStep={handleNextStep} />;
+      return <ContactDetails {...props} />;
     case ONBOARDING_ROUTES.EmploymentDetails:
-      return <EmploymentDetails handleNextStep={handleNextStep} />;
+      return <EmploymentDetails {...props} />;
     case ONBOARDING_ROUTES.Declaration:
-      return <Declaration handleNextStep={handleNextStep} />;
+      return <Declaration {...props} />;
     case ONBOARDING_ROUTES.Confirmation:
-      return <Confirmation handleNextStep={handleNextStep} />;
+      return <Confirmation {...props} />;
     case ONBOARDING_ROUTES.Payment:
-      return <Payment handleNextStep={handleNextStep} />;
+      return <Payment {...props} />;
     default:
       return null;
   }

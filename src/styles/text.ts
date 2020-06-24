@@ -105,6 +105,12 @@ export const fs16BoldBlack2: TextStyle = {
   fontSize: sh16,
 };
 
+export const fs16BoldBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoBold,
+  fontSize: sh16,
+};
+
 export const fs16RegBlack4: TextStyle = {
   color: colorBlack._4,
   fontFamily: NunitoRegular,

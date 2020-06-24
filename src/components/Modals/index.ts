@@ -1,2 +1,2 @@
-export * from "./ConfirmationModal";
-export * from "./NormalModal";
+export * from "./Confirmation";
+export * from "./Basic";

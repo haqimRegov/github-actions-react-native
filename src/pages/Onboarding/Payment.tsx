@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Alert, Text, View } from "react-native";
 
 import { CustomButton } from "../../components";

@@ -5,7 +5,6 @@ import { Alert, Image, ImageStyle, ScrollView, Text, View } from "react-native";
 import { LocalAssets } from "../assets/LocalAssets";
 import {
   CheckBox,
-  ConfirmationModal,
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
@@ -28,8 +27,6 @@ import {
   flexRow,
   fs12RegBlack2,
   fs12RegBlue,
-  fs12SemiBoldBlack2,
-  fs16BoldBlack2,
   fs24RegBlack2,
   fs36SemiBoldBlack2,
   fsUppercase,
@@ -39,14 +36,12 @@ import {
   sh14,
   sh16,
   sh23,
-  sh24,
   sh30,
   sh32,
   sh56,
   sh70,
   sw16,
   sw167,
-  sw205,
   sw24,
   sw278,
   sw4,
@@ -68,63 +63,15 @@ const {
   SUBHEADING,
   TERMS_AND_CONDITIONS,
 } = Language.PAGE.LOGIN;
-const {
-  CONFIRM_YOUR_DETAILS,
-  OUTPUT_FULL_NAME,
-  OUTPUT_FULL_NAME_PLACEHOLDER,
-  OUTPUT_NRIC_PASSPORT,
-  OUTPUT_NRIC_PASSPORT_PLACEHOLDER,
-  OUTPUT_GENDER,
-  OUTPUT_GENDER_PLACEHOLDER,
-  OUTPUT_DATE_OF_BIRTH,
-  OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
-  BUTTON_RE_UPLOAD,
-  BUTTON_CONFIRM,
-} = Language.PAGE.MODAL;
-
-interface ISampleClientDetails {
-  title: string;
-  output: string;
-}
-
-const SAMPLE_CLIENT_DETAILS: ISampleClientDetails[] = [
-  {
-    title: OUTPUT_FULL_NAME,
-    output: OUTPUT_FULL_NAME_PLACEHOLDER,
-  },
-  {
-    title: OUTPUT_NRIC_PASSPORT,
-    output: OUTPUT_NRIC_PASSPORT_PLACEHOLDER,
-  },
-  {
-    title: OUTPUT_GENDER,
-    output: OUTPUT_GENDER_PLACEHOLDER,
-  },
-  {
-    title: OUTPUT_DATE_OF_BIRTH,
-    output: OUTPUT_DATE_OF_BIRTH_PLACEHOLDER,
-  },
-];
 
 interface LoginPageProps {
   navigation: StackNavigationProp<RootNavigatorType>;
 }
 
 export const LoginPage = ({ navigation }: LoginPageProps) => {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [inputAgentCode, setInputAgentCode] = useState("");
   const [inputPassword, setInputPassword] = useState("");
-
-  // TODO check why sizes cannot be imported here
-
-  const logoStyle: ImageStyle = { height: sh70, width: sw167, resizeMode: "contain" };
-  const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
-
-  // Handlers
-  const handleModal = () => {
-    setModalVisible(!modalVisible);
-  };
 
   const handleForgotPassword = () => {
     navigation.navigate("Onboarding");
@@ -147,8 +94,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   };
 
   const handleLogin = () => {
-    handleModal();
-    navigation.navigate("Onboarding");
+    navigation.navigate("AddClient");
     // navigation.dispatch(
     //   CommonActions.reset({
     //     index: 0,
@@ -157,17 +103,13 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     // );
   };
 
-  const handleAddClient = () => {
-    navigation.navigate("AddClient");
-  };
-
   const handleRiskAssessment = () => {
     navigation.navigate("RiskAppetite");
   };
 
   const topLinks: LinkTextProps[] = [
     {
-      onPress: handleAddClient,
+      onPress: handleLogin,
       style: fsUppercase,
       text: LANGUAGE_BAHASA,
     },
@@ -187,6 +129,9 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
       text: TERMS_AND_CONDITIONS,
     },
   ];
+
+  const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
+  const logoStyle: ImageStyle = { height: sh70, width: sw167, resizeMode: "contain" };
 
   return (
     <Fragment>
@@ -212,7 +157,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
                 <CustomTextInput label={LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
                 <CustomSpacer space={sh30} />
                 <View style={flexRow}>
-                  <RoundedButton onPress={handleModal} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
+                  <RoundedButton onPress={handleRiskAssessment} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
                   <CustomSpacer isHorizontal={true} space={sw24} />
                   <IconButton name="fingerprint" onPress={handleFingerprint} />
                 </View>
@@ -231,24 +176,6 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
           </SafeAreaPage>
         </View>
       </ScrollView>
-      <ConfirmationModal
-        buttons={[
-          { onPress: handleModal, text: BUTTON_RE_UPLOAD, secondary: true, buttonStyle: { width: sw205 } },
-          { onPress: handleLogin, text: BUTTON_CONFIRM, buttonStyle: { width: sw205 } },
-        ]}
-        handleClose={handleModal}
-        title={CONFIRM_YOUR_DETAILS}
-        visible={modalVisible}>
-        <Fragment>
-          {SAMPLE_CLIENT_DETAILS.map((items: ISampleClientDetails, index: number) => (
-            <Fragment key={index}>
-              <Text style={fs12SemiBoldBlack2}>{items.title}</Text>
-              <Text style={fs16BoldBlack2}>{items.output}</Text>
-              <CustomSpacer space={sh24} />
-            </Fragment>
-          ))}
-        </Fragment>
-      </ConfirmationModal>
     </Fragment>
   );
 };

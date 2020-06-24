@@ -2,6 +2,14 @@ export const english = {
   PAGE: {
     ADD_CLIENT: {
       BUTTON_STARTED: "Get Started",
+      DETAILS_BUTTON_CONFIRM: "Confirm",
+      DETAILS_BUTTON_RE_UPLOAD: "Re-Upload",
+      DETAILS_LABEL_ADDRESS: "Address",
+      DETAILS_LABEL_DOB: "Date of Birth",
+      DETAILS_LABEL_GENDER: "Gender",
+      DETAILS_LABEL_ID: "NRIC/Passport",
+      DETAILS_NAME: "Full Name",
+      DETAILS_TITLE: "Please confirm your details.",
       HEADING: "Hello!",
       LABEL_ID_TYPE: "Select ID Type:",
       LABEL_NAME: "Full Name as per NRIC",
@@ -27,20 +35,6 @@ export const english = {
       REMEMBER_ME: "Remember Me",
       SUBHEADING: "Let's login to your account.",
       TERMS_AND_CONDITIONS: "Terms & Conditions",
-    },
-    MODAL: {
-      // TODO to be enhanced
-      BUTTON_CONFIRM: "Confirm",
-      BUTTON_RE_UPLOAD: "Re-Upload",
-      CONFIRM_YOUR_DETAILS: "Please confirm your details.",
-      OUTPUT_DATE_OF_BIRTH_PLACEHOLDER: "14 August 1988",
-      OUTPUT_DATE_OF_BIRTH: "Date of Birth",
-      OUTPUT_FULL_NAME_PLACEHOLDER: "Edgar Constantine",
-      OUTPUT_FULL_NAME: "Full Name",
-      OUTPUT_GENDER_PLACEHOLDER: "Male",
-      OUTPUT_GENDER: "Gender",
-      OUTPUT_NRIC_PASSPORT_PLACEHOLDER: "123 4567 8901",
-      OUTPUT_NRIC_PASSPORT: "NRIC/Passport",
     },
     ONBOARDING: {
       HEADING: "Your financial freedom in just 5 simple steps.",

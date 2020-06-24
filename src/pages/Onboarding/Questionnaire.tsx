@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
-import { Alert, Image, ScrollView, Text, View, ViewStyle } from "react-native";
+import { Image, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { CustomSpacer, LabeledTitle, Question, RoundedButton } from "../../components";
@@ -29,6 +29,7 @@ import {
   sw282,
   sw96,
 } from "../../styles";
+import { AlertDialog } from "../../utils";
 
 const {
   BUTTON_CANCEL,
@@ -81,9 +82,14 @@ export const QuestionnaireContent = ({ handleNextStep, navigation }: Questionnai
     navigation.goBack();
   };
 
-  const handleContinue = () => {
-    Alert.alert(`q1: ${q1}, q2: ${q2}, q3: ${q3}, q4: ${q4}`);
+  // TODO temporary
+  const handleConfirm = () => {
     handleNextStep(ONBOARDING_ROUTES.FundingOptions);
+  };
+
+  // TODO temporary
+  const handleContinue = () => {
+    AlertDialog(`q1: ${q1}, q2: ${q2}, q3: ${q3}, q4: ${q4}`, handleConfirm);
   };
 
   const sliderContainer: ViewStyle = { ...shadow, backgroundColor: colorWhite._1, borderRadius: 10 };

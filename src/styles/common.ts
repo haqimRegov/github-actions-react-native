@@ -54,6 +54,16 @@ export const circleBorder = (height: number, borderWidth: number, borderColor: s
   borderColor: borderColor,
 });
 
+export const customShadow = (color: string, offsetHeight: number, offsetWidth: number, opacity: number, radius: number) => ({
+  shadowColor: color,
+  shadowOffset: {
+    height: offsetHeight,
+    width: offsetWidth,
+  },
+  shadowOpacity: opacity,
+  shadowRadius: radius,
+});
+
 export const px = (points: number) =>
   ({
     paddingLeft: points,

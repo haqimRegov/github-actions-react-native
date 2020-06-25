@@ -6,3 +6,4 @@ export * from "./RadioButton";
 export * from "./Steps";
 export * from "./Touchables";
 export * from "./Views";
+export * from "./Accordion";

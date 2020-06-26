@@ -5,6 +5,7 @@ export const colorBlack = {
   _4: "#202020",
   _5: "#0a1f44",
   _6: "#333333",
+  _6_3: "rgba(51,51,51,0.3)",
 };
 
 export const colorBlue = {

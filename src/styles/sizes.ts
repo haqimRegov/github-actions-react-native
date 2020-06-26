@@ -1,7 +1,9 @@
 import { scaleHeight, scaleWidth } from "./scaler";
 
+export const sh05 = scaleHeight(0.5);
 export const sh1 = scaleHeight(1);
 export const sh4 = scaleHeight(4);
+export const sh5 = scaleHeight(5);
 export const sh6 = scaleHeight(6);
 export const sh7 = scaleHeight(7);
 export const sh8 = scaleHeight(8);
@@ -62,6 +64,7 @@ export const sh376 = scaleHeight(376);
 export const sh450 = scaleHeight(450);
 export const sh500 = scaleHeight(500);
 
+export const sw05 = scaleWidth(0.5);
 export const sw1 = scaleWidth(1);
 export const sw2 = scaleWidth(2);
 export const sw4 = scaleWidth(4);

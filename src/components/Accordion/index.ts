@@ -1,1 +1,1 @@
-export * from "./BasicAccordion";
+export * from "./Basic";

@@ -3,29 +3,33 @@ import { Text, View, TouchableWithoutFeedbackBase, ViewStyle, TextStyle } from "
 import Accordion from "react-native-collapsible/Accordion";
 
 import { CustomSpacer } from "../Views/Spacer";
+import { IcoMoon } from "../../icons";
 import {
-  centerHorizontal,
+  centerVertical,
   colorGray,
   colorWhite,
   customShadow,
-  flexChild,
+  flexRow,
   fs12SemiBoldBlack2,
   fs16SemiBoldBlack2,
   px,
-  sh31,
-  sh56,
-  sh8,
-  sh5,
   sh05,
   sh20,
-  sw24,
   sh24,
+  sh31,
+  sh5,
+  sh56,
+  sh8,
+  spaceBetweenHorizontal,
+  sw11,
+  sw24,
 } from "../../styles";
 
 interface BasicProps {
   containerStyle?: ViewStyle;
   contentContainerStyle?: ViewStyle;
   contentStyle?: TextStyle;
+  icon?: string;
   sections: object[];
   spaceInBetween?: number;
   spaceToBottom?: number;
@@ -42,6 +46,7 @@ export const BasicAccordion = ({
   containerStyle,
   contentContainerStyle,
   contentStyle,
+  icon,
   sections,
   spaceInBetween,
   spaceToBottom,
@@ -52,11 +57,12 @@ export const BasicAccordion = ({
   const defaultSpaceInBetween = spaceInBetween !== undefined ? spaceInBetween : sh8;
 
   const defaultTitleContainerStyle: ViewStyle = {
-    ...centerHorizontal,
+    ...centerVertical,
     ...containerStyle,
     ...customShadow(colorGray._4, sh5, 0, sh05, sh20),
-    ...flexChild,
+    ...flexRow,
     ...px(sw24),
+    ...spaceBetweenHorizontal,
     backgroundColor: colorWhite._1,
     borderRadius: 10,
     height: sh56,
@@ -76,6 +82,7 @@ export const BasicAccordion = ({
       <Fragment>
         <View style={defaultStyle}>
           <Text style={defaultTitleStyle}>{section.title}</Text>
+          {icon !== undefined ? <IcoMoon name={icon} size={sw11} /> : null}
         </View>
         {activeSections.includes(selected) === false ? <CustomSpacer space={defaultSpaceInBetween} /> : null}
       </Fragment>

@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, View, ViewStyle, Alert } from "react-native";
+import { Text, View, ViewStyle, Alert, TouchableWithoutFeedback } from "react-native";
 
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { BasicAccordion, ContentPage, CustomSpacer } from "../../components";
 import { ONBOARDING_ROUTES } from "../../constants";
 import { Language } from "../../constants/language";
+import { IcoMoon } from "../../icons";
 import {
   centerHorizontal,
   colorBlack,
@@ -12,19 +12,23 @@ import {
   colorWhite,
   customShadow,
   flexChild,
+  flexRow,
   fs16RegBlue1,
   px,
-  sh31,
-  sh43,
-  sh56,
-  sh8,
-  sh5,
   sh05,
   sh20,
+  sh31,
+  sh43,
+  sh5,
+  sh56,
+  sh8,
+  spaceBetweenHorizontal,
   sw05,
+  sw11,
   sw24,
   sw96,
 } from "../../styles";
+import { CONFIRMATIONS_MOCK } from "../../mocks/confirmation";
 
 const { CONFIRMATION } = Language.PAGE;
 
@@ -35,13 +39,13 @@ const AccordionContent = ({ text }: AccordionContentProps) => {
   return <Text>{text}</Text>;
 };
 const SECTIONS = [
-  { title: CONFIRMATION.TERMS_HEADING_1, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_1} /> },
-  { title: CONFIRMATION.TERMS_HEADING_2, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_2} /> },
-  { title: CONFIRMATION.TERMS_HEADING_3, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_3} /> },
-  { title: CONFIRMATION.TERMS_HEADING_4, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_4} /> },
-  { title: CONFIRMATION.TERMS_HEADING_5, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_5} /> },
-  { title: CONFIRMATION.TERMS_HEADING_6, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_6} /> },
-  { title: CONFIRMATION.TERMS_HEADING_7, content: <AccordionContent text={CONFIRMATION.TERMS_CONTENT_7} /> },
+  { title: CONFIRMATION.TERMS_HEADING_1, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
+  { title: CONFIRMATION.TERMS_HEADING_2, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
+  { title: CONFIRMATION.TERMS_HEADING_3, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
+  { title: CONFIRMATION.TERMS_HEADING_4, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
+  { title: CONFIRMATION.TERMS_HEADING_5, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
+  { title: CONFIRMATION.TERMS_HEADING_6, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
+  { title: CONFIRMATION.TERMS_HEADING_7, content: <AccordionContent text={CONFIRMATIONS_MOCK.termsContent} /> },
 ];
 
 interface ConfirmationProps {
@@ -60,13 +64,14 @@ export const Confirmation = ({ handleNextStep }: ConfirmationProps) => {
   };
   const divider: ViewStyle = { borderTopColor: colorBlack._6_3, borderTopWidth: sw05, ...flexChild };
   const sectionContainer: ViewStyle = {
+    ...customShadow(colorGray._4, sh5, 0, sh05, sh20),
+    ...px(sw24),
+    ...centerHorizontal,
     backgroundColor: colorWhite._1,
     borderRadius: 10,
-    ...customShadow(colorGray._4, sh5, 0, sh05, sh20),
-    ...flexChild,
-    ...px(sw24),
+    height: sh56,
   };
-  const touchableContainer: ViewStyle = { ...centerHorizontal, height: sh56 };
+  const titleStyle: ViewStyle = { ...flexRow, ...spaceBetweenHorizontal };
   return (
     <ContentPage
       heading={CONFIRMATION.HEADING}
@@ -76,20 +81,26 @@ export const Confirmation = ({ handleNextStep }: ConfirmationProps) => {
       rightButtonText={CONFIRMATION.BUTTON_AGREE}
       subHeading={CONFIRMATION.SUB_HEADING}>
       <View style={{ ...px(sw96) }}>
-        <BasicAccordion sections={SECTIONS} />
+        <BasicAccordion sections={SECTIONS} icon="back-arrow" />
       </View>
       <View style={divider} />
       <CustomSpacer space={sh31} />
       <View style={{ ...px(sw96) }}>
         <View style={sectionContainer}>
-          <TouchableWithoutFeedback onPress={handleSignature} style={touchableContainer}>
-            <Text style={fs16RegBlue1}>{CONFIRMATION.SIGNATURE_CLIENT}</Text>
+          <TouchableWithoutFeedback onPress={handleSignature}>
+            <View style={titleStyle}>
+              <Text style={fs16RegBlue1}>{CONFIRMATION.SIGNATURE_CLIENT}</Text>
+              <IcoMoon name={"back-arrow"} size={sw11} />
+            </View>
           </TouchableWithoutFeedback>
         </View>
         <CustomSpacer space={sh8} />
         <View style={sectionContainer}>
-          <TouchableWithoutFeedback onPress={handleSignature} style={touchableContainer}>
-            <Text style={fs16RegBlue1}>{CONFIRMATION.SIGNATURE_AGENT}</Text>
+          <TouchableWithoutFeedback onPress={handleSignature}>
+            <View style={titleStyle}>
+              <Text style={fs16RegBlue1}>{CONFIRMATION.SIGNATURE_AGENT}</Text>
+              <IcoMoon name={"back-arrow"} size={sw11} />
+            </View>
           </TouchableWithoutFeedback>
         </View>
       </View>

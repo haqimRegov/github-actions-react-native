@@ -87,9 +87,21 @@ export const fs15BoldBlack4: TextStyle = {
   fontSize: sh15,
 };
 
+export const fs15SemiBoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh15,
+};
+
 export const fs15BoldWhite: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoBold,
+  fontSize: sh15,
+};
+
+export const fs15SemiBoldWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoSemiBold,
   fontSize: sh15,
 };
 

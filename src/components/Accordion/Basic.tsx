@@ -2,7 +2,7 @@ import React, { useState, Fragment } from "react";
 import { Text, View, TouchableWithoutFeedbackBase, ViewStyle, TextStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
-import { CustomSpacer } from "../../components/Views/Spacer";
+import { CustomSpacer } from "../Views/Spacer";
 import {
   centerHorizontal,
   colorGray,
@@ -15,11 +15,14 @@ import {
   sh31,
   sh56,
   sh8,
+  sh5,
+  sh05,
+  sh20,
   sw24,
   sh24,
 } from "../../styles";
 
-interface BasicAccordionProps {
+interface BasicProps {
   containerStyle?: ViewStyle;
   contentContainerStyle?: ViewStyle;
   contentStyle?: TextStyle;
@@ -44,49 +47,60 @@ export const BasicAccordion = ({
   spaceToBottom,
   spaceToTop,
   titleStyle,
-}: BasicAccordionProps) => {
+}: BasicProps) => {
   const [activeSections, setActiveSections] = useState<number[]>([]);
+  const defaultSpaceInBetween = spaceInBetween !== undefined ? spaceInBetween : sh8;
+
+  const defaultTitleContainerStyle: ViewStyle = {
+    ...centerHorizontal,
+    ...containerStyle,
+    ...customShadow(colorGray._4, sh5, 0, sh05, sh20),
+    ...flexChild,
+    ...px(sw24),
+    backgroundColor: colorWhite._1,
+    borderRadius: 10,
+    height: sh56,
+  };
+  const defaultContentContainerStyle: ViewStyle = { ...contentContainerStyle, ...px(sw24), backgroundColor: colorWhite._1 };
+  const defaultTitleStyle: ViewStyle = { ...fs16SemiBoldBlack2, ...titleStyle };
+  const defaultContentStyle: ViewStyle = { ...contentStyle, ...fs12SemiBoldBlack2 };
+
   const handleUpdate = (section: number[]) => {
     setActiveSections(section);
   };
   const renderTitle = (section: SectionProps) => {
+    const selected = sections.indexOf(section);
+    const contentOpenedStyle: ViewStyle = { ...defaultTitleContainerStyle, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 };
+    const defaultStyle = activeSections.includes(selected) ? contentOpenedStyle : defaultTitleContainerStyle;
     return (
       <Fragment>
-        <View style={defaultContainerStyle}>
+        <View style={defaultStyle}>
           <Text style={defaultTitleStyle}>{section.title}</Text>
         </View>
-        <CustomSpacer space={spaceInBetween !== undefined ? spaceInBetween : sh8} />
+        {activeSections.includes(selected) === false ? <CustomSpacer space={defaultSpaceInBetween} /> : null}
       </Fragment>
     );
   };
   const renderContent = (section: SectionProps) => {
+    const selected = sections.indexOf(section);
+    const contentOpenedStyle: ViewStyle = { ...defaultContentContainerStyle, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 };
+    const defaultStyle = activeSections.includes(selected) ? contentOpenedStyle : defaultContentContainerStyle;
     return (
       <Fragment>
-        <View style={defaultContentContainerStyle}>
+        <View style={defaultStyle}>
           <Text style={defaultContentStyle}>{section.content}</Text>
         </View>
+        <CustomSpacer space={defaultSpaceInBetween} />
       </Fragment>
     );
   };
 
-  const defaultContainerStyle: ViewStyle = {
-    backgroundColor: colorWhite._1,
-    borderRadius: 10,
-    ...centerHorizontal,
-    ...containerStyle,
-    ...customShadow(colorGray._4, 5, 0, 0.5, 20),
-    ...flexChild,
-    height: sh56,
-    ...px(sw24),
-  };
-  const defaultContentContainerStyle: ViewStyle = { backgroundColor: colorWhite._1, ...contentContainerStyle, ...px(sw24) };
-  const defaultTitleStyle: ViewStyle = { ...fs16SemiBoldBlack2, ...titleStyle };
-  const defaultContentStyle: ViewStyle = { ...contentStyle, ...fs12SemiBoldBlack2 };
   return (
     <Fragment>
       <CustomSpacer space={spaceToTop !== undefined ? spaceToTop : sh24} />
       <Accordion
         activeSections={activeSections}
+        expandMultiple={true}
         onChange={handleUpdate}
         renderContent={renderContent}
         renderHeader={renderTitle}

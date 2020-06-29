@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Image, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { CustomSpacer, LabeledTitle, Question, RoundedButton } from "../../components";
+import { CustomSpacer, LabeledTitle, Question, RoundedButton, SafeAreaPage } from "../../components";
 import { CustomSlider } from "../../components/Slider/Slider";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import {
@@ -71,54 +71,56 @@ export const QuestionnaireContent = ({ handleNextStep, navigation }: Questionnai
   const sliderContainer: ViewStyle = { ...shadow, backgroundColor: colorWhite._1, borderRadius: 10 };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{ ...flexChild, ...px(sw96) }}>
-      <CustomSpacer space={sh32} />
-      <Text style={fs24RegBlack}>{RISK_ASSESSMENT.HEADING}</Text>
-      <CustomSpacer space={sh24} />
-      <LabeledTitle label={RISK_ASSESSMENT.LABEL_QUESTION_1} title={RISK_ASSESSMENT.QUESTION_1} />
-      <CustomSpacer space={sh16} />
-      <View style={sliderContainer}>
+    <SafeAreaPage>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ ...flexChild, ...px(sw96) }}>
+        <CustomSpacer space={sh32} />
+        <Text style={fs24RegBlack}>{RISK_ASSESSMENT.HEADING}</Text>
         <CustomSpacer space={sh24} />
-        <View style={px(sh24)}>
-          <CustomSlider options={Q1_OPTIONS} setSelected={setQ1} />
+        <LabeledTitle label={RISK_ASSESSMENT.LABEL_QUESTION_1} title={RISK_ASSESSMENT.QUESTION_1} />
+        <CustomSpacer space={sh16} />
+        <View style={sliderContainer}>
+          <CustomSpacer space={sh24} />
+          <View style={px(sh24)}>
+            <CustomSlider options={Q1_OPTIONS} setSelected={setQ1} />
+          </View>
+          <CustomSpacer space={sh24} />
         </View>
-        <CustomSpacer space={sh24} />
-      </View>
-      <CustomSpacer space={sh36} />
-      <LabeledTitle label={RISK_ASSESSMENT.LABEL_QUESTION_2} title={RISK_ASSESSMENT.QUESTION_2} />
-      <CustomSpacer space={sh16} />
-      <View style={sliderContainer}>
-        <CustomSpacer space={sh24} />
-        <View style={{ ...px(sh24) }}>
-          <CustomSlider options={Q2_OPTIONS} setSelected={setQ2} />
+        <CustomSpacer space={sh36} />
+        <LabeledTitle label={RISK_ASSESSMENT.LABEL_QUESTION_2} title={RISK_ASSESSMENT.QUESTION_2} />
+        <CustomSpacer space={sh16} />
+        <View style={sliderContainer}>
+          <CustomSpacer space={sh24} />
+          <View style={{ ...px(sh24) }}>
+            <CustomSlider options={Q2_OPTIONS} setSelected={setQ2} />
+          </View>
+          <CustomSpacer space={sh24} />
         </View>
-        <CustomSpacer space={sh24} />
-      </View>
-      <CustomSpacer space={sh36} />
-      <Question
-        label={RISK_ASSESSMENT.LABEL_QUESTION_3}
-        options={Q3_OPTIONS}
-        right={<Image style={{ height: sh143, width: sw140, bottom: sh20 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
-        selected={q3}
-        setSelected={setQ3}
-        title={RISK_ASSESSMENT.QUESTION_3}
-      />
-      <CustomSpacer space={sh35} />
-      <Question
-        label={RISK_ASSESSMENT.LABEL_QUESTION_4}
-        options={Q4_OPTIONS}
-        right={<Image style={{ height: sh189, width: sw282, bottom: sh24 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
-        selected={q4}
-        setSelected={setQ4}
-        title={RISK_ASSESSMENT.QUESTION_4}
-      />
-      <CustomSpacer space={sh78} />
-      <View style={flexRow}>
-        <RoundedButton onPress={handleCancel} secondary={true} text={RISK_ASSESSMENT.BUTTON_CANCEL} />
-        <CustomSpacer isHorizontal={true} space={sw16} />
-        <RoundedButton onPress={handleContinue} text={RISK_ASSESSMENT.BUTTON_CONTINUE} />
-      </View>
-      <CustomSpacer space={sh28} />
-    </ScrollView>
+        <CustomSpacer space={sh36} />
+        <Question
+          label={RISK_ASSESSMENT.LABEL_QUESTION_3}
+          options={Q3_OPTIONS}
+          right={<Image style={{ height: sh143, width: sw140, bottom: sh20 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
+          selected={q3}
+          setSelected={setQ3}
+          title={RISK_ASSESSMENT.QUESTION_3}
+        />
+        <CustomSpacer space={sh35} />
+        <Question
+          label={RISK_ASSESSMENT.LABEL_QUESTION_4}
+          options={Q4_OPTIONS}
+          right={<Image style={{ height: sh189, width: sw282, bottom: sh24 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
+          selected={q4}
+          setSelected={setQ4}
+          title={RISK_ASSESSMENT.QUESTION_4}
+        />
+        <CustomSpacer space={sh78} />
+        <View style={flexRow}>
+          <RoundedButton onPress={handleCancel} secondary={true} text={RISK_ASSESSMENT.BUTTON_CANCEL} />
+          <CustomSpacer isHorizontal={true} space={sw16} />
+          <RoundedButton onPress={handleContinue} text={RISK_ASSESSMENT.BUTTON_CONTINUE} />
+        </View>
+        <CustomSpacer space={sh28} />
+      </ScrollView>
+    </SafeAreaPage>
   );
 };

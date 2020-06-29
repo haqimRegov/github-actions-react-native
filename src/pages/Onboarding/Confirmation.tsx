@@ -1,10 +1,11 @@
 import React from "react";
-import { Text, View, ViewStyle, Alert, TouchableWithoutFeedback } from "react-native";
+import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { BasicAccordion, ContentPage, CustomSpacer } from "../../components";
 import { ONBOARDING_ROUTES } from "../../constants";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
+import { CONFIRMATIONS_MOCK } from "../../mocks/confirmation";
 import {
   centerHorizontal,
   colorBlack,
@@ -13,7 +14,7 @@ import {
   customShadow,
   flexChild,
   flexRow,
-  fs16RegBlue1,
+  fs16RegBlue,
   px,
   sh05,
   sh20,
@@ -28,7 +29,6 @@ import {
   sw24,
   sw96,
 } from "../../styles";
-import { CONFIRMATIONS_MOCK } from "../../mocks/confirmation";
 
 const { CONFIRMATION } = Language.PAGE;
 
@@ -89,7 +89,7 @@ export const Confirmation = ({ handleNextStep }: ConfirmationProps) => {
         <View style={sectionContainer}>
           <TouchableWithoutFeedback onPress={handleSignature}>
             <View style={titleStyle}>
-              <Text style={fs16RegBlue1}>{CONFIRMATION.SIGNATURE_CLIENT}</Text>
+              <Text style={fs16RegBlue}>{CONFIRMATION.SIGNATURE_CLIENT}</Text>
               <IcoMoon name={"back-arrow"} size={sw11} />
             </View>
           </TouchableWithoutFeedback>
@@ -98,7 +98,7 @@ export const Confirmation = ({ handleNextStep }: ConfirmationProps) => {
         <View style={sectionContainer}>
           <TouchableWithoutFeedback onPress={handleSignature}>
             <View style={titleStyle}>
-              <Text style={fs16RegBlue1}>{CONFIRMATION.SIGNATURE_AGENT}</Text>
+              <Text style={fs16RegBlue}>{CONFIRMATION.SIGNATURE_AGENT}</Text>
               <IcoMoon name={"back-arrow"} size={sw11} />
             </View>
           </TouchableWithoutFeedback>

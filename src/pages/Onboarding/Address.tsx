@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, ViewStyle, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Text, View, ViewStyle } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { ONBOARDING_ROUTES, Language } from "../../constants";
-import { SafeAreaPage, CustomSpacer, CustomFlexSpacer, CheckBox, RoundedButton, CustomTextInput } from "../../components";
+import { CheckBox, CustomFlexSpacer, CustomSpacer, CustomTextInput, RoundedButton, SafeAreaPage } from "../../components";
+import { TextArea } from "../../components/Input/TextArea";
+import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { SAMPLE_CLIENT } from "../../mocks";
 import {
   colorGray,
   flexChild,
@@ -23,22 +25,10 @@ import {
   sh7,
   sh8,
   sw16,
-  sw240,
   sw94,
 } from "../../styles";
-import { SAMPLE_CLIENT } from "../../mocks";
-import { TextArea } from "../../components/Input/TextArea";
 
-const {
-  BUTTON_CANCEL,
-  BUTTON_CONTINUE,
-  LABEL_CHECKBOX,
-  LABEL_MAILING_ADDRESS,
-  LABEL_PERMANENT_ADDRESS,
-  LABEL_PIN_CODE,
-  SUB_HEADING,
-  TITLE,
-} = Language.PAGE.PROOF_OF_ADDRESS;
+const { PROOF_OF_ADDRESS } = Language.PAGE;
 const HEADING: string = "Edgar";
 
 interface AddressProps {
@@ -74,32 +64,31 @@ export const Address = ({ handleNextStep }: AddressProps) => {
       <ScrollView style={flexChild} contentContainerStyle={container}>
         <CustomSpacer space={sh32} />
         <Text style={fs36SemiBoldBlack2}>{`${HEADING}.`}</Text>
-        <Text style={fs24RegBlack2}>{SUB_HEADING}</Text>
+        <Text style={fs24RegBlack2}>{PROOF_OF_ADDRESS.SUBHEADING}</Text>
         <CustomSpacer space={sh8} />
-        <Text style={fs16RegBlack2}>{TITLE}</Text>
+        <Text style={fs16RegBlack2}>{PROOF_OF_ADDRESS.TITLE}</Text>
         <CustomSpacer space={sh24} />
-        <Text style={fs16SemiBoldBlack2}>{LABEL_PERMANENT_ADDRESS}</Text>
+        <Text style={fs16SemiBoldBlack2}>{PROOF_OF_ADDRESS.LABEL_PERMANENT_ADDRESS}</Text>
         <CustomSpacer space={sh19} />
-        <CheckBox label={LABEL_CHECKBOX} toggle={sameAddressToggle} style={fs16RegBlack2} onPress={handleAddressToggle} />
+        <CheckBox label={PROOF_OF_ADDRESS.LABEL_CHECKBOX} toggle={sameAddressToggle} style={fs16RegBlack2} onPress={handleAddressToggle} />
         <CustomSpacer space={sh32} />
-        <Text style={fs16RegBlack2}>{LABEL_MAILING_ADDRESS}</Text>
+        <Text style={fs16RegBlack2}>{PROOF_OF_ADDRESS.LABEL_MAILING_ADDRESS}</Text>
         <CustomSpacer space={sh7} />
         <TextArea onChangeText={setInputMailingAddress} value={inputMailingAddress} editable={!sameAddressToggle} />
         <CustomSpacer space={sh24} />
-        <Text style={fs16RegBlack2}>{LABEL_PIN_CODE}</Text>
+        <Text style={fs16RegBlack2}>{PROOF_OF_ADDRESS.LABEL_PIN_CODE}</Text>
         <CustomSpacer space={sh7} />
         <CustomTextInput onChangeText={setInputPinCode} value={inputPinCode} editable={!sameAddressToggle} />
         <CustomFlexSpacer />
         <View style={flexRow}>
           <RoundedButton
             onPress={handleButtonPress}
-            text={BUTTON_CANCEL}
+            text={PROOF_OF_ADDRESS.BUTTON_CANCEL}
             secondary={true}
-            buttonStyle={{ width: sw240 }}
             textStyle={fs15SemiBoldBlack2}
           />
           <CustomSpacer space={sw16} isHorizontal={true} />
-          <RoundedButton onPress={handleSubmit} text={BUTTON_CONTINUE} buttonStyle={{ width: sw240 }} textStyle={fs15SemiBoldWhite} />
+          <RoundedButton onPress={handleSubmit} text={PROOF_OF_ADDRESS.BUTTON_CONTINUE} textStyle={fs15SemiBoldWhite} />
         </View>
         <CustomSpacer space={sh28} />
       </ScrollView>

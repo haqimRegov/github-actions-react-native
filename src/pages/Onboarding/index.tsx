@@ -5,47 +5,35 @@ import { OnboardingSteps, SafeAreaPage } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingContent } from "./Content";
 
-const {
-  TITLE_CONFIRMATION,
-  TITLE_CONTACT_DETAILS,
-  TITLE_EMPLOYMENT_DETAILS,
-  TITLE_FATCA,
-  TITLE_FUNDING_OPTIONS,
-  TITLE_PAYMENT,
-  TITLE_PERSONAL_INFORMATION,
-  TITLE_PRODUCT_RECOMMENDATION,
-  TITLE_PROOF_OF_ADDRESS,
-  TITLE_QUESTIONNAIRE,
-  TITLE_RISK_ASSESSMENT,
-} = Language.PAGE.ONBOARDING;
+const { ONBOARDING } = Language.PAGE;
 
-export const ONBOARDING: IOnboarding[] = [
+export const ONBOARDING_DATA: IOnboarding[] = [
   {
     content: [
-      { title: TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire },
-      { title: TITLE_FUNDING_OPTIONS, route: ONBOARDING_ROUTES.FundingOptions },
+      { title: ONBOARDING.TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire },
+      { title: ONBOARDING.TITLE_FUNDING_OPTIONS, route: ONBOARDING_ROUTES.FundingOptions },
     ],
-    label: TITLE_RISK_ASSESSMENT,
+    label: ONBOARDING.TITLE_RISK_ASSESSMENT,
   },
   {
-    label: TITLE_PRODUCT_RECOMMENDATION,
+    label: ONBOARDING.TITLE_PRODUCT_RECOMMENDATION,
     route: ONBOARDING_ROUTES.ProductRecommendation,
   },
   {
     content: [
-      { title: TITLE_PROOF_OF_ADDRESS, route: ONBOARDING_ROUTES.Address },
-      { title: TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.ContactDetails },
-      { title: TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
-      { title: TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
+      { title: ONBOARDING.TITLE_PROOF_OF_ADDRESS, route: ONBOARDING_ROUTES.Address },
+      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.ContactDetails },
+      { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
+      { title: ONBOARDING.TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
     ],
-    label: TITLE_PERSONAL_INFORMATION,
+    label: ONBOARDING.TITLE_PERSONAL_INFORMATION,
   },
   {
-    label: TITLE_CONFIRMATION,
+    label: ONBOARDING.TITLE_CONFIRMATION,
     route: ONBOARDING_ROUTES.Confirmation,
   },
   {
-    label: TITLE_PAYMENT,
+    label: ONBOARDING.TITLE_PAYMENT,
     route: ONBOARDING_ROUTES.Payment,
   },
 ];
@@ -84,7 +72,7 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
       setActiveContent={setActiveContent}
       setActiveSection={setActiveSection}
       setFinishedStep={setFinishedStep}
-      steps={ONBOARDING}
+      steps={ONBOARDING_DATA}
       visitedSections={finishedStep}
     />
   );

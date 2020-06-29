@@ -25,10 +25,9 @@ import {
   sh8,
   sw16,
   sw24,
-  sw240,
   sw96,
 } from "../styles";
-import { ONBOARDING as ONBOARDING_DATA } from "./Onboarding";
+import { ONBOARDING_DATA } from "./Onboarding";
 
 const { ONBOARDING, RISK_APPETITE } = Language.PAGE;
 const USER_NAME: string = "Edgar";
@@ -68,7 +67,7 @@ export const RiskAppetitePage = ({ navigation }: RiskAppetitePageProps) => {
   return (
     <View style={{ ...flexRow, ...fullHeight }}>
       <SideMenu>
-        <Text style={{ ...fs32SemiBoldBlack4, width: sw240 }}>{ONBOARDING.HEADING}</Text>
+        <Text style={fs32SemiBoldBlack4}>{ONBOARDING.HEADING}</Text>
         <CustomSpacer space={sh24} />
         {ONBOARDING_DATA.map((item: IOnboarding, index: number) => (
           <View style={{ ...centerVertical, ...flexRow }} key={index}>

@@ -50,19 +50,7 @@ import {
   sw73,
 } from "../styles";
 
-const {
-  BUTTON_LOGIN,
-  FORGOT_PASSWORD,
-  HEADING,
-  LABEL_AGENT_CODE,
-  LABEL_PASSWORD,
-  LANGUAGE_ENGLISH,
-  LANGUAGE_BAHASA,
-  PRIVACY_POLICY,
-  REMEMBER_ME,
-  SUBHEADING,
-  TERMS_AND_CONDITIONS,
-} = Language.PAGE.LOGIN;
+const { LOGIN } = Language.PAGE;
 
 interface LoginPageProps {
   navigation: StackNavigationProp<RootNavigatorType>;
@@ -111,22 +99,22 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     {
       onPress: handleLogin,
       style: fsUppercase,
-      text: LANGUAGE_BAHASA,
+      text: LOGIN.LANGUAGE_BAHASA,
     },
     {
       onPress: handleRiskAssessment,
       style: fsUppercase,
-      text: LANGUAGE_ENGLISH,
+      text: LOGIN.LANGUAGE_ENGLISH,
     },
   ];
   const bottomLinks: LinkTextProps[] = [
     {
       onPress: handlePrivacyPolicy,
-      text: PRIVACY_POLICY,
+      text: LOGIN.PRIVACY_POLICY,
     },
     {
       onPress: handleTermsAndConditions,
-      text: TERMS_AND_CONDITIONS,
+      text: LOGIN.TERMS_AND_CONDITIONS,
     },
   ];
 
@@ -151,21 +139,21 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
               </View>
               <View style={px(sw16)}>
                 <CustomSpacer space={sh56} />
-                <Text style={fs36SemiBoldBlack2}>{HEADING}</Text>
-                <Text style={fs24RegBlack2}>{SUBHEADING}</Text>
-                <CustomTextInput label={LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
-                <CustomTextInput label={LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
+                <Text style={fs36SemiBoldBlack2}>{LOGIN.HEADING}</Text>
+                <Text style={fs24RegBlack2}>{LOGIN.SUBHEADING}</Text>
+                <CustomTextInput label={LOGIN.LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
+                <CustomTextInput label={LOGIN.LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
                 <CustomSpacer space={sh30} />
                 <View style={flexRow}>
-                  <RoundedButton onPress={handleRiskAssessment} buttonStyle={{ width: sw278 }} text={BUTTON_LOGIN} />
+                  <RoundedButton onPress={handleRiskAssessment} buttonStyle={{ width: sw278 }} text={LOGIN.BUTTON_LOGIN} />
                   <CustomSpacer isHorizontal={true} space={sw24} />
                   <IconButton name="fingerprint" onPress={handleFingerprint} />
                 </View>
                 <CustomSpacer space={sh23} />
                 <View style={flexRow}>
-                  <CheckBox label={REMEMBER_ME} onPress={handleRememberMe} toggle={rememberMe} />
+                  <CheckBox label={LOGIN.REMEMBER_ME} onPress={handleRememberMe} toggle={rememberMe} />
                   <CustomSpacer isHorizontal={true} space={sw73} />
-                  <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={FORGOT_PASSWORD} />
+                  <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={LOGIN.FORGOT_PASSWORD} />
                 </View>
               </View>
               <CustomFlexSpacer />

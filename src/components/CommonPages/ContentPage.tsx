@@ -2,7 +2,9 @@ import React, { Fragment, ReactNode } from "react";
 
 import { Text, View, ScrollView, TextStyle, ViewStyle } from "react-native";
 
-import { CustomSpacer, RoundedButton, SafeAreaPage } from "..";
+import { CustomSpacer } from "../../components/Views";
+import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
+import { RoundedButton } from "../Touchables/Button";
 import { flexChild, flexRow, fs16RegBlack2, fs24RegBlack2, px, sh25, sh31, sh8, sw16, sw240, sw96 } from "../../styles";
 
 interface ContentPageProps {

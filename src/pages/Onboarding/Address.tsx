@@ -6,27 +6,27 @@ import { ONBOARDING_ROUTES, Language } from "../../constants";
 import { SafeAreaPage, CustomSpacer, CustomFlexSpacer, CheckBox, RoundedButton, CustomTextInput } from "../../components";
 import {
   colorGray,
-  fullHW,
-  sh8,
-  sh24,
-  sh19,
-  sh32,
-  sw94,
-  px,
+  flexChild,
   flexRow,
-  sw16,
-  sw240,
-  fs36SemiBoldBlack2,
-  fs24RegBlack2,
-  fs16RegBlack2,
-  fs16SemiBoldBlack2,
   fs15SemiBoldBlack2,
   fs15SemiBoldWhite,
-  sh7,
-  flexChild,
+  fs16RegBlack2,
+  fs16SemiBoldBlack2,
+  fs24RegBlack2,
+  fs36SemiBoldBlack2,
+  fullHW,
+  px,
+  sh19,
+  sh24,
   sh28,
+  sh32,
+  sh7,
+  sh8,
+  sw16,
+  sw240,
+  sw94,
 } from "../../styles";
-import { SAMPLE_CLIENT_ADDRESS } from "../../mocks";
+import { SAMPLE_CLIENT } from "../../mocks";
 import { TextArea } from "../../components/Input/TextArea";
 
 const {
@@ -36,39 +36,32 @@ const {
   LABEL_MAILING_ADDRESS,
   LABEL_PERMANENT_ADDRESS,
   LABEL_PIN_CODE,
-  QUESTION,
+  SUB_HEADING,
   TITLE,
 } = Language.PAGE.PROOF_OF_ADDRESS;
-const USER_NAME: string = "Edgar";
+const HEADING: string = "Edgar";
 
 interface AddressProps {
   handleNextStep: (route: string) => void;
 }
 
 export const Address = ({ handleNextStep }: AddressProps) => {
-  const [permanentAddressToggle, setPermanentAddressToggle] = useState<boolean>(true);
-  const pageContainer: ViewStyle = { backgroundColor: colorGray._2, ...fullHW, ...px(sw94) };
-  const [inputMailingAddress, setInputMailingAddress] = useState<string>(SAMPLE_CLIENT_ADDRESS.address);
-  const [inputPinCode, setInputPinCode] = useState<string>(SAMPLE_CLIENT_ADDRESS.pinCode);
+  const [sameAddressToggle, setSameAddressToggle] = useState<boolean>(true);
+  const container: ViewStyle = { ...fullHW, ...px(sw94), backgroundColor: colorGray._2 };
+  const [inputMailingAddress, setInputMailingAddress] = useState<string>("");
+  const [inputPinCode, setInputPinCode] = useState<string>("");
   const handleAddressToggle = () => {
-    if (permanentAddressToggle !== true) {
-      setInputMailingAddress(SAMPLE_CLIENT_ADDRESS.address);
-      setInputPinCode(SAMPLE_CLIENT_ADDRESS.pinCode);
-    } else {
-      setInputMailingAddress("");
-      setInputPinCode("");
-    }
-    setPermanentAddressToggle(!permanentAddressToggle);
+    setSameAddressToggle(!sameAddressToggle);
   };
   useEffect(() => {
-    if (permanentAddressToggle === true) {
-      setInputMailingAddress(SAMPLE_CLIENT_ADDRESS.address);
-      setInputPinCode(SAMPLE_CLIENT_ADDRESS.pinCode);
+    if (sameAddressToggle === true) {
+      setInputMailingAddress(SAMPLE_CLIENT.address);
+      setInputPinCode(SAMPLE_CLIENT.pinCode);
     } else {
       setInputMailingAddress("");
       setInputPinCode("");
     }
-  }, []);
+  }, [sameAddressToggle]);
   const handleButtonPress = () => {
     Alert.alert("test");
   };
@@ -77,25 +70,25 @@ export const Address = ({ handleNextStep }: AddressProps) => {
   };
 
   return (
-    <SafeAreaPage>
-      <ScrollView style={flexChild} contentContainerStyle={pageContainer}>
+    <SafeAreaPage bottomBackgroundColor={colorGray._2} topBackgroundColor={colorGray._2}>
+      <ScrollView style={flexChild} contentContainerStyle={container}>
         <CustomSpacer space={sh32} />
-        <Text style={fs36SemiBoldBlack2}>{`${USER_NAME}.`}</Text>
-        <Text style={fs24RegBlack2}>{TITLE}</Text>
+        <Text style={fs36SemiBoldBlack2}>{`${HEADING}.`}</Text>
+        <Text style={fs24RegBlack2}>{SUB_HEADING}</Text>
         <CustomSpacer space={sh8} />
-        <Text style={fs16RegBlack2}>{QUESTION}</Text>
+        <Text style={fs16RegBlack2}>{TITLE}</Text>
         <CustomSpacer space={sh24} />
         <Text style={fs16SemiBoldBlack2}>{LABEL_PERMANENT_ADDRESS}</Text>
         <CustomSpacer space={sh19} />
-        <CheckBox label={LABEL_CHECKBOX} toggle={permanentAddressToggle} style={fs16RegBlack2} onPress={handleAddressToggle} />
+        <CheckBox label={LABEL_CHECKBOX} toggle={sameAddressToggle} style={fs16RegBlack2} onPress={handleAddressToggle} />
         <CustomSpacer space={sh32} />
         <Text style={fs16RegBlack2}>{LABEL_MAILING_ADDRESS}</Text>
         <CustomSpacer space={sh7} />
-        <TextArea onChangeText={setInputMailingAddress} value={inputMailingAddress} editable={!permanentAddressToggle} />
+        <TextArea onChangeText={setInputMailingAddress} value={inputMailingAddress} editable={!sameAddressToggle} />
         <CustomSpacer space={sh24} />
         <Text style={fs16RegBlack2}>{LABEL_PIN_CODE}</Text>
         <CustomSpacer space={sh7} />
-        <CustomTextInput onChangeText={setInputPinCode} value={inputPinCode} editable={!permanentAddressToggle} />
+        <CustomTextInput onChangeText={setInputPinCode} value={inputPinCode} editable={!sameAddressToggle} />
         <CustomFlexSpacer />
         <View style={flexRow}>
           <RoundedButton

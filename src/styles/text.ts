@@ -99,15 +99,15 @@ export const fs15BoldWhite: TextStyle = {
   fontSize: sh15,
 };
 
-export const fs15SemiBoldWhite: TextStyle = {
-  color: colorWhite._1,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh15,
-};
-
 export const fs15RegWhite: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoRegular,
+  fontSize: sh15,
+};
+
+export const fs15SemiBoldWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoSemiBold,
   fontSize: sh15,
 };
 

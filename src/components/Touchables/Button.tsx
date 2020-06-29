@@ -16,6 +16,7 @@ import {
   sh48,
   sw1,
   sw100,
+  sw240,
   sw40,
 } from "../../styles";
 
@@ -52,6 +53,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
     backgroundColor: secondary ? colorGray._3 : colorBlue._1,
     height: sh48,
     opacity: disabled === true ? 0.5 : 1,
+    width: sw240,
     ...buttonStyle,
   };
   const textColor = secondary ? { color: colorBlack._4 } : { color: colorWhite._1 };

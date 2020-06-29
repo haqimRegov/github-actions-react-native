@@ -27,6 +27,7 @@ import {
   fs18SemiBoldBlack2,
   fs24RegBlack2,
   fs36SemiBoldBlack2,
+  fullWidth,
   px,
   sh10,
   sh12,
@@ -143,7 +144,7 @@ export const AddClientPage = ({ navigation }: PageProps) => {
                   spaceToLabel={sh10}
                 />
                 <CustomSpacer space={sh30} />
-                <RoundedButton onPress={handleShowModal} text={ADD_CLIENT.BUTTON_STARTED} />
+                <RoundedButton buttonStyle={fullWidth} onPress={handleShowModal} text={ADD_CLIENT.BUTTON_STARTED} />
               </View>
               <View style={{ ...centerHV, ...flexChild, ...flexRow }}>
                 <Text style={fs18SemiBoldBlack2}>{ADD_CLIENT.OR}</Text>

@@ -14,12 +14,14 @@ import {
   sw12,
   sw20,
   sw350,
+  colorWhite,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface ITextInputProps extends TextInputProps {
   label?: string;
   labelStyle?: TextStyle;
+  textInputStyle?: TextStyle;
   onPressLabel?: () => void;
   setRef?: (ref: TextInput | null) => void;
   spaceToBottom?: number;
@@ -36,6 +38,7 @@ export const CustomTextInput = ({
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
+  textInputStyle,
   viewStyle,
   ...rest
 }: ITextInputProps) => {
@@ -45,7 +48,8 @@ export const CustomTextInput = ({
   const borderColor: ViewStyle = inputFocus ? { borderColor: colorBlack._2 } : { borderColor: colorBlack._2 };
   const defaultLabelStyle: TextStyle = { ...fs16SemiBoldBlack2, ...labelStyle };
   const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
-  const textInputStyle: ViewStyle = {
+  const defaultTextInputStyle: ViewStyle = {
+    backgroundColor: colorWhite._1,
     ...centerVertical,
     ...flexRow,
     ...borderColor,
@@ -55,7 +59,7 @@ export const CustomTextInput = ({
     width: sw350,
     ...viewStyle,
   };
-  const textStyle: TextStyle = { ...flexChild, ...fs16SemiBoldBlack2, height: sh40 };
+  const textStyle: TextStyle = { ...flexChild, ...fs16SemiBoldBlack2, height: sh40, ...textInputStyle };
 
   const handleFocus = () => {
     setInputFocus(true);
@@ -79,7 +83,7 @@ export const CustomTextInput = ({
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}
-      <View style={textInputStyle}>
+      <View style={defaultTextInputStyle}>
         <CustomSpacer isHorizontal={true} space={sw12} />
         <TextInput
           ref={setRef}

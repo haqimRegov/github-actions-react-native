@@ -4,4 +4,5 @@ export const SAMPLE_CLIENT = {
   gender: "Male",
   id: "123 4567 8901",
   name: "Edgar Constantine",
+  pinCode: "46001",
 };

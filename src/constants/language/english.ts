@@ -91,5 +91,15 @@ export const english = {
       QUESTION_3: "If your portfolio falls along with the market, what would you do?",
       QUESTION_4: "If you could choose only one of the five hypothetical portfolios characterized below, which would you select?",
     },
+    PROOF_OF_ADDRESS: {
+      BUTTON_CANCEL: "Cancel",
+      BUTTON_CONTINUE: "Continue",
+      LABEL_CHECKBOX: "My Address is same as my IC",
+      LABEL_MAILING_ADDRESS: "Mailing Address",
+      LABEL_PERMANENT_ADDRESS: "Permanent Address",
+      LABEL_PIN_CODE: "Pin Code",
+      SUBHEADING: "One Step closer to your wealth",
+      TITLE: "We would need some of your details to open your account.",
+    },
   },
 };

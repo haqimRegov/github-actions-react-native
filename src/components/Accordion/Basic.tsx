@@ -1,8 +1,7 @@
-import React, { useState, Fragment } from "react";
-import { Text, View, TouchableWithoutFeedbackBase, ViewStyle, TextStyle } from "react-native";
+import React, { Fragment, useState } from "react";
+import { Text, TextStyle, TouchableWithoutFeedbackBase, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
-import { CustomSpacer } from "../Views/Spacer";
 import { IcoMoon } from "../../icons";
 import {
   centerVertical,
@@ -13,9 +12,10 @@ import {
   fs12SemiBoldBlack2,
   fs16SemiBoldBlack2,
   px,
+  scaleHeight,
   sh05,
+  sh16,
   sh20,
-  sh24,
   sh31,
   sh5,
   sh56,
@@ -24,6 +24,7 @@ import {
   sw11,
   sw24,
 } from "../../styles";
+import { CustomSpacer } from "../Views/Spacer";
 
 interface BasicProps {
   containerStyle?: ViewStyle;
@@ -80,11 +81,11 @@ export const BasicAccordion = ({
     const defaultStyle = activeSections.includes(selected) ? contentOpenedStyle : defaultTitleContainerStyle;
     return (
       <Fragment>
+        <CustomSpacer space={defaultSpaceInBetween} />
         <View style={defaultStyle}>
           <Text style={defaultTitleStyle}>{section.title}</Text>
           {icon !== undefined ? <IcoMoon name={icon} size={sw11} /> : null}
         </View>
-        {activeSections.includes(selected) === false ? <CustomSpacer space={defaultSpaceInBetween} /> : null}
       </Fragment>
     );
   };
@@ -104,7 +105,7 @@ export const BasicAccordion = ({
 
   return (
     <Fragment>
-      <CustomSpacer space={spaceToTop !== undefined ? spaceToTop : sh24} />
+      <CustomSpacer space={spaceToTop !== undefined ? scaleHeight(spaceToTop - sh8) : sh16} />
       <Accordion
         activeSections={activeSections}
         expandMultiple={true}

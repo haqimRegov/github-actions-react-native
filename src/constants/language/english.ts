@@ -98,7 +98,7 @@ export const english = {
       LABEL_MAILING_ADDRESS: "Mailing Address",
       LABEL_PERMANENT_ADDRESS: "Permanent Address",
       LABEL_PIN_CODE: "Pin Code",
-      SUB_HEADING: "One Step closer to your wealth",
+      SUBHEADING: "One Step closer to your wealth",
       TITLE: "We would need some of your details to open your account.",
     },
   },

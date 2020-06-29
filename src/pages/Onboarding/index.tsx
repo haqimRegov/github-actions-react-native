@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 
-import { OnboardingSteps, SafeAreaPage } from "../../components";
+import { OnboardingSteps } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingContent } from "./Content";
 
@@ -52,8 +52,8 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
   };
 
   useEffect(() => {
-    if (ONBOARDING[0].content !== undefined) {
-      setActiveContent(ONBOARDING[0].content[0]);
+    if (ONBOARDING_DATA[0].content !== undefined) {
+      setActiveContent(ONBOARDING_DATA[0].content[0]);
     }
   }, []);
 
@@ -65,9 +65,7 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
       activeSection={activeSection}
       handleContentChange={handleContentChange}
       RenderContent={({ handleNextStep }) => (
-        <SafeAreaPage>
-          <OnboardingContent route={ACTIVE_CONTENT} handleNextStep={handleNextStep} navigation={navigation} />
-        </SafeAreaPage>
+        <OnboardingContent route={ACTIVE_CONTENT} handleNextStep={handleNextStep} navigation={navigation} />
       )}
       setActiveContent={setActiveContent}
       setActiveSection={setActiveSection}

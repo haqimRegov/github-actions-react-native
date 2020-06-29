@@ -4,9 +4,5 @@ export const SAMPLE_CLIENT = {
   gender: "Male",
   id: "123 4567 8901",
   name: "Edgar Constantine",
-};
-
-export const SAMPLE_CLIENT_ADDRESS = {
-  address: "F-7-15, Block B, Lucky Gardens, Jalan Telawi, Bangsar, Kuala Lumpur",
   pinCode: "46001",
 };

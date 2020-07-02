@@ -12,12 +12,9 @@ import {
   fs15BoldWhite,
   fsAlignCenter,
   fsCapitalize,
-  px,
   sh48,
   sw1,
-  sw100,
   sw240,
-  sw40,
 } from "../../styles";
 
 export interface CustomButtonProps {
@@ -28,10 +25,6 @@ export interface CustomButtonProps {
   secondary?: boolean;
   text: string;
   textStyle?: TextStyle;
-}
-
-export interface RoundedButtonProps extends CustomButtonProps {
-  radius?: number;
 }
 
 export const CustomButton: FunctionComponent<CustomButtonProps> = ({
@@ -49,7 +42,6 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
     ...border(colorBlue._1, sw1),
     ...buttonShadow,
     ...centerHV,
-    ...px(sw40),
     backgroundColor: secondary ? colorTransparent : colorBlue._1,
     height: sh48,
     opacity: disabled === true ? 0.5 : 1,
@@ -66,13 +58,4 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
       </View>
     </TouchableWithoutFeedback>
   );
-};
-
-export const RoundedButton: FunctionComponent<RoundedButtonProps> = ({ buttonStyle, ...props }: CustomButtonProps) => {
-  const roundedButtonStyle: ViewStyle = {
-    borderRadius: sw100,
-    ...buttonStyle,
-  };
-
-  return <CustomButton buttonStyle={roundedButtonStyle} {...props} />;
 };

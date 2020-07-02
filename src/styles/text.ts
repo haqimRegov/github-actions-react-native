@@ -69,10 +69,28 @@ export const fs13RegBlack2: TextStyle = {
   fontSize: sh13,
 };
 
-export const fs16BoldBlack2: TextStyle = {
-  color: colorBlack._2,
+export const fs13SemiBoldBlue2: TextStyle = {
+  color: colorBlue._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh13,
+};
+
+export const fs14BoldBlack6: TextStyle = {
+  color: colorBlack._6,
   fontFamily: NunitoBold,
-  fontSize: sh16,
+  fontSize: sh14,
+};
+
+export const fs14RegularBlack6: TextStyle = {
+  color: colorBlack._6,
+  fontFamily: NunitoRegular,
+  fontSize: sh14,
+};
+
+export const fs15BoldBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoBold,
+  fontSize: sh15,
 };
 
 export const fs15BoldWhite: TextStyle = {
@@ -80,6 +98,50 @@ export const fs15BoldWhite: TextStyle = {
   fontFamily: NunitoBold,
   fontSize: sh15,
 };
+
+
+export const fs15RegWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoRegular,
+  fontSize: sh15,
+};
+
+export const fs15SemiBoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh15,
+};
+
+export const fs15SemiBoldWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh15,
+};
+
+export const fs16BoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh16,
+};
+
+export const fs16BoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh16,
+};
+
+export const fs16BoldBlack4: TextStyle = {
+  color: colorBlack._4,
+  fontFamily: NunitoBold,
+  fontSize: sh16,
+};
+
+export const fs16BoldWhite: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoBold,
+  fontSize: sh16,
+};
+
 
 export const fs16RegBlack2: TextStyle = {
   color: colorBlack._2,

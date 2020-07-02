@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 
-import { colorBlue } from "./colors";
+import { colorBlack, colorBlue } from "./colors";
 
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
 export const alignSelfCenter = { alignSelf: "center" } as const;
@@ -33,6 +33,7 @@ export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
 export const borderRadiusBottom = {};
+export const borderBottomBlack61 = { borderBottomWidth: 1, borderBottomColor: colorBlack._6_1 } as const;
 
 export const border = (color: string, width: number, radius?: number, style?: "solid" | "dotted" | "dashed") => ({
   borderColor: color,
@@ -87,6 +88,19 @@ export const shadow = {
   },
   shadowOpacity: 0.15,
   shadowRadius: 3,
+} as const;
+
+export const shadow5 = {
+  // shadow for android
+  elevation: 5,
+  // shadow for ios
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 5,
+  },
+  shadowOpacity: 0.15,
+  shadowRadius: 5,
 } as const;
 
 export const blueShadow = {

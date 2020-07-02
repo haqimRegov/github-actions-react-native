@@ -4,7 +4,7 @@ import { ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 import { CustomSpacer } from "../../components/Views";
 import { flexChild, flexRow, fs16RegBlack2, fs24RegBlack2, px, sh25, sh31, sh8, sw16, sw240, sw96 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
-import { RoundedButton } from "../Touchables/Button";
+import { RoundedButton } from "../Touchables/RoundedButton";
 
 interface ContentPageProps {
   children: ReactNode;

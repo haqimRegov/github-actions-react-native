@@ -1,8 +1,9 @@
 import React from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { centerVertical, colorBlack, colorBlue, flexRow, fs12RegBlack2, fsAlignCenter, sw10, sw18, sw2 } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { IcoMoon } from "../../icons";
+import { centerHV, centerVertical, colorBlack, colorBlue, colorWhite, flexRow, fs12RegBlack2, sh10, sw10, sw18, sw2 } from "../../styles";
+import { CustomSpacer } from "../Views/Spacer";
 
 export interface CheckBoxProps {
   label: string;
@@ -13,19 +14,25 @@ export interface CheckBoxProps {
 }
 
 export const CheckBox = ({ onPress, spaceToLabel, style, label, toggle }: CheckBoxProps) => {
-  const labelStyle: TextStyle = { ...fs12RegBlack2, ...fsAlignCenter, ...style };
-  // TODO proper design for toggle
-  const toggleStyle: ViewStyle = toggle
-    ? { backgroundColor: colorBlue._1, borderWidth: sw2, borderColor: colorBlue._1, borderRadius: sw2, height: sw18, width: sw18 }
-    : { borderWidth: sw2, borderColor: colorBlack._2, borderRadius: sw2, height: sw18, width: sw18 };
+  const selectedStyle: ViewStyle = toggle ? { backgroundColor: colorBlue._1, borderColor: colorBlue._1 } : {};
+  const toggleStyle: ViewStyle = {
+    ...centerHV,
+    borderColor: colorBlack._2,
+    borderRadius: sw2,
+    borderWidth: sw2,
+    height: sw18,
+    width: sw18,
+    ...selectedStyle,
+  };
+
   const defaultSpace = spaceToLabel !== undefined ? spaceToLabel : sw10;
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={{ ...flexRow, ...centerVertical }}>
-        <View style={toggleStyle} />
+        <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh10} /> : null}</View>
         <CustomSpacer isHorizontal={true} space={defaultSpace} />
-        <Text onPress={onPress} style={labelStyle}>
+        <Text onPress={onPress} style={{ ...fs12RegBlack2, ...style }}>
           {label}
         </Text>
       </View>

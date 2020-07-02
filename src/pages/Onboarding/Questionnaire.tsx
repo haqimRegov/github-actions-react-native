@@ -90,7 +90,7 @@ export const QuestionnaireContent = ({ handleNextStep, navigation }: Questionnai
         <CustomSpacer space={sh16} />
         <View style={sliderContainer}>
           <CustomSpacer space={sh24} />
-          <View style={{ ...px(sh24) }}>
+          <View style={px(sh24)}>
             <CustomSlider options={Q2_OPTIONS} setSelected={setQ2} />
           </View>
           <CustomSpacer space={sh24} />

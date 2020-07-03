@@ -5439,6 +5439,11 @@ react-native-collapsible@^1.5.2:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-enhanced-popup-menu@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-enhanced-popup-menu/-/react-native-enhanced-popup-menu-0.7.0.tgz#8eb2ab06ff39b031807308065361444fe254a68d"
+  integrity sha512-PEinhLrt0I7HvBpSAH0hO1jlg2KGAiIpxyD8M0c5kO4ds/HaRdW1nYhTR92uF+LJTESJH7KQLQYvP/NJe+zc0g==
+
 react-native-gesture-handler@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"

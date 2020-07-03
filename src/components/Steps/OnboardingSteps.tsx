@@ -10,10 +10,10 @@ import {
   fs16BoldBlack2,
   fs16RegBlack2,
   fs24RegBlack2,
-  fullHW,
   px,
   py,
   sh24,
+  sh49,
   sh8,
   sw16,
   sw40,
@@ -25,34 +25,38 @@ import { Step } from "./Step";
 export const OnboardingSteps = ({
   activeContent,
   activeSection,
+  collapse,
   handleContentChange,
+  onPressBackdrop,
+  onPressExpand,
+  overlay,
   RenderContent,
-  setActiveSection,
   setActiveContent,
+  setActiveSection,
   setFinishedStep,
   steps,
   visitedSections,
 }: OnboardingStepsProps) => {
-  const container: ViewStyle = { ...fullHW, ...flexRow, backgroundColor: colorWhite._1 };
-  const headerContainer: ViewStyle = { backgroundColor: colorWhite._1, ...py(sh8), ...flexRow, ...centerVertical };
-  const contentContainer: ViewStyle = { backgroundColor: colorWhite._1 };
-
   const accordionHeader = (step: IOnboarding, stepIndex: number, isActive: boolean) => {
-    const currentStep = (stepIndex + 1).toString();
     const visited = visitedSections.some((visitedStep) => visitedStep === stepIndex);
+    const currentStep = (stepIndex + 1).toString();
+
+    const stepStyle: ViewStyle = collapse === true && isActive === true ? { height: sh49 } : {};
+    const headerContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh8), backgroundColor: colorWhite._1, ...stepStyle };
     const labelOpacity = isActive || !visited ? { opacity: 1 } : { opacity: 0.5 };
     const textStyle: TextStyle = isActive ? { ...fs24RegBlack2, ...labelOpacity } : { ...fs16RegBlack2, ...labelOpacity };
+
     return (
       <View style={headerContainer}>
         <Step active={isActive} step={currentStep} visited={visited} />
         <CustomSpacer isHorizontal={true} space={sw16} />
-        <Text style={textStyle}>{step.label}</Text>
+        {collapse === true ? null : <Text style={textStyle}>{step.label}</Text>}
       </View>
     );
   };
 
   const accordionContent = (step: IOnboarding) => {
-    const activeContainer: ViewStyle = { ...contentContainer };
+    const activeContainer: ViewStyle = { backgroundColor: colorWhite._1 };
     if (step.content === undefined) {
       return <View />;
     }
@@ -126,8 +130,8 @@ export const OnboardingSteps = ({
   };
 
   return (
-    <View style={container}>
-      <SideMenu>
+    <View style={flexRow}>
+      <SideMenu collapse={collapse} onPressBackdrop={onPressBackdrop} onPressExpand={onPressExpand} overlay={overlay}>
         <Accordion
           activeSections={[activeSection]}
           duration={400}

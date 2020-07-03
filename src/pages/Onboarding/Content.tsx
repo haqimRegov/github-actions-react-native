@@ -9,7 +9,7 @@ import { Declaration } from "./Declaration";
 import { EmploymentDetails } from "./EmploymentDetails";
 import { FundingOptionsContent } from "./FundingOptions";
 import { Payment } from "./Payment";
-import { ProductRecommendation } from "./ProductRecommendation";
+import { Products } from "./Products";
 import { QuestionnaireContent } from "./Questionnaire";
 
 interface OnboardingContentProps {
@@ -25,7 +25,7 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
     case ONBOARDING_ROUTES.FundingOptions:
       return <FundingOptionsContent {...props} />;
     case ONBOARDING_ROUTES.ProductRecommendation:
-      return <ProductRecommendation {...props} />;
+      return <Products {...props} />;
     case ONBOARDING_ROUTES.Address:
       return <Address {...props} />;
     case ONBOARDING_ROUTES.ContactDetails:

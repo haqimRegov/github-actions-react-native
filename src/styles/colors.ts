@@ -7,7 +7,9 @@ export const colorBlack = {
   _4: "#202020",
   _5: "#0a1f44",
   _6: "#333333",
+  _6_1: "rgba(51,51,51,0.1)",
   _6_3: "rgba(51,51,51,0.3)",
+  _7: "#3c3c3e",
 };
 
 export const colorBlue = {
@@ -17,6 +19,7 @@ export const colorBlue = {
   _4: "#377bff",
   _5: "#0072ff",
   _6: "#0676ed",
+  _7: "#4b74ff",
 };
 
 export const colorGray = {
@@ -29,6 +32,12 @@ export const colorGray = {
   _7: "#fafcfd",
   _8: "#9e9e9e",
   _9: "#e9edf4",
+  _10: "#c6cbd4",
+  _11: "#6d7278",
+};
+
+export const colorGreen = {
+  _1: "#6aa130",
 };
 
 export const colorWhite = {

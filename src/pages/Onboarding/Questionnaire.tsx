@@ -72,7 +72,7 @@ export const QuestionnaireContent = ({ handleNextStep, navigation }: Questionnai
 
   return (
     <SafeAreaPage>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ ...flexChild, ...px(sw96) }}>
+      <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} style={{ ...flexChild, ...px(sw96) }}>
         <CustomSpacer space={sh32} />
         <Text style={fs24RegBlack}>{RISK_ASSESSMENT.HEADING}</Text>
         <CustomSpacer space={sh24} />

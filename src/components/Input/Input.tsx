@@ -5,6 +5,8 @@ import {
   centerVertical,
   colorBlack,
   colorGray,
+  colorTransparent,
+  colorWhite,
   flexChild,
   flexRow,
   fs16SemiBoldBlack2,
@@ -14,19 +16,18 @@ import {
   sw12,
   sw20,
   sw350,
-  colorWhite,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface ITextInputProps extends TextInputProps {
   label?: string;
   labelStyle?: TextStyle;
-  textInputStyle?: TextStyle;
   onPressLabel?: () => void;
   setRef?: (ref: TextInput | null) => void;
   spaceToBottom?: number;
   spaceToLabel?: number;
   spaceToTop?: number;
+  style?: TextStyle;
   viewStyle?: ViewStyle;
 }
 
@@ -38,7 +39,7 @@ export const CustomTextInput = ({
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
-  textInputStyle,
+  style,
   viewStyle,
   ...rest
 }: ITextInputProps) => {
@@ -48,7 +49,7 @@ export const CustomTextInput = ({
   const borderColor: ViewStyle = inputFocus ? { borderColor: colorBlack._2 } : { borderColor: colorBlack._2 };
   const defaultLabelStyle: TextStyle = { ...fs16SemiBoldBlack2, ...labelStyle };
   const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
-  const defaultTextInputStyle: ViewStyle = {
+  const defaultInputStyle: ViewStyle = {
     backgroundColor: colorWhite._1,
     ...centerVertical,
     ...flexRow,
@@ -59,7 +60,7 @@ export const CustomTextInput = ({
     width: sw350,
     ...viewStyle,
   };
-  const textStyle: TextStyle = { ...flexChild, ...fs16SemiBoldBlack2, height: sh40, ...textInputStyle };
+  const textStyle: TextStyle = { ...fs16SemiBoldBlack2, ...flexChild, height: sh40, ...style };
 
   const handleFocus = () => {
     setInputFocus(true);
@@ -83,17 +84,17 @@ export const CustomTextInput = ({
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}
-      <View style={defaultTextInputStyle}>
+      <View style={defaultInputStyle}>
         <CustomSpacer isHorizontal={true} space={sw12} />
         <TextInput
-          ref={setRef}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          selectionColor={colorBlack._2}
-          style={textStyle}
           placeholder={rest.placeholder}
           placeholderTextColor={colorGray._1}
-          underlineColorAndroid={"rgba(0,0,0,0)"}
+          ref={setRef}
+          selectionColor={colorBlack._2}
+          style={textStyle}
+          underlineColorAndroid={colorTransparent}
           {...rest}
         />
       </View>

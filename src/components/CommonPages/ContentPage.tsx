@@ -1,11 +1,10 @@
 import React, { Fragment, ReactNode } from "react";
-
-import { Text, View, ScrollView, TextStyle, ViewStyle } from "react-native";
+import { ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomSpacer } from "../../components/Views";
+import { flexChild, flexRow, fs16RegBlack2, fs24RegBlack2, px, sh25, sh31, sh8, sw16, sw240, sw96 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
 import { RoundedButton } from "../Touchables/Button";
-import { flexChild, flexRow, fs16RegBlack2, fs24RegBlack2, px, sh25, sh31, sh8, sw16, sw240, sw96 } from "../../styles";
 
 interface ContentPageProps {
   children: ReactNode;
@@ -47,7 +46,7 @@ export const ContentPage = ({
   const defaultTitleStyle: ViewStyle = { ...fs16RegBlack2, ...titleStyle };
   return (
     <SafeAreaPage>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ ...flexChild, ...px(sw96) }}>
           <CustomSpacer space={spaceToTop !== undefined ? spaceToTop : sh31} />
           <Text style={defaultHeadingStyle}>{heading}</Text>

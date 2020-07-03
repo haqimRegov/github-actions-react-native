@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Text, View, ViewStyle } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Alert, ScrollView, View } from "react-native";
 
-import { CheckBox, CustomFlexSpacer, CustomSpacer, CustomTextInput, RoundedButton, SafeAreaPage } from "../../components";
-import { TextArea } from "../../components/Input/TextArea";
+import {
+  CheckBox,
+  CustomFlexSpacer,
+  CustomSpacer,
+  CustomTextInput,
+  RoundedButton,
+  SafeAreaPage,
+  TextInputArea,
+  TextSpaceArea,
+} from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { SAMPLE_CLIENT } from "../../mocks";
 import {
-  colorGray,
   flexGrow,
   flexRow,
   fs16RegBlack2,
@@ -28,7 +34,8 @@ import {
 import { AlertDialog } from "../../utils";
 
 const { PROOF_OF_ADDRESS } = Language.PAGE;
-const HEADING: string = "Edgar";
+const SAMPLE_NAME: string = "Edgar";
+const GREETINGS: string = `${SAMPLE_NAME}.`;
 
 interface AddressProps {
   handleNextStep: (route: string) => void;
@@ -42,6 +49,8 @@ export const Address = ({ handleNextStep }: AddressProps) => {
   const handleAddressToggle = () => {
     if (sameAddressToggle) {
       setSameAddressToggle(false);
+      setInputMailingAddress("");
+      setInputPinCode("");
     } else {
       setSameAddressToggle(true);
       setInputMailingAddress(SAMPLE_CLIENT.address);
@@ -58,10 +67,9 @@ export const Address = ({ handleNextStep }: AddressProps) => {
   };
 
   const handleSubmit = () => {
-    AlertDialog(inputMailingAddress, handleNavigate);
+    const details = `${inputMailingAddress} ${inputPinCode}`;
+    AlertDialog(details, handleNavigate);
   };
-
-  const container: ViewStyle = { ...fullHW, ...px(sw94), backgroundColor: colorGray._2 };
 
   useEffect(() => {
     const sameAddress = inputMailingAddress === SAMPLE_CLIENT.address && inputPinCode === SAMPLE_CLIENT.pinCode;
@@ -69,32 +77,25 @@ export const Address = ({ handleNextStep }: AddressProps) => {
   }, [inputMailingAddress, inputPinCode]);
 
   return (
-    <SafeAreaPage bottomBackgroundColor={colorGray._2} topBackgroundColor={colorGray._2}>
-      <ScrollView contentContainerStyle={flexGrow}>
-        <View style={container}>
-          <CustomSpacer space={sh32} />
-          <Text style={fs36SemiBoldBlack2}>{`${HEADING}.`}</Text>
-          <Text style={fs24RegBlack2}>{PROOF_OF_ADDRESS.SUBHEADING}</Text>
-          <CustomSpacer space={sh8} />
-          <Text style={fs16RegBlack2}>{PROOF_OF_ADDRESS.TITLE}</Text>
-          <CustomSpacer space={sh24} />
-          <Text style={fs16SemiBoldBlack2}>{PROOF_OF_ADDRESS.LABEL_PERMANENT_ADDRESS}</Text>
-          <CustomSpacer space={sh19} />
+    <SafeAreaPage>
+      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
+        <View style={{ ...fullHW, ...px(sw94) }}>
+          <TextSpaceArea spaceToTop={sh32} style={fs36SemiBoldBlack2} text={GREETINGS} />
+          <TextSpaceArea spaceToBottom={sh8} style={fs24RegBlack2} text={PROOF_OF_ADDRESS.SUBHEADING} />
+          <TextSpaceArea spaceToBottom={sh24} style={fs16RegBlack2} text={PROOF_OF_ADDRESS.TITLE} />
+          <TextSpaceArea spaceToBottom={sh19} style={fs16SemiBoldBlack2} text={PROOF_OF_ADDRESS.LABEL_PERMANENT_ADDRESS} />
           <CheckBox
             label={PROOF_OF_ADDRESS.LABEL_CHECKBOX}
             onPress={handleAddressToggle}
             style={fs16RegBlack2}
             toggle={sameAddressToggle}
           />
-          <CustomSpacer space={sh32} />
-          <Text style={fs16RegBlack2}>{PROOF_OF_ADDRESS.LABEL_MAILING_ADDRESS}</Text>
-          <CustomSpacer space={sh7} />
-          <TextArea onChangeText={setInputMailingAddress} value={inputMailingAddress} />
-          <CustomSpacer space={sh24} />
-          <Text style={fs16RegBlack2}>{PROOF_OF_ADDRESS.LABEL_PIN_CODE}</Text>
-          <CustomSpacer space={sh7} />
+          <TextSpaceArea spaceToBottom={sh7} spaceToTop={sh32} style={fs16RegBlack2} text={PROOF_OF_ADDRESS.LABEL_MAILING_ADDRESS} />
+          <TextInputArea onChangeText={setInputMailingAddress} value={inputMailingAddress} />
+          <TextSpaceArea spaceToBottom={sh7} spaceToTop={sh24} style={fs16RegBlack2} text={PROOF_OF_ADDRESS.LABEL_POST_CODE} />
           <CustomTextInput onChangeText={setInputPinCode} value={inputPinCode} />
           <CustomFlexSpacer />
+          <CustomSpacer space={sh24} />
           <View style={flexRow}>
             <RoundedButton onPress={handleButtonPress} secondary={true} text={PROOF_OF_ADDRESS.BUTTON_CANCEL} />
             <CustomSpacer isHorizontal={true} space={sw16} />

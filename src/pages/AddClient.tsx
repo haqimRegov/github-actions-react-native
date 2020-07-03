@@ -106,7 +106,7 @@ export const AddClientPage = ({ navigation }: PageProps) => {
   return (
     <Fragment>
       <SafeAreaPage>
-        <ScrollView bounces={false}>
+        <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
           <View style={{ ...flexChild, backgroundColor: colorGray._3 }}>
             <CustomSpacer space={sh12} />
             <View style={px(sw36)}>

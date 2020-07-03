@@ -79,7 +79,7 @@ export const Confirmation = ({ handleNextStep }: ConfirmationProps) => {
       handleRightButton={handleAgree}
       leftButtonText={CONFIRMATION.BUTTON_CANCEL}
       rightButtonText={CONFIRMATION.BUTTON_AGREE}
-      subHeading={CONFIRMATION.SUB_HEADING}>
+      subHeading={CONFIRMATION.SUBHEADING}>
       <View style={{ ...px(sw96) }}>
         <BasicAccordion sections={SECTIONS} icon="back-arrow" />
       </View>

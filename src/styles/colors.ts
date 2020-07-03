@@ -1,3 +1,5 @@
+export const colorTransparent = "rgba(0,0,0,0)";
+
 export const colorBlack = {
   _1: "#000000",
   _2: "#4d4d4d",

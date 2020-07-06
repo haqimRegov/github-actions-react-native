@@ -92,7 +92,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   };
 
   const handleRiskAssessment = () => {
-    navigation.navigate("RiskAppetite");
+    navigation.navigate("Onboarding");
   };
 
   const topLinks: LinkTextProps[] = [

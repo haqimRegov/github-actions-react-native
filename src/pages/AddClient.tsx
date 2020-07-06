@@ -69,7 +69,7 @@ export const AddClientPage = ({ navigation }: PageProps) => {
 
   const handleConfirm = () => {
     handleHideModal();
-    navigation.navigate("RiskAppetite");
+    navigation.navigate("Onboarding");
   };
 
   // eslint-disable-next-line consistent-return

@@ -22,7 +22,9 @@
     "ios:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
     "ios:11": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
     "ios:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\"",
-    "fix:collapsible": "cp ./fixes/react-native-collapsible ./node_modules/react-native-collapsible/Collapsible.js"
+    "fix:collapsible:js": "cp ./fixes/react-native-collapsible--collapsible ./node_modules/react-native-collapsible/Collapsible.js",
+    "fix:collapsible:accordion": "cp ./fixes/react-native-collapsible--accordion ./node_modules/react-native-collapsible/Accordion.js",
+    "fix:collapsible": "npm run fix:collapsible:js && npm run fix:collapsible:accordion"
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "^1.2.2",
@@ -39,6 +41,7 @@
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.2",
     "react-native-screens": "^2.8.0",
+    "react-native-signature-capture": "^0.4.10",
     "react-native-splash-screen": "^3.2.0",
     "react-native-vector-icons": "^6.6.0"
   },
@@ -48,6 +51,7 @@
     "@react-native-community/eslint-config": "^1.0.0",
     "@types/jest": "^24.0.24",
     "@types/react-native": "^0.62.0",
+    "@types/react-native-signature-capture": "^0.4.1",
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-test-renderer": "16.9.2",
     "@typescript-eslint/eslint-plugin": "^2.27.0",

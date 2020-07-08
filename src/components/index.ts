@@ -4,6 +4,7 @@ export * from "./Input";
 export * from "./Modals";
 export * from "./Nav";
 export * from "./RadioButton";
+export * from "./Signature";
 export * from "./Steps";
 export * from "./Table";
 export * from "./Touchables";

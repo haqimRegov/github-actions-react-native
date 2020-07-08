@@ -1,122 +1,87 @@
-import React, { Fragment, useState } from "react";
-import { Text, TextStyle, TouchableWithoutFeedbackBase, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useState } from "react";
+import { Text, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
 import { IcoMoon } from "../../icons";
 import {
   centerVertical,
   colorGray,
+  colorTransparent,
   colorWhite,
   customShadow,
   flexRow,
-  fs12SemiBoldBlack2,
   fs16SemiBoldBlack2,
+  noBorderBottom,
   px,
-  scaleHeight,
-  sh05,
-  sh16,
   sh20,
-  sh31,
   sh5,
   sh56,
   sh8,
-  spaceBetweenHorizontal,
-  sw11,
+  sw10,
+  sw20,
   sw24,
 } from "../../styles";
-import { CustomSpacer } from "../Views/Spacer";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
-interface BasicProps {
-  containerStyle?: ViewStyle;
-  contentContainerStyle?: ViewStyle;
-  contentStyle?: TextStyle;
-  icon?: string;
-  sections: object[];
-  spaceInBetween?: number;
-  spaceToBottom?: number;
-  spaceToTop?: number;
-  titleStyle?: TextStyle;
-}
-
-interface SectionProps {
-  content: string;
-  title: string;
-}
-
-export const BasicAccordion = ({
-  containerStyle,
-  contentContainerStyle,
-  contentStyle,
+export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
+  headerStyle,
+  expandMultiple,
+  hideIcon,
   icon,
   sections,
   spaceInBetween,
-  spaceToBottom,
-  spaceToTop,
   titleStyle,
-}: BasicProps) => {
+}: IBasicAccordionProps) => {
   const [activeSections, setActiveSections] = useState<number[]>([]);
-  const defaultSpaceInBetween = spaceInBetween !== undefined ? spaceInBetween : sh8;
 
-  const defaultTitleContainerStyle: ViewStyle = {
-    ...centerVertical,
-    ...containerStyle,
-    ...customShadow(colorGray._4, sh5, 0, sh05, sh20),
-    ...flexRow,
-    ...px(sw24),
-    ...spaceBetweenHorizontal,
-    backgroundColor: colorWhite._1,
-    borderRadius: 10,
-    height: sh56,
-  };
-  const defaultContentContainerStyle: ViewStyle = { ...contentContainerStyle, ...px(sw24), backgroundColor: colorWhite._1 };
-  const defaultTitleStyle: ViewStyle = { ...fs16SemiBoldBlack2, ...titleStyle };
-  const defaultContentStyle: ViewStyle = { ...contentStyle, ...fs12SemiBoldBlack2 };
-
-  const handleUpdate = (section: number[]) => {
+  const handleSetSections = (section: number[]) => {
     setActiveSections(section);
   };
-  const renderTitle = (section: SectionProps) => {
-    const selected = sections.indexOf(section);
-    const contentOpenedStyle: ViewStyle = { ...defaultTitleContainerStyle, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 };
-    const defaultStyle = activeSections.includes(selected) ? contentOpenedStyle : defaultTitleContainerStyle;
-    return (
-      <Fragment>
-        <CustomSpacer space={defaultSpaceInBetween} />
-        <View style={defaultStyle}>
-          <Text style={defaultTitleStyle}>{section.title}</Text>
-          {icon !== undefined ? <IcoMoon name={icon} size={sw11} /> : null}
-        </View>
-      </Fragment>
-    );
+
+  const renderContent = (section: IAccordionSection) => {
+    return section.content;
   };
-  const renderContent = (section: SectionProps) => {
-    const selected = sections.indexOf(section);
-    const contentOpenedStyle: ViewStyle = { ...defaultContentContainerStyle, borderBottomLeftRadius: 10, borderBottomRightRadius: 10 };
-    const defaultStyle = activeSections.includes(selected) ? contentOpenedStyle : defaultContentContainerStyle;
+
+  const renderHeader = (section: IAccordionSection) => {
+    const defaultHeaderStyle: ViewStyle = {
+      ...centerVertical,
+      ...customShadow(colorGray._4, sh5, 0, 0.5, sh20),
+      ...flexRow,
+      ...px(sw24),
+      backgroundColor: colorWhite._1,
+      borderRadius: sw10,
+      height: sh56,
+      ...headerStyle,
+    };
+
+    const current = sections.indexOf(section);
+    const defaultStyle = activeSections.includes(current) ? { ...defaultHeaderStyle, ...noBorderBottom } : defaultHeaderStyle;
+    const defaultIcon = activeSections.includes(current) ? "caret-up" : "caret-down";
+    const customIcon = icon !== undefined ? icon : defaultIcon;
+    const defaultSpaceInBetween = spaceInBetween !== undefined ? spaceInBetween : sh8;
+
     return (
       <Fragment>
+        {current === 0 ? null : <CustomSpacer space={defaultSpaceInBetween} />}
         <View style={defaultStyle}>
-          <Text style={defaultContentStyle}>{section.content}</Text>
+          <Text style={{ ...fs16SemiBoldBlack2, ...titleStyle }}>{section.title}</Text>
+          <CustomFlexSpacer />
+          {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
         </View>
-        <CustomSpacer space={defaultSpaceInBetween} />
       </Fragment>
     );
   };
 
   return (
-    <Fragment>
-      <CustomSpacer space={spaceToTop !== undefined ? scaleHeight(spaceToTop - sh8) : sh16} />
-      <Accordion
-        activeSections={activeSections}
-        expandMultiple={true}
-        onChange={handleUpdate}
-        renderContent={renderContent}
-        renderHeader={renderTitle}
-        sections={sections}
-        touchableComponent={TouchableWithoutFeedbackBase}
-        underlayColor={colorWhite._1}
-      />
-      <CustomSpacer space={spaceToBottom !== undefined ? spaceToBottom : sh31} />
-    </Fragment>
+    <Accordion
+      activeSections={activeSections}
+      expandMultiple={expandMultiple}
+      onChange={handleSetSections}
+      renderContent={renderContent}
+      renderHeader={renderHeader}
+      sections={sections}
+      touchableProps={{ underlayColor: colorTransparent }}
+      underlayColor={colorWhite._1}
+    />
   );
 };

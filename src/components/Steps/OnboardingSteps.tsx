@@ -1,9 +1,10 @@
 import React from "react";
-import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
 import {
   centerVertical,
+  colorTransparent,
   colorWhite,
   flexChild,
   flexRow,
@@ -139,7 +140,7 @@ export const OnboardingSteps = ({
           renderContent={accordionContent}
           renderHeader={accordionHeader}
           sections={steps}
-          touchableComponent={TouchableWithoutFeedback}
+          touchableProps={{ underlayColor: colorTransparent }}
         />
       </SideMenu>
       <View style={flexChild}>

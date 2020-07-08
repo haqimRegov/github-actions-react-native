@@ -8,6 +8,7 @@ import {
   colorBlack,
   colorBlue,
   colorGray,
+  colorTransparent,
   colorWhite,
   flexRow,
   fs16BoldWhite,
@@ -179,7 +180,7 @@ export const CustomTable = ({
         renderContent={tableAccordion}
         renderHeader={tableItem}
         sections={data}
-        touchableComponent={TouchableWithoutFeedback}
+        touchableProps={{ underlayColor: colorTransparent }}
       />
     </View>
   );

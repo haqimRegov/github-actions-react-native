@@ -37,7 +37,7 @@ export const Products = ({ handleNextStep }: ProductsProps) => {
   const [selectedProduct, setSelectedProduct] = useState<ITableData[]>([]);
 
   const handleSubmit = () => {
-    handleNextStep(ONBOARDING_ROUTES.Questionnaire);
+    handleNextStep(ONBOARDING_ROUTES.Address);
   };
 
   const handlePress = () => {

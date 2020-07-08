@@ -31,8 +31,8 @@ export const ONBOARDING_DATA: IOnboarding[] = [
     label: ONBOARDING.TITLE_PERSONAL_INFORMATION,
   },
   {
-    label: ONBOARDING.TITLE_CONFIRMATION,
-    route: ONBOARDING_ROUTES.Confirmation,
+    label: ONBOARDING.TITLE_ACKNOWLEDGEMENT,
+    route: ONBOARDING_ROUTES.Acknowledgement,
   },
   {
     label: ONBOARDING.TITLE_PAYMENT,

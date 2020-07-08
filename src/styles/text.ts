@@ -21,6 +21,7 @@ export const fs12BoldBlack2: TextStyle = {
   fontFamily: NunitoBold,
   fontSize: sh12,
 };
+
 export const fs12BoldBlack4: TextStyle = {
   color: colorBlack._4,
   fontFamily: NunitoBold,
@@ -155,6 +156,12 @@ export const fs16SemiBoldWhite: TextStyle = {
 
 export const fs18SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh18,
+};
+
+export const fs18SemiBoldBlack6: TextStyle = {
+  color: colorBlack._6,
   fontFamily: NunitoSemiBold,
   fontSize: sh18,
 };

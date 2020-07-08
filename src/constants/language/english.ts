@@ -1,5 +1,20 @@
 export const english = {
   PAGE: {
+    ACKNOWLEDGEMENT: {
+      BUTTON_AGREE: "I/We Agree",
+      BUTTON_CANCEL: "Cancel",
+      HEADING: "Acknowledgement",
+      LABEL_AGENT_SIGNATURE: "Add Agent's Signature",
+      LABEL_CLIENT_SIGNATURE: "Add Your Signature",
+      SUBHEADING: "Terms & Conditions",
+      TERMS_HEADING_1: "Consent for Ongoing Services",
+      TERMS_HEADING_2: "PDPA Consent",
+      TERMS_HEADING_3: "Authorised Distribution",
+      TERMS_HEADING_4: "Declined to Provide Information",
+      TERMS_HEADING_5: "Purchase Outside of Risk",
+      TERMS_HEADING_6: "Receipt of Document",
+      TERMS_HEADING_7: "Information Disclosed",
+    },
     ADD_CLIENT: {
       BUTTON_STARTED: "Get Started",
       DETAILS_BUTTON_CONFIRM: "Confirm",
@@ -22,21 +37,6 @@ export const english = {
       UPLOAD_DOCUMENT_GUIDE: "Document Upload Guidelines",
       UPLOAD_DOCUMENT_HINT: "Make sure your environment is well lit.",
       UPLOAD_DOCUMENT: "Upload your document",
-    },
-    CONFIRMATION: {
-      BUTTON_AGREE: "I/We Agree",
-      BUTTON_CANCEL: "Cancel",
-      HEADING: "Acknowledgement",
-      SIGNATURE_AGENT: "Add Agent's Signature",
-      SIGNATURE_CLIENT: "Add Your Signature",
-      SUBHEADING: "Terms & Conditions",
-      TERMS_HEADING_1: "Consent for Ongoing Services",
-      TERMS_HEADING_2: "PDPA Consent",
-      TERMS_HEADING_3: "Authorised Distribution",
-      TERMS_HEADING_4: "Declined to Provide Information",
-      TERMS_HEADING_5: "Purchase Outside of Risk",
-      TERMS_HEADING_6: "Receipt of Document",
-      TERMS_HEADING_7: "Information Disclosed",
     },
     EMPLOYMENT_DETAILS: {
       BUTTON_CANCEL: "Cancel",
@@ -65,7 +65,7 @@ export const english = {
     ONBOARDING: {
       HEADING: "Your financial freedom in just 5 simple steps.",
       STEP: "STEP",
-      TITLE_CONFIRMATION: "Confirmation",
+      TITLE_ACKNOWLEDGEMENT: "Acknowledgement",
       TITLE_CONTACT_DETAILS: "Contact Details",
       TITLE_EMPLOYMENT_DETAILS: "Employment Details",
       TITLE_FATCA: "FATCA & CRS Declaration",
@@ -126,6 +126,10 @@ export const english = {
       QUESTION_2: "When are you planning to withdraw money form your investments?",
       QUESTION_3: "If your portfolio falls along with the market, what would you do?",
       QUESTION_4: "If you could choose only one of the five hypothetical portfolios characterized below, which would you select?",
+    },
+    SIGNATURE: {
+      BUTTON_CANCEL: "Re-Take",
+      BUTTON_CONFIRM: "Confirm",
     },
   },
 };

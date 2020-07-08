@@ -49,7 +49,7 @@ export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) =>
   };
 
   const handleNavigate = () => {
-    handleNextStep(ONBOARDING_ROUTES.ContactDetails);
+    handleNextStep(ONBOARDING_ROUTES.Declaration);
   };
 
   const handleSubmit = () => {

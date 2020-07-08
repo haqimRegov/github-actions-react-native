@@ -30,10 +30,10 @@ export const flexRowSaSa = { ...flexRow, ...spaceAroundHV } as const;
 export const fullHeight = { height: "100%" } as const;
 export const fullWidth = { width: "100%" } as const;
 export const fullHW = { ...fullHeight, ...fullWidth } as const;
+export const borderBottomBlack61 = { borderBottomWidth: 1, borderBottomColor: colorBlack._6_1 } as const;
+export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
-export const borderRadiusBottom = {};
-export const borderBottomBlack61 = { borderBottomWidth: 1, borderBottomColor: colorBlack._6_1 } as const;
 
 export const border = (color: string, width: number, radius?: number, style?: "solid" | "dotted" | "dashed") => ({
   borderColor: color,

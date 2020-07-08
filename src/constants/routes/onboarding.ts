@@ -1,6 +1,6 @@
 export const ONBOARDING_ROUTES = {
   Address: "Address",
-  Confirmation: "Confirmation",
+  Acknowledgement: "Acknowledgement",
   ContactDetails: "ContactDetails",
   Declaration: "Declaration",
   EmploymentDetails: "EmploymentDetails",

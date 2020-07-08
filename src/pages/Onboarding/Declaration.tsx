@@ -11,7 +11,7 @@ interface DeclarationProps {
 
 export const Declaration = ({ handleNextStep }: DeclarationProps) => {
   const handleSubmit = () => {
-    handleNextStep(ONBOARDING_ROUTES.Confirmation);
+    handleNextStep(ONBOARDING_ROUTES.Acknowledgement);
   };
 
   return (

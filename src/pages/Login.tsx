@@ -17,6 +17,7 @@ import {
 } from "../components";
 import { Language } from "../constants";
 import {
+  blueShadow,
   centerVertical,
   circle,
   colorBlack,
@@ -83,12 +84,6 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
 
   const handleLogin = () => {
     navigation.navigate("AddClient");
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [{ name: "Dashboard" }],
-    //   }),
-    // );
   };
 
   const handleRiskAssessment = () => {
@@ -147,7 +142,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
                 <View style={flexRow}>
                   <RoundedButton onPress={handleRiskAssessment} buttonStyle={{ width: sw278 }} text={LOGIN.BUTTON_LOGIN} />
                   <CustomSpacer isHorizontal={true} space={sw24} />
-                  <IconButton name="fingerprint" onPress={handleFingerprint} />
+                  <IconButton name="fingerprint" onPress={handleFingerprint} style={blueShadow} />
                 </View>
                 <CustomSpacer space={sh23} />
                 <View style={flexRow}>

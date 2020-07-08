@@ -2,8 +2,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 
 import { ONBOARDING_ROUTES } from "../../constants";
+import { Acknowledgement } from "./Acknowledgement";
 import { Address } from "./Address";
-import { Confirmation } from "./Confirmation";
 import { ContactDetails } from "./ContactDetails";
 import { Declaration } from "./Declaration";
 import { EmploymentDetails } from "./EmploymentDetails";
@@ -34,8 +34,8 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
       return <EmploymentDetails {...props} />;
     case ONBOARDING_ROUTES.Declaration:
       return <Declaration {...props} />;
-    case ONBOARDING_ROUTES.Confirmation:
-      return <Confirmation {...props} />;
+    case ONBOARDING_ROUTES.Acknowledgement:
+      return <Acknowledgement {...props} />;
     case ONBOARDING_ROUTES.Payment:
       return <Payment {...props} />;
     default:

@@ -11,10 +11,7 @@ const { ONBOARDING } = Language.PAGE;
 
 export const ONBOARDING_DATA: IOnboarding[] = [
   {
-    content: [
-      { title: ONBOARDING.TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire },
-      { title: ONBOARDING.TITLE_FUNDING_OPTIONS, route: ONBOARDING_ROUTES.FundingOptions },
-    ],
+    content: [{ title: ONBOARDING.TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire }],
     label: ONBOARDING.TITLE_RISK_ASSESSMENT,
   },
   {
@@ -24,7 +21,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   {
     content: [
       { title: ONBOARDING.TITLE_PROOF_OF_ADDRESS, route: ONBOARDING_ROUTES.Address },
-      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.ContactDetails },
+      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
       { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
       { title: ONBOARDING.TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
     ],

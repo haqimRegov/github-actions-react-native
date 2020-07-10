@@ -100,12 +100,11 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
 
   return (
     <ContentPage
+      handleCancel={handleCancel}
+      handleContinue={handleAgree}
       heading={ACKNOWLEDGEMENT.HEADING}
-      handleLeftButton={handleCancel}
-      handleRightButton={handleAgree}
-      leftButtonText={ACKNOWLEDGEMENT.BUTTON_CANCEL}
-      rightButtonText={ACKNOWLEDGEMENT.BUTTON_AGREE}
-      subHeading={ACKNOWLEDGEMENT.SUBHEADING}>
+      labelContinue={ACKNOWLEDGEMENT.BUTTON_AGREE}
+      subheading={ACKNOWLEDGEMENT.SUBHEADING}>
       <View style={px(sw96)}>
         <BasicAccordion sections={SECTIONS} />
         <CustomSpacer space={sh31} />
@@ -114,7 +113,7 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
       <CustomSpacer space={sh31} />
       <View style={px(sw96)}>
         <TouchableWithoutFeedback onPress={handleSignatureClient}>
-          <View style={clientSignStyle}>
+          <View onStartShouldSetResponderCapture={() => true} style={clientSignStyle}>
             <View style={{ ...flexRow, ...centerVertical }}>
               <Text style={fs16RegBlue}>{ACKNOWLEDGEMENT.LABEL_CLIENT_SIGNATURE}</Text>
               <CustomFlexSpacer />
@@ -125,7 +124,7 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
         {showClientSign ? <CustomSignature setSignature={setInputClientSign} signature={inputClientSign} /> : null}
         <CustomSpacer space={sh8} />
         <TouchableWithoutFeedback onPress={handleSignatureAgent}>
-          <View style={agentSignStyle}>
+          <View onStartShouldSetResponderCapture={() => true} style={agentSignStyle}>
             <View style={{ ...flexRow, ...centerVertical }}>
               <Text style={fs16RegBlue}>{ACKNOWLEDGEMENT.LABEL_AGENT_SIGNATURE}</Text>
               <CustomFlexSpacer />

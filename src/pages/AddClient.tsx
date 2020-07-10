@@ -12,8 +12,8 @@ import {
   RadioButtonGroup,
   RoundedButton,
   SafeAreaPage,
+  UploadPhoto,
 } from "../components";
-import { UploadPhoto } from "../components/Photo";
 import { Language } from "../constants";
 import { imageOpenCamera, imageOpenPicker } from "../integrations/react-native-image-crop-picker";
 import { SAMPLE_CLIENT } from "../mocks";
@@ -163,11 +163,13 @@ export const AddClientPage = ({ navigation }: PageProps) => {
         </ScrollView>
       </SafeAreaPage>
       <ConfirmationModal
-        buttons={[
-          { onPress: handleAddMedia, text: ADD_CLIENT.DETAILS_BUTTON_RE_UPLOAD, secondary: true, buttonStyle: { width: sw205 } },
-          { onPress: handleConfirm, text: ADD_CLIENT.DETAILS_BUTTON_CONFIRM, buttonStyle: { width: sw205 } },
-        ]}
+        cancelButtonStyle={{ width: sw205 }}
+        continueButtonStyle={{ width: sw205 }}
+        handleCancel={handleAddMedia}
         handleClose={handleHideModal}
+        handleContinue={handleConfirm}
+        labelCancel={ADD_CLIENT.DETAILS_BUTTON_RE_UPLOAD}
+        labelContinue={ADD_CLIENT.DETAILS_BUTTON_CONFIRM}
         title={ADD_CLIENT.DETAILS_TITLE}
         visible={modalVisible}>
         <Fragment>

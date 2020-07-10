@@ -172,6 +172,12 @@ export const fs24RegBlack: TextStyle = {
   fontSize: sh24,
 };
 
+export const fs24BoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh24,
+};
+
 export const fs24RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,

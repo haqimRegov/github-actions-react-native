@@ -1,70 +1,64 @@
-import React, { Fragment, ReactNode } from "react";
-import { ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { ReactNode } from "react";
+import { ScrollView, Text, TextStyle, View } from "react-native";
 
-import { CustomSpacer } from "../../components/Views";
-import { flexChild, flexRow, fs16RegBlack2, fs24RegBlack2, px, sh25, sh31, sh8, sw16, sw240, sw96 } from "../../styles";
+import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
+import { flexGrow, fs24BoldBlack2, fs24RegBlack2, fs36SemiBoldBlack2, px, sh16, sh25, sh32, sh8, sw94 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
-import { RoundedButton } from "../Touchables/RoundedButton";
 
-interface ContentPageProps {
+interface ContentPageProps extends ActionButtonsProps {
   children: ReactNode;
-  handleLeftButton: () => void;
-  handleRightButton: () => void;
-  heading: string;
+  heading?: string;
   headingStyle?: TextStyle;
-  leftButtonText: string;
-  rightButtonText: string;
   spaceToBottom?: number;
-  spaceToSubHeading?: number;
+  spaceToHeading?: number;
   spaceToTitle?: number;
   spaceToTop?: number;
-  subHeading: string;
-  subHeadingStyle?: TextStyle;
-  title?: string;
-  titleStyle?: TextStyle;
+  subheading?: string;
+  subheadingStyle?: TextStyle;
+  subtitle?: string;
+  subtitleStyle?: TextStyle;
 }
 
 export const ContentPage = ({
   children,
-  handleLeftButton,
-  handleRightButton,
   heading,
   headingStyle,
-  leftButtonText,
-  rightButtonText,
   spaceToBottom,
-  spaceToSubHeading,
+  spaceToHeading,
   spaceToTitle,
   spaceToTop,
-  subHeading,
-  subHeadingStyle,
-  title,
-  titleStyle,
+  subheading,
+  subheadingStyle,
+  subtitle,
+  subtitleStyle,
+  ...rest
 }: ContentPageProps) => {
-  const defaultHeadingStyle: ViewStyle = { ...fs24RegBlack2, ...headingStyle };
-  const defaultSubHeadingStyle: ViewStyle = { ...fs16RegBlack2, ...subHeadingStyle };
-  const defaultTitleStyle: ViewStyle = { ...fs16RegBlack2, ...titleStyle };
+  const topSpace = spaceToTop !== undefined ? spaceToTop : sh32;
+  const subheadingTopSpace = spaceToHeading !== undefined ? spaceToHeading : sh8;
+  const subtitleTopSpace = spaceToTitle !== undefined ? spaceToTitle : sh8;
+
+  const actionButtonProps: ActionButtonsProps = {
+    ...rest,
+    buttonContainerStyle: px(sw94),
+  };
+
   return (
     <SafeAreaPage>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <View style={{ ...flexChild, ...px(sw96) }}>
-          <CustomSpacer space={spaceToTop !== undefined ? spaceToTop : sh31} />
-          <Text style={defaultHeadingStyle}>{heading}</Text>
-          <CustomSpacer space={spaceToSubHeading !== undefined ? spaceToSubHeading : sh8} />
-          <Text style={defaultSubHeadingStyle}>{subHeading}</Text>
-          {title !== undefined ? (
-            <Fragment>
-              <CustomSpacer space={spaceToTitle !== undefined ? spaceToTitle : sh8} />
-              <Text style={defaultTitleStyle}>{title}</Text>
-            </Fragment>
+      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
+        <View style={px(sw94)}>
+          <CustomSpacer space={topSpace} />
+          {heading === undefined ? null : <Text style={{ ...fs36SemiBoldBlack2, ...headingStyle }}>{heading}</Text>}
+          {subheading === undefined ? null : (
+            <TextSpaceArea spaceToTop={subheadingTopSpace} style={{ ...fs24BoldBlack2, ...subheadingStyle }} text={subheading} />
+          )}
+          {subtitle !== undefined ? (
+            <TextSpaceArea spaceToTop={subtitleTopSpace} style={{ ...fs24RegBlack2, ...subtitleStyle }} text={subtitle} />
           ) : null}
         </View>
         {children}
-        <View style={{ ...flexRow, ...px(sw96) }}>
-          <RoundedButton buttonStyle={{ width: sw240 }} onPress={handleLeftButton} secondary={true} text={leftButtonText} />
-          <CustomSpacer isHorizontal={true} space={sw16} />
-          <RoundedButton buttonStyle={{ width: sw240 }} onPress={handleRightButton} text={rightButtonText} />
-        </View>
+        <CustomFlexSpacer />
+        <CustomSpacer space={sh16} />
+        <ActionButtons {...actionButtonProps} />
         <CustomSpacer space={spaceToBottom !== undefined ? spaceToBottom : sh25} />
       </ScrollView>
     </SafeAreaPage>

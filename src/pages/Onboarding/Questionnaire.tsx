@@ -60,7 +60,7 @@ export const QuestionnaireContent = ({ handleNextStep, navigation }: Questionnai
 
   // TODO temporary
   const handleConfirm = () => {
-    handleNextStep(ONBOARDING_ROUTES.FundingOptions);
+    handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
   };
 
   // TODO temporary

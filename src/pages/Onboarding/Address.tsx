@@ -63,7 +63,7 @@ export const Address = ({ handleNextStep }: AddressProps) => {
   };
 
   const handleNavigate = () => {
-    handleNextStep(ONBOARDING_ROUTES.ContactDetails);
+    handleNextStep(ONBOARDING_ROUTES.PersonalDetails);
   };
 
   const handleSubmit = () => {

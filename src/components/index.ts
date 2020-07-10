@@ -3,6 +3,7 @@ export * from "./CommonPages";
 export * from "./Input";
 export * from "./Modals";
 export * from "./Nav";
+export * from "./Photo";
 export * from "./RadioButton";
 export * from "./Signature";
 export * from "./Steps";

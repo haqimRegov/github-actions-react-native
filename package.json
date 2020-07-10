@@ -20,6 +20,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
     "ios:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
+    "ios:10": "react-native run-ios --simulator=\"iPad (7th generation)\"",
     "ios:11": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
     "ios:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\"",
     "fix:collapsible:js": "cp ./fixes/react-native-collapsible--collapsible ./node_modules/react-native-collapsible/Collapsible.js",

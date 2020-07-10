@@ -63,7 +63,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   const [inputPassword, setInputPassword] = useState("");
 
   const handleForgotPassword = () => {
-    navigation.navigate("Onboarding");
+    navigation.navigate("AddClient");
   };
 
   const handlePrivacyPolicy = () => {
@@ -137,7 +137,13 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
                 <Text style={fs36SemiBoldBlack2}>{LOGIN.HEADING}</Text>
                 <Text style={fs24RegBlack2}>{LOGIN.SUBHEADING}</Text>
                 <CustomTextInput label={LOGIN.LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
-                <CustomTextInput label={LOGIN.LABEL_PASSWORD} onChangeText={setInputPassword} spaceToTop={sh12} value={inputPassword} />
+                <CustomTextInput
+                  label={LOGIN.LABEL_PASSWORD}
+                  onChangeText={setInputPassword}
+                  secureTextEntry={true}
+                  spaceToTop={sh12}
+                  value={inputPassword}
+                />
                 <CustomSpacer space={sh30} />
                 <View style={flexRow}>
                   <RoundedButton onPress={handleRiskAssessment} buttonStyle={{ width: sw278 }} text={LOGIN.BUTTON_LOGIN} />

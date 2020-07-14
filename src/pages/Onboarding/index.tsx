@@ -46,7 +46,7 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
   const [activeSection, setActiveSection] = useState(0);
   const [finishedStep, setFinishedStep] = useState<number[]>([]);
 
-  const ACTIVE_CONTENT = activeContent !== undefined ? activeContent.route || "" : ONBOARDING_ROUTES.ProductRecommendation;
+  const initialContent = activeContent !== undefined ? activeContent.route || "" : ONBOARDING_ROUTES.Questionnaire;
 
   const handleContentChange = (item: IContentItem | IOnboarding) => {
     setActiveContent(item);
@@ -67,7 +67,7 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
         RenderContent={({ handleNextStep }) => {
           return (
             <View style={{ ...flexRow, ...fullHW }}>
-              <OnboardingContent route={ACTIVE_CONTENT} handleNextStep={handleNextStep} navigation={navigation} />
+              <OnboardingContent route={initialContent} handleNextStep={handleNextStep} navigation={navigation} />
             </View>
           );
         }}

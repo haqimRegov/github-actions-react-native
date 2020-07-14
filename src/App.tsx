@@ -10,6 +10,7 @@ export const App = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+
   return (
     <SafeAreaProvider>
       {Platform.select({

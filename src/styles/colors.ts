@@ -40,6 +40,10 @@ export const colorGreen = {
   _1: "#6aa130",
 };
 
+export const colorRed = {
+  _1: "#C61230",
+};
+
 export const colorWhite = {
   _1: "#FFFFFF",
   _2: "#fdfefe",

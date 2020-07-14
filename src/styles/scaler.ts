@@ -2,11 +2,8 @@ import { Dimensions, PixelRatio } from "react-native";
 
 const { height, width } = Dimensions.get("window");
 
-const baseHeight = 834;
-const baseWidth = 1194;
-
-export const baseNotchTop = 24;
-export const baseNotchBottom = 20;
+const baseHeight = 810;
+const baseWidth = 1080;
 
 const baseHypotenuse = Math.sqrt(baseWidth * baseWidth + baseHeight * baseHeight);
 const deviceHypotenuse = Math.sqrt(width * width + height * height);

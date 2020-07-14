@@ -22,6 +22,12 @@ export const fs12BoldBlack2: TextStyle = {
   fontSize: sh12,
 };
 
+export const fs12BoldBlack6: TextStyle = {
+  color: colorBlack._6,
+  fontFamily: NunitoBold,
+  fontSize: sh12,
+};
+
 export const fs12BoldBlack4: TextStyle = {
   color: colorBlack._4,
   fontFamily: NunitoBold,
@@ -42,6 +48,12 @@ export const fs12RegBlack: TextStyle = {
 
 export const fs12RegBlack2: TextStyle = {
   color: colorBlack._2,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+};
+
+export const fs12RegBlack6: TextStyle = {
+  color: colorBlack._6,
   fontFamily: NunitoRegular,
   fontSize: sh12,
 };

@@ -1,18 +1,18 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, ViewStyle } from "react-native";
 
-import { OnboardingStepsV2 } from "../../components";
+import { OnboardingSteps } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { flexRow, fullHW } from "../../styles";
+import { flexRow, fullHW, sw134, sw398 } from "../../styles";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
 
 export const ONBOARDING_DATA: IOnboarding[] = [
   {
-    label: ONBOARDING.TITLE_QUESTIONNAIRE,
-    route: ONBOARDING_ROUTES.Questionnaire,
+    content: [{ title: ONBOARDING.TITLE_QUESTIONNAIRE, route: ONBOARDING_ROUTES.Questionnaire }],
+    label: ONBOARDING.TITLE_RISK_ASSESSMENT,
   },
   {
     label: ONBOARDING.TITLE_PRODUCT_RECOMMENDATION,
@@ -41,15 +41,33 @@ interface OnboardingProps {
   navigation: StackNavigationProp<RootNavigatorType>;
 }
 
+const PRODUCTS_INDEX = 1;
+
 export const OnboardingPage = ({ navigation }: OnboardingProps) => {
   const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(undefined);
   const [activeSection, setActiveSection] = useState(0);
   const [finishedStep, setFinishedStep] = useState<number[]>([]);
+  const [hideSideMenu, setHideSideMenu] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const ACTIVE_CONTENT = activeContent !== undefined ? activeContent.route || "" : ONBOARDING_ROUTES.ProductRecommendation;
 
+  const sideBarStyle: ViewStyle = ACTIVE_CONTENT === ONBOARDING_ROUTES.ProductRecommendation ? { width: sw134 } : { width: sw398 };
+
   const handleContentChange = (item: IContentItem | IOnboarding) => {
     setActiveContent(item);
+    setShowOverlay(false);
+  };
+
+  const handleResetSection = () => {
+    setActiveSection(PRODUCTS_INDEX);
+    setHideSideMenu(true);
+    setShowOverlay(false);
+  };
+
+  const handleExpand = () => {
+    setHideSideMenu(false);
+    setShowOverlay(true);
   };
 
   useEffect(() => {
@@ -58,15 +76,30 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (activeSection === PRODUCTS_INDEX) {
+      return setHideSideMenu(true);
+    }
+    if (activeSection === PRODUCTS_INDEX && ACTIVE_CONTENT === ONBOARDING_ROUTES.ProductRecommendation) {
+      return setHideSideMenu(true);
+    }
+    return setHideSideMenu(false);
+  }, [activeSection, ACTIVE_CONTENT]);
+
   return (
     <Fragment>
-      <OnboardingStepsV2
+      <OnboardingSteps
         activeContent={activeContent}
         activeSection={activeSection}
+        collapse={hideSideMenu}
         handleContentChange={handleContentChange}
+        onPressBackdrop={handleResetSection}
+        onPressExpand={handleExpand}
+        overlay={showOverlay}
         RenderContent={({ handleNextStep }) => {
           return (
             <View style={{ ...flexRow, ...fullHW }}>
+              <View style={sideBarStyle} />
               <OnboardingContent route={ACTIVE_CONTENT} handleNextStep={handleNextStep} navigation={navigation} />
             </View>
           );

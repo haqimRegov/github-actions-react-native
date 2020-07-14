@@ -18,7 +18,7 @@
     "install:pods": "cd ios && pod install",
     "remove:ios:build": "cd ios && rm -rf build",
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
+    "ios": "react-native run-ios --simulator=\"iPad (7th generation)\"",
     "ios:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
     "ios:10": "react-native run-ios --simulator=\"iPad (7th generation)\"",
     "ios:11": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",

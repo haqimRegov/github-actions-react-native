@@ -5,16 +5,15 @@ import Accordion from "react-native-collapsible/Accordion";
 import {
   colorTransparent,
   colorWhite,
-  flexChild,
   flexRow,
-  fs12BoldBlack6,
-  fs12RegBlack6,
-  fs14RegularBlack6,
+  fs14BoldBlack2,
+  fs14RegBlack2,
+  fullHW,
   sh16,
-  sh24,
   sh40,
   sw104,
   sw120,
+  sw200,
   sw40,
   sw8,
 } from "../../styles";
@@ -39,17 +38,17 @@ export const OnboardingStepsV2 = ({
 
     const labelOpacity = isActive || !visited ? { opacity: 1 } : { opacity: 0.5 };
     const textStyle: TextStyle = isActive
-      ? { ...fs14RegularBlack6, width: sw120, ...labelOpacity }
-      : { ...fs14RegularBlack6, width: sw120, ...labelOpacity };
+      ? { ...fs14RegBlack2, width: sw120, ...labelOpacity }
+      : { ...fs14RegBlack2, width: sw120, ...labelOpacity };
 
     return (
       <View>
+        <CustomSpacer space={sh40} />
         <View style={flexRow}>
           <Step active={isActive} step={currentStep} visited={visited} />
           <CustomSpacer isHorizontal={true} space={sw8} />
           <Text style={textStyle}>{step.label}</Text>
         </View>
-        <CustomSpacer space={sh40} />
       </View>
     );
   };
@@ -69,17 +68,16 @@ export const OnboardingStepsV2 = ({
               handleContentChange(item);
             };
             const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
-            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack6 : fs12RegBlack6;
+            const textStyle: TextStyle = item.title === activeTitle ? fs14BoldBlack2 : fs14RegBlack2;
             return (
               <View key={index} style={{ width: sw104 }}>
+                <CustomSpacer space={sh16} />
                 <Text onPress={handleNavigateToContent} key={index} style={textStyle}>
                   {item.title}
                 </Text>
-                <CustomSpacer space={sh16} />
               </View>
             );
           })}
-          <CustomSpacer space={sh24} />
         </View>
       </View>
     );
@@ -133,7 +131,7 @@ export const OnboardingStepsV2 = ({
   };
 
   return (
-    <View style={flexRow}>
+    <View style={{ ...flexRow, ...fullHW }}>
       <SideMenuV2>
         <Accordion
           activeSections={[activeSection]}
@@ -145,9 +143,8 @@ export const OnboardingStepsV2 = ({
           touchableProps={{ underlayColor: colorTransparent }}
         />
       </SideMenuV2>
-      <View style={flexChild}>
-        <RenderContent handleNextStep={handleNextStep} />
-      </View>
+      <CustomSpacer isHorizontal={true} space={sw200} />
+      <RenderContent handleNextStep={handleNextStep} />
     </View>
   );
 };

@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, TextInput, TextStyle, View, ViewStyle } from "react-native";
 
-import { colorBlack, colorTransparent, colorWhite, sh05, sh133, sh135, sw1, sw20, sw326, sw348, sw350 } from "../../styles";
+import { colorGray, colorTransparent, colorWhite, px, sh05, sh110, sh118, sh120, sw1, sw16, sw20, sw358, sw360 } from "../../styles";
 import { CustomTextInput, ITextInputProps } from "./Input";
 
 export interface TextInputAreaProps extends ITextInputProps {
   style?: TextStyle;
 }
 
-export const TextInputArea: FunctionComponent<TextInputAreaProps> = (props: TextInputAreaProps) => {
+export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({ style, ...rest }: TextInputAreaProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
   const [textInputDummy, setTextInputDummy] = useState<TextInput | null>(null);
   const [multilineFocus, setMultilineFocus] = useState(false);
@@ -16,8 +16,10 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = (props: Text
   const handleMultilineFocus = () => {
     if (textInputDummy !== null) {
       if (multilineFocus === false) {
-        textInputDummy.focus();
-        setMultilineFocus(true);
+        setTimeout(() => {
+          textInputDummy.focus();
+          setMultilineFocus(true);
+        }, 300);
       }
     }
   };
@@ -34,14 +36,15 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = (props: Text
 
   const defaultStyle: ViewStyle = {
     backgroundColor: colorWhite._1,
-    borderColor: colorBlack._2,
+    borderColor: colorGray._7,
     borderRadius: sw20,
     borderWidth: sw1,
-    height: sh135,
-    width: sw350,
+    height: sh120,
+    width: sw360,
+    ...style,
   };
 
-  const defaultInputStyle: ViewStyle = { borderWidth: 0, height: sh133, width: sw348 };
+  const defaultInputStyle: ViewStyle = { ...px(0), borderWidth: 0, height: sh118, width: sw358 };
   const dummyInputStyle: ViewStyle = { borderWidth: 0, backgroundColor: colorTransparent, height: sh05 };
 
   useEffect(() => {
@@ -57,10 +60,10 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = (props: Text
         multiline={true}
         onFocus={handleMultilineFocus}
         setRef={setTextAreaRef}
-        style={{ height: sh135, width: sw326 }}
+        style={{ ...px(sw16), height: sh110, width: sw360 }}
         textAlignVertical="top"
         viewStyle={defaultInputStyle}
-        {...props}
+        {...rest}
       />
       <CustomTextInput
         onFocus={handleDummyInputFocus}

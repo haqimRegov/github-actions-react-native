@@ -22,11 +22,11 @@ import {
   colorGray,
   flexChild,
   flexRow,
-  fs12SemiBoldBlack2,
-  fs16SemiBoldBlack4,
-  fs18SemiBoldBlack2,
+  fs12BoldBlack2,
+  fs16BoldBlack1,
+  fs16BoldBlack2,
   fs24RegBlack2,
-  fs36SemiBoldBlack2,
+  fs40BoldBlack2,
   fullWidth,
   px,
   sh10,
@@ -100,14 +100,13 @@ export const AddClientPage = ({ navigation }: PageProps) => {
     });
   };
 
-  const labeledTitleProps = { labelStyle: fs12SemiBoldBlack2, titleStyle: fs16SemiBoldBlack4 };
   const logoStyle: ImageStyle = { height: sh60, resizeMode: "contain", width: sw126 };
 
   return (
     <Fragment>
       <SafeAreaPage>
         <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
-          <View style={{ ...flexChild, backgroundColor: colorGray._3 }}>
+          <View style={{ ...flexChild, backgroundColor: colorGray._5 }}>
             <CustomSpacer space={sh12} />
             <View style={px(sw36)}>
               <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
@@ -115,11 +114,11 @@ export const AddClientPage = ({ navigation }: PageProps) => {
             <CustomSpacer space={sh92} />
             <View style={{ ...flexRow, ...px(sw96) }}>
               <View>
-                <Text style={fs36SemiBoldBlack2}>{ADD_CLIENT.HEADING}</Text>
+                <Text style={fs40BoldBlack2}>{ADD_CLIENT.HEADING}</Text>
                 <Text style={fs24RegBlack2}>{ADD_CLIENT.SUBHEADING}</Text>
                 <CustomSpacer space={sh24} />
                 <View style={px(sw12)}>
-                  <Text style={fs12SemiBoldBlack2}>{ADD_CLIENT.LABEL_ID_TYPE}</Text>
+                  <Text style={fs12BoldBlack2}>{ADD_CLIENT.LABEL_ID_TYPE}</Text>
                   <CustomSpacer space={sh8} />
                   <RadioButtonGroup
                     direction="row"
@@ -130,24 +129,14 @@ export const AddClientPage = ({ navigation }: PageProps) => {
                   />
                 </View>
                 <CustomSpacer space={sh16} />
-                <CustomTextInput
-                  label={ADD_CLIENT.LABEL_NAME}
-                  labelStyle={fs12SemiBoldBlack2}
-                  onChangeText={undefined}
-                  spaceToLabel={sh10}
-                />
+                <CustomTextInput label={ADD_CLIENT.LABEL_NAME} onChangeText={undefined} spaceToLabel={sh10} />
                 <CustomSpacer space={sh20} />
-                <CustomTextInput
-                  label={ADD_CLIENT.LABEL_NRIC}
-                  labelStyle={fs12SemiBoldBlack2}
-                  onChangeText={undefined}
-                  spaceToLabel={sh10}
-                />
+                <CustomTextInput label={ADD_CLIENT.LABEL_NRIC} onChangeText={undefined} spaceToLabel={sh10} />
                 <CustomSpacer space={sh30} />
                 <RoundedButton buttonStyle={fullWidth} onPress={handleShowModal} text={ADD_CLIENT.BUTTON_STARTED} />
               </View>
               <View style={{ ...centerHV, ...flexChild, ...flexRow }}>
-                <Text style={fs18SemiBoldBlack2}>{ADD_CLIENT.OR}</Text>
+                <Text style={fs16BoldBlack2}>{ADD_CLIENT.OR}</Text>
               </View>
               <UploadPhoto
                 data={uploadImage}
@@ -173,21 +162,25 @@ export const AddClientPage = ({ navigation }: PageProps) => {
         title={ADD_CLIENT.DETAILS_TITLE}
         visible={modalVisible}>
         <Fragment>
-          <LabeledTitle {...labeledTitleProps} label={ADD_CLIENT.DETAILS_NAME} spaceToBottom={sh24} title={SAMPLE_CLIENT.name} />
-          <LabeledTitle {...labeledTitleProps} label={ADD_CLIENT.DETAILS_LABEL_ID} spaceToBottom={sh24} title={SAMPLE_CLIENT.id} />
-          <LabeledTitle {...labeledTitleProps} label={ADD_CLIENT.DETAILS_LABEL_GENDER} spaceToBottom={sh24} title={SAMPLE_CLIENT.gender} />
+          <LabeledTitle label={ADD_CLIENT.DETAILS_NAME} spaceToBottom={sh24} title={SAMPLE_CLIENT.name} titleStyle={fs16BoldBlack1} />
+          <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_ID} spaceToBottom={sh24} title={SAMPLE_CLIENT.id} titleStyle={fs16BoldBlack1} />
+          <LabeledTitle
+            label={ADD_CLIENT.DETAILS_LABEL_GENDER}
+            spaceToBottom={sh24}
+            title={SAMPLE_CLIENT.gender}
+            titleStyle={fs16BoldBlack1}
+          />
           <LabeledTitle
             label={ADD_CLIENT.DETAILS_LABEL_DOB}
             spaceToBottom={sh24}
             title={SAMPLE_CLIENT.dateOfBirth}
-            {...labeledTitleProps}
+            titleStyle={fs16BoldBlack1}
           />
           <LabeledTitle
             label={ADD_CLIENT.DETAILS_LABEL_ADDRESS}
             spaceToBottom={sh24}
             title={SAMPLE_CLIENT.address}
-            titleStyle={{ ...fs16SemiBoldBlack4, width: sw372 }}
-            labelStyle={fs12SemiBoldBlack2}
+            titleStyle={{ ...fs16BoldBlack1, width: sw372 }}
           />
         </Fragment>
       </ConfirmationModal>

@@ -10,14 +10,15 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs16SemiBoldBlack2,
+  fs12BoldBlack2,
+  fs16BoldBlack2,
   px,
-  sh4,
   sh40,
+  sh8,
   sw1,
-  sw12,
+  sw16,
   sw20,
-  sw350,
+  sw360,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -47,20 +48,20 @@ export const CustomTextInput = ({
   viewStyle,
   ...rest
 }: ITextInputProps) => {
-  const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
   const defaultInputStyle: ViewStyle = {
     backgroundColor: colorWhite._1,
     ...centerVertical,
     ...flexRow,
-    ...px(sw12),
-    borderColor: colorBlack._2,
+    ...px(sw16),
+    borderColor: colorGray._7,
     borderWidth: sw1,
     borderRadius: sw20,
     height: sh40,
-    width: sw350,
+    width: sw360,
     ...viewStyle,
   };
-  const textStyle: TextStyle = { ...fs16SemiBoldBlack2, ...flexChild, height: sh40, ...style };
+  const textStyle: TextStyle = { ...fs16BoldBlack2, ...flexChild, height: sh40, ...style };
 
   return (
     <View>
@@ -68,8 +69,8 @@ export const CustomTextInput = ({
       {label === undefined ? null : (
         <Fragment>
           <View style={flexRow}>
-            <CustomSpacer isHorizontal={true} space={sw12} />
-            <Text onPress={onPressLabel} style={{ ...fs16SemiBoldBlack2, ...labelStyle }}>
+            <CustomSpacer isHorizontal={true} space={sw16} />
+            <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle }}>
               {label}
             </Text>
           </View>
@@ -79,7 +80,7 @@ export const CustomTextInput = ({
       <View style={defaultInputStyle}>
         <TextInput
           placeholder={rest.placeholder}
-          placeholderTextColor={colorGray._1}
+          placeholderTextColor={colorGray._4}
           ref={setRef}
           selectionColor={colorBlack._2}
           style={textStyle}

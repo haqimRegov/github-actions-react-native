@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerVertical, flexCol, flexRow, fs12RegBlue, fsAlignCenter, fsCapitalize } from "../../styles";
+import { centerVertical, flexCol, flexRow, fs12RegBlue1, fsCapitalize } from "../../styles";
 import { CustomSpacer } from "../Views";
 
 export interface LinkTextProps {
@@ -19,7 +19,7 @@ export interface LinkTextGroupProps {
 }
 
 export const LinkText = ({ onPress, style, text }: LinkTextProps) => {
-  const textLinkStyle: TextStyle = { ...fs12RegBlue, ...fsAlignCenter, ...fsCapitalize, ...style };
+  const textLinkStyle: TextStyle = { ...fs12RegBlue1, ...fsCapitalize, ...style };
 
   return (
     <Text onPress={onPress} style={textLinkStyle}>
@@ -34,10 +34,10 @@ export const LinkTextGroup = ({ direction, divider, links, spaceToDivider, style
   const isHorizontal = direction !== "column";
 
   return (
-    <Fragment>
+    <View style={viewStyle}>
       {links.map((link: LinkTextProps, index: number) => {
         return (
-          <View key={index} style={viewStyle}>
+          <Fragment key={index}>
             {index === 0 ? null : (
               <Fragment>
                 <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />
@@ -46,9 +46,9 @@ export const LinkTextGroup = ({ direction, divider, links, spaceToDivider, style
             )}
             <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />
             <LinkText {...link} />
-          </View>
+          </Fragment>
         );
       })}
-    </Fragment>
+    </View>
   );
 };

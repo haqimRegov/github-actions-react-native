@@ -8,7 +8,7 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs16BoldBlack2,
+  fs12BoldBlack2,
   fs16RegBlack2,
   fs24RegBlack2,
   px,
@@ -69,7 +69,7 @@ export const OnboardingSteps = ({
             handleContentChange(item);
           };
           const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
-          const textStyle: TextStyle = item.title === activeTitle ? fs16BoldBlack2 : fs16RegBlack2;
+          const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : fs16RegBlack2;
           return (
             <View key={index} style={{ ...py(sh8), ...px(sw40) }}>
               <Text onPress={handleNavigateToContent} key={index} style={textStyle}>

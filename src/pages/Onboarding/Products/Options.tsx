@@ -3,7 +3,7 @@ import { Alert, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import { CustomSpacer, MenuPopup } from "../../../components";
 import { IcoMoon } from "../../../icons";
-import { centerHV, flexRow, fs13RegBlue, py, sh18, sw184, sw20, sw36 } from "../../../styles";
+import { centerHV, flexRow, fs12BoldBlue2, py, sh18, sw184, sw20, sw36 } from "../../../styles";
 
 export interface ProductOptionsProps {
   item: ITableData;
@@ -29,7 +29,7 @@ export const ProductOptions = ({ item }: ProductOptionsProps) => {
         };
         return (
           <View style={{ width: sw184, ...centerHV }}>
-            <Text onPress={handleSelect} style={{ ...fs13RegBlue, ...py(sh18) }}>
+            <Text onPress={handleSelect} style={{ ...fs12BoldBlue2, ...py(sh18) }}>
               View Details
             </Text>
           </View>

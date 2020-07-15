@@ -11,9 +11,10 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs16SemiBoldBlack2,
-  fs16SemiBoldGray8,
-  fs16SemiBoldWhite,
+  fs12BoldBlue3,
+  fs14BoldBlack2,
+  fs16BoldBlack2,
+  fs16RegBlack2,
   px,
   py,
   sh10,
@@ -75,8 +76,8 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
 
   const uploadContainer: ViewStyle = {
     ...centerHV,
-    backgroundColor: colorGray._7,
-    borderColor: colorGray._8,
+    backgroundColor: colorGray._3,
+    borderColor: colorGray._3,
     borderRadius: sh10,
     borderStyle: "dashed",
     borderWidth: 1,
@@ -96,7 +97,7 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
           <CustomSpacer isHorizontal={true} space={sw10} />
           <Image source={LocalAssets.addClient.paper} style={iconStyle} />
           <CustomSpacer isHorizontal={true} space={sh20} />
-          <Text style={fs16SemiBoldBlack2}>{label}</Text>
+          <Text style={fs14BoldBlack2}>{label}</Text>
         </View>
         <TouchableWithoutFeedback onPress={onPress}>
           <View style={uploadContainer}>
@@ -110,9 +111,9 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
               <Fragment>
                 <Image source={LocalAssets.addClient.documents} style={documentImageStyle} />
                 <CustomSpacer space={sh32} />
-                <Text style={fs16SemiBoldBlack2}>{title}</Text>
+                <Text style={fs16RegBlack2}>{title}</Text>
                 <CustomSpacer space={sh8} />
-                <Text style={fs16SemiBoldGray8}>{subtitle}</Text>
+                <Text style={fs12BoldBlue3}>{subtitle}</Text>
               </Fragment>
             )}
           </View>
@@ -122,11 +123,11 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
       {/** TODO to be enhanced */}
       {guidelines === undefined ? null : (
         <View style={guidelinesStyle}>
-          <View style={{ ...centerHV, ...circle(sw20, colorBlue._4) }}>
-            <Text style={fs16SemiBoldWhite}>i</Text>
+          <View style={{ ...centerHV, ...circle(sw20, colorBlue._2) }}>
+            <Text style={fs16BoldBlack2}>i</Text>
           </View>
           <CustomSpacer isHorizontal={true} space={sw10} />
-          <Text style={fs16SemiBoldBlack2}>{guidelines}</Text>
+          <Text style={fs12BoldBlue3}>{guidelines}</Text>
         </View>
       )}
     </View>

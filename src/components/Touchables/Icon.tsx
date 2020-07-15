@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerHV, circle, colorBlue, colorWhite, sh20, sw48 } from "../../styles";
+import { centerHV, circle, colorRed, colorWhite, sh20, sw48 } from "../../styles";
 
 interface IconButtonProps {
   color?: string;
@@ -13,7 +13,7 @@ interface IconButtonProps {
 }
 
 export const IconButton = ({ color, name, onPress, size, style }: IconButtonProps) => {
-  const defaultStyle: ViewStyle = { ...centerHV, ...circle(sw48, colorBlue._1), ...style };
+  const defaultStyle: ViewStyle = { ...centerHV, ...circle(sw48, colorRed._1), ...style };
   const defaultSize = size !== undefined ? size : sh20;
   const defaultColor = color !== undefined ? color : colorWhite._1;
   return (

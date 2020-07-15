@@ -3,14 +3,14 @@ import { View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, CustomTextInput, LabeledTitle, OutlineButton, Pagination } from "../../../components";
 import {
-  borderBottomBlack61,
+  borderBottomBlack21,
   centerVertical,
-  colorBlue,
-  colorGray,
+  colorBlack,
   flexChild,
   flexRow,
   fs16RegBlack2,
   fs24RegBlack2,
+  px,
   py,
   sh15,
   sh35,
@@ -18,9 +18,8 @@ import {
   sh8,
   sw106,
   sw145,
-  sw36,
+  sw24,
   sw561,
-  sw63,
   sw8,
 } from "../../../styles";
 
@@ -34,8 +33,7 @@ export interface ProductHeaderProps {
 export const ProductHeader = ({ handleNext, handlePrev, handleRecommended, handleViewAll }: ProductHeaderProps) => {
   return (
     <View>
-      <View style={flexRow}>
-        <CustomSpacer isHorizontal={true} space={sw63} />
+      <View style={px(sw24)}>
         <View style={flexChild}>
           <CustomSpacer space={sh54} />
           <View style={{ ...flexRow, ...centerVertical }}>
@@ -50,20 +48,17 @@ export const ProductHeader = ({ handleNext, handlePrev, handleRecommended, handl
             <CustomTextInput viewStyle={{ width: sw561 }} />
           </View>
         </View>
-        <CustomSpacer isHorizontal={true} space={sw36} />
       </View>
       <CustomSpacer space={sh35} />
-      <View style={borderBottomBlack61} />
-      <View style={{ ...flexRow, ...py(sh15) }}>
-        <CustomSpacer isHorizontal={true} space={sw63} />
-        <OutlineButton onPress={handleRecommended} color={colorBlue._7} text={"Recommended"} buttonStyle={{ width: sw145 }} />
+      <View style={borderBottomBlack21} />
+      <View style={{ ...flexRow, ...px(sw24), ...py(sh15) }}>
+        <OutlineButton onPress={handleRecommended} color={colorBlack._2} text={"Recommended"} buttonStyle={{ width: sw145 }} />
         <CustomSpacer isHorizontal={true} space={sw8} />
-        <OutlineButton onPress={handleViewAll} color={colorGray._11} text={"View All"} buttonStyle={{ width: sw106 }} />
+        <OutlineButton onPress={handleViewAll} color={colorBlack._2} text={"View All"} buttonStyle={{ width: sw106 }} />
         <CustomFlexSpacer />
         <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} itemsPerPage={20} />
-        <CustomSpacer isHorizontal={true} space={sw36} />
       </View>
-      <View style={borderBottomBlack61} />
+      <View style={borderBottomBlack21} />
     </View>
   );
 };

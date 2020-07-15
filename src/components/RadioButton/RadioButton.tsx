@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Text, TouchableWithoutFeedback, View } from "react-native";
 
-import { centerVertical, circleBorder, colorBlue, colorGray, colorWhite, flexRow, fs13RegBlack2, sw1, sw12, sw20, sw5 } from "../../styles";
+import { centerVertical, circleBorder, colorBlue, colorRed, colorWhite, flexRow, fs12BoldBlack2, sw1, sw12, sw24, sw6 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 interface RadioButtonProps {
@@ -11,16 +11,15 @@ interface RadioButtonProps {
 }
 
 export const RadioButton = ({ label, selected, setSelected }: RadioButtonProps) => {
-  const borderColor = selected ? colorBlue._5 : colorGray._5;
-  const borderWidth = selected ? sw5 : sw1;
-  const radioStyle: ViewStyle = { ...circleBorder(sw20, borderWidth, borderColor, colorWhite._1) };
+  const borderColor = selected ? colorRed._1 : colorBlue._3;
+  const borderWidth = selected ? sw6 : sw1;
 
   return (
     <TouchableWithoutFeedback onPress={setSelected}>
       <View style={{ ...centerVertical, ...flexRow }}>
-        <View style={radioStyle} />
+        <View style={circleBorder(sw24, borderWidth, borderColor, colorWhite._1)} />
         <CustomSpacer space={sw12} isHorizontal={true} />
-        <Text style={fs13RegBlack2}>{label}</Text>
+        <Text style={fs12BoldBlack2}>{label}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

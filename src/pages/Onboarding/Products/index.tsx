@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 
-import { CustomButton, CustomSpacer, CustomTable, SafeAreaPage } from "../../../components";
+import { CustomButton, CustomSpacer, CustomTable } from "../../../components";
 import { ONBOARDING_ROUTES } from "../../../constants";
 import { SAMPLE_PRODUCTS } from "../../../mocks/products";
 import {
   colorBlue,
-  colorGreen,
-  flexChild,
-  flexRow,
-  fs16SemiBoldBlack6,
-  fs18SemiBoldBlack6,
+  colorMint,
+  colorRed,
+  flexGrow,
+  fs16BoldBlack2,
   fsCapitalize,
-  fullHW,
+  px,
   sh15,
   sw107,
   sw109,
   sw115,
   sw125,
+  sw24,
   sw289,
-  sw36,
-  sw63,
   sw83,
 } from "../../../styles";
 import { ProductGraph } from "./Graph";
@@ -76,11 +74,11 @@ export const Products = ({ handleNextStep }: ProductsProps) => {
   const handleRiskStyle = (item: IColumnItemAccordion) => {
     switch (item.value.toUpperCase()) {
       case "LOW":
-        return { ...fs16SemiBoldBlack6, color: colorGreen._1 };
+        return { ...fs16BoldBlack2, color: colorMint._1 };
       case "MEDIUM":
-        return { ...fs16SemiBoldBlack6, color: colorBlue._7 };
+        return { ...fs16BoldBlack2, color: colorBlue._1 };
       case "HIGH":
-        return { ...fs16SemiBoldBlack6, color: "red" };
+        return { ...fs16BoldBlack2, color: colorRed._1 };
       default:
         return {};
     }
@@ -90,7 +88,7 @@ export const Products = ({ handleNextStep }: ProductsProps) => {
     {
       key: "name",
       itemTextStyle: () => {
-        return { ...fs18SemiBoldBlack6, ...fsCapitalize };
+        return { ...fs16BoldBlack2, ...fsCapitalize };
       },
       textStyle: {
         width: sw289,
@@ -155,31 +153,23 @@ export const Products = ({ handleNextStep }: ProductsProps) => {
   }, []);
 
   return (
-    <SafeAreaPage>
-      <ScrollView style={flexChild}>
-        <View style={{ ...flexRow, ...fullHW }}>
-          <View>
-            <ProductHeader handleNext={handlePress} handlePrev={handlePress} handleRecommended={handlePress} handleViewAll={handlePress} />
-            <CustomSpacer space={sh15} />
-            <View style={flexRow}>
-              <CustomSpacer isHorizontal={true} space={sw63} />
-              <View>
-                <CustomTable
-                  activeAccordion={activeAccordion}
-                  columns={columns}
-                  data={productList}
-                  rowSelection={selectedProduct}
-                  onRowSelect={handleSelectProduct}
-                  RenderAccordion={RenderAccordion}
-                  RenderOptions={RenderOptions}
-                />
-              </View>
-              <CustomSpacer isHorizontal={true} space={sw36} />
-            </View>
-            <CustomButton onPress={handleSubmit} text="Submit" />
-          </View>
+    <ScrollView contentContainerStyle={flexGrow}>
+      <View>
+        <ProductHeader handleNext={handlePress} handlePrev={handlePress} handleRecommended={handlePress} handleViewAll={handlePress} />
+        <CustomSpacer space={sh15} />
+        <View style={px(sw24)}>
+          <CustomTable
+            activeAccordion={activeAccordion}
+            columns={columns}
+            data={productList}
+            rowSelection={selectedProduct}
+            onRowSelect={handleSelectProduct}
+            RenderAccordion={RenderAccordion}
+            RenderOptions={RenderOptions}
+          />
         </View>
-      </ScrollView>
-    </SafeAreaPage>
+        <CustomButton onPress={handleSubmit} text="Submit" />
+      </View>
+    </ScrollView>
   );
 };

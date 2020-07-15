@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View } from "react-native";
 
+import { fs12BoldBlack2 } from "../../styles";
 import { CustomSpacer } from "./Spacer";
 
 interface TextSpaceAreaProps {
@@ -14,7 +15,7 @@ export const TextSpaceArea: FunctionComponent<TextSpaceAreaProps> = ({ spaceToBo
   return (
     <View>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
-      <Text style={style}>{text}</Text>
+      <Text style={{ ...fs12BoldBlack2, ...style }}>{text}</Text>
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
     </View>
   );

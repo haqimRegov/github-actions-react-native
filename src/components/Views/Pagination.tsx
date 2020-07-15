@@ -3,7 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { IcoMoon } from "../../icons";
-import { centerHV, centerVertical, colorGray, flexRow, fs14BoldBlack6, fs14RegularBlack6, sw05, sw16, sw2, sw32 } from "../../styles";
+import { centerHV, centerVertical, colorGray, flexRow, fs10RegBlue21, sw05, sw16, sw2, sw32 } from "../../styles";
 import { CustomSpacer } from "./Spacer";
 
 interface PaginationProps {
@@ -18,7 +18,7 @@ export const Pagination = ({ itemsPerPage, onPressNext, onPressPrev, page, total
   const buttonStyle: ViewStyle = {
     ...centerHV,
     backgroundColor: colorGray._3,
-    borderColor: colorGray._10,
+    borderColor: colorGray._1,
     borderRadius: sw2,
     borderWidth: sw05,
     height: sw32,
@@ -30,21 +30,21 @@ export const Pagination = ({ itemsPerPage, onPressNext, onPressPrev, page, total
   const lastItem = currentMaxItems > totalItems ? totalItems : currentMaxItems;
   const currentItems = `${currentMinItems}-${lastItem}`;
 
+  const label = `Showing ${currentItems} out of ${totalItems} results`;
+
   return (
     <View style={{ ...centerVertical, ...flexRow }}>
-      <Text style={fs14RegularBlack6}>
-        Viewing <Text style={fs14BoldBlack6}>{currentItems}</Text> of <Text style={fs14BoldBlack6}>{totalItems}</Text>
-      </Text>
+      <Text style={fs10RegBlue21}>{label}</Text>
       <CustomSpacer isHorizontal={true} space={sw16} />
       <View style={flexRow}>
         <TouchableWithoutFeedback onPress={onPressPrev}>
           <View style={buttonStyle}>
-            <IcoMoon name="caret-left-filled" />
+            <IcoMoon name="caret-left" />
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={onPressNext}>
           <View style={buttonStyle}>
-            <IcoMoon name="caret-right-filled" />
+            <IcoMoon name="caret-right" />
           </View>
         </TouchableWithoutFeedback>
       </View>

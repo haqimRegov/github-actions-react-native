@@ -1,10 +1,8 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { Fragment, useEffect, useState } from "react";
-import { View } from "react-native";
+import React, { useEffect, useState } from "react";
 
 import { OnboardingStepsV2 } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { flexRow, fullHW } from "../../styles";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
@@ -59,24 +57,18 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
   }, []);
 
   return (
-    <Fragment>
-      <OnboardingStepsV2
-        activeContent={activeContent}
-        activeSection={activeSection}
-        handleContentChange={handleContentChange}
-        RenderContent={({ handleNextStep }) => {
-          return (
-            <View style={{ ...flexRow, ...fullHW }}>
-              <OnboardingContent route={initialContent} handleNextStep={handleNextStep} navigation={navigation} />
-            </View>
-          );
-        }}
-        setActiveContent={setActiveContent}
-        setActiveSection={setActiveSection}
-        setFinishedStep={setFinishedStep}
-        steps={ONBOARDING_DATA}
-        visitedSections={finishedStep}
-      />
-    </Fragment>
+    <OnboardingStepsV2
+      activeContent={activeContent}
+      activeSection={activeSection}
+      handleContentChange={handleContentChange}
+      RenderContent={({ handleNextStep }) => {
+        return <OnboardingContent route={initialContent} handleNextStep={handleNextStep} navigation={navigation} />;
+      }}
+      setActiveContent={setActiveContent}
+      setActiveSection={setActiveSection}
+      setFinishedStep={setFinishedStep}
+      steps={ONBOARDING_DATA}
+      visitedSections={finishedStep}
+    />
   );
 };

@@ -1,24 +1,18 @@
 import React, { FunctionComponent } from "react";
 import { ViewStyle } from "react-native";
 
-import { sw100 } from "../../styles";
+import { sw24 } from "../../styles";
 import { CustomButton, CustomButtonProps } from "./Button";
 
 export interface RoundedButtonProps extends CustomButtonProps {
   radius?: number;
 }
 
-export const RoundedButton: FunctionComponent<RoundedButtonProps> = (props: RoundedButtonProps) => {
-  const defaultBorderRadius = props.radius !== undefined ? { borderRadius: props.radius } : { borderRadius: sw100 };
-
+export const RoundedButton: FunctionComponent<RoundedButtonProps> = ({ radius, buttonStyle, ...rest }: RoundedButtonProps) => {
   const roundedButtonStyle: ViewStyle = {
-    ...defaultBorderRadius,
-    ...props.buttonStyle,
-  };
-  const defaultProps = {
-    ...props,
-    buttonStyle: roundedButtonStyle,
+    borderRadius: radius !== undefined ? radius : sw24,
+    ...buttonStyle,
   };
 
-  return <CustomButton {...defaultProps} />;
+  return <CustomButton buttonStyle={roundedButtonStyle} {...rest} />;
 };

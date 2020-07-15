@@ -7,7 +7,7 @@ import { ONBOARDING_ROUTES } from "../../constants";
 import { Language } from "../../constants/language";
 import { ACKNOWLEDGEMENT_MOCK } from "../../mocks/acknowledgement";
 import {
-  borderBottomBlack61,
+  borderBottomBlack21,
   centerVertical,
   circleBorder,
   colorBlue,
@@ -15,20 +15,19 @@ import {
   colorWhite,
   customShadow,
   flexRow,
-  fs16RegBlue,
+  fs16BoldBlack2,
   noBorderBottom,
   px,
+  py,
   sh20,
-  sh31,
+  sh24,
   sh5,
   sh56,
-  sh72,
   sh8,
   sw05,
   sw12,
   sw24,
   sw28,
-  sw96,
 } from "../../styles";
 
 const { ACKNOWLEDGEMENT } = Language.PAGE;
@@ -85,7 +84,7 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
 
   const signatureBaseStyle: ViewStyle = {
     ...centerVertical,
-    ...customShadow(colorGray._4, sh5, 0, 0.5, sh20),
+    ...customShadow(colorGray._6, sh5, 0, 0.5, sh20),
     ...flexRow,
     ...px(sw24),
     backgroundColor: colorWhite._1,
@@ -102,20 +101,19 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
     <ContentPage
       handleCancel={handleCancel}
       handleContinue={handleAgree}
-      heading={ACKNOWLEDGEMENT.HEADING}
       labelContinue={ACKNOWLEDGEMENT.BUTTON_AGREE}
-      subheading={ACKNOWLEDGEMENT.SUBHEADING}>
-      <View style={px(sw96)}>
+      subheading={ACKNOWLEDGEMENT.HEADING}
+      subtitle={ACKNOWLEDGEMENT.SUBHEADING}>
+      <View style={{ ...px(sw24), ...py(sh24) }}>
         <BasicAccordion sections={SECTIONS} />
-        <CustomSpacer space={sh31} />
       </View>
-      <View style={borderBottomBlack61} />
-      <CustomSpacer space={sh31} />
-      <View style={px(sw96)}>
+      <View style={borderBottomBlack21} />
+      <CustomSpacer space={sh24} />
+      <View style={px(sw24)}>
         <TouchableWithoutFeedback onPress={handleSignatureClient}>
           <View onStartShouldSetResponderCapture={() => true} style={clientSignStyle}>
             <View style={{ ...flexRow, ...centerVertical }}>
-              <Text style={fs16RegBlue}>{ACKNOWLEDGEMENT.LABEL_CLIENT_SIGNATURE}</Text>
+              <Text style={fs16BoldBlack2}>{ACKNOWLEDGEMENT.LABEL_CLIENT_SIGNATURE}</Text>
               <CustomFlexSpacer />
               <IconButton color={colorBlue._1} name={clientIcon} size={sw12} style={circleBorder(sw28, sw05, colorBlue._1)} />
             </View>
@@ -126,7 +124,7 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
         <TouchableWithoutFeedback onPress={handleSignatureAgent}>
           <View onStartShouldSetResponderCapture={() => true} style={agentSignStyle}>
             <View style={{ ...flexRow, ...centerVertical }}>
-              <Text style={fs16RegBlue}>{ACKNOWLEDGEMENT.LABEL_AGENT_SIGNATURE}</Text>
+              <Text style={fs16BoldBlack2}>{ACKNOWLEDGEMENT.LABEL_AGENT_SIGNATURE}</Text>
               <CustomFlexSpacer />
               <IconButton color={colorBlue._1} name={agentIcon} size={sw12} style={circleBorder(sw28, sw05, colorBlue._1)} />
             </View>
@@ -134,7 +132,6 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
         </TouchableWithoutFeedback>
         {showAgentSign ? <CustomSignature setSignature={setInputAgentSign} signature={inputAgentSign} /> : null}
       </View>
-      <CustomSpacer space={sh72} />
     </ContentPage>
   );
 };

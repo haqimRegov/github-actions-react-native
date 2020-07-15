@@ -10,7 +10,7 @@ import {
   colorWhite,
   customShadow,
   flexRow,
-  fs16SemiBoldBlack2,
+  fs16RegBlack2,
   noBorderBottom,
   px,
   sh20,
@@ -45,7 +45,7 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
   const renderHeader = (section: IAccordionSection) => {
     const defaultHeaderStyle: ViewStyle = {
       ...centerVertical,
-      ...customShadow(colorGray._4, sh5, 0, 0.5, sh20),
+      ...customShadow(colorGray._6, sh5, 0, 0.5, sh20),
       ...flexRow,
       ...px(sw24),
       backgroundColor: colorWhite._1,
@@ -64,7 +64,7 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
       <Fragment>
         {current === 0 ? null : <CustomSpacer space={defaultSpaceInBetween} />}
         <View style={defaultStyle}>
-          <Text style={{ ...fs16SemiBoldBlack2, ...titleStyle }}>{section.title}</Text>
+          <Text style={{ ...fs16RegBlack2, ...titleStyle }}>{section.title}</Text>
           <CustomFlexSpacer />
           {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
         </View>

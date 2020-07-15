@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Image, ImageSourcePropType, ImageStyle, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { colorGray, colorWhite, flexRow, px, sh24, sh40, sh96, shadow5, sw200, sw208, sw24, sw94 } from "../../styles";
+import { colorTransparent, colorWhite, DEVICE, flexRow, px, sh40, sh44, sh56, shadow5, sw200, sw24, sw94 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
 export interface ISideMenuV2 {
@@ -17,8 +17,13 @@ export const SideMenuV2 = ({ children, logoStyle, spaceToBottom }: ISideMenuV2) 
   const defaultLogoStyle: ImageStyle = { width: sw94, height: sh40, resizeMode: "contain", ...logoStyle };
   const container: ViewStyle = {
     ...flexRow,
-    backgroundColor: colorGray._3,
-    width: sw208, // size is different to show shadow
+    backgroundColor: colorTransparent,
+    height: DEVICE.SCREEN.HEIGHT,
+    left: 0,
+    position: "absolute",
+    top: 0,
+    width: sw200, // size is different to show shadow
+    zIndex: 1,
   };
   const sideMenuV2Container: ViewStyle = {
     ...px(sw24),
@@ -32,9 +37,9 @@ export const SideMenuV2 = ({ children, logoStyle, spaceToBottom }: ISideMenuV2) 
   return (
     <View style={container}>
       <View style={sideMenuV2Container}>
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh44} />
         <Image source={LocalAssets.logo.kenanga_investors} style={defaultLogoStyle} />
-        <CustomSpacer space={sh96} />
+        <CustomSpacer space={sh56} />
         {children}
         {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : <CustomFlexSpacer />}
       </View>

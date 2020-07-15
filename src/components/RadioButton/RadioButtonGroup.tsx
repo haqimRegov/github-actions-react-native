@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { View } from "react-native";
 
 import { RadioButton } from "../../components/RadioButton/RadioButton";
-import { flexCol, flexRow, sh12, sw12 } from "../../styles";
+import { flexCol, flexRow, sh16, sw16 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface RadioButtonGroupProps {
@@ -14,7 +14,7 @@ export interface RadioButtonGroupProps {
 }
 
 export const RadioButtonGroup = ({ direction, labels, selected, setSelected, space }: RadioButtonGroupProps) => {
-  const defaultSpace = direction === "row" ? sw12 : sh12;
+  const defaultSpace = direction === "row" ? sw16 : sh16;
   const radioSpace = space !== undefined ? space : defaultSpace;
 
   return (
@@ -25,8 +25,8 @@ export const RadioButtonGroup = ({ direction, labels, selected, setSelected, spa
         };
         return (
           <Fragment key={index}>
+            {index === 0 ? null : <CustomSpacer isHorizontal={direction === "row"} space={radioSpace} />}
             <RadioButton label={label} selected={label === selected} setSelected={handleSelect} />
-            <CustomSpacer isHorizontal={direction === "row"} space={radioSpace} />
           </Fragment>
         );
       })}

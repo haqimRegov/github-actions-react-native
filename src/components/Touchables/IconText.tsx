@@ -2,22 +2,7 @@ import React from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import {
-  border,
-  centerVertical,
-  colorBlack,
-  colorGray,
-  flexRow,
-  fs12SemiBoldBlack2,
-  px,
-  sh16,
-  sh32,
-  sw1,
-  sw10,
-  sw156,
-  sw20,
-  sw5,
-} from "../../styles";
+import { border, centerVertical, colorBlack, flexRow, fs12SemiBoldBlack2, px, sh16, sh32, sw1, sw10, sw156, sw20, sw5 } from "../../styles";
 import { CustomSpacer } from "../Views";
 import { OutlineButtonProps } from "./OutlineButton";
 
@@ -33,7 +18,7 @@ export const IconText = ({ buttonStyle, color, disabled, name, onPress, position
   const flexDirection: ViewStyle = position === "right" ? { flexDirection: "row-reverse" } : flexRow;
 
   const defaultButtonStyle: ViewStyle = {
-    ...border(colorGray._11, sw1, sw20),
+    ...border(colorBlack._2, sw1, sw20),
     ...centerVertical,
     ...flexDirection,
     ...px(sw10),

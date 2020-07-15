@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerHV, circleBorder, colorBlack, colorRed, colorWhite, fs12SemiBoldBlack2, sw1, sw24 } from "../../styles";
+import { centerHV, circleBorder, colorBlack, colorRed, colorWhite, fs12BoldWhite1, fs12RegBlack2, sw1, sw24 } from "../../styles";
 
 interface StepProps {
   active: boolean;
@@ -14,16 +14,11 @@ export const Step = ({ active, step, visited }: StepProps) => {
   const stepBorderColor = active || !visited ? colorRed._1 : colorBlack._2;
   const stepColor: ViewStyle = circleBorder(sw24, sw1, stepBorderColor, stepBGColor);
 
-  const stepOpacity = active || !visited ? { opacity: 1 } : { opacity: 0.5 };
-
-  const container: ViewStyle = { ...stepOpacity, ...stepColor, ...centerHV };
-
-  const labelColor: TextStyle = active ? { color: colorWhite._1 } : {};
-  const textStyle: TextStyle = { ...fs12SemiBoldBlack2, ...labelColor, ...stepOpacity };
+  const activeLabelStyle: TextStyle = active ? { ...fs12BoldWhite1, color: colorWhite._1 } : {};
 
   return (
-    <View style={container}>
-      <Text style={textStyle}>{step}</Text>
+    <View style={{ ...stepColor, ...centerHV }}>
+      <Text style={{ ...fs12RegBlack2, ...activeLabelStyle }}>{step}</Text>
     </View>
   );
 };

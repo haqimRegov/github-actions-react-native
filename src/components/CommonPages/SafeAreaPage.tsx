@@ -15,12 +15,12 @@ export const SafeAreaPage = ({ barStyle, bottomBackgroundColor, children, topBac
 
   const safeAreaTopStyle: ViewStyle = {
     ...flexNone,
-    backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorGray._3,
+    backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorGray._5,
   };
 
   const safeAreaBottomStyle: ViewStyle = {
     ...flexChild,
-    backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorGray._3,
+    backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorGray._5,
   };
 
   return (

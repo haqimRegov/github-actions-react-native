@@ -64,9 +64,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   const signatureStyle: ViewStyle = {
     ...centerHV,
     backgroundColor: colorWhite._1,
-    borderColor: colorGray._2,
-    borderRadius: sw1,
-    borderStyle: "dashed",
+    borderColor: colorGray._5,
     borderWidth: sw1,
     height: defaultHeight,
   };

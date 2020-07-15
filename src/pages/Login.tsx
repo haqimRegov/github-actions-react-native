@@ -17,7 +17,6 @@ import {
 } from "../components";
 import { Language } from "../constants";
 import {
-  blueShadow,
   centerVertical,
   circle,
   colorBlack,
@@ -26,29 +25,26 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlack2,
-  fs12RegBlue,
+  fs12RegBlue1,
   fs24RegBlack2,
-  fs36SemiBoldBlack2,
+  fs40BoldBlack2,
   fsUppercase,
   px,
   py,
-  sh12,
-  sh14,
   sh16,
-  sh23,
-  sh30,
+  sh24,
+  sh28,
   sh32,
   sh56,
-  sh70,
+  sh64,
   sw16,
-  sw167,
+  sw160,
   sw24,
   sw278,
   sw4,
-  sw56,
+  sw48,
   sw590,
-  sw73,
+  sw70,
 } from "../styles";
 
 const { LOGIN } = Language.PAGE;
@@ -114,7 +110,7 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
   ];
 
   const backgroundStyle: ImageStyle = { width: sw590, height: DEVICE.WINDOW.HEIGHT };
-  const logoStyle: ImageStyle = { height: sh70, width: sw167, resizeMode: "contain" };
+  const logoStyle: ImageStyle = { height: sh64, width: sw160, resizeMode: "contain" };
 
   return (
     <Fragment>
@@ -124,42 +120,43 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
             <Image source={LocalAssets.login.background} style={backgroundStyle} />
           </View>
           <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
-            <View style={{ ...flexChild, ...px(sw56), ...py(sh32) }}>
+            <View style={{ ...flexChild, ...py(sh32) }}>
               <View style={flexRow}>
-                <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+                <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
                 <CustomFlexSpacer />
                 <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-                  <LinkTextGroup divider={<View style={circle(sw4, colorBlack._3)} />} links={topLinks} spaceToDivider={sw4} />
+                  <LinkTextGroup divider={<View style={circle(sw4, colorBlack._2)} />} links={topLinks} spaceToDivider={sw4} />
                 </View>
+                <CustomSpacer isHorizontal={true} space={sw48} />
               </View>
               <View style={px(sw16)}>
                 <CustomSpacer space={sh56} />
-                <Text style={fs36SemiBoldBlack2}>{LOGIN.HEADING}</Text>
+                <Text style={fs40BoldBlack2}>{LOGIN.HEADING}</Text>
                 <Text style={fs24RegBlack2}>{LOGIN.SUBHEADING}</Text>
-                <CustomTextInput label={LOGIN.LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh14} value={inputAgentCode} />
+                <CustomTextInput label={LOGIN.LABEL_AGENT_CODE} onChangeText={setInputAgentCode} spaceToTop={sh32} value={inputAgentCode} />
                 <CustomTextInput
                   label={LOGIN.LABEL_PASSWORD}
                   onChangeText={setInputPassword}
                   secureTextEntry={true}
-                  spaceToTop={sh12}
+                  spaceToTop={sh24}
                   value={inputPassword}
                 />
-                <CustomSpacer space={sh30} />
+                <CustomSpacer space={sh32} />
                 <View style={flexRow}>
                   <RoundedButton onPress={handleRiskAssessment} buttonStyle={{ width: sw278 }} text={LOGIN.BUTTON_LOGIN} />
                   <CustomSpacer isHorizontal={true} space={sw24} />
-                  <IconButton name="fingerprint" onPress={handleFingerprint} style={blueShadow} />
+                  <IconButton name="fingerprint" onPress={handleFingerprint} />
                 </View>
-                <CustomSpacer space={sh23} />
-                <View style={flexRow}>
+                <CustomSpacer space={sh28} />
+                <View style={{ ...centerVertical, ...flexRow }}>
                   <CheckBox label={LOGIN.REMEMBER_ME} onPress={handleRememberMe} toggle={rememberMe} />
-                  <CustomSpacer isHorizontal={true} space={sw73} />
-                  <LinkText onPress={handleForgotPassword} style={fs12RegBlack2} text={LOGIN.FORGOT_PASSWORD} />
+                  <CustomSpacer isHorizontal={true} space={sw70} />
+                  <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} style={{ height: sh16 }} />
                 </View>
               </View>
               <CustomFlexSpacer />
               <View style={flexRow}>
-                <LinkTextGroup divider={<Text style={fs12RegBlue}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
+                <LinkTextGroup divider={<Text style={fs12RegBlue1}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
               </View>
             </View>
           </SafeAreaPage>

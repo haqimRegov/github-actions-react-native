@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
-import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import React from "react";
+import { Text, View, ViewStyle } from "react-native";
 
-import { centerHV, colorGray, colorWhite, flexRow, fs16SemiBoldBlack4, px, py, sh24, sw24, sw5 } from "../../styles";
-import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer } from "../Views";
+import { centerHV, colorGray, colorWhite, flexRow, fs24BoldBlack1, px, py, sh24, sw24, sw5 } from "../../styles";
+import { ActionButtons, ActionButtonsProps, CustomSpacer } from "../Views";
 import { BasicModal } from "./Basic";
 
 interface ModalProps extends ActionButtonsProps {
@@ -14,7 +14,7 @@ interface ModalProps extends ActionButtonsProps {
 
 export const ConfirmationModal = ({ children, title, visible, handleClose, ...rest }: ModalProps) => {
   const modelContainer: ViewStyle = {
-    backgroundColor: colorGray._2,
+    backgroundColor: colorGray._5,
     borderRadius: sw5,
   };
 
@@ -32,29 +32,24 @@ export const ConfirmationModal = ({ children, title, visible, handleClose, ...re
 
   const actionButtonProps: ActionButtonsProps = {
     ...rest,
+    handleCancel: handleClose,
     buttonContainerStyle: buttonContainer,
   };
 
   return (
     <BasicModal visible={visible}>
-      <Fragment>
-        <View style={{ ...centerHV }}>
-          <View style={modelContainer}>
-            <View style={padding}>
-              <View style={flexRow}>
-                <Text style={fs16SemiBoldBlack4}>{title}</Text>
-                <CustomFlexSpacer />
-                <TouchableWithoutFeedback onPress={handleClose}>
-                  <Text style={fs16SemiBoldBlack4}>x</Text>
-                </TouchableWithoutFeedback>
-              </View>
-              <CustomSpacer space={sh24} />
-              {children}
+      <View style={centerHV}>
+        <View style={modelContainer}>
+          <View style={padding}>
+            <View style={flexRow}>
+              <Text style={fs24BoldBlack1}>{title}</Text>
             </View>
-            <ActionButtons {...actionButtonProps} />
+            <CustomSpacer space={sh24} />
+            {children}
           </View>
+          <ActionButtons {...actionButtonProps} />
         </View>
-      </Fragment>
+      </View>
     </BasicModal>
   );
 };

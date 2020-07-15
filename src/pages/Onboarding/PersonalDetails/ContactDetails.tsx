@@ -16,7 +16,6 @@ import {
   circleBorder,
   colorBlue,
   flexRow,
-  fs16SemiBoldBlack2,
   px,
   sh24,
   sh4,
@@ -26,8 +25,8 @@ import {
   sw12,
   sw14,
   sw16,
+  sw24,
   sw32,
-  sw94,
 } from "../../../styles";
 
 const { CONTACT_DETAILS } = Language.PAGE;
@@ -78,7 +77,7 @@ export const ContactDetails: FunctionComponent<IContactDetailsProps> = ({
   setInputBumiputera,
 }: IContactDetailsProps) => {
   return (
-    <View style={px(sw94)}>
+    <View style={px(sw24)}>
       {contactNumber.map((item: IContactNumber, index: number) => {
         const handleRemoveNumber = () => {
           const updatedNumber = [...contactNumber];
@@ -147,7 +146,7 @@ export const ContactDetails: FunctionComponent<IContactDetailsProps> = ({
       <View style={flexRow}>
         <CustomSpacer isHorizontal={true} space={sw12} />
         <View>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs16SemiBoldBlack2} text={CONTACT_DETAILS.LABEL_BUMIPUTERA} />
+          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} text={CONTACT_DETAILS.LABEL_BUMIPUTERA} />
           <RadioButtonGroup
             direction="row"
             labels={[CONTACT_DETAILS.OPTION_BUMIPUTERA_YES, CONTACT_DETAILS.OPTION_BUMIPUTERA_NO]}

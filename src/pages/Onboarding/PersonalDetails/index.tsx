@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import { ContentPage, CustomSpacer, LabeledTitle, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
-import { borderBottomBlack61, flexRow, fs24BoldBlack2, fs24RegBlack2, px, sh16, sh24, sh40, sh8, sw12, sw94 } from "../../../styles";
+import { borderBottomBlack21, flexRow, fs24BoldBlack2, fs24RegBlack2, px, sh16, sh24, sh40, sh8, sw12, sw24 } from "../../../styles";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 
@@ -78,12 +78,12 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
         {JOINT_ACCOUNT === false ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <View style={borderBottomBlack61} />
+            <View style={borderBottomBlack21} />
             <CustomSpacer space={sh24} />
             <LabeledTitle
               label={CONTACT_DETAILS.HEADING_JOINT}
               labelStyle={fs24BoldBlack2}
-              style={px(sw94)}
+              style={px(sw24)}
               title={CONTACT_DETAILS.SUBHEADING_CONTACT}
               titleStyle={fs24RegBlack2}
             />
@@ -101,9 +101,9 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
         )}
       </View>
       <CustomSpacer space={sh24} />
-      <View style={borderBottomBlack61} />
+      <View style={borderBottomBlack21} />
       <CustomSpacer space={sh24} />
-      <View style={px(sw94)}>
+      <View style={px(sw24)}>
         <LabeledTitle
           label={CONTACT_DETAILS.HEADING_ADDITIONAL}
           labelStyle={fs24BoldBlack2}

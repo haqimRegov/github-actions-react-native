@@ -11,8 +11,8 @@ import {
   colorTransparent,
   colorWhite,
   flexRow,
-  fs16BoldWhite,
-  fs16SemiBoldBlack6,
+  fs12BoldBlack2,
+  fs12RegBlue1,
   fsUppercase,
   sh120,
   sh55,
@@ -52,7 +52,7 @@ export const CustomTable = ({
     const tableHeaderStyle: ViewStyle = {
       ...flexRow,
       ...centerVertical,
-      backgroundColor: colorBlack._7,
+      backgroundColor: colorBlack._2,
       height: sh55,
       borderTopLeftRadius: sw8,
       borderTopRightRadius: sw8,
@@ -90,7 +90,7 @@ export const CustomTable = ({
           }
 
           const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...item.viewStyle };
-          const textStyle = { ...fs16BoldWhite, ...item.textStyle };
+          const textStyle = { ...fs12RegBlue1, ...item.textStyle };
 
           return (
             <TouchableWithoutFeedback key={index} onPress={item.onPressHeader}>
@@ -115,10 +115,10 @@ export const CustomTable = ({
   const tableItem = (item: ITableData, index: number) => {
     const itemSelected = rowSelection !== undefined && rowSelection.indexOf(item) !== -1;
     const itemSelectedStyle: ViewStyle = itemSelected
-      ? { backgroundColor: colorGray._10, borderLeftWidth: sw4, borderLeftColor: colorBlue._1 }
+      ? { backgroundColor: colorGray._1, borderLeftWidth: sw4, borderLeftColor: colorBlue._1 }
       : {};
     const space = itemSelected ? sw32 : sw36;
-    const itemColor: ViewStyle = index % 2 === 0 ? { backgroundColor: colorWhite._1 } : { backgroundColor: colorGray._9 };
+    const itemColor: ViewStyle = index % 2 === 0 ? { backgroundColor: colorWhite._1 } : { backgroundColor: colorGray._2 };
     const itemContainer: ViewStyle = { ...flexRow, ...centerVertical, ...itemColor, ...itemSelectedStyle, height: sh120 };
 
     const handleSelectRow = () => {
@@ -136,7 +136,7 @@ export const CustomTable = ({
             const key = Object.keys(item)[Object.values(item).indexOf(columnItem)];
             const columnData = { key: key, value: columnItem, rawData: item, index: index };
             const customStyle = column.itemTextStyle !== undefined ? column.itemTextStyle(columnData) : {};
-            const textStyle = { ...fs16SemiBoldBlack6, ...fsUppercase, ...column.textStyle, ...customStyle };
+            const textStyle = { ...fs12BoldBlack2, ...fsUppercase, ...column.textStyle, ...customStyle };
 
             if (rowSelection !== undefined && column.type === "checkbox") {
               toggle = rowSelection.includes(item);

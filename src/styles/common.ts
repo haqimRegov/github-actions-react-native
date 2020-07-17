@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 
-import { colorBlack, colorBlue } from "./colors";
+import { colorBlack, colorBlue, colorGray } from "./colors";
 
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
 export const alignSelfCenter = { alignSelf: "center" } as const;
@@ -31,6 +31,8 @@ export const fullHeight = { height: "100%" } as const;
 export const fullWidth = { width: "100%" } as const;
 export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: colorBlack._2_1 } as const;
+export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
+export const borderLeftGray2 = { borderLeftWidth: 1, borderLeftColor: colorGray._2 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;

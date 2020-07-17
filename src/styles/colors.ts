@@ -21,6 +21,8 @@ export const colorBlue = {
   _2: "#002043",
   _2_5: "rgba(0, 32, 67, 0.5)",
   _3: "rgba(42, 54, 90, 0.8)",
+  _4: "#29365A",
+  _4_7: "rgba(41,54,90, 0.7)",
   // old colors for reference
   // _1: "#0091ff",
   // _2: "#0D55CF",

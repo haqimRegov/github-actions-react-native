@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { centerVertical, flexCol, flexRow, fs12RegBlue1, fsCapitalize } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 
 export interface LinkTextProps {
   onPress?: () => void;

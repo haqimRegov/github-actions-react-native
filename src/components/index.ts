@@ -7,6 +7,7 @@ export * from "./Photo";
 export * from "./RadioButton";
 export * from "./Signature";
 export * from "./Steps";
+export * from "./Tab";
 export * from "./Table";
 export * from "./Touchables";
 export * from "./Views";

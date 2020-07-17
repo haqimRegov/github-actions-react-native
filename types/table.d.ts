@@ -10,6 +10,7 @@ declare interface ITableIcon {
 
 declare interface ITableColumn {
   icon?: ITableIcon;
+  itemIcon?: ITableIcon;
   itemStyle?: import("react-native").ViewStyle;
   itemTextStyle?: (item: IColumnItemAccordion) => import("react-native").TextStyle;
   key: string;
@@ -19,22 +20,29 @@ declare interface ITableColumn {
   title: string;
   type?: "checkbox" | "radio";
   viewStyle?: import("react-native").ViewStyle;
+  withAccordion?: boolean;
+}
+
+declare interface ITableOptions {
+  data: IColumnItemAccordion;
+  onClose: () => void;
 }
 
 declare interface IColumnItemAccordion {
   index: number;
-  key: string;
+  key?: string;
   rawData: ITableData;
-  value: string;
+  value?: string;
 }
 
-interface CustomTableProps {
+declare interface CustomTableProps {
   activeAccordion?: number[];
   columns: ITableColumn[];
   data: ITableData[];
   onChangeAccordion?: (indexes: number[]) => void;
   onRowSelect?: (record: ITableData[]) => void;
   RenderAccordion?: (record: ITableData) => JSX.Element;
-  RenderOptions?: (record: ITableData) => JSX.Element;
+  RenderOptions?: (props: ITableOptions) => JSX.Element;
   rowSelection?: ITableData[];
+  rowSelectionLabel?: string;
 }

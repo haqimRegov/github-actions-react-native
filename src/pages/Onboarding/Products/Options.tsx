@@ -1,40 +1,36 @@
-import React from "react";
-import { Alert, Text, TouchableWithoutFeedback, View } from "react-native";
+import React, { FunctionComponent } from "react";
+import { View, ViewStyle } from "react-native";
 
-import { CustomSpacer, MenuPopup } from "../../../components";
-import { IcoMoon } from "../../../icons";
-import { centerHV, flexRow, fs12BoldBlue2, py, sh18, sw184, sw20, sw36 } from "../../../styles";
+import { IconText } from "../../../components";
+import { borderBottomGray2, colorBlue, fs12BoldBlue2, px, sh48, sw16, sw184, sw8 } from "../../../styles";
 
-export interface ProductOptionsProps {
-  item: ITableData;
+export interface ProductOptionsProps extends ITableOptions {
+  handleShowPerformance: (data: IColumnItemAccordion) => void;
 }
 
-export const ProductOptions = ({ item }: ProductOptionsProps) => {
+export const ProductOptions: FunctionComponent<ProductOptionsProps> = ({ onClose, data, handleShowPerformance }: ProductOptionsProps) => {
+  const handleSelect = () => {
+    onClose();
+  };
+
+  const handlePerformance = () => {
+    onClose();
+    handleShowPerformance(data);
+  };
+
+  const itemStyle: ViewStyle = {
+    ...borderBottomGray2,
+    ...fs12BoldBlue2,
+    ...px(sw16),
+    height: sh48,
+    width: sw184,
+  };
+
   return (
-    <MenuPopup
-      RenderButton={({ show }) => {
-        return (
-          <View style={flexRow}>
-            <TouchableWithoutFeedback onPress={show}>
-              <IcoMoon name="action-menu" size={sw20} />
-            </TouchableWithoutFeedback>
-            <CustomSpacer isHorizontal={true} space={sw36} />
-          </View>
-        );
-      }}
-      RenderContent={({ hide }) => {
-        const handleSelect = () => {
-          hide();
-          Alert.alert(item.name);
-        };
-        return (
-          <View style={{ width: sw184, ...centerHV }}>
-            <Text onPress={handleSelect} style={{ ...fs12BoldBlue2, ...py(sh18) }}>
-              View Details
-            </Text>
-          </View>
-        );
-      }}
-    />
+    <View style={{ borderRadius: sw8 }}>
+      <IconText color={colorBlue._2} name="eye-show" onPress={handleSelect} text=" View Details" style={itemStyle} />
+      <IconText color={colorBlue._2} name="performance" onPress={handlePerformance} text="Performance" style={itemStyle} />
+      <IconText color={colorBlue._2} name="download" onPress={handleSelect} text="Download Reports" style={itemStyle} />
+    </View>
   );
 };

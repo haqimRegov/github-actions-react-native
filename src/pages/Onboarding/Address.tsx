@@ -61,7 +61,12 @@ export const Address = ({ handleNextStep }: AddressProps) => {
       subtitleStyle={fs16RegBlack2}>
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh20} spaceToTop={sh40} style={fs16RegBlack2} text={PROOF_OF_ADDRESS.LABEL_PERMANENT_ADDRESS} />
-        <CheckBox label={PROOF_OF_ADDRESS.LABEL_CHECKBOX} onPress={handleAddressToggle} style={fs12BoldBlack2} toggle={sameAddressToggle} />
+        <CheckBox
+          label={PROOF_OF_ADDRESS.LABEL_CHECKBOX}
+          labelStyle={fs12BoldBlack2}
+          onPress={handleAddressToggle}
+          toggle={sameAddressToggle}
+        />
         <TextSpaceArea spaceToTop={sh24} spaceToBottom={sh8} style={px(sw16)} text={PROOF_OF_ADDRESS.LABEL_MAILING_ADDRESS} />
         <TextInputArea onChangeText={setInputMailingAddress} value={inputMailingAddress} />
         <CustomTextInput label={PROOF_OF_ADDRESS.LABEL_POST_CODE} onChangeText={setInputPinCode} spaceToTop={sh24} value={inputPinCode} />

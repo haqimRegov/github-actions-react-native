@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
@@ -20,14 +20,15 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface CheckBoxProps {
-  label: string;
+  label?: string;
+  labelStyle?: TextStyle;
   onPress: () => void;
   spaceToLabel?: number;
-  style?: TextStyle;
+  style?: ViewStyle;
   toggle: boolean;
 }
 
-export const CheckBox = ({ onPress, spaceToLabel, style, label, toggle }: CheckBoxProps) => {
+export const CheckBox = ({ label, labelStyle, onPress, spaceToLabel, style, toggle }: CheckBoxProps) => {
   const selectedStyle: ViewStyle = toggle ? { backgroundColor: colorRed._1, borderColor: colorRed._1 } : {};
   const toggleStyle: ViewStyle = {
     ...centerHV,
@@ -45,12 +46,16 @@ export const CheckBox = ({ onPress, spaceToLabel, style, label, toggle }: CheckB
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={{ ...centerVertical, ...flexRow }}>
+      <View style={{ ...centerVertical, ...flexRow, ...style }}>
         <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh12} /> : null}</View>
-        <CustomSpacer isHorizontal={true} space={defaultSpace} />
-        <Text onPress={onPress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...style }}>
-          {label}
-        </Text>
+        {label === undefined ? null : (
+          <Fragment>
+            <CustomSpacer isHorizontal={true} space={defaultSpace} />
+            <Text onPress={onPress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...labelStyle }}>
+              {label}
+            </Text>
+          </Fragment>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

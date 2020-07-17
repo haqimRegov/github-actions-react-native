@@ -98,7 +98,13 @@ export const CustomTable = ({
                 {item.type === "checkbox" ? (
                   <Fragment>
                     <CustomSpacer isHorizontal={true} space={sw36} />
-                    <CheckBox label={item.title} onPress={handleSelectAll} spaceToLabel={sw24} style={textStyle} toggle={allRowsSelected} />
+                    <CheckBox
+                      label={item.title}
+                      labelStyle={textStyle}
+                      onPress={handleSelectAll}
+                      spaceToLabel={sw24}
+                      toggle={allRowsSelected}
+                    />
                   </Fragment>
                 ) : (
                   <Text style={textStyle}>{item.title}</Text>
@@ -127,6 +133,11 @@ export const CustomTable = ({
       }
     };
 
+    const rowData: IColumnItemAccordion = {
+      index: index,
+      rawData: item,
+    };
+
     return (
       <TouchableWithoutFeedback onPress={handleSelectRow}>
         <View key={index} style={itemContainer}>
@@ -153,7 +164,13 @@ export const CustomTable = ({
                   {column.type === "checkbox" ? (
                     <Fragment>
                       <CustomSpacer isHorizontal={true} space={space} />
-                      <CheckBox label={item[column.key]} onPress={handleSelectRow} spaceToLabel={sw24} style={textStyle} toggle={toggle} />
+                      <CheckBox
+                        label={item[column.key]}
+                        labelStyle={textStyle}
+                        onPress={handleSelectRow}
+                        spaceToLabel={sw24}
+                        toggle={toggle}
+                      />
                     </Fragment>
                   ) : (
                     <Text style={textStyle}>{item[column.key]}</Text>
@@ -163,7 +180,7 @@ export const CustomTable = ({
             );
           })}
 
-          {RenderOptions !== undefined ? <RenderOptions {...item} /> : null}
+          {RenderOptions !== undefined ? <RenderOptions data={rowData} onClose={() => {}} /> : null}
         </View>
       </TouchableWithoutFeedback>
     );

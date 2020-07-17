@@ -1,10 +1,25 @@
 import React from "react";
 import { Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-import { IcoMoon } from "../../icons";
-import { centerHV, centerVertical, colorGray, flexRow, fs10RegBlue21, sw05, sw16, sw2, sw32 } from "../../styles";
+import { Language } from "../../constants";
+import {
+  centerHV,
+  centerVertical,
+  circleBorder,
+  colorBlack,
+  colorGray,
+  flexRow,
+  fs10RegBlue25,
+  sh24,
+  sw1,
+  sw16,
+  sw40,
+  sw8,
+} from "../../styles";
+import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "./Spacer";
+
+const { PAGINATION } = Language.PAGE;
 
 interface PaginationProps {
   itemsPerPage: number;
@@ -16,13 +31,8 @@ interface PaginationProps {
 
 export const Pagination = ({ itemsPerPage, onPressNext, onPressPrev, page, totalItems }: PaginationProps) => {
   const buttonStyle: ViewStyle = {
+    ...circleBorder(sw40, sw1, colorGray._3),
     ...centerHV,
-    backgroundColor: colorGray._3,
-    borderColor: colorGray._1,
-    borderRadius: sw2,
-    borderWidth: sw05,
-    height: sw32,
-    width: sw32,
   };
 
   const currentMinItems = page * itemsPerPage - itemsPerPage + 1;
@@ -30,23 +40,16 @@ export const Pagination = ({ itemsPerPage, onPressNext, onPressPrev, page, total
   const lastItem = currentMaxItems > totalItems ? totalItems : currentMaxItems;
   const currentItems = `${currentMinItems}-${lastItem}`;
 
-  const label = `Showing ${currentItems} out of ${totalItems} results`;
+  const label = `${PAGINATION.LABEL_SHOWING} ${currentItems} ${PAGINATION.LABEL_OUT_OF} ${totalItems} ${PAGINATION.LABEL_RESULTS}`;
 
   return (
     <View style={{ ...centerVertical, ...flexRow }}>
-      <Text style={fs10RegBlue21}>{label}</Text>
+      <Text style={fs10RegBlue25}>{label}</Text>
       <CustomSpacer isHorizontal={true} space={sw16} />
       <View style={flexRow}>
-        <TouchableWithoutFeedback onPress={onPressPrev}>
-          <View style={buttonStyle}>
-            <IcoMoon name="caret-left" />
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={onPressNext}>
-          <View style={buttonStyle}>
-            <IcoMoon name="caret-right" />
-          </View>
-        </TouchableWithoutFeedback>
+        <IconButton color={colorBlack._1} name="caret-left" onPress={onPressPrev} size={sh24} style={buttonStyle} />
+        <CustomSpacer isHorizontal={true} space={sw8} />
+        <IconButton color={colorBlack._1} name="caret-right" onPress={onPressNext} size={sh24} style={buttonStyle} />
       </View>
     </View>
   );

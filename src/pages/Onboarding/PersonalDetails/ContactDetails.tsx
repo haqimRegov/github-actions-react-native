@@ -6,7 +6,7 @@ import {
   CustomSpacer,
   CustomTextInput,
   IconButton,
-  IconText,
+  OutlineButton,
   RadioButtonGroup,
   TextSpaceArea,
 } from "../../../components";
@@ -14,6 +14,7 @@ import { Language } from "../../../constants";
 import {
   centerVertical,
   circleBorder,
+  colorBlack,
   colorBlue,
   flexRow,
   px,
@@ -93,13 +94,15 @@ export const ContactDetails: FunctionComponent<IContactDetailsProps> = ({
 
         return (
           <View key={index} style={{ ...centerVertical, ...flexRow }}>
-            <CustomTextInput
-              keyboardType="phone-pad"
-              label={item.label}
-              onChangeText={handleChangeText}
-              spaceToTop={sh24}
-              value={item.value}
-            />
+            <View>
+              <CustomTextInput
+                keyboardType="phone-pad"
+                label={item.label}
+                onChangeText={handleChangeText}
+                spaceToTop={sh24}
+                value={item.value}
+              />
+            </View>
             <CustomSpacer isHorizontal={true} space={sw16} />
             {index === 0 ? null : (
               <View>
@@ -130,7 +133,7 @@ export const ContactDetails: FunctionComponent<IContactDetailsProps> = ({
           return contactNumber.some(checkName) ? null : (
             <Fragment key={index}>
               <CustomSpacer space={sh8} />
-              <IconText name="plus" onPress={handleAddNumber} text={buttonText} />
+              <OutlineButton iconColor={colorBlack._1} icon="plus" onPress={handleAddNumber} text={buttonText} />
             </Fragment>
           );
         })}

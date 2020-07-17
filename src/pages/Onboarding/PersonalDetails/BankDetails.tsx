@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, CustomTextInput, IconButton, IconText } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, CustomTextInput, IconButton, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
 import { centerVertical, circleBorder, colorBlue, flexRow, px, sh24, sh4, sh8, sw05, sw12, sw14, sw16, sw32 } from "../../../styles";
 
@@ -100,9 +100,9 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({ bankingDetai
       })}
       <View style={px(sw14)}>
         <CustomSpacer space={sh8} />
-        <IconText name="plus" onPress={handleAddLocalBank} text={CONTACT_DETAILS.BUTTON_ADD_LOCAL} />
+        <OutlineButton icon="plus" onPress={handleAddLocalBank} text={CONTACT_DETAILS.BUTTON_ADD_LOCAL} />
         <CustomSpacer space={sh8} />
-        <IconText name="plus" onPress={handleAddForeignBank} text={CONTACT_DETAILS.BUTTON_ADD_FOREIGN} />
+        <OutlineButton icon="plus" onPress={handleAddForeignBank} text={CONTACT_DETAILS.BUTTON_ADD_FOREIGN} />
       </View>
     </View>
   );

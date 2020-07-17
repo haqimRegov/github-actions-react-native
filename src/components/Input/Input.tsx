@@ -3,8 +3,10 @@ import { Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from "rea
 
 import { IcoMoon } from "../../icons";
 import {
+  border,
   centerVertical,
   colorBlack,
+  colorBlue,
   colorGray,
   colorTransparent,
   colorWhite,
@@ -12,6 +14,7 @@ import {
   flexRow,
   fs12BoldBlack2,
   fs16BoldBlack2,
+  fs16RegBlack2,
   px,
   sh40,
   sh8,
@@ -25,6 +28,7 @@ import { CustomSpacer } from "../Views/Spacer";
 export interface ITextInputProps extends TextInputProps {
   label?: string;
   labelStyle?: TextStyle;
+  noBorder?: boolean;
   onPressLabel?: () => void;
   rightIcon?: string;
   setRef?: (ref: TextInput | null) => void;
@@ -38,6 +42,7 @@ export interface ITextInputProps extends TextInputProps {
 export const CustomTextInput = ({
   label,
   labelStyle,
+  noBorder,
   onPressLabel,
   rightIcon,
   setRef,
@@ -45,26 +50,29 @@ export const CustomTextInput = ({
   spaceToLabel,
   spaceToTop,
   style,
+  value,
   viewStyle,
   ...rest
 }: ITextInputProps) => {
-  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
+  const borderWidth = noBorder === true ? 0 : sw1;
   const defaultInputStyle: ViewStyle = {
-    backgroundColor: colorWhite._1,
     ...centerVertical,
     ...flexRow,
     ...px(sw16),
-    borderColor: colorGray._7,
-    borderWidth: sw1,
-    borderRadius: sw20,
+    ...border(colorGray._7, borderWidth, sw20),
+    backgroundColor: colorWhite._1,
     height: sh40,
     width: sw360,
     ...viewStyle,
   };
-  const textStyle: TextStyle = { ...fs16BoldBlack2, ...flexChild, height: sh40, ...style };
+  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
+
+  // TODO improved placeholder style
+  const placeHolderStyle: TextStyle =
+    value === "" || value === undefined ? { ...fs16RegBlack2, letterSpacing: -0.39, opacity: 0.7 } : fs16BoldBlack2;
 
   return (
-    <View>
+    <Fragment>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
@@ -80,16 +88,17 @@ export const CustomTextInput = ({
       <View style={defaultInputStyle}>
         <TextInput
           placeholder={rest.placeholder}
-          placeholderTextColor={colorGray._4}
+          placeholderTextColor={colorBlue._4_7}
           ref={setRef}
           selectionColor={colorBlack._2}
-          style={textStyle}
+          style={{ ...placeHolderStyle, ...flexChild, ...style }}
           underlineColorAndroid={colorTransparent}
+          value={value}
           {...rest}
         />
         {rightIcon === undefined ? null : <IcoMoon color={colorBlack._2} name={rightIcon} size={sw20} />}
       </View>
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
-    </View>
+    </Fragment>
   );
 };

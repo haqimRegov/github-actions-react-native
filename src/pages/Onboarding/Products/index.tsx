@@ -1,45 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { Alert, ScrollView, View } from "react-native";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Alert, ScrollView, View, ViewStyle } from "react-native";
 
-import { CustomButton, CustomSpacer, CustomTable } from "../../../components";
-import { ONBOARDING_ROUTES } from "../../../constants";
+import { CustomFlexSpacer, CustomSpacer, CustomTableV2, Pagination, Tab } from "../../../components";
+import { Language } from "../../../constants";
 import { SAMPLE_PRODUCTS } from "../../../mocks/products";
 import {
-  colorBlue,
-  colorMint,
-  colorRed,
+  colorWhite,
+  flexChild,
   flexGrow,
-  fs16BoldBlack2,
-  fsCapitalize,
-  px,
+  flexRow,
   sh15,
-  sw107,
+  sh153,
+  sh16,
+  shadow5,
+  sw102,
   sw109,
-  sw115,
-  sw125,
+  sw234,
   sw24,
-  sw289,
+  sw72,
   sw83,
+  sw90,
 } from "../../../styles";
 import { ProductGraph } from "./Graph";
 import { ProductHeader } from "./Header";
 import { ProductOptions } from "./Options";
 
-interface ProductsProps {
-  handleNextStep: (route: string) => void;
-}
+const { PRODUCT_LIST } = Language.PAGE;
 
-export const Products = ({ handleNextStep }: ProductsProps) => {
+export const Products: FunctionComponent = () => {
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
+  const [allFunds, setAllFunds] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(true);
+  const [inputSearch, setInputSearch] = useState<string>("");
   const [productList, setProductList] = useState<ITableData[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<ITableData[]>([]);
 
-  const handleSubmit = () => {
-    handleNextStep(ONBOARDING_ROUTES.Address);
+  const handleFilter = () => {
+    setFilter(!filter);
   };
 
-  const handlePress = () => {
+  const handleNext = () => {
     Alert.alert("handlePress");
+  };
+
+  const handlePrev = () => {
+    Alert.alert("handlePress");
+  };
+
+  const handleRecommendedFunds = () => {
+    setAllFunds(false);
+  };
+
+  const handleAllFunds = () => {
+    setAllFunds(true);
   };
 
   const handleSelectProduct = (product: ITableData[]) => {
@@ -59,93 +72,79 @@ export const Products = ({ handleNextStep }: ProductsProps) => {
   };
 
   const handleShowPerformance = (item: IColumnItemAccordion) => {
-    if (item.key === "performance") {
-      const newSections: number[] = [...activeAccordion];
-      const sectionIndex = newSections.indexOf(item.index);
-      if (sectionIndex > -1) {
-        newSections.splice(sectionIndex, 1);
-      } else {
-        newSections.push(item.index);
-      }
-      setActiveAccordion(newSections);
+    const newSections: number[] = [...activeAccordion];
+    const sectionIndex = newSections.indexOf(item.index);
+    if (sectionIndex > -1) {
+      newSections.splice(sectionIndex, 1);
+    } else {
+      newSections.push(item.index);
     }
-  };
-
-  const handleRiskStyle = (item: IColumnItemAccordion) => {
-    switch (item.value.toUpperCase()) {
-      case "LOW":
-        return { ...fs16BoldBlack2, color: colorMint._1 };
-      case "MEDIUM":
-        return { ...fs16BoldBlack2, color: colorBlue._1 };
-      case "HIGH":
-        return { ...fs16BoldBlack2, color: colorRed._1 };
-      default:
-        return {};
-    }
+    setActiveAccordion(newSections);
   };
 
   const columns: ITableColumn[] = [
     {
       key: "name",
-      itemTextStyle: () => {
-        return { ...fs16BoldBlack2, ...fsCapitalize };
+      viewStyle: {
+        width: sw234,
       },
-      textStyle: {
-        width: sw289,
-      },
-      title: "Name",
-      type: "checkbox",
+      title: PRODUCT_LIST.LABEL_COLUMN_NAME,
     },
     {
+      icon: {
+        name: "caret-down",
+      },
       key: "type",
-      textStyle: {
-        width: sw109,
-      },
-      title: "Product",
-    },
-    {
-      itemTextStyle: handleRiskStyle,
-      key: "risk",
-      textStyle: {
-        width: sw125,
-      },
-      title: "Risk Score",
-    },
-    {
-      key: "epf",
-      textStyle: {
+      viewStyle: {
         width: sw83,
       },
-      title: "EPF",
+      title: PRODUCT_LIST.LABEL_COLUMN_PRODUCT,
     },
     {
-      key: "shariah",
-      textStyle: {
-        width: sw107,
+      icon: {
+        name: "caret-down",
       },
-      title: "Shariah",
-    },
-    {
-      key: "performance",
-      textStyle: {
-        width: sw115,
-      },
-      title: "Performance",
-      onPressItem: handleShowPerformance,
+      key: "risk",
       viewStyle: {
-        height: "100%",
-        alignItems: "center",
+        width: sw102,
       },
+      title: PRODUCT_LIST.LABEL_COLUMN_RISK,
+    },
+    {
+      icon: {
+        name: "caret-down",
+      },
+      key: "epf",
+      viewStyle: {
+        width: sw72,
+      },
+      title: PRODUCT_LIST.LABEL_COLUMN_EPF,
+    },
+    {
+      icon: {
+        name: "caret-down",
+      },
+      key: "shariah",
+      viewStyle: {
+        width: sw90,
+      },
+      title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
+    },
+    {
+      icon: {
+        name: "caret-down",
+      },
+      key: "performance",
+      viewStyle: {
+        width: sw109,
+      },
+      title: PRODUCT_LIST.LABEL_COLUMN_PERFORMANCE,
+      onPressItem: handleShowPerformance,
+      withAccordion: true,
     },
   ];
 
-  const RenderAccordion = (item: ITableData) => {
-    return <ProductGraph item={item} />;
-  };
-
-  const RenderOptions = (item: ITableData) => {
-    return <ProductOptions item={item} />;
-  };
+  const tableContainer: ViewStyle = { backgroundColor: colorWhite._2, borderBottomRightRadius: sw24, borderBottomLeftRadius: sw24 };
 
   useEffect(() => {
     // TODO integration
@@ -153,22 +152,41 @@ export const Products = ({ handleNextStep }: ProductsProps) => {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={flexGrow}>
-      <View>
-        <ProductHeader handleNext={handlePress} handlePrev={handlePress} handleRecommended={handlePress} handleViewAll={handlePress} />
-        <CustomSpacer space={sh15} />
-        <View style={px(sw24)}>
-          <CustomTable
-            activeAccordion={activeAccordion}
-            columns={columns}
-            data={productList}
-            rowSelection={selectedProduct}
-            onRowSelect={handleSelectProduct}
-            RenderAccordion={RenderAccordion}
-            RenderOptions={RenderOptions}
-          />
+    <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" scrollEnabled={filter}>
+      <View style={{ ...flexChild }}>
+        <ProductHeader
+          filter={filter}
+          handleFilter={handleFilter}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
+          inputSearch={inputSearch}
+          setInputSearch={setInputSearch}
+        />
+        <View style={{ ...shadow5, margin: sw24, backgroundColor: colorWhite._1, borderRadius: sw24 }}>
+          <CustomSpacer space={sh153} />
+          <CustomSpacer space={sh16} />
+          <View style={{ ...flexRow }}>
+            <Tab onPress={handleRecommendedFunds} selected={!allFunds} text={PRODUCT_LIST.LABEL_RECOMMENDED} />
+            <Tab onPress={handleAllFunds} selected={allFunds} text={PRODUCT_LIST.LABEL_ALL_FUNDS} />
+            <CustomFlexSpacer />
+            <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} itemsPerPage={20} />
+            <CustomSpacer isHorizontal={true} space={sw24} />
+          </View>
+          <CustomSpacer space={sh15} />
+          <View style={tableContainer}>
+            <CustomTableV2
+              activeAccordion={activeAccordion}
+              columns={columns}
+              data={productList}
+              rowSelection={selectedProduct}
+              onRowSelect={handleSelectProduct}
+              RenderAccordion={(item: ITableData) => <ProductGraph item={item} />}
+              RenderOptions={(props: ITableOptions) => <ProductOptions {...props} handleShowPerformance={handleShowPerformance} />}
+              rowSelectionLabel={PRODUCT_LIST.LABEL_COLUMN_BUY}
+            />
+            <CustomSpacer space={sh15} />
+          </View>
         </View>
-        <CustomButton onPress={handleSubmit} text="Submit" />
       </View>
     </ScrollView>
   );

@@ -1,23 +1,29 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
+import { IcoMoon } from "../../icons";
 import {
   border,
-  centerHV,
   colorBlack,
   colorRed,
   colorTransparent,
   colorWhite,
+  flexRowCC,
   fs16SemiBoldWhite1,
   fsCapitalize,
+  sh16,
   sh48,
   sw1,
   sw240,
+  sw8,
 } from "../../styles";
+import { CustomSpacer } from "../Views/Spacer";
 
 export interface CustomButtonProps {
   buttonStyle?: ViewStyle;
   disabled?: boolean;
+  icon?: string;
+  iconColor?: string;
   onPress: () => void;
   secondary?: boolean;
   text: string;
@@ -27,6 +33,8 @@ export interface CustomButtonProps {
 export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   buttonStyle,
   disabled,
+  icon,
+  iconColor,
   onPress,
   secondary,
   text,
@@ -34,19 +42,27 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
 }: CustomButtonProps) => {
   const defaultButtonStyle: ViewStyle = {
     ...border(colorRed._1, sw1),
-    ...centerHV,
+    ...flexRowCC,
     backgroundColor: secondary ? colorTransparent : colorRed._1,
     height: sh48,
     opacity: disabled === true ? 0.5 : 1,
     width: sw240,
     ...buttonStyle,
   };
-  const textColor = secondary ? { color: colorBlack._2 } : { color: colorWhite._1 };
+
+  const defaultIconColor = iconColor !== undefined ? iconColor : colorWhite._1;
+  const textColor = secondary ? colorBlack._2 : colorWhite._1;
 
   return (
     <TouchableWithoutFeedback onPress={disabled === true ? undefined : onPress}>
       <View style={defaultButtonStyle}>
-        <Text style={{ ...fs16SemiBoldWhite1, ...fsCapitalize, ...textColor, ...textStyle }}>{text}</Text>
+        {icon === undefined ? null : (
+          <Fragment>
+            <IcoMoon color={defaultIconColor} name={icon} size={sh16} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+          </Fragment>
+        )}
+        <Text style={{ ...fs16SemiBoldWhite1, ...fsCapitalize, color: textColor, ...textStyle }}>{text}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

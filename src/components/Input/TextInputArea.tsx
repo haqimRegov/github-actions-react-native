@@ -50,7 +50,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({ style, ..
   useEffect(() => {
     Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
     return () => {
-      Keyboard.removeListener("keyboardDidHide", () => {});
+      Keyboard.removeListener("keyboardDidHide", handleKeyboardHide);
     };
   }, []);
 

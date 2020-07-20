@@ -1,8 +1,8 @@
 import React, { Fragment, ReactNode } from "react";
-import { View } from "react-native";
+import { TextStyle, View } from "react-native";
 
 import { LabeledTitle } from "../../components/Views/LabeledTitle";
-import { flexRow, sh20 } from "../../styles";
+import { flexRow, sh16 } from "../../styles";
 import { RadioButtonGroup } from "../RadioButton/RadioButtonGroup";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 
@@ -20,13 +20,24 @@ export interface QuestionProps {
   setSelected: (name: string) => void;
   spaceToContent?: number;
   title: string;
+  titleStyle?: TextStyle;
 }
 
-export const Question = ({ label, options, RenderContent, right, selected, setSelected, spaceToContent, title }: QuestionProps) => {
+export const Question = ({
+  label,
+  options,
+  RenderContent,
+  right,
+  selected,
+  setSelected,
+  spaceToContent,
+  title,
+  titleStyle,
+}: QuestionProps) => {
   return (
     <Fragment>
-      <LabeledTitle label={label} title={title} />
-      <CustomSpacer space={spaceToContent === undefined ? sh20 : spaceToContent} />
+      <LabeledTitle label={label} title={title} titleStyle={titleStyle} />
+      <CustomSpacer space={spaceToContent === undefined ? sh16 : spaceToContent} />
       {RenderContent !== undefined ? (
         <RenderContent contentOptions={options} selected={selected} setSelectedOption={setSelected} />
       ) : (

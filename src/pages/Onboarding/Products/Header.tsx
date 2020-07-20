@@ -114,7 +114,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
             <CustomSpacer isHorizontal={true} space={sw40} />
             <IconButton color={filterColor} name="filter" onPress={handlePressFilter} size={sh24} style={filterContainer} />
           </View>
-          <Collapsible collapsed={filter}>
+          <Collapsible collapsed={filter} duration={300}>
             <CustomSpacer space={sh56} />
             <ActionButtons
               buttonContainerStyle={centerHorizontal}

@@ -5,7 +5,7 @@ import { CustomSpacer } from "../../../components";
 import { border, colorGray, flexChild, flexRow, sh120, sw1, sw12, sw23, sw56 } from "../../../styles";
 
 export interface ProductGraphProps {
-  item: ITableData;
+  item: IProduct;
 }
 
 export const ProductGraph = ({ item }: ProductGraphProps) => {

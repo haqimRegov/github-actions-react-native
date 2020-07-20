@@ -2,7 +2,8 @@ import React from "react";
 import { View } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
-import { colorTransparent } from "../../styles";
+import { colorTransparent, sh16 } from "../../styles";
+import { CustomSpacer } from "../Views";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 
@@ -46,9 +47,10 @@ export const CustomTableV2 = ({
   return (
     <View>
       <TableHeader columns={columns} rowSelectionLabel={rowSelectionLabel} />
+      <CustomSpacer space={sh16} />
       <Accordion
         activeSections={activeSection}
-        duration={400}
+        duration={300}
         expandMultiple={true}
         onChange={handleAccordionChange}
         renderContent={tableAccordion}

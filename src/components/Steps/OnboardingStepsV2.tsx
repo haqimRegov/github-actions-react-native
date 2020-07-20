@@ -135,7 +135,7 @@ export const OnboardingStepsV2 = ({
       <SideMenuV2>
         <Accordion
           activeSections={[activeSection]}
-          duration={400}
+          duration={300}
           onChange={setSections}
           renderContent={accordionContent}
           renderHeader={accordionHeader}

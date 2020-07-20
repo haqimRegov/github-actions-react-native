@@ -16,6 +16,7 @@ export interface LinkTextGroupProps {
   links: LinkTextProps[];
   spaceToDivider?: number;
   style?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 export const LinkText = ({ onPress, style, text }: LinkTextProps) => {

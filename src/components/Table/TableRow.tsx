@@ -74,7 +74,7 @@ export const TableRow: FunctionComponent<TableRowProps> = ({
 
   return (
     <View>
-      <CustomSpacer space={sh8} />
+      {index === 0 ? null : <CustomSpacer space={sh8} />}
       <View style={rowContainer}>
         {rowSelection === undefined ? null : (
           <CheckBox onPress={handleSelectRow} style={{ ...px(sw20), ...flexRowCC }} toggle={itemSelected} />

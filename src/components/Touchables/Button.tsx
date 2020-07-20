@@ -13,7 +13,7 @@ import {
   fsCapitalize,
   sh16,
   sh48,
-  sw1,
+  sw2,
   sw240,
   sw8,
 } from "../../styles";
@@ -41,7 +41,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   textStyle,
 }: CustomButtonProps) => {
   const defaultButtonStyle: ViewStyle = {
-    ...border(colorRed._1, sw1),
+    ...border(colorRed._1, sw2),
     ...flexRowCC,
     backgroundColor: secondary ? colorTransparent : colorRed._1,
     height: sh48,

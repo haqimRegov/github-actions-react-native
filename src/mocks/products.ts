@@ -1,12 +1,13 @@
-export const SAMPLE_PRODUCTS: ITableData[] = [
+export const SAMPLE_PRODUCTS: IProduct[] = [
   {
     epf: "Yes",
     graph: "Kenanga growth fund graph",
+    issuer: "Kenanga Investors Berhad",
     name: "Kenanga growth fund",
     performance: "+5.3%",
     risk: "LOW",
     shariah: "No",
-    type: "UT",
+    type: "Equity / Growth",
   },
   {
     epf: "Yes",
@@ -15,7 +16,8 @@ export const SAMPLE_PRODUCTS: ITableData[] = [
     performance: "+5.3%",
     risk: "LOW",
     shariah: "No",
-    type: "UT",
+    type: "Equity / Growth",
+    issuer: "Kenanga Investors Berhad",
   },
   {
     epf: "Yes",
@@ -25,6 +27,7 @@ export const SAMPLE_PRODUCTS: ITableData[] = [
     risk: "HIGH",
     shariah: "No",
     type: "UT",
+    issuer: "Kenanga Investors Berhad",
   },
   {
     epf: "Yes",
@@ -34,6 +37,7 @@ export const SAMPLE_PRODUCTS: ITableData[] = [
     risk: "MEDIUM",
     shariah: "No",
     type: "UT",
+    issuer: "Kenanga Investors Berhad",
   },
   {
     epf: "Yes",
@@ -43,6 +47,7 @@ export const SAMPLE_PRODUCTS: ITableData[] = [
     risk: "LOW",
     shariah: "No",
     type: "UT",
+    issuer: "Kenanga Investors Berhad",
   },
   {
     epf: "Yes",
@@ -52,5 +57,6 @@ export const SAMPLE_PRODUCTS: ITableData[] = [
     risk: "LOW",
     shariah: "No",
     type: "UT",
+    issuer: "Kenanga Investors Berhad",
   },
 ];

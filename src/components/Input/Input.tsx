@@ -22,15 +22,18 @@ import {
   sw16,
   sw20,
   sw360,
+  sw8,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface ITextInputProps extends TextInputProps {
   label?: string;
   labelStyle?: TextStyle;
+  inputPrefix?: string;
   noBorder?: boolean;
   onPressLabel?: () => void;
   rightIcon?: string;
+  prefixStyle?: TextStyle;
   setRef?: (ref: TextInput | null) => void;
   spaceToBottom?: number;
   spaceToLabel?: number;
@@ -42,9 +45,11 @@ export interface ITextInputProps extends TextInputProps {
 export const CustomTextInput = ({
   label,
   labelStyle,
+  inputPrefix,
   noBorder,
   onPressLabel,
   rightIcon,
+  prefixStyle,
   setRef,
   spaceToBottom,
   spaceToLabel,
@@ -86,12 +91,18 @@ export const CustomTextInput = ({
         </Fragment>
       )}
       <View style={defaultInputStyle}>
+        {inputPrefix !== undefined ? (
+          <Fragment>
+            <Text style={prefixStyle}>{inputPrefix}</Text>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+          </Fragment>
+        ) : null}
         <TextInput
           placeholder={rest.placeholder}
           placeholderTextColor={colorBlue._4_7}
           ref={setRef}
           selectionColor={colorBlack._2}
-          style={{ ...placeHolderStyle, ...flexChild, ...style }}
+          style={{ ...placeHolderStyle, ...flexChild, height: sh40, ...style }}
           underlineColorAndroid={colorTransparent}
           value={value}
           {...rest}

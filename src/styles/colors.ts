@@ -39,6 +39,7 @@ export const colorGray = {
   _3: "#C6CBD4",
   _4: "#EAEBEE",
   _5: "#F4F4F4",
+  _5_5: "rgb(244,244,244, 0.5)",
   _6: "#A3A3A3",
   _7: "#C9C9CD",
   // old colors for reference
@@ -60,12 +61,14 @@ export const colorMint = {
 
 export const colorRed = {
   _1: "#C61230",
+  _1_5: "rgb(198, 18, 48, 0.5)",
 };
 
 export const colorWhite = {
   _1: "#FFFFFF",
   _2: "#FDFEFE",
   _3: "#FBFBFB",
+  _3_5: "rgb(251,251,251,0.5)",
 };
 
 export const colorYellow = {

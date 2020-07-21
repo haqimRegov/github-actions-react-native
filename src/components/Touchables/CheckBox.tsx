@@ -20,6 +20,7 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface CheckBoxProps {
+  checkboxStyle?: ViewStyle;
   label?: string;
   labelStyle?: TextStyle;
   onPress: () => void;
@@ -28,7 +29,7 @@ export interface CheckBoxProps {
   toggle: boolean;
 }
 
-export const CheckBox = ({ label, labelStyle, onPress, spaceToLabel, style, toggle }: CheckBoxProps) => {
+export const CheckBox = ({ checkboxStyle, label, labelStyle, onPress, spaceToLabel, style, toggle }: CheckBoxProps) => {
   const selectedStyle: ViewStyle = toggle ? { backgroundColor: colorRed._1, borderColor: colorRed._1 } : {};
   const toggleStyle: ViewStyle = {
     ...centerHV,
@@ -47,7 +48,9 @@ export const CheckBox = ({ label, labelStyle, onPress, spaceToLabel, style, togg
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={{ ...centerVertical, ...flexRow, ...style }}>
-        <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh12} /> : null}</View>
+        <View style={checkboxStyle}>
+          <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh12} /> : null}</View>
+        </View>
         {label === undefined ? null : (
           <Fragment>
             <CustomSpacer isHorizontal={true} space={defaultSpace} />

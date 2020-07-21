@@ -16,15 +16,21 @@ export const fsUnderline: TextStyle = {
   textDecorationLine: "underline",
 };
 
-export const fs10RegBlue25: TextStyle = {
-  color: colorBlue._2_5,
+export const fs10BoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh10,
+};
+
+export const fs10RegBlue21: TextStyle = {
+  color: colorBlack._2_1,
   fontFamily: NunitoRegular,
   fontSize: sh10,
 };
 
-export const fs10BoldBlack2: TextStyle = {
-  color: colorBlack._2,
-  fontFamily: NunitoBold,
+export const fs10RegBlue25: TextStyle = {
+  color: colorBlue._2_5,
+  fontFamily: NunitoRegular,
   fontSize: sh10,
 };
 
@@ -121,6 +127,12 @@ export const fs16BoldBlack2: TextStyle = {
 export const fs16BoldBlue2: TextStyle = {
   color: colorBlue._2,
   fontFamily: NunitoBold,
+  fontSize: sh16,
+};
+
+export const fs16RegBlack1: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoRegular,
   fontSize: sh16,
 };
 

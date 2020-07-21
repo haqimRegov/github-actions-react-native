@@ -1,8 +1,31 @@
 import { Slider } from "@miblanchard/react-native-slider";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { colorGray, colorRed, colorWhite, flexRowSbSb, fs12BoldBlack2, sh16, sh6, sw18, sw2 } from "../../styles";
+import {
+  centerHV,
+  centerVertical,
+  circle,
+  colorGray,
+  colorRed,
+  colorWhite,
+  customShadow,
+  flexRowSbSb,
+  fs12BoldBlack2,
+  px,
+  py,
+  sh16,
+  sh6,
+  sh8,
+  sw10,
+  sw12,
+  sw14,
+  sw15,
+  sw18,
+  sw24,
+  sw72,
+} from "../../styles";
+import { CustomSpacer } from "../Views";
 
 export interface SliderProps {
   disabled?: boolean;
@@ -25,33 +48,55 @@ export const CustomSlider = ({ disabled, options, setSelected }: SliderProps) =>
     setSelected(options[index]);
   };
 
-  const thumbStyle: ViewStyle = { borderColor: colorWhite._1, borderWidth: sw2, height: sw18, width: sw18 };
+  const sliderContainer: ViewStyle = {
+    ...customShadow(colorGray._3, 0, 0, 0.8, sw15),
+    ...px(sw24),
+    ...py(sh16),
+    backgroundColor: colorWhite._1,
+    borderRadius: sw10,
+  };
+
+  const CustomThumb = () => {
+    return (
+      <View style={{ ...centerHV, ...circle(sw18, colorWhite._1) }}>
+        <View style={circle(sw14, colorRed._1)} />
+      </View>
+    );
+  };
 
   return (
-    <Fragment>
+    <View style={sliderContainer}>
       <Slider
         animateTransitions={true}
         containerStyle={{ height: sh16 }}
         disabled={disabled}
         maximumTrackTintColor={colorGray._4}
         maximumValue={options.length - 1}
-        minimumTrackTintColor={colorRed._1}
+        minimumTrackTintColor={value === 0 ? colorWhite._1 : colorRed._1}
         minimumValue={0}
         onValueChange={handleChange}
-        thumbStyle={thumbStyle}
-        thumbTintColor={colorRed._1}
+        renderThumbComponent={() => <CustomThumb />}
         trackStyle={{ height: sh6 }}
         value={value}
       />
+      <CustomSpacer space={sh8} />
       <View style={flexRowSbSb}>
         {options.map((option: string, index: number) => {
+          let optionStyle: ViewStyle = { width: sw72, ...centerVertical };
+          if (index === 1) {
+            optionStyle = { ...optionStyle, paddingRight: sw15 };
+          } else if (index === 2) {
+            optionStyle = { ...optionStyle, paddingLeft: sw12 };
+          }
           return (
             <TouchableWithoutFeedback key={index} onPress={() => handleSeek(index)}>
-              <Text style={fs12BoldBlack2}>{option}</Text>
+              <View style={optionStyle}>
+                <Text style={fs12BoldBlack2}>{option}</Text>
+              </View>
             </TouchableWithoutFeedback>
           );
         })}
       </View>
-    </Fragment>
+    </View>
   );
 };

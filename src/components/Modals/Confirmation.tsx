@@ -1,51 +1,72 @@
 import React from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { centerHV, colorGray, colorWhite, flexRow, fs24BoldBlack1, px, py, sh24, sw24, sw5 } from "../../styles";
+import {
+  centerHV,
+  colorGray,
+  colorWhite,
+  flexRowCC,
+  fs24BoldBlack1,
+  px,
+  sh16,
+  sh56,
+  sh64,
+  sh96,
+  sw10,
+  sw218,
+  sw5,
+  sw56,
+  sw565,
+} from "../../styles";
 import { ActionButtons, ActionButtonsProps, CustomSpacer } from "../Views";
 import { BasicModal } from "./Basic";
 
 interface ModalProps extends ActionButtonsProps {
   children: JSX.Element;
-  handleClose: () => void;
+  spaceToButton?: number;
+  spaceToContent?: number;
   title: string;
   visible: boolean;
 }
 
-export const ConfirmationModal = ({ children, title, visible, handleClose, ...rest }: ModalProps) => {
+export const ConfirmationModal = ({ children, spaceToButton, spaceToContent, title, visible, ...rest }: ModalProps) => {
+  const defaultSpaceToContent = spaceToContent === undefined ? sh16 : spaceToContent;
+  const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
   const modelContainer: ViewStyle = {
     backgroundColor: colorGray._5,
     borderRadius: sw5,
-  };
-
-  const padding: ViewStyle = {
-    ...py(sh24),
-    ...px(sw24),
+    width: sw565,
   };
 
   const buttonContainer: ViewStyle = {
-    ...padding,
+    ...flexRowCC,
+    ...px(sw56),
     backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw5,
-    borderBottomRightRadius: sw5,
+    borderBottomLeftRadius: sw10,
+    borderBottomRightRadius: sw10,
+    height: sh96,
   };
+
+  const cancelButtonStyle: ViewStyle = { width: sw218 };
+  const continueButtonStyle: ViewStyle = { width: sw218 };
 
   const actionButtonProps: ActionButtonsProps = {
     ...rest,
-    handleCancel: handleClose,
     buttonContainerStyle: buttonContainer,
+    cancelButtonStyle: cancelButtonStyle,
+    continueButtonStyle: continueButtonStyle,
   };
 
   return (
     <BasicModal visible={visible}>
       <View style={centerHV}>
         <View style={modelContainer}>
-          <View style={padding}>
-            <View style={flexRow}>
-              <Text style={fs24BoldBlack1}>{title}</Text>
-            </View>
-            <CustomSpacer space={sh24} />
+          <View style={px(sw56)}>
+            <CustomSpacer space={sh64} />
+            <Text style={fs24BoldBlack1}>{title}</Text>
+            <CustomSpacer space={defaultSpaceToContent} />
             {children}
+            <CustomSpacer space={defaultSpaceToButton} />
           </View>
           <ActionButtons {...actionButtonProps} />
         </View>

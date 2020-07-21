@@ -155,7 +155,6 @@ export const AddClientPage = ({ navigation }: PageProps) => {
         cancelButtonStyle={{ width: sw205 }}
         continueButtonStyle={{ width: sw205 }}
         handleCancel={handleAddMedia}
-        handleClose={handleHideModal}
         handleContinue={handleConfirm}
         labelCancel={ADD_CLIENT.DETAILS_BUTTON_RE_UPLOAD}
         labelContinue={ADD_CLIENT.DETAILS_BUTTON_CONFIRM}

@@ -11,7 +11,9 @@ const { ACTION_BUTTONS } = Language.PAGE;
 export interface ActionButtonsProps {
   buttonContainerStyle?: ViewStyle;
   cancelButtonStyle?: ViewStyle;
+  cancelDisabled?: boolean;
   continueButtonStyle?: ViewStyle;
+  continueDisabled?: boolean;
   handleCancel: () => void;
   handleContinue: () => void;
   labelCancel?: string;
@@ -21,20 +23,28 @@ export interface ActionButtonsProps {
 export const ActionButtons = ({
   buttonContainerStyle,
   cancelButtonStyle,
+  cancelDisabled,
   continueButtonStyle,
   handleCancel,
   handleContinue,
   labelCancel,
   labelContinue,
+  continueDisabled,
 }: ActionButtonsProps) => {
   const buttonCancel = labelCancel !== undefined ? labelCancel : ACTION_BUTTONS.BUTTON_CANCEL;
   const buttonContinue = labelContinue !== undefined ? labelContinue : ACTION_BUTTONS.BUTTON_CONTINUE;
 
   return (
     <View style={{ ...flexRow, ...buttonContainerStyle }}>
-      <RoundedButton buttonStyle={cancelButtonStyle} onPress={handleCancel} secondary={true} text={buttonCancel} />
+      <RoundedButton
+        buttonStyle={cancelButtonStyle}
+        disabled={cancelDisabled}
+        onPress={handleCancel}
+        secondary={true}
+        text={buttonCancel}
+      />
       <CustomSpacer isHorizontal={true} space={sw16} />
-      <RoundedButton buttonStyle={continueButtonStyle} onPress={handleContinue} text={buttonContinue} />
+      <RoundedButton buttonStyle={continueButtonStyle} disabled={continueDisabled} onPress={handleContinue} text={buttonContinue} />
     </View>
   );
 };

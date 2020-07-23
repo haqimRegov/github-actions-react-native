@@ -9,6 +9,7 @@ import { EmploymentDetails } from "./EmploymentDetails";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
+import { PRSDetails } from "./PRSDetails";
 import { QuestionnaireContent } from "./Questionnaire";
 
 interface OnboardingContentProps {
@@ -27,6 +28,8 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
       return <Address {...props} />;
     case ONBOARDING_ROUTES.PersonalDetails:
       return <PersonalDetails {...props} />;
+    case ONBOARDING_ROUTES.PRSDetails:
+      return <PRSDetails {...props} />;
     case ONBOARDING_ROUTES.EmploymentDetails:
       return <EmploymentDetails {...props} />;
     case ONBOARDING_ROUTES.Declaration:

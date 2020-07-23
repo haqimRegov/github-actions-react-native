@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { ScrollView, Text, TextInput, View, ViewStyle } from "react-native";
+import { ScrollView, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
 import { ActionButtons, CustomSpacer, IconButton } from "../../../components";
@@ -18,6 +18,7 @@ import {
   DEVICE,
   flexGrow,
   flexRow,
+  fs16SemiBoldBlack2,
   fs24BoldBlue2,
   fullHeight,
   fullWidth,
@@ -89,6 +90,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const filterColor = filter ? colorBlack._1 : colorWhite._1;
 
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
+  const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
 
   return (
     <View style={pageContainer}>
@@ -107,7 +109,9 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
               icon="search"
               onChangeText={setInputSearch}
               placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
+              placeholderTextColor={colorBlack._2_5}
               setRef={setSearchInputRef}
+              style={inputStyle}
               value={inputSearch}
               viewStyle={{ borderRadius: sw100, height: sh48 }}
             />

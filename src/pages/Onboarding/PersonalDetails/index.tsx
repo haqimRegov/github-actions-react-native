@@ -55,7 +55,7 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
   };
 
   const handleSubmit = () => {
-    handleNextStep(ONBOARDING_ROUTES.EmploymentDetails);
+    handleNextStep(ONBOARDING_ROUTES.PRSDetails);
   };
 
   return (

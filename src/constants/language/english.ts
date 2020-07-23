@@ -42,6 +42,9 @@ export const english = {
       UPLOAD_DOCUMENT_HINT: "Make sure your environment is well lit.",
       UPLOAD_DOCUMENT: "Upload your document",
     },
+    DROPDOWN: {
+      PLACEHOLDER: "Select One",
+    },
     EMPLOYMENT_DETAILS: {
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONTINUE: "Continue",
@@ -126,6 +129,7 @@ export const english = {
       TITLE_PROOF_OF_ADDRESS: "Proof of Address",
       TITLE_QUESTIONNAIRE: "Questionnaire",
       TITLE_RISK_ASSESSMENT: "Risk Assessment",
+      TITLE_PRS: "PRS Details",
     },
     PRODUCT_CONFIRMATION: {
       BUTTON_CANCEL: "Cancel",
@@ -159,6 +163,14 @@ export const english = {
       LABEL_POST_CODE: "Post Code",
       SUBHEADING: "One Step closer to your wealth",
       TITLE: "We would need some of your details to open your account.",
+    },
+    PRS: {
+      HEADING: "PRS Details",
+      LABEL_EDUCATION: "Education level",
+      LABEL_MARITAL: "Marital Status",
+      LABEL_MONTHLY_INCOME: "Monthly Household Income",
+      LABEL_MOTHER_NAME: "Mother's Maiden Name",
+      SUBHEADING: "Tell us more about yourself",
     },
     RISK_APPETITE: {
       BUTTON_SKIP: "Skip Risk Assessment",

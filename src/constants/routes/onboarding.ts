@@ -6,5 +6,6 @@ export const ONBOARDING_ROUTES = {
   EmploymentDetails: "EmploymentDetails",
   Payment: "Payment",
   ProductRecommendation: "ProductRecommendation",
+  PRSDetails: "PRS Details",
   Questionnaire: "Questionnaire",
 };

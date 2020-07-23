@@ -14,7 +14,6 @@ import {
   flexRow,
   fs12BoldBlack2,
   fs16BoldBlack2,
-  fs16RegBlack2,
   px,
   sh40,
   sh8,
@@ -47,6 +46,7 @@ export const CustomTextInput = ({
   labelStyle,
   inputPrefix,
   noBorder,
+  onLayout,
   onPressLabel,
   rightIcon,
   prefixStyle,
@@ -72,12 +72,12 @@ export const CustomTextInput = ({
   };
   const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
 
-  // TODO improved placeholder style
-  const placeHolderStyle: TextStyle =
-    value === "" || value === undefined ? { ...fs16RegBlack2, letterSpacing: -0.39, opacity: 0.7 } : fs16BoldBlack2;
+  // // TODO improved placeholder style
+  // const placeHolderStyle: TextStyle =
+  //   value === "" || value === undefined ? { ...fs16RegBlack2, letterSpacing: -0.39, opacity: 0.7 } : fs16BoldBlack2;
 
   return (
-    <Fragment>
+    <View onLayout={onLayout}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
@@ -102,7 +102,7 @@ export const CustomTextInput = ({
           placeholderTextColor={colorBlue._4_7}
           ref={setRef}
           selectionColor={colorBlack._2}
-          style={{ ...placeHolderStyle, ...flexChild, height: sh40, ...style }}
+          style={{ ...fs16BoldBlack2, ...flexChild, height: sh40, ...style }}
           underlineColorAndroid={colorTransparent}
           value={value}
           {...rest}
@@ -110,6 +110,6 @@ export const CustomTextInput = ({
         {rightIcon === undefined ? null : <IcoMoon color={colorBlack._2} name={rightIcon} size={sw20} />}
       </View>
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
-    </Fragment>
+    </View>
   );
 };

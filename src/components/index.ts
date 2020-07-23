@@ -1,5 +1,6 @@
 export * from "./Accordion";
 export * from "./CommonPages";
+export * from "./Dropdown";
 export * from "./Input";
 export * from "./Modals";
 export * from "./Nav";

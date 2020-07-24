@@ -11,7 +11,7 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs12BoldBlue3,
+  fs12BoldBlue38,
   fs14BoldBlack2,
   fs16BoldBlack2,
   fs16RegBlack2,
@@ -36,7 +36,7 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views";
 
-interface IUploadPhotoProps {
+interface IUploadPhotoPropsV1 {
   data?: FileBase64;
   guidelines?: string;
   label: string;
@@ -45,7 +45,7 @@ interface IUploadPhotoProps {
   title: string;
 }
 
-export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title }: IUploadPhotoProps) => {
+export const UploadPhotoV1 = ({ data, guidelines, label, onPress, subtitle, title }: IUploadPhotoPropsV1) => {
   const documentImageStyle: ImageStyle = {
     resizeMode: "contain",
     width: sw96,
@@ -113,7 +113,7 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
                 <CustomSpacer space={sh32} />
                 <Text style={fs16RegBlack2}>{title}</Text>
                 <CustomSpacer space={sh8} />
-                <Text style={fs12BoldBlue3}>{subtitle}</Text>
+                <Text style={fs12BoldBlue38}>{subtitle}</Text>
               </Fragment>
             )}
           </View>
@@ -127,7 +127,7 @@ export const UploadPhoto = ({ data, guidelines, label, onPress, subtitle, title 
             <Text style={fs16BoldBlack2}>i</Text>
           </View>
           <CustomSpacer isHorizontal={true} space={sw10} />
-          <Text style={fs12BoldBlue3}>{guidelines}</Text>
+          <Text style={fs12BoldBlue38}>{guidelines}</Text>
         </View>
       )}
     </View>

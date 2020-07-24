@@ -4,7 +4,7 @@ import { Text, TextStyle, View, ViewStyle } from "react-native";
 import { fs12BoldBlack2, fs16RegBlack2 } from "../../styles";
 import { CustomSpacer } from "./Spacer";
 
-interface LabeledTitleProps {
+export interface LabeledTitleProps {
   label: string;
   labelStyle?: TextStyle;
   spaceToBottom?: number;

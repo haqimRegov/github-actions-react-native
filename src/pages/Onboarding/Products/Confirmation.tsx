@@ -10,7 +10,7 @@ const { PRODUCT_CONFIRMATION } = Language.PAGE;
 export interface ProductConfirmationProps {
   selectedProduct: IProduct[];
   setFixedBottomShow: (toggle: boolean) => void;
-  setProductConfirmShow: (toggle: boolean) => void;
+  setPage: (page: number) => void;
   setSelectedProduct: (product: IProduct[]) => void;
 }
 
@@ -36,7 +36,7 @@ const initialState: IProductConfirmation = {
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
   selectedProduct,
   setFixedBottomShow,
-  setProductConfirmShow,
+  setPage,
   setSelectedProduct,
 }: ProductConfirmationProps) => {
   const [data, setData] = useState<IProductConfirmation[]>([]);
@@ -89,7 +89,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
             const updatedProducts = [...selectedProduct];
             updatedProducts.splice(index, 1);
             if (updatedProducts.length === 0) {
-              setProductConfirmShow(false);
+              setPage(0);
             }
 
             setData(data);

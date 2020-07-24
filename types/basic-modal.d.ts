@@ -3,7 +3,10 @@ declare interface IBasicModalProps {
   animationInTiming?: number;
   animationOut?: import("react-native-animatable").Animation | import("react-native-animatable").CustomAnimation;
   animationOutTiming?: number;
+  backdropColor?: string;
+  backdropOpacity?: number;
   children: JSX.Element;
   onClose?: () => void;
+  style?: import("react-native").ViewStyle;
   visible: boolean;
 }

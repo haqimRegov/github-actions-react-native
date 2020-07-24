@@ -11,7 +11,7 @@ interface RadioButtonProps {
 }
 
 export const RadioButton = ({ label, selected, setSelected }: RadioButtonProps) => {
-  const borderColor = selected ? colorRed._1 : colorBlue._3;
+  const borderColor = selected ? colorRed._1 : colorBlue._3_8;
   const borderWidth = selected ? sw6 : sw1;
 
   return (

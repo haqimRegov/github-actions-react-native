@@ -84,6 +84,22 @@ export const english = {
       SUBHEADING_BANK: "Provide your banking details",
       SUBHEADING_CONTACT: "How can we reach you?",
     },
+    IDENTITY_CONFIRMATION: {
+      BUTTON_CONFIRM: "Confirm",
+      BUTTON_CONTINUE: "Continue",
+      CONFIRM_MODAL_LABEL_DOB: "Date of Birth",
+      CONFIRM_MODAL_LABEL_GENDER: "Gender",
+      CONFIRM_MODAL_LABEL_NAME: "Full Name",
+      CONFIRM_MODAL_TITLE: "Please confirm all the details",
+      HEADING: "Confirm Identification",
+      LABEL_BACK_NRIC: "Back of NRIC",
+      LABEL_BACK_OTHER: "Back of ID",
+      LABEL_DATA_PASSPORT: "Data Page of Passport",
+      LABEL_FRONT_NRIC: "Front of NRIC",
+      LABEL_FRONT_OTHER: "Front of ID",
+      LABEL_VISA_PASSPORT: "Visa Page of Passport",
+      SUBHEADING: "Upload",
+    },
     LOGIN: {
       BUTTON_LOGIN: "Login Now",
       FORGOT_PASSWORD: "Forgot Password?",
@@ -133,6 +149,7 @@ export const english = {
     },
     PRODUCT_CONFIRMATION: {
       BUTTON_CANCEL: "Cancel",
+      BUTTON_CONFIRM: "Confirm",
       BUTTON_START_INVESTING: "Start Investing",
       HEADING: "Confirmation",
       LABEL_AMOUNT: "Investment Amount",
@@ -245,6 +262,10 @@ export const english = {
     },
     SIDE_MENU: {
       LABEL_FOOTER: "Kenanga © 2020",
+    },
+    UPLOAD: {
+      LABEL_NO_FILE: "No file uploaded - Max file size: 5MB",
+      LABEL_FILE_SIZE_EXCEEDED: "File size exceeded. Please try again.",
     },
   },
 };

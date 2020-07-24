@@ -6,12 +6,13 @@ import {
   colorTransparent,
   colorWhite,
   flexRow,
-  fs14BoldBlack2,
+  fs12BoldBlack2,
+  fs12RegBlack2,
   fs14RegBlack2,
   fullHW,
   sh16,
   sh40,
-  sw104,
+  sw112,
   sw120,
   sw200,
   sw40,
@@ -68,9 +69,9 @@ export const OnboardingStepsV2 = ({
               handleContentChange(item);
             };
             const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
-            const textStyle: TextStyle = item.title === activeTitle ? fs14BoldBlack2 : fs14RegBlack2;
+            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : fs12RegBlack2;
             return (
-              <View key={index} style={{ width: sw104 }}>
+              <View key={index} style={{ width: sw112 }}>
                 <CustomSpacer space={sh16} />
                 <Text onPress={handleNavigateToContent} key={index} style={textStyle}>
                   {item.title}

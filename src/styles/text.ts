@@ -46,8 +46,8 @@ export const fs12BoldBlue2: TextStyle = {
   fontSize: sh12,
 };
 
-export const fs12BoldBlue3: TextStyle = {
-  color: colorBlue._3,
+export const fs12BoldBlue38: TextStyle = {
+  color: colorBlue._3_8,
   fontFamily: NunitoBold,
   fontSize: sh12,
 };

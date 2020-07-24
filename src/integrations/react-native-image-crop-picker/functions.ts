@@ -1,7 +1,6 @@
 import ImagePicker, { Image, Options } from "react-native-image-crop-picker";
 
 const options: Options = {
-  cropperToolbarTitle: "Edit Photo",
   cropping: true,
   includeBase64: true,
   mediaType: "photo",

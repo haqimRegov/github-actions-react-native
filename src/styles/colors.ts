@@ -21,7 +21,8 @@ export const colorBlue = {
   _1: "#0091ff",
   _2: "#002043",
   _2_5: "rgba(0, 32, 67, 0.5)",
-  _3: "rgba(42, 54, 90, 0.8)",
+  _3: "#2A365A",
+  _3_8: "rgba(42, 54, 90, 0.8)",
   _4: "#29365A",
   _4_7: "rgba(41,54,90, 0.7)",
   // old colors for reference
@@ -56,6 +57,10 @@ export const colorGray = {
   // _11: "#6d7278",
 };
 
+export const colorGreen = {
+  _1: "#2ECC82",
+};
+
 export const colorMint = {
   _1: "#2CD9C5",
 };
@@ -63,6 +68,7 @@ export const colorMint = {
 export const colorRed = {
   _1: "#C61230",
   _1_5: "rgb(198, 18, 48, 0.5)",
+  _2: "#E84C3D",
 };
 
 export const colorWhite = {

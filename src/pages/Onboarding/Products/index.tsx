@@ -6,6 +6,7 @@ import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { SAMPLE_PRODUCTS } from "../../../mocks";
 import { flexChild, flexCol } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
+import { IdentityConfirmation } from "./IdentityConfirmation";
 import { ProductList } from "./ProductList";
 
 const { PRODUCT_CONFIRMATION } = Language.PAGE;
@@ -15,25 +16,65 @@ interface ProductsProps {
 }
 
 export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: ProductsProps) => {
-  const [productConfirmShow, setProductConfirmShow] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
 
   const [productList, setProductList] = useState<IProduct[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProduct[]>([]);
 
-  const handleCancel = () => {
-    return productConfirmShow ? setProductConfirmShow(false) : setSelectedProduct([]);
-  };
-
-  const handleSubmit = () => {
-    if (productConfirmShow === true) {
-      handleNextStep(ONBOARDING_ROUTES.PersonalDetails);
-    }
-    setProductConfirmShow(true);
-  };
-
   const amount = selectedProduct.length * 1000;
   const LABEL_FUND = selectedProduct.length === 1 ? PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION : PRODUCT_CONFIRMATION.LABEL_FUNDS_SELECTION;
+
+  const handleGoBack = () => {
+    setPage(0);
+  };
+
+  const handleStartInvesting = () => {
+    setPage(1);
+  };
+
+  const handleConfirmFunds = () => {
+    setPage(2);
+    setFixedBottomShow(false);
+  };
+
+  const handleCancel = () => {
+    return page === 1 ? handleGoBack() : setSelectedProduct([]);
+  };
+
+  const handleConfirmIdentity = () => {
+    handleNextStep(ONBOARDING_ROUTES.PersonalDetails);
+  };
+
+  let screen = {
+    content: <ProductList productList={productList} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />,
+    onPressSubmit: handleStartInvesting,
+    labelSubmit: PRODUCT_CONFIRMATION.BUTTON_START_INVESTING,
+  };
+
+  if (page === 1) {
+    screen = {
+      ...screen,
+      content: (
+        <ProductConfirmation
+          selectedProduct={selectedProduct}
+          setFixedBottomShow={setFixedBottomShow}
+          setPage={setPage}
+          setSelectedProduct={setSelectedProduct}
+        />
+      ),
+      onPressSubmit: handleConfirmFunds,
+      labelSubmit: PRODUCT_CONFIRMATION.BUTTON_CONFIRM,
+    };
+  }
+
+  if (page === 2) {
+    screen = {
+      ...screen,
+      content: <IdentityConfirmation handleNextStep={handleNextStep} />,
+      onPressSubmit: handleConfirmIdentity,
+    };
+  }
 
   useEffect(() => {
     // TODO integration
@@ -43,16 +84,7 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
   return (
     <SafeAreaPage>
       <View style={flexChild}>
-        {productConfirmShow === true && selectedProduct.length !== 0 ? (
-          <ProductConfirmation
-            selectedProduct={selectedProduct}
-            setFixedBottomShow={setFixedBottomShow}
-            setProductConfirmShow={setProductConfirmShow}
-            setSelectedProduct={setSelectedProduct}
-          />
-        ) : (
-          <ProductList productList={productList} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
-        )}
+        {screen.content}
         {fixedBottomShow === true && selectedProduct.length !== 0 ? (
           <View style={flexCol}>
             <BottomFixedDetails
@@ -61,9 +93,9 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
               fundAmountText={PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION_AMOUNT}
               fundSelectionText={LABEL_FUND}
               labelCancel={PRODUCT_CONFIRMATION.BUTTON_CANCEL}
-              labelSubmit={PRODUCT_CONFIRMATION.BUTTON_START_INVESTING}
+              labelSubmit={screen.labelSubmit}
               numberOfFunds={selectedProduct.length}
-              submitOnPress={handleSubmit}
+              submitOnPress={screen.onPressSubmit}
             />
           </View>
         ) : null}

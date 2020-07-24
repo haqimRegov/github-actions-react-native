@@ -1,46 +1,61 @@
 {
   "images" : [
     {
-      "idiom" : "iphone",
+      "filename" : "Kenanga app logo-20@1x.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "20x20"
+    },
+    {
+      "filename" : "Kenanga app logo-20@2x.png",
+      "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "20x20"
+      "filename" : "Kenanga app logo-29@1x.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "29x29"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "Kenanga app logo-29@2x.png",
+      "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "29x29"
+      "filename" : "Kenanga app logo-40@1x.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "40x40"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "Kenanga app logo-40@2x.png",
+      "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "40x40"
+      "filename" : "Kenanga app logo-76@1x.png",
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "size" : "76x76"
     },
     {
-      "idiom" : "iphone",
+      "filename" : "Kenanga app logo-76@2x.png",
+      "idiom" : "ipad",
       "scale" : "2x",
-      "size" : "60x60"
+      "size" : "76x76"
     },
     {
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "60x60"
+      "filename" : "Kenanga app logo-83.5@2x.png",
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "size" : "83.5x83.5"
     },
     {
+      "filename" : "Kenanga app logo-1024@1x.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

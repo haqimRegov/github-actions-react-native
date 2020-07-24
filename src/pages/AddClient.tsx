@@ -12,7 +12,7 @@ import {
   RadioButtonGroup,
   RoundedButton,
   SafeAreaPage,
-  UploadPhoto,
+  UploadPhotoV1,
 } from "../components";
 import { Language } from "../constants";
 import { imageOpenCamera, imageOpenPicker } from "../integrations/react-native-image-crop-picker";
@@ -138,7 +138,7 @@ export const AddClientPage = ({ navigation }: PageProps) => {
               <View style={{ ...centerHV, ...flexChild, ...flexRow }}>
                 <Text style={fs16BoldBlack2}>{ADD_CLIENT.OR}</Text>
               </View>
-              <UploadPhoto
+              <UploadPhotoV1
                 data={uploadImage}
                 guidelines={ADD_CLIENT.UPLOAD_DOCUMENT_GUIDE}
                 label={ADD_CLIENT.LABEL_UPLOAD}

@@ -19,7 +19,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({ style, ..
         setTimeout(() => {
           textInputDummy.focus();
           setMultilineFocus(true);
-        }, 300);
+        }, 350);
       }
     }
   };
@@ -70,6 +70,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({ style, ..
         setRef={setTextInputDummy}
         style={{ height: sh05 }}
         selectionColor={colorTransparent}
+        value=""
         viewStyle={dummyInputStyle}
       />
     </View>

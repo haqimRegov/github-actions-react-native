@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import {
   CheckBox,
@@ -49,7 +49,7 @@ export const NormalLogin = ({ navigation, passwordRecovery, setRootPage }: Norma
 
   const handleFingerprint = () => {
     // TODO
-    Alert.alert("handleFingerprint");
+    navigation.navigate("Onboarding");
   };
 
   const handleForgotPassword = () => {

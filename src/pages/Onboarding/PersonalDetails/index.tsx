@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
 import { View } from "react-native";
 
@@ -15,7 +14,7 @@ const JOINT_ACCOUNT = 100 / 2 === 50;
 
 interface PersonalDetailsProps {
   handleNextStep: (route: string) => void;
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 const mobileNumberState: IContactNumber = {

@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 
 import { OnboardingStepsV2 } from "../../components";
@@ -37,7 +36,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
 ];
 
 interface OnboardingProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 export const OnboardingPage = ({ navigation }: OnboardingProps) => {

@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
 import { View, ViewStyle } from "react-native";
 
@@ -38,7 +37,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
 ];
 
 interface OnboardingProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 const PRODUCTS_INDEX = 1;

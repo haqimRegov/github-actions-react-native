@@ -26,13 +26,15 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface ITextInputProps extends TextInputProps {
+  inputPrefix?: string;
   label?: string;
   labelStyle?: TextStyle;
-  inputPrefix?: string;
   noBorder?: boolean;
   onPressLabel?: () => void;
-  rightIcon?: string;
   prefixStyle?: TextStyle;
+  rightIcon?: string;
+  rightIconPress?: () => void;
+  rightIconSize?: number;
   setRef?: (ref: TextInput | null) => void;
   spaceToBottom?: number;
   spaceToLabel?: number;
@@ -42,14 +44,16 @@ export interface ITextInputProps extends TextInputProps {
 }
 
 export const CustomTextInput = ({
+  inputPrefix,
   label,
   labelStyle,
-  inputPrefix,
   noBorder,
   onLayout,
   onPressLabel,
-  rightIcon,
   prefixStyle,
+  rightIcon,
+  rightIconPress,
+  rightIconSize,
   setRef,
   spaceToBottom,
   spaceToLabel,
@@ -107,7 +111,9 @@ export const CustomTextInput = ({
           value={value}
           {...rest}
         />
-        {rightIcon === undefined ? null : <IcoMoon color={colorBlack._2} name={rightIcon} size={sw20} />}
+        {rightIcon === undefined ? null : (
+          <IcoMoon color={colorBlack._2} name={rightIcon} onPress={rightIconPress} size={rightIconSize || sw20} />
+        )}
       </View>
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
     </View>

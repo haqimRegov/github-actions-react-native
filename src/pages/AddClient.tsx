@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
 import { Image, ImageStyle, ScrollView, Text, View } from "react-native";
 import { Image as ImageCropType } from "react-native-image-crop-picker";
@@ -49,7 +48,7 @@ import {
 import { RequestActionButton, RequestActionUtil } from "../utils";
 
 interface PageProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -72,7 +71,6 @@ export const AddClientPage = ({ navigation }: PageProps) => {
     navigation.navigate("Onboarding");
   };
 
-  // eslint-disable-next-line consistent-return
   const handleImageResult = (results: ImageCropType | ImageCropType[]) => {
     if (!Array.isArray(results)) {
       const { data, filename, size, mime, creationDate, path } = results;
@@ -80,6 +78,7 @@ export const AddClientPage = ({ navigation }: PageProps) => {
       handleShowModal();
       return setUploadImage(selectedImage);
     }
+    return false;
   };
 
   const handleOpenCamera = () => {

@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
 import { Text, View } from "react-native";
 
@@ -32,7 +31,7 @@ const USER_NAME: string = "Edgar";
 const GREETINGS: string = `${RISK_APPETITE.HEADING} ${USER_NAME}.`;
 
 interface RiskAppetitePageProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 export const RiskAppetitePage = ({ navigation }: RiskAppetitePageProps) => {

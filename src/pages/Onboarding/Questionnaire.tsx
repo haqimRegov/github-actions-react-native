@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
 
@@ -28,7 +27,7 @@ const { RISK_ASSESSMENT } = Language.PAGE;
 
 interface QuestionnaireContentProps {
   handleNextStep: (route: string) => void;
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 const Q1_OPTIONS = [

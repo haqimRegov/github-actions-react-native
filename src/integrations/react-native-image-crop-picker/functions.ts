@@ -16,7 +16,6 @@ const SIZES = {
 
 type SuccessCallback = (image: Image | Image[]) => void;
 
-// eslint-disable-next-line consistent-return
 export const imageOpenPicker = async (handleSuccess: SuccessCallback) => {
   try {
     const image = await ImagePicker.openPicker({
@@ -34,9 +33,9 @@ export const imageOpenPicker = async (handleSuccess: SuccessCallback) => {
     // eslint-disable-next-line no-console
     return console.log("error", error);
   }
+  return false;
 };
 
-// eslint-disable-next-line consistent-return
 export const imageOpenCamera = async (handleSuccess: SuccessCallback) => {
   try {
     const image = await ImagePicker.openCamera({
@@ -54,4 +53,5 @@ export const imageOpenCamera = async (handleSuccess: SuccessCallback) => {
     // eslint-disable-next-line no-console
     return console.log("error", error);
   }
+  return false;
 };

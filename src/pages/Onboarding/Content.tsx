@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 
 import { ONBOARDING_ROUTES } from "../../constants";
@@ -15,7 +14,7 @@ import { QuestionnaireContent } from "./Questionnaire";
 interface OnboardingContentProps {
   route: string;
   handleNextStep: (route: string) => void;
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
 }
 
 export const OnboardingContent = (props: OnboardingContentProps) => {

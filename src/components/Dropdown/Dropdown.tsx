@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { LayoutChangeEvent, LayoutRectangle, TextStyle, ViewStyle } from "react-native";
+import { LayoutChangeEvent, LayoutRectangle, TextStyle, View, ViewStyle } from "react-native";
 import { Dropdown, DropDownData, DropDownProps } from "react-native-material-dropdown";
 
 import { Language } from "../../constants";
@@ -24,6 +24,7 @@ const { DROPDOWN } = Language.PAGE;
 export interface CustomDropdownProps {
   data: DropDownData[];
   handleChange: (text: string) => void;
+  inputStyle?: TextStyle;
   label?: string;
   labelStyle?: TextStyle;
   placeholder?: string;
@@ -34,6 +35,7 @@ export interface CustomDropdownProps {
 export const CustomDropdown: FunctionComponent<CustomDropdownProps> = ({
   data,
   handleChange,
+  inputStyle,
   label,
   labelStyle,
   placeholder,
@@ -74,35 +76,38 @@ export const CustomDropdown: FunctionComponent<CustomDropdownProps> = ({
   const dropdownOffsetY = dropdownLayout !== undefined ? dropdownLayout.height + sh16 : sh56;
 
   return (
-    <Dropdown
-      animationDuration={0}
-      data={data}
-      dropdownOffset={{ left: sw16, top: dropdownOffsetY }}
-      dropdownPosition={0}
-      itemTextStyle={fs16BoldBlack2}
-      onBlur={handleFocus}
-      onChangeText={handleChange}
-      onFocus={handleFocus}
-      pickerStyle={dropdownStyle}
-      propsExtractor={propsExtractor}
-      renderBase={() => {
-        return (
-          <CustomTextInput
-            onLayout={handleDropdownLayout}
-            editable={false}
-            rightIcon="caret-down"
-            label={label}
-            labelStyle={labelStyle}
-            placeholder={placeholder || DROPDOWN.PLACEHOLDER}
-            placeholderTextColor={colorBlack._2}
-            pointerEvents="none"
-            value={value}
-            viewStyle={dropdownInputStyle}
-          />
-        );
-      }}
-      rippleOpacity={0}
-      useNativeDriver={true}
-    />
+    <View style={{ width: sw360 }}>
+      <Dropdown
+        animationDuration={0}
+        data={data}
+        dropdownOffset={{ left: sw16, top: dropdownOffsetY }}
+        dropdownPosition={0}
+        itemTextStyle={fs16BoldBlack2}
+        onBlur={handleFocus}
+        onChangeText={handleChange}
+        onFocus={handleFocus}
+        pickerStyle={dropdownStyle}
+        propsExtractor={propsExtractor}
+        renderBase={() => {
+          return (
+            <CustomTextInput
+              onLayout={handleDropdownLayout}
+              editable={false}
+              rightIcon="caret-down"
+              label={label}
+              labelStyle={labelStyle}
+              placeholder={placeholder || DROPDOWN.PLACEHOLDER}
+              placeholderTextColor={colorBlack._2}
+              pointerEvents="none"
+              style={inputStyle}
+              value={value}
+              viewStyle={dropdownInputStyle}
+            />
+          );
+        }}
+        rippleOpacity={0}
+        useNativeDriver={true}
+      />
+    </View>
   );
 };

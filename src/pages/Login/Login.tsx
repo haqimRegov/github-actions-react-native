@@ -12,7 +12,7 @@ import {
   RoundedButton,
 } from "../../components";
 import { Language } from "../../constants";
-import { updateStorageData } from "../../integrations/async-storage";
+import { updateStorageData } from "../../integrations";
 import {
   centerVertical,
   flexRow,

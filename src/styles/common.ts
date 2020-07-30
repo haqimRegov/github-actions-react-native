@@ -107,17 +107,17 @@ export const shadow5 = {
   shadowRadius: 5,
 } as const;
 
-export const blueShadow = {
+export const shadowBlue5 = {
   // shadow for android
-  elevation: 3,
+  elevation: 1,
   // shadow for ios
-  shadowColor: colorBlue._1,
+  shadowColor: colorBlue._5,
   shadowOffset: {
     width: 0,
-    height: 3,
+    height: 0,
   },
-  shadowOpacity: 0.35,
-  shadowRadius: 3,
+  shadowOpacity: 0.12,
+  shadowRadius: 12,
 } as const;
 
 export interface DeviceSizeType {

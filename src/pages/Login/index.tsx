@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import { LoginBackground } from "../../components";
-import { getStorageData } from "../../integrations/async-storage";
+import { getStorageData } from "../../integrations";
 import { FirstTimeLogin } from "./FirstTime";
 import { NormalLogin } from "./Login";
 import { PasswordRecovery } from "./PasswordRecovery";

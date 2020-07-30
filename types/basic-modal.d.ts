@@ -6,6 +6,7 @@ declare interface IBasicModalProps {
   backdropColor?: string;
   backdropOpacity?: number;
   children: JSX.Element;
+  hasBackdrop?: boolean;
   onClose?: () => void;
   style?: import("react-native").ViewStyle;
   visible: boolean;

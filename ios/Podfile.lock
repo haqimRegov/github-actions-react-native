@@ -233,6 +233,8 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
   - React-jsinspector (0.62.2)
+  - react-native-document-picker (3.5.4):
+    - React
   - react-native-safe-area-context (3.0.2):
     - React
   - react-native-signature-capture (0.4.10):
@@ -302,6 +304,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
+  - RNFS (2.16.6):
+    - React
   - RNGestureHandler (1.6.1):
     - React
   - RNImageCropPicker (0.32.0):
@@ -313,6 +317,8 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
+  - RNPDF (0.11.0):
+    - React
   - RNReanimated (1.9.0):
     - React
   - RNScreens (2.8.0):
@@ -360,6 +366,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -376,8 +383,10 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -428,6 +437,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-signature-capture:
@@ -458,10 +469,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNPDF:
+    :path: "../node_modules/react-native-view-pdf"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -497,6 +512,7 @@ SPEC CHECKSUMS:
   React-jsi: b6dc94a6a12ff98e8877287a0b7620d365201161
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
+  react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
   react-native-safe-area-context: b11a34881faac509cad5578726c98161ad4d275c
   react-native-signature-capture: 331c29f07b4f19ccfe63c5247a956b203abb500f
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
@@ -512,8 +528,10 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNImageCropPicker: fc4b4d2a4d7176eeb6442fa191ba56493c14b6d6
+  RNPDF: b575ff11a65121f346b2851e3da736e7c51c18ab
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

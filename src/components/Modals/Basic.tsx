@@ -10,6 +10,7 @@ export const BasicModal = ({
   animationOutTiming,
   backdropColor,
   backdropOpacity,
+  hasBackdrop,
   children,
   onClose,
   style,
@@ -21,6 +22,7 @@ export const BasicModal = ({
   return (
     <Modal
       backdropOpacity={backdropOpacity || 0.7}
+      hasBackdrop={hasBackdrop}
       backdropColor={backdropColor || colorBlack._1}
       animationIn={defaultAnimationIn}
       animationInTiming={animationInTiming}

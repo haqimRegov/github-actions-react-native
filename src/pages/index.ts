@@ -1,3 +1,3 @@
-export * from "./AddClient";
+export * from "./Dashboard";
 export * from "./Login";
 export * from "./Onboarding";

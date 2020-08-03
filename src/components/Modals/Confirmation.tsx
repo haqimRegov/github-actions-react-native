@@ -1,16 +1,17 @@
 import React from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { KeyboardAvoidingView, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
   centerHV,
   colorGray,
   colorWhite,
+  flexGrow,
   flexRowCC,
   fs24BoldBlack1,
+  fullHW,
   px,
-  sh16,
+  sh32,
   sh56,
-  sh64,
   sh96,
   sw10,
   sw218,
@@ -26,13 +27,15 @@ interface ModalProps extends ActionButtonsProps {
   spaceToButton?: number;
   spaceToContent?: number;
   title: string;
+  titleStyle?: TextStyle;
   visible: boolean;
 }
 
-export const ConfirmationModal = ({ children, spaceToButton, spaceToContent, title, visible, ...rest }: ModalProps) => {
-  const defaultSpaceToContent = spaceToContent === undefined ? sh16 : spaceToContent;
+export const ConfirmationModal = ({ children, spaceToButton, spaceToContent, title, titleStyle, visible, ...rest }: ModalProps) => {
+  const defaultSpaceToContent = spaceToContent === undefined ? sh32 : spaceToContent;
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
-  const modelContainer: ViewStyle = {
+
+  const modalContainer: ViewStyle = {
     backgroundColor: colorGray._5,
     borderRadius: sw5,
     width: sw565,
@@ -56,21 +59,25 @@ export const ConfirmationModal = ({ children, spaceToButton, spaceToContent, tit
     cancelButtonStyle: cancelButtonStyle,
     continueButtonStyle: continueButtonStyle,
   };
-
+  // TODO: fix KeyboardAvoidingView behavior, for now if number of TextInput become more it pushes top fields out of screen
   return (
     <BasicModal visible={visible}>
-      <View style={centerHV}>
-        <View style={modelContainer}>
-          <View style={px(sw56)}>
-            <CustomSpacer space={sh64} />
-            <Text style={fs24BoldBlack1}>{title}</Text>
-            <CustomSpacer space={defaultSpaceToContent} />
-            {children}
-            <CustomSpacer space={defaultSpaceToButton} />
+      <KeyboardAvoidingView behavior="position">
+        <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
+          <View style={{ ...centerHV, ...fullHW }}>
+            <View style={modalContainer}>
+              <View style={px(sw56)}>
+                <CustomSpacer space={sh56} />
+                <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
+                <CustomSpacer space={defaultSpaceToContent} />
+                {children}
+                <CustomSpacer space={defaultSpaceToButton} />
+              </View>
+              <ActionButtons {...actionButtonProps} />
+            </View>
           </View>
-          <ActionButtons {...actionButtonProps} />
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </BasicModal>
   );
 };

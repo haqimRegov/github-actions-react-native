@@ -49,7 +49,7 @@ export const NormalLogin = ({ navigation, passwordRecovery, setRootPage }: Norma
 
   const handleFingerprint = () => {
     // TODO
-    navigation.navigate("Onboarding");
+    navigation.navigate("Dashboard");
   };
 
   const handleForgotPassword = () => {

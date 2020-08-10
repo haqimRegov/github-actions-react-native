@@ -1,14 +1,45 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Keyboard, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Keyboard, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 
-import { colorGray, colorTransparent, colorWhite, px, sh05, sh110, sh118, sh120, sw1, sw16, sw20, sw358, sw360 } from "../../styles";
+import { CustomSpacer } from "..";
+import {
+  colorGray,
+  colorTransparent,
+  colorWhite,
+  flexRow,
+  fs12BoldBlack2,
+  px,
+  sh05,
+  sh110,
+  sh118,
+  sh120,
+  sh8,
+  sw1,
+  sw16,
+  sw20,
+  sw358,
+  sw360,
+} from "../../styles";
 import { CustomTextInput, ITextInputProps } from "./Input";
 
 export interface TextInputAreaProps extends ITextInputProps {
+  label?: string;
+  labelStyle?: TextStyle;
+  onPressLabel?: () => void;
+  spaceToLabel?: number;
+  spaceToTop?: number;
   style?: TextStyle;
 }
 
-export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({ style, ...rest }: TextInputAreaProps) => {
+export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
+  label,
+  labelStyle,
+  onPressLabel,
+  style,
+  spaceToLabel,
+  spaceToTop,
+  ...rest
+}: TextInputAreaProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
   const [textInputDummy, setTextInputDummy] = useState<TextInput | null>(null);
   const [multilineFocus, setMultilineFocus] = useState(false);
@@ -54,25 +85,41 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({ style, ..
     };
   }, []);
 
+  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
+
   return (
-    <View style={defaultStyle}>
-      <CustomTextInput
-        multiline={true}
-        onFocus={handleMultilineFocus}
-        setRef={setTextAreaRef}
-        style={{ ...px(sw16), height: sh110, width: sw360 }}
-        textAlignVertical="top"
-        viewStyle={defaultInputStyle}
-        {...rest}
-      />
-      <CustomTextInput
-        onFocus={handleDummyInputFocus}
-        setRef={setTextInputDummy}
-        style={{ height: sh05 }}
-        selectionColor={colorTransparent}
-        value=""
-        viewStyle={dummyInputStyle}
-      />
-    </View>
+    <Fragment>
+      {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
+      {label === undefined ? null : (
+        <Fragment>
+          <View style={flexRow}>
+            <CustomSpacer isHorizontal={true} space={sw16} />
+            <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle }}>
+              {label}
+            </Text>
+          </View>
+          <CustomSpacer space={defaultLabelSpace} />
+        </Fragment>
+      )}
+      <View style={defaultStyle}>
+        <CustomTextInput
+          multiline={true}
+          onFocus={handleMultilineFocus}
+          setRef={setTextAreaRef}
+          style={{ ...px(sw16), height: sh110, width: sw360 }}
+          textAlignVertical="top"
+          viewStyle={defaultInputStyle}
+          {...rest}
+        />
+        <CustomTextInput
+          onFocus={handleDummyInputFocus}
+          setRef={setTextInputDummy}
+          style={{ height: sh05 }}
+          selectionColor={colorTransparent}
+          value=""
+          viewStyle={dummyInputStyle}
+        />
+      </View>
+    </Fragment>
   );
 };

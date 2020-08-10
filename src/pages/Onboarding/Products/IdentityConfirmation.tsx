@@ -2,8 +2,10 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, UploadWithModal } from "../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { Language } from "../../../constants";
+import { SAMPLE_CLIENT } from "../../../mocks";
 import { flexChild, flexGrow, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh40, sh56, sh8, sw24 } from "../../../styles";
+import { IDVerification } from "../IDVerification";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
@@ -19,12 +21,13 @@ export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> 
   const [idType, setIdType] = useState<IdType | undefined>(undefined);
   const [frontPage, setFrontPage] = useState<FileBase64 | undefined>(undefined);
   const [secondPage, setSecondPage] = useState<FileBase64 | undefined>(undefined);
+  const [page, setPage] = useState<number>(0);
 
   const buttonDisabled = frontPage === undefined || secondPage === undefined;
 
   const handleContinue = () => {
     if (frontPage !== undefined && secondPage !== undefined) {
-      handleNextStep(ONBOARDING_ROUTES.Address);
+      setPage(1);
     }
   };
 
@@ -57,39 +60,43 @@ export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> 
   return (
     <Fragment>
       <ScrollView bounces={false} contentContainerStyle={flexGrow}>
-        <View style={{ ...flexChild, ...px(sw24) }}>
-          <CustomSpacer space={sh32} />
-          <LabeledTitle
-            label={IDENTITY_CONFIRMATION.HEADING}
-            labelStyle={fs24BoldBlack2}
-            spaceToLabel={sh8}
-            title={title}
-            titleStyle={fs16RegBlack2}
-          />
-          <CustomSpacer space={sh40} />
-          <UploadWithModal
-            features={["camera", "gallery"]}
-            label={firstLabel}
-            onSuccess={handleFirstUpload}
-            setValue={setFrontPage}
-            value={frontPage}
-          />
-          {idType === "Passport" ? null : (
-            <Fragment>
-              <CustomSpacer space={sh8} />
-              <UploadWithModal
-                features={["camera", "gallery"]}
-                label={secondLabel}
-                onSuccess={handleSecondUpload}
-                setValue={setSecondPage}
-                value={secondPage}
-              />
-            </Fragment>
-          )}
-          <CustomFlexSpacer />
-          <RoundedButton disabled={buttonDisabled} onPress={handleContinue} text={IDENTITY_CONFIRMATION.BUTTON_CONTINUE} />
-          <CustomSpacer space={sh56} />
-        </View>
+        {page === 0 ? (
+          <View style={{ ...flexChild, ...px(sw24) }}>
+            <CustomSpacer space={sh32} />
+            <LabeledTitle
+              label={IDENTITY_CONFIRMATION.HEADING}
+              labelStyle={fs24BoldBlack2}
+              spaceToLabel={sh8}
+              title={title}
+              titleStyle={fs16RegBlack2}
+            />
+            <CustomSpacer space={sh40} />
+            <UploadWithModal
+              features={["camera", "gallery"]}
+              label={firstLabel}
+              onSuccess={handleFirstUpload}
+              setValue={setFrontPage}
+              value={frontPage}
+            />
+            {idType === "Passport" ? null : (
+              <Fragment>
+                <CustomSpacer space={sh8} />
+                <UploadWithModal
+                  features={["camera", "gallery"]}
+                  label={secondLabel}
+                  onSuccess={handleSecondUpload}
+                  setValue={setSecondPage}
+                  value={secondPage}
+                />
+              </Fragment>
+            )}
+            <CustomFlexSpacer />
+            <RoundedButton disabled={buttonDisabled} onPress={handleContinue} text={IDENTITY_CONFIRMATION.BUTTON_CONTINUE} />
+            <CustomSpacer space={sh56} />
+          </View>
+        ) : (
+          <IDVerification isPassport={SAMPLE_CLIENT.isPassport} handleNextStep={handleNextStep} />
+        )}
       </ScrollView>
     </Fragment>
   );

@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { LayoutChangeEvent, LayoutRectangle, TextStyle, View, ViewStyle } from "react-native";
 import { Dropdown, DropDownData, DropDownProps } from "react-native-material-dropdown";
 
+import { CustomSpacer } from "..";
 import { Language } from "../../constants";
 import {
   colorBlack,
@@ -29,6 +30,7 @@ export interface CustomDropdownProps {
   labelStyle?: TextStyle;
   placeholder?: string;
   propsExtractor?: (item: DropDownData, index: number) => Partial<DropDownProps>;
+  spaceToTop?: number;
   value: string;
 }
 
@@ -40,6 +42,7 @@ export const CustomDropdown: FunctionComponent<CustomDropdownProps> = ({
   labelStyle,
   placeholder,
   propsExtractor,
+  spaceToTop,
   value,
 }: CustomDropdownProps) => {
   const [dropdownLayout, setDropdownLayout] = useState<LayoutRectangle | undefined>(undefined);
@@ -77,6 +80,7 @@ export const CustomDropdown: FunctionComponent<CustomDropdownProps> = ({
 
   return (
     <View style={{ width: sw360 }}>
+      {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       <Dropdown
         animationDuration={0}
         data={data}

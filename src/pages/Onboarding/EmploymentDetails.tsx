@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 
-import { ContentPage, CustomDropdown, CustomSpacer, CustomTextInput, TextInputArea, TextSpaceArea } from "../../components";
+import { ContentPage, CustomDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { DICTIONARY_BUSINESS_NATURE } from "../../data/dictionary/business-nature";
 import { DICTIONARY_OCCUPATION } from "../../data/dictionary/occupation";
-import { px, sh24, sh32, sw16, sw24 } from "../../styles";
+import { px, sh24, sh32, sw24 } from "../../styles";
 import { AlertDialog } from "../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -62,8 +62,12 @@ export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) =>
         />
         <CustomSpacer space={sh32} />
         <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME} onChangeText={setInputEmployerName} value={inputEmployerName} />
-        <TextSpaceArea spaceToTop={sh32} style={px(sw16)} text={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS} />
-        <TextInputArea onChangeText={setInputAddress} value={inputAddress} />
+        <TextInputArea
+          label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS}
+          onChangeText={setInputAddress}
+          spaceToTop={sh32}
+          value={inputAddress}
+        />
         <CustomSpacer space={sh32} />
         <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_POST_CODE} onChangeText={setInputPostCode} value={inputPostCode} />
       </View>

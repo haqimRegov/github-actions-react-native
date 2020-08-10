@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, RoundedButton } from "../../components";
 import { SideMenuV2 } from "../../components/Nav/SideMenuV2";
-import { alignSelfCenter, flexRow, fullHW, sw200 } from "../../styles";
+import { alignSelfCenter, centerHV, flexCol, flexRow, fullHW, sw20, sw256 } from "../../styles";
 import { AddClient } from "./AddClient";
 
 interface DashboardPageProps {
@@ -17,12 +17,21 @@ export const DashboardPage = ({ navigation }: DashboardPageProps) => {
   const handleAddClient = () => {
     setAddClient(true);
   };
+
+  const handleOnboarding = () => {
+    navigation.navigate("Onboarding");
+  };
+
   return (
     <Fragment>
       <View style={{ ...flexRow, ...fullHW }}>
         <SideMenuV2 />
-        <CustomSpacer isHorizontal={true} space={sw200} />
-        <RoundedButton onPress={handleAddClient} text="Add Client" buttonStyle={alignSelfCenter} />
+        <CustomSpacer isHorizontal={true} space={sw256} />
+        <View style={{ ...flexCol, ...centerHV }}>
+          <RoundedButton onPress={handleAddClient} text="Add Client" buttonStyle={alignSelfCenter} />
+          <CustomSpacer space={sw20} />
+          <RoundedButton onPress={handleOnboarding} text="Products" buttonStyle={alignSelfCenter} />
+        </View>
       </View>
       <AddClient navigation={navigation} setVisible={setAddClient} visible={addClient} />
     </Fragment>

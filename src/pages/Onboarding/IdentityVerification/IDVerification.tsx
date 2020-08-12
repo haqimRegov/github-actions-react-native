@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 
-import { ContentPage, CustomDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../components";
-import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION, DICTIONARY_STATES } from "../../data/dictionary";
-import { SAMPLE_CLIENT } from "../../mocks";
-import { fs12BoldBlack26, fs16BoldBlack26, px, sh32, sh52, sw24 } from "../../styles";
-import { AlertDialog } from "../../utils";
+import { ContentPage, CustomDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../../components";
+import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION, DICTIONARY_STATES } from "../../../data/dictionary";
+import { SAMPLE_CLIENT } from "../../../mocks";
+import { fs12BoldBlack26, fs16BoldBlack26, px, sh32, sh52, sw24 } from "../../../styles";
+import { AlertDialog } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
 

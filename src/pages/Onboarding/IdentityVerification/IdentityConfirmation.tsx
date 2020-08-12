@@ -5,7 +5,7 @@ import { CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, UploadWith
 import { Language } from "../../../constants";
 import { SAMPLE_CLIENT } from "../../../mocks";
 import { flexChild, flexGrow, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh40, sh56, sh8, sw24 } from "../../../styles";
-import { IDVerification } from "../IDVerification";
+import { IDVerification } from "./IDVerification";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 

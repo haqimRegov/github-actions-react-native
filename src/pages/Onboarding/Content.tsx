@@ -4,10 +4,10 @@ import { ONBOARDING_ROUTES } from "../../constants";
 import { Acknowledgement } from "./Acknowledgement";
 import { Declaration } from "./Declaration";
 import { EmploymentDetails } from "./EmploymentDetails";
+import { IdentityConfirmation } from "./IdentityVerification/IdentityConfirmation";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
-import { IdentityConfirmation } from "./Products/IdentityConfirmation";
 import { PRSDetails } from "./PRSDetails";
 import { QuestionnaireContent } from "./Questionnaire";
 

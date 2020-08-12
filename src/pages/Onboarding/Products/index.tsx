@@ -5,8 +5,8 @@ import { BottomFixedDetails, SafeAreaPage } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { SAMPLE_PRODUCTS } from "../../../mocks";
 import { flexChild, flexCol } from "../../../styles";
+import { IdentityConfirmation } from "../IdentityVerification/IdentityConfirmation";
 import { ProductConfirmation } from "./Confirmation";
-import { IdentityConfirmation } from "./IdentityConfirmation";
 import { ProductList } from "./ProductList";
 
 const { PRODUCT_CONFIRMATION } = Language.PAGE;

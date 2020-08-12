@@ -2,7 +2,6 @@ import React, { FunctionComponent, useState } from "react";
 import { LayoutChangeEvent, LayoutRectangle, TextStyle, View, ViewStyle } from "react-native";
 import { Dropdown, DropDownData, DropDownProps } from "react-native-material-dropdown";
 
-import { CustomSpacer } from "..";
 import { Language } from "../../constants";
 import {
   colorBlack,
@@ -20,6 +19,7 @@ import {
   sw360,
 } from "../../styles";
 import { CustomTextInput } from "../Input";
+import { CustomSpacer } from "../Views";
 
 const { DROPDOWN } = Language.PAGE;
 export interface CustomDropdownProps {

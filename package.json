@@ -55,7 +55,11 @@
     "react-native-signature-capture": "0.4.10",
     "react-native-splash-screen": "3.2.0",
     "react-native-vector-icons": "6.6.0",
-    "react-native-view-pdf": "0.11.0"
+    "react-native-view-pdf": "0.11.0",
+    "react-redux": "7.2.1",
+    "redux": "4.0.5",
+    "redux-devtools-extension": "2.13.8",
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.6.2",
@@ -66,7 +70,11 @@
     "@types/react-native-material-dropdown": "0.11.4",
     "@types/react-native-signature-capture": "0.4.1",
     "@types/react-native-vector-icons": "6.4.5",
+    "@types/react-redux": "7.1.9",
     "@types/react-test-renderer": "16.9.2",
+    "@types/redux": "3.6.0",
+    "@types/redux-devtools-extension": "2.13.2",
+    "@types/redux-thunk": "2.1.0",
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
     "babel-jest": "24.9.0",

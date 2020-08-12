@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
 
-import { OnboardingStepsV2 } from "../../components";
+import { OnboardingSteps } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { RootState, updateFinishedSteps } from "../../store";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
@@ -17,7 +20,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
   {
     content: [
-      { title: ONBOARDING.TITLE_ID_VERIFICATION, route: ONBOARDING_ROUTES.UploadDocument },
+      { title: ONBOARDING.TITLE_ID_VERIFICATION, route: ONBOARDING_ROUTES.IdentityVerification },
       { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
       { title: ONBOARDING.TITLE_PRS, route: ONBOARDING_ROUTES.PRSDetails },
       { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
@@ -35,16 +38,16 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
 ];
 
-interface OnboardingProps {
+interface OnboardingProps extends ReduxStoreProps {
   navigation: IStackNavigationProp;
 }
 
-export const OnboardingPage = ({ navigation }: OnboardingProps) => {
-  const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(undefined);
-  const [activeSection, setActiveSection] = useState(0);
-  const [finishedStep, setFinishedStep] = useState<number[]>([]);
+const OnboardingPageComponent = (props: OnboardingProps) => {
+  const { finishedSteps, navigation } = props;
 
-  const initialContent = activeContent !== undefined ? activeContent.route || "" : ONBOARDING_ROUTES.Questionnaire;
+  const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);
+  const [activeSection, setActiveSection] = useState<number>(0);
+  const activeRoute: TypeOnboardingRoute = activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.Questionnaire;
 
   const handleContentChange = (item: IContentItem | IOnboarding) => {
     setActiveContent(item);
@@ -57,18 +60,43 @@ export const OnboardingPage = ({ navigation }: OnboardingProps) => {
   }, []);
 
   return (
-    <OnboardingStepsV2
+    <OnboardingSteps
       activeContent={activeContent}
       activeSection={activeSection}
+      finishedSteps={finishedSteps}
       handleContentChange={handleContentChange}
       RenderContent={({ handleNextStep }) => {
-        return <OnboardingContent route={initialContent} handleNextStep={handleNextStep} navigation={navigation} />;
+        return (
+          <OnboardingContent
+            finishedSteps={finishedSteps}
+            handleNextStep={handleNextStep}
+            navigation={navigation}
+            route={activeRoute}
+            setFinishedSteps={props.updateFinishedSteps}
+          />
+        );
       }}
       setActiveContent={setActiveContent}
       setActiveSection={setActiveSection}
-      setFinishedStep={setFinishedStep}
+      setFinishedStep={props.updateFinishedSteps}
       steps={ONBOARDING_DATA}
-      visitedSections={finishedStep}
     />
   );
 };
+
+const mapStateToProps = (state: RootState) => ({
+  finishedSteps: state.onboardingSteps.finishedStep,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+    {
+      updateFinishedSteps,
+    },
+    dispatch,
+  );
+};
+
+type ReduxStoreProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
+
+export const OnboardingPage = connect(mapStateToProps, mapDispatchToProps)(OnboardingPageComponent);

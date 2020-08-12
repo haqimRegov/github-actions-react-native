@@ -1,5 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
 
 import {
   ConfirmationModal,
@@ -12,40 +14,42 @@ import {
 } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
-import { SAMPLE_CLIENT } from "../../mocks";
+import { loadClient, resetClientDetails, RootState } from "../../store";
 import { fs16BoldBlack1, fs24BoldBlack2, fs40BoldBlack2, sh16, sh24, sh32, sh8, sw218, sw56 } from "../../styles";
 
-interface AddClientProps {
+const { ADD_CLIENT } = Language.PAGE;
+
+interface AddClientProps extends ReduxStoreProps {
   navigation: StackNavigationProp<RootNavigatorType>;
   setVisible: (visibility: boolean) => void;
   visible: boolean;
 }
 
-const { ADD_CLIENT } = Language.PAGE;
+const AddClientComponent = (props: AddClientProps) => {
+  const { navigation, setVisible, visible } = props;
+  const clientDetails = props.client;
 
-export const AddClient = ({ navigation, setVisible, visible }: AddClientProps) => {
   const [radioIDType, setRadioIDType] = useState<string>(DICTIONARY_ID_TYPE[0]);
   const [inputOtherIDType, setInputOtherIDType] = useState<string>(DICTIONARY_ID_OTHER_TYPE[0].value);
   const [inputClientName, setInputClientName] = useState<string>("");
   const [inputClientID, setInputClientID] = useState<string>("");
   const [inputClientDOB, setInputClientDOB] = useState<string>("");
-  const [clientDetails, setClientDetails] = useState<IClientIDDetails | undefined>(undefined);
 
   const handleCancel = () => {
-    return clientDetails !== undefined ? setClientDetails(undefined) : setVisible(false);
-  };
-
-  const handleGetStarted = () => {
-    // TODO integration
-    setClientDetails(SAMPLE_CLIENT);
+    return clientDetails !== undefined ? props.resetClientDetails() : setVisible(false);
   };
 
   const handleContinue = () => {
+    const selectedIDType = radioIDType === "Other" ? inputOtherIDType : radioIDType;
+    const IDType = selectedIDType as TypeClientID;
+    props.loadClient({ id: inputClientID, idType: IDType, name: inputClientName });
     if (clientDetails !== undefined || radioIDType !== "NRIC") {
       setVisible(false);
+
       return navigation.navigate("Onboarding");
     }
-    return handleGetStarted();
+
+    return false;
   };
 
   const ADD_CLIENT_HEADING = clientDetails !== undefined ? ADD_CLIENT.DETAILS_TITLE : ADD_CLIENT.HEADING;
@@ -54,13 +58,24 @@ export const AddClient = ({ navigation, setVisible, visible }: AddClientProps) =
   const LABEL_NAME = `${ADD_CLIENT.LABEL_NAME} ${LABEL_ID_DYNAMIC}`;
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
   const spaceToContent = clientDetails === undefined ? sh8 : sh32;
-
   const titleStyle = clientDetails !== undefined ? {} : fs40BoldBlack2;
+
+  const continueDisabled =
+    radioIDType === "NRIC"
+      ? inputClientName === "" || inputClientID === ""
+      : inputClientName === "" || inputClientID === "" || inputClientDOB === "";
+
+  useEffect(() => {
+    setInputClientName("");
+    setInputClientID("");
+    setInputClientDOB("");
+  }, [radioIDType]);
+
   return (
     <ConfirmationModal
       cancelButtonStyle={{ width: sw218 }}
       continueButtonStyle={{ width: sw218 }}
-      continueDisabled={inputClientName === "" || inputClientID === "" || inputClientDOB === ""}
+      continueDisabled={continueDisabled}
       handleCancel={handleCancel}
       handleContinue={handleContinue}
       labelContinue={BUTTON_LABEL}
@@ -91,16 +106,17 @@ export const AddClient = ({ navigation, setVisible, visible }: AddClientProps) =
                 />
               </Fragment>
             )}
-
             <CustomTextInput label={LABEL_NAME} onChangeText={setInputClientName} spaceToTop={sh32} value={inputClientName} />
             <CustomTextInput label={LABEL_ID} onChangeText={setInputClientID} spaceToTop={sh32} value={inputClientID} />
-            <CustomTextInput
-              label={ADD_CLIENT.LABEL_DOB}
-              onChangeText={setInputClientDOB}
-              rightIcon="calendar"
-              spaceToTop={sh32}
-              value={inputClientDOB}
-            />
+            {radioIDType === "NRIC" ? null : (
+              <CustomTextInput
+                label={ADD_CLIENT.LABEL_DOB}
+                onChangeText={setInputClientDOB}
+                rightIcon="calendar"
+                spaceToTop={sh32}
+                value={inputClientDOB}
+              />
+            )}
           </Fragment>
         ) : (
           <Fragment>
@@ -108,27 +124,27 @@ export const AddClient = ({ navigation, setVisible, visible }: AddClientProps) =
               label={ADD_CLIENT.DETAILS_LABEL_NAME}
               spaceToLabel={sh8}
               spaceToBottom={sh24}
-              title={clientDetails.name}
+              title={clientDetails.name!}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={radioIDType}
               spaceToLabel={sh8}
               spaceToBottom={sh24}
-              title={clientDetails.id}
+              title={clientDetails.id!}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_GENDER}
               spaceToLabel={sh8}
               spaceToBottom={sh24}
-              title={clientDetails.gender}
+              title={clientDetails.gender!}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_DOB}
               spaceToLabel={sh8}
-              title={clientDetails.dateOfBirth}
+              title={clientDetails.dateOfBirth!}
               titleStyle={fs16BoldBlack1}
             />
           </Fragment>
@@ -137,3 +153,21 @@ export const AddClient = ({ navigation, setVisible, visible }: AddClientProps) =
     </ConfirmationModal>
   );
 };
+
+const mapStateToProps = (state: RootState) => ({
+  client: state.client.details,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+    {
+      loadClient,
+      resetClientDetails,
+    },
+    dispatch,
+  );
+};
+
+type ReduxStoreProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
+
+export const AddClient = connect(mapStateToProps, mapDispatchToProps)(AddClientComponent);

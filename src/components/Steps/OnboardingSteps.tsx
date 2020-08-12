@@ -1,57 +1,76 @@
 import React from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
 import {
-  centerVertical,
   colorTransparent,
   colorWhite,
-  flexChild,
   flexRow,
   fs12BoldBlack2,
-  fs16RegBlack2,
-  fs24RegBlack2,
-  px,
-  py,
-  sh24,
-  sh49,
-  sh8,
-  sw16,
+  fs12RegBlack2,
+  fs14RegBlack2,
+  fullHW,
+  sh16,
+  sh40,
+  sw112,
+  sw120,
+  sw200,
   sw40,
+  sw8,
 } from "../../styles";
-import { SideMenu } from "../Nav";
+import { SideMenuV2 } from "../Nav";
 import { CustomSpacer } from "../Views";
 import { Step } from "./Step";
 
 export const OnboardingSteps = ({
   activeContent,
   activeSection,
-  collapse,
+  disableNextSteps,
   handleContentChange,
-  onPressBackdrop,
-  onPressExpand,
-  overlay,
   RenderContent,
   setActiveContent,
   setActiveSection,
-  setFinishedStep,
   steps,
-  visitedSections,
+  finishedSteps,
 }: OnboardingStepsProps) => {
+  const setSections = (sections: number[]) => {
+    if (sections.length > 0) {
+      const sectionIndex = sections[0];
+      const selectedSection = steps[sectionIndex];
+      setActiveSection(sectionIndex);
+      if (selectedSection.route !== undefined) {
+        handleContentChange(steps[sectionIndex]);
+      }
+    }
+  };
+
   const accordionHeader = (step: IOnboarding, stepIndex: number, isActive: boolean) => {
-    const visited = visitedSections.some((visitedStep) => visitedStep === stepIndex);
+    const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.route) : false;
     const currentStep = (stepIndex + 1).toString();
 
-    const stepStyle: ViewStyle = collapse === true && isActive === true ? { height: sh49 } : {};
-    const headerContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh8), backgroundColor: colorWhite._1, ...stepStyle };
     const labelOpacity = isActive || !visited ? { opacity: 1 } : { opacity: 0.5 };
-    const textStyle: TextStyle = isActive ? { ...fs24RegBlack2, ...labelOpacity } : { ...fs16RegBlack2, ...labelOpacity };
+    const textStyle: TextStyle = isActive
+      ? { ...fs14RegBlack2, width: sw120, ...labelOpacity }
+      : { ...fs14RegBlack2, width: sw120, ...labelOpacity };
+
+    const handleChange = () => {
+      if (finishedSteps!.indexOf(step.route!) !== -1) {
+        setSections([stepIndex]);
+      }
+    };
+
+    const pointerEvents = disableNextSteps === true ? undefined : "none";
 
     return (
-      <View style={headerContainer}>
-        <Step active={isActive} step={currentStep} visited={visited} />
-        <CustomSpacer isHorizontal={true} space={sw16} />
-        {collapse === true ? null : <Text style={textStyle}>{step.label}</Text>}
+      <View>
+        <CustomSpacer space={sh40} />
+        <TouchableWithoutFeedback onPress={handleChange}>
+          <View pointerEvents={pointerEvents} style={flexRow}>
+            <Step active={isActive} step={currentStep} visited={visited} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <Text style={textStyle}>{step.label}</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
@@ -63,35 +82,27 @@ export const OnboardingSteps = ({
     }
 
     return (
-      <View style={activeContainer}>
-        {step.content.map((item: IContentItem, index: number) => {
-          const handleNavigateToContent = () => {
-            handleContentChange(item);
-          };
-          const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
-          const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : fs16RegBlack2;
-          return (
-            <View key={index} style={{ ...py(sh8), ...px(sw40) }}>
-              <Text onPress={handleNavigateToContent} key={index} style={textStyle}>
-                {item.title}
-              </Text>
-            </View>
-          );
-        })}
-        <CustomSpacer space={sh24} />
+      <View style={flexRow}>
+        <CustomSpacer isHorizontal={true} space={sw40} />
+        <View style={activeContainer}>
+          {step.content.map((item: IContentItem, index: number) => {
+            const handleNavigateToContent = () => {
+              handleContentChange(item);
+            };
+            const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
+            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : fs12RegBlack2;
+            return (
+              <View key={index} style={{ width: sw112 }}>
+                <CustomSpacer space={sh16} />
+                <Text onPress={handleNavigateToContent} key={index} style={textStyle}>
+                  {item.title}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
       </View>
     );
-  };
-
-  const setSections = (sections: number[]) => {
-    if (sections.length > 0) {
-      const sectionIndex = sections[0];
-      const selectedSection = steps[sectionIndex];
-      setActiveSection(sectionIndex);
-      if (selectedSection.route !== undefined) {
-        handleContentChange(steps[sectionIndex]);
-      }
-    }
   };
 
   const handleNextStep = (nextRoute: string) => {
@@ -125,27 +136,25 @@ export const OnboardingSteps = ({
 
     setActiveSection(newIndex);
     setActiveContent(newRoute);
-
-    //  TODO handle finished steps
-    setFinishedStep([]);
   };
 
+  const touchablePress = disableNextSteps === true ? { onPress: undefined } : {};
+
   return (
-    <View style={flexRow}>
-      <SideMenu collapse={collapse} onPressBackdrop={onPressBackdrop} onPressExpand={onPressExpand} overlay={overlay}>
+    <View style={{ ...flexRow, ...fullHW }}>
+      <SideMenuV2>
         <Accordion
           activeSections={[activeSection]}
-          duration={400}
+          duration={300}
           onChange={setSections}
           renderContent={accordionContent}
           renderHeader={accordionHeader}
           sections={steps}
-          touchableProps={{ underlayColor: colorTransparent }}
+          touchableProps={{ underlayColor: colorTransparent, ...touchablePress }}
         />
-      </SideMenu>
-      <View style={flexChild}>
-        <RenderContent handleNextStep={handleNextStep} />
-      </View>
+      </SideMenuV2>
+      <CustomSpacer isHorizontal={true} space={sw200} />
+      <RenderContent handleNextStep={handleNextStep} />
     </View>
   );
 };

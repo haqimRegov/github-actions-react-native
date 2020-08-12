@@ -13,6 +13,7 @@
     "RNFS",
     "Touchables",
     "animatable",
+    "devtools",
     "downlevel",
     "esnext",
     "gradlew",

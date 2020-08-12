@@ -123,7 +123,6 @@ export const UploadDocument: FunctionComponent<UploadProps> = ({
         return setError(UPLOAD.LABEL_FILE_SIZE_EXCEEDED);
       }
       setError("");
-      console.log(selectedImage);
       return onSuccess(selectedImage);
     }
     return false;

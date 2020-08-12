@@ -1,5 +1,5 @@
 import { Slider } from "@miblanchard/react-native-slider";
-import React, { useState } from "react";
+import React from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
@@ -30,24 +30,11 @@ import { CustomSpacer } from "../Views";
 export interface SliderProps {
   disabled?: boolean;
   options: string[];
-  setSelected: (result: string) => void;
+  selected: number;
+  setSelected: (result: number) => void;
 }
 
-export const CustomSlider = ({ disabled, options, setSelected }: SliderProps) => {
-  const [value, setValue] = useState<number>(0);
-
-  const handleChange = (update: number[]) => {
-    const current: number = update[0];
-    const index = Math.round(current);
-    setValue(index);
-    setSelected(options[index]);
-  };
-
-  const handleSeek = (index: number) => {
-    setValue(index);
-    setSelected(options[index]);
-  };
-
+export const CustomSlider = ({ disabled, options, selected, setSelected }: SliderProps) => {
   const sliderContainer: ViewStyle = {
     ...customShadow(colorGray._3, 0, 0, 0.8, sw15),
     ...px(sw24),
@@ -72,12 +59,11 @@ export const CustomSlider = ({ disabled, options, setSelected }: SliderProps) =>
         disabled={disabled}
         maximumTrackTintColor={colorGray._4}
         maximumValue={options.length - 1}
-        minimumTrackTintColor={value === 0 ? colorWhite._1 : colorRed._1}
+        minimumTrackTintColor={selected === 0 ? colorWhite._1 : colorRed._1}
         minimumValue={0}
-        onValueChange={handleChange}
         renderThumbComponent={() => <CustomThumb />}
         trackStyle={{ height: sh6 }}
-        value={value}
+        value={selected}
       />
       <CustomSpacer space={sh8} />
       <View style={flexRowSbSb}>
@@ -88,8 +74,13 @@ export const CustomSlider = ({ disabled, options, setSelected }: SliderProps) =>
           } else if (index === 2) {
             optionStyle = { ...optionStyle, paddingLeft: sw12 };
           }
+
+          const handleSeek = () => {
+            setSelected(index);
+          };
+
           return (
-            <TouchableWithoutFeedback key={index} onPress={() => handleSeek(index)}>
+            <TouchableWithoutFeedback key={index} onPress={handleSeek}>
               <View style={optionStyle}>
                 <Text style={fs12BoldBlack2}>{option}</Text>
               </View>

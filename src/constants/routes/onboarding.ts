@@ -1,11 +1,11 @@
-export const ONBOARDING_ROUTES = {
+export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   Acknowledgement: "Acknowledgement",
   Declaration: "Declaration",
   EmploymentDetails: "EmploymentDetails",
+  IdentityVerification: "IdentityVerification",
   Payment: "Payment",
   PersonalDetails: "PersonalDetails",
   ProductRecommendation: "ProductRecommendation",
-  PRSDetails: "PRS Details",
+  PRSDetails: "PRSDetails",
   Questionnaire: "Questionnaire",
-  UploadDocument: "UploadDocument",
 };

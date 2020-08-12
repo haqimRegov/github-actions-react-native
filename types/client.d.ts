@@ -12,5 +12,16 @@ declare interface IClientIDDetails {
   state: string;
 }
 
-declare type TypeID = "NRIC" | "Passport" | "Army" | "Police";
 declare type TypeIDChoices = "NRIC" | "Passport" | "Other";
+
+declare type TypeClientID = "NRIC" | "Passport" | "Army" | "Police";
+
+declare type IClientDetails = {
+  id?: string;
+  idType?: TypeClientID;
+  name?: string;
+  dateOfBirth?: string;
+  address?: string;
+  gender?: "Male" | "Female";
+  postCode?: string;
+};

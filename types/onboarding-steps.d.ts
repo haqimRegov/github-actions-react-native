@@ -1,42 +1,57 @@
 declare interface IContentItem {
+  route: TypeOnboardingRoute;
   title: string;
-  route: string;
 }
 
 declare interface IOnboarding {
   content?: IContentItem[];
   label: string;
-  route?: string;
+  route?: TypeOnboardingRoute;
 }
 
 declare interface OnboardingContentProps {
-  handleNextStep: (nextRoute: string) => void;
+  finishedSteps: TypeOnboardingRoute[];
+  handleNextStep: (route: string) => void;
+  navigation: IStackNavigationProp;
+  route: string;
+  setFinishedSteps: (route: TypeOnboardingRoute[]) => void;
+}
+declare interface OnboardingStepsContentProps {
+  handleNextStep: (route: string) => void;
 }
 
 declare interface OnboardingStepsProps {
   activeContent?: IContentItem | IOnboarding;
   activeSection: number;
-  collapse?: boolean;
+  disableNextSteps?: boolean;
+  finishedSteps?: TypeOnboardingRoute[];
   handleContentChange: (item: IContentItem | IOnboarding) => void;
-  onPressBackdrop?: () => void;
-  onPressExpand?: () => void;
-  overlay?: boolean;
-  RenderContent: (props: OnboardingContentProps) => JSX.Element;
+  RenderContent: (props: OnboardingStepsContentProps) => JSX.Element;
   setActiveContent: (content: IContentItem | IOnboarding) => void;
   setActiveSection: (section: any) => void;
-  setFinishedStep: (step: number[]) => void;
+  setFinishedStep: (step: TypeOnboardingRoute[]) => void;
   steps: IOnboarding[];
-  visitedSections: number[];
 }
 
-declare interface OnboardingStepsV2Props {
-  activeContent?: IContentItem | IOnboarding;
-  activeSection: number;
-  handleContentChange: (item: IContentItem | IOnboarding) => void;
-  RenderContent: (props: OnboardingContentProps) => JSX.Element;
-  setActiveContent: (content: IContentItem | IOnboarding) => void;
-  setActiveSection: (section: any) => void;
-  setFinishedStep: (step: number[]) => void;
-  steps: IOnboarding[];
-  visitedSections: number[];
+declare type TypeOnboardingRoute =
+  | "Acknowledgement"
+  | "Declaration"
+  | "EmploymentDetails"
+  | "IdentityVerification"
+  | "Payment"
+  | "PersonalDetails"
+  | "ProductRecommendation"
+  | "PRSDetails"
+  | "Questionnaire";
+
+declare interface IOnboardingRoutes {
+  Acknowledgement: TypeOnboardingRoute;
+  Declaration: TypeOnboardingRoute;
+  EmploymentDetails: TypeOnboardingRoute;
+  IdentityVerification: TypeOnboardingRoute;
+  Payment: TypeOnboardingRoute;
+  PersonalDetails: TypeOnboardingRoute;
+  ProductRecommendation: TypeOnboardingRoute;
+  PRSDetails: TypeOnboardingRoute;
+  Questionnaire: TypeOnboardingRoute;
 }

@@ -5,7 +5,7 @@ import { ContentPage, CustomDropdown, CustomSpacer, CustomTextInput, TextInputAr
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION, DICTIONARY_STATES } from "../../../data/dictionary";
 import { SAMPLE_CLIENT } from "../../../mocks";
-import { fs12BoldBlack26, fs16BoldBlack26, px, sh32, sh52, sw24 } from "../../../styles";
+import { fs12BoldBlack26, fs16BoldBlack26, px, sh32, sw24 } from "../../../styles";
 import { AlertDialog } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -50,6 +50,8 @@ export const IDVerification = ({ handleNextStep, isPassport }: IDVerificationPro
     (inputCountry === "" && !isID) ||
     inputState === "";
 
+  const labelId = isID ? ID_VERIFICATION.LABEL_NRIC : ID_VERIFICATION.LABEL_PASSPORT;
+
   return (
     <ContentPage
       continueDisabled={continueDisabled}
@@ -60,14 +62,8 @@ export const IDVerification = ({ handleNextStep, isPassport }: IDVerificationPro
       subheading={ID_VERIFICATION.LABEL_ID_VERIFY}
       subtitle={ID_VERIFICATION.TITLE}>
       <View style={px(sw24)}>
-        <CustomTextInput
-          editable={false}
-          label={isID ? ID_VERIFICATION.LABEL_NRIC : ID_VERIFICATION.LABEL_PASSPORT}
-          labelStyle={fs12BoldBlack26}
-          spaceToTop={sh32}
-          style={fs16BoldBlack26}
-          value={SAMPLE_CLIENT.id}
-        />
+        <CustomSpacer space={sh32} />
+        <CustomTextInput editable={false} label={labelId} labelStyle={fs12BoldBlack26} style={fs16BoldBlack26} value={SAMPLE_CLIENT.id} />
         <CustomTextInput
           editable={false}
           label={ID_VERIFICATION.LABEL_DOB}
@@ -85,28 +81,15 @@ export const IDVerification = ({ handleNextStep, isPassport }: IDVerificationPro
           spaceToTop={sh32}
           value={inputSalutation}
         />
-        <CustomDropdown
-          data={DICTIONARY_GENDER}
-          handleChange={setInputGender}
-          label={ID_VERIFICATION.LABEL_GENDER}
-          spaceToTop={sh32}
-          value={inputGender}
-        />
-        <TextInputArea
-          label={ID_VERIFICATION.LABEL_PERMANENT}
-          onChangeText={setInputMailingAddress}
-          spaceToTop={sh32}
-          value={inputMailingAddress}
-        />
+        <CustomSpacer space={sh32} />
+        <CustomDropdown data={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
+        <CustomSpacer space={sh32} />
+        <TextInputArea label={ID_VERIFICATION.LABEL_PERMANENT} onChangeText={setInputMailingAddress} value={inputMailingAddress} />
         <CustomTextInput label={ID_VERIFICATION.LABEL_POSTCODE} onChangeText={setInputPostCode} spaceToTop={sh32} value={inputPostCode} />
+        <TextInputArea label={ID_VERIFICATION.LABEL_PERMANENT} onChangeText={setInputMailingAddress} value={inputMailingAddress} />
         <CustomTextInput label={ID_VERIFICATION.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
-        <CustomDropdown
-          data={DICTIONARY_STATES}
-          handleChange={setInputState}
-          label={ID_VERIFICATION.LABEL_STATE}
-          spaceToTop={sh32}
-          value={inputState}
-        />
+        <CustomSpacer space={sh32} />
+        <CustomDropdown data={DICTIONARY_STATES} handleChange={setInputState} label={ID_VERIFICATION.LABEL_STATE} value={inputState} />
         {isID ? null : (
           <CustomDropdown
             data={DICTIONARY_COUNTRIES}
@@ -116,7 +99,6 @@ export const IDVerification = ({ handleNextStep, isPassport }: IDVerificationPro
             value={inputCountry}
           />
         )}
-        <CustomSpacer space={sh52} />
       </View>
     </ContentPage>
   );

@@ -62,12 +62,8 @@ export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) =>
         />
         <CustomSpacer space={sh32} />
         <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME} onChangeText={setInputEmployerName} value={inputEmployerName} />
-        <TextInputArea
-          label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS}
-          onChangeText={setInputAddress}
-          spaceToTop={sh32}
-          value={inputAddress}
-        />
+        <CustomSpacer space={sh32} />
+        <TextInputArea label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS} onChangeText={setInputAddress} value={inputAddress} />
         <CustomSpacer space={sh32} />
         <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_POST_CODE} onChangeText={setInputPostCode} value={inputPostCode} />
       </View>

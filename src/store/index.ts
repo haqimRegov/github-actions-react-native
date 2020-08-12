@@ -1,6 +1,6 @@
 export * from "./Client";
-export * from "./Onboarding";
 export * from "./OnboardingSteps";
+export * from "./RiskAssessment";
 
 export * from "./actionCreator";
 export * from "./rootReducer";

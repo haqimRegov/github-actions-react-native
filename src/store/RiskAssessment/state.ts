@@ -1,10 +1,10 @@
-export type OnboardingState = {
+export type RiskAssessmentState = {
   loading: boolean;
   questionnaire?: IRiskAssessmentQuestions;
-  riskAssessment?: IRiskScore;
+  riskScore?: IRiskScore;
 };
 
-export const onboardingInitialState: OnboardingState = {
+export const riskAssessmentInitialState: RiskAssessmentState = {
   loading: false,
   questionnaire: {
     questionOne: 0,
@@ -14,5 +14,5 @@ export const onboardingInitialState: OnboardingState = {
     questionFive: 0,
     questionSix: 0,
   },
-  riskAssessment: undefined,
+  riskScore: undefined,
 };

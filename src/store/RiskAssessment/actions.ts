@@ -5,11 +5,19 @@ import { SAMPLE_RISK_ASSESSMENT } from "../../mocks";
 import { typedAction } from "../actionCreator";
 
 export const addAssessmentQuestions = (answers: IRiskAssessmentQuestions) => {
-  return typedAction("onboarding/ADD_QUESTIONS", answers);
+  return typedAction("riskAssessment/ADD_ANSWERS", answers);
 };
 
-const addRiskAssessment = (riskAssessment: IRiskScore) => {
-  return typedAction("onboarding/ADD_ASSESSMENT", riskAssessment);
+export const addRiskScore = (riskScore: IRiskScore) => {
+  return typedAction("riskAssessment/ADD_SCORE", riskScore);
+};
+
+export const resetQuestionnaire = () => {
+  return typedAction("riskAssessment/RESET_QUESTIONNAIRE");
+};
+
+export const resetRiskAssessment = () => {
+  return typedAction("riskAssessment/RESET_SCORE");
 };
 
 // Action creator returning a thunk!
@@ -23,20 +31,12 @@ export const getRiskAssessment = (questionnaire: IRiskAssessmentQuestions) => {
       }
       const results = SAMPLE_RISK_ASSESSMENT;
       if (results) {
-        dispatch(addRiskAssessment(results));
+        dispatch(addRiskScore(results));
       }
     }, 50);
   };
 };
 
-export const resetRiskAssessment = () => {
-  return typedAction("client/RESET_ASSESSMENT");
-};
-
-export const resetQuestionnaire = () => {
-  return typedAction("client/RESET_QUESTIONNAIRE");
-};
-
-export type OnboardingAction = ReturnType<
-  typeof addAssessmentQuestions | typeof addRiskAssessment | typeof resetRiskAssessment | typeof resetQuestionnaire
+export type RiskAssessmentAction = ReturnType<
+  typeof addAssessmentQuestions | typeof addRiskScore | typeof resetQuestionnaire | typeof resetRiskAssessment
 >;

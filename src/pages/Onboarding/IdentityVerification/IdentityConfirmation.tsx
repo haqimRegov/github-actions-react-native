@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, UploadWithModal } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, SafeAreaPage, UploadWithModal } from "../../../components";
 import { Language } from "../../../constants";
 import { SAMPLE_CLIENT } from "../../../mocks";
-import { flexChild, flexGrow, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh40, sh56, sh8, sw24 } from "../../../styles";
+import { flexChild, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh40, sh56, sh8, sw24 } from "../../../styles";
 import { IDVerification } from "./IDVerification";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
@@ -59,8 +59,8 @@ export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> 
 
   return (
     <Fragment>
-      <ScrollView bounces={false} contentContainerStyle={flexGrow}>
-        {page === 0 ? (
+      {page === 0 ? (
+        <SafeAreaPage>
           <View style={{ ...flexChild, ...px(sw24) }}>
             <CustomSpacer space={sh32} />
             <LabeledTitle
@@ -94,10 +94,10 @@ export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> 
             <RoundedButton disabled={buttonDisabled} onPress={handleContinue} text={IDENTITY_CONFIRMATION.BUTTON_CONTINUE} />
             <CustomSpacer space={sh56} />
           </View>
-        ) : (
-          <IDVerification isPassport={SAMPLE_CLIENT.isPassport} handleNextStep={handleNextStep} />
-        )}
-      </ScrollView>
+        </SafeAreaPage>
+      ) : (
+        <IDVerification isPassport={SAMPLE_CLIENT.isPassport} handleNextStep={handleNextStep} />
+      )}
     </Fragment>
   );
 };

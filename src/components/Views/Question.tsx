@@ -8,8 +8,8 @@ import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 
 export interface QuestionContentProps {
   options?: string[];
-  selected: string;
-  setSelected: (name: string) => void;
+  selected: number;
+  setSelected: (name: number) => void;
 }
 export interface QuestionProps extends QuestionContentProps {
   label: string;
@@ -20,6 +20,12 @@ export interface QuestionProps extends QuestionContentProps {
 }
 
 export const Question = ({ label, options, RenderContent, right, selected, setSelected, spaceToContent, title }: QuestionProps) => {
+  const handleSelect = (answer: string) => {
+    if (options !== undefined) {
+      setSelected(options?.indexOf(answer));
+    }
+  };
+
   return (
     <Fragment>
       <LabeledTitle label={label} labelStyle={fs10BoldBlack2} title={title} titleStyle={{ ...fs16SemiBoldBlack2, maxWidth: sw608 }} />
@@ -29,7 +35,7 @@ export const Question = ({ label, options, RenderContent, right, selected, setSe
       ) : (
         <View style={flexRow}>
           {options !== undefined ? (
-            <RadioButtonGroup direction="column" labels={options} selected={selected} setSelected={setSelected} />
+            <RadioButtonGroup direction="column" labels={options} selected={options[selected]} setSelected={handleSelect} />
           ) : null}
           <CustomFlexSpacer />
           {right !== undefined ? right : null}

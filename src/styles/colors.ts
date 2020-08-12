@@ -6,6 +6,7 @@ export const colorBlack = {
   _2: "#333333",
   _2_1: "rgba(51,51,51,0.1)",
   _2_5: "rgba(51,51,51,0.5)",
+  _2_6: "rgba(51,51,51,0.6)",
   // old color for reference
   // _1: "#000000",
   // _2: "#4d4d4d",

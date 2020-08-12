@@ -2,9 +2,9 @@ import React from "react";
 
 import { ONBOARDING_ROUTES } from "../../constants";
 import { Acknowledgement } from "./Acknowledgement";
-import { Address } from "./Address";
 import { Declaration } from "./Declaration";
 import { EmploymentDetails } from "./EmploymentDetails";
+import { IdentityConfirmation } from "./IdentityVerification/IdentityConfirmation";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
@@ -23,8 +23,8 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
       return <QuestionnaireContent {...props} />;
     case ONBOARDING_ROUTES.ProductRecommendation:
       return <Products {...props} />;
-    case ONBOARDING_ROUTES.Address:
-      return <Address {...props} />;
+    case ONBOARDING_ROUTES.UploadDocument:
+      return <IdentityConfirmation {...props} />;
     case ONBOARDING_ROUTES.PersonalDetails:
       return <PersonalDetails {...props} />;
     case ONBOARDING_ROUTES.PRSDetails:

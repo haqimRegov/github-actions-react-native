@@ -5,8 +5,8 @@ import { BottomFixedDetails, SafeAreaPage } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { SAMPLE_PRODUCTS } from "../../../mocks";
 import { flexChild, flexCol } from "../../../styles";
+import { IdentityConfirmation } from "../IdentityVerification/IdentityConfirmation";
 import { ProductConfirmation } from "./Confirmation";
-import { IdentityConfirmation } from "./IdentityConfirmation";
 import { ProductList } from "./ProductList";
 
 const { PRODUCT_CONFIRMATION } = Language.PAGE;
@@ -33,17 +33,12 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
     setPage(1);
   };
 
-  const handleConfirmFunds = () => {
-    setPage(2);
-    setFixedBottomShow(false);
-  };
-
   const handleCancel = () => {
     return page === 1 ? handleGoBack() : setSelectedProduct([]);
   };
 
   const handleConfirmIdentity = () => {
-    handleNextStep(ONBOARDING_ROUTES.PersonalDetails);
+    handleNextStep(ONBOARDING_ROUTES.UploadDocument);
   };
 
   let screen = {
@@ -63,7 +58,7 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
           setSelectedProduct={setSelectedProduct}
         />
       ),
-      onPressSubmit: handleConfirmFunds,
+      onPressSubmit: handleConfirmIdentity,
       labelSubmit: PRODUCT_CONFIRMATION.BUTTON_CONFIRM,
     };
   }

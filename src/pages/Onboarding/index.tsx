@@ -17,7 +17,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
   {
     content: [
-      { title: ONBOARDING.TITLE_PROOF_OF_ADDRESS, route: ONBOARDING_ROUTES.Address },
+      { title: ONBOARDING.TITLE_ID_VERIFICATION, route: ONBOARDING_ROUTES.UploadDocument },
       { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
       { title: ONBOARDING.TITLE_PRS, route: ONBOARDING_ROUTES.PRSDetails },
       { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },

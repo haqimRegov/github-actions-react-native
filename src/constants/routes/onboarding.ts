@@ -1,11 +1,11 @@
 export const ONBOARDING_ROUTES = {
-  Address: "Address",
   Acknowledgement: "Acknowledgement",
-  PersonalDetails: "PersonalDetails",
   Declaration: "Declaration",
   EmploymentDetails: "EmploymentDetails",
   Payment: "Payment",
+  PersonalDetails: "PersonalDetails",
   ProductRecommendation: "ProductRecommendation",
   PRSDetails: "PRS Details",
   Questionnaire: "Questionnaire",
+  UploadDocument: "UploadDocument",
 };

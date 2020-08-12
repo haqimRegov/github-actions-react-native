@@ -11,19 +11,13 @@ import { Products } from "./Products";
 import { PRSDetails } from "./PRSDetails";
 import { QuestionnaireContent } from "./Questionnaire";
 
-interface OnboardingContentProps {
-  route: string;
-  handleNextStep: (route: string) => void;
-  navigation: IStackNavigationProp;
-}
-
 export const OnboardingContent = (props: OnboardingContentProps) => {
   switch (props.route) {
     case ONBOARDING_ROUTES.Questionnaire:
       return <QuestionnaireContent {...props} />;
     case ONBOARDING_ROUTES.ProductRecommendation:
       return <Products {...props} />;
-    case ONBOARDING_ROUTES.UploadDocument:
+    case ONBOARDING_ROUTES.IdentityVerification:
       return <IdentityConfirmation {...props} />;
     case ONBOARDING_ROUTES.PersonalDetails:
       return <PersonalDetails {...props} />;

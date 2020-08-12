@@ -38,7 +38,7 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
   };
 
   const handleConfirmIdentity = () => {
-    handleNextStep(ONBOARDING_ROUTES.UploadDocument);
+    handleNextStep(ONBOARDING_ROUTES.IdentityVerification);
   };
 
   let screen = {

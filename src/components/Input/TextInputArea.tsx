@@ -1,7 +1,6 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 
-import { CustomSpacer } from "..";
 import {
   colorGray,
   colorTransparent,
@@ -20,6 +19,7 @@ import {
   sw358,
   sw360,
 } from "../../styles";
+import { CustomSpacer } from "../Views";
 import { CustomTextInput, ITextInputProps } from "./Input";
 
 export interface TextInputAreaProps extends ITextInputProps {

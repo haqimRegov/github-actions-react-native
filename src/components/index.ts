@@ -8,6 +8,7 @@ export * from "./Nav";
 export * from "./ProductCard";
 export * from "./RadioButton";
 export * from "./Signature";
+export * from "./Slider";
 export * from "./Steps";
 export * from "./Tab";
 export * from "./Table";

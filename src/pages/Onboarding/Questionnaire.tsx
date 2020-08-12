@@ -34,7 +34,7 @@ interface QuestionnaireContentProps extends OnboardingContentProps, ReduxStorePr
 }
 
 const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
-  const { handleNextStep, navigation, riskAssessment, questionnaire, setFinishedSteps, finishedSteps } = props;
+  const { finishedSteps, handleNextStep, navigation, questionnaire, riskScore, setFinishedSteps } = props;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
@@ -110,12 +110,12 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
   const modalTitleStyle: TextStyle = isAssessment ? {} : { width: sw432 };
 
   const riskProfile =
-    riskAssessment !== undefined
+    riskScore !== undefined
       ? [
-          { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: riskAssessment.appetite },
-          { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskAssessment.profile },
-          { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskAssessment.return },
-          { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskAssessment.type },
+          { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: riskScore.appetite },
+          { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile },
+          { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.return },
+          { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskScore.type },
         ]
       : [];
 
@@ -193,8 +193,8 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
               />
             ))}
             <Text style={fs12SemiBoldBlack2}>{RISK_ASSESSMENT.PROFILE_LABEL_SUGGESTION}</Text>
-            {riskAssessment !== undefined &&
-              riskAssessment.suggestedFunds.map((fund: string, index: number) => (
+            {riskScore !== undefined &&
+              riskScore.suggestedFunds.map((fund: string, index: number) => (
                 <TextSpaceArea key={index} spaceToTop={sh8} style={fs16BoldBlack1} text={fund} />
               ))}
           </Fragment>
@@ -207,8 +207,8 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  questionnaire: state.onboarding.questionnaire,
-  riskAssessment: state.onboarding.riskAssessment,
+  questionnaire: state.riskAssessment.questionnaire,
+  riskScore: state.riskAssessment.riskScore,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

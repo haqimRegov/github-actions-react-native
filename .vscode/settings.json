@@ -13,6 +13,7 @@
     "RNFS",
     "Touchables",
     "animatable",
+    "datetimepicker",
     "devtools",
     "downlevel",
     "esnext",

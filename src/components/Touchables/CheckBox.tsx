@@ -43,23 +43,23 @@ export const CheckBox = ({ checkboxStyle, label, labelStyle, onPress, spaceToLab
 
   const defaultSpace = spaceToLabel !== undefined ? spaceToLabel : sw10;
 
-  // TODO fix Checkbox width taking the whole view
-
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View style={{ ...centerVertical, ...flexRow, ...style }}>
-        <View style={checkboxStyle}>
-          <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh12} /> : null}</View>
+    <View style={flexRow}>
+      <TouchableWithoutFeedback onPress={onPress}>
+        <View style={{ ...centerVertical, ...flexRow, ...style }}>
+          <View style={checkboxStyle}>
+            <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh12} /> : null}</View>
+          </View>
+          {label === undefined ? null : (
+            <Fragment>
+              <CustomSpacer isHorizontal={true} space={defaultSpace} />
+              <Text onPress={onPress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...labelStyle }}>
+                {label}
+              </Text>
+            </Fragment>
+          )}
         </View>
-        {label === undefined ? null : (
-          <Fragment>
-            <CustomSpacer isHorizontal={true} space={defaultSpace} />
-            <Text onPress={onPress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...labelStyle }}>
-              {label}
-            </Text>
-          </Fragment>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };

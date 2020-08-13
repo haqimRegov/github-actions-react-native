@@ -1,7 +1,8 @@
 import { Dimensions } from "react-native";
 
-import { colorBlack, colorBlue, colorGray } from "./colors";
+import { colorBlack, colorBlue, colorGray, colorTransparent } from "./colors";
 
+export const alignItemsEnd = { alignItems: "flex-end" } as const;
 export const alignItemsStart = { alignItems: "flex-start" } as const;
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
 export const alignSelfCenter = { alignSelf: "center" } as const;
@@ -35,9 +36,11 @@ export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: co
 export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderLeftGray2 = { borderLeftWidth: 1, borderLeftColor: colorGray._2 } as const;
+export const borderTopGray2 = { borderTopWidth: 1, borderTopColor: colorGray._2 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
+export const noBGColor = { backgroundColor: colorTransparent } as const;
 
 export const border = (color: string, width: number, radius?: number, style?: "solid" | "dotted" | "dashed") => ({
   borderColor: color,

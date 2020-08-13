@@ -37,13 +37,13 @@ interface BottomFixedDetailsProps {
 
 export const BottomFixedDetails = ({
   amount,
+  cancelOnPress,
   fundAmountText,
   fundSelectionText,
-  cancelOnPress,
   labelCancel,
+  labelSubmit,
   numberOfFunds,
   submitOnPress,
-  labelSubmit,
 }: BottomFixedDetailsProps) => {
   const bottomFixedTitle = `${numberOfFunds} ${fundSelectionText}`;
   const textStyle: TextStyle = { ...fs16RegBlack2, textTransform: "none" };

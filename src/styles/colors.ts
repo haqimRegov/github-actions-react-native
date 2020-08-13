@@ -7,6 +7,7 @@ export const colorBlack = {
   _2_1: "rgba(51,51,51,0.1)",
   _2_5: "rgba(51,51,51,0.5)",
   _2_6: "rgba(51,51,51,0.6)",
+  _3: "#101426",
   // old color for reference
   // _1: "#000000",
   // _2: "#4d4d4d",
@@ -28,6 +29,7 @@ export const colorBlue = {
   _4: "#29365A",
   _4_7: "rgba(41,54,90, 0.7)",
   _5: "#122778",
+  _6: "#0089EC",
   // old colors for reference
   // _1: "#0091ff",
   // _2: "#0D55CF",

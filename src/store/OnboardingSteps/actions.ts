@@ -5,3 +5,7 @@ export const updateFinishedSteps = (steps: TypeOnboardingRoute[]) => {
 };
 
 export type OnboardingStepsAction = ReturnType<typeof updateFinishedSteps>;
+
+export const OnboardingStepsActionProps = { updateFinishedSteps };
+
+export type OnboardingStepsActionsType = typeof OnboardingStepsActionProps;

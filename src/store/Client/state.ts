@@ -1,9 +1,7 @@
 export type ClientState = {
-  details?: IClientDetails;
-  loading: boolean;
+  details?: IClientDetailsState;
 };
 
 export const clientInitialState: ClientState = {
   details: undefined,
-  loading: false,
 };

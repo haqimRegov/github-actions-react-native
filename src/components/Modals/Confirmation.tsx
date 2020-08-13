@@ -1,5 +1,5 @@
 import React from "react";
-import { KeyboardAvoidingView, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
   centerHV,
@@ -14,7 +14,8 @@ import {
   sh56,
   sh96,
   sw10,
-  sw218,
+  sw234,
+  sw40,
   sw5,
   sw56,
   sw565,
@@ -24,6 +25,7 @@ import { BasicModal } from "./Basic";
 
 interface ModalProps extends ActionButtonsProps {
   children: JSX.Element;
+  keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
   spaceToButton?: number;
   spaceToContent?: number;
   title: string;
@@ -31,7 +33,18 @@ interface ModalProps extends ActionButtonsProps {
   visible: boolean;
 }
 
-export const ConfirmationModal = ({ children, spaceToButton, spaceToContent, title, titleStyle, visible, ...rest }: ModalProps) => {
+type TypeBehavior = "height" | "position" | "padding" | undefined;
+
+export const ConfirmationModal = ({
+  children,
+  keyboardAvoidingRef,
+  spaceToButton,
+  spaceToContent,
+  title,
+  titleStyle,
+  visible,
+  ...rest
+}: ModalProps) => {
   const defaultSpaceToContent = spaceToContent === undefined ? sh32 : spaceToContent;
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
@@ -50,24 +63,26 @@ export const ConfirmationModal = ({ children, spaceToButton, spaceToContent, tit
     height: sh96,
   };
 
-  const cancelButtonStyle: ViewStyle = { width: sw218 };
-  const continueButtonStyle: ViewStyle = { width: sw218 };
+  const buttonStyle: ViewStyle = { width: sw234 };
 
   const actionButtonProps: ActionButtonsProps = {
     ...rest,
     buttonContainerStyle: buttonContainer,
-    cancelButtonStyle: cancelButtonStyle,
-    continueButtonStyle: continueButtonStyle,
+    cancelButtonStyle: buttonStyle,
+    continueButtonStyle: buttonStyle,
   };
+
   // TODO: fix KeyboardAvoidingView behavior, for now if number of TextInput become more it pushes top fields out of screen
+  const behavior: TypeBehavior = Platform.select({ ios: "position" });
+
   return (
     <BasicModal visible={visible}>
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView ref={keyboardAvoidingRef} behavior={behavior}>
         <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
           <View style={{ ...centerHV, ...fullHW }}>
             <View style={modalContainer}>
-              <View style={px(sw56)}>
-                <CustomSpacer space={sh56} />
+              <View style={px(sw40)}>
+                <CustomSpacer space={sh32} />
                 <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
                 <CustomSpacer space={defaultSpaceToContent} />
                 {children}

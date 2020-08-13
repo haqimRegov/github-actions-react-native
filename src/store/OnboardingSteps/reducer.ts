@@ -6,7 +6,7 @@ export function onboardingStepsReducer(state = onboardingStepsInitialState, acti
     case "onboarding/UPDATE_STEPS":
       return {
         ...state,
-        finishedStep: [...action.payload],
+        finishedSteps: [...action.payload],
       };
 
     default:

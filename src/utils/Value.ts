@@ -21,3 +21,16 @@ export const shortenString = (str: string, max: number, index: number, noDots?: 
 
   return `${str.substring(0, index)}${noDots === true ? "" : "..."}`;
 };
+
+export const isObjectEqual = (firstObject: object, secondObject: object) => {
+  const keys = Object.keys(firstObject);
+  let equal = true;
+  keys.map((key: string) => {
+    if (firstObject[key] !== secondObject[key]) {
+      equal = false;
+    }
+    return false;
+  });
+
+  return equal;
+};

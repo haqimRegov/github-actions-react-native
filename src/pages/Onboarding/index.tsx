@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
 
 import { OnboardingSteps } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { RootState, updateFinishedSteps } from "../../store";
+import { OnboardingStepsMapDispatchToProps, OnboardingStepsMapStateToProps, OnboardingStepsStoreProps } from "../../store";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
@@ -38,7 +37,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
 ];
 
-interface OnboardingProps extends ReduxStoreProps {
+interface OnboardingProps extends OnboardingStepsStoreProps {
   navigation: IStackNavigationProp;
 }
 
@@ -84,19 +83,4 @@ const OnboardingPageComponent = (props: OnboardingProps) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  finishedSteps: state.onboardingSteps.finishedStep,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators(
-    {
-      updateFinishedSteps,
-    },
-    dispatch,
-  );
-};
-
-type ReduxStoreProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
-
-export const OnboardingPage = connect(mapStateToProps, mapDispatchToProps)(OnboardingPageComponent);
+export const OnboardingPage = connect(OnboardingStepsMapStateToProps, OnboardingStepsMapDispatchToProps)(OnboardingPageComponent);

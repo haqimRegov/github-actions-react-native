@@ -1,7 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
 
 import {
   ConfirmationModal,
@@ -14,12 +13,13 @@ import {
 } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
-import { loadClient, resetClientDetails, RootState } from "../../store";
+import { verifyClient } from "../../network-actions";
+import { ClientMapStateToProps, ClientStoreProps, ClintMapDispatchToProps } from "../../store";
 import { fs16BoldBlack1, fs24BoldBlack2, fs40BoldBlack2, sh16, sh24, sh32, sh8, sw218, sw56 } from "../../styles";
 
 const { ADD_CLIENT } = Language.PAGE;
 
-interface AddClientProps extends ReduxStoreProps {
+interface AddClientProps extends ClientStoreProps {
   navigation: StackNavigationProp<RootNavigatorType>;
   setVisible: (visibility: boolean) => void;
   visible: boolean;
@@ -27,7 +27,7 @@ interface AddClientProps extends ReduxStoreProps {
 
 const AddClientComponent = (props: AddClientProps) => {
   const { navigation, setVisible, visible } = props;
-  const clientDetails = props.client;
+  const clientDetails = props.details;
 
   const [radioIDType, setRadioIDType] = useState<string>(DICTIONARY_ID_TYPE[0]);
   const [inputOtherIDType, setInputOtherIDType] = useState<string>(DICTIONARY_ID_OTHER_TYPE[0].value);
@@ -42,7 +42,7 @@ const AddClientComponent = (props: AddClientProps) => {
   const handleContinue = () => {
     const selectedIDType = radioIDType === "Other" ? inputOtherIDType : radioIDType;
     const IDType = selectedIDType as TypeClientID;
-    props.loadClient({ id: inputClientID, idType: IDType, name: inputClientName });
+    verifyClient(props, { id: inputClientID, idType: IDType, name: inputClientName });
     if (clientDetails !== undefined || radioIDType !== "NRIC") {
       setVisible(false);
 
@@ -124,27 +124,27 @@ const AddClientComponent = (props: AddClientProps) => {
               label={ADD_CLIENT.DETAILS_LABEL_NAME}
               spaceToLabel={sh8}
               spaceToBottom={sh24}
-              title={clientDetails.name!}
+              title={clientDetails.name}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={radioIDType}
               spaceToLabel={sh8}
               spaceToBottom={sh24}
-              title={clientDetails.id!}
+              title={clientDetails.id}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_GENDER}
               spaceToLabel={sh8}
               spaceToBottom={sh24}
-              title={clientDetails.gender!}
+              title={clientDetails.gender}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_DOB}
               spaceToLabel={sh8}
-              title={clientDetails.dateOfBirth!}
+              title={clientDetails.dateOfBirth}
               titleStyle={fs16BoldBlack1}
             />
           </Fragment>
@@ -154,20 +154,4 @@ const AddClientComponent = (props: AddClientProps) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  client: state.client.details,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators(
-    {
-      loadClient,
-      resetClientDetails,
-    },
-    dispatch,
-  );
-};
-
-type ReduxStoreProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
-
-export const AddClient = connect(mapStateToProps, mapDispatchToProps)(AddClientComponent);
+export const AddClient = connect(ClientMapStateToProps, ClintMapDispatchToProps)(AddClientComponent);

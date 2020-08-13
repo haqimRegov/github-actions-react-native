@@ -1,7 +1,7 @@
 export type OnboardingStepsState = {
-  finishedStep: TypeOnboardingRoute[];
+  finishedSteps: TypeOnboardingRoute[];
 };
 
 export const onboardingStepsInitialState: OnboardingStepsState = {
-  finishedStep: [],
+  finishedSteps: [],
 };

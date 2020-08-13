@@ -1,7 +1,7 @@
 import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
-import { colorBlack, colorBlue, colorWhite } from "./colors";
+import { colorBlack, colorBlue, colorGray, colorWhite } from "./colors";
 import { sh10, sh12, sh13, sh14, sh16, sh24, sh40 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
@@ -19,6 +19,12 @@ export const fsUnderline: TextStyle = {
 export const fs10BoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoBold,
+  fontSize: sh10,
+};
+
+export const fs10RegBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoRegular,
   fontSize: sh10,
 };
 
@@ -87,6 +93,13 @@ export const fs12BoldBlack26: TextStyle = {
   fontFamily: NunitoBold,
   fontSize: sh12,
 };
+
+export const fs12RegBlue6: TextStyle = {
+  color: colorBlue._6,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+};
+
 export const fs12SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
@@ -153,8 +166,20 @@ export const fs16RegBlack2: TextStyle = {
   fontSize: sh16,
 };
 
+export const fs16RegBlack3: TextStyle = {
+  color: colorBlack._3,
+  fontFamily: NunitoRegular,
+  fontSize: sh16,
+};
+
 export const fs16RegBlue25: TextStyle = {
   color: colorBlue._2_5,
+  fontFamily: NunitoRegular,
+  fontSize: sh16,
+};
+
+export const fs16RegGray7: TextStyle = {
+  color: colorGray._7,
   fontFamily: NunitoRegular,
   fontSize: sh16,
 };

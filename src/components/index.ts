@@ -4,7 +4,6 @@ export * from "./Collapsible";
 export * from "./CommonPages";
 export * from "./DateAndTimePicker";
 export * from "./Dropdown";
-export * from "./FundTitleCard";
 export * from "./Input";
 export * from "./Modals";
 export * from "./Nav";

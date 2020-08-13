@@ -1,9 +1,11 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
+import { KeyboardAvoidingView } from "react-native";
 import { connect } from "react-redux";
 
 import {
   ConfirmationModal,
+  CustomDatePicker,
   CustomDropdown,
   CustomSpacer,
   CustomTextInput,
@@ -15,7 +17,22 @@ import { Language } from "../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 import { verifyClient } from "../../network-actions";
 import { ClientMapStateToProps, ClientStoreProps, ClintMapDispatchToProps } from "../../store";
-import { fs16BoldBlack1, fs24BoldBlack2, fs40BoldBlack2, sh16, sh24, sh32, sh8, sw218, sw56 } from "../../styles";
+import {
+  colorTransparent,
+  fs16BoldBlack1,
+  fs24BoldBlack2,
+  fs40BoldBlack2,
+  px,
+  sh143,
+  sh16,
+  sh24,
+  sh32,
+  sh8,
+  sw16,
+  sw218,
+  sw48,
+  sw56,
+} from "../../styles";
 
 const { ADD_CLIENT } = Language.PAGE;
 
@@ -29,14 +46,19 @@ const AddClientComponent = (props: AddClientProps) => {
   const { navigation, setVisible, visible } = props;
   const clientDetails = props.details;
 
+  const [ref, setRef] = useState<TypeKeyboardAvoidingView>(null);
   const [radioIDType, setRadioIDType] = useState<string>(DICTIONARY_ID_TYPE[0]);
   const [inputOtherIDType, setInputOtherIDType] = useState<string>(DICTIONARY_ID_OTHER_TYPE[0].value);
   const [inputClientName, setInputClientName] = useState<string>("");
   const [inputClientID, setInputClientID] = useState<string>("");
-  const [inputClientDOB, setInputClientDOB] = useState<string>("");
+  const [inputClientDOB, setInputClientDOB] = useState<Date | undefined>(undefined);
 
   const handleCancel = () => {
     return clientDetails !== undefined ? props.resetClientDetails() : setVisible(false);
+  };
+
+  const handleRef = (event: KeyboardAvoidingView | null) => {
+    setRef(event as TypeKeyboardAvoidingView);
   };
 
   const handleContinue = () => {
@@ -63,12 +85,12 @@ const AddClientComponent = (props: AddClientProps) => {
   const continueDisabled =
     radioIDType === "NRIC"
       ? inputClientName === "" || inputClientID === ""
-      : inputClientName === "" || inputClientID === "" || inputClientDOB === "";
+      : inputClientName === "" || inputClientID === "" || inputClientDOB === undefined;
 
   useEffect(() => {
     setInputClientName("");
     setInputClientID("");
-    setInputClientDOB("");
+    setInputClientDOB(undefined);
   }, [radioIDType]);
 
   return (
@@ -78,6 +100,7 @@ const AddClientComponent = (props: AddClientProps) => {
       continueDisabled={continueDisabled}
       handleCancel={handleCancel}
       handleContinue={handleContinue}
+      keyboardAvoidingRef={handleRef}
       labelContinue={BUTTON_LABEL}
       spaceToContent={spaceToContent}
       title={ADD_CLIENT_HEADING}
@@ -86,7 +109,7 @@ const AddClientComponent = (props: AddClientProps) => {
       <Fragment>
         {clientDetails === undefined ? (
           <Fragment>
-            <TextSpaceArea spaceToBottom={sh32} style={fs24BoldBlack2} text={ADD_CLIENT.SUBHEADING} />
+            <TextSpaceArea spaceToBottom={sh24} style={fs24BoldBlack2} text={ADD_CLIENT.SUBHEADING} />
             <TextSpaceArea spaceToBottom={sh16} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
             <RadioButtonGroup
               direction="row"
@@ -97,7 +120,7 @@ const AddClientComponent = (props: AddClientProps) => {
             />
             {radioIDType !== "Other" ? null : (
               <Fragment>
-                <CustomSpacer space={sh32} />
+                <CustomSpacer space={sh24} />
                 <CustomDropdown
                   data={DICTIONARY_ID_OTHER_TYPE}
                   handleChange={setInputOtherIDType}
@@ -109,13 +132,17 @@ const AddClientComponent = (props: AddClientProps) => {
             <CustomTextInput label={LABEL_NAME} onChangeText={setInputClientName} spaceToTop={sh32} value={inputClientName} />
             <CustomTextInput label={LABEL_ID} onChangeText={setInputClientID} spaceToTop={sh32} value={inputClientID} />
             {radioIDType === "NRIC" ? null : (
-              <CustomTextInput
-                label={ADD_CLIENT.LABEL_DOB}
-                onChangeText={setInputClientDOB}
-                rightIcon="calendar"
-                spaceToTop={sh32}
-                value={inputClientDOB}
-              />
+              <Fragment>
+                <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={px(sw16)} text={ADD_CLIENT.LABEL_DOB} />
+                <CustomDatePicker
+                  datePickerStyle={{ height: sh143 }}
+                  dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
+                  keyboardAvoidingRef={ref}
+                  mode="date"
+                  setValue={setInputClientDOB}
+                  value={inputClientDOB}
+                />
+              </Fragment>
             )}
           </Fragment>
         ) : (

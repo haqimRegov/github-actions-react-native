@@ -1,11 +1,9 @@
 export type RiskAssessmentState = {
-  loading: boolean;
-  questionnaire?: IRiskAssessmentQuestions;
-  riskScore?: IRiskScore;
+  questionnaire: IRiskAssessmentState;
+  riskScore: IRiskScoreState;
 };
 
 export const riskAssessmentInitialState: RiskAssessmentState = {
-  loading: false,
   questionnaire: {
     questionOne: 0,
     questionTwo: 0,
@@ -14,5 +12,11 @@ export const riskAssessmentInitialState: RiskAssessmentState = {
     questionFive: 0,
     questionSix: 0,
   },
-  riskScore: undefined,
+  riskScore: {
+    appetite: "",
+    profile: "",
+    return: "",
+    type: "",
+    suggestedFunds: [],
+  },
 };

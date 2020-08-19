@@ -14,12 +14,13 @@ import {
   TextSpaceArea,
 } from "../../components";
 import { Language } from "../../constants";
-import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
+import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 import { verifyClient } from "../../network-actions";
 import { ClientMapStateToProps, ClientStoreProps, ClintMapDispatchToProps } from "../../store";
 import {
   colorTransparent,
   fs16BoldBlack1,
+  fs16RegBlack2,
   fs24BoldBlack2,
   fs40BoldBlack2,
   px,
@@ -27,6 +28,7 @@ import {
   sh16,
   sh24,
   sh32,
+  sh40,
   sh8,
   sw16,
   sw218,
@@ -43,7 +45,7 @@ interface AddClientProps extends ClientStoreProps {
 }
 
 const AddClientComponent = (props: AddClientProps) => {
-  const { navigation, setVisible, visible } = props;
+  const { accountType, navigation, setVisible, visible } = props;
   const clientDetails = props.details;
 
   const [ref, setRef] = useState<TypeKeyboardAvoidingView>(null);
@@ -52,6 +54,8 @@ const AddClientComponent = (props: AddClientProps) => {
   const [inputClientName, setInputClientName] = useState<string>("");
   const [inputClientID, setInputClientID] = useState<string>("");
   const [inputClientDOB, setInputClientDOB] = useState<Date | undefined>(undefined);
+
+  const setAccountType = (type: string) => props.addAccountType(type as TypeAccountChoices);
 
   const handleCancel = () => {
     return clientDetails !== undefined ? props.resetClientDetails() : setVisible(false);
@@ -102,6 +106,7 @@ const AddClientComponent = (props: AddClientProps) => {
       handleContinue={handleContinue}
       keyboardAvoidingRef={handleRef}
       labelContinue={BUTTON_LABEL}
+      spaceToButton={sh40}
       spaceToContent={spaceToContent}
       title={ADD_CLIENT_HEADING}
       titleStyle={titleStyle}
@@ -144,36 +149,40 @@ const AddClientComponent = (props: AddClientProps) => {
                 />
               </Fragment>
             )}
+            <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs16RegBlack2} text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE} />
+            <RadioButtonGroup direction="row" labels={DICTIONARY_ACCOUNT_TYPE} selected={accountType} setSelected={setAccountType} />
           </Fragment>
         ) : (
           <Fragment>
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_NAME}
-              spaceToLabel={sh8}
               spaceToBottom={sh24}
+              spaceToLabel={sh8}
               title={clientDetails.name}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={radioIDType}
-              spaceToLabel={sh8}
               spaceToBottom={sh24}
+              spaceToLabel={sh8}
               title={clientDetails.id}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_GENDER}
-              spaceToLabel={sh8}
               spaceToBottom={sh24}
+              spaceToLabel={sh8}
               title={clientDetails.gender}
               titleStyle={fs16BoldBlack1}
             />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_DOB}
+              spaceToBottom={sh24}
               spaceToLabel={sh8}
               title={clientDetails.dateOfBirth}
               titleStyle={fs16BoldBlack1}
             />
+            <LabeledTitle label={ADD_CLIENT.LABEL_ACCOUNT_TYPE} spaceToLabel={sh8} title={accountType} titleStyle={fs16BoldBlack1} />
           </Fragment>
         )}
       </Fragment>

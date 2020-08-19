@@ -4,6 +4,7 @@ import { RootState } from "../rootReducer";
 import { ClientActionProps } from "./actions";
 
 export const ClientMapStateToProps = (state: RootState) => ({
+  accountType: state.client.accountType,
   details: state.client.details,
 });
 

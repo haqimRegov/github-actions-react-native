@@ -1,3 +1,4 @@
+export * from "./account-type";
 export * from "./business-nature";
 export * from "./countries";
 export * from "./education-level";

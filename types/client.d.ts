@@ -25,3 +25,5 @@ declare type IClientDetails = {
   gender?: "Male" | "Female";
   postCode?: string;
 };
+
+declare type TypeAccountChoices = "Individual" | "Joint";

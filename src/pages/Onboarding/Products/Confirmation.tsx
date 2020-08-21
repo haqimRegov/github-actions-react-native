@@ -8,10 +8,10 @@ import { flexGrow, fs16RegBlack2, fs24BoldBlack2, px, sh176, sh24, sh40, sh56, s
 const { PRODUCT_CONFIRMATION } = Language.PAGE;
 
 export interface ProductConfirmationProps {
-  selectedProduct: IProduct[];
+  selectedFunds: IFund[];
   setFixedBottomShow: (toggle: boolean) => void;
   setPage: (page: number) => void;
-  setSelectedProduct: (product: IProduct[]) => void;
+  setSelectedFunds: (product: IFund[]) => void;
 }
 
 const initialState: IProductConfirmation = {
@@ -34,16 +34,16 @@ const initialState: IProductConfirmation = {
 };
 
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
-  selectedProduct,
+  selectedFunds,
   setFixedBottomShow,
   setPage,
-  setSelectedProduct,
+  setSelectedFunds,
 }: ProductConfirmationProps) => {
   const [data, setData] = useState<IProductConfirmation[]>([]);
 
   useEffect(() => {
     const initialStateArray: IProductConfirmation[] = [];
-    selectedProduct.map((item: any) => {
+    selectedFunds.map((item: any) => {
       const newState: IProductConfirmation = {
         ...initialState,
         ...item,
@@ -68,7 +68,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
       Keyboard.removeListener("keyboardWillShow", keyboardWillShow);
       Keyboard.removeListener("keyboardWillHide", keyboardWillHide);
     };
-  }, [selectedProduct, setFixedBottomShow]);
+  }, [selectedFunds, setFixedBottomShow]);
 
   return (
     <ScrollView contentContainerStyle={flexGrow}>
@@ -86,14 +86,14 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
           const newData = [...data];
 
           const handleDelete = () => {
-            const updatedProducts = [...selectedProduct];
+            const updatedProducts = [...selectedFunds];
             updatedProducts.splice(index, 1);
             if (updatedProducts.length === 0) {
               setPage(0);
             }
 
             setData(data);
-            setSelectedProduct(updatedProducts);
+            setSelectedFunds(updatedProducts);
           };
 
           const handleInvestmentAmount = (text: string) => {

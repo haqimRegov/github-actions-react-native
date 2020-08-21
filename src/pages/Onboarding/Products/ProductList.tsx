@@ -29,16 +29,12 @@ import { ProductOptions } from "./Options";
 const { PRODUCT_LIST } = Language.PAGE;
 
 interface ProductListProps {
-  productList: IProduct[];
-  selectedProduct: IProduct[];
-  setSelectedProduct: (product: IProduct[]) => void;
+  productList: IFund[];
+  selectedFunds: IFund[];
+  setSelectedFunds: (product: IFund[]) => void;
 }
 
-export const ProductList: FunctionComponent<ProductListProps> = ({
-  productList,
-  selectedProduct,
-  setSelectedProduct,
-}: ProductListProps) => {
+export const ProductList: FunctionComponent<ProductListProps> = ({ productList, selectedFunds, setSelectedFunds }: ProductListProps) => {
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [allFunds, setAllFunds] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(true);
@@ -65,7 +61,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
   };
 
   const handleSelectProduct = (product: ITableData[]) => {
-    let newSelected = product === productList ? product : [...selectedProduct];
+    let newSelected = product === productList ? product : [...selectedFunds];
     if (product.length === 0) {
       newSelected = [];
     }
@@ -77,7 +73,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
         newSelected.push(product[0]);
       }
     }
-    setSelectedProduct(newSelected as IProduct[]);
+    setSelectedFunds(newSelected as IFund[]);
   };
 
   const handleShowPerformance = (item: IColumnItemAccordion) => {
@@ -94,6 +90,9 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
   const columns: ITableColumn[] = [
     {
       key: "name",
+      icon: {
+        name: "caret-down",
+      },
       viewStyle: {
         width: sw234,
       },
@@ -103,7 +102,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "type",
+      key: "fundType",
       viewStyle: {
         width: sw83,
       },
@@ -113,7 +112,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "risk",
+      key: "riskCategory",
       viewStyle: {
         width: sw102,
       },
@@ -123,7 +122,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "epf",
+      key: "isEpf",
       viewStyle: {
         width: sw72,
       },
@@ -133,7 +132,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "shariah",
+      key: "isShariah",
       viewStyle: {
         width: sw90,
       },
@@ -143,7 +142,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "performance",
+      key: "performanceOverview",
       viewStyle: {
         width: sw109,
       },
@@ -182,7 +181,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
               activeAccordion={activeAccordion}
               columns={columns}
               data={productList}
-              rowSelection={selectedProduct}
+              rowSelection={selectedFunds}
               onRowSelect={handleSelectProduct}
               RenderAccordion={(item: ITableData) => <ProductGraph item={item as IProduct} />}
               RenderOptions={(props: ITableOptions) => <ProductOptions {...props} handleShowPerformance={handleShowPerformance} />}
@@ -192,7 +191,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
           </View>
         </View>
       </View>
-      {selectedProduct.length !== 0 ? <CustomSpacer space={sh152} /> : null}
+      {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
     </ScrollView>
   );
 };

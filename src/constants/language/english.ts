@@ -262,7 +262,7 @@ export const english = {
       LABEL_COLUMN_NAME: "Name",
       LABEL_COLUMN_PERFORMANCE: "Performance",
       LABEL_COLUMN_PRODUCT: "Product",
-      LABEL_COLUMN_RISK: "Risk Score",
+      LABEL_COLUMN_RISK: "Risk Category",
       LABEL_COLUMN_SHARIAH: "Shariah",
       LABEL_RECOMMENDED: "Recommended",
     },

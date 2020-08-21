@@ -106,11 +106,22 @@ export const TableRow: FunctionComponent<TableRowProps> = ({
               ...column.itemIcon,
             };
 
+            let itemLabel = item[column.key];
+
+            const isBoolean = typeof item[column.key] === "boolean";
+
+            if (isBoolean) {
+              itemLabel = "Yes";
+              if (!item[column.key]) {
+                itemLabel = "No";
+              }
+            }
+
             return (
               <TouchableWithoutFeedback key={columnIndex} onPress={handlePressColumnItem}>
                 <View style={{ ...flexRow, ...itemBorderLeft }}>
                   <View style={{ ...flexRow, ...centerVertical, ...px(sw8), ...column.viewStyle, ...column.itemStyle }}>
-                    <Text style={textStyle}>{item[column.key]}</Text>
+                    <Text style={textStyle}>{itemLabel}</Text>
                     {column.itemIcon !== undefined || column.withAccordion === true ? (
                       <Fragment>
                         <CustomSpacer isHorizontal={true} space={sw16} />

@@ -1,9 +1,11 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { View } from "react-native";
+import { connect } from "react-redux";
 
 import { BottomFixedDetails, SafeAreaPage } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
-import { SAMPLE_PRODUCTS } from "../../../mocks";
+import { SAMPLE_PRODUCTS_1 } from "../../../mocks";
+import { SelectedFundMapDispatchToProps, SelectedFundMapStateToProps, SelectedFundStoreProps } from "../../../store";
 import { flexChild, flexCol } from "../../../styles";
 import { IdentityConfirmation } from "../IdentityVerification/IdentityConfirmation";
 import { ProductConfirmation } from "./Confirmation";
@@ -11,19 +13,24 @@ import { ProductList } from "./ProductList";
 
 const { PRODUCT_CONFIRMATION } = Language.PAGE;
 
-interface ProductsProps {
+interface ProductsProps extends SelectedFundStoreProps {
   handleNextStep: (route: string) => void;
 }
 
-export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: ProductsProps) => {
+export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextStep, selectedFunds, addSelectedFund }: ProductsProps) => {
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
 
-  const [productList, setProductList] = useState<IProduct[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<IProduct[]>([]);
+  const [productList, setProductList] = useState<IFund[]>([]);
 
-  const amount = selectedProduct.length * 1000;
-  const LABEL_FUND = selectedProduct.length === 1 ? PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION : PRODUCT_CONFIRMATION.LABEL_FUNDS_SELECTION;
+  const totalMinimumAmount: number =
+    selectedFunds.length !== 0
+      ? selectedFunds
+          .map((product: IFund) => product.newSalesAmount.cash?.minimum!)
+          .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
+      : 0;
+
+  const LABEL_FUND = selectedFunds.length === 1 ? PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION : PRODUCT_CONFIRMATION.LABEL_FUNDS_SELECTION;
 
   const handleGoBack = () => {
     setPage(0);
@@ -34,7 +41,7 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
   };
 
   const handleCancel = () => {
-    return page === 1 ? handleGoBack() : setSelectedProduct([]);
+    return page === 1 ? handleGoBack() : addSelectedFund([]);
   };
 
   const handleConfirmIdentity = () => {
@@ -42,7 +49,7 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
   };
 
   let screen = {
-    content: <ProductList productList={productList} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />,
+    content: <ProductList productList={productList} selectedFunds={selectedFunds} setSelectedFunds={addSelectedFund} />,
     onPressSubmit: handleStartInvesting,
     labelSubmit: PRODUCT_CONFIRMATION.BUTTON_START_INVESTING,
   };
@@ -52,10 +59,10 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
       ...screen,
       content: (
         <ProductConfirmation
-          selectedProduct={selectedProduct}
+          selectedFunds={selectedFunds}
           setFixedBottomShow={setFixedBottomShow}
           setPage={setPage}
-          setSelectedProduct={setSelectedProduct}
+          setSelectedFunds={addSelectedFund}
         />
       ),
       onPressSubmit: handleConfirmIdentity,
@@ -73,23 +80,23 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
 
   useEffect(() => {
     // TODO integration
-    setProductList(SAMPLE_PRODUCTS);
+    setProductList(SAMPLE_PRODUCTS_1);
   }, []);
 
   return (
     <SafeAreaPage>
       <View style={flexChild}>
         {screen.content}
-        {fixedBottomShow === true && selectedProduct.length !== 0 ? (
+        {fixedBottomShow === true && selectedFunds.length !== 0 ? (
           <View style={flexCol}>
             <BottomFixedDetails
-              amount={amount.toString()}
+              amount={totalMinimumAmount.toString()}
               cancelOnPress={handleCancel}
               fundAmountText={PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION_AMOUNT}
               fundSelectionText={LABEL_FUND}
               labelCancel={PRODUCT_CONFIRMATION.BUTTON_CANCEL}
               labelSubmit={screen.labelSubmit}
-              numberOfFunds={selectedProduct.length}
+              numberOfFunds={selectedFunds.length}
               submitOnPress={screen.onPressSubmit}
             />
           </View>
@@ -98,3 +105,5 @@ export const Products: FunctionComponent<ProductsProps> = ({ handleNextStep }: P
     </SafeAreaPage>
   );
 };
+
+export const Products = connect(SelectedFundMapStateToProps, SelectedFundMapDispatchToProps)(ProductComponent);

@@ -1,13 +1,17 @@
 {
   "cSpell.words": [
+    "ASIAPAC",
     "Authorised",
     "BAHASA",
     "Berhad",
     "Bumiputera",
     "FATCA",
+    "FTSE",
     "Kenanga",
+    "Maybank",
     "NRIC",
     "Nunito",
+    "ONEPRS",
     "Organisation",
     "PDPA",
     "RNFS",
@@ -21,7 +25,8 @@
     "icomoon",
     "miblanchard",
     "plusplus",
-    "tslib"
+    "tslib",
+    "utmc"
   ],
   "editor.formatOnSave": true,
   "javascript.preferences.importModuleSpecifier": "relative",

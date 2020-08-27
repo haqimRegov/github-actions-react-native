@@ -19,7 +19,7 @@ import {
   sw360,
 } from "../../styles";
 import { CustomTextInput } from "../Input";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 export interface CustomDropdownProps {

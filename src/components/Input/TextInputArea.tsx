@@ -19,7 +19,7 @@ import {
   sw358,
   sw360,
 } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 import { CustomTextInput, ITextInputProps } from "./Input";
 
 export interface TextInputAreaProps extends ITextInputProps {

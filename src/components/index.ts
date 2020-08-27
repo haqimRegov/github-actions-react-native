@@ -7,6 +7,7 @@ export * from "./Dropdown";
 export * from "./Input";
 export * from "./Modals";
 export * from "./Nav";
+export * from "./Popup";
 export * from "./ProductCard";
 export * from "./RadioButton";
 export * from "./Signature";

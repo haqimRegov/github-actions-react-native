@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { ScrollView, Text, TextStyle, View } from "react-native";
 
 import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
-import { flexGrow, fs16RegBlack2, fs24BoldBlack2, fs40BoldBlack2, px, sh36, sh56, sh8, sw24 } from "../../styles";
+import { flexGrow, fs16SemiBoldBlack2, fs24BoldBlack2, fs40BoldBlack2, px, sh36, sh56, sh8, sw24 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
 
 interface ContentPageProps extends ActionButtonsProps {
@@ -38,11 +38,11 @@ export const ContentPage = ({
   const topSpace = spaceToTop !== undefined ? spaceToTop : sh36;
   const subheadingTopSpace = spaceToHeading !== undefined ? spaceToHeading : sh8;
   const subtitleTopSpace = spaceToTitle !== undefined ? spaceToTitle : sh8;
-
   const actionButtonProps: ActionButtonsProps = {
     buttonContainerStyle: px(sw24),
     ...rest,
   };
+  const defaultSubtitleStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.05, ...subtitleStyle };
 
   return (
     <SafeAreaPage>
@@ -53,9 +53,7 @@ export const ContentPage = ({
           {subheading === undefined ? null : (
             <TextSpaceArea spaceToTop={subheadingTopSpace} style={{ ...fs24BoldBlack2, ...subheadingStyle }} text={subheading} />
           )}
-          {subtitle !== undefined ? (
-            <TextSpaceArea spaceToTop={subtitleTopSpace} style={{ ...fs16RegBlack2, ...subtitleStyle }} text={subtitle} />
-          ) : null}
+          {subtitle !== undefined ? <TextSpaceArea spaceToTop={subtitleTopSpace} style={defaultSubtitleStyle} text={subtitle} /> : null}
         </View>
         {children}
         <CustomFlexSpacer />

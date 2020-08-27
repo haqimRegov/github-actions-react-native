@@ -60,10 +60,10 @@ export const CollapsibleDropdown = ({
   /**
    * Known Issues:
    * 1. Absolute position is wrong when keyboard is open (quick solution, pass keyboardAvoidingRef)
-   * 2. If keyboard is open while opening the Dropdown, keyboard is opening again after Dropdown closes
    */
 
   const handleAnimationOpen = () => {
+    Keyboard.dismiss();
     setTimeout(() => {
       setCollapse(false);
     }, 50);

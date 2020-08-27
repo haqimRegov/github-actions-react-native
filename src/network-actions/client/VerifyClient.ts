@@ -1,11 +1,9 @@
-import { SAMPLE_CLIENTS } from "../../mocks";
+import { SAMPLE_CLIENT_4 } from "../../mocks";
 import { ClientActionsType } from "../../store";
 
 export const verifyClient = (actionProps: ClientActionsType, params: IClientDetails) => {
   // TODO integration
-  // eslint-disable-next-line no-console
-  console.log(params);
-  // Pretend fetch
-  const results = SAMPLE_CLIENTS[0];
-  actionProps.addClientDetails(results as IClientDetailsState);
+  const results = SAMPLE_CLIENT_4;
+  const client = { ...results, mailingAddress: results.permanentAddress, name: params.name, id: params.id, idType: params.idType };
+  actionProps.addClientDetails(client as IClientDetailsState);
 };

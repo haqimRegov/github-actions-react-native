@@ -3,8 +3,9 @@ import React from "react";
 import { ONBOARDING_ROUTES } from "../../constants";
 import { Acknowledgement } from "./Acknowledgement";
 import { Declaration } from "./Declaration";
+import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
-import { IdentityConfirmation } from "./IdentityVerification/IdentityConfirmation";
+import { IdentityConfirmation } from "./IdentityVerification";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
@@ -17,6 +18,8 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
       return <QuestionnaireContent {...props} />;
     case ONBOARDING_ROUTES.ProductRecommendation:
       return <Products {...props} />;
+    case ONBOARDING_ROUTES.EmailVerification:
+      return <EmailVerification {...props} />;
     case ONBOARDING_ROUTES.IdentityVerification:
       return <IdentityConfirmation {...props} />;
     case ONBOARDING_ROUTES.PersonalDetails:

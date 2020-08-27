@@ -35,6 +35,7 @@ export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: colorBlack._2_1 } as const;
 export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
+export const borderBottomGray7 = { borderBottomWidth: 1, borderBottomColor: colorGray._7 } as const;
 export const borderLeftGray2 = { borderLeftWidth: 1, borderLeftColor: colorGray._2 } as const;
 export const borderTopGray2 = { borderTopWidth: 1, borderTopColor: colorGray._2 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;

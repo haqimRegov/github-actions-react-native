@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { BasicAccordion, ContentPage, CustomFlexSpacer, CustomSpacer, IconButton } from "../../components";
+import {
+  BasicAccordion,
+  CheckBox,
+  ContentPage,
+  CustomFlexSpacer,
+  CustomPopup,
+  CustomSpacer,
+  IconButton,
+  RadioButtonGroup,
+} from "../../components";
 import { CustomSignature } from "../../components/Signature";
-import { ONBOARDING_ROUTES } from "../../constants";
 import { Language } from "../../constants/language";
-import { ACKNOWLEDGEMENT_MOCK } from "../../mocks/acknowledgement";
+import { IcoMoon } from "../../icons";
+import { ACKNOWLEDGEMENT_MOCK } from "../../mocks";
 import {
   borderBottomBlack21,
   centerVertical,
@@ -15,12 +24,17 @@ import {
   colorWhite,
   customShadow,
   flexRow,
+  fs12BoldBlack2,
   fs16BoldBlack2,
+  fs16SemiBoldBlack2,
   noBorderBottom,
   px,
   py,
+  sh16,
   sh20,
   sh24,
+  sh32,
+  sh40,
   sh5,
   sh56,
   sh8,
@@ -28,6 +42,7 @@ import {
   sw12,
   sw24,
   sw28,
+  sw32,
 } from "../../styles";
 
 const { ACKNOWLEDGEMENT } = Language.PAGE;
@@ -55,14 +70,16 @@ const SECTIONS: IBasicAccordion[] = [
 ];
 
 interface AcknowledgementProps {
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
   const [inputAgentSign, setInputAgentSign] = useState<string>("");
   const [inputClientSign, setInputClientSign] = useState<string>("");
   const [showAgentSign, setShowAgentSign] = useState<boolean>(false);
+  const [agree, setAgree] = useState<boolean>(false);
   const [showClientSign, setShowClientSign] = useState<boolean>(false);
+  const [inputConsent, setInputConsent] = useState<string>(ACKNOWLEDGEMENT.OPTION_CONSENT_NO);
 
   const handleSignatureClient = () => {
     setShowClientSign(!showClientSign);
@@ -78,8 +95,12 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
     Alert.alert("Cancel");
   };
 
+  const handleContinue = () => {
+    handleNextStep("Payment");
+  };
+
   const handleAgree = () => {
-    handleNextStep(ONBOARDING_ROUTES.Payment);
+    setAgree(!agree);
   };
 
   const signatureBaseStyle: ViewStyle = {
@@ -100,14 +121,13 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
   return (
     <ContentPage
       handleCancel={handleCancel}
-      handleContinue={handleAgree}
+      handleContinue={handleContinue}
       labelContinue={ACKNOWLEDGEMENT.BUTTON_AGREE}
       subheading={ACKNOWLEDGEMENT.HEADING}
       subtitle={ACKNOWLEDGEMENT.SUBHEADING}>
       <View style={{ ...px(sw24), ...py(sh24) }}>
         <BasicAccordion sections={SECTIONS} />
       </View>
-      <View style={borderBottomBlack21} />
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <TouchableWithoutFeedback onPress={handleSignatureClient}>
@@ -131,6 +151,28 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
           </View>
         </TouchableWithoutFeedback>
         {showAgentSign ? <CustomSignature setSignature={setInputAgentSign} signature={inputAgentSign} /> : null}
+      </View>
+      <CustomSpacer space={sh32} />
+      <View style={borderBottomBlack21} />
+      <CustomSpacer space={sh32} />
+      <View style={px(sw24)}>
+        <View style={{ ...centerVertical, ...flexRow }}>
+          <Text style={fs16SemiBoldBlack2}>{ACKNOWLEDGEMENT.LABEL_SERVICES}</Text>
+          <CustomSpacer isHorizontal={true} space={sw12} />
+          <CustomPopup popupText={ACKNOWLEDGEMENT.POPUP_CONSENT}>
+            <IcoMoon name="info" size={sw32} />
+          </CustomPopup>
+        </View>
+        <CustomSpacer space={sh16} />
+        <RadioButtonGroup
+          direction="row"
+          labels={[ACKNOWLEDGEMENT.OPTION_CONSENT_NO, ACKNOWLEDGEMENT.OPTION_CONSENT_YES]}
+          selected={inputConsent}
+          setSelected={setInputConsent}
+          space={sh40}
+        />
+        <CustomSpacer space={sh32} />
+        <CheckBox label={ACKNOWLEDGEMENT.LABEL_AGREE} labelStyle={fs12BoldBlack2} onPress={handleAgree} toggle={agree} />
       </View>
     </ContentPage>
   );

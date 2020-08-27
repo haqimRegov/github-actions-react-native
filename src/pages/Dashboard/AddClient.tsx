@@ -16,7 +16,7 @@ import {
 import { Language } from "../../constants";
 import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 import { verifyClient } from "../../network-actions";
-import { ClientMapStateToProps, ClientStoreProps, ClintMapDispatchToProps } from "../../store";
+import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../store";
 import {
   colorTransparent,
   fs16BoldBlack1,
@@ -190,4 +190,4 @@ const AddClientComponent = (props: AddClientProps) => {
   );
 };
 
-export const AddClient = connect(ClientMapStateToProps, ClintMapDispatchToProps)(AddClientComponent);
+export const AddClient = connect(ClientMapStateToProps, ClientMapDispatchToProps)(AddClientComponent);

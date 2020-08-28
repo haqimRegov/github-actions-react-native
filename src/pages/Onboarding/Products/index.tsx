@@ -10,13 +10,19 @@ import { flexChild, flexCol } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductList } from "./ProductList";
 
-const { PRODUCT_CONFIRMATION } = Language.PAGE;
+const { INVESTMENT } = Language.PAGE;
 
 interface ProductsProps extends SelectedFundStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextStep, selectedFunds, addSelectedFund }: ProductsProps) => {
+export const ProductComponent: FunctionComponent<ProductsProps> = ({
+  addInvestmentDetails,
+  addSelectedFund,
+  handleNextStep,
+  investmentDetails,
+  selectedFunds,
+}: ProductsProps) => {
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
 
@@ -29,13 +35,27 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextS
           .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
       : 0;
 
-  const LABEL_FUND = selectedFunds.length === 1 ? PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION : PRODUCT_CONFIRMATION.LABEL_FUNDS_SELECTION;
+  const LABEL_FUND = selectedFunds.length === 1 ? INVESTMENT.LABEL_FUND_SELECTION : INVESTMENT.LABEL_FUNDS_SELECTION;
 
   const handleGoBack = () => {
     setPage(0);
   };
 
   const handleStartInvesting = () => {
+    const initialStateArray: IFundSales[] = [];
+    selectedFunds.map((item: IFund) => {
+      const newState: IFundSales = {
+        fundPaymentMethod: "Cash",
+        investmentAmount: "",
+        salesCharge: 0,
+        scheduledInvestment: false,
+        fund: { ...item },
+      };
+
+      return initialStateArray.push(newState);
+    });
+    addInvestmentDetails(initialStateArray);
+
     setPage(1);
   };
 
@@ -50,7 +70,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextS
   let screen = {
     content: <ProductList productList={productList} selectedFunds={selectedFunds} setSelectedFunds={addSelectedFund} />,
     onPressSubmit: handleStartInvesting,
-    labelSubmit: PRODUCT_CONFIRMATION.BUTTON_START_INVESTING,
+    labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
   };
 
   if (page === 1) {
@@ -58,14 +78,16 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextS
       ...screen,
       content: (
         <ProductConfirmation
+          investmentDetails={investmentDetails!}
           selectedFunds={selectedFunds}
           setFixedBottomShow={setFixedBottomShow}
+          setInvestmentDetails={addInvestmentDetails}
           setPage={setPage}
-          setSelectedFunds={addSelectedFund}
+          setSelectedFund={addSelectedFund}
         />
       ),
       onPressSubmit: handleConfirmIdentity,
-      labelSubmit: PRODUCT_CONFIRMATION.BUTTON_CONFIRM,
+      labelSubmit: INVESTMENT.BUTTON_CONFIRM,
     };
   }
 
@@ -83,9 +105,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextS
             <BottomFixedDetails
               amount={totalMinimumAmount.toString()}
               cancelOnPress={handleCancel}
-              fundAmountText={PRODUCT_CONFIRMATION.LABEL_FUND_SELECTION_AMOUNT}
+              fundAmountText={INVESTMENT.LABEL_FUND_SELECTION_AMOUNT}
               fundSelectionText={LABEL_FUND}
-              labelCancel={PRODUCT_CONFIRMATION.BUTTON_CANCEL}
+              labelCancel={INVESTMENT.BUTTON_CANCEL}
               labelSubmit={screen.labelSubmit}
               numberOfFunds={selectedFunds.length}
               submitOnPress={screen.onPressSubmit}

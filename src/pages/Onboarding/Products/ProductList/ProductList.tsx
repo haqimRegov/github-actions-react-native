@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
 import { Alert, ScrollView, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, CustomTableV2, Pagination, Tab } from "../../../components";
-import { Language } from "../../../constants";
+import { CustomFlexSpacer, CustomSpacer, CustomTableV2, Pagination, Tab } from "../../../../components";
+import { Language } from "../../../../constants";
 import {
   colorWhite,
   flexChild,
@@ -21,7 +21,7 @@ import {
   sw72,
   sw83,
   sw90,
-} from "../../../styles";
+} from "../../../../styles";
 import { ProductGraph } from "./Graph";
 import { ProductHeader } from "./Header";
 import { ProductOptions } from "./Options";
@@ -183,7 +183,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({ productList, 
               data={productList}
               rowSelection={selectedFunds}
               onRowSelect={handleSelectProduct}
-              RenderAccordion={(item: ITableData) => <ProductGraph item={item as IProduct} />}
+              RenderAccordion={(item: ITableData) => <ProductGraph item={item as IFund} />}
               RenderOptions={(props: ITableOptions) => <ProductOptions {...props} handleShowPerformance={handleShowPerformance} />}
               rowSelectionLabel={PRODUCT_LIST.LABEL_COLUMN_BUY}
             />

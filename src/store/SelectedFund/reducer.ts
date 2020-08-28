@@ -9,10 +9,22 @@ export function selectedFundReducer(state = selectedFundInitialState, action: Se
         funds: action.payload,
       };
 
+    case "selectedFund/ADD_INVESTMENT_DETAILS":
+      return {
+        ...state,
+        investmentDetails: action.payload,
+      };
+
     case "selectedFund/RESET_FUND":
       return {
         ...state,
         funds: [],
+      };
+
+    case "selectedFund/RESET_INVESTMENT_DETAILS":
+      return {
+        ...state,
+        investmentDetails: [],
       };
 
     default:

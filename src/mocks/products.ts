@@ -1,66 +1,3 @@
-export const SAMPLE_PRODUCTS: IProduct[] = [
-  {
-    epf: "Yes",
-    graph: "Kenanga growth fund graph",
-    issuer: "Kenanga Investors Berhad",
-    name: "Kenanga growth fund",
-    performance: "+5.3%",
-    risk: "LOW",
-    shariah: "No",
-    type: "Equity / Growth",
-  },
-  {
-    epf: "Yes",
-    graph: "Kenanga Investment Fund graph",
-    name: "Kenanga Investment Fund",
-    performance: "+5.3%",
-    risk: "LOW",
-    shariah: "No",
-    type: "Equity / Growth",
-    issuer: "Kenanga Investors Berhad",
-  },
-  {
-    epf: "Yes",
-    graph: "KENANGA ACTIVELY MANAGED PORTFOLIOS (AMP) SERVICE graph",
-    name: "KENANGA ACTIVELY MANAGED PORTFOLIOS (AMP) SERVICE",
-    performance: "+5.3%",
-    risk: "HIGH",
-    shariah: "No",
-    type: "UT",
-    issuer: "Kenanga Investors Berhad",
-  },
-  {
-    epf: "Yes",
-    graph: "Kenanga Balanced Fund graph",
-    name: "Kenanga Balanced Fund",
-    performance: "+5.3%",
-    risk: "MEDIUM",
-    shariah: "No",
-    type: "UT",
-    issuer: "Kenanga Investors Berhad",
-  },
-  {
-    epf: "Yes",
-    graph: "Kenanga Cash Plus Fund graph",
-    name: "Kenanga Cash Plus Fund",
-    performance: "+5.3%",
-    risk: "LOW",
-    shariah: "No",
-    type: "UT",
-    issuer: "Kenanga Investors Berhad",
-  },
-  {
-    epf: "Yes",
-    graph: "Kenanga Principal Protected Income Fund graph",
-    name: "Kenanga Principal Protected Income Fund",
-    performance: "+5.3%",
-    risk: "LOW",
-    shariah: "No",
-    type: "UT",
-    issuer: "Kenanga Investors Berhad",
-  },
-];
-
 // UTF, shariah, EPF, scheduled
 export const SAMPLE_PRODUCT_2: IFund = {
   name: "KENANGA SHARIAH GROWTH OPPORTUNITIES FUND",
@@ -75,24 +12,24 @@ export const SAMPLE_PRODUCT_2: IFund = {
   fundCategory: "EQUITY",
   latestFundSize: 5000000,
   salesCharge: {
-    cash: {
-      maximum: "6.5%",
-      minimum: "",
-    },
     epf: {
-      maximum: "",
-      minimum: "",
+      maximum: 8,
+      minimum: 5,
+    },
+    cash: {
+      maximum: 10,
+      minimum: 8,
     },
   },
-  annualManagementFee: "1.550%",
+  annualManagementFee: 1.55,
   topUpAmount: {
+    cash: {
+      maximum: 9999999999999,
+      minimum: 500,
+    },
     epf: {
       maximum: 9999999999999,
       minimum: 1000,
-    },
-    cash: {
-      maximum: 9999999999999,
-      minimum: 100,
     },
   },
   newSalesAmount: {
@@ -102,10 +39,10 @@ export const SAMPLE_PRODUCT_2: IFund = {
     },
     cash: {
       maximum: 9999999999999,
-      minimum: 1000,
+      minimum: 2000,
     },
   },
-  fundCurrency: "MYR",
+  fundCurrency: "AUD",
   performanceOverview: "+5.3%",
   performance: {
     details: "60% FTSE Bursa Malaysia 100 Index and 40% Maybank 12-month Fixed Deposit Rate : 140.49",
@@ -142,24 +79,24 @@ export const SAMPLE_PRODUCT_3: IFund = {
   fundCategory: "Conservative",
   latestFundSize: 5000000,
   salesCharge: {
-    cash: {
-      maximum: "6.5%",
-      minimum: "",
-    },
     epf: {
-      maximum: "",
-      minimum: "",
+      maximum: 10,
+      minimum: 5,
+    },
+    cash: {
+      maximum: 10,
+      minimum: 8,
     },
   },
-  annualManagementFee: "1.550%",
+  annualManagementFee: 1.55,
   topUpAmount: {
+    cash: {
+      maximum: 9999999999999,
+      minimum: 500,
+    },
     epf: {
       maximum: 9999999999999,
       minimum: 1000,
-    },
-    cash: {
-      maximum: 9999999999999,
-      minimum: 100,
     },
   },
   newSalesAmount: {
@@ -169,7 +106,7 @@ export const SAMPLE_PRODUCT_3: IFund = {
     },
     cash: {
       maximum: 9999999999999,
-      minimum: 1000,
+      minimum: 2000,
     },
   },
   fundCurrency: "MYR",
@@ -209,24 +146,24 @@ export const SAMPLE_PRODUCT_4: IFund = {
   fundCategory: "Moderate",
   latestFundSize: 5000000,
   salesCharge: {
-    cash: {
-      maximum: "6.5%",
-      minimum: "",
-    },
     epf: {
-      maximum: "",
-      minimum: "",
+      maximum: 10,
+      minimum: 5,
+    },
+    cash: {
+      maximum: 10,
+      minimum: 8,
     },
   },
-  annualManagementFee: "1.550%",
+  annualManagementFee: 1.55,
   topUpAmount: {
+    cash: {
+      maximum: 9999999999999,
+      minimum: 500,
+    },
     epf: {
       maximum: 9999999999999,
       minimum: 1000,
-    },
-    cash: {
-      maximum: 9999999999999,
-      minimum: 100,
     },
   },
   newSalesAmount: {
@@ -236,7 +173,7 @@ export const SAMPLE_PRODUCT_4: IFund = {
     },
     cash: {
       maximum: 9999999999999,
-      minimum: 1000,
+      minimum: 2000,
     },
   },
   fundCurrency: "MYR",
@@ -270,32 +207,40 @@ export const SAMPLE_PRODUCT_5: IFund = {
   riskCategory: "High",
   isEpf: false,
   isShariah: false,
-  isScheduled: false,
+  isScheduled: true,
   fundObjective:
     "The portfolio seeks to deliver potential consistent return through investments in Kenanga Investors Berhad approved money market, fixed income and equities funds. These funds qualified under EPF Member’s Investment Scheme.",
   fundCategory: "CAPITAL GUARANTEED",
   latestFundSize: 5000000,
   salesCharge: {
     epf: {
-      maximum: "",
-      minimum: "",
+      maximum: 10,
+      minimum: 0,
     },
     cash: {
-      maximum: "1.500%",
-      minimum: "",
+      maximum: 10,
+      minimum: 0,
     },
   },
-  annualManagementFee: "1.000%",
+  annualManagementFee: 1,
   topUpAmount: {
     cash: {
       maximum: 9999999999999,
-      minimum: 5000,
+      minimum: 500,
+    },
+    epf: {
+      maximum: 9999999999999,
+      minimum: 500,
     },
   },
   newSalesAmount: {
     cash: {
       maximum: 50000000,
-      minimum: 5000,
+      minimum: 2000,
+    },
+    epf: {
+      maximum: 10000000,
+      minimum: 1000,
     },
   },
   fundCurrency: "MYR",
@@ -335,15 +280,18 @@ export const SAMPLE_PRODUCT_6: IFund = {
   latestFundSize: 5000000,
   salesCharge: {
     cash: {
-      maximum: "1.500%",
-      minimum: "",
+      maximum: 1.5,
     },
   },
-  annualManagementFee: "1.550%",
+  annualManagementFee: 1.55,
   topUpAmount: {
     cash: {
       maximum: 9999999999999,
       minimum: 100,
+    },
+    epf: {
+      maximum: 9999999999999,
+      minimum: 500,
     },
   },
   newSalesAmount: {

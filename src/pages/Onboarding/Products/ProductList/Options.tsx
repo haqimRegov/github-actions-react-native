@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { IconText } from "../../../components";
-import { borderBottomGray2, colorBlue, fs12BoldBlue2, px, sh48, sw16, sw184, sw8 } from "../../../styles";
+import { IconText } from "../../../../components";
+import { borderBottomGray2, colorBlue, fs12BoldBlue2, px, sh48, sw16, sw184, sw8 } from "../../../../styles";
 
 export interface ProductOptionsProps extends ITableOptions {
   handleShowPerformance: (data: IColumnItemAccordion) => void;

@@ -1,11 +1,11 @@
 import React from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CustomSpacer } from "../../../components";
-import { border, colorGray, flexChild, flexRow, sh120, sw1, sw12, sw23, sw56 } from "../../../styles";
+import { CustomSpacer } from "../../../../components";
+import { border, colorGray, flexChild, flexRow, sh120, sw1, sw12, sw23, sw56 } from "../../../../styles";
 
 export interface ProductGraphProps {
-  item: IProduct;
+  item: IFund;
 }
 
 export const ProductGraph = ({ item }: ProductGraphProps) => {
@@ -22,7 +22,7 @@ export const ProductGraph = ({ item }: ProductGraphProps) => {
     <View style={flexRow}>
       <CustomSpacer isHorizontal={true} space={sw56} />
       <View style={container}>
-        <Text>{item.graph}</Text>
+        <Text>{item.name}</Text>
       </View>
       <CustomSpacer isHorizontal={true} space={sw23} />
     </View>

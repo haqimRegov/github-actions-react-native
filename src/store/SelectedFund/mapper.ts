@@ -5,6 +5,7 @@ import { SelectedFundActionProps } from "./actions";
 
 export const SelectedFundMapStateToProps = (state: RootState) => ({
   selectedFunds: state.selectedFund.funds,
+  investmentDetails: state.selectedFund.investmentDetails,
 });
 
 export const SelectedFundMapDispatchToProps = (dispatch: Dispatch) => {

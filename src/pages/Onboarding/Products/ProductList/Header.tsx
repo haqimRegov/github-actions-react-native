@@ -2,9 +2,9 @@ import React, { FunctionComponent, useState } from "react";
 import { ScrollView, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { ActionButtons, CustomSpacer, IconButton } from "../../../components";
-import { IconInput } from "../../../components/Input/IconInput";
-import { Language } from "../../../constants";
+import { ActionButtons, CustomSpacer, IconButton } from "../../../../components";
+import { IconInput } from "../../../../components/Input/IconInput";
+import { Language } from "../../../../constants";
 import {
   centerHorizontal,
   centerHV,
@@ -35,7 +35,7 @@ import {
   sw218,
   sw24,
   sw40,
-} from "../../../styles";
+} from "../../../../styles";
 
 const { PRODUCT_LIST } = Language.PAGE;
 interface ProductHeaderProps {

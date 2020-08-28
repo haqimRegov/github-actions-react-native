@@ -1,16 +1,5 @@
-declare interface IProduct {
-  epf: string;
-  graph: string;
-  issuer: string;
-  name: string;
-  performance: string;
-  risk: string;
-  shariah: string;
-  type: string;
-}
-
 declare interface IFund {
-  annualManagementFee?: string;
+  annualManagementFee?: number;
   fundCategory: string;
   fundCurrency: string;
   fundObjective?: string;
@@ -54,12 +43,12 @@ declare interface IFund {
   riskCategory: string;
   salesCharge: {
     cash?: {
-      maximum?: string;
-      minimum?: string;
+      maximum?: number;
+      minimum?: number;
     };
     epf?: {
-      maximum?: string;
-      minimum?: string;
+      maximum?: number;
+      minimum?: number;
     };
   };
   topUpAmount?: {
@@ -74,13 +63,15 @@ declare interface IFund {
   };
 }
 
-declare interface IProductConfirmation extends IProduct {
-  accountType: string;
-  channel: string;
-  currency: string;
-  fundMethod: string;
-  fundType: string;
+declare interface IFundSales extends IFundInvestment {
+  fund: IFund;
+}
+
+declare interface IFundInvestment {
+  fundPaymentMethod: "Cash" | "EPF";
   investmentAmount: string;
-  salesCharge: string;
-  scheduledPayment: string;
+  salesCharge: number;
+  scheduledInvestment: boolean;
+  scheduledInvestmentAmount?: string;
+  scheduledSalesCharge?: number;
 }

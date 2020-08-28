@@ -39,27 +39,29 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
   bankingDetails,
   setBankingDetails,
 }: ILocalBankDetailsProps) => {
-  const updatedDetails = [...bankingDetails];
-
   return (
     <View>
       {bankingDetails.map((item: IBankingDetails, index: number) => {
         const handleRemoveNumber = () => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails.splice(updatedDetails.indexOf(item), 1);
           setBankingDetails(updatedDetails);
         };
 
         const handleBankName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].bankName = input;
           setBankingDetails(updatedDetails);
         };
 
         const handleAddCurrency = () => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].currency.push("");
           setBankingDetails(updatedDetails);
         };
 
         const handleOtherBankName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].otherBankName = input;
           setBankingDetails(updatedDetails);
         };
@@ -72,11 +74,13 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
         };
 
         const handleAccountName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].accountName = input;
           setBankingDetails(updatedDetails);
         };
 
         const handleAccountNumber = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].accountNumber = input;
           setBankingDetails(updatedDetails);
         };
@@ -106,6 +110,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 .filter((thisCurrency) => thisCurrency !== item.currency[0])
                 .map((value: TypeBankCurrency, currencyIndex: number) => {
                   const handleRemoveCurrency = () => {
+                    const updatedDetails = [...bankingDetails];
                     const updatedCurrency = [...item.currency];
                     updatedCurrency.splice(currencyIndex + 1, 1);
                     updatedDetails[index].currency = updatedCurrency;
@@ -113,6 +118,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                   };
 
                   const handleOtherCurrency = (input: string) => {
+                    const updatedDetails = [...bankingDetails];
                     const updatedCurrency = [...bankingDetails[index].currency];
                     updatedCurrency[currencyIndex + 1] = input as TypeBankCurrency;
                     updatedDetails[index].currency = updatedCurrency;

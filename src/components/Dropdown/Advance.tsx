@@ -33,7 +33,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 export interface AdvancedDropdownProps {
-  handleChange: (text: string) => void;
+  handleChange: (text: DataType) => void;
   items: TypeLabelValue[];
   label?: string;
   labelStyle?: TextStyle;
@@ -151,7 +151,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
                       return (
                         <TouchableWithoutFeedback key={index} onPress={handleSelect}>
                           <View style={itemContainer}>
-                            <Text style={itemStyle}>{itemExtractor.value}</Text>
+                            <Text style={itemStyle}>{itemExtractor.label}</Text>
                           </View>
                         </TouchableWithoutFeedback>
                       );

@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { ContentPage, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
+import { DICTIONARY_CURRENCY, DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
 import {
   borderBottomBlack21,
   borderBottomGray7,
@@ -16,7 +16,7 @@ import {
   sw24,
   sw48,
 } from "../../../styles";
-import { BankDetails, initialLocalBankState } from "./BankDetails";
+import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 import { EPFDetails } from "./EPFDetails";
 import { MalaysianDetails } from "./MalaysianDetails";
@@ -36,6 +36,14 @@ const mobileNumberState: IContactNumber = {
 
 // TODO joint and dynamic handling of data
 export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
+  const initialLocalBankState: IBankingDetails = {
+    accountName: "",
+    accountNumber: "",
+    bankName: "",
+    currency: [DICTIONARY_CURRENCY[0].value],
+    otherBankName: "",
+  };
+
   const [contactNumber, setContactNumber] = useState<IContactNumber[]>([mobileNumberState]);
   const [localBankDetails, setLocalBankDetails] = useState<IBankingDetails[]>([initialLocalBankState]);
   const [foreignBankDetails, setForeignBankDetails] = useState<IBankingDetails[]>([]);

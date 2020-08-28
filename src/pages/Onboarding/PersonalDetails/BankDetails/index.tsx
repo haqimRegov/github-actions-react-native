@@ -17,42 +17,48 @@ interface IBankDetailsProps {
   setLocalBankDetails: (input: IBankingDetails[]) => void;
 }
 
-export const initialLocalBankState: IBankingDetails = {
-  accountName: "",
-  accountNumber: "",
-  bankName: "",
-  currency: [DICTIONARY_CURRENCY[0].value],
-  otherBankName: "",
-};
-
-export const initialForeignBankState: IBankingDetails = {
-  ...initialLocalBankState,
-  currency: [""],
-};
-
 export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   foreignBankDetails,
   localBankDetails,
   setForeignBankDetails,
   setLocalBankDetails,
 }: IBankDetailsProps) => {
+  const initialLocalBankState: IBankingDetails = {
+    accountName: "",
+    accountNumber: "",
+    bankName: "",
+    currency: [DICTIONARY_CURRENCY[0].value],
+    otherBankName: "",
+  };
+
+  const initialForeignBankState: IBankingDetails = {
+    ...initialLocalBankState,
+    currency: [""],
+  };
+
   const handleAddLocalBank = () => {
-    const bankingDetailsClone = [...localBankDetails, { ...initialLocalBankState }];
+    const bankingDetailsClone = [...localBankDetails];
+    bankingDetailsClone.push(initialLocalBankState);
     setLocalBankDetails(bankingDetailsClone);
   };
 
   const handleAddForeignBank = () => {
-    const bankingDetailsClone = [...foreignBankDetails, { ...initialForeignBankState }];
+    const bankingDetailsClone = [...foreignBankDetails];
+    bankingDetailsClone.push(initialForeignBankState);
     setForeignBankDetails(bankingDetailsClone);
   };
+
+  const spaceToButton = foreignBankDetails.length !== 0 ? sh32 : sh8;
 
   return (
     <View>
       <LocalBankDetails bankingDetails={localBankDetails} setBankingDetails={setLocalBankDetails} />
-      <ForeignBankDetails bankingDetails={foreignBankDetails} setBankingDetails={setForeignBankDetails} />
       <View style={px(sw24)}>
         <OutlineButton icon="plus" onPress={handleAddLocalBank} text={PERSONAL_DETAILS.BUTTON_ADD_LOCAL} textStyle={fs12RegBlack2} />
-        <CustomSpacer space={sh8} />
+      </View>
+      <CustomSpacer space={spaceToButton} />
+      <ForeignBankDetails bankingDetails={foreignBankDetails} setBankingDetails={setForeignBankDetails} />
+      <View style={px(sw24)}>
         <OutlineButton icon="plus" onPress={handleAddForeignBank} text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN} textStyle={fs12RegBlack2} />
       </View>
       <CustomSpacer space={sh32} />

@@ -39,37 +39,41 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
   bankingDetails,
   setBankingDetails,
 }: IForeignBankDetailsProps) => {
-  const updatedDetails = [...bankingDetails];
-
   return (
     <View>
       {bankingDetails.map((item: IBankingDetails, index: number) => {
         const handleAddCurrency = () => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].currency.push("");
           setBankingDetails(updatedDetails);
         };
 
         const handleRemoveNumber = () => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails.splice(updatedDetails.indexOf(item), 1);
           setBankingDetails(updatedDetails);
         };
 
         const handleBankName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].bankName = input;
           setBankingDetails(updatedDetails);
         };
 
         const handleAccountName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].accountName = input;
           setBankingDetails(updatedDetails);
         };
 
         const handleAccountNumber = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].accountNumber = input;
           setBankingDetails(updatedDetails);
         };
 
         const handleSwiftCode = (input: string) => {
+          const updatedDetails = [...bankingDetails];
           updatedDetails[index].bankSwiftCode = input;
           setBankingDetails(updatedDetails);
         };
@@ -92,11 +96,10 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
               />
             </View>
             <View style={px(sw24)}>
-              <CustomTextInput disabled={true} label={PERSONAL_DETAILS.LABEL_CURRENCY} value={item.currency[0]} />
-              {item.currency.slice(1).map((value: TypeBankCurrency, currencyIndex: number) => {
+              {item.currency.map((value: TypeBankCurrency, currencyIndex: number) => {
                 const handleRemoveCurrency = () => {
                   const updatedCurrency = [...item.currency];
-                  updatedCurrency.splice(currencyIndex + 1, 1);
+                  updatedCurrency.splice(currencyIndex, 1);
                   const updatedBankingDetails = [...bankingDetails];
                   updatedBankingDetails[index].currency = updatedCurrency;
                   setBankingDetails(updatedBankingDetails);
@@ -104,33 +107,32 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
 
                 const handleOtherCurrency = (input: string) => {
                   const updatedCurrency = [...bankingDetails[index].currency];
-                  updatedCurrency[currencyIndex + 1] = input as TypeBankCurrency;
+                  updatedCurrency[currencyIndex] = input as TypeBankCurrency;
                   const updatedBankingDetails = [...bankingDetails];
                   updatedBankingDetails[index].currency = updatedCurrency;
                   setBankingDetails(updatedBankingDetails);
                 };
 
+                const label = currencyIndex === 0 ? PERSONAL_DETAILS.LABEL_CURRENCY : PERSONAL_DETAILS.LABEL_OTHER_CURRENCY;
+
                 return (
-                  <View key={currencyIndex} style={{ ...centerVertical, ...flexRow }}>
-                    <AdvancedDropdown
-                      handleChange={handleOtherCurrency}
-                      items={currencyExtractor}
-                      label={PERSONAL_DETAILS.LABEL_OTHER_CURRENCY}
-                      spaceToTop={sh32}
-                      value={value}
-                    />
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <View>
-                      <CustomFlexSpacer />
-                      <IconButton
-                        name="trash"
-                        color={colorBlack._1}
-                        onPress={handleRemoveCurrency}
-                        size={sh24}
-                        style={circle(sw40, colorTransparent)}
-                      />
+                  <Fragment key={currencyIndex}>
+                    {currencyIndex === 0 ? null : <CustomSpacer space={sh32} />}
+                    <View style={{ ...centerVertical, ...flexRow }}>
+                      <AdvancedDropdown handleChange={handleOtherCurrency} items={currencyExtractor} label={label} value={value} />
+                      <CustomSpacer isHorizontal={true} space={sw16} />
+                      <View>
+                        <CustomFlexSpacer />
+                        <IconButton
+                          name="trash"
+                          color={colorBlack._1}
+                          onPress={handleRemoveCurrency}
+                          size={sh24}
+                          style={circle(sw40, colorTransparent)}
+                        />
+                      </View>
                     </View>
-                  </View>
+                  </Fragment>
                 );
               })}
               {item.currency.length === DICTIONARY_CURRENCY.length ? null : (

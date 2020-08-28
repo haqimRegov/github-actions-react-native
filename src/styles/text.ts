@@ -184,6 +184,12 @@ export const fs16RegGray7: TextStyle = {
   fontSize: sh16,
 };
 
+export const fs16SemiBoldBlue1: TextStyle = {
+  color: colorBlue._1,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+};
+
 export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,

@@ -8,8 +8,8 @@ export const ClientMapStateToProps = (state: RootState) => ({
   details: state.client.details,
 });
 
-export const ClintMapDispatchToProps = (dispatch: Dispatch) => {
+export const ClientMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(ClientActionProps, dispatch);
 };
 
-export type ClientStoreProps = ReturnType<typeof ClientMapStateToProps> & ReturnType<typeof ClintMapDispatchToProps>;
+export type ClientStoreProps = ReturnType<typeof ClientMapStateToProps> & ReturnType<typeof ClientMapDispatchToProps>;

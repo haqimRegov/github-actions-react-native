@@ -3,6 +3,90 @@ export const IcoMoonSelection = {
   icons: [
     {
       icon: {
+        paths: ["M512 682.667l256-298.667h-512l256 298.667z"],
+        attrs: [{}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["arrow-solid-down"],
+      },
+      attrs: [{}],
+      properties: {
+        order: 58,
+        id: 106,
+        name: "arrow-solid-down",
+        prevSize: 32,
+        code: 59695,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 0,
+    },
+    {
+      icon: {
+        paths: ["M341.333 512l298.667 256-0-512-298.667 256z"],
+        attrs: [{}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["arrow-solid-left"],
+      },
+      attrs: [{}],
+      properties: {
+        order: 59,
+        id: 107,
+        name: "arrow-solid-left",
+        prevSize: 32,
+        code: 59696,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 1,
+    },
+    {
+      icon: {
+        paths: ["M512 341.333l-256 298.667h512l-256-298.667z"],
+        attrs: [{}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["arrow-solid-up"],
+      },
+      attrs: [{}],
+      properties: {
+        order: 60,
+        id: 109,
+        name: "arrow-solid-up",
+        prevSize: 32,
+        code: 59697,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 2,
+    },
+    {
+      icon: {
+        paths: ["M682.667 512l-298.667-256v512l298.667-256z"],
+        attrs: [{}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["arrow-solid-right"],
+      },
+      attrs: [{}],
+      properties: {
+        order: 61,
+        id: 108,
+        name: "arrow-solid-right",
+        prevSize: 32,
+        code: 59698,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 3,
+    },
+    {
+      icon: {
         paths: [
           "M716.087 481.182c13.21 14.797 12.139 37.692-2.394 51.14l-244.442 226.261c-13.564 12.557-34.274 12.557-47.836 0l-111.111-102.844c-14.53-13.449-15.601-36.348-2.392-51.14s35.696-15.885 50.226-2.436l87.194 80.708 220.527-204.122c14.528-13.453 37.018-12.361 50.227 2.432z",
           "M279.273 232.247c-12.185 0-23.972 4.875-32.74 13.713-8.784 8.855-13.805 20.966-13.805 33.694v547.383c0 12.732 5.021 24.841 13.805 33.694 8.768 8.841 20.555 13.713 32.74 13.713h465.453c12.186 0 23.974-4.873 32.742-13.713 8.785-8.853 13.807-20.962 13.807-33.694v-547.383c0-12.728-5.022-24.84-13.807-33.694-8.768-8.838-20.557-13.713-32.742-13.713h-55.411c-17.135 0-31.027-13.785-31.027-30.79s13.892-30.79 31.027-30.79h55.411c28.966 0 56.64 11.602 76.971 32.094 20.314 20.475 31.637 48.144 31.637 76.894v547.383c0 28.753-11.324 56.422-31.637 76.894-20.331 20.493-48.004 32.094-76.971 32.094h-465.453c-28.963 0-56.64-11.601-76.968-32.094-20.312-20.471-31.638-48.141-31.638-76.894v-547.383c0-28.751 11.325-56.419 31.638-76.894 20.329-20.492 48.005-32.094 76.968-32.094v61.581zM279.273 201.457v30.79h55.412c17.137 0 31.030-13.785 31.030-30.79s-13.893-30.79-31.030-30.79h-55.412v30.79z",
@@ -24,7 +108,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 0,
+      iconIdx: 4,
     },
     {
       icon: {
@@ -49,7 +133,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 1,
+      iconIdx: 5,
     },
     {
       icon: {
@@ -75,7 +159,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 2,
+      iconIdx: 6,
     },
     {
       icon: {
@@ -100,7 +184,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 3,
+      iconIdx: 7,
     },
     {
       icon: {
@@ -125,7 +209,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 4,
+      iconIdx: 8,
     },
     {
       icon: {
@@ -150,7 +234,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 5,
+      iconIdx: 9,
     },
     {
       icon: {
@@ -176,7 +260,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 6,
+      iconIdx: 10,
     },
     {
       icon: {
@@ -203,7 +287,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 7,
+      iconIdx: 11,
     },
     {
       icon: {
@@ -228,7 +312,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 8,
+      iconIdx: 12,
     },
     {
       icon: {
@@ -254,7 +338,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 9,
+      iconIdx: 13,
     },
     {
       icon: {
@@ -277,7 +361,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 10,
+      iconIdx: 14,
     },
     {
       icon: {
@@ -302,7 +386,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 11,
+      iconIdx: 15,
     },
     {
       icon: {
@@ -326,7 +410,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 12,
+      iconIdx: 16,
     },
     {
       icon: {
@@ -349,7 +433,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 13,
+      iconIdx: 17,
     },
     {
       icon: {
@@ -373,7 +457,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 14,
+      iconIdx: 18,
     },
     {
       icon: {
@@ -401,7 +485,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 15,
+      iconIdx: 19,
     },
     {
       icon: {
@@ -424,7 +508,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 16,
+      iconIdx: 20,
     },
     {
       icon: {
@@ -448,7 +532,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 17,
+      iconIdx: 21,
     },
     {
       icon: {
@@ -471,7 +555,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 18,
+      iconIdx: 22,
     },
     {
       icon: {
@@ -495,7 +579,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 19,
+      iconIdx: 23,
     },
     {
       icon: {
@@ -519,7 +603,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 20,
+      iconIdx: 24,
     },
     {
       icon: {
@@ -542,7 +626,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 21,
+      iconIdx: 25,
     },
     {
       icon: {
@@ -566,7 +650,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 22,
+      iconIdx: 26,
     },
     {
       icon: {
@@ -589,7 +673,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 23,
+      iconIdx: 27,
     },
     {
       icon: {
@@ -613,7 +697,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 24,
+      iconIdx: 28,
     },
     {
       icon: {
@@ -637,7 +721,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 25,
+      iconIdx: 29,
     },
     {
       icon: {
@@ -661,7 +745,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 26,
+      iconIdx: 30,
     },
     {
       icon: {
@@ -685,7 +769,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 27,
+      iconIdx: 31,
     },
     {
       icon: {
@@ -708,7 +792,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 28,
+      iconIdx: 32,
     },
     {
       icon: {
@@ -731,7 +815,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 29,
+      iconIdx: 33,
     },
     {
       icon: {
@@ -755,7 +839,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 30,
+      iconIdx: 34,
     },
     {
       icon: {
@@ -778,7 +862,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 31,
+      iconIdx: 35,
     },
     {
       icon: {
@@ -802,7 +886,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 32,
+      iconIdx: 36,
     },
     {
       icon: {
@@ -825,7 +909,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 33,
+      iconIdx: 37,
     },
     {
       icon: {
@@ -848,7 +932,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 34,
+      iconIdx: 38,
     },
     {
       icon: {
@@ -873,7 +957,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 35,
+      iconIdx: 39,
     },
     {
       icon: {
@@ -897,7 +981,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 36,
+      iconIdx: 40,
     },
     {
       icon: {
@@ -922,7 +1006,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 37,
+      iconIdx: 41,
     },
     {
       icon: {
@@ -946,7 +1030,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 38,
+      iconIdx: 42,
     },
     {
       icon: {
@@ -969,7 +1053,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 39,
+      iconIdx: 43,
     },
     {
       icon: {
@@ -992,7 +1076,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 40,
+      iconIdx: 44,
     },
     {
       icon: {
@@ -1015,7 +1099,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 41,
+      iconIdx: 45,
     },
     {
       icon: {
@@ -1038,7 +1122,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 42,
+      iconIdx: 46,
     },
     {
       icon: {
@@ -1061,7 +1145,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 43,
+      iconIdx: 47,
     },
     {
       icon: {
@@ -1084,7 +1168,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 44,
+      iconIdx: 48,
     },
     {
       icon: {
@@ -1107,7 +1191,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 45,
+      iconIdx: 49,
     },
     {
       icon: {
@@ -1130,7 +1214,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 46,
+      iconIdx: 50,
     },
   ],
   height: 1024,

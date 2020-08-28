@@ -36,6 +36,7 @@ declare interface OnboardingStepsProps {
 declare type TypeOnboardingRoute =
   | "Acknowledgement"
   | "Declaration"
+  | "EmailVerification"
   | "EmploymentDetails"
   | "IdentityVerification"
   | "Payment"
@@ -47,6 +48,7 @@ declare type TypeOnboardingRoute =
 declare interface IOnboardingRoutes {
   Acknowledgement: TypeOnboardingRoute;
   Declaration: TypeOnboardingRoute;
+  EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;

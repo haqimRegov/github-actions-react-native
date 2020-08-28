@@ -32,4 +32,26 @@ export const SAMPLE_CLIENT_3: IClientDetails = {
   postCode: "46050",
 };
 
+export const SAMPLE_CLIENT_4: IClientDetailsResponse = {
+  dateOfBirth: "04 January 1998",
+  id: "EC7742123",
+  idType: "Passport",
+  gender: "Male",
+  permanentAddress: {
+    address: "B-7-3A, Block B West, Menara Pj8",
+    postCode: "46050",
+    city: "Petaling Jaya",
+    country: "Malaysia",
+    state: "Selangor",
+  },
+  mailingAddress: {
+    address: "B-7-3A, Block B West, Menara Pj8",
+    postCode: "46050",
+    city: "Petaling Jaya",
+    country: "Malaysia",
+    state: "Selangor",
+  },
+  name: "Aldrin Castro",
+};
+
 export const SAMPLE_CLIENTS = [SAMPLE_CLIENT_2, SAMPLE_CLIENT_3];

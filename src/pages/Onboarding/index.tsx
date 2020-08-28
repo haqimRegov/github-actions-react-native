@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import { OnboardingSteps } from "../../components";
@@ -19,8 +19,9 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
   {
     content: [
+      { title: ONBOARDING.TITLE_EMAIL_VERIFICATION, route: ONBOARDING_ROUTES.EmailVerification },
       { title: ONBOARDING.TITLE_ID_VERIFICATION, route: ONBOARDING_ROUTES.IdentityVerification },
-      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
+      { title: ONBOARDING.TITLE_PERSONAL_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
       { title: ONBOARDING.TITLE_PRS, route: ONBOARDING_ROUTES.PRSDetails },
       { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
       { title: ONBOARDING.TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
@@ -41,7 +42,7 @@ interface OnboardingProps extends OnboardingStepsStoreProps {
   navigation: IStackNavigationProp;
 }
 
-const OnboardingPageComponent = (props: OnboardingProps) => {
+const OnboardingPageComponent: FunctionComponent<OnboardingProps> = (props: OnboardingProps) => {
   const { finishedSteps, navigation } = props;
 
   const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);

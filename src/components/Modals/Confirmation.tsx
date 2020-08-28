@@ -20,7 +20,8 @@ import {
   sw56,
   sw565,
 } from "../../styles";
-import { ActionButtons, ActionButtonsProps, CustomSpacer } from "../Views";
+import { ActionButtons, ActionButtonsProps } from "../Views/ActionButtons";
+import { CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
 
 interface ModalProps extends ActionButtonsProps {

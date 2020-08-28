@@ -14,6 +14,7 @@ import {
   flexRow,
   fs12BoldBlack2,
   fs16BoldBlack2,
+  fs16RegBlack2,
   px,
   sh40,
   sh8,
@@ -26,6 +27,7 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface ITextInputProps extends TextInputProps {
+  disabled?: boolean;
   inputPrefix?: string;
   label?: string;
   labelStyle?: TextStyle;
@@ -44,6 +46,8 @@ export interface ITextInputProps extends TextInputProps {
 }
 
 export const CustomTextInput = ({
+  disabled,
+  editable,
   inputPrefix,
   label,
   labelStyle,
@@ -76,9 +80,8 @@ export const CustomTextInput = ({
   };
   const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
 
-  // // TODO improved placeholder style
-  // const placeHolderStyle: TextStyle =
-  //   value === "" || value === undefined ? { ...fs16RegBlack2, letterSpacing: -0.39, opacity: 0.7 } : fs16BoldBlack2;
+  const disabledStyle: TextStyle = disabled === true ? { opacity: 0.5 } : {};
+  const disabledInput = disabled === true ? !disabled : editable;
 
   return (
     <View onLayout={onLayout}>
@@ -97,16 +100,17 @@ export const CustomTextInput = ({
       <View style={defaultInputStyle}>
         {inputPrefix !== undefined ? (
           <Fragment>
-            <Text style={prefixStyle}>{inputPrefix}</Text>
+            <Text style={{ ...fs16RegBlack2, ...prefixStyle }}>{inputPrefix}</Text>
             <CustomSpacer isHorizontal={true} space={sw8} />
           </Fragment>
         ) : null}
         <TextInput
+          editable={disabledInput}
           placeholder={rest.placeholder}
           placeholderTextColor={colorBlue._4_7}
           ref={setRef}
           selectionColor={colorBlack._2}
-          style={{ ...fs16BoldBlack2, ...flexChild, height: sh40, ...style }}
+          style={{ ...fs16BoldBlack2, ...flexChild, height: sh40, ...disabledStyle, ...style }}
           underlineColorAndroid={colorTransparent}
           value={value}
           {...rest}

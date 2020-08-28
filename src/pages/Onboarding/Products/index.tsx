@@ -7,14 +7,13 @@ import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { SAMPLE_PRODUCTS_1 } from "../../../mocks";
 import { SelectedFundMapDispatchToProps, SelectedFundMapStateToProps, SelectedFundStoreProps } from "../../../store";
 import { flexChild, flexCol } from "../../../styles";
-import { IdentityConfirmation } from "../IdentityVerification/IdentityConfirmation";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductList } from "./ProductList";
 
 const { PRODUCT_CONFIRMATION } = Language.PAGE;
 
 interface ProductsProps extends SelectedFundStoreProps {
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextStep, selectedFunds, addSelectedFund }: ProductsProps) => {
@@ -67,14 +66,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({ handleNextS
       ),
       onPressSubmit: handleConfirmIdentity,
       labelSubmit: PRODUCT_CONFIRMATION.BUTTON_CONFIRM,
-    };
-  }
-
-  if (page === 2) {
-    screen = {
-      ...screen,
-      content: <IdentityConfirmation handleNextStep={handleNextStep} />,
-      onPressSubmit: handleConfirmIdentity,
     };
   }
 

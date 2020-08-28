@@ -1,34 +1,34 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
+import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, SafeAreaPage, UploadWithModal } from "../../../components";
 import { Language } from "../../../constants";
-import { SAMPLE_CLIENT } from "../../../mocks";
+import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../store";
 import { flexChild, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh40, sh56, sh8, sw24 } from "../../../styles";
 import { IDVerification } from "./IDVerification";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
-const SAMPLE_ID_TYPE = "NRIC";
-
-type IdType = "NRIC" | "Passport" | "Other";
-
-interface IdentityConfirmationProps {
-  handleNextStep: (route: string) => void;
+interface IdentityConfirmationProps extends ClientStoreProps {
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
-
-export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> = ({ handleNextStep }: IdentityConfirmationProps) => {
-  const [idType, setIdType] = useState<IdType | undefined>(undefined);
+const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps> = ({
+  addClientDetails,
+  details,
+  handleNextStep,
+}: IdentityConfirmationProps) => {
+  const { idType } = details!;
   const [frontPage, setFrontPage] = useState<FileBase64 | undefined>(undefined);
   const [secondPage, setSecondPage] = useState<FileBase64 | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
 
-  const buttonDisabled = frontPage === undefined || secondPage === undefined;
+  // const buttonDisabled = frontPage === undefined || secondPage === undefined;
 
   const handleContinue = () => {
-    if (frontPage !== undefined && secondPage !== undefined) {
-      setPage(1);
-    }
+    // if (frontPage !== undefined && secondPage !== undefined) {
+    setPage(1);
+    // }
   };
 
   const handleFirstUpload = (uploaded: FileBase64) => {
@@ -39,23 +39,19 @@ export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> 
     setSecondPage(uploaded);
   };
 
-  let firstLabel = IDENTITY_CONFIRMATION.LABEL_FRONT_NRIC;
-  let secondLabel = IDENTITY_CONFIRMATION.LABEL_BACK_NRIC;
+  let firstLabel = `${IDENTITY_CONFIRMATION.LABEL_FRONT} ${idType}`;
+  let secondLabel = `${IDENTITY_CONFIRMATION.LABEL_BACK} ${idType}`;
+  const defaultTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${idType}`;
+  const title = idType !== "Passport" ? `${defaultTitle} ${IDENTITY_CONFIRMATION.LABEL_ID}` : `${defaultTitle}`;
 
   if (idType === "Passport") {
     firstLabel = IDENTITY_CONFIRMATION.LABEL_DATA_PASSPORT;
   }
 
-  if (idType === "Other") {
-    firstLabel = IDENTITY_CONFIRMATION.LABEL_FRONT_OTHER;
-    secondLabel = IDENTITY_CONFIRMATION.LABEL_BACK_OTHER;
+  if (idType !== "NRIC" && idType !== "Passport") {
+    firstLabel = `${IDENTITY_CONFIRMATION.LABEL_FRONT} ${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}`;
+    secondLabel = `${IDENTITY_CONFIRMATION.LABEL_BACK} ${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}`;
   }
-
-  const title = `${IDENTITY_CONFIRMATION.SUBHEADING} ${SAMPLE_ID_TYPE}`;
-
-  useEffect(() => {
-    setIdType(SAMPLE_ID_TYPE);
-  }, []);
 
   return (
     <Fragment>
@@ -91,13 +87,15 @@ export const IdentityConfirmation: FunctionComponent<IdentityConfirmationProps> 
               </Fragment>
             )}
             <CustomFlexSpacer />
-            <RoundedButton disabled={buttonDisabled} onPress={handleContinue} text={IDENTITY_CONFIRMATION.BUTTON_CONTINUE} />
+            <RoundedButton onPress={handleContinue} text={IDENTITY_CONFIRMATION.BUTTON_CONTINUE} />
             <CustomSpacer space={sh56} />
           </View>
         </SafeAreaPage>
       ) : (
-        <IDVerification isPassport={SAMPLE_CLIENT.isPassport} handleNextStep={handleNextStep} />
+        <IDVerification addClientDetails={addClientDetails} handleNextStep={handleNextStep} details={details!} />
       )}
     </Fragment>
   );
 };
+
+export const IdentityConfirmation = connect(ClientMapStateToProps, ClientMapDispatchToProps)(IdentityConfirmationComponent);

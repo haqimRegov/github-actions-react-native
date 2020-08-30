@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { LayoutChangeEvent, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerVertical, colorBlack, fs12BoldWhite1, px, py, sh12, sw12, sw264, sw32, sw8 } from "../../styles";
+import { centerVertical, colorBlack, fs12BoldWhite1, px, py, sh12, sh24, sw12, sw264, sw32, sw8 } from "../../styles";
 
 export interface IPopupLayout {
   height: number;
@@ -93,6 +93,8 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
     width: sw264,
   };
 
+  const popupTextStyle: TextStyle = { ...fs12BoldWhite1, ...px(sw12), ...py(sh12), lineHeight: sh24, ...textStyle };
+
   return (
     <View onLayout={handleBaseLayout} style={containerStyle}>
       <TouchableWithoutFeedback onPress={handlePress}>
@@ -102,7 +104,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
             <View onLayout={handleLayout} style={{ ...container }}>
               <IcoMoon color={popupColor} name={arrowIcon} size={sw32} style={{ ...iconOffset }} />
               <View style={{ ...defaultPopupStyle, ...popupStyle }}>
-                <Text style={{ ...fs12BoldWhite1, ...px(sw12), ...py(sh12), ...textStyle }}>{popupText}</Text>
+                <Text style={popupTextStyle}>{popupText}</Text>
               </View>
             </View>
           ) : null}

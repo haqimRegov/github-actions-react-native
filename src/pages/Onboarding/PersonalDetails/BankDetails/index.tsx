@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CustomSpacer, OutlineButton } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_CURRENCY } from "../../../../data/dictionary";
-import { fs12RegBlack2, px, sh32, sh8, sw24 } from "../../../../styles";
+import { px, sh32, sh8, sw24 } from "../../../../styles";
 import { ForeignBankDetails } from "./Foreign";
 import { LocalBankDetails } from "./Local";
 
@@ -54,12 +54,12 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
     <View>
       <LocalBankDetails bankingDetails={localBankDetails} setBankingDetails={setLocalBankDetails} />
       <View style={px(sw24)}>
-        <OutlineButton icon="plus" onPress={handleAddLocalBank} text={PERSONAL_DETAILS.BUTTON_ADD_LOCAL} textStyle={fs12RegBlack2} />
+        <OutlineButton icon="plus" onPress={handleAddLocalBank} text={PERSONAL_DETAILS.BUTTON_ADD_LOCAL} />
       </View>
       <CustomSpacer space={spaceToButton} />
       <ForeignBankDetails bankingDetails={foreignBankDetails} setBankingDetails={setForeignBankDetails} />
       <View style={px(sw24)}>
-        <OutlineButton icon="plus" onPress={handleAddForeignBank} text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN} textStyle={fs12RegBlack2} />
+        <OutlineButton icon="plus" onPress={handleAddForeignBank} text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN} />
       </View>
       <CustomSpacer space={sh32} />
     </View>

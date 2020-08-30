@@ -4,22 +4,7 @@ import { View } from "react-native";
 import { CustomFlexSpacer, CustomSpacer, CustomTextInput, IconButton, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
-import {
-  centerVertical,
-  circle,
-  colorBlack,
-  colorGray,
-  colorTransparent,
-  flexRow,
-  fs12RegBlack2,
-  px,
-  sh16,
-  sh24,
-  sh32,
-  sw16,
-  sw24,
-  sw40,
-} from "../../../styles";
+import { centerVertical, circle, colorBlack, colorTransparent, flexRow, px, sh16, sh24, sh32, sw16, sw24, sw40 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -77,7 +62,6 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
                 label={item.label}
                 onChangeText={handleChangeNumber}
                 placeholder="12 3456 7890"
-                placeholderTextColor={colorGray._7}
                 spaceToTop={sh32}
                 value={item.value}
               />
@@ -110,7 +94,7 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
             return contactNumber.some(checkName) ? null : (
               <Fragment key={index}>
                 <CustomSpacer space={sh16} />
-                <OutlineButton icon="plus" onPress={handleAddNumber} text={buttonText} textStyle={fs12RegBlack2} />
+                <OutlineButton icon="plus" onPress={handleAddNumber} text={buttonText} />
               </Fragment>
             );
           })}

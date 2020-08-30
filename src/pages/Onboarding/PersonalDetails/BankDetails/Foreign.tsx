@@ -18,7 +18,6 @@ import {
   colorBlack,
   colorTransparent,
   flexRow,
-  fs12RegBlack2,
   fs16BoldBlue2,
   px,
   sh24,
@@ -138,12 +137,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
               {item.currency.length === DICTIONARY_CURRENCY.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
-                  <OutlineButton
-                    icon="plus"
-                    onPress={handleAddCurrency}
-                    text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
-                    textStyle={fs12RegBlack2}
-                  />
+                  <OutlineButton icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
                 </Fragment>
               )}
 

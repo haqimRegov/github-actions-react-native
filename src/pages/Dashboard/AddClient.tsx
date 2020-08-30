@@ -118,7 +118,7 @@ const AddClientComponent = (props: AddClientProps) => {
             <TextSpaceArea spaceToBottom={sh16} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
             <RadioButtonGroup
               direction="row"
-              labels={DICTIONARY_ID_TYPE}
+              options={DICTIONARY_ID_TYPE}
               selected={radioIDType}
               setSelected={setRadioIDType}
               space={sw56}
@@ -150,7 +150,7 @@ const AddClientComponent = (props: AddClientProps) => {
               </Fragment>
             )}
             <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs16RegBlack2} text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE} />
-            <RadioButtonGroup direction="row" labels={DICTIONARY_ACCOUNT_TYPE} selected={accountType} setSelected={setAccountType} />
+            <RadioButtonGroup direction="row" options={DICTIONARY_ACCOUNT_TYPE} selected={accountType} setSelected={setAccountType} />
           </Fragment>
         ) : (
           <Fragment>

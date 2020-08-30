@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { AdvancedDropdown, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_RACE } from "../../../data/dictionary";
-import { fs16SemiBoldBlack2, px, sh16, sh32, sw24, sw40, sw48 } from "../../../styles";
+import { fs16SemiBoldBlack2, px, sh16, sh32, sw24, sw40 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -33,8 +33,7 @@ export const MalaysianDetails: FunctionComponent<MalaysianDetailsProps> = ({
       <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} text={PERSONAL_DETAILS.LABEL_BUMIPUTERA} style={fs16SemiBoldBlack2} />
       <RadioButtonGroup
         direction="row"
-        labels={[PERSONAL_DETAILS.OPTION_BUMIPUTERA_YES, PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO]}
-        labelStyle={{ width: sw48 }}
+        options={[PERSONAL_DETAILS.OPTION_BUMIPUTERA_YES, PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO]}
         selected={inputBumiputera}
         setSelected={setInputBumiputera}
         space={sw40}

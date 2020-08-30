@@ -166,7 +166,7 @@ export const Acknowledgement = ({ handleNextStep }: AcknowledgementProps) => {
         <CustomSpacer space={sh16} />
         <RadioButtonGroup
           direction="row"
-          labels={[ACKNOWLEDGEMENT.OPTION_CONSENT_NO, ACKNOWLEDGEMENT.OPTION_CONSENT_YES]}
+          options={[ACKNOWLEDGEMENT.OPTION_CONSENT_NO, ACKNOWLEDGEMENT.OPTION_CONSENT_YES]}
           selected={inputConsent}
           setSelected={setInputConsent}
           space={sh40}

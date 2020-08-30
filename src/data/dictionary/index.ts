@@ -3,6 +3,7 @@ export * from "./banks";
 export * from "./business-nature";
 export * from "./countries";
 export * from "./currency";
+export * from "./declaration";
 export * from "./education-level";
 export * from "./epf-type";
 export * from "./id-type";

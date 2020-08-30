@@ -33,7 +33,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 export interface AdvancedDropdownProps {
-  handleChange: (text: DataType) => void;
+  handleChange: (text: string) => void;
   items: TypeLabelValue[];
   label?: string;
   labelStyle?: TextStyle;

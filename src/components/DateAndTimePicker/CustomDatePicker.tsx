@@ -133,7 +133,6 @@ export const CustomDatePicker = ({
               <CustomTextInput
                 editable={false}
                 placeholder={placeholder}
-                placeholderTextColor={colorGray._7}
                 rightIcon={icon}
                 value={selectedValue}
                 viewStyle={baseInputStyle}

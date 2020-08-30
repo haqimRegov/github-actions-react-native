@@ -35,7 +35,7 @@ export const Question = ({ label, options, RenderContent, right, selected, setSe
       ) : (
         <View style={flexRow}>
           {options !== undefined ? (
-            <RadioButtonGroup direction="column" labels={options} selected={options[selected]} setSelected={handleSelect} />
+            <RadioButtonGroup direction="column" options={options} selected={options[selected]} setSelected={handleSelect} />
           ) : null}
           <CustomFlexSpacer />
           {right !== undefined ? right : null}

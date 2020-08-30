@@ -4,18 +4,7 @@ import { View } from "react-native";
 import { ContentPage, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_CURRENCY, DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
-import {
-  borderBottomBlack21,
-  borderBottomGray7,
-  fs16SemiBoldBlack2,
-  fs24BoldBlack2,
-  px,
-  sh16,
-  sh24,
-  sh32,
-  sw24,
-  sw48,
-} from "../../../styles";
+import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sw24, sw48 } from "../../../styles";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 import { EPFDetails } from "./EPFDetails";
@@ -93,12 +82,12 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
           setForeignBankDetails={setForeignBankDetails}
           setLocalBankDetails={setLocalBankDetails}
         />
-        <View style={borderBottomGray7} />
+        <View style={borderBottomBlack21} />
         <View style={px(sw24)}>
           <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_DISTRIBUTION} />
           <RadioButtonGroup
             direction="row"
-            labels={[PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT, PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST]}
+            options={[PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT, PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST]}
             selected={inputDistribution}
             setSelected={setInputDistribution}
             space={sw48}

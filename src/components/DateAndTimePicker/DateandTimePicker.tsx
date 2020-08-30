@@ -87,14 +87,7 @@ export const DateAndTimePicker = ({ buttonText, datePicker, handleData, setShowC
         <View style={containerStyle} ref={(refs) => setRef(refs)}>
           <TouchableWithoutFeedback onPress={handleCollapse}>
             <View onStartShouldSetResponderCapture={() => true}>
-              <CustomTextInput
-                editable={false}
-                placeholder={placeholderText}
-                placeholderTextColor={colorGray._7}
-                rightIcon={icon}
-                value={value}
-                viewStyle={inputStyle}
-              />
+              <CustomTextInput editable={false} placeholder={placeholderText} rightIcon={icon} value={value} viewStyle={inputStyle} />
             </View>
           </TouchableWithoutFeedback>
         </View>

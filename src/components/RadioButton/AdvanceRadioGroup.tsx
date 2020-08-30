@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, ReactNode } from "react";
 import { TextStyle, View } from "react-native";
 
 import { flexCol, flexRow, fs16RegBlack2, sh16, sw16 } from "../../styles";
@@ -6,11 +6,17 @@ import { CustomSpacer } from "../Views/Spacer";
 import { TextSpaceArea } from "../Views/TextSpaceArea";
 import { RadioButton } from "./RadioButton";
 
-export interface RadioButtonGroupProps {
+export interface IAdvanceRadio {
+  label: string;
+  right?: ReactNode;
+  value: string;
+}
+
+export interface AdvanceRadioGroupProps {
   direction?: "row" | "column";
   label?: string;
   labelStyle?: TextStyle;
-  options: string[];
+  options: IAdvanceRadio[];
   optionStyle?: TextStyle;
   selected: string;
   setSelected: (selected: string) => void;
@@ -19,7 +25,7 @@ export interface RadioButtonGroupProps {
   spaceToTop?: number;
 }
 
-export const RadioButtonGroup = ({
+export const AdvanceRadioGroup = ({
   direction,
   label,
   labelStyle,
@@ -30,7 +36,7 @@ export const RadioButtonGroup = ({
   space,
   spaceToLabel,
   spaceToTop,
-}: RadioButtonGroupProps) => {
+}: AdvanceRadioGroupProps) => {
   const defaultSpace = direction === "row" ? sw16 : sh16;
   const radioSpace = space !== undefined ? space : defaultSpace;
 
@@ -41,14 +47,20 @@ export const RadioButtonGroup = ({
         <TextSpaceArea spaceToBottom={spaceToLabel || sh16} style={{ ...fs16RegBlack2, ...labelStyle }} text={label} />
       ) : null}
       <View style={direction === "row" ? flexRow : flexCol}>
-        {options.map((option: string, index: number) => {
+        {options.map((option: IAdvanceRadio, index: number) => {
           const handleSelect = () => {
-            setSelected(option);
+            setSelected(option.value);
           };
           return (
             <Fragment key={index}>
               {index === 0 ? null : <CustomSpacer isHorizontal={direction === "row"} space={radioSpace} />}
-              <RadioButton label={option} labelStyle={optionStyle} selected={option === selected} setSelected={handleSelect} />
+              <RadioButton
+                label={option.label}
+                labelStyle={optionStyle}
+                right={option.right}
+                selected={option.value === selected}
+                setSelected={handleSelect}
+              />
             </Fragment>
           );
         })}

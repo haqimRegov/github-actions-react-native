@@ -21,6 +21,7 @@ import { CustomSpacer } from "../Views/Spacer";
 
 export interface CheckBoxProps {
   checkboxStyle?: ViewStyle;
+  disabled?: boolean;
   label?: string;
   labelStyle?: TextStyle;
   onPress: () => void;
@@ -29,8 +30,10 @@ export interface CheckBoxProps {
   toggle: boolean;
 }
 
-export const CheckBox = ({ checkboxStyle, label, labelStyle, onPress, spaceToLabel, style, toggle }: CheckBoxProps) => {
+export const CheckBox = ({ checkboxStyle, disabled, label, labelStyle, onPress, spaceToLabel, style, toggle }: CheckBoxProps) => {
   const selectedStyle: ViewStyle = toggle ? { backgroundColor: colorRed._1, borderColor: colorRed._1 } : {};
+  const disabledStyle: ViewStyle = disabled === true ? { opacity: 0.5 } : {};
+
   const toggleStyle: ViewStyle = {
     ...centerHV,
     borderColor: colorBlue._2,
@@ -39,13 +42,20 @@ export const CheckBox = ({ checkboxStyle, label, labelStyle, onPress, spaceToLab
     height: sw16,
     width: sw16,
     ...selectedStyle,
+    ...disabledStyle,
   };
 
   const defaultSpace = spaceToLabel !== undefined ? spaceToLabel : sw10;
 
+  const handlePress = () => {
+    if (disabled !== true) {
+      onPress();
+    }
+  };
+
   return (
     <View style={flexRow}>
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback onPress={handlePress}>
         <View style={{ ...centerVertical, ...flexRow, ...style }}>
           <View style={checkboxStyle}>
             <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="check" size={sh12} /> : null}</View>
@@ -53,7 +63,7 @@ export const CheckBox = ({ checkboxStyle, label, labelStyle, onPress, spaceToLab
           {label === undefined ? null : (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={defaultSpace} />
-              <Text onPress={onPress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...labelStyle }}>
+              <Text onPress={handlePress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...disabledStyle, ...labelStyle }}>
                 {label}
               </Text>
             </Fragment>

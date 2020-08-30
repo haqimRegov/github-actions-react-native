@@ -11,7 +11,7 @@ export const colorBlack = {
 };
 
 export const colorBlue = {
-  _1: "#0091ff",
+  _1: "#0089EC",
   _2: "#002043",
   _2_5: "rgba(0, 32, 67, 0.5)",
   _3: "#2A365A",
@@ -19,7 +19,6 @@ export const colorBlue = {
   _4: "#29365A",
   _4_7: "rgba(41,54,90, 0.7)",
   _5: "#122778",
-  _6: "#0089EC",
 };
 
 export const colorGray = {

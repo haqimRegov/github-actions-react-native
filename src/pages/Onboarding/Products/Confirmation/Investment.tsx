@@ -52,7 +52,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
 
   for (let index = minSalesCharge || 0; index <= maxSalesCharge; index += 0.5) {
-    const element: TypeLabelValue = { label: `${index}`, value: index };
+    const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
     extractedSalesCharge.push(element);
   }
 
@@ -74,10 +74,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
     setData({ ...data, investmentAmount: text });
   };
 
-  const handleSalesCharge = (value: DataType) => {
-    if (typeof value === "number") {
-      setData({ ...data, salesCharge: value });
-    }
+  const handleSalesCharge = (value: string) => {
+    setData({ ...data, salesCharge: parseInt(value, 10) });
   };
 
   const handleScheduled = () => {
@@ -93,10 +91,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
     setData({ ...data, scheduledInvestmentAmount: value });
   };
 
-  const handleScheduledSalesCharge = (value: DataType) => {
-    if (typeof value === "number") {
-      setData({ ...data, scheduledSalesCharge: value });
-    }
+  const handleScheduledSalesCharge = (value: string) => {
+    setData({ ...data, scheduledSalesCharge: parseInt(value, 10) });
   };
 
   const investmentAmountInput = (
@@ -130,7 +126,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
         {fund.isEpf && age < 55 ? (
           <View>
             <TextSpaceArea spaceToBottom={sh16} style={{ ...fs16RegBlack2, width: sw360 }} text={INVESTMENT.LABEL_FUND} />
-            <RadioButtonGroup labels={RADIO_GROUP_1} space={sh24} selected={fundPaymentMethod} setSelected={handleFundingMethod} />
+            <RadioButtonGroup options={RADIO_GROUP_1} space={sh24} selected={fundPaymentMethod} setSelected={handleFundingMethod} />
           </View>
         ) : (
           investmentAmountInput

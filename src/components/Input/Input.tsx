@@ -6,7 +6,6 @@ import {
   border,
   centerVertical,
   colorBlack,
-  colorBlue,
   colorGray,
   colorTransparent,
   colorWhite,
@@ -107,7 +106,7 @@ export const CustomTextInput = ({
         <TextInput
           editable={disabledInput}
           placeholder={rest.placeholder}
-          placeholderTextColor={colorBlue._4_7}
+          placeholderTextColor={colorGray._7}
           ref={setRef}
           selectionColor={colorBlack._2}
           style={{ ...fs16BoldBlack2, ...flexChild, height: sh40, ...disabledStyle, ...style }}

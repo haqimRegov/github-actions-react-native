@@ -23,11 +23,6 @@ import { CustomSpacer } from "../Views/Spacer";
 import { CustomTextInput, ITextInputProps } from "./Input";
 
 export interface TextInputAreaProps extends ITextInputProps {
-  label?: string;
-  labelStyle?: TextStyle;
-  onPressLabel?: () => void;
-  spaceToLabel?: number;
-  spaceToTop?: number;
   style?: TextStyle;
 }
 
@@ -35,9 +30,10 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
   label,
   labelStyle,
   onPressLabel,
-  style,
+  spaceToBottom,
   spaceToLabel,
   spaceToTop,
+  style,
   ...rest
 }: TextInputAreaProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
@@ -120,6 +116,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
           viewStyle={dummyInputStyle}
         />
       </View>
+      {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
     </Fragment>
   );
 };

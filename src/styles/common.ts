@@ -2,6 +2,7 @@ import { Dimensions } from "react-native";
 
 import { colorBlack, colorBlue, colorGray, colorTransparent } from "./colors";
 
+export const alignFlexStart = { alignItems: "flex-start" } as const;
 export const alignItemsEnd = { alignItems: "flex-end" } as const;
 export const alignItemsStart = { alignItems: "flex-start" } as const;
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
@@ -9,6 +10,7 @@ export const alignSelfCenter = { alignSelf: "center" } as const;
 export const centerHorizontal = { justifyContent: "center" } as const;
 export const centerVertical = { alignItems: "center" } as const;
 export const centerHV = { ...centerHorizontal, ...centerVertical } as const;
+export const justifyContentEnd = { justifyContent: "flex-end" } as const;
 export const spaceBetweenHorizontal = { justifyContent: "space-between" } as const;
 export const spaceBetweenVertical = { alignContent: "space-between" } as const;
 export const spaceBetweenHV = { ...spaceBetweenHorizontal, ...spaceBetweenVertical } as const;
@@ -33,7 +35,6 @@ export const fullHeight = { height: "100%" } as const;
 export const fullWidth = { width: "100%" } as const;
 export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: colorBlack._2_1 } as const;
-export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderBottomGray7 = { borderBottomWidth: 1, borderBottomColor: colorGray._7 } as const;
 export const borderLeftGray2 = { borderLeftWidth: 1, borderLeftColor: colorGray._2 } as const;

@@ -12,6 +12,11 @@ export const fsUppercase: TextStyle = {
 export const fsCapitalize: TextStyle = {
   textTransform: "capitalize",
 };
+
+export const fsTransformNone: TextStyle = {
+  textTransform: "none",
+};
+
 export const fsUnderline: TextStyle = {
   textDecorationLine: "underline",
 };
@@ -42,6 +47,12 @@ export const fs10RegBlue25: TextStyle = {
 
 export const fs12BoldBlack2: TextStyle = {
   color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh12,
+};
+
+export const fs12BoldBlack26: TextStyle = {
+  color: colorBlack._2_6,
   fontFamily: NunitoBold,
   fontSize: sh12,
 };
@@ -84,18 +95,6 @@ export const fs12RegBlue2: TextStyle = {
 
 export const fs12RegBlue25: TextStyle = {
   color: colorBlue._2_5,
-  fontFamily: NunitoRegular,
-  fontSize: sh12,
-};
-
-export const fs12BoldBlack26: TextStyle = {
-  color: colorBlack._2_6,
-  fontFamily: NunitoBold,
-  fontSize: sh12,
-};
-
-export const fs12RegBlue6: TextStyle = {
-  color: colorBlue._6,
   fontFamily: NunitoRegular,
   fontSize: sh12,
 };

@@ -20,10 +20,8 @@ export interface LinkTextGroupProps {
 }
 
 export const LinkText = ({ onPress, style, text }: LinkTextProps) => {
-  const textLinkStyle: TextStyle = { ...fs12RegBlue1, ...fsCapitalize, ...style };
-
   return (
-    <Text onPress={onPress} style={textLinkStyle}>
+    <Text onPress={onPress} style={{ ...fs12RegBlue1, ...fsCapitalize, ...style }}>
       {text}
     </Text>
   );

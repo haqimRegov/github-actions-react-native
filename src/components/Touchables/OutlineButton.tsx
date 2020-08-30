@@ -9,8 +9,7 @@ import {
   colorRed,
   colorTransparent,
   flexRow,
-  fs16SemiBoldWhite1,
-  fsCapitalize,
+  fs12RegBlack2,
   px,
   sh16,
   sh32,
@@ -62,7 +61,7 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
             <CustomSpacer isHorizontal={true} space={sw8} />
           </Fragment>
         )}
-        <Text style={{ ...fs16SemiBoldWhite1, ...fsCapitalize, color: color, ...textStyle }}>{text}</Text>
+        <Text style={{ ...fs12RegBlack2, color: color, ...textStyle }}>{text}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

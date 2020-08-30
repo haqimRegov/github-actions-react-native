@@ -25,11 +25,11 @@ export const ActionButtons = ({
   cancelButtonStyle,
   cancelDisabled,
   continueButtonStyle,
+  continueDisabled,
   handleCancel,
   handleContinue,
   labelCancel,
   labelContinue,
-  continueDisabled,
 }: ActionButtonsProps) => {
   const buttonCancel = labelCancel !== undefined ? labelCancel : ACTION_BUTTONS.BUTTON_CANCEL;
   const buttonContinue = labelContinue !== undefined ? labelContinue : ACTION_BUTTONS.BUTTON_CONTINUE;

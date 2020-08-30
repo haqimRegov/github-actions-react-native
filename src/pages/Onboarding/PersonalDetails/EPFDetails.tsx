@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_EPF_TYPE } from "../../../data/dictionary";
-import { borderBottomGray7, fs24BoldBlack2, px, sh32, sw24 } from "../../../styles";
+import { borderBottomBlack21, fs24BoldBlack2, px, sh32, sw24 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -23,7 +23,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
 }: EPFDetailsProps) => {
   return (
     <Fragment>
-      <View style={borderBottomGray7} />
+      <View style={borderBottomBlack21} />
       <View style={px(sw24)}>
         <CustomSpacer space={sh32} />
         <TextSpaceArea spaceToBottom={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.LABEL_EPF_DETAILS} />

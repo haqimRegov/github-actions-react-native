@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, ReactNode, useState } from "react";
 import { LayoutChangeEvent, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
@@ -13,8 +13,9 @@ interface CustomPopupProps {
   children: JSX.Element;
   color?: string;
   direction?: "top" | "left" | "bottom" | "right";
+  popupContent?: ReactNode;
   popupStyle?: ViewStyle;
-  popupText: string;
+  popupText?: string;
   textStyle?: TextStyle;
   show?: boolean;
   spaceToPopup?: number;
@@ -25,6 +26,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
   containerStyle,
   color,
   direction,
+  popupContent,
   popupStyle,
   popupText,
   show,
@@ -104,7 +106,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
             <View onLayout={handleLayout} style={{ ...container }}>
               <IcoMoon color={popupColor} name={arrowIcon} size={sw32} style={{ ...iconOffset }} />
               <View style={{ ...defaultPopupStyle, ...popupStyle }}>
-                <Text style={popupTextStyle}>{popupText}</Text>
+                {popupContent !== undefined ? popupContent : <Text style={popupTextStyle}>{popupText}</Text>}
               </View>
             </View>
           ) : null}

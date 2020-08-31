@@ -1,14 +1,35 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { CustomButtonProps, CustomSpacer, CustomTextInput, ITextInputProps, LinkText, RoundedButton } from "../../components";
+import { CustomButtonProps, CustomSpacer, CustomTextInput, ITextInputProps, LinkText, PasswordInfo, RoundedButton } from "../../components";
 import { Language } from "../../constants";
+import { DICTIONARY_OTP_EXPIRY } from "../../data/dictionary";
 import { SAMPLE_EMAIL_OTP } from "../../mocks";
-import { fs16RegBlack2, fs24BoldBlack2, fs40BoldBlack2, px, sh16, sh24, sh28, sh32, sh40, sh60, sh8, sw360, sw40 } from "../../styles";
+import {
+  centerVertical,
+  flexRow,
+  fs12BoldBlack2,
+  fs12RegBlack2,
+  fs12SemiBoldBlack2,
+  fs16RegBlack2,
+  fs24RegBlack2,
+  fs40BoldBlack2,
+  px,
+  sh16,
+  sh24,
+  sh32,
+  sh40,
+  sh60,
+  sh8,
+  sw16,
+  sw360,
+  sw4,
+  sw40,
+  sw8,
+} from "../../styles";
 import { maskedString } from "../../utils";
 
 const { LOGIN } = Language.PAGE;
-
 interface FirstTimeLoginProps {
   setPasswordRecovery: (value: boolean) => void;
   setRootPage: (page: TypeLoginPages) => void;
@@ -23,7 +44,7 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
   const [inputRetypePassword, setInputRetypePassword] = useState<string>("");
   const [page, setPage] = useState<TypePage>("NRIC");
   const [showPassword, setShowPassword] = useState<boolean>(true);
-
+  const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
   const maskedEmail = emailOTP !== undefined ? maskedString(emailOTP.email, 0, 4) : "";
 
   const handleExistingLogin = () => {
@@ -36,19 +57,19 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
     setPasswordRecovery(true);
   };
 
-  const handleNRICNew = () => {
+  const handleCheckAgent = () => {
     // TODO integration
     setEmailOTP(SAMPLE_EMAIL_OTP);
     setPage("OTP");
   };
 
-  const handleOTP = (value?: string) => {
-    if (emailOTP !== undefined && emailOTP.otp === value) {
-      setPage("PASSWORD");
-    }
-    if (value !== undefined) {
-      setInputOTP(value);
-    }
+  const handleVerifyOTP = () => {
+    // TODO integration
+    setPage("PASSWORD");
+  };
+
+  const handleResend = () => {
+    setResendTimer(DICTIONARY_OTP_EXPIRY);
   };
 
   const handleShowPassword = () => {
@@ -57,6 +78,7 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
 
   let baseInput1Props: ITextInputProps = {
     label: LOGIN.LABEL_NRIC,
+    maxLength: 12,
     onChangeText: setInputNRIC,
     secureTextEntry: false,
     keyboardType: "numeric",
@@ -77,7 +99,7 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
 
   let baseButtonProps: CustomButtonProps = {
     disabled: inputNRIC === "",
-    onPress: handleNRICNew,
+    onPress: handleCheckAgent,
     buttonStyle: { width: sw360 },
     text: LOGIN.BUTTON_CONTINUE,
   };
@@ -85,19 +107,21 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
   let pageTexts: IPageTexts = {
     heading: LOGIN.HEADING_WELCOME,
     subheading: LOGIN.SUBHEADING_FIRST_TIME,
-    subheadingStyle: { width: sw360, ...fs24BoldBlack2 },
+    subheadingStyle: { width: sw360, ...fs24RegBlack2 },
   };
 
   if (page === "OTP") {
     baseButtonProps = {
       ...baseButtonProps,
       disabled: emailOTP !== undefined && emailOTP.otp !== inputOTP,
-      onPress: handleOTP,
+      onPress: handleVerifyOTP,
     };
     baseInput1Props = {
       ...baseInput1Props,
+      keyboardType: "numeric",
       label: LOGIN.LABEL_OTP,
-      onChangeText: handleOTP,
+      maxLength: 6,
+      onChangeText: setInputOTP,
       value: inputOTP,
     };
     pageTexts = {
@@ -140,10 +164,20 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
       subheading: LOGIN.SUBHEADING_PASSWORD,
       subheadingStyle: {
         ...pageTexts.subheadingStyle,
-        ...fs16RegBlack2,
+        ...fs24RegBlack2,
       },
     };
   }
+
+  useEffect(() => {
+    let otpTimer: number;
+    if (page === "OTP" && resendTimer > 0) {
+      otpTimer = setInterval(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(otpTimer);
+  }, [page, resendTimer]);
 
   return (
     <View style={px(sw40)}>
@@ -152,7 +186,17 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
       <CustomSpacer space={sh8} />
       <Text style={pageTexts.subheadingStyle}>{pageTexts.subheading}</Text>
       <CustomSpacer space={sh40} />
-      <CustomTextInput {...baseInput1Props} />
+      {page === "PASSWORD" ? (
+        <Fragment>
+          <View style={{ ...centerVertical, ...flexRow, ...px(sw16) }}>
+            <Text style={fs12BoldBlack2}>{baseInput1Props.label}</Text>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <PasswordInfo />
+          </View>
+          <CustomSpacer space={sh8} />
+        </Fragment>
+      ) : null}
+      <CustomTextInput {...baseInput1Props} label={page === "PASSWORD" ? undefined : baseInput1Props.label} />
       {page === "PASSWORD" ? (
         <Fragment>
           <CustomTextInput {...baseInput2Props} />
@@ -160,8 +204,19 @@ export const FirstTimeLogin = ({ setPasswordRecovery, setRootPage }: FirstTimeLo
       ) : null}
       <CustomSpacer space={sh32} />
       <RoundedButton {...baseButtonProps} />
-      <CustomSpacer space={sh28} />
+      <CustomSpacer space={sh32} />
       {page === "NRIC" ? <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ height: sh16 }} /> : null}
+      {page === "OTP" ? (
+        <View style={flexRow}>
+          <Text style={fs12SemiBoldBlack2}>{LOGIN.LABEL_DID_NOT_GET}</Text>
+          <CustomSpacer isHorizontal={true} space={sw4} />
+          {resendTimer <= 0 ? (
+            <LinkText onPress={handleResend} text={LOGIN.LABEL_RESEND_AGAIN} />
+          ) : (
+            <Text style={fs12RegBlack2}>{`${LOGIN.LABEL_RESEND} ${resendTimer} ${LOGIN.LABEL_SECONDS}`}</Text>
+          )}
+        </View>
+      ) : null}
     </View>
   );
 };

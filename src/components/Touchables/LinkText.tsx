@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerVertical, flexCol, flexRow, fs12RegBlue1, fsCapitalize } from "../../styles";
+import { centerVertical, colorBlack, flexCol, flexRow, fs12RegBlue1, sh16, sw1 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface LinkTextProps {
@@ -14,6 +14,7 @@ export interface LinkTextGroupProps {
   direction?: "row" | "column";
   divider?: JSX.Element;
   links: LinkTextProps[];
+  noDividier?: boolean;
   spaceToDivider?: number;
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -21,16 +22,18 @@ export interface LinkTextGroupProps {
 
 export const LinkText = ({ onPress, style, text }: LinkTextProps) => {
   return (
-    <Text onPress={onPress} style={{ ...fs12RegBlue1, ...fsCapitalize, ...style }}>
+    <Text onPress={onPress} style={{ ...fs12RegBlue1, ...style }}>
       {text}
     </Text>
   );
 };
 
-export const LinkTextGroup = ({ direction, divider, links, spaceToDivider, style }: LinkTextGroupProps) => {
+export const LinkTextGroup = ({ direction, divider, links, noDividier, spaceToDivider, style }: LinkTextGroupProps) => {
   const viewStyle = direction === "column" ? { ...flexCol, ...style } : { ...flexRow, ...centerVertical, ...style };
   const defaultSpace = spaceToDivider !== undefined ? spaceToDivider : 0;
   const isHorizontal = direction !== "column";
+
+  const linkDivider = divider !== undefined ? divider : <View style={{ backgroundColor: colorBlack._2, height: sh16, width: sw1 }} />;
 
   return (
     <View style={viewStyle}>
@@ -40,7 +43,7 @@ export const LinkTextGroup = ({ direction, divider, links, spaceToDivider, style
             {index === 0 ? null : (
               <Fragment>
                 <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />
-                {divider}
+                {noDividier === true ? null : linkDivider}
               </Fragment>
             )}
             <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />

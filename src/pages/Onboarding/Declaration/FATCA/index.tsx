@@ -24,7 +24,6 @@ import {
   fs14BoldBlack2,
   fs16RegBlack2,
   fs24BoldBlack2,
-  fsTransformNone,
   justifyContentEnd,
   px,
   py,
@@ -114,7 +113,7 @@ export const FATCADeclaration = ({
     <Fragment>
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh8} style={fs24BoldBlack2} text={DECLARATION.LABEL_FATCA} />
-        <LinkText style={fsTransformNone} text={DECLARATION.LABEL_DECLARATION} onPress={handleFATCAPress} />
+        <LinkText text={DECLARATION.LABEL_DECLARATION} onPress={handleFATCAPress} />
         <View style={flexRow}>
           <TextSpaceArea text={DECLARATION.LABEL_US_CITIZEN} spaceToTop={sh24} style={fs16RegBlack2} />
           <CustomSpacer isHorizontal={true} space={sw12} />

@@ -1,10 +1,31 @@
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Text, TextStyle, View } from "react-native";
 
-import { CustomButtonProps, CustomSpacer, CustomTextInput, ITextInputProps, RoundedButton } from "../../components";
+import { CustomButtonProps, CustomSpacer, CustomTextInput, ITextInputProps, LinkText, PasswordInfo, RoundedButton } from "../../components";
 import { Language } from "../../constants";
+import { DICTIONARY_OTP_EXPIRY } from "../../data/dictionary";
 import { SAMPLE_EMAIL_OTP } from "../../mocks";
-import { fs16RegBlack2, fs24BoldBlack2, fs40BoldBlack2, px, sh24, sh32, sh40, sh60, sh8, sw360, sw40 } from "../../styles";
+import {
+  centerVertical,
+  flexRow,
+  fs12BoldBlack2,
+  fs12RegBlack2,
+  fs12SemiBoldBlack2,
+  fs16RegBlack2,
+  fs24RegBlack2,
+  fs40BoldBlack2,
+  px,
+  sh24,
+  sh32,
+  sh40,
+  sh60,
+  sh8,
+  sw16,
+  sw360,
+  sw4,
+  sw40,
+  sw8,
+} from "../../styles";
 import { maskedString } from "../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -22,24 +43,20 @@ export const PasswordRecovery = ({ setPasswordRecovery, setRootPage }: PasswordR
   const [inputRetypePassword, setInputRetypePassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [page, setPage] = useState<TypePage>("NRIC");
-
   const [emailOTP, setEmailOTP] = useState<IEmailOTP | undefined>(undefined);
 
+  const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
   const maskedEmail = emailOTP !== undefined ? maskedString(emailOTP.email, 0, 4) : "";
 
-  const handleNRICRecovery = () => {
+  const handleCheckAgent = () => {
     // TODO integration
     setEmailOTP(SAMPLE_EMAIL_OTP);
     setPage("OTP");
   };
 
-  const handleOTPRecovery = (value?: string) => {
-    if (emailOTP !== undefined && emailOTP.otp === value) {
-      setPage("PASSWORD");
-    }
-    if (value !== undefined) {
-      setInputOTP(value);
-    }
+  const handleVerifyOTP = () => {
+    // TODO integration
+    setPage("PASSWORD");
   };
 
   const handelNewPassword = () => {
@@ -48,12 +65,18 @@ export const PasswordRecovery = ({ setPasswordRecovery, setRootPage }: PasswordR
     setRootPage("LOGIN");
   };
 
+  const handleResend = () => {
+    // TODO integration
+    setResendTimer(DICTIONARY_OTP_EXPIRY);
+  };
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   let input1Props: ITextInputProps = {
     label: LOGIN.LABEL_NRIC,
+    maxLength: 12,
     onChangeText: setInputNRIC,
     secureTextEntry: false,
     keyboardType: "numeric",
@@ -74,12 +97,12 @@ export const PasswordRecovery = ({ setPasswordRecovery, setRootPage }: PasswordR
 
   let buttonProps: CustomButtonProps = {
     disabled: inputNRIC === "",
-    onPress: handleNRICRecovery,
+    onPress: handleCheckAgent,
     buttonStyle: { width: sw360 },
     text: LOGIN.BUTTON_CONTINUE,
   };
 
-  const subheadingStyle: TextStyle = page === "NRIC" ? fs24BoldBlack2 : fs16RegBlack2;
+  const subheadingStyle: TextStyle = page === "NRIC" ? fs24RegBlack2 : fs16RegBlack2;
 
   let pageTexts: IPageTexts = {
     heading: LOGIN.HEADING_RECOVERY,
@@ -91,12 +114,12 @@ export const PasswordRecovery = ({ setPasswordRecovery, setRootPage }: PasswordR
     buttonProps = {
       ...buttonProps,
       disabled: emailOTP !== undefined && emailOTP.otp !== inputOTP,
-      onPress: handleOTPRecovery,
+      onPress: handleVerifyOTP,
     };
     input1Props = {
       ...input1Props,
       label: LOGIN.LABEL_OTP,
-      onChangeText: handleOTPRecovery,
+      onChangeText: setInputOTP,
       value: inputOTP,
     };
     pageTexts = {
@@ -136,6 +159,16 @@ export const PasswordRecovery = ({ setPasswordRecovery, setRootPage }: PasswordR
     };
   }
 
+  useEffect(() => {
+    let otpTimer: number;
+    if (page === "OTP" && resendTimer > 0) {
+      otpTimer = setInterval(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(otpTimer);
+  }, [page, resendTimer]);
+
   return (
     <View style={px(sw40)}>
       <CustomSpacer space={sh60} />
@@ -143,10 +176,32 @@ export const PasswordRecovery = ({ setPasswordRecovery, setRootPage }: PasswordR
       <CustomSpacer space={sh8} />
       <Text style={pageTexts.subheadingStyle}>{pageTexts.subheading}</Text>
       <CustomSpacer space={sh40} />
-      <CustomTextInput {...input1Props} />
+      {page === "PASSWORD" ? (
+        <Fragment>
+          <View style={{ ...centerVertical, ...flexRow, ...px(sw16) }}>
+            <Text style={fs12BoldBlack2}>{input1Props.label}</Text>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <PasswordInfo />
+          </View>
+          <CustomSpacer space={sh8} />
+        </Fragment>
+      ) : null}
+      <CustomTextInput {...input1Props} label={page === "PASSWORD" ? undefined : input1Props.label} />
       {page === "PASSWORD" ? <CustomTextInput {...input2Props} /> : null}
       <CustomSpacer space={sh32} />
       <RoundedButton {...buttonProps} />
+      <CustomSpacer space={sh32} />
+      {page === "OTP" ? (
+        <View style={flexRow}>
+          <Text style={fs12SemiBoldBlack2}>{LOGIN.LABEL_DID_NOT_GET}</Text>
+          <CustomSpacer isHorizontal={true} space={sw4} />
+          {resendTimer <= 0 ? (
+            <LinkText onPress={handleResend} text={LOGIN.LABEL_RESEND_AGAIN} />
+          ) : (
+            <Text style={fs12RegBlack2}>{`${LOGIN.LABEL_RESEND} ${resendTimer} ${LOGIN.LABEL_SECONDS}`}</Text>
+          )}
+        </View>
+      ) : null}
     </View>
   );
 };

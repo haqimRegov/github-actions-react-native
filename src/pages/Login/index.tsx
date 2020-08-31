@@ -41,5 +41,9 @@ export const LoginPage = ({ navigation }: LoginPageProps) => {
     content = <PasswordRecovery setRootPage={setPage} setPasswordRecovery={setPasswordRecovery} />;
   }
 
-  return <LoginBackground>{content}</LoginBackground>;
+  return (
+    <LoginBackground page={page} setPage={setPage}>
+      {content}
+    </LoginBackground>
+  );
 };

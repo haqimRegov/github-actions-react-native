@@ -10,6 +10,7 @@ export * from "./id-type";
 export * from "./mobile-code";
 export * from "./monthly-income";
 export * from "./occupation";
+export * from "./otp";
 export * from "./personal";
 export * from "./races";
 export * from "./states";

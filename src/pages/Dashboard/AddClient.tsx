@@ -77,7 +77,7 @@ const AddClientComponent = (props: AddClientProps) => {
 
     return false;
   };
-
+  const idMaxLength = radioIDType === "NRIC" ? 12 : undefined;
   const ADD_CLIENT_HEADING = clientDetails !== undefined ? ADD_CLIENT.DETAILS_TITLE : ADD_CLIENT.HEADING;
   const BUTTON_LABEL = clientDetails !== undefined ? ADD_CLIENT.BUTTON_CONFIRM : ADD_CLIENT.BUTTON_STARTED;
   const LABEL_ID_DYNAMIC = radioIDType !== "Other" ? radioIDType : ADD_CLIENT.LABEL_ID;
@@ -135,7 +135,8 @@ const AddClientComponent = (props: AddClientProps) => {
               </Fragment>
             )}
             <CustomTextInput label={LABEL_NAME} onChangeText={setInputClientName} spaceToTop={sh32} value={inputClientName} />
-            <CustomTextInput label={LABEL_ID} onChangeText={setInputClientID} spaceToTop={sh32} value={inputClientID} />
+            <CustomSpacer space={sh32} />
+            <CustomTextInput label={LABEL_ID} maxLength={idMaxLength} onChangeText={setInputClientID} value={inputClientID} />
             {radioIDType === "NRIC" ? null : (
               <Fragment>
                 <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={px(sw16)} text={ADD_CLIENT.LABEL_DOB} />

@@ -111,6 +111,12 @@ export const fs12SemiBoldGray8: TextStyle = {
   fontSize: sh12,
 };
 
+export const fs12RegWhite1: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+};
+
 export const fs13BoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoBold,

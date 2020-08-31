@@ -1,18 +1,16 @@
 import React, { Fragment, ReactNode } from "react";
-import { Alert, Image, ImageStyle, ScrollView, Text, View } from "react-native";
+import { Alert, Image, ImageStyle, ScrollView, View } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
 import {
   centerVertical,
-  circle,
-  colorBlack,
   colorWhite,
   DEVICE,
   flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlue1,
+  fs12RegBlack2,
   fsUppercase,
   py,
   sh16,
@@ -32,9 +30,11 @@ const { LOGIN } = Language.PAGE;
 
 interface LoginPageProps {
   children: ReactNode;
+  page?: TypeLoginPages;
+  setPage: (page: TypeLoginPages) => void;
 }
 
-export const LoginBackground = ({ children }: LoginPageProps) => {
+export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
   const handlePrivacyPolicy = () => {
     // TODO
     Alert.alert("PrivacyPolicy");
@@ -45,6 +45,14 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
     Alert.alert("TermsAndConditions");
   };
 
+  const handleAgentOnboarding = () => {
+    setPage("FIRST_TIME_LOGIN");
+  };
+
+  const handleBackToLogin = () => {
+    setPage("LOGIN");
+  };
+
   const topLinks: LinkTextProps[] = [
     {
       onPress: undefined,
@@ -53,20 +61,39 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
     },
     {
       onPress: undefined,
-      style: fsUppercase,
+      style: fs12RegBlack2,
       text: LOGIN.LANGUAGE_ENGLISH,
     },
   ];
+
+  const agentOnboardingLink = {
+    onPress: handleAgentOnboarding,
+    text: LOGIN.LINK_AGENT_ONBOARDING,
+  };
+
+  const backToLoginLink = {
+    onPress: handleBackToLogin,
+    text: LOGIN.LINK_BACK_TO_LOGIN,
+  };
+
   const bottomLinks: LinkTextProps[] = [
     {
       onPress: handlePrivacyPolicy,
-      text: LOGIN.PRIVACY_POLICY,
+      text: LOGIN.LINK_PRIVACY_POLICY,
     },
     {
       onPress: handleTermsAndConditions,
-      text: LOGIN.TERMS_AND_CONDITIONS,
+      text: LOGIN.LINK_TERMS_AND_CONDITIONS,
     },
   ];
+
+  if (page === "LOGIN") {
+    bottomLinks.push(agentOnboardingLink);
+  }
+
+  if (page === "PASSWORD_RECOVERY") {
+    bottomLinks.push(backToLoginLink);
+  }
 
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
   const logoStyle: ImageStyle = { height: sh64, width: sw160, resizeMode: "contain" };
@@ -85,14 +112,14 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
                 <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
                 <CustomFlexSpacer />
                 <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-                  <LinkTextGroup divider={<View style={circle(sw4, colorBlack._2)} />} links={topLinks} spaceToDivider={sw4} />
+                  <LinkTextGroup links={topLinks} spaceToDivider={sw4} />
                 </View>
                 <CustomSpacer isHorizontal={true} space={sw56} />
               </View>
               {children}
               <CustomFlexSpacer />
               <View style={flexRow}>
-                <LinkTextGroup divider={<Text style={fs12RegBlue1}>|</Text>} links={bottomLinks} spaceToDivider={sw4} />
+                <LinkTextGroup links={bottomLinks} spaceToDivider={sw4} />
               </View>
             </View>
           </SafeAreaPage>

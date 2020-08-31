@@ -76,7 +76,7 @@ export const BottomFixedDetails = ({
           <Text style={fs24BoldBlack2}>{bottomFixedTitle}</Text>
           <CustomSpacer space={sh8} />
           <View style={flexRow}>
-            <LinkTextGroup direction="row" links={links} spaceToDivider={sw1} />
+            <LinkTextGroup direction="row" links={links} noDividier={true} spaceToDivider={sw1} />
           </View>
         </View>
         <CustomFlexSpacer />

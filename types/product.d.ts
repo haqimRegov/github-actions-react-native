@@ -1,5 +1,6 @@
 declare interface IFund {
   annualManagementFee?: number;
+  documents?: IFundDocument[];
   fundCategory: string;
   fundCurrency: string;
   fundObjective?: string;
@@ -74,4 +75,9 @@ declare interface IFundInvestment {
   scheduledInvestment: boolean;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: number;
+}
+
+declare interface IFundDocument {
+  link: string;
+  name: string;
 }

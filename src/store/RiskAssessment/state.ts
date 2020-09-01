@@ -11,6 +11,7 @@ export const riskAssessmentInitialState: RiskAssessmentState = {
     questionFour: 0,
     questionFive: 0,
     questionSix: 0,
+    questionSeven: 0,
   },
   riskScore: {
     appetite: "",

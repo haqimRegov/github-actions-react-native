@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 
 import { BottomFixedDetails, SafeAreaPage } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
-import { SAMPLE_PRODUCTS_1 } from "../../../mocks";
+import { RNShareApi } from "../../../integrations";
+import { SAMPLE_PDF, SAMPLE_PRODUCTS_1 } from "../../../mocks";
 import { SelectedFundMapDispatchToProps, SelectedFundMapStateToProps, SelectedFundStoreProps } from "../../../store";
 import { flexChild, flexCol } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
+import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
 
 const { INVESTMENT } = Language.PAGE;
@@ -25,6 +27,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 }: ProductsProps) => {
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
+  const [shareSuccess, setShareSuccess] = useState<boolean>(false);
+  const [viewFund, setViewFund] = useState<IFund | undefined>(undefined);
 
   const [productList, setProductList] = useState<IFund[]>([]);
 
@@ -40,7 +44,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const handleGoBack = () => {
     setPage(0);
   };
-
   const handleStartInvesting = () => {
     const initialStateArray: IFundSales[] = [];
     selectedFunds.map((item: IFund) => {
@@ -63,12 +66,35 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     return page === 1 ? handleGoBack() : addSelectedFund([]);
   };
 
+  const handleBack = () => {
+    setViewFund(undefined);
+  };
+
   const handleConfirmIdentity = () => {
     handleNextStep(ONBOARDING_ROUTES.IdentityVerification);
   };
 
+  const handleShareDocuments = async () => {
+    // TODO integration
+    const response = [SAMPLE_PDF, SAMPLE_PDF];
+    const documents = response.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
+    const share = await RNShareApi.filesBase64(documents);
+    if (share !== undefined) {
+      setShareSuccess(true);
+    }
+  };
+
   let screen = {
-    content: <ProductList productList={productList} selectedFunds={selectedFunds} setSelectedFunds={addSelectedFund} />,
+    content: (
+      <ProductList
+        handleShareDocuments={handleShareDocuments}
+        productList={productList}
+        selectedFunds={selectedFunds}
+        setSelectedFunds={addSelectedFund}
+        setViewFund={setViewFund}
+        shareSuccess={shareSuccess}
+      />
+    ),
     onPressSubmit: handleStartInvesting,
     labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
   };
@@ -90,6 +116,19 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       labelSubmit: INVESTMENT.BUTTON_CONFIRM,
     };
   }
+
+  if (viewFund !== undefined) {
+    screen = {
+      ...screen,
+      content: <ProductDetails fund={viewFund} handleBack={handleBack} handleShareDocuments={handleShareDocuments} />,
+      onPressSubmit: handleConfirmIdentity,
+      labelSubmit: INVESTMENT.BUTTON_CONFIRM,
+    };
+  }
+
+  useEffect(() => {
+    setShareSuccess(false);
+  }, [shareSuccess]);
 
   useEffect(() => {
     // TODO integration

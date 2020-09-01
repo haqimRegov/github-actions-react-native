@@ -120,16 +120,18 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                     <View style={{ ...centerVertical, ...flexRow }}>
                       <AdvancedDropdown handleChange={handleOtherCurrency} items={currencyExtractor} label={label} value={value} />
                       <CustomSpacer isHorizontal={true} space={sw16} />
-                      <View>
-                        <CustomFlexSpacer />
-                        <IconButton
-                          name="trash"
-                          color={colorBlack._1}
-                          onPress={handleRemoveCurrency}
-                          size={sh24}
-                          style={circle(sw40, colorTransparent)}
-                        />
-                      </View>
+                      {currencyIndex === 0 ? null : (
+                        <View>
+                          <CustomFlexSpacer />
+                          <IconButton
+                            name="trash"
+                            color={colorBlack._1}
+                            onPress={handleRemoveCurrency}
+                            size={sh24}
+                            style={circle(sw40, colorTransparent)}
+                          />
+                        </View>
+                      )}
                     </View>
                   </Fragment>
                 );

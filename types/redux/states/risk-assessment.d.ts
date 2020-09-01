@@ -5,6 +5,7 @@ declare interface IRiskAssessmentState {
   questionFour: number;
   questionFive: number;
   questionSix: number;
+  questionSeven: number;
 }
 
 declare interface IRiskScoreState {

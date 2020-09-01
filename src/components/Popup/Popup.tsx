@@ -14,6 +14,7 @@ interface CustomPopupProps {
   color?: string;
   direction?: "top" | "left" | "bottom" | "right";
   popupContent?: ReactNode;
+  popupOnPress?: (toggle: boolean) => void;
   popupStyle?: ViewStyle;
   popupText?: string;
   textStyle?: TextStyle;
@@ -27,6 +28,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
   color,
   direction,
   popupContent,
+  popupOnPress,
   popupStyle,
   popupText,
   show,
@@ -69,6 +71,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
 
   const handlePress = () => {
     setShowPopup(!showPopup);
+    popupOnPress!(!showPopup);
   };
 
   const handleBaseLayout = (event: LayoutChangeEvent) => {

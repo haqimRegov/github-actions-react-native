@@ -76,10 +76,12 @@ export const UploadDocument: FunctionComponent<UploadProps> = ({
     const [selectedExtension] = fileNameArray.slice(-1);
 
     const shortFileName = shortenString(selectedName, 20, 20);
-    const fileSizeUnit = value.size >= 100000 ? "MB" : "KB";
-    const fileSize = value.size >= 100000 ? value.size / BYTE_TO_MEGABYTE : value.size / BYTE_TO_KILOBYTE;
+    const valueSize = value.size !== undefined ? value.size : -1;
+    const fileSizeUnit = valueSize >= 100000 ? "MB" : "KB";
+    const fileSize = valueSize >= 100000 ? valueSize / BYTE_TO_MEGABYTE : valueSize / BYTE_TO_KILOBYTE;
+    const fileSizeLabel = valueSize !== -1 ? `- ${fileSize.toFixed(2)}${fileSizeUnit}` : "";
 
-    uploadLabel = `${shortFileName}.${selectedExtension} - ${`${fileSize.toFixed(2)}${fileSizeUnit}`}`;
+    uploadLabel = `${shortFileName}.${selectedExtension} ${fileSizeLabel}`;
   }
 
   const defaultLabel = error || uploadLabel;

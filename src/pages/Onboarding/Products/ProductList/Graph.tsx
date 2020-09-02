@@ -97,7 +97,7 @@ export const ProductGraph: FunctionComponent<ProductGraphProps> = ({ fund, layou
         text={PRODUCT_GRAPH.LABEL_FUND_PERFORMANCE}
       />
       <CustomGraph labels={labels} performance={navPerformance} layout={layout} benchmark={benchmarkPerformance} />
-      <View style={{ ...px(sw24), ...flexChild }}>
+      <View style={px(sw24)}>
         <CustomSpacer space={sh24} />
         <View style={{ ...flexRow }}>
           <ButtonSelectionList

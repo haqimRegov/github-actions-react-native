@@ -46,7 +46,7 @@ export const UploadWithModal: FunctionComponent<UploadWithModalProps> = ({ onPre
     setViewFile(false);
   };
 
-  const fileSize = value !== undefined ? `${(value.size / BYTE_TO_MEGABYTE).toFixed(2).toString()}MB` : "";
+  const fileSize = value !== undefined && value.size !== undefined ? `${(value.size / BYTE_TO_MEGABYTE).toFixed(2).toString()}MB` : "";
 
   const viewImageHeader: ViewStyle = {
     ...flexRow,
@@ -80,7 +80,7 @@ export const UploadWithModal: FunctionComponent<UploadWithModalProps> = ({ onPre
                 </View>
                 <CustomSpacer space={sh24} />
               </View>
-              {value.type === "application/pdf" ? (
+              {value.type === "application/pdf" && value.base64 !== undefined ? (
                 <View style={flexChild}>
                   <CustomSpacer space={sh96} />
                   <PDFView fadeInDuration={350} style={{ ...fullHW, ...flexChild }} resource={value.base64} resourceType="base64" />

@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, ScrollView, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, CustomTableV2, Pagination, Tab } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, Pagination, Tab } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   colorWhite,
@@ -13,6 +13,7 @@ import {
   sh153,
   sh16,
   sh32,
+  sh40,
   shadow5,
   sw102,
   sw109,
@@ -29,12 +30,22 @@ import { ProductOptions } from "./Options";
 const { PRODUCT_LIST } = Language.PAGE;
 
 interface ProductListProps {
+  handleShareDocuments: (fund: IFund) => void;
   productList: IFund[];
   selectedFunds: IFund[];
   setSelectedFunds: (product: IFund[]) => void;
+  setViewFund: (product: IFund) => void;
+  shareSuccess?: boolean;
 }
 
-export const ProductList: FunctionComponent<ProductListProps> = ({ productList, selectedFunds, setSelectedFunds }: ProductListProps) => {
+export const ProductList: FunctionComponent<ProductListProps> = ({
+  handleShareDocuments,
+  productList,
+  selectedFunds,
+  setSelectedFunds,
+  setViewFund,
+  shareSuccess,
+}: ProductListProps) => {
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [allFunds, setAllFunds] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(true);
@@ -42,6 +53,10 @@ export const ProductList: FunctionComponent<ProductListProps> = ({ productList, 
 
   const handleFilter = () => {
     setFilter(!filter);
+  };
+
+  const handleViewDetails = (fund: IFund) => {
+    setViewFund(fund);
   };
 
   const handleNext = () => {
@@ -82,7 +97,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({ productList, 
     if (sectionIndex > -1) {
       newSections.splice(sectionIndex, 1);
     } else {
-      newSections.push(item.index);
+      newSections.splice(0, 1, item.index);
     }
     setActiveAccordion(newSections);
   };
@@ -151,6 +166,16 @@ export const ProductList: FunctionComponent<ProductListProps> = ({ productList, 
       withAccordion: true,
     },
   ];
+  const tableAccordion = (item: ITableData) => {
+    return (
+      <Fragment>
+        <ProductGraph fund={item as IFund} />
+        <CustomSpacer space={sh40} />
+      </Fragment>
+    );
+  };
+
+  const renderAccordion = productList.length !== 0 ? tableAccordion : undefined;
 
   const tableContainer: ViewStyle = { backgroundColor: colorWhite._2, borderBottomRightRadius: sw24, borderBottomLeftRadius: sw24 };
 
@@ -177,14 +202,22 @@ export const ProductList: FunctionComponent<ProductListProps> = ({ productList, 
           </View>
           <CustomSpacer space={sh15} />
           <View style={tableContainer}>
-            <CustomTableV2
+            <AdvanceTable
               activeAccordion={activeAccordion}
               columns={columns}
               data={productList}
               rowSelection={selectedFunds}
               onRowSelect={handleSelectProduct}
-              RenderAccordion={(item: ITableData) => <ProductGraph item={item as IFund} />}
-              RenderOptions={(props: ITableOptions) => <ProductOptions {...props} handleShowPerformance={handleShowPerformance} />}
+              RenderAccordion={renderAccordion}
+              RenderOptions={(props: ITableOptions) => (
+                <ProductOptions
+                  {...props}
+                  handleShareDocuments={handleShareDocuments}
+                  handleShowPerformance={handleShowPerformance}
+                  handleViewDetails={handleViewDetails}
+                  shareSuccess={shareSuccess}
+                />
+              )}
               rowSelectionLabel={PRODUCT_LIST.LABEL_COLUMN_BUY}
             />
             <CustomSpacer space={sh32} />

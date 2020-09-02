@@ -1,9 +1,9 @@
 declare interface FileBase64 {
-  base64: string;
+  base64?: string;
   date?: string;
   name: string;
   path?: string;
-  size: number;
+  size?: number;
   type: string;
   url?: string;
 }

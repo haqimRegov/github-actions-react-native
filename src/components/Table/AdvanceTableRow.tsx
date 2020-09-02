@@ -87,9 +87,11 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
       {index === 0 ? null : <CustomSpacer space={sh8} />}
       <View style={rowContainer}>
         {rowSelection === undefined ? null : (
-          <View style={{ height: sh80, ...centerHV }}>
-            <CheckBox onPress={handleSelectRow} style={{ ...px(sw20), ...flexRowCC }} toggle={itemSelected} />
-          </View>
+          <TouchableWithoutFeedback onPress={handleSelectRow}>
+            <View style={{ height: sh80, ...centerHV }}>
+              <CheckBox onPress={handleSelectRow} style={{ ...px(sw20), ...flexRowCC }} toggle={itemSelected} />
+            </View>
+          </TouchableWithoutFeedback>
         )}
         <View style={rowStyle}>
           <View style={itemContainer}>
@@ -164,7 +166,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
             ) : null}
           </View>
           {RenderAccordion !== undefined && activeAccordion !== undefined ? (
-            <Collapsible collapsed={!activeAccordion.includes(index)} duration={!activeAccordion.includes(index) ? 100 : 200}>
+            <Collapsible collapsed={!activeAccordion.includes(index)} duration={50}>
               {activeAccordion.includes(index) ? (
                 <Fragment>
                   <View style={borderBottomGray2} />

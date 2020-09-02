@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, ScrollView, View, ViewStyle } from "react-native";
 
 import { AdvanceTable, CustomFlexSpacer, CustomSpacer, Pagination, Tab } from "../../../../components";
@@ -178,10 +178,6 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
   const renderAccordion = productList.length !== 0 ? tableAccordion : undefined;
 
   const tableContainer: ViewStyle = { backgroundColor: colorWhite._2, borderBottomRightRadius: sw24, borderBottomLeftRadius: sw24 };
-
-  useEffect(() => {
-    setActiveAccordion([]);
-  }, [shareSuccess]);
 
   return (
     <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" scrollEnabled={filter}>

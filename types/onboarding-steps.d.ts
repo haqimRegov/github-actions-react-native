@@ -39,12 +39,14 @@ declare type TypeOnboardingRoute =
   | "EmailVerification"
   | "EmploymentDetails"
   | "IdentityVerification"
+  | "OrderSummary"
   | "Payment"
   | "PersonalDetails"
   | "ProductRecommendation"
   | "PRSDetails"
   | "Questionnaire"
   | "Summary";
+  | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {
   Acknowledgement: TypeOnboardingRoute;
@@ -52,10 +54,12 @@ declare interface IOnboardingRoutes {
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
+  OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
   PersonalDetails: TypeOnboardingRoute;
   ProductRecommendation: TypeOnboardingRoute;
   PRSDetails: TypeOnboardingRoute;
   Questionnaire: TypeOnboardingRoute;
   Summary: TypeOnboardingRoute;
+  TermsAndConditions: TypeOnboardingRoute;
 }

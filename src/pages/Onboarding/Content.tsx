@@ -5,12 +5,14 @@ import { Declaration } from "./Declaration";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
 import { IdentityConfirmation } from "./IdentityVerification";
+import { OrderSummary } from "./OrderSummary";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
 import { PRSDetails } from "./PRSDetails";
 import { QuestionnaireContent } from "./Questionnaire";
 import { Summary } from "./Summary";
+import { TermsAndConditions } from "./TermsAndConditions";
 
 export const OnboardingContent = (props: OnboardingContentProps) => {
   switch (props.route) {
@@ -30,8 +32,10 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
       return <EmploymentDetails {...props} />;
     case ONBOARDING_ROUTES.Declaration:
       return <Declaration {...props} />;
-    case ONBOARDING_ROUTES.Acknowledgement:
-      return <Declaration {...props} />;
+    case ONBOARDING_ROUTES.OrderSummary:
+      return <OrderSummary {...props} />;
+    case ONBOARDING_ROUTES.TermsAndConditions:
+      return <TermsAndConditions {...props} />;
     case ONBOARDING_ROUTES.Summary:
       return <Summary {...props} />;
     case ONBOARDING_ROUTES.Payment:

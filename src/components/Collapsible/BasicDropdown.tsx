@@ -3,7 +3,7 @@ import { Keyboard, TouchableWithoutFeedback, View, ViewStyle } from "react-nativ
 import Collapsible from "react-native-collapsible";
 
 import { colorTransparent, colorWhite, flexRow, fullHW, noBGColor } from "../../styles";
-import { BasicModal } from "../Modals";
+import { BasicModal } from "../Modals/Basic";
 
 interface RenderBaseProps {
   collapse: boolean;

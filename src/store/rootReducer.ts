@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 
+import { orderSummaryReducer } from "./Acknowledgement";
 import { clientReducer } from "./Client";
 import { onboardingStepsReducer } from "./OnboardingSteps";
 import { riskAssessmentReducer } from "./RiskAssessment";
@@ -10,6 +11,7 @@ export const rootReducer = combineReducers({
   onboardingSteps: onboardingStepsReducer,
   riskAssessment: riskAssessmentReducer,
   selectedFund: selectedFundReducer,
+  orderSummary: orderSummaryReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,3 +1,4 @@
+export * from "./Acknowledgement";
 export * from "./Client";
 export * from "./OnboardingSteps";
 export * from "./RiskAssessment";

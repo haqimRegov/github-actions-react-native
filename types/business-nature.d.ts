@@ -51,4 +51,4 @@ declare type TypeBusinessNature =
   | "Training"
   | "Uniformed Bodies";
 
-declare type TypeBusinessNatureValue = { value: TypeBusinessNature };
+declare type TypeNatureLabelValue = { label: string; value: TypeBusinessNature };

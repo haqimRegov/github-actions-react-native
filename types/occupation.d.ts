@@ -50,4 +50,4 @@ declare type TypeOccupation =
   | "Unemployed"
   | "Uniformed Bodies";
 
-declare type TypeOccupationValue = { value: TypeOccupation };
+declare type TypeOccupationLabelValue = { label: string; value: TypeOccupation };

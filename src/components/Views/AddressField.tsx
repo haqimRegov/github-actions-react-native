@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
 import { sh32 } from "../../styles";
-import { AdvancedDropdown } from "../Dropdown";
+import { AdvancedDropdown } from "../Dropdown/Advance";
 import { CustomTextInput, TextInputArea } from "../Input";
 import { CustomSpacer } from "./Spacer";
 

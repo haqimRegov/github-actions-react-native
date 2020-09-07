@@ -1,7 +1,6 @@
 import React from "react";
 
 import { ONBOARDING_ROUTES } from "../../constants";
-import { Acknowledgement } from "./Acknowledgement";
 import { Declaration } from "./Declaration";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
@@ -11,6 +10,7 @@ import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
 import { PRSDetails } from "./PRSDetails";
 import { QuestionnaireContent } from "./Questionnaire";
+import { Summary } from "./Summary";
 
 export const OnboardingContent = (props: OnboardingContentProps) => {
   switch (props.route) {
@@ -31,7 +31,9 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
     case ONBOARDING_ROUTES.Declaration:
       return <Declaration {...props} />;
     case ONBOARDING_ROUTES.Acknowledgement:
-      return <Acknowledgement {...props} />;
+      return <Declaration {...props} />;
+    case ONBOARDING_ROUTES.Summary:
+      return <Summary {...props} />;
     case ONBOARDING_ROUTES.Payment:
       return <Payment {...props} />;
     default:

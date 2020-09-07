@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 
-import { ContentPage, CustomDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../components";
+import { AdvancedDropdown, ContentPage, CustomSpacer, CustomTextInput, TextInputArea, TextSpaceArea } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { DICTIONARY_BUSINESS_NATURE } from "../../data/dictionary/business-nature";
-import { DICTIONARY_OCCUPATION } from "../../data/dictionary/occupation";
-import { px, sh24, sh32, sw24 } from "../../styles";
+import { DICTIONARY_BUSINESS_NATURE, DICTIONARY_COUNTRIES, DICTIONARY_OCCUPATION } from "../../data/dictionary";
+import { DICTIONARY_HOUSEHOLD_INCOME } from "../../data/dictionary/household-income";
+import { fs12SemiBoldGray8, px, sh24, sh32, sh8, sw16, sw24 } from "../../styles";
 import { AlertDialog } from "../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -16,12 +16,24 @@ interface EmploymentDetailsProps {
 export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) => {
   const [inputAddress, setInputAddress] = useState<string>("");
   const [inputBusinessNature, setInputBusinessNature] = useState<string>("");
+  const [inputCity, setInputCity] = useState("");
+  const [inputCountry, setInputCountry] = useState<string>("Malaysia");
   const [inputEmployerName, setInputEmployerName] = useState<string>("");
+  const [inputHousehold, setInputHousehold] = useState<string>("");
   const [inputOccupation, setInputOccupation] = useState<string>("");
   const [inputPostCode, setInputPostCode] = useState<string>("");
+  const [inputState, setInputState] = useState("");
 
   const buttonDisabled =
-    inputAddress === "" || inputBusinessNature === "" || inputEmployerName === "" || inputOccupation === "" || inputPostCode === "";
+    inputAddress === "" ||
+    inputBusinessNature === "" ||
+    inputCity === "" ||
+    inputCountry === "" ||
+    inputEmployerName === "" ||
+    inputHousehold === "" ||
+    inputOccupation === "" ||
+    inputPostCode === "" ||
+    inputState === "";
 
   const handleButtonPress = () => {
     Alert.alert("test");
@@ -47,25 +59,44 @@ export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) =>
       subtitle={EMPLOYMENT_DETAILS.SUBHEADING}>
       <View style={px(sw24)}>
         <CustomSpacer space={sh24} />
-        <CustomDropdown
-          data={DICTIONARY_OCCUPATION}
+        <AdvancedDropdown
+          items={DICTIONARY_OCCUPATION}
           handleChange={setInputOccupation}
           label={EMPLOYMENT_DETAILS.LABEL_OCCUPATION}
           value={inputOccupation}
         />
         <CustomSpacer space={sh32} />
-        <CustomDropdown
-          data={DICTIONARY_BUSINESS_NATURE}
+        <AdvancedDropdown
+          items={DICTIONARY_BUSINESS_NATURE}
           handleChange={setInputBusinessNature}
           label={EMPLOYMENT_DETAILS.LABEL_NATURE_BUSINESS}
           value={inputBusinessNature}
         />
+        <CustomSpacer space={sh32} />
+        <AdvancedDropdown
+          items={DICTIONARY_HOUSEHOLD_INCOME}
+          handleChange={setInputHousehold}
+          label={EMPLOYMENT_DETAILS.LABEL_HOUSEHOLD}
+          value={inputHousehold}
+        />
+        <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={EMPLOYMENT_DETAILS.LABEL_COMBINED} />
         <CustomSpacer space={sh32} />
         <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME} onChangeText={setInputEmployerName} value={inputEmployerName} />
         <CustomSpacer space={sh32} />
         <TextInputArea label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS} onChangeText={setInputAddress} value={inputAddress} />
         <CustomSpacer space={sh32} />
         <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_POST_CODE} onChangeText={setInputPostCode} value={inputPostCode} />
+        <CustomSpacer space={sh32} />
+        <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_CITY} onChangeText={setInputCity} value={inputCity} />
+        <CustomSpacer space={sh32} />
+        <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_STATE} onChangeText={setInputState} value={inputState} />
+        <CustomSpacer space={sh32} />
+        <AdvancedDropdown
+          items={DICTIONARY_COUNTRIES}
+          handleChange={setInputCountry}
+          label={EMPLOYMENT_DETAILS.LABEL_COUNTRY}
+          value={inputCountry}
+        />
       </View>
     </ContentPage>
   );

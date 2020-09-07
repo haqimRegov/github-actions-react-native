@@ -25,6 +25,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
       { title: ONBOARDING.TITLE_PRS, route: ONBOARDING_ROUTES.PRSDetails },
       { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
       { title: ONBOARDING.TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
+      { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.Summary },
     ],
     label: ONBOARDING.TITLE_PERSONAL_INFORMATION,
   },

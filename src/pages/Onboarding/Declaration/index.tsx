@@ -54,7 +54,7 @@ export const Declaration = ({ handleNextStep }: DeclarationProps) => {
   const [inputUSBorn, setInputUSBorn] = useState<string>(OPTIONS_US_BORN[1]);
 
   const handleSubmit = () => {
-    handleNextStep(ONBOARDING_ROUTES.Acknowledgement);
+    handleNextStep(ONBOARDING_ROUTES.Summary);
   };
 
   const handleCancelPress = () => {

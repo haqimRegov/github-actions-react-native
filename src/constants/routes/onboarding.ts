@@ -9,4 +9,5 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   ProductRecommendation: "ProductRecommendation",
   PRSDetails: "PRSDetails",
   Questionnaire: "Questionnaire",
+  Summary: "Summary",
 };

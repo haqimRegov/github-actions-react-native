@@ -8,6 +8,7 @@ import {
   flexChild,
   flexGrow,
   flexRow,
+  fs12SemiBoldGray8,
   sh15,
   sh152,
   sh153,
@@ -104,7 +105,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
 
   const columns: ITableColumn[] = [
     {
-      key: "name",
+      key: [{ key: "name" }],
       icon: {
         name: "caret-down",
       },
@@ -117,7 +118,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "fundType",
+      key: [{ key: "fundType" }],
       viewStyle: {
         width: sw83,
       },
@@ -127,7 +128,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "riskCategory",
+      key: [{ key: "riskCategory" }],
       viewStyle: {
         width: sw102,
       },
@@ -137,7 +138,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "isEpf",
+      key: [{ key: "isEpf" }],
       viewStyle: {
         width: sw72,
       },
@@ -147,7 +148,8 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "isShariah",
+      key: [{ key: "isShariah" }, { key: "fundType", textStyle: fs12SemiBoldGray8 }], // TODO for reference for other table
+      prefix: [{ key: "fundCurrency", targetKey: "fundType", textStyle: fs12SemiBoldGray8 }],
       viewStyle: {
         width: sw90,
       },
@@ -157,7 +159,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: "performanceOverview",
+      key: [{ key: "performanceOverview" }],
       viewStyle: {
         width: sw109,
       },

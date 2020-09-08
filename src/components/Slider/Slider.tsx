@@ -18,12 +18,13 @@ import {
   sh6,
   sh8,
   sw10,
-  sw12,
+  sw100,
   sw14,
   sw15,
   sw18,
   sw24,
-  sw72,
+  sw25,
+  sw30,
 } from "../../styles";
 import { CustomSpacer } from "../Views";
 
@@ -68,11 +69,11 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
       <CustomSpacer space={sh8} />
       <View style={flexRowSbSb}>
         {options.map((option: string, index: number) => {
-          let optionStyle: ViewStyle = { width: sw72, ...centerVertical };
+          let optionStyle: ViewStyle = { maxWidth: sw100, ...centerVertical };
           if (index === 1) {
-            optionStyle = { ...optionStyle, paddingRight: sw15 };
+            optionStyle = { ...optionStyle, paddingLeft: sw25 };
           } else if (index === 2) {
-            optionStyle = { ...optionStyle, paddingLeft: sw12 };
+            optionStyle = { ...optionStyle, paddingLeft: sw30 };
           }
 
           const handleSeek = () => {

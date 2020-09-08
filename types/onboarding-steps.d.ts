@@ -45,7 +45,7 @@ declare type TypeOnboardingRoute =
   | "ProductRecommendation"
   | "PRSDetails"
   | "Questionnaire"
-  | "Summary";
+  | "Summary"
   | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {

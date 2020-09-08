@@ -24,6 +24,7 @@ import {
   sw12,
   sw16,
   sw20,
+  sw4,
   sw56,
   sw8,
 } from "../../styles";
@@ -96,15 +97,12 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
         <View style={rowStyle}>
           <View style={itemContainer}>
             {columns.map((column: ITableColumn, columnIndex: number) => {
-              const columnItem = item[column.key];
-              const key = Object.keys(item)[Object.values(item).indexOf(columnItem)];
-              const columnData = { ...rowData, key: key, value: columnItem };
-              const customStyle = column.itemTextStyle !== undefined ? column.itemTextStyle(columnData) : {};
+              const dataKey = column.key.map((key: ITableItemKey) => key);
+              const customStyle = column.itemTextStyle !== undefined ? column.itemTextStyle(rowData) : {};
               const textStyle = { ...fs12BoldBlack2, ...fsUppercase, ...column.textStyle, ...customStyle };
-
               const handlePressColumnItem = () => {
                 if (column.onPressItem !== undefined) {
-                  column.onPressItem(columnData);
+                  column.onPressItem(rowData);
                 }
               };
 
@@ -121,22 +119,50 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 ...column.itemIcon,
               };
 
-              let itemLabel = item[column.key];
+              const itemLabel: IColumnItem[] = dataKey.map((labelKey: ITableItemKey) => {
+                const itemPrefix: ITableItemPrefix[] | undefined =
+                  column.prefix !== undefined
+                    ? column.prefix.filter((prefix: ITableItemPrefix) => prefix.targetKey === labelKey.key)
+                    : undefined;
 
-              const isBoolean = typeof item[column.key] === "boolean";
+                const prefixData =
+                  itemPrefix !== undefined && itemPrefix.length !== 0
+                    ? { prefix: rowData.rawData[itemPrefix[0].key], prefixStyle: itemPrefix[0].textStyle }
+                    : {};
 
-              if (isBoolean) {
-                itemLabel = "Yes";
-                if (!item[column.key]) {
-                  itemLabel = "No";
+                const itemData: IColumnItem = { label: rowData.rawData[labelKey.key], textStyle: labelKey.textStyle, ...prefixData };
+
+                const isBoolean = typeof itemData.label === "boolean";
+
+                if (isBoolean) {
+                  itemData.label = "Yes";
+                  if (!itemData.label) {
+                    itemData.label = "No";
+                  }
                 }
-              }
+
+                return itemData;
+              });
 
               return (
                 <TouchableWithoutFeedback key={columnIndex} onPress={handlePressColumnItem}>
                   <View style={{ ...flexRow, ...itemBorderLeft }}>
                     <View style={{ ...flexRow, ...centerVertical, ...px(sw8), ...column.viewStyle, ...column.itemStyle }}>
-                      <Text style={textStyle}>{itemLabel}</Text>
+                      <View>
+                        {itemLabel.map((label: IColumnItem, labelIndex: number) => {
+                          return (
+                            <View key={labelIndex} style={flexRow}>
+                              {label.prefix !== undefined ? (
+                                <Fragment>
+                                  <Text style={{ ...textStyle, ...label.prefixStyle }}>{label.prefix}</Text>
+                                  <CustomSpacer isHorizontal={true} space={sw4} />
+                                </Fragment>
+                              ) : null}
+                              <Text style={{ ...textStyle, ...label.textStyle }}>{label.label}</Text>
+                            </View>
+                          );
+                        })}
+                      </View>
                       {column.itemIcon !== undefined || column.withAccordion === true ? (
                         <Fragment>
                           <CustomSpacer isHorizontal={true} space={sw16} />

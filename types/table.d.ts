@@ -8,14 +8,33 @@ declare interface ITableIcon {
   size?: number;
 }
 
+declare interface ITableItemPrefix {
+  key: string;
+  targetKey: string;
+  textStyle?: import("react-native").TextStyle;
+}
+
+declare interface ITableItemKey {
+  key: string;
+  textStyle?: import("react-native").TextStyle;
+}
+
+declare interface IColumnItem {
+  label: string;
+  prefix?: string;
+  prefixStyle?: import("react-native").TextStyle;
+  textStyle?: import("react-native").TextStyle;
+}
+
 declare interface ITableColumn {
   icon?: ITableIcon;
   itemIcon?: ITableIcon;
   itemStyle?: import("react-native").ViewStyle;
   itemTextStyle?: (item: IColumnItemAccordion) => import("react-native").TextStyle;
-  key: string;
+  key: ITableItemKey[];
   onPressHeader?: () => void;
   onPressItem?: (item: IColumnItemAccordion) => void;
+  prefix?: ITableItemPrefix[];
   textStyle?: import("react-native").ViewStyle;
   title: string;
   type?: "checkbox" | "radio";
@@ -30,9 +49,7 @@ declare interface ITableOptions {
 
 declare interface IColumnItemAccordion {
   index: number;
-  key?: string;
   rawData: ITableData;
-  value?: string;
 }
 
 declare interface CustomTableProps {

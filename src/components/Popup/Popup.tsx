@@ -71,7 +71,9 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
 
   const handlePress = () => {
     setShowPopup(!showPopup);
-    popupOnPress!(!showPopup);
+    if (popupOnPress !== undefined) {
+      popupOnPress(!showPopup);
+    }
   };
 
   const handleBaseLayout = (event: LayoutChangeEvent) => {
@@ -89,6 +91,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
     flexDirection: flexDirection,
     left: leftPosition,
     position: "absolute",
+    zIndex: 1,
     top: topPosition,
   };
 
@@ -97,11 +100,15 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
     borderRadius: sw8,
     width: sw264,
   };
+  const popupContainer: ViewStyle = {
+    ...containerStyle,
+    zIndex: 1,
+  };
 
   const popupTextStyle: TextStyle = { ...fs12BoldWhite1, ...px(sw12), ...py(sh12), lineHeight: sh24, ...textStyle };
 
   return (
-    <View onLayout={handleBaseLayout} style={containerStyle}>
+    <View onLayout={handleBaseLayout} style={popupContainer}>
       <TouchableWithoutFeedback onPress={handlePress}>
         <View>
           {children}

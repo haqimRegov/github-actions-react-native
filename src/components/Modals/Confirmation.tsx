@@ -74,7 +74,7 @@ export const ConfirmationModal = ({
   };
 
   // TODO: fix KeyboardAvoidingView behavior, for now if number of TextInput become more it pushes top fields out of screen
-  const behavior: TypeBehavior = Platform.select({ ios: "position" });
+  const behavior: TypeBehavior = Platform.select({ ios: "padding" });
 
   return (
     <BasicModal visible={visible}>

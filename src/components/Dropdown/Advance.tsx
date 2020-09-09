@@ -151,7 +151,9 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
                       return (
                         <TouchableWithoutFeedback key={index} onPress={handleSelect}>
                           <View style={itemContainer}>
-                            <Text style={itemStyle}>{itemExtractor.label}</Text>
+                            <Text numberOfLines={1} style={itemStyle}>
+                              {itemExtractor.label}
+                            </Text>
                           </View>
                         </TouchableWithoutFeedback>
                       );

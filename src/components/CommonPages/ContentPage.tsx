@@ -46,7 +46,11 @@ export const ContentPage = ({
 
   return (
     <SafeAreaPage>
-      <ScrollView bounces={!noBounce} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        bounces={!noBounce}
+        contentContainerStyle={flexGrow}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
         <View style={px(sw24)}>
           <CustomSpacer space={topSpace} />
           {heading === undefined ? null : <Text style={{ ...fs40BoldBlack2, ...headingStyle }}>{heading}</Text>}

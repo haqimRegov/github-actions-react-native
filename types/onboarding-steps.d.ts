@@ -34,28 +34,30 @@ declare interface OnboardingStepsProps {
 }
 
 declare type TypeOnboardingRoute =
-  | "Acknowledgement"
   | "Declaration"
   | "EmailVerification"
   | "EmploymentDetails"
   | "IdentityVerification"
+  | "OrderSummary"
   | "Payment"
   | "PersonalDetails"
   | "ProductRecommendation"
   | "PRSDetails"
   | "Questionnaire"
-  | "Summary";
+  | "Summary"
+  | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {
-  Acknowledgement: TypeOnboardingRoute;
   Declaration: TypeOnboardingRoute;
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
+  OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
   PersonalDetails: TypeOnboardingRoute;
   ProductRecommendation: TypeOnboardingRoute;
   PRSDetails: TypeOnboardingRoute;
   Questionnaire: TypeOnboardingRoute;
   Summary: TypeOnboardingRoute;
+  TermsAndConditions: TypeOnboardingRoute;
 }

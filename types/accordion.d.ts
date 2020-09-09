@@ -1,9 +1,19 @@
 declare interface IAccordionSection {
-  content: JSX.Element;
   title: string;
+  sections: ISection[];
+}
+
+declare interface ISection {
+  heading?: string;
+  subHeading?: string;
+  termsList: {
+    label?: string;
+    content: string;
+  }[];
 }
 
 declare interface IBasicAccordionProps {
+  expandAll?: boolean;
   expandMultiple?: boolean;
   headerStyle?: import("react-native").ViewStyle;
   hideIcon?: boolean;

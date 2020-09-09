@@ -1,31 +1,35 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
 import { IcoMoon } from "../../icons";
 import {
+  borderBottomBlack21,
   centerVertical,
-  colorGray,
   colorTransparent,
   colorWhite,
-  customShadow,
   flexRow,
-  fs16RegBlack2,
+  fs12BoldBlack2,
+  fs14BoldBlack2,
+  fs14RegBlack2,
+  fs16BoldBlack2,
   noBorderBottom,
   px,
-  sh20,
-  sh5,
+  sh16,
+  sh24,
   sh56,
   sh8,
-  sw10,
+  shadowBlue5,
   sw20,
   sw24,
+  sw8,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
-  headerStyle,
+  expandAll,
   expandMultiple,
+  headerStyle,
   hideIcon,
   icon,
   sections,
@@ -39,17 +43,50 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
   };
 
   const renderContent = (section: IAccordionSection) => {
-    return section.content;
+    return (
+      <View style={{ backgroundColor: colorWhite._1, borderBottomLeftRadius: sw8, borderBottomRightRadius: sw8 }}>
+        {section.sections.map((terms, index) => {
+          return (
+            <Fragment key={index}>
+              {index !== 0 ? (
+                <Fragment>
+                  <View style={borderBottomBlack21} />
+                  <CustomSpacer space={sh16} />
+                </Fragment>
+              ) : null}
+              {terms.heading !== undefined ? <Text style={{ ...fs14BoldBlack2, ...px(sw24) }}>{terms.heading}</Text> : null}
+              <CustomSpacer space={sh8} />
+              {terms.termsList.map((term, insideIndex) => {
+                return (
+                  <Fragment key={insideIndex}>
+                    <View style={px(sw24)}>
+                      {term.label === undefined ? null : (
+                        <Fragment>
+                          <CustomSpacer space={sh8} />
+                          <Text style={fs12BoldBlack2}>{term.label}</Text>
+                        </Fragment>
+                      )}
+                      <Text style={{ ...fs14RegBlack2, lineHeight: sh24 }}>{term.content}</Text>
+                    </View>
+                    <CustomSpacer space={sh16} />
+                  </Fragment>
+                );
+              })}
+            </Fragment>
+          );
+        })}
+      </View>
+    );
   };
 
   const renderHeader = (section: IAccordionSection) => {
     const defaultHeaderStyle: ViewStyle = {
       ...centerVertical,
-      ...customShadow(colorGray._6, sh5, 0, 0.5, sh20),
+      ...shadowBlue5,
       ...flexRow,
       ...px(sw24),
       backgroundColor: colorWhite._1,
-      borderRadius: sw10,
+      borderRadius: sw8,
       height: sh56,
       ...headerStyle,
     };
@@ -64,13 +101,25 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
       <Fragment>
         {current === 0 ? null : <CustomSpacer space={defaultSpaceInBetween} />}
         <View style={defaultStyle}>
-          <Text style={{ ...fs16RegBlack2, ...titleStyle }}>{section.title}</Text>
+          <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{section.title}</Text>
           <CustomFlexSpacer />
           {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
         </View>
       </Fragment>
     );
   };
+
+  useEffect(() => {
+    if (expandAll) {
+      const allActiveSections: number[] = [];
+      sections.map((section, index) => {
+        return allActiveSections.push(index);
+      });
+      setActiveSections(allActiveSections);
+    } else {
+      setActiveSections([]);
+    }
+  }, [expandAll, sections]);
 
   return (
     <Accordion

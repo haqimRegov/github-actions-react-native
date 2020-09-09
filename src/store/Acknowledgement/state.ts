@@ -1,5 +1,3 @@
-import { IOrderSummary } from "../../../types/order-summary";
-
 export type orderSummaryState = {
   orders: IOrderSummary[];
 };

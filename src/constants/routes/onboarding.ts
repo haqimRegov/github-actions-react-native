@@ -1,5 +1,4 @@
 export const ONBOARDING_ROUTES: IOnboardingRoutes = {
-  Acknowledgement: "Acknowledgement",
   Declaration: "Declaration",
   EmailVerification: "EmailVerification",
   EmploymentDetails: "EmploymentDetails",

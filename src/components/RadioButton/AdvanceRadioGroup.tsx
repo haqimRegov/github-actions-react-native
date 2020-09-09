@@ -51,16 +51,21 @@ export const AdvanceRadioGroup = ({
           const handleSelect = () => {
             setSelected(option.value);
           };
+
+          const zIndex = option.right !== undefined ? 2 : 1;
+
           return (
             <Fragment key={index}>
               {index === 0 ? null : <CustomSpacer isHorizontal={direction === "row"} space={radioSpace} />}
-              <RadioButton
-                label={option.label}
-                labelStyle={optionStyle}
-                right={option.right}
-                selected={option.value === selected}
-                setSelected={handleSelect}
-              />
+              <View style={{ zIndex: zIndex }}>
+                <RadioButton
+                  label={option.label}
+                  labelStyle={optionStyle}
+                  right={option.right}
+                  selected={option.value === selected}
+                  setSelected={handleSelect}
+                />
+              </View>
             </Fragment>
           );
         })}

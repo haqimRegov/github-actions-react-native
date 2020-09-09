@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
 
-import { ButtonSelectionList, CardV5, CustomSpacer, FileViewer, LabeledTitle, TextSpaceArea } from "../../../components";
+import { BasicCard, ButtonSelectionList, CustomSpacer, FileViewer, LabeledTitle, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
@@ -94,7 +94,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
           <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs16BoldBlack2} text={PRODUCT_DETAILS.LABEL_FUND_FACTS} />
-            <CardV5
+            <BasicCard
               data={[
                 {
                   label: PRODUCT_DETAILS.LABEL_FUND_TYPE,
@@ -119,7 +119,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
               ]}
             />
             <CustomSpacer space={sw24} />
-            <CardV5
+            <BasicCard
               data={[
                 {
                   label: PRODUCT_DETAILS.LABEL_LATEST,

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CardV1, ContentPage, CustomSpacer, LabeledTitleProps } from "../../components";
+import { CardWrap, ContentPage, CustomSpacer, LabeledTitleProps } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
@@ -54,7 +54,7 @@ export const Summary: FunctionComponent<SummaryProps> = ({ handleNextStep }: Sum
   };
 
   const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.Acknowledgement);
+    handleNextStep(ONBOARDING_ROUTES.OrderSummary);
   };
 
   const personalDetails: LabeledTitleProps[] = [
@@ -171,33 +171,33 @@ export const Summary: FunctionComponent<SummaryProps> = ({ handleNextStep }: Sum
           </View>
           <View style={borderBottomBlack21}>
             <TitleIcon title={SUMMARY.TITLE_PERSONAL} />
-            <CardV1 data={personalDetails} />
+            <CardWrap data={personalDetails} />
           </View>
           <View style={borderBottomBlack21}>
             <TitleIcon title={SUMMARY.TITLE_ADDRESS} />
-            <CardV1 data={permanentAddress} />
-            <CardV1 data={mailingAddress} />
+            <CardWrap data={permanentAddress} />
+            <CardWrap data={mailingAddress} />
           </View>
           <View style={borderBottomBlack21}>
             <TitleIcon title={SUMMARY.TITLE_CONTACT} />
-            <CardV1 data={contactDetails} />
+            <CardWrap data={contactDetails} />
           </View>
           <View style={borderBottomBlack21}>
             <TitleIcon title={SUMMARY.TITLE_EPF} />
-            <CardV1 data={epfDetails} />
+            <CardWrap data={epfDetails} />
           </View>
           <View style={borderBottomBlack21}>
             <TitleIcon title={SUMMARY.TITLE_BANK} />
-            <CardV1 data={localBank} />
-            <CardV1 data={foreignBank} />
+            <CardWrap data={localBank} />
+            <CardWrap data={foreignBank} />
           </View>
           <View style={borderBottomBlack21}>
             <TitleIcon title={SUMMARY.TITLE_EMPLOYMENT} />
-            <CardV1 data={employmentDetails} />
+            <CardWrap data={employmentDetails} />
           </View>
           <View>
             <TitleIcon title={SUMMARY.TITLE_FATCA} />
-            <CardV1 data={declaration} />
+            <CardWrap data={declaration} />
           </View>
         </View>
       </View>

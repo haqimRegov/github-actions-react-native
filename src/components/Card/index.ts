@@ -1,2 +1,2 @@
-export * from "./CardV1";
-export * from "./CardV5";
+export * from "./Basic";
+export * from "./CardWrap";

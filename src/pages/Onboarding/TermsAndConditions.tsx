@@ -28,6 +28,7 @@ import {
   px,
   sh16,
   sh24,
+  sh32,
   sh40,
   sh5,
   sh8,
@@ -86,13 +87,13 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
   };
 
   useEffect(() => {
-    const fundTypeArray: string[] = [];
-    orders.map((order) =>
-      fundTypeArray.includes(order.funds[0].fundType) === true ? fundTypeArray : fundTypeArray.push(order.funds[0].fundType),
-    );
+    const fundTypeArray = orders
+      .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
+      .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
     setFundTypeList(fundTypeArray);
   }, [orders]);
 
+  // TODO FEA to be removed
   const TERMS_AND_CONDITION_LIST = [FATCA, CRS, FEA];
   if (fundTypeList?.includes("PRS")) {
     TERMS_AND_CONDITION_LIST.push(PRS);
@@ -124,13 +125,13 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
         </View>
         <CustomSpacer space={sh24} />
         <BasicAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh32} />
       </View>
       <View style={borderBottomBlack21} />
-      <CustomSpacer space={sh24} />
+      <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1} labelStyle={fs12BoldBlack2} onPress={handleAgree1} toggle={agree1} />
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh16} />
         <CheckBox
           checkboxStyle={{ paddingTop: sh5 }}
           label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_2}
@@ -139,7 +140,7 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
           onPress={handleAgree2}
           toggle={agree2}
         />
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh16} />
         <CheckBox
           checkboxStyle={{ paddingTop: sh5 }}
           label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_3}
@@ -148,9 +149,9 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
           onPress={handleAgree3}
           toggle={agree3}
         />
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh16} />
         <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4} labelStyle={fs12BoldBlack2} onPress={handleAgree4} toggle={agree4} />
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh16} />
         <View style={{ ...centerVertical, ...flexRow }}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.LABEL_CONSENT}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />

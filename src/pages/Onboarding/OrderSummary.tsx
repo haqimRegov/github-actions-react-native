@@ -2,14 +2,13 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { IOrderSummary } from "../../../types/order-summary";
 import { ContentPage, CustomPopup, CustomSpacer } from "../../components";
-import { CardV3 } from "../../components/Cards/CardV3";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { IcoMoon } from "../../icons";
-import { ORDER_SUMMARY_MOCKS } from "../../mocks";
+import { SAMPLE_ORDER_SUMMARY } from "../../mocks";
 import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store/Acknowledgement";
 import { borderBottomBlack21, flexRow, fs16SemiBoldBlack2, px, sh24, sh8, shadow5, sw12, sw24 } from "../../styles";
+import { OrderDetails } from "./Order/OrderDetails";
 
 interface OrderSummaryProps extends OrderSummaryStoreProps {
   handleNextStep: (route: string) => void;
@@ -26,7 +25,7 @@ const OrderSummaryContent = ({ handleNextStep, addOrders }: OrderSummaryProps) =
   };
 
   useEffect(() => {
-    setData(ORDER_SUMMARY_MOCKS);
+    setData(SAMPLE_ORDER_SUMMARY);
   }, []);
 
   const handleBack = () => {
@@ -50,7 +49,7 @@ const OrderSummaryContent = ({ handleNextStep, addOrders }: OrderSummaryProps) =
         </CustomPopup>
       </View>
       <CustomSpacer space={sh24} />
-      {data.map((order: IOrderSummary, index: number) => {
+      {data.map((orderSummary: IOrderSummary, index: number) => {
         return (
           <Fragment key={index}>
             {index !== 0 ? (
@@ -61,14 +60,7 @@ const OrderSummaryContent = ({ handleNextStep, addOrders }: OrderSummaryProps) =
               </Fragment>
             ) : null}
             <View style={{ ...px(sw24), ...shadow5 }} key={index}>
-              <CardV3
-                title={order.orderNo}
-                heading={order.date}
-                amount={order.totalAmount}
-                rightHeading={ORDER_SUMMARY.LABEL_TOTAL_INVESTMENT_AMOUNT}
-                rightContent={ORDER_SUMMARY.LABEL_MYR}
-                funds={order.funds}
-              />
+              <OrderDetails orderSummary={orderSummary} />
             </View>
           </Fragment>
         );

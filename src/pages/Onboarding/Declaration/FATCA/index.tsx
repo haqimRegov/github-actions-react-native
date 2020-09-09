@@ -133,7 +133,7 @@ export const FATCADeclaration = ({
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs14BoldBlack2} text={DECLARATION.LABEL_UPLOAD} />
             <UploadWithModal
-              features={["camera", "gallery"]}
+              features={["camera", "file", "gallery"]}
               label={DECLARATION.TITLE_CERTIFICATE}
               onSuccess={handleProof}
               setValue={handleProof}

@@ -17,6 +17,7 @@ import {
   fs16SemiBoldBlack2,
   fs24BoldBlack2,
   fsCapitalize,
+  fsUppercase,
   px,
   py,
   sh05,
@@ -43,6 +44,7 @@ interface ProductDetailsProps {
   handleShareDocuments: () => void;
 }
 export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, handleBack, handleShareDocuments }: ProductDetailsProps) => {
+  // TODO Fund Facts design for AMP fund
   const [viewDocument, setViewDocument] = useState<FileBase64 | undefined>(undefined);
   const epf = fund.isEpf ? "Yes" : "No";
   const shariah = fund.isShariah ? "Yes" : "No";
@@ -97,12 +99,13 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             <BasicCard
               data={[
                 {
-                  label: PRODUCT_DETAILS.LABEL_FUND_TYPE,
+                  label: PRODUCT_DETAILS.LABEL_FUND_CATEGORY,
                   title: fund.fundCategory,
                 },
                 {
-                  label: PRODUCT_DETAILS.LABEL_FUND_CATEGORY,
+                  label: PRODUCT_DETAILS.LABEL_FUND_TYPE,
                   title: fund.fundType,
+                  titleStyle: fsUppercase,
                 },
                 {
                   label: PRODUCT_DETAILS.LABEL_RISK,
@@ -122,25 +125,25 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             <BasicCard
               data={[
                 {
-                  label: PRODUCT_DETAILS.LABEL_LATEST,
-                  title: `${fund.latestFundSize}`,
-                  titlePrefix: fund.fundCurrency,
-                },
-                {
                   label: PRODUCT_DETAILS.LABEL_SALES_CASH,
-                  title: `${fund.salesCharge.cash?.maximum}`,
+                  title: `${fund.salesCharge.cash?.minimum} % - ${fund.salesCharge.cash?.maximum} %`,
                 },
                 {
                   label: PRODUCT_DETAILS.LABEL_SALES_EPF,
-                  title: `${fund.salesCharge.epf?.maximum}`,
+                  title: `${fund.salesCharge.epf?.minimum} % - ${fund.salesCharge.epf?.maximum} %`,
                 },
                 {
                   label: PRODUCT_DETAILS.LABEL_ANNUAL,
                   title: `${fund.annualManagementFee} %`,
                 },
                 {
-                  label: PRODUCT_DETAILS.LABEL_MINIMUM,
-                  title: `${fund.newSalesAmount.cash?.minimum}`,
+                  label: PRODUCT_DETAILS.LABEL_MINIMUM_CASH,
+                  title: `${fund.salesCharge.cash?.maximum}`,
+                  titlePrefix: fund.fundCurrency,
+                },
+                {
+                  label: PRODUCT_DETAILS.LABEL_MINIMUM_EPF,
+                  title: `${fund.newSalesAmount.epf?.minimum}`,
                   titlePrefix: fund.fundCurrency,
                 },
               ]}
@@ -156,7 +159,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             <View style={{ ...flexRow, ...centerVertical }}>
               <Text style={{ ...fs16BoldBlack2 }}>{PRODUCT_DETAILS.LABEL_FUND_DOCUMENTS}</Text>
               <CustomSpacer isHorizontal={true} space={sw12} />
-              <IcoMoon name="share" color={colorBlue._1} size={sw16} onPress={handleShareDocuments} />
+              <TouchableWithoutFeedback onPress={handleShareDocuments}>
+                <IcoMoon name="share" color={colorBlue._1} size={sw16} />
+              </TouchableWithoutFeedback>
             </View>
             <CustomSpacer space={sh14} />
             <View style={flexRow}>

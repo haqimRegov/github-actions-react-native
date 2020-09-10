@@ -42,7 +42,6 @@ declare type TypeOnboardingRoute =
   | "Payment"
   | "PersonalDetails"
   | "ProductRecommendation"
-  | "PRSDetails"
   | "Questionnaire"
   | "Summary"
   | "TermsAndConditions";
@@ -56,7 +55,6 @@ declare interface IOnboardingRoutes {
   Payment: TypeOnboardingRoute;
   PersonalDetails: TypeOnboardingRoute;
   ProductRecommendation: TypeOnboardingRoute;
-  PRSDetails: TypeOnboardingRoute;
   Questionnaire: TypeOnboardingRoute;
   Summary: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;

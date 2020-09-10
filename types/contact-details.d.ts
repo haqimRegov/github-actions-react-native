@@ -1,6 +1,7 @@
 declare interface IBankingDetails {
   accountName: string;
   accountNumber: string;
+  bankLocation?: string;
   bankName: string;
   bankSwiftCode?: string;
   currency: TypeBankCurrency[];

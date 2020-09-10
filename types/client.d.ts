@@ -13,6 +13,8 @@ declare interface IClientIDDetails {
 }
 
 declare type TypeIDChoices = "NRIC" | "Passport" | "Other";
+declare type TypeIDChoicesValue = { value: TypeIDChoices };
+declare type TypeIDChoicesLabelValue = { label: string; value: TypeCurrency };
 
 declare type TypeClientID = "NRIC" | "Passport" | "Army" | "Police";
 

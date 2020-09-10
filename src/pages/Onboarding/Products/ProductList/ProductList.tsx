@@ -8,6 +8,7 @@ import {
   flexChild,
   flexGrow,
   flexRow,
+  fsUppercase,
   px,
   py,
   sh15,
@@ -134,7 +135,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: [{ key: "fundType" }],
+      key: [{ key: "fundType", textStyle: fsUppercase }],
       viewStyle: {
         width: sw83,
       },

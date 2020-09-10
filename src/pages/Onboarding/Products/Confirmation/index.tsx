@@ -1,15 +1,16 @@
 import React, { Fragment, FunctionComponent, useEffect } from "react";
 import { Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitle } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../../../../components";
 import { Language } from "../../../../constants";
+import { IcoMoon } from "../../../../icons";
 import {
-  circle,
+  centerVertical,
   colorBlack,
   colorWhite,
   flexChild,
   flexGrow,
-  flexRowCC,
+  flexRow,
   fs10BoldBlack2,
   fs16SemiBoldBlack2,
   fs24BoldBlack2,
@@ -98,7 +99,6 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
             setInvestmentDetails(newData);
           };
 
-          const iconStyle: ViewStyle = { ...circle(sw24, colorWhite._1), backgroundColor: colorWhite._1, justifyContent: "center" };
           const container: ViewStyle = {
             ...flexChild,
             ...shadowBlue5,
@@ -112,10 +112,10 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
               <View style={container}>
                 <CustomSpacer space={sh32} />
                 <View style={px(sw24)}>
-                  <View style={flexRowCC}>
+                  <View style={{ ...centerVertical, ...flexRow }}>
                     <Text style={fs10BoldBlack2}>{product.fund.fundCategory}</Text>
                     <CustomFlexSpacer />
-                    <IconButton name="trash" color={colorBlack._1} onPress={handleDelete} size={sh24} style={iconStyle} />
+                    <IcoMoon name="trash" color={colorBlack._1} onPress={handleDelete} size={sh32} />
                   </View>
                   <LabeledTitle
                     label={product.fund.name}

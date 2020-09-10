@@ -31,7 +31,7 @@ export const NormalLogin = ({ navigation, passwordRecovery, setRootPage }: Norma
   const handleLogin = async () => {
     // TODO integration
     await updateStorageData("visited", true);
-    navigation.navigate("Onboarding");
+    navigation.navigate("Dashboard");
   };
 
   const handleShowPassword = () => {

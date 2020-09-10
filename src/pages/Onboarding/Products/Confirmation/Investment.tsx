@@ -51,7 +51,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   const maxSalesCharge = isFundingMethodCash ? fund.salesCharge.cash?.maximum! : fund.salesCharge.epf?.maximum!;
   const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
 
-  for (let index = minSalesCharge || 0; index <= maxSalesCharge; index += 0.5) {
+  for (let index = minSalesCharge || 0; index <= maxSalesCharge; index += isFundingMethodCash ? 0.5 : maxSalesCharge - minSalesCharge) {
     const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
     extractedSalesCharge.push(element);
   }
@@ -79,7 +79,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   };
 
   const handleScheduled = () => {
-    const newData = { ...data, scheduledInvestment: !scheduledInvestment };
+    const newData = { ...data, scheduledSalesCharge: 0, scheduledInvestment: !scheduledInvestment };
     if (newData.scheduledInvestment === false) {
       delete newData.scheduledSalesCharge;
       delete newData.scheduledInvestmentAmount;

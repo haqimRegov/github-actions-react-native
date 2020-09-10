@@ -1,6 +1,7 @@
 export * from "./Accordion";
 export * from "./Badge";
 export * from "./Card";
+export * from "./CheckBox";
 export * from "./Collapsible";
 export * from "./CommonPages";
 export * from "./DateAndTimePicker";

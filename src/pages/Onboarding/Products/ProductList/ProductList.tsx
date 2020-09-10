@@ -1,20 +1,24 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, ScrollView, View, ViewStyle } from "react-native";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, Pagination, Tab } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, Pagination, RoundedButton, Tab } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   colorWhite,
   flexChild,
   flexGrow,
   flexRow,
-  fs12SemiBoldGray8,
+  px,
+  py,
   sh15,
   sh152,
   sh153,
   sh16,
+  sh24,
   sh32,
   sh40,
+  sh48,
+  sh56,
   shadow5,
   sw102,
   sw109,
@@ -33,7 +37,9 @@ const { PRODUCT_LIST } = Language.PAGE;
 interface ProductListProps {
   handleShareDocuments: (fund: IFund) => void;
   productList: IFund[];
+  selectedFilter: IProductFilter;
   selectedFunds: IFund[];
+  setSelectedFilter: (value: IProductFilter) => void;
   setSelectedFunds: (product: IFund[]) => void;
   setViewFund: (product: IFund) => void;
   shareSuccess?: boolean;
@@ -42,18 +48,24 @@ interface ProductListProps {
 export const ProductList: FunctionComponent<ProductListProps> = ({
   handleShareDocuments,
   productList,
+  selectedFilter,
   selectedFunds,
+  setSelectedFilter,
   setSelectedFunds,
   setViewFund,
   shareSuccess,
 }: ProductListProps) => {
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [allFunds, setAllFunds] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(true);
+  const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>("");
+  const [showMore, setShowMore] = useState<boolean>(false);
 
   const handleFilter = () => {
-    setFilter(!filter);
+    if (filterVisible && showMore) {
+      setShowMore(false);
+    }
+    setFilterVisible(!filterVisible);
   };
 
   const handleViewDetails = (fund: IFund) => {
@@ -65,6 +77,10 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
   };
 
   const handlePrev = () => {
+    Alert.alert("handlePress");
+  };
+
+  const handleCancel = () => {
     Alert.alert("handlePress");
   };
 
@@ -107,7 +123,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
     {
       key: [{ key: "name" }],
       icon: {
-        name: "caret-down",
+        name: "arrow-down",
       },
       viewStyle: {
         width: sw234,
@@ -122,7 +138,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       viewStyle: {
         width: sw83,
       },
-      title: PRODUCT_LIST.LABEL_COLUMN_PRODUCT,
+      title: PRODUCT_LIST.LABEL_COLUMN_FUND_TYPE,
     },
     {
       icon: {
@@ -148,8 +164,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       icon: {
         name: "caret-down",
       },
-      key: [{ key: "isShariah" }, { key: "fundType", textStyle: fs12SemiBoldGray8 }], // TODO for reference for other table
-      prefix: [{ key: "fundCurrency", targetKey: "fundType", textStyle: fs12SemiBoldGray8 }],
+      key: [{ key: "isShariah" }],
       viewStyle: {
         width: sw90,
       },
@@ -180,53 +195,74 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
   const renderAccordion = productList.length !== 0 ? tableAccordion : undefined;
 
   const tableContainer: ViewStyle = { backgroundColor: colorWhite._2, borderBottomRightRadius: sw24, borderBottomLeftRadius: sw24 };
+  const scrollEnabled = !filterVisible || (filterVisible && showMore);
+  const filterPills = Object.values(selectedFilter)
+    .flat(1)
+    .filter((value) => value !== "");
 
   return (
-    <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" scrollEnabled={filter}>
+    <ScrollView
+      contentContainerStyle={flexGrow}
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={scrollEnabled}
+      showsVerticalScrollIndicator={false}>
       <View style={flexChild}>
         <ProductHeader
-          filter={filter}
+          selectedFilter={selectedFilter}
+          filterVisible={filterVisible}
           handleFilter={handleFilter}
-          handleNext={handleNext}
-          handlePrev={handlePrev}
           inputSearch={inputSearch}
+          setSelectedFilter={setSelectedFilter}
           setInputSearch={setInputSearch}
+          setShowMore={setShowMore}
+          showMore={showMore}
         />
-        <View style={{ ...shadow5, margin: sw24, backgroundColor: colorWhite._1, borderRadius: sw24 }}>
-          <CustomSpacer space={sh153} />
-          <CustomSpacer space={sh16} />
-          <View style={flexRow}>
-            <Tab onPress={handleRecommendedFunds} selected={!allFunds} text={PRODUCT_LIST.LABEL_RECOMMENDED} />
-            <Tab onPress={handleAllFunds} selected={allFunds} text={PRODUCT_LIST.LABEL_ALL_FUNDS} />
-            <CustomFlexSpacer />
-            <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} itemsPerPage={20} />
-            <CustomSpacer isHorizontal={true} space={sw24} />
-          </View>
-          <CustomSpacer space={sh15} />
-          <View style={tableContainer}>
-            <AdvanceTable
-              activeAccordion={activeAccordion}
-              columns={columns}
-              data={productList}
-              rowSelection={selectedFunds}
-              onRowSelect={handleSelectProduct}
-              RenderAccordion={renderAccordion}
-              RenderOptions={(props: ITableOptions) => (
-                <ProductOptions
-                  {...props}
-                  handleShareDocuments={handleShareDocuments}
-                  handleShowPerformance={handleShowPerformance}
-                  handleViewDetails={handleViewDetails}
-                  shareSuccess={shareSuccess}
+        <CustomSpacer space={sh24} />
+        {filterVisible && showMore ? null : (
+          <Fragment>
+            <View style={{ ...shadow5, marginHorizontal: sw24, backgroundColor: colorWhite._1, borderRadius: sw24 }}>
+              <CustomSpacer space={sh153} />
+              <CustomSpacer space={sh16} />
+              {filterPills.length === 0 ? null : <CustomSpacer space={sh48} />}
+              <View style={flexRow}>
+                <Tab onPress={handleRecommendedFunds} selected={!allFunds} text={PRODUCT_LIST.LABEL_RECOMMENDED} />
+                <Tab onPress={handleAllFunds} selected={allFunds} text={PRODUCT_LIST.LABEL_ALL_FUNDS} />
+                <CustomFlexSpacer />
+                <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} itemsPerPage={20} />
+                <CustomSpacer isHorizontal={true} space={sw24} />
+              </View>
+              <CustomSpacer space={sh15} />
+              <View style={tableContainer}>
+                <AdvanceTable
+                  activeAccordion={activeAccordion}
+                  columns={columns}
+                  data={productList}
+                  rowSelection={selectedFunds}
+                  onRowSelect={handleSelectProduct}
+                  RenderAccordion={renderAccordion}
+                  RenderOptions={(props: ITableOptions) => (
+                    <ProductOptions
+                      {...props}
+                      handleShareDocuments={handleShareDocuments}
+                      handleShowPerformance={handleShowPerformance}
+                      handleViewDetails={handleViewDetails}
+                      shareSuccess={shareSuccess}
+                    />
+                  )}
+                  rowSelectionLabel={PRODUCT_LIST.LABEL_COLUMN_BUY}
                 />
-              )}
-              rowSelectionLabel={PRODUCT_LIST.LABEL_COLUMN_BUY}
-            />
-            <CustomSpacer space={sh32} />
-          </View>
-        </View>
+                <CustomSpacer space={sh32} />
+              </View>
+            </View>
+            {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
+            {selectedFunds.length === 0 ? (
+              <View style={{ ...px(sw24), ...py(sh56) }}>
+                <RoundedButton onPress={handleCancel} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
+              </View>
+            ) : null}
+          </Fragment>
+        )}
       </View>
-      {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
     </ScrollView>
   );
 };

@@ -3,12 +3,117 @@ export const IcoMoonSelection = {
   icons: [
     {
       icon: {
+        paths: [
+          "M511.991 184.889c-180.66 0-327.113 146.453-327.113 327.111s146.452 327.113 327.113 327.113c180.655 0 327.108-146.453 327.108-327.113s-146.453-327.111-327.108-327.111zM127.99 512c0-212.077 171.922-384 384.002-384 212.075 0 384 171.923 384 384 0 212.079-171.925 384-384 384-212.079 0-384.002-171.921-384.002-384z",
+          "M656.115 367.867c12.629 12.628 12.629 33.103 0 45.731l-242.523 242.522c-12.628 12.629-33.103 12.629-45.731 0-12.628-12.625-12.628-33.101 0-45.73l242.523-242.522c12.629-12.628 33.101-12.628 45.73 0z",
+          "M367.862 367.867c12.628-12.628 33.103-12.628 45.731 0l242.523 242.522c12.629 12.629 12.629 33.105 0 45.73-12.629 12.629-33.101 12.629-45.73 0l-242.523-242.522c-12.628-12.628-12.628-33.103 0-45.731z",
+        ],
+        attrs: [{}, {}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["close-circle"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
+      },
+      attrs: [{}, {}, {}],
+      properties: {
+        order: 68,
+        id: 112,
+        name: "close-circle",
+        prevSize: 32,
+        code: 59703,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 0,
+    },
+    {
+      icon: {
+        paths: [
+          "M2288.941 0h-2048c-132.518 0-240.941 108.424-240.941 240.941v361.412c0 132.518 108.424 240.941 240.941 240.941h843.294l180.706 180.706 180.706-180.706h843.294c132.518 0 240.941-108.424 240.941-240.941v-361.412c0-132.518-108.424-240.941-240.941-240.941zM2499.765 602.353c0 117.459-93.365 210.824-210.824 210.824h-855.341l-168.659 168.659-168.659-168.659h-855.341c-117.459 0-210.824-93.365-210.824-210.824v-361.412c0-117.459 93.365-210.824 210.824-210.824h2048c117.459 0 210.824 93.365 210.824 210.824v361.412z",
+          "M2499.765 240.941v361.412c0 117.459-93.365 210.824-210.824 210.824h-855.341l-168.659 168.659-168.659-168.659h-855.341c-117.459 0-210.824-93.365-210.824-210.824v-361.412c0-117.459 93.365-210.824 210.824-210.824h2048c117.459 0 210.824 93.365 210.824 210.824z",
+        ],
+        attrs: [
+          {
+            fill: "rgb(234, 235, 238)",
+          },
+          {
+            fill: "rgb(255, 255, 255)",
+          },
+        ],
+        width: 2530,
+        isMulticolor: true,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["filter-tooltip"],
+        colorPermutations: {
+          "2342352381255255255132671": [
+            {
+              f: 1,
+            },
+            {
+              f: 2,
+            },
+          ],
+        },
+      },
+      attrs: [
+        {
+          fill: "rgb(234, 235, 238)",
+        },
+        {
+          fill: "rgb(255, 255, 255)",
+        },
+      ],
+      properties: {
+        order: 66,
+        id: 111,
+        name: "filter-tooltip",
+        prevSize: 32,
+        code: 59700,
+        codes: [59700, 59701, 59702],
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 1,
+    },
+    {
+      icon: {
+        paths: ["M512 298.667l256-298.667h-512l256 298.667z"],
+        attrs: [{}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["arrow-solid-down-border"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
+      },
+      attrs: [{}],
+      properties: {
+        order: 62,
+        id: 110,
+        name: "arrow-solid-down-border",
+        prevSize: 32,
+        code: 59699,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 2,
+    },
+    {
+      icon: {
         paths: ["M512 682.667l256-298.667h-512l256 298.667z"],
         attrs: [{}],
         isMulticolor: false,
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-solid-down"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -20,7 +125,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 0,
+      iconIdx: 3,
     },
     {
       icon: {
@@ -30,6 +135,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-solid-left"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -41,7 +149,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 1,
+      iconIdx: 4,
     },
     {
       icon: {
@@ -51,6 +159,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-solid-up"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -62,7 +173,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 2,
+      iconIdx: 5,
     },
     {
       icon: {
@@ -72,6 +183,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-solid-right"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -83,7 +197,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 3,
+      iconIdx: 6,
     },
     {
       icon: {
@@ -97,6 +211,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["order-success"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -108,7 +225,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 4,
+      iconIdx: 7,
     },
     {
       icon: {
@@ -122,6 +239,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["archive"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -133,7 +253,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 5,
+      iconIdx: 8,
     },
     {
       icon: {
@@ -148,6 +268,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["calendar"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}, {}],
       properties: {
@@ -159,7 +282,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 6,
+      iconIdx: 9,
     },
     {
       icon: {
@@ -173,6 +296,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["error"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -184,7 +310,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 7,
+      iconIdx: 10,
     },
     {
       icon: {
@@ -198,6 +324,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["external"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -209,7 +338,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 8,
+      iconIdx: 11,
     },
     {
       icon: {
@@ -223,6 +352,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["login"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -234,7 +366,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 9,
+      iconIdx: 12,
     },
     {
       icon: {
@@ -249,6 +381,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["order-failed"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}, {}],
       properties: {
@@ -260,7 +395,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 10,
+      iconIdx: 13,
     },
     {
       icon: {
@@ -276,6 +411,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["share"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}, {}, {}],
       properties: {
@@ -287,7 +425,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 11,
+      iconIdx: 14,
     },
     {
       icon: {
@@ -301,6 +439,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["gallery"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -312,7 +453,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 12,
+      iconIdx: 15,
     },
     {
       icon: {
@@ -327,6 +468,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["file"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}, {}],
       properties: {
@@ -338,7 +482,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 13,
+      iconIdx: 16,
     },
     {
       icon: {
@@ -350,6 +494,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["performance"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -361,7 +508,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 14,
+      iconIdx: 17,
     },
     {
       icon: {
@@ -375,6 +522,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["trash"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -386,7 +536,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 15,
+      iconIdx: 18,
     },
     {
       icon: {
@@ -399,6 +549,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["search"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -410,7 +563,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 16,
+      iconIdx: 19,
     },
     {
       icon: {
@@ -422,6 +575,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["filter"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -433,7 +589,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 17,
+      iconIdx: 20,
     },
     {
       icon: {
@@ -446,6 +602,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["bell"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -457,7 +616,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 18,
+      iconIdx: 21,
     },
     {
       icon: {
@@ -474,6 +633,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["fingerprint"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}, {}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}, {}, {}, {}],
       properties: {
@@ -485,7 +647,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 19,
+      iconIdx: 22,
     },
     {
       icon: {
@@ -497,6 +659,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["eye-show"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -508,7 +673,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 20,
+      iconIdx: 23,
     },
     {
       icon: {
@@ -521,6 +686,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["eye-hide"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -532,7 +700,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 21,
+      iconIdx: 24,
     },
     {
       icon: {
@@ -544,6 +712,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["action-menu"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -555,7 +726,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 22,
+      iconIdx: 25,
     },
     {
       icon: {
@@ -568,6 +739,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["expand"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -579,7 +753,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 23,
+      iconIdx: 26,
     },
     {
       icon: {
@@ -592,6 +766,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["collapse"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -603,7 +780,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 24,
+      iconIdx: 27,
     },
     {
       icon: {
@@ -615,6 +792,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["plus"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -626,7 +806,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 25,
+      iconIdx: 28,
     },
     {
       icon: {
@@ -639,6 +819,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["camera"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -650,7 +833,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 26,
+      iconIdx: 29,
     },
     {
       icon: {
@@ -662,6 +845,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["close"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -673,7 +859,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 27,
+      iconIdx: 30,
     },
     {
       icon: {
@@ -686,6 +872,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["download"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -697,7 +886,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 28,
+      iconIdx: 31,
     },
     {
       icon: {
@@ -710,6 +899,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["upload"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -721,7 +913,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 29,
+      iconIdx: 32,
     },
     {
       icon: {
@@ -734,6 +926,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["edit"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -745,7 +940,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 30,
+      iconIdx: 33,
     },
     {
       icon: {
@@ -758,6 +953,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["order"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -769,7 +967,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 31,
+      iconIdx: 34,
     },
     {
       icon: {
@@ -781,6 +979,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["task"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -792,7 +993,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 32,
+      iconIdx: 35,
     },
     {
       icon: {
@@ -804,6 +1005,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["profile"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -815,7 +1019,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 33,
+      iconIdx: 36,
     },
     {
       icon: {
@@ -828,6 +1032,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["quick-action"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -839,7 +1046,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 34,
+      iconIdx: 37,
     },
     {
       icon: {
@@ -851,6 +1058,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["check"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -862,7 +1072,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 35,
+      iconIdx: 38,
     },
     {
       icon: {
@@ -875,6 +1085,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["clock"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -886,7 +1099,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 36,
+      iconIdx: 39,
     },
     {
       icon: {
@@ -898,6 +1111,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["agents"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -909,7 +1125,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 37,
+      iconIdx: 40,
     },
     {
       icon: {
@@ -921,6 +1137,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["dashboard"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -932,7 +1151,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 38,
+      iconIdx: 41,
     },
     {
       icon: {
@@ -946,6 +1165,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["cloud-upload"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -957,7 +1179,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 39,
+      iconIdx: 42,
     },
     {
       icon: {
@@ -970,6 +1192,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["question"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -981,7 +1206,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 40,
+      iconIdx: 43,
     },
     {
       icon: {
@@ -995,6 +1220,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["info"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
       },
       attrs: [{}, {}, {}],
       properties: {
@@ -1006,7 +1234,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 41,
+      iconIdx: 44,
     },
     {
       icon: {
@@ -1019,6 +1247,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["dollar"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
       },
       attrs: [{}, {}],
       properties: {
@@ -1030,7 +1261,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 42,
+      iconIdx: 45,
     },
     {
       icon: {
@@ -1042,6 +1273,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["caret-down"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1053,7 +1287,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 43,
+      iconIdx: 46,
     },
     {
       icon: {
@@ -1065,6 +1299,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["caret-up"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1076,7 +1313,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 44,
+      iconIdx: 47,
     },
     {
       icon: {
@@ -1088,6 +1325,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["caret-left"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1099,7 +1339,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 45,
+      iconIdx: 48,
     },
     {
       icon: {
@@ -1111,6 +1351,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["caret-right"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1122,7 +1365,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 46,
+      iconIdx: 49,
     },
     {
       icon: {
@@ -1134,6 +1377,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-down"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1145,7 +1391,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 47,
+      iconIdx: 50,
     },
     {
       icon: {
@@ -1157,6 +1403,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-up"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1168,7 +1417,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 48,
+      iconIdx: 51,
     },
     {
       icon: {
@@ -1180,6 +1429,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-right"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1191,7 +1443,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 49,
+      iconIdx: 52,
     },
     {
       icon: {
@@ -1203,6 +1455,9 @@ export const IcoMoonSelection = {
         isMulticolor2: false,
         grid: 0,
         tags: ["arrow-left"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
       },
       attrs: [{}],
       properties: {
@@ -1214,7 +1469,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 50,
+      iconIdx: 53,
     },
   ],
   height: 1024,

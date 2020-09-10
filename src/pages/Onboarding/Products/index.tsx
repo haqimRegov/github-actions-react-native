@@ -19,8 +19,10 @@ interface ProductsProps extends SelectedFundStoreProps {
 }
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
+  addFilters,
   addInvestmentDetails,
   addSelectedFund,
+  filters,
   handleNextStep,
   investmentDetails,
   selectedFunds,
@@ -89,10 +91,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       <ProductList
         handleShareDocuments={handleShareDocuments}
         productList={productList}
+        selectedFilter={filters}
         selectedFunds={selectedFunds}
         setSelectedFunds={addSelectedFund}
         setViewFund={setViewFund}
         shareSuccess={shareSuccess}
+        setSelectedFilter={addFilters}
       />
     ),
     onPressSubmit: handleStartInvesting,

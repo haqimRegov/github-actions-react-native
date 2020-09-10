@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
@@ -29,8 +29,16 @@ export interface CheckBoxProps {
   style?: ViewStyle;
   toggle: boolean;
 }
-
-export const CheckBox = ({ checkboxStyle, disabled, label, labelStyle, onPress, spaceToLabel, style, toggle }: CheckBoxProps) => {
+export const CheckBox: FunctionComponent<CheckBoxProps> = ({
+  checkboxStyle,
+  disabled,
+  label,
+  labelStyle,
+  onPress,
+  spaceToLabel,
+  style,
+  toggle,
+}: CheckBoxProps) => {
   const selectedStyle: ViewStyle = toggle ? { backgroundColor: colorRed._1, borderColor: colorRed._1 } : {};
   const disabledStyle: ViewStyle = disabled === true ? { opacity: 0.5 } : {};
 

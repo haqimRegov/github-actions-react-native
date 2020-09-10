@@ -14,17 +14,18 @@ import { Language } from "../../../../constants";
 import { DICTIONARY_CURRENCY, DICTIONARY_MALAYSIA_BANK } from "../../../../data/dictionary";
 import {
   centerVertical,
-  circle,
   colorBlack,
-  colorTransparent,
   flexRow,
+  fs12SemiBoldGray8,
   fs16BoldBlue2,
   px,
+  py,
+  sh16,
   sh24,
   sh32,
+  sh8,
   sw16,
   sw24,
-  sw40,
 } from "../../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -47,15 +48,15 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
-        const handleBankName = (input: string) => {
-          const updatedDetails = [...bankingDetails];
-          updatedDetails[index].bankName = input;
-          setBankingDetails(updatedDetails);
-        };
-
         const handleAddCurrency = () => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].currency.push("");
+          setBankingDetails(updatedDetails);
+        };
+
+        const handleBankName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].bankName = input;
           setBankingDetails(updatedDetails);
         };
 
@@ -78,6 +79,12 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
+        const handleSwiftCode = (input: string) => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].bankSwiftCode = input;
+          setBankingDetails(updatedDetails);
+        };
+
         const handleAccountNumber = (input: string) => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].accountNumber = input;
@@ -90,19 +97,12 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
         return (
           <View key={index}>
-            <View style={{ ...flexRow, ...px(sw24) }}>
-              <TextSpaceArea spaceToBottom={sh32} style={fs16BoldBlue2} text={localBankLabel} />
-              <CustomFlexSpacer />
-              {index === 0 ? null : (
-                <IconButton
-                  name="trash"
-                  color={colorBlack._1}
-                  onPress={handleRemoveNumber}
-                  size={sh32}
-                  style={circle(sw40, colorTransparent)}
-                />
-              )}
+            <View style={{ ...centerVertical, ...flexRow, ...px(sw24) }}>
+              <TextSpaceArea style={fs16BoldBlue2} text={localBankLabel} />
+              <CustomSpacer isHorizontal={true} space={sw16} />
+              {index === 0 ? null : <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} />}
             </View>
+            <CustomSpacer space={sh16} />
             <View style={px(sw24)}>
               <CustomTextInput disabled={true} label={PERSONAL_DETAILS.LABEL_CURRENCY} value={item.currency[0]} />
               {item.currency
@@ -136,13 +136,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                       <CustomSpacer isHorizontal={true} space={sw16} />
                       <View>
                         <CustomFlexSpacer />
-                        <IconButton
-                          name="trash"
-                          color={colorBlack._1}
-                          onPress={handleRemoveCurrency}
-                          size={sh24}
-                          style={circle(sw40, colorTransparent)}
-                        />
+                        <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveCurrency} size={sh24} style={py(sh8)} />
                       </View>
                     </View>
                   );
@@ -181,6 +175,13 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 spaceToTop={sh32}
                 value={item.accountNumber}
               />
+              <CustomTextInput
+                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
+                onChangeText={handleSwiftCode}
+                spaceToTop={sh32}
+                value={item.bankSwiftCode}
+              />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
             </View>
             <CustomSpacer space={sh24} />
           </View>

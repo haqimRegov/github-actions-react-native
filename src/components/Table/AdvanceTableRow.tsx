@@ -5,8 +5,8 @@ import Collapsible from "react-native-collapsible";
 import { IcoMoon } from "../../icons";
 import {
   border,
-  borderBottomGray2,
-  borderLeftGray2,
+  borderBottomGray4,
+  borderLeftGray4,
   centerHV,
   centerVertical,
   colorBlack,
@@ -28,7 +28,7 @@ import {
   sw56,
   sw8,
 } from "../../styles";
-import { CheckBox } from "../Touchables/CheckBox";
+import { CheckBox } from "../CheckBox";
 import { MenuPopup } from "../Touchables/Menu";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -69,7 +69,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   };
 
   const rowStyle: ViewStyle = {
-    ...border(colorGray._2, sw1, sw12),
+    ...border(colorGray._4, sw1, sw12),
   };
 
   const handleSelectRow = () => {
@@ -106,7 +106,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 }
               };
 
-              const itemBorderLeft = columnIndex === 0 ? {} : borderLeftGray2;
+              const itemBorderLeft = columnIndex === 0 ? {} : borderLeftGray4;
 
               const itemAccordionIcon: ITableIcon = {
                 color: colorBlack._2,
@@ -175,7 +175,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
               );
             })}
             {RenderOptions !== undefined ? (
-              <View style={{ ...flexRowCC, ...borderLeftGray2, width: sw56 }}>
+              <View style={{ ...flexRowCC, ...borderLeftGray4, width: sw56 }}>
                 <MenuPopup
                   RenderButton={({ show }) => {
                     return (
@@ -195,7 +195,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
             <Collapsible collapsed={!activeAccordion.includes(index)} duration={50}>
               {activeAccordion.includes(index) ? (
                 <Fragment>
-                  <View style={borderBottomGray2} />
+                  <View style={borderBottomGray4} />
                   <View>
                     <RenderAccordion {...item} index={index} />
                   </View>

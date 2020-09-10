@@ -29,7 +29,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
 }: AdvanceTableProps) => {
   return (
     <View>
-      <TableHeader columns={columns} rowSelectionLabel={rowSelectionLabel} />
+      <TableHeader columns={columns} rowSelectionLabel={rowSelectionLabel} withActions={RenderOptions !== undefined} />
       <CustomSpacer space={sh16} />
       {data.map((row: ITableData, index: number) => {
         return (

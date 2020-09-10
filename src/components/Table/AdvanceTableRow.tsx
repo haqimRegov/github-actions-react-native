@@ -15,7 +15,7 @@ import {
   flexRow,
   flexRowCC,
   fs12BoldBlack2,
-  fsUppercase,
+  fsCapitalize,
   px,
   sh24,
   sh8,
@@ -99,7 +99,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
             {columns.map((column: ITableColumn, columnIndex: number) => {
               const dataKey = column.key.map((key: ITableItemKey) => key);
               const customStyle = column.itemTextStyle !== undefined ? column.itemTextStyle(rowData) : {};
-              const textStyle = { ...fs12BoldBlack2, ...fsUppercase, ...column.textStyle, ...customStyle };
+              const textStyle = { ...fs12BoldBlack2, ...fsCapitalize, ...column.textStyle, ...customStyle };
               const handlePressColumnItem = () => {
                 if (column.onPressItem !== undefined) {
                   column.onPressItem(rowData);
@@ -158,7 +158,9 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                                   <CustomSpacer isHorizontal={true} space={sw4} />
                                 </Fragment>
                               ) : null}
-                              <Text style={{ ...textStyle, ...label.textStyle }}>{label.label}</Text>
+                              <Text numberOfLines={2} style={{ ...textStyle, ...label.textStyle }}>
+                                {label.label}
+                              </Text>
                             </View>
                           );
                         })}

@@ -4,9 +4,9 @@ import { KeyboardAvoidingView } from "react-native";
 import { connect } from "react-redux";
 
 import {
+  AdvancedDropdown,
   ConfirmationModal,
   CustomDatePicker,
-  CustomDropdown,
   CustomSpacer,
   CustomTextInput,
   LabeledTitle,
@@ -126,9 +126,9 @@ const AddClientComponent = (props: AddClientProps) => {
             {radioIDType !== "Other" ? null : (
               <Fragment>
                 <CustomSpacer space={sh24} />
-                <CustomDropdown
-                  data={DICTIONARY_ID_OTHER_TYPE}
+                <AdvancedDropdown
                   handleChange={setInputOtherIDType}
+                  items={DICTIONARY_ID_OTHER_TYPE}
                   label={ADD_CLIENT.LABEL_ID_TYPE}
                   value={inputOtherIDType}
                 />

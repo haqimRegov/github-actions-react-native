@@ -40,6 +40,7 @@ import {
   sw24,
   sw32,
   sw464,
+  sw48,
 } from "../../../../styles";
 
 const { DECLARATION } = Language.PAGE;
@@ -124,9 +125,15 @@ export const FATCADeclaration = ({
           </View>
         </View>
         <CustomSpacer space={sh16} />
-        <RadioButtonGroup direction="row" options={OPTIONS_US_CITIZEN} selected={inputAmerican} setSelected={setInputAmerican} />
+        <RadioButtonGroup
+          direction="row"
+          options={OPTIONS_US_CITIZEN}
+          selected={inputAmerican}
+          setSelected={setInputAmerican}
+          space={sw48}
+        />
         <TextSpaceArea text={DECLARATION.LABEL_US_BORN} spaceToTop={sh32} spaceToBottom={sh16} style={fs16RegBlack2} />
-        <RadioButtonGroup direction="row" options={OPTIONS_US_BORN} selected={inputUSBorn} setSelected={setInputUSBorn} />
+        <RadioButtonGroup direction="row" options={OPTIONS_US_BORN} selected={inputUSBorn} setSelected={setInputUSBorn} space={sw48} />
       </View>
       {inputUSBorn === OPTIONS_US_BORN[0] ? (
         <Fragment>
@@ -142,7 +149,12 @@ export const FATCADeclaration = ({
             {certificate === undefined ? (
               <Fragment>
                 <CustomSpacer space={sh24} />
-                <CheckBox onPress={handleUploadLater} toggle={uploadLater!} label={DECLARATION.LABEL_UPLOAD_LATER} />
+                <CheckBox
+                  label={DECLARATION.LABEL_UPLOAD_LATER}
+                  labelStyle={fs12BoldBlack2}
+                  onPress={handleUploadLater}
+                  toggle={uploadLater!}
+                />
               </Fragment>
             ) : null}
           </View>

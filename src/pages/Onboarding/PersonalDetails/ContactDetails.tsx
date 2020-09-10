@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CustomFlexSpacer, CustomSpacer, CustomTextInput, IconButton, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
-import { centerVertical, circle, colorBlack, colorTransparent, flexRow, px, sh16, sh24, sh32, sw16, sw24, sw40 } from "../../../styles";
+import { centerVertical, colorBlack, flexRow, px, py, sh16, sh24, sh32, sh8, sw16, sw24 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -69,13 +69,7 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
               {index === 0 ? null : (
                 <View>
                   <CustomFlexSpacer />
-                  <IconButton
-                    name="trash"
-                    color={colorBlack._1}
-                    onPress={handleRemoveNumber}
-                    size={sh24}
-                    style={circle(sw40, colorTransparent)}
-                  />
+                  <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} style={py(sh8)} />
                 </View>
               )}
             </View>

@@ -3,7 +3,7 @@ import { Image, ImageSourcePropType, ImageStyle, View, ViewStyle } from "react-n
 
 import { IcoMoon } from "../../icons";
 import { border, centerVertical, colorGray, flexChild, sh24, sh40, sw1, sw16, sw20 } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 import { CustomTextInput, ITextInputProps } from "./Input";
 
 interface IconInputProps extends ITextInputProps {

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 
 import { ContentPage, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
@@ -9,6 +9,7 @@ import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 import { EPFDetails } from "./EPFDetails";
 import { MalaysianDetails } from "./MalaysianDetails";
+import { PRSDetails } from "./PRSDetails";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -24,7 +25,7 @@ const mobileNumberState: IContactNumber = {
 };
 
 // TODO joint and dynamic handling of data
-export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
+export const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({ handleNextStep }: PersonalDetailsProps) => {
   const initialLocalBankState: IBankingDetails = {
     accountName: "",
     accountNumber: "",
@@ -40,6 +41,10 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
   const [inputBumiputera, setInputBumiputera] = useState<string>(PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO);
   const [inputEpfType, setInputEpfType] = useState<string>("");
   const [inputEpfNumber, setInputEpfNumber] = useState<string>("");
+  const [inputMotherName, setInputMotherName] = useState<string>("");
+  const [inputMaritalStatus, setInputMaritalStatus] = useState<string>("");
+  const [inputEducation, setInputEducation] = useState<string>("");
+  const [inputOtherEducation, setInputOtherEducation] = useState<string>("");
 
   const [inputDistribution, setInputDistribution] = useState<string>(PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT);
 
@@ -48,7 +53,7 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
   };
 
   const handleSubmit = () => {
-    handleNextStep("PRSDetails");
+    handleNextStep("Declaration");
   };
 
   return (
@@ -63,6 +68,16 @@ export const PersonalDetails = ({ handleNextStep }: PersonalDetailsProps) => {
         inputRace={inputRace}
         setInputBumiputera={setInputBumiputera}
         setInputRace={setInputRace}
+      />
+      <PRSDetails
+        inputEducation={inputEducation}
+        inputMaritalStatus={inputMaritalStatus}
+        inputMotherName={inputMotherName}
+        inputOtherEducation={inputOtherEducation}
+        setInputEducation={setInputEducation}
+        setInputMaritalStatus={setInputMaritalStatus}
+        setInputMotherName={setInputMotherName}
+        setInputOtherEducation={setInputOtherEducation}
       />
       <EPFDetails
         inputEpfNumber={inputEpfNumber}

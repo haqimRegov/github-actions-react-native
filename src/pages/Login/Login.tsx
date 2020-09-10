@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, CustomTextInput, IconButton, LinkText, RoundedButton } from "../../components";
+import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../components";
 import { Language } from "../../constants";
 import { updateStorageData } from "../../integrations";
-import { flexRow, fs24RegBlack2, fs40BoldBlack2, px, sh24, sh28, sh32, sh40, sh60, sh8, sw24, sw288, sw360, sw40 } from "../../styles";
+import { fs24RegBlack2, fs40BoldBlack2, px, sh24, sh28, sh32, sh40, sh60, sh8, sw360, sw40 } from "../../styles";
 
 const { LOGIN } = Language.PAGE;
 
@@ -18,11 +18,6 @@ export const NormalLogin = ({ navigation, passwordRecovery, setRootPage }: Norma
   const [inputNRIC, setInputNRIC] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(true);
-
-  const handleFingerprint = () => {
-    // TODO
-    navigation.navigate("Dashboard");
-  };
 
   const handleForgotPassword = () => {
     setRootPage("PASSWORD_RECOVERY");
@@ -67,18 +62,12 @@ export const NormalLogin = ({ navigation, passwordRecovery, setRootPage }: Norma
         value={inputPassword}
       />
       <CustomSpacer space={sh32} />
-      <View style={flexRow}>
-        <RoundedButton
-          disabled={inputNRIC === "" || inputPassword === ""}
-          onPress={handleLogin}
-          buttonStyle={{ width: sw288 }}
-          text={LOGIN.BUTTON_LOGIN}
-        />
-        <CustomSpacer isHorizontal={true} space={sw24} />
-        <Fragment>
-          <IconButton name="fingerprint" onPress={handleFingerprint} />
-        </Fragment>
-      </View>
+      <RoundedButton
+        buttonStyle={{ width: sw360 }}
+        disabled={inputNRIC === "" || inputPassword === ""}
+        onPress={handleLogin}
+        text={LOGIN.BUTTON_LOGIN}
+      />
       <CustomSpacer space={sh28} />
       <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} />
     </View>

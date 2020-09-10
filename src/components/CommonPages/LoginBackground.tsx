@@ -10,8 +10,6 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlack2,
-  fsUppercase,
   py,
   sh16,
   sh56,
@@ -53,18 +51,19 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
     setPage("LOGIN");
   };
 
-  const topLinks: LinkTextProps[] = [
-    {
-      onPress: undefined,
-      style: fsUppercase,
-      text: LOGIN.LANGUAGE_BAHASA,
-    },
-    {
-      onPress: undefined,
-      style: fs12RegBlack2,
-      text: LOGIN.LANGUAGE_ENGLISH,
-    },
-  ];
+  // TODO Module 1A will only support English language
+  // const topLinks: LinkTextProps[] = [
+  //   {
+  //     onPress: undefined,
+  //     style: fsUppercase,
+  //     text: LOGIN.LANGUAGE_BAHASA,
+  //   },
+  //   {
+  //     onPress: undefined,
+  //     style: fs12RegBlack2,
+  //     text: LOGIN.LANGUAGE_ENGLISH,
+  //   },
+  // ];
 
   const agentOnboardingLink = {
     onPress: handleAgentOnboarding,
@@ -112,7 +111,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
                 <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
                 <CustomFlexSpacer />
                 <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-                  <LinkTextGroup links={topLinks} spaceToDivider={sw4} />
+                  <LinkTextGroup links={[]} spaceToDivider={sw4} />
                 </View>
                 <CustomSpacer isHorizontal={true} space={sw56} />
               </View>

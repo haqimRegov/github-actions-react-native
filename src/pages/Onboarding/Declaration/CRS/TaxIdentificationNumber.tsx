@@ -5,7 +5,6 @@ import {
   AdvancedDropdown,
   AdvanceRadioGroup,
   CheckBox,
-  CustomFlexSpacer,
   CustomPopup,
   CustomSpacer,
   CustomTextInput,
@@ -20,9 +19,7 @@ import { DICTIONARY_COUNTRIES } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
 import {
   borderBottomBlack21,
-  circle,
   colorBlack,
-  colorTransparent,
   flexRow,
   fs12BoldBlack2,
   fs16RegBlack2,
@@ -34,7 +31,6 @@ import {
   sw24,
   sw264,
   sw32,
-  sw40,
   sw8,
 } from "../../../../styles";
 
@@ -137,12 +133,14 @@ export const TaxIdentificationNumber = ({ inputTaxIdNumber, setInputTaxIdNumber 
                   <CustomTextInput label={DECLARATION.LABEL_TIN} onChangeText={handleTaxNumber} value={item.taxIdNumber} />
                   <Fragment>
                     <CustomSpacer space={sh16} />
-                    <CheckBox
-                      label={DECLARATION.LABEL_NO_TIN}
-                      labelStyle={fs12BoldBlack2}
-                      onPress={handleNoTaxNumber}
-                      toggle={item.noTaxIdNumber}
-                    />
+                    {index !== 0 ? null : (
+                      <CheckBox
+                        label={DECLARATION.LABEL_NO_TIN}
+                        labelStyle={fs12BoldBlack2}
+                        onPress={handleNoTaxNumber}
+                        toggle={item.noTaxIdNumber}
+                      />
+                    )}
                     {item.noTaxIdNumber ? (
                       <View style={px(sw32)}>
                         <CustomSpacer space={sh12} />
@@ -161,15 +159,11 @@ export const TaxIdentificationNumber = ({ inputTaxIdNumber, setInputTaxIdNumber 
                   </Fragment>
                   <CustomSpacer space={sh24} />
                 </View>
-                <CustomFlexSpacer />
                 {index === 0 ? null : (
-                  <IconButton
-                    name="trash"
-                    color={colorBlack._1}
-                    onPress={handleDelete}
-                    size={sh32}
-                    style={circle(sw40, colorTransparent)}
-                  />
+                  <View>
+                    <CustomSpacer space={sh32} />
+                    <IconButton name="trash" color={colorBlack._1} onPress={handleDelete} size={sh24} />
+                  </View>
                 )}
               </View>
             </Fragment>

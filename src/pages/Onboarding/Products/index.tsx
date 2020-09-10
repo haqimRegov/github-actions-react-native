@@ -43,15 +43,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const LABEL_FUND = selectedFunds.length === 1 ? INVESTMENT.LABEL_FUND_SELECTION : INVESTMENT.LABEL_FUNDS_SELECTION;
 
-  const handleGoBack = () => {
-    setPage(0);
-  };
   const handleStartInvesting = () => {
     const initialStateArray: IFundSales[] = [];
     selectedFunds.map((item: IFund) => {
       const newState: IFundSales = {
         fundPaymentMethod: "Cash",
-        investmentAmount: "",
+        investmentAmount: `${item.newSalesAmount.cash?.minimum}`,
         salesCharge: 0,
         scheduledInvestment: false,
         fund: { ...item },
@@ -65,7 +62,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleCancel = () => {
-    return page === 1 ? handleGoBack() : addSelectedFund([]);
+    setPage(0);
   };
 
   const handleBack = () => {
@@ -143,7 +140,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     <SafeAreaPage>
       <View style={flexChild}>
         {screen.content}
-        {fixedBottomShow === true && selectedFunds.length !== 0 ? (
+        {fixedBottomShow === true && selectedFunds.length !== 0 && viewFund === undefined ? (
           <View style={flexCol}>
             <BottomFixedDetails
               amount={totalMinimumAmount.toString()}

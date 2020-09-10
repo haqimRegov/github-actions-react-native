@@ -3,8 +3,12 @@ import { Alert, View } from "react-native";
 
 import { AdvancedDropdown, ContentPage, CustomSpacer, CustomTextInput, TextInputArea, TextSpaceArea } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { DICTIONARY_BUSINESS_NATURE, DICTIONARY_COUNTRIES, DICTIONARY_OCCUPATION } from "../../data/dictionary";
-import { DICTIONARY_HOUSEHOLD_INCOME } from "../../data/dictionary/household-income";
+import {
+  DICTIONARY_BUSINESS_NATURE,
+  DICTIONARY_COUNTRIES,
+  DICTIONARY_HOUSEHOLD_INCOME,
+  DICTIONARY_OCCUPATION,
+} from "../../data/dictionary";
 import { fs12SemiBoldGray8, px, sh24, sh32, sh8, sw16, sw24 } from "../../styles";
 import { AlertDialog } from "../../utils";
 

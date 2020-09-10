@@ -10,10 +10,10 @@ import {
   flexRow,
   fs12BoldBlack2,
   sw1,
-  sw12,
   sw24,
   sw48,
   sw6,
+  sw8,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -33,7 +33,7 @@ export const RadioButton = ({ label, labelStyle, right, selected, setSelected }:
     <TouchableWithoutFeedback onPress={setSelected}>
       <View style={{ ...centerVertical, ...flexRow }}>
         <View style={circleBorder(sw24, borderWidth, borderColor, colorWhite._1)} />
-        <CustomSpacer space={sw12} isHorizontal={true} />
+        <CustomSpacer space={sw8} isHorizontal={true} />
         <Text style={{ ...fs12BoldBlack2, minWidth: sw48, ...labelStyle }}>{label}</Text>
         {right}
       </View>

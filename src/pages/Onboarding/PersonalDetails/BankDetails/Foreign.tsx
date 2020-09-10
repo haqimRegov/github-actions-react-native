@@ -11,20 +11,21 @@ import {
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
-import { DICTIONARY_CURRENCY } from "../../../../data/dictionary";
+import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../../data/dictionary";
 import {
   centerVertical,
-  circle,
   colorBlack,
-  colorTransparent,
   flexRow,
+  fs12SemiBoldGray8,
   fs16BoldBlue2,
   px,
+  py,
+  sh16,
   sh24,
   sh32,
+  sh8,
   sw16,
   sw24,
-  sw40,
 } from "../../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -59,6 +60,12 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
           setBankingDetails(updatedDetails);
         };
 
+        const handleBankLocation = (input: string) => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].bankLocation = input;
+          setBankingDetails(updatedDetails);
+        };
+
         const handleAccountName = (input: string) => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].accountName = input;
@@ -77,23 +84,18 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
           setBankingDetails(updatedDetails);
         };
 
-        const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}`;
+        const foreignBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}`;
 
         const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency.includes(filteredCurrency.value));
 
         return (
           <View key={index}>
-            <View style={{ ...flexRow, ...px(sw24) }}>
-              <TextSpaceArea spaceToBottom={sh32} style={fs16BoldBlue2} text={localBankLabel} />
-              <CustomFlexSpacer />
-              <IconButton
-                name="trash"
-                color={colorBlack._1}
-                onPress={handleRemoveNumber}
-                size={sh32}
-                style={circle(sw40, colorTransparent)}
-              />
+            <View style={{ ...centerVertical, ...flexRow, ...px(sw24) }}>
+              <TextSpaceArea style={fs16BoldBlue2} text={foreignBankLabel} />
+              <CustomSpacer isHorizontal={true} space={sw16} />
+              <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} />
             </View>
+            <CustomSpacer space={sh16} />
             <View style={px(sw24)}>
               {item.currency.map((value: TypeBankCurrency, currencyIndex: number) => {
                 const handleRemoveCurrency = () => {
@@ -123,13 +125,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       {currencyIndex === 0 ? null : (
                         <View>
                           <CustomFlexSpacer />
-                          <IconButton
-                            name="trash"
-                            color={colorBlack._1}
-                            onPress={handleRemoveCurrency}
-                            size={sh24}
-                            style={circle(sw40, colorTransparent)}
-                          />
+                          <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveCurrency} size={sh24} style={py(sh8)} />
                         </View>
                       )}
                     </View>
@@ -162,12 +158,20 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 spaceToTop={sh32}
                 value={item.accountNumber}
               />
+              <AdvancedDropdown
+                items={DICTIONARY_COUNTRIES}
+                handleChange={handleBankLocation}
+                label={PERSONAL_DETAILS.LABEL_BANK_LOCATION}
+                spaceToTop={sh32}
+                value={item.bankLocation || ""}
+              />
               <CustomTextInput
                 label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
                 onChangeText={handleSwiftCode}
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}
               />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
             </View>
             <CustomSpacer space={sh24} />
           </View>

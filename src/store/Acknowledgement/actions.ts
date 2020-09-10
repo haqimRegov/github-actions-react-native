@@ -1,4 +1,3 @@
-import { IOrderSummary } from "../../../types/order-summary";
 import { typedAction } from "../actionCreator";
 
 export const addOrders = (orders: IOrderSummary[]) => {

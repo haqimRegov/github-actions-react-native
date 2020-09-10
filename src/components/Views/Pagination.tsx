@@ -2,20 +2,7 @@ import React from "react";
 import { Text, View, ViewStyle } from "react-native";
 
 import { Language } from "../../constants";
-import {
-  centerHV,
-  centerVertical,
-  circleBorder,
-  colorBlack,
-  colorGray,
-  flexRow,
-  fs10RegBlue25,
-  sh24,
-  sw1,
-  sw16,
-  sw40,
-  sw8,
-} from "../../styles";
+import { centerVertical, circleBorder, colorBlack, colorGray, flexRow, fs10RegBlue25, sh24, sw1, sw16, sw40, sw8 } from "../../styles";
 import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "./Spacer";
 
@@ -30,11 +17,7 @@ interface PaginationProps {
 }
 
 export const Pagination = ({ itemsPerPage, onPressNext, onPressPrev, page, totalItems }: PaginationProps) => {
-  const buttonStyle: ViewStyle = {
-    ...circleBorder(sw40, sw1, colorGray._3),
-    ...centerHV,
-  };
-
+  const buttonStyle: ViewStyle = circleBorder(sw40, sw1, colorGray._3);
   const currentMinItems = page * itemsPerPage - itemsPerPage + 1;
   const currentMaxItems = page * itemsPerPage;
   const lastItem = currentMaxItems > totalItems ? totalItems : currentMaxItems;

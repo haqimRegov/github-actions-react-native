@@ -9,7 +9,6 @@ import { OrderSummary } from "./OrderSummary";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
-import { PRSDetails } from "./PRSDetails";
 import { QuestionnaireContent } from "./Questionnaire";
 import { Summary } from "./Summary";
 import { TermsAndConditions } from "./TermsAndConditions";
@@ -26,8 +25,6 @@ export const OnboardingContent = (props: OnboardingContentProps) => {
       return <IdentityConfirmation {...props} />;
     case ONBOARDING_ROUTES.PersonalDetails:
       return <PersonalDetails {...props} />;
-    case ONBOARDING_ROUTES.PRSDetails:
-      return <PRSDetails {...props} />;
     case ONBOARDING_ROUTES.EmploymentDetails:
       return <EmploymentDetails {...props} />;
     case ONBOARDING_ROUTES.Declaration:

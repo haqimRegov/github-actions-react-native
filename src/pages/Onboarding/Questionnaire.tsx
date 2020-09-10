@@ -161,7 +161,12 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
           <CustomSpacer isHorizontal={true} space={sw24} />
           <View>
             <CustomSpacer space={sh40} />
-            <LabeledTitle label={RISK_ASSESSMENT.LABEL_QUESTION_1} title={RISK_ASSESSMENT.QUESTION_1} titleStyle={fs16BoldBlack2} />
+            <LabeledTitle
+              label={RISK_ASSESSMENT.LABEL_QUESTION_1}
+              spaceToLabel={sh8}
+              title={RISK_ASSESSMENT.QUESTION_1}
+              titleStyle={fs16BoldBlack2}
+            />
             <CustomSpacer space={sh16} />
             <CustomSlider disabled={true} options={Q1_OPTIONS} selected={q1} setSelected={setQ1} />
             <CustomSpacer space={sh32} />
@@ -191,7 +196,12 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
               title={RISK_ASSESSMENT.QUESTION_4}
             />
             <CustomSpacer space={sh32} />
-            <LabeledTitle label={RISK_ASSESSMENT.LABEL_QUESTION_5} title={RISK_ASSESSMENT.QUESTION_5} titleStyle={fs16SemiBoldBlack2} />
+            <LabeledTitle
+              label={RISK_ASSESSMENT.LABEL_QUESTION_5}
+              spaceToLabel={sh8}
+              title={RISK_ASSESSMENT.QUESTION_5}
+              titleStyle={fs16SemiBoldBlack2}
+            />
             <CustomSpacer space={sh16} />
             <CustomSlider disabled={true} options={Q5_OPTIONS} selected={q5} setSelected={setQ5} />
             <CustomSpacer space={sh32} />

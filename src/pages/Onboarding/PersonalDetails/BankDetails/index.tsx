@@ -33,6 +33,7 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
 
   const initialForeignBankState: IBankingDetails = {
     ...initialLocalBankState,
+    bankLocation: "",
     currency: [""],
   };
 

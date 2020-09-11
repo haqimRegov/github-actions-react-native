@@ -42,7 +42,7 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 const RADIO_CONSENT = [TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_YES, TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_NO];
 
 interface TermsAndConditionsProps extends OrderSummaryStoreProps {
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndConditionsProps) => {

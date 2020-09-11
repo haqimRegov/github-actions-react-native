@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useEffect } from "react";
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
@@ -36,15 +36,21 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   setInputPostCode,
   setInputState,
 }: AddressFieldProps) => {
+  useEffect(() => {
+    if (addressType === "Other" && inputCountry === DICTIONARY_COUNTRIES[133].value) {
+      setInputState("");
+    }
+  }, [addressType, inputCountry, setInputState]);
+
   return (
     <Fragment>
       <TextInputArea label={labelAddress} onChangeText={setInputAddress} value={inputAddress} />
       <CustomTextInput label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
       <CustomSpacer space={sh32} />
-      {addressType === "Other" ? (
+      {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[133].value ? (
         <AdvancedDropdown items={DICTIONARY_MALAYSIA_STATES} handleChange={setInputState} label={ADDRESS.LABEL_STATE} value={inputState} />
       ) : (
-        <CustomTextInput label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputCity} value={inputCity} />
+        <CustomTextInput label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputState} value={inputState} />
       )}
       {setInputCountry !== undefined ? (
         <AdvancedDropdown

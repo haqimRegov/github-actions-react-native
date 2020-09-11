@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { Alert, View } from "react-native";
 
 import { CustomSpacer, LinkText, RadioButtonGroup, TextSpaceArea } from "../../../../components";
@@ -24,7 +24,12 @@ interface CRSDeclarationProps {
   setTaxResidency: (input: string) => void;
 }
 
-export const CRSDeclaration = ({ inputTaxIdNumber, inputTaxResidency, setInputTaxIdNumber, setTaxResidency }: CRSDeclarationProps) => {
+export const CRSDeclaration: FunctionComponent<CRSDeclarationProps> = ({
+  inputTaxIdNumber,
+  inputTaxResidency,
+  setInputTaxIdNumber,
+  setTaxResidency,
+}: CRSDeclarationProps) => {
   // TODO Note for CRS from FRS
   // TODO Section Logic: This will not appear if EPF investment is selected.
   // TODO Section Logic: This will not appear for the joint holder if joint holder is below 18 years old.

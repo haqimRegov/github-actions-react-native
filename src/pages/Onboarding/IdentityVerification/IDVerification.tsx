@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, View } from "react-native";
 
@@ -11,8 +12,8 @@ import {
   CustomTextInput,
   TextSpaceArea,
 } from "../../../components";
-import { Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION } from "../../../data/dictionary";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION } from "../../../data/dictionary";
 import { SAMPLE_CLIENT_4 } from "../../../mocks";
 import {
   colorTransparent,
@@ -21,7 +22,6 @@ import {
   fs16BoldBlack26,
   px,
   sh143,
-  sh24,
   sh32,
   sh8,
   sw16,
@@ -33,21 +33,27 @@ const { ID_VERIFICATION } = Language.PAGE;
 
 interface IDVerificationProps {
   addClientDetails: (details: IClientDetailsState) => void;
+  addPersonalInfo: (info: IPersonalInfoState) => void;
   handleNextStep: (route: TypeOnboardingRoute) => void;
   details: IClientDetailsState;
+  personalInfo: IPersonalInfoState;
+  riskScore: IRiskScoreState;
 }
 
 export const IDVerification: FunctionComponent<IDVerificationProps> = ({
-  addClientDetails,
+  addPersonalInfo,
   details,
   handleNextStep,
+  riskScore,
 }: IDVerificationProps) => {
   const { dateOfBirth, id, idType, name, permanentAddress, mailingAddress }: IClientDetailsState = details || SAMPLE_CLIENT_4;
+  const defaultNationality = DICTIONARY_ALL_ID_TYPE.indexOf(idType) !== 1 ? DICTIONARY_COUNTRIES[133].value : "";
 
   const [sameAddressToggle, setSameAddressToggle] = useState<boolean>(true);
   const [inputSalutation, setInputSalutation] = useState<string>("");
   const [inputGender, setInputGender] = useState<string>("");
   const [inputPlaceOfBirth, setInputPlaceOfBirth] = useState<string>("");
+  const [inputNationality, setInputNationality] = useState<string>(defaultNationality);
   const [inputCountryOfBirth, setInputCountryOfBirth] = useState<string>("");
   const [inputExpiryDate, setExpiryDate] = useState<Date | undefined>(undefined);
   const [inputPermanentAddress, setInputPermanentAddress] = useState<string>(permanentAddress.address);
@@ -69,31 +75,38 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
   };
 
   const handleSubmit = () => {
-    const clientDetails = {
-      countryOfBirth: inputCountryOfBirth,
-      dateOfBirth: dateOfBirth,
-      gender: inputGender,
-      id: id,
-      idType: idType,
-      mailingAddress: {
-        address: inputMailingAddress,
-        postCode: inputMailingPostCode,
-        city: inputMailingCity,
-        country: inputMailingCountry,
-        state: inputMailingState,
-      },
+    const personalDetails: IPersonalDetailsState = {
+      idNumber: id,
+      dateOfBirth: moment(dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
       name: name,
-      permanentAddress: {
-        address: inputPermanentAddress,
-        postCode: inputPermanentPostCode,
-        city: inputPermanentCity,
-        country: inputPermanentCountry,
-        state: inputPermanentState,
-      },
-      placeOfBirth: inputPlaceOfBirth,
       salutation: inputSalutation,
+      gender: inputGender,
+      placeOfBirth: inputPlaceOfBirth,
+      countryOfBirth: inputCountryOfBirth,
+      idType: idType,
+      riskProfile: riskScore.appetite,
+      nationality: inputNationality,
     };
-    addClientDetails(clientDetails);
+    const principalDetails: IHolderInfoState = {
+      personalDetails: personalDetails,
+      addressInformation: {
+        mailingAddress: {
+          address: inputMailingAddress,
+          postCode: inputMailingPostCode,
+          city: inputMailingCity,
+          country: inputMailingCountry,
+          state: inputMailingState,
+        },
+        permanentAddress: {
+          address: inputPermanentAddress,
+          postCode: inputPermanentPostCode,
+          city: inputPermanentCity,
+          country: inputPermanentCountry,
+          state: inputPermanentState,
+        },
+      },
+    };
+    addPersonalInfo({ principal: principalDetails });
     handleNextStep("PersonalDetails");
   };
 
@@ -114,7 +127,7 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
     inputMailingCity === "" ||
     inputMailingState === "" ||
     inputName === "" ||
-    (isPassport && inputExpiryDate === undefined);
+    (isPassport && inputExpiryDate === undefined && inputNationality === "");
 
   const labelId = `${idType} No.`;
   const addressType = isPassport ? "Other" : "Malaysia";
@@ -160,9 +173,17 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
           style={fs16BoldBlack26}
           value={dateOfBirth}
         />
+        <CustomTextInput label={ID_VERIFICATION.LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
         {isPassport ? (
           <Fragment>
-            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={px(sw16)} text={ID_VERIFICATION.LABEL_EXPIRY} />
+            <AdvancedDropdown
+              items={DICTIONARY_COUNTRIES}
+              handleChange={setInputNationality}
+              label={ID_VERIFICATION.LABEL_NATIONALITY}
+              spaceToTop={sh32}
+              value={inputNationality}
+            />
+            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={px(sw16)} text={ID_VERIFICATION.LABEL_EXPIRY} />
             <CustomDatePicker
               datePickerStyle={{ height: sh143 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
@@ -172,7 +193,6 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
             />
           </Fragment>
         ) : null}
-        <CustomTextInput label={ID_VERIFICATION.LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
         <AdvancedDropdown
           items={DICTIONARY_SALUTATION}
           handleChange={setInputSalutation}
@@ -221,7 +241,7 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
         <CustomSpacer space={sh32} />
         {sameAddressToggle === true ? null : (
           <AddressField
-            addressType="Malaysia"
+            addressType={addressType}
             inputAddress={inputMailingAddress}
             inputCity={inputMailingCity}
             inputCountry={isPassport ? inputMailingCountry : undefined}

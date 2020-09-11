@@ -4,18 +4,21 @@ import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, SafeAreaPage, UploadWithModal } from "../../../components";
 import { Language } from "../../../constants";
-import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../store";
+import { ClientStoreProps, PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { flexChild, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh40, sh56, sh8, sw24 } from "../../../styles";
 import { IDVerification } from "./IDVerification";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
-interface IdentityConfirmationProps extends ClientStoreProps {
+interface IdentityConfirmationProps extends PersonalInfoStoreProps, ClientStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps> = ({
   addClientDetails,
+  addPersonalInfo,
   details,
+  personalInfo,
+  riskScore,
   handleNextStep,
 }: IdentityConfirmationProps) => {
   const { idType } = details!;
@@ -92,10 +95,17 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           </View>
         </SafeAreaPage>
       ) : (
-        <IDVerification addClientDetails={addClientDetails} handleNextStep={handleNextStep} details={details!} />
+        <IDVerification
+          addClientDetails={addClientDetails}
+          addPersonalInfo={addPersonalInfo}
+          details={details!}
+          handleNextStep={handleNextStep}
+          personalInfo={personalInfo}
+          riskScore={riskScore}
+        />
       )}
     </Fragment>
   );
 };
 
-export const IdentityConfirmation = connect(ClientMapStateToProps, ClientMapDispatchToProps)(IdentityConfirmationComponent);
+export const IdentityConfirmation = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(IdentityConfirmationComponent);

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { Fragment, ReactNode } from "react";
 import { Alert, Image, ImageStyle, ScrollView, View } from "react-native";
 
@@ -33,9 +34,10 @@ interface LoginPageProps {
 }
 
 export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
+  const navigation = useNavigation();
   const handlePrivacyPolicy = () => {
     // TODO
-    Alert.alert("PrivacyPolicy");
+    navigation.navigate("Dashboard");
   };
 
   const handleTermsAndConditions = () => {

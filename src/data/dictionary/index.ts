@@ -6,6 +6,7 @@ export * from "./currency";
 export * from "./declaration";
 export * from "./education-level";
 export * from "./epf-type";
+export * from "./gross-income";
 export * from "./household-income";
 export * from "./id-type";
 export * from "./marital-status";

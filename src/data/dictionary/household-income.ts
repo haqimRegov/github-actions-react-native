@@ -1,4 +1,4 @@
-export const DICTIONARY_HOUSEHOLD_INCOME: TypeIncomeLabelValue[] = [
+export const DICTIONARY_HOUSEHOLD_INCOME: TypeHouseholdIncomeLabelValue[] = [
   { label: "Up to RM 1,500", value: "Up to RM 1,500" },
   { label: "RM 1,501 - RM 3,000", value: "RM 1,501 - RM 3,000" },
   { label: "RM 3,001 - RM 5,000", value: "RM 3,001 - RM 5,000" },

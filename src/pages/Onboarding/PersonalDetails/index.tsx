@@ -1,9 +1,11 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
+import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { ContentPage, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_CURRENCY, DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
+import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sw24, sw48 } from "../../../styles";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
@@ -13,7 +15,7 @@ import { PRSDetails } from "./PRSDetails";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
-interface PersonalDetailsProps {
+interface PersonalDetailsProps extends PersonalInfoStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
   navigation: IStackNavigationProp;
 }
@@ -25,7 +27,14 @@ const mobileNumberState: IContactNumber = {
 };
 
 // TODO joint and dynamic handling of data
-export const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({ handleNextStep }: PersonalDetailsProps) => {
+const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
+  addPersonalInfo,
+  details,
+  handleNextStep,
+  personalInfo,
+}: PersonalDetailsProps) => {
+  const { principal } = personalInfo;
+
   const initialLocalBankState: IBankingDetails = {
     accountName: "",
     accountNumber: "",
@@ -53,8 +62,80 @@ export const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({ handl
   };
 
   const handleSubmit = () => {
-    handleNextStep("Declaration");
+    const contactDetails = { ...principal!.contactDetails! };
+    contactNumber.forEach((number: IContactNumber) => {
+      if (number.label === PERSONAL_DETAILS.LABEL_MOBILE_NUMBER) {
+        contactDetails.mobileNumber = number.value;
+        contactDetails.mobileNumberCode = number.code;
+      }
+      if (number.label === PERSONAL_DETAILS.LABEL_HOME_NUMBER) {
+        contactDetails.homeNumber = number.value;
+        contactDetails.homeNumberCode = number.code;
+      }
+      if (number.label === PERSONAL_DETAILS.LABEL_OFFICE_NUMBER) {
+        contactDetails.officeNumber = number.value;
+        contactDetails.officeNumberCode = number.code;
+      }
+      if (number.label === PERSONAL_DETAILS.LABEL_FAX_NUMBER) {
+        contactDetails.faxNumber = number.value;
+        contactDetails.faxNumberCode = number.code;
+      }
+    });
+
+    const personalDetails: IPersonalDetailsState = {
+      ...principal!.personalDetails!,
+      bumiputera: inputBumiputera,
+      race: inputRace,
+      mothersMaidenName: inputMotherName,
+      maritalStatus: inputMaritalStatus,
+      educationLevel: inputOtherEducation !== "" ? inputOtherEducation : inputEducation,
+    };
+
+    const localBank = localBankDetails.map((bank: IBankingDetails) => {
+      return {
+        bankAccountName: bank.accountName,
+        currency: bank.currency,
+        bankAccountNumber: bank.accountNumber,
+        bankSwiftCode: bank.bankSwiftCode,
+        bankName: bank.otherBankName !== "" ? bank.otherBankName : bank.bankName,
+        bankLocation: DICTIONARY_COUNTRIES[133].value,
+      };
+    });
+    const foreignBank = foreignBankDetails.map((bank: IBankingDetails) => {
+      return {
+        bankAccountName: bank.accountName,
+        currency: bank.currency,
+        bankAccountNumber: bank.accountNumber,
+        bankSwiftCode: bank.bankSwiftCode,
+        bankName: bank.otherBankName !== "" ? bank.otherBankName : bank.bankName,
+        bankLocation: DICTIONARY_COUNTRIES[133].value,
+      };
+    });
+
+    const bankDetails: IBankSummaryState = {
+      localBank: localBank as IBankDetailsState[],
+      foreignBank: foreignBank as IBankDetailsState[],
+    };
+
+    const epfDetails =
+      personalInfo.epfInvestment === true
+        ? {
+            epfAccountType: inputEpfType,
+            epfMemberNumber: inputEpfNumber,
+          }
+        : undefined;
+
+    const principalDetails: IHolderInfoState = {
+      personalDetails: personalDetails,
+      bankSummary: bankDetails,
+      contactDetails: contactDetails,
+      epfDetails: epfDetails,
+    };
+    addPersonalInfo({ principal: principalDetails });
+    handleNextStep("EmploymentDetails");
   };
+
+  const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(details?.idType!) !== 1;
 
   return (
     <ContentPage
@@ -63,12 +144,14 @@ export const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({ handl
       subheading={PERSONAL_DETAILS.SUBHEADING_ONE_STEP}
       subtitle={PERSONAL_DETAILS.SUBTITLE}>
       <ContactDetails contactNumber={contactNumber} setContactNumber={setContactNumber} />
-      <MalaysianDetails
-        inputBumiputera={inputBumiputera}
-        inputRace={inputRace}
-        setInputBumiputera={setInputBumiputera}
-        setInputRace={setInputRace}
-      />
+      {isMalaysian ? (
+        <MalaysianDetails
+          inputBumiputera={inputBumiputera}
+          inputRace={inputRace}
+          setInputBumiputera={setInputBumiputera}
+          setInputRace={setInputRace}
+        />
+      ) : null}
       <PRSDetails
         inputEducation={inputEducation}
         inputMaritalStatus={inputMaritalStatus}
@@ -79,13 +162,14 @@ export const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({ handl
         setInputMotherName={setInputMotherName}
         setInputOtherEducation={setInputOtherEducation}
       />
-      <EPFDetails
-        inputEpfNumber={inputEpfNumber}
-        inputEpfType={inputEpfType}
-        setInputEpfNumber={setInputEpfNumber}
-        setInputEpfType={setInputEpfType}
-      />
-      <CustomSpacer space={sh32} />
+      {personalInfo.epfInvestment === true ? (
+        <EPFDetails
+          inputEpfNumber={inputEpfNumber}
+          inputEpfType={inputEpfType}
+          setInputEpfNumber={setInputEpfNumber}
+          setInputEpfType={setInputEpfType}
+        />
+      ) : null}
       <Fragment>
         <View style={borderBottomBlack21} />
         <View style={px(sw24)}>
@@ -112,3 +196,5 @@ export const PersonalDetails: FunctionComponent<PersonalDetailsProps> = ({ handl
     </ContentPage>
   );
 };
+
+export const PersonalDetails = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(PersonalDetailsComponent);

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { AdvancedDropdown, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_RACE } from "../../../data/dictionary";
 import { fs16SemiBoldBlack2, px, sh16, sh32, sw24, sw44 } from "../../../styles";
@@ -38,7 +38,6 @@ export const MalaysianDetails: FunctionComponent<MalaysianDetailsProps> = ({
         setSelected={setInputBumiputera}
         space={sw44}
       />
-      <CustomSpacer space={sh32} />
     </View>
   );
 };

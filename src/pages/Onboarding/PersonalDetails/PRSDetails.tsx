@@ -46,6 +46,7 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
 
   return (
     <View style={px(sw24)}>
+      <CustomSpacer space={sh32} />
       <CustomTextInput label={PRS.LABEL_MOTHER_NAME} onChangeText={handleMotherName} spaceToBottom={sh32} value={inputMotherName} />
       <AdvancedDropdown
         handleChange={handleMaritalStatus}

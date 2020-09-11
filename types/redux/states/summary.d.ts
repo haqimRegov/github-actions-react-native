@@ -38,8 +38,8 @@ declare interface IContactDetailsState {
   faxNumberCode?: string;
   homeNumber?: string;
   homeNumberCode?: string;
-  mobileNumber: string;
-  mobileNumberCode: string;
+  mobileNumber?: string;
+  mobileNumberCode?: string;
   officeNumber?: string;
   officeNumberCode?: string;
 }

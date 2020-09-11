@@ -14,18 +14,19 @@ import { ProductList } from "./ProductList";
 
 const { INVESTMENT } = Language.PAGE;
 
-interface ProductsProps extends SelectedFundStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
-}
+interface ProductsProps extends SelectedFundStoreProps, OnboardingContentProps {}
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addFilters,
   addInvestmentDetails,
+  addPersonalInfo,
   addSelectedFund,
   filters,
+  finishedSteps,
   handleNextStep,
   investmentDetails,
   selectedFunds,
+  setFinishedSteps,
 }: ProductsProps) => {
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
@@ -49,7 +50,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       const newState: IFundSales = {
         fundPaymentMethod: "Cash",
         investmentAmount: `${item.newSalesAmount.cash?.minimum}`,
-        salesCharge: 0,
+        salesCharge: item.salesCharge.cash?.minimum!,
         scheduledInvestment: false,
         fund: { ...item },
       };
@@ -57,7 +58,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       return initialStateArray.push(newState);
     });
     addInvestmentDetails(initialStateArray);
-
     setPage(1);
   };
 
@@ -70,7 +70,14 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleConfirmIdentity = () => {
-    handleNextStep(ONBOARDING_ROUTES.IdentityVerification);
+    const isEpfInvestment = investmentDetails!.findIndex((investment) => investment.fundPaymentMethod === "EPF");
+    if (isEpfInvestment !== -1) {
+      addPersonalInfo({ epfInvestment: true });
+    }
+    handleNextStep(ONBOARDING_ROUTES.EmailVerification);
+    const updatedSteps: TypeOnboardingRoute[] = [...finishedSteps];
+    updatedSteps.push(ONBOARDING_ROUTES.ProductRecommendation);
+    setFinishedSteps(updatedSteps);
   };
 
   const handleShareDocuments = async () => {

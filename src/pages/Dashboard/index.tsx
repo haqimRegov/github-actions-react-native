@@ -12,7 +12,7 @@ import {
   SafeAreaPage,
   SideMenuV2,
 } from "../../components";
-import { alignSelfCenter, borderTopGray2, flexChild, flexRow, flexRowCC, fullHW, sh24, sw200, sw24 } from "../../styles";
+import { alignSelfCenter, borderBottomGray4, flexChild, flexRow, flexRowCC, fullHW, sh24, sw200, sw24 } from "../../styles";
 import { AddClient } from "./AddClient";
 
 interface DashboardPageProps {
@@ -32,6 +32,11 @@ export const DashboardPage = ({ navigation }: DashboardPageProps) => {
 
   const QUICK_ACTIONS: IQuickAction[] = [
     {
+      label: "Add New Client",
+      onPress: handleAddClient,
+      style: borderBottomGray4,
+    },
+    {
       label: "Top Up",
       onPress: handleTopUp,
     },
@@ -50,11 +55,6 @@ export const DashboardPage = ({ navigation }: DashboardPageProps) => {
     {
       label: "Buy Fund",
       onPress: handleTopUp,
-    },
-    {
-      label: "Add New Client",
-      onPress: handleAddClient,
-      style: borderTopGray2,
     },
   ];
 

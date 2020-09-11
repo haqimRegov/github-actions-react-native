@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import {
@@ -58,7 +58,10 @@ interface TaxIdentificationNumberProps {
   setInputTaxIdNumber: (input: IDeclarationTaxNumber[]) => void;
 }
 
-export const TaxIdentificationNumber = ({ inputTaxIdNumber, setInputTaxIdNumber }: TaxIdentificationNumberProps) => {
+export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberProps> = ({
+  inputTaxIdNumber,
+  setInputTaxIdNumber,
+}: TaxIdentificationNumberProps) => {
   const handleAddTin = () => {
     const countryTaxNumber = [...inputTaxIdNumber];
     countryTaxNumber.push({
@@ -125,7 +128,6 @@ export const TaxIdentificationNumber = ({ inputTaxIdNumber, setInputTaxIdNumber 
                   <AdvancedDropdown
                     items={DICTIONARY_COUNTRIES}
                     label={DECLARATION.LABEL_SELECT_COUNTRY}
-                    labelStyle={fs12BoldBlack2}
                     handleChange={handleCountry}
                     value={inputTaxIdNumber[index].country}
                   />

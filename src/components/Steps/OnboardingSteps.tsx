@@ -91,13 +91,15 @@ export const OnboardingSteps = ({
             };
             const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
             const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : fs12RegBlack2;
+            const onPress = disableNextSteps === true ? undefined : handleNavigateToContent;
+
             return (
-              <View key={index} style={{ width: sw112 }}>
-                <CustomSpacer space={sh16} />
-                <Text onPress={handleNavigateToContent} key={index} style={textStyle}>
-                  {item.title}
-                </Text>
-              </View>
+              <TouchableWithoutFeedback key={index} onPress={onPress}>
+                <View style={{ width: sw112 }}>
+                  <CustomSpacer space={sh16} />
+                  <Text style={textStyle}>{item.title}</Text>
+                </View>
+              </TouchableWithoutFeedback>
             );
           })}
         </View>

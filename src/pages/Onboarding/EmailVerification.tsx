@@ -1,17 +1,22 @@
 import React, { FunctionComponent, useState } from "react";
 import { Alert, Text, View } from "react-native";
+import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, CustomTextInput, LinkText, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../store";
 import { flexRow, fs12RegBlack2, fs16SemiBoldBlack2, fs16SemiBoldBlue1, px, sh16, sh24, sh32, sh8, sw12, sw24, sw4 } from "../../styles";
 
 const { EMAIL_VERIFICATION } = Language.PAGE;
 
-interface EmailVerificationProps {
+interface EmailVerificationProps extends PersonalInfoStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-export const EmailVerification: FunctionComponent<EmailVerificationProps> = ({ handleNextStep }: EmailVerificationProps) => {
+const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
+  addPersonalInfo,
+  handleNextStep,
+}: EmailVerificationProps) => {
   const [inputEmail, setInputEmail] = useState<string>("");
 
   const handleCancel = () => {
@@ -20,6 +25,7 @@ export const EmailVerification: FunctionComponent<EmailVerificationProps> = ({ h
 
   const handleContinue = () => {
     handleNextStep("IdentityVerification");
+    addPersonalInfo({ principal: { contactDetails: { emailAddress: inputEmail } } });
   };
 
   return (
@@ -31,7 +37,13 @@ export const EmailVerification: FunctionComponent<EmailVerificationProps> = ({ h
       subtitle={EMAIL_VERIFICATION.SUBHEADING}>
       <View style={px(sw24)}>
         <CustomSpacer space={sh24} />
-        <CustomTextInput label={EMAIL_VERIFICATION.LABEL_EMAIL} onChangeText={setInputEmail} spaceToBottom={sh8} value={inputEmail} />
+        <CustomTextInput
+          autoCapitalize="none"
+          label={EMAIL_VERIFICATION.LABEL_EMAIL}
+          onChangeText={setInputEmail}
+          spaceToBottom={sh8}
+          value={inputEmail}
+        />
         <Text style={{ ...fs12RegBlack2, ...px(sw12) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
         <CustomSpacer space={sh32} />
         <View style={flexRow}>
@@ -44,3 +56,5 @@ export const EmailVerification: FunctionComponent<EmailVerificationProps> = ({ h
     </ContentPage>
   );
 };
+
+export const EmailVerification = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(EmailVerificationComponent);

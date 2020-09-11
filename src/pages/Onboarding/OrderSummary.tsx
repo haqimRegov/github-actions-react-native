@@ -11,7 +11,7 @@ import { borderBottomBlack21, flexRow, fs16SemiBoldBlack2, px, sh24, sh8, shadow
 import { OrderDetails } from "./Order/OrderDetails";
 
 interface OrderSummaryProps extends OrderSummaryStoreProps {
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 const { ORDER_SUMMARY } = Language.PAGE;

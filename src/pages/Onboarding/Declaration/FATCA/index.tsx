@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Alert, Text, View } from "react-native";
 
 import {
@@ -54,7 +54,7 @@ interface FATCADeclarationProps {
   setInputUSBorn: (input: string) => void;
 }
 
-export const FATCADeclaration = ({
+export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({
   inputAmerican,
   inputLossCertificate,
   inputUSBorn,

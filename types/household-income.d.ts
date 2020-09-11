@@ -1,4 +1,4 @@
-declare type TypeIncome =
+declare type TypeHouseholdIncome =
   | "Up to RM 1,500"
   | "RM 1,501 - RM 3,000"
   | "RM 3,001 - RM 5,000"
@@ -10,4 +10,4 @@ declare type TypeIncome =
   | "RM 100,001 - RM 200,000"
   | "> RM 200,000";
 
-declare type TypeIncomeLabelValue = { label: string; value: TypeIncome };
+declare type TypeHouseholdIncomeLabelValue = { label: string; value: TypeHouseholdIncome };

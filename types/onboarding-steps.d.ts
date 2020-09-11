@@ -11,13 +11,13 @@ declare interface IOnboarding {
 
 declare interface OnboardingContentProps {
   finishedSteps: TypeOnboardingRoute[];
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
   navigation: IStackNavigationProp;
   route: string;
   setFinishedSteps: (route: TypeOnboardingRoute[]) => void;
 }
 declare interface OnboardingStepsContentProps {
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 declare interface OnboardingStepsProps {

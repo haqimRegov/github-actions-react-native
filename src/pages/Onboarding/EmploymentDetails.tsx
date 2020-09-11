@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Alert, View } from "react-native";
+import { connect } from "react-redux";
 
 import { AdvancedDropdown, ContentPage, CustomSpacer, CustomTextInput, TextInputArea, TextSpaceArea } from "../../components";
-import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { Language } from "../../constants";
 import {
   DICTIONARY_BUSINESS_NATURE,
   DICTIONARY_COUNTRIES,
   DICTIONARY_HOUSEHOLD_INCOME,
   DICTIONARY_OCCUPATION,
 } from "../../data/dictionary";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../store";
 import { fs12SemiBoldGray8, px, sh24, sh32, sh8, sw16, sw24 } from "../../styles";
-import { AlertDialog } from "../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
-interface EmploymentDetailsProps {
-  handleNextStep: (route: string) => void;
+interface EmploymentDetailsProps extends PersonalInfoStoreProps {
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) => {
+const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
+  addPersonalInfo,
+  handleNextStep,
+}: EmploymentDetailsProps) => {
   const [inputAddress, setInputAddress] = useState<string>("");
   const [inputBusinessNature, setInputBusinessNature] = useState<string>("");
   const [inputCity, setInputCity] = useState("");
-  const [inputCountry, setInputCountry] = useState<string>("Malaysia");
+  const [inputCountry, setInputCountry] = useState<string>(DICTIONARY_COUNTRIES[133].value);
   const [inputEmployerName, setInputEmployerName] = useState<string>("");
   const [inputHousehold, setInputHousehold] = useState<string>("");
   const [inputOccupation, setInputOccupation] = useState<string>("");
@@ -43,15 +47,23 @@ export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) =>
     Alert.alert("test");
   };
 
-  const handleNavigate = () => {
-    handleNextStep(ONBOARDING_ROUTES.Declaration);
-  };
-
   const handleSubmit = () => {
-    const occupationIndex = DICTIONARY_OCCUPATION.findIndex((item) => item.value === inputOccupation);
-    const natureIndex = DICTIONARY_BUSINESS_NATURE.findIndex((item) => item.value === inputBusinessNature);
-    const details = `${occupationIndex} ${natureIndex} ${inputEmployerName} ${inputAddress} ${inputPostCode}`;
-    AlertDialog(details, handleNavigate);
+    const principalDetails: IHolderInfoState = {
+      employmentDetails: {
+        occupation: inputOccupation,
+        businessNature: inputBusinessNature,
+        monthlyHouseholdIncome: inputHousehold,
+        employerName: inputEmployerName,
+        address: inputAddress,
+        postCode: inputPostCode,
+        city: inputCity,
+        state: inputState,
+        country: inputCountry,
+      },
+    };
+
+    addPersonalInfo({ principal: principalDetails });
+    handleNextStep("Declaration");
   };
 
   return (
@@ -105,3 +117,5 @@ export const EmploymentDetails = ({ handleNextStep }: EmploymentDetailsProps) =>
     </ContentPage>
   );
 };
+
+export const EmploymentDetails = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(EmploymentDetailsComponent);

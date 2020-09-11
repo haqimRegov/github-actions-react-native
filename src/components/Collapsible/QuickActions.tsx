@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
@@ -12,8 +12,10 @@ import {
   fs16BoldBlue2,
   px,
   sh24,
+  sh4,
   sh40,
   sh48,
+  sh8,
   shadowBlue5,
   sw1,
   sw16,
@@ -104,12 +106,16 @@ export const QuickActions: FunctionComponent<QuickActionsProps> = ({ actions }: 
               };
 
               return (
-                <TouchableWithoutFeedback key={index} onPress={handlePress}>
-                  <View style={actionStyle}>
-                    <CustomSpacer isHorizontal={true} space={sw48} />
-                    <Text style={actionTextStyle}>{action.label}</Text>
-                  </View>
-                </TouchableWithoutFeedback>
+                <Fragment key={index}>
+                  {index === 0 ? <CustomSpacer space={sh8} /> : null}
+                  <TouchableWithoutFeedback onPress={handlePress}>
+                    <View style={actionStyle}>
+                      <CustomSpacer isHorizontal={true} space={sw48} />
+                      <Text style={actionTextStyle}>{action.label}</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                  {index === actions.length - 1 ? <CustomSpacer space={sh4} /> : null}
+                </Fragment>
               );
             })}
           </View>

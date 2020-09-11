@@ -4,6 +4,195 @@ export const IcoMoonSelection = {
     {
       icon: {
         paths: [
+          "M246.583 637.696c32.673-32.674 76.987-51.029 123.194-51.029h284.444c46.208 0 90.522 18.355 123.196 51.029 32.67 32.674 51.025 76.988 51.025 123.191v71.113c0 17.673-14.323 32-32 32-17.673 0-32-14.327-32-32v-71.113c0-29.231-11.61-57.267-32.282-77.939-20.672-20.668-48.704-32.282-77.939-32.282h-284.444c-29.233 0-57.268 11.614-77.939 32.282-20.671 20.672-32.283 48.708-32.283 77.939v71.113c0 17.673-14.327 32-32 32s-32-14.327-32-32v-71.113c0-46.204 18.356-90.517 51.028-123.191z",
+          "M512 224c-60.877 0-110.224 49.348-110.224 110.222s49.347 110.224 110.224 110.224c60.873 0 110.221-49.35 110.221-110.224s-49.348-110.222-110.221-110.222zM337.776 334.222c0-96.22 78.002-174.222 174.224-174.222 96.218 0 174.221 78.002 174.221 174.222s-78.003 174.224-174.221 174.224c-96.222 0-174.224-78.003-174.224-174.224z",
+        ],
+        attrs: [{}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["avatar"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
+      },
+      attrs: [{}, {}],
+      properties: {
+        order: 71,
+        id: 120,
+        name: "avatar",
+        prevSize: 32,
+        code: 59702,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 0,
+    },
+    {
+      icon: {
+        paths: [
+          "M866.001 722.001h-83.998v-285.001h83.998c13.082 0 24.657-8.478 28.604-20.948 3.947-12.473-0.644-26.064-11.341-33.59l-353.997-249.001c-10.359-7.282-24.166-7.282-34.522 0l-353.999 249.001c-10.7 7.526-15.288 21.117-11.342 33.59 3.945 12.471 15.519 20.948 28.6 20.948h84v285.001h-84c-16.569 0-30 13.431-30 29.999v114.001c0 16.567 13.431 29.999 30 29.999h707.995c16.572 0 30.003-13.431 30.003-29.999v-114.001c-0.004-16.567-13.436-29.999-30.003-29.999zM512.004 194.677l259.204 182.322c-27.004 0-493.495 0-518.407 0l259.203-182.322zM722.001 437.001v285.001h-53.999v-285.001h53.999zM608.004 437.001v285.001h-192.001v-285.001h192.001zM302.005 437.001h54v285.001h-54v-285.001zM188.004 836.002v-54.003c6.134 0 641.577 0 647.998 0v54.003h-647.998z",
+        ],
+        attrs: [{}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["bank"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}],
+        },
+      },
+      attrs: [{}],
+      properties: {
+        order: 70,
+        id: 119,
+        name: "bank",
+        prevSize: 32,
+        code: 59704,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 1,
+    },
+    {
+      icon: {
+        paths: [
+          "M256.005 288c-17.527 0-32 14.473-32 32v384c0 17.527 14.473 32 32 32h511.999c17.527 0 32-14.473 32-32v-384c0-17.527-14.473-32-32-32h-511.999zM160.005 320c0-52.873 43.127-96 96-96h511.999c52.873 0 96 43.127 96 96v384c0 52.873-43.127 96-96 96h-511.999c-52.873 0-96-43.127-96-96v-384z",
+          "M165.787 301.652c10.135-14.479 30.088-18 44.566-7.865l301.651 211.156 301.649-211.156c14.477-10.135 34.428-6.614 44.565 7.865 10.133 14.478 6.613 34.431-7.863 44.566l-320 224c-11.021 7.714-25.685 7.714-36.702 0l-320.001-224c-14.479-10.135-18-30.088-7.865-44.566z",
+        ],
+        attrs: [{}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["envelope"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
+      },
+      attrs: [{}, {}],
+      properties: {
+        order: 73,
+        id: 117,
+        name: "envelope",
+        prevSize: 32,
+        code: 59705,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 2,
+    },
+    {
+      icon: {
+        paths: [
+          "M287.999 510.711c-18.38 0-33.28 14.899-33.28 33.28v224c0 18.381 14.9 33.28 33.28 33.28h448.001c18.377 0 33.28-14.899 33.28-33.28v-224c0-18.381-14.903-33.28-33.28-33.28h-448.001zM193.279 543.991c0-52.314 42.408-94.72 94.72-94.72h448.001c52.309 0 94.72 42.406 94.72 94.72v224c0 52.314-42.411 94.72-94.72 94.72h-448.001c-52.312 0-94.72-42.406-94.72-94.72v-224z",
+          "M512 222.711c-34.287 0-67.17 13.62-91.416 37.865-24.244 24.245-37.865 57.128-37.865 91.415v128c0 16.964-13.754 30.72-30.72 30.72s-30.72-13.756-30.72-30.72v-128c0-50.582 20.093-99.092 55.86-134.86s84.279-55.86 134.861-55.86c50.581 0 99.089 20.093 134.857 55.86s55.863 84.277 55.863 134.86v128c0 16.964-13.756 30.72-30.72 30.72-16.969 0-30.72-13.756-30.72-30.72v-128c0-34.287-13.623-67.17-37.867-91.415s-57.126-37.865-91.413-37.865z",
+        ],
+        attrs: [{}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["lock"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
+      },
+      attrs: [{}, {}],
+      properties: {
+        order: 74,
+        id: 116,
+        name: "lock",
+        prevSize: 32,
+        code: 59706,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 3,
+    },
+    {
+      icon: {
+        paths: [
+          "M266.667 156.437c0-17.673 14.327-32 32-32h426.667c17.673 0 32 14.327 32 32v248.889c0 17.673-14.327 31.998-32 31.998s-32-14.325-32-31.998v-216.889h-362.667v216.889c0 17.673-14.327 31.998-32 31.998s-32-14.325-32-31.998v-248.889z",
+          "M227.554 437.333c-10.373 0-20.321 4.122-27.656 11.456s-11.455 17.284-11.455 27.657v177.775c0 10.372 4.12 20.322 11.455 27.657s17.283 11.456 27.656 11.456h71.111c17.673 0 32 14.327 32 32s-14.327 32-32 32h-71.111c-27.347 0-53.574-10.863-72.911-30.199s-30.2-45.564-30.2-72.913v-177.775c0-27.349 10.863-53.575 30.2-72.912s45.564-30.201 72.911-30.201h568.888c27.349 0 53.577 10.863 72.913 30.201s30.199 45.562 30.199 72.912v177.775c0 27.349-10.863 53.577-30.199 72.913s-45.564 30.199-72.913 30.199h-71.108c-17.677 0-32-14.327-32-32s14.323-32 32-32h71.108c10.372 0 20.322-4.122 27.657-11.456s11.456-17.284 11.456-27.657v-177.775c0-10.372-4.122-20.322-11.456-27.657s-17.284-11.456-27.657-11.456h-568.888z",
+          "M266.667 583.104c0-17.673 14.327-32 32-32h426.667c17.673 0 32 14.327 32 32v284.446c0 17.673-14.327 32-32 32h-426.667c-17.673 0-32-14.327-32-32v-284.446zM330.667 615.104v220.446h362.667v-220.446h-362.667z",
+        ],
+        attrs: [{}, {}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["print"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}, {}],
+        },
+      },
+      attrs: [{}, {}, {}],
+      properties: {
+        order: 75,
+        id: 115,
+        name: "print",
+        prevSize: 32,
+        code: 59707,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 4,
+    },
+    {
+      icon: {
+        paths: [
+          "M772.378 753.020h-487.099c-31.605 0-57.306-25.702-57.306-57.306s25.702-57.306 57.306-57.306h57.306c15.816 0 28.653-12.834 28.653-28.651s-12.837-28.655-28.653-28.655h-57.306c-63.209 0-114.612 51.405-114.612 114.611 0 63.211 51.403 114.611 114.612 114.611h487.099c15.817 0 28.655-12.834 28.655-28.651s-12.838-28.655-28.655-28.655z",
+          "M821.312 245.708c-42.752-42.693-112.32-42.75-155.157 0l-43.84 43.84c-0.542 0.459-1.203 0.631-1.715 1.146-0.516 0.516-0.691 1.175-1.148 1.719l-147.017 147.016c-28.309 28.369-43.9 66.074-43.9 106.163v64.179c0 15.817 12.838 28.655 28.655 28.655h64.183c40.085 0 77.79-15.586 106.214-43.925l193.694-193.694c42.722-42.75 42.722-112.349 0.030-155.099zM587.102 553.954c-17.562 17.51-40.917 27.166-65.728 27.166h-35.533v-35.529c0-24.815 9.655-48.166 27.136-65.702l128.162-128.166 74.099 74.096-128.137 128.135zM780.766 360.291l-25.011 25.014-74.099-74.096 24.986-24.985c20.429-20.401 53.696-20.372 74.095 0 20.403 20.429 20.403 53.666 0.030 74.067z",
+        ],
+        attrs: [{}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["sign"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
+      },
+      attrs: [{}, {}],
+      properties: {
+        order: 76,
+        id: 114,
+        name: "sign",
+        prevSize: 32,
+        code: 59708,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 5,
+    },
+    {
+      icon: {
+        paths: [
+          "M512 232.727c-154.238 0-279.273 125.035-279.273 279.273 0 154.24 125.035 279.275 279.273 279.275 154.24 0 279.275-125.035 279.275-279.275 0-154.238-125.035-279.273-279.275-279.273zM170.667 512c0-188.513 152.82-341.333 341.333-341.333s341.333 152.82 341.333 341.333c0 188.514-152.819 341.333-341.333 341.333s-341.333-152.819-341.333-341.333z",
+          "M270.674 270.674c12.118-12.118 31.765-12.118 43.884 0l438.769 438.77c12.117 12.117 12.117 31.765 0 43.883s-31.765 12.117-43.883 0l-438.77-438.769c-12.118-12.118-12.118-31.765 0-43.884z",
+        ],
+        attrs: [{}, {}],
+        isMulticolor: false,
+        isMulticolor2: false,
+        grid: 0,
+        tags: ["terminate"],
+        colorPermutations: {
+          "2342352381255255255132671": [{}, {}],
+        },
+      },
+      attrs: [{}, {}],
+      properties: {
+        order: 77,
+        id: 113,
+        name: "terminate",
+        prevSize: 32,
+        code: 59709,
+      },
+      setIdx: 0,
+      setId: 1,
+      iconIdx: 6,
+    },
+    {
+      icon: {
+        paths: [
           "M511.991 184.889c-180.66 0-327.113 146.453-327.113 327.111s146.452 327.113 327.113 327.113c180.655 0 327.108-146.453 327.108-327.113s-146.453-327.111-327.108-327.111zM127.99 512c0-212.077 171.922-384 384.002-384 212.075 0 384 171.923 384 384 0 212.079-171.925 384-384 384-212.079 0-384.002-171.921-384.002-384z",
           "M656.115 367.867c12.629 12.628 12.629 33.103 0 45.731l-242.523 242.522c-12.628 12.629-33.103 12.629-45.731 0-12.628-12.625-12.628-33.101 0-45.73l242.523-242.522c12.629-12.628 33.101-12.628 45.73 0z",
           "M367.862 367.867c12.628-12.628 33.103-12.628 45.731 0l242.523 242.522c12.629 12.629 12.629 33.105 0 45.73-12.629 12.629-33.101 12.629-45.73 0l-242.523-242.522c-12.628-12.628-12.628-33.103 0-45.731z",
@@ -27,7 +216,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 0,
+      iconIdx: 7,
     },
     {
       icon: {
@@ -77,7 +266,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 1,
+      iconIdx: 8,
     },
     {
       icon: {
@@ -101,7 +290,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 2,
+      iconIdx: 9,
     },
     {
       icon: {
@@ -125,7 +314,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 3,
+      iconIdx: 10,
     },
     {
       icon: {
@@ -149,7 +338,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 4,
+      iconIdx: 11,
     },
     {
       icon: {
@@ -173,7 +362,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 5,
+      iconIdx: 12,
     },
     {
       icon: {
@@ -197,7 +386,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 6,
+      iconIdx: 13,
     },
     {
       icon: {
@@ -225,7 +414,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 7,
+      iconIdx: 14,
     },
     {
       icon: {
@@ -253,7 +442,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 8,
+      iconIdx: 15,
     },
     {
       icon: {
@@ -282,7 +471,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 9,
+      iconIdx: 16,
     },
     {
       icon: {
@@ -310,7 +499,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 10,
+      iconIdx: 17,
     },
     {
       icon: {
@@ -338,7 +527,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 11,
+      iconIdx: 18,
     },
     {
       icon: {
@@ -366,7 +555,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 12,
+      iconIdx: 19,
     },
     {
       icon: {
@@ -395,7 +584,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 13,
+      iconIdx: 20,
     },
     {
       icon: {
@@ -425,7 +614,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 14,
+      iconIdx: 21,
     },
     {
       icon: {
@@ -453,7 +642,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 15,
+      iconIdx: 22,
     },
     {
       icon: {
@@ -482,7 +671,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 16,
+      iconIdx: 23,
     },
     {
       icon: {
@@ -508,7 +697,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 17,
+      iconIdx: 24,
     },
     {
       icon: {
@@ -528,7 +717,7 @@ export const IcoMoonSelection = {
       },
       attrs: [{}, {}, {}],
       properties: {
-        order: 47,
+        order: 69,
         id: 94,
         name: "trash",
         prevSize: 32,
@@ -536,7 +725,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 18,
+      iconIdx: 25,
     },
     {
       icon: {
@@ -563,7 +752,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 19,
+      iconIdx: 26,
     },
     {
       icon: {
@@ -589,7 +778,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 20,
+      iconIdx: 27,
     },
     {
       icon: {
@@ -616,7 +805,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 21,
+      iconIdx: 28,
     },
     {
       icon: {
@@ -647,7 +836,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 22,
+      iconIdx: 29,
     },
     {
       icon: {
@@ -673,7 +862,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 23,
+      iconIdx: 30,
     },
     {
       icon: {
@@ -700,7 +889,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 24,
+      iconIdx: 31,
     },
     {
       icon: {
@@ -726,7 +915,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 25,
+      iconIdx: 32,
     },
     {
       icon: {
@@ -753,7 +942,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 26,
+      iconIdx: 33,
     },
     {
       icon: {
@@ -780,7 +969,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 27,
+      iconIdx: 34,
     },
     {
       icon: {
@@ -806,7 +995,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 28,
+      iconIdx: 35,
     },
     {
       icon: {
@@ -833,7 +1022,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 29,
+      iconIdx: 36,
     },
     {
       icon: {
@@ -859,7 +1048,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 30,
+      iconIdx: 37,
     },
     {
       icon: {
@@ -886,7 +1075,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 31,
+      iconIdx: 38,
     },
     {
       icon: {
@@ -913,7 +1102,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 32,
+      iconIdx: 39,
     },
     {
       icon: {
@@ -940,7 +1129,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 33,
+      iconIdx: 40,
     },
     {
       icon: {
@@ -967,7 +1156,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 34,
+      iconIdx: 41,
     },
     {
       icon: {
@@ -993,7 +1182,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 35,
+      iconIdx: 42,
     },
     {
       icon: {
@@ -1019,7 +1208,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 36,
+      iconIdx: 43,
     },
     {
       icon: {
@@ -1046,7 +1235,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 37,
+      iconIdx: 44,
     },
     {
       icon: {
@@ -1072,7 +1261,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 38,
+      iconIdx: 45,
     },
     {
       icon: {
@@ -1099,7 +1288,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 39,
+      iconIdx: 46,
     },
     {
       icon: {
@@ -1125,7 +1314,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 40,
+      iconIdx: 47,
     },
     {
       icon: {
@@ -1151,7 +1340,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 41,
+      iconIdx: 48,
     },
     {
       icon: {
@@ -1179,7 +1368,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 42,
+      iconIdx: 49,
     },
     {
       icon: {
@@ -1206,7 +1395,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 43,
+      iconIdx: 50,
     },
     {
       icon: {
@@ -1234,7 +1423,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 44,
+      iconIdx: 51,
     },
     {
       icon: {
@@ -1261,7 +1450,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 45,
+      iconIdx: 52,
     },
     {
       icon: {
@@ -1287,7 +1476,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 46,
+      iconIdx: 53,
     },
     {
       icon: {
@@ -1313,7 +1502,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 47,
+      iconIdx: 54,
     },
     {
       icon: {
@@ -1339,7 +1528,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 48,
+      iconIdx: 55,
     },
     {
       icon: {
@@ -1365,7 +1554,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 49,
+      iconIdx: 56,
     },
     {
       icon: {
@@ -1391,7 +1580,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 50,
+      iconIdx: 57,
     },
     {
       icon: {
@@ -1417,7 +1606,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 51,
+      iconIdx: 58,
     },
     {
       icon: {
@@ -1443,7 +1632,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 52,
+      iconIdx: 59,
     },
     {
       icon: {
@@ -1469,7 +1658,7 @@ export const IcoMoonSelection = {
       },
       setIdx: 0,
       setId: 1,
-      iconIdx: 53,
+      iconIdx: 60,
     },
   ],
   height: 1024,

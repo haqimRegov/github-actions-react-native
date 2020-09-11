@@ -59,9 +59,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   const handleFundingMethod = (option: string) => {
     const newData: IFundSales =
       option === "Cash"
-        ? { ...data, fundPaymentMethod: "Cash" }
+        ? { ...data, salesCharge: fund.salesCharge.cash?.minimum!, fundPaymentMethod: "Cash" }
         : {
             ...data,
+            salesCharge: fund.salesCharge.epf?.minimum!,
             scheduledInvestment: false,
             fundPaymentMethod: "EPF",
             scheduledSalesCharge: undefined,
@@ -75,11 +76,11 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   };
 
   const handleSalesCharge = (value: string) => {
-    setData({ ...data, salesCharge: parseInt(value, 10) });
+    setData({ ...data, salesCharge: parseFloat(value) });
   };
 
   const handleScheduled = () => {
-    const newData = { ...data, scheduledSalesCharge: 0, scheduledInvestment: !scheduledInvestment };
+    const newData = { ...data, scheduledSalesCharge: fund.salesCharge.cash?.minimum!, scheduledInvestment: !scheduledInvestment };
     if (newData.scheduledInvestment === false) {
       delete newData.scheduledSalesCharge;
       delete newData.scheduledInvestmentAmount;
@@ -92,7 +93,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   };
 
   const handleScheduledSalesCharge = (value: string) => {
-    setData({ ...data, scheduledSalesCharge: parseInt(value, 10) });
+    setData({ ...data, scheduledSalesCharge: parseFloat(value) });
   };
 
   const investmentAmountInput = (

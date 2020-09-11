@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Alert, View } from "react-native";
+import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { Language } from "../../../constants";
 import { OPTIONS_TAX_RESIDENCY, OPTIONS_US_BORN, OPTIONS_US_CITIZEN } from "../../../data/dictionary";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomBlack21 } from "../../../styles";
 import { CRSDeclaration } from "./CRS";
 import { NO_TIN_OPTIONS } from "./CRS/TaxIdentificationNumber";
@@ -11,11 +13,11 @@ import { FATCADeclaration } from "./FATCA";
 
 const { DECLARATION } = Language.PAGE;
 
-interface DeclarationProps {
-  handleNextStep: (route: string) => void;
+interface DeclarationProps extends PersonalInfoStoreProps {
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-export const Declaration = ({ handleNextStep }: DeclarationProps) => {
+const DeclarationComponent: FunctionComponent<DeclarationProps> = ({ addPersonalInfo, handleNextStep }: DeclarationProps) => {
   // TODO Note for FATCA from FRS
   // TODO US Citizen will be populated from Nationality
   // TODO Section Logic: This will not appear for the joint holder if joint holder is below 18 years old.
@@ -53,8 +55,42 @@ export const Declaration = ({ handleNextStep }: DeclarationProps) => {
   const [inputTaxResidency, setInputTaxResidency] = useState<string>(OPTIONS_TAX_RESIDENCY[0]);
   const [inputUSBorn, setInputUSBorn] = useState<string>(OPTIONS_US_BORN[1]);
 
+  const { certificate, explanation, noCertificate, reason, uploadLater } = inputLossCertificate;
+
   const handleSubmit = () => {
-    handleNextStep(ONBOARDING_ROUTES.Summary);
+    const fatca: IFatcaState = {
+      usBorn: inputUSBorn,
+      certificate: certificate,
+      noCertificate: noCertificate!,
+      uploadLater: uploadLater!,
+      usCitizen: inputAmerican,
+      reason: explanation !== "" ? explanation : reason,
+    };
+
+    const tin = inputTaxIdNumber.map((tax: IDeclarationTaxNumber) => {
+      const tinReason = tax.reason === NO_TIN_OPTIONS[2].value ? tax.explanation : tax.reason;
+      return {
+        country: tax.country,
+        tinNumber: tax.taxIdNumber,
+        noTin: tax.noTaxIdNumber,
+        reason: tax.noTaxIdNumber ? tinReason : undefined,
+      };
+    });
+
+    const crs: ICrsState = {
+      taxResident: inputTaxResidency,
+      tin: tin,
+    };
+
+    const principalDetails: IHolderInfoState = {
+      declaration: {
+        fatca: fatca,
+        crs: crs,
+      },
+    };
+
+    addPersonalInfo({ principal: principalDetails });
+    handleNextStep("Summary");
   };
 
   const handleCancelPress = () => {
@@ -88,3 +124,5 @@ export const Declaration = ({ handleNextStep }: DeclarationProps) => {
     </ContentPage>
   );
 };
+
+export const Declaration = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(DeclarationComponent);

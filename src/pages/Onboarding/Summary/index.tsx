@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react";
-import { Alert } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
@@ -10,22 +9,21 @@ import { Principal } from "./Principal";
 
 const { SUMMARY } = Language.PAGE;
 
-interface SummaryProps extends PersonalInfoStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
-}
+interface SummaryProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 
-const SummaryComponent: FunctionComponent<SummaryProps> = ({ accountType, handleNextStep, personalInfo }: SummaryProps) => {
-  const handleCancel = () => {
-    Alert.alert("Cancel");
-  };
-
+const SummaryComponent: FunctionComponent<SummaryProps> = ({
+  accountType,
+  handleCancelOnboarding,
+  handleNextStep,
+  personalInfo,
+}: SummaryProps) => {
   const handleContinue = () => {
     handleNextStep(ONBOARDING_ROUTES.OrderSummary);
   };
 
   return (
     <ContentPage
-      handleCancel={handleCancel}
+      handleCancel={handleCancelOnboarding!}
       handleContinue={handleContinue}
       noBounce={true}
       subheading={SUMMARY.HEADING}

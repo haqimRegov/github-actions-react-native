@@ -1,3 +1,4 @@
+import { CommonActions } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 
@@ -26,7 +27,12 @@ export const NormalLogin = ({ navigation, passwordRecovery, setRootPage }: Norma
   const handleLogin = async () => {
     // TODO integration
     await updateStorageData("visited", true);
-    navigation.navigate("Dashboard");
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Dashboard" }],
+      }),
+    );
   };
 
   const handleShowPassword = () => {

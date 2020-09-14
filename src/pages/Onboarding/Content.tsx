@@ -1,6 +1,10 @@
-import React from "react";
+import { CommonActions } from "@react-navigation/native";
+import React, { Fragment, useState } from "react";
+import { Text, View } from "react-native";
 
-import { ONBOARDING_ROUTES } from "../../constants";
+import { ConfirmationModal } from "../../components";
+import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { fs16BoldBlack2 } from "../../styles";
 import { Declaration } from "./Declaration";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
@@ -13,31 +17,85 @@ import { QuestionnaireContent } from "./Questionnaire";
 import { Summary } from "./Summary";
 import { TermsAndConditions } from "./TermsAndConditions";
 
-export const OnboardingContent = (props: OnboardingContentProps) => {
-  switch (props.route) {
+const { ONBOARDING } = Language.PAGE;
+
+export const OnboardingContent = (props: OnboardingProps) => {
+  const { navigation, resetClientDetails, resetPersonalInfo } = props;
+  const [cancelOnboarding, setCancelOnboarding] = useState<boolean>(false);
+
+  const handleCancelOnboarding = () => {
+    setCancelOnboarding(!cancelOnboarding);
+  };
+
+  const handleResetOnboarding = () => {
+    setCancelOnboarding(false);
+    resetClientDetails();
+    resetPersonalInfo();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Dashboard" }],
+      }),
+    );
+  };
+
+  const newProps = {
+    ...props,
+    handleCancelOnboarding: handleCancelOnboarding,
+  };
+
+  let content: JSX.Element = <View />;
+
+  switch (newProps.route) {
     case ONBOARDING_ROUTES.Questionnaire:
-      return <QuestionnaireContent {...props} />;
+      content = <QuestionnaireContent {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.ProductRecommendation:
-      return <Products {...props} />;
+      content = <Products {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.EmailVerification:
-      return <EmailVerification {...props} />;
+      content = <EmailVerification {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.IdentityVerification:
-      return <IdentityConfirmation {...props} />;
+      content = <IdentityConfirmation {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.PersonalDetails:
-      return <PersonalDetails {...props} />;
+      content = <PersonalDetails {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.EmploymentDetails:
-      return <EmploymentDetails {...props} />;
+      content = <EmploymentDetails {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.Declaration:
-      return <Declaration {...props} />;
+      content = <Declaration {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.OrderSummary:
-      return <OrderSummary {...props} />;
+      content = <OrderSummary {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.TermsAndConditions:
-      return <TermsAndConditions {...props} />;
+      content = <TermsAndConditions {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.Summary:
-      return <Summary {...props} />;
+      content = <Summary {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.Payment:
-      return <Payment {...props} />;
+      content = <Payment {...newProps} />;
+      break;
     default:
-      return null;
+      content = <View />;
+      break;
   }
+  return (
+    <Fragment>
+      {content}
+      <ConfirmationModal
+        handleCancel={handleCancelOnboarding!}
+        handleContinue={handleResetOnboarding}
+        labelCancel={ONBOARDING.BUTTON_NO}
+        labelContinue={ONBOARDING.BUTTON_YES}
+        title={ONBOARDING.EDIT_TITLE}
+        visible={cancelOnboarding!}>
+        <Text style={fs16BoldBlack2}>{ONBOARDING.EDIT_LABEL}</Text>
+      </ConfirmationModal>
+    </Fragment>
+  );
 };

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const SAMPLE_CLIENT: IClientIDDetails = {
   address: "",
   city: "",
@@ -32,9 +34,9 @@ export const SAMPLE_CLIENT_3: IClientDetails = {
   postCode: "46050",
 };
 
-export const SAMPLE_CLIENT_4: IClientDetailsResponse = {
-  dateOfBirth: "04 January 1998",
-  id: "EC7742123",
+export const SAMPLE_CLIENT_4: IClientDetailsState = {
+  dateOfBirth: moment().subtract(23, "years").toDate(),
+  idNumber: "EC7742123",
   idType: "Passport",
   gender: "Male",
   permanentAddress: {
@@ -52,6 +54,28 @@ export const SAMPLE_CLIENT_4: IClientDetailsResponse = {
     state: "Selangor",
   },
   name: "Aldrin Castro",
+};
+
+export const SAMPLE_CLIENT_5: IClientDetailsState = {
+  dateOfBirth: moment().subtract(17, "years").toDate(),
+  idNumber: "98121231231",
+  idType: "NRIC",
+  gender: "Female",
+  permanentAddress: {
+    address: "A-29-13 Elements",
+    postCode: "55000",
+    city: "Kuala Lumpur",
+    country: "Malaysia",
+    state: "Kuala Lumpur",
+  },
+  mailingAddress: {
+    address: "A-29-13 Elements",
+    postCode: "55000",
+    city: "Kuala Lumpur",
+    country: "Malaysia",
+    state: "Kuala Lumpur",
+  },
+  name: "Jane Constantine",
 };
 
 export const SAMPLE_CLIENTS = [SAMPLE_CLIENT_2, SAMPLE_CLIENT_3];

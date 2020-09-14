@@ -38,9 +38,10 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
 }: AddressFieldProps) => {
   useEffect(() => {
     if (addressType === "Other" && inputCountry === DICTIONARY_COUNTRIES[133].value) {
-      setInputState("");
+      // TODO Address field enhancement when changing to Country: Malaysia
+      // setInputState("");
     }
-  }, [addressType, inputCountry, setInputState]);
+  }, [addressType, inputCountry, inputState, setInputState]);
 
   return (
     <Fragment>

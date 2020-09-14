@@ -11,10 +11,10 @@ import { LocalBankDetails } from "./Local";
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface IBankDetailsProps {
-  foreignBankDetails: IBankingDetails[];
-  localBankDetails: IBankingDetails[];
-  setForeignBankDetails: (input: IBankingDetails[]) => void;
-  setLocalBankDetails: (input: IBankingDetails[]) => void;
+  foreignBankDetails: IBankDetailsState[];
+  localBankDetails: IBankDetailsState[];
+  setForeignBankDetails: (input: IBankDetailsState[]) => void;
+  setLocalBankDetails: (input: IBankDetailsState[]) => void;
 }
 
 export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
@@ -23,15 +23,16 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   setForeignBankDetails,
   setLocalBankDetails,
 }: IBankDetailsProps) => {
-  const initialLocalBankState: IBankingDetails = {
-    accountName: "",
-    accountNumber: "",
+  const initialLocalBankState: IBankDetailsState = {
+    bankAccountName: "",
+    bankAccountNumber: "",
     bankName: "",
+    bankSwiftCode: "",
     currency: [DICTIONARY_CURRENCY[0].value],
     otherBankName: "",
   };
 
-  const initialForeignBankState: IBankingDetails = {
+  const initialForeignBankState: IBankDetailsState = {
     ...initialLocalBankState,
     bankLocation: "",
     currency: [""],
@@ -62,7 +63,6 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
       <View style={px(sw24)}>
         <OutlineButton icon="plus" onPress={handleAddForeignBank} text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN} />
       </View>
-      <CustomSpacer space={sh32} />
     </View>
   );
 };

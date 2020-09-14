@@ -1,24 +1,26 @@
 declare type IClientDetailsState = {
-  countryOfBirth: string;
-  dateOfBirth: string;
-  gender: string;
-  id: string;
-  idType: TypeClientID;
+  countryOfBirth?: string;
+  dateOfBirth?: Date;
+  gender?: string;
+  idNumber?: string;
+  idType?: TypeClientIDChoices;
+  otherIdType?: TypeClientIDChoices;
   mailingAddress?: {
-    address: string;
-    postCode: string;
-    city: string;
-    country: string;
-    state: string;
+    address?: string;
+    postCode?: string;
+    city?: string;
+    country?: string;
+    state?: string;
   };
-  name: string;
-  permanentAddress: {
-    address: string;
-    postCode: string;
-    city: string;
-    country: string;
-    state: string;
+  name?: string;
+  permanentAddress?: {
+    address?: string;
+    postCode?: string;
+    city?: string;
+    country?: string;
+    state?: string;
   };
-  placeOfBirth: string;
-  salutation: string;
+  placeOfBirth?: string;
+  salutation?: string;
+  verified?: boolean;
 };

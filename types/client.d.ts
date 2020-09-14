@@ -17,6 +17,7 @@ declare type TypeIDChoicesValue = { value: TypeIDChoices };
 declare type TypeIDChoicesLabelValue = { label: string; value: TypeCurrency };
 
 declare type TypeClientID = "NRIC" | "Passport" | "Army" | "Police";
+declare type TypeClientIDChoices = "NRIC" | "Passport" | "Army" | "Police" | "Other";
 
 declare type IClientDetails = {
   id?: string;
@@ -29,3 +30,4 @@ declare type IClientDetails = {
 };
 
 declare type TypeAccountChoices = "Individual" | "Joint";
+declare type TypeAccountHolder = "Principal" | "Joint";

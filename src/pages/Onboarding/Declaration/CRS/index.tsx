@@ -7,41 +7,31 @@ import { OPTIONS_TAX_RESIDENCY } from "../../../../data/dictionary";
 import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sh8, sw24 } from "../../../../styles";
 import { NO_TIN_OPTIONS, TaxIdentificationNumber } from "./TaxIdentificationNumber";
 
-interface ICRSDeclarationTaxNumber {
-  country: string;
-  noTaxIdNumber: boolean;
-  otherReason?: string;
-  reason?: string;
-  taxIdNumber: string;
-}
-
 const { DECLARATION } = Language.PAGE;
 
 interface CRSDeclarationProps {
-  inputTaxIdNumber: ICRSDeclarationTaxNumber[];
-  inputTaxResidency: string;
-  setInputTaxIdNumber: (input: ICRSDeclarationTaxNumber[]) => void;
-  setTaxResidency: (input: string) => void;
+  crs: ICrsState;
+  setCrs: (value: ICrsState) => void;
 }
 
-export const CRSDeclaration: FunctionComponent<CRSDeclarationProps> = ({
-  inputTaxIdNumber,
-  inputTaxResidency,
-  setInputTaxIdNumber,
-  setTaxResidency,
-}: CRSDeclarationProps) => {
+export const CRSDeclaration: FunctionComponent<CRSDeclarationProps> = ({ crs, setCrs }: CRSDeclarationProps) => {
   // TODO Note for CRS from FRS
   // TODO Section Logic: This will not appear if EPF investment is selected.
   // TODO Section Logic: This will not appear for the joint holder if joint holder is below 18 years old.
   // TODO Add Additional TaxNumber only when Non-Malaysian.
   // TODO Question: If add additional TaxNumber, User then will need to answer Q2, Q3 and Q4 again. Why give the No TaxNumber choice if they are adding another TaxNumber?
 
-  const initialStateTaxNumber: ICRSDeclarationTaxNumber = {
+  const inputTaxIdNumber = crs.tin!;
+  const inputTaxResidency = crs.taxResident!;
+  const setInputTaxIdNumber = (value: ITinState[]) => setCrs({ tin: value });
+  const setTaxResidency = (value: string) => setCrs({ taxResident: value });
+
+  const initialStateTaxNumber: ITinState = {
     country: "",
-    taxIdNumber: "",
-    noTaxIdNumber: false,
+    tinNumber: "",
+    noTin: false,
     reason: NO_TIN_OPTIONS[0].value,
-    otherReason: "",
+    explanation: "",
   };
 
   const handleCRSPress = () => {

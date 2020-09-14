@@ -54,8 +54,8 @@ export const NO_TIN_OPTIONS: IAdvanceRadio[] = [
 ];
 
 interface TaxIdentificationNumberProps {
-  inputTaxIdNumber: IDeclarationTaxNumber[];
-  setInputTaxIdNumber: (input: IDeclarationTaxNumber[]) => void;
+  inputTaxIdNumber: ITinState[];
+  setInputTaxIdNumber: (input: ITinState[]) => void;
 }
 
 export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberProps> = ({
@@ -67,8 +67,8 @@ export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberP
     countryTaxNumber.push({
       country: "",
       explanation: "",
-      taxIdNumber: "",
-      noTaxIdNumber: false,
+      tinNumber: "",
+      noTin: false,
       reason: NO_TIN_OPTIONS[0].value,
     });
     setInputTaxIdNumber(countryTaxNumber);
@@ -79,7 +79,7 @@ export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberP
       <Fragment>
         <CustomSpacer space={sh32} />
         <TextSpaceArea spaceToBottom={sh16} style={{ ...fs16RegBlack2, ...px(sw24) }} text={DECLARATION.LABEL_DECLARE_COUNTRY} />
-        {inputTaxIdNumber.map((item: IDeclarationTaxNumber, index: number) => {
+        {inputTaxIdNumber.map((item: ITinState, index: number) => {
           const handleCountry = (input: string) => {
             const updatedCountry = [...inputTaxIdNumber];
             updatedCountry[index].country = input;
@@ -94,7 +94,7 @@ export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberP
 
           const handleTaxNumber = (input: string) => {
             const updatedTaxNumber = [...inputTaxIdNumber];
-            updatedTaxNumber[index].taxIdNumber = input;
+            updatedTaxNumber[index].tinNumber = input;
             setInputTaxIdNumber(updatedTaxNumber);
           };
 
@@ -117,7 +117,7 @@ export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberP
             const updatedTaxNumber = [...inputTaxIdNumber];
             const [initial] = NO_TIN_OPTIONS;
             updatedTaxNumber[index].reason = initial.value;
-            updatedTaxNumber[index].noTaxIdNumber = !updatedTaxNumber[index].noTaxIdNumber;
+            updatedTaxNumber[index].noTin = !updatedTaxNumber[index].noTin;
             setInputTaxIdNumber(updatedTaxNumber);
           };
 
@@ -129,10 +129,10 @@ export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberP
                     items={DICTIONARY_COUNTRIES}
                     label={DECLARATION.LABEL_SELECT_COUNTRY}
                     handleChange={handleCountry}
-                    value={inputTaxIdNumber[index].country}
+                    value={inputTaxIdNumber[index].country!}
                   />
                   <CustomSpacer space={sh32} />
-                  <CustomTextInput label={DECLARATION.LABEL_TIN} onChangeText={handleTaxNumber} value={item.taxIdNumber} />
+                  <CustomTextInput label={DECLARATION.LABEL_TIN} onChangeText={handleTaxNumber} value={item.tinNumber!} />
                   <Fragment>
                     <CustomSpacer space={sh16} />
                     {index !== 0 ? null : (
@@ -140,10 +140,10 @@ export const TaxIdentificationNumber: FunctionComponent<TaxIdentificationNumberP
                         label={DECLARATION.LABEL_NO_TIN}
                         labelStyle={fs12BoldBlack2}
                         onPress={handleNoTaxNumber}
-                        toggle={item.noTaxIdNumber}
+                        toggle={item.noTin!}
                       />
                     )}
-                    {item.noTaxIdNumber ? (
+                    {item.noTin! ? (
                       <View style={px(sw32)}>
                         <CustomSpacer space={sh12} />
                         <AdvanceRadioGroup options={NO_TIN_OPTIONS} selected={item.reason!} setSelected={handleReason} />

@@ -23,6 +23,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addSelectedFund,
   filters,
   finishedSteps,
+  handleCancelOnboarding,
   handleNextStep,
   investmentDetails,
   selectedFunds,
@@ -62,7 +63,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleCancel = () => {
-    setPage(0);
+    return page === 1 ? setPage(0) : addSelectedFund([]);
   };
 
   const handleBack = () => {
@@ -93,6 +94,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   let screen = {
     content: (
       <ProductList
+        handleCancelOnboarding={handleCancelOnboarding!}
         handleShareDocuments={handleShareDocuments}
         productList={productList}
         selectedFilter={filters}

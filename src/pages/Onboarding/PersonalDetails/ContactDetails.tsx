@@ -9,8 +9,8 @@ import { centerVertical, colorBlack, flexRow, px, py, sh16, sh24, sh32, sh8, sw1
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface ContactDetailsProps {
-  contactNumber: IContactNumber[];
-  setContactNumber: (input: IContactNumber[]) => void;
+  contactNumber: IContactNumberState[];
+  setContactNumber: (input: IContactNumberState[]) => void;
 }
 
 interface IContactNumberLabel {

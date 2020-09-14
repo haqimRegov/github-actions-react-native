@@ -69,7 +69,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
 
   const defaultLabelStyle: TextStyle = { ...fs16BoldBlack2, ...labelStyle };
   const defaultPlaceholderStyle: TextStyle = { ...fs16BoldBlack2, color: colorGray._7, ...placeholderStyle };
-  const valueStyle = value !== "" ? defaultLabelStyle : defaultPlaceholderStyle;
+  const valueStyle = value === "" || value === undefined ? defaultPlaceholderStyle : defaultLabelStyle;
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
 

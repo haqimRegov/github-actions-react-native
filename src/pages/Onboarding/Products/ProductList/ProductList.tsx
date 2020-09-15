@@ -22,12 +22,11 @@ import {
   sh56,
   shadow5,
   sw102,
-  sw109,
-  sw234,
+  sw104,
   sw24,
+  sw240,
   sw72,
-  sw83,
-  sw90,
+  sw88,
 } from "../../../../styles";
 import { ProductGraph } from "./Graph";
 import { ProductHeader } from "./Header";
@@ -127,7 +126,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
         name: "arrow-down",
       },
       viewStyle: {
-        width: sw234,
+        width: sw240,
       },
       title: PRODUCT_LIST.LABEL_COLUMN_NAME,
     },
@@ -137,7 +136,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       },
       key: [{ key: "fundType", textStyle: fsUppercase }],
       viewStyle: {
-        width: sw83,
+        width: sw88,
       },
       title: PRODUCT_LIST.LABEL_COLUMN_FUND_TYPE,
     },
@@ -147,7 +146,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       },
       key: [{ key: "riskCategory" }],
       viewStyle: {
-        width: sw102,
+        width: sw104,
       },
       title: PRODUCT_LIST.LABEL_COLUMN_RISK,
     },
@@ -167,7 +166,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       },
       key: [{ key: "isShariah" }],
       viewStyle: {
-        width: sw90,
+        width: sw88,
       },
       title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
     },
@@ -177,7 +176,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
       },
       key: [{ key: "performanceOverview" }],
       viewStyle: {
-        width: sw109,
+        width: sw102,
       },
       title: PRODUCT_LIST.LABEL_COLUMN_PERFORMANCE,
       onPressItem: handleShowPerformance,

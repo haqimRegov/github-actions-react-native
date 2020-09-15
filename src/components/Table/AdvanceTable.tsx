@@ -15,6 +15,7 @@ interface AdvanceTableProps {
   RenderOptions?: (props: ITableOptions) => JSX.Element;
   rowSelection?: ITableData[];
   rowSelectionLabel?: string;
+  spaceToHeader?: number;
 }
 
 export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
@@ -26,11 +27,12 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   RenderOptions,
   rowSelection,
   rowSelectionLabel,
+  spaceToHeader,
 }: AdvanceTableProps) => {
   return (
     <View>
       <TableHeader columns={columns} rowSelectionLabel={rowSelectionLabel} withActions={RenderOptions !== undefined} />
-      <CustomSpacer space={sh16} />
+      <CustomSpacer space={spaceToHeader || sh16} />
       {data.map((row: ITableData, index: number) => {
         return (
           <AdvanceTableRow

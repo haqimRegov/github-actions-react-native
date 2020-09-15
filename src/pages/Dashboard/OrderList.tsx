@@ -23,6 +23,14 @@ export const OrderList: FunctionComponent<OrderListProps> = ({ navigation, handl
     handleRoute("OrderDetails");
   };
 
+  const handlePersonalDocuments = () => {
+    handleRoute("UploadDocuments");
+  };
+
+  const handleUploadHardCopy = () => {
+    handleRoute("UploadHardCopy");
+  };
+
   return (
     <DashboardLayout navigation={navigation}>
       <View style={flexChild}>
@@ -35,6 +43,10 @@ export const OrderList: FunctionComponent<OrderListProps> = ({ navigation, handl
         <RoundedButton onPress={handleOnboarding} text="Jump to Onboarding" buttonStyle={alignSelfCenter} />
         <CustomSpacer space={sh24} />
         <RoundedButton onPress={handleOrder} text="Order Details" buttonStyle={alignSelfCenter} />
+        <CustomSpacer space={sh24} />
+        <RoundedButton onPress={handlePersonalDocuments} text="Upload Docs" buttonStyle={alignSelfCenter} />
+        <CustomSpacer space={sh24} />
+        <RoundedButton onPress={handleUploadHardCopy} text="Upload Hard Copy Docs" buttonStyle={alignSelfCenter} />
       </View>
     </DashboardLayout>
   );

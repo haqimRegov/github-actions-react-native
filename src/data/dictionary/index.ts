@@ -1,5 +1,6 @@
 export * from "./account-type";
 export * from "./banks";
+export * from "./branches";
 export * from "./business-nature";
 export * from "./countries";
 export * from "./currency";

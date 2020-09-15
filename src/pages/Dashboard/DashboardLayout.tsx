@@ -9,6 +9,7 @@ import { AddClient } from "./AddClient";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  hideQuickActions?: boolean;
   navigation: StackNavigationProp<RootNavigatorType>;
   title?: string;
   titleIcon?: string;
@@ -17,6 +18,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   children,
+  hideQuickActions,
   navigation,
   title,
   titleIcon,
@@ -73,7 +75,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
               ) : null}
               {title !== undefined ? <Text style={fs24BoldBlack2}>{title}</Text> : null}
               <CustomFlexSpacer />
-              <QuickActions actions={QUICK_ACTIONS} />
+              {hideQuickActions === true ? null : <QuickActions actions={QUICK_ACTIONS} />}
             </View>
           </View>
           {children}

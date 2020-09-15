@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorWhite } from "./colors";
-import { sh10, sh12, sh13, sh14, sh16, sh24, sh40 } from "./sizes";
+import { sh10, sh12, sh13, sh14, sh16, sh18, sh24, sh40 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsUppercase: TextStyle = {
@@ -123,6 +123,12 @@ export const fs12RegWhite1: TextStyle = {
   fontSize: sh12,
 };
 
+export const fs12RegBlue65: TextStyle = {
+  color: colorBlue._6_5,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+};
+
 export const fs13BoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoBold,
@@ -144,6 +150,12 @@ export const fs14BoldBlack2: TextStyle = {
 export const fs14RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
+  fontSize: sh14,
+};
+
+export const fs14SemiBoldBlack1: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoSemiBold,
   fontSize: sh14,
 };
 
@@ -217,6 +229,12 @@ export const fs16SemiBoldWhite1: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
+};
+
+export const fs18BoldBlack2: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoBold,
+  fontSize: sh18,
 };
 
 export const fs24BoldBlack1: TextStyle = {

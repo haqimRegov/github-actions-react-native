@@ -3,7 +3,7 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
-import { centerVertical, flexRow, fs12RegBlue25, sh16, sw20, sw4, sw56, sw8 } from "../../styles";
+import { centerVertical, colorTransparent, flexRow, fs12RegBlue25, sw1, sw20, sw4, sw56, sw8, sw9 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 const { PRODUCT_LIST } = Language.PAGE;
@@ -18,7 +18,8 @@ export const TableHeader: FunctionComponent<TableHeaderProps> = ({ columns, rowS
   const tableHeaderStyle: ViewStyle = {
     ...flexRow,
     ...centerVertical,
-    height: sh16,
+    borderWidth: sw1,
+    borderColor: colorTransparent,
   };
 
   const headerLetterSpacing = { letterSpacing: -0.33 };
@@ -26,18 +27,20 @@ export const TableHeader: FunctionComponent<TableHeaderProps> = ({ columns, rowS
 
   return (
     <View style={tableHeaderStyle}>
-      <View style={{ width: sw56, ...flexRow }}>
-        <CustomSpacer isHorizontal={true} space={sw20} />
-        {rowSelectionLabel !== undefined ? <Text style={{ ...fs12RegBlue25, ...headerLetterSpacing }}>{rowSelectionLabel}</Text> : null}
-      </View>
+      {rowSelectionLabel !== undefined ? (
+        <View style={{ width: sw56, ...flexRow }}>
+          <CustomSpacer isHorizontal={true} space={sw20} />
+          <Text style={{ ...fs12RegBlue25, ...headerLetterSpacing }}>{rowSelectionLabel}</Text>
+        </View>
+      ) : null}
       {tableColumns.map((item: ITableColumn, index: number) => {
         const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...item.viewStyle };
-        const textStyle: TextStyle = { ...fs12RegBlue25, ...headerLetterSpacing, ...item.textStyle };
+        const textStyle: TextStyle = { ...fs12RegBlue25, ...headerLetterSpacing, ...item.textStyle, ...item.titleStyle };
 
         return (
           <TouchableWithoutFeedback key={index} onPress={item.onPressHeader}>
             <View style={headerStyle}>
-              <CustomSpacer isHorizontal={true} space={sw8} />
+              <CustomSpacer isHorizontal={true} space={index === 0 ? sw8 : sw9} />
               <Text style={textStyle}>{item.title}</Text>
               {item.icon === undefined ? null : (
                 <Fragment>

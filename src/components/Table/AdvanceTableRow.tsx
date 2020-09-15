@@ -25,7 +25,7 @@ import {
   sw16,
   sw20,
   sw4,
-  sw56,
+  sw64,
   sw8,
 } from "../../styles";
 import { CheckBox } from "../CheckBox";
@@ -64,13 +64,6 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
     backgroundColor: colorWhite._1,
     minHeight: sh80,
   };
-  const rowContainer: ViewStyle = {
-    ...flexRow,
-  };
-
-  const rowStyle: ViewStyle = {
-    ...border(colorGray._4, sw1, sw12),
-  };
 
   const handleSelectRow = () => {
     if (onRowSelect !== undefined) {
@@ -86,7 +79,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   return (
     <View>
       {index === 0 ? null : <CustomSpacer space={sh8} />}
-      <View style={rowContainer}>
+      <View style={flexRow}>
         {rowSelection === undefined ? null : (
           <TouchableWithoutFeedback onPress={handleSelectRow}>
             <View style={{ height: sh80, ...centerHV }}>
@@ -94,7 +87,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
             </View>
           </TouchableWithoutFeedback>
         )}
-        <View style={rowStyle}>
+        <View style={border(colorGray._4, sw1, sw12)}>
           <View style={itemContainer}>
             {columns.map((column: ITableColumn, columnIndex: number) => {
               const dataKey = column.key.map((key: ITableItemKey) => key);
@@ -144,10 +137,18 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 return itemData;
               });
 
+              const itemStyle: ViewStyle = {
+                ...flexRow,
+                ...centerVertical,
+                ...itemBorderLeft,
+                ...px(sw8),
+                ...column.viewStyle,
+                ...column.itemStyle,
+              };
               return (
                 <TouchableWithoutFeedback key={columnIndex} onPress={handlePressColumnItem}>
-                  <View style={{ ...flexRow, ...itemBorderLeft }}>
-                    <View style={{ ...flexRow, ...centerVertical, ...px(sw8), ...column.viewStyle, ...column.itemStyle }}>
+                  <View style={flexRow}>
+                    <View style={itemStyle}>
                       <View>
                         {itemLabel.map((label: IColumnItem, labelIndex: number) => {
                           return (
@@ -177,7 +178,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
               );
             })}
             {RenderOptions !== undefined ? (
-              <View style={{ ...flexRowCC, ...borderLeftGray4, width: sw56 }}>
+              <View style={{ ...flexRowCC, ...borderLeftGray4, width: sw64 }}>
                 <MenuPopup
                   RenderButton={({ show }) => {
                     return (
@@ -206,6 +207,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
             </Collapsible>
           ) : null}
         </View>
+        <CustomSpacer isHorizontal={true} space={sw16} />
       </View>
     </View>
   );

@@ -35,6 +35,7 @@ import { ProductOptions } from "./Options";
 const { PRODUCT_LIST } = Language.PAGE;
 
 interface ProductListProps {
+  handleCancelOnboarding: () => void;
   handleShareDocuments: (fund: IFund) => void;
   productList: IFund[];
   selectedFilter: IProductFilter;
@@ -46,6 +47,7 @@ interface ProductListProps {
 }
 
 export const ProductList: FunctionComponent<ProductListProps> = ({
+  handleCancelOnboarding,
   handleShareDocuments,
   productList,
   selectedFilter,
@@ -77,10 +79,6 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
   };
 
   const handlePrev = () => {
-    Alert.alert("handlePress");
-  };
-
-  const handleCancel = () => {
     Alert.alert("handlePress");
   };
 
@@ -257,7 +255,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
             {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
             {selectedFunds.length === 0 ? (
               <View style={{ ...px(sw24), ...py(sh56) }}>
-                <RoundedButton onPress={handleCancel} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
+                <RoundedButton onPress={handleCancelOnboarding} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
               </View>
             ) : null}
           </Fragment>

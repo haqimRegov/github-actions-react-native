@@ -15,8 +15,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
       };
     case "client/RESET_DETAILS":
       return {
-        ...state,
-        details: clientInitialState.details,
+        ...clientInitialState,
       };
 
     default:

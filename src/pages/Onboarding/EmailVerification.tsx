@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import React, { Fragment, FunctionComponent } from "react";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, CustomTextInput, LinkText, TextSpaceArea } from "../../components";
@@ -9,28 +9,41 @@ import { flexRow, fs12RegBlack2, fs16SemiBoldBlack2, fs16SemiBoldBlue1, px, sh16
 
 const { EMAIL_VERIFICATION } = Language.PAGE;
 
-interface EmailVerificationProps extends PersonalInfoStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
-}
+interface EmailVerificationProps extends OnboardingContentProps, PersonalInfoStoreProps {}
 
 const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
+  accountType,
   addPersonalInfo,
+  handleCancelOnboarding,
   handleNextStep,
+  personalInfo,
 }: EmailVerificationProps) => {
-  const [inputEmail, setInputEmail] = useState<string>("");
+  const { joint, principal } = personalInfo!;
 
-  const handleCancel = () => {
-    Alert.alert("Cancel");
-  };
+  const inputPrincipalEmail = principal!.contactDetails!.emailAddress!;
+  const inputJointEmail = joint!.contactDetails!.emailAddress!;
+
+  const setInputPrincipalEmail = (value: string) =>
+    addPersonalInfo({
+      ...personalInfo,
+      principal: { ...principal, contactDetails: { ...principal?.contactDetails, emailAddress: value } },
+    });
+
+  const setInputJointEmail = (value: string) =>
+    addPersonalInfo({
+      ...personalInfo,
+      joint: { ...joint, contactDetails: { ...joint?.contactDetails, emailAddress: value } },
+    });
 
   const handleContinue = () => {
     handleNextStep("IdentityVerification");
-    addPersonalInfo({ principal: { contactDetails: { emailAddress: inputEmail } } });
   };
+
+  const principalEmailLabel = accountType === "Individual" ? EMAIL_VERIFICATION.LABEL_EMAIL : EMAIL_VERIFICATION.LABEL_EMAIL_PRINCIPAL;
 
   return (
     <ContentPage
-      handleCancel={handleCancel}
+      handleCancel={handleCancelOnboarding!}
       handleContinue={handleContinue}
       noBounce={true}
       subheading={EMAIL_VERIFICATION.HEADING}
@@ -39,12 +52,25 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         <CustomSpacer space={sh24} />
         <CustomTextInput
           autoCapitalize="none"
-          label={EMAIL_VERIFICATION.LABEL_EMAIL}
-          onChangeText={setInputEmail}
+          label={principalEmailLabel}
+          onChangeText={setInputPrincipalEmail}
           spaceToBottom={sh8}
-          value={inputEmail}
+          value={inputPrincipalEmail}
         />
         <Text style={{ ...fs12RegBlack2, ...px(sw12) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
+        {accountType === "Individual" ? null : (
+          <Fragment>
+            <CustomSpacer space={sh32} />
+            <CustomTextInput
+              autoCapitalize="none"
+              label={EMAIL_VERIFICATION.LABEL_EMAIL_JOINT}
+              onChangeText={setInputJointEmail}
+              spaceToBottom={sh8}
+              value={inputJointEmail}
+            />
+            <Text style={{ ...fs12RegBlack2, ...px(sw12) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
+          </Fragment>
+        )}
         <CustomSpacer space={sh32} />
         <View style={flexRow}>
           <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>

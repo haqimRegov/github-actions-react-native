@@ -17,4 +17,5 @@ export * from "./otp";
 export * from "./personal";
 export * from "./product-filter";
 export * from "./races";
+export * from "./relationship";
 export * from "./states";

@@ -31,8 +31,8 @@ import {
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface IForeignBankDetailsProps {
-  bankingDetails: IBankingDetails[];
-  setBankingDetails: (input: IBankingDetails[]) => void;
+  bankingDetails: IBankDetailsState[];
+  setBankingDetails: (input: IBankDetailsState[]) => void;
 }
 
 export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = ({
@@ -41,10 +41,10 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
 }: IForeignBankDetailsProps) => {
   return (
     <View>
-      {bankingDetails.map((item: IBankingDetails, index: number) => {
+      {bankingDetails.map((item: IBankDetailsState, index: number) => {
         const handleAddCurrency = () => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].currency.push("");
+          updatedDetails[index].currency!.push("");
           setBankingDetails(updatedDetails);
         };
 
@@ -68,13 +68,13 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
 
         const handleAccountName = (input: string) => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].accountName = input;
+          updatedDetails[index].bankAccountName = input;
           setBankingDetails(updatedDetails);
         };
 
         const handleAccountNumber = (input: string) => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].accountNumber = input;
+          updatedDetails[index].bankAccountNumber = input;
           setBankingDetails(updatedDetails);
         };
 
@@ -86,7 +86,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
 
         const foreignBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}`;
 
-        const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency.includes(filteredCurrency.value));
+        const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency!.includes(filteredCurrency.value));
 
         return (
           <View key={index}>
@@ -97,9 +97,9 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
             </View>
             <CustomSpacer space={sh16} />
             <View style={px(sw24)}>
-              {item.currency.map((value: TypeBankCurrency, currencyIndex: number) => {
+              {item.currency!.map((value: string, currencyIndex: number) => {
                 const handleRemoveCurrency = () => {
-                  const updatedCurrency = [...item.currency];
+                  const updatedCurrency = [...item.currency!];
                   updatedCurrency.splice(currencyIndex, 1);
                   const updatedBankingDetails = [...bankingDetails];
                   updatedBankingDetails[index].currency = updatedCurrency;
@@ -107,7 +107,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 };
 
                 const handleOtherCurrency = (input: string) => {
-                  const updatedCurrency = [...bankingDetails[index].currency];
+                  const updatedCurrency = [...bankingDetails[index].currency!];
                   updatedCurrency[currencyIndex] = input as TypeBankCurrency;
                   const updatedBankingDetails = [...bankingDetails];
                   updatedBankingDetails[index].currency = updatedCurrency;
@@ -132,7 +132,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                   </Fragment>
                 );
               })}
-              {item.currency.length === DICTIONARY_CURRENCY.length ? null : (
+              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
                   <OutlineButton icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
@@ -149,14 +149,14 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                 onChangeText={handleAccountName}
                 spaceToTop={sh32}
-                value={item.accountName}
+                value={item.bankAccountName}
               />
               <CustomTextInput
                 keyboardType="numeric"
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
                 onChangeText={handleAccountNumber}
                 spaceToTop={sh32}
-                value={item.accountNumber}
+                value={item.bankAccountNumber}
               />
               <AdvancedDropdown
                 items={DICTIONARY_COUNTRIES}

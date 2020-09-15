@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { ScrollView, Text, TextStyle, View } from "react-native";
 
 import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
-import { flexGrow, fs16SemiBoldBlack2, fs24BoldBlack2, fs40BoldBlack2, px, sh36, sh56, sh8, sw24 } from "../../styles";
+import { flexGrow, fs16SemiBoldBlack2, fs24BoldBlack2, fs40BoldBlack2, px, sh32, sh56, sh8, sw24 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
 
 interface ContentPageProps extends ActionButtonsProps {
@@ -35,7 +35,7 @@ export const ContentPage = ({
   subtitleStyle,
   ...rest
 }: ContentPageProps) => {
-  const topSpace = spaceToTop !== undefined ? spaceToTop : sh36;
+  const topSpace = spaceToTop !== undefined ? spaceToTop : sh32;
   const subheadingTopSpace = spaceToHeading !== undefined ? spaceToHeading : sh8;
   const subtitleTopSpace = spaceToTitle !== undefined ? spaceToTitle : sh8;
   const actionButtonProps: ActionButtonsProps = {

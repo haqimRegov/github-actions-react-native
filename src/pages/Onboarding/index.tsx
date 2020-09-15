@@ -3,7 +3,12 @@ import { connect } from "react-redux";
 
 import { OnboardingSteps } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { OnboardingStepsMapDispatchToProps, OnboardingStepsMapStateToProps, OnboardingStepsStoreProps } from "../../store";
+import {
+  OnboardingStepsMapDispatchToProps,
+  OnboardingStepsMapStateToProps,
+  OnboardingStepsStoreProps,
+  PersonalInfoStoreProps,
+} from "../../store";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
@@ -41,12 +46,12 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
 ];
 
-interface OnboardingProps extends OnboardingStepsStoreProps {
+interface OnboardingPageProps extends OnboardingStepsStoreProps, PersonalInfoStoreProps {
   navigation: IStackNavigationProp;
 }
 
-const OnboardingPageComponent: FunctionComponent<OnboardingProps> = (props: OnboardingProps) => {
-  const { finishedSteps, navigation } = props;
+const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: OnboardingPageProps) => {
+  const { finishedSteps, navigation, resetClientDetails, resetPersonalInfo, updateFinishedSteps } = props;
 
   const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
@@ -74,14 +79,16 @@ const OnboardingPageComponent: FunctionComponent<OnboardingProps> = (props: Onbo
             finishedSteps={finishedSteps}
             handleNextStep={handleNextStep}
             navigation={navigation}
+            resetClientDetails={resetClientDetails}
+            resetPersonalInfo={resetPersonalInfo}
             route={activeRoute}
-            setFinishedSteps={props.updateFinishedSteps}
+            setFinishedSteps={updateFinishedSteps}
           />
         );
       }}
       setActiveContent={setActiveContent}
       setActiveSection={setActiveSection}
-      setFinishedStep={props.updateFinishedSteps}
+      setFinishedStep={updateFinishedSteps}
       steps={ONBOARDING_DATA}
     />
   );

@@ -2,7 +2,7 @@ declare type IClientDetailsResponse = {
   id: string;
   idType: TypeClientID;
   countryOfBirth?: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   gender?: string;
   mailingAddress?: {
     address: string;

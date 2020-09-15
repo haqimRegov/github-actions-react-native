@@ -61,12 +61,10 @@ import { isObjectEqual } from "../../utils";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
-interface QuestionnaireContentProps extends OnboardingContentProps, RiskStoreProps {
-  navigation: IStackNavigationProp;
-}
+interface QuestionnaireContentProps extends OnboardingContentProps, RiskStoreProps {}
 
 const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
-  const { finishedSteps, handleNextStep, navigation, questionnaire, riskScore, setFinishedSteps } = props;
+  const { finishedSteps, handleCancelOnboarding, handleNextStep, questionnaire, riskScore, setFinishedSteps } = props;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
@@ -88,10 +86,6 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
   const setQ5 = (index: number) => props.addAssessmentQuestions({ questionFive: index });
   const setQ6 = (index: number) => props.addAssessmentQuestions({ questionSix: index });
   const setQ7 = (index: number) => props.addAssessmentQuestions({ questionSeven: index });
-
-  const handlePageCancel = () => {
-    navigation.goBack();
-  };
 
   const handleConfirmAssessment = () => {
     const updatedSteps: TypeOnboardingRoute[] = [...finishedSteps];
@@ -153,7 +147,7 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
   return (
     <Fragment>
       <ContentPage
-        handleCancel={handlePageCancel}
+        handleCancel={handleCancelOnboarding!}
         handleContinue={handlePageContinue}
         heading={RISK_ASSESSMENT.HEADING}
         subheading={RISK_ASSESSMENT.SUBHEADING}>

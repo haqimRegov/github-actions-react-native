@@ -31,8 +31,8 @@ import {
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface ILocalBankDetailsProps {
-  bankingDetails: IBankingDetails[];
-  setBankingDetails: (input: IBankingDetails[]) => void;
+  bankingDetails: IBankDetailsState[];
+  setBankingDetails: (input: IBankDetailsState[]) => void;
 }
 
 export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
@@ -41,7 +41,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 }: ILocalBankDetailsProps) => {
   return (
     <View>
-      {bankingDetails.map((item: IBankingDetails, index: number) => {
+      {bankingDetails.map((item: IBankDetailsState, index: number) => {
         const handleRemoveNumber = () => {
           const updatedDetails = [...bankingDetails];
           updatedDetails.splice(updatedDetails.indexOf(item), 1);
@@ -50,7 +50,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
         const handleAddCurrency = () => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].currency.push("");
+          updatedDetails[index].currency!.push("");
           setBankingDetails(updatedDetails);
         };
 
@@ -75,7 +75,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
         const handleAccountName = (input: string) => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].accountName = input;
+          updatedDetails[index].bankAccountName = input;
           setBankingDetails(updatedDetails);
         };
 
@@ -87,13 +87,13 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
         const handleAccountNumber = (input: string) => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].accountNumber = input;
+          updatedDetails[index].bankAccountNumber = input;
           setBankingDetails(updatedDetails);
         };
 
         const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} ${index + 1}`;
 
-        const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency.includes(filteredCurrency.value));
+        const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency!.includes(filteredCurrency.value));
 
         return (
           <View key={index}>
@@ -104,13 +104,13 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
             </View>
             <CustomSpacer space={sh16} />
             <View style={px(sw24)}>
-              <CustomTextInput disabled={true} label={PERSONAL_DETAILS.LABEL_CURRENCY} value={item.currency[0]} />
-              {item.currency
-                .filter((thisCurrency) => thisCurrency !== item.currency[0])
-                .map((value: TypeBankCurrency, currencyIndex: number) => {
+              <CustomTextInput disabled={true} label={PERSONAL_DETAILS.LABEL_CURRENCY} value={item.currency![0]} />
+              {item
+                .currency!.filter((thisCurrency) => thisCurrency !== item.currency![0])
+                .map((value: string, currencyIndex: number) => {
                   const handleRemoveCurrency = () => {
                     const updatedDetails = [...bankingDetails];
-                    const updatedCurrency = [...item.currency];
+                    const updatedCurrency = [...item.currency!];
                     updatedCurrency.splice(currencyIndex + 1, 1);
                     updatedDetails[index].currency = updatedCurrency;
                     setBankingDetails(updatedDetails);
@@ -118,7 +118,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
                   const handleOtherCurrency = (input: string) => {
                     const updatedDetails = [...bankingDetails];
-                    const updatedCurrency = [...bankingDetails[index].currency];
+                    const updatedCurrency = [...bankingDetails[index].currency!];
                     updatedCurrency[currencyIndex + 1] = input as TypeBankCurrency;
                     updatedDetails[index].currency = updatedCurrency;
                     setBankingDetails(updatedDetails);
@@ -141,7 +141,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                     </View>
                   );
                 })}
-              {item.currency.length === DICTIONARY_CURRENCY.length ? null : (
+              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
                   <OutlineButton icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
@@ -152,7 +152,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 items={DICTIONARY_MALAYSIA_BANK}
                 label={PERSONAL_DETAILS.LABEL_BANK_NAME}
                 spaceToTop={sh32}
-                value={item.bankName}
+                value={item.bankName!}
               />
               {item.bankName === "Others" ? (
                 <CustomTextInput
@@ -166,14 +166,14 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                 onChangeText={handleAccountName}
                 spaceToTop={sh32}
-                value={item.accountName}
+                value={item.bankAccountName}
               />
               <CustomTextInput
                 keyboardType="numeric"
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
                 onChangeText={handleAccountNumber}
                 spaceToTop={sh32}
-                value={item.accountNumber}
+                value={item.bankAccountNumber}
               />
               <CustomTextInput
                 label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}

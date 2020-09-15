@@ -9,12 +9,14 @@ import { DashboardPage, LoginPage, OnboardingPage } from "./pages";
 const { Navigator, Screen } = createStackNavigator();
 
 export const RootNavigator = () => {
+  const defaultOptions = { animationEnabled: false };
+
   return (
     <NavigationContainer>
       <Navigator initialRouteName="Login" headerMode="none">
-        <Screen name="Dashboard" component={DashboardPage} />
-        <Screen name="Login" component={LoginPage} />
-        <Screen name="Onboarding" component={OnboardingPage} />
+        <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
+        <Screen name="Login" component={LoginPage} options={defaultOptions} />
+        <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
       </Navigator>
     </NavigationContainer>
   );

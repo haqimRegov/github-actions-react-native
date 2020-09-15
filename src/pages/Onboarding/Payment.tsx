@@ -5,7 +5,7 @@ import { CustomButton } from "../../components";
 import { flexChild } from "../../styles";
 
 interface PaymentProps {
-  handleNextStep: (route: string) => void;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 export const Payment = (props: PaymentProps) => {

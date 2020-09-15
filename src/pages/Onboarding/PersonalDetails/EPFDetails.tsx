@@ -36,6 +36,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
           value={inputEpfType}
         />
       </View>
+      <CustomSpacer space={sh32} />
     </Fragment>
   );
 };

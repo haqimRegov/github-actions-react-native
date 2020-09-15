@@ -6,15 +6,14 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
     case "personalInfo/ADD_PERSONAL_INFO":
       return {
         ...state,
+        ...action.payload,
         principal: { ...state.principal, ...action.payload.principal },
         joint: { ...state.joint, ...action.payload.joint },
       };
 
     case "personalInfo/RESET_PERSONAL_INFO":
       return {
-        ...state,
-        principal: undefined,
-        joint: undefined,
+        ...personalInfoInitialState,
       };
 
     default:

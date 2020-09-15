@@ -29,7 +29,7 @@ import {
 const { SUMMARY } = Language.PAGE;
 
 interface SummaryDetailsProps {
-  accountHolder: "Principal" | "Joint";
+  accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
   additionalInfo: LabeledTitleProps[];
   contactDetails: LabeledTitleProps[];
@@ -37,6 +37,7 @@ interface SummaryDetailsProps {
   employmentDetails: LabeledTitleProps[];
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
+  handleNextStep: (route: TypeOnboardingRoute) => void;
   localBankDetails: LabeledTitleProps[][];
   mailingAddress: LabeledTitleProps[];
   name: string;
@@ -69,6 +70,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   employmentDetails,
   epfDetails,
   foreignBankDetails,
+  handleNextStep,
   localBankDetails,
   mailingAddress,
   name,
@@ -90,6 +92,22 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
 
   const headerTitle = accountHolder === "Principal" ? SUMMARY.TITLE_PRINCIPAL : SUMMARY.TITLE_JOINT;
 
+  const handleEditPersonalDetails = () => {
+    handleNextStep("IdentityVerification");
+  };
+
+  const handleEditOtherDetails = () => {
+    handleNextStep("PersonalDetails");
+  };
+
+  const handleEditEmploymentDetails = () => {
+    handleNextStep("EmploymentDetails");
+  };
+
+  const handleEditDeclaration = () => {
+    handleNextStep("Declaration");
+  };
+
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
@@ -100,30 +118,30 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           {accountType === "Individual" ? null : <Text style={fs16RegBlack2}>{headerTitle}</Text>}
         </View>
         <View style={borderBottomBlack21}>
-          <TitleIcon title={SUMMARY.TITLE_PERSONAL} />
+          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_PERSONAL} />
           <CardWrap data={personalDetails} />
         </View>
         <View style={borderBottomBlack21}>
-          <TitleIcon title={SUMMARY.LABEL_ADDITIONAL} />
+          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.LABEL_ADDITIONAL} />
           <CardWrap data={additionalInfo} />
         </View>
         <View style={borderBottomBlack21}>
-          <TitleIcon title={SUMMARY.TITLE_ADDRESS} />
+          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} />
           <CardWrap data={permanentAddress} />
           <CardWrap data={mailingAddress} />
         </View>
         <View style={borderBottomBlack21}>
-          <TitleIcon title={SUMMARY.TITLE_CONTACT} />
+          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_CONTACT} />
           <CardWrap data={contactDetails} />
         </View>
         {epfDetails !== undefined && epfDetails.length !== 0 ? (
           <View style={borderBottomBlack21}>
-            <TitleIcon title={SUMMARY.TITLE_EPF} />
+            <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_EPF} />
             <CardWrap data={epfDetails} />
           </View>
         ) : null}
         <View style={borderBottomBlack21}>
-          <TitleIcon title={SUMMARY.TITLE_BANK} />
+          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} />
           {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
             const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
             return (
@@ -156,11 +174,11 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           })}
         </View>
         <View style={borderBottomBlack21}>
-          <TitleIcon title={SUMMARY.TITLE_EMPLOYMENT} />
+          <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} />
           <CardWrap data={employmentDetails} />
         </View>
         <View>
-          <TitleIcon title={SUMMARY.TITLE_FATCA} />
+          <TitleIcon onPress={handleEditDeclaration} title={SUMMARY.TITLE_FATCA} />
           <CardWrap data={declarationDetails} />
         </View>
       </View>

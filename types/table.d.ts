@@ -37,6 +37,7 @@ declare interface ITableColumn {
   prefix?: ITableItemPrefix[];
   textStyle?: import("react-native").ViewStyle;
   title: string;
+  titleStyle?: import("react-native").TextStyle;
   type?: "checkbox" | "radio";
   viewStyle?: import("react-native").ViewStyle;
   withAccordion?: boolean;

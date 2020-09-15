@@ -10,7 +10,7 @@ import {
   DICTIONARY_HOUSEHOLD_INCOME,
   DICTIONARY_OCCUPATION,
 } from "../../../data/dictionary";
-import { fs12SemiBoldGray8, px, sh24, sh32, sh8, sw16, sw24 } from "../../../styles";
+import { fs12SemiBoldGray8, px, sh122, sh24, sh32, sh8, sw16, sw24 } from "../../../styles";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
 interface EmploymentInfoProps {
@@ -98,6 +98,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
         items={DICTIONARY_COUNTRIES}
         handleChange={setInputCountry}
         label={EMPLOYMENT_DETAILS.LABEL_COUNTRY}
+        style={{ height: sh122 }}
         value={inputCountry}
       />
     </View>

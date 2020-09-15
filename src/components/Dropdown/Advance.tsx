@@ -41,6 +41,7 @@ export interface AdvancedDropdownProps {
   placeholderStyle?: TextStyle;
   spaceToLabel?: number;
   spaceToTop?: number;
+  style?: ViewStyle;
   value: string;
 }
 
@@ -53,6 +54,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
   placeholderStyle,
   spaceToLabel,
   spaceToTop,
+  style,
   value,
 }: AdvancedDropdownProps) => {
   const baseDropdownStyle: ViewStyle = {
@@ -119,6 +121,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
               backgroundColor: colorWhite._1,
               borderBottomLeftRadius: sw24,
               borderBottomRightRadius: sw24,
+              ...style,
             };
 
             return (

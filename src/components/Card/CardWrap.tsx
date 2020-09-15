@@ -1,31 +1,62 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { flexRow, flexWrap, fs10BoldBlack2, fs16BoldBlack1, fsCapitalize, sh16, sh8, sw144, sw24, sw240, sw32, sw8 } from "../../styles";
+import {
+  flexCol,
+  flexRow,
+  flexWrap,
+  fs10BoldBlack2,
+  fs16BoldBlack1,
+  fsCapitalize,
+  sh16,
+  sh8,
+  sw144,
+  sw16,
+  sw24,
+  sw240,
+  sw32,
+  sw8,
+} from "../../styles";
 import { LabeledTitle, LabeledTitleProps } from "../Views/LabeledTitle";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface CardWrapProps {
   data: LabeledTitleProps[];
+  direction?: "row" | "column";
   itemStyle?: ViewStyle;
   labelStyle?: TextStyle;
   style?: ViewStyle;
+  spaceBetween?: number;
+  noInitialSpace?: boolean;
   titleStyle?: TextStyle;
 }
-export const CardWrap: FunctionComponent<CardWrapProps> = ({ data, itemStyle, labelStyle, style, titleStyle }: CardWrapProps) => {
+export const CardWrap: FunctionComponent<CardWrapProps> = ({
+  data,
+  direction,
+  itemStyle,
+  labelStyle,
+  noInitialSpace,
+  spaceBetween,
+  style,
+  titleStyle,
+}: CardWrapProps) => {
   // TODO this component is created for personal information summary
   // TODO spacing in between items is constant
 
+  const defaultDirection = direction === "column" ? flexCol : flexRow;
   return (
-    <View style={{ ...flexRow, ...flexWrap, ...style }}>
+    <View style={{ ...defaultDirection, ...flexWrap, ...style }}>
       {data.map((item: LabeledTitleProps, index: number) => {
         const itemDefaultStyle: ViewStyle = { marginBottom: sh16, width: sw240, ...itemStyle, ...item.style };
+        const initialSpace = index === 0 ? sw32 : sw8;
+
         return (
           <Fragment key={index}>
-            {index === 0 ? <CustomSpacer isHorizontal={true} space={sw32} /> : <CustomSpacer isHorizontal={true} space={sw8} />}
+            {noInitialSpace === true ? null : <CustomSpacer isHorizontal={true} space={initialSpace} />}
             <View style={itemDefaultStyle}>
               <LabeledTitle
                 {...item}
+                iconSize={sw16}
                 labelStyle={{ ...fs10BoldBlack2, ...labelStyle, ...item.labelStyle }}
                 onPress={item.onPress}
                 spaceToLabel={sh8}
@@ -33,7 +64,7 @@ export const CardWrap: FunctionComponent<CardWrapProps> = ({ data, itemStyle, la
                 titleStyle={{ ...fs16BoldBlack1, ...fsCapitalize, ...titleStyle, ...item.titleStyle }}
               />
             </View>
-            {index === data.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw24} />}
+            {index === data.length - 1 ? null : <CustomSpacer isHorizontal={true} space={spaceBetween || sw24} />}
           </Fragment>
         );
       })}

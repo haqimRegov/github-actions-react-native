@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, SafeAreaPage, SideMenuV2 } from "../../components";
 import { flexRow, fullHW, sw200 } from "../../styles";
+import { UploadDocuments, UploadHardCopy } from "./Documents";
 import { OrderDetails } from "./OrderDetails";
 import { OrderList } from "./OrderList";
 
@@ -17,16 +18,17 @@ export const DashboardPage: FunctionComponent<DashboardPageProps> = ({ navigatio
     setRoute(nextPage);
   };
 
-  let content: JSX.Element = <View />;
-
   const props = { handleRoute: handleRoute, navigation: navigation };
+  let content: JSX.Element = <OrderList {...props} />;
 
-  switch (route) {
-    case "OrderDetails":
-      content = <OrderDetails {...props} />;
-      break;
-    default:
-      content = <OrderList {...props} />;
+  if (route === "OrderDetails") {
+    content = <OrderDetails {...props} />;
+  }
+  if (route === "UploadDocuments") {
+    content = <UploadDocuments {...props} />;
+  }
+  if (route === "UploadHardCopy") {
+    content = <UploadHardCopy {...props} />;
   }
 
   return (

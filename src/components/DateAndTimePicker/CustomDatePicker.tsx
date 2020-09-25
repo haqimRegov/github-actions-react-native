@@ -35,6 +35,7 @@ interface CustomDatePickerProps {
   maximumDate?: Date;
   minimumDate?: Date;
   mode: "date" | "time";
+  placeholder?: string;
   selectedFormat?: string;
   setValue: (value: Date) => void;
   value?: Date;
@@ -49,6 +50,7 @@ export const CustomDatePicker = ({
   keyboardAvoidingRef,
   minimumDate,
   maximumDate,
+  placeholder,
   selectedFormat,
   setValue,
   value,
@@ -75,7 +77,7 @@ export const CustomDatePicker = ({
   };
 
   const icon = mode === "date" ? "calendar" : "clock";
-  const placeholder = mode === "date" ? DATE_PICKER.PLACEHOLDER_DATE : DATE_PICKER.PLACEHOLDER_TIME;
+  const defaultPlaceholder = mode === "date" ? DATE_PICKER.PLACEHOLDER_DATE : DATE_PICKER.PLACEHOLDER_TIME;
 
   const baseDropdownStyle: ViewStyle = {
     backgroundColor: colorTransparent,
@@ -132,7 +134,7 @@ export const CustomDatePicker = ({
             <View style={containerStyle}>
               <CustomTextInput
                 editable={false}
-                placeholder={placeholder}
+                placeholder={placeholder || defaultPlaceholder}
                 rightIcon={icon}
                 value={selectedValue}
                 viewStyle={baseInputStyle}

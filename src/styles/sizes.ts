@@ -1,5 +1,7 @@
 import { scaleHeight, scaleWidth } from "./scaler";
 
+export const sh033 = scaleHeight(0.33);
+export const sh02 = scaleHeight(0.2);
 export const sh05 = scaleHeight(0.5);
 export const sh1 = scaleHeight(1);
 export const sh4 = scaleHeight(4);

@@ -46,7 +46,7 @@ export const LinkTextGroup = ({ direction, divider, links, noDividier, spaceToDi
                 {noDividier === true ? null : linkDivider}
               </Fragment>
             )}
-            <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />
+            {index === 0 ? null : <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />}
             <LinkText {...link} />
           </Fragment>
         );

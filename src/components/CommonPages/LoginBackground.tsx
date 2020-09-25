@@ -11,8 +11,8 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  py,
   sh16,
+  sh32,
   sh56,
   sh64,
   sw16,
@@ -20,6 +20,7 @@ import {
   sw4,
   sw532,
   sw56,
+  sw8,
 } from "../../styles";
 import { LinkTextGroup, LinkTextProps } from "../Touchables";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
@@ -108,7 +109,8 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
           </View>
           <CustomSpacer isHorizontal={true} space={sw16} />
           <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
-            <View style={{ ...flexChild, ...py(sh56) }}>
+            <View style={flexChild}>
+              <CustomSpacer space={sh32} />
               <View style={flexRow}>
                 <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
                 <CustomFlexSpacer />
@@ -120,8 +122,9 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
               {children}
               <CustomFlexSpacer />
               <View style={flexRow}>
-                <LinkTextGroup links={bottomLinks} spaceToDivider={sw4} />
+                <LinkTextGroup links={bottomLinks} spaceToDivider={sw8} />
               </View>
+              <CustomSpacer space={sh56} />
             </View>
           </SafeAreaPage>
         </View>

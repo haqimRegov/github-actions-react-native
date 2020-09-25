@@ -7,19 +7,23 @@ import {
   centerVertical,
   colorBlack,
   colorGray,
+  colorRed,
   colorTransparent,
   colorWhite,
   flexChild,
   flexRow,
   fs12BoldBlack2,
+  fs12SemiBoldRed2,
   fs16BoldBlack2,
   fs16RegBlack2,
   px,
+  sh16,
   sh40,
   sh8,
   sw1,
   sw16,
   sw20,
+  sw304,
   sw360,
   sw8,
 } from "../../styles";
@@ -27,6 +31,7 @@ import { CustomSpacer } from "../Views/Spacer";
 
 export interface ITextInputProps extends TextInputProps {
   disabled?: boolean;
+  error?: string;
   inputPrefix?: string;
   label?: string;
   labelStyle?: TextStyle;
@@ -47,6 +52,7 @@ export interface ITextInputProps extends TextInputProps {
 export const CustomTextInput = ({
   disabled,
   editable,
+  error,
   inputPrefix,
   label,
   labelStyle,
@@ -77,7 +83,7 @@ export const CustomTextInput = ({
     width: sw360,
     ...viewStyle,
   };
-  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
 
   const disabledStyle: TextStyle = disabled === true ? { opacity: 0.5 } : {};
   const disabledInput = disabled === true ? !disabled : editable;
@@ -118,6 +124,17 @@ export const CustomTextInput = ({
           <IcoMoon color={colorBlack._2} name={rightIcon} onPress={rightIconPress} size={rightIconSize || sw20} />
         )}
       </View>
+      {error === undefined ? null : (
+        <Fragment>
+          <CustomSpacer space={sh8} />
+          <View style={flexRow}>
+            <CustomSpacer isHorizontal={true} space={sw16} />
+            <IcoMoon color={colorRed._2} name="error" size={sh16} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <Text style={{ ...fs12SemiBoldRed2, width: sw304 }}>{error}</Text>
+          </View>
+        </Fragment>
+      )}
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
     </View>
   );

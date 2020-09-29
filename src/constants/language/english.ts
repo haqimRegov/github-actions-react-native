@@ -274,6 +274,8 @@ export const english = {
       LABEL_EMAIL_JOINT: "Joint Account Holder Email Address",
       LABEL_EMAIL_PRINCIPAL: "Principle Account Holder Email Address",
       LABEL_RESEND: "Didn’t receive the verification email?",
+      LABEL_RESEND_IN: "Resend in",
+      LABEL_SECONDS: "seconds",
       LINK_RESEND: "Resend again",
       NOTE_LINK: "A verification link will be sent to your email",
       NOTE_SPAM: "If you cannot see the email in your inbox, please check your SPAM folder.",

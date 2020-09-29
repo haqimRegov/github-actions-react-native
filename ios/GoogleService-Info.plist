@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>98378143950-r2gpt3es7gfs5hllm0j41p8sr9used8u.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.98378143950-r2gpt3es7gfs5hllm0j41p8sr9used8u</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAPu7GQ9oiFEF6tucEZwlPVHeotwL-Umcc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>98378143950</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.KenangaOmni</string>
+	<key>PROJECT_ID</key>
+	<string>kenanga-mobile</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kenanga-mobile.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:98378143950:ios:ae0eefcaede4b5e18c189f</string>
+	<key>DATABASE_URL</key>
+	<string>https://kenanga-mobile.firebaseio.com</string>
+</dict>
+</plist>

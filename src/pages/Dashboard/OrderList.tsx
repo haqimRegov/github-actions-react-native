@@ -1,17 +1,20 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
+import { connect } from "react-redux";
 
 import { CustomDatePicker, CustomSpacer, RoundedButton } from "../../components";
+import { logout } from "../../network-actions";
+import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { alignSelfCenter, flexChild, flexRowCC, sh24, sw24 } from "../../styles";
 import { DashboardLayout } from "./DashboardLayout";
 
-interface OrderListProps {
+interface OrderListProps extends GlobalStoreProps {
   navigation: StackNavigationProp<RootNavigatorType>;
   handleRoute: (route: string) => void;
 }
 
-export const OrderList: FunctionComponent<OrderListProps> = ({ navigation, handleRoute }: OrderListProps) => {
+const OrderListComponent: FunctionComponent<OrderListProps> = ({ navigation, handleRoute, resetGlobal }: OrderListProps) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState<Date | undefined>(undefined);
 
@@ -30,6 +33,9 @@ export const OrderList: FunctionComponent<OrderListProps> = ({ navigation, handl
   const handleUploadHardCopy = () => {
     handleRoute("UploadHardCopy");
   };
+  const handleLogOut = () => {
+    logout(resetGlobal, navigation);
+  };
 
   return (
     <DashboardLayout navigation={navigation}>
@@ -44,6 +50,8 @@ export const OrderList: FunctionComponent<OrderListProps> = ({ navigation, handl
         <CustomSpacer space={sh24} />
         <RoundedButton onPress={handleOrder} text="Order Details" buttonStyle={alignSelfCenter} />
         <CustomSpacer space={sh24} />
+        <RoundedButton onPress={handleLogOut} text="Log Out" buttonStyle={alignSelfCenter} />
+        <CustomSpacer space={sh24} />
         <RoundedButton onPress={handlePersonalDocuments} text="Upload Docs" buttonStyle={alignSelfCenter} />
         <CustomSpacer space={sh24} />
         <RoundedButton onPress={handleUploadHardCopy} text="Upload Hard Copy Docs" buttonStyle={alignSelfCenter} />
@@ -51,3 +59,5 @@ export const OrderList: FunctionComponent<OrderListProps> = ({ navigation, handl
     </DashboardLayout>
   );
 };
+
+export const OrderList = connect(GlobalMapStateToProps, GlobalMapDispatchToProps)(OrderListComponent);

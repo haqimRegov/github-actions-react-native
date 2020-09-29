@@ -1,0 +1,5 @@
+#graphql
+amplify/
+graphql/
+aws-exports.js
+API.ts

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { BottomFixedDetails, SafeAreaPage } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { RNShareApi } from "../../../integrations";
-import { SAMPLE_PDF, SAMPLE_PRODUCTS_1 } from "../../../mocks";
+import { SAMPLE_PDF_1, SAMPLE_PRODUCTS_1 } from "../../../mocks";
 import { SelectedFundMapDispatchToProps, SelectedFundMapStateToProps, SelectedFundStoreProps } from "../../../store";
 import { flexChild, flexCol } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
@@ -83,7 +83,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const handleShareDocuments = async () => {
     // TODO integration
-    const response = [SAMPLE_PDF, SAMPLE_PDF];
+    const response = [SAMPLE_PDF_1, SAMPLE_PDF_1];
     const documents = response.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
     const share = await RNShareApi.filesBase64(documents);
     if (share !== undefined) {

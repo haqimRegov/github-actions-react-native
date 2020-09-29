@@ -122,9 +122,11 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
 
   if (contactDetails.home !== undefined) {
     contactSummary.push({ label: DASHBOARD_ORDER_DETAILS.LABEL_HOME, title: contactDetails.home });
-  } else if (contactDetails.office !== undefined) {
+  }
+  if (contactDetails.office !== undefined) {
     contactSummary.push({ label: DASHBOARD_ORDER_DETAILS.LABEL_OFFICE, title: contactDetails.office });
-  } else if (contactDetails.fax !== undefined) {
+  }
+  if (contactDetails.fax !== undefined) {
     contactSummary.push({ label: DASHBOARD_ORDER_DETAILS.LABEL_FAX, title: contactDetails.fax });
   }
 

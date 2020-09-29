@@ -9,6 +9,7 @@ import onboardingPeople from "./onboarding_people/onboarding_people.png";
 import riskAssessmentGraph1 from "./risk_assessment_graph_1/risk_assessment_graph_1.png";
 import riskAssessmentGraph2 from "./risk_assessment_graph_2/risk_assessment_graph_2.png";
 import uploadSuccess from "./upload_success/upload_success.png";
+import { whiteBackground } from "./white_background";
 
 export const LocalAssets = {
   addClient: {
@@ -32,6 +33,9 @@ export const LocalAssets = {
   },
   onboarding: {
     people: onboardingPeople,
+  },
+  signatureBackground: {
+    background: whiteBackground,
   },
   uploadSuccess: {
     uploadSuccess: uploadSuccess,

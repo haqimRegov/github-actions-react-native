@@ -8,10 +8,4 @@ declare interface IRiskAssessmentState {
   questionSeven: number;
 }
 
-declare interface IRiskScoreState {
-  appetite: string;
-  profile: string;
-  return: string;
-  type: string;
-  suggestedFunds: string[];
-}
+declare type IRiskScoreState = IRiskScore;

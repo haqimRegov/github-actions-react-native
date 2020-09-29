@@ -53,6 +53,7 @@ export const colorWhite = {
   _2: "#FDFEFE",
   _3: "#FBFBFB",
   _3_5: "rgb(251,251,251,0.5)",
+  _4: "#F2F4F6",
 };
 
 export const colorYellow = {

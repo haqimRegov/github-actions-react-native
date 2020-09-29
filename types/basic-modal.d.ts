@@ -1,7 +1,7 @@
 declare interface IBasicModalProps {
-  animationIn?: import("react-native-animatable").Animation | import("react-native-animatable").CustomAnimation;
+  animationIn?: TypeModalAnimation;
   animationInTiming?: number;
-  animationOut?: import("react-native-animatable").Animation | import("react-native-animatable").CustomAnimation;
+  animationOut?: TypeModalAnimation;
   animationOutTiming?: number;
   backdropColor?: string;
   backdropOpacity?: number;
@@ -11,3 +11,5 @@ declare interface IBasicModalProps {
   style?: import("react-native").ViewStyle;
   visible: boolean;
 }
+
+declare type TypeModalAnimation = import("react-native-animatable").Animation | import("react-native-animatable").CustomAnimation;

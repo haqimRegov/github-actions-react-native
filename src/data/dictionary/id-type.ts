@@ -10,3 +10,5 @@ export const DICTIONARY_ALL_ID = [
   { label: "Police", value: "Police" },
 ];
 export const DICTIONARY_ALL_ID_TYPE: TypeClientID[] = ["NRIC", "Passport", "Army", "Police"];
+
+export const DICTIONARY_NRIC_LENGTH = 12;

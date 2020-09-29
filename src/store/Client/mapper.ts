@@ -1,5 +1,6 @@
 import { bindActionCreators, Dispatch } from "redux";
 
+import { GlobalActionProps } from "../Global";
 import { RootState } from "../rootReducer";
 import { ClientActionProps } from "./actions";
 
@@ -9,7 +10,7 @@ export const ClientMapStateToProps = (state: RootState) => ({
 });
 
 export const ClientMapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators(ClientActionProps, dispatch);
+  return bindActionCreators({ ...ClientActionProps, ...GlobalActionProps }, dispatch);
 };
 
 export type ClientStoreProps = ReturnType<typeof ClientMapStateToProps> & ReturnType<typeof ClientMapDispatchToProps>;

@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite } from "./colors";
-import { sh02, sh033, sh05, sh10, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55 } from "./sizes";
+import { sh005, sh02, sh033, sh10, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsUppercase: TextStyle = {
@@ -251,7 +251,7 @@ export const fs16SemiBoldBlue1: TextStyle = {
   color: colorBlue._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
-  letterSpacing: -sh05,
+  letterSpacing: -sh005,
   lineHeight: sh24,
 };
 
@@ -259,7 +259,7 @@ export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
-  letterSpacing: -sh05,
+  letterSpacing: -sh005,
   lineHeight: sh24,
 };
 
@@ -267,7 +267,7 @@ export const fs16SemiBoldWhite1: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
-  letterSpacing: -sh05,
+  letterSpacing: -sh005,
   lineHeight: sh24,
 };
 

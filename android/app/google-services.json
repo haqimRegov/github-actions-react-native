@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "29080189605",
+    "firebase_url": "https://omni-kenanga-8021e.firebaseio.com",
+    "project_id": "omni-kenanga-8021e",
+    "storage_bucket": "omni-kenanga-8021e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29080189605:android:a469545afe180c9c6deb4c",
+        "android_client_info": {
+          "package_name": "com.kenangamobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29080189605-l37opefe34i9q2k4tpd3o9mcb825vaac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtUR7pcG4PsaMvkhDKwLazpONCbGr0UmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29080189605-l37opefe34i9q2k4tpd3o9mcb825vaac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

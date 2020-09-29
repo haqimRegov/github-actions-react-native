@@ -4,4 +4,3 @@ export * from "./documents";
 export * from "./file";
 export * from "./login";
 export * from "./products";
-export * from "./risk-assessment";

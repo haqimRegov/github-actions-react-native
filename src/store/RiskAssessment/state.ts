@@ -16,8 +16,9 @@ export const riskAssessmentInitialState: RiskAssessmentState = {
   riskScore: {
     appetite: "",
     profile: "",
-    return: "",
+    rangeOfReturn: "",
+    fundSuggestion: "",
+    netWorth: "",
     type: "",
-    suggestedFunds: [],
   },
 };

@@ -1,5 +1,6 @@
 export * from "./Acknowledgement";
 export * from "./Client";
+export * from "./Global";
 export * from "./OnboardingSteps";
 export * from "./PersonalInfo";
 export * from "./Products";

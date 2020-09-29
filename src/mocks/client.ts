@@ -35,6 +35,7 @@ export const SAMPLE_CLIENT_3: IClientDetails = {
 };
 
 export const SAMPLE_CLIENT_4: IClientDetailsState = {
+  clientId: "123",
   dateOfBirth: moment().subtract(23, "years").toDate(),
   idNumber: "EC7742123",
   idType: "Passport",
@@ -57,6 +58,7 @@ export const SAMPLE_CLIENT_4: IClientDetailsState = {
 };
 
 export const SAMPLE_CLIENT_5: IClientDetailsState = {
+  clientId: "123",
   dateOfBirth: moment().subtract(17, "years").toDate(),
   idNumber: "98121231231",
   idType: "NRIC",

@@ -1,4 +1,5 @@
 declare type IClientDetailsState = {
+  clientId?: string;
   countryOfBirth?: string;
   dateOfBirth?: Date;
   gender?: string;

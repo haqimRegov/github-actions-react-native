@@ -1,20 +1,19 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
-import { connect } from "react-redux";
 
 import {
   BasicAccordion,
   CheckBox,
   ContentPage,
   CustomFlexSpacer,
+  CustomPopup,
   CustomSpacer,
-  CustomTooltip,
   LinkText,
   RadioButtonGroup,
-} from "../../components";
-import { Language } from "../../constants/language";
-import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../mocks/terms-and-conditions";
-import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store";
+} from "../../../components";
+import { Language } from "../../../constants/language";
+import { IcoMoon } from "../../../icons";
+import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks/terms-and-conditions";
 import {
   alignItemsStart,
   alignSelfCenter,
@@ -22,7 +21,6 @@ import {
   centerVertical,
   flexRow,
   fs12BoldBlack2,
-  fs12BoldWhite1,
   fs12SemiBoldBlue1,
   fs16SemiBoldBlack2,
   px,
@@ -34,22 +32,19 @@ import {
   sh8,
   sw12,
   sw24,
-  sw265,
   sw800,
-} from "../../styles";
+} from "../../../styles";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const RADIO_CONSENT = [TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_YES, TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_NO];
 
-interface TermsAndConditionsProps extends OrderSummaryStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+interface TermsAndConditionsProps {
+  orders: IOrderSummary[];
+  setPage: (page: number) => void;
 }
 
-export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProps> = ({
-  handleNextStep,
-  orders,
-}: TermsAndConditionsProps) => {
+export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({ orders, setPage }: TermsAndConditionsProps) => {
   const [agree1, setAgree1] = useState<boolean>(false);
   const [agree2, setAgree2] = useState<boolean>(false);
   const [agree3, setAgree3] = useState<boolean>(false);
@@ -79,7 +74,7 @@ export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProp
   };
 
   const handleContinue = () => {
-    handleNextStep("Payment");
+    setPage(1);
   };
 
   const handleExpandAll = () => {
@@ -91,12 +86,10 @@ export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProp
   };
 
   useEffect(() => {
-    if (orders.length !== 0) {
-      const fundTypeArray = orders
-        .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
-        .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
-      setFundTypeList(fundTypeArray);
-    }
+    const fundTypeArray = orders
+      .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
+      .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
+    setFundTypeList(fundTypeArray);
   }, [orders]);
 
   // TODO FEA to be removed
@@ -108,16 +101,6 @@ export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProp
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }
 
-  const popupContentTerms = (
-    <View>
-      <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>
-    </View>
-  );
-  const popupContentConsent = (
-    <View>
-      <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{TERMS_AND_CONDITIONS.POPUP_CONSENT}</Text>
-    </View>
-  );
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agree1 === true && agree2 === true && agree3 === true && agree4 === true);
 
@@ -133,7 +116,9 @@ export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProp
         <View style={termsHeader}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
-          <CustomTooltip content={popupContentTerms} contentStyle={{ width: sw265 }} />
+          <CustomPopup popupText={TERMS_AND_CONDITIONS.POPUP_TERMS}>
+            <IcoMoon name="info" size={sw24} />
+          </CustomPopup>
           <CustomFlexSpacer />
           <LinkText onPress={handleExpandAll} style={fs12SemiBoldBlue1} text={TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL} />
         </View>
@@ -169,7 +154,9 @@ export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProp
         <View style={{ ...centerVertical, ...flexRow }}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.LABEL_CONSENT}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
-          <CustomTooltip content={popupContentConsent} contentStyle={{ width: sw265 }} />
+          <CustomPopup popupText={TERMS_AND_CONDITIONS.POPUP_CONSENT}>
+            <IcoMoon name="info" size={sw24} />
+          </CustomPopup>
         </View>
         <CustomSpacer space={sh16} />
         <RadioButtonGroup
@@ -183,5 +170,3 @@ export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProp
     </ContentPage>
   );
 };
-
-export const TermsAndConditions = connect(OrderSummaryMapStateToProps, OrderSummaryMapDispatchToProps)(TermsAndConditionsContent);

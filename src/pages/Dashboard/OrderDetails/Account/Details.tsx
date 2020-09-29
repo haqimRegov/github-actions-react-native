@@ -8,6 +8,7 @@ import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
   borderBottomBlack21,
+  borderBottomGray2,
   circleBorder,
   colorBlue,
   colorGreen,
@@ -24,6 +25,7 @@ import {
   sh16,
   sh24,
   sh32,
+  sh4,
   sh8,
   sw1,
   sw120,
@@ -86,14 +88,14 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
         </View>
         <CustomSpacer isHorizontal={true} space={sw40} />
         <View style={{ width: sw240 }}>
-          <LabeledTitle label={DASHBOARD_ORDER_DETAILS.LABEL_NAME} spaceToLabel={sh8} title={data.name} titleStyle={fs16BoldBlack2} />
-          <CustomSpacer space={sh16} />
+          <LabeledTitle label={DASHBOARD_ORDER_DETAILS.LABEL_NAME} spaceToLabel={sh4} title={data.name} titleStyle={fs16BoldBlack2} />
+          <CustomSpacer space={sh8} />
           <LabeledTitle
             iconSize={sw20}
             label={DASHBOARD_ORDER_DETAILS.LABEL_NRIC}
             onPress={handleNric}
             spaceToIcon={sw20}
-            spaceToLabel={sh8}
+            spaceToLabel={sh4}
             title={data.id}
             titleIcon="profile-card"
             titleStyle={fs16BoldBlack2}
@@ -104,6 +106,7 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
           <RoundedButton buttonStyle={buttonStyle} onPress={handleToggle} secondary={true} text={holder} textStyle={fs12SemiBoldBlack2} />
         ) : null}
       </View>
+      <View style={{ position: "relative", bottom: 12, zIndex: -1, ...borderBottomGray2, width: "100%" }} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_SUMMARY} />

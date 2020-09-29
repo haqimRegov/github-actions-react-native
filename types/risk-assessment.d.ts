@@ -10,10 +10,11 @@ declare interface IRiskAssessmentQuestions {
 
 declare interface IRiskScore {
   appetite: string;
+  fundSuggestion: string;
+  netWorth: string;
   profile: string;
-  return: string;
+  rangeOfReturn: string;
   type: string;
-  suggestedFunds: string[];
 }
 
 declare type TypeRiskAssessmentModal = "prompt" | "assessment" | undefined;

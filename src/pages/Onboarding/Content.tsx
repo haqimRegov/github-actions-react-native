@@ -15,7 +15,7 @@ import { PersonalDetails } from "./PersonalDetails";
 import { Products } from "./Products";
 import { QuestionnaireContent } from "./Questionnaire";
 import { Summary } from "./Summary";
-import { TermsAndConditions } from "./TermsAndConditions";
+import { TermsAndConditionsPages } from "./TermsAndConditions";
 
 const { ONBOARDING } = Language.PAGE;
 
@@ -72,7 +72,7 @@ export const OnboardingContent = (props: OnboardingProps) => {
       content = <OrderSummary {...newProps} />;
       break;
     case ONBOARDING_ROUTES.TermsAndConditions:
-      content = <TermsAndConditions {...newProps} />;
+      content = <TermsAndConditionsPages {...newProps} />;
       break;
     case ONBOARDING_ROUTES.Summary:
       content = <Summary {...newProps} />;

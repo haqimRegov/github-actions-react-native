@@ -1,6 +1,6 @@
 {
   "name": "KenangaMobile",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -29,7 +29,10 @@
     "fix:collapsible": "npm run fix:collapsible:js && npm run fix:collapsible:accordion",
     "amplify:add:codegen": "amplify codegen remove",
     "amplify:remove:codegen": "amplify add codegen --apiId rywhnkwdhfadriy4tzrfiv65xu",
-    "amplify:codegen": "npm run amplify:add:codegen && npm run amplify:remove:codegen"
+    "amplify:codegen": "npm run amplify:add:codegen && npm run amplify:remove:codegen",
+    "bump-patch": "npm version patch --no-git-tag-version && bundle exec fastlane bump",
+    "bump-minor": "npm version minor --no-git-tag-version && bundle exec fastlane bump",
+    "bump-major": "npm version major --no-git-tag-version && bundle exec fastlane bump"
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "1.2.2",

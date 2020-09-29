@@ -22,7 +22,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh40,
   sh56,
   sh90,
   sh96,
@@ -129,7 +128,7 @@ export const UploadHardCopy = ({ navigation, handleRoute }: UploadHardCopyProps)
               <Badge>
                 <IcoMoon name="file" size={sw100} />
               </Badge>
-              <CustomSpacer space={sh40} />
+              <CustomSpacer space={sh24} />
               <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter }}>{UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}</Text>
               <CustomSpacer space={sh16} />
               <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter }}>{UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}</Text>

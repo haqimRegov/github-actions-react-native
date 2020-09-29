@@ -4,6 +4,7 @@ declare interface FileBase64 {
   name: string;
   path?: string;
   size?: number;
+  title?: string;
   type: string;
   url?: string;
 }

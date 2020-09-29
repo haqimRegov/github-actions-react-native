@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Image, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Alert, Image, Text, TextStyle, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -12,20 +12,11 @@ import {
   LabeledTitle,
   Question,
   RadioButton,
-  TextSpaceArea,
 } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import {
-  Q1_OPTIONS,
-  Q2_OPTIONS,
-  Q3_OPTIONS,
-  Q4_OPTIONS,
-  Q5_OPTIONS,
-  Q6_OPTIONS,
-  Q7_OPTIONS,
-} from "../../data/dictionary/risk-assessment-questions";
+import { Q1_OPTIONS, Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
-import { getRiskScore } from "../../network-actions";
+import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   flexRow,
@@ -63,29 +54,34 @@ const { RISK_ASSESSMENT } = Language.PAGE;
 
 interface QuestionnaireContentProps extends OnboardingContentProps, RiskStoreProps {}
 
-const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
-  const { finishedSteps, handleCancelOnboarding, handleNextStep, questionnaire, riskScore, setFinishedSteps } = props;
+const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
+  addAssessmentQuestions,
+  addRiskScore,
+  clientDetails,
+  finishedSteps,
+  handleCancelOnboarding,
+  handleNextStep,
+  questionnaire,
+  resetRiskAssessment,
+  riskScore,
+  setFinishedSteps,
+  setLoading,
+}: QuestionnaireContentProps) => {
+  const clientId = clientDetails!.clientId!;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
   const [popupIncome, setPopupIncome] = useState<boolean>(false);
   const [popupAsset, setPopupAsset] = useState<boolean>(false);
+  const { questionOne, questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven } = questionnaire;
 
-  const q1 = questionnaire.questionOne;
-  const q2 = questionnaire.questionTwo;
-  const q3 = questionnaire.questionThree;
-  const q4 = questionnaire.questionFour;
-  const q5 = questionnaire.questionFive;
-  const q6 = questionnaire.questionSix;
-  const q7 = questionnaire.questionSeven;
-
-  const setQ1 = (index: number) => props.addAssessmentQuestions({ questionOne: index });
-  const setQ2 = (index: number) => props.addAssessmentQuestions({ questionTwo: index });
-  const setQ3 = (index: number) => props.addAssessmentQuestions({ questionThree: index });
-  const setQ4 = (index: number) => props.addAssessmentQuestions({ questionFour: index });
-  const setQ5 = (index: number) => props.addAssessmentQuestions({ questionFive: index });
-  const setQ6 = (index: number) => props.addAssessmentQuestions({ questionSix: index });
-  const setQ7 = (index: number) => props.addAssessmentQuestions({ questionSeven: index });
+  const setQ1 = (index: number) => addAssessmentQuestions({ questionOne: index });
+  const setQ2 = (index: number) => addAssessmentQuestions({ questionTwo: index });
+  const setQ3 = (index: number) => addAssessmentQuestions({ questionThree: index });
+  const setQ4 = (index: number) => addAssessmentQuestions({ questionFour: index });
+  const setQ5 = (index: number) => addAssessmentQuestions({ questionFive: index });
+  const setQ6 = (index: number) => addAssessmentQuestions({ questionSix: index });
+  const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
 
   const handleConfirmAssessment = () => {
     const updatedSteps: TypeOnboardingRoute[] = [...finishedSteps];
@@ -97,24 +93,46 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
 
   const handleRetakeAssessment = () => {
     setConfirmModal(undefined);
-    props.resetRiskAssessment();
+    resetRiskAssessment();
   };
 
-  const handlePageContinue = () => {
-    setConfirmModal("assessment");
-    getRiskScore(props, questionnaire);
+  const handlePageContinue = async () => {
+    try {
+      // setLoading(true);
+      const response: IGetRiskProfileResponse = await getRiskProfile({ clientId: clientId, riskAssessment: { ...questionnaire } });
+      if (response === undefined) {
+        return;
+      }
+      const { data, error } = response;
+      if (error === null) {
+        if (data !== null) {
+          setLoading(false);
+          const riskAssessment = { ...data.result };
+          addRiskScore(riskAssessment);
+          setTimeout(() => {
+            setConfirmModal("assessment");
+          }, 300);
+        }
+      } else {
+        Alert.alert(error.message);
+      }
+    } catch (error) {
+      Alert.alert(error);
+    } finally {
+      // setLoading(false);
+    }
   };
 
   const handleEdit = () => {
     setConfirmModal(undefined);
     setFinishedSteps([]);
-    props.resetRiskAssessment();
+    resetRiskAssessment();
   };
 
   const handleCancelEdit = () => {
     if (prevQuestionnaire !== undefined) {
       setConfirmModal(undefined);
-      props.addAssessmentQuestions(prevQuestionnaire);
+      addAssessmentQuestions(prevQuestionnaire);
     }
   };
 
@@ -130,8 +148,9 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
   const riskProfile = [
     { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: riskScore.appetite },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.return },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.rangeOfReturn },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskScore.type },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_SUGGESTION, title: riskScore.fundSuggestion },
   ];
 
   useEffect(() => {
@@ -162,12 +181,12 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q1_OPTIONS} selected={q1} setSelected={setQ1} />
+            <CustomSlider disabled={true} options={Q1_OPTIONS} selected={questionOne} setSelected={setQ1} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_2}
               options={Q2_OPTIONS}
-              selected={q2}
+              selected={questionTwo}
               setSelected={setQ2}
               title={RISK_ASSESSMENT.QUESTION_2}
             />
@@ -176,7 +195,7 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
               label={RISK_ASSESSMENT.LABEL_QUESTION_3}
               options={Q3_OPTIONS}
               right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
-              selected={q3}
+              selected={questionThree}
               setSelected={setQ3}
               title={RISK_ASSESSMENT.QUESTION_3}
             />
@@ -185,7 +204,7 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
               label={RISK_ASSESSMENT.LABEL_QUESTION_4}
               options={Q4_OPTIONS}
               right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
-              selected={q4}
+              selected={questionFour}
               setSelected={setQ4}
               title={RISK_ASSESSMENT.QUESTION_4}
             />
@@ -197,12 +216,12 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
               titleStyle={fs16SemiBoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q5_OPTIONS} selected={q5} setSelected={setQ5} />
+            <CustomSlider disabled={true} options={Q5_OPTIONS} selected={questionFive} setSelected={setQ5} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_6}
               options={Q6_OPTIONS}
-              selected={q6}
+              selected={questionSix}
               setSelected={setQ6}
               title={RISK_ASSESSMENT.QUESTION_6}
             />
@@ -285,7 +304,7 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
                   </Fragment>
                 );
               }}
-              selected={q7}
+              selected={questionSeven}
               setSelected={setQ7}
               title={RISK_ASSESSMENT.QUESTION_7}
             />
@@ -314,11 +333,6 @@ const QuestionnaireContentComponent = (props: QuestionnaireContentProps) => {
                 titleStyle={fs16BoldBlack1}
               />
             ))}
-            <Text style={fs12SemiBoldBlack2}>{RISK_ASSESSMENT.PROFILE_LABEL_SUGGESTION}</Text>
-            {riskScore !== undefined &&
-              riskScore.suggestedFunds.map((fund: string, index: number) => (
-                <TextSpaceArea key={index} spaceToTop={sh8} style={fs16BoldBlack1} text={fund} />
-              ))}
           </Fragment>
         ) : (
           <Text style={fs16BoldBlack2}>{RISK_ASSESSMENT.EDIT_LABEL}</Text>

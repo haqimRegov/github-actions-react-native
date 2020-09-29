@@ -152,7 +152,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                       <View>
                         {itemLabel.map((label: IColumnItem, labelIndex: number) => {
                           return (
-                            <View key={labelIndex} style={flexRow}>
+                            <View key={labelIndex} style={{ ...flexRow, ...centerVertical }}>
                               {label.prefix !== undefined ? (
                                 <Fragment>
                                   <Text style={{ ...textStyle, ...label.prefixStyle }}>{label.prefix}</Text>

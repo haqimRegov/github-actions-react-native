@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ViewStyle } from "react-native";
+import { TextStyle, View, ViewStyle } from "react-native";
 
 import { Language } from "../../constants";
 import { flexRow, sw16 } from "../../styles";
@@ -12,9 +12,11 @@ export interface ActionButtonsProps {
   buttonContainerStyle?: ViewStyle;
   cancelButtonStyle?: ViewStyle;
   cancelDisabled?: boolean;
+  cancelTextStyle?: TextStyle;
   continueButtonStyle?: ViewStyle;
   continueDisabled?: boolean;
-  handleCancel: () => void;
+  continueTextStyle?: TextStyle;
+  handleCancel?: () => void;
   handleContinue: () => void;
   labelCancel?: string;
   labelContinue?: string;
@@ -24,8 +26,10 @@ export const ActionButtons = ({
   buttonContainerStyle,
   cancelButtonStyle,
   cancelDisabled,
+  cancelTextStyle,
   continueButtonStyle,
   continueDisabled,
+  continueTextStyle,
   handleCancel,
   handleContinue,
   labelCancel,
@@ -36,15 +40,24 @@ export const ActionButtons = ({
 
   return (
     <View style={{ ...flexRow, ...buttonContainerStyle }}>
-      <RoundedButton
-        buttonStyle={cancelButtonStyle}
-        disabled={cancelDisabled}
-        onPress={handleCancel}
-        secondary={true}
-        text={buttonCancel}
-      />
+      {handleCancel !== undefined ? (
+        <RoundedButton
+          buttonStyle={cancelButtonStyle}
+          disabled={cancelDisabled}
+          onPress={handleCancel}
+          secondary={true}
+          text={buttonCancel}
+          textStyle={cancelTextStyle}
+        />
+      ) : null}
       <CustomSpacer isHorizontal={true} space={sw16} />
-      <RoundedButton buttonStyle={continueButtonStyle} disabled={continueDisabled} onPress={handleContinue} text={buttonContinue} />
+      <RoundedButton
+        buttonStyle={continueButtonStyle}
+        disabled={continueDisabled}
+        onPress={handleContinue}
+        text={buttonContinue}
+        textStyle={continueTextStyle}
+      />
     </View>
   );
 };

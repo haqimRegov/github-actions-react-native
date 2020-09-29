@@ -29,7 +29,7 @@
     "fix:collapsible": "npm run fix:collapsible:js && npm run fix:collapsible:accordion",
     "amplify:add:codegen": "amplify codegen remove",
     "amplify:remove:codegen": "amplify add codegen --apiId rywhnkwdhfadriy4tzrfiv65xu",
-    "amplify:codegen": "npm run amplify:remove:codegen && npm run amplify:add:codegen"
+    "amplify:codegen": "npm run amplify:add:codegen && npm run amplify:remove:codegen"
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "1.2.2",

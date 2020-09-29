@@ -59,6 +59,10 @@ const ACCOUNT_DETAILS_MOCKS: IAccountDetails = {
       motherName: "anna",
       relationWithJoint: "Spouse",
     },
+    epfDetails: {
+      epfAccountType: "Conventional",
+      epfNumber: "31231231",
+    },
     addressInfo: {
       permanentAddress: {
         address: "Menara Olympia, Jalan Raja, CHulan, Kuala Lumpur",

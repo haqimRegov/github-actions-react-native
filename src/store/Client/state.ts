@@ -8,6 +8,7 @@ export type ClientState = {
 export const clientInitialState: ClientState = {
   accountType: DICTIONARY_ACCOUNT_TYPE[0],
   details: {
+    clientId: "",
     idNumber: "",
     name: "",
     dateOfBirth: undefined,

@@ -1,7 +1,7 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -45,6 +45,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
 
   const handleLogin = async () => {
     try {
+      Keyboard.dismiss();
       setLockPrompt(false);
       setLoading(true);
       setErrorMessage(undefined);

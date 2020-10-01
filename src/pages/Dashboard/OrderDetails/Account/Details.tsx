@@ -8,7 +8,6 @@ import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
   borderBottomBlack21,
-  borderBottomGray2,
   circleBorder,
   colorBlue,
   colorGreen,
@@ -106,7 +105,6 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
           <RoundedButton buttonStyle={buttonStyle} onPress={handleToggle} secondary={true} text={holder} textStyle={fs12SemiBoldBlack2} />
         ) : null}
       </View>
-      <View style={{ position: "relative", bottom: 12, zIndex: -1, ...borderBottomGray2, width: "100%" }} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_SUMMARY} />

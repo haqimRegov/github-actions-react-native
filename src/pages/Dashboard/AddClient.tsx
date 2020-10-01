@@ -170,7 +170,7 @@ const AddClientComponent = (props: AddClientProps) => {
         {verified === false ? (
           <Fragment>
             <TextSpaceArea spaceToBottom={sh24} style={fs24BoldBlack2} text={ADD_CLIENT.SUBHEADING} />
-            <TextSpaceArea spaceToBottom={sh16} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
+            <TextSpaceArea spaceToBottom={sh8} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
             <RadioButtonGroup direction="row" options={DICTIONARY_ID_TYPE} selected={idType!} setSelected={setInputIdType} space={sw56} />
             {idType !== "Other" ? null : (
               <Fragment>
@@ -183,8 +183,7 @@ const AddClientComponent = (props: AddClientProps) => {
                 />
               </Fragment>
             )}
-            <CustomTextInput label={LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={name} />
-            <CustomSpacer space={sh32} />
+            <CustomTextInput label={LABEL_NAME} onChangeText={setInputName} spaceToBottom={sh24} spaceToTop={sh24} value={name} />
             <CustomTextInput
               keyboardType={keyboardType}
               label={LABEL_ID}
@@ -220,29 +219,11 @@ const AddClientComponent = (props: AddClientProps) => {
           </Fragment>
         ) : (
           <Fragment>
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_NAME}
-              spaceToBottom={sh24}
-              spaceToLabel={sh8}
-              title={name!}
-              titleStyle={fs16BoldBlack1}
-            />
-            <LabeledTitle label={idType!} spaceToBottom={sh24} spaceToLabel={sh8} title={idNumber!} titleStyle={fs16BoldBlack1} />
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_GENDER}
-              spaceToBottom={sh24}
-              spaceToLabel={sh8}
-              title={gender!}
-              titleStyle={fs16BoldBlack1}
-            />
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_DOB}
-              spaceToBottom={sh24}
-              spaceToLabel={sh8}
-              title={formattedDob}
-              titleStyle={fs16BoldBlack1}
-            />
-            <LabeledTitle label={ADD_CLIENT.LABEL_ACCOUNT_TYPE} spaceToLabel={sh8} title={accountType} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_NAME} spaceToBottom={sh24} title={name!} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={idType!} spaceToBottom={sh24} title={idNumber!} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_GENDER} spaceToBottom={sh24} title={gender!} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_DOB} spaceToBottom={sh24} title={formattedDob} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.LABEL_ACCOUNT_TYPE} title={accountType} titleStyle={fs16BoldBlack1} />
           </Fragment>
         )}
       </Fragment>

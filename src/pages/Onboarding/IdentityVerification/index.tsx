@@ -15,7 +15,7 @@ import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID, DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES } from "../../../data/dictionary";
 import { SAMPLE_CLIENT_5 } from "../../../mocks";
 import { uploadClientId } from "../../../network-actions";
-import { ClientStoreProps, PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
   borderBottomGray4,
   flexGrow,
@@ -35,7 +35,7 @@ import { UploadID } from "./UploadID";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
-interface IdentityConfirmationProps extends PersonalInfoStoreProps, ClientStoreProps, OnboardingContentProps {}
+interface IdentityConfirmationProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps> = ({
   accountType,
   addClientDetails,

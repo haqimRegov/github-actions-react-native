@@ -13,9 +13,9 @@ export const RootNavigator = () => {
 
   return (
     <NavigationContainer>
-      <Navigator initialRouteName="Login" headerMode="none">
+      <Navigator initialRouteName="Auth" headerMode="none">
+        <Screen name="Auth" component={AuthPage} options={defaultOptions} />
         <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
-        <Screen name="Login" component={AuthPage} options={defaultOptions} />
         <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
       </Navigator>
     </NavigationContainer>

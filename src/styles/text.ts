@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite } from "./colors";
-import { sh005, sh02, sh033, sh10, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55 } from "./sizes";
+import { sh10, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw033 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsUppercase: TextStyle = {
@@ -25,7 +25,15 @@ export const fs10BoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoBold,
   fontSize: sh10,
-  letterSpacing: -sh033,
+  letterSpacing: -sw033,
+  lineHeight: sh16,
+};
+
+export const fs10BoldWhite1: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoBold,
+  fontSize: sh10,
+  letterSpacing: -sw033,
   lineHeight: sh16,
 };
 
@@ -173,7 +181,15 @@ export const fs14RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
   fontSize: sh14,
-  letterSpacing: -sh02,
+  letterSpacing: -sw02,
+  lineHeight: sh24,
+};
+
+export const fs14RegBlue2: TextStyle = {
+  color: colorBlue._2,
+  fontFamily: NunitoRegular,
+  fontSize: sh14,
+  letterSpacing: -sw02,
   lineHeight: sh24,
 };
 
@@ -251,7 +267,7 @@ export const fs16SemiBoldBlue1: TextStyle = {
   color: colorBlue._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
-  letterSpacing: -sh005,
+  letterSpacing: -sw005,
   lineHeight: sh24,
 };
 
@@ -259,7 +275,7 @@ export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
-  letterSpacing: -sh005,
+  letterSpacing: -sw005,
   lineHeight: sh24,
 };
 
@@ -267,15 +283,23 @@ export const fs16SemiBoldWhite1: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh16,
-  letterSpacing: -sh005,
+  letterSpacing: -sw005,
   lineHeight: sh24,
 };
 
 export const fs18BoldBlack2: TextStyle = {
-  color: colorBlack._1,
+  color: colorBlack._2,
   fontFamily: NunitoBold,
   fontSize: sh18,
-  letterSpacing: -sh02,
+  letterSpacing: -sw02,
+  lineHeight: sh32,
+};
+
+export const fs18BoldBlue2: TextStyle = {
+  color: colorBlue._2,
+  fontFamily: NunitoBold,
+  fontSize: sh18,
+  letterSpacing: -sw02,
   lineHeight: sh32,
 };
 

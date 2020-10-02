@@ -8,4 +8,9 @@ declare interface IConfig {
 declare interface IAgentProfile {
   email: string;
   licenseCode: string;
+  agentCode?: string;
+  branch?: string;
+  name?: string;
+  image?: string;
+  role?: string;
 }

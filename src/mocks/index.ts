@@ -1,3 +1,4 @@
+export * from "./agent";
 export * from "./acknowledgement";
 export * from "./client";
 export * from "./documents";

@@ -1,4 +1,5 @@
 export * from "./account-type";
+export * from "./aims";
 export * from "./banks";
 export * from "./branches";
 export * from "./business-nature";

@@ -9,6 +9,7 @@ import { BasicModal, Prompt } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR, ERROR_CODE } from "../../data/dictionary";
 import { updateStorageData } from "../../integrations";
+import { SAMPLE_AGENT } from "../../mocks";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight } from "../../styles";
@@ -60,7 +61,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
         if (data !== null) {
           await Auth.signIn(inputNRIC, inputPassword);
           addGlobal({
-            agent: { email: data.result.email, licenseCode: data.result.licenseCode },
+            agent: { ...SAMPLE_AGENT, email: data.result.email, licenseCode: data.result.licenseCode },
             config: {
               identityId: data.result.identityId,
               secretAccessKey: data.result.secretAccessKey,

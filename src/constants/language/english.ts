@@ -110,6 +110,14 @@ export const english = {
       SUBTITLE_DETAILS: "We would need some of your details to open your account. ",
       SUBTITLE_REACH: "How can we reach you?",
     },
+    DASHBOARD: {
+      LABEL_ID: "ID",
+      MENU_DASHBOARD: "Dashboard",
+      MENU_EDD: "EDD",
+      MENU_INBOX: "Inbox",
+      MENU_LOGOUT: "Logout",
+      MENU_PROFILE: "Profile",
+    },
     DASHBOARD_ORDER_DETAILS: {
       LABEL_ACCOUNT_DETAILS: "Account Details",
       LABEL_ACCOUNT_NO: "Account No",
@@ -745,7 +753,7 @@ export const english = {
         "By skipping the risk assessment, I decline to provide certain information required for the investor suitability assessment and acknowledge that this may adversely affect my suitability assessment.",
     },
     SIDE_MENU: {
-      LABEL_FOOTER: "Kenanga © 2020",
+      LABEL_FOOTER: "Kenanga Investors © 2020",
     },
     SIGNATURE: {
       BUTTON_CANCEL: "Re-Take",

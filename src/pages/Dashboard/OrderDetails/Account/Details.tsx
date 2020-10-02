@@ -95,7 +95,7 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
             spaceToIcon={sw20}
             spaceToLabel={sh8}
             title={data.id}
-            titleIcon={"profile"}
+            titleIcon="profile-card"
             titleStyle={fs16BoldBlack2}
           />
         </View>

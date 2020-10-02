@@ -1,94 +1,83 @@
-import React, { ReactNode } from "react";
-import { Image, ImageSourcePropType, ImageStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import React, { FunctionComponent, ReactNode } from "react";
+import { Image, ImageSourcePropType, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { IcoMoon } from "../../icons";
+import { Language } from "../../constants";
 import {
-  centerHV,
-  circle,
-  colorBlack,
-  colorBlue,
+  borderBottomGray4,
+  colorTransparent,
   colorWhite,
   DEVICE,
   flexRow,
-  fullWidth,
+  fs12RegBlue25,
   px,
-  sh100,
-  sh36,
-  sh60,
+  sh16,
+  sh24,
+  sh40,
+  sh44,
+  sh56,
   shadow5,
-  sw126,
-  sw134,
-  sw36,
-  sw398,
-  sw54,
-  sw70,
-  sw83,
+  sw200,
+  sw24,
+  sw94,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
-export interface ISideMenu {
+const { SIDE_MENU } = Language.PAGE;
+
+export interface SideMenuProps {
   children?: ReactNode;
-  collapse?: boolean;
   image?: ImageSourcePropType;
   logoStyle?: ImageStyle;
-  onPressBackdrop?: () => void;
-  onPressExpand?: () => void;
-  overlay?: boolean;
   spaceToBottom?: number;
   spaceToContent?: number;
 }
 
-export const SideMenu = ({
+export const SideMenu: FunctionComponent<SideMenuProps> = ({
   children,
-  collapse,
+  image,
   logoStyle,
-  onPressBackdrop,
-  onPressExpand,
-  overlay,
   spaceToBottom,
   spaceToContent,
-}: ISideMenu) => {
-  const contentSpace = spaceToContent !== undefined ? spaceToContent : sh100;
-  const containerWidth = collapse === true ? sw134 : sw398;
-  const logoWidth = collapse === true ? sw83 : sw126;
-
-  const defaultLogoStyle: ImageStyle = { height: sh60, resizeMode: "contain", width: logoWidth, ...logoStyle };
+}: SideMenuProps) => {
+  const defaultLogoStyle: ImageStyle = { width: sw94, height: sh40, resizeMode: "contain", ...logoStyle };
   const container: ViewStyle = {
     ...flexRow,
+    backgroundColor: colorTransparent,
+    height: DEVICE.SCREEN.HEIGHT,
     left: 0,
     position: "absolute",
     top: 0,
-    zIndex: 99,
+    width: sw200,
+    zIndex: 1,
   };
-  const expandButtonStyle: ViewStyle = { ...centerHV, ...circle(sw54, colorBlue._1), left: sw70 };
-  const overlayStyle: ViewStyle = { backgroundColor: colorBlack._1, opacity: 0.5, width: DEVICE.SCREEN.WIDTH };
-  const sideMenuContainer: ViewStyle = { ...shadow5, backgroundColor: colorWhite._2, height: DEVICE.SCREEN.HEIGHT, width: containerWidth };
+  const sideMenuV2Container: ViewStyle = {
+    ...shadow5,
+    backgroundColor: colorWhite._1,
+    borderTopRightRadius: sw24,
+    borderBottomRightRadius: sw24,
+    width: sw200,
+  };
+
+  const footerStyle: TextStyle = { ...fs12RegBlue25, ...px(sw24), letterSpacing: -0.3 };
 
   return (
     <View style={container}>
-      <View style={sideMenuContainer}>
-        <View style={px(sw36)}>
-          <CustomSpacer space={sh36} />
-          <Image source={LocalAssets.logo.kenanga} style={defaultLogoStyle} />
-          <CustomSpacer space={contentSpace} />
-          {children}
-          {collapse === false ? null : (
-            <TouchableWithoutFeedback onPress={onPressExpand}>
-              <View style={expandButtonStyle}>
-                <IcoMoon color={colorWhite._1} name="caret-right" />
-              </View>
-            </TouchableWithoutFeedback>
-          )}
+      <View style={sideMenuV2Container}>
+        <View style={px(sw24)}>
+          <CustomSpacer space={sh44} />
+          <Image source={image || LocalAssets.logo.kenanga_investors} style={defaultLogoStyle} />
+          <CustomSpacer space={spaceToContent || sh56} />
         </View>
+        {children}
         {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : <CustomFlexSpacer />}
-        {collapse === true ? null : <Image source={LocalAssets.onboarding.people} style={fullWidth} />}
+        <View style={borderBottomGray4} />
+        <View>
+          <CustomSpacer space={sh16} />
+          <Text style={footerStyle}>{SIDE_MENU.LABEL_FOOTER}</Text>
+          <CustomSpacer space={sh24} />
+        </View>
       </View>
-      {overlay === true ? (
-        <TouchableWithoutFeedback onPress={onPressBackdrop}>
-          <View style={overlayStyle} />
-        </TouchableWithoutFeedback>
-      ) : null}
     </View>
   );
 };

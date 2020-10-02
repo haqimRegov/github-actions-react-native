@@ -10,15 +10,17 @@ import {
   fs12RegBlack2,
   fs14RegBlack2,
   fullHW,
+  px,
   sh16,
   sh40,
   sw112,
   sw120,
   sw200,
+  sw24,
   sw40,
   sw8,
 } from "../../styles";
-import { SideMenuV2 } from "../Nav";
+import { SideMenu } from "../Nav";
 import { CustomSpacer } from "../Views";
 import { Step } from "./Step";
 
@@ -144,17 +146,19 @@ export const OnboardingSteps = ({
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>
-      <SideMenuV2>
-        <Accordion
-          activeSections={[activeSection]}
-          duration={300}
-          onChange={setSections}
-          renderContent={accordionContent}
-          renderHeader={accordionHeader}
-          sections={steps}
-          touchableProps={{ underlayColor: colorTransparent, ...touchablePress }}
-        />
-      </SideMenuV2>
+      <SideMenu>
+        <View style={px(sw24)}>
+          <Accordion
+            activeSections={[activeSection]}
+            duration={300}
+            onChange={setSections}
+            renderContent={accordionContent}
+            renderHeader={accordionHeader}
+            sections={steps}
+            touchableProps={{ underlayColor: colorTransparent, ...touchablePress }}
+          />
+        </View>
+      </SideMenu>
       <CustomSpacer isHorizontal={true} space={sw200} />
       <RenderContent handleNextStep={handleNextStep} />
     </View>

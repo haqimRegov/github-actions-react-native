@@ -1,3 +1,5 @@
+import { SAMPLE_AGENT } from "../../mocks";
+
 export type GlobalState = {
   agent?: IAgentProfile;
   config?: IConfig;
@@ -5,7 +7,7 @@ export type GlobalState = {
 };
 
 export const globalInitialState: GlobalState = {
-  agent: undefined,
+  agent: SAMPLE_AGENT,
   config: undefined,
   loading: false,
 };

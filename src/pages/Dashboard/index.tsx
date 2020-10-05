@@ -26,6 +26,7 @@ import {
   sh20,
   sh24,
   sh32,
+  sh4,
   sw033,
   sw039,
   sw05,
@@ -112,9 +113,10 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
               <Avatar image={{ uri: agent?.image }} />
               <CustomSpacer isHorizontal={true} space={sw16} />
               <View style={{ width: sw96 }}>
-                <Text numberOfLines={1} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh24 }}>
+                <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh20 }}>
                   {agent?.name}
                 </Text>
+                <CustomSpacer space={sh4} />
                 <Text style={{ ...fs14RegBlue2, letterSpacing: -sw039, lineHeight: sh16 }}>{agent?.role}</Text>
               </View>
             </View>
@@ -129,9 +131,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
               <CustomSpacer isHorizontal={true} space={sw16} />
             </View>
             <View style={borderBottomGray4} />
-            <View style={px(sw24)}>
-              <MenuList items={MENU_ITEMS} />
-            </View>
+            <MenuList activeIndex={0} items={MENU_ITEMS} />
           </View>
           <CustomFlexSpacer />
           <View style={borderBottomGray4} />

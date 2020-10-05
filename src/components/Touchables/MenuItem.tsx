@@ -2,11 +2,12 @@ import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerVertical, colorBlue, fs16BoldBlue2, sh32, sh56, sw8 } from "../../styles";
+import { centerVertical, colorBlue, colorRed, colorWhite, flexRow, fs16BoldBlue2, px, sh32, sh56, sw24, sw8 } from "../../styles";
 import { BadgeCount } from "../Badge";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
 export interface MenuItemProps {
+  active?: boolean;
   badgeCount?: number;
   color?: string;
   iconSize?: number;
@@ -19,6 +20,7 @@ export interface MenuItemProps {
 }
 
 export const MenuItem: FunctionComponent<MenuItemProps> = ({
+  active,
   badgeCount,
   color,
   iconSize,
@@ -29,21 +31,27 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
   text,
   textStyle,
 }: MenuItemProps) => {
+  const bgColor: ViewStyle = active === true ? { backgroundColor: colorRed._1 } : { backgroundColor: colorWhite._1 };
+  const selectedColor = active === true ? colorWhite._1 : colorBlue._2;
   const defaultButtonStyle: ViewStyle = {
+    ...bgColor,
     ...centerVertical,
+    ...flexRow,
+    ...px(sw24),
     height: sh56,
     ...style,
   };
   const textColor = color ? { color: color } : {};
   const defaultTextStyle: TextStyle = {
     ...fs16BoldBlue2,
+    color: selectedColor,
     ...textColor,
     ...textStyle,
   };
 
   const defaultSpaceBetween = spaceBetween !== undefined ? spaceBetween : sw8;
   const defaultSize = iconSize !== undefined ? iconSize : sh32;
-  const defaultColor = color !== undefined ? color : colorBlue._2;
+  const defaultColor = color !== undefined ? color : selectedColor;
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>

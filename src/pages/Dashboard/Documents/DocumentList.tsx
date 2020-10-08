@@ -16,7 +16,7 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, setDa
         return (
           <View key={index}>
             {index === 0 ? null : <CustomSpacer space={sh32} />}
-            <TextSpaceArea style={fs12BoldBlack2} text={relatedDocuments.label} />
+            <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={relatedDocuments.label} />
             {relatedDocuments.documents.map(({ document, reference }: IDocument, documentIndex: number) => {
               const resourceType = document?.url !== undefined ? "url" : "file";
               const handleProof = (file: FileBase64 | undefined) => {

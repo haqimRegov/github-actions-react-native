@@ -1,11 +1,11 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Image, Text, View, ViewStyle } from "react-native";
 
-import { ActionButtons, AdvancedDropdown, Badge, BasicModal, CheckBox, CustomSpacer, RoundedButton } from "../../../components";
+import { LocalAssets } from "../../../assets/LocalAssets";
+import { ActionButtons, AdvancedDropdown, BasicModal, CheckBox, CustomSpacer, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_BRANCHES } from "../../../data/dictionary";
-import { IcoMoon } from "../../../icons";
 import { SAMPLE_DOCUMENTS_1 } from "../../../mocks";
 import {
   borderBottomBlack21,
@@ -20,16 +20,19 @@ import {
   fullHW,
   px,
   sh16,
+  sh17,
+  sh174,
   sh24,
   sh32,
+  sh50,
   sh56,
-  sh90,
   sh96,
-  sw100,
+  sw164,
   sw218,
   sw24,
+  sw453,
+  sw48,
   sw5,
-  sw56,
   sw565,
   sw8,
 } from "../../../styles";
@@ -123,13 +126,13 @@ export const UploadHardCopy = ({ navigation, handleRoute }: UploadHardCopyProps)
       <BasicModal visible={showModal}>
         <View style={{ ...centerHV, ...fullHW }}>
           <View style={modalContainer}>
-            <View style={{ ...centerVertical, ...px(sw56) }}>
-              <CustomSpacer space={sh90} />
-              <Badge>
-                <IcoMoon name="file" size={sw100} />
-              </Badge>
-              <CustomSpacer space={sh24} />
-              <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter }}>{UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}</Text>
+            <View style={{ ...centerVertical, ...px(sw48) }}>
+              <CustomSpacer space={sh50} />
+              <Image source={LocalAssets.uploadSuccess.uploadSuccess} style={{ height: sh174, width: sw164 }} />
+              <CustomSpacer space={sh17} />
+              <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, maxWidth: sw453 }}>
+                {UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}
+              </Text>
               <CustomSpacer space={sh16} />
               <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter }}>{UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}</Text>
               <CustomSpacer space={sh56} />

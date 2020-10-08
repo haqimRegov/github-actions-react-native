@@ -1,6 +1,5 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { View } from "react-native";
 
 import {
   AddressField,
@@ -13,7 +12,7 @@ import {
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION } from "../../../data/dictionary";
-import { colorTransparent, fs12BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw48 } from "../../../styles";
+import { colorTransparent, fs12BoldBlack2, px, sh143, sh24, sh32, sh8, sw16, sw48 } from "../../../styles";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
@@ -101,8 +100,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const labelSameMailing = accountHolder === "Joint" ? ID_VERIFICATION.LABEL_MAILING_SAME_PRINCIPAL : ID_VERIFICATION.LABEL_MAILING_SAME;
 
   return (
-    <View style={px(sw24)}>
-      <CustomSpacer space={sh32} />
+    <Fragment>
+      <CustomSpacer space={sh24} />
       <CustomTextInput disabled={true} label={labelId} value={idNumber} />
       <CustomTextInput disabled={true} label={ID_VERIFICATION.LABEL_DOB} rightIcon="calendar" spaceToTop={sh32} value={formattedDOB} />
       <CustomTextInput label={ID_VERIFICATION.LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
@@ -179,6 +178,6 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
           />
         </Fragment>
       )}
-    </View>
+    </Fragment>
   );
 };

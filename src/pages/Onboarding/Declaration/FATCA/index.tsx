@@ -27,7 +27,6 @@ import {
   justifyContentEnd,
   px,
   py,
-  sh12,
   sh16,
   sh24,
   sh32,
@@ -111,7 +110,7 @@ export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({ fat
         <TextSpaceArea spaceToBottom={sh8} style={fs24BoldBlack2} text={DECLARATION.LABEL_FATCA} />
         <LinkText text={DECLARATION.LABEL_DECLARATION} onPress={handleFATCAPress} />
         <View style={flexRow}>
-          <TextSpaceArea text={DECLARATION.LABEL_US_CITIZEN} spaceToTop={sh24} style={fs16RegBlack2} />
+          <TextSpaceArea text={DECLARATION.LABEL_US_CITIZEN} spaceToTop={sh24} style={{ ...fs16RegBlack2, lineHeight: sh24 }} />
           <CustomSpacer isHorizontal={true} space={sw12} />
           <View style={justifyContentEnd}>
             <CustomPopup popupStyle={{ width: sw208 }} popupText={DECLARATION.INFO_US_CITIZEN} textStyle={{ width: sw200 }}>
@@ -121,7 +120,12 @@ export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({ fat
         </View>
         <CustomSpacer space={sh16} />
         <RadioButtonGroup direction="row" options={OPTIONS_US_CITIZEN} selected={usCitizen!} setSelected={setInputAmerican} space={sw48} />
-        <TextSpaceArea text={DECLARATION.LABEL_US_BORN} spaceToTop={sh32} spaceToBottom={sh16} style={fs16RegBlack2} />
+        <TextSpaceArea
+          text={DECLARATION.LABEL_US_BORN}
+          spaceToTop={sh32}
+          spaceToBottom={sh16}
+          style={{ ...fs16RegBlack2, lineHeight: sh24 }}
+        />
         <RadioButtonGroup direction="row" options={OPTIONS_US_BORN} selected={usBorn!} setSelected={setInputUSBorn} space={sw48} />
       </View>
       {usBorn === OPTIONS_US_BORN[0] ? (
@@ -164,7 +168,7 @@ export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({ fat
             />
             {noCertificate === true ? (
               <View style={px(sw32)}>
-                <RadioButtonGroup spaceToTop={sh12} options={OPTIONS_NO_CERTIFICATE} selected={reason!} setSelected={handleReason} />
+                <RadioButtonGroup spaceToTop={sh8} options={OPTIONS_NO_CERTIFICATE} selected={reason!} setSelected={handleReason} />
                 {reason! === OPTIONS_NO_CERTIFICATE[1] ? (
                   <TextInputArea
                     label={DECLARATION.LABEL_NO_CERTIFICATE_REASON}

@@ -4,7 +4,7 @@ import { Alert, View } from "react-native";
 import { CustomSpacer, LinkText, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_TAX_RESIDENCY } from "../../../../data/dictionary";
-import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sh8, sw24 } from "../../../../styles";
+import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh20, sh24, sh32, sh8, sw24 } from "../../../../styles";
 import { NO_TIN_OPTIONS, TaxIdentificationNumber } from "./TaxIdentificationNumber";
 
 const { DECLARATION } = Language.PAGE;
@@ -52,7 +52,7 @@ export const CRSDeclaration: FunctionComponent<CRSDeclarationProps> = ({ crs, se
         <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs24BoldBlack2} text={DECLARATION.LABEL_CRS} />
         <LinkText text={DECLARATION.LABEL_DECLARATION} onPress={handleCRSPress} />
         <CustomSpacer space={sh24} />
-        <TextSpaceArea spaceToBottom={sh16} style={fs16SemiBoldBlack2} text={DECLARATION.LABEL_TAX_RESIDENCY} />
+        <TextSpaceArea spaceToBottom={sh20} style={fs16SemiBoldBlack2} text={DECLARATION.LABEL_TAX_RESIDENCY} />
         <RadioButtonGroup options={OPTIONS_TAX_RESIDENCY} selected={inputTaxResidency} setSelected={handleTaxResidency} />
       </View>
       {inputTaxResidency !== OPTIONS_TAX_RESIDENCY[0] ? (

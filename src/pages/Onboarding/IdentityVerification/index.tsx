@@ -180,6 +180,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       ? `${inputJointIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
       : `${inputJointIdType}`;
   const defaultJointTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${jointTitle}`;
+  const principalHolderName = details !== undefined ? details.name : IDENTITY_CONFIRMATION.LABEL_PRINCIPAL;
 
   return (
     <Fragment>
@@ -189,7 +190,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             <View style={px(sw24)}>
               <CustomSpacer space={sh32} />
               {accountType === "Individual" ? null : (
-                <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} />
+                <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={principalHolderName!} />
               )}
               <LabeledTitle
                 label={IDENTITY_CONFIRMATION.HEADING}

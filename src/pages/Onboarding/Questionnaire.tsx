@@ -35,6 +35,7 @@ import {
   sh24,
   sh32,
   sh40,
+  sh56,
   sh8,
   sh80,
   sw140,
@@ -319,6 +320,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         handleContinue={handleContinue}
         labelCancel={labelCancel}
         labelContinue={labelContinue}
+        spaceToButton={sh32}
+        spaceToContent={sh24}
+        spaceToTitle={sh56}
         title={modalTitle}
         titleStyle={modalTitleStyle}
         visible={confirmModal !== undefined}>

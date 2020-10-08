@@ -178,6 +178,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
               handleContinue={handleEnterOTP}
               illustration={LocalAssets.illustration.login_error}
               label={LOGIN.LABEL_LOCKED_ACCOUNT}
+              spaceToContent={0}
               title={LOGIN.TITLE_LOCKED_ACCOUNT}
             />
           ) : (

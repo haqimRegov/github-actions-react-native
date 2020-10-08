@@ -24,7 +24,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh4,
   sh8,
   sw1,
   sw120,
@@ -72,7 +71,7 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
   const buttonStyle: ViewStyle = { ...px(sw16), height: sh24, width: "auto" };
   const holder = toggle === false ? DASHBOARD_ORDER_DETAILS.LABEL_JOINT_ACCOUNT : DASHBOARD_ORDER_DETAILS.LABEL_PRINCIPAL_ACCOUNT;
   const profilePicStyle: ImageStyle = { ...circleBorder(sh120, sw1, colorWhite._1) };
-  const cardWrapProps = { spaceBetween: sw64, noInitialSpace: true, labelStyle: fs12BoldBlack2 };
+  const cardWrapProps = { spaceBetween: sw64, noInitialSpace: true, labelStyle: { ...fs12BoldBlack2, lineHeight: sh16 } };
 
   return (
     <Fragment>
@@ -87,14 +86,21 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
         </View>
         <CustomSpacer isHorizontal={true} space={sw40} />
         <View style={{ width: sw240 }}>
-          <LabeledTitle label={DASHBOARD_ORDER_DETAILS.LABEL_NAME} spaceToLabel={sh4} title={data.name} titleStyle={fs16BoldBlack2} />
-          <CustomSpacer space={sh8} />
+          <LabeledTitle
+            label={DASHBOARD_ORDER_DETAILS.LABEL_NAME}
+            labelStyle={{ lineHeight: sh16 }}
+            spaceToLabel={sh8}
+            title={data.name}
+            titleStyle={fs16BoldBlack2}
+          />
+          <CustomSpacer space={sh16} />
           <LabeledTitle
             iconSize={sw20}
             label={DASHBOARD_ORDER_DETAILS.LABEL_NRIC}
+            labelStyle={{ lineHeight: sh16 }}
             onPress={handleNric}
             spaceToIcon={sw20}
-            spaceToLabel={sh4}
+            spaceToLabel={sh8}
             title={data.id}
             titleIcon="profile-card"
             titleStyle={fs16BoldBlack2}

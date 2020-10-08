@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { flexRow, fs10BoldBlack2, fs16BoldBlack2, fsCapitalize, sh6, sw144, sw16 } from "../../styles";
+import { flexRow, fs10BoldBlack2, fs16BoldBlack2, fsCapitalize, sh8, sw144, sw16 } from "../../styles";
 import { LabeledTitle, LabeledTitleProps } from "../Views/LabeledTitle";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -32,7 +32,7 @@ export const BasicCard: FunctionComponent<BasicCardProps> = ({
             {...item}
             labelStyle={{ ...fs10BoldBlack2, ...labelStyle, ...item.labelStyle }}
             onPress={item.onPress}
-            spaceToLabel={sh6}
+            spaceToLabel={sh8}
             style={{ minWidth: sw144, ...itemStyle, ...item.style }}
             titleStyle={{ ...fs16BoldBlack2, ...fsCapitalize, ...titleStyle, ...item.titleStyle }}
           />

@@ -4,7 +4,20 @@ import { ScrollView, Text, View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions } from "../../components";
 import { IcoMoon } from "../../icons";
-import { borderBottomGray4, centerVertical, flexGrow, flexRow, fs24BoldBlack2, fullHeight, px, sh16, sw20, sw24 } from "../../styles";
+import {
+  alignItemsEnd,
+  alignSelfCenter,
+  borderBottomGray4,
+  centerVertical,
+  flexGrow,
+  flexRow,
+  fs24BoldBlack2,
+  fullHeight,
+  px,
+  sh16,
+  sw20,
+  sw24,
+} from "../../styles";
 import { AddClient } from "./AddClient";
 
 interface DashboardLayoutProps {
@@ -67,13 +80,18 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
             <View style={{ ...centerVertical, ...flexRow }}>
-              {titleIcon !== undefined ? (
-                <Fragment>
-                  <IcoMoon name={titleIcon} onPress={titleIconOnPress} size={sw24} />
-                  <CustomSpacer isHorizontal={true} space={sw20} />
-                </Fragment>
-              ) : null}
-              {title !== undefined ? <Text style={fs24BoldBlack2}>{title}</Text> : null}
+              <View>
+                <CustomSpacer space={sh16} />
+                <View style={flexRow}>
+                  {titleIcon !== undefined ? (
+                    <Fragment>
+                      <IcoMoon name={titleIcon} onPress={titleIconOnPress} size={sw24} style={alignSelfCenter} />
+                      <CustomSpacer isHorizontal={true} space={sw20} />
+                    </Fragment>
+                  ) : null}
+                  {title !== undefined ? <Text style={{ ...fs24BoldBlack2, ...alignItemsEnd }}>{title}</Text> : null}
+                </View>
+              </View>
               <CustomFlexSpacer />
               {hideQuickActions === true ? null : <QuickActions actions={QUICK_ACTIONS} />}
             </View>

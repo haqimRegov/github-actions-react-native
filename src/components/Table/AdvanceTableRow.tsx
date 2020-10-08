@@ -17,6 +17,7 @@ import {
   fs12BoldBlack2,
   fsCapitalize,
   px,
+  sh16,
   sh24,
   sh8,
   sh80,
@@ -155,11 +156,11 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                             <View key={labelIndex} style={{ ...flexRow, ...centerVertical }}>
                               {label.prefix !== undefined ? (
                                 <Fragment>
-                                  <Text style={{ ...textStyle, ...label.prefixStyle }}>{label.prefix}</Text>
+                                  <Text style={{ ...textStyle, ...label.prefixStyle, lineHeight: sh16 }}>{label.prefix}</Text>
                                   <CustomSpacer isHorizontal={true} space={sw4} />
                                 </Fragment>
                               ) : null}
-                              <Text numberOfLines={2} style={{ ...textStyle, ...label.textStyle }}>
+                              <Text numberOfLines={2} style={{ ...textStyle, ...label.textStyle, lineHeight: sh16 }}>
                                 {label.label}
                               </Text>
                             </View>

@@ -14,8 +14,7 @@ import {
   sh56,
   sh96,
   sw10,
-  sw234,
-  sw40,
+  sw218,
   sw5,
   sw56,
   sw565,
@@ -27,8 +26,10 @@ import { BasicModal } from "./Basic";
 interface ModalProps extends ActionButtonsProps {
   children: JSX.Element;
   keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
+  paddingHorizontal?: number;
   spaceToButton?: number;
   spaceToContent?: number;
+  spaceToTitle?: number;
   title: string;
   titleStyle?: TextStyle;
   visible: boolean;
@@ -39,13 +40,16 @@ type TypeBehavior = "height" | "position" | "padding" | undefined;
 export const ConfirmationModal = ({
   children,
   keyboardAvoidingRef,
+  paddingHorizontal,
   spaceToButton,
   spaceToContent,
+  spaceToTitle,
   title,
   titleStyle,
   visible,
   ...rest
 }: ModalProps) => {
+  const defaultPaddingHorizontal = paddingHorizontal !== undefined ? paddingHorizontal : sw56;
   const defaultSpaceToContent = spaceToContent === undefined ? sh32 : spaceToContent;
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
@@ -64,7 +68,7 @@ export const ConfirmationModal = ({
     height: sh96,
   };
 
-  const buttonStyle: ViewStyle = { width: sw234 };
+  const buttonStyle: ViewStyle = { width: sw218 };
 
   const actionButtonProps: ActionButtonsProps = {
     ...rest,
@@ -75,6 +79,7 @@ export const ConfirmationModal = ({
 
   // TODO: fix KeyboardAvoidingView behavior, for now if number of TextInput become more it pushes top fields out of screen
   const behavior: TypeBehavior = Platform.select({ ios: "padding" });
+  const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh32;
 
   return (
     <BasicModal visible={visible}>
@@ -82,8 +87,8 @@ export const ConfirmationModal = ({
         <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
           <View style={{ ...centerHV, ...fullHW }}>
             <View style={modalContainer}>
-              <View style={px(sw40)}>
-                <CustomSpacer space={sh32} />
+              <View style={px(defaultPaddingHorizontal)}>
+                <CustomSpacer space={defaultSpaceToTitle} />
                 <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
                 <CustomSpacer space={defaultSpaceToContent} />
                 {children}

@@ -1,11 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import {
   AdvancedDropdown,
   AdvanceRadioGroup,
   CheckBox,
-  CustomPopup,
   CustomSpacer,
   CustomTextInput,
   IAdvanceRadio,
@@ -14,6 +13,7 @@ import {
   TextInputArea,
   TextSpaceArea,
 } from "../../../../components";
+import { TooltipComponent } from "../../../../components/Tooltip";
 import { Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
@@ -22,6 +22,7 @@ import {
   colorBlack,
   flexRow,
   fs12BoldBlack2,
+  fs12BoldWhite1,
   fs16RegBlack2,
   px,
   sh12,
@@ -29,13 +30,18 @@ import {
   sh24,
   sh32,
   sw24,
-  sw264,
+  sw265,
   sw32,
   sw8,
 } from "../../../../styles";
 
 const { DECLARATION } = Language.PAGE;
 
+const popupContent = (
+  <View>
+    <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{DECLARATION.INFO_NO_TIN}</Text>
+  </View>
+);
 export const NO_TIN_OPTIONS: IAdvanceRadio[] = [
   { label: DECLARATION.OPTION_NO_TIN_COUNTRY, value: DECLARATION.OPTION_NO_TIN_COUNTRY },
   {
@@ -43,9 +49,9 @@ export const NO_TIN_OPTIONS: IAdvanceRadio[] = [
     right: (
       <View style={flexRow}>
         <CustomSpacer isHorizontal={true} space={sw8} />
-        <CustomPopup popupStyle={{ width: sw264 }} popupText={DECLARATION.INFO_NO_TIN}>
+        <TooltipComponent content={popupContent} contentStyle={{ width: sw265 }} showChild={false}>
           <IcoMoon name="info" size={sh24} />
-        </CustomPopup>
+        </TooltipComponent>
       </View>
     ),
     value: DECLARATION.OPTION_NO_TIN_REQUIRED,

@@ -2,16 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import {
-  BasicAccordion,
-  CheckBox,
-  ContentPage,
-  CustomFlexSpacer,
-  CustomPopup,
-  CustomSpacer,
-  LinkText,
-  RadioButtonGroup,
-} from "../../components";
+import { BasicAccordion, CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, LinkText, RadioButtonGroup } from "../../components";
+import { TooltipComponent } from "../../components/Tooltip";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
 import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../mocks/terms-and-conditions";
@@ -23,6 +15,7 @@ import {
   centerVertical,
   flexRow,
   fs12BoldBlack2,
+  fs12BoldWhite1,
   fs12SemiBoldBlue1,
   fs16SemiBoldBlack2,
   px,
@@ -34,6 +27,7 @@ import {
   sh8,
   sw12,
   sw24,
+  sw265,
   sw800,
 } from "../../styles";
 
@@ -102,6 +96,16 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }
 
+  const popupContentTerms = (
+    <View>
+      <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>
+    </View>
+  );
+  const popupContentConsent = (
+    <View>
+      <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{TERMS_AND_CONDITIONS.POPUP_CONSENT}</Text>
+    </View>
+  );
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agree1 === true && agree2 === true && agree3 === true && agree4 === true);
 
@@ -117,9 +121,9 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
         <View style={termsHeader}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
-          <CustomPopup popupText={TERMS_AND_CONDITIONS.POPUP_TERMS}>
-            <IcoMoon name="info" size={sw24} />
-          </CustomPopup>
+          <TooltipComponent content={popupContentTerms} contentStyle={{ width: sw265 }} showChild={false}>
+            <IcoMoon name="info" size={sh24} />
+          </TooltipComponent>
           <CustomFlexSpacer />
           <LinkText onPress={handleExpandAll} style={fs12SemiBoldBlue1} text={TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL} />
         </View>
@@ -155,9 +159,9 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
         <View style={{ ...centerVertical, ...flexRow }}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.LABEL_CONSENT}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
-          <CustomPopup popupText={TERMS_AND_CONDITIONS.POPUP_CONSENT}>
-            <IcoMoon name="info" size={sw24} />
-          </CustomPopup>
+          <TooltipComponent content={popupContentConsent} contentStyle={{ width: sw265 }} showChild={false}>
+            <IcoMoon name="info" size={sh24} />
+          </TooltipComponent>
         </View>
         <CustomSpacer space={sh16} />
         <RadioButtonGroup

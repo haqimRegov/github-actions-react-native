@@ -2,12 +2,13 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomPopup, CustomSpacer } from "../../components";
+import { ContentPage, CustomSpacer } from "../../components";
+import { TooltipComponent } from "../../components/Tooltip";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { IcoMoon } from "../../icons";
 import { SAMPLE_ORDER_SUMMARY } from "../../mocks";
 import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store/Acknowledgement";
-import { borderBottomBlack21, flexRow, fs16SemiBoldBlack2, px, sh24, sh8, shadow5, sw12, sw24 } from "../../styles";
+import { borderBottomBlack21, flexRow, fs12BoldWhite1, fs16SemiBoldBlack2, px, sh24, sh8, shadow5, sw12, sw24, sw376 } from "../../styles";
 import { OrderDetails } from "./Order/OrderDetails";
 
 interface OrderSummaryProps extends OrderSummaryStoreProps {
@@ -32,6 +33,11 @@ const OrderSummaryContent = ({ handleNextStep, addOrders }: OrderSummaryProps) =
     Alert.alert("reset");
   };
 
+  const popupContent = (
+    <View>
+      <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{ORDER_SUMMARY.POPUP_ORDER_SUMMARY}</Text>
+    </View>
+  );
   const orderSummaryHeader: ViewStyle = { ...flexRow, ...px(sw24), zIndex: 2 };
 
   return (
@@ -44,9 +50,9 @@ const OrderSummaryContent = ({ handleNextStep, addOrders }: OrderSummaryProps) =
       <View style={orderSummaryHeader}>
         <Text style={fs16SemiBoldBlack2}>{ORDER_SUMMARY.LABEL_ORDER_SUMMARY}</Text>
         <CustomSpacer isHorizontal={true} space={sw12} />
-        <CustomPopup direction="right" popupText={ORDER_SUMMARY.POPUP_ORDER_SUMMARY}>
-          <IcoMoon name="info" size={sw24} />
-        </CustomPopup>
+        <TooltipComponent content={popupContent} contentStyle={{ width: sw376 }} showChild={false}>
+          <IcoMoon name="info" size={sh24} />
+        </TooltipComponent>
       </View>
       <CustomSpacer space={sh24} />
       {data.map((orderSummary: IOrderSummary, index: number) => {

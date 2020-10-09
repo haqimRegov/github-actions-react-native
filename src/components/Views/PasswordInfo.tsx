@@ -4,7 +4,7 @@ import { Text, TextStyle, View } from "react-native";
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import { flexRow, fs12BoldWhite1, fs12RegWhite1, px, py, sh16, sh20, sh24, sw16, sw296, sw4 } from "../../styles";
-import { CustomPopup } from "../Popup";
+import { TooltipComponent } from "../Tooltip";
 
 const { PASSWORD } = Language.PAGE;
 
@@ -39,8 +39,8 @@ export const PasswordInfo = () => {
     </View>
   );
   return (
-    <CustomPopup direction="top" popupContent={infoContent} popupStyle={{ width: sw296 }}>
+    <TooltipComponent content={infoContent} contentStyle={{ width: sw296 }} showChild={false}>
       <IcoMoon name="info" size={sh24} />
-    </CustomPopup>
+    </TooltipComponent>
   );
 };

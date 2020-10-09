@@ -1,18 +1,10 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, Image, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
+import { Alert, Image, Text, TextStyle, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import {
-  ConfirmationModal,
-  ContentPage,
-  CustomPopup,
-  CustomSlider,
-  CustomSpacer,
-  LabeledTitle,
-  Question,
-  RadioButton,
-} from "../../components";
+import { ConfirmationModal, ContentPage, CustomSlider, CustomSpacer, LabeledTitle, Question, RadioButton } from "../../components";
+import { TooltipComponent } from "../../components/Tooltip";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { Q1_OPTIONS, Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
@@ -26,6 +18,7 @@ import {
   fs12SemiBoldBlack2,
   fs16BoldBlack1,
   fs16BoldBlack2,
+  fs16SemiBoldBlack2,
   px,
   py,
   sh104,
@@ -37,12 +30,8 @@ import {
   sh40,
   sh56,
   sh8,
-  sh80,
   sw140,
-  sw16,
   sw20,
-  sw204,
-  sw208,
   sw221,
   sw24,
   sw256,
@@ -237,41 +226,29 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                 return (
                   <Fragment>
                     {options!.map((option: string, index: number) => {
-                      const popupStyle: ViewStyle = {
-                        ...px(sw16),
-                        ...py(sh16),
-                        height: index === 0 ? sh104 : sh80,
-                        width: sw204,
-                      };
                       const infoContent =
                         index === 1 ? (
-                          <View style={popupStyle}>
+                          <View>
                             <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_ASSET_1}</Text>
-                            <CustomSpacer space={sh8} />
                             <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_ASSET_2}</Text>
                           </View>
                         ) : (
-                          <View style={popupStyle}>
+                          <View>
                             <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{RISK_ASSESSMENT.POPUP_INCOME}</Text>
                           </View>
                         );
-                      const defaultCondition = index <= 1 ? infoContent : null;
+                      const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
                       const showPopup = index === 0 ? popupIncome : popupAsset;
+
                       const handleSelect = () => {
                         setSelected(options!.indexOf(option));
                       };
 
-                      const handleToggle = (toggle: boolean) => {
+                      const handleToggle = () => {
                         if (index === 0) {
-                          if (toggle === true) {
-                            setPopupAsset(false);
-                          }
-                          setPopupIncome(toggle);
+                          setPopupIncome(!popupIncome);
                         } else {
-                          if (toggle === true) {
-                            setPopupIncome(false);
-                          }
-                          setPopupAsset(toggle);
+                          setPopupAsset(!popupAsset);
                         }
                       };
 
@@ -288,16 +265,16 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                             {index < 2 ? (
                               <Fragment>
                                 <CustomSpacer isHorizontal={true} space={sw20} />
-                                <CustomPopup
-                                  direction="right"
-                                  popupContent={defaultCondition}
-                                  popupOnPress={handleToggle}
-                                  popupStyle={{ width: sw208 }}
-                                  show={showPopup}>
+                                <TooltipComponent
+                                  content={defaultCondition}
+                                  isVisible={showPopup}
+                                  onClose={handleToggle}
+                                  onPress={handleToggle}
+                                  showChild={true}>
                                   <View style={{ height: sh24, width: sw30 }}>
                                     <IcoMoon name="info" size={sh24} />
                                   </View>
-                                </CustomPopup>
+                                </TooltipComponent>
                               </Fragment>
                             ) : null}
                           </View>

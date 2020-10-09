@@ -9,6 +9,7 @@ export * from "./CommonPages";
 export * from "./DateAndTimePicker";
 export * from "./Dropdown";
 export * from "./Graph";
+export * from "./Items";
 export * from "./Input";
 export * from "./List";
 export * from "./Modals";

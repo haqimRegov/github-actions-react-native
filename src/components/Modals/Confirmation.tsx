@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
@@ -23,10 +23,10 @@ import { ActionButtons, ActionButtonsProps } from "../Views/ActionButtons";
 import { CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
 
-interface ModalProps extends ActionButtonsProps {
+interface ConfirmationModalProps extends ActionButtonsProps {
   children: JSX.Element;
+  headerStyle?: ViewStyle;
   keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
-  paddingHorizontal?: number;
   spaceToButton?: number;
   spaceToContent?: number;
   spaceToTitle?: number;
@@ -37,10 +37,10 @@ interface ModalProps extends ActionButtonsProps {
 
 type TypeBehavior = "height" | "position" | "padding" | undefined;
 
-export const ConfirmationModal = ({
+export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   children,
+  headerStyle,
   keyboardAvoidingRef,
-  paddingHorizontal,
   spaceToButton,
   spaceToContent,
   spaceToTitle,
@@ -48,8 +48,7 @@ export const ConfirmationModal = ({
   titleStyle,
   visible,
   ...rest
-}: ModalProps) => {
-  const defaultPaddingHorizontal = paddingHorizontal !== undefined ? paddingHorizontal : sw56;
+}: ConfirmationModalProps) => {
   const defaultSpaceToContent = spaceToContent === undefined ? sh32 : spaceToContent;
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
@@ -87,7 +86,7 @@ export const ConfirmationModal = ({
         <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
           <View style={{ ...centerHV, ...fullHW }}>
             <View style={modalContainer}>
-              <View style={px(defaultPaddingHorizontal)}>
+              <View style={{ ...px(sw56), ...headerStyle }}>
                 <CustomSpacer space={defaultSpaceToTitle} />
                 <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
                 <CustomSpacer space={defaultSpaceToContent} />

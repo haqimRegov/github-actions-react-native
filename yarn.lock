@@ -7947,7 +7947,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8015,6 +8015,11 @@ react-devtools-core@^4.0.6:
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"
+
+react-fast-compare@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
+  integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
 react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.13.1"
@@ -8176,6 +8181,14 @@ react-native-view-pdf@0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/react-native-view-pdf/-/react-native-view-pdf-0.11.0.tgz#8853b63c664a00b56fc57ee20249a225425ca70d"
   integrity sha512-Q63eoTMzepmhQuC2H6JG/vrgCP9t9dGtX74+m4KsCcQlxthBWrP1UKOOVYb0IFa0fgKOilTpQsjjhem08YfgxA==
+
+react-native-walkthrough-tooltip@^1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/react-native-walkthrough-tooltip/-/react-native-walkthrough-tooltip-1.1.11.tgz#8ff6c769346202e236ce452dfd11d5abd16cb624"
+  integrity sha512-3NpqjO4Wwm68TqcRfodjlBmFpzLezBlJL3F5jC66MuVYBWx2LmpWC/yO0RT9p7hZwNpydVRAC6RXFi6T3cQI3Q==
+  dependencies:
+    prop-types "^15.6.1"
+    react-fast-compare "^2.0.4"
 
 react-native-windows@^0.62.0-0:
   version "0.62.12"

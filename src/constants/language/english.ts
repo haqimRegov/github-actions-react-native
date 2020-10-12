@@ -751,7 +751,7 @@ export const english = {
       QUESTION_4: "If you could choose only one of the three hypothetical portfolios characterized below, which would you choose?",
       QUESTION_5: "What percentage of your annual income can be invested?",
       QUESTION_6: "What is your gross annual income in MYR?",
-      QUESTION_7: "Do you fall under any pf the following categories?",
+      QUESTION_7: "Do you fall under any of the following categories?",
       SKIP_MODAL_CERTIFY:
         "I/We certify that the information on this form is accurate. If at any time, a change in the circumstances occurs that causes any of the certifications ‘1’ to ‘5’ above to become no longer true, I/We will inform Kenanga within 30 days. ",
       SKIP_MODAL_TITLE: "Skip Risk Assessment",

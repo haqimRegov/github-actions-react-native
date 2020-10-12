@@ -99,7 +99,7 @@ export const OnboardingSteps = ({
               <TouchableWithoutFeedback key={index} onPress={onPress}>
                 <View style={{ width: sw112 }}>
                   <CustomSpacer space={sh16} />
-                  <Text style={textStyle}>{item.title}</Text>
+                  <Text style={{ ...textStyle, lineHeight: sh16 }}>{item.title}</Text>
                 </View>
               </TouchableWithoutFeedback>
             );

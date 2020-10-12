@@ -3,8 +3,8 @@ import { Alert, Text, View } from "react-native";
 
 import {
   CheckBox,
-  CustomPopup,
   CustomSpacer,
+  CustomTooltip,
   LinkText,
   RadioButtonGroup,
   TextInputArea,
@@ -13,7 +13,6 @@ import {
 } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_NO_CERTIFICATE, OPTIONS_US_BORN, OPTIONS_US_CITIZEN } from "../../../../data/dictionary";
-import { IcoMoon } from "../../../../icons";
 import {
   alignSelfStart,
   borderBottomBlack21,
@@ -21,6 +20,7 @@ import {
   flexChild,
   flexRow,
   fs12BoldBlack2,
+  fs12BoldWhite1,
   fs14BoldBlack2,
   fs16RegBlack2,
   fs24BoldBlack2,
@@ -34,8 +34,6 @@ import {
   sh40,
   sh8,
   sw12,
-  sw200,
-  sw208,
   sw24,
   sw32,
   sw464,
@@ -102,6 +100,12 @@ export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({ fat
     setInputExplanation(value);
   };
 
+  const popupContent = (
+    <View>
+      <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{DECLARATION.INFO_US_CITIZEN}</Text>
+    </View>
+  );
+
   const bottomSpace = usBorn === OPTIONS_US_BORN[1] ? sh40 : sh24;
 
   return (
@@ -113,9 +117,7 @@ export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({ fat
           <TextSpaceArea text={DECLARATION.LABEL_US_CITIZEN} spaceToTop={sh24} style={{ ...fs16RegBlack2, lineHeight: sh24 }} />
           <CustomSpacer isHorizontal={true} space={sw12} />
           <View style={justifyContentEnd}>
-            <CustomPopup popupStyle={{ width: sw208 }} popupText={DECLARATION.INFO_US_CITIZEN} textStyle={{ width: sw200 }}>
-              <IcoMoon name="info" size={sh24} />
-            </CustomPopup>
+            <CustomTooltip content={popupContent} />
           </View>
         </View>
         <CustomSpacer space={sh16} />

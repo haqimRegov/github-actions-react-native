@@ -20,7 +20,6 @@ import {
   fs16BoldBlue2,
   px,
   py,
-  sh16,
   sh24,
   sh32,
   sh8,
@@ -102,7 +101,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
               <CustomSpacer isHorizontal={true} space={sw16} />
               {index === 0 ? null : <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} />}
             </View>
-            <CustomSpacer space={sh16} />
+            <CustomSpacer space={sh24} />
             <View style={px(sw24)}>
               <CustomTextInput disabled={true} label={PERSONAL_DETAILS.LABEL_CURRENCY} value={item.currency![0]} />
               {item

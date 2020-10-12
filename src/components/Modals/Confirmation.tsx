@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
@@ -14,8 +14,7 @@ import {
   sh56,
   sh96,
   sw10,
-  sw234,
-  sw40,
+  sw218,
   sw5,
   sw56,
   sw565,
@@ -24,11 +23,13 @@ import { ActionButtons, ActionButtonsProps } from "../Views/ActionButtons";
 import { CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
 
-interface ModalProps extends ActionButtonsProps {
+interface ConfirmationModalProps extends ActionButtonsProps {
   children: JSX.Element;
+  headerStyle?: ViewStyle;
   keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
   spaceToButton?: number;
   spaceToContent?: number;
+  spaceToTitle?: number;
   title: string;
   titleStyle?: TextStyle;
   visible: boolean;
@@ -36,16 +37,18 @@ interface ModalProps extends ActionButtonsProps {
 
 type TypeBehavior = "height" | "position" | "padding" | undefined;
 
-export const ConfirmationModal = ({
+export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   children,
+  headerStyle,
   keyboardAvoidingRef,
   spaceToButton,
   spaceToContent,
+  spaceToTitle,
   title,
   titleStyle,
   visible,
   ...rest
-}: ModalProps) => {
+}: ConfirmationModalProps) => {
   const defaultSpaceToContent = spaceToContent === undefined ? sh32 : spaceToContent;
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
@@ -64,7 +67,7 @@ export const ConfirmationModal = ({
     height: sh96,
   };
 
-  const buttonStyle: ViewStyle = { width: sw234 };
+  const buttonStyle: ViewStyle = { width: sw218 };
 
   const actionButtonProps: ActionButtonsProps = {
     ...rest,
@@ -75,6 +78,7 @@ export const ConfirmationModal = ({
 
   // TODO: fix KeyboardAvoidingView behavior, for now if number of TextInput become more it pushes top fields out of screen
   const behavior: TypeBehavior = Platform.select({ ios: "padding" });
+  const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh32;
 
   return (
     <BasicModal visible={visible}>
@@ -82,8 +86,8 @@ export const ConfirmationModal = ({
         <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
           <View style={{ ...centerHV, ...fullHW }}>
             <View style={modalContainer}>
-              <View style={px(sw40)}>
-                <CustomSpacer space={sh32} />
+              <View style={{ ...px(sw56), ...headerStyle }}>
+                <CustomSpacer space={defaultSpaceToTitle} />
                 <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
                 <CustomSpacer space={defaultSpaceToContent} />
                 {children}

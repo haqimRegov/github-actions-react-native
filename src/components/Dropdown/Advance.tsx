@@ -75,7 +75,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
 
-  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
   const labelExtractor = items.map((item) => item.label);
 
   return (

@@ -102,7 +102,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
       label={INVESTMENT.LABEL_AMOUNT}
       onChangeText={handleInvestmentAmount}
       prefixStyle={fs16RegBlack2}
-      spaceToLabel={sh8}
       value={investmentAmount}
     />
   );
@@ -126,20 +125,14 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
       <View style={{ ...flexRow, ...px(sw24) }}>
         {fund.isEpf && age < 55 ? (
           <View>
-            <TextSpaceArea spaceToBottom={sh16} style={{ ...fs16RegBlack2, width: sw360 }} text={INVESTMENT.LABEL_FUND} />
-            <RadioButtonGroup options={RADIO_GROUP_1} space={sh24} selected={fundPaymentMethod} setSelected={handleFundingMethod} />
+            <TextSpaceArea spaceToBottom={sh16} style={{ ...fs16RegBlack2, width: sw360, lineHeight: sh24 }} text={INVESTMENT.LABEL_FUND} />
+            <RadioButtonGroup options={RADIO_GROUP_1} space={sh16} selected={fundPaymentMethod} setSelected={handleFundingMethod} />
           </View>
         ) : (
           investmentAmountInput
         )}
         <CustomSpacer isHorizontal={true} space={sw64} />
-        <CustomTextInput
-          disabled={true}
-          label={INVESTMENT.LABEL_CURRENCY}
-          spaceToLabel={sh8}
-          style={fs16BoldBlack26}
-          value={fund.fundCurrency}
-        />
+        <CustomTextInput disabled={true} label={INVESTMENT.LABEL_CURRENCY} style={fs16BoldBlack26} value={fund.fundCurrency} />
       </View>
       <CustomSpacer space={sh32} />
       <View style={borderBottomBlack21} />
@@ -174,7 +167,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
                 inputPrefix={fund.fundCurrency}
                 label={INVESTMENT.LABEL_SCHEDULE_PAYMENT}
                 onChangeText={handleScheduledAmount}
-                spaceToLabel={sh8}
                 value={scheduledInvestmentAmount}
               />
               <CustomSpacer isHorizontal={true} space={sw64} />

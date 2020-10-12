@@ -18,6 +18,7 @@ import {
   sh16,
   sh24,
   sh29,
+  sh8,
   sh80,
   sw16,
   sw24,
@@ -102,7 +103,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fundSummary }
         <View>
           <CustomSpacer space={sh24} />
           <View style={flexRow}>
-            <Text style={fs16RegBlack2}>{fundCurrency}</Text>
+            <Text style={{ ...fs16RegBlack2, lineHeight: sh24 }}>{fundCurrency}</Text>
             <CustomSpacer isHorizontal={true} space={sw4} />
             <Text style={fs16BoldBlack2}>{investmentAmount}</Text>
           </View>
@@ -111,6 +112,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fundSummary }
       <View>
         <CustomSpacer space={sh16} />
         <CardWrap data={summary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+        <CustomSpacer space={sh8} />
       </View>
     </Fragment>
   );

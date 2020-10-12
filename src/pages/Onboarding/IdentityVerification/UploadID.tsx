@@ -1,10 +1,9 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { View } from "react-native";
 
 import { CustomSpacer, UploadWithModal } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID_TYPE } from "../../../data/dictionary";
-import { px, sh8, sw24 } from "../../../styles";
+import { sh8 } from "../../../styles";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
@@ -46,7 +45,7 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
   }
 
   return (
-    <View style={px(sw24)}>
+    <Fragment>
       <UploadWithModal
         features={["camera", "gallery"]}
         label={firstLabel}
@@ -66,6 +65,6 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
           />
         </Fragment>
       )}
-    </View>
+    </Fragment>
   );
 };

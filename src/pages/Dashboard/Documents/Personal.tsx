@@ -1,10 +1,10 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Image, Text, View, ViewStyle } from "react-native";
 
-import { Badge, BasicModal, CustomSpacer, RoundedButton, SelectionBanner, TextSpaceArea } from "../../../components";
+import { LocalAssets } from "../../../assets/LocalAssets";
+import { BasicModal, CustomSpacer, RoundedButton, SelectionBanner, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { IcoMoon } from "../../../icons";
 import { SAMPLE_PERSONAL_DOCUMENTS } from "../../../mocks";
 import {
   borderBottomGray4,
@@ -19,14 +19,15 @@ import {
   fullHW,
   px,
   sh16,
+  sh174,
   sh176,
   sh24,
   sh32,
   sh40,
+  sh50,
   sh8,
-  sh90,
   sh96,
-  sw100,
+  sw164,
   sw218,
   sw24,
   sw5,
@@ -154,10 +155,8 @@ export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProp
         <View style={{ ...centerHV, ...fullHW }}>
           <View style={modalContainer}>
             <View style={modalBodyContainer}>
-              <CustomSpacer space={sh90} />
-              <Badge>
-                <IcoMoon name="file" size={sw100} />
-              </Badge>
+              <CustomSpacer space={sh50} />
+              <Image source={LocalAssets.uploadSuccess.uploadSuccess} style={{ height: sh174, width: sw164 }} />
               <CustomSpacer space={sh40} />
               <Text style={fs24BoldBlue2}>{UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}</Text>
               <CustomSpacer space={sh16} />

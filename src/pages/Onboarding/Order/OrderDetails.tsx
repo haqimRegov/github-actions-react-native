@@ -63,7 +63,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ orderSummar
           <CustomSpacer space={sh8} />
           {totalAmount !== undefined && totalAmount.length === 1 ? (
             <View style={flexRow}>
-              <Text style={fs16RegBlack2}>{totalAmount[0].currency}</Text>
+              <Text style={{ ...fs16RegBlack2, lineHeight: sh24 }}>{totalAmount[0].currency}</Text>
               <CustomSpacer isHorizontal={true} space={sw4} />
               <Text style={fs16BoldBlack2}>{totalAmount[0].amount}</Text>
             </View>

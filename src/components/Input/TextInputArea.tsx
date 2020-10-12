@@ -12,7 +12,6 @@ import {
   sh110,
   sh118,
   sh120,
-  sh8,
   sw1,
   sw16,
   sw20,
@@ -81,7 +80,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
     };
   }, []);
 
-  const defaultLabelSpace = spaceToLabel === undefined ? sh8 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
 
   return (
     <Fragment>

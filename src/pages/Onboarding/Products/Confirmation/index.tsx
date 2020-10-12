@@ -18,8 +18,6 @@ import {
   sh176,
   sh24,
   sh32,
-  sh40,
-  sh56,
   sh8,
   shadowBlue5,
   sw24,
@@ -66,7 +64,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
   return (
     <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
       <View style={px(sw24)}>
-        <CustomSpacer space={sh56} />
+        <CustomSpacer space={sh32} />
         <LabeledTitle
           label={INVESTMENT.HEADING}
           labelStyle={fs24BoldBlack2}
@@ -74,7 +72,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
           title={INVESTMENT.SUBHEADING}
           titleStyle={fs16SemiBoldBlack2}
         />
-        <CustomSpacer space={sh40} />
+        <CustomSpacer space={sh24} />
         {investmentDetails!.map((product: IFundSales, index: number) => {
           const newData = [...investmentDetails!];
 
@@ -110,7 +108,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
             <Fragment key={index}>
               {index === 0 ? null : <CustomSpacer space={sh24} />}
               <View style={container}>
-                <CustomSpacer space={sh32} />
+                <CustomSpacer space={sh24} />
                 <View style={px(sw24)}>
                   <View style={{ ...centerVertical, ...flexRow }}>
                     <Text style={fs10BoldBlack2}>{product.fund.fundCategory}</Text>
@@ -120,7 +118,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                   <LabeledTitle
                     label={product.fund.name}
                     labelStyle={fs24BoldBlack2}
-                    spaceToLabel={0}
+                    spaceToLabel={sh8}
                     title={product.fund.issuer}
                     titleStyle={fs16SemiBoldBlack2}
                   />

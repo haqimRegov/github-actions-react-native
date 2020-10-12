@@ -47,7 +47,7 @@ export const OnboardingContent = (props: OnboardingProps) => {
   let content: JSX.Element = <View />;
 
   switch (newProps.route) {
-    case ONBOARDING_ROUTES.Questionnaire:
+    case ONBOARDING_ROUTES.RiskAssessment:
       content = <QuestionnaireContent {...newProps} />;
       break;
     case ONBOARDING_ROUTES.ProductRecommendation:

@@ -34,7 +34,7 @@ export const TransactionDetailsContent = ({ transactionSummary, paymentSummary }
     Alert.alert("payment edit route");
   };
 
-  const cardWrapProps = { spaceBetween: sw64, noInitialSpace: true, labelStyle: fs12BoldBlack2 };
+  const cardWrapProps = { spaceBetween: sw64, noInitialSpace: true, labelStyle: { ...fs12BoldBlack2, lineHeight: sh16 } };
 
   return (
     <Fragment>

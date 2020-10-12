@@ -13,7 +13,6 @@ import {
   fullHW,
   px,
   sh16,
-  sh32,
   sh48,
   sh56,
   sh8,
@@ -32,7 +31,6 @@ export interface PromptProps extends ActionButtonsProps {
   children?: JSX.Element;
   illustration?: ImageSourcePropType;
   spaceToButton?: number;
-  spaceToContent?: number;
   title?: string;
   titleStyle?: TextStyle;
   label?: string;
@@ -43,14 +41,12 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   children,
   illustration,
   spaceToButton,
-  spaceToContent,
   title,
   titleStyle,
   label,
   labelStyle,
   ...rest
 }: PromptProps) => {
-  const defaultSpaceToContent = spaceToContent === undefined ? sh32 : spaceToContent;
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
   const modalContainer: ViewStyle = {
@@ -98,7 +94,6 @@ export const Prompt: FunctionComponent<PromptProps> = ({
             </Fragment>
           ) : null}
           {title !== undefined ? <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}
-          <CustomSpacer space={defaultSpaceToContent} />
           {children}
           <CustomSpacer space={defaultSpaceToButton} />
         </View>

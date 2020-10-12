@@ -5,12 +5,13 @@ import { colorBlack, colorBlue, colorGray, colorRed, colorWhite } from "./colors
 import { sh10, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw033 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
-export const fsUppercase: TextStyle = {
-  textTransform: "uppercase",
-};
 
 export const fsCapitalize: TextStyle = {
   textTransform: "capitalize",
+};
+
+export const fsNoLineHeight: TextStyle = {
+  lineHeight: undefined,
 };
 
 export const fsTransformNone: TextStyle = {
@@ -19,6 +20,10 @@ export const fsTransformNone: TextStyle = {
 
 export const fsUnderline: TextStyle = {
   textDecorationLine: "underline",
+};
+
+export const fsUppercase: TextStyle = {
+  textTransform: "uppercase",
 };
 
 export const fs10BoldBlack2: TextStyle = {

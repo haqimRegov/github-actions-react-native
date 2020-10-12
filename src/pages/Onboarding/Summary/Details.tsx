@@ -13,6 +13,7 @@ import {
   fs16BoldBlack2,
   fs16BoldBlue2,
   fs16RegBlack2,
+  fs18BoldBlack2,
   fs24BoldBlack2,
   px,
   py,
@@ -141,7 +142,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           </View>
         ) : null}
         <View style={borderBottomBlack21}>
-          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} />
+          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldBlack2} />
           {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
             const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
             return (

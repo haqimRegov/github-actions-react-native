@@ -15,8 +15,8 @@ const { ONBOARDING } = Language.PAGE;
 
 export const ONBOARDING_DATA: IOnboarding[] = [
   {
-    label: ONBOARDING.TITLE_QUESTIONNAIRE,
-    route: ONBOARDING_ROUTES.Questionnaire,
+    label: ONBOARDING.TITLE_RISK_ASSESSMENT,
+    route: ONBOARDING_ROUTES.RiskAssessment,
   },
   {
     label: ONBOARDING.TITLE_PRODUCT_RECOMMENDATION,
@@ -55,7 +55,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
 
   const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
-  const activeRoute: TypeOnboardingRoute = activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.Questionnaire;
+  const activeRoute: TypeOnboardingRoute = activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskAssessment;
 
   const handleContentChange = (item: IContentItem | IOnboarding) => {
     setActiveContent(item);

@@ -20,12 +20,12 @@ import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   flexRow,
+  fs10BoldBlack2,
   fs12BoldBlack2,
   fs12BoldWhite1,
   fs12SemiBoldBlack2,
   fs16BoldBlack1,
   fs16BoldBlack2,
-  fs16SemiBoldBlack2,
   px,
   py,
   sh104,
@@ -35,6 +35,7 @@ import {
   sh24,
   sh32,
   sh40,
+  sh56,
   sh8,
   sh80,
   sw140,
@@ -85,7 +86,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const handleConfirmAssessment = () => {
     const updatedSteps: TypeOnboardingRoute[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_ROUTES.Questionnaire);
+    updatedSteps.push(ONBOARDING_ROUTES.RiskAssessment);
     setConfirmModal(undefined);
     setFinishedSteps(updatedSteps);
     handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
@@ -154,7 +155,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   ];
 
   useEffect(() => {
-    if (prevQuestionnaire === undefined && finishedSteps.includes(ONBOARDING_ROUTES.Questionnaire)) {
+    if (prevQuestionnaire === undefined && finishedSteps.includes(ONBOARDING_ROUTES.RiskAssessment)) {
       setPrevQuestionnaire(questionnaire);
     }
 
@@ -176,6 +177,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <CustomSpacer space={sh40} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_1}
+              labelStyle={fs10BoldBlack2}
               spaceToLabel={sh8}
               title={RISK_ASSESSMENT.QUESTION_1}
               titleStyle={fs16BoldBlack2}
@@ -211,9 +213,10 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <CustomSpacer space={sh32} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_5}
+              labelStyle={fs10BoldBlack2}
               spaceToLabel={sh8}
               title={RISK_ASSESSMENT.QUESTION_5}
-              titleStyle={fs16SemiBoldBlack2}
+              titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
             <CustomSlider disabled={true} options={Q5_OPTIONS} selected={questionFive} setSelected={setQ5} />
@@ -317,6 +320,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         handleContinue={handleContinue}
         labelCancel={labelCancel}
         labelContinue={labelContinue}
+        spaceToButton={sh32}
+        spaceToContent={sh24}
+        spaceToTitle={sh56}
         title={modalTitle}
         titleStyle={modalTitleStyle}
         visible={confirmModal !== undefined}>

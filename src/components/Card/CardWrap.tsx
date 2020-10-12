@@ -27,6 +27,7 @@ export interface CardWrapProps {
   labelStyle?: TextStyle;
   style?: ViewStyle;
   spaceBetween?: number;
+  spaceToLabel?: number;
   noInitialSpace?: boolean;
   titleStyle?: TextStyle;
 }
@@ -37,6 +38,7 @@ export const CardWrap: FunctionComponent<CardWrapProps> = ({
   labelStyle,
   noInitialSpace,
   spaceBetween,
+  spaceToLabel,
   style,
   titleStyle,
 }: CardWrapProps) => {
@@ -49,6 +51,7 @@ export const CardWrap: FunctionComponent<CardWrapProps> = ({
       {data.map((item: LabeledTitleProps, index: number) => {
         const itemDefaultStyle: ViewStyle = { marginBottom: sh16, width: sw240, ...itemStyle, ...item.style };
         const initialSpace = index === 0 ? sw32 : sw8;
+        const defaultSpaceToLabel = spaceToLabel !== undefined ? spaceToLabel : sh8;
 
         return (
           <Fragment key={index}>
@@ -59,7 +62,7 @@ export const CardWrap: FunctionComponent<CardWrapProps> = ({
                 iconSize={sw16}
                 labelStyle={{ ...fs10BoldBlack2, ...labelStyle, ...item.labelStyle }}
                 onPress={item.onPress}
-                spaceToLabel={sh8}
+                spaceToLabel={defaultSpaceToLabel}
                 style={{ minWidth: sw144, ...item.style }}
                 titleStyle={{ ...fs16BoldBlack1, ...fsCapitalize, ...titleStyle, ...item.titleStyle }}
               />

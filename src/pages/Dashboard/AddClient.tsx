@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import moment from "moment";
 import React, { Fragment, useEffect, useState } from "react";
-import { Alert, KeyboardAvoidingView } from "react-native";
+import { Alert, KeyboardAvoidingView, TextStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -26,10 +26,9 @@ import {
   fs40BoldBlack2,
   px,
   sh143,
-  sh16,
   sh24,
-  sh32,
   sh40,
+  sh56,
   sh8,
   sw16,
   sw218,
@@ -61,6 +60,8 @@ const AddClientComponent = (props: AddClientProps) => {
 
   // TODO actual ID
   const agentId = "999999999998";
+  const defaultSpaceToTitle = verified === true ? sh56 : sh40;
+  const defaultSpaceToBottom = verified === true ? sh56 : sh40;
   const keyboardType = idType === "NRIC" ? "numeric" : "default";
   const idMaxLength = idType === "NRIC" ? 12 : undefined;
   const ADD_CLIENT_HEADING = verified === true ? ADD_CLIENT.DETAILS_TITLE : ADD_CLIENT.HEADING;
@@ -68,8 +69,8 @@ const AddClientComponent = (props: AddClientProps) => {
   const LABEL_ID_DYNAMIC = idType !== "Other" ? idType : ADD_CLIENT.LABEL_ID;
   const LABEL_NAME = `${ADD_CLIENT.LABEL_NAME} ${LABEL_ID_DYNAMIC}`;
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
-  const spaceToContent = verified === true ? sh32 : sh8;
-  const titleStyle = verified === true ? {} : fs40BoldBlack2;
+  const spaceToContent = verified === true ? 0 : sh8;
+  const titleStyle: TextStyle = verified === true ? {} : { ...fs40BoldBlack2, lineHeight: sh40 };
 
   const continueDisabled = idType === "NRIC" ? name === "" || idNumber === "" : name === "" || idNumber === "" || dateOfBirth === undefined;
 
@@ -161,16 +162,17 @@ const AddClientComponent = (props: AddClientProps) => {
       handleContinue={handleContinue}
       keyboardAvoidingRef={handleRef}
       labelContinue={BUTTON_LABEL}
-      spaceToButton={sh40}
+      spaceToButton={defaultSpaceToBottom}
       spaceToContent={spaceToContent}
+      spaceToTitle={defaultSpaceToTitle}
       title={ADD_CLIENT_HEADING}
       titleStyle={titleStyle}
       visible={visible}>
       <Fragment>
         {verified === false ? (
           <Fragment>
-            <TextSpaceArea spaceToBottom={sh24} style={fs24BoldBlack2} text={ADD_CLIENT.SUBHEADING} />
-            <TextSpaceArea spaceToBottom={sh16} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
+            <TextSpaceArea style={fs24BoldBlack2} text={ADD_CLIENT.SUBHEADING} />
+            <TextSpaceArea spaceToBottom={sh8} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
             <RadioButtonGroup direction="row" options={DICTIONARY_ID_TYPE} selected={idType!} setSelected={setInputIdType} space={sw56} />
             {idType !== "Other" ? null : (
               <Fragment>
@@ -183,8 +185,7 @@ const AddClientComponent = (props: AddClientProps) => {
                 />
               </Fragment>
             )}
-            <CustomTextInput label={LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={name} />
-            <CustomSpacer space={sh32} />
+            <CustomTextInput label={LABEL_NAME} onChangeText={setInputName} spaceToBottom={sh24} spaceToTop={sh24} value={name} />
             <CustomTextInput
               keyboardType={keyboardType}
               label={LABEL_ID}
@@ -209,7 +210,12 @@ const AddClientComponent = (props: AddClientProps) => {
                 />
               </Fragment>
             )}
-            <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs16RegBlack2} text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE} />
+            <TextSpaceArea
+              spaceToBottom={sh8}
+              spaceToTop={sh24}
+              style={{ ...fs16RegBlack2, lineHeight: sh24 }}
+              text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE}
+            />
             <RadioButtonGroup
               direction="row"
               options={DICTIONARY_ACCOUNT_TYPE}
@@ -220,29 +226,11 @@ const AddClientComponent = (props: AddClientProps) => {
           </Fragment>
         ) : (
           <Fragment>
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_NAME}
-              spaceToBottom={sh24}
-              spaceToLabel={sh8}
-              title={name!}
-              titleStyle={fs16BoldBlack1}
-            />
-            <LabeledTitle label={idType!} spaceToBottom={sh24} spaceToLabel={sh8} title={idNumber!} titleStyle={fs16BoldBlack1} />
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_GENDER}
-              spaceToBottom={sh24}
-              spaceToLabel={sh8}
-              title={gender!}
-              titleStyle={fs16BoldBlack1}
-            />
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_DOB}
-              spaceToBottom={sh24}
-              spaceToLabel={sh8}
-              title={formattedDob}
-              titleStyle={fs16BoldBlack1}
-            />
-            <LabeledTitle label={ADD_CLIENT.LABEL_ACCOUNT_TYPE} spaceToLabel={sh8} title={accountType} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_NAME} spaceToBottom={sh24} title={name!} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={idType!} spaceToBottom={sh24} title={idNumber!} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_GENDER} spaceToBottom={sh24} title={gender!} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_DOB} spaceToBottom={sh24} title={formattedDob} titleStyle={fs16BoldBlack1} />
+            <LabeledTitle label={ADD_CLIENT.LABEL_ACCOUNT_TYPE} title={accountType} titleStyle={fs16BoldBlack1} />
           </Fragment>
         )}
       </Fragment>

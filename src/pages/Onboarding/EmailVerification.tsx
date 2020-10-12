@@ -1,9 +1,10 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, CustomTextInput, LinkText, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
+import { DICTIONARY_OTP_EXPIRY } from "../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../store";
 import { flexRow, fs12RegBlack2, fs16SemiBoldBlack2, fs16SemiBoldBlue1, px, sh16, sh24, sh32, sh8, sw12, sw24, sw4 } from "../../styles";
 
@@ -18,6 +19,21 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   handleNextStep,
   personalInfo,
 }: EmailVerificationProps) => {
+  const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
+  const handleResend = () => {
+    setResendTimer(DICTIONARY_OTP_EXPIRY);
+  };
+
+  useEffect(() => {
+    let otpTimer: number;
+    if (resendTimer > 0) {
+      otpTimer = setInterval(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(otpTimer);
+  }, [resendTimer]);
+
   const { joint, principal } = personalInfo!;
 
   const inputPrincipalEmail = principal!.contactDetails!.emailAddress!;
@@ -75,7 +91,12 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         <View style={flexRow}>
           <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>
           <CustomSpacer isHorizontal={true} space={sw4} />
-          <LinkText style={fs16SemiBoldBlue1} text={EMAIL_VERIFICATION.LINK_RESEND} />
+          {resendTimer <= 0 ? (
+            <LinkText onPress={handleResend} style={fs16SemiBoldBlue1} text={EMAIL_VERIFICATION.LINK_RESEND} />
+          ) : (
+            <Text
+              style={fs16SemiBoldBlack2}>{`${EMAIL_VERIFICATION.LABEL_RESEND_IN} ${resendTimer} ${EMAIL_VERIFICATION.LABEL_SECONDS}`}</Text>
+          )}
         </View>
         <TextSpaceArea spaceToBottom={sh32} spaceToTop={sh16} style={fs12RegBlack2} text={EMAIL_VERIFICATION.NOTE_SPAM} />
       </View>

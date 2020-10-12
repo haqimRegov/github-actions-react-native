@@ -101,8 +101,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
 
   return (
     <Fragment>
-      <CustomSpacer space={sh24} />
-      <CustomTextInput disabled={true} label={labelId} value={idNumber} />
+      <CustomTextInput disabled={true} label={labelId} spaceToTop={sh24} value={idNumber} />
       <CustomTextInput disabled={true} label={ID_VERIFICATION.LABEL_DOB} rightIcon="calendar" spaceToTop={sh32} value={formattedDOB} />
       <CustomTextInput label={ID_VERIFICATION.LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
       {isPassport ? (

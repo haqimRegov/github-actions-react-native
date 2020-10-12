@@ -21,6 +21,7 @@ export * from "./Slider";
 export * from "./Steps";
 export * from "./Tab";
 export * from "./Table";
+export * from "./Tooltip";
 export * from "./Touchables";
 export * from "./Upload";
 export * from "./Views";

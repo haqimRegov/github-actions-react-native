@@ -39,6 +39,7 @@ import {
 } from "../../styles";
 import { LinkUtils } from "../../utils";
 import { UploadDocuments, UploadHardCopy } from "./Documents";
+import { InboxPage } from "./Inbox";
 import { OrderDetails } from "./OrderDetails";
 import { OrderList } from "./OrderList";
 
@@ -49,6 +50,7 @@ interface DashboardPageProps extends GlobalStoreProps {
 
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, navigation, resetGlobal }: DashboardPageProps) => {
   const [route, setRoute] = useState<string>("");
+  const [activeMenu, setActiveMenu] = useState<number>(0);
 
   const handleRoute = (nextPage: string) => {
     setRoute(nextPage);
@@ -62,12 +64,20 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
     LinkUtils.openLink(DICTIONARY_AIMS_URL);
   };
 
-  const handleInbox = () => {};
+  const handleInbox = () => {
+    setActiveMenu(1);
+    setRoute("Inbox");
+  };
 
   const handleProfile = () => {};
 
-  const handleDashboard = () => {};
-  const handleEdd = () => {};
+  const handleDashboard = () => {
+    setRoute("Dashboard");
+    setActiveMenu(0);
+  };
+  const handleEdd = () => {
+    setActiveMenu(2);
+  };
 
   const props = { handleRoute: handleRoute, navigation: navigation };
   let content: JSX.Element = <OrderList {...props} />;
@@ -80,6 +90,12 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   }
   if (route === "UploadHardCopy") {
     content = <UploadHardCopy {...props} />;
+  }
+  if (route === "Inbox") {
+    content = <InboxPage {...props} />;
+  }
+  if (route === "Dashboard") {
+    content = <OrderList {...props} />;
   }
 
   // TODO integration for inbox
@@ -131,7 +147,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
               <CustomSpacer isHorizontal={true} space={sw16} />
             </View>
             <View style={borderBottomGray4} />
-            <MenuList activeIndex={0} items={MENU_ITEMS} />
+            <MenuList activeIndex={activeMenu} items={MENU_ITEMS} />
           </View>
           <CustomFlexSpacer />
           <View style={borderBottomGray4} />

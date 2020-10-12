@@ -356,6 +356,11 @@ export const english = {
       LABEL_SALUTATION: "Salutation",
       TITLE: "Take a look and confirm if all of your information is correct.",
     },
+    INBOX: {
+      HEADER: "Inbox",
+      PLACEHOLDER_SEARCH: "Search here",
+      TAB_NOTIFICATIONS: "Notifications",
+    },
     INVESTMENT: {
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",

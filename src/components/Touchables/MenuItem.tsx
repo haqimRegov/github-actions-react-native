@@ -31,6 +31,8 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
   text,
   textStyle,
 }: MenuItemProps) => {
+  const badgeColor: ViewStyle = active === true ? { backgroundColor: colorWhite._1 } : { backgroundColor: colorRed._1 };
+  const badgeCountColor: TextStyle = active === true ? { color: colorRed._1 } : { color: colorWhite._1 };
   const bgColor: ViewStyle = active === true ? { backgroundColor: colorRed._1 } : { backgroundColor: colorWhite._1 };
   const selectedColor = active === true ? colorWhite._1 : colorBlue._2;
   const defaultButtonStyle: ViewStyle = {
@@ -60,7 +62,7 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
         <CustomSpacer isHorizontal={true} space={defaultSpaceBetween} />
         <Text style={defaultTextStyle}>{text}</Text>
         <CustomFlexSpacer />
-        {badgeCount !== undefined ? <BadgeCount count={badgeCount} /> : null}
+        {badgeCount !== undefined ? <BadgeCount count={badgeCount} countStyle={badgeCountColor} style={badgeColor} /> : null}
       </View>
     </TouchableWithoutFeedback>
   );

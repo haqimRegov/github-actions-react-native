@@ -3,11 +3,18 @@ import { Alert, Image, Text, TextStyle, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { ConfirmationModal, ContentPage, CustomSlider, CustomSpacer, LabeledTitle, Question, RadioButton } from "../../components";
-import { TooltipComponent } from "../../components/Tooltip";
+import {
+  ConfirmationModal,
+  ContentPage,
+  CustomSlider,
+  CustomSpacer,
+  CustomTooltip,
+  LabeledTitle,
+  Question,
+  RadioButton,
+} from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { Q1_OPTIONS, Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS } from "../../data/dictionary";
-import { IcoMoon } from "../../icons";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
@@ -35,7 +42,6 @@ import {
   sw221,
   sw24,
   sw256,
-  sw30,
   sw432,
 } from "../../styles";
 import { isObjectEqual } from "../../utils";
@@ -61,8 +67,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
-  const [popupIncome, setPopupIncome] = useState<boolean>(false);
-  const [popupAsset, setPopupAsset] = useState<boolean>(false);
   const { questionOne, questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven } = questionnaire;
 
   const setQ1 = (index: number) => addAssessmentQuestions({ questionOne: index });
@@ -238,18 +242,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                           </View>
                         );
                       const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
-                      const showPopup = index === 0 ? popupIncome : popupAsset;
 
                       const handleSelect = () => {
                         setSelected(options!.indexOf(option));
-                      };
-
-                      const handleToggle = () => {
-                        if (index === 0) {
-                          setPopupIncome(!popupIncome);
-                        } else {
-                          setPopupAsset(!popupAsset);
-                        }
                       };
 
                       return (
@@ -265,16 +260,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                             {index < 2 ? (
                               <Fragment>
                                 <CustomSpacer isHorizontal={true} space={sw20} />
-                                <TooltipComponent
-                                  content={defaultCondition}
-                                  isVisible={showPopup}
-                                  onClose={handleToggle}
-                                  onPress={handleToggle}
-                                  showChild={true}>
-                                  <View style={{ height: sh24, width: sw30 }}>
-                                    <IcoMoon name="info" size={sh24} />
-                                  </View>
-                                </TooltipComponent>
+                                <CustomTooltip content={defaultCondition} />
                               </Fragment>
                             ) : null}
                           </View>

@@ -7,16 +7,15 @@ import {
   CheckBox,
   CustomSpacer,
   CustomTextInput,
+  CustomTooltip,
   IAdvanceRadio,
   IconButton,
   OutlineButton,
   TextInputArea,
   TextSpaceArea,
 } from "../../../../components";
-import { TooltipComponent } from "../../../../components/Tooltip";
 import { Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES } from "../../../../data/dictionary";
-import { IcoMoon } from "../../../../icons";
 import {
   borderBottomBlack21,
   colorBlack,
@@ -49,9 +48,7 @@ export const NO_TIN_OPTIONS: IAdvanceRadio[] = [
     right: (
       <View style={flexRow}>
         <CustomSpacer isHorizontal={true} space={sw8} />
-        <TooltipComponent content={popupContent} contentStyle={{ width: sw265 }} showChild={false}>
-          <IcoMoon name="info" size={sh24} />
-        </TooltipComponent>
+        <CustomTooltip content={popupContent} contentStyle={{ width: sw265 }} />
       </View>
     ),
     value: DECLARATION.OPTION_NO_TIN_REQUIRED,

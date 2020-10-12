@@ -2,9 +2,8 @@ import React from "react";
 import { Text, TextStyle, View } from "react-native";
 
 import { Language } from "../../constants";
-import { IcoMoon } from "../../icons";
-import { flexRow, fs12BoldWhite1, fs12RegWhite1, px, py, sh16, sh20, sh24, sw16, sw296, sw4 } from "../../styles";
-import { TooltipComponent } from "../Tooltip";
+import { flexRow, fs12BoldWhite1, fs12RegWhite1, px, py, sh16, sh20, sw16, sw296, sw4 } from "../../styles";
+import { CustomTooltip } from "../Tooltip";
 
 const { PASSWORD } = Language.PAGE;
 
@@ -38,9 +37,5 @@ export const PasswordInfo = () => {
       </View>
     </View>
   );
-  return (
-    <TooltipComponent content={infoContent} contentStyle={{ width: sw296 }} showChild={false}>
-      <IcoMoon name="info" size={sh24} />
-    </TooltipComponent>
-  );
+  return <CustomTooltip content={infoContent} contentStyle={{ width: sw296 }} />;
 };

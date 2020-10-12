@@ -1,11 +1,18 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Alert, Text, View } from "react-native";
 
-import { CheckBox, CustomSpacer, LinkText, RadioButtonGroup, TextInputArea, TextSpaceArea, UploadWithModal } from "../../../../components";
-import { TooltipComponent } from "../../../../components/Tooltip";
+import {
+  CheckBox,
+  CustomSpacer,
+  CustomTooltip,
+  LinkText,
+  RadioButtonGroup,
+  TextInputArea,
+  TextSpaceArea,
+  UploadWithModal,
+} from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_NO_CERTIFICATE, OPTIONS_US_BORN, OPTIONS_US_CITIZEN } from "../../../../data/dictionary";
-import { IcoMoon } from "../../../../icons";
 import {
   alignSelfStart,
   borderBottomBlack21,
@@ -110,9 +117,7 @@ export const FATCADeclaration: FunctionComponent<FATCADeclarationProps> = ({ fat
           <TextSpaceArea text={DECLARATION.LABEL_US_CITIZEN} spaceToTop={sh24} style={{ ...fs16RegBlack2, lineHeight: sh24 }} />
           <CustomSpacer isHorizontal={true} space={sw12} />
           <View style={justifyContentEnd}>
-            <TooltipComponent content={popupContent} showChild={false}>
-              <IcoMoon name="info" size={sh24} />
-            </TooltipComponent>
+            <CustomTooltip content={popupContent} />
           </View>
         </View>
         <CustomSpacer space={sh16} />

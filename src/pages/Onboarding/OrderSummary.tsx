@@ -2,12 +2,10 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer } from "../../components";
-import { TooltipComponent } from "../../components/Tooltip";
+import { ContentPage, CustomSpacer, CustomTooltip } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { IcoMoon } from "../../icons";
 import { SAMPLE_ORDER_SUMMARY } from "../../mocks";
-import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store/Acknowledgement";
+import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store";
 import { borderBottomBlack21, flexRow, fs12BoldWhite1, fs16SemiBoldBlack2, px, sh24, sh8, shadow5, sw12, sw24, sw376 } from "../../styles";
 import { OrderDetails } from "./Order/OrderDetails";
 
@@ -50,9 +48,7 @@ const OrderSummaryContent = ({ handleNextStep, addOrders }: OrderSummaryProps) =
       <View style={orderSummaryHeader}>
         <Text style={fs16SemiBoldBlack2}>{ORDER_SUMMARY.LABEL_ORDER_SUMMARY}</Text>
         <CustomSpacer isHorizontal={true} space={sw12} />
-        <TooltipComponent content={popupContent} contentStyle={{ width: sw376 }} showChild={false}>
-          <IcoMoon name="info" size={sh24} />
-        </TooltipComponent>
+        <CustomTooltip content={popupContent} contentStyle={{ width: sw376 }} />
       </View>
       <CustomSpacer space={sh24} />
       {data.map((orderSummary: IOrderSummary, index: number) => {

@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { BasicAccordion, CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, LinkText, RadioButtonGroup } from "../../components";
-import { TooltipComponent } from "../../components/Tooltip";
+import {
+  BasicAccordion,
+  CheckBox,
+  ContentPage,
+  CustomFlexSpacer,
+  CustomSpacer,
+  CustomTooltip,
+  LinkText,
+  RadioButtonGroup,
+} from "../../components";
 import { Language } from "../../constants/language";
-import { IcoMoon } from "../../icons";
 import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../mocks/terms-and-conditions";
-import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store/Acknowledgement";
+import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../store";
 import {
   alignItemsStart,
   alignSelfCenter,
@@ -39,7 +46,10 @@ interface TermsAndConditionsProps extends OrderSummaryStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndConditionsProps) => {
+export const TermsAndConditionsContent: FunctionComponent<TermsAndConditionsProps> = ({
+  handleNextStep,
+  orders,
+}: TermsAndConditionsProps) => {
   const [agree1, setAgree1] = useState<boolean>(false);
   const [agree2, setAgree2] = useState<boolean>(false);
   const [agree3, setAgree3] = useState<boolean>(false);
@@ -81,10 +91,12 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
   };
 
   useEffect(() => {
-    const fundTypeArray = orders
-      .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
-      .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
-    setFundTypeList(fundTypeArray);
+    if (orders.length !== 0) {
+      const fundTypeArray = orders
+        .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
+        .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
+      setFundTypeList(fundTypeArray);
+    }
   }, [orders]);
 
   // TODO FEA to be removed
@@ -121,9 +133,7 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
         <View style={termsHeader}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
-          <TooltipComponent content={popupContentTerms} contentStyle={{ width: sw265 }} showChild={false}>
-            <IcoMoon name="info" size={sh24} />
-          </TooltipComponent>
+          <CustomTooltip content={popupContentTerms} contentStyle={{ width: sw265 }} />
           <CustomFlexSpacer />
           <LinkText onPress={handleExpandAll} style={fs12SemiBoldBlue1} text={TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL} />
         </View>
@@ -159,9 +169,7 @@ export const TermsAndConditionsContent = ({ handleNextStep, orders }: TermsAndCo
         <View style={{ ...centerVertical, ...flexRow }}>
           <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.LABEL_CONSENT}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
-          <TooltipComponent content={popupContentConsent} contentStyle={{ width: sw265 }} showChild={false}>
-            <IcoMoon name="info" size={sh24} />
-          </TooltipComponent>
+          <CustomTooltip content={popupContentConsent} contentStyle={{ width: sw265 }} />
         </View>
         <CustomSpacer space={sh16} />
         <RadioButtonGroup

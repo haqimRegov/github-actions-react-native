@@ -1,9 +1,13 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { gqlOperation } from "../../integrations/graphql";
 
-export const resetPassword = async (variables: IResetPasswordRequest) => {
+export const resetPassword = async (variables: IResetPasswordRequest, headers: IResetPasswordHeader) => {
   try {
-    const data = await gqlOperation<IResetPasswordMutation, IResetPasswordRequest>(GQL_MUTATIONS.resetPassword, variables);
+    const data = await gqlOperation<IResetPasswordMutation, IResetPasswordRequest, IResetPasswordHeader>(
+      GQL_MUTATIONS.resetPassword,
+      variables,
+      headers,
+    );
     return data?.resetPassword;
   } catch (error) {
     // eslint-disable-next-line no-console

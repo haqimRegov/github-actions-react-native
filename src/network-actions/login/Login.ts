@@ -1,9 +1,9 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { gqlOperation } from "../../integrations/graphql";
 
-export const login = async (variables: ILoginRequest) => {
+export const login = async (variables: ILoginRequest, headers: ILoginHeader) => {
   try {
-    const data = await gqlOperation<ILoginMutation, ILoginRequest>(GQL_MUTATIONS.userLogin, variables);
+    const data = await gqlOperation<ILoginMutation, ILoginRequest>(GQL_MUTATIONS.userLogin, variables, headers);
     return data?.userLogin;
   } catch (error) {
     // eslint-disable-next-line no-console

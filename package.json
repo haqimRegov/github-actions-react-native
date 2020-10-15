@@ -53,6 +53,7 @@
     "react-native": "0.62.2",
     "react-native-chart-kit": "6.6.0",
     "react-native-collapsible": "1.5.2",
+    "react-native-crypto-js": "1.0.0",
     "react-native-document-picker": "3.5.4",
     "react-native-enhanced-popup-menu": "0.7.0",
     "react-native-fs": "2.16.6",

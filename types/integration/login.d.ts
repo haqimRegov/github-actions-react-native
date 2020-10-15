@@ -3,6 +3,10 @@ declare interface ILoginRequest {
   password: string;
 }
 
+declare interface ILoginHeader {
+  encryptionKey: string;
+}
+
 declare interface ILoginResult {
   accessKeyId: string;
   email: string;

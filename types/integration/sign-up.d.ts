@@ -4,6 +4,10 @@ declare interface ISignUpRequest {
   confirmPassword: string;
 }
 
+declare interface ISignUpHeader {
+  encryptionKey: string;
+}
+
 declare interface ISignUpResult {
   message: string;
   status: boolean;

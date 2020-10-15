@@ -4,6 +4,10 @@ declare interface IResetPasswordRequest {
   confirmPassword: string;
 }
 
+declare interface IResetPasswordHeader {
+  encryptionKey: string;
+}
+
 declare interface IResetPasswordResult {
   message: string;
   status: boolean;

@@ -1,10 +1,10 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { Alert } from "react-native";
 
-export const gqlOperation = async <ResultType extends {}, VariablesType extends {} = {}>(
+export const gqlOperation = async <ResultType extends {}, VariablesType extends {}, Object extends {} = {}>(
   query: string,
   variables?: VariablesType,
-  headers?: object,
+  headers?: Object,
   handleError?: TypeIntegrationError,
 ) => {
   try {

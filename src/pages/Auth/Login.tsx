@@ -13,7 +13,7 @@ import { SAMPLE_AGENT } from "../../mocks";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight } from "../../styles";
-import { maskedString } from "../../utils";
+import { Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails } from "./Details";
 
 const { LOGIN } = Language.PAGE;
@@ -50,7 +50,12 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
       setLockPrompt(false);
       setLoading(true);
       setErrorMessage(undefined);
-      const response: ILoginResponse = await login({ username: inputNRIC, password: inputPassword });
+      const credentials = await Auth.Credentials.get();
+      const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
+      const response: ILoginResponse = await login(
+        { username: inputNRIC, password: encryptedPassword },
+        { encryptionKey: credentials.sessionToken },
+      );
       if (response === undefined) {
         // TODO temporary
         setLoading(false);

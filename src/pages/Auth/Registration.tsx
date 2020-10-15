@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
@@ -5,7 +6,7 @@ import { connect } from "react-redux";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
 import { register, registerPassword, verifySignUp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { maskedString } from "../../utils";
+import { Encrypt, maskedString } from "../../utils";
 import { NRICDetails, OTPDetails, PasswordDetails } from "./Details";
 
 interface RegistrationProps extends GlobalStoreProps {
@@ -36,11 +37,17 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
   const handelNewPassword = async () => {
     setLoading(true);
     setInput1Error(undefined);
-    const response: ISignUpResponse = await registerPassword({
-      username: inputNRIC,
-      password: inputNewPassword,
-      confirmPassword: inputRetypePassword,
-    });
+    const credentials = await Auth.Credentials.get();
+    const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
+    const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
+    const response: ISignUpResponse = await registerPassword(
+      {
+        username: inputNRIC,
+        password: encryptedNewPassword,
+        confirmPassword: encryptedRetypePassword,
+      },
+      { encryptionKey: credentials.sessionToken },
+    );
     setLoading(false);
     if (response === undefined) {
       return;

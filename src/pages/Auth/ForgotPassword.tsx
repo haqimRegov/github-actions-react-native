@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
@@ -6,7 +7,7 @@ import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
 import { forgotPassword, resetPassword, verifyOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { maskedString } from "../../utils";
+import { Encrypt, maskedString } from "../../utils";
 import { NRICDetails, OTPDetails, PasswordDetails } from "./Details";
 
 const { LOGIN } = Language.PAGE;
@@ -55,11 +56,17 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
   const handelNewPassword = async () => {
     setLoading(true);
     setInput2Error(undefined);
-    const response: ISignUpResponse = await resetPassword({
-      username: inputNRIC,
-      password: inputNewPassword,
-      confirmPassword: inputRetypePassword,
-    });
+    const credentials = await Auth.Credentials.get();
+    const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
+    const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
+    const response: ISignUpResponse = await resetPassword(
+      {
+        username: inputNRIC,
+        password: encryptedNewPassword,
+        confirmPassword: encryptedRetypePassword,
+      },
+      { encryptionKey: credentials.sessionToken },
+    );
     setLoading(false);
     if (response === undefined) {
       // TODO temporary

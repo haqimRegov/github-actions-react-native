@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
-import { EditPdf } from "./EditPDF";
+import { EditPdf } from "./PDFEdit";
 import { Signature } from "./Signature";
 import { TermsAndConditions } from "./TermsAndConditions";
 

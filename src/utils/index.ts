@@ -6,3 +6,4 @@ export * from "./OSAction";
 export * from "./Encryption";
 export * from "./Validator";
 export * from "./Value";
+export * from "./GetEmbeddedBase64";

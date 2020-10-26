@@ -835,10 +835,12 @@ export const english = {
     TERMS_AND_CONDITIONS: {
       BUTTON_AGREE: "Agree & Confirm",
       BUTTON_CANCEL: "Cancel",
+      BUTTON_CONTINUE: "Continue",
       HEADING: "Acknowledgement",
-      LABEL_AGENT_SIGNATURE: "Add Agent's Signature",
+      LABEL_ADVISER_SIGNATURE: "Adviser Signature",
       LABEL_AGREE: "Agree",
-      LABEL_CLIENT_SIGNATURE: "Add Your Signature",
+      LABEL_CLIENT_SIGNATURE: "Your Signature",
+
       LABEL_CHECKBOX_1: "I/We have read, understood and accepted the Terms and Conditions above.",
       LABEL_CHECKBOX_2:
         "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate. \nI acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document.",
@@ -852,11 +854,13 @@ export const english = {
       LABEL_DISCLAIMER:
         "By signing below, you agree to the Terms and Conditions of this document. I/We acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document",
       LABEL_EXPAND_ALL: "Expand all",
-      LABEL_JOINT_SIGNATURE: "Add Joint Account Holder's Signature",
-      LABEL_PRINCIPAL_SIGNATURE: "Add Principle's Signature",
+      LABEL_FUND: "Fund",
+      LABEL_JOINT_SIGNATURE: "Joint Signature",
+      LABEL_MYR: "MYR",
       POPUP_CONSENT:
         "I/We hereby give consent to the Manager to disclose my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
       POPUP_TERMS: "Based on your products selected, we will define the corresponding account orders and will be processed accordingly",
+      SUBTITLE: "Signatures",
       SUBHEADING: "Terms & Conditions",
       TERMS_HEADING_1: "Suitability Assessment",
       TERMS_HEADING_2: "PDPA Consent",

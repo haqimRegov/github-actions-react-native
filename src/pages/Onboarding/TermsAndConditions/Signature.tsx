@@ -36,7 +36,7 @@ export interface SignatureProps extends ClientStoreProps {
   setPdfList: (data: PdfWithSignature[]) => void;
 }
 
-export const SignaturesComponent: FunctionComponent<SignatureProps> = ({
+export const SignatureComponent: FunctionComponent<SignatureProps> = ({
   accountType,
   handleNextStep,
   initialPdfArray,
@@ -50,9 +50,9 @@ export const SignaturesComponent: FunctionComponent<SignatureProps> = ({
     Alert.alert("Cancel");
   };
 
-  const handleDataToBackend = async () => {
-    const dataToBackend: PdfWithSignature[] = [];
-    pdfList.map(async (pdf) => {
+  const handleSubmit = async () => {
+    const pdfSubmission: PdfWithSignature[] = [];
+    pdfList.map(async (pdf: PdfWithSignature) => {
       const dataUri = GetEmbeddedBase64(pdf.pdf);
       const loadPdf = await PDFDocument.load(dataUri);
       const pages = loadPdf.getPages();
@@ -69,12 +69,12 @@ export const SignaturesComponent: FunctionComponent<SignatureProps> = ({
         ...pdf,
         pdf: pdfLastPage,
       };
-      dataToBackend.push(pdfWithSignature);
+      pdfSubmission.push(pdfWithSignature);
     });
   };
 
-  const handleContinue = async () => {
-    await handleDataToBackend();
+  const handleContinue = () => {
+    handleSubmit();
     handleNextStep(ONBOARDING_ROUTES.Payment);
   };
 
@@ -87,7 +87,7 @@ export const SignaturesComponent: FunctionComponent<SignatureProps> = ({
       });
       setPdfList(initialDataArray);
     }
-  }, []);
+  }, [pdfList, setInitialPdfArray, setPdfList]);
 
   const buttonDisabled =
     pdfList !== [] &&
@@ -151,4 +151,4 @@ export const SignaturesComponent: FunctionComponent<SignatureProps> = ({
   );
 };
 
-export const Signatures = connect(ClientMapStateToProps, ClientMapDispatchToProps)(SignaturesComponent);
+export const Signature = connect(ClientMapStateToProps, ClientMapDispatchToProps)(SignatureComponent);

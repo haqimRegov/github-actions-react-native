@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 
 import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
-import { EditPdf } from "./EditPdf";
-import { Signatures } from "./Signatures";
+import { EditPdf } from "./EditPDF";
+import { Signature } from "./Signature";
 import { TermsAndConditions } from "./TermsAndConditions";
 
 interface TermsAndConditionsPageProps extends OrderSummaryStoreProps {
@@ -38,7 +38,7 @@ export const TermsAndConditionPagesComponent = ({ handleNextStep, orders }: Term
   let content: JSX.Element = <View />;
   switch (page) {
     case 1:
-      content = <Signatures {...props} />;
+      content = <Signature {...props} />;
       break;
     case 2:
       content = <EditPdf {...props} />;

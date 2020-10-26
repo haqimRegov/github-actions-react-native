@@ -44,5 +44,6 @@
   "typescript.preferences.quoteStyle": "double",
   "typescriptHero.imports.multiLineWrapThreshold": 140,
   "typescriptHero.imports.organizeOnSave": true,
-  "typescriptHero.imports.stringQuoteStyle": "\""
+  "typescriptHero.imports.stringQuoteStyle": "\"",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

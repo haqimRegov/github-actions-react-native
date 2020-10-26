@@ -6,38 +6,29 @@ import { Dimensions, GestureResponderEvent, Platform, ScrollView, Text, Touchabl
 import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../assets/LocalAssets";
-import { BasicModal, CustomFlexSpacer, CustomSignatureV2, CustomSpacer, IconButton } from "../../../components";
+import { CustomSpacer, SignatureModal } from "../../../components";
+import { Base64 } from "../../../constants";
 import { Language } from "../../../constants/language";
 import { IcoMoon } from "../../../icons";
 import { ClientMapDispatchToProps, ClientMapStateToProps } from "../../../store";
 import {
   centerVertical,
-  circleBorder,
   colorBlack,
-  colorGray,
-  colorWhite,
   flexChild,
-  flexColCC,
   flexGrow,
   flexRow,
-  fs16BoldBlack2,
   fs24BoldBlack2,
   px,
   sh100,
   sh155,
   sh1600,
   sh220,
-  sh24,
-  sh368,
   sh370,
   sh4,
   sh40,
   sh56,
   sh800,
   sh90,
-  sw1,
-  sw14,
   sw180,
   sw20,
   sw200,
@@ -47,10 +38,9 @@ import {
   sw470,
   sw595,
   sw8,
-  sw832,
 } from "../../../styles";
 import { GetEmbeddedBase64 } from "../../../utils";
-import { SignatureProps } from "./Signatures";
+import { SignatureProps } from "./Signature";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -70,20 +60,11 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
   const [signer, setSigner] = useState<0 | 1 | 2>();
   const [signaturePosition, setSignaturePosition] = useState({ page: -1, x: 0, y: 0 });
 
-  const calculatePages = async () => {
-    if (currentPdf !== undefined) {
-      const dataUri = GetEmbeddedBase64(currentPdf.pdf);
-      const loadPdf = await PDFDocument.load(dataUri);
-      const pages = loadPdf.getPages().length;
-      setNumberOfPdfPages(pages);
-    }
-  };
-
   const modifyPdf = async (value: string) => {
     if (value !== "" && currentPdf !== undefined) {
       const dataUri = GetEmbeddedBase64(currentPdf.pdf);
       const loadPdf = await PDFDocument.load(dataUri);
-      const whiteImage = await loadPdf.embedPng(LocalAssets.signatureBackground.background.white_background);
+      const whiteImage = await loadPdf.embedPng(Base64.background.white);
       const signatureImage = await loadPdf.embedPng(value);
       const pages = loadPdf.getPages();
       const selectedPage = pages[signaturePosition.page];
@@ -167,7 +148,7 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
     setPage(1);
   };
 
-  const handleShowModal = () => {
+  const handleConfirm = () => {
     if (showSignPdf === true) {
       setTimeout(() => {
         setShowSignPdf(false);
@@ -175,6 +156,10 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
     } else {
       setShowSignPdf(true);
     }
+  };
+
+  const handleClose = () => {
+    setShowSignPdf(false);
   };
 
   const handleSignature = (value: string) => {
@@ -187,10 +172,6 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
     }
     modifyPdf(value);
   };
-
-  useEffect(() => {
-    calculatePages();
-  }, []);
 
   let signerLabel = "";
   let signatureToDisplay = "";
@@ -216,7 +197,19 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
 
   const pdfViewContainer: ViewStyle = { ...px(sw8), width: sw595, height: numberOfPdfPages * sh800 };
   const pdfContainer: ViewStyle = { height: numberOfPdfPages * sh1600 }; // To display the page number correctly in the viewer
-  const modalContainer: ViewStyle = { backgroundColor: colorWhite._1, borderRadius: sw8, height: sh368, width: sw832 };
+
+  useEffect(() => {
+    const calculatePages = async () => {
+      if (currentPdf !== undefined) {
+        const dataUri = GetEmbeddedBase64(currentPdf.pdf);
+        const loadPdf = await PDFDocument.load(dataUri);
+        const pages = loadPdf.getPages().length;
+        setNumberOfPdfPages(pages);
+      }
+    };
+
+    calculatePages();
+  }, [currentPdf]);
 
   return (
     <View style={flexChild}>
@@ -238,26 +231,14 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
           </View>
         </TouchableWithoutFeedback>
       </ScrollView>
-      <BasicModal animationInTiming={500} animationOutTiming={500} animationOut="fadeOut" visible={showSignPdf}>
-        <View style={flexColCC}>
-          <View style={modalContainer}>
-            <CustomSpacer space={sh24} />
-            <View style={{ ...flexRow, ...px(sw24) }}>
-              <Text style={fs16BoldBlack2}>{signerLabel}</Text>
-              <CustomFlexSpacer />
-              <IconButton
-                color={colorBlack._1}
-                name="close"
-                onPress={() => setShowSignPdf(false)}
-                size={sw14}
-                style={circleBorder(sw24, sw1, colorGray._3)}
-              />
-            </View>
-            <CustomSpacer space={sh24} />
-            <CustomSignatureV2 handleConfirm={handleShowModal} setSignature={handleSignature} signature={signatureToDisplay} />
-          </View>
-        </View>
-      </BasicModal>
+      <SignatureModal
+        handleClose={handleClose}
+        handleConfirm={handleConfirm}
+        handleSignature={handleSignature}
+        signature={signatureToDisplay}
+        title={signerLabel}
+        visible={showSignPdf}
+      />
     </View>
   );
 };

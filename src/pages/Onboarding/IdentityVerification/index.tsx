@@ -62,11 +62,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
 
   const handlePrincipalDetails = (value: IClientIDState) =>
     addPersonalInfo({ ...personalInfo, principal: { ...principal, personalDetails: { ...principal!.personalDetails, id: { ...value } } } });
-  const setPrincipalSecondPage = (value?: FileBase64) => handlePrincipalDetails({ ...principal!.personalDetails?.id!, secondPage: value });
 
   const handleJointDetails = (value: IClientIDState) =>
-    addPersonalInfo({ ...personalInfo, principal: { ...joint, personalDetails: { ...joint!.personalDetails, id: { ...value } } } });
-  const setJointSecondPage = (value?: FileBase64) => handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: value });
+    addPersonalInfo({ ...personalInfo, joint: { ...joint, personalDetails: { ...joint!.personalDetails, id: { ...value } } } });
 
   const setInputJointIdType = (value: string) =>
     addPersonalInfo({ ...personalInfo, joint: { ...joint!, personalDetails: { ...joint!.personalDetails, idType: value } } });
@@ -89,7 +87,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     }
   };
 
-  const handlePrincipalUpload = (uploaded?: FileBase64) => {
+  const handlePrincipalFirstPage = (uploaded?: FileBase64) => {
     if (uploaded !== undefined) {
       const ocrResponse = uploadClientId("token", uploaded);
 
@@ -102,6 +100,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           idNumber: idNumber,
           idType: clientIdType,
           id: {
+            ...principal?.personalDetails?.id,
             frontPage: uploaded,
           },
           name: ocrResponse.name,
@@ -129,7 +128,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     return handlePrincipalDetails({ ...principal!.personalDetails?.id!, frontPage: undefined });
   };
 
-  const handleJointUpload = (uploaded?: FileBase64) => {
+  const handlePrincipalSecondPage = (value?: FileBase64) =>
+    handlePrincipalDetails({ ...principal!.personalDetails?.id!, secondPage: value });
+
+  const handleJointFirstPage = (uploaded?: FileBase64) => {
     if (uploaded !== undefined) {
       // const ocrResponse = uploadClientId("token", uploaded);
       // TODO temporary
@@ -145,6 +147,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           idNumber: ocrResponse.idNumber || "",
           idType: ocrResponse.idType || "NRIC",
           id: {
+            ...joint?.personalDetails?.id,
             frontPage: uploaded,
           },
           name: ocrResponse.name,
@@ -169,8 +172,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       };
       return addPersonalInfo({ ...personalInfo, joint: jointInfo });
     }
-    return handlePrincipalDetails({ ...joint!.personalDetails?.id!, frontPage: undefined });
+    return handleJointDetails({ ...joint!.personalDetails?.id!, frontPage: undefined });
   };
+  const handleJointSecondPage = (value?: FileBase64) => handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: value });
 
   const principalTitle = idType !== "Passport" && idType !== "NRIC" ? `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : `${idType}`;
   const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
@@ -204,8 +208,8 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
                 idType={clientIdType as TypeClientID}
                 frontPage={principalFrontPage}
                 secondPage={principalSecondPage}
-                setFrontPage={handlePrincipalUpload}
-                setSecondPage={setPrincipalSecondPage}
+                setFrontPage={handlePrincipalFirstPage}
+                setSecondPage={handlePrincipalSecondPage}
               />
               <CustomSpacer space={sh32} />
             </View>
@@ -234,8 +238,8 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
                     idType={inputJointIdType as TypeClientID}
                     frontPage={jointFrontPage}
                     secondPage={jointSecondPage}
-                    setFrontPage={handleJointUpload}
-                    setSecondPage={setJointSecondPage}
+                    setFrontPage={handleJointFirstPage}
+                    setSecondPage={handleJointSecondPage}
                   />
                 </View>
               </Fragment>

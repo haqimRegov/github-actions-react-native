@@ -5,19 +5,17 @@ import { Alert, Image, ImageStyle, ScrollView, View } from "react-native";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
 import {
-  centerVertical,
   colorWhite,
   DEVICE,
   flexChild,
   flexGrow,
   flexRow,
-  sh16,
+  fs12SemiBoldBlue2,
   sh32,
   sh56,
   sh64,
-  sw16,
   sw160,
-  sw4,
+  sw24,
   sw532,
   sw56,
   sw8,
@@ -71,21 +69,25 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   const agentOnboardingLink = {
     onPress: handleAgentOnboarding,
     text: LOGIN.LINK_AGENT_ONBOARDING,
+    style: fs12SemiBoldBlue2,
   };
 
   const backToLoginLink = {
     onPress: handleBackToLogin,
     text: LOGIN.LINK_BACK_TO_LOGIN,
+    style: fs12SemiBoldBlue2,
   };
 
   const bottomLinks: LinkTextProps[] = [
     {
       onPress: handlePrivacyPolicy,
       text: LOGIN.LINK_PRIVACY_POLICY,
+      style: fs12SemiBoldBlue2,
     },
     {
       onPress: handleTermsAndConditions,
       text: LOGIN.LINK_TERMS_AND_CONDITIONS,
+      style: fs12SemiBoldBlue2,
     },
   ];
 
@@ -107,17 +109,17 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
           <View>
             <Image source={LocalAssets.login.background} style={backgroundStyle} />
           </View>
-          <CustomSpacer isHorizontal={true} space={sw16} />
-          <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
+          <CustomSpacer isHorizontal={true} space={sw56} />
+          <SafeAreaPage barStyle={"light-content"} bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
             <View style={flexChild}>
               <CustomSpacer space={sh32} />
               <View style={flexRow}>
-                <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
                 <CustomFlexSpacer />
-                <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
+                <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
+                {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
                   <LinkTextGroup links={[]} spaceToDivider={sw4} />
-                </View>
-                <CustomSpacer isHorizontal={true} space={sw56} />
+                </View> */}
+                <CustomSpacer isHorizontal={true} space={sw24} />
               </View>
               {children}
               <CustomFlexSpacer />

@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, PasswordValidation, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_PASSWORD_MAX_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegBlack2, fs40BoldBlack2, px, sh24, sh32, sh40, sh56, sh8, sw360, sw40 } from "../../../styles";
+import { fs24RegBlack2, fs40BoldBlack2, sh24, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
 import { isPassword } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -51,7 +51,7 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
   const buttonDisabled = inputNewPassword === "" || !isPassword(inputNewPassword);
 
   return (
-    <View style={px(sw40)}>
+    <View>
       <CustomSpacer space={sh56} />
       <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_PASSWORD}</Text>
       <CustomSpacer space={sh8} />

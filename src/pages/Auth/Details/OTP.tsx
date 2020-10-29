@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, ERROR } from "../../../data/dictionary";
-import { flexRow, fs12SemiBoldBlue2, fs16RegBlack2, fs40BoldBlack2, px, sh32, sh40, sh56, sh8, sw360, sw4, sw40 } from "../../../styles";
+import { flexRow, fs12SemiBoldBlue2, fs16SemiBoldBlack2, fs40BoldBlack2, sh32, sh40, sh56, sh8, sw360, sw4 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -63,13 +63,14 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
   }, [resendTimer, setResendTimer]);
 
   return (
-    <View style={px(sw40)}>
+    <View>
       <CustomSpacer space={sh56} />
       <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_OTP}</Text>
       <CustomSpacer space={sh8} />
-      <Text style={{ ...fs16RegBlack2, width: sw360 }}>{subheading || `${LOGIN.SUBHEADING_OTP} ${email}`}</Text>
+      <Text style={{ ...fs16SemiBoldBlack2, width: sw360 }}>{subheading || `${LOGIN.SUBHEADING_OTP} ${email}`}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
+        error={error}
         keyboardType={"numeric"}
         label={LOGIN.LABEL_OTP}
         maxLength={DICTIONARY_OTP_LENGTH}
@@ -77,7 +78,6 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
         onChangeText={setInputOTP}
         placeholder={LOGIN.PLACEHOLDER_OTP}
         value={inputOTP}
-        error={error}
       />
       <CustomSpacer space={sh32} />
       <RoundedButton buttonStyle={{ width: sw360 }} disabled={!isNumber(inputOTP)} onPress={handleContinue} text={LOGIN.BUTTON_CONTINUE} />
@@ -86,7 +86,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
         <Text style={fs12SemiBoldBlue2}>{LOGIN.LABEL_DID_NOT_GET}</Text>
         <CustomSpacer isHorizontal={true} space={sw4} />
         {resendTimer <= 0 ? (
-          <LinkText onPress={handleResendOTP} text={LOGIN.LABEL_RESEND_AGAIN} />
+          <LinkText onPress={handleResendOTP} text={LOGIN.LABEL_RESEND_OTP} />
         ) : (
           <Text style={fs12SemiBoldBlue2}>{`${LOGIN.LABEL_RESEND} ${resendTimer} ${LOGIN.LABEL_SECONDS}`}</Text>
         )}

@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_NRIC_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegBlack2, fs40BoldBlack2, px, sh16, sh32, sh40, sh56, sh8, sw360, sw40 } from "../../../styles";
+import { fs24RegBlack2, fs40BoldBlack2, sh16, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -38,21 +38,22 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
   };
 
   return (
-    <View style={px(sw40)}>
+    <View>
       <CustomSpacer space={sh56} />
       <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_WELCOME}</Text>
       <CustomSpacer space={sh8} />
       <Text style={{ width: sw360, ...fs24RegBlack2 }}>{subheading || LOGIN.SUBHEADING_FIRST_TIME}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
+        error={error}
+        keyboardType="numeric"
         label={LOGIN.LABEL_NRIC}
         maxLength={DICTIONARY_NRIC_LENGTH}
         onBlur={handleValidateNRIC}
         onChangeText={setInputNRIC}
+        placeholder={LOGIN.LABEL_PLACEHOLDER_NRIC}
         secureTextEntry={false}
-        keyboardType={"numeric"}
         value={inputNRIC}
-        error={error}
       />
       <CustomSpacer space={sh32} />
       <RoundedButton disabled={!isNumber(inputNRIC)} onPress={handleSubmit} buttonStyle={{ width: sw360 }} text={LOGIN.BUTTON_CONTINUE} />

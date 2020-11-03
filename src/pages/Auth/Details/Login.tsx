@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
-import { fs24RegBlack2, fs40BoldBlack2, px, sh24, sh28, sh32, sh40, sh56, sh8, sw360, sw40 } from "../../../styles";
+import { fs24RegBlack2, fs40BoldBlack2, sh24, sh28, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
 
 const { LOGIN } = Language.PAGE;
 
@@ -38,7 +38,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
 
   return (
     <Fragment>
-      <View style={px(sw40)}>
+      <View>
         <CustomSpacer space={sh56} />
         <Text style={fs40BoldBlack2}>{HEADING}</Text>
         <CustomSpacer space={sh8} />
@@ -54,7 +54,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
         />
         <CustomTextInput
           error={errorMessage}
-          keyboardType={"default"}
+          keyboardType="default"
           label={LOGIN.LABEL_PASSWORD}
           onChangeText={setInputPassword}
           rightIcon={showPassword ? "eye-show" : "eye-hide"}

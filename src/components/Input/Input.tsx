@@ -75,11 +75,12 @@ export const CustomTextInput = ({
   ...rest
 }: ITextInputProps) => {
   const borderWidth = noBorder === true ? 0 : sw1;
+  const borderColor = error !== undefined ? colorRed._2 : colorGray._7;
   const defaultInputStyle: ViewStyle = {
     ...centerVertical,
     ...flexRow,
     ...px(sw16),
-    ...border(colorGray._7, borderWidth, sw20),
+    ...border(borderColor, borderWidth, sw20),
     backgroundColor: colorWhite._1,
     height: sh40,
     width: sw360,

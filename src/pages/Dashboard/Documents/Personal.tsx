@@ -122,7 +122,7 @@ export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProp
         navigation={navigation}
         titleIconOnPress={handleBack}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
-        titleIcon={"arrow-left"}>
+        titleIcon="arrow-left">
         <View style={px(sw64)}>
           <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16RegBlack2} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>
@@ -156,7 +156,7 @@ export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProp
           <View style={modalContainer}>
             <View style={modalBodyContainer}>
               <CustomSpacer space={sh50} />
-              <Image source={LocalAssets.uploadSuccess.uploadSuccess} style={{ height: sh174, width: sw164 }} />
+              <Image source={LocalAssets.illustration.uploadSuccess} style={{ height: sh174, width: sw164 }} />
               <CustomSpacer space={sh40} />
               <Text style={fs24BoldBlue2}>{UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}</Text>
               <CustomSpacer space={sh16} />

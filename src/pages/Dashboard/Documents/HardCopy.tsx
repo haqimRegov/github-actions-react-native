@@ -128,7 +128,7 @@ export const UploadHardCopy = ({ navigation, handleRoute }: UploadHardCopyProps)
           <View style={modalContainer}>
             <View style={{ ...centerVertical, ...px(sw48) }}>
               <CustomSpacer space={sh50} />
-              <Image source={LocalAssets.uploadSuccess.uploadSuccess} style={{ height: sh174, width: sw164 }} />
+              <Image source={LocalAssets.illustration.uploadSuccess} style={{ height: sh174, width: sw164 }} />
               <CustomSpacer space={sh17} />
               <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, maxWidth: sw453 }}>
                 {UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}

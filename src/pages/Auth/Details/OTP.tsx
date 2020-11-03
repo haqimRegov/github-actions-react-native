@@ -71,7 +71,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error}
-        keyboardType={"numeric"}
+        keyboardType="numeric"
         label={LOGIN.LABEL_OTP}
         maxLength={DICTIONARY_OTP_LENGTH}
         onBlur={handleValidateOTP}

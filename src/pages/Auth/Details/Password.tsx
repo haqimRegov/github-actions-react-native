@@ -59,7 +59,7 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error1}
-        keyboardType={"default"}
+        keyboardType="default"
         label={LOGIN.LABEL_NEW_PASSWORD}
         maxLength={DICTIONARY_PASSWORD_MAX_LENGTH}
         onBlur={handleValidatePassword}
@@ -73,7 +73,7 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
       <PasswordValidation password={inputNewPassword} />
       <CustomTextInput
         error={error2}
-        keyboardType={"default"}
+        keyboardType="default"
         label={LOGIN.LABEL_RETYPE_PASSWORD}
         onBlur={handleValidatePassword}
         onChangeText={setInputRetypePassword}

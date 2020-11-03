@@ -54,7 +54,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
         />
         <CustomTextInput
           error={errorMessage}
-          keyboardType={"default"}
+          keyboardType="default"
           label={LOGIN.LABEL_PASSWORD}
           onChangeText={setInputPassword}
           rightIcon={showPassword ? "eye-show" : "eye-hide"}

@@ -46,7 +46,7 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error}
-        keyboardType={"numeric"}
+        keyboardType="numeric"
         label={LOGIN.LABEL_NRIC}
         maxLength={DICTIONARY_NRIC_LENGTH}
         onBlur={handleValidateNRIC}

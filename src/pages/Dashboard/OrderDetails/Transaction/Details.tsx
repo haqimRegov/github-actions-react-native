@@ -52,7 +52,7 @@ export const TransactionDetailsContent = ({ transactionSummary, paymentSummary }
             <View style={flexRow}>
               <Text style={fs18BoldBlack2}>{DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_SUMMARY}</Text>
               <CustomSpacer isHorizontal={true} space={sw20} />
-              <IcoMoon color={colorBlue._1} name={"edit"} onPress={handleEdit} size={sw24} />
+              <IcoMoon color={colorBlue._1} name="edit" onPress={handleEdit} size={sw24} />
             </View>
             <CustomSpacer space={sh16} />
             {paymentSummary.map((payment, index: number) => {

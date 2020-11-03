@@ -213,7 +213,7 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
 
   return (
     <View style={flexChild}>
-      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps={"handled"}>
+      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
         <CustomSpacer space={sh56} />
         <View style={px(sw24)}>
           <View style={{ ...centerVertical, ...flexRow }}>
@@ -226,7 +226,7 @@ export const EditPdfComponent: FunctionComponent<SignatureProps> = ({
         <TouchableWithoutFeedback onPress={handlePosition}>
           <View style={pdfViewContainer}>
             <View pointerEvents="none">
-              <PDFView fadeInDuration={350} style={pdfContainer} resource={currentPdf.pdf.base64!} resourceType={"base64"} />
+              <PDFView fadeInDuration={350} style={pdfContainer} resource={currentPdf.pdf.base64!} resourceType="base64" />
             </View>
           </View>
         </TouchableWithoutFeedback>

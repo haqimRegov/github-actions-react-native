@@ -110,12 +110,12 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
             <Image source={LocalAssets.login.background} style={backgroundStyle} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw56} />
-          <SafeAreaPage barStyle={"light-content"} bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
+          <SafeAreaPage barStyle="light-content" bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
             <View style={flexChild}>
               <CustomSpacer space={sh32} />
               <View style={flexRow}>
                 <CustomFlexSpacer />
-                <Image source={LocalAssets.logo.kenanga_investors} style={logoStyle} />
+                <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
                 {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
                   <LinkTextGroup links={[]} spaceToDivider={sw4} />
                 </View> */}

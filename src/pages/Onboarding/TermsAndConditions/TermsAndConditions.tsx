@@ -13,7 +13,8 @@ import {
 } from "../../../components";
 import { Language } from "../../../constants/language";
 import { IcoMoon } from "../../../icons";
-import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks";
+import { SAMPLE_ORDER_SUMMARY } from "../../../mocks";
+import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks/terms-and-conditions";
 import {
   alignItemsStart,
   alignSelfCenter,
@@ -40,11 +41,12 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 const RADIO_CONSENT = [TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_YES, TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_NO];
 
 interface TermsAndConditionsProps {
+  addOrders: (orders: IOrderSummary[]) => void;
   orders: IOrderSummary[];
   setPage: (page: number) => void;
 }
 
-export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({ orders, setPage }: TermsAndConditionsProps) => {
+export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({ addOrders, orders, setPage }: TermsAndConditionsProps) => {
   const [agree1, setAgree1] = useState<boolean>(false);
   const [agree2, setAgree2] = useState<boolean>(false);
   const [agree3, setAgree3] = useState<boolean>(false);
@@ -86,11 +88,14 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
   };
 
   useEffect(() => {
-    const fundTypeArray = orders
-      .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
-      .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
-    setFundTypeList(fundTypeArray);
-  }, [orders]);
+    addOrders(SAMPLE_ORDER_SUMMARY);
+    if (orders.length !== 0) {
+      const fundTypeArray = orders
+        .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
+        .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
+      setFundTypeList(fundTypeArray);
+    }
+  }, [orders, addOrders]);
 
   // TODO FEA to be removed
   const TERMS_AND_CONDITION_LIST = [FATCA, CRS, FEA];
@@ -110,7 +115,8 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
       handleCancel={handleCancel}
       handleContinue={handleContinue}
       labelContinue={TERMS_AND_CONDITIONS.BUTTON_AGREE}
-      subheading={TERMS_AND_CONDITIONS.HEADING}>
+      subheading={TERMS_AND_CONDITIONS.HEADING}
+      spaceToHeading={0}>
       <View style={px(sw24)}>
         <CustomSpacer space={sh8} />
         <View style={termsHeader}>

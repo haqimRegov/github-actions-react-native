@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "1.2.2",
+    "@pdf-lib/fontkit": "1.0.0",
     "@react-native-community/async-storage": "1.11.0",
     "@react-native-community/datetimepicker": "2.6.1",
     "@react-native-community/masked-view": "0.1.10",
@@ -48,9 +49,9 @@
     "aws-amplify-react-native": "4.2.6",
     "aws-appsync": "4.0.1",
     "axios": "0.20.0",
-    "graphql-tag": "2.11.0",
     "base-64": "0.1.0",
     "buffer": "5.6.0",
+    "graphql-tag": "2.11.0",
     "moment": "2.27.0",
     "pdf-lib": "1.10.0",
     "react": "16.11.0",

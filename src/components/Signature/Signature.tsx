@@ -3,7 +3,7 @@ import { Image, View, ViewStyle } from "react-native";
 import SignatureCapture, { SaveEventParams, SignatureCaptureProps } from "react-native-signature-capture";
 
 import { Language } from "../../constants";
-import { centerHV, colorGray, colorWhite, flexRowCC, fullHW, px, sh16, sh20, sh200, sw1, sw10, sw16, sw20, sw205 } from "../../styles";
+import { centerHV, colorGray, colorWhite, flexRowCC, fullHW, px, sh16, sh20, sh200, sw1, sw10, sw16, sw205, sw24 } from "../../styles";
 import { RoundedButton } from "../Touchables";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -35,6 +35,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   spaceToButtons,
 }: CustomSignatureProps) => {
   const [signRef, setSignRef] = useState<SignatureCapture | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const handlePressCancel = () => {
     if (handleCancel !== undefined) {
@@ -56,8 +57,15 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   };
 
   const saveEvent = (result: SaveEventParams) => {
-    const base64String = `data:image/png;base64,${result.encoded}`;
-    setSignature(base64String);
+    if (result.encoded !== "") {
+      setDisabled(false);
+      const base64String = `data:image/png;base64,${result.encoded}`;
+      setSignature(base64String);
+    }
+  };
+
+  const handleDisabled = () => {
+    setDisabled(false);
   };
 
   const defaultHeight = height !== undefined ? height : sh200;
@@ -69,31 +77,29 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
     height: defaultHeight,
   };
   const container: ViewStyle = {
-    ...px(sw20),
+    ...px(sw24),
     backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     ...signatureContainerStyle,
   };
-
   const defaultProps: SignatureCaptureProps = {
     showBorder: false,
     showTitleLabel: false,
     showNativeButtons: false,
     viewMode: "landscape",
   };
-
   const defaultSpaceToBottom = spaceToBottom === undefined ? sh20 : spaceToBottom;
   const defaultSpaceToButtons = spaceToButtons === undefined ? sh16 : spaceToButtons;
-
   const cancelText = secondaryText !== undefined ? secondaryText : SIGNATURE.BUTTON_CANCEL;
   const confirmText = primaryText !== undefined ? primaryText : SIGNATURE.BUTTON_CONFIRM;
+  const confirmDisabled = disabled;
 
   return (
     <View style={container}>
       <View style={signatureStyle}>
         {signature === "" ? (
-          <SignatureCapture onSaveEvent={saveEvent} ref={setSignRef} style={fullHW} {...defaultProps} />
+          <SignatureCapture onDragEvent={handleDisabled} onSaveEvent={saveEvent} ref={setSignRef} style={fullHW} {...defaultProps} />
         ) : (
           <Image source={{ uri: signature }} style={fullHW} />
         )}
@@ -102,7 +108,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
       <View style={flexRowCC}>
         <RoundedButton buttonStyle={{ width: sw205 }} onPress={handlePressCancel} secondary={true} text={cancelText} />
         <CustomSpacer isHorizontal={true} space={sw16} />
-        <RoundedButton buttonStyle={{ width: sw205 }} onPress={handlePressConfirm} text={confirmText} />
+        <RoundedButton buttonStyle={{ width: sw205 }} disabled={confirmDisabled} onPress={handlePressConfirm} text={confirmText} />
       </View>
       <CustomSpacer space={defaultSpaceToBottom} />
     </View>

@@ -26,9 +26,9 @@ import {
 } from "../../styles";
 import { BasicModal } from "../Modals";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
-import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, PdfEdit } from "./PdfEdit";
+import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, PdfEditCard } from "./PdfEditCard";
 
-interface PdfEditWithModalProps extends PdfEditProps {
+interface PdfEditWithModalProps extends PdfEditCardProps {
   resourceType?: "url" | "file" | "base64";
 }
 
@@ -91,7 +91,7 @@ export const PdfEditWithModal: FunctionComponent<PdfEditWithModalProps> = ({
 
   return (
     <Fragment>
-      <PdfEdit onPress={handleViewFile} value={value} {...uploadProps} />
+      <PdfEditCard onPress={handleViewFile} value={value} {...uploadProps} />
       <BasicModal animationInTiming={modalAnimationInTiming} hasBackdrop={false} visible={viewFile}>
         <Fragment>
           {value !== undefined ? (

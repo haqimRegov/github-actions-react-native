@@ -2164,6 +2164,13 @@
   resolved "https://registry.yarnpkg.com/@miblanchard/react-native-slider/-/react-native-slider-1.2.2.tgz#8a5164c646e180990123afad0a2143dd803d4a66"
   integrity sha512-PmR4gYOAhtgHEwlzszhjdjOZtRRELxRmg6zpCN2eZTwW7lll05TPve2QxA5YfuDwXL69OH+3HtZVr0yUIlxmEQ==
 
+"@pdf-lib/fontkit@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pdf-lib/fontkit/-/fontkit-1.0.0.tgz#26249d7ba865714625bafeecb5677796037e8051"
+  integrity sha512-C1Hn6wqRMAXZMW5vTa/oCvcTPq0FQsqKKP2mzzzMxUcx0BWZuJKeH4ZRS320y0LKvRBEs1ntFG2txstSsMGr2g==
+  dependencies:
+    pako "^1.0.6"
+
 "@pdf-lib/standard-fonts@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@pdf-lib/standard-fonts/-/standard-fonts-0.0.4.tgz#49fffa97fe1a5fff9b8b60fd9decf79b10bd0982"
@@ -8167,7 +8174,7 @@ react-native-enhanced-popup-menu@0.7.0:
   resolved "https://registry.yarnpkg.com/react-native-enhanced-popup-menu/-/react-native-enhanced-popup-menu-0.7.0.tgz#8eb2ab06ff39b031807308065361444fe254a68d"
   integrity sha512-PEinhLrt0I7HvBpSAH0hO1jlg2KGAiIpxyD8M0c5kO4ds/HaRdW1nYhTR92uF+LJTESJH7KQLQYvP/NJe+zc0g==
 
-react-native-fs@2.16.6:
+react-native-fs@^2.16.6:
   version "2.16.6"
   resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.16.6.tgz#2901789a43210a35a0ef0a098019bbef3af395fd"
   integrity sha512-ZWOooD1AuFoAGY3HS2GY7Qx2LZo4oIg6AK0wbC68detxwvX75R/q9lRqThXNKP6vIo2VHWa0fYUo/SrLw80E8w==

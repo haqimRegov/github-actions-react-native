@@ -1,9 +1,11 @@
 declare interface PdfWithSignature {
+  active?: boolean;
+  adviserSignature: string;
+  completed?: boolean;
+  jointSignature?: string;
   orderNo: string;
   pdf: FileBase64;
-  adviserSignature: string;
-  clientSignature: string;
-  jointSignature?: string;
+  principalSignature: string;
 }
 
 declare interface PdfWithIndex {

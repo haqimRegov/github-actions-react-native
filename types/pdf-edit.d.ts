@@ -1,6 +1,9 @@
-declare interface PdfEditProps {
+declare interface PdfEditCardProps {
   accountType?: TypeAccountChoices;
+  active?: boolean;
   completed: boolean;
+  completedText?: string;
+  disabled?: boolean;
   label?: string;
   labelStyle?: import("react-native").TextStyle;
   onError?: (data: FileBase64) => void;
@@ -11,5 +14,6 @@ declare interface PdfEditProps {
   setValue: (value?: FileBase64) => void;
   title?: string;
   titleStyle?: import("react-native").TextStyle;
+  tooltipLabel?: string;
   value?: FileBase64;
 }

@@ -10,6 +10,16 @@ const readFile = async (path: string) => {
   }
 };
 
+const readFileMainBundle = async (path: string) => {
+  try {
+    return await RNFS.readFile(`${RNFS.MainBundlePath}/${path}`, "base64");
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return "An Error Occurred";
+  }
+};
+
 const readFileTemp = async (fileName: string) => {
   try {
     return await RNFS.readFile(`${RNFS.TemporaryDirectoryPath}/${fileName}`, "base64");
@@ -42,4 +52,4 @@ const writeFileTemp = async (fileName: string, base64: string) => {
   }
 };
 
-export const ReactFileSystem = { readFile, readFileTemp, writeFile, writeFileTemp };
+export const ReactFileSystem = { readFile, readFileMainBundle, readFileTemp, writeFile, writeFileTemp };

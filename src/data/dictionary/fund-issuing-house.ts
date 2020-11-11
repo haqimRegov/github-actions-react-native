@@ -1,0 +1,18 @@
+export const DICTIONARY_ISSUING_HOUSE = [
+  { label: "Kenanga Investors Berhad Funds", value: "Kenanga Investors Berhad Funds" },
+  { label: "Aberdeen", value: "Aberdeen" },
+  { label: "Affin Hwang", value: "Affin Hwang" },
+  { label: "AIA", value: "AIA" },
+  { label: "AmanahRaya", value: "AmanahRaya" },
+  { label: "AmFunds", value: "AmFunds" },
+  { label: "BIMB", value: "BIMB" },
+  { label: "East Sprint", value: "East Sprint" },
+  { label: "Franklin Templeton", value: "Franklin Templeton" },
+  { label: "Manulife", value: "Manulife" },
+  { label: "Maybank", value: "Maybank" },
+  { label: "Opus", value: "Opus" },
+  { label: "Pheim", value: "Pheim" },
+  { label: "Principal", value: "Principal" },
+  { label: "RHB", value: "RHB" },
+  { label: "UOB", value: "UOB" },
+];

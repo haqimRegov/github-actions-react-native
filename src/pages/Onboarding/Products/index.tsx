@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { BottomFixedDetails, SafeAreaPage } from "../../../components";
+import { SafeAreaPage, SelectionBanner } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1, SAMPLE_PRODUCTS_1 } from "../../../mocks";
 import { SelectedFundMapDispatchToProps, SelectedFundMapStateToProps, SelectedFundStoreProps } from "../../../store";
-import { flexChild, flexCol } from "../../../styles";
+import { flexChild, flexCol, fs16SemiBoldBlack2 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
@@ -145,21 +145,21 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     setProductList(SAMPLE_PRODUCTS_1);
   }, []);
 
+  const bannerText = `${INVESTMENT.LABEL_FUND_SELECTION_AMOUNT}${totalMinimumAmount} `;
+
   return (
     <SafeAreaPage>
       <View style={flexChild}>
         {screen.content}
         {fixedBottomShow === true && selectedFunds.length !== 0 && viewFund === undefined ? (
           <View style={flexCol}>
-            <BottomFixedDetails
-              amount={totalMinimumAmount.toString()}
+            <SelectionBanner
+              bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
               cancelOnPress={handleCancel}
-              fundAmountText={INVESTMENT.LABEL_FUND_SELECTION_AMOUNT}
-              fundSelectionText={LABEL_FUND}
               labelCancel={INVESTMENT.BUTTON_CANCEL}
               labelSubmit={screen.labelSubmit}
-              numberOfFunds={selectedFunds.length}
               submitOnPress={screen.onPressSubmit}
+              label={`${selectedFunds.length} ${LABEL_FUND}`}
             />
           </View>
         ) : null}

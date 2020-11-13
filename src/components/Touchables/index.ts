@@ -6,3 +6,4 @@ export * from "./Menu";
 export * from "./MenuItem";
 export * from "./OutlineButton";
 export * from "./RoundedButton";
+export * from "./TouchableWrapper";

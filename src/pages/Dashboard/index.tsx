@@ -15,9 +15,8 @@ import {
   centerVertical,
   colorBlue,
   flexRow,
+  fs10RegBlue2,
   fs12BoldBlue2,
-  fs12RegBlue2,
-  fs14RegBlue2,
   fs18BoldBlue2,
   fullHW,
   px,
@@ -26,7 +25,6 @@ import {
   sh20,
   sh24,
   sh32,
-  sh4,
   sw033,
   sw039,
   sw05,
@@ -38,10 +36,10 @@ import {
   sw96,
 } from "../../styles";
 import { LinkUtils } from "../../utils";
+import { ApplicationHistory } from "./ApplicationHistory";
 import { UploadDocuments, UploadHardCopy } from "./Documents";
 import { InboxPage } from "./Inbox";
 import { OrderDetails } from "./OrderDetails";
-import { OrderList } from "./OrderList";
 
 const { DASHBOARD } = Language.PAGE;
 interface DashboardPageProps extends GlobalStoreProps {
@@ -72,7 +70,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   const handleProfile = () => {};
 
   const handleDashboard = () => {
-    setRoute("Dashboard");
+    setRoute("Transactions");
     setActiveMenu(0);
   };
   const handleEdd = () => {
@@ -80,7 +78,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation };
-  let content: JSX.Element = <OrderList {...props} />;
+  let content: JSX.Element = <ApplicationHistory {...props} />;
 
   if (route === "OrderDetails") {
     content = <OrderDetails {...props} />;
@@ -94,30 +92,21 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   if (route === "Inbox") {
     content = <InboxPage {...props} />;
   }
-  if (route === "Dashboard") {
-    content = <OrderList {...props} />;
+  if (route === "Transactions") {
+    content = <ApplicationHistory {...props} />;
   }
 
   // TODO integration for inbox
   const MENU_ITEMS: MenuItemProps[] = [
-    { name: "dashboard", onPress: handleDashboard, text: DASHBOARD.MENU_DASHBOARD },
-    { badgeCount: 2, name: "bell", onPress: handleInbox, text: DASHBOARD.MENU_INBOX },
-    { badgeCount: 3, name: "order-check", onPress: handleEdd, text: DASHBOARD.MENU_EDD },
-    { name: "profile", onPress: handleProfile, text: DASHBOARD.MENU_PROFILE },
-    { name: "logout", onPress: handleLogout, text: DASHBOARD.MENU_LOGOUT },
+    { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
+    { badgeCount: 2, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
+    { name: "edd", onPress: handleEdd, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
+    { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
+    { name: "logout", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];
 
   const dateToday = moment().format(FULL_DATE_FORMAT);
   const dayToday = `${moment().format(DAY_FORMAT)},`;
-
-  const agentId = ` (${DASHBOARD.LABEL_ID}: `;
-  const agentBranchId = (
-    <Fragment>
-      {agent?.branch!}
-      {agentId}
-      <Text style={{ ...fs12RegBlue2, letterSpacing: -sw033 }}>{agent?.agentCode!}</Text>
-    </Fragment>
-  );
 
   return (
     <Fragment>
@@ -129,18 +118,17 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
               <Avatar image={{ uri: agent?.image }} />
               <CustomSpacer isHorizontal={true} space={sw16} />
               <View style={{ width: sw96 }}>
-                <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh20 }}>
+                <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh24 }}>
                   {agent?.name}
                 </Text>
-                <CustomSpacer space={sh4} />
-                <Text style={{ ...fs14RegBlue2, letterSpacing: -sw039, lineHeight: sh16 }}>{agent?.role}</Text>
+                <Text style={{ ...fs10RegBlue2, letterSpacing: -sw039 }}>{agent?.role}</Text>
               </View>
             </View>
             <View style={borderBottomGray4} />
             <View style={{ ...flexRow, ...py(sh20) }}>
               <CustomSpacer isHorizontal={true} space={sw24} />
               <View style={{ width: sw160 }}>
-                <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{agentBranchId})</Text>
+                <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{agent?.branch}</Text>
                 <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dayToday}</Text>
                 <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dateToday}</Text>
               </View>

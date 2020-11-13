@@ -1,4 +1,5 @@
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
+import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
 import kenanga from "./kenanga/kenanga.png";
 import logoAims from "./logo_aims/logo_aims.png";
@@ -13,6 +14,7 @@ export const LocalAssets = {
   },
   illustration: {
     login_error: illustrationLoginError,
+    submissionSummary: illustrationSubmissionSummary,
     uploadSuccess: illustrationUploadSuccess,
   },
   login: {

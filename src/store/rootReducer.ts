@@ -8,16 +8,18 @@ import { personalInfoReducer } from "./PersonalInfo";
 import { productsReducer } from "./Products";
 import { riskAssessmentReducer } from "./RiskAssessment";
 import { selectedFundReducer } from "./SelectedFund";
+import { transactionsReducer } from "./Transactions";
 
 export const rootReducer = combineReducers({
   client: clientReducer,
   global: globalReducer,
   onboardingSteps: onboardingStepsReducer,
+  orderSummary: orderSummaryReducer,
   personalInfo: personalInfoReducer,
   products: productsReducer,
   riskAssessment: riskAssessmentReducer,
   selectedFund: selectedFundReducer,
-  orderSummary: orderSummaryReducer,
+  transactions: transactionsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

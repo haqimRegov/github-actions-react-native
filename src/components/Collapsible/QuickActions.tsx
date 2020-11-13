@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
-  centerVertical,
+  centerHV,
   colorBlack,
   colorBlue,
   colorGray,
@@ -20,9 +20,8 @@ import {
   shadowBlack5,
   sw1,
   sw16,
-  sw168,
+  sw172,
   sw24,
-  sw48,
 } from "../../styles";
 import { IconText } from "../Touchables";
 import { CustomSpacer } from "../Views";
@@ -62,7 +61,7 @@ export const QuickActions: FunctionComponent<QuickActionsProps> = ({ actions }: 
           backgroundColor: collapse ? colorWhite._1 : colorGray._2,
           borderRadius: sw24,
           height: sh48,
-          width: sw168,
+          width: sw172,
         };
 
         const baseContainerStyle: ViewStyle = {
@@ -98,7 +97,7 @@ export const QuickActions: FunctionComponent<QuickActionsProps> = ({ actions }: 
           <View style={dropdownStyle}>
             {actions.map((action: IQuickAction, index: number) => {
               const actionTextStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -0.44, ...action.labelStyle };
-              const actionStyle: ViewStyle = { ...centerVertical, ...flexRow, height: sh40, ...action.style };
+              const actionStyle: ViewStyle = { ...centerHV, ...flexRow, height: sh40, ...action.style };
 
               const handlePress = () => {
                 handleClose();
@@ -114,7 +113,6 @@ export const QuickActions: FunctionComponent<QuickActionsProps> = ({ actions }: 
                   {index === 0 ? <CustomSpacer space={sh8} /> : null}
                   <TouchableWithoutFeedback onPress={handlePress}>
                     <View style={actionStyle}>
-                      <CustomSpacer isHorizontal={true} space={sw48} />
                       <Text style={actionTextStyle}>{action.label}</Text>
                     </View>
                   </TouchableWithoutFeedback>

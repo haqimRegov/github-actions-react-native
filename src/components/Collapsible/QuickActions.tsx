@@ -3,6 +3,7 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import {
   centerVertical,
+  colorBlack,
   colorBlue,
   colorGray,
   colorTransparent,
@@ -16,7 +17,7 @@ import {
   sh40,
   sh48,
   sh8,
-  shadowBlue5,
+  shadowBlack5,
   sw1,
   sw16,
   sw168,
@@ -45,11 +46,14 @@ export const QuickActions: FunctionComponent<QuickActionsProps> = ({ actions }: 
   const baseDropdownStyle: ViewStyle = {
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
-    ...shadowBlue5,
+    ...shadowBlack5,
   };
 
   return (
     <CollapsibleDropdown
+      backDrop={true}
+      backDropColor={colorBlack._1}
+      backDropOpacity={0.3}
       baseDropdownStyle={baseDropdownStyle}
       dummyBaseStyle={{ shadowColor: colorTransparent }}
       RenderBase={({ collapse, dummyBaseStyle }) => {
@@ -63,10 +67,10 @@ export const QuickActions: FunctionComponent<QuickActionsProps> = ({ actions }: 
 
         const baseContainerStyle: ViewStyle = {
           borderWidth: sw1,
-          borderColor: collapse ? colorTransparent : colorWhite._1,
+          borderColor: collapse ? colorGray._4 : colorWhite._1,
           borderRadius: sw24,
           backgroundColor: colorWhite._1,
-          ...shadowBlue5,
+          ...shadowBlack5,
           ...dummyBaseStyle,
         };
 

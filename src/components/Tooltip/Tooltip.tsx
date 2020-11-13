@@ -1,11 +1,12 @@
 import React, { FunctionComponent, ReactElement, ReactNode, useState } from "react";
 import { TouchableWithoutFeedback, ViewStyle } from "react-native";
-import Tooltip from "react-native-walkthrough-tooltip";
+import Tooltip, { TooltipSize } from "react-native-walkthrough-tooltip";
 
 import { IcoMoon } from "../../icons";
-import { colorBlack, colorTransparent, px, py, sh16, sh24, sw16, sw208, sw8 } from "../../styles";
+import { colorBlack, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208, sw7, sw8 } from "../../styles";
 
 export interface CustomTooltipProps {
+  arrowSize?: TooltipSize;
   arrowStyle?: ViewStyle;
   children?: ReactNode;
   content: ReactElement;
@@ -17,11 +18,14 @@ export interface CustomTooltipProps {
   overlayColor?: string;
   placement?: "top" | "bottom" | "left" | "right";
   showChild?: boolean;
+  spacing?: number;
   tooltipStyle?: ViewStyle;
+  topAdjustment?: number;
   withShadow?: boolean;
 }
 
 export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
+  arrowSize,
   arrowStyle,
   children,
   content,
@@ -33,7 +37,9 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   placement,
   isVisible,
   showChild,
+  spacing,
   tooltipStyle,
+  topAdjustment,
   withShadow,
 }: CustomTooltipProps) => {
   // TODO known library issues:
@@ -72,11 +78,15 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   const defaultPlacement = placement !== undefined ? placement : "right";
   const defaultShadow = withShadow !== undefined ? withShadow : true;
   const defaultShowChild = showChild !== undefined ? showChild : false;
+  const defaultArrowSize = arrowSize !== undefined ? arrowSize : { width: sw7, height: sh12 };
+  const defaultSpacing = spacing !== undefined ? spacing : sw2;
 
   return (
     <Tooltip
+      arrowSize={defaultArrowSize}
       arrowStyle={defaultArrowStyle}
       backgroundColor={defaultOverlayColor}
+      childContentSpacing={defaultSpacing}
       content={content}
       contentStyle={defaultContentStyle}
       disableShadow={defaultShadow}
@@ -85,6 +95,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
       onClose={handleHide}
       placement={defaultPlacement}
       showChildInTooltip={defaultShowChild}
+      topAdjustment={topAdjustment}
       tooltipStyle={tooltipStyle}>
       <TouchableWithoutFeedback onPress={handleShow}>
         {children !== undefined ? children : <IcoMoon name="info" size={sh24} />}

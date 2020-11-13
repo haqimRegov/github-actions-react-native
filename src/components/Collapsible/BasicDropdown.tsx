@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Keyboard, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { colorTransparent, colorWhite, flexRow, fullHW, noBGColor } from "../../styles";
+import { colorBlack, colorTransparent, colorWhite, flexRow, fullHW, noBGColor } from "../../styles";
 import { BasicModal } from "../Modals/Basic";
 
 interface RenderBaseProps {
@@ -16,6 +16,9 @@ interface RenderDropdownProps {
 }
 
 export interface CollapsibleDropdownProps {
+  backDrop?: boolean;
+  backDropColor?: string;
+  backDropOpacity?: number;
   baseContainerStyle?: ViewStyle;
   baseDropdownStyle?: ViewStyle;
   dropdownInnerStyle?: ViewStyle;
@@ -38,6 +41,9 @@ interface IBasicLayout {
 }
 
 export const CollapsibleDropdown = ({
+  backDrop,
+  backDropColor,
+  backDropOpacity,
   baseContainerStyle,
   baseDropdownStyle,
   collapseOnBaseClick,
@@ -135,6 +141,9 @@ export const CollapsibleDropdown = ({
     width: layout.width - 2,
     ...dropdownInnerStyle,
   };
+  const defaultBackDrop = backDrop !== undefined ? backDrop : false;
+  const defaultBackDropColor = backDropColor !== undefined ? backDropColor : colorBlack._1;
+  const defaultBackDropOpacity = backDropOpacity !== undefined ? backDropOpacity : 1;
 
   return (
     <Fragment>
@@ -145,7 +154,12 @@ export const CollapsibleDropdown = ({
           </View>
         </TouchableWithoutFeedback>
       </View>
-      <BasicModal animationOutTiming={50} visible={collapsibleModal} hasBackdrop={false}>
+      <BasicModal
+        animationOutTiming={50}
+        visible={collapsibleModal}
+        hasBackdrop={defaultBackDrop}
+        backdropColor={defaultBackDropColor}
+        backdropOpacity={defaultBackDropOpacity}>
         <TouchableWithoutFeedback onPress={handleBackdropPress}>
           <View style={fullHW}>
             <View style={dropdownContainer}>

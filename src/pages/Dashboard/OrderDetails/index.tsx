@@ -120,7 +120,8 @@ const initialData: IOrderDetails = {
   },
 };
 
-export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ navigation, handleRoute }: OrderDetailsProps) => {
+export const OrderDetails: FunctionComponent<OrderDetailsProps> = (props: OrderDetailsProps) => {
+  const { handleRoute } = props;
   const [data, setData] = useState<IOrderDetails>(initialData);
   const [selection, setSelection] = useState<number>(0);
 
@@ -141,7 +142,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ navigation,
   };
 
   const handleBack = () => {
-    handleRoute("");
+    handleRoute("Transactions");
   };
 
   const handlePrevious = () => {
@@ -175,11 +176,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ navigation,
   };
 
   return (
-    <DashboardLayout
-      navigation={navigation}
-      title={DASHBOARD_ORDER_DETAILS.LABEL_ORDER_DETAILS}
-      titleIcon="arrow-left"
-      titleIconOnPress={handleBack}>
+    <DashboardLayout {...props} title={DASHBOARD_ORDER_DETAILS.LABEL_ORDER_DETAILS} titleIcon="arrow-left" titleIconOnPress={handleBack}>
       <View style={flexChild}>
         <View style={cardStyle}>
           <CustomSpacer space={sh16} />
@@ -204,7 +201,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ navigation,
             />
             <CustomFlexSpacer />
             {selection === 0 ? (
-              <Pagination onPressNext={handleNext} onPressPrev={handlePrevious} page={1} totalItems={36} itemsPerPage={20} />
+              <Pagination onPressNext={handleNext} onPressPrev={handlePrevious} page={1} totalItems={36} totalPages={5} itemsPerPage={20} />
             ) : null}
             <CustomSpacer isHorizontal={true} space={sw24} />
           </View>

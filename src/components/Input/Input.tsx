@@ -118,7 +118,7 @@ export const CustomTextInput = ({
           placeholderTextColor={colorGray._7}
           ref={setRef}
           selectionColor={colorBlack._2}
-          style={{ ...fs16BoldBlack2, ...fsNoLineHeight, ...flexChild, height: sh38, ...disabledStyle, ...style }}
+          style={{ ...fs16BoldBlack2, ...flexChild, height: sh38, ...disabledStyle, ...style, ...fsNoLineHeight }}
           underlineColorAndroid={colorTransparent}
           value={value}
           {...rest}

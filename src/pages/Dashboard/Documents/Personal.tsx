@@ -1,41 +1,12 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
-import { Image, Text, View, ViewStyle } from "react-native";
+import { View } from "react-native";
 
 import { LocalAssets } from "../../../assets/LocalAssets";
-import { BasicModal, CustomSpacer, RoundedButton, SelectionBanner, TextSpaceArea } from "../../../components";
+import { CustomSpacer, PromptModal, SelectionBanner, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { SAMPLE_PERSONAL_DOCUMENTS } from "../../../mocks";
-import {
-  borderBottomGray4,
-  centerHV,
-  colorGray,
-  colorWhite,
-  flexRowCC,
-  fs12BoldBlack2,
-  fs16RegBlack2,
-  fs16SemiBoldBlack2,
-  fs24BoldBlue2,
-  fullHW,
-  px,
-  sh16,
-  sh174,
-  sh176,
-  sh24,
-  sh32,
-  sh40,
-  sh50,
-  sh8,
-  sh96,
-  sw164,
-  sw218,
-  sw24,
-  sw5,
-  sw56,
-  sw565,
-  sw64,
-  sw8,
-} from "../../../styles";
+import { borderBottomGray4, fs12BoldBlack2, fs16RegBlack2, px, sh176, sh24, sh32, sh8, sw24, sw64 } from "../../../styles";
 import { DashboardLayout } from "../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
@@ -47,7 +18,8 @@ interface UploadDocumentsProps {
   handleRoute: (route: string) => void;
 }
 
-export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProps) => {
+export const UploadDocuments = (props: UploadDocumentsProps) => {
+  const { handleRoute } = props;
   // TODO ask for confirmatino when removing existing upload
   // TODO get orderNo from home page
   // TODO get account type and account names
@@ -55,33 +27,18 @@ export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProp
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleBack = () => {
-    handleRoute("");
+    handleRoute("Transactions");
   };
 
   const handleDone = () => {
     setShowModal(false);
-    handleRoute("");
+    handleRoute("Transactions");
   };
 
   const handleSubmitDone = () => {
     setShowModal(true);
   };
 
-  const modalContainer: ViewStyle = {
-    backgroundColor: colorGray._5,
-    borderRadius: sw5,
-    width: sw565,
-  };
-
-  const buttonContainer: ViewStyle = {
-    ...flexRowCC,
-    backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw8,
-    borderBottomRightRadius: sw8,
-    height: sh96,
-  };
-
-  const modalBodyContainer: ViewStyle = { height: 384, ...px(sw56), alignItems: "center" };
   const uploadedOrder = `${UPLOAD_DOCUMENTS.LABEL_UPLOADED_ORDER} ${orderNo}`;
   const principalPendingDocs =
     data !== undefined && data.principal! !== undefined
@@ -118,8 +75,8 @@ export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProp
   return (
     <Fragment>
       <DashboardLayout
+        {...props}
         hideQuickActions={true}
-        navigation={navigation}
         titleIconOnPress={handleBack}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
         titleIcon="arrow-left">
@@ -151,23 +108,14 @@ export const UploadDocuments = ({ navigation, handleRoute }: UploadDocumentsProp
         submitOnPress={handleSubmitDone}
         labelSubmit={UPLOAD_DOCUMENTS.BUTTON_DONE}
       />
-      <BasicModal visible={showModal}>
-        <View style={{ ...centerHV, ...fullHW }}>
-          <View style={modalContainer}>
-            <View style={modalBodyContainer}>
-              <CustomSpacer space={sh50} />
-              <Image source={LocalAssets.illustration.uploadSuccess} style={{ height: sh174, width: sw164 }} />
-              <CustomSpacer space={sh40} />
-              <Text style={fs24BoldBlue2}>{UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}</Text>
-              <CustomSpacer space={sh16} />
-              <Text style={fs16SemiBoldBlack2}>{uploadedOrder} </Text>
-            </View>
-            <View style={buttonContainer}>
-              <RoundedButton buttonStyle={{ width: sw218 }} onPress={handleDone} radius={sw24} text={UPLOAD_DOCUMENTS.BUTTON_DONE} />
-            </View>
-          </View>
-        </View>
-      </BasicModal>
+      <PromptModal
+        handleContinue={handleDone}
+        illustration={LocalAssets.illustration.submissionSummary}
+        label={UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}
+        labelContinue={UPLOAD_DOCUMENTS.BUTTON_DONE}
+        title={uploadedOrder}
+        visible={showModal}
+      />
     </Fragment>
   );
 };

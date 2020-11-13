@@ -5,11 +5,14 @@ declare interface ITableData {
 declare interface ITableIcon {
   color?: string;
   name: string;
+  onPress?: () => void;
   size?: number;
+  style?: import("react-native").ViewStyle;
 }
 
 declare interface ITableItemPrefix {
   key: string;
+  value?: string;
   targetKey: string;
   textStyle?: import("react-native").TextStyle;
 }
@@ -27,13 +30,14 @@ declare interface IColumnItem {
 }
 
 declare interface ITableColumn {
+  customItem?: boolean;
   icon?: ITableIcon;
   itemIcon?: ITableIcon;
   itemStyle?: import("react-native").ViewStyle;
-  itemTextStyle?: (item: IColumnItemAccordion) => import("react-native").TextStyle;
+  itemTextStyle?: (item: ITableRowData) => import("react-native").TextStyle;
   key: ITableItemKey[];
   onPressHeader?: () => void;
-  onPressItem?: (item: IColumnItemAccordion) => void;
+  onPressItem?: (item: ITableRowData) => void;
   prefix?: ITableItemPrefix[];
   textStyle?: import("react-native").ViewStyle;
   title: string;
@@ -44,11 +48,11 @@ declare interface ITableColumn {
 }
 
 declare interface ITableOptions {
-  data: IColumnItemAccordion;
+  data: ITableRowData;
   onClose: () => void;
 }
 
-declare interface IColumnItemAccordion {
+declare interface ITableRowData {
   index: number;
   rawData: ITableData;
 }
@@ -61,6 +65,14 @@ declare interface CustomTableProps {
   onRowSelect?: (record: ITableData[]) => void;
   RenderAccordion?: (record: ITableData) => JSX.Element;
   RenderOptions?: (props: ITableOptions) => JSX.Element;
+  RenderCustomItem?: (record: ITableData, key: string) => JSX.Element;
   rowSelection?: ITableData[];
   rowSelectionLabel?: string;
+}
+
+declare interface ITableCustomItem {
+  accordionIcon?: ITableIcon;
+  item: ITableRowData;
+  keyName: ITableItemKey;
+  lastIndex: boolean;
 }

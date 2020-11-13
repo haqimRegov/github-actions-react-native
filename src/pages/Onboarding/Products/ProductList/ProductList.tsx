@@ -106,7 +106,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
     setSelectedFunds(newSelected as IFund[]);
   };
 
-  const handleShowPerformance = (item: IColumnItemAccordion) => {
+  const handleShowPerformance = (item: ITableRowData) => {
     const newSections: number[] = [...activeAccordion];
     const sectionIndex = newSections.indexOf(item.index);
     if (sectionIndex > -1) {
@@ -226,7 +226,7 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
                 <Tab onPress={handleRecommendedFunds} selected={!allFunds} text={PRODUCT_LIST.LABEL_RECOMMENDED} />
                 <Tab onPress={handleAllFunds} selected={allFunds} text={PRODUCT_LIST.LABEL_ALL_FUNDS} />
                 <CustomFlexSpacer />
-                <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} itemsPerPage={20} />
+                <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} totalPages={5} itemsPerPage={20} />
                 <CustomSpacer isHorizontal={true} space={sw24} />
               </View>
               <CustomSpacer space={sh15} />

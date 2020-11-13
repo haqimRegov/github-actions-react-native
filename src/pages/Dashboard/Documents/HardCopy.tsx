@@ -1,41 +1,13 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, useEffect, useState } from "react";
-import { Image, Text, View, ViewStyle } from "react-native";
+import { View } from "react-native";
 
 import { LocalAssets } from "../../../assets/LocalAssets";
-import { ActionButtons, AdvancedDropdown, BasicModal, CheckBox, CustomSpacer, RoundedButton } from "../../../components";
+import { ActionButtons, AdvancedDropdown, CheckBox, CustomSpacer, PromptModal } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_BRANCHES } from "../../../data/dictionary";
 import { SAMPLE_DOCUMENTS_1 } from "../../../mocks";
-import {
-  borderBottomBlack21,
-  centerHV,
-  centerVertical,
-  colorGray,
-  colorWhite,
-  flexRowCC,
-  fs16SemiBoldBlack2,
-  fs24BoldBlue2,
-  fsAlignCenter,
-  fullHW,
-  px,
-  sh16,
-  sh17,
-  sh174,
-  sh24,
-  sh32,
-  sh50,
-  sh56,
-  sh96,
-  sw164,
-  sw218,
-  sw24,
-  sw453,
-  sw48,
-  sw5,
-  sw565,
-  sw8,
-} from "../../../styles";
+import { borderBottomBlack21, px, sh24, sh32, sh56, sw24 } from "../../../styles";
 import { DashboardLayout } from "../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
@@ -46,18 +18,19 @@ interface UploadHardCopyProps {
   handleRoute: (route: string) => void;
 }
 
-export const UploadHardCopy = ({ navigation, handleRoute }: UploadHardCopyProps) => {
+export const UploadHardCopy = (props: UploadHardCopyProps) => {
+  const { handleRoute } = props;
   const [showModal, setShowModal] = useState<boolean>(false);
   const [branch, setBranch] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
   const [data, setData] = useState<IRelatedDocuments[]>();
 
   const handleBack = () => {
-    handleRoute("");
+    handleRoute("Transactions");
   };
 
   const handleDone = () => {
-    handleRoute("");
+    handleRoute("Transactions");
   };
 
   const handleSubmit = () => {
@@ -78,24 +51,11 @@ export const UploadHardCopy = ({ navigation, handleRoute }: UploadHardCopyProps)
     setData(SAMPLE_DOCUMENTS_1);
   }, []);
 
-  const buttonContainer: ViewStyle = {
-    ...flexRowCC,
-    backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw8,
-    borderBottomRightRadius: sw8,
-    height: sh96,
-  };
-  const modalContainer: ViewStyle = {
-    backgroundColor: colorGray._5,
-    borderRadius: sw5,
-    width: sw565,
-  };
-
   return (
     <Fragment>
       <DashboardLayout
+        {...props}
         hideQuickActions={true}
-        navigation={navigation}
         titleIconOnPress={handleBack}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMISSION}
         titleIcon="arrow-left">
@@ -123,31 +83,14 @@ export const UploadHardCopy = ({ navigation, handleRoute }: UploadHardCopyProps)
         </View>
         <CustomSpacer space={sh56} />
       </DashboardLayout>
-      <BasicModal visible={showModal}>
-        <View style={{ ...centerHV, ...fullHW }}>
-          <View style={modalContainer}>
-            <View style={{ ...centerVertical, ...px(sw48) }}>
-              <CustomSpacer space={sh50} />
-              <Image source={LocalAssets.illustration.uploadSuccess} style={{ height: sh174, width: sw164 }} />
-              <CustomSpacer space={sh17} />
-              <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, maxWidth: sw453 }}>
-                {UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}
-              </Text>
-              <CustomSpacer space={sh16} />
-              <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter }}>{UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}</Text>
-              <CustomSpacer space={sh56} />
-            </View>
-            <View style={buttonContainer}>
-              <RoundedButton
-                buttonStyle={{ width: sw218 }}
-                onPress={handleDone}
-                radius={sw24}
-                text={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_DONE}
-              />
-            </View>
-          </View>
-        </View>
-      </BasicModal>
+      <PromptModal
+        handleContinue={handleDone}
+        illustration={LocalAssets.illustration.submissionSummary}
+        label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}
+        labelContinue={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_DONE}
+        title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}
+        visible={showModal}
+      />
     </Fragment>
   );
 };

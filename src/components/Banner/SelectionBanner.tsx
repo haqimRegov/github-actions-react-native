@@ -9,7 +9,7 @@ import {
   fs24BoldBlue2,
   fullWidth,
   px,
-  sh120,
+  sh112,
   sw16,
   sw200,
   sw24,
@@ -47,7 +47,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
     bottom: 0,
-    height: sh120,
+    height: sh112,
     position: "absolute",
   };
 

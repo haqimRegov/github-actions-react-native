@@ -5,13 +5,14 @@ import { CardWrap, CustomSpacer, IconText, LabeledTitleProps, TextSpaceArea } fr
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
-  borderBottomBlack21,
+  borderBottomGray4,
   colorBlue,
   flexRow,
   fs12BoldBlack2,
   fs16BoldBlue2,
   fs18BoldBlack2,
   px,
+  sh12,
   sh16,
   sh24,
   sh32,
@@ -46,7 +47,7 @@ export const TransactionDetailsContent = ({ transactionSummary, paymentSummary }
       <CustomSpacer space={sh16} />
       {paymentSummary !== undefined ? (
         <Fragment>
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray4} />
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             <View style={flexRow}>
@@ -62,8 +63,8 @@ export const TransactionDetailsContent = ({ transactionSummary, paymentSummary }
                   {index !== 0 ? <CustomSpacer space={sh8} /> : null}
                   <IconText color={colorBlue._2} iconSize={sh24} name="bank" spaceBetween={sw16} textStyle={fs16BoldBlue2} text={label} />
                   <CustomSpacer space={sh16} />
-                  <View style={borderBottomBlack21} />
-                  <CustomSpacer space={sh16} />
+                  <View style={borderBottomGray4} />
+                  <CustomSpacer space={sh12} />
                   <CardWrap data={payment} {...cardWrapProps} />
                 </Fragment>
               );

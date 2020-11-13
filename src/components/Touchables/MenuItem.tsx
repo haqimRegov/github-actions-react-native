@@ -2,7 +2,20 @@ import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerVertical, colorBlue, colorRed, colorWhite, flexRow, fs16BoldBlue2, px, sh32, sh56, sw24, sw8 } from "../../styles";
+import {
+  centerVertical,
+  colorBlue,
+  colorRed,
+  colorWhite,
+  flexRow,
+  fs10RegBlue38,
+  fs16BoldBlue2,
+  px,
+  sh32,
+  sh56,
+  sw24,
+  sw8,
+} from "../../styles";
 import { BadgeCount } from "../Badge";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
@@ -15,8 +28,10 @@ export interface MenuItemProps {
   onPress?: () => void;
   spaceBetween?: number;
   style?: ViewStyle;
-  text: string;
-  textStyle?: TextStyle;
+  subtitle?: string;
+  subtitleStyle?: TextStyle;
+  title: string;
+  titleStyle?: TextStyle;
 }
 
 export const MenuItem: FunctionComponent<MenuItemProps> = ({
@@ -28,8 +43,10 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
   onPress,
   spaceBetween,
   style,
-  text,
-  textStyle,
+  subtitle,
+  titleStyle,
+  subtitleStyle,
+  title,
 }: MenuItemProps) => {
   const badgeColor: ViewStyle = active === true ? { backgroundColor: colorWhite._1 } : { backgroundColor: colorRed._1 };
   const badgeCountColor: TextStyle = active === true ? { color: colorRed._1 } : { color: colorWhite._1 };
@@ -44,11 +61,18 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
     ...style,
   };
   const textColor = color ? { color: color } : {};
-  const defaultTextStyle: TextStyle = {
+  const defaultTitleStyle: TextStyle = {
     ...fs16BoldBlue2,
     color: selectedColor,
     ...textColor,
-    ...textStyle,
+    ...titleStyle,
+  };
+
+  const defaultSubtitleStyle: TextStyle = {
+    ...fs10RegBlue38,
+    color: selectedColor,
+    ...textColor,
+    ...subtitleStyle,
   };
 
   const defaultSpaceBetween = spaceBetween !== undefined ? spaceBetween : sw8;
@@ -60,7 +84,10 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
       <View style={defaultButtonStyle}>
         <IcoMoon color={defaultColor} name={name} size={defaultSize} />
         <CustomSpacer isHorizontal={true} space={defaultSpaceBetween} />
-        <Text style={defaultTextStyle}>{text}</Text>
+        <View>
+          <Text style={defaultTitleStyle}>{title}</Text>
+          {subtitle !== undefined ? <Text style={defaultSubtitleStyle}>{subtitle}</Text> : null}
+        </View>
         <CustomFlexSpacer />
         {badgeCount !== undefined ? <BadgeCount count={badgeCount} countStyle={badgeCountColor} style={badgeColor} /> : null}
       </View>

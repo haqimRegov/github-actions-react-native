@@ -6,7 +6,7 @@ import { borderBottomGray4, colorBlue, fs12BoldBlue2, px, sh48, sw16, sw184, sw8
 
 export interface ProductOptionsProps extends ITableOptions {
   handleShareDocuments: (fund: IFund) => void;
-  handleShowPerformance: (data: IColumnItemAccordion) => void;
+  handleShowPerformance: (data: ITableRowData) => void;
   handleViewDetails: (fund: IFund) => void;
   shareSuccess?: boolean;
 }

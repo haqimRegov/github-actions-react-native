@@ -719,6 +719,13 @@ export const english = {
       LABEL_OTHERS: "Other Education Level",
       SUBHEADING: "Tell us more about yourself",
     },
+    QUICK_ACTIONS: {
+      LABEL_NEW_SALES: "Open Account & New Sales",
+      LABEL_REDEMPTION: "Redemption",
+      LABEL_SWITCHING: "Switching",
+      LABEL_TOP_UP: "Top Up",
+      LABEL_TRANSFER: "Transfer",
+    },
     RISK_APPETITE: {
       BUTTON_SKIP: "Skip Risk Assessment",
       BUTTON_TAKE: "Take Risk Assessment",

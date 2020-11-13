@@ -17,6 +17,7 @@ export * from "./mobile-code";
 export * from "./monthly-income";
 export * from "./occupation";
 export * from "./otp";
+export * from "./order-status";
 export * from "./password";
 export * from "./personal";
 export * from "./product-filter";

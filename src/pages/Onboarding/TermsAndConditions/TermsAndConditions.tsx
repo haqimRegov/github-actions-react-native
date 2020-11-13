@@ -13,7 +13,7 @@ import {
 } from "../../../components";
 import { Language } from "../../../constants/language";
 import { IcoMoon } from "../../../icons";
-import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks/terms-and-conditions";
+import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks";
 import {
   alignItemsStart,
   alignSelfCenter,

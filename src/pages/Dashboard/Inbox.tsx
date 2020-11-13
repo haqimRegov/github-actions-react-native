@@ -90,7 +90,7 @@ export const InboxPage: FunctionComponent<InboxPageProps> = () => {
         <View style={flexRow}>
           <Tab selected={true} style={{ height: sh48 }} text={INBOX.TAB_NOTIFICATIONS} />
           <CustomFlexSpacer />
-          <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} itemsPerPage={20} />
+          <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalItems={36} totalPages={5} itemsPerPage={20} />
           <CustomSpacer isHorizontal={true} space={sw24} />
         </View>
         <View style={borderBottomBlack21} />

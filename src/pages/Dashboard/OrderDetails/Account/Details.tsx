@@ -7,7 +7,7 @@ import { AddressInfo } from "../../../../components/Views/AddressInfo";
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
-  borderBottomBlack21,
+  borderBottomGray4,
   circleBorder,
   colorBlue,
   colorGreen,
@@ -20,6 +20,7 @@ import {
   fs16BoldBlue2,
   fs18BoldBlack2,
   px,
+  sh12,
   sh120,
   sh16,
   sh24,
@@ -112,19 +113,21 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
         ) : null}
       </View>
       <CustomSpacer space={sh32} />
+      <View style={borderBottomGray4} />
+      <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_SUMMARY} />
         <CardWrap data={accountSummaryDetails} {...cardWrapProps} />
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_CONTACT_DETAILS} />
         <CardWrap data={contactDetails} {...cardWrapProps} />
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_ADDRESS_INFO} />
@@ -135,7 +138,7 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
         </View>
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
       {epfDetails.length !== 0 ? (
         <Fragment>
@@ -144,7 +147,7 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
             <CardWrap data={epfDetails} {...cardWrapProps} />
           </View>
           <CustomSpacer space={sh16} />
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray4} />
           <CustomSpacer space={sh32} />
         </Fragment>
       ) : null}
@@ -153,7 +156,7 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
         <CardWrap data={employmentDetails} {...cardWrapProps} />
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_BANK_SUMMARY} />
@@ -163,8 +166,8 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
             <Fragment key={numberIndex}>
               <IconText color={colorBlue._2} iconSize={sh24} name="bank" spaceBetween={sw16} textStyle={fs16BoldBlue2} text={label} />
               <CustomSpacer space={sh16} />
-              <View style={borderBottomBlack21} />
-              <CustomSpacer space={sh16} />
+              <View style={borderBottomGray4} />
+              <CustomSpacer space={sh12} />
               <CardWrap data={bank} {...cardWrapProps} />
             </Fragment>
           );
@@ -176,22 +179,22 @@ export const AccountDetailsContent = ({ data, handleFile, handleToggle, toggle }
             <Fragment key={numberIndex}>
               <IconText color={colorBlue._2} iconSize={sh24} name="bank" spaceBetween={sw16} textStyle={fs16BoldBlue2} text={label} />
               <CustomSpacer space={sh16} />
-              <View style={borderBottomBlack21} />
-              <CustomSpacer space={sh16} />
+              <View style={borderBottomGray4} />
+              <CustomSpacer space={sh12} />
               <CardWrap data={bank} {...cardWrapProps} />
             </Fragment>
           );
         })}
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_ORDER_DETAILS.LABEL_FATCA_CRS} />
         <CardWrap data={fatcaCrsDetails} {...cardWrapProps} />
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <View style={flexRow}>

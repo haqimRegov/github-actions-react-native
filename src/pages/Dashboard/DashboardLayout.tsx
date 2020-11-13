@@ -3,12 +3,16 @@ import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions } from "../../components";
+import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
+import { logout } from "../../network-actions";
+import { GlobalStoreProps } from "../../store";
 import {
   alignItemsEnd,
   alignSelfCenter,
   borderBottomGray4,
   centerVertical,
+  colorWhite,
   flexGrow,
   flexRow,
   fs24BoldBlack2,
@@ -20,7 +24,9 @@ import {
 } from "../../styles";
 import { AddClient } from "./AddClient";
 
-interface DashboardLayoutProps {
+const { QUICK_ACTIONS } = Language.PAGE;
+
+interface DashboardLayoutProps extends Partial<GlobalStoreProps> {
   children: ReactNode;
   hideQuickActions?: boolean;
   navigation: StackNavigationProp<RootNavigatorType>;
@@ -33,6 +39,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   children,
   hideQuickActions,
   navigation,
+  resetGlobal,
   title,
   titleIcon,
   titleIconOnPress,
@@ -43,40 +50,42 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     setAddClient(true);
   };
 
-  const handleTopUp = () => {};
+  const handleTopUp = () => {
+    navigation.navigate("Onboarding");
+  };
 
-  const QUICK_ACTIONS: IQuickAction[] = [
+  const handleLogout = () => {
+    logout(resetGlobal!, navigation);
+  };
+
+  const actions: IQuickAction[] = [
     {
-      label: "Add New Client",
+      label: QUICK_ACTIONS.LABEL_NEW_SALES,
       onPress: handleAddClient,
       style: borderBottomGray4,
     },
     {
-      label: "Top Up",
+      label: QUICK_ACTIONS.LABEL_TOP_UP,
       onPress: handleTopUp,
     },
     {
-      label: "Switch",
+      label: QUICK_ACTIONS.LABEL_SWITCHING,
       onPress: handleTopUp,
     },
     {
-      label: "Redeem",
+      label: QUICK_ACTIONS.LABEL_REDEMPTION,
       onPress: handleTopUp,
     },
     {
-      label: "Transfer",
-      onPress: handleTopUp,
-    },
-    {
-      label: "Buy Fund",
-      onPress: handleTopUp,
+      label: QUICK_ACTIONS.LABEL_TRANSFER,
+      onPress: handleLogout,
     },
   ];
 
   return (
     <Fragment>
       <ScrollView bounces={true} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <View style={fullHeight}>
+        <View style={{ ...fullHeight, backgroundColor: colorWhite._4 }}>
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
             <View style={{ ...centerVertical, ...flexRow }}>
@@ -93,7 +102,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                 </View>
               </View>
               <CustomFlexSpacer />
-              {hideQuickActions === true ? null : <QuickActions actions={QUICK_ACTIONS} />}
+              {hideQuickActions === true ? null : <QuickActions actions={actions} />}
             </View>
           </View>
           {children}

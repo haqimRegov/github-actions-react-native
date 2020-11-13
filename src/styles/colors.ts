@@ -13,12 +13,16 @@ export const colorBlack = {
 export const colorBlue = {
   _1: "#0089EC",
   _2: "#002043",
+  _2_05: "rgba(0, 32, 67, 0.05)",
+  _2_1: "rgba(0, 32, 67, 0.1)",
   _2_5: "rgba(0, 32, 67, 0.5)",
   _3: "#2A365A",
+  _3_6: "rgba(42, 54, 90, 0.6)",
   _3_8: "rgba(42, 54, 90, 0.8)",
   _4: "#29365A",
   _4_7: "rgba(41,54,90, 0.7)",
   _5: "#122778",
+  _6: "#253052",
   _6_5: "rgba(37, 48, 82, 0.5)",
 };
 
@@ -28,7 +32,7 @@ export const colorGray = {
   _3: "#C6CBD4",
   _4: "#EAEBEE",
   _5: "#F4F4F4",
-  _5_5: "rgb(244,244,244, 0.5)",
+  _5_5: "rgba(244,244,244, 0.5)",
   _6: "#A3A3A3",
   _7: "#C9C9CD",
   _8: "#4D4D4D",
@@ -36,6 +40,7 @@ export const colorGray = {
 
 export const colorGreen = {
   _1: "#2ECC82",
+  _1_05: "rgba(46, 204, 130, 0.05)",
 };
 
 export const colorMint = {
@@ -44,18 +49,23 @@ export const colorMint = {
 
 export const colorRed = {
   _1: "#C61230",
-  _1_5: "rgb(198, 18, 48, 0.5)",
+  _1_5: "rgba(198, 18, 48, 0.5)",
   _2: "#E84C3D",
+  _2_05: "rgba(232, 76, 61, 0.05)",
+  _3: "#AB001D",
+  _3_05: "rgba(171, 0, 29, 0.05)",
 };
 
 export const colorWhite = {
   _1: "#FFFFFF",
   _2: "#FDFEFE",
   _3: "#FBFBFB",
-  _3_5: "rgb(251,251,251,0.5)",
+  _3_5: "rgba(251,251,251,0.5)",
   _4: "#F2F4F6",
 };
 
 export const colorYellow = {
   _1: "#F6EDD9",
+  _2: "#E89700",
+  _2_05: "rgba(232, 151, 0, 0.05)",
 };

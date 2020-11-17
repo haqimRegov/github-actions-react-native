@@ -5,3 +5,4 @@ export * from "./graphql";
 export * from "./react-native-document-picker";
 export * from "./react-native-image-crop-picker";
 export * from "./react-native-share";
+export * from "./react-native-text-size";

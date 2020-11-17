@@ -304,6 +304,7 @@ export const english = {
     },
     DROPDOWN: {
       PLACEHOLDER: "Select One",
+      PLACEHOLDER_MANY: "Select",
     },
     EMAIL_VERIFICATION: {
       HEADING: "Email Verification",

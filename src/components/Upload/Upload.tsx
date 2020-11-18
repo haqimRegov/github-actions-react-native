@@ -179,7 +179,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={container}>
-        {value === undefined ? (
+        {value === undefined || defaultError !== "" ? (
           <IcoMoon color={colorBlack._1} name={uploadIcon} size={sh24} />
         ) : (
           <View style={iconBadgeOffset}>

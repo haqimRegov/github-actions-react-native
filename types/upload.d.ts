@@ -1,6 +1,7 @@
 declare type TypeUploadFeature = "camera" | "gallery" | "file";
 
 declare interface UploadProps {
+  errorMessage?: string;
   features: TypeUploadFeature[];
   label?: string;
   labelStyle?: import("react-native").TextStyle;
@@ -15,4 +16,10 @@ declare interface UploadProps {
   title?: string;
   titleStyle?: import("react-native").TextStyle;
   value?: FileBase64;
+}
+
+declare interface IUploadDocumentRef {
+  handleOpenCamera: () => void;
+  handleOpenPicker: () => void;
+  handleOpenDocument: () => void;
 }

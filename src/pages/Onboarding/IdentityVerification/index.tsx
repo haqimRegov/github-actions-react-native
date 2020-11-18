@@ -43,7 +43,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const { idType, otherIdType } = details!;
   const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
-  const principalSecondPage = principal!.personalDetails!.id!.secondPage;
+  const principalBackPage = principal!.personalDetails!.id!.secondPage;
   const jointFrontPage = joint!.personalDetails!.id!.frontPage;
   const jointSecondPage = joint!.personalDetails!.id!.secondPage;
   const inputJointIdType = joint!.personalDetails!.idType!;
@@ -60,10 +60,18 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       : `${inputJointIdType}`;
   const defaultJointTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${jointTitle}`;
 
-  const individualNRIC = principalFrontPage?.path !== undefined && principalSecondPage?.path !== undefined;
-  const individualPass = principalFrontPage?.path !== undefined;
-  const jointNRIC = jointFrontPage?.path !== undefined && jointSecondPage?.path !== undefined;
-  const jointPass = jointFrontPage?.path !== undefined;
+  const individualNRIC =
+    principalFrontPage?.path !== undefined &&
+    principalBackPage?.path !== undefined &&
+    principalFrontError === undefined &&
+    principalBackError === undefined;
+  const individualPass = principalFrontPage?.path !== undefined && principalFrontError === undefined;
+  const jointNRIC =
+    jointFrontPage?.path !== undefined &&
+    jointSecondPage?.path !== undefined &&
+    jointFrontError === undefined &&
+    jointBackError === undefined;
+  const jointPass = jointFrontPage?.path !== undefined && jointFrontError === undefined;
 
   let buttonDisabled = false;
   if (accountType === "Individual" || accountType === "Joint") {
@@ -127,6 +135,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       if ("error" in mykad && mykad.error !== undefined) {
         if (mykad.error?.code === ERROR_CODE_OCR.invalidNricData) {
           setReviewImage(uploaded);
+          setPrincipalFrontError(undefined);
         } else {
           setPrincipalFrontError(mykad.error?.message);
         }
@@ -173,10 +182,11 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined) {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
-        return setPrincipalBackError(mykadBack.error?.message);
+        setPrincipalBackError(mykadBack.error?.message);
+      } else {
+        setPrincipalBackError(undefined);
       }
     }
-    setPrincipalBackError(undefined);
     return handlePrincipalDetails({ ...principal!.personalDetails?.id!, secondPage: uploaded });
   };
 
@@ -187,6 +197,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       if ("error" in mykad && mykad.error !== undefined) {
         if (mykad.error?.code === ERROR_CODE_OCR.invalidNricData) {
           setReviewImage(uploaded);
+          setJointFrontError(undefined);
         } else {
           setJointFrontError(mykad.error?.message);
         }
@@ -234,10 +245,11 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined) {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
-        return setJointBackError(mykadBack.error?.message);
+        setJointBackError(mykadBack.error?.message);
+      } else {
+        setJointBackError(undefined);
       }
     }
-    setJointBackError(undefined);
     return handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: uploaded });
   };
 
@@ -254,7 +266,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             <CustomSpacer space={sh40} />
             <UploadID
               backError={principalBackError}
-              backPage={principalSecondPage}
+              backPage={principalBackPage}
               frontError={principalFrontError}
               frontPage={principalFrontPage}
               idType={clientIdType as TypeClientID}

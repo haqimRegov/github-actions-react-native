@@ -1,41 +1,23 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
-import { ScrollView, View } from "react-native";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
-import {
-  AdvancedDropdown,
-  CustomFlexSpacer,
-  CustomSpacer,
-  LabeledTitle,
-  RoundedButton,
-  SafeAreaPage,
-  TextSpaceArea,
-} from "../../../components";
+import { AdvancedDropdown, ContentPage, CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID, DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES } from "../../../data/dictionary";
-import { SAMPLE_CLIENT_5 } from "../../../mocks";
-import { uploadClientId } from "../../../network-actions";
+import { DICTIONARY_ALL_ID, DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES, ERROR_CODE_OCR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import {
-  borderBottomGray4,
-  flexGrow,
-  fs10BoldBlack2,
-  fs16RegBlack2,
-  fs24BoldBlack2,
-  px,
-  sh24,
-  sh32,
-  sh40,
-  sh56,
-  sh8,
-  sw24,
-} from "../../../styles";
+import { borderBottomGray4, fs10BoldBlack2, fs16RegBlack2, fs24BoldBlack2, px, sh24, sh32, sh40, sh8, sw24 } from "../../../styles";
+import { OCRUtils } from "../../../utils";
 import { IDVerification } from "./IDVerification";
+import { ImageReview } from "./ImageReview";
 import { UploadID } from "./UploadID";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
+type TypeUploader = "camera-joint" | "camera-principal" | "gallery-joint" | "gallery-principal";
+
 interface IdentityConfirmationProps extends PersonalInfoStoreProps, OnboardingContentProps {}
+
 const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps> = ({
   accountType,
   addClientDetails,
@@ -47,18 +29,77 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   riskScore,
 }: IdentityConfirmationProps) => {
   // TODO issue in dropdown and keyboard avoiding view
-  const { principal, joint } = personalInfo;
-  const { idNumber, idType, otherIdType } = details!;
-  const clientIdType = idType === "Other" ? otherIdType : idType;
   const defaultPage = personalInfo.editMode === true ? 1 : 0;
   const [page, setPage] = useState<number>(defaultPage);
+  const [uploadType, setUploadType] = useState<TypeUploader | undefined>(undefined);
+  const [reviewImage, setReviewImage] = useState<FileBase64 | undefined>(undefined);
+  const [principalFrontError, setPrincipalFrontError] = useState<string | undefined>(undefined);
+  const [principalBackError, setPrincipalBackError] = useState<string | undefined>(undefined);
+  const [jointFrontError, setJointFrontError] = useState<string | undefined>(undefined);
+  const [jointBackError, setJointBackError] = useState<string | undefined>(undefined);
+  const principalUploadRef = useRef<IUploadDocumentRef>();
+  const jointUploadRef = useRef<IUploadDocumentRef>();
+
+  const { idType, otherIdType } = details!;
+  const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
   const principalSecondPage = principal!.personalDetails!.id!.secondPage;
   const jointFrontPage = joint!.personalDetails!.id!.frontPage;
   const jointSecondPage = joint!.personalDetails!.id!.secondPage;
   const inputJointIdType = joint!.personalDetails!.idType!;
+  const clientIdType = idType === "Other" ? otherIdType : idType;
   const extractedIdType = typeof clientIdType! === "string" ? clientIdType! : DICTIONARY_ALL_ID_TYPE[clientIdType!];
   const isPrincipalMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(extractedIdType as TypeClientID) !== 1;
+
+  const principalTitle = idType !== "Passport" && idType !== "NRIC" ? `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : `${idType}`;
+  const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
+
+  const jointTitle =
+    inputJointIdType !== "Passport" && inputJointIdType !== "NRIC"
+      ? `${inputJointIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
+      : `${inputJointIdType}`;
+  const defaultJointTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${jointTitle}`;
+
+  const individualNRIC = principalFrontPage?.path !== undefined && principalSecondPage?.path !== undefined;
+  const individualPass = principalFrontPage?.path !== undefined;
+  const jointNRIC = jointFrontPage?.path !== undefined && jointSecondPage?.path !== undefined;
+  const jointPass = jointFrontPage?.path !== undefined;
+
+  let buttonDisabled = false;
+  if (accountType === "Individual" || accountType === "Joint") {
+    buttonDisabled = clientIdType === "NRIC" && !individualNRIC;
+    if (!buttonDisabled) {
+      buttonDisabled = clientIdType === "Passport" && !individualPass;
+    }
+  }
+  if (accountType === "Joint" && !buttonDisabled) {
+    buttonDisabled = clientIdType === "NRIC" && !jointNRIC;
+    if (!buttonDisabled) {
+      buttonDisabled = clientIdType === "Passport" && !jointPass;
+    }
+  }
+
+  const handleReupload = () => {
+    if (uploadType === "camera-joint" && jointUploadRef.current !== undefined) {
+      return jointUploadRef.current.handleOpenCamera();
+    }
+    if (uploadType === "camera-principal" && principalUploadRef.current !== undefined) {
+      return principalUploadRef.current.handleOpenCamera();
+    }
+    if (uploadType === "gallery-principal" && principalUploadRef.current !== undefined) {
+      return principalUploadRef.current.handleOpenPicker();
+    }
+    if (uploadType === "gallery-joint" && jointUploadRef.current !== undefined) {
+      return jointUploadRef.current.handleOpenPicker();
+    }
+    return null;
+  };
+
+  const handleCameraPrincipal = () => setUploadType("camera-principal");
+  const handlePickerPrincipal = () => setUploadType("gallery-principal");
+  const handleCameraJoint = () => setUploadType("camera-joint");
+  const handlePickerJoint = () => setUploadType("gallery-joint");
+  const handleProceed = () => setReviewImage(undefined);
 
   const handlePrincipalDetails = (value: IClientIDState) =>
     addPersonalInfo({ ...personalInfo, principal: { ...principal, personalDetails: { ...principal!.personalDetails, id: { ...value } } } });
@@ -69,189 +110,199 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const setInputJointIdType = (value: string) =>
     addPersonalInfo({ ...personalInfo, joint: { ...joint!, personalDetails: { ...joint!.personalDetails, idType: value } } });
 
-  // TODO validation
-  const buttonDisabled = false;
-
   const handleContinue = () => {
-    // TODO validation
     const principalMailingAddress = personalInfo.principal!.addressInformation?.mailingAddress!;
     setPage(1);
     if (accountType === "Joint") {
       addPersonalInfo({
         ...personalInfo,
-        joint: {
-          ...joint,
-          addressInformation: { ...joint!.addressInformation, mailingAddress: { ...principalMailingAddress } },
-        },
+        joint: { ...joint, addressInformation: { ...joint!.addressInformation, mailingAddress: { ...principalMailingAddress } } },
       });
     }
   };
 
-  const handlePrincipalFirstPage = (uploaded?: FileBase64) => {
-    if (uploaded !== undefined) {
-      const ocrResponse = uploadClientId("token", uploaded);
-
-      const principalInfo: IHolderInfoState = {
-        ...principal,
-        personalDetails: {
-          ...principal?.personalDetails,
-          dateOfBirth: ocrResponse.dateOfBirth,
-          gender: ocrResponse.gender!,
-          idNumber: idNumber,
-          idType: clientIdType,
-          id: {
-            ...principal?.personalDetails?.id,
-            frontPage: uploaded,
+  const handlePrincipalFrontPage = async (uploaded?: FileBase64) => {
+    if (uploaded !== undefined && clientIdType === DICTIONARY_ALL_ID[0].value) {
+      const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
+      if ("error" in mykad && mykad.error !== undefined) {
+        if (mykad.error?.code === ERROR_CODE_OCR.invalidNricData) {
+          setReviewImage(uploaded);
+        } else {
+          setPrincipalFrontError(mykad.error?.message);
+        }
+      } else {
+        const principalInfo: IHolderInfoState = {
+          ...principal,
+          personalDetails: {
+            ...principal?.personalDetails,
+            gender: mykad.gender!,
+            id: {
+              ...principal?.personalDetails?.id,
+              frontPage: uploaded,
+            },
+            nationality: isPrincipalMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
+            placeOfBirth: mykad.placeOfBirth,
           },
-          name: ocrResponse.name,
-          nationality: isPrincipalMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
-        },
-        addressInformation: {
-          mailingAddress: {
-            address: ocrResponse.permanentAddress?.address || "",
-            city: ocrResponse.permanentAddress?.city || "",
-            country: ocrResponse.permanentAddress?.country || "",
-            postCode: ocrResponse.permanentAddress?.postCode || "",
-            state: ocrResponse.permanentAddress?.state || "",
+          addressInformation: {
+            mailingAddress: {
+              address: mykad.address || "",
+              city: mykad.city || "",
+              country: mykad.country || "",
+              postCode: mykad.postCode || "",
+              state: mykad.state || "",
+            },
+            permanentAddress: {
+              address: mykad.address || "",
+              city: mykad.city || "",
+              country: mykad.country || "",
+              postCode: mykad.postCode || "",
+              state: mykad.state || "",
+            },
           },
-          permanentAddress: {
-            address: ocrResponse.permanentAddress?.address || "",
-            city: ocrResponse.permanentAddress?.city || "",
-            country: ocrResponse.permanentAddress?.country || "",
-            postCode: ocrResponse.permanentAddress?.postCode || "",
-            state: ocrResponse.permanentAddress?.state || "",
-          },
-        },
-      };
-      return addPersonalInfo({ ...personalInfo, principal: principalInfo });
+        };
+        setReviewImage(undefined);
+        setPrincipalFrontError(undefined);
+        return addPersonalInfo({ ...personalInfo, principal: principalInfo });
+      }
     }
-    return handlePrincipalDetails({ ...principal!.personalDetails?.id!, frontPage: undefined });
+
+    return handlePrincipalDetails({ ...principal!.personalDetails?.id!, frontPage: uploaded });
   };
 
-  const handlePrincipalSecondPage = (value?: FileBase64) =>
-    handlePrincipalDetails({ ...principal!.personalDetails?.id!, secondPage: value });
-
-  const handleJointFirstPage = (uploaded?: FileBase64) => {
+  const handlePrincipalBackPage = async (uploaded?: FileBase64) => {
     if (uploaded !== undefined) {
-      // const ocrResponse = uploadClientId("token", uploaded);
-      // TODO temporary
-      const ocrResponse = SAMPLE_CLIENT_5;
-      const jointIdType = joint!.personalDetails?.idType || ocrResponse.idType;
-      const isJointMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(jointIdType as TypeClientID) !== 1;
-      const jointInfo: IHolderInfoState = {
-        ...joint,
-        personalDetails: {
-          ...joint!.personalDetails,
-          dateOfBirth: ocrResponse.dateOfBirth,
-          gender: ocrResponse.gender!,
-          idNumber: ocrResponse.idNumber || "",
-          idType: ocrResponse.idType || "NRIC",
-          id: {
-            ...joint?.personalDetails?.id,
-            frontPage: uploaded,
-          },
-          name: ocrResponse.name,
-          nationality: isJointMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
-        },
-        addressInformation: {
-          mailingAddress: {
-            address: ocrResponse.permanentAddress?.address || "",
-            city: ocrResponse.permanentAddress?.city || "",
-            country: ocrResponse.permanentAddress?.country || "",
-            postCode: ocrResponse.permanentAddress?.postCode || "",
-            state: ocrResponse.permanentAddress?.state || "",
-          },
-          permanentAddress: {
-            address: ocrResponse.permanentAddress?.address || "",
-            city: ocrResponse.permanentAddress?.city || "",
-            country: ocrResponse.permanentAddress?.country || "",
-            postCode: ocrResponse.permanentAddress?.postCode || "",
-            state: ocrResponse.permanentAddress?.state || "",
-          },
-        },
-      };
-      return addPersonalInfo({ ...personalInfo, joint: jointInfo });
+      const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
+      if ("error" in mykadBack && mykadBack.error !== undefined) {
+        return setPrincipalBackError(mykadBack.error?.message);
+      }
     }
-    return handleJointDetails({ ...joint!.personalDetails?.id!, frontPage: undefined });
+    setPrincipalBackError(undefined);
+    return handlePrincipalDetails({ ...principal!.personalDetails?.id!, secondPage: uploaded });
   };
-  const handleJointSecondPage = (value?: FileBase64) => handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: value });
 
-  const principalTitle = idType !== "Passport" && idType !== "NRIC" ? `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : `${idType}`;
-  const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
+  const handleJointFrontPage = async (uploaded?: FileBase64) => {
+    const jointIdType = joint!.personalDetails?.idType;
+    if (uploaded !== undefined && jointIdType === DICTIONARY_ALL_ID[0].value) {
+      const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
+      if ("error" in mykad && mykad.error !== undefined) {
+        if (mykad.error?.code === ERROR_CODE_OCR.invalidNricData) {
+          setReviewImage(uploaded);
+        } else {
+          setJointFrontError(mykad.error?.message);
+        }
+      } else {
+        const isJointMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(jointIdType as TypeClientID) !== 1;
+        const jointInfo: IHolderInfoState = {
+          ...joint,
+          personalDetails: {
+            ...joint?.personalDetails,
+            gender: mykad.gender!,
+            id: {
+              ...joint?.personalDetails?.id,
+              frontPage: uploaded,
+            },
+            nationality: isJointMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
+            placeOfBirth: mykad.placeOfBirth,
+          },
+          addressInformation: {
+            mailingAddress: {
+              address: mykad.address || "",
+              city: mykad.city || "",
+              country: mykad.country || "",
+              postCode: mykad.postCode || "",
+              state: mykad.state || "",
+            },
+            permanentAddress: {
+              address: mykad.address || "",
+              city: mykad.city || "",
+              country: mykad.country || "",
+              postCode: mykad.postCode || "",
+              state: mykad.state || "",
+            },
+          },
+        };
+        setReviewImage(undefined);
+        setJointFrontError(undefined);
+        return addPersonalInfo({ ...personalInfo, joint: jointInfo });
+      }
+    }
 
-  const jointTitle =
-    inputJointIdType !== "Passport" && inputJointIdType !== "NRIC"
-      ? `${inputJointIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
-      : `${inputJointIdType}`;
-  const defaultJointTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${jointTitle}`;
-  const principalHolderName = details !== undefined ? details.name : IDENTITY_CONFIRMATION.LABEL_PRINCIPAL;
+    return handleJointDetails({ ...joint!.personalDetails?.id!, frontPage: uploaded });
+  };
+
+  const handleJointBackPage = async (uploaded?: FileBase64) => {
+    if (uploaded !== undefined) {
+      const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
+      if ("error" in mykadBack && mykadBack.error !== undefined) {
+        return setJointBackError(mykadBack.error?.message);
+      }
+    }
+    setJointBackError(undefined);
+    return handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: uploaded });
+  };
 
   return (
     <Fragment>
       {page === 0 ? (
-        <SafeAreaPage>
-          <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-            <View style={px(sw24)}>
+        <ContentPage
+          continueDisabled={buttonDisabled}
+          handleCancel={handleCancelOnboarding!}
+          handleContinue={handleContinue}
+          subheading={IDENTITY_CONFIRMATION.HEADING}
+          subtitle={defaultPrincipalTitle}>
+          <View style={px(sw24)}>
+            <CustomSpacer space={sh40} />
+            <UploadID
+              backError={principalBackError}
+              backPage={principalSecondPage}
+              frontError={principalFrontError}
+              frontPage={principalFrontPage}
+              idType={clientIdType as TypeClientID}
+              onPressCamera={handleCameraPrincipal}
+              onPressPicker={handlePickerPrincipal}
+              setBackPage={handlePrincipalBackPage}
+              setFrontPage={handlePrincipalFrontPage}
+              uploadRef={principalUploadRef}
+            />
+            <CustomSpacer space={sh32} />
+          </View>
+          {accountType === "Individual" ? null : (
+            <Fragment>
+              <View style={borderBottomGray4} />
               <CustomSpacer space={sh32} />
-              {accountType === "Individual" ? null : (
-                <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={principalHolderName!} />
-              )}
-              <LabeledTitle
-                label={IDENTITY_CONFIRMATION.HEADING}
-                labelStyle={fs24BoldBlack2}
-                spaceToLabel={sh8}
-                title={defaultPrincipalTitle}
-                titleStyle={fs16RegBlack2}
-              />
-              <CustomSpacer space={sh40} />
-              <UploadID
-                idType={clientIdType as TypeClientID}
-                frontPage={principalFrontPage}
-                secondPage={principalSecondPage}
-                setFrontPage={handlePrincipalFirstPage}
-                setSecondPage={handlePrincipalSecondPage}
-              />
-              <CustomSpacer space={sh32} />
-            </View>
-            {accountType === "Individual" ? null : (
-              <Fragment>
-                <View style={borderBottomGray4} />
-                <CustomSpacer space={sh32} />
-                <View style={px(sw24)}>
-                  <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={IDENTITY_CONFIRMATION.LABEL_JOINT} />
-                  <LabeledTitle
-                    label={IDENTITY_CONFIRMATION.HEADING}
-                    labelStyle={fs24BoldBlack2}
-                    spaceToLabel={sh8}
-                    spaceToBottom={sh24}
-                    title={defaultJointTitle}
-                    titleStyle={fs16RegBlack2}
-                  />
-                  <AdvancedDropdown
-                    handleChange={setInputJointIdType}
-                    items={DICTIONARY_ALL_ID}
-                    label={IDENTITY_CONFIRMATION.LABEL_ID_TYPE}
-                    value={inputJointIdType}
-                  />
-                  <CustomSpacer space={sh24} />
-                  <UploadID
-                    idType={inputJointIdType as TypeClientID}
-                    frontPage={jointFrontPage}
-                    secondPage={jointSecondPage}
-                    setFrontPage={handleJointFirstPage}
-                    setSecondPage={handleJointSecondPage}
-                  />
-                </View>
-              </Fragment>
-            )}
-            <CustomFlexSpacer />
-            <CustomSpacer space={sh56} />
-            <View style={px(sw24)}>
-              <RoundedButton disabled={buttonDisabled} onPress={handleContinue} text={IDENTITY_CONFIRMATION.BUTTON_CONTINUE} />
-            </View>
-            <CustomSpacer space={sh56} />
-          </ScrollView>
-        </SafeAreaPage>
+              <View style={px(sw24)}>
+                <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={IDENTITY_CONFIRMATION.LABEL_JOINT} />
+                <LabeledTitle
+                  label={IDENTITY_CONFIRMATION.HEADING}
+                  labelStyle={fs24BoldBlack2}
+                  spaceToLabel={sh8}
+                  spaceToBottom={sh24}
+                  title={defaultJointTitle}
+                  titleStyle={fs16RegBlack2}
+                />
+                <AdvancedDropdown
+                  handleChange={setInputJointIdType}
+                  items={DICTIONARY_ALL_ID}
+                  label={IDENTITY_CONFIRMATION.LABEL_ID_TYPE}
+                  value={inputJointIdType}
+                />
+                <CustomSpacer space={sh24} />
+                <UploadID
+                  backError={jointBackError}
+                  backPage={jointSecondPage}
+                  frontError={jointFrontError}
+                  frontPage={jointFrontPage}
+                  idType={inputJointIdType as TypeClientID}
+                  onPressCamera={handleCameraJoint}
+                  onPressPicker={handlePickerJoint}
+                  setBackPage={handleJointBackPage}
+                  setFrontPage={handleJointFrontPage}
+                  uploadRef={jointUploadRef}
+                />
+              </View>
+            </Fragment>
+          )}
+        </ContentPage>
       ) : (
         <IDVerification
           accountType={accountType}
@@ -264,6 +315,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           riskScore={riskScore}
         />
       )}
+      <ImageReview handleProceed={handleProceed} handleReupload={handleReupload} image={reviewImage} visible={reviewImage !== undefined} />
     </Fragment>
   );
 };

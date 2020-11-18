@@ -22,6 +22,7 @@ export * from "./otp";
 export * from "./order-status";
 export * from "./password";
 export * from "./personal";
+export * from "./place-of-birth";
 export * from "./product-filter";
 export * from "./races";
 export * from "./relationship";

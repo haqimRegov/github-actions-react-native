@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { forwardRef, Fragment, useImperativeHandle, useState } from "react";
 import { Platform, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 import { Image } from "react-native-image-crop-picker";
@@ -48,22 +48,24 @@ const UploadButton = ({ icon, onPress }) => {
   );
 };
 
-export const UploadDocument: FunctionComponent<UploadProps> = ({
-  features,
-  label,
-  labelStyle,
-  maxFileSizeMB,
-  onError,
-  onPress,
-  onPressCamera,
-  onPressRemove,
-  onPressPicker,
-  onSuccess,
-  setValue,
-  title,
-  titleStyle,
-  value,
-}: UploadProps) => {
+export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props, ref) => {
+  const {
+    errorMessage,
+    features,
+    label,
+    labelStyle,
+    maxFileSizeMB,
+    onError,
+    onPress,
+    onPressCamera,
+    onPressRemove,
+    onPressPicker,
+    onSuccess,
+    setValue,
+    title,
+    titleStyle,
+    value,
+  } = props;
   const [error, setError] = useState<string>("");
 
   const MAX_SIZE_BYTE = maxFileSizeMB || DEFAULT_MAX_SIZE_MB;
@@ -84,7 +86,8 @@ export const UploadDocument: FunctionComponent<UploadProps> = ({
     uploadLabel = `${shortFileName}.${selectedExtension} ${fileSizeLabel}`;
   }
 
-  const defaultLabel = error || uploadLabel;
+  const defaultError = errorMessage !== undefined ? errorMessage : error;
+  const defaultLabel = defaultError !== "" ? defaultError : uploadLabel;
 
   const handleDocumentResult = async (results: DocumentPickerResponse) => {
     if (!Array.isArray(results)) {
@@ -158,6 +161,8 @@ export const UploadDocument: FunctionComponent<UploadProps> = ({
     imageOpenPicker(handleImageResult);
   };
 
+  useImperativeHandle(ref, () => ({ handleOpenCamera, handleOpenPicker, handleOpenDocument }));
+
   const container: ViewStyle = {
     ...centerVertical,
     ...flexRow,
@@ -167,7 +172,7 @@ export const UploadDocument: FunctionComponent<UploadProps> = ({
     borderRadius: sw10,
     height: sh88,
   };
-  const errorStyle: TextStyle = error !== "" ? { color: colorRed._2 } : {};
+  const errorStyle: TextStyle = defaultError !== "" ? { color: colorRed._2 } : {};
   const uploadIcon = features.includes("file") ? "file" : "profile";
   const iconBadgeOffset = { bottom: 0.5 };
 
@@ -203,4 +208,4 @@ export const UploadDocument: FunctionComponent<UploadProps> = ({
       </View>
     </TouchableWithoutFeedback>
   );
-};
+});

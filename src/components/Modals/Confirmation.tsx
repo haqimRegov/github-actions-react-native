@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
@@ -30,7 +30,7 @@ interface ConfirmationModalProps extends ActionButtonsProps {
   spaceToButton?: number;
   spaceToContent?: number;
   spaceToTitle?: number;
-  title: string;
+  title?: string;
   titleStyle?: TextStyle;
   visible: boolean;
 }
@@ -87,8 +87,12 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
           <View style={{ ...centerHV, ...fullHW }}>
             <View style={modalContainer}>
               <View style={{ ...px(sw56), ...headerStyle }}>
-                <CustomSpacer space={defaultSpaceToTitle} />
-                <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
+                {title !== undefined ? (
+                  <Fragment>
+                    <CustomSpacer space={defaultSpaceToTitle} />
+                    <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
+                  </Fragment>
+                ) : null}
                 <CustomSpacer space={defaultSpaceToContent} />
                 {children}
                 <CustomSpacer space={defaultSpaceToButton} />

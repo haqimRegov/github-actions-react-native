@@ -1,5 +1,5 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, ImageSourcePropType, ImageStyle, TextStyle, View, ViewStyle } from "react-native";
+import React, { forwardRef, Fragment, useState } from "react";
+import { Image, ImageSourcePropType, ImageStyle, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 
 import { IcoMoon } from "../../icons";
@@ -15,12 +15,16 @@ import {
   fullHW,
   fullWidth,
   px,
+  sh140,
+  sh236,
   sh24,
   sh32,
   sh40,
   sh500,
   sh96,
   shadow5,
+  sw10,
+  sw204,
   sw40,
   sw750,
 } from "../../styles";
@@ -30,14 +34,11 @@ import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./Upload";
 
 interface UploadWithModalProps extends UploadProps {
   resourceType?: "url" | "file" | "base64";
+  withPreview?: boolean;
 }
 
-export const UploadWithModal: FunctionComponent<UploadWithModalProps> = ({
-  onPress,
-  resourceType,
-  value,
-  ...uploadProps
-}: UploadWithModalProps) => {
+export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalProps>((props, ref) => {
+  const { onPress, resourceType, value, withPreview, ...uploadProps }: UploadWithModalProps = props;
   const [viewFile, setViewFile] = useState<boolean>(false);
 
   const handleViewFile = () => {
@@ -69,6 +70,7 @@ export const UploadWithModal: FunctionComponent<UploadWithModalProps> = ({
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
   const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow5 };
   const imageStyle: ImageStyle = { height: sh500, resizeMode: "contain", width: sw750 };
+  const previewStyle: ImageStyle = { height: sh140, resizeMode: "contain", width: sw204 };
 
   const modalAnimationInTiming = value !== undefined && value.type === "application/pdf" ? 0 : 450;
 
@@ -103,7 +105,22 @@ export const UploadWithModal: FunctionComponent<UploadWithModalProps> = ({
 
   return (
     <Fragment>
-      <UploadDocument onPress={handleViewFile} value={value} {...uploadProps} />
+      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw10 }}>
+        <UploadDocument onPress={handleViewFile} ref={ref} value={value} {...uploadProps} />
+        {value !== undefined && value.type !== "application/pdf" && withPreview === true ? (
+          <View style={{ height: sh236 }}>
+            {isFileValid === false ? null : (
+              <View style={{ ...flexChild, ...flexRow, ...centerVertical }}>
+                <CustomSpacer isHorizontal={true} space={sw40} />
+                <TouchableWithoutFeedback onPress={handleViewFile}>
+                  <Image source={imageValue} style={previewStyle} />
+                </TouchableWithoutFeedback>
+              </View>
+            )}
+          </View>
+        ) : null}
+      </View>
+
       <BasicModal animationInTiming={modalAnimationInTiming} hasBackdrop={false} visible={viewFile}>
         <Fragment>
           {value !== undefined ? (
@@ -144,4 +161,4 @@ export const UploadWithModal: FunctionComponent<UploadWithModalProps> = ({
       </BasicModal>
     </Fragment>
   );
-};
+});

@@ -3,34 +3,36 @@ import React, { Fragment, FunctionComponent } from "react";
 import { CustomSpacer, UploadWithModal } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID_TYPE } from "../../../data/dictionary";
-import { sh8 } from "../../../styles";
+import { sh16 } from "../../../styles";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
 interface UploadIDProps {
-  idType: TypeClientID;
+  backError?: string | undefined;
+  backPage: FileBase64 | undefined;
+  frontError: string | undefined;
   frontPage: FileBase64 | undefined;
-  secondPage: FileBase64 | undefined;
+  idType: TypeClientID;
+  onPressCamera: () => void;
+  onPressPicker: () => void;
+  setBackPage: (value: FileBase64 | undefined) => void;
   setFrontPage: (value: FileBase64 | undefined) => void;
-  setSecondPage: (value: FileBase64 | undefined) => void;
+  uploadRef?: any;
 }
 export const UploadID: FunctionComponent<UploadIDProps> = ({
-  idType,
+  backError,
+  backPage,
+  frontError,
   frontPage,
-  secondPage,
+  idType,
+  onPressCamera,
+  onPressPicker,
+  setBackPage,
   setFrontPage,
-  setSecondPage,
+  uploadRef,
 }: UploadIDProps) => {
   const extractedIdType = typeof idType! === "string" ? idType! : DICTIONARY_ALL_ID_TYPE[idType!];
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(extractedIdType as TypeClientID) !== 1;
-
-  const handleFirstUpload = (uploaded: FileBase64) => {
-    setFrontPage(uploaded);
-  };
-
-  const handleSecondUpload = (uploaded: FileBase64) => {
-    setSecondPage(uploaded);
-  };
 
   let firstLabel = `${IDENTITY_CONFIRMATION.LABEL_FRONT} ${idType}`;
   let secondLabel = `${IDENTITY_CONFIRMATION.LABEL_BACK} ${idType}`;
@@ -44,24 +46,41 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
     firstLabel = IDENTITY_CONFIRMATION.LABEL_DATA_PASSPORT;
   }
 
+  const handleFirstUpload = (uploaded: FileBase64) => {
+    setFrontPage(uploaded);
+  };
+
+  const handleSecondUpload = (uploaded: FileBase64) => {
+    setBackPage(uploaded);
+  };
+
   return (
     <Fragment>
       <UploadWithModal
+        errorMessage={frontError}
         features={["camera", "gallery"]}
         label={firstLabel}
+        onPressCamera={onPressCamera}
+        onPressPicker={onPressPicker}
         onSuccess={handleFirstUpload}
+        ref={uploadRef}
         setValue={setFrontPage}
         value={frontPage}
+        withPreview={true}
       />
       {idType === "Passport" ? null : (
         <Fragment>
-          <CustomSpacer space={sh8} />
+          <CustomSpacer space={sh16} />
           <UploadWithModal
+            errorMessage={backError}
             features={["camera", "gallery"]}
             label={secondLabel}
+            onPressCamera={onPressCamera}
+            onPressPicker={onPressPicker}
             onSuccess={handleSecondUpload}
-            setValue={setSecondPage}
-            value={secondPage}
+            setValue={setBackPage}
+            value={backPage}
+            withPreview={true}
           />
         </Fragment>
       )}

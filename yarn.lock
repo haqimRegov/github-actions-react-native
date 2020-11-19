@@ -2363,6 +2363,11 @@
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
+"@react-native-firebase/ml-vision@7.4.8":
+  version "7.4.8"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/ml-vision/-/ml-vision-7.4.8.tgz#b690babe267d188585098a130d99b9c7eb1ac534"
+  integrity sha512-QmHzlpxZRPK9vMeKO2tZ5Nkdg7elh7BjfsiphFL9MZTJ74y/sDccPAuka4beQ/aZKvoXv4qmLjUOjuoyyY7gkg==
+
 "@react-navigation/core@^5.9.0":
   version "5.12.5"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.12.5.tgz#434a34893368de1c9daca9508fdd7be94d1ec642"

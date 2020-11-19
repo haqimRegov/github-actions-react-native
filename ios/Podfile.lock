@@ -13,6 +13,12 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.62.2)
   - Firebase/CoreOnly (6.30.0):
     - FirebaseCore (= 6.10.0)
+  - Firebase/MLVision (6.30.0):
+    - Firebase/CoreOnly
+    - FirebaseMLVision (~> 0.21.0)
+  - Firebase/MLVisionTextModel (6.30.0):
+    - Firebase/CoreOnly
+    - FirebaseMLVisionTextModel (~> 0.21.0)
   - FirebaseCore (6.10.0):
     - FirebaseCoreDiagnostics (~> 1.3)
     - GoogleUtilities/Environment (~> 6.7)
@@ -22,6 +28,31 @@ PODS:
     - GoogleUtilities/Environment (~> 6.7)
     - GoogleUtilities/Logger (~> 6.7)
     - nanopb (~> 1.30906.0)
+  - FirebaseInstallations (1.7.0):
+    - FirebaseCore (~> 6.10)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
+    - PromisesObjC (~> 1.2)
+  - FirebaseMLCommon (0.21.0):
+    - FirebaseCore (~> 6.9)
+    - FirebaseInstallations (~> 1.5)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - GoogleUtilities/UserDefaults (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+    - Protobuf (~> 3.12)
+  - FirebaseMLVision (0.21.0):
+    - FirebaseCore (~> 6.9)
+    - FirebaseMLCommon (~> 0.21)
+    - GoogleAPIClientForREST/Core (~> 1.3)
+    - GoogleAPIClientForREST/Vision (~> 1.3)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - GTMSessionFetcher/Core (~> 1.1)
+    - Protobuf (~> 3.12)
+  - FirebaseMLVisionTextModel (0.21.0):
+    - FirebaseMLVision (~> 0.21)
   - Flipper (0.37.0):
     - Flipper-Folly (~> 2.2)
     - Flipper-RSocket (~> 1.1)
@@ -78,12 +109,36 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - GoogleAPIClientForREST/Core (1.5.0):
+    - GTMSessionFetcher (>= 1.1.7)
+  - GoogleAPIClientForREST/Vision (1.5.0):
+    - GoogleAPIClientForREST/Core
+    - GTMSessionFetcher (>= 1.1.7)
   - GoogleDataTransport (7.4.0):
     - nanopb (~> 1.30906.0)
+  - GoogleToolboxForMac/DebugUtils (2.3.0):
+    - GoogleToolboxForMac/Defines (= 2.3.0)
+  - GoogleToolboxForMac/Defines (2.3.0)
+  - GoogleToolboxForMac/Logger (2.3.0):
+    - GoogleToolboxForMac/Defines (= 2.3.0)
+  - "GoogleToolboxForMac/NSData+zlib (2.3.0)":
+    - GoogleToolboxForMac/Defines (= 2.3.0)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.3.0)":
+    - GoogleToolboxForMac/DebugUtils (= 2.3.0)
+    - GoogleToolboxForMac/Defines (= 2.3.0)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.3.0)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.3.0)"
   - GoogleUtilities/Environment (6.7.2):
     - PromisesObjC (~> 1.2)
   - GoogleUtilities/Logger (6.7.2):
     - GoogleUtilities/Environment
+  - GoogleUtilities/UserDefaults (6.7.2):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher (1.4.0):
+    - GTMSessionFetcher/Full (= 1.4.0)
+  - GTMSessionFetcher/Core (1.4.0)
+  - GTMSessionFetcher/Full (1.4.0):
+    - GTMSessionFetcher/Core (= 1.4.0)
   - JKBigInteger2 (0.0.5)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
@@ -94,6 +149,7 @@ PODS:
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
   - PromisesObjC (1.2.10)
+  - Protobuf (3.13.0)
   - RCTRequired (0.62.2)
   - RCTTypeSafety (0.62.2):
     - FBLazyVector (= 0.62.2)
@@ -340,6 +396,11 @@ PODS:
   - RNFBApp (8.4.5):
     - Firebase/CoreOnly (~> 6.30.0)
     - React-Core
+  - RNFBMLVision (7.4.8):
+    - Firebase/MLVision (~> 6.30.0)
+    - Firebase/MLVisionTextModel (~> 6.30.0)
+    - React-Core
+    - RNFBApp
   - RNFS (2.16.6):
     - React
   - RNGestureHandler (1.6.1):
@@ -430,6 +491,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBMLVision (from `../node_modules/@react-native-firebase/ml-vision`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
@@ -450,6 +512,10 @@ SPEC REPOS:
     - Firebase
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseInstallations
+    - FirebaseMLCommon
+    - FirebaseMLVision
+    - FirebaseMLVisionTextModel
     - Flipper
     - Flipper-DoubleConversion
     - Flipper-Folly
@@ -457,12 +523,16 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - Flipper-RSocket
     - FlipperKit
+    - GoogleAPIClientForREST
     - GoogleDataTransport
+    - GoogleToolboxForMac
     - GoogleUtilities
+    - GTMSessionFetcher
     - JKBigInteger2
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - Protobuf
     - TOCropViewController
     - YogaKit
 
@@ -537,6 +607,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBMLVision:
+    :path: "../node_modules/@react-native-firebase/ml-vision"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -570,6 +642,10 @@ SPEC CHECKSUMS:
   Firebase: 210f41ca352067d83b1ba4fd2e7fb49a0c017397
   FirebaseCore: 9a41e2de78fef10f63cee30ab10e2945266bc1fc
   FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
+  FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
+  FirebaseMLCommon: d218d75dd1c6c4e447f731ac22da56b88cb79431
+  FirebaseMLVision: 68dd092b4c52a7ac163ec0d4f541d5711fc9fec6
+  FirebaseMLVisionTextModel: e9f3cba0f31022ae9dd3d246aff9849075cacd98
   Flipper: 1670db365568191bd123a0c905b834e77ba9e3d3
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: c12092ea368353b58e992843a990a3225d4533c3
@@ -579,12 +655,16 @@ SPEC CHECKSUMS:
   FlipperKit: afd4259ef9eadeeb2d30250b37d95cb3b6b97a69
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  GoogleAPIClientForREST: e152cbe478166145abeb22255d545a1faa86033c
   GoogleDataTransport: b7f406340a291370045a270c599e53c6fa6ec20f
+  GoogleToolboxForMac: 1350d40e86a76f7863928d63bcb0b89c84c521c5
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
+  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   JKBigInteger2: e91672035c42328c48b7dd015b66812ddf40ca9b
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
+  Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -615,6 +695,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNDateTimePicker: 83540fb5d71f28bd34990d8fabccb8d91e5d957e
   RNFBApp: 570b136767f588b7eef0ab918284e9fe364d0c3e
+  RNFBMLVision: 157c25df35acc4493ae6bd4917fbf9af336958c6
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNImageCropPicker: fc4b4d2a4d7176eeb6442fa191ba56493c14b6d6

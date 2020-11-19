@@ -1,2 +1,2 @@
-export * from "./PdfEdit";
+export * from "./PdfEditCard";
 export * from "./PdfEditWithModal";

@@ -18,7 +18,7 @@ import {
   sw8,
   sw832,
 } from "../../styles";
-import { CustomSignatureV2 } from "../Signature";
+import { CustomSignature } from "../Signature";
 import { IconButton } from "../Touchables/Icon";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
@@ -60,7 +60,7 @@ export const SignatureModal: FunctionComponent<SignatureModalProps> = ({
             />
           </View>
           <CustomSpacer space={sh24} />
-          <CustomSignatureV2 handleConfirm={handleConfirm} setSignature={handleSignature} signature={signature} />
+          <CustomSignature handleConfirm={handleConfirm} setSignature={handleSignature} signature={signature} />
         </View>
       </View>
     </BasicModal>

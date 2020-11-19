@@ -16,16 +16,16 @@ import { GetEmbeddedBase64 } from "../../../utils";
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const initialData: PdfWithSignature = {
+  adviserSignature: "",
+  principalSignature: "",
+  orderNo: "",
   pdf: {
     name: "",
     type: "",
   },
-  orderNo: "",
-  clientSignature: "",
-  adviserSignature: "",
 };
 
-export interface SignatureProps extends ClientStoreProps {
+export interface PDFListProps extends ClientStoreProps {
   currentPdf: PdfWithIndex;
   handleNextStep: (route: TypeOnboardingRoute) => void;
   initialPdfArray: FileBase64[];
@@ -36,7 +36,7 @@ export interface SignatureProps extends ClientStoreProps {
   setPdfList: (data: PdfWithSignature[]) => void;
 }
 
-export const SignatureComponent: FunctionComponent<SignatureProps> = ({
+export const PDFListComponent: FunctionComponent<PDFListProps> = ({
   accountType,
   handleNextStep,
   initialPdfArray,
@@ -45,7 +45,7 @@ export const SignatureComponent: FunctionComponent<SignatureProps> = ({
   setInitialPdfArray,
   setPage,
   setPdfList,
-}: SignatureProps) => {
+}: PDFListProps) => {
   const handleCancel = () => {
     Alert.alert("Cancel");
   };
@@ -82,19 +82,24 @@ export const SignatureComponent: FunctionComponent<SignatureProps> = ({
     setInitialPdfArray(SAMPLE_PDFS);
     const initialDataArray: PdfWithSignature[] = [];
     if (pdfList.length === 0) {
-      SAMPLE_PDFS.map(() => {
-        return initialDataArray.push(initialData);
+      SAMPLE_PDFS.map((pdf, index) => {
+        let active: boolean = false;
+        if (index === 0) {
+          active = true;
+        }
+        const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
+        return initialDataArray.push({ ...initialData, pdf: pdf, active: active, ...jointInitial });
       });
       setPdfList(initialDataArray);
     }
-  }, [pdfList, setInitialPdfArray, setPdfList]);
+  }, [pdfList, setInitialPdfArray, setPdfList, accountType]);
 
   const buttonDisabled =
     pdfList !== [] &&
     pdfList
-      .map(({ pdf, clientSignature, adviserSignature, jointSignature }) => {
+      .map(({ pdf, principalSignature, adviserSignature, jointSignature }) => {
         const accountTypeCheck = accountType === "Joint" ? jointSignature !== "" : true;
-        return pdf.base64 !== "" && clientSignature !== "" && adviserSignature !== "" && accountTypeCheck;
+        return pdf.base64 !== "" && principalSignature !== "" && adviserSignature !== "" && accountTypeCheck;
       })
       .includes(false);
 
@@ -111,13 +116,12 @@ export const SignatureComponent: FunctionComponent<SignatureProps> = ({
       <View style={px(sw24)}>
         {initialPdfArray !== undefined
           ? initialPdfArray.map((pdf, index) => {
-              const { adviserSignature, clientSignature, jointSignature } = pdfList[index];
+              const { adviserSignature, principalSignature, jointSignature } = pdfList[index];
               const value = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
               const completed =
-                accountType === "Individual" && pdfList[index] === undefined
-                  ? adviserSignature !== "" && clientSignature !== ""
-                  : adviserSignature !== "" && clientSignature !== "" && jointSignature !== "";
-
+                accountType === "Individual"
+                  ? adviserSignature !== "" && principalSignature !== ""
+                  : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
               const handleEdit = () => {
                 const pdfData = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
                 setCurrentPdf({ pdf: pdfData, index: index });
@@ -125,13 +129,19 @@ export const SignatureComponent: FunctionComponent<SignatureProps> = ({
               };
               const handleRemove = () => {
                 const dataClone = [...pdfList];
-                dataClone[index] = { ...initialData, pdf: pdf };
+                const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
+                dataClone[index] = { ...initialData, ...jointInitial, pdf: pdf };
                 setPdfList(dataClone);
               };
+              const disabledCondition = pdfList[index].active === false;
+              const disabled = index === 0 ? false : disabledCondition;
               return (
                 <Fragment key={index}>
                   <PdfEditWithModal
+                    active={pdfList[index].active}
                     completed={completed}
+                    completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
+                    disabled={disabled}
                     label={pdf.name}
                     onPressEdit={handleEdit}
                     onPressRemove={handleRemove}
@@ -139,6 +149,7 @@ export const SignatureComponent: FunctionComponent<SignatureProps> = ({
                     resourceType="base64"
                     setValue={() => {}}
                     title={pdf.title}
+                    tooltipLabel={TERMS_AND_CONDITIONS.LABEL_PROCEED}
                     value={value}
                   />
                   <CustomSpacer space={sh8} />
@@ -151,4 +162,4 @@ export const SignatureComponent: FunctionComponent<SignatureProps> = ({
   );
 };
 
-export const Signature = connect(ClientMapStateToProps, ClientMapDispatchToProps)(SignatureComponent);
+export const PDFList = connect(ClientMapStateToProps, ClientMapDispatchToProps)(PDFListComponent);

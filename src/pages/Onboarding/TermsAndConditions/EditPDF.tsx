@@ -328,6 +328,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
         setShowSignPdf(true);
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
 
   useEffect(() => {
@@ -336,6 +337,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
         scrollRef.scrollToEnd();
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completed]);
 
   return <PdfView {...props} />;

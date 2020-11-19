@@ -1,8 +1,32 @@
 import React, { Fragment, useState } from "react";
-import { Keyboard, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { FlatList, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { colorBlack, colorTransparent, colorWhite, flexRow, fullHW, noBGColor } from "../../styles";
+import { CustomSpacer } from "../../components/Views";
+import {
+  borderBottomGray7,
+  centerVertical,
+  colorBlack,
+  colorTransparent,
+  colorWhite,
+  flexChild,
+  flexRow,
+  fs12BoldBlack2,
+  fs12SemiBoldBlack2,
+  fullHW,
+  noBGColor,
+  px,
+  py,
+  sh10,
+  sh200,
+  sh24,
+  sh6,
+  sw12,
+  sw16,
+  sw2,
+  sw24,
+} from "../../styles";
+import { CheckBox } from "../CheckBox";
 import { BasicModal } from "../Modals/Basic";
 
 interface RenderBaseProps {
@@ -21,16 +45,22 @@ export interface CollapsibleDropdownProps {
   backDropOpacity?: number;
   baseContainerStyle?: ViewStyle;
   baseDropdownStyle?: ViewStyle;
-  dropdownInnerStyle?: ViewStyle;
   collapseOnBaseClick?: boolean;
   collapsibleStyle?: ViewStyle;
+  dropdownInnerStyle?: ViewStyle;
+  dropdownStyle?: ViewStyle;
   dummyBaseStyle?: ViewStyle;
+  handleChange?: (value: string[]) => void;
+  handleReset?: (index: number, reset: boolean) => void;
+  items?: TypeLabelValue[];
   keyboardAvoidingRef?: TypeKeyboardAvoidingView;
   onBackdropPress?: () => void;
   onClose?: () => void;
   onExpandedBasePress?: () => void;
   RenderBase: (props: RenderBaseProps) => JSX.Element;
-  RenderDropdown: (props: RenderDropdownProps) => JSX.Element;
+  RenderDropdown?: (props: RenderDropdownProps) => JSX.Element;
+  style?: ViewStyle;
+  value?: string[];
 }
 
 interface IBasicLayout {
@@ -55,6 +85,11 @@ export const CollapsibleDropdown = ({
   onClose,
   onExpandedBasePress,
   RenderBase,
+  value,
+  handleChange,
+  items,
+  style,
+  handleReset,
   RenderDropdown,
 }: CollapsibleDropdownProps) => {
   const [layout, setLayout] = useState<IBasicLayout>({ x: 0, y: 0, width: 0, height: 0 });
@@ -107,13 +142,13 @@ export const CollapsibleDropdown = ({
 
   const handleExpand = () => {
     if (ref !== null) {
-      ref.measure((_x, _y, _width, _height, px, py) => {
-        let measurement = { x: px, y: py, height: _height, width: _width };
+      ref.measure((_x, _y, _width, _height, pageX, pageY) => {
+        let measurement = { x: pageX, y: pageY, height: _height, width: _width };
         if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
           Keyboard.dismiss();
           const keyboardOffset = keyboardAvoidingRef.state.bottom;
           measurement = { ...measurement, y: measurement.y + keyboardOffset };
-          setLayout({ x: px, y: py + keyboardOffset, height: _height, width: _width });
+          setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
         }
         setLayout(measurement);
       });
@@ -133,12 +168,19 @@ export const CollapsibleDropdown = ({
     ...baseDropdownStyle,
   };
 
+  const dropdownStyle: ViewStyle = {
+    backgroundColor: colorWhite._1,
+    borderBottomLeftRadius: sw24,
+    borderBottomRightRadius: sw24,
+    ...style,
+  };
+
   const dropdownInnerContainer: ViewStyle = {
     ...baseDropdownStyle,
     backgroundColor: colorWhite._1,
     borderWidth: 0,
     shadowColor: colorTransparent,
-    width: layout.width - 2,
+    width: layout.width - sw2,
     ...dropdownInnerStyle,
   };
   const defaultBackDrop = backDrop !== undefined ? backDrop : false;
@@ -165,12 +207,69 @@ export const CollapsibleDropdown = ({
             <View style={dropdownContainer}>
               <View style={dropdownInnerContainer}>
                 <TouchableWithoutFeedback onPress={handleExpandedBasePress}>
-                  <View onStartShouldSetResponderCapture={() => true}>
+                  <View>
                     <RenderBase collapse={collapse} dummyBaseStyle={dummyBaseStyle} />
                   </View>
                 </TouchableWithoutFeedback>
                 <Collapsible duration={100} collapsed={collapse} style={{ ...noBGColor, ...collapsibleStyle }}>
-                  <RenderDropdown collapse={collapse} handleClose={handleClose} />
+                  {RenderDropdown === undefined ? (
+                    <View>
+                      <View style={borderBottomGray7} />
+                      <View style={dropdownStyle}>
+                        <FlatList
+                          extraData={value}
+                          data={items!.map((item) => item.label)}
+                          style={{ ...px(sw16), maxHeight: sh200 }}
+                          keyboardDismissMode="on-drag"
+                          keyboardShouldPersistTaps="always"
+                          keyExtractor={(item: string) => item}
+                          ListHeaderComponent={() => <CustomSpacer space={sh6} />}
+                          ListFooterComponent={() => <CustomSpacer space={sh6} />}
+                          renderItem={({ index }) => {
+                            const itemExtractor = items![index];
+                            const itemValue = itemExtractor.value;
+                            const selected = value!.includes(itemValue);
+                            const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh10) };
+                            const itemStyle: TextStyle = selected ? fs12BoldBlack2 : fs12SemiBoldBlack2;
+
+                            const handleSelect = () => {
+                              let reset: boolean = false;
+                              if (itemExtractor !== undefined) {
+                                let newValue = [...value!];
+                                if (newValue.includes(itemValue)) {
+                                  newValue = newValue.filter((item) => item !== itemValue);
+                                  reset = true;
+                                } else {
+                                  newValue.push(itemValue);
+                                }
+                                handleChange!(newValue);
+                                handleReset!(index, reset);
+                              }
+                            };
+
+                            return (
+                              <TouchableWithoutFeedback key={index} onPress={handleSelect}>
+                                <View style={itemContainer}>
+                                  <CheckBox
+                                    label={itemExtractor.label}
+                                    labelStyle={itemStyle}
+                                    onPress={handleSelect}
+                                    spaceToLabel={sw12}
+                                    style={{ ...flexChild, height: sh24 }}
+                                    toggle={selected}
+                                  />
+                                </View>
+                              </TouchableWithoutFeedback>
+                            );
+                          }}
+                          showsVerticalScrollIndicator={false}
+                          scrollEventThrottle={16}
+                        />
+                      </View>
+                    </View>
+                  ) : (
+                    <RenderDropdown collapse={collapse} handleClose={handleClose} />
+                  )}
                 </Collapsible>
               </View>
             </View>

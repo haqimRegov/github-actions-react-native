@@ -28,7 +28,7 @@ import {
   sw358,
   sw360,
 } from "../../styles";
-import { CollapsibleDropdown } from "../Collapsible/BasicDropdown";
+import { CollapsibleDropdown } from "../Collapsible";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;

@@ -129,7 +129,8 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
               };
               const handleRemove = () => {
                 const dataClone = [...pdfList];
-                dataClone[index] = { ...initialData, pdf: pdf };
+                const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
+                dataClone[index] = { ...initialData, ...jointInitial, pdf: pdf };
                 setPdfList(dataClone);
               };
               const disabledCondition = pdfList[index].active === false;

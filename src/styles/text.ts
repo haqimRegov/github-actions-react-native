@@ -147,13 +147,6 @@ export const fs12RegBlue25: TextStyle = {
   lineHeight: sh16,
 };
 
-export const fs12RegBlue38: TextStyle = {
-  color: colorBlue._3_8,
-  fontFamily: NunitoRegular,
-  fontSize: sh12,
-  lineHeight: sh16,
-};
-
 export const fs12RegBlue6: TextStyle = {
   color: colorBlue._6,
   fontFamily: NunitoRegular,

@@ -885,12 +885,13 @@ export const english = {
       LABEL_ADD_SIGN: "Add Sign",
       LABEL_ADVISER_SIGNATURE: "Adviser Signature",
       LABEL_AGREE: "Agree",
+      LABEL_COLLAPSE_ALL: "Collapse all",
       LABEL_PRINCIPAL_SIGNATURE: "Principal Signature",
       LABEL_CHECKBOX_1: "I/We have read, understood and accepted the Terms and Conditions above.",
       LABEL_CHECKBOX_2:
         "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate. \nI acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document.",
       LABEL_CHECKBOX_3:
-        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice on pages 11 - 12 of this Account Opening & Investment Form, as may be amended or supplemented from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.\nFor the most current version of the Personal Data Protection Notice at all material times, please refer to the posting on https://kenanga.com.my.",
+        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice on pages 11 - 12 of this Account Opening & Investment Form, as may be amended or supplemented from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
       LABEL_CHECKBOX_4:
         "I have decided to purchase another unlisted capital market product that is not recommended by the authorized distributor",
       LABEL_COMPLETED: "Completed",
@@ -904,6 +905,7 @@ export const english = {
       LABEL_JOINT_SIGNATURE: "Joint Signature",
       LABEL_MYR: "MYR",
       LABEL_PROCEED: "Proceed",
+      LABEL_SIGN_NOW: "Sign Document Now",
       POPUP_CONSENT:
         "I/We hereby give consent to the Manager to disclose my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
       POPUP_TERMS: "Based on your products selected, we will define the corresponding account orders and will be processed accordingly",

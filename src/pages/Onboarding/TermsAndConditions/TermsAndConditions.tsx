@@ -22,8 +22,9 @@ import {
   centerVertical,
   flexRow,
   fs12BoldBlack2,
-  fs12SemiBoldBlue1,
+  fs12SemiBoldBlue2,
   fs16SemiBoldBlack2,
+  justifyContentEnd,
   px,
   sh16,
   sh24,
@@ -106,6 +107,8 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }
 
+  const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
+
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agree1 === true && agree2 === true && agree3 === true && agree4 === true);
 
@@ -126,7 +129,9 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
             <IcoMoon name="info" size={sw24} />
           </CustomPopup>
           <CustomFlexSpacer />
-          <LinkText onPress={handleExpandAll} style={fs12SemiBoldBlue1} text={TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL} />
+          <View style={justifyContentEnd}>
+            <LinkText onPress={handleExpandAll} style={{ ...fs12SemiBoldBlue2, lineHeight: sh16 }} text={headerText} />
+          </View>
         </View>
         <CustomSpacer space={sh24} />
         <BasicAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />

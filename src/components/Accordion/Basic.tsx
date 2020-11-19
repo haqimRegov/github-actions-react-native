@@ -12,7 +12,7 @@ import {
   fs12BoldBlack2,
   fs14BoldBlack2,
   fs14RegBlack2,
-  fs16BoldBlack2,
+  fs16BoldBlue2,
   noBorderBottom,
   px,
   sh16,
@@ -101,7 +101,7 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
       <Fragment>
         {current === 0 ? null : <CustomSpacer space={defaultSpaceInBetween} />}
         <View style={defaultStyle}>
-          <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{section.title}</Text>
+          <Text style={{ ...fs16BoldBlue2, ...titleStyle }}>{section.title}</Text>
           <CustomFlexSpacer />
           {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
         </View>
@@ -110,7 +110,7 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
   };
 
   useEffect(() => {
-    if (expandAll) {
+    if (expandAll === true) {
       const allActiveSections: number[] = [];
       sections.map((section, index) => {
         return allActiveSections.push(index);

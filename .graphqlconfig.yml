@@ -1,6 +1,6 @@
 projects:
   TestApp:
-    schemaPath: src/graphql/schema.json
+    schemaPath: graphql/schema.json
     includes:
       - src/graphql/**/*.ts
     excludes:
@@ -9,9 +9,7 @@ projects:
       amplify:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
-        docsFilePath: src/graphql
+        docsFilePath: graphql
         region: ap-southeast-1
         apiId: rywhnkwdhfadriy4tzrfiv65xu
-extensions:
-  amplify:
-    version: 3
+        maxDepth: 2

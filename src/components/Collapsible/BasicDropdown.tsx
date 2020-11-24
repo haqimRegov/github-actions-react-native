@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { FlatList, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { CustomSpacer } from "../../components/Views";
+import { CustomSpacer } from "../../components/Views/Spacer";
 import {
   borderBottomGray7,
   centerVertical,
@@ -26,7 +26,7 @@ import {
   sw2,
   sw24,
 } from "../../styles";
-import { CheckBox } from "../CheckBox";
+import { CheckBox } from "../CheckBox/CheckBox";
 import { BasicModal } from "../Modals/Basic";
 
 interface RenderBaseProps {

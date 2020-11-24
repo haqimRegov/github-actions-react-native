@@ -17,7 +17,7 @@ import {
   sw8,
 } from "../../styles";
 import { BadgeCount } from "../Badge";
-import { CustomFlexSpacer, CustomSpacer } from "../Views";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 export interface MenuItemProps {
   active?: boolean;

@@ -24,7 +24,7 @@ import {
   sw24,
 } from "../../styles";
 import { IconText } from "../Touchables";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 import { CollapsibleDropdown } from "./BasicDropdown";
 
 export interface IQuickAction {

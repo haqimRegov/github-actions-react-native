@@ -3,7 +3,7 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import { IcoMoon } from "../../icons";
 import { centerVertical, colorBlack, flexRow, fs12SemiBoldBlack2, sh16, sw8 } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 
 interface IconTextProps {
   color?: string;

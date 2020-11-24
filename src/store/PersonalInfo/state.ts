@@ -1,14 +1,14 @@
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_MOBILE_CODE } from "../../data/dictionary";
-import { NO_TIN_OPTIONS } from "../../pages/Onboarding/Declaration/CRS/TaxIdentificationNumber";
 
-const { PERSONAL_DETAILS, DECLARATION } = Language.PAGE;
+const { PERSONAL_DETAILS } = Language.PAGE;
 
 export type PersonalInfoState = IPersonalInfoState;
 
 export const personalInfoInitialState: PersonalInfoState = {
   cancelOnboarding: false,
   editMode: false,
+  editDeclaration: false,
   epfInvestment: false,
   incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,
   signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
@@ -55,25 +55,33 @@ export const personalInfoInitialState: PersonalInfoState = {
     },
     declaration: {
       crs: {
-        taxResident: DECLARATION.OPTION_MALAYSIAN_TAX,
-        tin: [
-          {
-            country: "",
-            explanation: "",
-            tinNumber: "",
-            noTin: false,
-            reason: NO_TIN_OPTIONS[0].value,
-          },
-        ],
+        acceptCrs: false,
+        country: "",
+        explanation: "",
+        explanationSaved: true,
+        noTin: false,
+        reason: -1,
+        taxResident: -1,
+        tinNumber: "",
       },
       fatca: {
-        acknowledgement: false,
+        acceptFatca: false,
+        agreeToFill: false,
+        confirmAddress: -1,
         certificate: undefined,
+        explanation: "",
+        explanationSaved: true,
         noCertificate: false,
-        reason: "",
+        reason: -1,
         uploadLater: false,
-        usBorn: DECLARATION.OPTION_US_BORN_NO,
-        usCitizen: DECLARATION.OPTION_US_CITIZEN_NO,
+        usBorn: -1,
+        usCitizen: -1,
+      },
+      fea: {
+        acceptFea: false,
+        balance: "",
+        facility: -1,
+        resident: -1,
       },
     },
     epfDetails: {
@@ -161,16 +169,33 @@ export const personalInfoInitialState: PersonalInfoState = {
     },
     declaration: {
       crs: {
-        taxResident: DECLARATION.OPTION_MALAYSIAN_TAX,
-        tin: [],
+        acceptCrs: false,
+        country: "",
+        explanation: "",
+        explanationSaved: true,
+        noTin: false,
+        reason: -1,
+        taxResident: -1,
+        tinNumber: "",
       },
       fatca: {
+        acceptFatca: false,
+        agreeToFill: false,
         certificate: undefined,
+        confirmAddress: -1,
+        explanation: "",
+        explanationSaved: true,
         noCertificate: false,
-        reason: "",
+        reason: -1,
         uploadLater: false,
-        usBorn: DECLARATION.OPTION_US_BORN_NO,
-        usCitizen: DECLARATION.OPTION_US_CITIZEN_NO,
+        usBorn: -1,
+        usCitizen: -1,
+      },
+      fea: {
+        acceptFea: false,
+        balance: "",
+        facility: -1,
+        resident: -1,
       },
     },
     epfDetails: {

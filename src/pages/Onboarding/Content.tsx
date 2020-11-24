@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { ConfirmationModal } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { fs16BoldBlack2 } from "../../styles";
-import { Declaration } from "./Declaration";
+import { CrsDeclaration, DeclarationSummary, FatcaDeclaration, FeaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
 import { IdentityConfirmation } from "./IdentityVerification";
@@ -65,8 +65,17 @@ export const OnboardingContent = (props: OnboardingProps) => {
     case ONBOARDING_ROUTES.EmploymentDetails:
       content = <EmploymentDetails {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.Declaration:
-      content = <Declaration {...newProps} />;
+    case ONBOARDING_ROUTES.FATCADeclarations:
+      content = <FatcaDeclaration {...newProps} />;
+      break;
+    case ONBOARDING_ROUTES.CRSDeclaration:
+      content = <CrsDeclaration {...newProps} />;
+      break;
+    case ONBOARDING_ROUTES.FEADeclarations:
+      content = <FeaDeclaration {...newProps} />;
+      break;
+    case ONBOARDING_ROUTES.DeclarationSummary:
+      content = <DeclarationSummary {...newProps} />;
       break;
     case ONBOARDING_ROUTES.OrderSummary:
       content = <OrderSummary {...newProps} />;

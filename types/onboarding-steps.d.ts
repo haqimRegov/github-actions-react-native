@@ -40,9 +40,12 @@ declare interface OnboardingStepsProps {
 }
 
 declare type TypeOnboardingRoute =
-  | "Declaration"
+  | "CRSDeclaration"
+  | "DeclarationSummary"
   | "EmailVerification"
   | "EmploymentDetails"
+  | "FATCADeclarations"
+  | "FEADeclaration"
   | "IdentityVerification"
   | "OrderSummary"
   | "Payment"
@@ -53,9 +56,12 @@ declare type TypeOnboardingRoute =
   | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {
-  Declaration: TypeOnboardingRoute;
+  CRSDeclaration: TypeOnboardingRoute;
+  DeclarationSummary: TypeOnboardingRoute;
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
+  FATCADeclarations: TypeOnboardingRoute;
+  FEADeclarations: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
   OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;

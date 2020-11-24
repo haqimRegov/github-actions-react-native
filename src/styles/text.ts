@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite, colorYellow } from "./colors";
-import { sh10, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw033 } from "./sizes";
+import { sh10, sh11, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw033 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 
@@ -77,6 +77,13 @@ export const fs10RegBlue25: TextStyle = {
   lineHeight: sh16,
 };
 
+export const fs11RegBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoRegular,
+  fontSize: sh11,
+  lineHeight: sh16,
+};
+
 export const fs12BoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoBold,
@@ -107,6 +114,13 @@ export const fs12BoldBlue2: TextStyle = {
 
 export const fs12BoldBlue38: TextStyle = {
   color: colorBlue._3_8,
+  fontFamily: NunitoBold,
+  fontSize: sh12,
+  lineHeight: sh24,
+};
+
+export const fs12BoldGray7: TextStyle = {
+  color: colorGray._7,
   fontFamily: NunitoBold,
   fontSize: sh12,
   lineHeight: sh24,

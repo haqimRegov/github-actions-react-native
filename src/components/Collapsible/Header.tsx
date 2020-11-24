@@ -2,7 +2,6 @@ import React, { Fragment, FunctionComponent, ReactNode } from "react";
 import { Keyboard, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { CustomSpacer, IconButton, IconInput } from "..";
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
@@ -34,6 +33,9 @@ import {
   sw40,
   sw85,
 } from "../../styles";
+import { IconInput } from "../Input/IconInput";
+import { IconButton } from "../Touchables/Icon";
+import { CustomSpacer } from "../Views/Spacer";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface CollapsibleHeaderProps {

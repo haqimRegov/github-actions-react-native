@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
@@ -31,7 +31,7 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
-export interface ITextInputProps extends TextInputProps {
+export interface CustomTextInputProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   inputPrefix?: string;
@@ -51,9 +51,8 @@ export interface ITextInputProps extends TextInputProps {
   viewStyle?: ViewStyle;
 }
 
-export const CustomTextInput = ({
+export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   disabled,
-  editable,
   error,
   inputPrefix,
   label,
@@ -73,7 +72,7 @@ export const CustomTextInput = ({
   value,
   viewStyle,
   ...rest
-}: ITextInputProps) => {
+}: CustomTextInputProps) => {
   const borderWidth = noBorder === true ? 0 : sw1;
   const borderColor = error !== undefined ? colorRed._2 : colorGray._7;
   const defaultInputStyle: ViewStyle = {
@@ -87,9 +86,7 @@ export const CustomTextInput = ({
     ...viewStyle,
   };
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
-
   const disabledStyle: TextStyle = disabled === true ? { opacity: 0.5 } : {};
-  const disabledInput = disabled === true ? !disabled : editable;
 
   return (
     <View onLayout={onLayout}>
@@ -98,7 +95,7 @@ export const CustomTextInput = ({
         <Fragment>
           <View style={flexRow}>
             <CustomSpacer isHorizontal={true} space={sw16} />
-            <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle }}>
+            <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...disabledStyle, ...labelStyle }}>
               {label}
             </Text>
           </View>
@@ -113,7 +110,7 @@ export const CustomTextInput = ({
           </Fragment>
         ) : null}
         <TextInput
-          editable={disabledInput}
+          editable={!disabled}
           placeholder={rest.placeholder}
           placeholderTextColor={colorGray._7}
           ref={setRef}

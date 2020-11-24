@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
 import { Language } from "../../constants";
@@ -17,7 +17,7 @@ export interface ActionButtonsProps {
   continueDisabled?: boolean;
   continueTextStyle?: TextStyle;
   handleCancel?: () => void;
-  handleContinue: () => void;
+  handleContinue?: () => void;
   labelCancel?: string;
   labelContinue?: string;
 }
@@ -50,14 +50,18 @@ export const ActionButtons = ({
           textStyle={cancelTextStyle}
         />
       ) : null}
-      <CustomSpacer isHorizontal={true} space={sw16} />
-      <RoundedButton
-        buttonStyle={continueButtonStyle}
-        disabled={continueDisabled}
-        onPress={handleContinue}
-        text={buttonContinue}
-        textStyle={continueTextStyle}
-      />
+      {handleContinue !== undefined ? (
+        <Fragment>
+          <CustomSpacer isHorizontal={true} space={sw16} />
+          <RoundedButton
+            buttonStyle={continueButtonStyle}
+            disabled={continueDisabled}
+            onPress={handleContinue}
+            text={buttonContinue}
+            textStyle={continueTextStyle}
+          />
+        </Fragment>
+      ) : null}
     </View>
   );
 };

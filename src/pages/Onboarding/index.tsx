@@ -13,6 +13,19 @@ import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
 
+// TODO handle if FEA
+const isFea = true;
+
+const DECLARATION_CONTENT = [
+  { title: ONBOARDING.TITLE_FATCA_DECLARATION, route: ONBOARDING_ROUTES.FATCADeclaration },
+  { title: ONBOARDING.TITLE_CRS_DECLARATION, route: ONBOARDING_ROUTES.CRSDeclaration },
+  { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.DeclarationSummary },
+];
+
+if (isFea === true) {
+  DECLARATION_CONTENT.splice(2, 0, { title: ONBOARDING.TITLE_FEA_DECLARATION, route: ONBOARDING_ROUTES.FEADeclarations });
+}
+
 export const ONBOARDING_DATA: IOnboarding[] = [
   {
     label: ONBOARDING.TITLE_RISK_ASSESSMENT,
@@ -28,10 +41,13 @@ export const ONBOARDING_DATA: IOnboarding[] = [
       { title: ONBOARDING.TITLE_ID_VERIFICATION, route: ONBOARDING_ROUTES.IdentityVerification },
       { title: ONBOARDING.TITLE_PERSONAL_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
       { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
-      { title: ONBOARDING.TITLE_FATCA, route: ONBOARDING_ROUTES.Declaration },
       { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.Summary },
     ],
     label: ONBOARDING.TITLE_PERSONAL_INFORMATION,
+  },
+  {
+    content: DECLARATION_CONTENT,
+    label: ONBOARDING.TITLE_DECLARATIONS,
   },
   {
     content: [

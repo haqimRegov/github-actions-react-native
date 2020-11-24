@@ -1,7 +1,10 @@
 export const ONBOARDING_ROUTES: IOnboardingRoutes = {
-  Declaration: "Declaration",
+  CRSDeclaration: "CRSDeclaration",
+  DeclarationSummary: "DeclarationSummary",
   EmailVerification: "EmailVerification",
   EmploymentDetails: "EmploymentDetails",
+  FATCADeclaration: "FATCADeclaration",
+  FEADeclarations: "FEADeclaration",
   IdentityVerification: "IdentityVerification",
   OrderSummary: "OrderSummary",
   Payment: "Payment",

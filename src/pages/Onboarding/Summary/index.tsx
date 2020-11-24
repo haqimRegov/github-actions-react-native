@@ -18,7 +18,7 @@ const SummaryComponent: FunctionComponent<SummaryProps> = ({
   personalInfo,
 }: SummaryProps) => {
   const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.OrderSummary);
+    handleNextStep(ONBOARDING_ROUTES.FATCADeclaration);
   };
 
   return (

@@ -14,6 +14,7 @@ export * from "./fund-issuing-house";
 export * from "./gross-income";
 export * from "./household-income";
 export * from "./id-type";
+export * from "./links";
 export * from "./marital-status";
 export * from "./mobile-code";
 export * from "./monthly-income";

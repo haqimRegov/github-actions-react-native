@@ -7,21 +7,24 @@ import {
   colorWhite,
   flexRow,
   fs12BoldBlack2,
+  fs12SemiBoldGray8,
   px,
   sh05,
   sh110,
   sh118,
   sh120,
+  sh8,
   sw1,
   sw16,
-  sw20,
   sw358,
   sw360,
+  sw8,
 } from "../../styles";
-import { CustomSpacer } from "../Views/Spacer";
-import { CustomTextInput, ITextInputProps } from "./Input";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
+import { CustomTextInput, CustomTextInputProps } from "./Input";
 
-export interface TextInputAreaProps extends ITextInputProps {
+export interface TextInputAreaProps extends CustomTextInputProps {
+  showLength?: boolean;
   style?: TextStyle;
 }
 
@@ -29,6 +32,8 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
   label,
   labelStyle,
   onPressLabel,
+  placeholder,
+  showLength,
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
@@ -63,7 +68,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
   const defaultStyle: ViewStyle = {
     backgroundColor: colorWhite._1,
     borderColor: colorGray._7,
-    borderRadius: sw20,
+    borderRadius: sw8,
     borderWidth: sw1,
     height: sh120,
     width: sw360,
@@ -81,6 +86,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
   }, []);
 
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
+  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${rest.value?.length}/${rest.maxLength}` : "";
 
   return (
     <Fragment>
@@ -100,6 +106,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
         <CustomTextInput
           multiline={true}
           onFocus={handleMultilineFocus}
+          placeholder={placeholder}
           setRef={setTextAreaRef}
           style={{ ...px(sw16), height: sh110, width: sw360 }}
           textAlignVertical="top"
@@ -115,6 +122,12 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
           viewStyle={dummyInputStyle}
         />
       </View>
+      {showLength === true && rest.maxLength !== undefined ? (
+        <View style={{ ...flexRow, width: sw360 }}>
+          <CustomFlexSpacer />
+          <Text style={{ ...fs12SemiBoldGray8, paddingTop: sh8 }}>{charRemaining}</Text>
+        </View>
+      ) : null}
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}
     </Fragment>
   );

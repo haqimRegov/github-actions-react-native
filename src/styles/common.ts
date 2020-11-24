@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 
-import { colorBlack, colorBlue, colorGray, colorTransparent } from "./colors";
+import { colorBlack, colorBlue, colorGray, colorRed, colorTransparent } from "./colors";
 
 export const alignFlexStart = { alignItems: "flex-start" } as const;
 export const alignItemsEnd = { alignItems: "flex-end" } as const;
@@ -42,6 +42,7 @@ export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: co
 export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderBottomGray7 = { borderBottomWidth: 1, borderBottomColor: colorGray._7 } as const;
+export const borderBottomRed4 = { borderBottomWidth: 1, borderBottomColor: colorRed._4 } as const;
 export const borderLeftGray4 = { borderLeftWidth: 1, borderLeftColor: colorGray._4 } as const;
 export const borderTopGray2 = { borderTopWidth: 1, borderTopColor: colorGray._2 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
@@ -117,6 +118,19 @@ export const shadow5 = {
   shadowRadius: 5,
 } as const;
 
+export const shadowBlack116 = {
+  // shadow for android
+  elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlack._1,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.16,
+  shadowRadius: 12,
+} as const;
+
 export const shadowBlack5 = {
   // shadow for android
   elevation: 1,
@@ -127,6 +141,19 @@ export const shadowBlack5 = {
     height: 0,
   },
   shadowOpacity: 0.12,
+  shadowRadius: 12,
+} as const;
+
+export const shadowBlue204 = {
+  // shadow for android
+  elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlue._2,
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.04,
   shadowRadius: 12,
 } as const;
 

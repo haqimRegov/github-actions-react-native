@@ -78,33 +78,38 @@ declare interface IEmploymentDetailsState extends IAddressState {
 }
 
 declare interface IFatcaState {
-  acknowledgement?: boolean;
+  acceptFatca?: boolean;
+  confirmAddress?: TypeToggleButtonValue;
+  agreeToFill?: boolean;
   certificate?: FileBase64;
   explanation?: string;
+  explanationSaved?: boolean;
   noCertificate?: boolean;
-  reason?: string;
+  reason?: TypeAdvanceToggleButtonValue;
   uploadLater?: boolean;
-  usBorn?: string;
-  usCitizen?: string;
+  usBorn?: TypeToggleButtonValue;
+  usCitizen?: TypeToggleButtonValue;
+}
+
+declare interface IFeaState {
+  acceptFea?: boolean;
+  balance?: string;
+  facility?: TypeAdvanceToggleButtonValue;
+  resident?: TypeToggleButtonValue;
 }
 
 declare interface ITinState {
   country?: string;
   explanation?: string;
+  explanationSaved?: boolean;
   noTin?: boolean;
-  reason?: string;
-  tinNumber: string;
+  reason?: TypeAdvanceToggleButtonValue;
+  tinNumber?: string;
 }
 
-declare interface IFeaState {
-  questionOne?: number;
-  questionTwo?: number;
-  questionThree?: number;
-}
-
-declare interface ICrsState {
-  taxResident?: string;
-  tin?: ITinState[];
+declare interface ICrsState extends ITinState {
+  acceptCrs?: boolean;
+  taxResident?: TypeAdvanceToggleButtonValue;
 }
 
 declare interface IDeclarationState {
@@ -126,6 +131,7 @@ declare interface IHolderInfoState {
 declare interface IPersonalInfoState {
   cancelOnboarding?: boolean;
   editMode?: boolean;
+  editDeclaration?: boolean;
   epfInvestment?: boolean;
   joint?: IHolderInfoState;
   principal?: IHolderInfoState;

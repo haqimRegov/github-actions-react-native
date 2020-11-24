@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
@@ -12,7 +12,7 @@ import {
   fullHW,
   px,
   sh16,
-  sh40,
+  sh32,
   sw112,
   sw120,
   sw200,
@@ -24,7 +24,7 @@ import { SideMenu } from "../Nav";
 import { CustomSpacer } from "../Views";
 import { Step } from "./Step";
 
-export const OnboardingSteps = ({
+export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   activeContent,
   activeSection,
   disableNextSteps,
@@ -65,7 +65,7 @@ export const OnboardingSteps = ({
 
     return (
       <View>
-        <CustomSpacer space={sh40} />
+        {stepIndex === 0 ? null : <CustomSpacer space={sh32} />}
         <TouchableWithoutFeedback onPress={handleChange}>
           <View pointerEvents={pointerEvents} style={flexRow}>
             <Step active={isActive} step={currentStep} visited={visited} />

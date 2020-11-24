@@ -54,6 +54,7 @@ export const colorRed = {
   _2_05: "rgba(232, 76, 61, 0.05)",
   _3: "#AB001D",
   _3_05: "rgba(171, 0, 29, 0.05)",
+  _4: "#C10A27",
 };
 
 export const colorWhite = {

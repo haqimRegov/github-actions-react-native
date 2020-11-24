@@ -3,7 +3,7 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   DeclarationSummary: "DeclarationSummary",
   EmailVerification: "EmailVerification",
   EmploymentDetails: "EmploymentDetails",
-  FATCADeclarations: "FATCADeclarations",
+  FATCADeclaration: "FATCADeclaration",
   FEADeclarations: "FEADeclaration",
   IdentityVerification: "IdentityVerification",
   OrderSummary: "OrderSummary",

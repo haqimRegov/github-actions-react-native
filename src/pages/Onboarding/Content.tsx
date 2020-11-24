@@ -65,7 +65,7 @@ export const OnboardingContent = (props: OnboardingProps) => {
     case ONBOARDING_ROUTES.EmploymentDetails:
       content = <EmploymentDetails {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.FATCADeclarations:
+    case ONBOARDING_ROUTES.FATCADeclaration:
       content = <FatcaDeclaration {...newProps} />;
       break;
     case ONBOARDING_ROUTES.CRSDeclaration:

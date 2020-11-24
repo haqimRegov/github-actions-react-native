@@ -65,7 +65,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   summary,
 }: DeclarationDetailsProps) => {
   const handleEditFatca = () => {
-    handleNextStep("FATCADeclarations");
+    handleNextStep("FATCADeclaration");
   };
 
   const handleEditCrs = () => {

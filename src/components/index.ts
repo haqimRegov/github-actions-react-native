@@ -22,6 +22,7 @@ export * from "./Steps";
 export * from "./Tabs";
 export * from "./Table";
 export * from "./Tags";
+export * from "./ToggleButton";
 export * from "./Tooltip";
 export * from "./Touchables";
 export * from "./Upload";

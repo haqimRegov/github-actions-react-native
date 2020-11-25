@@ -20,8 +20,11 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
+type ButtonType = "solid" | "dashed";
+
 export interface OutlineButtonProps {
   buttonStyle?: ViewStyle;
+  buttonType?: ButtonType;
   disabled?: boolean;
   color?: string;
   icon?: string;
@@ -32,6 +35,7 @@ export interface OutlineButtonProps {
 
 export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
   buttonStyle,
+  buttonType,
   disabled,
   color,
   icon,
@@ -39,8 +43,9 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
   text,
   textStyle,
 }: OutlineButtonProps) => {
+  const borderStyle: ViewStyle = buttonType === "dashed" ? { borderStyle: "dashed" } : {};
   const disabledOpacity = disabled === true ? { opacity: 0.5 } : undefined;
-  const defaultBorderColor: ViewStyle = color !== undefined ? { borderColor: color } : { borderColor: colorBlack._2 };
+  const borderColor: ViewStyle = color !== undefined ? { borderColor: color } : { borderColor: colorBlack._2 };
   const roundedButtonStyle: ViewStyle = {
     ...border(colorRed._1, sw1),
     ...centerVertical,
@@ -49,7 +54,8 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
     backgroundColor: colorTransparent,
     borderRadius: sw100,
     height: sh32,
-    ...defaultBorderColor,
+    ...borderStyle,
+    ...borderColor,
     ...disabledOpacity,
     ...buttonStyle,
   };

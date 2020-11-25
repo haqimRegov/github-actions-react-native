@@ -9,7 +9,7 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   OrderSummary: "OrderSummary",
   Payment: "Payment",
   PersonalDetails: "PersonalDetails",
-  PersonalDetailsSummary: "PersonalDetailsSummary",
+  PersonalInfoSummary: "PersonalInfoSummary",
   ProductRecommendation: "ProductRecommendation",
   RiskAssessment: "RiskAssessment",
   TermsAndConditions: "TermsAndConditions",

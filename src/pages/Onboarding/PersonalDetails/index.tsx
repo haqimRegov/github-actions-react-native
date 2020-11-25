@@ -24,7 +24,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const buttonDisabled = false;
 
   const handleSubmit = () => {
-    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalDetailsSummary" : "EmploymentDetails";
+    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalInfoSummary" : "EmploymentDetails";
     handleNextStep(route);
   };
 

@@ -33,7 +33,7 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
 
   const handleSubmit = () => {
     addPersonalInfo({ principal: { ...principal, personalDetails: { ...principal?.personalDetails, riskProfile: riskScore.appetite } } });
-    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalDetailsSummary" : "PersonalDetails";
+    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalInfoSummary" : "PersonalDetails";
     handleNextStep(route);
   };
 

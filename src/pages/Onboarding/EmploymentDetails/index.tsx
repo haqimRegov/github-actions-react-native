@@ -23,7 +23,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   const buttonDisabled = false;
 
   const handleSubmit = () => {
-    handleNextStep("PersonalDetailsSummary");
+    handleNextStep("PersonalInfoSummary");
   };
 
   const handlePrincipalEmployment = (value: IEmploymentDetailsState) => {

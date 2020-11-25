@@ -2,11 +2,11 @@ import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { AdvancedDropdown, ContentPage, CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../components";
+import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID, DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES, ERROR_CODE_OCR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomGray4, fs10BoldBlack2, fs16RegBlack2, fs24BoldBlack2, px, sh24, sh32, sh40, sh8, sw24 } from "../../../styles";
+import { px, sh40, sh56, sw24 } from "../../../styles";
 import { OCRUtils } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -53,12 +53,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
 
   const principalTitle = idType !== "Passport" && idType !== "NRIC" ? `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : `${idType}`;
   const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
-
-  const jointTitle =
-    inputJointIdType !== "Passport" && inputJointIdType !== "NRIC"
-      ? `${inputJointIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
-      : `${inputJointIdType}`;
-  const defaultJointTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${jointTitle}`;
+  const defaultSubtitle = accountType === "Joint" ? IDENTITY_CONFIRMATION.JOINT_SUBHEADING : defaultPrincipalTitle;
 
   const individualNRIC =
     principalFrontPage?.path !== undefined &&
@@ -110,13 +105,19 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const handleProceed = () => setReviewImage(undefined);
 
   const handlePrincipalDetails = (value: IClientIDState) =>
-    addPersonalInfo({ ...personalInfo, principal: { ...principal, personalDetails: { ...principal!.personalDetails, id: { ...value } } } });
+    addPersonalInfo({
+      ...personalInfo,
+      principal: { ...principal, personalDetails: { ...principal!.personalDetails, id: { ...value } } },
+    });
 
   const handleJointDetails = (value: IClientIDState) =>
-    addPersonalInfo({ ...personalInfo, joint: { ...joint, personalDetails: { ...joint!.personalDetails, id: { ...value } } } });
-
-  const setInputJointIdType = (value: string) =>
-    addPersonalInfo({ ...personalInfo, joint: { ...joint!, personalDetails: { ...joint!.personalDetails, idType: value } } });
+    addPersonalInfo({
+      ...personalInfo,
+      joint: {
+        ...joint,
+        personalDetails: { ...joint!.personalDetails, id: { ...value } },
+      },
+    });
 
   const handleContinue = () => {
     const principalMailingAddress = personalInfo.principal!.addressInformation?.mailingAddress!;
@@ -149,6 +150,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               ...principal?.personalDetails?.id,
               frontPage: uploaded,
             },
+            idType: details?.idType,
+            idNumber: details?.idNumber,
+            name: details?.name,
             nationality: isPrincipalMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
             placeOfBirth: mykad.placeOfBirth,
           },
@@ -212,6 +216,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               ...joint?.personalDetails?.id,
               frontPage: uploaded,
             },
+            idType: details?.idType,
+            idNumber: details?.idNumber,
+            name: details?.name,
             nationality: isJointMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
             placeOfBirth: mykad.placeOfBirth,
           },
@@ -261,9 +268,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           handleCancel={handleCancelOnboarding!}
           handleContinue={handleContinue}
           subheading={IDENTITY_CONFIRMATION.HEADING}
-          subtitle={defaultPrincipalTitle}>
+          subtitle={defaultSubtitle}>
           <View style={px(sw24)}>
             <CustomSpacer space={sh40} />
+            {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} title={details?.name!} /> : null}
             <UploadID
               backError={principalBackError}
               backPage={principalBackPage}
@@ -276,29 +284,12 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               setFrontPage={handlePrincipalFrontPage}
               uploadRef={principalUploadRef}
             />
-            <CustomSpacer space={sh32} />
+            <CustomSpacer space={sh56} />
           </View>
           {accountType === "Individual" ? null : (
             <Fragment>
-              <View style={borderBottomGray4} />
-              <CustomSpacer space={sh32} />
               <View style={px(sw24)}>
-                <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={IDENTITY_CONFIRMATION.LABEL_JOINT} />
-                <LabeledTitle
-                  label={IDENTITY_CONFIRMATION.HEADING}
-                  labelStyle={fs24BoldBlack2}
-                  spaceToLabel={sh8}
-                  spaceToBottom={sh24}
-                  title={defaultJointTitle}
-                  titleStyle={fs16RegBlack2}
-                />
-                <AdvancedDropdown
-                  handleChange={setInputJointIdType}
-                  items={DICTIONARY_ALL_ID}
-                  label={IDENTITY_CONFIRMATION.LABEL_ID_TYPE}
-                  value={inputJointIdType}
-                />
-                <CustomSpacer space={sh24} />
+                {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_JOINT} title={details?.name!} /> : null}
                 <UploadID
                   backError={jointBackError}
                   backPage={jointSecondPage}

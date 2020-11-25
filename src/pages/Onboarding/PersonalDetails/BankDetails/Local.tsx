@@ -15,8 +15,9 @@ import { DICTIONARY_CURRENCY, DICTIONARY_MALAYSIA_BANK } from "../../../../data/
 import {
   centerVertical,
   colorBlack,
+  colorBlue,
   flexRow,
-  fs12SemiBoldGray8,
+  fs12BoldBlue2,
   fs16BoldBlue2,
   px,
   py,
@@ -78,12 +79,6 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
-        const handleSwiftCode = (input: string) => {
-          const updatedDetails = [...bankingDetails];
-          updatedDetails[index].bankSwiftCode = input;
-          setBankingDetails(updatedDetails);
-        };
-
         const handleAccountNumber = (input: string) => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].bankAccountNumber = input;
@@ -91,7 +86,6 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
         };
 
         const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} ${index + 1}`;
-
         const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency!.includes(filteredCurrency.value));
 
         return (
@@ -140,12 +134,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                     </View>
                   );
                 })}
-              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
-                <Fragment>
-                  <CustomSpacer space={sh32} />
-                  <OutlineButton icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
-                </Fragment>
-              )}
+
               <AdvancedDropdown
                 handleChange={handleOtherBank}
                 items={DICTIONARY_MALAYSIA_BANK}
@@ -174,13 +163,19 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 spaceToTop={sh32}
                 value={item.bankAccountNumber}
               />
-              <CustomTextInput
-                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
-                onChangeText={handleSwiftCode}
-                spaceToTop={sh32}
-                value={item.bankSwiftCode}
-              />
-              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
+              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
+                <Fragment>
+                  <CustomSpacer space={sh32} />
+                  <OutlineButton
+                    buttonType="dashed"
+                    color={colorBlue._2}
+                    icon="plus"
+                    onPress={handleAddCurrency}
+                    text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
+                    textStyle={fs12BoldBlue2}
+                  />
+                </Fragment>
+              )}
             </View>
             <CustomSpacer space={sh24} />
           </View>

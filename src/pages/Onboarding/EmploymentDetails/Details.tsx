@@ -1,16 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextInputArea, TextSpaceArea } from "../../../components";
+import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../../components";
 import { Language } from "../../../constants";
-import {
-  DICTIONARY_BUSINESS_NATURE,
-  DICTIONARY_COUNTRIES,
-  DICTIONARY_GROSS_INCOME,
-  DICTIONARY_HOUSEHOLD_INCOME,
-  DICTIONARY_OCCUPATION,
-} from "../../../data/dictionary";
-import { fs12SemiBoldGray8, px, sh122, sh24, sh32, sh8, sw16, sw24 } from "../../../styles";
+import { DICTIONARY_BUSINESS_NATURE, DICTIONARY_COUNTRIES, DICTIONARY_GROSS_INCOME, DICTIONARY_OCCUPATION } from "../../../data/dictionary";
+import { px, sh122, sh24, sh32, sw24 } from "../../../styles";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
 interface EmploymentInfoProps {
@@ -31,7 +25,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const inputCity = employmentDetails.city!;
   const inputCountry = employmentDetails.country!;
   const inputEmployerName = employmentDetails.employerName!;
-  const inputHousehold = employmentDetails.monthlyHouseholdIncome!;
   const inputGross = employmentDetails.grossIncome!;
   const inputOccupation = employmentDetails.occupation!;
   const inputPostCode = employmentDetails.postCode!;
@@ -41,7 +34,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputCity = (value: string) => setEmploymentDetails({ city: value });
   const setInputCountry = (value: string) => setEmploymentDetails({ country: value });
   const setInputEmployerName = (value: string) => setEmploymentDetails({ employerName: value });
-  const setInputHousehold = (value: string) => setEmploymentDetails({ monthlyHouseholdIncome: value });
   const setInputGross = (value: string) => setEmploymentDetails({ grossIncome: value });
   const setInputOccupation = (value: string) => setEmploymentDetails({ occupation: value });
   const setInputPostCode = (value: string) => setEmploymentDetails({ postCode: value });
@@ -63,19 +55,11 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
         label={EMPLOYMENT_DETAILS.LABEL_NATURE_BUSINESS}
         value={inputBusinessNature}
       />
-      <CustomSpacer space={sh32} />
-      <AdvancedDropdown
-        items={DICTIONARY_GROSS_INCOME}
-        handleChange={setInputHousehold}
-        label={EMPLOYMENT_DETAILS.LABEL_HOUSEHOLD}
-        value={inputHousehold}
-      />
-      <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={EMPLOYMENT_DETAILS.LABEL_COMBINED} />
       {accountType === "Joint" && accountHolder === "Joint" ? (
         <Fragment>
           <CustomSpacer space={sh32} />
           <AdvancedDropdown
-            items={DICTIONARY_HOUSEHOLD_INCOME}
+            items={DICTIONARY_GROSS_INCOME}
             handleChange={setInputGross}
             label={EMPLOYMENT_DETAILS.LABEL_GROSS}
             value={inputGross}

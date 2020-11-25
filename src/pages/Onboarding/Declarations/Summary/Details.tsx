@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, LabeledTitleProps } from "../../../../components";
+import { AccountHeader, CardWrap, CustomFlexSpacer, CustomSpacer, LabeledTitleProps } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
@@ -167,11 +167,15 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   return (
     <View style={px(sw24)}>
       <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
-        <View style={headerStyle}>
-          <Text style={fs24BoldBlack2}>{name}</Text>
-          <CustomFlexSpacer />
-          {accountType === "Individual" ? null : <Text style={fs16RegBlack2}>{headerTitle}</Text>}
-        </View>
+        {accountType === "Individual" ? (
+          <View style={headerStyle}>
+            <Text style={fs24BoldBlack2}>{name}</Text>
+            <CustomFlexSpacer />
+            <Text style={fs16RegBlack2}>{headerTitle}</Text>
+          </View>
+        ) : (
+          <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />
+        )}
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
           <CardWrap data={fatcaSummary} />

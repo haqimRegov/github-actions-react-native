@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { LabeledTitle, TextSpaceArea } from "../../../components";
+import { AccountHeader, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { fs10BoldBlack2, fs16RegBlack2, fs24BoldBlack2, px, sh32, sh8, sw24 } from "../../../styles";
+import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh8, sw24 } from "../../../styles";
 import { PersonalInfo } from "./Details";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -33,33 +33,38 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
   setEpfDetails,
   setPersonalDetails,
 }: PrincipalDetails) => {
+  const padding = accountType === "Joint" ? px(sw24) : {};
+
   return (
     <View>
       <View style={px(sw24)}>
         {accountType === "Individual" ? null : (
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs10BoldBlack2} text={personalDetails.name!} />
+          <AccountHeader subtitle={PERSONAL_DETAILS.LABEL_PRINCIPAL_HOLDER} title={personalDetails.name!} />
         )}
         <LabeledTitle
           label={PERSONAL_DETAILS.SUBHEADING_PERSONAL}
           labelStyle={fs24BoldBlack2}
           spaceToLabel={sh8}
+          style={padding}
           title={PERSONAL_DETAILS.SUBTITLE_REACH}
-          titleStyle={fs16RegBlack2}
+          titleStyle={fs16SemiBoldBlack2}
         />
       </View>
-      <PersonalInfo
-        accountType={accountType}
-        accountHolder="Principal"
-        bankDetails={bankDetails}
-        contactDetails={contactDetails}
-        epfDetails={epfDetails}
-        epfInvestment={epfInvestment}
-        personalDetails={personalDetails}
-        setBankDetails={setBankDetails}
-        setContactDetails={setContactDetails}
-        setEpfDetails={setEpfDetails}
-        setPersonalDetails={setPersonalDetails}
-      />
+      <View style={padding}>
+        <PersonalInfo
+          accountType={accountType}
+          accountHolder="Principal"
+          bankDetails={bankDetails}
+          contactDetails={contactDetails}
+          epfDetails={epfDetails}
+          epfInvestment={epfInvestment}
+          personalDetails={personalDetails}
+          setBankDetails={setBankDetails}
+          setContactDetails={setContactDetails}
+          setEpfDetails={setEpfDetails}
+          setPersonalDetails={setPersonalDetails}
+        />
+      </View>
     </View>
   );
 };

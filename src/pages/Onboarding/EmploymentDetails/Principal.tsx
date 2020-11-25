@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { LabeledTitle, TextSpaceArea } from "../../../components";
+import { AccountHeader, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { fs10BoldBlack2, fs16RegBlack2, fs24BoldBlack2, px, sh24, sh8, sw24 } from "../../../styles";
+import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh8, sw24 } from "../../../styles";
 import { EmploymentInfo } from "./Details";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -21,19 +21,24 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
   personalDetails,
   setEmploymentDetails,
 }: PrincipalEmploymentDetails) => {
+  const padding = accountType === "Joint" ? px(sw24) : {};
+
   return (
     <View>
       <View style={px(sw24)}>
-        {accountType === "Individual" ? null : <TextSpaceArea spaceToBottom={sh8} style={fs10BoldBlack2} text={personalDetails.name!} />}
+        {accountType === "Joint" ? <AccountHeader subtitle={EMPLOYMENT_DETAILS.LABEL_PRINCIPAL} title={personalDetails.name!} /> : null}
         <LabeledTitle
           label={EMPLOYMENT_DETAILS.HEADING}
           labelStyle={fs24BoldBlack2}
           spaceToLabel={sh8}
+          style={padding}
           title={EMPLOYMENT_DETAILS.SUBHEADING}
-          titleStyle={{ ...fs16RegBlack2, lineHeight: sh24 }}
+          titleStyle={fs16SemiBoldBlack2}
         />
       </View>
-      <EmploymentInfo accountType={accountType} employmentDetails={employmentDetails} setEmploymentDetails={setEmploymentDetails} />
+      <View style={padding}>
+        <EmploymentInfo accountType={accountType} employmentDetails={employmentDetails} setEmploymentDetails={setEmploymentDetails} />
+      </View>
     </View>
   );
 };

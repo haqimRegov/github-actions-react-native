@@ -1,9 +1,9 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { View } from "react-native";
+import { View, ViewStyle } from "react-native";
 
 import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
-import { borderBottomGray4, sh32 } from "../../../styles";
+import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { JointVerification } from "./Joint";
 import { PrincipalVerification } from "./Principal";
 
@@ -33,7 +33,7 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
 
   const handleSubmit = () => {
     addPersonalInfo({ principal: { ...principal, personalDetails: { ...principal?.personalDetails, riskProfile: riskScore.appetite } } });
-    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "Summary" : "PersonalDetails";
+    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalInfoSummary" : "PersonalDetails";
     handleNextStep(route);
   };
 
@@ -55,9 +55,11 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
   const handleJointAddress = (value: IAddressInfoState) => {
     addPersonalInfo({ joint: { addressInformation: { ...joint!.addressInformation, ...value } } });
   };
+  const padding: ViewStyle = accountType === "Joint" ? px(sw48) : px(sw24);
 
   return (
     <ContentPage
+      buttonContainerStyle={padding}
       continueDisabled={continueDisabled}
       handleCancel={handleCancelOnboarding!}
       handleContinue={handleSubmit}
@@ -71,11 +73,11 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
         setAddressInfo={handlePrincipalAddress}
         setPersonalDetails={handlePrincipalDetails}
       />
-      <CustomSpacer space={sh32} />
       {accountType === "Individual" ? null : (
         <Fragment>
-          <View style={borderBottomGray4} />
-          <CustomSpacer space={sh32} />
+          <CustomSpacer space={sh24} />
+          <View style={borderBottomBlack21} />
+          <CustomSpacer space={sh48} />
           <JointVerification
             addressInfo={joint!.addressInformation!}
             personalDetails={joint!.personalDetails!}

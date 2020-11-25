@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { TextSpaceArea } from "../../../components";
+import { AdvancedDropdown, CustomSpacer, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID_TYPE } from "../../../data/dictionary";
-import { borderBottomBlack21, fs24BoldBlack2, px, sh24, sh32, sw24 } from "../../../styles";
+import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_GROSS_INCOME } from "../../../data/dictionary";
+import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh8, sw24, sw40 } from "../../../styles";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 import { EPFDetails } from "./EPFDetails";
@@ -51,6 +51,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   const setInputMaritalStatus = (value: string) => setPersonalDetails({ maritalStatus: value });
   const setInputEducation = (value: string) => setPersonalDetails({ educationLevel: value });
   const setInputOtherEducation = (value: string) => setPersonalDetails({ otherEducationLevel: value });
+  const setInputMonthlyHousehold = (value: string) => setPersonalDetails({ monthlyHouseholdIncome: value });
 
   const inputEducation = personalDetails.educationLevel!;
   const inputOtherEducation = personalDetails.otherEducationLevel!;
@@ -60,6 +61,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   const inputEpfNumber = epfDetails.epfMemberNumber!;
   const inputMotherName = personalDetails.mothersMaidenName!;
   const inputMaritalStatus = personalDetails.maritalStatus!;
+  const inputMonthlyHousehold = personalDetails.monthlyHouseholdIncome!;
 
   const setLocalBank = (value: IBankDetailsState[]) => {
     setBankDetails({ localBank: value });
@@ -99,6 +101,15 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         setInputMotherName={setInputMotherName}
         setInputOtherEducation={setInputOtherEducation}
       />
+      <View style={px(sw24)}>
+        <AdvancedDropdown
+          items={DICTIONARY_GROSS_INCOME}
+          handleChange={setInputMonthlyHousehold}
+          label={PERSONAL_DETAILS.LABEL_MONTHLY_INCOME}
+          value={inputMonthlyHousehold}
+        />
+      </View>
+      <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw40) }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
       {epfInvestment === true ? (
         <EPFDetails
           inputEpfNumber={inputEpfNumber}
@@ -108,6 +119,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         />
       ) : null}
       <Fragment>
+        <CustomSpacer space={sh24} />
         <View style={borderBottomBlack21} />
         <View style={px(sw24)}>
           <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />

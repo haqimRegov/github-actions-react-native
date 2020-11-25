@@ -42,7 +42,7 @@ export const ContentPage = ({
     buttonContainerStyle: px(sw24),
     ...rest,
   };
-  const defaultSubtitleStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.05, ...subtitleStyle };
+  const defaultSubtitleStyle: TextStyle = { ...fs16SemiBoldBlack2, ...subtitleStyle };
 
   return (
     <SafeAreaPage>

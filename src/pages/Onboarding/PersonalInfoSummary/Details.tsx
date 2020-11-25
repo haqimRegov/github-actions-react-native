@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, IconText, LabeledTitleProps } from "../../../components";
+import { AccountHeader, CardWrap, CustomFlexSpacer, CustomSpacer, IconText, LabeledTitleProps } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
@@ -15,12 +15,16 @@ import {
   fs16RegBlack2,
   fs18BoldBlack2,
   fs24BoldBlack2,
+  fsTransformNone,
   px,
   py,
   sh16,
   sh24,
+  sh32,
+  sh64,
   sh8,
   sh80,
+  shadowBlack116,
   shadowBlue5,
   sw16,
   sw24,
@@ -34,7 +38,6 @@ interface SummaryDetailsProps {
   accountType: TypeAccountChoices;
   additionalInfo: LabeledTitleProps[];
   contactDetails: LabeledTitleProps[];
-  declarationDetails: LabeledTitleProps[];
   employmentDetails: LabeledTitleProps[];
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
@@ -67,7 +70,6 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   accountType,
   additionalInfo,
   contactDetails,
-  declarationDetails,
   employmentDetails,
   epfDetails,
   foreignBankDetails,
@@ -105,43 +107,47 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const handleEditDeclaration = () => {
-    handleNextStep("Declaration");
-  };
-
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
-      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlue5 }}>
-        <View style={headerStyle}>
-          <Text style={fs24BoldBlack2}>{name}</Text>
-          <CustomFlexSpacer />
-          {accountType === "Individual" ? null : <Text style={fs16RegBlack2}>{headerTitle}</Text>}
-        </View>
+      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
+        {accountType === "Individual" ? (
+          <View style={headerStyle}>
+            <Text style={fs24BoldBlack2}>{name}</Text>
+            <CustomFlexSpacer />
+            <Text style={fs16RegBlack2}>{headerTitle}</Text>
+          </View>
+        ) : (
+          <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={sh32} subtitle={headerTitle} title={name} />
+        )}
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_PERSONAL} />
-          <CardWrap data={personalDetails} />
+          <CardWrap data={personalDetails} titleStyle={fsTransformNone} />
         </View>
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.LABEL_ADDITIONAL} />
-          <CardWrap data={additionalInfo} />
-        </View>
-        <View style={borderBottomBlack21}>
-          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} />
-          <CardWrap data={permanentAddress} />
-          <CardWrap data={mailingAddress} />
+          <CardWrap data={additionalInfo} titleStyle={fsTransformNone} />
         </View>
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_CONTACT} />
-          <CardWrap data={contactDetails} />
+          <CardWrap data={contactDetails} titleStyle={fsTransformNone} />
+        </View>
+        <View style={borderBottomBlack21}>
+          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} />
+          <CardWrap data={permanentAddress} titleStyle={fsTransformNone} />
+          <CardWrap data={mailingAddress} titleStyle={fsTransformNone} />
         </View>
         {epfDetails !== undefined && epfDetails.length !== 0 ? (
           <View style={borderBottomBlack21}>
             <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_EPF} />
-            <CardWrap data={epfDetails} />
+            <CardWrap data={epfDetails} titleStyle={fsTransformNone} />
           </View>
         ) : null}
         <View style={borderBottomBlack21}>
+          <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} />
+          <CardWrap data={employmentDetails} titleStyle={fsTransformNone} />
+        </View>
+        <View>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldBlack2} />
           {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
             const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
@@ -154,7 +160,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
                   <View style={borderBottomBlack21} />
                   <CustomSpacer space={sh8} />
                 </View>
-                <CardWrap data={bank} />
+                <CardWrap data={bank} titleStyle={fsTransformNone} />
               </Fragment>
             );
           })}
@@ -169,19 +175,12 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
                   <View style={borderBottomBlack21} />
                   <CustomSpacer space={sh8} />
                 </View>
-                <CardWrap data={bank} />
+                <CardWrap data={bank} titleStyle={fsTransformNone} />
               </Fragment>
             );
           })}
         </View>
-        <View style={borderBottomBlack21}>
-          <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} />
-          <CardWrap data={employmentDetails} />
-        </View>
-        <View>
-          <TitleIcon onPress={handleEditDeclaration} title={SUMMARY.TITLE_FATCA} />
-          <CardWrap data={declarationDetails} />
-        </View>
+        <CustomSpacer space={sh24} />
       </View>
     </View>
   );

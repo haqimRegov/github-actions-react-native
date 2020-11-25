@@ -44,15 +44,15 @@ declare type TypeOnboardingRoute =
   | "DeclarationSummary"
   | "EmailVerification"
   | "EmploymentDetails"
-  | "FATCADeclarations"
+  | "FATCADeclaration"
   | "FEADeclaration"
   | "IdentityVerification"
   | "OrderSummary"
   | "Payment"
   | "PersonalDetails"
+  | "PersonalInfoSummary"
   | "ProductRecommendation"
   | "RiskAssessment"
-  | "Summary"
   | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {
@@ -60,14 +60,14 @@ declare interface IOnboardingRoutes {
   DeclarationSummary: TypeOnboardingRoute;
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
-  FATCADeclarations: TypeOnboardingRoute;
+  FATCADeclaration: TypeOnboardingRoute;
   FEADeclarations: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
   OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
   PersonalDetails: TypeOnboardingRoute;
+  PersonalInfoSummary: TypeOnboardingRoute;
   ProductRecommendation: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
-  Summary: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
 }

@@ -1,28 +1,20 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Text, View } from "react-native";
 
-import { CheckBox, CustomFlexSpacer, CustomSpacer, CustomTooltip, ToggleButton } from "../../../../components";
+import { AccountHeader, CheckBox, CustomSpacer, CustomTooltip, ToggleButton } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
-  borderBottomRed4,
-  centerVertical,
-  colorWhite,
   flexChild,
   flexRow,
   fs12BoldBlack2,
   fs12BoldWhite1,
-  fs16RegBlack2,
   fs16SemiBoldBlack2,
-  fs24BoldBlack2,
   px,
   sh24,
   sh32,
-  sh64,
   sh8,
-  shadowBlue204,
   sw12,
   sw24,
-  sw8,
 } from "../../../../styles";
 import { FatcaTerms } from "./Declaration";
 import { FatcaUSBorn } from "./USBorn";
@@ -137,20 +129,6 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
   const handleAgreeToFill = () => handleFatcaDeclaration({ ...fatca, acceptFatca: false, agreeToFill: !agreeToFill });
   const handleAcceptFatca = () => handleFatcaDeclaration({ ...fatca, acceptFatca: !acceptFatca });
 
-  const headerStyle: ViewStyle = {
-    ...centerVertical,
-    ...flexRow,
-    ...px(sw24),
-    ...borderBottomRed4,
-    ...shadowBlue204,
-    backgroundColor: colorWhite._1,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
-    height: sh64,
-    position: "relative",
-    zIndex: 1,
-  };
-
   const headerTitle = accountHolder === "Principal" ? DECLARATIONS.TITLE_PRINCIPAL : DECLARATIONS.TITLE_JOINT;
 
   return (
@@ -159,11 +137,7 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
         {accountType === "Individual" ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <View style={headerStyle}>
-              <Text style={fs24BoldBlack2}>{name}</Text>
-              <CustomFlexSpacer />
-              <Text style={fs16RegBlack2}>{headerTitle}</Text>
-            </View>
+            <AccountHeader spaceToBottom={0} subtitle={headerTitle} title={name} />
           </Fragment>
         )}
         <CustomSpacer space={sh24} />

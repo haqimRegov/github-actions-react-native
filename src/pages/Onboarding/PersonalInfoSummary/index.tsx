@@ -9,14 +9,14 @@ import { Principal } from "./Principal";
 
 const { SUMMARY } = Language.PAGE;
 
-interface SummaryProps extends PersonalInfoStoreProps, OnboardingContentProps {}
+interface PersonalInfoSummaryProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 
-const SummaryComponent: FunctionComponent<SummaryProps> = ({
+const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> = ({
   accountType,
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
-}: SummaryProps) => {
+}: PersonalInfoSummaryProps) => {
   const handleContinue = () => {
     handleNextStep(ONBOARDING_ROUTES.FATCADeclaration);
   };
@@ -34,4 +34,4 @@ const SummaryComponent: FunctionComponent<SummaryProps> = ({
   );
 };
 
-export const Summary = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(SummaryComponent);
+export const PersonalInfoSummary = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(PersonalInfoSummaryComponent);

@@ -12,9 +12,9 @@ import { IdentityConfirmation } from "./IdentityVerification";
 import { OrderSummary } from "./OrderSummary";
 import { Payment } from "./Payment";
 import { PersonalDetails } from "./PersonalDetails";
+import { PersonalInfoSummary } from "./PersonalInfoSummary";
 import { Products } from "./Products";
 import { QuestionnaireContent } from "./Questionnaire";
-import { Summary } from "./Summary";
 import { TermsAndConditionsPages } from "./TermsAndConditions";
 
 const { ONBOARDING } = Language.PAGE;
@@ -83,8 +83,8 @@ export const OnboardingContent = (props: OnboardingProps) => {
     case ONBOARDING_ROUTES.TermsAndConditions:
       content = <TermsAndConditionsPages {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.Summary:
-      content = <Summary {...newProps} />;
+    case ONBOARDING_ROUTES.PersonalInfoSummary:
+      content = <PersonalInfoSummary {...newProps} />;
       break;
     case ONBOARDING_ROUTES.Payment:
       content = <Payment {...newProps} />;

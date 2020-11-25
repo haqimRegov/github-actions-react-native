@@ -14,6 +14,7 @@ import {
   flexRow,
   fs12BoldBlack2,
   fs16BoldBlack2,
+  fs16RegBlack2,
   noBorderBottom,
   px,
   py,
@@ -70,7 +71,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
   };
 
   const defaultLabelStyle: TextStyle = { ...fs16BoldBlack2, ...labelStyle };
-  const defaultPlaceholderStyle: TextStyle = { ...fs16BoldBlack2, color: colorGray._7, ...placeholderStyle };
+  const defaultPlaceholderStyle: TextStyle = { ...fs16RegBlack2, ...placeholderStyle };
   const valueStyle = value === "" || value === undefined ? defaultPlaceholderStyle : defaultLabelStyle;
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
@@ -83,10 +84,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
-          <View style={flexRow}>
-            <CustomSpacer isHorizontal={true} space={sw16} />
-            <Text style={{ ...fs12BoldBlack2, ...labelStyle }}>{label}</Text>
-          </View>
+          <Text style={{ ...fs12BoldBlack2, ...labelStyle }}>{label}</Text>
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}

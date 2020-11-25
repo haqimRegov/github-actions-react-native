@@ -1,15 +1,13 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage } from "../../../components";
-import { Language } from "../../../constants";
+import { ContentPage, CustomSpacer } from "../../../components";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { AccountDetails } from "./AccountDetails";
 import { JointDetails } from "./Joint";
 import { PrincipalDetails } from "./Principal";
-
-const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface PersonalDetailsProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 
@@ -26,7 +24,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const buttonDisabled = false;
 
   const handleSubmit = () => {
-    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "Summary" : "EmploymentDetails";
+    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalInfoSummary" : "EmploymentDetails";
     handleNextStep(route);
   };
 
@@ -65,23 +63,14 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const handleJointPersonalDetails = (value: IPersonalDetailsState) => {
     addPersonalInfo({ joint: { personalDetails: { ...joint!.personalDetails, ...value } } });
   };
-
-  const principalName = principal?.personalDetails!.name!;
-  const heading =
-    accountType === "Individual"
-      ? undefined
-      : `${PERSONAL_DETAILS.HEADING_HELLO} ${principalName} ${PERSONAL_DETAILS.LABEL_AND} ${joint?.personalDetails!.name!}.`;
-  const subheading = accountType === "Individual" ? undefined : PERSONAL_DETAILS.SUBHEADING_WEALTH;
-  const subtitle = accountType === "Individual" ? undefined : PERSONAL_DETAILS.SUBTITLE_DETAILS;
+  const padding = accountType === "Joint" ? px(sw48) : px(sw24);
 
   return (
     <ContentPage
+      buttonContainerStyle={padding}
       continueDisabled={buttonDisabled}
       handleCancel={handleCancelOnboarding!}
-      handleContinue={handleSubmit}
-      heading={heading}
-      subheading={subheading}
-      subtitle={subtitle}>
+      handleContinue={handleSubmit}>
       <View>
         <PrincipalDetails
           accountType={accountType}
@@ -96,17 +85,22 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           setPersonalDetails={handlePrincipalPersonalDetails}
         />
         {accountType === "Individual" ? null : (
-          <JointDetails
-            bankDetails={joint!.bankSummary!}
-            contactDetails={joint!.contactDetails!}
-            epfDetails={joint!.epfDetails!}
-            epfInvestment={epfInvestment!}
-            personalDetails={joint!.personalDetails!}
-            setBankDetails={handleJointBankDetails}
-            setContactDetails={handleJointContactDetails}
-            setEpfDetails={handleJointEpfDetails}
-            setPersonalDetails={handleJointPersonalDetails}
-          />
+          <Fragment>
+            <CustomSpacer space={sh24} />
+            <View style={borderBottomBlack21} />
+            <CustomSpacer space={sh48} />
+            <JointDetails
+              bankDetails={joint!.bankSummary!}
+              contactDetails={joint!.contactDetails!}
+              epfDetails={joint!.epfDetails!}
+              epfInvestment={epfInvestment!}
+              personalDetails={joint!.personalDetails!}
+              setBankDetails={handleJointBankDetails}
+              setContactDetails={handleJointContactDetails}
+              setEpfDetails={handleJointEpfDetails}
+              setPersonalDetails={handleJointPersonalDetails}
+            />
+          </Fragment>
         )}
         <AccountDetails accountType={accountType} personalInfo={personalInfo} setPersonalInfo={handlePersonalInfo} />
       </View>

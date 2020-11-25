@@ -44,7 +44,7 @@ declare type TypeOnboardingRoute =
   | "DeclarationSummary"
   | "EmailVerification"
   | "EmploymentDetails"
-  | "FATCADeclarations"
+  | "FATCADeclaration"
   | "FEADeclaration"
   | "IdentityVerification"
   | "OrderSummary"
@@ -52,7 +52,7 @@ declare type TypeOnboardingRoute =
   | "PersonalDetails"
   | "ProductRecommendation"
   | "RiskAssessment"
-  | "Summary"
+  | "PersonalDetailsSummary"
   | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {
@@ -60,14 +60,14 @@ declare interface IOnboardingRoutes {
   DeclarationSummary: TypeOnboardingRoute;
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
-  FATCADeclarations: TypeOnboardingRoute;
+  FATCADeclaration: TypeOnboardingRoute;
   FEADeclarations: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
   OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
   PersonalDetails: TypeOnboardingRoute;
+  PersonalDetailsSummary: TypeOnboardingRoute;
   ProductRecommendation: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
-  Summary: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
 }

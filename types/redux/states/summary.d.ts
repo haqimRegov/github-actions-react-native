@@ -16,6 +16,7 @@ declare interface IPersonalDetailsState {
   idType?: string;
   maritalStatus?: string;
   mothersMaidenName?: string;
+  monthlyHouseholdIncome?: string;
   name?: string;
   nationality?: string;
   placeOfBirth?: string;
@@ -73,7 +74,6 @@ declare interface IEmploymentDetailsState extends IAddressState {
   businessNature?: string;
   employerName?: string;
   grossIncome?: string;
-  monthlyHouseholdIncome?: string;
   occupation?: string;
 }
 

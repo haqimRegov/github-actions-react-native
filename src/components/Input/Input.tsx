@@ -41,6 +41,7 @@ export interface CustomTextInputProps extends TextInputProps {
   onPressLabel?: () => void;
   prefixStyle?: TextStyle;
   rightIcon?: string;
+  rightIconColor?: string;
   rightIconPress?: () => void;
   rightIconSize?: number;
   setRef?: (ref: TextInput | null) => void;
@@ -62,6 +63,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   onPressLabel,
   prefixStyle,
   rightIcon,
+  rightIconColor,
   rightIconPress,
   rightIconSize,
   setRef,
@@ -86,6 +88,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
     ...viewStyle,
   };
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
+  const defaultIconColor = rightIconColor !== undefined ? rightIconColor : colorBlack._2;
   const disabledStyle: TextStyle = disabled === true ? { opacity: 0.5 } : {};
 
   return (
@@ -93,12 +96,9 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
-          <View style={flexRow}>
-            <CustomSpacer isHorizontal={true} space={sw16} />
-            <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...disabledStyle, ...labelStyle }}>
-              {label}
-            </Text>
-          </View>
+          <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle, ...disabledStyle }}>
+            {label}
+          </Text>
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}
@@ -121,7 +121,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           {...rest}
         />
         {rightIcon === undefined ? null : (
-          <IcoMoon color={colorBlack._2} name={rightIcon} onPress={rightIconPress} size={rightIconSize || sw20} />
+          <IcoMoon color={defaultIconColor} name={rightIcon} onPress={rightIconPress} size={rightIconSize || sw20} style={disabledStyle} />
         )}
       </View>
       {error === undefined ? null : (

@@ -1,3 +1,4 @@
+import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
 import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
@@ -13,6 +14,7 @@ export const LocalAssets = {
     risk_assessment_graph_2: riskAssessmentGraph2,
   },
   illustration: {
+    email_verified: illustrationEmailVerified,
     login_error: illustrationLoginError,
     submissionSummary: illustrationSubmissionSummary,
     uploadSuccess: illustrationUploadSuccess,

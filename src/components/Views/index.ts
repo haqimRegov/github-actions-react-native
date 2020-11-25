@@ -1,3 +1,4 @@
+export * from "./AccountHeader";
 export * from "./ActionButtons";
 export * from "./AddressField";
 export * from "./LabeledTitle";
@@ -7,5 +8,5 @@ export * from "./PasswordValidation";
 export * from "./Prompt";
 export * from "./Question";
 export * from "./Spacer";
-export * from "./TextSpaceArea";
 export * from "./Status";
+export * from "./TextSpaceArea";

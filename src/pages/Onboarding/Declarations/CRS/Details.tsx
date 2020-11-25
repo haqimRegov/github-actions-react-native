@@ -1,25 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Text, View } from "react-native";
 
-import { AdvanceToggleButton, CustomFlexSpacer, CustomSpacer } from "../../../../components";
+import { AccountHeader, AdvanceToggleButton, CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../../../../data/dictionary";
-import {
-  borderBottomRed4,
-  centerVertical,
-  colorWhite,
-  flexChild,
-  flexRow,
-  fs16RegBlack2,
-  fs24BoldBlack2,
-  px,
-  sh12,
-  sh24,
-  sh64,
-  shadowBlue204,
-  sw24,
-  sw8,
-} from "../../../../styles";
+import { flexChild, fs16RegBlack2, px, sh12, sh24, sw24 } from "../../../../styles";
 import { CrsTerms } from "./Declaration";
 import { NonTaxResident } from "./NonTaxResident";
 
@@ -96,20 +81,6 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
 
   const handleAcceptCrs = () => handleCrsDeclaration({ ...crs, acceptCrs: !acceptCrs });
 
-  const headerStyle: ViewStyle = {
-    ...centerVertical,
-    ...flexRow,
-    ...px(sw24),
-    ...borderBottomRed4,
-    ...shadowBlue204,
-    backgroundColor: colorWhite._1,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
-    height: sh64,
-    position: "relative",
-    zIndex: 1,
-  };
-
   const headerTitle = accountHolder === "Principal" ? DECLARATIONS.TITLE_PRINCIPAL : DECLARATIONS.TITLE_JOINT;
 
   return (
@@ -118,11 +89,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
         {accountType === "Individual" ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <View style={headerStyle}>
-              <Text style={fs24BoldBlack2}>{name}</Text>
-              <CustomFlexSpacer />
-              <Text style={fs16RegBlack2}>{headerTitle}</Text>
-            </View>
+            <AccountHeader spaceToBottom={0} subtitle={headerTitle} title={name} />
           </Fragment>
         )}
         <CustomSpacer space={sh24} />

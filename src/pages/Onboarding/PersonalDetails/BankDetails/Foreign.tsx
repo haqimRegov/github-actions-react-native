@@ -15,7 +15,9 @@ import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../../data/dict
 import {
   centerVertical,
   colorBlack,
+  colorBlue,
   flexRow,
+  fs12BoldBlue2,
   fs12SemiBoldGray8,
   fs16BoldBlue2,
   px,
@@ -24,8 +26,10 @@ import {
   sh24,
   sh32,
   sh8,
+  sw02,
   sw16,
   sw24,
+  sw328,
 } from "../../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -85,7 +89,6 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
         };
 
         const foreignBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}`;
-
         const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency!.includes(filteredCurrency.value));
 
         return (
@@ -132,12 +135,6 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                   </Fragment>
                 );
               })}
-              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
-                <Fragment>
-                  <CustomSpacer space={sh32} />
-                  <OutlineButton icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
-                </Fragment>
-              )}
 
               <CustomTextInput
                 label={PERSONAL_DETAILS.LABEL_BANK_NAME}
@@ -171,7 +168,24 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}
               />
-              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
+              <TextSpaceArea
+                spaceToTop={sh8}
+                style={{ ...fs12SemiBoldGray8, ...px(sw16), letterSpacing: -sw02, maxWidth: sw328 }}
+                text={PERSONAL_DETAILS.HINT_SWIFT_CODE}
+              />
+              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
+                <Fragment>
+                  <CustomSpacer space={sh32} />
+                  <OutlineButton
+                    buttonType="dashed"
+                    color={colorBlue._2}
+                    icon="plus"
+                    onPress={handleAddCurrency}
+                    text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
+                    textStyle={fs12BoldBlue2}
+                  />
+                </Fragment>
+              )}
             </View>
             <CustomSpacer space={sh24} />
           </View>

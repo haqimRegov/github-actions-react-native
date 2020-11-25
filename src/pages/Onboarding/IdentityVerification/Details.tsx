@@ -12,7 +12,7 @@ import {
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION } from "../../../data/dictionary";
-import { colorTransparent, fs12BoldBlack2, px, sh143, sh24, sh32, sh8, sw16, sw48 } from "../../../styles";
+import { colorBlue, colorTransparent, fs12BoldBlack2, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
@@ -38,7 +38,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const idType = personalDetails.idType!;
   const dateOfBirth = personalDetails!.dateOfBirth!;
   const formattedDOB = moment(dateOfBirth).format(DEFAULT_DATE_FORMAT);
-  const labelId = `${idType} No.`;
+  const labelId = `${idType} Number`;
   const isPassport = idType === "Passport";
   const addressType = isPassport ? "Other" : "Malaysia";
 
@@ -98,12 +98,20 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   };
 
   const labelSameMailing = accountHolder === "Joint" ? ID_VERIFICATION.LABEL_MAILING_SAME_PRINCIPAL : ID_VERIFICATION.LABEL_MAILING_SAME;
+  const nameLabel = `${ID_VERIFICATION.LABEL_NAME} (as per ${personalDetails.idType})`;
 
   return (
     <Fragment>
       <CustomTextInput disabled={true} label={labelId} spaceToTop={sh24} value={idNumber} />
-      <CustomTextInput disabled={true} label={ID_VERIFICATION.LABEL_DOB} rightIcon="calendar" spaceToTop={sh32} value={formattedDOB} />
-      <CustomTextInput label={ID_VERIFICATION.LABEL_NAME} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
+      <CustomTextInput
+        disabled={true}
+        label={ID_VERIFICATION.LABEL_DOB}
+        rightIcon="calendar"
+        rightIconColor={colorBlue._2}
+        spaceToTop={sh32}
+        value={formattedDOB}
+      />
+      <CustomTextInput label={nameLabel} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
       {isPassport ? (
         <Fragment>
           <AdvancedDropdown
@@ -113,7 +121,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             spaceToTop={sh32}
             value={inputNationality}
           />
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={px(sw16)} text={ID_VERIFICATION.LABEL_EXPIRY} />
+          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
           <CustomDatePicker
             datePickerStyle={{ height: sh143 }}
             dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}

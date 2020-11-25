@@ -10,6 +10,7 @@ import {
   centerVertical,
   circleBorder,
   colorBlack,
+  colorBlue,
   colorGray,
   colorRed,
   colorWhite,
@@ -42,7 +43,7 @@ const UploadButton = ({ icon, onPress }) => {
   const iconButtonStyle: ViewStyle = circleBorder(sh48, sw1, colorGray._3, colorWhite._1);
   return (
     <Fragment>
-      <IconButton color={colorBlack._1} name={icon} onPress={onPress} style={iconButtonStyle} />
+      <IconButton color={colorBlue._2} name={icon} onPress={onPress} size={sw24} style={iconButtonStyle} />
       <CustomSpacer isHorizontal={true} space={sw16} />
     </Fragment>
   );

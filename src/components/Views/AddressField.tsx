@@ -46,6 +46,13 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   return (
     <Fragment>
       <TextInputArea label={labelAddress} onChangeText={setInputAddress} value={inputAddress} />
+      <CustomTextInput
+        keyboardType="numeric"
+        label={ADDRESS.LABEL_POSTCODE}
+        onChangeText={setInputPostCode}
+        spaceToTop={sh32}
+        value={inputPostCode}
+      />
       <CustomTextInput label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
       <CustomSpacer space={sh32} />
       {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[133].value ? (
@@ -62,7 +69,6 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           value={inputCountry || ""}
         />
       ) : null}
-      <CustomTextInput label={ADDRESS.LABEL_POSTCODE} onChangeText={setInputPostCode} spaceToTop={sh32} value={inputPostCode} />
     </Fragment>
   );
 };

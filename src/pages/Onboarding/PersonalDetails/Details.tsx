@@ -15,8 +15,8 @@ import { PRSDetails } from "./PRSDetails";
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface PersonalInfoProps {
-  accountType?: TypeAccountChoices;
-  accountHolder?: TypeAccountHolder;
+  accountType: TypeAccountChoices;
+  accountHolder: TypeAccountHolder;
   bankDetails: IBankSummaryState;
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
@@ -118,19 +118,21 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
           setInputEpfType={setInputEpfType}
         />
       ) : null}
-      <Fragment>
-        <CustomSpacer space={sh24} />
-        <View style={borderBottomBlack21} />
-        <View style={px(sw24)}>
-          <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
-        </View>
-        <BankDetails
-          foreignBankDetails={foreignBank!}
-          localBankDetails={localBank!}
-          setForeignBankDetails={setForeignBank}
-          setLocalBankDetails={setLocalBank}
-        />
-      </Fragment>
+      {accountType === "Joint" && accountHolder === "Joint" ? null : (
+        <Fragment>
+          <CustomSpacer space={sh24} />
+          <View style={borderBottomBlack21} />
+          <View style={px(sw24)}>
+            <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
+          </View>
+          <BankDetails
+            foreignBankDetails={foreignBank!}
+            localBankDetails={localBank!}
+            setForeignBankDetails={setForeignBank}
+            setLocalBankDetails={setLocalBank}
+          />
+        </Fragment>
+      )}
     </View>
   );
 };

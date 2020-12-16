@@ -10,18 +10,16 @@ const { ID_VERIFICATION } = Language.PAGE;
 
 interface PrincipalVerificationProps extends IDDetailsProps {
   accountType: TypeAccountChoices;
-  details: IClientDetailsState;
 }
 
 export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps> = ({
   accountType,
   addressInfo,
-  details,
   personalDetails,
   setAddressInfo,
   setPersonalDetails,
 }: PrincipalVerificationProps) => {
-  const principalHolderName = details.name !== undefined ? personalDetails.name : ID_VERIFICATION.LABEL_PRINCIPAL;
+  const principalHolderName = personalDetails!.name !== undefined ? personalDetails.name : ID_VERIFICATION.LABEL_PRINCIPAL;
   const jointStyle: ViewStyle = accountType === "Joint" ? px(sw24) : {};
 
   return (

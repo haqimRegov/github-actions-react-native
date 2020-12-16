@@ -45,6 +45,8 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
           />
         </View>
         <PersonalInfo
+          accountHolder="Joint"
+          accountType="Joint"
           bankDetails={bankDetails}
           contactDetails={contactDetails}
           epfDetails={epfDetails}

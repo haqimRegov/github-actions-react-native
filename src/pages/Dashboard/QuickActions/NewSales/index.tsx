@@ -1,0 +1,303 @@
+import { StackNavigationProp } from "@react-navigation/stack";
+import moment from "moment";
+import React, { Fragment, useState } from "react";
+import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { connect } from "react-redux";
+
+import { ActionButtons, BasicModal, CustomSpacer } from "../../../../components";
+import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
+import { DICTIONARY_COUNTRIES, DICTIONARY_PLACE_OF_BIRTH, ERROR_CODE } from "../../../../data/dictionary";
+import { checkClient, clientRegister } from "../../../../network-actions";
+import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
+import {
+  centerHV,
+  colorWhite,
+  flexGrow,
+  flexRowCC,
+  fs24BoldBlack1,
+  fs40BoldBlack2,
+  fullHW,
+  px,
+  sh40,
+  sh56,
+  sh96,
+  sw10,
+  sw218,
+  sw5,
+  sw56,
+  sw565,
+} from "../../../../styles";
+import { NewSalesDetails } from "./Details";
+import { NewSalesPrompt } from "./Prompt";
+import { NewSalesSummary } from "./Summary";
+
+const { ADD_CLIENT } = Language.PAGE;
+
+interface NewSalesProps extends ClientStoreProps {
+  navigation: StackNavigationProp<RootNavigatorType>;
+  setVisible: (visibility: boolean) => void;
+  visible: boolean;
+}
+
+const NewSalesComponent = ({
+  accountType,
+  addAccountType,
+  addClientDetails,
+  addJointInfo,
+  addPersonalInfo,
+  addPrincipalInfo,
+  agent,
+  details,
+  navigation,
+  personalInfo,
+  resetClientDetails,
+  setVisible,
+  visible,
+}: NewSalesProps) => {
+  const [clientType, setClientType] = useState<TypeClient | "">("");
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [registered, setRegistered] = useState<boolean>(false);
+  const [prompt, setPrompt] = useState<"ageMinimum" | "ageMaximum" | undefined>(undefined);
+  const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
+  const { jointHolder, principalHolder } = details!;
+  const { dateOfBirth, id, idType, name } = details![holderToFill]!;
+
+  const BUTTON_LABEL_UNREGISTERED = clientType !== "" ? ADD_CLIENT.BUTTON_PROCEED : ADD_CLIENT.BUTTON_STARTED;
+  const BUTTON_LABEL_PROMPT = prompt !== undefined ? ADD_CLIENT.BUTTON_ADD : BUTTON_LABEL_UNREGISTERED;
+  const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
+  const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
+  const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
+  const titleStyle: TextStyle = registered === true ? {} : { ...fs40BoldBlack2, lineHeight: sh40 };
+
+  const setClientInfo = (info: IClientBasicInfo) =>
+    holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
+  const setAccountType = (type: string) => addAccountType(type as TypeAccountChoices);
+
+  const continueDisabled = idType === "NRIC" ? name === "" || id === "" : name === "" || id === "" || dateOfBirth === undefined;
+
+  const handleReset = () => {
+    setClientType("");
+    setHolderToFill("principalHolder");
+    setErrorMessage(undefined);
+    resetClientDetails();
+    setPrompt(undefined);
+  };
+
+  const handleCancelNewSales = () => {
+    setVisible(false);
+    handleReset();
+  };
+
+  const handleCancel = () => {
+    if (prompt !== undefined) {
+      handleCancelNewSales();
+    } else if (registered === true) {
+      setRegistered(false);
+    } else if (clientType !== "" && holderToFill === "jointHolder") {
+      setHolderToFill("principalHolder");
+    } else if (clientType !== "" && holderToFill === "principalHolder") {
+      setClientType("");
+      addAccountType("Individual");
+    } else {
+      handleCancelNewSales();
+    }
+  };
+
+  const handleNavigation = () => {
+    const principalFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === principalHolder?.id!.substr(7, 2));
+    const jointFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === jointHolder?.id!.substr(7, 2));
+    const principalPlaceOfBirth =
+      principalHolder?.idType === "NRIC" && principalFilteredPlace.length !== 0 ? principalFilteredPlace[0].location : "";
+    const jointPlaceOfBirth =
+      accountType === "Joint" && jointHolder?.idType === "NRIC" && jointFilteredPlace.length !== 0 ? jointFilteredPlace[0].location : "";
+    const jointDetails =
+      accountType === "Individual"
+        ? { ...personalInfo.joint! }
+        : {
+            ...personalInfo.joint,
+            personalDetails: {
+              ...personalInfo.joint?.personalDetails,
+              countryOfBirth: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
+              dateOfBirth: moment(jointHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate(),
+              expirationDate: undefined,
+              idNumber: jointHolder?.id,
+              idType: jointHolder?.idType,
+              name: jointHolder?.name,
+              nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
+              placeOfBirth: principalPlaceOfBirth,
+            },
+          };
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        personalDetails: {
+          ...personalInfo.principal?.personalDetails,
+          countryOfBirth: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
+          dateOfBirth: moment(principalHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate(),
+          expirationDate: undefined,
+          idNumber: principalHolder?.id,
+          idType: principalHolder?.idType,
+          name: principalHolder?.name,
+          nationality: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
+          placeOfBirth: jointPlaceOfBirth,
+        },
+      },
+      joint: jointDetails,
+    });
+    setVisible(false);
+    navigation.navigate("Onboarding");
+  };
+
+  const handleCheckClient = async () => {
+    const req = {
+      agentId: agent?.id!,
+      principalHolder: {
+        dateOfBirth: principalHolder?.dateOfBirth,
+        id: principalHolder?.id,
+        idType: principalIdType,
+        name: principalHolder?.name,
+      },
+    };
+    const clientCheck: IEtbCheckResponse = await checkClient(req);
+    if (clientCheck !== undefined) {
+      const { data, error } = clientCheck;
+      if (error === null && data !== null) {
+        setErrorMessage(undefined);
+        return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+      }
+      if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
+        return setPrompt("ageMinimum");
+      }
+      if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
+        return setPrompt("ageMaximum");
+      }
+    }
+    return undefined;
+  };
+
+  const handleClientRegister = async () => {
+    const jointInfo =
+      accountType === "Individual"
+        ? undefined
+        : {
+            dateOfBirth: jointHolder?.dateOfBirth!,
+            id: jointHolder?.id!,
+            idType: jointIdType,
+            name: jointHolder?.name!,
+          };
+    const req: IClientRegisterRequest = {
+      agentId: agent?.id!,
+      accountType: accountType,
+      principalHolder: {
+        dateOfBirth: principalHolder?.dateOfBirth!,
+        id: principalHolder?.id!,
+        idType: principalIdType,
+        name: principalHolder?.name!,
+      },
+      jointHolder: jointInfo,
+    };
+    const client: IClientRegisterResponse = await clientRegister(req);
+    if (client !== undefined) {
+      const { data, error } = client;
+      if (error === null && data !== null) {
+        const moreJointInfo =
+          data.result.jointHolder !== undefined && data.result.jointHolder !== null
+            ? { dateOfBirth: data.result.jointHolder.dateOfBirth, clientId: data.result.jointHolder.clientId }
+            : {};
+        setErrorMessage(undefined);
+        addClientDetails({
+          ...details,
+          principalHolder: {
+            ...principalHolder,
+            dateOfBirth: data.result.principalHolder.dateOfBirth,
+            clientId: data.result.principalHolder.clientId,
+          },
+          jointHolder: { ...jointHolder, ...moreJointInfo },
+        });
+        return setRegistered(true);
+      }
+      setErrorMessage(error?.message);
+    }
+    return undefined;
+  };
+
+  const handleContinue = () => {
+    if (prompt !== undefined) {
+      return handleReset();
+    }
+    if (registered === true) {
+      return handleNavigation();
+    }
+
+    if (clientType === "NTB") {
+      if (accountType === "Joint" && holderToFill === "principalHolder") {
+        return setHolderToFill("jointHolder");
+      }
+      return handleClientRegister();
+    }
+    return handleCheckClient();
+  };
+
+  const modalContainer: ViewStyle = {
+    backgroundColor: colorWhite._4,
+    borderRadius: sw5,
+    width: sw565,
+  };
+
+  const buttonContainer: ViewStyle = {
+    ...flexRowCC,
+    ...px(sw56),
+    backgroundColor: colorWhite._2,
+    borderBottomLeftRadius: sw10,
+    borderBottomRightRadius: sw10,
+    height: sh96,
+  };
+
+  return (
+    <BasicModal visible={visible}>
+      <KeyboardAwareScrollView bounces={false} contentContainerStyle={flexGrow}>
+        <View style={{ ...centerHV, ...fullHW }}>
+          <View style={modalContainer}>
+            {prompt !== undefined ? (
+              <NewSalesPrompt id={id!} idType={principalIdType} name={name!} prompt={prompt} />
+            ) : (
+              <View style={px(sw56)}>
+                <CustomSpacer space={registered === true ? sh56 : sh40} />
+                {registered === false ? (
+                  <Fragment>
+                    <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
+                    <NewSalesDetails
+                      accountType={accountType}
+                      clientType={clientType}
+                      errorMessage={errorMessage}
+                      holderToFill={holderToFill}
+                      clientInfo={details![holderToFill]!}
+                      setClientInfo={setClientInfo}
+                      setAccountType={setAccountType}
+                    />
+                  </Fragment>
+                ) : (
+                  <NewSalesSummary accountType={accountType} jointHolder={jointHolder} principalHolder={principalHolder!} />
+                )}
+                <CustomSpacer space={sh56} />
+              </View>
+            )}
+            <ActionButtons
+              buttonContainerStyle={buttonContainer}
+              cancelButtonStyle={{ width: sw218 }}
+              continueButtonStyle={{ width: sw218 }}
+              continueDisabled={continueDisabled}
+              handleCancel={handleCancel}
+              handleContinue={handleContinue}
+              labelContinue={BUTTON_LABEL}
+            />
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+    </BasicModal>
+  );
+};
+
+export const NewSales = connect(ClientMapStateToProps, ClientMapDispatchToProps)(NewSalesComponent);

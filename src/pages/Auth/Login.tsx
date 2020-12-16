@@ -2,17 +2,17 @@ import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, useState } from "react";
 import { ActivityIndicator, Keyboard, View } from "react-native";
+import DeviceInfo from "react-native-device-info";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { BasicModal, Prompt } from "../../components";
 import { Language } from "../../constants";
-import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR, ERROR_CODE } from "../../data/dictionary";
+import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
 import { updateStorageData } from "../../integrations";
-import { SAMPLE_AGENT } from "../../mocks";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { centerHV, colorWhite, fullHeight } from "../../styles";
+import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
 import { Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails } from "./Details";
 
@@ -43,30 +43,28 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
     setLoading(false);
     setLockPrompt(false);
   };
-
   const handleLogin = async () => {
-    try {
-      Keyboard.dismiss();
-      setLockPrompt(false);
-      setLoading(true);
-      setErrorMessage(undefined);
-      const credentials = await Auth.Credentials.get();
-      const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
-      const response: ILoginResponse = await login(
-        { username: inputNRIC, password: encryptedPassword },
-        { encryptionKey: credentials.sessionToken },
-      );
-      if (response === undefined) {
-        // TODO temporary
-        setLoading(false);
-        return;
-      }
+    // TODO deviceToken is only available for real devices
+    const uniqueId = DeviceInfo.getUniqueId();
+    Keyboard.dismiss();
+    setLockPrompt(false);
+    setLoading(true);
+    setErrorMessage(undefined);
+    const credentials = await Auth.Credentials.get();
+    const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
+    setLoading(true);
+    const response: ILoginResponse = await login(
+      { username: inputNRIC, password: encryptedPassword },
+      { deviceToken: uniqueId, encryptionKey: credentials.sessionToken },
+    );
+    if (response !== undefined) {
       const { data, error } = response;
       if (error === null) {
         if (data !== null) {
+          const { name, licenseCode, licenseType, email, agentId } = data.result;
           await Auth.signIn(inputNRIC, inputPassword);
           addGlobal({
-            agent: { ...SAMPLE_AGENT, email: data.result.email, licenseCode: data.result.licenseCode },
+            agent: { name: name, email: email, licenseCode: licenseCode, licenseType: licenseType, id: agentId },
             config: {
               identityId: data.result.identityId,
               secretAccessKey: data.result.secretAccessKey,
@@ -74,8 +72,8 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
               accessKeyId: data.result.accessKeyId,
             },
           });
-          await updateStorageData("visited", true);
           setLoading(false);
+          await updateStorageData("visited", true);
           navigation.dispatch(
             CommonActions.reset({
               index: 0,
@@ -92,13 +90,8 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
         setErrorMessage(error.message);
         setLoading(false);
       }
-    } catch (error) {
-      // TODO temporary
-      // eslint-disable-next-line no-console
-      console.log("Error in login line 91 at Login.tsx", error);
-      setErrorMessage(ERROR.LOGIN_INVALID);
-      setLoading(false);
     }
+    return undefined;
   };
 
   const handleVerifyOTP = async () => {
@@ -178,13 +171,15 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
       <BasicModal visible={loading}>
         <Fragment>
           {lockPrompt ? (
-            <Prompt
-              labelContinue={LOGIN.BUTTON_ENTER}
-              handleContinue={handleEnterOTP}
-              illustration={LocalAssets.illustration.login_error}
-              label={LOGIN.LABEL_LOCKED_ACCOUNT}
-              title={LOGIN.TITLE_LOCKED_ACCOUNT}
-            />
+            <View style={{ ...centerHV, ...fullHW }}>
+              <Prompt
+                labelContinue={LOGIN.BUTTON_ENTER}
+                handleContinue={handleEnterOTP}
+                illustration={LocalAssets.illustration.login_error}
+                label={LOGIN.LABEL_LOCKED_ACCOUNT}
+                title={LOGIN.TITLE_LOCKED_ACCOUNT}
+              />
+            </View>
           ) : (
             <View style={{ ...fullHeight, ...centerHV }}>
               <ActivityIndicator color={colorWhite._1} size="small" />

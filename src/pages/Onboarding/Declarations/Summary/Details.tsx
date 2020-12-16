@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from "react";
-import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useState } from "react";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CardWrap, CustomFlexSpacer, CustomSpacer, LabeledTitleProps } from "../../../../components";
+import { AccountHeader, CardWrap, CustomFlexSpacer, CustomSpacer, FileViewer, LabeledTitleProps } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
@@ -64,6 +64,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   name,
   summary,
 }: DeclarationDetailsProps) => {
+  const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
   const handleEditFatca = () => {
     handleNextStep("FATCADeclaration");
   };
@@ -78,7 +79,11 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   const { fatca, fea, crs } = summary;
 
   const handleView = () => {
-    Alert.alert("View picture");
+    setViewFile(fatca!.certificate);
+  };
+
+  const handleCloseViewer = () => {
+    setViewFile(undefined);
   };
 
   const isTaxResident = crs!.taxResident! === 0;
@@ -165,32 +170,37 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   const headerTitle = accountHolder === "Principal" ? DECLARATION_SUMMARY.TITLE_PRINCIPAL : DECLARATION_SUMMARY.TITLE_JOINT;
 
   return (
-    <View style={px(sw24)}>
-      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
-        {accountType === "Individual" ? (
-          <View style={headerStyle}>
-            <Text style={fs24BoldBlack2}>{name}</Text>
-            <CustomFlexSpacer />
-            <Text style={fs16RegBlack2}>{headerTitle}</Text>
+    <Fragment>
+      <View style={px(sw24)}>
+        <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
+          {accountType === "Individual" ? (
+            <View style={headerStyle}>
+              <Text style={fs24BoldBlack2}>{name}</Text>
+              <CustomFlexSpacer />
+              <Text style={fs16RegBlack2}>{headerTitle}</Text>
+            </View>
+          ) : (
+            <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />
+          )}
+          <View style={borderBottomBlack21}>
+            <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
+            <CardWrap data={fatcaSummary} />
           </View>
-        ) : (
-          <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />
-        )}
-        <View style={borderBottomBlack21}>
-          <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
-          <CardWrap data={fatcaSummary} />
-        </View>
-        <View>
-          <TitleIcon onPress={handleEditCrs} title={DECLARATION_SUMMARY.TITLE_CRS} />
-          <CardWrap data={crsSummary} />
-        </View>
-        {feaSummary.length !== 0 ? (
           <View>
-            <TitleIcon onPress={handleEditFea} title={DECLARATION_SUMMARY.TITLE_FEA} />
-            <CardWrap data={feaSummary} />
+            <TitleIcon onPress={handleEditCrs} title={DECLARATION_SUMMARY.TITLE_CRS} />
+            <CardWrap data={crsSummary} />
           </View>
-        ) : null}
+          {feaSummary.length !== 0 ? (
+            <View>
+              <TitleIcon onPress={handleEditFea} title={DECLARATION_SUMMARY.TITLE_FEA} />
+              <CardWrap data={feaSummary} />
+            </View>
+          ) : null}
+        </View>
       </View>
-    </View>
+      {viewFile !== undefined ? (
+        <FileViewer handleClose={handleCloseViewer} resourceType="file" value={viewFile} visible={viewFile !== undefined} />
+      ) : null}
+    </Fragment>
   );
 };

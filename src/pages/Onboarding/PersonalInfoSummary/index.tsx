@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { Joint } from "./Joint";
 import { Principal } from "./Principal";
@@ -13,12 +13,17 @@ interface PersonalInfoSummaryProps extends PersonalInfoStoreProps, OnboardingCon
 
 const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> = ({
   accountType,
+  finishedSteps,
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
+  updateFinishedSteps,
 }: PersonalInfoSummaryProps) => {
   const handleContinue = () => {
     handleNextStep(ONBOARDING_ROUTES.FATCADeclaration);
+    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    updatedSteps.push(ONBOARDING_KEYS.PersonalInformation);
+    updateFinishedSteps(updatedSteps);
   };
 
   return (

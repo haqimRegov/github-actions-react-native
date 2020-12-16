@@ -238,7 +238,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
             setShowSignPdf(false);
           }
         }
-      }, 1000);
+      }, 500);
     } else {
       setShowSignPdf(true);
     }
@@ -273,7 +273,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
       } else {
         setTimeout(() => {
           setShowSignPdf(true);
-        }, 1000);
+        }, 500);
       }
     }
   };
@@ -326,7 +326,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
       setTimeout(() => {
         calculatePosition();
         setShowSignPdf(true);
-      }, 1000);
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
@@ -335,7 +335,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
     if (scrollRef !== null && completed === true) {
       setTimeout(() => {
         scrollRef.scrollToEnd();
-      }, 1000);
+      }, 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completed]);

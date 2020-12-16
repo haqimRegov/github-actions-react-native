@@ -1,59 +1,82 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { SafeAreaPage, SelectionBanner } from "../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { ConfirmationModal, SelectionBanner } from "../../../components";
+import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
 import { RNShareApi } from "../../../integrations";
-import { SAMPLE_PDF_1, SAMPLE_PRODUCTS_1 } from "../../../mocks";
-import { SelectedFundMapDispatchToProps, SelectedFundMapStateToProps, SelectedFundStoreProps } from "../../../store";
-import { flexChild, flexCol, fs16SemiBoldBlack2 } from "../../../styles";
+import { SAMPLE_PDF_1 } from "../../../mocks";
+import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
+import { flexChild, flexCol, fs16BoldBlack2, fs16SemiBoldBlack2 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
 
-const { INVESTMENT } = Language.PAGE;
+const { INVESTMENT, ONBOARDING } = Language.PAGE;
 
-interface ProductsProps extends SelectedFundStoreProps, OnboardingContentProps {}
+interface ProductsProps extends ProductsStoreProps, OnboardingContentProps {}
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
-  addFilters,
   addInvestmentDetails,
   addPersonalInfo,
   addSelectedFund,
-  filters,
+  addViewFund,
   finishedSteps,
-  handleCancelOnboarding,
   handleNextStep,
   investmentDetails,
+  resetProducts,
   selectedFunds,
-  setFinishedSteps,
+  updateFinishedSteps,
+  viewFund,
 }: ProductsProps) => {
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
-  const [viewFund, setViewFund] = useState<IFund | undefined>(undefined);
+  const [cancelProduct, setCancelProduct] = useState<boolean>(false);
+  const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
 
-  const [productList, setProductList] = useState<IFund[]>([]);
+  // const [productList, setProductList] = useState<IFund[]>([]);
 
-  const totalMinimumAmount: number =
-    selectedFunds.length !== 0
-      ? selectedFunds
-          .map((product: IFund) => product.newSalesAmount.cash?.minimum!)
-          .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
-      : 0;
+  // const totalMinimumAmount: number =
+  //   selectedFunds.length !== 0
+  //     ? selectedFunds
+  //         .map((product: IFund) => product.newSalesAmount.cash?.minimum!)
+  //         .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
+  //     : 0;
 
-  const LABEL_FUND = selectedFunds.length === 1 ? INVESTMENT.LABEL_FUND_SELECTION : INVESTMENT.LABEL_FUNDS_SELECTION;
+  const handleBackToAssessment = () => {
+    setCancelProduct(false);
+    handleNextStep("RiskAssessment");
+    resetProducts();
+  };
+
+  const handleCancel = () => {
+    setCancelProduct(!cancelProduct);
+  };
 
   const handleStartInvesting = () => {
-    const initialStateArray: IFundSales[] = [];
-    selectedFunds.map((item: IFund) => {
-      const newState: IFundSales = {
-        fundPaymentMethod: "Cash",
-        investmentAmount: `${item.newSalesAmount.cash?.minimum}`,
-        salesCharge: item.salesCharge.cash?.minimum!,
-        scheduledInvestment: false,
-        fund: { ...item },
+    const initialStateArray: IProductSales[] = [];
+    selectedFunds.map((item: IProduct) => {
+      let newMasterClassList: IProductClasses = {};
+      item.masterList.forEach((list: IProductMasterList) => {
+        const classIndex = newMasterClassList !== {} ? Object.keys(newMasterClassList).indexOf(list.class) : -1;
+        if (classIndex === -1) {
+          newMasterClassList = { ...newMasterClassList, [list.class]: [list] };
+        } else {
+          newMasterClassList[list.class].push(list);
+        }
+      });
+      const newState: IProductSales = {
+        investment: {
+          fundPaymentMethod: "Cash",
+          investmentAmount: "",
+          investmentSalesCharge: "",
+          fundCurrency: item.masterList[0].currency,
+          fundClass: item.masterList[0].class,
+          scheduledInvestment: false,
+        },
+        fundDetails: { ...item },
+        masterClassList: newMasterClassList,
       };
 
       return initialStateArray.push(newState);
@@ -62,23 +85,23 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     setPage(1);
   };
 
-  const handleCancel = () => {
+  const handleBackToListing = () => {
     return page === 1 ? setPage(0) : addSelectedFund([]);
   };
 
   const handleBack = () => {
-    setViewFund(undefined);
+    addViewFund(undefined);
   };
 
   const handleConfirmIdentity = () => {
-    const isEpfInvestment = investmentDetails!.findIndex((investment) => investment.fundPaymentMethod === "EPF");
+    const isEpfInvestment = investmentDetails!.findIndex(({ investment }) => investment.fundPaymentMethod === "EPF");
     if (isEpfInvestment !== -1) {
       addPersonalInfo({ epfInvestment: true });
     }
     handleNextStep(ONBOARDING_ROUTES.EmailVerification);
-    const updatedSteps: TypeOnboardingRoute[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_ROUTES.ProductRecommendation);
-    setFinishedSteps(updatedSteps);
+    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    updatedSteps.push(ONBOARDING_KEYS.Products);
+    updateFinishedSteps(updatedSteps);
   };
 
   const handleShareDocuments = async () => {
@@ -92,19 +115,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   let screen = {
-    content: (
-      <ProductList
-        handleCancelOnboarding={handleCancelOnboarding!}
-        handleShareDocuments={handleShareDocuments}
-        productList={productList}
-        selectedFilter={filters}
-        selectedFunds={selectedFunds}
-        setSelectedFunds={addSelectedFund}
-        setViewFund={setViewFund}
-        shareSuccess={shareSuccess}
-        setSelectedFilter={addFilters}
-      />
-    ),
+    content: <ProductList handleCancelProducts={handleCancel} handleShareDocuments={handleShareDocuments} />,
+    onPressCancel: handleCancel,
     onPressSubmit: handleStartInvesting,
     labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
   };
@@ -122,6 +134,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           setSelectedFund={addSelectedFund}
         />
       ),
+      onPressCancel: handleBackToListing,
       onPressSubmit: handleConfirmIdentity,
       labelSubmit: INVESTMENT.BUTTON_CONFIRM,
     };
@@ -140,32 +153,87 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     setShareSuccess(false);
   }, [shareSuccess]);
 
+  let utCount = 0;
+  let prsCount = 0;
+  let ampCount = 0;
+  selectedFunds.forEach((fund: IProduct) => {
+    if (fund.fundType === "UT") {
+      utCount += 1;
+    } else if (fund.fundType === "PRS") {
+      prsCount += 1;
+    } else if (fund.fundType === "AMP") {
+      ampCount += 1;
+    }
+  });
+
+  const utSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ", " : "";
+  const prsSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
+  const prsPrefix = prsCount > 0 && utCount > 0 && ampCount === 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
+  const ampPrefix =
+    (ampCount > 0 && utCount > 0 && prsCount === 0) || (ampCount > 0 && prsCount > 0 && utCount === 0) ? ` ${INVESTMENT.LABEL_AND} ` : "";
+  const utLabel = utCount > 0 ? `${utCount} ${INVESTMENT.LABEL_UT}` : "";
+  const prsLabel = prsCount > 0 ? `${prsCount} ${INVESTMENT.LABEL_PRS}` : "";
+  const ampLabel = ampCount > 0 ? `${ampCount} ${INVESTMENT.LABEL_AMP}` : "";
+
+  const bannerText = `${utLabel}${utSuffix}${prsPrefix}${prsLabel}${prsSuffix}${ampPrefix}${ampLabel} ${INVESTMENT.LABEL_SELECTED}`;
+
+  const disableContinue = investmentDetails?.find(({ investment }) => {
+    return (
+      investment.investmentAmount === "" ||
+      investment.investmentSalesCharge === "" ||
+      (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
+      (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
+      investment.amountError !== undefined ||
+      investment.scheduledAmountError !== undefined
+    );
+  });
+
+  const handleKeyboardShow = () => {
+    setKeyboardIsShowing(true);
+  };
+
+  const handleKeyboardHide = () => {
+    setKeyboardIsShowing(false);
+  };
+
   useEffect(() => {
-    // TODO integration
-    setProductList(SAMPLE_PRODUCTS_1);
+    Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
+    Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
+    return () => {
+      Keyboard.removeListener("keyboardWillHide", handleKeyboardHide);
+      Keyboard.removeListener("keyboardWillShow", handleKeyboardShow);
+    };
   }, []);
 
-  const bannerText = `${INVESTMENT.LABEL_FUND_SELECTION_AMOUNT}${totalMinimumAmount} `;
-
   return (
-    <SafeAreaPage>
+    <Fragment>
       <View style={flexChild}>
         {screen.content}
-        {fixedBottomShow === true && selectedFunds.length !== 0 && viewFund === undefined ? (
+        {fixedBottomShow === true && selectedFunds.length !== 0 && viewFund === undefined && keyboardIsShowing === false ? (
           <View style={flexCol}>
             <SelectionBanner
               bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
-              cancelOnPress={handleCancel}
+              cancelOnPress={screen.onPressCancel}
+              continueDisabled={disableContinue !== undefined && page === 1}
               labelCancel={INVESTMENT.BUTTON_CANCEL}
               labelSubmit={screen.labelSubmit}
               submitOnPress={screen.onPressSubmit}
-              label={`${selectedFunds.length} ${LABEL_FUND}`}
+              label={INVESTMENT.LABEL_FUND_SUMMARY}
             />
           </View>
         ) : null}
       </View>
-    </SafeAreaPage>
+      <ConfirmationModal
+        handleCancel={handleCancel}
+        handleContinue={handleBackToAssessment}
+        labelCancel={ONBOARDING.BUTTON_NO}
+        labelContinue={ONBOARDING.BUTTON_YES}
+        title={ONBOARDING.CANCEL_PRODUCT_TITLE}
+        visible={cancelProduct}>
+        <Text style={fs16BoldBlack2}>{ONBOARDING.CANCEL_PRODUCT_LABEL}</Text>
+      </ConfirmationModal>
+    </Fragment>
   );
 };
 
-export const Products = connect(SelectedFundMapStateToProps, SelectedFundMapDispatchToProps)(ProductComponent);
+export const Products = connect(ProductsMapStateToProps, ProductsMapDispatchToProps)(ProductComponent);

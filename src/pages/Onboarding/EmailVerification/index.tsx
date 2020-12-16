@@ -2,63 +2,90 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../assets/LocalAssets";
-import { PromptModal } from "../../../components";
-import { Language } from "../../../constants/language";
+import { DATE_OF_BIRTH_FORMAT } from "../../../constants";
+import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { EmailOTP } from "./EmailOTP";
 import { Verification } from "./Verification";
-
-const { EMAIL_VERIFICATION } = Language.PAGE;
 
 interface EmailVerificationProps extends OnboardingContentProps, PersonalInfoStoreProps {}
 
 const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   accountType,
   addPersonalInfo,
+  details,
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
+  setLoading,
 }: EmailVerificationProps) => {
   const [page, setPage] = useState<"verification" | "otp">("verification");
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [principalOtp, setPrincipalOtp] = useState<string>("");
+  const [jointOtp, setJointOtp] = useState<string>("");
 
-  const handleNext = () => {
+  const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
+  const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
+  const principalClientId = details?.principalHolder?.clientId!;
+
+  const handleNavigate = () => {
     handleNextStep("IdentityVerification");
   };
 
-  const handleContinue = () => {
-    if (page === "otp") {
-      // TODO integration
-      setShowModal(true);
-      setTimeout(() => {
-        setShowModal(false);
-        handleNext();
-      }, 5000);
-    } else {
-      setPage("otp");
+  const handleEmailVerification = async () => {
+    const jointRequest = accountType === "Joint" ? { email: inputJointEmail } : undefined;
+    const req = {
+      clientId: principalClientId,
+      principalHolder: { email: inputPrincipalEmail },
+      jointHolder: jointRequest,
+    };
+    setLoading(true);
+    const response: IEmailVerificationResponse = await emailVerification(req);
+    setLoading(false);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        if (data.result.status === true) {
+          setPage("otp");
+        }
+      }
     }
   };
 
-  const jointEmailCheck = accountType === "Joint" && moment().diff(personalInfo.joint?.personalDetails!.dateOfBirth, "years") >= 18;
-  const props = {
-    accountType,
-    handleCancel: handleCancelOnboarding,
-    handleContinue,
-    isJointEmail: jointEmailCheck,
-    personalInfo,
+  const handleContinue = () => {
+    handleEmailVerification();
   };
+
+  const jointEmailCheck =
+    accountType === "Joint" && moment().diff(moment(details?.jointHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT), "years") >= 18;
 
   return (
     <Fragment>
-      {page === "verification" ? <Verification {...props} addPersonalInfo={addPersonalInfo} /> : <EmailOTP {...props} setPage={setPage} />}
-      <PromptModal
-        handleContinue={handleNext}
-        illustration={LocalAssets.illustration.email_verified}
-        label={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED}
-        title={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED_TITLE}
-        visible={showModal}
-      />
+      {page === "verification" ? (
+        <Verification
+          accountType={accountType}
+          addPersonalInfo={addPersonalInfo}
+          jointEmailCheck={jointEmailCheck}
+          handleCancel={handleCancelOnboarding}
+          handleContinue={handleContinue}
+          personalInfo={personalInfo}
+        />
+      ) : (
+        <EmailOTP
+          accountType={accountType}
+          handleCancel={handleCancelOnboarding}
+          handleNavigate={handleNavigate}
+          handleResend={handleEmailVerification}
+          jointEmailCheck={jointEmailCheck}
+          jointEmail={inputJointEmail}
+          jointOtp={jointOtp}
+          principalClientId={principalClientId}
+          principalEmail={inputPrincipalEmail}
+          principalOtp={principalOtp}
+          setJointOtp={setJointOtp}
+          setPage={setPage}
+          setPrincipalOtp={setPrincipalOtp}
+        />
+      )}
     </Fragment>
   );
 };

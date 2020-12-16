@@ -9,6 +9,7 @@ export interface CustomTooltipProps {
   arrowSize?: TooltipSize;
   arrowStyle?: ViewStyle;
   children?: ReactNode;
+  color?: string;
   content: ReactElement;
   contentStyle?: ViewStyle;
   insets?: Object;
@@ -28,6 +29,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   arrowSize,
   arrowStyle,
   children,
+  color,
   content,
   contentStyle,
   insets,
@@ -64,15 +66,17 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   };
 
   const visible = isVisible !== undefined ? isVisible : popup;
+  const defaultColor = color !== undefined ? color : colorBlack._2;
   const defaultContentStyle: ViewStyle = {
     ...px(sw16),
     ...py(sh16),
-    backgroundColor: colorBlack._2,
+    backgroundColor: defaultColor,
     borderRadius: sw8,
     width: sw208,
     ...contentStyle,
   };
-  const defaultArrowStyle: ViewStyle = { borderTopColor: colorBlack._2, ...arrowStyle };
+
+  const defaultArrowStyle: ViewStyle = { borderTopColor: defaultColor, ...arrowStyle };
   const defaultInsets = { left: 0, right: 0, top: 0, bottom: 0, ...insets };
   const defaultOverlayColor = overlayColor !== undefined ? overlayColor : colorTransparent;
   const defaultPlacement = placement !== undefined ? placement : "right";

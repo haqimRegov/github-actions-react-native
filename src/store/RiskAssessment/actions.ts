@@ -13,7 +13,7 @@ export const resetQuestionnaire = () => {
 };
 
 export const resetRiskAssessment = () => {
-  return typedAction("riskAssessment/RESET_SCORE");
+  return typedAction("riskAssessment/RESET_RISK_ASSESSMENT");
 };
 
 export type RiskAssessmentAction = ReturnType<

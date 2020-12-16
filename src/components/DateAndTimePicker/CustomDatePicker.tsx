@@ -28,6 +28,7 @@ const { DATE_PICKER } = Language.PAGE;
 
 interface CustomDatePickerProps {
   buttonText?: string;
+  disabled?: boolean;
   datePickerStyle?: ViewStyle;
   dropdownStyle?: ViewStyle;
   initialDate?: Date;
@@ -44,6 +45,7 @@ interface CustomDatePickerProps {
 export const CustomDatePicker = ({
   buttonText,
   datePickerStyle,
+  disabled,
   dropdownStyle,
   mode,
   initialDate,
@@ -108,7 +110,7 @@ export const CustomDatePicker = ({
   };
 
   return (
-    <View style={flexRow}>
+    <View onStartShouldSetResponderCapture={() => disabled === true} style={flexRow}>
       <CollapsibleDropdown
         baseDropdownStyle={baseDropdownStyle}
         dummyBaseStyle={dummyInputStyle}
@@ -133,6 +135,7 @@ export const CustomDatePicker = ({
           return (
             <View style={containerStyle}>
               <CustomTextInput
+                disabled={disabled}
                 editable={false}
                 placeholder={placeholder || defaultPlaceholder}
                 rightIcon={icon}

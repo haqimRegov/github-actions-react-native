@@ -49,7 +49,9 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
       if (multilineFocus === false) {
         setTimeout(() => {
           textInputDummy.focus();
-          setMultilineFocus(true);
+          if (multilineFocus === false) {
+            setMultilineFocus(true);
+          }
         }, 350);
       }
     }

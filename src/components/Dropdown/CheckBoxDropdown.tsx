@@ -18,10 +18,11 @@ import {
   fs12BoldBlack2,
   fs12SemiBoldBlue2,
   fs12SemiBoldWhite1,
-  fs16BoldBlack2,
+  fs16RegBlack2,
   noBorderBottom,
   px,
   py,
+  sh192,
   sh24,
   sh38,
   sh4,
@@ -86,7 +87,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
   };
 
   const defaultLabelStyle: TextStyle = { ...fs12SemiBoldWhite1, ...labelStyle };
-  const defaultPlaceholderStyle: TextStyle = { ...fs16BoldBlack2, color: colorGray._7, ...placeholderStyle };
+  const defaultPlaceholderStyle: TextStyle = { ...fs16RegBlack2, ...placeholderStyle };
   const valueStyle = value.length === 0 || value === undefined ? defaultPlaceholderStyle : defaultLabelStyle;
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER_MANY;
@@ -122,6 +123,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
         <CollapsibleDropdown
           baseDropdownStyle={baseDropdownStyle}
           dummyBaseStyle={dummyStyle}
+          flatlistStyle={{ maxHeight: sh192 }}
           handleReset={handleReset}
           RenderBase={({ collapse, dummyBaseStyle }) => {
             const inputBorder: ViewStyle = collapse === false ? { ...noBorderBottom, borderBottomColor: colorTransparent } : {};
@@ -201,7 +203,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                   )}
                 </View>
                 <View>
-                  {showMore.active === true ? (
+                  {showMore.active === true && showMore.number > 0 ? (
                     <Fragment>
                       <CustomSpacer isHorizontal={true} space={sw4} />
                       <View style={{ ...defaultTagStyle, backgroundColor: colorGray._3 }}>

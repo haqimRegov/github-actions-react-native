@@ -6,20 +6,6 @@ import { CustomSpacer } from "../Views/Spacer";
 import { AdvanceTableRow } from "./AdvanceTableRow";
 import { TableHeader } from "./TableHeader";
 
-interface AdvanceTableProps {
-  activeAccordion?: number[];
-  columns: ITableColumn[];
-  data: ITableData[];
-  handleRowNavigation?: (item: ITableData) => void;
-  onRowSelect?: (record: ITableData[]) => void;
-  RenderAccordion?: (record: ITableData, index: number) => JSX.Element;
-  RenderCustomItem?: (customItem: ITableCustomItem) => JSX.Element;
-  RenderOptions?: (props: ITableOptions) => JSX.Element;
-  rowSelection?: ITableData[];
-  rowSelectionLabel?: string;
-  spaceToHeader?: number;
-}
-
 export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   activeAccordion,
   columns,
@@ -27,15 +13,22 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   handleRowNavigation,
   onRowSelect,
   RenderAccordion,
+  RenderCustomHeader,
   RenderCustomItem,
   RenderOptions,
   rowSelection,
-  rowSelectionLabel,
+  RowSelectionItem,
+  rowSelectionKey,
   spaceToHeader,
 }: AdvanceTableProps) => {
   return (
     <View>
-      <TableHeader columns={columns} rowSelectionLabel={rowSelectionLabel} withActions={RenderOptions !== undefined} />
+      <TableHeader
+        columns={columns}
+        RenderCustomHeader={RenderCustomHeader}
+        RowSelectionItem={RowSelectionItem}
+        withActions={RenderOptions !== undefined}
+      />
       <CustomSpacer space={spaceToHeader || sh8} />
       {data.map((row: ITableData, index: number) => {
         return (
@@ -52,6 +45,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
             RenderCustomItem={RenderCustomItem}
             RenderOptions={RenderOptions}
             rowSelection={rowSelection}
+            rowSelectionKey={rowSelectionKey}
           />
         );
       })}

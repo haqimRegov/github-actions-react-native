@@ -1,12 +1,12 @@
 import React, { Fragment, FunctionComponent, useEffect } from "react";
 import { Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage } from "../../../../components";
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
   centerVertical,
-  colorBlack,
+  colorBlue,
   colorWhite,
   flexChild,
   flexGrow,
@@ -28,12 +28,12 @@ import { Investment } from "./Investment";
 const { INVESTMENT } = Language.PAGE;
 
 export interface ProductConfirmationProps {
-  investmentDetails: IFundSales[];
-  selectedFunds: IFund[];
+  investmentDetails: IProductSales[];
+  selectedFunds: IProduct[];
   setFixedBottomShow: (toggle: boolean) => void;
-  setInvestmentDetails: (fundSales: IFundSales[]) => void;
+  setInvestmentDetails: (fundSales: IProductSales[]) => void;
   setPage: (page: number) => void;
-  setSelectedFund: (fund: IFund[]) => void;
+  setSelectedFund: (fund: IProduct[]) => void;
 }
 
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
@@ -62,75 +62,78 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
   }, [setFixedBottomShow]);
 
   return (
-    <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
-      <View style={px(sw24)}>
-        <CustomSpacer space={sh32} />
-        <LabeledTitle
-          label={INVESTMENT.HEADING}
-          labelStyle={fs24BoldBlack2}
-          spaceToLabel={sh8}
-          title={INVESTMENT.SUBHEADING}
-          titleStyle={fs16SemiBoldBlack2}
-        />
-        <CustomSpacer space={sh24} />
-        {investmentDetails!.map((product: IFundSales, index: number) => {
-          const newData = [...investmentDetails!];
+    <SafeAreaPage>
+      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
+        <View style={px(sw24)}>
+          <CustomSpacer space={sh32} />
+          <LabeledTitle
+            label={INVESTMENT.HEADING}
+            labelStyle={fs24BoldBlack2}
+            spaceToLabel={sh8}
+            title={INVESTMENT.SUBHEADING}
+            titleStyle={fs16SemiBoldBlack2}
+          />
+          <CustomSpacer space={sh24} />
+          {investmentDetails!.map((product: IProductSales, index: number) => {
+            const { fundType, fundName, issuingHouse } = product.fundDetails;
+            const newData = [...investmentDetails!];
 
-          const handleDelete = () => {
-            const updatedProducts = [...selectedFunds];
-            updatedProducts.splice(index, 1);
-            if (updatedProducts.length === 0) {
-              setPage(0);
-            }
-            const updatedDetails = [...investmentDetails!];
-            updatedDetails.splice(index, 1);
-            if (updatedDetails.length === 0) {
-              setPage(0);
-            }
+            const handleDelete = () => {
+              const updatedProducts = [...selectedFunds];
+              updatedProducts.splice(index, 1);
+              if (updatedProducts.length === 0) {
+                setPage(0);
+              }
+              const updatedDetails = [...investmentDetails!];
+              updatedDetails.splice(index, 1);
+              if (updatedDetails.length === 0) {
+                setPage(0);
+              }
 
-            setInvestmentDetails(updatedDetails);
-            setSelectedFund(updatedProducts);
-          };
+              setInvestmentDetails(updatedDetails);
+              setSelectedFund(updatedProducts);
+            };
 
-          const updateData = (updatedData: IFundSales) => {
-            newData[index] = updatedData;
-            setInvestmentDetails(newData);
-          };
+            const updateData = (updatedData: IProductSales) => {
+              newData[index] = updatedData;
+              setInvestmentDetails(newData);
+            };
 
-          const container: ViewStyle = {
-            ...flexChild,
-            ...shadowBlue5,
-            backgroundColor: colorWhite._1,
-            borderRadius: sw8,
-          };
+            const container: ViewStyle = {
+              ...flexChild,
+              ...shadowBlue5,
+              backgroundColor: colorWhite._1,
+              borderRadius: sw8,
+            };
 
-          return (
-            <Fragment key={index}>
-              {index === 0 ? null : <CustomSpacer space={sh24} />}
-              <View style={container}>
-                <CustomSpacer space={sh24} />
-                <View style={px(sw24)}>
-                  <View style={{ ...centerVertical, ...flexRow }}>
-                    <Text style={fs10BoldBlack2}>{product.fund.fundCategory}</Text>
-                    <CustomFlexSpacer />
-                    <IcoMoon name="trash" color={colorBlack._1} onPress={handleDelete} size={sh32} />
+            return (
+              <Fragment key={index}>
+                {index === 0 ? null : <CustomSpacer space={sh24} />}
+                <View style={container}>
+                  <CustomSpacer space={sh24} />
+                  <View style={px(sw24)}>
+                    <View style={{ ...centerVertical, ...flexRow }}>
+                      <Text style={fs10BoldBlack2}>{fundType}</Text>
+                      <CustomFlexSpacer />
+                      <IcoMoon name="trash" color={colorBlue._2} onPress={handleDelete} size={sh32} />
+                    </View>
+                    <LabeledTitle
+                      label={fundName}
+                      labelStyle={fs24BoldBlack2}
+                      spaceToLabel={sh8}
+                      title={issuingHouse}
+                      titleStyle={fs16SemiBoldBlack2}
+                    />
                   </View>
-                  <LabeledTitle
-                    label={product.fund.name}
-                    labelStyle={fs24BoldBlack2}
-                    spaceToLabel={sh8}
-                    title={product.fund.issuer}
-                    titleStyle={fs16SemiBoldBlack2}
-                  />
+                  <CustomSpacer space={sh24} />
+                  <Investment data={product} setData={updateData} />
                 </View>
-                <CustomSpacer space={sh24} />
-                <Investment data={product} setData={updateData} />
-              </View>
-            </Fragment>
-          );
-        })}
-        <CustomSpacer space={sh176} />
-      </View>
-    </ScrollView>
+              </Fragment>
+            );
+          })}
+          <CustomSpacer space={sh176} />
+        </View>
+      </ScrollView>
+    </SafeAreaPage>
   );
 };

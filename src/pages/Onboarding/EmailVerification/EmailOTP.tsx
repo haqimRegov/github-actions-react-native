@@ -2,17 +2,16 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { ActionButtons, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, SafeAreaPage } from "../../../components";
+import { LocalAssets } from "../../../assets/LocalAssets";
+import { ActionButtons, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, PromptModal, SafeAreaPage } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH } from "../../../data/dictionary";
+import { DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, ERROR } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
+import { emailOtpVerification } from "../../../network-actions";
 import {
-  alignSelfCenter,
   colorWhite,
   flexGrow,
   flexRow,
-  fs12BoldBlack2,
-  fs16BoldBlack2,
   fs16SemiBoldBlack2,
   fs16SemiBoldBlue1,
   fs24BoldBlack2,
@@ -25,42 +24,116 @@ import {
   sw20,
   sw24,
   sw4,
-  sw40,
 } from "../../../styles";
+import { isNumber } from "../../../utils";
 
 const { EMAIL_VERIFICATION } = Language.PAGE;
 declare interface EmailOTPProps {
   accountType: TypeAccountChoices;
   handleCancel?: () => void;
-  handleContinue: () => void;
-  isJointEmail: boolean;
-  personalInfo: IPersonalInfoState;
+  handleNavigate: () => void;
+  handleResend: () => void;
+  jointEmail: string;
+  jointEmailCheck: boolean;
+  jointOtp: string;
+  principalClientId: string;
+  principalEmail: string;
+  principalOtp: string;
+  setJointOtp: (value: string) => void;
   setPage: (page: "verification" | "otp") => void;
+  setPrincipalOtp: (value: string) => void;
 }
 
 export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
+  accountType,
   handleCancel,
-  handleContinue,
-  isJointEmail,
-  personalInfo,
+  handleNavigate,
+  handleResend,
+  jointEmail,
+  jointEmailCheck,
+  jointOtp,
+  principalClientId,
+  principalEmail,
+  principalOtp,
+  setJointOtp,
   setPage,
+  setPrincipalOtp,
 }: EmailOTPProps) => {
   const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
-  const [jointResendTimer, setJointResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
-  const [principalOtp, setPrincipalOtp] = useState<string>("");
-  const [jointOtp, setJointOtp] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
+  const [jointError, setJointError] = useState<string | undefined>(undefined);
 
-  const handleResend = () => {
-    setResendTimer(DICTIONARY_OTP_EXPIRY);
+  const validateOtp = (value: string) => {
+    if (isNumber(value) === false) {
+      return ERROR.LOGIN_INVALID_OTP;
+    }
+    return undefined;
   };
 
-  const handleJointResend = () => {
-    setJointResendTimer(11);
+  const checkPrincipalOtp = () => {
+    setPrincipalError(validateOtp(principalOtp));
+  };
+
+  const checkJointOtp = () => {
+    setJointError(validateOtp(jointOtp));
+  };
+
+  const handleVerifyOTP = async () => {
+    const jointRequest = accountType === "Joint" ? { email: jointEmail, code: jointOtp } : undefined;
+    const req = {
+      clientId: principalClientId,
+      principalHolder: { email: principalEmail, code: principalOtp },
+      jointHolder: jointRequest,
+    };
+    const response: IEmailOtpVerificationResponse = await emailOtpVerification(req);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        if (data.result.status === true) {
+          setShowModal(true);
+          setTimeout(() => {
+            if (showModal === true) {
+              setShowModal(false);
+            }
+            handleNavigate();
+          }, 5000);
+        }
+        return true;
+      }
+      if (error !== null) {
+        return setPrincipalError(error.message);
+      }
+    }
+    return true;
+  };
+
+  const handleResendOtp = () => {
+    handleResend();
+    setResendTimer(DICTIONARY_OTP_EXPIRY);
   };
 
   const handleBack = () => {
     setPage("verification");
   };
+
+  const resendMinutes = Math.floor(resendTimer / 60);
+  const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
+  const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
+  const disabled =
+    jointEmailCheck === false
+      ? principalOtp === "" || principalError !== undefined || validateOtp(principalOtp) !== undefined
+      : principalOtp === "" ||
+        principalOtp === "" ||
+        principalError !== undefined ||
+        jointError !== undefined ||
+        validateOtp(principalOtp) !== undefined ||
+        validateOtp(principalOtp) !== undefined;
+  const pincipalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
+  const otpLabel =
+    jointEmailCheck === true
+      ? `${EMAIL_VERIFICATION.LABEL_OTP_SENT_JOINT} ${principalEmail} & ${jointEmail}.`
+      : `${EMAIL_VERIFICATION.LABEL_OTP_SEND_TO} ${principalEmail}`;
 
   useEffect(() => {
     let otpTimer: number;
@@ -72,24 +145,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
     return () => clearInterval(otpTimer);
   }, [resendTimer]);
 
-  useEffect(() => {
-    let otpTimer: number;
-    if (jointResendTimer > 0) {
-      otpTimer = setInterval(() => {
-        setJointResendTimer(jointResendTimer - 1);
-      }, 1000);
-    }
-    return () => clearInterval(otpTimer);
-  }, [jointResendTimer]);
-
-  const resendMinutes = Math.floor(resendTimer / 60);
-  const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
-  const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
-  const jointResendMinutes = Math.floor(jointResendTimer / 60);
-  const jointResendSeconds = jointResendTimer % 60 === 0 ? 0 : jointResendTimer % 60;
-  const formattedJointResendSeconds = jointResendSeconds < 10 ? `0${jointResendSeconds}` : jointResendSeconds;
-  const disabled = isJointEmail === true ? principalOtp === "" || jointOtp === "" : principalOtp === "";
-
   return (
     <SafeAreaPage>
       <ScrollView
@@ -100,80 +155,70 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         <CustomSpacer space={sh56} />
         <View style={flexRow}>
           <CustomSpacer space={sw4} />
-          <View style={alignSelfCenter}>
+          <View>
             <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw20} />
-          <Text style={fs24BoldBlack2}>{EMAIL_VERIFICATION.HEADING}</Text>
-        </View>
-        <CustomSpacer space={sh8} />
-        <View style={px(sw40)}>
-          <View style={flexRow}>
-            <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_OTP_SEND_TO}</Text>
-            <CustomSpacer isHorizontal={true} space={sw4} />
-            <Text style={fs16BoldBlack2}>{personalInfo.principal?.contactDetails?.emailAddress}</Text>
+          <View>
+            <Text style={fs24BoldBlack2}>{EMAIL_VERIFICATION.HEADING}</Text>
+            <CustomSpacer space={sh8} />
+            <Text style={fs16SemiBoldBlack2}>{otpLabel}</Text>
+            <CustomSpacer space={sh24} />
+            <CustomTextInput
+              keyboardType="numeric"
+              error={principalError}
+              label={pincipalOtpLabel}
+              maxLength={DICTIONARY_OTP_LENGTH}
+              onBlur={checkPrincipalOtp}
+              onChangeText={setPrincipalOtp}
+              placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
+              value={principalOtp}
+            />
+            <CustomSpacer space={sh32} />
+            {jointEmailCheck === true ? (
+              <Fragment>
+                <CustomTextInput
+                  keyboardType="numeric"
+                  error={jointError}
+                  label={EMAIL_VERIFICATION.LABEL_OTP_JOINT}
+                  onBlur={checkJointOtp}
+                  maxLength={DICTIONARY_OTP_LENGTH}
+                  onChangeText={setJointOtp}
+                  placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
+                  value={jointOtp}
+                />
+                <CustomSpacer space={sh32} />
+              </Fragment>
+            ) : null}
+            <View style={flexRow}>
+              <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>
+              <CustomSpacer isHorizontal={true} space={sw4} />
+              {resendTimer <= 0 ? (
+                <LinkText onPress={handleResendOtp} style={fs16SemiBoldBlue1} text={EMAIL_VERIFICATION.LINK_RESEND} />
+              ) : (
+                <Text style={fs16SemiBoldBlack2}>{`${EMAIL_VERIFICATION.LABEL_RESEND_IN} ${resendMinutes}:${formattedResendSeconds}`}</Text>
+              )}
+            </View>
           </View>
-          <CustomSpacer space={sh24} />
-          <Text style={fs12BoldBlack2}>{EMAIL_VERIFICATION.LABEL_OTP}</Text>
-          <CustomTextInput
-            keyboardType="numeric"
-            maxLength={DICTIONARY_OTP_LENGTH}
-            onChangeText={setPrincipalOtp}
-            placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
-            value={principalOtp}
-          />
-          <CustomSpacer space={sh32} />
-          <View style={flexRow}>
-            <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>
-            <CustomSpacer isHorizontal={true} space={sw4} />
-            {resendTimer <= 0 ? (
-              <LinkText onPress={handleResend} style={fs16SemiBoldBlue1} text={EMAIL_VERIFICATION.LINK_RESEND} />
-            ) : (
-              <Text style={fs16SemiBoldBlack2}>{`${EMAIL_VERIFICATION.LABEL_RESEND_IN} ${resendMinutes}:${formattedResendSeconds}`}</Text>
-            )}
-          </View>
-          <CustomSpacer space={sh32} />
-          {isJointEmail ? (
-            <Fragment>
-              <View style={flexRow}>
-                <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_OTP_SEND_TO}</Text>
-                <CustomSpacer isHorizontal={true} space={sw4} />
-                <Text style={fs16BoldBlack2}>{personalInfo.joint?.contactDetails?.emailAddress}</Text>
-              </View>
-              <CustomSpacer space={sh24} />
-              <Text style={fs12BoldBlack2}>{EMAIL_VERIFICATION.LABEL_OTP}</Text>
-              <CustomTextInput
-                keyboardType="numeric"
-                maxLength={DICTIONARY_OTP_LENGTH}
-                onChangeText={setJointOtp}
-                placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
-                value={jointOtp}
-              />
-              <CustomSpacer space={sh32} />
-              <View style={flexRow}>
-                <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>
-                <CustomSpacer isHorizontal={true} space={sw4} />
-                {jointResendTimer <= 0 ? (
-                  <LinkText onPress={handleJointResend} style={fs16SemiBoldBlue1} text={EMAIL_VERIFICATION.LINK_RESEND} />
-                ) : (
-                  <Text
-                    style={
-                      fs16SemiBoldBlack2
-                    }>{`${EMAIL_VERIFICATION.LABEL_RESEND_IN} ${jointResendMinutes}:${formattedJointResendSeconds}`}</Text>
-                )}
-              </View>
-            </Fragment>
-          ) : null}
         </View>
+
         <CustomFlexSpacer />
+        <CustomSpacer space={sh56} />
         <ActionButtons
           continueDisabled={disabled}
           labelContinue={EMAIL_VERIFICATION.LABEL_VERIFY}
           handleCancel={handleCancel}
-          handleContinue={handleContinue}
+          handleContinue={handleVerifyOTP}
         />
         <CustomSpacer space={sh40} />
       </ScrollView>
+      <PromptModal
+        handleContinue={handleNavigate}
+        illustration={LocalAssets.illustration.email_verified}
+        label={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED}
+        title={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED_TITLE}
+        visible={showModal}
+      />
     </SafeAreaPage>
   );
 };

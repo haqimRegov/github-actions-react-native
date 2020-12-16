@@ -9,6 +9,7 @@ interface ButtonSelectionListProps {
   activeIndex?: number;
   buttonStyle?: ViewStyle;
   data: string[];
+  color?: string;
   icon?: string;
   onPress: (item: number) => void;
   spaceBetween?: number;
@@ -20,6 +21,7 @@ export const ButtonSelectionList: FunctionComponent<ButtonSelectionListProps> = 
   activeIndex,
   buttonStyle,
   data,
+  color,
   icon,
   onPress,
   spaceBetween,
@@ -41,6 +43,7 @@ export const ButtonSelectionList: FunctionComponent<ButtonSelectionListProps> = 
             <OutlineButton
               buttonStyle={{ ...buttonStyle, ...activeStyle }}
               icon={icon}
+              color={color}
               onPress={handlePress}
               text={item}
               textStyle={textStyle}

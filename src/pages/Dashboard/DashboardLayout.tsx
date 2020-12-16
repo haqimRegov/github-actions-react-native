@@ -22,7 +22,7 @@ import {
   sw20,
   sw24,
 } from "../../styles";
-import { AddClient } from "./AddClient";
+import { NewSales } from "./QuickActions";
 
 const { QUICK_ACTIONS } = Language.PAGE;
 
@@ -108,7 +108,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
           {children}
         </View>
       </ScrollView>
-      <AddClient navigation={navigation} setVisible={setAddClient} visible={addClient} />
+      <NewSales navigation={navigation} setVisible={setAddClient} visible={addClient} />
     </Fragment>
   );
 };

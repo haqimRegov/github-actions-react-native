@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
 import { PdfEditWithModal } from "../../../components/PdfEdit";
-import { ONBOARDING_ROUTES } from "../../../constants";
+import { ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
 import { Language } from "../../../constants/language";
 import { SAMPLE_PDFS } from "../../../mocks";
-import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../store";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sh8, sw24 } from "../../../styles";
 import { GetEmbeddedBase64 } from "../../../utils";
 
@@ -25,7 +25,7 @@ const initialData: PdfWithSignature = {
   },
 };
 
-export interface PDFListProps extends ClientStoreProps {
+export interface PDFListProps extends PersonalInfoStoreProps {
   currentPdf: PdfWithIndex;
   handleNextStep: (route: TypeOnboardingRoute) => void;
   initialPdfArray: FileBase64[];
@@ -38,6 +38,7 @@ export interface PDFListProps extends ClientStoreProps {
 
 export const PDFListComponent: FunctionComponent<PDFListProps> = ({
   accountType,
+  finishedSteps,
   handleNextStep,
   initialPdfArray,
   pdfList,
@@ -45,6 +46,7 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
   setInitialPdfArray,
   setPage,
   setPdfList,
+  updateFinishedSteps,
 }: PDFListProps) => {
   const handleCancel = () => {
     Alert.alert("Cancel");
@@ -76,6 +78,9 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
   const handleContinue = () => {
     handleSubmit();
     handleNextStep(ONBOARDING_ROUTES.Payment);
+    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    updatedSteps.push(ONBOARDING_KEYS.Acknowledgement);
+    updateFinishedSteps(updatedSteps);
   };
 
   useEffect(() => {
@@ -162,4 +167,4 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
   );
 };
 
-export const PDFList = connect(ClientMapStateToProps, ClientMapDispatchToProps)(PDFListComponent);
+export const PDFList = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(PDFListComponent);

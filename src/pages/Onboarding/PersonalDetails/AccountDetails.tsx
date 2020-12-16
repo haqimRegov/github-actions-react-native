@@ -3,7 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sh48, sw24, sw48 } from "../../../styles";
+import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sw24, sw48 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -35,7 +35,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
   const subtitleLabel = `${PERSONAL_DETAILS.LABEL_PRINCIPAL} ${PERSONAL_DETAILS.LABEL_AND} ${PERSONAL_DETAILS.LABEL_JOINT}`;
   const space = accountType === "Joint" ? sh24 : 0;
   const padding: ViewStyle = accountType === "Joint" ? px(sw24) : {};
-  const spaceToAdditional = accountType === "Joint" ? sh48 : sh32;
+  const spaceToAdditional = accountType === "Joint" ? sh24 : sh32;
 
   return (
     <Fragment>

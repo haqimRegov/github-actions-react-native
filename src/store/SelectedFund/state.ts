@@ -1,9 +1,11 @@
 export type SelectedFundState = {
-  funds: IFund[];
-  investmentDetails?: IFundSales[];
+  funds: IProduct[];
+  investmentDetails?: IProductSales[];
+  viewFund?: IProduct;
 };
 
 export const selectedFundInitialState: SelectedFundState = {
   funds: [],
   investmentDetails: [],
+  viewFund: undefined,
 };

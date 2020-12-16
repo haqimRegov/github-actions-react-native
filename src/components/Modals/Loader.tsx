@@ -22,6 +22,7 @@ export const Loader: FunctionComponent<LoaderProps> = ({
   return (
     <BasicModal
       animationIn={animationIn || "fadeIn"}
+      backdropOpacity={0.4}
       animationInTiming={animationInTiming}
       animationOut={animationOut || "fadeOut"}
       animationOutTiming={animationOutTiming}

@@ -18,10 +18,9 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
         ...state,
         questionnaire: { ...riskAssessmentInitialState.questionnaire },
       };
-    case "riskAssessment/RESET_SCORE":
+    case "riskAssessment/RESET_RISK_ASSESSMENT":
       return {
-        ...state,
-        riskScore: riskAssessmentInitialState.riskScore,
+        ...riskAssessmentInitialState,
       };
 
     default:

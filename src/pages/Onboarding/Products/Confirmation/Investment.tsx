@@ -1,19 +1,31 @@
-import React, { Fragment, FunctionComponent } from "react";
-import { View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Text, View } from "react-native";
 
-import { AdvancedDropdown, CheckBox, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
+import {
+  AdvancedDropdown,
+  CheckBox,
+  CustomSpacer,
+  CustomTextInput,
+  LabeledTitle,
+  RadioButtonGroup,
+  TextSpaceArea,
+} from "../../../../components";
 import { Language } from "../../../../constants/language";
+import { ERROR } from "../../../../data/dictionary";
 import {
   borderBottomBlack21,
+  centerVertical,
+  colorBlack,
   flexRow,
   fs12BoldBlack2,
+  fs12RegBlack2,
   fs12SemiBoldGray8,
-  fs16BoldBlack26,
+  fs16BoldBlack2,
   fs16RegBlack2,
   px,
+  sh12,
   sh16,
   sh24,
-  sh32,
   sh8,
   sw12,
   sw16,
@@ -21,160 +33,284 @@ import {
   sw360,
   sw64,
 } from "../../../../styles";
+import { isAmount } from "../../../../utils";
 
 const { INVESTMENT } = Language.PAGE;
 
-const RADIO_GROUP_1 = [INVESTMENT.QUESTION_1_OPTION_1, INVESTMENT.QUESTION_1_OPTION_2];
-
-const age = 54;
-
 interface InvestmentProps {
-  data: IFundSales;
-  setData: (data: IFundSales) => void;
+  data: IProductSales;
+  setData: (data: IProductSales) => void;
 }
 
 export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }: InvestmentProps) => {
+  const { investment, fundDetails, masterClassList } = data;
+
   const {
+    amountError,
+    fundClass,
+    fundCurrency,
     fundPaymentMethod,
     investmentAmount,
-    salesCharge,
+    investmentSalesCharge,
+    scheduledAmountError,
     scheduledInvestment,
     scheduledInvestmentAmount,
     scheduledSalesCharge,
-    fund,
-  } = data;
+  } = investment;
 
-  const extractedSalesCharge: TypeLabelValue[] = [];
-  const isFundingMethodCash = fundPaymentMethod === "Cash";
+  const { fundClasses, fundCurrencies, isEpf, isScheduled, masterList } = fundDetails;
+  const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(masterList[0]);
+  const [cashSalesCharges, setCashSalesCharges] = useState<TypeLabelValue[]>([]);
+  const [epfSalesCharges, setEpfSalesCharges] = useState<TypeLabelValue[]>([]);
+  const { salesCharge, newSalesAmount, topUpAmount } = filteredCurrency;
 
-  const minSalesCharge = isFundingMethodCash ? fund.salesCharge.cash?.minimum! : fund.salesCharge.epf?.minimum!;
-  const maxSalesCharge = isFundingMethodCash ? fund.salesCharge.cash?.maximum! : fund.salesCharge.epf?.maximum!;
-  const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
-
-  for (let index = minSalesCharge || 0; index <= maxSalesCharge; index += isFundingMethodCash ? 0.5 : maxSalesCharge - minSalesCharge) {
-    const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
-    extractedSalesCharge.push(element);
+  const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
+  const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
+  const fundingOption = [INVESTMENT.QUESTION_1_OPTION_1];
+  if (isEpf === "Yes") {
+    fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
 
+  const setAmountError = (value?: string) => {
+    setData({ ...data, investment: { ...investment, amountError: value } });
+  };
+
+  const setScheduledAmountError = (value?: string) => {
+    setData({ ...data, investment: { ...investment, scheduledAmountError: value } });
+  };
+  const salesCharges = fundPaymentMethod === "Cash" ? cashSalesCharges : epfSalesCharges;
+  const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${salesCharge[fundingMethod].max}%`;
+  const minNewSalesAmount = newSalesAmount[fundingMethod].min;
+  const minTopUpAmount = topUpAmount[fundingMethod].min;
+  const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
+  const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minTopUpAmount})`;
+
+  const currencies =
+    masterClassList !== undefined && fundClass !== undefined
+      ? masterClassList[fundClass].map((value) => {
+          return { label: value.currency, value: value.currency };
+        })
+      : [];
+
+  const classes =
+    masterClassList !== undefined
+      ? Object.keys(masterClassList).map((value) => {
+          return { label: value, value: value };
+        })
+      : [];
+
   const handleFundingMethod = (option: string) => {
-    const newData: IFundSales =
+    const newData: IProductSales =
       option === "Cash"
-        ? { ...data, salesCharge: fund.salesCharge.cash?.minimum!, fundPaymentMethod: "Cash" }
+        ? { ...data, investment: { ...investment, investmentSalesCharge: "", fundPaymentMethod: "Cash" } }
         : {
             ...data,
-            salesCharge: fund.salesCharge.epf?.minimum!,
-            scheduledInvestment: false,
-            fundPaymentMethod: "EPF",
-            scheduledSalesCharge: undefined,
-            scheduledInvestmentAmount: undefined,
+            investment: {
+              ...investment,
+              investmentSalesCharge: "",
+              scheduledInvestment: false,
+              fundPaymentMethod: "EPF",
+              scheduledSalesCharge: undefined,
+              scheduledInvestmentAmount: undefined,
+            },
           };
     setData(newData);
   };
 
-  const handleInvestmentAmount = (text: string) => {
-    setData({ ...data, investmentAmount: text });
+  const handleInvestmentAmount = (value: string) => {
+    setData({ ...data, investment: { ...investment, investmentAmount: value } });
+  };
+
+  const validateAmount = (value: string, amountType: "newSalesAmount" | "topUpAmount") => {
+    if (isAmount(value) === false) {
+      return ERROR.INVESTMENT_INVALID_AMOUNT;
+    }
+    if (parseInt(value, 10) > parseInt(filteredCurrency[amountType][fundingMethod].max, 10)) {
+      return ERROR.INVESTMENT_MAX_AMOUNT;
+    }
+    if (parseInt(value, 10) < parseInt(filteredCurrency[amountType][fundingMethod].min, 10)) {
+      return ERROR.INVESTMENT_MIN_AMOUNT;
+    }
+    return undefined;
+  };
+
+  const checkInvestmentAmount = () => {
+    setAmountError(validateAmount(investmentAmount, "newSalesAmount"));
+  };
+
+  const checkScheduledInvestmentAmount = () => {
+    setScheduledAmountError(validateAmount(scheduledInvestmentAmount!, "topUpAmount"));
+  };
+
+  const handleCurrency = (value: string) => {
+    setData({ ...data, investment: { ...investment, fundCurrency: value } });
+  };
+
+  const handleClass = (value: string) => {
+    const newCurrency = masterClassList[value][0].currency;
+    setFilteredCurrency(masterClassList[value][0]);
+    setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency } });
   };
 
   const handleSalesCharge = (value: string) => {
-    setData({ ...data, salesCharge: parseFloat(value) });
+    setData({ ...data, investment: { ...investment, investmentSalesCharge: value } });
   };
 
   const handleScheduled = () => {
-    const newData = { ...data, scheduledSalesCharge: fund.salesCharge.cash?.minimum!, scheduledInvestment: !scheduledInvestment };
-    if (newData.scheduledInvestment === false) {
-      delete newData.scheduledSalesCharge;
-      delete newData.scheduledInvestmentAmount;
+    const newData: IProductSales = {
+      ...data,
+      investment: { ...investment, scheduledSalesCharge: "", scheduledInvestment: !scheduledInvestment },
+    };
+    if (newData.investment.scheduledInvestment === false) {
+      newData.investment.scheduledSalesCharge = "";
+      newData.investment.scheduledInvestmentAmount = "";
     }
+    setScheduledAmountError(undefined);
     setData(newData);
   };
 
   const handleScheduledAmount = (value: string) => {
-    setData({ ...data, scheduledInvestmentAmount: value });
+    setData({ ...data, investment: { ...investment, scheduledInvestmentAmount: value } });
   };
 
   const handleScheduledSalesCharge = (value: string) => {
-    setData({ ...data, scheduledSalesCharge: parseFloat(value) });
+    setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
   };
 
-  const investmentAmountInput = (
-    <CustomTextInput
-      inputPrefix={fund.fundCurrency}
-      label={INVESTMENT.LABEL_AMOUNT}
-      onChangeText={handleInvestmentAmount}
-      prefixStyle={fs16RegBlack2}
-      value={investmentAmount}
-    />
-  );
-
-  const scheduledCheckbox = (
-    <Fragment>
-      <CustomSpacer space={sh16} />
-      <CheckBox
-        label={INVESTMENT.LABEL_SCHEDULE_PAYMENT}
-        labelStyle={fs12BoldBlack2}
-        onPress={handleScheduled}
-        spaceToLabel={sw12}
-        style={px(sw16)}
-        toggle={scheduledInvestment}
-      />
-    </Fragment>
-  );
+  useEffect(() => {
+    const cashSalesChargesTmp: TypeLabelValue[] = [];
+    const epfSalesChargesTmp: TypeLabelValue[] = [];
+    if (cashSalesCharges.length === 0) {
+      for (
+        let index = parseFloat(salesCharge.cash.min);
+        index <= parseFloat(salesCharge.cash.max);
+        index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.cash.min) - parseFloat(salesCharge.cash.max)
+      ) {
+        const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
+        cashSalesChargesTmp.push(element);
+      }
+      setCashSalesCharges(cashSalesChargesTmp);
+    }
+    if (isEpf === "Yes" && epfSalesCharges.length === 0) {
+      for (
+        let index = parseFloat(salesCharge.epf.min);
+        index <= parseFloat(salesCharge.epf.max);
+        index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.epf.min) - parseFloat(salesCharge.epf.max)
+      ) {
+        const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
+        epfSalesChargesTmp.push(element);
+      }
+      setEpfSalesCharges(epfSalesChargesTmp);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Fragment>
       <View style={{ ...flexRow, ...px(sw24) }}>
-        {fund.isEpf && age < 55 ? (
-          <View>
-            <TextSpaceArea spaceToBottom={sh16} style={{ ...fs16RegBlack2, width: sw360, lineHeight: sh24 }} text={INVESTMENT.LABEL_FUND} />
-            <RadioButtonGroup options={RADIO_GROUP_1} space={sh16} selected={fundPaymentMethod} setSelected={handleFundingMethod} />
-          </View>
-        ) : (
-          investmentAmountInput
-        )}
+        <View>
+          <TextSpaceArea style={{ ...fs12BoldBlack2, width: sw360 }} text={INVESTMENT.LABEL_FUNDING_OPTION} />
+          <RadioButtonGroup
+            options={fundingOption}
+            space={sh16}
+            selected={fundPaymentMethod}
+            selectedColor={radioColor}
+            setSelected={handleFundingMethod}
+          />
+        </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
-        <CustomTextInput disabled={true} label={INVESTMENT.LABEL_CURRENCY} style={fs16BoldBlack26} value={fund.fundCurrency} />
+        {fundCurrencies.length > 1 && fundClasses.length === 1 ? (
+          <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
+        ) : null}
+        {fundCurrencies.length === 1 ? (
+          <LabeledTitle
+            label={INVESTMENT.LABEL_CURRENCY}
+            title={fundCurrency!}
+            titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
+            style={{ width: sw360 }}
+          />
+        ) : null}
       </View>
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
+      {fundCurrencies.length > 1 && fundClasses.length > 1 ? (
+        <Fragment>
+          <View style={{ ...flexRow, ...px(sw24) }}>
+            {fundClasses.length > 1 ? (
+              <Fragment>
+                <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
+                <CustomSpacer isHorizontal={true} space={sw64} />
+              </Fragment>
+            ) : null}
+            {fundCurrencies.length > 1 && fundClasses.length > 1 ? (
+              <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
+            ) : null}
+          </View>
+          <CustomSpacer space={sh24} />
+        </Fragment>
+      ) : null}
       <View style={borderBottomBlack21} />
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <View style={flexRow}>
-          {fund.isEpf === true ? (
-            <Fragment>
-              <View>
-                {investmentAmountInput}
-                {fund.isScheduled === false || fundPaymentMethod === "EPF" ? null : scheduledCheckbox}
-              </View>
-              <CustomSpacer isHorizontal={true} space={sw64} />
-            </Fragment>
-          ) : null}
+          <View>
+            <View style={{ ...flexRow, ...centerVertical }}>
+              <Text style={fs12BoldBlack2}>{INVESTMENT.LABEL_AMOUNT}</Text>
+              <Text style={fs12RegBlack2}>{minNewSalesAmountLabel}</Text>
+            </View>
+            <CustomTextInput
+              error={amountError}
+              inputPrefix={fundCurrency}
+              onBlur={checkInvestmentAmount}
+              onChangeText={handleInvestmentAmount}
+              prefixStyle={fs16RegBlack2}
+              spaceToBottom={isScheduled === "Yes" ? sh12 : undefined}
+              value={investmentAmount}
+            />
+            {isScheduled === "Yes" ? (
+              <CheckBox
+                label={INVESTMENT.LABEL_RECURRING}
+                labelStyle={fs12BoldBlack2}
+                onPress={handleScheduled}
+                spaceToLabel={sw12}
+                style={px(sw16)}
+                toggle={scheduledInvestment}
+              />
+            ) : null}
+          </View>
+          <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <AdvancedDropdown
-              items={extractedSalesCharge}
+              items={salesCharges}
               handleChange={handleSalesCharge}
               label={INVESTMENT.LABEL_SALES_CHARGE}
-              value={`${salesCharge}`}
+              value={investmentSalesCharge}
             />
             <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargelabel} />
-            {fund.isEpf === true || fund.isScheduled === false ? null : scheduledCheckbox}
           </View>
         </View>
         {scheduledInvestment === true ? (
           <Fragment>
-            <CustomSpacer space={sh32} />
+            <CustomSpacer space={sh24} />
             <View style={flexRow}>
-              <CustomTextInput
-                inputPrefix={fund.fundCurrency}
-                label={INVESTMENT.LABEL_SCHEDULE_PAYMENT}
-                onChangeText={handleScheduledAmount}
-                value={scheduledInvestmentAmount}
-              />
+              <View>
+                <View style={{ ...flexRow, ...centerVertical }}>
+                  <Text style={fs12BoldBlack2}>{INVESTMENT.LABEL_AMOUNT}</Text>
+                  <Text style={fs12RegBlack2}>{minTopUpAmountLabel}</Text>
+                </View>
+                <CustomTextInput
+                  error={scheduledAmountError}
+                  inputPrefix={fundCurrency}
+                  onBlur={checkScheduledInvestmentAmount}
+                  onChangeText={handleScheduledAmount}
+                  value={scheduledInvestmentAmount}
+                />
+              </View>
               <CustomSpacer isHorizontal={true} space={sw64} />
               <View>
                 <AdvancedDropdown
                   handleChange={handleScheduledSalesCharge}
-                  items={extractedSalesCharge}
-                  label={INVESTMENT.LABEL_SALES_CHARGE}
+                  items={salesCharges}
+                  label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
                   value={`${scheduledSalesCharge}`}
                 />
                 <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargelabel} />

@@ -5,12 +5,57 @@ const clientRegister = gql`
     clientRegister(input: $input) {
       data {
         result {
-          clientId
-          name
           message
-          dateOfBirth
-          gender
-          id
+          principalHolder {
+            clientId
+            dateOfBirth
+            id
+            name
+          }
+          jointHolder {
+            dateOfBirth
+            id
+            name
+            clientId
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const emailVerification = gql`
+  mutation emailVerification($input: email) {
+    emailVerification(input: $input) {
+      data {
+        result {
+          message
+          status
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const emailOtpVerification = gql`
+  mutation emailOtpVerification($input: verifyOtp) {
+    emailOtpVerification(input: $input) {
+      data {
+        result {
+          message
+          status
         }
       }
       error {
@@ -210,7 +255,10 @@ const userLogin = gql`
           sessionToken
           accessKeyId
           email
+          name
+          agentId
           licenseCode
+          licenseType
         }
       }
       error {
@@ -225,6 +273,8 @@ const userLogin = gql`
 
 export const GQL_MUTATIONS = {
   clientRegister,
+  emailVerification,
+  emailOtpVerification,
   firstTimeSignUp,
   forgotPassword,
   registerPassword,

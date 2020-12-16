@@ -2,7 +2,6 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Image, ImageSourcePropType, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
-  centerHV,
   centerVertical,
   colorWhite,
   flexRowCC,
@@ -10,7 +9,6 @@ import {
   fs24BoldBlue2,
   fsAlignCenter,
   fsTransformNone,
-  fullHW,
   px,
   sh16,
   sh48,
@@ -58,7 +56,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
-    backgroundColor: colorWhite._3,
+    backgroundColor: colorWhite._2,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
@@ -77,28 +75,31 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   const illustrationStyle: ImageStyle = { height: sw176, width: sw176 };
 
   return (
-    <View style={{ ...centerHV, ...fullHW }}>
-      <View style={modalContainer}>
-        <View style={{ ...centerVertical, ...px(sw56) }}>
-          <CustomSpacer space={sh48} />
-          {illustration !== undefined ? (
-            <Fragment>
-              <Image source={illustration} style={illustrationStyle} />
-              <CustomSpacer space={sh8} />
-            </Fragment>
-          ) : null}
-          {label !== undefined ? (
-            <Fragment>
-              <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, ...labelStyle }}>{label}</Text>
-              <CustomSpacer space={sh16} />
-            </Fragment>
-          ) : null}
-          {title !== undefined ? <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}
-          {children}
-          <CustomSpacer space={defaultSpaceToButton} />
-        </View>
-        <ActionButtons {...actionButtonProps} />
+    <View style={modalContainer}>
+      <View style={{ ...centerVertical, ...px(sw56) }}>
+        <CustomSpacer space={sh48} />
+        {illustration !== undefined ? (
+          <Fragment>
+            <Image source={illustration} style={illustrationStyle} />
+            <CustomSpacer space={sh8} />
+          </Fragment>
+        ) : null}
+        {label !== undefined ? (
+          <Fragment>
+            <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, ...labelStyle }}>{label}</Text>
+            <CustomSpacer space={sh16} />
+          </Fragment>
+        ) : null}
+        {title !== undefined ? <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}
+        {children}
+        <CustomSpacer space={defaultSpaceToButton} />
       </View>
+      {rest.labelCancel === undefined &&
+      rest.labelContinue === undefined &&
+      rest.handleCancel === undefined &&
+      rest.handleContinue === undefined ? null : (
+        <ActionButtons {...actionButtonProps} />
+      )}
     </View>
   );
 };

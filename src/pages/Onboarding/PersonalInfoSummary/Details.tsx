@@ -20,7 +20,6 @@ import {
   py,
   sh16,
   sh24,
-  sh32,
   sh64,
   sh8,
   sh80,
@@ -118,7 +117,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
             <Text style={fs16RegBlack2}>{headerTitle}</Text>
           </View>
         ) : (
-          <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={sh32} subtitle={headerTitle} title={name} />
+          <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={sh8} subtitle={headerTitle} title={name} />
         )}
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_PERSONAL} />
@@ -147,40 +146,42 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} />
           <CardWrap data={employmentDetails} titleStyle={fsTransformNone} />
         </View>
-        <View>
-          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldBlack2} />
-          {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
-            const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
-            return (
-              <Fragment key={index}>
-                {index === 0 ? null : <CustomSpacer space={sh8} />}
-                <View style={px(sw24)}>
-                  <IconText color={colorBlue._2} iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue2} />
+        {accountType === "Joint" && accountHolder === "Joint" ? null : (
+          <View>
+            <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldBlack2} />
+            {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
+              const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
+              return (
+                <Fragment key={index}>
+                  {index === 0 ? null : <CustomSpacer space={sh8} />}
+                  <View style={px(sw24)}>
+                    <IconText color={colorBlue._2} iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue2} />
+                    <CustomSpacer space={sh8} />
+                    <View style={borderBottomBlack21} />
+                    <CustomSpacer space={sh8} />
+                  </View>
+                  <CardWrap data={bank} titleStyle={fsTransformNone} />
+                </Fragment>
+              );
+            })}
+            {foreignBankDetails.map((bank: LabeledTitleProps[], index: number) => {
+              const label = `${SUMMARY.SUBTITLE_FOREIGN_BANK} ${index + 1}`;
+              return (
+                <Fragment key={index}>
                   <CustomSpacer space={sh8} />
-                  <View style={borderBottomBlack21} />
-                  <CustomSpacer space={sh8} />
-                </View>
-                <CardWrap data={bank} titleStyle={fsTransformNone} />
-              </Fragment>
-            );
-          })}
-          {foreignBankDetails.map((bank: LabeledTitleProps[], index: number) => {
-            const label = `${SUMMARY.SUBTITLE_FOREIGN_BANK} ${index + 1}`;
-            return (
-              <Fragment key={index}>
-                <CustomSpacer space={sh8} />
-                <View style={px(sw24)}>
-                  <IconText color={colorBlue._2} iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue2} />
-                  <CustomSpacer space={sh8} />
-                  <View style={borderBottomBlack21} />
-                  <CustomSpacer space={sh8} />
-                </View>
-                <CardWrap data={bank} titleStyle={fsTransformNone} />
-              </Fragment>
-            );
-          })}
-        </View>
-        <CustomSpacer space={sh24} />
+                  <View style={px(sw24)}>
+                    <IconText color={colorBlue._2} iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue2} />
+                    <CustomSpacer space={sh8} />
+                    <View style={borderBottomBlack21} />
+                    <CustomSpacer space={sh8} />
+                  </View>
+                  <CardWrap data={bank} titleStyle={fsTransformNone} />
+                </Fragment>
+              );
+            })}
+            <CustomSpacer space={sh24} />
+          </View>
+        )}
       </View>
     </View>
   );

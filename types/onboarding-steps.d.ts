@@ -5,23 +5,18 @@ declare interface IContentItem {
 
 declare interface IOnboarding {
   content?: IContentItem[];
+  key: string;
   label: string;
   route?: TypeOnboardingRoute;
 }
 
 declare interface OnboardingContentProps {
-  finishedSteps: TypeOnboardingRoute[];
+  cancelOnboarding?: boolean;
   handleCancelOnboarding?: () => void;
+  handleResetOnboarding?: () => void;
   handleNextStep: (route: TypeOnboardingRoute) => void;
-  setFinishedSteps: (route: TypeOnboardingRoute[]) => void;
 }
 
-declare interface OnboardingProps extends OnboardingContentProps {
-  navigation: IStackNavigationProp;
-  resetClientDetails: () => void;
-  resetPersonalInfo: () => void;
-  route: string;
-}
 declare interface OnboardingStepsContentProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
@@ -30,12 +25,13 @@ declare interface OnboardingStepsProps {
   activeContent?: IContentItem | IOnboarding;
   activeSection: number;
   disableNextSteps?: boolean;
-  finishedSteps?: TypeOnboardingRoute[];
+  finishedSteps?: TypeOnboardingKey[];
   handleContentChange: (item: IContentItem | IOnboarding) => void;
+  handleBackToDashboard: () => void;
   RenderContent: (props: OnboardingStepsContentProps) => JSX.Element;
   setActiveContent: (content: IContentItem | IOnboarding) => void;
   setActiveSection: (section: any) => void;
-  setFinishedStep: (step: TypeOnboardingRoute[]) => void;
+  setFinishedStep: (step: TypeOnboardingKey[]) => void;
   steps: IOnboarding[];
 }
 
@@ -55,6 +51,8 @@ declare type TypeOnboardingRoute =
   | "RiskAssessment"
   | "TermsAndConditions";
 
+declare type TypeOnboardingKey = "Acknowledgement" | "Declarations" | "PersonalInformation" | "Products" | "RiskAssessment" | "Payment";
+
 declare interface IOnboardingRoutes {
   CRSDeclaration: TypeOnboardingRoute;
   DeclarationSummary: TypeOnboardingRoute;
@@ -70,4 +68,13 @@ declare interface IOnboardingRoutes {
   ProductRecommendation: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
+}
+
+declare interface IOnboardingKeys {
+  Acknowledgement: TypeOnboardingKey;
+  Declarations: TypeOnboardingKey;
+  PersonalInformation: TypeOnboardingKey;
+  Products: TypeOnboardingKey;
+  RiskAssessment: TypeOnboardingKey;
+  Payment: TypeOnboardingKey;
 }

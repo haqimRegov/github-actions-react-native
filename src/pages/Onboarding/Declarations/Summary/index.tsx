@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../../constants";
+import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, sh24 } from "../../../../styles";
 import { DeclarationDetails } from "./Details";
@@ -15,9 +15,11 @@ interface DeclarationSummaryProps extends PersonalInfoStoreProps, OnboardingCont
 
 export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryProps> = ({
   accountType,
+  finishedSteps,
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
+  updateFinishedSteps,
 }: DeclarationSummaryProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
@@ -27,6 +29,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   const handleContinue = () => {
     handleNextStep(ONBOARDING_ROUTES.OrderSummary);
+    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    updatedSteps.push(ONBOARDING_KEYS.Declarations);
+    updateFinishedSteps(updatedSteps);
   };
 
   const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
@@ -59,8 +64,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             accountType="Joint"
             handleNextStep={handleNextStep}
             isFea={isFea}
-            name={joint?.personalDetails!.name!}
-            summary={personalInfo.principal?.declaration!}
+            name={joint!.personalDetails!.name!}
+            summary={joint!.declaration!}
           />
         </View>
       ) : null}

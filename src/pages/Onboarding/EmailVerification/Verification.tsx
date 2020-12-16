@@ -3,6 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { ContentPage, CustomSpacer, CustomTextInput, CustomTooltip, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
+import { ERROR } from "../../../data/dictionary";
 import {
   flexRow,
   fs12BoldBlack2,
@@ -24,6 +25,7 @@ import {
   sw7,
   sw8,
 } from "../../../styles";
+import { isEmail } from "../../../utils";
 
 const { EMAIL_VERIFICATION } = Language.PAGE;
 
@@ -32,7 +34,7 @@ declare interface VerificationProps {
   accountType: TypeAccountChoices;
   handleCancel?: () => void;
   handleContinue: () => void;
-  isJointEmail: boolean;
+  jointEmailCheck: boolean;
   personalInfo: IPersonalInfoState;
 }
 
@@ -41,10 +43,12 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   addPersonalInfo,
   handleCancel,
   handleContinue,
-  isJointEmail,
+  jointEmailCheck,
   personalInfo,
 }: VerificationProps) => {
   const [showInfo, setShowInfo] = useState<boolean>(true);
+  const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
+  const [jointError, setJointError] = useState<string | undefined>(undefined);
   const { joint, principal } = personalInfo!;
   const inputPrincipalEmail = principal!.contactDetails!.emailAddress!;
   const inputJointEmail = joint!.contactDetails!.emailAddress!;
@@ -65,6 +69,21 @@ export const Verification: FunctionComponent<VerificationProps> = ({
     setShowInfo(false);
   };
 
+  const validateEmail = (value: string) => {
+    if (isEmail(value) === false) {
+      return ERROR.INVESTMENT_INVALID_EMAIL;
+    }
+    return undefined;
+  };
+
+  const checkPrincipalEmail = () => {
+    setPrincipalError(validateEmail(inputPrincipalEmail));
+  };
+
+  const checkJointEmail = () => {
+    setJointError(validateEmail(inputJointEmail));
+  };
+
   useEffect(() => {
     if (personalInfo.principal?.contactDetails?.emailAddress !== "") {
       setShowInfo(false);
@@ -78,7 +97,16 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   );
   const contentStyle: ViewStyle = { width: sw264 };
   const principalEmailLabel = accountType === "Individual" ? EMAIL_VERIFICATION.LABEL_EMAIL : EMAIL_VERIFICATION.LABEL_EMAIL_PRINCIPAL;
-  const disabled = isJointEmail === false ? inputPrincipalEmail === "" : inputPrincipalEmail === "" || inputJointEmail === "";
+  const disabled =
+    jointEmailCheck === false
+      ? inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined
+      : inputPrincipalEmail === "" ||
+        inputJointEmail === "" ||
+        principalError !== undefined ||
+        jointError !== undefined ||
+        validateEmail(inputPrincipalEmail) !== undefined ||
+        validateEmail(inputJointEmail) !== undefined;
+  const subtitle = jointEmailCheck === true ? EMAIL_VERIFICATION.SUBHEADING_JOINT : EMAIL_VERIFICATION.SUBHEADING;
 
   return (
     <ContentPage
@@ -88,7 +116,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       labelContinue={EMAIL_VERIFICATION.LABEL_GET_OTP}
       noBounce={false}
       subheading={EMAIL_VERIFICATION.HEADING}
-      subtitle={EMAIL_VERIFICATION.SUBHEADING}
+      subtitle={subtitle}
       continueDisabled={disabled}>
       <View style={flexRow}>
         <CustomSpacer isHorizontal={true} space={sw24} />
@@ -105,20 +133,29 @@ export const Verification: FunctionComponent<VerificationProps> = ({
             tooltipStyle={{ top: sh136 }}>
             <CustomTextInput
               autoCapitalize="none"
+              error={principalError}
               keyboardType="email-address"
+              onBlur={checkPrincipalEmail}
               onChangeText={setInputPrincipalEmail}
-              spaceToBottom={sh8}
               value={inputPrincipalEmail}
             />
           </CustomTooltip>
-          <Text style={{ ...fs12RegBlack2, ...px(sw12), letterSpacing: sw02 }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
-          {isJointEmail === true ? (
+          {jointEmailCheck === true ? null : (
+            <TextSpaceArea
+              spaceToTop={sh8}
+              style={{ ...fs12RegBlack2, ...px(sw12), letterSpacing: sw02 }}
+              text={EMAIL_VERIFICATION.NOTE_LINK}
+            />
+          )}
+          {jointEmailCheck === true ? (
             <Fragment>
               <CustomSpacer space={sh32} />
               <Text style={fs12BoldBlack2}>{EMAIL_VERIFICATION.LABEL_EMAIL_JOINT}</Text>
               <CustomTextInput
                 autoCapitalize="none"
+                error={jointError}
                 keyboardType="email-address"
+                onBlur={checkJointEmail}
                 onChangeText={setInputJointEmail}
                 spaceToBottom={sh8}
                 value={inputJointEmail}
@@ -126,6 +163,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
               <Text style={{ ...fs12RegBlack2, ...px(sw12) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
             </Fragment>
           ) : null}
+
           <View style={flexRow}>
             <CustomSpacer isHorizontal={true} space={sw16} />
             <TextSpaceArea

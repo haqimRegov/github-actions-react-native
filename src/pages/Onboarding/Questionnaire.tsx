@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
-import { Alert, Image, Text, TextStyle, View } from "react-native";
+import { Image, Text, TextStyle, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -13,7 +13,7 @@ import {
   Question,
   RadioButton,
 } from "../../components";
-import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../constants";
 import { Q1_OPTIONS, Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -25,6 +25,7 @@ import {
   fs12SemiBoldBlack2,
   fs16BoldBlack1,
   fs16BoldBlack2,
+  fs16RegBlack1,
   sh143,
   sh155,
   sh16,
@@ -49,17 +50,18 @@ interface QuestionnaireContentProps extends OnboardingContentProps, RiskStorePro
 const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
   addAssessmentQuestions,
   addRiskScore,
-  clientDetails,
+  principalHolder,
   finishedSteps,
   handleCancelOnboarding,
   handleNextStep,
   questionnaire,
   resetRiskAssessment,
   riskScore,
-  setFinishedSteps,
+  updateFinishedSteps,
   setLoading,
 }: QuestionnaireContentProps) => {
-  const clientId = clientDetails!.clientId!;
+  // const clientId = cli;
+  const { clientId, dateOfBirth } = principalHolder!;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
@@ -74,10 +76,10 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
 
   const handleConfirmAssessment = () => {
-    const updatedSteps: TypeOnboardingRoute[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_ROUTES.RiskAssessment);
+    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    updatedSteps.push(ONBOARDING_KEYS.RiskAssessment);
     setConfirmModal(undefined);
-    setFinishedSteps(updatedSteps);
+    updateFinishedSteps(updatedSteps);
     handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
   };
 
@@ -87,35 +89,27 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   };
 
   const handlePageContinue = async () => {
-    try {
-      // setLoading(true);
-      const response: IGetRiskProfileResponse = await getRiskProfile({ clientId: clientId, riskAssessment: { ...questionnaire } });
-      if (response === undefined) {
-        return;
-      }
+    const response: IGetRiskProfileResponse = await getRiskProfile({
+      clientId: clientId!,
+      dateOfBirth: dateOfBirth!,
+      riskAssessment: { ...questionnaire },
+    });
+    if (response !== undefined) {
       const { data, error } = response;
-      if (error === null) {
-        if (data !== null) {
-          setLoading(false);
-          const riskAssessment = { ...data.result };
-          addRiskScore(riskAssessment);
-          setTimeout(() => {
-            setConfirmModal("assessment");
-          }, 300);
-        }
-      } else {
-        Alert.alert(error.message);
+      if (error === null && data !== null) {
+        setLoading(false);
+        const riskAssessment = { ...data.result };
+        addRiskScore(riskAssessment);
+        setTimeout(() => {
+          setConfirmModal("assessment");
+        }, 300);
       }
-    } catch (error) {
-      Alert.alert(error);
-    } finally {
-      // setLoading(false);
     }
   };
 
   const handleEdit = () => {
     setConfirmModal(undefined);
-    setFinishedSteps([]);
+    updateFinishedSteps([]);
     resetRiskAssessment();
   };
 
@@ -137,14 +131,14 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const riskProfile = [
     { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: riskScore.appetite },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.rangeOfReturn },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskScore.type },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_SUGGESTION, title: riskScore.fundSuggestion },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile, titleStyle: fs16RegBlack1 },
   ];
 
   useEffect(() => {
-    if (prevQuestionnaire === undefined && finishedSteps.includes(ONBOARDING_ROUTES.RiskAssessment)) {
+    if (prevQuestionnaire === undefined && finishedSteps.includes(ONBOARDING_KEYS.RiskAssessment)) {
       setPrevQuestionnaire(questionnaire);
     }
 
@@ -295,7 +289,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                 spaceToBottom={sh24}
                 spaceToLabel={sh8}
                 title={item.title}
-                titleStyle={fs16BoldBlack1}
+                titleStyle={{ ...fs16BoldBlack1, ...item.titleStyle }}
               />
             ))}
           </Fragment>

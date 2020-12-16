@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID, DICTIONARY_ALL_ID_TYPE, DICTIONARY_COUNTRIES, ERROR_CODE_OCR } from "../../../data/dictionary";
+import { DICTIONARY_ALL_ID, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh40, sh56, sw24 } from "../../../styles";
 import { OCRUtils } from "../../../utils";
@@ -40,18 +40,20 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const principalUploadRef = useRef<IUploadDocumentRef>();
   const jointUploadRef = useRef<IUploadDocumentRef>();
 
-  const { idType, otherIdType } = details!;
+  const { principalHolder, jointHolder } = details!;
   const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
   const principalBackPage = principal!.personalDetails!.id!.secondPage;
   const jointFrontPage = joint!.personalDetails!.id!.frontPage;
   const jointSecondPage = joint!.personalDetails!.id!.secondPage;
-  const inputJointIdType = joint!.personalDetails!.idType!;
-  const clientIdType = idType === "Other" ? otherIdType : idType;
-  const extractedIdType = typeof clientIdType! === "string" ? clientIdType! : DICTIONARY_ALL_ID_TYPE[clientIdType!];
-  const isPrincipalMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(extractedIdType as TypeClientID) !== 1;
+  const inputJointIdType = jointHolder!.idType!;
+  const principalIdType = principalHolder!.idType!;
+  const clientIdType = principalIdType === "Other" ? principalHolder!.otherIdType : principalIdType;
 
-  const principalTitle = idType !== "Passport" && idType !== "NRIC" ? `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : `${idType}`;
+  const principalTitle =
+    principalIdType !== "Passport" && principalIdType !== "NRIC"
+      ? `${principalIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
+      : `${principalIdType}`;
   const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
   const defaultSubtitle = accountType === "Joint" ? IDENTITY_CONFIRMATION.JOINT_SUBHEADING : defaultPrincipalTitle;
 
@@ -134,7 +136,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && clientIdType === DICTIONARY_ALL_ID[0].value) {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
-        if (mykad.error?.code === ERROR_CODE_OCR.invalidNricData) {
+        if (mykad.error?.code === ERROR_CODE.invalidNricData) {
           setReviewImage(uploaded);
           setPrincipalFrontError(undefined);
         } else {
@@ -145,15 +147,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           ...principal,
           personalDetails: {
             ...principal?.personalDetails,
-            gender: mykad.gender!,
             id: {
               ...principal?.personalDetails?.id,
               frontPage: uploaded,
             },
-            idType: details?.idType,
-            idNumber: details?.idNumber,
-            name: details?.name,
-            nationality: isPrincipalMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
             placeOfBirth: mykad.placeOfBirth,
           },
           addressInformation: {
@@ -199,27 +196,21 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && jointIdType === DICTIONARY_ALL_ID[0].value) {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
-        if (mykad.error?.code === ERROR_CODE_OCR.invalidNricData) {
+        if (mykad.error?.code === ERROR_CODE.invalidNricData) {
           setReviewImage(uploaded);
           setJointFrontError(undefined);
         } else {
           setJointFrontError(mykad.error?.message);
         }
       } else {
-        const isJointMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(jointIdType as TypeClientID) !== 1;
         const jointInfo: IHolderInfoState = {
           ...joint,
           personalDetails: {
             ...joint?.personalDetails,
-            gender: mykad.gender!,
             id: {
               ...joint?.personalDetails?.id,
               frontPage: uploaded,
             },
-            idType: details?.idType,
-            idNumber: details?.idNumber,
-            name: details?.name,
-            nationality: isJointMalaysian ? DICTIONARY_COUNTRIES[133].value : "",
             placeOfBirth: mykad.placeOfBirth,
           },
           addressInformation: {
@@ -271,7 +262,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           subtitle={defaultSubtitle}>
           <View style={px(sw24)}>
             <CustomSpacer space={sh40} />
-            {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} title={details?.name!} /> : null}
+            {accountType === "Joint" ? (
+              <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} title={principalHolder!.name!} />
+            ) : null}
             <UploadID
               backError={principalBackError}
               backPage={principalBackPage}
@@ -289,7 +282,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           {accountType === "Individual" ? null : (
             <Fragment>
               <View style={px(sw24)}>
-                {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_JOINT} title={details?.name!} /> : null}
+                {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_JOINT} title={jointHolder!.name!} /> : null}
                 <UploadID
                   backError={jointBackError}
                   backPage={jointSecondPage}

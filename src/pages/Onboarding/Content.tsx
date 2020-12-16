@@ -1,9 +1,10 @@
-import { CommonActions } from "@react-navigation/native";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Text, View } from "react-native";
+import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
 import { fs16BoldBlack2 } from "../../styles";
 import { CrsDeclaration, DeclarationSummary, FatcaDeclaration, FeaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
@@ -18,27 +19,12 @@ import { QuestionnaireContent } from "./Questionnaire";
 import { TermsAndConditionsPages } from "./TermsAndConditions";
 
 const { ONBOARDING } = Language.PAGE;
+interface OnboardingProps extends OnboardingContentProps, OnboardingStoreProps {
+  navigation: IStackNavigationProp;
+  route: string;
+}
 
-export const OnboardingContent = (props: OnboardingProps) => {
-  const { navigation, resetClientDetails, resetPersonalInfo } = props;
-  const [cancelOnboarding, setCancelOnboarding] = useState<boolean>(false);
-
-  const handleCancelOnboarding = () => {
-    setCancelOnboarding(!cancelOnboarding);
-  };
-
-  const handleResetOnboarding = () => {
-    setCancelOnboarding(false);
-    resetClientDetails();
-    resetPersonalInfo();
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "Dashboard" }],
-      }),
-    );
-  };
-
+const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboarding, cancelOnboarding, ...props }: OnboardingProps) => {
   const newProps = {
     ...props,
     handleCancelOnboarding: handleCancelOnboarding,
@@ -108,3 +94,4 @@ export const OnboardingContent = (props: OnboardingProps) => {
     </Fragment>
   );
 };
+export const OnboardingContent = connect(OnboardingMapStateToProps, OnboardingMapDispatchToProps)(OnboardingContentComponent);

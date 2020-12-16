@@ -23,7 +23,6 @@ interface IDVerificationProps {
 export const IDVerification: FunctionComponent<IDVerificationProps> = ({
   accountType,
   addPersonalInfo,
-  details,
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
@@ -68,7 +67,6 @@ export const IDVerification: FunctionComponent<IDVerificationProps> = ({
       <PrincipalVerification
         accountType={accountType}
         addressInfo={principal!.addressInformation!}
-        details={details}
         personalDetails={principal!.personalDetails!}
         setAddressInfo={handlePrincipalAddress}
         setPersonalDetails={handlePrincipalDetails}

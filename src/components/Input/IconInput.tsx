@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
-import { Image, ImageSourcePropType, ImageStyle, View, ViewStyle } from "react-native";
+import { Image, ImageSourcePropType, ImageStyle, TextInput, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { border, centerVertical, colorGray, flexChild, sh24, sh40, sw1, sw16, sw20 } from "../../styles";
+import { border, centerVertical, colorGray, flexChild, fullWidth, sh24, sh40, sw1, sw16, sw20 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 import { CustomTextInput, CustomTextInputProps } from "./Input";
 
@@ -10,6 +10,8 @@ interface IconInputProps extends CustomTextInputProps {
   icon?: ImageSourcePropType | string;
   iconSize?: number;
   iconPosition?: "left" | "right";
+  iconInputRef?: TextInput | null;
+  setIconInputRef?: (instance: TextInput | null) => void;
 }
 
 export const IconInput: FunctionComponent<IconInputProps> = ({
@@ -19,6 +21,8 @@ export const IconInput: FunctionComponent<IconInputProps> = ({
   keyboardType,
   onChangeText,
   placeholder,
+  iconInputRef,
+  setIconInputRef,
   textContentType,
   value,
   viewStyle,
@@ -46,25 +50,35 @@ export const IconInput: FunctionComponent<IconInputProps> = ({
 
   const textInputStyle = {
     ...flexChild,
+    ...fullWidth,
     ...viewStyle,
     height: offsetHeight,
   };
 
+  const handleInput = () => {
+    if (iconInputRef !== undefined && iconInputRef !== null) {
+      iconInputRef.focus();
+    }
+  };
+
   return (
-    <View style={inputContainerStyle}>
-      <CustomSpacer isHorizontal={true} space={sw16} />
-      {icoMoon}
-      {imageIcon}
-      <CustomTextInput
-        keyboardType={keyboardType}
-        noBorder={true}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        textContentType={textContentType}
-        value={value}
-        viewStyle={textInputStyle}
-        {...rest}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={handleInput}>
+      <View style={inputContainerStyle}>
+        <CustomSpacer isHorizontal={true} space={sw16} />
+        {icoMoon}
+        {imageIcon}
+        <CustomTextInput
+          keyboardType={keyboardType}
+          noBorder={true}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          setRef={setIconInputRef}
+          textContentType={textContentType}
+          value={value}
+          viewStyle={textInputStyle}
+          {...rest}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };

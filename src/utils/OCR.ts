@@ -2,7 +2,7 @@ import vision from "@react-native-firebase/ml-vision";
 import moment from "moment";
 
 import { NRIC_DATE_FORMAT } from "../constants";
-import { DICTIONARY_PLACE_OF_BIRTH, ERROR, ERROR_CODE_OCR } from "../data/dictionary";
+import { DICTIONARY_PLACE_OF_BIRTH, ERROR, ERROR_CODE } from "../data/dictionary";
 
 const processMykadFront = async (filePath: string) => {
   let rightBounds = 0;
@@ -28,7 +28,7 @@ const processMykadFront = async (filePath: string) => {
     return { blocks: cleanBlocks.filter((block) => block !== undefined), text: processed.text };
   }
 
-  return { error: { code: ERROR_CODE_OCR.invalidNric, message: ERROR.OCR_INVALID_NRIC } };
+  return { error: { code: ERROR_CODE.invalidNric, message: ERROR.OCR_INVALID_NRIC } };
 };
 
 const mykadBack = async (filePath: string) => {
@@ -38,7 +38,7 @@ const mykadBack = async (filePath: string) => {
     return {};
   }
 
-  return { error: { code: ERROR_CODE_OCR.invalidNric, message: ERROR.OCR_INVALID_NRIC } };
+  return { error: { code: ERROR_CODE.invalidNric, message: ERROR.OCR_INVALID_NRIC } };
 };
 
 const mykadFront = async (filePath: string) => {
@@ -92,7 +92,7 @@ const mykadFront = async (filePath: string) => {
     mykad.name = mykadBlocks!.blocks[idNumberIndex + 1]?.text!.split("\n").join(" ");
   }
   if (mykad.address === "" || mykad.postCode === "" || mykad.city === "" || mykad.state === "") {
-    return { error: { code: ERROR_CODE_OCR.invalidNricData, message: ERROR.OCR_INVALID_NRIC_DATA } };
+    return { error: { code: ERROR_CODE.invalidNricData, message: ERROR.OCR_INVALID_NRIC_DATA } };
   }
 
   return mykad;

@@ -14,3 +14,11 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   RiskAssessment: "RiskAssessment",
   TermsAndConditions: "TermsAndConditions",
 };
+export const ONBOARDING_KEYS: IOnboardingKeys = {
+  Acknowledgement: "Acknowledgement",
+  Declarations: "Declarations",
+  PersonalInformation: "PersonalInformation",
+  Products: "Products",
+  RiskAssessment: "RiskAssessment",
+  Payment: "Payment",
+};

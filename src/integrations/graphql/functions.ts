@@ -5,8 +5,16 @@ export const gqlOperation = async <ResultType extends {}, VariablesType extends 
   query: string,
   variables?: VariablesType,
   headers?: HeadersType,
-  handleError?: TypeIntegrationError,
+  handleError?: ResponseErrorType,
 ) => {
+  const serverError = { error: { errorCode: "EMXXX", message: "Internal Server Error", statusCode: "401" } };
+
+  const errorHandling = () => {
+    if (handleError !== undefined) {
+      return handleError(serverError);
+    }
+    return Alert.alert(serverError.error.message);
+  };
   try {
     const response = (await API.graphql(graphqlOperation(query, { input: variables }), { ...headers })) as {
       data: ResultType;
@@ -18,12 +26,11 @@ export const gqlOperation = async <ResultType extends {}, VariablesType extends 
     }
     return response.data;
   } catch (error) {
-    Alert.alert("Internal Server Error");
+    // Alert.alert("Internal Server Error");
+    // const serverError = { data: { error: { errorCode: "EMXXX", message: "Internal Server Error", statusCode: "401" } } };
     // eslint-disable-next-line no-console
     console.log("Error in gqlOperation line 23 at integrations/graphql/functions.ts", JSON.stringify(error));
-    if (handleError !== undefined) {
-      handleError(error);
-    }
-    return undefined;
+    errorHandling();
+    return error;
   }
 };

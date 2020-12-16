@@ -763,4 +763,201 @@ export const SAMPLE_PRODUCT_6: IFund = {
   },
 };
 
-export const SAMPLE_PRODUCTS_1: IFund[] = [SAMPLE_PRODUCT_2, SAMPLE_PRODUCT_3, SAMPLE_PRODUCT_4, SAMPLE_PRODUCT_5, SAMPLE_PRODUCT_6];
+export const SAMPLE_PRODUCTS_1: IFund[] = [
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+];
+export const SAMPLE_PRODUCTS_2: IFund[] = [
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+];
+export const SAMPLE_PRODUCTS_3: IFund[] = [
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+];
+export const SAMPLE_PRODUCTS_4: IFund[] = [
+  SAMPLE_PRODUCT_6,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+  SAMPLE_PRODUCT_2,
+  SAMPLE_PRODUCT_3,
+  SAMPLE_PRODUCT_4,
+  SAMPLE_PRODUCT_5,
+  SAMPLE_PRODUCT_6,
+];
+
+export const SAMPLE_UPDATED_PRODUCT: IProduct = {
+  fundCurrencies: ["MYR", "USD", "AUD"],
+  fundClasses: [],
+  fundId: "29",
+  fundAbbr: "KIPF",
+  fundName: "KENANGA INCOME PLUS FUND",
+  fundType: "UT",
+  fundCategory: "FIXED INCOME",
+  issuingHouse: "KENANGA INVESTORS BERHAD",
+  riskCategory: "MEDIUM",
+  isEpf: "No",
+  isSyariah: "No",
+  isWholesale: "No",
+  isScheduled: "Yes",
+  ampFee: "",
+  masterList: [
+    {
+      class: "",
+      currency: "MYR",
+      salesCharge: {
+        epf: {
+          min: "1",
+          max: "10",
+        },
+        cash: {
+          min: "1",
+          max: "10",
+        },
+      },
+      newSalesAmount: {
+        epf: {
+          min: "0",
+          max: "0",
+        },
+        cash: {
+          min: "1001",
+          max: "99999999999",
+        },
+      },
+      topUpAmount: {
+        epf: {
+          min: "0",
+          max: "0",
+        },
+        cash: {
+          min: "100",
+          max: "99999999999",
+        },
+      },
+    },
+    {
+      class: "",
+      currency: "USD",
+      salesCharge: {
+        epf: {
+          min: "2",
+          max: "10",
+        },
+        cash: {
+          min: "2",
+          max: "10",
+        },
+      },
+      newSalesAmount: {
+        epf: {
+          min: "0",
+          max: "0",
+        },
+        cash: {
+          min: "1002",
+          max: "99999999999",
+        },
+      },
+      topUpAmount: {
+        epf: {
+          min: "0",
+          max: "0",
+        },
+        cash: {
+          min: "100",
+          max: "99999999999",
+        },
+      },
+    },
+    {
+      class: "",
+      currency: "AUD",
+      salesCharge: {
+        epf: {
+          min: "3",
+          max: "10",
+        },
+        cash: {
+          min: "3",
+          max: "10",
+        },
+      },
+      newSalesAmount: {
+        epf: {
+          min: "0",
+          max: "0",
+        },
+        cash: {
+          min: "1003",
+          max: "99999999999",
+        },
+      },
+      topUpAmount: {
+        epf: {
+          min: "0",
+          max: "0",
+        },
+        cash: {
+          min: "100",
+          max: "99999999999",
+        },
+      },
+    },
+  ],
+  fundObjective:
+    "The Fund aims to provide investors with a regular income stream through investments in bonds and money market instruments.",
+  landingFund: "",
+  annualManagementFee: "1.0",
+  performance: "5.42",
+  docs: [
+    {
+      url: "",
+      name: "propectus",
+    },
+    {
+      url: "",
+      name: "highlights",
+    },
+    {
+      url: "",
+      name: "annual",
+    },
+    {
+      url: "",
+      name: "fact",
+    },
+  ],
+};

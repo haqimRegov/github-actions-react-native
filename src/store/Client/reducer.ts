@@ -8,6 +8,16 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
         ...state,
         accountType: action.payload,
       };
+    case "client/ADD_PRINCIPAL_INFO":
+      return {
+        ...state,
+        details: { ...state.details, principalHolder: { ...action.payload } },
+      };
+    case "client/ADD_JOINT_INFO":
+      return {
+        ...state,
+        details: { ...state.details, jointHolder: { ...action.payload } },
+      };
     case "client/ADD_DETAILS":
       return {
         ...state,

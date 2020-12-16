@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 import { orderSummaryReducer } from "./Acknowledgement";
 import { clientReducer } from "./Client";
 import { globalReducer } from "./Global";
-import { onboardingStepsReducer } from "./OnboardingSteps";
+import { onboardingReducer } from "./Onboarding";
 import { personalInfoReducer } from "./PersonalInfo";
 import { productsReducer } from "./Products";
 import { riskAssessmentReducer } from "./RiskAssessment";
@@ -13,7 +13,7 @@ import { transactionsReducer } from "./Transactions";
 export const rootReducer = combineReducers({
   client: clientReducer,
   global: globalReducer,
-  onboardingSteps: onboardingStepsReducer,
+  onboarding: onboardingReducer,
   orderSummary: orderSummaryReducer,
   personalInfo: personalInfoReducer,
   products: productsReducer,

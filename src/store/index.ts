@@ -2,7 +2,7 @@ export * from "./Acknowledgement";
 export * from "./actionCreator";
 export * from "./Client";
 export * from "./Global";
-export * from "./OnboardingSteps";
+export * from "./Onboarding";
 export * from "./PersonalInfo";
 export * from "./Products";
 export * from "./RiskAssessment";

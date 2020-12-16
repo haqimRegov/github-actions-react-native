@@ -1,21 +1,23 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { OnboardingStepsActionProps } from "../OnboardingSteps";
+import { GlobalActionProps } from "../Global";
+import { OnboardingActionProps } from "../Onboarding";
 import { PersonalInfoActionProps } from "../PersonalInfo";
 import { ProductsActionProps } from "../Products";
 import { RootState } from "../rootReducer";
 import { SelectedFundActionProps } from "./actions";
 
 export const SelectedFundMapStateToProps = (state: RootState) => ({
-  filters: state.products.filters,
-  finishedSteps: state.onboardingSteps.finishedSteps,
+  finishedSteps: state.onboarding.finishedSteps,
   investmentDetails: state.selectedFund.investmentDetails,
   selectedFunds: state.selectedFund.funds,
+  viewFund: state.selectedFund.viewFund,
+  loading: state.global.loading,
 });
 
 export const SelectedFundMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
-    { ...OnboardingStepsActionProps, ...PersonalInfoActionProps, ...ProductsActionProps, ...SelectedFundActionProps },
+    { ...OnboardingActionProps, ...PersonalInfoActionProps, ...ProductsActionProps, ...SelectedFundActionProps, ...GlobalActionProps },
     dispatch,
   );
 };

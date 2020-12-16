@@ -8,12 +8,20 @@ export type ClientState = {
 export const clientInitialState: ClientState = {
   accountType: DICTIONARY_ACCOUNT_TYPE[0],
   details: {
-    clientId: "",
-    idNumber: "",
-    name: "",
-    dateOfBirth: undefined,
-    idType: DICTIONARY_ID_TYPE[0] as TypeClientID,
-    otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value as TypeClientID,
+    principalHolder: {
+      name: "",
+      dateOfBirth: "",
+      id: "",
+      idType: DICTIONARY_ID_TYPE[0],
+      otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+    },
+    jointHolder: {
+      name: "",
+      dateOfBirth: "",
+      id: "",
+      idType: DICTIONARY_ID_TYPE[0],
+      otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+    },
     verified: false,
   },
 };

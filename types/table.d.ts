@@ -30,6 +30,7 @@ declare interface IColumnItem {
 }
 
 declare interface ITableColumn {
+  customHeader?: boolean;
   customItem?: boolean;
   icon?: ITableIcon;
   itemIcon?: ITableIcon;
@@ -57,22 +58,49 @@ declare interface ITableRowData {
   rawData: ITableData;
 }
 
-declare interface CustomTableProps {
-  activeAccordion?: number[];
-  columns: ITableColumn[];
-  data: ITableData[];
-  onChangeAccordion?: (indexes: number[]) => void;
-  onRowSelect?: (record: ITableData[]) => void;
-  RenderAccordion?: (record: ITableData) => JSX.Element;
-  RenderOptions?: (props: ITableOptions) => JSX.Element;
-  RenderCustomItem?: (record: ITableData, key: string) => JSX.Element;
-  rowSelection?: ITableData[];
-  rowSelectionLabel?: string;
-}
-
 declare interface ITableCustomItem {
   accordionIcon?: ITableIcon;
   item: ITableRowData;
   keyName: ITableItemKey;
   lastIndex: boolean;
+}
+
+declare interface BaseTableProps {
+  activeAccordion?: number[];
+  columns: ITableColumn[];
+  handleRowNavigation?: (item: ITableData) => void;
+  onRowSelect?: (record: ITableData) => void;
+  RenderAccordion?: (record: ITableData, index: number) => JSX.Element;
+  RenderCustomItem?: (customItem: ITableCustomItem) => JSX.Element;
+  RenderOptions?: (props: ITableOptions) => JSX.Element;
+  rowSelection?: ITableData[];
+  rowSelectionKey?: string;
+}
+
+declare interface BaseTableHeaderProps {
+  RenderCustomHeader?: RenderCustomHeaderType;
+  RowSelectionItem?: () => JSX.Element;
+}
+
+declare type RenderCustomHeaderType = (props: RenderCustomHeaderProps) => JSX.Element;
+
+declare interface RenderCustomHeaderProps {
+  item: ITableColumn;
+}
+
+declare interface AdvanceTableProps extends BaseTableProps, BaseTableHeaderProps {
+  data: ITableData[];
+  spaceToHeader?: number;
+}
+
+declare interface AdvanceTableRowProps extends BaseTableProps {
+  index: number;
+  item: ITableData;
+  lastIndex: boolean;
+  // itemSelected?: boolean;
+}
+
+declare interface TableHeaderProps extends BaseTableHeaderProps {
+  columns: ITableColumn[];
+  withActions?: boolean;
 }

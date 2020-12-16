@@ -1,5 +1,6 @@
 declare interface IGetRiskProfileRequest {
   clientId: string;
+  dateOfBirth: string;
   riskAssessment: {
     questionOne: number;
     questionTwo: number;

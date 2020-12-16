@@ -6,8 +6,10 @@ declare interface IConfig {
 }
 
 declare interface IAgentProfile {
+  id: string;
   email: string;
   licenseCode: string;
+  licenseType: string[];
   agentCode?: string;
   branch?: string;
   name?: string;

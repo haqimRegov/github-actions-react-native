@@ -68,6 +68,25 @@ declare interface IFundSales extends IFundInvestment {
   fund: IFund;
 }
 
+declare interface IProductSales {
+  fundDetails: IProduct;
+  investment: IProductInvestment;
+  masterClassList: IProductClasses;
+}
+
+declare interface IProductInvestment {
+  amountError?: string;
+  fundClass?: string;
+  fundCurrency?: string;
+  fundPaymentMethod: "Cash" | "EPF";
+  investmentAmount: string;
+  investmentSalesCharge: string;
+  scheduledAmountError?: string;
+  scheduledInvestment: boolean;
+  scheduledInvestmentAmount?: string;
+  scheduledSalesCharge?: string;
+}
+
 declare interface IFundInvestment {
   fundPaymentMethod: "Cash" | "EPF";
   investmentAmount: string;

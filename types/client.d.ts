@@ -13,6 +13,8 @@ declare interface IClientIDDetails {
 }
 
 declare type TypeIDChoices = "NRIC" | "Passport" | "Other";
+declare type TypeIDOther = "Army" | "Police";
+declare type TypeIDOtherLabelValue = { label: string; value: TypeIDOther };
 declare type TypeIDChoicesValue = { value: TypeIDChoices };
 declare type TypeIDChoicesLabelValue = { label: string; value: TypeCurrency };
 
@@ -31,3 +33,19 @@ declare type IClientDetails = {
 
 declare type TypeAccountChoices = "Individual" | "Joint";
 declare type TypeAccountHolder = "Principal" | "Joint";
+declare type TypeClient = "NTB" | "ETB";
+
+declare interface IClientBasicInfo {
+  dateOfBirth?: string;
+  id?: string;
+  idType?: TypeIDChoices;
+  otherIdType?: TypeIDOther;
+  name?: string;
+  clientId?: string;
+}
+
+declare type IClientDetailsState = {
+  principalHolder?: IClientBasicInfo;
+  jointHolder?: IClientBasicInfo;
+  verified?: boolean;
+};

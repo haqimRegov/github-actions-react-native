@@ -26,6 +26,7 @@ export * from "./personal";
 export * from "./place-of-birth";
 export * from "./product-filter";
 export * from "./races";
+export * from "./regex";
 export * from "./relationship";
 export * from "./risk-assessment-questions";
 export * from "./risk-category";

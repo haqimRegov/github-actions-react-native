@@ -128,5 +128,10 @@
       "json",
       "node"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm run format_all"
+    }
   }
 }

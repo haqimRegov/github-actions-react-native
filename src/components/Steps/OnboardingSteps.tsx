@@ -1,17 +1,23 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
 import {
+  borderBottomGray4,
+  colorBlue,
   colorTransparent,
   colorWhite,
   flexRow,
   fs12BoldBlack2,
   fs12RegBlack2,
+  fs14BoldBlack2,
   fs14RegBlack2,
+  fs14RegGray7,
   fullHW,
   px,
+  py,
   sh16,
+  sh20,
   sh32,
   sw112,
   sw120,
@@ -21,7 +27,8 @@ import {
   sw8,
 } from "../../styles";
 import { SideMenu } from "../Nav";
-import { CustomSpacer } from "../Views";
+import { IconText } from "../Touchables";
+import { CustomFlexSpacer, CustomSpacer } from "../Views";
 import { Step } from "./Step";
 
 export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
@@ -29,6 +36,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   activeSection,
   disableNextSteps,
   handleContentChange,
+  handleBackToDashboard,
   RenderContent,
   setActiveContent,
   setActiveSection,
@@ -47,13 +55,10 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   };
 
   const accordionHeader = (step: IOnboarding, stepIndex: number, isActive: boolean) => {
-    const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.route) : false;
+    const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.key) : false;
     const currentStep = (stepIndex + 1).toString();
-
-    const labelOpacity = isActive || !visited ? { opacity: 1 } : { opacity: 0.5 };
-    const textStyle: TextStyle = isActive
-      ? { ...fs14RegBlack2, width: sw120, ...labelOpacity }
-      : { ...fs14RegBlack2, width: sw120, ...labelOpacity };
+    const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegBlack2 : fs14BoldBlack2;
+    const textStyle: TextStyle = isActive ? { ...activeTextStyle, width: sw120 } : { ...fs14RegGray7, width: sw120 };
 
     const handleChange = () => {
       if (finishedSteps!.indexOf(step.route!) !== -1) {
@@ -64,7 +69,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
     const pointerEvents = disableNextSteps === true ? undefined : "none";
 
     return (
-      <View>
+      <Fragment>
         {stepIndex === 0 ? null : <CustomSpacer space={sh32} />}
         <TouchableWithoutFeedback onPress={handleChange}>
           <View pointerEvents={pointerEvents} style={flexRow}>
@@ -73,7 +78,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
             <Text style={textStyle}>{step.label}</Text>
           </View>
         </TouchableWithoutFeedback>
-      </View>
+      </Fragment>
     );
   };
 
@@ -146,7 +151,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>
-      <SideMenu>
+      <SideMenu spaceToBottom={0}>
         <View style={px(sw24)}>
           <Accordion
             activeSections={[activeSection]}
@@ -156,6 +161,18 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
             renderHeader={accordionHeader}
             sections={steps}
             touchableProps={{ underlayColor: colorTransparent, ...touchablePress }}
+          />
+        </View>
+        <CustomFlexSpacer />
+        <View style={borderBottomGray4} />
+        <View style={{ ...px(sw24), ...py(sh20) }}>
+          <IconText
+            color={colorBlue._2}
+            name="arrow-left"
+            onPress={handleBackToDashboard}
+            iconSize={sw24}
+            text="Back to Dashboard"
+            textStyle={fs12RegBlack2}
           />
         </View>
       </SideMenu>

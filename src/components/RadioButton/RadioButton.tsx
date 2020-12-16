@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View } from "react-native";
 
 import {
@@ -21,6 +21,7 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 interface RadioButtonProps {
+  selectedColor?: string;
   label: string;
   labelStyle?: TextStyle;
   right?: ReactNode;
@@ -28,8 +29,16 @@ interface RadioButtonProps {
   setSelected: () => void;
 }
 
-export const RadioButton = ({ label, labelStyle, right, selected, setSelected }: RadioButtonProps) => {
-  const borderColor = selected ? colorRed._1 : colorBlue._3_8;
+export const RadioButton: FunctionComponent<RadioButtonProps> = ({
+  label,
+  labelStyle,
+  right,
+  selected,
+  selectedColor,
+  setSelected,
+}: RadioButtonProps) => {
+  const color = selectedColor !== undefined ? selectedColor : colorRed._1;
+  const borderColor = selected ? color : colorBlue._3_8;
   const borderWidth = selected ? sw4 : sw1;
   const circleSize = selected ? sw8 : sw14;
 

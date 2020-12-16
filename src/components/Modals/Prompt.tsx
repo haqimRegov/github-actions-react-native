@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
-import { flexGrow } from "../../styles";
+import { centerHV, flexGrow, fullHW } from "../../styles";
 import { Prompt, PromptProps } from "../Views";
 import { BasicModal } from "./Basic";
 
@@ -40,7 +40,9 @@ export const PromptModal: FunctionComponent<PromptModalProps> = ({
       visible={visible}>
       <KeyboardAvoidingView ref={keyboardAvoidingRef} behavior={behavior}>
         <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
-          <Prompt {...rest} />
+          <View style={{ ...centerHV, ...fullHW }}>
+            <Prompt {...rest} />
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </BasicModal>

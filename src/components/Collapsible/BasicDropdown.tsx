@@ -50,6 +50,7 @@ export interface CollapsibleDropdownProps {
   dropdownInnerStyle?: ViewStyle;
   dropdownStyle?: ViewStyle;
   dummyBaseStyle?: ViewStyle;
+  flatlistStyle?: ViewStyle;
   handleChange?: (value: string[]) => void;
   handleReset?: (index: number, reset: boolean) => void;
   items?: TypeLabelValue[];
@@ -79,6 +80,7 @@ export const CollapsibleDropdown = ({
   collapseOnBaseClick,
   collapsibleStyle,
   dropdownInnerStyle,
+  flatlistStyle,
   dummyBaseStyle,
   keyboardAvoidingRef,
   onBackdropPress,
@@ -219,7 +221,7 @@ export const CollapsibleDropdown = ({
                         <FlatList
                           extraData={value}
                           data={items!.map((item) => item.label)}
-                          style={{ ...px(sw16), maxHeight: sh200 }}
+                          style={{ ...px(sw16), maxHeight: sh200, ...flatlistStyle }}
                           keyboardDismissMode="on-drag"
                           keyboardShouldPersistTaps="always"
                           keyExtractor={(item: string) => item}

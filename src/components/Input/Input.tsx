@@ -44,7 +44,7 @@ export interface CustomTextInputProps extends TextInputProps {
   rightIconColor?: string;
   rightIconPress?: () => void;
   rightIconSize?: number;
-  setRef?: (ref: TextInput | null) => void;
+  setRef?: React.MutableRefObject<TextInput | null> | null | ((instance: TextInput | null) => void);
   spaceToBottom?: number;
   spaceToLabel?: number;
   spaceToTop?: number;
@@ -92,7 +92,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   const disabledStyle: TextStyle = disabled === true ? { opacity: 0.5 } : {};
 
   return (
-    <View onLayout={onLayout}>
+    <View onLayout={onLayout} style={flexChild}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>

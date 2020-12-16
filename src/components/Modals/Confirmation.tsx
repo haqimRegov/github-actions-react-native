@@ -1,5 +1,6 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
+import { KeyboardAvoidingView, Text, TextStyle, View, ViewStyle } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import {
   centerHV,
@@ -40,7 +41,7 @@ type TypeBehavior = "height" | "position" | "padding" | undefined;
 export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   children,
   headerStyle,
-  keyboardAvoidingRef,
+  // keyboardAvoidingRef,
   spaceToButton,
   spaceToContent,
   spaceToTitle,
@@ -77,31 +78,29 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   };
 
   // TODO: fix KeyboardAvoidingView behavior, for now if number of TextInput become more it pushes top fields out of screen
-  const behavior: TypeBehavior = Platform.select({ ios: "padding" });
+  // const behavior: TypeBehavior = Platform.select({ ios: "height" });
   const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh32;
 
   return (
     <BasicModal visible={visible}>
-      <KeyboardAvoidingView ref={keyboardAvoidingRef} behavior={behavior}>
-        <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
-          <View style={{ ...centerHV, ...fullHW }}>
-            <View style={modalContainer}>
-              <View style={{ ...px(sw56), ...headerStyle }}>
-                {title !== undefined ? (
-                  <Fragment>
-                    <CustomSpacer space={defaultSpaceToTitle} />
-                    <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
-                  </Fragment>
-                ) : null}
-                <CustomSpacer space={defaultSpaceToContent} />
-                {children}
-                <CustomSpacer space={defaultSpaceToButton} />
-              </View>
-              <ActionButtons {...actionButtonProps} />
+      <KeyboardAwareScrollView contentContainerStyle={flexGrow}>
+        <View style={{ ...centerHV, ...fullHW }}>
+          <View style={modalContainer}>
+            <View style={{ ...px(sw56), ...headerStyle }}>
+              {title !== undefined ? (
+                <Fragment>
+                  <CustomSpacer space={defaultSpaceToTitle} />
+                  <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
+                </Fragment>
+              ) : null}
+              <CustomSpacer space={defaultSpaceToContent} />
+              {children}
+              <CustomSpacer space={defaultSpaceToButton} />
             </View>
+            <ActionButtons {...actionButtonProps} />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </KeyboardAwareScrollView>
     </BasicModal>
   );
 };

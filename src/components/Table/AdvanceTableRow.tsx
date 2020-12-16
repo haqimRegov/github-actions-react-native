@@ -34,20 +34,6 @@ import { MenuPopup } from "../Touchables/Menu";
 import { TouchableWrapper } from "../Touchables/TouchableWrapper";
 import { CustomSpacer } from "../Views/Spacer";
 
-interface AdvanceTableRowProps {
-  activeAccordion?: number[];
-  columns: ITableColumn[];
-  handleRowNavigation?: (item: ITableData) => void;
-  index: number;
-  item: ITableData;
-  lastIndex: boolean;
-  onRowSelect?: (record: ITableData[]) => void;
-  RenderAccordion?: (record: ITableData, index: number) => JSX.Element;
-  RenderCustomItem?: (customItem: ITableCustomItem) => JSX.Element;
-  RenderOptions?: (props: ITableOptions) => JSX.Element;
-  rowSelection?: ITableData[];
-}
-
 export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   activeAccordion,
   columns,
@@ -60,8 +46,12 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   RenderCustomItem,
   RenderOptions,
   rowSelection,
+  rowSelectionKey,
 }: AdvanceTableRowProps) => {
-  const itemSelected = rowSelection !== undefined && rowSelection.indexOf(item) !== -1;
+  const itemSelected =
+    rowSelection !== undefined && rowSelectionKey !== undefined
+      ? rowSelection.findIndex((rowData) => rowData[rowSelectionKey] === item[rowSelectionKey]) > -1
+      : false;
   const itemAccordionOpen = activeAccordion !== undefined ? activeAccordion.includes(index) : false;
   const itemBorder: ViewStyle = itemAccordionOpen ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {};
 
@@ -75,7 +65,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
 
   const handleSelectRow = () => {
     if (onRowSelect !== undefined) {
-      onRowSelect([item]);
+      onRowSelect(item);
     }
   };
 

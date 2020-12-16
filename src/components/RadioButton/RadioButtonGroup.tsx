@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View } from "react-native";
 
 import { flexCol, flexRow, fs16RegBlack2, sh16, sw16 } from "../../styles";
@@ -13,19 +13,21 @@ export interface RadioButtonGroupProps {
   options: string[];
   optionStyle?: TextStyle;
   selected: string;
+  selectedColor?: string;
   setSelected: (selected: string) => void;
   space?: number;
   spaceToLabel?: number;
   spaceToTop?: number;
 }
 
-export const RadioButtonGroup = ({
+export const RadioButtonGroup: FunctionComponent<RadioButtonGroupProps> = ({
   direction,
   label,
   labelStyle,
   options,
   optionStyle,
   selected,
+  selectedColor,
   setSelected,
   space,
   spaceToLabel,
@@ -48,7 +50,13 @@ export const RadioButtonGroup = ({
           return (
             <Fragment key={index}>
               {index === 0 ? null : <CustomSpacer isHorizontal={direction === "row"} space={radioSpace} />}
-              <RadioButton label={option} labelStyle={optionStyle} selected={option === selected} setSelected={handleSelect} />
+              <RadioButton
+                label={option}
+                labelStyle={optionStyle}
+                selected={option === selected}
+                selectedColor={selectedColor}
+                setSelected={handleSelect}
+              />
             </Fragment>
           );
         })}

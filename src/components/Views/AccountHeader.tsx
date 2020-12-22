@@ -6,7 +6,7 @@ import {
   centerVertical,
   colorWhite,
   flexRow,
-  fs16RegBlack2,
+  fs12RegBlack2,
   fs24BoldBlack2,
   px,
   sh24,
@@ -56,7 +56,7 @@ export const AccountHeader: FunctionComponent<AccountHeaderProps> = ({
       <View style={container}>
         <Text style={{ ...fs24BoldBlack2, ...titleStyle }}>{title}</Text>
         <CustomFlexSpacer />
-        <Text style={{ ...fs16RegBlack2, ...subtitleStyle }}>{subtitle}</Text>
+        <Text style={{ ...fs12RegBlack2, ...subtitleStyle }}>{subtitle}</Text>
       </View>
       <CustomSpacer space={defaultBottomSpace} />
     </Fragment>

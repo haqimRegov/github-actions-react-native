@@ -7,6 +7,7 @@ import { CheckBox } from "./CheckBox";
 
 export interface CheckBoxGroupProps {
   checkBoxStyle?: ViewStyle;
+  checkboxLabelStyle?: TextStyle;
   direction?: "column" | "row";
   columntCount?: number;
   disabled?: boolean;
@@ -23,6 +24,7 @@ export interface CheckBoxGroupProps {
 
 export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
   checkBoxStyle,
+  checkboxLabelStyle,
   direction,
   disabled,
   disabledIndex,
@@ -40,7 +42,6 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
   const flexDirection = direction === "row" ? flexRow : flexCol;
 
   const labelDisabled = disabled === true ? { opacity: 0.5 } : {};
-
   return (
     <View>
       {label !== undefined ? (
@@ -62,7 +63,7 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
                 disabled={disabled === true ? true : disabledOption}
                 key={index}
                 label={option}
-                labelStyle={fs14RegBlack2}
+                labelStyle={{ ...fs14RegBlack2, ...checkboxLabelStyle }}
                 onPress={handleSelect}
                 spaceToLabel={sw12}
                 style={checkBoxStyle}

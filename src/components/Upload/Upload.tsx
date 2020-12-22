@@ -174,18 +174,17 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     height: sh88,
   };
   const errorStyle: TextStyle = defaultError !== "" ? { color: colorRed._2 } : {};
-  const uploadIcon = features.includes("file") ? "file" : "profile";
   const iconBadgeOffset = { bottom: 0.5 };
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={container}>
         {value === undefined || defaultError !== "" ? (
-          <IcoMoon color={colorBlack._1} name={uploadIcon} size={sh24} />
+          <IcoMoon color={colorBlack._1} name="file" size={sh24} />
         ) : (
           <View style={iconBadgeOffset}>
             <Badge>
-              <IcoMoon color={colorBlack._1} name={uploadIcon} size={sh24} />
+              <IcoMoon color={colorBlack._1} name="file" size={sh24} />
             </Badge>
           </View>
         )}

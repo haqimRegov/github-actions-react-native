@@ -175,7 +175,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
               <Prompt
                 labelContinue={LOGIN.BUTTON_ENTER}
                 handleContinue={handleEnterOTP}
-                illustration={LocalAssets.illustration.login_error}
+                illustration={LocalAssets.illustration.loginError}
                 label={LOGIN.LABEL_LOCKED_ACCOUNT}
                 title={LOGIN.TITLE_LOCKED_ACCOUNT}
               />

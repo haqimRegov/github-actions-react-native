@@ -5,27 +5,37 @@ declare interface ISubmitInvestment {
   fundId: string;
   fundingOption: string;
   investmentAmount: string;
-  isScheduled: TypeBooleanString;
   salesCharge: string;
 
+  isScheduled?: string;
   fundClass?: string;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;
 }
 
 declare interface ISubmitBank {
-  bankAccountName: string;
-  bankAccountNumber: string;
-  bankLocation: string;
-  bankName: string;
-  bankSwiftCode: string;
-  currency: string[];
+  bankAccountName?: string;
+  bankAccountNumber?: string;
+  bankLocation?: string;
+  bankName?: string;
+  bankSwiftCode?: string;
+  currency?: string[];
+}
+
+declare interface ISubmitBankSummary {
+  localBank: ISubmitBank[];
+  foreignBank?: ISubmitBank[];
 }
 
 declare interface ISubmitContactNumber {
   code: string;
   label: string;
   value: string;
+}
+
+declare interface ISubmitContactDetails {
+  emailAddress: string;
+  contactNumber: ISubmitContactNumber[];
 }
 
 declare interface ISubmitEmploymentBase extends ISubmitAddress {
@@ -46,6 +56,11 @@ declare interface ISubmitAddress {
   state: string;
 }
 
+declare interface ISubmitAddressInformation {
+  mailingAddress?: ISubmitAddress;
+  permanentAddress?: ISubmitAddress;
+}
+
 declare interface ISubmitPersonalDetails {
   countryOfBirth: string;
   educationLevel: string;
@@ -59,59 +74,56 @@ declare interface ISubmitPersonalDetails {
   placeOfBirth: string;
   salutation: string;
 
-  bumiputera?: boolean;
-  expirationDate?: string;
+  bumiputera?: string;
+  expirationDate?: number;
   race?: string;
   relationship?: string;
 }
 
 declare interface ISubmitEpfDetails {
-  epfAccountType: string;
-  epfMemberNumber: string;
+  epfAccountType?: string;
+  epfMemberNumber?: string;
 }
 
 declare interface ISubmitCrs {
   country?: string; // undefined if taxResident === 0
-  noTin?: TypeBooleanString; // "true" || "false", undefined if taxResident === 0
+  noTin?: string; // "true" || "false", undefined if taxResident === 0
   reason?: string; // undefined if taxResident === 0, required if noTin === true
   taxResident: string; // find index
   tinNumber?: string; // undefined if taxResident === 0 or noTin === true
 }
 
 declare interface ISubmitFatca {
-  formW9?: TypeBooleanString; // "true" || "false", required if usCitizen === true
-  formW8Ben?: TypeBooleanString; // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-  confirmAddress?: TypeBooleanString; // "true" || "false", only required if usCitizen is false and usBorn is true
+  formW9?: string; // "true" || "false", required if usCitizen === true
+  formW8Ben?: string; // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+  confirmAddress?: string; // "true" || "false", only required if usCitizen is false and usBorn is true
   certificate?: FileBase64; // required if noCertificate === false
-  noCertificate?: TypeBooleanString; // "true" || "false", required if certificate === undefined
+  noCertificate?: string; // "true" || "false", required if certificate === undefined
   reason?: string; // required if noCertificate === true
-  usBorn?: TypeBooleanString; // "true" || "false", required if usCitizen === false
-  usCitizen: TypeBooleanString; // "true" || "false", required
+  usBorn?: string; // "true" || "false", required if usCitizen === false
+  usCitizen: string; // "true" || "false", required
 }
 
 declare interface ISubmitFea {
   balance: string;
-  borrowingFacility: TypeBooleanString; // "true" || "false"
-  resident: TypeBooleanString; // "true" || "false"
+  borrowingFacility: string; // "true" || "false"
+  resident: string; // "true" || "false"
+}
+
+declare interface ISubmitDeclaration {
+  crs?: ISubmitCrs;
+  fatca?: ISubmitFatca;
+  fea?: ISubmitFea;
 }
 
 declare interface ISubmitClientAccountRequest {
-  incomeDistribution: "";
+  incomeDistribution: string;
   signatory?: string;
   principal: {
     clientId: string;
-    addressInformation: {
-      mailingAddress: ISubmitAddress;
-      permanentAddress: ISubmitAddress;
-    };
-    bankSummary: {
-      localBank: ISubmitBank[];
-      foreignBank?: ISubmitBank[];
-    };
-    contactDetails: {
-      emailAddress: string;
-      contactNumber: ISubmitContactNumber[];
-    };
+    addressInformation: ISubmitAddressInformation;
+    bankSummary: ISubmitBankSummary;
+    contactDetails: ISubmitContactDetails;
     declaration: {
       crs: ISubmitCrs;
       fatca: ISubmitFatca;
@@ -123,19 +135,9 @@ declare interface ISubmitClientAccountRequest {
   };
   joint?: {
     clientId: string;
-    addressInformation: {
-      mailingAddress: ISubmitAddress;
-      permanentAddress: ISubmitAddress;
-    };
-    contactDetails?: {
-      emailAddress?: string;
-      contactNumber?: ISubmitContactNumber[];
-    };
-    declaration?: {
-      crs?: ISubmitCrs;
-      fatca?: ISubmitFatca;
-      fea?: ISubmitFea;
-    };
+    addressInformation: ISubmitAddressInformation;
+    contactDetails?: ISubmitContactDetails;
+    declaration?: ISubmitDeclaration;
     employmentDetails?: ISubmitEmploymentJoint;
     personalDetails: ISubmitPersonalDetails;
   };

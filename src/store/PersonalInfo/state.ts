@@ -8,6 +8,7 @@ export type PersonalInfoState = IPersonalInfoState;
 export const personalInfoInitialState: PersonalInfoState = {
   cancelOnboarding: false,
   editMode: false,
+  editPersonal: false,
   editDeclaration: false,
   epfInvestment: false,
   incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,

@@ -63,7 +63,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
 
   return (
     <SafeAreaPage>
-      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={flexGrow}>
         <View style={px(sw24)}>
           <CustomSpacer space={sh32} />
           <LabeledTitle

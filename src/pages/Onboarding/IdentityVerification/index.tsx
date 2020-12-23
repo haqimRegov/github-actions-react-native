@@ -6,7 +6,7 @@ import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh40, sh56, sw24 } from "../../../styles";
+import { px, sh40, sw24 } from "../../../styles";
 import { OCRUtils } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -20,16 +20,14 @@ interface IdentityConfirmationProps extends PersonalInfoStoreProps, OnboardingCo
 
 const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps> = ({
   accountType,
-  addClientDetails,
   addPersonalInfo,
   details,
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
-  riskScore,
 }: IdentityConfirmationProps) => {
   // TODO issue in dropdown and keyboard avoiding view
-  const defaultPage = personalInfo.editMode === true ? 1 : 0;
+  const defaultPage = personalInfo.editPersonal === true ? 1 : 0;
   const [page, setPage] = useState<number>(defaultPage);
   const [uploadType, setUploadType] = useState<TypeUploader | undefined>(undefined);
   const [reviewImage, setReviewImage] = useState<FileBase64 | undefined>(undefined);
@@ -278,7 +276,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               setFrontPage={handlePrincipalFrontPage}
               uploadRef={principalUploadRef}
             />
-            <CustomSpacer space={sh56} />
           </View>
           {accountType === "Individual" ? null : (
             <Fragment>
@@ -301,16 +298,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           )}
         </ContentPage>
       ) : (
-        <IDVerification
-          accountType={accountType}
-          addClientDetails={addClientDetails}
-          addPersonalInfo={addPersonalInfo}
-          details={details!}
-          handleCancelOnboarding={handleCancelOnboarding!}
-          handleNextStep={handleNextStep}
-          personalInfo={personalInfo}
-          riskScore={riskScore}
-        />
+        <IDVerification handleCancelOnboarding={handleCancelOnboarding!} handleNextStep={handleNextStep} />
       )}
       <ImageReview handleProceed={handleProceed} handleReupload={handleReupload} image={reviewImage} visible={reviewImage !== undefined} />
     </Fragment>

@@ -23,6 +23,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
 }: EPFDetailsProps) => {
   return (
     <Fragment>
+      <CustomSpacer space={sh32} />
       <View style={borderBottomBlack21} />
       <View style={px(sw24)}>
         <CustomSpacer space={sh32} />

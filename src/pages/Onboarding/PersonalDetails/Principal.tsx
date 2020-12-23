@@ -14,6 +14,7 @@ interface PrincipalDetails {
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
   epfInvestment: boolean;
+  investmentCurrencies: string[];
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
   setContactDetails: (value: IContactDetailsState) => void;
@@ -27,6 +28,7 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
   contactDetails,
   epfDetails,
   epfInvestment,
+  investmentCurrencies,
   personalDetails,
   setBankDetails,
   setContactDetails,
@@ -58,6 +60,7 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
           contactDetails={contactDetails}
           epfDetails={epfDetails}
           epfInvestment={epfInvestment}
+          investmentCurrencies={investmentCurrencies}
           personalDetails={personalDetails}
           setBankDetails={setBankDetails}
           setContactDetails={setContactDetails}

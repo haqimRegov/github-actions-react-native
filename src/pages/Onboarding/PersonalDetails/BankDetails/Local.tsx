@@ -18,25 +18,30 @@ import {
   colorBlue,
   flexRow,
   fs12BoldBlue2,
+  fs12SemiBoldGray8,
   fs16BoldBlue2,
   px,
   py,
   sh24,
   sh32,
   sh8,
+  sw02,
   sw16,
   sw24,
+  sw328,
 } from "../../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface ILocalBankDetailsProps {
   bankingDetails: IBankDetailsState[];
+  investmentCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
 }
 
 export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
   bankingDetails,
+  investmentCurrencies,
   setBankingDetails,
 }: ILocalBankDetailsProps) => {
   return (
@@ -85,8 +90,16 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
+        const handleSwiftCode = (input: string) => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].bankSwiftCode = input;
+          setBankingDetails(updatedDetails);
+        };
+
         const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} ${index + 1}`;
-        const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => !item.currency!.includes(filteredCurrency.value));
+        const currencyExtractor = DICTIONARY_CURRENCY.filter(
+          (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
+        );
 
         return (
           <View key={index}>
@@ -163,7 +176,18 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 spaceToTop={sh32}
                 value={item.bankAccountNumber}
               />
-              {item.currency!.length === DICTIONARY_CURRENCY.length ? null : (
+              <CustomTextInput
+                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
+                onChangeText={handleSwiftCode}
+                spaceToTop={sh32}
+                value={item.bankSwiftCode}
+              />
+              <TextSpaceArea
+                spaceToTop={sh8}
+                style={{ ...fs12SemiBoldGray8, ...px(sw16), letterSpacing: -sw02, maxWidth: sw328 }}
+                text={PERSONAL_DETAILS.HINT_SWIFT_CODE}
+              />
+              {item.currency!.length === investmentCurrencies.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
                   <OutlineButton
@@ -177,7 +201,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 </Fragment>
               )}
             </View>
-            <CustomSpacer space={sh24} />
+            {index === bankingDetails.length - 1 ? null : <CustomSpacer space={sh24} />}
           </View>
         );
       })}

@@ -13,6 +13,7 @@ interface JointDetails {
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
   epfInvestment: boolean;
+  investmentCurrencies: string[];
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
   setContactDetails: (value: IContactDetailsState) => void;
@@ -25,6 +26,7 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
   contactDetails,
   epfDetails,
   epfInvestment,
+  investmentCurrencies,
   personalDetails,
   setBankDetails,
   setContactDetails,
@@ -51,6 +53,7 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
           contactDetails={contactDetails}
           epfDetails={epfDetails}
           epfInvestment={epfInvestment}
+          investmentCurrencies={investmentCurrencies}
           personalDetails={personalDetails}
           setBankDetails={setBankDetails}
           setContactDetails={setContactDetails}

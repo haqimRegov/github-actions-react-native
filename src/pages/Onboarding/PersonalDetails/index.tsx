@@ -17,14 +17,63 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   handleCancelOnboarding,
   handleNextStep,
   personalInfo,
+  productSales,
 }: PersonalDetailsProps) => {
   const { principal, joint, epfInvestment } = personalInfo;
+  const investmentCurrencies = productSales!.map(({ investment }) =>
+    investment.fundCurrency !== undefined ? investment.fundCurrency : "",
+  );
+  const checkRelationship = accountType === "Individual" ? true : principal!.personalDetails?.relationship !== "";
+  const checkLocalBank = principal!.bankSummary!.localBank!.map(
+    (bank) => bank.bankName !== "" && bank.bankAccountNumber !== "" && bank.bankAccountName !== "" && bank.currency?.includes("") === false,
+  );
 
-  // TODO validations
-  const buttonDisabled = false;
+  const checkForeignBank =
+    principal!.bankSummary!.foreignBank!.length > 0
+      ? principal!.bankSummary!.foreignBank!.map(
+          (bank) =>
+            bank.bankName !== "" &&
+            bank.bankAccountNumber !== "" &&
+            bank.bankAccountName !== "" &&
+            bank.currency?.includes("") === false &&
+            bank.bankLocation !== "",
+        )
+      : [true];
+
+  const validateDetails = (details: IHolderInfoState) => {
+    const { contactDetails, personalDetails } = details;
+    const checkEducation =
+      personalDetails!.educationLevel !== "" ||
+      (personalDetails!.educationLevel !== "" &&
+        personalDetails!.educationLevel === "Others" &&
+        personalDetails!.otherEducationLevel !== "");
+    const checkMalaysianDetails =
+      personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
+    return (
+      Object.values(contactDetails!.contactNumber!)
+        .map((contact) => contact.value)
+        .flat()
+        .includes("") === false &&
+      checkMalaysianDetails === true &&
+      personalDetails!.mothersMaidenName !== "" &&
+      personalDetails!.maritalStatus !== "" &&
+      checkEducation === true &&
+      personalDetails!.monthlyHouseholdIncome !== ""
+    );
+  };
+
+  const buttonDisabled =
+    accountType === "Individual"
+      ? validateDetails(principal!) === false || checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true
+      : validateDetails(principal!) === false ||
+        checkLocalBank.includes(false) === true ||
+        checkForeignBank.includes(false) === true ||
+        validateDetails(joint!) === false ||
+        checkRelationship === false;
 
   const handleSubmit = () => {
-    const route: TypeOnboardingRoute = personalInfo.editMode === true ? "PersonalInfoSummary" : "EmploymentDetails";
+    const route: TypeOnboardingRoute = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
+    addPersonalInfo({ ...personalInfo, editPersonal: true });
     handleNextStep(route);
   };
 
@@ -64,6 +113,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     addPersonalInfo({ joint: { personalDetails: { ...joint!.personalDetails, ...value } } });
   };
   const padding = accountType === "Joint" ? px(sw48) : px(sw24);
+  const uniqueCurrencies = investmentCurrencies.filter((currency, index) => investmentCurrencies.indexOf(currency) === index);
 
   return (
     <ContentPage
@@ -78,6 +128,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           contactDetails={principal!.contactDetails!}
           epfDetails={principal!.epfDetails!}
           epfInvestment={epfInvestment!}
+          investmentCurrencies={uniqueCurrencies}
           personalDetails={principal!.personalDetails!}
           setBankDetails={handlePrincipalBankDetails}
           setContactDetails={handlePrincipalContactDetails}
@@ -94,6 +145,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
               contactDetails={joint!.contactDetails!}
               epfDetails={joint!.epfDetails!}
               epfInvestment={epfInvestment!}
+              investmentCurrencies={uniqueCurrencies}
               personalDetails={joint!.personalDetails!}
               setBankDetails={handleJointBankDetails}
               setContactDetails={handleJointContactDetails}

@@ -1,11 +1,11 @@
 declare interface IRiskAssessmentQuestions {
-  questionOne?: number;
   questionTwo?: number;
   questionThree?: number;
   questionFour?: number;
   questionFive?: number;
   questionSix?: number;
   questionSeven?: number;
+  questionEight?: number;
 }
 
 declare interface IRiskScore {
@@ -17,4 +17,4 @@ declare interface IRiskScore {
   type: string;
 }
 
-declare type TypeRiskAssessmentModal = "prompt" | "assessment" | undefined;
+declare type TypeRiskAssessmentModal = "promptAssessment" | "assessment" | "promptDateOfBirth" | undefined;

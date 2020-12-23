@@ -131,6 +131,7 @@ declare interface IHolderInfoState {
 declare interface IPersonalInfoState {
   cancelOnboarding?: boolean;
   editMode?: boolean;
+  editPersonal?: boolean;
   editDeclaration?: boolean;
   epfInvestment?: boolean;
   joint?: IHolderInfoState;

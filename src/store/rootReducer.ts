@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
-import { orderSummaryReducer } from "./Acknowledgement";
+import { acknowledgementReducer } from "./Acknowledgement";
 import { clientReducer } from "./Client";
 import { globalReducer } from "./Global";
 import { onboardingReducer } from "./Onboarding";
@@ -11,10 +11,10 @@ import { selectedFundReducer } from "./SelectedFund";
 import { transactionsReducer } from "./Transactions";
 
 export const rootReducer = combineReducers({
+  acknowledgement: acknowledgementReducer,
   client: clientReducer,
   global: globalReducer,
   onboarding: onboardingReducer,
-  orderSummary: orderSummaryReducer,
   personalInfo: personalInfoReducer,
   products: productsReducer,
   riskAssessment: riskAssessmentReducer,

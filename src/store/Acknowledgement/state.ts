@@ -1,7 +1,7 @@
-export type orderSummaryState = {
+export type acknowledgementState = {
   orders: IOrderSummary[];
 };
 
-export const orderSummaryInitialState: orderSummaryState = {
+export const acknowledgementInitialState: acknowledgementState = {
   orders: [],
 };

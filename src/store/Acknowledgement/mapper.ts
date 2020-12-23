@@ -1,14 +1,17 @@
 import { bindActionCreators, Dispatch } from "redux";
 
 import { RootState } from "../rootReducer";
-import { OrderSummaryActionProps } from "./actions";
+import { AcknowledgementActionProps } from "./actions";
 
-export const OrderSummaryMapStateToProps = (state: RootState) => ({
-  orders: state.orderSummary.orders,
+export const AcknowledgementMapStateToProps = (state: RootState) => ({
+  investmentDetails: state.selectedFund.investmentDetails,
+  orders: state.acknowledgement.orders,
+  personalInfo: state.personalInfo,
 });
 
-export const OrderSummaryMapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators(OrderSummaryActionProps, dispatch);
+export const AcknowledgementMapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(AcknowledgementActionProps, dispatch);
 };
 
-export type OrderSummaryStoreProps = ReturnType<typeof OrderSummaryMapStateToProps> & ReturnType<typeof OrderSummaryMapDispatchToProps>;
+export type AcknowledgementStoreProps = ReturnType<typeof AcknowledgementMapStateToProps> &
+  ReturnType<typeof AcknowledgementMapDispatchToProps>;

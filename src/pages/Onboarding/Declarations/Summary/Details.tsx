@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CardWrap, CustomFlexSpacer, CustomSpacer, FileViewer, LabeledTitleProps } from "../../../../components";
+import { AccountHeader, CardWrap, CustomSpacer, FileViewer, LabeledTitleProps } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
@@ -13,7 +13,6 @@ import {
   colorWhite,
   flexRow,
   fs16BoldBlack2,
-  fs16RegBlack2,
   fs24BoldBlack2,
   fsTransformNone,
   px,
@@ -176,8 +175,6 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
           {accountType === "Individual" ? (
             <View style={headerStyle}>
               <Text style={fs24BoldBlack2}>{name}</Text>
-              <CustomFlexSpacer />
-              <Text style={fs16RegBlack2}>{headerTitle}</Text>
             </View>
           ) : (
             <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />

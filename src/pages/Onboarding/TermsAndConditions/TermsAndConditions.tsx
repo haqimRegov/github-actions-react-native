@@ -1,25 +1,15 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 
-import {
-  BasicAccordion,
-  CheckBox,
-  ContentPage,
-  CustomFlexSpacer,
-  CustomPopup,
-  CustomSpacer,
-  LinkText,
-  RadioButtonGroup,
-} from "../../../components";
+import { BasicAccordion, CheckBox, ContentPage, CustomFlexSpacer, CustomPopup, CustomSpacer, LinkText } from "../../../components";
 import { Language } from "../../../constants/language";
 import { IcoMoon } from "../../../icons";
-import { SAMPLE_ORDER_SUMMARY } from "../../../mocks";
 import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks/terms-and-conditions";
 import {
   alignItemsStart,
   alignSelfCenter,
   borderBottomBlack21,
-  centerVertical,
+  disabledOpacity,
   flexRow,
   fs12BoldBlack2,
   fs12SemiBoldBlue2,
@@ -29,7 +19,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh40,
   sh5,
   sh8,
   sw12,
@@ -39,11 +28,9 @@ import {
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
-const RADIO_CONSENT = [TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_YES, TERMS_AND_CONDITIONS.LABEL_CONSENT_OPTION_NO];
-
 interface TermsAndConditionsProps {
-  addOrders: (orders: IOrderSummary[]) => void;
-  orders: IOrderSummary[];
+  addOrders: (orders: IInvestmentSummary) => void;
+  orders: IInvestmentSummary | undefined;
   setPage: (page: number) => void;
 }
 
@@ -54,7 +41,6 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
   const [agree4, setAgree4] = useState<boolean>(false);
   const [expandAll, setExpandAll] = useState<boolean>(false);
   const [fundTypeList, setFundTypeList] = useState<string[]>();
-  const [inputConsent, setInputConsent] = useState<number>(0);
 
   const handleCancel = () => {
     Alert.alert("Cancel");
@@ -84,15 +70,10 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
     setExpandAll(!expandAll);
   };
 
-  const handleInputConsent = (selected: string) => {
-    setInputConsent(RADIO_CONSENT.indexOf(selected));
-  };
-
   useEffect(() => {
-    addOrders(SAMPLE_ORDER_SUMMARY);
-    if (orders.length !== 0) {
-      const fundTypeArray = orders
-        .map((order: IOrderSummary) => order.funds.map((fundOrder: IFundOrderSummary) => fundOrder.fundType))
+    if (orders !== undefined) {
+      const fundTypeArray = orders.orders
+        .map((order: IOrder) => order.investments.map((investment: IOrderInvestment) => investment.fundType))
         .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
       setFundTypeList(fundTypeArray);
     }
@@ -162,20 +143,13 @@ export const TermsAndConditions: FunctionComponent<TermsAndConditionsProps> = ({
         <CustomSpacer space={sh16} />
         <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4} labelStyle={fs12BoldBlack2} onPress={handleAgree4} toggle={agree4} />
         <CustomSpacer space={sh16} />
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.LABEL_CONSENT}</Text>
-          <CustomSpacer isHorizontal={true} space={sw12} />
-          <CustomPopup popupText={TERMS_AND_CONDITIONS.POPUP_CONSENT}>
-            <IcoMoon name="info" size={sw24} />
-          </CustomPopup>
-        </View>
-        <CustomSpacer space={sh16} />
-        <RadioButtonGroup
-          direction="row"
-          options={RADIO_CONSENT}
-          selected={RADIO_CONSENT[inputConsent]}
-          setSelected={handleInputConsent}
-          space={sh40}
+        <CheckBox
+          checkboxStyle={{ ...disabledOpacity, paddingTop: sh5 }}
+          label={TERMS_AND_CONDITIONS.POPUP_CONSENT}
+          labelStyle={fs12BoldBlack2}
+          style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+          onPress={() => {}}
+          toggle={true}
         />
       </View>
     </ContentPage>

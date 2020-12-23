@@ -5,13 +5,13 @@ export type RiskAssessmentState = {
 
 export const riskAssessmentInitialState: RiskAssessmentState = {
   questionnaire: {
-    questionOne: 0,
     questionTwo: 0,
     questionThree: 0,
     questionFour: 0,
     questionFive: 0,
     questionSix: 0,
     questionSeven: 0,
+    questionEight: -1,
   },
   riskScore: {
     appetite: "",

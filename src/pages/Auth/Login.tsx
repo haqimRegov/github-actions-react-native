@@ -2,7 +2,6 @@ import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, useState } from "react";
 import { ActivityIndicator, Keyboard, View } from "react-native";
-import DeviceInfo from "react-native-device-info";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -10,6 +9,7 @@ import { BasicModal, Prompt } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
 import { updateStorageData } from "../../integrations";
+import { SAMPLE_AGENT } from "../../mocks";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
@@ -45,7 +45,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
   };
   const handleLogin = async () => {
     // TODO deviceToken is only available for real devices
-    const uniqueId = DeviceInfo.getUniqueId();
+    // const uniqueId = DeviceInfo.getUniqueId();
     Keyboard.dismiss();
     setLockPrompt(false);
     setLoading(true);
@@ -55,7 +55,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
     setLoading(true);
     const response: ILoginResponse = await login(
       { username: inputNRIC, password: encryptedPassword },
-      { deviceToken: uniqueId, encryptionKey: credentials.sessionToken },
+      { encryptionKey: credentials.sessionToken },
     );
     if (response !== undefined) {
       const { data, error } = response;
@@ -64,7 +64,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
           const { name, licenseCode, licenseType, email, agentId } = data.result;
           await Auth.signIn(inputNRIC, inputPassword);
           addGlobal({
-            agent: { name: name, email: email, licenseCode: licenseCode, licenseType: licenseType, id: agentId },
+            agent: { name: name, email: email, licenseCode: licenseCode, licenseType: licenseType, id: agentId, image: SAMPLE_AGENT.image },
             config: {
               identityId: data.result.identityId,
               secretAccessKey: data.result.secretAccessKey,
@@ -175,7 +175,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
               <Prompt
                 labelContinue={LOGIN.BUTTON_ENTER}
                 handleContinue={handleEnterOTP}
-                illustration={LocalAssets.illustration.login_error}
+                illustration={LocalAssets.illustration.loginError}
                 label={LOGIN.LABEL_LOCKED_ACCOUNT}
                 title={LOGIN.TITLE_LOCKED_ACCOUNT}
               />

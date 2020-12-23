@@ -14,6 +14,7 @@ export const PersonalInfoMapStateToProps = (state: RootState) => ({
   investmentDetails: state.selectedFund.investmentDetails,
   personalInfo: state.personalInfo,
   riskScore: state.riskAssessment.riskScore,
+  productSales: state.selectedFund.investmentDetails,
 });
 
 export const PersonalInfoMapDispatchToProps = (dispatch: Dispatch) => {

@@ -4,7 +4,7 @@ declare interface ILoginRequest {
 }
 
 declare interface ILoginHeader {
-  deviceToken: string;
+  deviceToken?: string;
   encryptionKey: string;
 }
 

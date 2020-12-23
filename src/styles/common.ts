@@ -46,6 +46,7 @@ export const borderBottomRed4 = { borderBottomWidth: 1, borderBottomColor: color
 export const borderLeftGray4 = { borderLeftWidth: 1, borderLeftColor: colorGray._4 } as const;
 export const borderTopGray2 = { borderTopWidth: 1, borderTopColor: colorGray._2 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
+export const borderDashed = { borderStyle: "dashed" } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
 export const noBGColor = { backgroundColor: colorTransparent } as const;
@@ -79,6 +80,8 @@ export const customShadow = (color: string, offsetY: number, offsetX: number, op
   shadowOpacity: opacity,
   shadowRadius: radius,
 });
+
+export const disabledOpacity = { opacity: 0.5 } as const;
 
 export const px = (points: number) =>
   ({

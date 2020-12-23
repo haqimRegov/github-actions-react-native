@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
-import { Image, Text, TextStyle, View } from "react-native";
+import { Image, Text, TextStyle, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -8,16 +8,19 @@ import {
   ContentPage,
   CustomSlider,
   CustomSpacer,
+  CustomTextInput,
   CustomTooltip,
   LabeledTitle,
   Question,
   RadioButton,
 } from "../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../constants";
-import { Q1_OPTIONS, Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS } from "../../data/dictionary";
+import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
+  colorBlue,
+  disabledOpacity,
   flexRow,
   fs10BoldBlack2,
   fs12BoldBlack2,
@@ -50,36 +53,37 @@ interface QuestionnaireContentProps extends OnboardingContentProps, RiskStorePro
 const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
   addAssessmentQuestions,
   addRiskScore,
-  principalHolder,
   finishedSteps,
   handleCancelOnboarding,
   handleNextStep,
+  // handleResetOnboarding,
+  principalHolder,
   questionnaire,
   resetRiskAssessment,
   riskScore,
-  updateFinishedSteps,
   setLoading,
+  updateFinishedSteps,
 }: QuestionnaireContentProps) => {
-  const { clientId } = principalHolder!;
+  const { clientId, dateOfBirth, name } = principalHolder!;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
-  const { questionOne, questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven } = questionnaire;
+  const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight } = questionnaire;
 
-  const setQ1 = (index: number) => addAssessmentQuestions({ questionOne: index });
   const setQ2 = (index: number) => addAssessmentQuestions({ questionTwo: index });
   const setQ3 = (index: number) => addAssessmentQuestions({ questionThree: index });
   const setQ4 = (index: number) => addAssessmentQuestions({ questionFour: index });
   const setQ5 = (index: number) => addAssessmentQuestions({ questionFive: index });
   const setQ6 = (index: number) => addAssessmentQuestions({ questionSix: index });
-  const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
+  const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index, questionEight: index > 0 ? 0 : -1 });
+  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index });
 
   const handleConfirmAssessment = () => {
+    handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
     const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
     updatedSteps.push(ONBOARDING_KEYS.RiskAssessment);
     setConfirmModal(undefined);
     updateFinishedSteps(updatedSteps);
-    handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
   };
 
   const handleRetakeAssessment = () => {
@@ -97,7 +101,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         questionFive: questionFive!,
         questionSix: questionSix!,
         questionSeven: questionSeven!,
-        questionEight: questionOne!,
+        questionEight: questionEight!,
       },
     });
     if (response !== undefined) {
@@ -113,10 +117,15 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     }
   };
 
-  const handleEdit = () => {
+  const handleConfirmEdit = () => {
+    if (confirmModal === "promptDateOfBirth") {
+      // TODO prefill previous principal holder details
+      // return handleResetOnboarding(false, { editMode: true });
+    }
     setConfirmModal(undefined);
-    updateFinishedSteps([]);
+    // resetOnboarding();
     resetRiskAssessment();
+    return true;
   };
 
   const handleCancelEdit = () => {
@@ -124,15 +133,23 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       setConfirmModal(undefined);
       addAssessmentQuestions(prevQuestionnaire);
     }
+    if (confirmModal === "promptDateOfBirth") {
+      setConfirmModal(undefined);
+    }
+  };
+
+  const handleEditDOB = () => {
+    setConfirmModal("promptDateOfBirth");
   };
 
   const isAssessment = confirmModal === "assessment";
 
   const labelCancel = isAssessment ? RISK_ASSESSMENT.BUTTON_RETAKE : RISK_ASSESSMENT.BUTTON_NO;
   const labelContinue = isAssessment ? RISK_ASSESSMENT.BUTTON_CONFIRM : RISK_ASSESSMENT.BUTTON_YES;
-  const modalTitle = isAssessment ? RISK_ASSESSMENT.PROFILE_TITLE : RISK_ASSESSMENT.EDIT_TITLE;
+  const editTitle = confirmModal === "promptDateOfBirth" ? RISK_ASSESSMENT.EDIT_TITLE_DOB : RISK_ASSESSMENT.EDIT_TITLE_ASSESSMENT;
+  const modalTitle = isAssessment ? RISK_ASSESSMENT.PROFILE_TITLE : editTitle;
   const handleCancel = isAssessment ? handleRetakeAssessment : handleCancelEdit;
-  const handleContinue = isAssessment ? handleConfirmAssessment : handleEdit;
+  const handleContinue = isAssessment ? handleConfirmAssessment : handleConfirmEdit;
   const modalTitleStyle: TextStyle = isAssessment ? {} : { width: sw432 };
 
   const riskProfile = [
@@ -149,7 +166,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     }
 
     if (prevQuestionnaire !== undefined && !isObjectEqual(questionnaire, prevQuestionnaire)) {
-      setConfirmModal("prompt");
+      setConfirmModal("promptAssessment");
     }
   }, [finishedSteps, prevQuestionnaire, questionnaire]);
 
@@ -158,35 +175,46 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       <ContentPage
         handleCancel={handleCancelOnboarding!}
         handleContinue={handlePageContinue}
-        heading={RISK_ASSESSMENT.HEADING}
+        heading={`${RISK_ASSESSMENT.HEADING} ${name}.`}
         subheading={RISK_ASSESSMENT.SUBHEADING}>
         <View style={flexRow}>
           <CustomSpacer isHorizontal={true} space={sw24} />
           <View>
             <CustomSpacer space={sh40} />
+            <TouchableWithoutFeedback onPress={handleEditDOB}>
+              <View onStartShouldSetResponderCapture={() => true}>
+                <LabeledTitle
+                  label={RISK_ASSESSMENT.LABEL_QUESTION_1}
+                  labelStyle={{ ...fs10BoldBlack2, ...disabledOpacity }}
+                  spaceToLabel={sh8}
+                  title={RISK_ASSESSMENT.QUESTION_1}
+                  titleStyle={{ ...fs16BoldBlack2, ...disabledOpacity }}
+                />
+                <CustomSpacer space={sh16} />
+                <CustomTextInput
+                  disabled={true}
+                  label={RISK_ASSESSMENT.LABEL_DATE_OF_BIRTH}
+                  rightIcon="calendar"
+                  rightIconColor={colorBlue._2}
+                  value={dateOfBirth}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+            <CustomSpacer space={sh32} />
             <LabeledTitle
-              label={RISK_ASSESSMENT.LABEL_QUESTION_1}
+              label={RISK_ASSESSMENT.LABEL_QUESTION_2}
               labelStyle={fs10BoldBlack2}
               spaceToLabel={sh8}
-              title={RISK_ASSESSMENT.QUESTION_1}
+              title={RISK_ASSESSMENT.QUESTION_2}
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q1_OPTIONS} selected={questionOne} setSelected={setQ1} />
-            <CustomSpacer space={sh32} />
-            <Question
-              label={RISK_ASSESSMENT.LABEL_QUESTION_2}
-              options={Q2_OPTIONS}
-              selected={questionTwo}
-              setSelected={setQ2}
-              title={RISK_ASSESSMENT.QUESTION_2}
-            />
+            <CustomSlider disabled={true} options={Q2_OPTIONS} selected={questionTwo!} setSelected={setQ2} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_3}
               options={Q3_OPTIONS}
-              right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
-              selected={questionThree}
+              selected={questionThree!}
               setSelected={setQ3}
               title={RISK_ASSESSMENT.QUESTION_3}
             />
@@ -194,82 +222,95 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_4}
               options={Q4_OPTIONS}
-              right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
-              selected={questionFour}
+              right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
+              selected={questionFour!}
               setSelected={setQ4}
               title={RISK_ASSESSMENT.QUESTION_4}
             />
             <CustomSpacer space={sh32} />
-            <LabeledTitle
+            <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_5}
+              options={Q5_OPTIONS}
+              right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
+              selected={questionFive!}
+              setSelected={setQ5}
+              title={RISK_ASSESSMENT.QUESTION_5}
+            />
+            <CustomSpacer space={sh32} />
+            <LabeledTitle
+              label={RISK_ASSESSMENT.LABEL_QUESTION_6}
               labelStyle={fs10BoldBlack2}
               spaceToLabel={sh8}
-              title={RISK_ASSESSMENT.QUESTION_5}
+              title={RISK_ASSESSMENT.QUESTION_6}
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q5_OPTIONS} selected={questionFive} setSelected={setQ5} />
-            <CustomSpacer space={sh32} />
-            <Question
-              label={RISK_ASSESSMENT.LABEL_QUESTION_6}
-              options={Q6_OPTIONS}
-              selected={questionSix}
-              setSelected={setQ6}
-              title={RISK_ASSESSMENT.QUESTION_6}
-            />
+            <CustomSlider disabled={true} options={Q6_OPTIONS} selected={questionSix!} setSelected={setQ6} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_7}
               options={Q7_OPTIONS}
-              RenderContent={(renderContentProps) => {
-                const { options, selected, setSelected } = renderContentProps;
-                return (
-                  <Fragment>
-                    {options!.map((option: string, index: number) => {
-                      const infoContent =
-                        index === 1 ? (
-                          <View>
-                            <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_ASSET_1}</Text>
-                            <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_ASSET_2}</Text>
-                          </View>
-                        ) : (
-                          <View>
-                            <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{RISK_ASSESSMENT.POPUP_INCOME}</Text>
-                          </View>
-                        );
-                      const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
-
-                      const handleSelect = () => {
-                        setSelected(options!.indexOf(option));
-                      };
-
-                      return (
-                        <Fragment key={index}>
-                          {index !== 0 ? <CustomSpacer isHorizontal={false} space={sh16} /> : null}
-                          <View style={flexRow}>
-                            <RadioButton
-                              label={option}
-                              labelStyle={fs12BoldBlack2}
-                              selected={index === selected}
-                              setSelected={handleSelect}
-                            />
-                            {index < 2 ? (
-                              <Fragment>
-                                <CustomSpacer isHorizontal={true} space={sw20} />
-                                <CustomTooltip content={defaultCondition} />
-                              </Fragment>
-                            ) : null}
-                          </View>
-                        </Fragment>
-                      );
-                    })}
-                  </Fragment>
-                );
-              }}
-              selected={questionSeven}
+              selected={questionSeven!}
               setSelected={setQ7}
               title={RISK_ASSESSMENT.QUESTION_7}
             />
+            {questionSeven !== undefined && questionSeven !== 0 ? (
+              <Fragment>
+                <CustomSpacer space={sh32} />
+                <Question
+                  label={RISK_ASSESSMENT.LABEL_QUESTION_8}
+                  options={Q8_OPTIONS}
+                  RenderContent={(renderContentProps) => {
+                    const { options, selected, setSelected } = renderContentProps;
+                    return (
+                      <Fragment>
+                        {options!.map((option: string, index: number) => {
+                          const infoContent =
+                            index === 1 ? (
+                              <View>
+                                <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_ASSET_1}</Text>
+                                <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_ASSET_2}</Text>
+                              </View>
+                            ) : (
+                              <View>
+                                <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{RISK_ASSESSMENT.POPUP_INCOME}</Text>
+                              </View>
+                            );
+                          const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
+
+                          const handleSelect = () => {
+                            setSelected(options!.indexOf(option));
+                          };
+
+                          return (
+                            <Fragment key={index}>
+                              {index !== 0 ? <CustomSpacer isHorizontal={false} space={sh16} /> : null}
+                              <View style={flexRow}>
+                                <RadioButton
+                                  label={option}
+                                  labelStyle={fs12BoldBlack2}
+                                  selected={index === selected}
+                                  setSelected={handleSelect}
+                                />
+                                {index < 2 ? (
+                                  <Fragment>
+                                    <CustomSpacer isHorizontal={true} space={sw20} />
+                                    <CustomTooltip content={defaultCondition} />
+                                  </Fragment>
+                                ) : null}
+                              </View>
+                            </Fragment>
+                          );
+                        })}
+                      </Fragment>
+                    );
+                  }}
+                  selected={questionEight!}
+                  setSelected={setQ8}
+                  title={RISK_ASSESSMENT.QUESTION_8}
+                />
+              </Fragment>
+            ) : null}
           </View>
           <CustomSpacer isHorizontal={true} space={sw256} />
         </View>

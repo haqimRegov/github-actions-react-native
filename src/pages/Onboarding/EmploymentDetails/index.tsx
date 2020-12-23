@@ -19,8 +19,25 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
 }: EmploymentDetailsProps) => {
   const { joint, principal } = personalInfo;
 
-  // TODO validations
-  const buttonDisabled = false;
+  const checkJointGross = accountType === "Joint" && joint!.employmentDetails!.grossIncome !== "";
+  const validateDetails = (details: IHolderInfoState) => {
+    const { employmentDetails } = details;
+    return (
+      employmentDetails!.occupation !== "" &&
+      employmentDetails!.businessNature !== "" &&
+      employmentDetails!.employerName !== "" &&
+      employmentDetails!.address !== "" &&
+      employmentDetails!.postCode !== "" &&
+      employmentDetails!.city !== "" &&
+      employmentDetails!.state !== "" &&
+      employmentDetails!.country !== ""
+    );
+  };
+
+  const buttonDisabled =
+    accountType === "Individual"
+      ? validateDetails(principal!) === false
+      : validateDetails(principal!) === false || validateDetails(joint!) === false || checkJointGross === false;
 
   const handleSubmit = () => {
     handleNextStep("PersonalInfoSummary");

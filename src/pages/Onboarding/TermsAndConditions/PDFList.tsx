@@ -1,16 +1,18 @@
+import { useNavigation } from "@react-navigation/native";
 import { Buffer } from "buffer";
 import { PDFDocument } from "pdf-lib";
-import React, { Fragment, FunctionComponent, useEffect } from "react";
-import { Alert, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer } from "../../../components";
+import { LocalAssets } from "../../../assets/LocalAssets";
+import { ContentPage, CustomSpacer, PromptModal } from "../../../components";
 import { PdfEditWithModal } from "../../../components/PdfEdit";
 import { ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
 import { Language } from "../../../constants/language";
 import { SAMPLE_PDFS } from "../../../mocks";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh24, sh8, sw24 } from "../../../styles";
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
+import { centerVertical, fs12RegBlack2, px, sh24, sh8, sw24, sw452 } from "../../../styles";
 import { GetEmbeddedBase64 } from "../../../utils";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -25,7 +27,7 @@ const initialData: PdfWithSignature = {
   },
 };
 
-export interface PDFListProps extends PersonalInfoStoreProps {
+export interface PDFListProps extends AcknowledgementStoreProps {
   currentPdf: PdfWithIndex;
   handleNextStep: (route: TypeOnboardingRoute) => void;
   initialPdfArray: FileBase64[];
@@ -48,6 +50,8 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
   setPdfList,
   updateFinishedSteps,
 }: PDFListProps) => {
+  const navigation = useNavigation();
+  const [showPrompt, setShowPrompt] = useState(false);
   const handleCancel = () => {
     Alert.alert("Cancel");
   };
@@ -73,10 +77,14 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
       };
       pdfSubmission.push(pdfWithSignature);
     });
+    setShowPrompt(true);
+  };
+
+  const handleBackToDashboard = () => {
+    navigation.navigate("Dashboard");
   };
 
   const handleContinue = () => {
-    handleSubmit();
     handleNextStep(ONBOARDING_ROUTES.Payment);
     const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
     updatedSteps.push(ONBOARDING_KEYS.Acknowledgement);
@@ -109,62 +117,82 @@ export const PDFListComponent: FunctionComponent<PDFListProps> = ({
       .includes(false);
 
   return (
-    <ContentPage
-      continueDisabled={buttonDisabled}
-      handleCancel={handleCancel}
-      handleContinue={handleContinue}
-      labelContinue={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
-      subheading={TERMS_AND_CONDITIONS.HEADING}
-      subtitle={TERMS_AND_CONDITIONS.SUBTITLE}
-      spaceToBottom={sh24}>
-      <CustomSpacer space={sh24} />
-      <View style={px(sw24)}>
-        {initialPdfArray !== undefined
-          ? initialPdfArray.map((pdf, index) => {
-              const { adviserSignature, principalSignature, jointSignature } = pdfList[index];
-              const value = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
-              const completed =
-                accountType === "Individual"
-                  ? adviserSignature !== "" && principalSignature !== ""
-                  : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
-              const handleEdit = () => {
-                const pdfData = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
-                setCurrentPdf({ pdf: pdfData, index: index });
-                setPage(2);
-              };
-              const handleRemove = () => {
-                const dataClone = [...pdfList];
-                const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
-                dataClone[index] = { ...initialData, ...jointInitial, pdf: pdf };
-                setPdfList(dataClone);
-              };
-              const disabledCondition = pdfList[index].active === false;
-              const disabled = index === 0 ? false : disabledCondition;
-              return (
-                <Fragment key={index}>
-                  <PdfEditWithModal
-                    active={pdfList[index].active}
-                    completed={completed}
-                    completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
-                    disabled={disabled}
-                    label={pdf.name}
-                    onPressEdit={handleEdit}
-                    onPressRemove={handleRemove}
-                    onSuccess={() => {}}
-                    resourceType="base64"
-                    setValue={() => {}}
-                    title={pdf.title}
-                    tooltipLabel={TERMS_AND_CONDITIONS.LABEL_PROCEED}
-                    value={value}
-                  />
-                  <CustomSpacer space={sh8} />
-                </Fragment>
-              );
-            })
-          : null}
-      </View>
-    </ContentPage>
+    <Fragment>
+      <ContentPage
+        continueDisabled={buttonDisabled}
+        handleCancel={handleCancel}
+        handleContinue={handleSubmit}
+        labelContinue={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
+        subheading={TERMS_AND_CONDITIONS.HEADING}
+        subtitle={TERMS_AND_CONDITIONS.SUBTITLE}
+        spaceToBottom={sh24}>
+        <CustomSpacer space={sh24} />
+        <View style={px(sw24)}>
+          {initialPdfArray !== undefined
+            ? initialPdfArray.map((pdf, index) => {
+                const { adviserSignature, principalSignature, jointSignature } = pdfList[index];
+                const value = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
+                const completed =
+                  accountType === "Individual"
+                    ? adviserSignature !== "" && principalSignature !== ""
+                    : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
+                const handleEdit = () => {
+                  const pdfData = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
+                  setCurrentPdf({ pdf: pdfData, index: index });
+                  setPage(2);
+                };
+                const handleRemove = () => {
+                  const dataClone = [...pdfList];
+                  const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
+                  dataClone[index] = { ...initialData, ...jointInitial, pdf: pdf };
+                  setPdfList(dataClone);
+                };
+                const disabledCondition = pdfList[index].active === false;
+                const disabled = index === 0 ? false : disabledCondition;
+                return (
+                  <Fragment key={index}>
+                    <PdfEditWithModal
+                      active={pdfList[index].active}
+                      completed={completed}
+                      completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
+                      disabled={disabled}
+                      label={pdf.name}
+                      onPressEdit={handleEdit}
+                      onPressRemove={handleRemove}
+                      onSuccess={() => {}}
+                      resourceType="base64"
+                      setValue={() => {}}
+                      title={pdf.title}
+                      tooltipLabel={TERMS_AND_CONDITIONS.LABEL_PROCEED}
+                      value={value}
+                    />
+                    <CustomSpacer space={sh8} />
+                  </Fragment>
+                );
+              })
+            : null}
+        </View>
+      </ContentPage>
+      <PromptModal
+        labelCancel={TERMS_AND_CONDITIONS.BUTTON_DASHBOARD}
+        labelContinue={TERMS_AND_CONDITIONS.BUTTON_PAY}
+        handleCancel={handleBackToDashboard}
+        handleContinue={handleContinue}
+        illustration={LocalAssets.illustration.orderReceived}
+        label={TERMS_AND_CONDITIONS.PROMPT_TITLE}
+        title={TERMS_AND_CONDITIONS.PROMPT_SUBTITLE}
+        visible={showPrompt}>
+        <View style={centerVertical}>
+          <CustomSpacer space={sh8} />
+          <View style={{ width: sw452 }}>
+            <Text style={fs12RegBlack2}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
+            <CustomSpacer space={sh8} />
+            <Text style={fs12RegBlack2}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
+          </View>
+        </View>
+      </PromptModal>
+    </Fragment>
   );
 };
 
-export const PDFList = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(PDFListComponent);
+export const PDFList = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(PDFListComponent);

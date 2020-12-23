@@ -6,6 +6,7 @@ export * from "./Card";
 export * from "./CheckBox";
 export * from "./Collapsible";
 export * from "./CommonPages";
+export * from "./Dash";
 export * from "./DateAndTimePicker";
 export * from "./Dropdown";
 export * from "./Graph";

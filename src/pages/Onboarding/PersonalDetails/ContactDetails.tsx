@@ -56,15 +56,17 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
 
           return (
             <View key={index} style={{ ...centerVertical, ...flexRow }}>
-              <CustomTextInput
-                inputPrefix={item.code}
-                keyboardType="numeric"
-                label={item.label}
-                onChangeText={handleChangeNumber}
-                placeholder="12 3456 7890"
-                spaceToTop={sh24}
-                value={item.value}
-              />
+              <View>
+                <CustomTextInput
+                  inputPrefix={item.code}
+                  keyboardType="numeric"
+                  label={item.label}
+                  onChangeText={handleChangeNumber}
+                  placeholder="12 3456 7890"
+                  spaceToTop={sh24}
+                  value={item.value}
+                />
+              </View>
               <CustomSpacer isHorizontal={true} space={sw16} />
               {index === 0 ? null : (
                 <View>
@@ -72,6 +74,7 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
                   <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} style={py(sh8)} />
                 </View>
               )}
+              <CustomFlexSpacer />
             </View>
           );
         })}

@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../../constants";
+import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS, OPTIONS_FATCA_NO_CERTIFICATE } from "../../../../data/dictionary";
 import { SAMPLE_ORDERS } from "../../../../mocks/order-summary";
 import { submitClientAccount } from "../../../../network-actions";
@@ -20,14 +20,14 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   accountType,
   details,
   addOrders,
-  // finishedSteps,
+  finishedSteps,
   handleCancelOnboarding,
   handleNextStep,
   investmentDetails,
   personalInfo,
   setLoading,
-}: // updateFinishedSteps,
-DeclarationSummaryProps) => {
+  updateFinishedSteps,
+}: DeclarationSummaryProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
 
@@ -35,6 +35,7 @@ DeclarationSummaryProps) => {
   const isFea = 100 < 500;
 
   const handleSetupClient = async () => {
+    setLoading(true);
     const jointIdType = details?.jointHolder?.idType === "Other" ? details?.jointHolder?.otherIdType : details?.jointHolder?.idType;
     const principalIdType =
       details?.principalHolder?.idType === "Other" ? details?.principalHolder?.otherIdType : details?.principalHolder?.idType;
@@ -256,7 +257,6 @@ DeclarationSummaryProps) => {
 
     // eslint-disable-next-line no-console
     console.log("request", newRequest);
-    setLoading(true);
     const response: ISetupClientAccountResponse = await submitClientAccount(newRequest);
     setLoading(false);
     if (response !== undefined) {
@@ -265,11 +265,17 @@ DeclarationSummaryProps) => {
         // eslint-disable-next-line no-console
         console.log("data", data);
         addOrders(data.result);
+        const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+        updatedSteps.push(ONBOARDING_KEYS.Declarations);
+        updateFinishedSteps(updatedSteps);
         return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
       }
 
       if (error !== null) {
         addOrders(SAMPLE_ORDERS);
+        const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
+        updatedSteps.push(ONBOARDING_KEYS.Declarations);
+        updateFinishedSteps(updatedSteps);
         return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
       }
     }

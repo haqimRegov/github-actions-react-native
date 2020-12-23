@@ -27,8 +27,10 @@ import {
   sh16,
   sh24,
   sh8,
+  sw02,
   sw12,
   sw16,
+  sw20,
   sw24,
   sw360,
   sw64,
@@ -159,7 +161,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   const handleScheduled = () => {
     const newData: IProductSales = {
       ...data,
-      investment: { ...investment, scheduledSalesCharge: "", scheduledInvestment: !scheduledInvestment },
+      investment: { ...investment, scheduledSalesCharge: "", scheduledInvestmentAmount: "", scheduledInvestment: !scheduledInvestment },
     };
     if (newData.investment.scheduledInvestment === false) {
       newData.investment.scheduledSalesCharge = "";
@@ -304,6 +306,11 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
                   onChangeText={handleScheduledAmount}
                   value={scheduledInvestmentAmount}
                 />
+                <CustomSpacer space={sh8} />
+                <View style={{ ...px(sw20) }}>
+                  <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{INVESTMENT.HINT_FPX}</Text>
+                  <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{INVESTMENT.HINT_DDA}</Text>
+                </View>
               </View>
               <CustomSpacer isHorizontal={true} space={sw64} />
               <View>

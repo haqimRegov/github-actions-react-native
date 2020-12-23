@@ -21,6 +21,7 @@ interface PersonalInfoProps {
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
   epfInvestment: boolean;
+  investmentCurrencies: string[];
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
   setContactDetails: (value: IContactDetailsState) => void;
@@ -35,6 +36,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   contactDetails,
   epfDetails,
   epfInvestment,
+  investmentCurrencies,
   personalDetails,
   setBankDetails,
   setContactDetails,
@@ -42,16 +44,6 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   setPersonalDetails,
 }: PersonalInfoProps) => {
   const { localBank, foreignBank } = bankDetails;
-
-  const setInputRace = (value: string) => setPersonalDetails({ race: value });
-  const setInputBumiputera = (value: string) => setPersonalDetails({ bumiputera: value });
-  const setInputEpfType = (value: string) => setEpfDetails({ epfAccountType: value });
-  const setInputEpfNumber = (value: string) => setEpfDetails({ epfMemberNumber: value });
-  const setInputMotherName = (value: string) => setPersonalDetails({ mothersMaidenName: value });
-  const setInputMaritalStatus = (value: string) => setPersonalDetails({ maritalStatus: value });
-  const setInputEducation = (value: string) => setPersonalDetails({ educationLevel: value });
-  const setInputOtherEducation = (value: string) => setPersonalDetails({ otherEducationLevel: value });
-  const setInputMonthlyHousehold = (value: string) => setPersonalDetails({ monthlyHouseholdIncome: value });
 
   const inputEducation = personalDetails.educationLevel!;
   const inputOtherEducation = personalDetails.otherEducationLevel!;
@@ -62,6 +54,17 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   const inputMotherName = personalDetails.mothersMaidenName!;
   const inputMaritalStatus = personalDetails.maritalStatus!;
   const inputMonthlyHousehold = personalDetails.monthlyHouseholdIncome!;
+
+  const setInputRace = (value: string) => setPersonalDetails({ race: value });
+  const setInputBumiputera = (value: string) => setPersonalDetails({ bumiputera: value });
+  const setInputEpfType = (value: string) => setEpfDetails({ epfAccountType: value });
+  const setInputEpfNumber = (value: string) => setEpfDetails({ epfMemberNumber: value });
+  const setInputMotherName = (value: string) => setPersonalDetails({ mothersMaidenName: value });
+  const setInputMaritalStatus = (value: string) => setPersonalDetails({ maritalStatus: value });
+  const setInputEducation = (value: string) =>
+    setPersonalDetails({ educationLevel: value, otherEducationLevel: value !== "Others" ? "" : inputOtherEducation });
+  const setInputOtherEducation = (value: string) => setPersonalDetails({ otherEducationLevel: value });
+  const setInputMonthlyHousehold = (value: string) => setPersonalDetails({ monthlyHouseholdIncome: value });
 
   const setLocalBank = (value: IBankDetailsState[]) => {
     setBankDetails({ localBank: value });
@@ -117,16 +120,18 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
           setInputEpfNumber={setInputEpfNumber}
           setInputEpfType={setInputEpfType}
         />
-      ) : null}
+      ) : (
+        <CustomSpacer space={sh24} />
+      )}
       {accountType === "Joint" && accountHolder === "Joint" ? null : (
         <Fragment>
-          <CustomSpacer space={sh24} />
           <View style={borderBottomBlack21} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
           </View>
           <BankDetails
             foreignBankDetails={foreignBank!}
+            investmentCurrencies={investmentCurrencies}
             localBankDetails={localBank!}
             setForeignBankDetails={setForeignBank}
             setLocalBankDetails={setLocalBank}

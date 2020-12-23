@@ -29,33 +29,18 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
   setInputMotherName,
   setInputOtherEducation,
 }: PRSDetailsProps) => {
-  const handleMotherName = (text: string) => {
-    setInputMotherName(text);
-  };
-
-  const handleMaritalStatus = (text: string) => {
-    setInputMaritalStatus(text);
-  };
-
-  const handleEducation = (input: string) => {
-    if (input !== "Others") {
-      setInputOtherEducation("");
-    }
-    setInputEducation(input);
-  };
-
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={PRS.LABEL_MOTHER_NAME} onChangeText={handleMotherName} spaceToBottom={sh32} value={inputMotherName} />
+      <CustomTextInput label={PRS.LABEL_MOTHER_NAME} onChangeText={setInputMotherName} spaceToBottom={sh32} value={inputMotherName} />
       <AdvancedDropdown
-        handleChange={handleMaritalStatus}
+        handleChange={setInputMaritalStatus}
         items={DICTIONARY_MARITAL_STATUS}
         label={PRS.LABEL_MARITAL}
         value={inputMaritalStatus}
       />
       <CustomSpacer space={sh32} />
-      <AdvancedDropdown handleChange={handleEducation} items={DICTIONARY_EDUCATION} label={PRS.LABEL_EDUCATION} value={inputEducation} />
+      <AdvancedDropdown handleChange={setInputEducation} items={DICTIONARY_EDUCATION} label={PRS.LABEL_EDUCATION} value={inputEducation} />
       {inputEducation === "Others" ? (
         <CustomTextInput label={PRS.LABEL_OTHERS} onChangeText={setInputOtherEducation} spaceToTop={sh32} value={inputOtherEducation} />
       ) : null}

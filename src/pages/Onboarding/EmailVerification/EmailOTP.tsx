@@ -5,7 +5,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { LocalAssets } from "../../../assets/LocalAssets";
 import { ActionButtons, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, PromptModal, SafeAreaPage } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, ERROR, ERROR_CODE } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
 import { emailOtpVerification } from "../../../network-actions";
 import {
@@ -80,6 +80,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   };
 
   const handleVerifyOTP = async () => {
+    setPrincipalError(undefined);
     const jointRequest = accountType === "Joint" ? { email: jointEmail, code: jointOtp } : undefined;
     const req = {
       clientId: principalClientId,
@@ -102,7 +103,11 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         return true;
       }
       if (error !== null) {
-        return setPrincipalError(error.message);
+        setPrincipalError(error.message);
+        setJointError(error.message);
+        if (error.errorCode === ERROR_CODE.otpAttempt) {
+          setResendTimer(DICTIONARY_OTP_COOL_OFF);
+        }
       }
     }
     return true;
@@ -120,15 +125,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   const resendMinutes = Math.floor(resendTimer / 60);
   const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
-  const disabled =
-    jointEmailCheck === false
-      ? principalOtp === "" || principalError !== undefined || validateOtp(principalOtp) !== undefined
-      : principalOtp === "" ||
-        principalOtp === "" ||
-        principalError !== undefined ||
-        jointError !== undefined ||
-        validateOtp(principalOtp) !== undefined ||
-        validateOtp(principalOtp) !== undefined;
+  const disabled = jointEmailCheck === false ? principalOtp === "" : principalOtp === "" || jointOtp === "";
   const pincipalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
   const otpLabel =
     jointEmailCheck === true
@@ -214,7 +211,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       </ScrollView>
       <PromptModal
         handleContinue={handleNavigate}
-        illustration={LocalAssets.illustration.email_verified}
+        illustration={LocalAssets.illustration.emailVerified}
         label={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED}
         title={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED_TITLE}
         visible={showModal}

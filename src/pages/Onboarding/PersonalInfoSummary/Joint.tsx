@@ -36,6 +36,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
     { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
   ];
 
   const nonMalaysianDetails = [{ label: SUMMARY.LABEL_EXPIRATION, title: expirationDate }];
@@ -109,9 +110,10 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
   const employmentDetailsSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_OCCUPATION, title: employmentDetails!.occupation! },
     { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
-    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
-    { label: SUMMARY.LABEL_GROSS, title: employmentDetails!.grossIncome!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
+  ];
+
+  const employmentAddressSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_EMPLOYER_ADDRESS, title: employmentDetails!.address!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: employmentDetails!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: employmentDetails!.city! },
@@ -125,6 +127,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
       accountType="Joint"
       additionalInfo={additionalInfoSummary}
       contactDetails={contactDetailsSummary}
+      employmentAddress={employmentAddressSummary}
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
       foreignBankDetails={foreignBank}

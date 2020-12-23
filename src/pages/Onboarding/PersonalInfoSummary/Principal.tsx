@@ -38,12 +38,10 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
     { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
   ];
 
-  const jointInfoSummary = [
-    { label: SUMMARY.LABEL_OPERATING, title: "TODO" },
-    { label: SUMMARY.LABEL_RELATIONSHIP, title: "TODO" },
-  ];
+  const jointInfoSummary = [{ label: SUMMARY.LABEL_RELATIONSHIP, title: personalDetails!.relationship! }];
 
   const nonMalaysianDetails = [{ label: SUMMARY.LABEL_EXPIRATION, title: expirationDate }];
   const malaysianDetails: LabeledTitleProps[] = [
@@ -99,6 +97,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
       { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
+      { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
       { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
     ] as LabeledTitleProps[];
   });
@@ -120,8 +119,10 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   const employmentDetailsSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_OCCUPATION, title: employmentDetails!.occupation! },
     { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
-    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
+  ];
+
+  const employmentAddressSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_EMPLOYER_ADDRESS, title: employmentDetails!.address!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: employmentDetails!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: employmentDetails!.city! },
@@ -135,6 +136,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
       accountType={accountType}
       additionalInfo={additionalInfoSummary}
       contactDetails={contactDetailsSummary}
+      employmentAddress={employmentAddressSummary}
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
       foreignBankDetails={foreignBank}

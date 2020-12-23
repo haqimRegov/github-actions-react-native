@@ -265,21 +265,20 @@ const submitClientAccount = gql`
           }
           orders {
             orderNumber
+            orderDate
             orderTotalAmount {
               currency
               amount
             }
             investments {
               fundingOption
-              accountType
               distributionInstruction
-              fundCode
+              fundClass
               fundCurrency
               fundIssuer
               fundName
               fundType
               investmentAmount
-              fundProcessingGroup
               isEpf
               isSyariah
               salesCharge

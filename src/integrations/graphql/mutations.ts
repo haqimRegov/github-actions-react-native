@@ -259,8 +259,36 @@ const submitClientAccount = gql`
     submitClientAccount(input: $input) {
       data {
         result {
-          message
-          status
+          grandTotal {
+            currency
+            amount
+          }
+          orders {
+            orderNumber
+            orderTotalAmount {
+              currency
+              amount
+            }
+            investments {
+              fundingOption
+              accountType
+              distributionInstruction
+              fundCode
+              fundCurrency
+              fundIssuer
+              fundName
+              fundType
+              investmentAmount
+              fundProcessingGroup
+              isEpf
+              isSyariah
+              salesCharge
+              isScheduled
+              scheduledInvestmentAmount
+              scheduledSalesCharge
+              isFea
+            }
+          }
         }
       }
       error {

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { OrderSummaryMapDispatchToProps, OrderSummaryMapStateToProps, OrderSummaryStoreProps } from "../../../store";
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
 import { EditPdf } from "./EditPDF";
 import { PDFList } from "./PDFList";
 import { TermsAndConditions } from "./TermsAndConditions";
 
-interface TermsAndConditionsPageProps extends OrderSummaryStoreProps {
+interface TermsAndConditionsPageProps extends AcknowledgementStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
@@ -50,6 +50,6 @@ export const TermsAndConditionPagesComponent = ({ addOrders, handleNextStep, ord
 };
 
 export const TermsAndConditionsPages = connect(
-  OrderSummaryMapStateToProps,
-  OrderSummaryMapDispatchToProps,
+  AcknowledgementMapStateToProps,
+  AcknowledgementMapDispatchToProps,
 )(TermsAndConditionPagesComponent);

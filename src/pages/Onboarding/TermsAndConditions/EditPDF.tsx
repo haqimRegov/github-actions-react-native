@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { Base64 } from "../../../constants";
 import { Language } from "../../../constants/language";
 import { ReactFileSystem } from "../../../integrations/file-system/functions";
-import { ClientMapDispatchToProps, ClientMapStateToProps } from "../../../store";
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps } from "../../../store";
 import {
   sh100,
   sh12,
@@ -343,4 +343,4 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
   return <PdfView {...props} />;
 };
 
-export const EditPdf = connect(ClientMapStateToProps, ClientMapDispatchToProps)(EditPdfComponent);
+export const EditPdf = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(EditPdfComponent);

@@ -1,6 +1,7 @@
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
+import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
 import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
 import kenanga from "./kenanga/kenanga.png";
@@ -16,8 +17,9 @@ export const LocalAssets = {
   },
   illustration: {
     clientWarning: illustrationClientWarning,
-    email_verified: illustrationEmailVerified,
-    login_error: illustrationLoginError,
+    emailVerified: illustrationEmailVerified,
+    orderReceived: illustrationOrderReceived,
+    loginError: illustrationLoginError,
     submissionSummary: illustrationSubmissionSummary,
     uploadSuccess: illustrationUploadSuccess,
   },

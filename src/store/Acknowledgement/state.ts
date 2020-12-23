@@ -1,7 +1,7 @@
 export type acknowledgementState = {
-  orders: IOrderSummary[];
+  orders?: IInvestmentSummary;
 };
 
 export const acknowledgementInitialState: acknowledgementState = {
-  orders: [],
+  orders: undefined,
 };

@@ -1,6 +1,6 @@
 import { typedAction } from "../actionCreator";
 
-export const addOrders = (orders: IOrderSummary[]) => {
+export const addOrders = (orders: IInvestmentSummary) => {
   return typedAction("orders/ADD_ORDERS", orders);
 };
 

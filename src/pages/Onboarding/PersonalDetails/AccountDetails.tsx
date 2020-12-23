@@ -3,6 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
+import { OPTION_OPERATING_CONTROL } from "../../../data/dictionary";
 import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sw24, sw48 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -12,12 +13,6 @@ interface AccountDetailsProps {
   personalInfo: IPersonalInfoState;
   setPersonalInfo: (value: IPersonalInfoState) => void;
 }
-
-const OPTION_SIGN = [
-  PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
-  PERSONAL_DETAILS.OPTION_CONTROL_BOTH,
-  PERSONAL_DETAILS.OPTION_CONTROL_EITHER,
-];
 
 export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
   accountType,
@@ -59,7 +54,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
               <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_SIGN} />
               <RadioButtonGroup
                 direction="row"
-                options={OPTION_SIGN}
+                options={OPTION_OPERATING_CONTROL}
                 selected={inputSignatory}
                 setSelected={setInputSignatory}
                 space={sw48}

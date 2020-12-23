@@ -48,7 +48,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const jointSecondPage = joint!.personalDetails!.id!.secondPage;
   const inputJointIdType = jointHolder!.idType!;
   const principalIdType = principalHolder!.idType!;
-  const clientIdType = principalIdType === "Other" ? principalHolder!.otherIdType : principalIdType;
+  const jointIdType = jointHolder!.idType!;
+  const principalClientIdType = principalIdType === "Other" ? principalHolder!.otherIdType : principalIdType;
+  const jointClientIdType = jointIdType === "Other" ? jointHolder!.otherIdType : jointIdType;
 
   const principalTitle =
     principalIdType !== "Passport" && principalIdType !== "NRIC"
@@ -72,15 +74,15 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
 
   let buttonDisabled = false;
   if (accountType === "Individual" || accountType === "Joint") {
-    buttonDisabled = clientIdType === "NRIC" && !individualNRIC;
+    buttonDisabled = principalClientIdType === "NRIC" && !individualNRIC;
     if (!buttonDisabled) {
-      buttonDisabled = clientIdType === "Passport" && !individualPass;
+      buttonDisabled = principalClientIdType === "Passport" && !individualPass;
     }
   }
   if (accountType === "Joint" && !buttonDisabled) {
-    buttonDisabled = clientIdType === "NRIC" && !jointNRIC;
+    buttonDisabled = jointClientIdType === "NRIC" && !jointNRIC;
     if (!buttonDisabled) {
-      buttonDisabled = clientIdType === "Passport" && !jointPass;
+      buttonDisabled = jointClientIdType === "Passport" && !jointPass;
     }
   }
 
@@ -133,7 +135,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handlePrincipalFrontPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined && clientIdType === DICTIONARY_ALL_ID[0].value) {
+    if (uploaded !== undefined && principalClientIdType === DICTIONARY_ALL_ID[0].value) {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
         if (mykad.error?.code === ERROR_CODE.invalidNricData) {
@@ -192,7 +194,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleJointFrontPage = async (uploaded?: FileBase64) => {
-    const jointIdType = joint!.personalDetails?.idType;
     if (uploaded !== undefined && jointIdType === DICTIONARY_ALL_ID[0].value) {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
@@ -270,7 +271,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               backPage={principalBackPage}
               frontError={principalFrontError}
               frontPage={principalFrontPage}
-              idType={clientIdType as TypeClientID}
+              idType={principalClientIdType!}
               onPressCamera={handleCameraPrincipal}
               onPressPicker={handlePickerPrincipal}
               setBackPage={handlePrincipalBackPage}

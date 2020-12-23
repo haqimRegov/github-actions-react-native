@@ -266,7 +266,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
               spaceToBottom={isScheduled === "Yes" ? sh12 : undefined}
               value={investmentAmount}
             />
-            {isScheduled === "Yes" ? (
+            {isScheduled === "Yes" && fundPaymentMethod === "Cash" ? (
               <CheckBox
                 label={INVESTMENT.LABEL_RECURRING}
                 labelStyle={fs12BoldBlack2}

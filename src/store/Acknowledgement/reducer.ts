@@ -1,7 +1,7 @@
-import { OrderSummaryAction } from "./actions";
-import { orderSummaryInitialState, orderSummaryState } from "./state";
+import { AcknowledgementAction } from "./actions";
+import { acknowledgementInitialState, acknowledgementState } from "./state";
 
-export function orderSummaryReducer(state = orderSummaryInitialState, action: OrderSummaryAction): orderSummaryState {
+export function acknowledgementReducer(state = acknowledgementInitialState, action: AcknowledgementAction): acknowledgementState {
   switch (action.type) {
     case "orders/ADD_ORDERS":
       return {

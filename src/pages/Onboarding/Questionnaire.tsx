@@ -60,8 +60,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   updateFinishedSteps,
   setLoading,
 }: QuestionnaireContentProps) => {
-  // const clientId = cli;
-  const { clientId, dateOfBirth } = principalHolder!;
+  const { clientId } = principalHolder!;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
@@ -91,8 +90,15 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const handlePageContinue = async () => {
     const response: IGetRiskProfileResponse = await getRiskProfile({
       clientId: clientId!,
-      dateOfBirth: dateOfBirth!,
-      riskAssessment: { ...questionnaire },
+      riskAssessment: {
+        questionTwo: questionTwo!,
+        questionThree: questionThree!,
+        questionFour: questionFour!,
+        questionFive: questionFive!,
+        questionSix: questionSix!,
+        questionSeven: questionSeven!,
+        questionEight: questionOne!,
+      },
     });
     if (response !== undefined) {
       const { data, error } = response;

@@ -78,7 +78,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         fundClass: investment.fundClass,
         fundCurrency: investment.fundCurrency!,
         investmentAmount: investment.investmentAmount!,
-        isScheduled: fundDetails.isEpf ? undefined : `${investment.scheduledInvestment!}`,
+        isScheduled: `${investment.scheduledInvestment!}`,
         scheduledInvestmentAmount: investment.scheduledInvestmentAmount,
         salesCharge: investment.investmentSalesCharge!,
         scheduledSalesCharge: investment.scheduledSalesCharge,

@@ -43,7 +43,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
   orderSummary,
   setExpandOrder,
 }: OrderDetailsProps) => {
-  const { orderTotalAmount, orderNumber, investments } = orderSummary;
+  const { orderDate, orderTotalAmount, orderNumber, investments } = orderSummary;
   const expanded = expandOrder === index;
   const icon = expanded ? "caret-up" : "caret-down";
 
@@ -74,7 +74,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
         <View style={cardHeaderStyle}>
           <View>
             <Text style={fs24BoldBlack2}>{orderNumber}</Text>
-            <Text style={fs12RegBlack2}>23/12/2020</Text>
+            <Text style={fs12RegBlack2}>{orderDate}</Text>
           </View>
           <CustomFlexSpacer />
           <View style={alignItemsEnd}>

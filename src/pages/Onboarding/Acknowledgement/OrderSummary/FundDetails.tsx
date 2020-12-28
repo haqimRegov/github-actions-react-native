@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, LabeledTitleProps } from "../../../../components";
+import { CardWrap, CustomFlexSpacer, CustomSpacer, Dash, LabeledTitleProps } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   centerHorizontal,
@@ -29,31 +29,26 @@ export interface FundDetailsProps {
 }
 
 export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundDetailsProps) => {
-  // TODO recurring
   const {
-    fundingOption,
-    // accountType,
     distributionInstruction,
-    // fundCode,
     fundClass,
     fundCurrency,
+    fundingOption,
     fundIssuer,
     fundName,
-    // fundType,
     investmentAmount,
-    // fundProcessingGroup,
-    isEpf,
+    isFea,
+    isScheduled,
     isSyariah,
     salesCharge,
-    // isScheduled,
-    // scheduledInvestmentAmount,
-    // scheduledSalesCharge,
-    // isFea,
+    scheduledInvestmentAmount,
+    scheduledSalesCharge,
   } = fund;
+
   const summary: LabeledTitleProps[] = [
     {
       label: ORDER_SUMMARY.LABEL_FUND_CLASS,
-      title: "fundClass" in fund && fundClass !== null ? `${fundClass}` : "-",
+      title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
     },
     {
       label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
@@ -62,6 +57,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     {
       label: ORDER_SUMMARY.LABEL_FUNDING_OPTION,
       title: fundingOption,
+      titleStyle: fundingOption === "EPF" ? undefined : fsCapitalize,
     },
     {
       label: ORDER_SUMMARY.LABEL_TYPE,
@@ -69,24 +65,24 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     },
     {
       label: ORDER_SUMMARY.LABEL_FEA,
-      title: isEpf ? "Yes" : "No",
+      title: isFea ? "Yes" : "No",
     },
     {
       label: ORDER_SUMMARY.LABEL_DISTRIBUTION,
       title: distributionInstruction,
+      titleStyle: fsCapitalize,
     },
-    // {
-    //   label: ORDER_SUMMARY.LABEL_CHANNEL,
-    //   title: distributionChannel,
-    // },
-    // {
-    //   label: ORDER_SUMMARY.LABEL_CURRENCY,
-    //   title: fundCurrency,
-    // },
-    // {
-    //   label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
-    //   title: `${salesCharge}`,
-    // },
+  ];
+
+  const recurringSummary: LabeledTitleProps[] = [
+    {
+      label: ORDER_SUMMARY.LABEL_RECURRING_AMOUNT,
+      title: `${fundCurrency} ${scheduledInvestmentAmount}`,
+    },
+    {
+      label: ORDER_SUMMARY.LABEL_RECURRING_SALES_CHARGE,
+      title: `${scheduledSalesCharge}%`,
+    },
   ];
 
   const fundHeaderStyle: ViewStyle = {
@@ -118,6 +114,14 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
       <View>
         <CustomSpacer space={sh16} />
         <CardWrap data={summary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+        <CustomSpacer space={sh8} />
+        {isScheduled === true ? (
+          <Fragment>
+            <Dash />
+            <CustomSpacer space={sh16} />
+            <CardWrap data={recurringSummary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+          </Fragment>
+        ) : null}
         <CustomSpacer space={sh8} />
       </View>
     </Fragment>

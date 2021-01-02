@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Keyboard, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import { Keyboard, Text, TextInput, View, ViewStyle } from "react-native";
 
 import {
   colorGray,
@@ -16,7 +16,7 @@ import {
   sh8,
   sw1,
   sw16,
-  sw358,
+  sw2,
   sw360,
   sw8,
 } from "../../styles";
@@ -25,7 +25,7 @@ import { CustomTextInput, CustomTextInputProps } from "./Input";
 
 export interface TextInputAreaProps extends CustomTextInputProps {
   showLength?: boolean;
-  style?: TextStyle;
+  width?: number;
 }
 
 export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
@@ -37,12 +37,14 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
-  style,
+  width,
   ...rest
 }: TextInputAreaProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
   const [textInputDummy, setTextInputDummy] = useState<TextInput | null>(null);
   const [multilineFocus, setMultilineFocus] = useState(false);
+
+  const inputWidth = width !== undefined ? width : sw360;
 
   const handleMultilineFocus = () => {
     if (textInputDummy !== null) {
@@ -73,11 +75,10 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
     borderRadius: sw8,
     borderWidth: sw1,
     height: sh120,
-    width: sw360,
-    ...style,
+    width: inputWidth,
   };
 
-  const defaultInputStyle: ViewStyle = { ...px(0), borderWidth: 0, height: sh118, width: sw358 };
+  const defaultInputStyle: ViewStyle = { ...px(0), borderWidth: 0, height: sh118, width: inputWidth - sw2 };
   const dummyInputStyle: ViewStyle = { borderWidth: 0, backgroundColor: colorTransparent, height: sh05 };
 
   useEffect(() => {
@@ -107,7 +108,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
           onFocus={handleMultilineFocus}
           placeholder={placeholder}
           setRef={setTextAreaRef}
-          style={{ ...px(sw16), height: sh110, width: sw360 }}
+          style={{ ...px(sw16), height: sh110, width: inputWidth }}
           textAlignVertical="top"
           viewStyle={defaultInputStyle}
           {...rest}
@@ -122,7 +123,7 @@ export const TextInputArea: FunctionComponent<TextInputAreaProps> = ({
         />
       </View>
       {showLength === true && rest.maxLength !== undefined ? (
-        <View style={{ ...flexRow, width: sw360 }}>
+        <View style={{ ...flexRow, width: inputWidth }}>
           <CustomFlexSpacer />
           <Text style={{ ...fs12SemiBoldGray8, paddingTop: sh8 }}>{charRemaining}</Text>
         </View>

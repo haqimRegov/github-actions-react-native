@@ -28,6 +28,7 @@ export interface CheckBoxProps {
   spaceToLabel?: number;
   style?: ViewStyle;
   toggle: boolean;
+  toggleColor?: string;
 }
 export const CheckBox: FunctionComponent<CheckBoxProps> = ({
   checkboxStyle,
@@ -38,8 +39,10 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
   spaceToLabel,
   style,
   toggle,
+  toggleColor,
 }: CheckBoxProps) => {
-  const selectedStyle: ViewStyle = toggle ? { backgroundColor: colorRed._1, borderColor: colorRed._1 } : {};
+  const defaultColor = toggleColor !== undefined ? toggleColor : colorRed._1;
+  const selectedStyle: ViewStyle = toggle ? { backgroundColor: defaultColor, borderColor: defaultColor } : {};
   const disabledStyle: ViewStyle = disabled === true ? { opacity: 0.5 } : {};
 
   const toggleStyle: ViewStyle = {

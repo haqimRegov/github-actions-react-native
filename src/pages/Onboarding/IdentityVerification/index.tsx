@@ -6,7 +6,7 @@ import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh40, sw24 } from "../../../styles";
+import { px, sh40, sh56, sw24 } from "../../../styles";
 import { OCRUtils } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -120,6 +120,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         personalDetails: { ...joint!.personalDetails, id: { ...value } },
       },
     });
+
+  const handleBackToUpload = () => {
+    setPage(0);
+  };
 
   const handleContinue = () => {
     const principalMailingAddress = personalInfo.principal!.addressInformation?.mailingAddress!;
@@ -279,6 +283,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           </View>
           {accountType === "Individual" ? null : (
             <Fragment>
+              <CustomSpacer space={sh56} />
               <View style={px(sw24)}>
                 {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_JOINT} title={jointHolder!.name!} /> : null}
                 <UploadID
@@ -298,7 +303,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           )}
         </ContentPage>
       ) : (
-        <IDVerification handleCancelOnboarding={handleCancelOnboarding!} handleNextStep={handleNextStep} />
+        <IDVerification handleBack={handleBackToUpload} handleNextStep={handleNextStep} />
       )}
       <ImageReview handleProceed={handleProceed} handleReupload={handleReupload} image={reviewImage} visible={reviewImage !== undefined} />
     </Fragment>

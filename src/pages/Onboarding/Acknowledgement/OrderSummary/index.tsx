@@ -72,7 +72,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({ handleNex
       <CustomSpacer space={sh24} />
       <View style={{ ...px(sw24) }}>
         <View style={{ ...centerVertical, ...flexRow, ...border(colorGray._3, sw1, sw8), height: sh88, ...px(sw24) }}>
-          <IcoMoon color={colorGray._3} name="order-success" size={sh56} />
+          <IcoMoon color={colorGray._3} name="order-total" size={sh56} />
           <CustomSpacer isHorizontal={true} space={sw8} />
           <View>
             <View style={{ ...centerVertical, ...flexRow }}>

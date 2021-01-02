@@ -147,7 +147,7 @@ declare interface ISubmitClientAccountRequest {
 declare interface ISubmitClientAccountResult extends IInvestmentSummary {}
 
 declare interface ISubmitClientAccountMutation {
-  setupClientAccount: ISubmitClientAccountResponse;
+  submitClientAccount: ISubmitClientAccountResponse;
 }
 
 declare type ISubmitClientAccountResponse = IMutationResponse<ISubmitClientAccountResult> | undefined;

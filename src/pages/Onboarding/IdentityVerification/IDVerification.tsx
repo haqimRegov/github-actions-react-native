@@ -12,14 +12,14 @@ import { PrincipalVerification } from "./Principal";
 const { ID_VERIFICATION } = Language.PAGE;
 
 interface IDVerificationProps extends PersonalInfoStoreProps {
-  handleCancelOnboarding: () => void;
+  handleBack: () => void;
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
 const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   accountType,
   addPersonalInfo,
-  handleCancelOnboarding,
+  handleBack,
   handleNextStep,
   personalInfo,
   riskScore,
@@ -76,7 +76,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
     <ContentPage
       buttonContainerStyle={padding}
       continueDisabled={continueDisabled}
-      handleCancel={handleCancelOnboarding!}
+      handleCancel={handleBack}
       handleContinue={handleSubmit}
       labelCancel={ID_VERIFICATION.BUTTON_BACK}
       labelContinue={ID_VERIFICATION.BUTTON_VERIFY}>

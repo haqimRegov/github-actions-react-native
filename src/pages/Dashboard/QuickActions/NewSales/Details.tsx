@@ -37,7 +37,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const LABEL_NAME = `${ADD_CLIENT.LABEL_NAME} ${LABEL_ID_DYNAMIC}`;
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
 
-  const setInputIdType = (value: TypeIDChoices) => setClientInfo({ ...[holderToFill], idType: value });
+  const setInputIdType = (value: TypeIDChoices) => setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
   const setInputName = (value: string) => setClientInfo({ ...[holderToFill], name: value });
   const setInputIdNumber = (value: string) => setClientInfo({ ...[holderToFill], id: value });

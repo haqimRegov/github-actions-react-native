@@ -5,7 +5,7 @@ import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 
-import { ActionButtons, BasicModal, CustomSpacer } from "../../../../components";
+import { ActionButtons, CustomSpacer, RNModal } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_PLACE_OF_BIRTH, ERROR_CODE } from "../../../../data/dictionary";
 import { checkClient, clientRegister } from "../../../../network-actions";
@@ -167,11 +167,14 @@ const NewSalesComponent = ({
         setErrorMessage(undefined);
         return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }
-      if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
-        return setPrompt("ageMinimum");
-      }
-      if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
-        return setPrompt("ageMaximum");
+      if (error !== null) {
+        if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
+          return setPrompt("ageMinimum");
+        }
+        if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
+          return setPrompt("ageMaximum");
+        }
+        return setErrorMessage(error.message);
       }
     }
     return undefined;
@@ -256,7 +259,7 @@ const NewSalesComponent = ({
   };
 
   return (
-    <BasicModal visible={visible}>
+    <RNModal animationType="fade" visible={visible}>
       <KeyboardAwareScrollView bounces={false} contentContainerStyle={flexGrow}>
         <View style={{ ...centerHV, ...fullHW }}>
           <View style={modalContainer}>
@@ -296,7 +299,7 @@ const NewSalesComponent = ({
           </View>
         </View>
       </KeyboardAwareScrollView>
-    </BasicModal>
+    </RNModal>
   );
 };
 

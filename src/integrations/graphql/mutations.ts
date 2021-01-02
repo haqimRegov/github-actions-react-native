@@ -207,53 +207,6 @@ const verifyLockOtp = gql`
   }
 `;
 
-const setupClientAccount = gql`
-  mutation setupClientAccount($input: setupClientAccountInput) {
-    setupClientAccount(input: $input) {
-      data {
-        result {
-          grandTotal {
-            currency
-            amount
-          }
-          orders {
-            orderNumber
-            orderTotalAmount {
-              currency
-              amount
-            }
-            investments {
-              fundingOption
-              accountType
-              distributionInstruction
-              fundCode
-              fundCurrency
-              fundIssuer
-              fundName
-              fundType
-              investmentAmount
-              fundProcessingGroup
-              isEpf
-              isSyariah
-              salesCharge
-              isScheduled
-              scheduledInvestmentAmount
-              scheduledSalesCharge
-              isFea
-            }
-          }
-        }
-      }
-      error {
-        errorCode
-        message
-        statusCode
-        errorList
-      }
-    }
-  }
-`;
-
 const submitClientAccount = gql`
   mutation SubmitClientAccount($input: SubmitClientAccountInput) {
     submitClientAccount(input: $input) {
@@ -270,6 +223,7 @@ const submitClientAccount = gql`
               currency
               amount
             }
+            paymentType
             investments {
               fundingOption
               distributionInstruction
@@ -374,7 +328,6 @@ export const GQL_MUTATIONS = {
   resendLockOtp,
   resetPassword,
   riskAssessment,
-  setupClientAccount,
   submitClientAccount,
   userLogin,
   verifyLockOtp,

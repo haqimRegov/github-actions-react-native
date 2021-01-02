@@ -23,6 +23,7 @@ declare interface IOrderSummary {
 }
 
 declare interface IOrderInvestment {
+  fundId?: string;
   fundingOption: string;
   accountType: string;
   distributionInstruction: string;
@@ -44,10 +45,11 @@ declare interface IOrderInvestment {
 }
 
 declare interface IOrder {
-  orderNumber: string;
-  orderDate: string;
-  orderTotalAmount: IOrderAmount[];
   investments: IOrderInvestment[];
+  orderDate: string;
+  orderNumber: string;
+  orderTotalAmount: IOrderAmount[];
+  paymentType: TypePaymentType;
 }
 
 declare interface IInvestmentSummary {

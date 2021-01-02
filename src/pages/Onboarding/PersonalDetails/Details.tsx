@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { AdvancedDropdown, CustomSpacer, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_GROSS_INCOME } from "../../../data/dictionary";
+import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_HOUSEHOLD_INCOME } from "../../../data/dictionary";
 import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh8, sw24, sw40 } from "../../../styles";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
@@ -106,7 +106,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
       />
       <View style={px(sw24)}>
         <AdvancedDropdown
-          items={DICTIONARY_GROSS_INCOME}
+          items={DICTIONARY_HOUSEHOLD_INCOME}
           handleChange={setInputMonthlyHousehold}
           label={PERSONAL_DETAILS.LABEL_MONTHLY_INCOME}
           value={inputMonthlyHousehold}

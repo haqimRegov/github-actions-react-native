@@ -237,7 +237,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           placeOfBirth: principal!.personalDetails!.placeOfBirth!,
           salutation: principal!.personalDetails!.salutation!,
           ...principalMalaysianDetails,
-          relationsip: jointRelationship,
+          relationship: jointRelationship,
           expirationDate: principalExpirationDate,
         },
       },
@@ -257,7 +257,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
     // eslint-disable-next-line no-console
     console.log("request", newRequest);
-    const response: ISetupClientAccountResponse = await submitClientAccount(newRequest);
+    const response: ISubmitClientAccountResponse = await submitClientAccount(newRequest);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;

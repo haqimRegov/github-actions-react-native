@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { forwardRef, Fragment, useImperativeHandle, useState } from "react";
 import { Platform, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { DocumentPickerResponse } from "react-native-document-picker";
@@ -9,14 +10,13 @@ import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem } fro
 import {
   centerVertical,
   circleBorder,
-  colorBlack,
   colorBlue,
   colorGray,
   colorRed,
   colorWhite,
   flexRow,
   fs12BoldBlue38,
-  fs16RegBlack1,
+  fs16SemiBoldBlue2,
   px,
   sh24,
   sh48,
@@ -104,7 +104,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
         newName = name === null ? realURI.substring(realURI.lastIndexOf("/") + 1) : name;
       }
 
-      const selectedFile: FileBase64 = { base64: base64 || "", name: newName, size, type, path: realURI };
+      const selectedFile: FileBase64 = { base64: base64 || "", name: newName, size, type, date: `${moment().unix()}`, path: realURI };
       if (size > MAX_SIZE_BYTE) {
         if (onError) {
           return onError(selectedFile);
@@ -119,9 +119,9 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
 
   const handleImageResult = (results: Image | Image[]) => {
     if (!Array.isArray(results)) {
-      const { data, filename, size, mime, creationDate, path } = results;
+      const { data, filename, size, mime, path } = results;
       const newName = filename === null || filename === undefined ? path.substring(path.lastIndexOf("/") + 1) : filename;
-      const selectedImage: FileBase64 = { base64: data || "", name: newName, size, type: mime, date: creationDate, path };
+      const selectedImage: FileBase64 = { base64: data || "", name: newName, size, type: mime, date: `${moment().unix()}`, path };
       if (size > MAX_SIZE_BYTE) {
         if (onError) {
           return onError(selectedImage);
@@ -180,18 +180,18 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={container}>
         {value === undefined || defaultError !== "" ? (
-          <IcoMoon color={colorBlack._1} name="file" size={sh24} />
+          <IcoMoon color={colorBlue._2} name="file" size={sh24} />
         ) : (
           <View style={iconBadgeOffset}>
             <Badge>
-              <IcoMoon color={colorBlack._1} name="file" size={sh24} />
+              <IcoMoon color={colorBlue._2} name="file" size={sh24} />
             </Badge>
           </View>
         )}
         <CustomSpacer isHorizontal={true} space={sw16} />
         <LabeledTitle
           label={label || ""}
-          labelStyle={{ ...fs16RegBlack1, ...labelStyle }}
+          labelStyle={{ ...fs16SemiBoldBlue2, ...labelStyle }}
           title={title || defaultLabel}
           titleStyle={{ ...fs12BoldBlue38, ...errorStyle, ...titleStyle }}
         />

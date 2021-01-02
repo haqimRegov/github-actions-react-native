@@ -5,14 +5,14 @@ import { ActivityIndicator, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { BasicModal, Prompt } from "../../components";
+import { Prompt, RNModal } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
 import { updateStorageData } from "../../integrations";
 import { SAMPLE_AGENT } from "../../mocks";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
+import { centerHV, colorWhite, fullHeight } from "../../styles";
 import { Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails } from "./Details";
 
@@ -168,10 +168,10 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
           setInputPassword={setInputPassword}
         />
       )}
-      <BasicModal visible={loading}>
+      <RNModal animationType="fade" visible={loading}>
         <Fragment>
           {lockPrompt ? (
-            <View style={{ ...centerHV, ...fullHW }}>
+            <View style={centerHV}>
               <Prompt
                 labelContinue={LOGIN.BUTTON_ENTER}
                 handleContinue={handleEnterOTP}
@@ -186,7 +186,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
             </View>
           )}
         </Fragment>
-      </BasicModal>
+      </RNModal>
     </Fragment>
   );
 };

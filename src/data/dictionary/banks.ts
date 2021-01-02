@@ -1,4 +1,4 @@
-export const DICTIONARY_MALAYSIA_BANK: TypeMalaysiaBankLabelValue[] = [
+export const DICTIONARY_MALAYSIA_BANK_BASE: TypeMalaysiaBankLabelValue[] = [
   { label: "Affin Bank Berhad", value: "Affin Bank Berhad" },
   { label: "Alliance Bank Malaysia Berhad", value: "Alliance Bank Malaysia Berhad" },
   { label: "AmBank (M) Berhad", value: "AmBank (M) Berhad" },
@@ -28,5 +28,30 @@ export const DICTIONARY_MALAYSIA_BANK: TypeMalaysiaBankLabelValue[] = [
   { label: "Sumitomo Mitsui Banking Corporation Malaysia Berhad", value: "Sumitomo Mitsui Banking Corporation Malaysia Berhad" },
   { label: "The Bank of Nova Scotia Berhad", value: "The Bank of Nova Scotia Berhad" },
   { label: "United Overseas Bank (Malaysia) Bhd.", value: "United Overseas Bank (Malaysia) Bhd." },
+];
+
+export const DICTIONARY_MALAYSIA_BANK: TypeMalaysiaBankLabelValue[] = [
+  ...DICTIONARY_MALAYSIA_BANK_BASE,
   { label: "Others", value: "Others" },
+];
+
+export const DICTIONARY_UTMC_MASTER = [
+  "ABERDEEN ISLAMIC ASSET MANAGEMENT SDN BHD",
+  "AFFIN HWANG INVESTMENT MANAGEMENT BERHAD",
+  "AIA PENSION AND ASSET MANAGEMENT SDN BHD",
+  "AMANAHRAYA INVESTMENT MANAGEMENT SDN BHD",
+  "AMFUNDS MANAGEMENT BERHAD",
+  "BIMB INVESTMENT MANAGEMENT BERHAD",
+  "EASTSPRING INVESTMENTS BERHAD",
+  "Franklin Templeton Asset Management Berhad",
+  "FRANKLIN TEMPLETON GSC ASSET MANAGEMENT SDN BHD",
+  "KENANGA INVESTORS BERHAD",
+  "MANULIFE INVESTMENT MANAGEMENT(M) BERHAD",
+  "MAYBANK ASSET MANAGEMENTSDN BHD",
+  "OPUS ASSET MANAGEMENT SDN BHD",
+  "PHEIM UNIT TRUSTS BERHAD",
+  "PRINCIPAL ASSET MANAGEMENT BERHAD",
+  "RHB ASSET MANAGEMENT SDN BHD",
+  "RHB ISLAMIC INTERNATIONAL ASSET MANAGEMENT BERHAD",
+  "UOB ASSET MANAGEMENT (MALAYSIA) SDN BHD",
 ];

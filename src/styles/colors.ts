@@ -2,6 +2,7 @@ export const colorTransparent = "rgba(0,0,0,0)";
 
 export const colorBlack = {
   _1: "#000000",
+  _1_04: "rgba(0,0,0,0.4)",
   _1_85: "rgba(0,0,0,0.85)",
   _2: "#333333",
   _2_1: "rgba(51,51,51,0.1)",

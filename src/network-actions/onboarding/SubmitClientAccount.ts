@@ -1,18 +1,18 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { gqlOperation } from "../../integrations/graphql/functions";
 
-export const setupClientAccount = async (variables: ISetupClientAccountRequest, handleError?: ResponseErrorType) => {
+export const submitClientAccount = async (variables: ISubmitClientAccountRequest, handleError?: ResponseErrorType) => {
   try {
-    const data = await gqlOperation<ISetupClientAccountMutation, ISetupClientAccountRequest>(
-      GQL_MUTATIONS.setupClientAccount,
+    const data = await gqlOperation<ISubmitClientAccountMutation, ISubmitClientAccountRequest>(
+      GQL_MUTATIONS.submitClientAccount,
       variables,
       undefined,
       handleError,
     );
-    return data?.setupClientAccount;
+    return data?.submitClientAccount;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in setupClientAccount line 15 at ClientRegister.ts", error);
+    console.log("Error in submitClientAccount line 15 at SubmitClientAccount.ts", error);
     return error;
   }
 };

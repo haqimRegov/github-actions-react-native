@@ -1,5 +1,17 @@
-export const baseURL = "https://ukrr3zhuxvf27mfbafp3qing6q.appsync-api.ap-southeast-1.amazonaws.com/";
-export const configBaseURL = "https://4w895f9gak.execute-api.ap-southeast-1.amazonaws.com/";
+export const env: TypeEnv = "dev";
+
+const api = {
+  dev: {
+    baseURL: "https://ukrr3zhuxvf27mfbafp3qing6q.appsync-api.ap-southeast-1.amazonaws.com/",
+    configBaseURL: "https://4w895f9gak.execute-api.ap-southeast-1.amazonaws.com/",
+  },
+  sit: {
+    baseURL: "https://uvprk3hpcffapibockmwqf5lhi.appsync-api.ap-southeast-1.amazonaws.com/",
+    configBaseURL: "https://23tjghyu6e.execute-api.ap-southeast-1.amazonaws.com/",
+  },
+};
+
+export const { baseURL, configBaseURL } = api[env];
 
 export const X_API_KEY = "nvtORmuuhZ35UzQNhsqs41OfDS7D2UXx22VqlQNK";
 

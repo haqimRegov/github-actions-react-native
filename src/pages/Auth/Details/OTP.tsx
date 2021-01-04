@@ -52,6 +52,10 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
     handleSubmit();
   };
 
+  const resendMinutes = Math.floor(resendTimer / 60);
+  const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
+  const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
+
   useEffect(() => {
     let otpTimer: number;
     if (resendTimer > 0) {
@@ -88,7 +92,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
         {resendTimer <= 0 ? (
           <LinkText onPress={handleResendOTP} text={LOGIN.LABEL_RESEND_OTP} />
         ) : (
-          <Text style={fs12SemiBoldBlue2}>{`${LOGIN.LABEL_RESEND} ${resendTimer} ${LOGIN.LABEL_SECONDS}`}</Text>
+          <Text style={fs12SemiBoldBlue2}>{`${LOGIN.LABEL_RESEND} ${resendMinutes}:${formattedResendSeconds}`}</Text>
         )}
       </View>
     </View>

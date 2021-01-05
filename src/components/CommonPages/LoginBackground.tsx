@@ -1,9 +1,9 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { Fragment, ReactNode } from "react";
-import { Alert, Image, ImageStyle, ScrollView, View } from "react-native";
+import { Image, ImageStyle, ScrollView, View } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
+import { DICTIONARY_LINK_PRIVACY, DICTIONARY_LINK_TERMS } from "../../data/dictionary";
 import {
   colorWhite,
   DEVICE,
@@ -20,6 +20,7 @@ import {
   sw56,
   sw8,
 } from "../../styles";
+import { LinkUtils } from "../../utils";
 import { LinkTextGroup, LinkTextProps } from "../Touchables";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 import { SafeAreaPage } from "./SafeAreaPage";
@@ -33,15 +34,12 @@ interface LoginPageProps {
 }
 
 export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
-  const navigation = useNavigation();
   const handlePrivacyPolicy = () => {
-    // TODO
-    navigation.navigate("Dashboard");
+    LinkUtils.openLink(DICTIONARY_LINK_PRIVACY);
   };
 
   const handleTermsAndConditions = () => {
-    // TODO
-    Alert.alert("TermsAndConditions");
+    LinkUtils.openLink(DICTIONARY_LINK_TERMS);
   };
 
   const handleAgentOnboarding = () => {

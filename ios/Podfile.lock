@@ -391,8 +391,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
-  - RNDateTimePicker (2.6.1):
-    - React
+  - RNDateTimePicker (3.0.9):
+    - React-Core
   - RNDeviceInfo (7.3.1):
     - React-Core
   - RNFBApp (8.4.5):
@@ -700,7 +700,7 @@ SPEC CHECKSUMS:
   RNAWSCognito: 4ec594a3b149f59642d8eaed2e381026d53ec7c2
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNDateTimePicker: 83540fb5d71f28bd34990d8fabccb8d91e5d957e
+  RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
   RNDeviceInfo: 6ecb1d1c87d20e4c62354be0348de23362824dcd
   RNFBApp: 570b136767f588b7eef0ab918284e9fe364d0c3e
   RNFBMLVision: 157c25df35acc4493ae6bd4917fbf9af336958c6
@@ -718,6 +718,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 0f741779abbed2098cb429d1875a2e23850d43c6
+PODFILE CHECKSUM: bf8f2cf775e435a7f6a24990b20fad7b506a14cf
 
 COCOAPODS: 1.9.3

@@ -1,8 +1,8 @@
 projects:
-  DecApp:
+  TestAuth:
     schemaPath: graphql/schema.json
     includes:
-      - ''
+      - src/graphql/**/*.ts
     excludes:
       - ./amplify/**
     extensions:

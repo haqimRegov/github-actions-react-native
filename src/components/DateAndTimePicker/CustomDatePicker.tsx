@@ -170,16 +170,18 @@ export const CustomDatePicker = ({
           return (
             <View style={dropdownContainer}>
               <View style={collapseContainer}>
-                <DateTimePicker
-                  display="calendar"
-                  is24Hour={true}
-                  maximumDate={maximumDate}
-                  minimumDate={minimumDate}
-                  mode={mode}
-                  onChange={handleDateChange}
-                  style={pickerStyle}
-                  value={selectedDate}
-                />
+                <View style={pickerStyle}>
+                  <DateTimePicker
+                    display="spinner"
+                    is24Hour={true}
+                    maximumDate={maximumDate}
+                    minimumDate={minimumDate}
+                    mode={mode}
+                    onChange={handleDateChange}
+                    style={pickerStyle}
+                    value={selectedDate}
+                  />
+                </View>
                 <CustomButton buttonStyle={buttonStyle} onPress={handleConfirmDate} text={buttonLabel} />
               </View>
             </View>

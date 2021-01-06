@@ -19,6 +19,7 @@
     "remove:ios:build": "cd ios && rm -rf build",
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPad (7th generation)\"",
+    "ios:8": "react-native run-ios --simulator=\"iPad (8th generation)\"",
     "ios:device": "react-native run-ios --device",
     "ios:9": "react-native run-ios --simulator=\"iPad Pro (9.7-inch)\"",
     "ios:10": "react-native run-ios --simulator=\"iPad (7th generation)\"",
@@ -32,14 +33,15 @@
     "amplify:codegen": "npm run amplify:add:codegen && npm run amplify:remove:codegen",
     "bump-patch": "npm version patch --no-git-tag-version && bundle exec fastlane bump",
     "bump-minor": "npm version minor --no-git-tag-version && bundle exec fastlane bump",
-    "bump-major": "npm version major --no-git-tag-version && bundle exec fastlane bump"
+    "bump-major": "npm version major --no-git-tag-version && bundle exec fastlane bump",
+    "postinstall": "npx react-native-fix-image"
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "1.2.2",
     "@pdf-lib/fontkit": "1.0.0",
     "@react-native-community/async-storage": "1.11.0",
     "@react-native-community/blur": "3.6.0",
-    "@react-native-community/datetimepicker": "2.6.1",
+    "@react-native-community/datetimepicker": "^3.0.9",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "5.9.9",
     "@react-native-firebase/app": "8.4.5",

@@ -133,6 +133,7 @@ declare interface IPersonalInfoState {
   editMode?: boolean;
   editPersonal?: boolean;
   editDeclaration?: boolean;
+  emailOtpSent?: boolean;
   epfInvestment?: boolean;
   joint?: IHolderInfoState;
   principal?: IHolderInfoState;

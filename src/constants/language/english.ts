@@ -628,6 +628,7 @@ export const english = {
       TITLE_PRS: "PRS Details",
       TITLE_RISK_ASSESSMENT: "Risk Assessment",
       TITLE_SUMMARY: "Summary",
+      TITLE_SIGNATURES: "Signatures",
       TITLE_TERMS_CONDITIONS: "Terms & Conditions",
     },
     ORDER_SUMMARY: {

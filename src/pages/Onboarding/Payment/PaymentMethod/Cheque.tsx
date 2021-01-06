@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, LabeledTitle, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_MALAYSIA_BANK } from "../../../../data/dictionary";
-import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh24, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../../styles";
+import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh24, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -34,7 +34,6 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
   return (
     <View>
       <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
         <View style={flexRow}>
           <AdvancedDropdown items={DICTIONARY_MALAYSIA_BANK} handleChange={setBankName} label={PAYMENT.LABEL_BANK_NAME} value={bankName} />
           <CustomSpacer isHorizontal={true} space={sw64} />
@@ -42,7 +41,7 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
         </View>
       </View>
       <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh32} />
         <View style={flexRow}>
           <LabeledTitle
             label={PAYMENT.LABEL_KIB_ACCOUNT}

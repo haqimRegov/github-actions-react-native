@@ -108,6 +108,52 @@ const forgotPassword = gql`
   }
 `;
 
+const generatePdf = gql`
+  mutation generatePdf($input: PdfInput) {
+    generatePdf(input: $input) {
+      data {
+        result {
+          message
+          status
+          pdf {
+            base64
+            name
+            date
+            url
+            urlPageCount
+            type
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitPdf = gql`
+  mutation submitPdf($input: submitPdfInput) {
+    submitPdf(input: $input) {
+      data {
+        result {
+          message
+          status
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const registerPassword = gql`
   mutation signUp($input: SetPasswordInput) {
     signUp(input: $input) {
@@ -254,6 +300,34 @@ const submitClientAccount = gql`
   }
 `;
 
+const submitProofOfPayments = gql`
+  mutation submitProofOfPayments($input: SubmitPopInput) {
+    submitProofOfPayments(input: $input) {
+      data {
+        result {
+          account {
+            status
+            remarks
+          }
+          orders {
+            orderNumber
+            paymentType
+            status
+            remarks
+          }
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const verifyOtp = gql`
   mutation verifyOtp($input: otp) {
     verifyOtp(input: $input) {
@@ -320,15 +394,18 @@ const userLogin = gql`
 
 export const GQL_MUTATIONS = {
   clientRegister,
-  emailVerification,
   emailOtpVerification,
+  emailVerification,
   firstTimeSignUp,
   forgotPassword,
+  generatePdf,
   registerPassword,
   resendLockOtp,
   resetPassword,
   riskAssessment,
   submitClientAccount,
+  submitPdf,
+  submitProofOfPayments,
   userLogin,
   verifyLockOtp,
   verifyOtp,

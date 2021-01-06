@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, CustomTextInput } from "../../../../components";
 import { Language } from "../../../../constants";
-import { flexRow, px, sh24, sw24, sw64 } from "../../../../styles";
+import { flexRow, px, sw24, sw64 } from "../../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -22,7 +22,6 @@ export const ClientTrustAccount: FunctionComponent<ClientTrustAccountProps> = ({
 }: ClientTrustAccountProps) => {
   return (
     <View style={px(sw24)}>
-      <CustomSpacer space={sh24} />
       <View style={flexRow}>
         <CustomTextInput label={PAYMENT.LABEL_CLIENT_NAME} onChangeText={setClientName} value={clientName} />
         <CustomSpacer isHorizontal={true} space={sw64} />

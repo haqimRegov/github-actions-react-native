@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import { DATE_OF_BIRTH_FORMAT } from "../../../constants";
@@ -19,6 +19,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   personalInfo,
   setLoading,
 }: EmailVerificationProps) => {
+  const { emailOtpSent } = personalInfo;
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
   const [jointOtp, setJointOtp] = useState<string>("");
@@ -45,6 +46,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       const { data, error } = response;
       if (error === null && data !== null) {
         if (data.result.status === true) {
+          addPersonalInfo({ ...personalInfo, emailOtpSent: true });
           setPage("otp");
         }
       }
@@ -57,6 +59,13 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 
   const jointEmailCheck =
     accountType === "Joint" && moment().diff(moment(details?.jointHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT), "years") >= 18;
+
+  useEffect(() => {
+    if (emailOtpSent === true) {
+      setPage("otp");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Fragment>

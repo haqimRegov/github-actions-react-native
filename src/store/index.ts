@@ -3,7 +3,6 @@ export * from "./actionCreator";
 export * from "./Client";
 export * from "./Global";
 export * from "./Onboarding";
-export * from "./OnboardingPayment";
 export * from "./PersonalInfo";
 export * from "./Products";
 export * from "./RiskAssessment";

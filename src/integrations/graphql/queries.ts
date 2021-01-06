@@ -107,4 +107,35 @@ const etbCheck = gql`
   }
 `;
 
-export const GQL_QUERIES = { etbCheck, productList };
+const getReceiptSummaryList = gql`
+  query getReceiptSummaryList($input: getReceiptSummaryListInput) {
+    getReceiptSummaryList(input: $input) {
+      data {
+        result {
+          message
+          status
+          orders {
+            name
+            orderNumber
+            isScheduled
+            isEpf
+            fundType
+            fundCount
+            orderTotalAmount {
+              currency
+              amount
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+export const GQL_QUERIES = { etbCheck, getReceiptSummaryList, productList };

@@ -12,6 +12,7 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   PersonalInfoSummary: "PersonalInfoSummary",
   ProductRecommendation: "ProductRecommendation",
   RiskAssessment: "RiskAssessment",
+  Signatures: "Signatures",
   TermsAndConditions: "TermsAndConditions",
 };
 export const ONBOARDING_KEYS: IOnboardingKeys = {

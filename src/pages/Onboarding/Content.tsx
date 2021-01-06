@@ -6,7 +6,7 @@ import { ConfirmationModal } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
 import { fs16BoldBlack2 } from "../../styles";
-import { OrderSummary } from "./Acknowledgement";
+import { OrderSummary, Signatures, TermsAndConditions } from "./Acknowledgement";
 import { CrsDeclaration, DeclarationSummary, FatcaDeclaration, FeaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
@@ -16,7 +16,6 @@ import { PersonalDetails } from "./PersonalDetails";
 import { PersonalInfoSummary } from "./PersonalInfoSummary";
 import { Products } from "./Products";
 import { QuestionnaireContent } from "./Questionnaire";
-import { TermsAndConditionsPages } from "./TermsAndConditions";
 
 const { ONBOARDING } = Language.PAGE;
 interface OnboardingProps extends OnboardingContentProps, OnboardingStoreProps {
@@ -66,8 +65,11 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.OrderSummary:
       content = <OrderSummary {...newProps} />;
       break;
+    case ONBOARDING_ROUTES.Signatures:
+      content = <Signatures {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.TermsAndConditions:
-      content = <TermsAndConditionsPages {...newProps} />;
+      content = <TermsAndConditions {...newProps} />;
       break;
     case ONBOARDING_ROUTES.PersonalInfoSummary:
       content = <PersonalInfoSummary {...newProps} />;

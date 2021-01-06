@@ -480,14 +480,16 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                           </View>
                         </View>
                       ) : null}
-                      <CustomSpacer space={sh32} />
+                      <CustomSpacer space={sh24} />
+                      <Dash />
+                      <CustomSpacer space={sh16} />
                     </Fragment>
                   )}
 
                   {paymentMethodInfo}
                   {payment.paymentMethod! === "Recurring" || payment.paymentMethod! === "EPF" ? null : (
                     <Fragment>
-                      <CustomSpacer space={sh32} />
+                      <CustomSpacer space={sh24} />
                       <Dash />
                     </Fragment>
                   )}
@@ -535,7 +537,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                       />
                     </View>
                   )}
-                  <CustomSpacer space={sh56} />
+                  <CustomSpacer space={sh32} />
                   <ActionButtons
                     handleCancel={handleCancelPaymentInfo}
                     handleContinue={handleSavePayment}

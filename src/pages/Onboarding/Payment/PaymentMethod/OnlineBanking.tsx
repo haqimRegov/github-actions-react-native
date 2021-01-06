@@ -25,7 +25,6 @@ export const OnlineBanking: FunctionComponent<OnlineBankingProps> = ({
   return (
     <View>
       <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
         <View style={flexRow}>
           <LabeledTitle
             label={PAYMENT.LABEL_KIB_ACCOUNT}

@@ -40,9 +40,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     const principalIdType =
       details?.principalHolder?.idType === "Other" ? details?.principalHolder?.otherIdType : details?.principalHolder?.idType;
     const jointExpirationDate =
-      joint!.personalDetails!.expirationDate !== undefined ? moment(joint!.personalDetails!.expirationDate).unix() : undefined;
+      joint!.personalDetails!.expirationDate !== undefined ? moment(joint!.personalDetails!.expirationDate).valueOf() : undefined;
     const principalExpirationDate =
-      principal!.personalDetails!.expirationDate !== undefined ? moment(principal!.personalDetails!.expirationDate).unix() : undefined;
+      principal!.personalDetails!.expirationDate !== undefined ? moment(principal!.personalDetails!.expirationDate).valueOf() : undefined;
 
     const principalMalaysianDetails =
       principalIdType !== "Passport"

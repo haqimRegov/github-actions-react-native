@@ -1,12 +1,12 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { BlurView, CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
-import { SAMPLE_PAYMENT } from "../../../mocks/payment-summary";
-import { OnboardingPaymentMapDispatchToProps, OnboardingPaymentMapStateToProps, OnboardingPaymentStoreProps } from "../../../store";
+import { submitProofOfPayments } from "../../../network-actions";
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   borderBottomBlack21,
   centerVertical,
@@ -30,34 +30,49 @@ import {
 import { PaymentOrder } from "./PaymentOrder";
 
 const { PAYMENT } = Language.PAGE;
-interface PaymentProps extends OnboardingPaymentStoreProps {
+interface PaymentProps extends AcknowledgementStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-const PaymentComponent: FunctionComponent<PaymentProps> = ({ paymentSummary, updatePaymentSummary }: PaymentProps) => {
+const PaymentComponent: FunctionComponent<PaymentProps> = ({ orders, paymentSummary, updatePaymentSummary }: PaymentProps) => {
   const [activeOrder, setActiveOrder] = useState<string>("");
 
   const [viewFund, setViewFund] = useState<string>("");
-  const handleSubmit = () => {
-    const request = paymentSummary!.orders.map(({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
-      return {
-        orderNumber: orderNumber,
-        paymentType: paymentType,
-        payments: payments
+
+  const handleSubmit = async () => {
+    const paymentOrders: ISubmitProofOfPaymentOrder[] = paymentSummary!.orders.map(
+      ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
+        const payment: ISubmitProofOfPayment[] = payments
           .map((paymentInfo: IPaymentState) => {
             return {
               ...paymentInfo,
-              transactionDate: moment(paymentInfo.transactionDate).unix(),
-              transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).unix() : undefined,
+              transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
+              transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
             };
           })
-          .filter((value) => value.saved === true),
-      };
-    });
+          .filter((value) => value.saved === true);
+        return { orderNumber: orderNumber, paymentType: paymentType, payments: payment };
+      },
+    );
+    const request = { orders: paymentOrders };
     // eslint-disable-next-line no-console
-    console.log("request", { orders: request });
+    console.log("submitProofOfPayments request", request);
+    const paymentResponse: IGetReceiptSummaryListResponse = await submitProofOfPayments(request);
+    // eslint-disable-next-line no-console
+    console.log("submitProofOfPayments", paymentResponse);
+    if (paymentResponse !== undefined) {
+      const { data, error } = paymentResponse;
+      if (error === null && data !== null) {
+        Alert.alert(data.result.message);
+        // setErrorMessage(undefined);
+        // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+      }
+      if (error !== null) {
+        Alert.alert(error.message);
+      }
+    }
+    return undefined;
   };
-
   const email = "alan@kib.com.my";
 
   let completedOrders: IPaymentOrderState[] = [];
@@ -78,8 +93,17 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ paymentSummary, upd
   const bannerText = completedOrders.length === 0 ? `${pendingText}` : completedBannerText;
 
   useEffect(() => {
-    if (paymentSummary === undefined) {
-      updatePaymentSummary(SAMPLE_PAYMENT);
+    if (paymentSummary === undefined && orders !== undefined) {
+      const newOrders: IPaymentOrderState[] = orders!.orders.map((order: IOrder) => {
+        return {
+          ...order,
+          payments: [],
+
+          completed: false,
+          floatingAmount: [],
+        };
+      });
+      updatePaymentSummary({ grandTotal: orders!.grandTotal, orders: newOrders });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -163,4 +187,4 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ paymentSummary, upd
     </SafeAreaPage>
   );
 };
-export const Payment = connect(OnboardingPaymentMapStateToProps, OnboardingPaymentMapDispatchToProps)(PaymentComponent);
+export const Payment = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(PaymentComponent);

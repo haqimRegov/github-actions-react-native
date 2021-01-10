@@ -95,14 +95,14 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({ handleNex
       <CustomSpacer space={sh24} />
       {orders !== undefined &&
         orders.orders.map((orderSummary: IOrder, index: number) => {
-          return (
+          return orderSummary.paymentType !== "Recurring" ? (
             <Fragment key={index}>
               {index !== 0 ? <CustomSpacer space={sh24} /> : null}
               <View style={{ ...px(sw24), ...shadow5 }}>
                 <OrderDetails expandOrder={expandOrder} index={index} orderSummary={orderSummary} setExpandOrder={setExpandOrder} />
               </View>
             </Fragment>
-          );
+          ) : null;
         })}
     </ContentPage>
   );

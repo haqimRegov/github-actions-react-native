@@ -1,5 +1,10 @@
 declare type TypePaymentType = "Cash" | "EPF" | "Recurring";
 
+declare interface IFloatingAmount {
+  amount: number;
+  currency: TypeCurrency;
+}
+
 declare interface IPaymentOrderState {
   investments: IOrderInvestment[];
   paymentType: TypePaymentType;
@@ -9,7 +14,7 @@ declare interface IPaymentOrderState {
   payments: IPaymentState[];
 
   completed?: boolean;
-  floatingAmount?: IOrderAmount[];
+  floatingAmount?: IFloatingAmount[];
 }
 
 declare interface IPurchaseSummary {
@@ -47,7 +52,5 @@ declare interface IPayment {
 }
 
 declare interface IPaymentState extends IPayment {
-  expanded?: boolean;
-  show?: boolean;
   saved?: boolean;
 }

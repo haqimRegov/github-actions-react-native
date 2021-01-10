@@ -53,6 +53,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
     content: [
       { title: ONBOARDING.TITLE_ORDER_SUMMARY, route: ONBOARDING_ROUTES.OrderSummary },
       { title: ONBOARDING.TITLE_TERMS_CONDITIONS, route: ONBOARDING_ROUTES.TermsAndConditions },
+      { title: ONBOARDING.TITLE_SIGNATURES, route: ONBOARDING_ROUTES.Signatures },
     ],
     key: ONBOARDING_KEYS.Acknowledgement,
     label: ONBOARDING.TITLE_ACKNOWLEDGEMENT,

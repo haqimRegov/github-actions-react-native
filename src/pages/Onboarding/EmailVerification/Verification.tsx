@@ -167,7 +167,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
           <View style={flexRow}>
             <CustomSpacer isHorizontal={true} space={sw16} />
             <TextSpaceArea
-              spaceToBottom={sh32}
+              spaceToBottom={jointEmailCheck === true ? sh32 : 0}
               spaceToTop={sh16}
               style={{ ...fs12RegBlack2, letterSpacing: sw02, maxWidth: sw320 }}
               text={EMAIL_VERIFICATION.NOTE_SPAM}

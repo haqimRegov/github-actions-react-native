@@ -104,7 +104,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
         newName = name === null ? realURI.substring(realURI.lastIndexOf("/") + 1) : name;
       }
 
-      const selectedFile: FileBase64 = { base64: base64 || "", name: newName, size, type, date: `${moment().unix()}`, path: realURI };
+      const selectedFile: FileBase64 = { base64: base64 || "", name: newName, size, type, date: `${moment().valueOf()}`, path: realURI };
       if (size > MAX_SIZE_BYTE) {
         if (onError) {
           return onError(selectedFile);
@@ -121,7 +121,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     if (!Array.isArray(results)) {
       const { data, filename, size, mime, path } = results;
       const newName = filename === null || filename === undefined ? path.substring(path.lastIndexOf("/") + 1) : filename;
-      const selectedImage: FileBase64 = { base64: data || "", name: newName, size, type: mime, date: `${moment().unix()}`, path };
+      const selectedImage: FileBase64 = { base64: data || "", name: newName, size, type: mime, date: `${moment().valueOf()}`, path };
       if (size > MAX_SIZE_BYTE) {
         if (onError) {
           return onError(selectedImage);

@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { CustomDatePicker, CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
-import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh24, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../../styles";
+import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -29,7 +29,6 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
   return (
     <View>
       <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
         <View style={flexRow}>
           <View>
             <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_DATE} />
@@ -55,7 +54,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
         </View>
       </View>
       <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh32} />
         <View style={flexRow}>
           <LabeledTitle
             label={PAYMENT.LABEL_KIB_ACCOUNT}

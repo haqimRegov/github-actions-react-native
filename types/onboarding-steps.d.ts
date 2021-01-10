@@ -49,6 +49,7 @@ declare type TypeOnboardingRoute =
   | "PersonalInfoSummary"
   | "ProductRecommendation"
   | "RiskAssessment"
+  | "Signatures"
   | "TermsAndConditions";
 
 declare type TypeOnboardingKey = "Acknowledgement" | "Declarations" | "PersonalInformation" | "Products" | "RiskAssessment" | "Payment";
@@ -67,6 +68,7 @@ declare interface IOnboardingRoutes {
   PersonalInfoSummary: TypeOnboardingRoute;
   ProductRecommendation: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
+  Signatures: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
 }
 

@@ -47,7 +47,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
   setViewFund,
   viewFund,
 }: PaymentOrderProps) => {
-  const { orderDate, orderTotalAmount, orderNumber, investments, payments, paymentType, completed } = paymentOrder;
+  const { completed, floatingAmount, investments, orderDate, orderNumber, orderTotalAmount, payments, paymentType } = paymentOrder;
 
   const cardHeaderStyle: ViewStyle = {
     ...centerVertical,
@@ -85,7 +85,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           remark: undefined,
           bankName: "",
           checkNumber: "",
-          expanded: true,
+          saved: false,
         };
         break;
       case "Recurring":
@@ -97,7 +97,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           recurringBank: DICTIONARY_DDA_BANK[0].value,
           frequency: DICTIONARY_RECURRING_FREQUENCY[0].value,
           proof: undefined,
-          expanded: true,
+          saved: false,
         };
         break;
       case "EPF":
@@ -108,7 +108,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           epfReferenceNumber: "",
           proof: undefined,
           remark: undefined,
-          expanded: true,
+          saved: false,
         };
         break;
 
@@ -119,50 +119,31 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     return initialState;
   };
 
-  const payOrder = () => {
+  const handleExpandPayment = () => {
     AnimationUtils.layout({ duration: activeOrder === orderNumber ? 200 : 300 });
     setActiveOrder(activeOrder === orderNumber ? "" : orderNumber);
   };
 
-  const handleSavePayment = () => {
+  const handleFloatingAmount = (latestPayments: IPaymentState[]) => {
     const floatingTotalAmount = orderTotalAmount.map((orderAmount) => {
-      const filtered = payments.filter((value) => value.currency === orderAmount.currency);
-      const mapp = filtered.map((payment: IPaymentState) => parseFloat(payment.amount!));
-      const total = mapp.length === 0 ? 0 : mapp.reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
-      return { currency: orderAmount.currency, amount: `${total - parseFloat(orderAmount.amount)}` };
+      const filteredPayments = latestPayments
+        .filter((value) => value.currency === orderAmount.currency)
+        .map((payment: IPaymentState) => parseFloat(payment.amount!));
+      const total =
+        filteredPayments.length === 0
+          ? 0
+          : filteredPayments.reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
+      return { currency: orderAmount.currency, amount: total - parseFloat(orderAmount.amount) };
     });
-    const checkFloating = floatingTotalAmount.map((floating) => parseFloat(floating.amount) >= 0);
+    const checkFloating = floatingTotalAmount.map((floating) => floating.amount >= 0);
     const isCompleted = paymentType === "Recurring" ? true : !checkFloating.includes(false);
-    const updatedPaymentOrder = { ...paymentOrder, floatingAmount: floatingTotalAmount, completed: isCompleted };
+    const updatedPaymentOrder = { floatingAmount: floatingTotalAmount, completed: isCompleted };
     return updatedPaymentOrder;
   };
 
-  const handleSave = () => {
-    const newPaymentOrder = handleSavePayment();
-    setPaymentOrder(newPaymentOrder);
-    payOrder();
-  };
-
-  const handleAdditionalPayment = () => {
-    const newState = generateNewPaymentDraft();
-    const newPaymentOrder = handleSavePayment();
-    const updatedPaymentOrder = { ...newPaymentOrder };
-    updatedPaymentOrder.payments.push(newState);
-    setPaymentOrder(updatedPaymentOrder);
-  };
-
-  const handleCancelPaymentInfo = () => {
-    if (payments.length > 1) {
-      const updatedPaymentOrder = { ...paymentOrder };
-      updatedPaymentOrder.payments.splice(-1, 1);
-      setPaymentOrder(updatedPaymentOrder);
-    } else {
-      const newState = generateNewPaymentDraft();
-      const updatedPaymentOrder = { ...paymentOrder };
-      updatedPaymentOrder.payments = [newState];
-      setPaymentOrder(updatedPaymentOrder);
-      handleSave();
-    }
+  const handleSavePayments = (latestPayments: IPaymentState[]) => {
+    const newPaymentOrder = handleFloatingAmount(latestPayments);
+    setPaymentOrder({ ...paymentOrder, payments: latestPayments, ...newPaymentOrder });
   };
 
   useEffect(() => {
@@ -224,10 +205,10 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
       <PaymentCard
         active={activeOrder === orderNumber}
         currencies={currencies}
-        handleAddPayment={payOrder}
-        handleSave={handleSave}
-        handleAdditionalPayment={handleAdditionalPayment}
-        handleCancelPaymentInfo={handleCancelPaymentInfo}
+        floatingAmount={floatingAmount!}
+        generateNewPayment={generateNewPaymentDraft}
+        handleExpandPayment={handleExpandPayment}
+        handleSavePayments={handleSavePayments}
         isScheduled={paymentType === "Recurring"}
         payments={payments}
         setPayments={setPayments}

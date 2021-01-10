@@ -4,7 +4,6 @@ import { acknowledgementReducer } from "./Acknowledgement";
 import { clientReducer } from "./Client";
 import { globalReducer } from "./Global";
 import { onboardingReducer } from "./Onboarding";
-import { onboardingPaymentReducer } from "./OnboardingPayment";
 import { personalInfoReducer } from "./PersonalInfo";
 import { productsReducer } from "./Products";
 import { riskAssessmentReducer } from "./RiskAssessment";
@@ -16,7 +15,6 @@ export const rootReducer = combineReducers({
   client: clientReducer,
   global: globalReducer,
   onboarding: onboardingReducer,
-  onboardingPayment: onboardingPaymentReducer,
   personalInfo: personalInfoReducer,
   products: productsReducer,
   riskAssessment: riskAssessmentReducer,

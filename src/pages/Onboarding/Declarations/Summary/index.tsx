@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer } from "../../../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS, OPTIONS_FATCA_NO_CERTIFICATE } from "../../../../data/dictionary";
-import { SAMPLE_ORDERS } from "../../../../mocks/order-summary";
+import { SAMPLE_PAYMENT } from "../../../../mocks/payment-summary";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, sh24 } from "../../../../styles";
@@ -40,9 +40,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     const principalIdType =
       details?.principalHolder?.idType === "Other" ? details?.principalHolder?.otherIdType : details?.principalHolder?.idType;
     const jointExpirationDate =
-      joint!.personalDetails!.expirationDate !== undefined ? moment(joint!.personalDetails!.expirationDate).unix() : undefined;
+      joint!.personalDetails!.expirationDate !== undefined ? moment(joint!.personalDetails!.expirationDate).valueOf() : undefined;
     const principalExpirationDate =
-      principal!.personalDetails!.expirationDate !== undefined ? moment(principal!.personalDetails!.expirationDate).unix() : undefined;
+      principal!.personalDetails!.expirationDate !== undefined ? moment(principal!.personalDetails!.expirationDate).valueOf() : undefined;
 
     const principalMalaysianDetails =
       principalIdType !== "Passport"
@@ -272,7 +272,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       }
 
       if (error !== null) {
-        addOrders(SAMPLE_ORDERS);
+        addOrders(SAMPLE_PAYMENT);
         const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
         updatedSteps.push(ONBOARDING_KEYS.Declarations);
         updateFinishedSteps(updatedSteps);

@@ -7,6 +7,7 @@ import { AcknowledgementActionProps } from "./actions";
 
 export const AcknowledgementMapStateToProps = (state: RootState) => ({
   accountType: state.client.accountType,
+  agent: state.global.agent,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
   investmentDetails: state.selectedFund.investmentDetails,

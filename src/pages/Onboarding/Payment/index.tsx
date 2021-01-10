@@ -13,6 +13,7 @@ import {
   flexChild,
   flexGrow,
   flexRow,
+  fs12RegBlack2,
   fs16BoldBlack2,
   fs16RegBlack2,
   fs16SemiBoldBlack2,
@@ -34,7 +35,7 @@ interface PaymentProps extends AcknowledgementStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-const PaymentComponent: FunctionComponent<PaymentProps> = ({ orders, paymentSummary, updatePaymentSummary }: PaymentProps) => {
+const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paymentSummary, updatePaymentSummary }: PaymentProps) => {
   const [activeOrder, setActiveOrder] = useState<string>("");
 
   const [viewFund, setViewFund] = useState<string>("");
@@ -73,24 +74,40 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ orders, paymentSumm
     }
     return undefined;
   };
-  const email = "alan@kib.com.my";
 
-  let completedOrders: IPaymentOrderState[] = [];
-  // TODO floatingAmount
-  // let floatingAmount: IOrderAmount[] = [];
-  if (paymentSummary !== undefined) {
-    // const filtered = paymentSummary!.orders.filter((order) => order.floatingAmount !== undefined);
-    // const test = filtered.map((order) => order.floatingAmount!).flat().map((order) => ).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
-    // console.log("test", test);
-    // floatingAmount = filtered !== undefined ? filtered.map((order) => order.floatingAmount!) : [];
-    completedOrders = paymentSummary!.orders.filter((order) => order.completed === true);
-  }
+  const completedOrders: IPaymentOrderState[] =
+    paymentSummary !== undefined ? paymentSummary!.orders.filter((order) => order.completed === true) : [];
 
   const completedText = `${completedOrders.length} ${PAYMENT.LABEL_COMPLETED}`;
   const pendingCount = paymentSummary !== undefined ? paymentSummary.orders.length - completedOrders.length : 0;
   const pendingText = `${pendingCount} ${PAYMENT.LABEL_PENDING_PAYMENT}`;
   const completedBannerText = pendingCount === 0 ? `${completedText}` : `${pendingText}, ${completedText}`;
   const bannerText = completedOrders.length === 0 ? `${pendingText}` : completedBannerText;
+
+  const withFloatingAmount =
+    paymentSummary !== undefined
+      ? paymentSummary.orders.filter(
+          (order) => order.floatingAmount !== undefined && order.floatingAmount.length > 0 && order.paymentType === "Cash",
+        )
+      : [];
+
+  const floatingTotalAmount = withFloatingAmount.map(({ floatingAmount }) => floatingAmount!).flat(1);
+  const floatingLabel =
+    floatingTotalAmount.length > 0
+      ? floatingTotalAmount
+          .reduce((accumulator: IFloatingAmount[], current: IFloatingAmount) => {
+            const currencyIndex = accumulator.findIndex((value: IFloatingAmount) => value.currency === current.currency);
+            if (currencyIndex === -1) {
+              accumulator.push(current);
+            } else {
+              accumulator[currencyIndex].amount += current.amount;
+            }
+            return accumulator;
+          }, [])
+          .filter(({ amount }) => amount > 0)
+          .map(({ amount, currency }) => `${currency} ${amount}`)
+          .join(", ")
+      : "";
 
   useEffect(() => {
     if (paymentSummary === undefined && orders !== undefined) {
@@ -122,7 +139,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ orders, paymentSumm
               titleStyle={fs16SemiBoldBlack2}
             />
             <CustomFlexSpacer />
-            <Text style={{ ...fs16RegBlack2, width: sw256 }}>{`${PAYMENT.LABEL_EMAIL} ${email}`}</Text>
+            <Text style={{ ...fs16RegBlack2, width: sw256 }}>{`${PAYMENT.LABEL_EMAIL} ${agent?.email}`}</Text>
           </View>
           {paymentSummary !== undefined &&
             paymentSummary.orders.map((order: IPaymentOrderState, index: number) => {
@@ -161,25 +178,28 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ orders, paymentSumm
       {activeOrder !== "" ? null : (
         <SelectionBanner
           bottomContent={
-            <View style={{ ...centerVertical, ...flexRow }}>
-              {paymentSummary !== undefined &&
-                paymentSummary.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                  return (
-                    <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                      {index !== 0 ? (
-                        <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
-                      ) : (
-                        <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
-                      )}
-                      <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
-                      <CustomSpacer isHorizontal={true} space={sw4} />
-                      <Text style={fs16BoldBlack2}>{`${totalAmount.amount}`}</Text>
-                    </View>
-                  );
-                })}
+            <View>
+              <View style={{ ...centerVertical, ...flexRow }}>
+                {paymentSummary !== undefined &&
+                  paymentSummary.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
+                    return (
+                      <View key={index} style={{ ...centerVertical, ...flexRow }}>
+                        {index !== 0 ? (
+                          <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
+                        ) : (
+                          <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
+                        )}
+                        <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw4} />
+                        <Text style={fs16BoldBlack2}>{`${totalAmount.amount}`}</Text>
+                      </View>
+                    );
+                  })}
+              </View>
+              {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
             </View>
           }
-          labelSubmit={PAYMENT.BUTTON_DONE}
+          labelSubmit={PAYMENT.BUTTON_SUBMIT}
           submitOnPress={handleSubmit}
           label={bannerText}
         />

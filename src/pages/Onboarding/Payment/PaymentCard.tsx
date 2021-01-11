@@ -110,6 +110,8 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   const completedTitle = withPayment === true ? `${PAYMENT.LABEL_PROOF} - ${paymentTitle} (${floating})` : headerTitle;
 
   // TODO actual holder names
+  // TODO no prompt if all are saved
+  // TODO dont reflect current change if viewing other info
   const recurringBankNames = [{ label: "Edgar Constantine", value: "Edgar Constantine" }];
   const modalTitle = prompt === -1 || prompt === expandedIndex ? PAYMENT.PROMPT_TITLE_CANCEL : PAYMENT.PROMPT_TITLE_VIEW;
 
@@ -246,6 +248,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
             const setProof = (value?: FileBase64) => {
               const updatedPayments = [...draftPayments];
               updatedPayments[index].proof = value;
+              updatedPayments[index].saved = value !== undefined ? updatedPayments[index].saved : false;
               setDraftPayments(updatedPayments);
             };
 

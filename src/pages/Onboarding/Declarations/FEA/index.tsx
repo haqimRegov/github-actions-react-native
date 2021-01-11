@@ -54,13 +54,15 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
     principal?.declaration!.fea!.acceptFea &&
     principal?.declaration!.fea!.resident !== -1 &&
     principal?.declaration!.fea!.facility !== -1 &&
-    principal?.declaration!.fea!.balance !== "";
+    principal?.declaration!.fea!.balance !== "" &&
+    principal?.declaration!.fea!.balanceError === undefined;
 
   const validationsJoint =
     joint?.declaration!.fea!.acceptFea &&
     joint?.declaration!.fea!.resident !== -1 &&
     joint?.declaration!.fea!.facility !== -1 &&
-    principal?.declaration!.fea!.balance !== "";
+    principal?.declaration!.fea!.balance !== "" &&
+    principal?.declaration!.fea!.balanceError === undefined;
 
   const continueEnabled = accountType === "Individual" ? validationsPrincipal : validationsPrincipal && validationsJoint;
 

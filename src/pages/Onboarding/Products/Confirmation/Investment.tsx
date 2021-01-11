@@ -262,6 +262,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
             <CustomTextInput
               error={amountError}
               inputPrefix={fundCurrency}
+              keyboardType="numeric"
               onBlur={checkInvestmentAmount}
               onChangeText={handleInvestmentAmount}
               prefixStyle={fs16RegBlack2}

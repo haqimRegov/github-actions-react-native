@@ -1,4 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect } from "react";
+import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
@@ -16,6 +17,8 @@ interface AddressFieldProps {
   inputPostCode: string;
   inputState: string;
   labelAddress: string;
+  onBlurPostCode?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  postCodeError?: string;
   setInputAddress: (input: string) => void;
   setInputCity: (input: string) => void;
   setInputCountry?: (input: string) => void;
@@ -30,6 +33,8 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   inputPostCode,
   inputState,
   labelAddress,
+  onBlurPostCode,
+  postCodeError,
   setInputAddress,
   setInputCity,
   setInputCountry,
@@ -47,8 +52,10 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
     <Fragment>
       <TextInputArea label={labelAddress} onChangeText={setInputAddress} value={inputAddress} />
       <CustomTextInput
+        error={postCodeError}
         keyboardType="numeric"
         label={ADDRESS.LABEL_POSTCODE}
+        onBlur={onBlurPostCode}
         onChangeText={setInputPostCode}
         spaceToTop={sh32}
         value={inputPostCode}

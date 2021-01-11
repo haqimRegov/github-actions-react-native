@@ -3,8 +3,9 @@ import { View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, CustomTextInput, IconButton, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
+import { DICTIONARY_MOBILE_CODE, ERROR } from "../../../data/dictionary";
 import { centerVertical, colorBlack, colorBlue, flexRow, fs12BoldBlue2, px, py, sh16, sh24, sh8, sw16, sw24 } from "../../../styles";
+import { isNumber } from "../../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -54,13 +55,21 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
             setContactNumber(updatedNumber);
           };
 
+          const checkNumber = () => {
+            const updatedNumber = [...contactNumber];
+            updatedNumber[index].error = isNumber(item.value) === false ? ERROR.INVALID_NUMBER : undefined;
+            setContactNumber(updatedNumber);
+          };
+
           return (
             <View key={index} style={{ ...centerVertical, ...flexRow }}>
               <View>
                 <CustomTextInput
+                  error={item.error}
                   inputPrefix={item.code}
                   keyboardType="numeric"
                   label={item.label}
+                  onBlur={checkNumber}
                   onChangeText={handleChangeNumber}
                   placeholder="12 3456 7890"
                   spaceToTop={sh24}
@@ -72,6 +81,7 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
                 <View>
                   <CustomFlexSpacer />
                   <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} style={py(sh8)} />
+                  {item.error !== undefined ? <CustomSpacer space={sh24} /> : null}
                 </View>
               )}
               <CustomFlexSpacer />

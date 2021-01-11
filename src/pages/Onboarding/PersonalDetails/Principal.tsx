@@ -20,6 +20,8 @@ interface PrincipalDetails {
   setContactDetails: (value: IContactDetailsState) => void;
   setEpfDetails: (value: IEpfDetailsState) => void;
   setPersonalDetails: (value: IPersonalDetailsState) => void;
+  setValidations: (value: IPersonalDetailsValidations) => void;
+  validations: IPersonalDetailsValidations;
 }
 
 export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
@@ -34,6 +36,8 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
   setContactDetails,
   setEpfDetails,
   setPersonalDetails,
+  setValidations,
+  validations,
 }: PrincipalDetails) => {
   const padding = accountType === "Joint" ? px(sw24) : {};
 
@@ -66,6 +70,8 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
           setContactDetails={setContactDetails}
           setEpfDetails={setEpfDetails}
           setPersonalDetails={setPersonalDetails}
+          setValidations={setValidations}
+          validations={validations}
         />
       </View>
     </View>

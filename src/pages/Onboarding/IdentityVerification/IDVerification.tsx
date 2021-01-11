@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -25,6 +25,11 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   riskScore,
 }: IDVerificationProps) => {
   const { principal, joint } = personalInfo;
+  const [validations, setValidations] = useState<IIDVerificationValidations>({
+    name: undefined,
+    permanentPostCode: undefined,
+    mailingPostCode: undefined,
+  });
 
   const validateDetails = (details: IHolderInfoState) => {
     const { addressInformation, personalDetails } = details;
@@ -39,6 +44,9 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       personalDetails!.placeOfBirth !== "" &&
       Object.values(addressInformation!.permanentAddress!).includes("") === false &&
       Object.values(addressInformation!.mailingAddress!).includes("") === false &&
+      Object.values(validations)
+        .map((value) => typeof value)
+        .includes(typeof "string") === false &&
       checkPassport === true
     );
   };
@@ -86,6 +94,8 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
         personalDetails={principal!.personalDetails!}
         setAddressInfo={handlePrincipalAddress}
         setPersonalDetails={handlePrincipalDetails}
+        setValidations={setValidations}
+        validations={validations}
       />
       {accountType === "Individual" ? null : (
         <Fragment>
@@ -97,6 +107,8 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
             personalDetails={joint!.personalDetails!}
             setAddressInfo={handleJointAddress}
             setPersonalDetails={handleJointDetails}
+            setValidations={setValidations}
+            validations={validations}
           />
         </Fragment>
       )}

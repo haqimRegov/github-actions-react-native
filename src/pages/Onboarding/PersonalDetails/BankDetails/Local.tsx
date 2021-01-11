@@ -11,7 +11,7 @@ import {
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
-import { DICTIONARY_CURRENCY, DICTIONARY_MALAYSIA_BANK } from "../../../../data/dictionary";
+import { DICTIONARY_CURRENCY, DICTIONARY_MALAYSIA_BANK, ERROR } from "../../../../data/dictionary";
 import {
   centerVertical,
   colorBlack,
@@ -30,6 +30,7 @@ import {
   sw24,
   sw328,
 } from "../../../../styles";
+import { isNonNumber, isNumber } from "../../../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -65,6 +66,12 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
+        const checkAccountBankName = () => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].bankAccountNameError = isNonNumber(item.bankAccountName!) === false ? ERROR.INVALID_BANK_NAME : undefined;
+          setBankingDetails(updatedDetails);
+        };
+
         const handleOtherBankName = (input: string) => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].otherBankName = input;
@@ -87,6 +94,13 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
         const handleAccountNumber = (input: string) => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].bankAccountNumber = input;
+          setBankingDetails(updatedDetails);
+        };
+
+        const checkNumber = () => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].bankAccountNumberError =
+            isNumber(item.bankAccountNumber!) === false ? ERROR.INVALID_BANK_NUMBER : undefined;
           setBankingDetails(updatedDetails);
         };
 
@@ -164,14 +178,18 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 />
               ) : null}
               <CustomTextInput
+                error={item.bankAccountNameError}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                onBlur={checkAccountBankName}
                 onChangeText={handleAccountName}
                 spaceToTop={sh32}
                 value={item.bankAccountName}
               />
               <CustomTextInput
+                error={item.bankAccountNumberError}
                 keyboardType="numeric"
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
+                onBlur={checkNumber}
                 onChangeText={handleAccountNumber}
                 spaceToTop={sh32}
                 value={item.bankAccountNumber}

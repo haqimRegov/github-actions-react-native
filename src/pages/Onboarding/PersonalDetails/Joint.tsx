@@ -19,6 +19,8 @@ interface JointDetails {
   setContactDetails: (value: IContactDetailsState) => void;
   setEpfDetails: (value: IEpfDetailsState) => void;
   setPersonalDetails: (value: IPersonalDetailsState) => void;
+  setValidations: (value: IPersonalDetailsValidations) => void;
+  validations: IPersonalDetailsValidations;
 }
 
 export const JointDetails: FunctionComponent<JointDetails> = ({
@@ -32,6 +34,8 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
   setContactDetails,
   setEpfDetails,
   setPersonalDetails,
+  setValidations,
+  validations,
 }: JointDetails) => {
   return (
     <View>
@@ -59,6 +63,8 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
           setContactDetails={setContactDetails}
           setEpfDetails={setEpfDetails}
           setPersonalDetails={setPersonalDetails}
+          setValidations={setValidations}
+          validations={validations}
         />
       </View>
     </View>

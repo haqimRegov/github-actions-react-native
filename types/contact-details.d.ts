@@ -14,6 +14,7 @@ declare type TypePhoneNumber = "mobile" | "home" | "office" | "fax";
 
 declare interface IContactNumber {
   code: string;
+  error?: string;
   label: string;
   value: string;
 }

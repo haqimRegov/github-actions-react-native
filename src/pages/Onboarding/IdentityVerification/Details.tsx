@@ -11,8 +11,9 @@ import {
   TextSpaceArea,
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION } from "../../../data/dictionary";
+import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION, ERROR } from "../../../data/dictionary";
 import { colorBlue, colorTransparent, fs12BoldBlack2, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
@@ -22,6 +23,8 @@ export interface IDDetailsProps {
   personalDetails: IPersonalDetailsState;
   setAddressInfo: (value: IAddressInfoState) => void;
   setPersonalDetails: (value: IPersonalDetailsState) => void;
+  setValidations: (value: IIDVerificationValidations) => void;
+  validations: IIDVerificationValidations;
 }
 
 export const IDDetails: FunctionComponent<IDDetailsProps> = ({
@@ -30,6 +33,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   personalDetails,
   setAddressInfo,
   setPersonalDetails,
+  setValidations,
+  validations,
 }: IDDetailsProps) => {
   const [sameAddressToggle, setSameAddressToggle] = useState<boolean>(true);
   const [principalMailingAddress] = useState<IAddressState>(addressInfo.mailingAddress!);
@@ -97,6 +102,18 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
     }
   };
 
+  const checkPermanentPostCode = () => {
+    setValidations({ ...validations, permanentPostCode: isNumber(inputPermanentPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+  };
+
+  const checkMailingPostCode = () => {
+    setValidations({ ...validations, mailingPostCode: isNumber(inputMailingPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+  };
+
+  const checkName = () => {
+    setValidations({ ...validations, name: isNonNumber(inputName) === false ? ERROR.INVALID_NAME : undefined });
+  };
+
   const labelSameMailing = accountHolder === "Joint" ? ID_VERIFICATION.LABEL_MAILING_SAME_PRINCIPAL : ID_VERIFICATION.LABEL_MAILING_SAME;
   const nameLabel = `${ID_VERIFICATION.LABEL_NAME} (as per ${personalDetails.idType})`;
 
@@ -111,7 +128,14 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         spaceToTop={sh32}
         value={formattedDOB}
       />
-      <CustomTextInput label={nameLabel} onChangeText={setInputName} spaceToTop={sh32} value={inputName} />
+      <CustomTextInput
+        error={validations.name}
+        label={nameLabel}
+        onBlur={checkName}
+        onChangeText={setInputName}
+        spaceToTop={sh32}
+        value={inputName}
+      />
       {isPassport ? (
         <Fragment>
           <AdvancedDropdown
@@ -159,6 +183,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         inputCountry={isPassport ? inputPermanentCountry : undefined}
         setInputCountry={isPassport ? setInputPermanentCountry : undefined}
         labelAddress={ID_VERIFICATION.LABEL_PERMANENT}
+        onBlurPostCode={checkPermanentPostCode}
+        postCodeError={validations.permanentPostCode}
         setInputAddress={setInputPermanentAddress}
         setInputCity={setInputPermanentCity}
         setInputPostCode={setInputPermanentPostCode}
@@ -178,6 +204,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             inputPostCode={inputMailingPostCode}
             inputState={inputMailingState}
             labelAddress={ID_VERIFICATION.LABEL_MAILING}
+            onBlurPostCode={checkMailingPostCode}
+            postCodeError={validations.mailingPostCode}
             setInputAddress={setInputMailingAddress}
             setInputCity={setInputMailingCity}
             setInputPostCode={setInputMailingPostCode}

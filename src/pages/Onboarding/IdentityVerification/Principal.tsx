@@ -18,6 +18,8 @@ export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps
   personalDetails,
   setAddressInfo,
   setPersonalDetails,
+  setValidations,
+  validations,
 }: PrincipalVerificationProps) => {
   const principalHolderName = personalDetails!.name !== undefined ? personalDetails.name : ID_VERIFICATION.LABEL_PRINCIPAL;
   const jointStyle: ViewStyle = accountType === "Joint" ? px(sw24) : {};
@@ -38,6 +40,8 @@ export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps
           personalDetails={personalDetails}
           setAddressInfo={setAddressInfo}
           setPersonalDetails={setPersonalDetails}
+          setValidations={setValidations}
+          validations={validations}
         />
       </View>
     </View>

@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { AccountHeader, AdvanceToggleButton, CustomSpacer, CustomTextInput, CustomTooltip, ToggleButton } from "../../../../components";
 import { Language } from "../../../../constants";
-import { OPTIONS_FEA_FACILITY } from "../../../../data/dictionary";
+import { ERROR, OPTIONS_FEA_FACILITY } from "../../../../data/dictionary";
 import {
   flexChild,
   flexRow,
@@ -20,6 +20,7 @@ import {
   sw32,
   sw600,
 } from "../../../../styles";
+import { isNumber } from "../../../../utils";
 import { FeaTerms } from "./Declaration";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -39,7 +40,7 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
   handleFeaDeclaration,
   name,
 }: FeaDeclarationDetailsProps) => {
-  const { acceptFea, balance, facility, resident } = fea;
+  const { acceptFea, balance, balanceError, facility, resident } = fea;
 
   const handleAcceptFea = () => handleFeaDeclaration({ ...fea, acceptFea: !acceptFea });
 
@@ -53,6 +54,13 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
 
   const handleBalance = (value: string) => {
     handleFeaDeclaration({ ...fea, balance: value });
+  };
+  const handleBalanceError = (value?: string) => {
+    handleFeaDeclaration({ ...fea, balanceError: value });
+  };
+
+  const checkNumber = () => {
+    handleBalanceError(isNumber(balance!) === false ? ERROR.INVALID_NUMBER : undefined);
   };
 
   const headerTitle = accountHolder === "Principal" ? DECLARATIONS.TITLE_PRINCIPAL : DECLARATIONS.TITLE_JOINT;
@@ -86,7 +94,14 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
         <CustomSpacer space={sh16} />
         <AdvanceToggleButton labels={OPTIONS_FEA_FACILITY} onSelect={handleFacility} value={facility!} />
         <CustomSpacer space={sw32} />
-        <CustomTextInput label={DECLARATIONS.LABEL_REMAINING} onChangeText={handleBalance} value={balance!} />
+        <CustomTextInput
+          error={balanceError}
+          keyboardType="numeric"
+          label={DECLARATIONS.LABEL_REMAINING}
+          onBlur={checkNumber}
+          onChangeText={handleBalance}
+          value={balance!}
+        />
       </View>
       <FeaTerms accepted={acceptFea!} setAccepted={handleAcceptFea} />
     </View>

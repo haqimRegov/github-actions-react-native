@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
@@ -19,24 +19,39 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   personalInfo,
   productSales,
 }: PersonalDetailsProps) => {
+  const [validations, setValidations] = useState<IPersonalDetailsValidations>({
+    epfNumber: undefined,
+    faxNumber: undefined,
+    homeNumber: undefined,
+    mobileNumber: undefined,
+    officeNumber: undefined,
+  });
   const { principal, joint, epfInvestment } = personalInfo;
   const investmentCurrencies = productSales!.map(({ investment }) =>
     investment.fundCurrency !== undefined ? investment.fundCurrency : "",
   );
   const checkRelationship = accountType === "Individual" ? true : principal!.personalDetails?.relationship !== "";
   const checkLocalBank = principal!.bankSummary!.localBank!.map(
-    (bank) => bank.bankName !== "" && bank.bankAccountNumber !== "" && bank.bankAccountName !== "" && bank.currency?.includes("") === false,
+    (bank) =>
+      bank.bankName !== "" &&
+      bank.bankAccountNumber !== "" &&
+      bank.bankAccountName !== "" &&
+      bank.currency?.includes("") === false &&
+      bank.bankAccountNameError === undefined &&
+      bank.bankAccountNumberError === undefined,
   );
 
   const checkForeignBank =
     principal!.bankSummary!.foreignBank!.length > 0
       ? principal!.bankSummary!.foreignBank!.map(
-          (bank) =>
+          (bank: IBankDetailsState) =>
             bank.bankName !== "" &&
             bank.bankAccountNumber !== "" &&
             bank.bankAccountName !== "" &&
             bank.currency?.includes("") === false &&
-            bank.bankLocation !== "",
+            bank.bankLocation !== "" &&
+            bank.bankAccountNameError === undefined &&
+            bank.bankAccountNumberError === undefined,
         )
       : [true];
 
@@ -49,11 +64,15 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         personalDetails!.otherEducationLevel !== "");
     const checkMalaysianDetails =
       personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
+
     return (
       Object.values(contactDetails!.contactNumber!)
         .map((contact) => contact.value)
         .flat()
         .includes("") === false &&
+      Object.values(contactDetails!.contactNumber!)
+        .map((contact) => typeof contact.error)
+        .includes("string") === false &&
       checkMalaysianDetails === true &&
       personalDetails!.mothersMaidenName !== "" &&
       personalDetails!.maritalStatus !== "" &&
@@ -134,6 +153,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           setContactDetails={handlePrincipalContactDetails}
           setEpfDetails={handlePrincipalEpfDetails}
           setPersonalDetails={handlePrincipalPersonalDetails}
+          setValidations={setValidations}
+          validations={validations}
         />
         {accountType === "Individual" ? null : (
           <Fragment>
@@ -151,6 +172,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
               setContactDetails={handleJointContactDetails}
               setEpfDetails={handleJointEpfDetails}
               setPersonalDetails={handleJointPersonalDetails}
+              setValidations={setValidations}
+              validations={validations}
             />
           </Fragment>
         )}

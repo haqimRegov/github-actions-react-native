@@ -11,6 +11,8 @@ const { PERSONAL_DETAILS } = Language.PAGE;
 interface EPFDetailsProps {
   inputEpfNumber: string;
   inputEpfType: string;
+  epfNumberError: string | undefined;
+  onBlurEpfNumber: () => void;
   setInputEpfNumber: (input: string) => void;
   setInputEpfType: (input: string) => void;
 }
@@ -18,6 +20,8 @@ interface EPFDetailsProps {
 export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
   inputEpfNumber,
   inputEpfType,
+  epfNumberError,
+  onBlurEpfNumber,
   setInputEpfNumber,
   setInputEpfType,
 }: EPFDetailsProps) => {
@@ -28,7 +32,13 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
       <View style={px(sw24)}>
         <CustomSpacer space={sh32} />
         <TextSpaceArea spaceToBottom={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.LABEL_EPF_DETAILS} />
-        <CustomTextInput label={PERSONAL_DETAILS.LABEL_EPF_NUMBER} onChangeText={setInputEpfNumber} value={inputEpfNumber} />
+        <CustomTextInput
+          error={epfNumberError}
+          label={PERSONAL_DETAILS.LABEL_EPF_NUMBER}
+          onBlur={onBlurEpfNumber}
+          onChangeText={setInputEpfNumber}
+          value={inputEpfNumber}
+        />
         <AdvancedDropdown
           handleChange={setInputEpfType}
           items={DICTIONARY_EPF_TYPE}

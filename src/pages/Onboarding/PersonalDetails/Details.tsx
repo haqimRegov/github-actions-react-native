@@ -3,8 +3,9 @@ import { View } from "react-native";
 
 import { AdvancedDropdown, CustomSpacer, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_HOUSEHOLD_INCOME } from "../../../data/dictionary";
+import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_HOUSEHOLD_INCOME, ERROR } from "../../../data/dictionary";
 import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh8, sw24, sw40 } from "../../../styles";
+import { isNumber } from "../../../utils";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 import { EPFDetails } from "./EPFDetails";
@@ -27,6 +28,8 @@ interface PersonalInfoProps {
   setContactDetails: (value: IContactDetailsState) => void;
   setEpfDetails: (value: IEpfDetailsState) => void;
   setPersonalDetails: (value: IPersonalDetailsState) => void;
+  setValidations: (value: IPersonalDetailsValidations) => void;
+  validations: IPersonalDetailsValidations;
 }
 
 export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
@@ -42,6 +45,8 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   setContactDetails,
   setEpfDetails,
   setPersonalDetails,
+  setValidations,
+  validations,
 }: PersonalInfoProps) => {
   const { localBank, foreignBank } = bankDetails;
 
@@ -76,6 +81,10 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
 
   const setContactNumber = (value: IContactNumberState[]) => {
     setContactDetails({ contactNumber: value });
+  };
+
+  const checkEpfNumber = () => {
+    setValidations({ ...validations, epfNumber: isNumber(inputEpfNumber) === false ? ERROR.INVALID_POST_CODE : undefined });
   };
 
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails!.idType! as TypeClientID) !== 1;
@@ -115,8 +124,10 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
       <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw40) }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
       {epfInvestment === true ? (
         <EPFDetails
+          epfNumberError={validations.epfNumber}
           inputEpfNumber={inputEpfNumber}
           inputEpfType={inputEpfType}
+          onBlurEpfNumber={checkEpfNumber}
           setInputEpfNumber={setInputEpfNumber}
           setInputEpfType={setInputEpfType}
         />

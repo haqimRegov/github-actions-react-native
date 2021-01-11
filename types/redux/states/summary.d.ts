@@ -44,6 +44,7 @@ declare interface IContactNumberState {
   label: string;
   code: string;
   value: string;
+  error?: string;
 }
 declare interface IContactDetailsState {
   emailAddress?: string;
@@ -57,7 +58,9 @@ declare interface IEpfDetailsState {
 
 declare interface IBankDetailsState {
   bankAccountName?: string;
+  bankAccountNameError?: string;
   bankAccountNumber?: string;
+  bankAccountNumberError?: string;
   bankLocation?: string;
   bankName?: string;
   bankSwiftCode?: string;

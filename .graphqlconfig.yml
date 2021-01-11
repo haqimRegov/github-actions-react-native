@@ -1,5 +1,5 @@
 projects:
-  Onboarding:
+  TestApp:
     schemaPath: graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -11,7 +11,7 @@ projects:
         generatedFileName: src/API.ts
         docsFilePath: graphql
         region: ap-southeast-1
-        apiId: u4agpiyz7vd27lhuveaynighre
+        apiId: rywhnkwdhfadriy4tzrfiv65xu
 extensions:
   amplify:
     version: 3

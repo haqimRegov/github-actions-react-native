@@ -15,6 +15,8 @@ export const JointVerification: FunctionComponent<JointVerificationProps> = ({
   personalDetails,
   setAddressInfo,
   setPersonalDetails,
+  setValidations,
+  validations,
 }: JointVerificationProps) => {
   const jointHolderName = personalDetails.name !== undefined ? personalDetails.name : ID_VERIFICATION.LABEL_JOINT;
 
@@ -35,6 +37,8 @@ export const JointVerification: FunctionComponent<JointVerificationProps> = ({
           personalDetails={personalDetails}
           setAddressInfo={setAddressInfo}
           setPersonalDetails={setPersonalDetails}
+          setValidations={setValidations}
+          validations={validations}
         />
       </View>
     </View>

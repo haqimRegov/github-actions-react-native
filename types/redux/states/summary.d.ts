@@ -97,6 +97,7 @@ declare interface IFatcaState {
 declare interface IFeaState {
   acceptFea?: boolean;
   balance?: string;
+  balanceError?: string;
   facility?: TypeAdvanceToggleButtonValue;
   resident?: TypeToggleButtonValue;
 }

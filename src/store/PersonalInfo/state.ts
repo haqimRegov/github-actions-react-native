@@ -68,7 +68,8 @@ export const personalInfoInitialState: PersonalInfoState = {
       },
       fatca: {
         acceptFatca: false,
-        agreeToFill: false,
+        formW9: false,
+        formW8Ben: false,
         confirmAddress: -1,
         certificate: undefined,
         explanation: "",
@@ -181,7 +182,8 @@ export const personalInfoInitialState: PersonalInfoState = {
       },
       fatca: {
         acceptFatca: false,
-        agreeToFill: false,
+        formW9: false,
+        formW8Ben: false,
         certificate: undefined,
         confirmAddress: -1,
         explanation: "",

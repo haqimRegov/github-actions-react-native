@@ -36,6 +36,7 @@ declare type TypeAccountHolder = "Principal" | "Joint";
 declare type TypeClient = "NTB" | "ETB";
 
 declare interface IClientBasicInfo {
+  country?: string;
   dateOfBirth?: string;
   id?: string;
   idType?: TypeIDChoices;

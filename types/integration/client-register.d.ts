@@ -1,4 +1,5 @@
 declare interface IClientRegisterInfo {
+  country?: string;
   dateOfBirth?: string;
   id?: string;
   idType?: TypeClientID;

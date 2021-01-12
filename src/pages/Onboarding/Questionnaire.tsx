@@ -92,6 +92,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   };
 
   const handlePageContinue = async () => {
+    setLoading(true);
     const response: IGetRiskProfileResponse = await getRiskProfile({
       clientId: clientId!,
       riskAssessment: {
@@ -104,6 +105,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         questionEight: questionEight!,
       },
     });
+    setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -124,8 +126,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     }
     setConfirmModal(undefined);
     // resetOnboarding();
-    resetRiskAssessment();
-    return true;
+    updateFinishedSteps([]);
+    // resetRiskAssessment();
+    // return true;
   };
 
   const handleCancelEdit = () => {
@@ -164,7 +167,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (prevQuestionnaire === undefined && finishedSteps.includes(ONBOARDING_KEYS.RiskAssessment)) {
       setPrevQuestionnaire(questionnaire);
     }
-
     if (prevQuestionnaire !== undefined && !isObjectEqual(questionnaire, prevQuestionnaire)) {
       setConfirmModal("promptAssessment");
     }
@@ -315,35 +317,37 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
           <CustomSpacer isHorizontal={true} space={sw256} />
         </View>
       </ContentPage>
-      <ConfirmationModal
-        handleCancel={handleCancel}
-        handleContinue={handleContinue}
-        labelCancel={labelCancel}
-        labelContinue={labelContinue}
-        spaceToButton={sh32}
-        spaceToContent={sh24}
-        spaceToTitle={sh56}
-        title={modalTitle}
-        titleStyle={modalTitleStyle}
-        visible={confirmModal !== undefined}>
-        {confirmModal === "assessment" ? (
-          <Fragment>
-            {riskProfile.map((item, index) => (
-              <LabeledTitle
-                key={index}
-                label={item.label}
-                labelStyle={fs12SemiBoldBlack2}
-                spaceToBottom={sh24}
-                spaceToLabel={sh8}
-                title={item.title}
-                titleStyle={{ ...fs16BoldBlack1, ...item.titleStyle }}
-              />
-            ))}
-          </Fragment>
-        ) : (
-          <Text style={fs16BoldBlack2}>{RISK_ASSESSMENT.EDIT_LABEL}</Text>
-        )}
-      </ConfirmationModal>
+      {confirmModal !== undefined ? (
+        <ConfirmationModal
+          handleCancel={handleCancel}
+          handleContinue={handleContinue}
+          labelCancel={labelCancel}
+          labelContinue={labelContinue}
+          spaceToButton={sh32}
+          spaceToContent={sh24}
+          spaceToTitle={sh56}
+          title={modalTitle}
+          titleStyle={modalTitleStyle}
+          visible={confirmModal !== undefined}>
+          {confirmModal === "assessment" ? (
+            <Fragment>
+              {riskProfile.map((item, index) => (
+                <LabeledTitle
+                  key={index}
+                  label={item.label}
+                  labelStyle={fs12SemiBoldBlack2}
+                  spaceToBottom={sh24}
+                  spaceToLabel={sh8}
+                  title={item.title}
+                  titleStyle={{ ...fs16BoldBlack1, ...item.titleStyle }}
+                />
+              ))}
+            </Fragment>
+          ) : (
+            <Text style={fs16BoldBlack2}>{RISK_ASSESSMENT.EDIT_LABEL}</Text>
+          )}
+        </ConfirmationModal>
+      ) : null}
     </Fragment>
   );
 };

@@ -3,6 +3,7 @@ import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
+import { FILTER_RISK } from "../../../../../data/dictionary";
 import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
@@ -26,6 +27,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   products,
   productType,
   resetSelectedFund,
+  riskProfile,
   selectedFunds,
   setLoading,
   shareSuccess,
@@ -42,6 +44,13 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskProfile);
+  const recommendedRisk = FILTER_RISK.slice(0, riskIndex);
+  const riskCategory =
+    filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
+      ? recommendedRisk
+      : filters.riskCategory;
+
   const handleFetch = async () => {
     setLoading(true);
     const sortAllFunds = showBy === "all" ? [{ column: "fundAbbr", value: "asc" }] : [];
@@ -51,7 +60,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: filters.shariahApproved![0] || "",
-      riskCategory: filters.riskCategory || [],
+      riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],
       sort: sortAllFunds,
@@ -59,6 +68,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       search: search,
       page: page,
     };
+    // eslint-disable-next-line no-console
+    console.log("productList", req);
     const productListResponse: IProductListResponse = await getProductList(req);
     setLoading(false);
     if (productListResponse !== undefined) {
@@ -161,6 +172,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       />
       <CustomSpacer space={248} />
       <ProductListView
+        filter={filterTemp}
         handleAllFunds={handleAllFunds}
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}

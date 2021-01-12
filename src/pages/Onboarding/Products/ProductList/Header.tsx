@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
-import { Text, TextInput, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { TextInput, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { ActionButtons, CustomSpacer, CustomTooltip, IconButton, IconInput } from "../../../../components";
+import { ActionButtons, CustomSpacer, IconButton, IconInput } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   centerHorizontal,
@@ -12,22 +12,15 @@ import {
   colorBlack,
   colorBlue,
   colorGray,
-  colorTransparent,
   colorWhite,
   flexRow,
-  fs12RegBlue2,
   fs16SemiBoldBlack2,
   fullWidth,
-  px,
-  py,
   sh120,
   sh24,
-  sh28,
   sh32,
   sh48,
-  shadow,
   shadowBlack5,
-  sw033,
   sw1,
   sw100,
   sw2,
@@ -35,7 +28,6 @@ import {
   sw24,
   sw40,
   sw44,
-  sw84,
 } from "../../../../styles";
 import { ProductFilter, ProductFilterProps } from "./Filter";
 
@@ -60,11 +52,11 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
-  // TODO hide show all pills is only 1 line
+  // const [showMore, setShowMore] = useState<{ active: boolean; number: number }>({ active: false, number: 0 });
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   // const [showMorePills, setShowMorePills] = useState<boolean>(false);
   // const [filter, setFilter] = useState<IProductFilter>();
-  const [filterLabelShow, setFilterLabelShow] = useState<boolean>(true);
+  // const [filterLabelShow, setFilterLabelShow] = useState<boolean>(true);
 
   // const inputSearch = products[productList].search;
 
@@ -85,9 +77,9 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     handleShowFilter();
   };
 
-  const handleFilterLabel = () => {
-    setFilterLabelShow(!filterLabelShow);
-  };
+  // const handleFilterLabel = () => {
+  //   setFilterLabelShow(!filterLabelShow);
+  // };
 
   // const handleShowAllFilter = () => {
   //   setShowMorePills(!showMorePills);
@@ -120,9 +112,18 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   //   // updateProducts(newProducts);
   //   // handleFilter();
   // };
+
+  // const filterTags = Object.values(filterProps.filter).flat();
+
+  // const handlePills = async () => {
+  //   const count = await CalculateCount(filterTags, 688, 32);
+  //   setShowMore({ ...showMore, number: count });
+  // };
+
   const handleApplyFilter = () => {
     handleConfirm();
     handleShowFilter();
+    // handlePills();
   };
 
   // const overlay = filterVisible ? fullHeight : {};
@@ -159,6 +160,23 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   //   };
   // }, []);
 
+  // const handleWidth = async (event: LayoutChangeEvent) => {
+  //   const { height, width } = event.nativeEvent.layout;
+  //   if (showMore.active === false) {
+  //     if (width >= 826) {
+  //       setShowMore({ ...showMore, active: true });
+  //     }
+  //   } else if ((height < sh24 && showMore.active === true) || width < 826) {
+  //     setShowMore({ ...showMore, active: false, number: 0 });
+  //   }
+  // };
+  // const showMoreText = `+${showMore.number} More`;
+  // console.log("showMore", showMore);
+  // useEffect(() => {
+  //   handlePills();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   return (
     <View style={container}>
       <CustomSpacer space={sh32} />
@@ -177,7 +195,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           value={inputSearch}
           viewStyle={{ borderRadius: sw100, height: sh48 }}
         />
-        <CustomTooltip
+        {/* <CustomTooltip
           color={colorWhite._1}
           topAdjustment={32}
           contentStyle={{ ...px(0), ...py(0), height: sh28, width: sw84, ...centerHV }}
@@ -187,17 +205,37 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           isVisible={false}
           content={<Text style={{ ...fs12RegBlue2, letterSpacing: -sw033 }}>Filter</Text>}
           placement="top"
-          onClose={handleFilterLabel}>
-          <View style={{ ...centerVertical, ...flexRow }}>
-            <CustomSpacer isHorizontal={true} space={sw44} />
-            <TouchableWithoutFeedback onPress={handlePressFilter}>
-              <IconButton color={filterColor} onPress={handlePressFilter} name="filter" size={sh24} style={filterContainer} />
-            </TouchableWithoutFeedback>
-            <CustomSpacer isHorizontal={true} space={sw44} />
-          </View>
-        </CustomTooltip>
+          onClose={handleFilterLabel}> */}
+        <View style={{ ...centerVertical, ...flexRow }}>
+          <CustomSpacer isHorizontal={true} space={sw44} />
+          <TouchableWithoutFeedback onPress={handlePressFilter}>
+            <IconButton color={filterColor} onPress={handlePressFilter} name="filter" size={sh24} style={filterContainer} />
+          </TouchableWithoutFeedback>
+          <CustomSpacer isHorizontal={true} space={sw44} />
+        </View>
+        {/* </CustomTooltip> */}
         <CustomSpacer isHorizontal={true} space={sw2} />
       </View>
+      {/* <View>
+        <CustomSpacer space={sh16} />
+        <View style={{ ...px(sw24), ...flexRow, width: 826, ...flexWrap }} onLayout={handleWidth}>
+          {filterTags.slice(0, filterTags.length - showMore.number).map((tag, index) => (
+            <View>
+              <View style={flexRow}>
+                {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
+                <Tag color="secondary" icon="close" text={tag} />
+              </View>
+              <CustomSpacer space={sh16} />
+            </View>
+          ))}
+          {showMore.active === true && showMore.number > 0 ? (
+            <Fragment>
+              <CustomSpacer isHorizontal={true} space={sw4} />
+              <Tag color="secondary" text={showMoreText} />
+            </Fragment>
+          ) : null}
+        </View>
+      </View> */}
       <Collapsible collapsed={!filterVisible} duration={300}>
         <ProductFilter {...filterProps} />
         <CustomSpacer space={sh32} />

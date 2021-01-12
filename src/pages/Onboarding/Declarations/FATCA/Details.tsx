@@ -47,7 +47,8 @@ interface FatcaDeclarationDetailsProps {
 
 const initialState: IFatcaState = {
   acceptFatca: false,
-  agreeToFill: false,
+  formW9: false,
+  formW8Ben: false,
   certificate: undefined,
   confirmAddress: -1,
   explanation: "",
@@ -69,7 +70,8 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
 }: FatcaDeclarationDetailsProps) => {
   const {
     acceptFatca,
-    agreeToFill,
+    formW9,
+    formW8Ben,
     certificate,
     confirmAddress,
     explanation,
@@ -116,17 +118,18 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
     const newFatca: IFatcaState = { ...fatca };
     if (value === "") {
       newFatca.confirmAddress = -1;
-      newFatca.agreeToFill = false;
+      newFatca.formW8Ben = false;
       newFatca.acceptFatca = false;
     }
     handleFatcaDeclaration({ ...newFatca, explanation: value, explanationSaved: true });
   };
 
   const handleConfirmAddress = (value: TypeToggleButtonValue) => {
-    handleFatcaDeclaration({ ...fatca, acceptFatca: false, agreeToFill: false, confirmAddress: value });
+    handleFatcaDeclaration({ ...fatca, acceptFatca: false, formW8Ben: false, confirmAddress: value });
   };
 
-  const handleAgreeToFill = () => handleFatcaDeclaration({ ...fatca, acceptFatca: false, agreeToFill: !agreeToFill });
+  const handleFormW9 = () => handleFatcaDeclaration({ ...fatca, acceptFatca: false, formW9: !formW9 });
+  const handleFormW8Ben = () => handleFatcaDeclaration({ ...fatca, acceptFatca: false, formW8Ben: !formW8Ben });
   const handleAcceptFatca = () => handleFatcaDeclaration({ ...fatca, acceptFatca: !acceptFatca });
 
   const headerTitle = accountHolder === "Principal" ? DECLARATIONS.TITLE_PRINCIPAL : DECLARATIONS.TITLE_JOINT;
@@ -175,14 +178,18 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
             usBorn={usBorn!}
           />
         ) : null}
-
-        {usCitizen === 0 ||
-        (citizenNoBornYes && uploadYesAddressYes) ||
+        {usCitizen === 0 ? (
+          <Fragment>
+            <CustomSpacer space={sh32} />
+            <CheckBox toggle={formW9!} onPress={handleFormW9} label={DECLARATIONS.LABEL_FORM_W9} labelStyle={fs12BoldBlack2} />
+          </Fragment>
+        ) : null}
+        {(citizenNoBornYes && uploadYesAddressYes) ||
         (citizenNoBornYes && uploadNoLostYesAddressYes) ||
         (citizenNoBornYes && uploadNoLostNoAddressYes) ? (
           <Fragment>
             <CustomSpacer space={sh32} />
-            <CheckBox toggle={agreeToFill!} onPress={handleAgreeToFill} label={DECLARATIONS.LABEL_CHECK_FILL} labelStyle={fs12BoldBlack2} />
+            <CheckBox toggle={formW8Ben!} onPress={handleFormW8Ben} label={DECLARATIONS.LABEL_FORM_W8_BEN} labelStyle={fs12BoldBlack2} />
           </Fragment>
         ) : null}
       </View>

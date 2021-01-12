@@ -20,6 +20,7 @@ import {
   sh80,
   sw24,
   sw4,
+  sw648,
 } from "../../../../styles";
 
 const { ORDER_SUMMARY } = Language.PAGE;
@@ -38,12 +39,13 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     fundName,
     investmentAmount,
     isFea,
-    isScheduled,
     isSyariah,
     salesCharge,
     scheduledInvestmentAmount,
     scheduledSalesCharge,
   } = fund;
+
+  const isScheduled = scheduledInvestmentAmount !== undefined && scheduledSalesCharge !== undefined;
 
   const summary: LabeledTitleProps[] = [
     {
@@ -98,8 +100,14 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
       <View style={fundHeaderStyle}>
         <View>
           <CustomSpacer space={sh16} />
-          <Text style={{ ...fs24BoldBlack2, ...fsCapitalize }}>{fundName}</Text>
-          <Text style={{ ...fs12BoldBlack2, ...fsCapitalize }}>{fundIssuer}</Text>
+          <View style={{ width: sw648 }}>
+            <Text numberOfLines={1} style={fs24BoldBlack2}>
+              {fundName}
+            </Text>
+            <Text numberOfLines={1} style={fs12BoldBlack2}>
+              {fundIssuer}
+            </Text>
+          </View>
         </View>
         <CustomFlexSpacer />
         <View>

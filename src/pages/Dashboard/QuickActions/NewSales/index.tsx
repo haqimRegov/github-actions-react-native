@@ -154,6 +154,7 @@ const NewSalesComponent = ({
     const req = {
       agentId: agent?.id!,
       principalHolder: {
+        country: principalHolder?.country,
         dateOfBirth: principalHolder?.dateOfBirth,
         id: principalHolder?.id,
         idType: principalIdType,

@@ -3,6 +3,7 @@ import { Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
+import { FILTER_RISK } from "../../../../../data/dictionary";
 import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
@@ -27,6 +28,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   products,
   productType,
   resetSelectedFund,
+  riskProfile,
   selectedFunds,
   setLoading,
   shareSuccess,
@@ -53,6 +55,13 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     AlertDialog("Error", hideLoading);
   };
 
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskProfile);
+  const recommendedRisk = FILTER_RISK.slice(0, riskIndex);
+  const riskCategory =
+    filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
+      ? recommendedRisk
+      : filters.riskCategory;
+
   const handleFetch = async () => {
     setLoading(true);
     const req = {
@@ -61,7 +70,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: filters.shariahApproved![0] || "",
-      riskCategory: filters.riskCategory || [],
+      riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],
       sort: sort,
@@ -69,6 +78,8 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       search: search,
       page: page,
     };
+    // eslint-disable-next-line no-console
+    console.log("productList", req);
     const productListResponse: IProductListResponse = await getProductList(req, handleError);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -174,6 +185,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       />
       <CustomSpacer space={248} />
       <ProductListView
+        filter={filterTemp}
         handleAllFunds={handleAllFunds}
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}

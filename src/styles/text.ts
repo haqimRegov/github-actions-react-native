@@ -1,6 +1,6 @@
 import { TextStyle } from "react-native";
 
-import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
+import { NunitoBlack, NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite, colorYellow } from "./colors";
 import { sh10, sh11, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw03, sw033 } from "./sizes";
 
@@ -361,6 +361,14 @@ export const fs16SemiBoldBlue1: TextStyle = {
   lineHeight: sh24,
 };
 
+export const fs16SemiBoldBlack1: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+  letterSpacing: -sw005,
+  lineHeight: sh24,
+};
+
 export const fs16SemiBoldBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoSemiBold,
@@ -398,6 +406,13 @@ export const fs18BoldBlue2: TextStyle = {
   fontFamily: NunitoBold,
   fontSize: sh18,
   letterSpacing: -sw02,
+  lineHeight: sh32,
+};
+
+export const fs24BlackBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoBlack,
+  fontSize: sh24,
   lineHeight: sh32,
 };
 

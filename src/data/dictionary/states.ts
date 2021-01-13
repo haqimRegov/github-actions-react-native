@@ -16,3 +16,22 @@ export const DICTIONARY_MALAYSIA_STATES: TypeMalaysiaStateLabelValue[] = [
   { label: "Sarawak", value: "Sarawak" },
   { label: "Terengganu", value: "Terengganu" },
 ];
+
+export const DICTIONARY_MALAYSIA_STATES_LIST: TypeMalaysiaState[] = [
+  "Johor",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+  "Kuala Lumpur",
+  "Labuan",
+  "Putrajaya",
+  "Kedah",
+  "Kelantan",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Pulau Pinang",
+  "Perak",
+  "Perlis",
+];

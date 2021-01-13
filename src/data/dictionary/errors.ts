@@ -39,4 +39,5 @@ export const ERROR_CODE = {
   invalidNricData: "EM012",
   clientAgeMinimum: "EM600",
   clientAgeMaximum: "EM601",
+  clientBannedCountry: "EM602",
 };

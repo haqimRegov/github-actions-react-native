@@ -1,13 +1,20 @@
 declare interface ITermsAndConditions {
   title: string;
-  sections: ISection[];
+  subsection: IBasicAccordionSection[];
 }
 
-declare interface ISection {
+declare interface ITermsList {
+  label?: string;
+  content: string;
+}
+interface IBasicAccordionSection {
   heading?: string;
   subHeading?: string;
-  termsList: {
-    label?: string;
-    content: string;
-  }[];
+  termsList: ITermsList[];
+}
+
+interface ICustomAccordionSection {
+  title: string;
+  custom?: JSX.Element;
+  subsection?: IBasicAccordionSection[];
 }

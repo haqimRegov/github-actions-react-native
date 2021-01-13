@@ -50,3 +50,5 @@ declare type IClientDetailsState = {
   jointHolder?: IClientBasicInfo;
   verified?: boolean;
 };
+
+declare type TypeNewSalesPrompt = "ageMinimum" | "ageMaximum" | "bannedCountry" | "highRisk" | undefined;

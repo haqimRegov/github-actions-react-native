@@ -4,6 +4,7 @@ declare interface IEtbCheckRequest {
 }
 
 declare interface IEtbCheckResult {
+  highRisk: boolean;
   message: string;
   status: string;
   accounts: {

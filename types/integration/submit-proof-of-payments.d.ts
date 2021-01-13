@@ -32,17 +32,20 @@ declare interface ISubmitProofOfPaymentsRequest {
   orders: ISubmitProofOfPaymentOrder[];
 }
 
+declare interface ISubmitProofOfPaymentResultOrder {
+  orderNumber: string;
+  paymentType: string;
+  status: string;
+  remarks: string[];
+}
+
+declare interface ISubmitProofOfPaymentResultAccount {
+  status: string;
+  remarks: string[];
+}
 declare interface ISubmitProofOfPaymentsResult {
-  account: {
-    status: string;
-    remarks: string;
-  };
-  orders: {
-    orderNumber: string;
-    paymentType: string;
-    status: string;
-    remarks: string;
-  };
+  account: ISubmitProofOfPaymentResultAccount;
+  orders: ISubmitProofOfPaymentResultOrder[];
   message: string;
 }
 declare type ISubmitProofOfPaymentsResponse = IMutationResponse<ISubmitProofOfPaymentsResult> | undefined;

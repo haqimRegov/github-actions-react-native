@@ -2,17 +2,17 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ConfirmationModal, SelectionBanner } from "../../../components";
+import { ConfirmationModal, RadioButtonGroup, SelectionBanner } from "../../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1 } from "../../../mocks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
-import { flexChild, flexCol, fs16BoldBlack2, fs16SemiBoldBlack2 } from "../../../styles";
+import { alignSelfStart, flexChild, flexCol, fs16BoldBlack2, fs16SemiBoldBlack2, sh24, sh4, sh56, sw360 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
 
-const { INVESTMENT, ONBOARDING } = Language.PAGE;
+const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
 
 interface ProductsProps extends ProductsStoreProps, OnboardingContentProps {}
 
@@ -25,36 +25,29 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   handleNextStep,
   investmentDetails,
   resetProducts,
+  riskProfile,
   selectedFunds,
   updateFinishedSteps,
   viewFund,
 }: ProductsProps) => {
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
+  const [outsideRisk, setOutsideRisk] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
-  const [cancelProduct, setCancelProduct] = useState<boolean>(false);
+  const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
 
-  // const [productList, setProductList] = useState<IFund[]>([]);
-
-  // const totalMinimumAmount: number =
-  //   selectedFunds.length !== 0
-  //     ? selectedFunds
-  //         .map((product: IFund) => product.newSalesAmount.cash?.minimum!)
-  //         .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
-  //     : 0;
-
   const handleBackToAssessment = () => {
-    setCancelProduct(false);
+    setPrompt(undefined);
     handleNextStep("RiskAssessment");
     resetProducts();
   };
 
   const handleCancel = () => {
-    setCancelProduct(!cancelProduct);
+    setPrompt(undefined);
   };
 
-  const handleStartInvesting = () => {
+  const handleInvest = () => {
     const initialStateArray: IProductSales[] = [];
     selectedFunds.map((item: IProduct) => {
       let newMasterClassList: IProductClasses = {};
@@ -83,6 +76,36 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     });
     addInvestmentDetails(initialStateArray);
     setPage(1);
+  };
+
+  const handlePrompt = () => {
+    if (prompt === "risk") {
+      if (outsideRisk === 1) {
+        handleInvest();
+        setPrompt(undefined);
+      }
+      return setPrompt(undefined);
+    }
+    return handleBackToAssessment();
+  };
+
+  const checkOutsideRiskFactor = () => {
+    const fundsRisk = selectedFunds.map((item) => item.riskCategory.toLowerCase());
+    if (riskProfile.toLowerCase() === "medium") {
+      return fundsRisk.includes("high");
+    }
+    if (riskProfile.toLowerCase() === "low") {
+      return fundsRisk.includes("high") || fundsRisk.includes("medium");
+    }
+
+    return false;
+  };
+
+  const handleStartInvesting = () => {
+    if (checkOutsideRiskFactor() === true) {
+      return setPrompt("risk");
+    }
+    return handleInvest();
   };
 
   const handleBackToListing = () => {
@@ -188,6 +211,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     );
   });
 
+  const riskFactorOptions = [PRODUCT_LIST.PROMPT_OPTION_1, PRODUCT_LIST.PROMPT_OPTION_2];
+
+  const handleRiskOption = (value: string) => {
+    setOutsideRisk(riskFactorOptions.indexOf(value));
+  };
+
   const handleKeyboardShow = () => {
     setKeyboardIsShowing(true);
   };
@@ -197,13 +226,20 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   useEffect(() => {
+    if (finishedSteps.includes("Products")) {
+      setPage(1);
+    }
     Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
     Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
     return () => {
       Keyboard.removeListener("keyboardWillHide", handleKeyboardHide);
       Keyboard.removeListener("keyboardWillShow", handleKeyboardShow);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const labelContinue = prompt === "cancel" ? PRODUCT_LIST.BUTTON_YES : PRODUCT_LIST.BUTTON_AGREE;
+  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
 
   return (
     <Fragment>
@@ -225,12 +261,25 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       </View>
       <ConfirmationModal
         handleCancel={handleCancel}
-        handleContinue={handleBackToAssessment}
-        labelCancel={ONBOARDING.BUTTON_NO}
-        labelContinue={ONBOARDING.BUTTON_YES}
-        title={ONBOARDING.CANCEL_PRODUCT_TITLE}
-        visible={cancelProduct}>
-        <Text style={fs16BoldBlack2}>{ONBOARDING.CANCEL_PRODUCT_LABEL}</Text>
+        handleContinue={handlePrompt}
+        labelCancel={prompt === "cancel" ? PRODUCT_LIST.BUTTON_NO : undefined}
+        labelContinue={labelContinue}
+        spaceToContent={prompt === "cancel" ? undefined : sh24}
+        spaceToTitle={prompt === "cancel" ? undefined : sh56}
+        title={promptTitle}
+        visible={prompt !== undefined}>
+        {prompt === "cancel" ? (
+          <Text style={fs16BoldBlack2}>{PRODUCT_LIST.PROMPT_LABEL_CANCEL}</Text>
+        ) : (
+          <View style={{ width: sw360 }}>
+            <RadioButtonGroup
+              options={riskFactorOptions}
+              radioStyle={{ ...alignSelfStart, marginTop: sh4 }}
+              selected={riskFactorOptions[outsideRisk]}
+              setSelected={handleRiskOption}
+            />
+          </View>
+        )}
       </ConfirmationModal>
     </Fragment>
   );

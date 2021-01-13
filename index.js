@@ -6,10 +6,10 @@ import { Provider } from "react-redux";
 import { name as appName } from "./app.json";
 import config from "./aws-exports";
 import { App } from "./src/App";
-import { COGNITO_CONFIG_DEV } from "./src/integrations";
+import { COGNITO_CONFIG } from "./src/integrations";
 import { store } from "./src/store";
 
-Amplify.configure({ ...config, ...COGNITO_CONFIG_DEV });
+Amplify.configure({ ...config, ...COGNITO_CONFIG });
 
 const RootApp = () => (
   <Provider store={store}>

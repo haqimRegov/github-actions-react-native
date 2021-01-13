@@ -1,7 +1,7 @@
 export const DICTIONARY_MALAYSIA_STATES: TypeMalaysiaStateLabelValue[] = [
-  { label: "W.P. Kuala Lumpur", value: "W.P. Kuala Lumpur" },
-  { label: "W.P. Labuan", value: "W.P. Labuan" },
-  { label: "W.P. Putrajaya", value: "W.P. Putrajaya" },
+  { label: "Kuala Lumpur", value: "Kuala Lumpur" },
+  { label: "Labuan", value: "Labuan" },
+  { label: "Putrajaya", value: "Putrajaya" },
   { label: "Selangor", value: "Selangor" },
   { label: "Johor", value: "Johor" },
   { label: "Kedah", value: "Kedah" },
@@ -15,4 +15,23 @@ export const DICTIONARY_MALAYSIA_STATES: TypeMalaysiaStateLabelValue[] = [
   { label: "Sabah", value: "Sabah" },
   { label: "Sarawak", value: "Sarawak" },
   { label: "Terengganu", value: "Terengganu" },
+];
+
+export const DICTIONARY_MALAYSIA_STATES_LIST: TypeMalaysiaState[] = [
+  "Johor",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+  "Kuala Lumpur",
+  "Labuan",
+  "Putrajaya",
+  "Kedah",
+  "Kelantan",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Pulau Pinang",
+  "Perak",
+  "Perlis",
 ];

@@ -22,8 +22,8 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
 }: FatcaDeclarationProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
-  const principalAddress = `${principal?.addressInformation?.permanentAddress?.address} ${principal?.addressInformation?.permanentAddress?.city}`;
-  const jointAddress = `${joint?.addressInformation?.permanentAddress?.address} ${joint?.addressInformation?.permanentAddress?.city}`;
+  const principalAddress = `${principal?.addressInformation?.permanentAddress?.address}, ${principal?.addressInformation?.permanentAddress?.postCode}, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${principal?.addressInformation?.permanentAddress?.country}`;
+  const jointAddress = `${joint?.addressInformation?.permanentAddress?.address}, ${joint?.addressInformation?.permanentAddress?.postCode}, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${joint?.addressInformation?.permanentAddress?.country}`;
 
   const handlePrincipalFatca = (fatcaDeclaration: IFatcaState) => {
     addPersonalInfo({
@@ -79,24 +79,24 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   const uploadNoLostNoAddressNoJoint = uploadNoLostNoJoint && joint?.declaration!.fatca!.confirmAddress === 1;
 
   const showTermsPrincipal =
-    (principal?.declaration!.fatca!.usCitizen === 0 && principal?.declaration!.fatca!.agreeToFill) ||
+    (principal?.declaration!.fatca!.usCitizen === 0 && principal?.declaration!.fatca!.formW9) ||
     citizenNoBornNoPrincipal ||
     (citizenNoBornYesPrincipal && uploadYesAddressNoPrincipal) ||
-    (citizenNoBornYesPrincipal && uploadYesAddressYesPrincipal && principal?.declaration!.fatca!.agreeToFill) ||
+    (citizenNoBornYesPrincipal && uploadYesAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben) ||
     (citizenNoBornYesPrincipal && uploadNoLostYesAddressNoPrincipal) ||
-    (citizenNoBornYesPrincipal && uploadNoLostYesAddressYesPrincipal && principal?.declaration!.fatca!.agreeToFill) ||
+    (citizenNoBornYesPrincipal && uploadNoLostYesAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben) ||
     (citizenNoBornYesPrincipal && uploadNoLostNoAddressNoPrincipal) ||
-    (citizenNoBornYesPrincipal && uploadNoLostNoAddressYesPrincipal && principal?.declaration!.fatca!.agreeToFill);
+    (citizenNoBornYesPrincipal && uploadNoLostNoAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben);
 
   const showTermsJoint =
-    (joint?.declaration!.fatca!.usCitizen === 0 && joint?.declaration!.fatca!.agreeToFill) ||
+    (joint?.declaration!.fatca!.usCitizen === 0 && joint?.declaration!.fatca!.formW9) ||
     citizenNoBornNoJoint ||
     (citizenNoBornYesJoint && uploadYesAddressNoJoint) ||
-    (citizenNoBornYesJoint && uploadYesAddressYesJoint && joint?.declaration!.fatca!.agreeToFill) ||
+    (citizenNoBornYesJoint && uploadYesAddressYesJoint && joint?.declaration!.fatca!.formW8Ben) ||
     (citizenNoBornYesJoint && uploadNoLostYesAddressNoJoint) ||
-    (citizenNoBornYesJoint && uploadNoLostYesAddressYesJoint && joint?.declaration!.fatca!.agreeToFill) ||
+    (citizenNoBornYesJoint && uploadNoLostYesAddressYesJoint && joint?.declaration!.fatca!.formW8Ben) ||
     (citizenNoBornYesJoint && uploadNoLostNoAddressNoJoint) ||
-    (citizenNoBornYesJoint && uploadNoLostNoAddressYesJoint && joint?.declaration!.fatca!.agreeToFill);
+    (citizenNoBornYesJoint && uploadNoLostNoAddressYesJoint && joint?.declaration!.fatca!.formW8Ben);
 
   const showButtonContinuePrincipal = showTermsPrincipal ? handleContinue : undefined;
   const continueEnabledPrincipal =

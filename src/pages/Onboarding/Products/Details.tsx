@@ -55,7 +55,7 @@ interface ProductDetailsProps {
   handleBack: () => void;
   handleShareDocuments: () => void;
 }
-export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, handleBack, handleShareDocuments }: ProductDetailsProps) => {
+export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, handleBack }: ProductDetailsProps) => {
   const [viewDocument, setViewDocument] = useState<FileBase64 | undefined>(undefined);
   const [masterClassList, setMasterClassList] = useState<IProductClasses | undefined>(undefined);
   const [inputCurrency, setInputCurrency] = useState<string>(fund.masterList[0].currency);
@@ -239,9 +239,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
               <View style={{ ...flexRow, ...centerVertical }}>
                 <Text style={{ ...fs16BoldBlack2 }}>{PRODUCT_DETAILS.LABEL_FUND_DOCUMENTS}</Text>
                 <CustomSpacer isHorizontal={true} space={sw12} />
-                <TouchableWithoutFeedback onPress={handleShareDocuments}>
+                {/* <TouchableWithoutFeedback onPress={handleShareDocuments}>
                   <IcoMoon name="share" color={colorBlue._1} size={sw16} />
-                </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback> */}
               </View>
               <CustomSpacer space={sh14} />
               <View style={flexRow}>

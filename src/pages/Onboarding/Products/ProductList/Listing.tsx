@@ -39,6 +39,7 @@ import { ProductOptions } from "./Actions";
 const { PRODUCT_LIST } = Language.PAGE;
 
 interface ProductListViewProps {
+  filter: IProductFilter;
   handleAllFunds?: () => void;
   handleRecommendedFunds?: () => void;
   handleResetSelected: () => void;
@@ -59,6 +60,7 @@ interface ProductListViewProps {
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
+  filter,
   handleAllFunds,
   handleRecommendedFunds,
   handleResetSelected,
@@ -73,7 +75,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   shareSuccess,
   showBy,
   sort,
-  // updateFilter,
+  updateFilter,
   updatePage,
   updateSort,
 }: ProductListViewProps) => {
@@ -125,11 +127,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     updateSort(updatedAbbrName);
   };
 
-  const handleFilterRisk = () => {
-    // TODO filter
-    // updateFilter();
-  };
-
   const columns: ITableColumn[] = [
     {
       icon: {
@@ -162,7 +159,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
         width: sw96,
       },
       customHeader: true,
-      onPressItem: handleFilterRisk,
       title: PRODUCT_LIST.LABEL_COLUMN_RISK,
     },
     {
@@ -280,11 +276,23 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                     );
                   }}
                   RenderContent={({ hide }) => {
+                    const handleLow = () => {
+                      updateFilter({ ...filter, riskCategory: ["Low"] });
+                      hide();
+                    };
+                    const handleMedium = () => {
+                      updateFilter({ ...filter, riskCategory: ["Medium"] });
+                      hide();
+                    };
+                    const handleHigh = () => {
+                      updateFilter({ ...filter, riskCategory: ["High"] });
+                      hide();
+                    };
                     return (
                       <View style={{ width: sw120, ...px(sw16), ...py(sh8) }}>
-                        <LinkText onPress={hide} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"Low"} />
-                        <LinkText onPress={hide} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"Medium"} />
-                        <LinkText onPress={hide} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"High"} />
+                        <LinkText onPress={handleLow} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"Low"} />
+                        <LinkText onPress={handleMedium} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"Medium"} />
+                        <LinkText onPress={handleHigh} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"High"} />
                       </View>
                     );
                   }}

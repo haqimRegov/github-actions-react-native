@@ -4,7 +4,7 @@ import { View, ViewStyle } from "react-native";
 
 import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
-import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
+import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_COUNTRIES, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
 import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -28,7 +28,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   clientInfo,
   setClientInfo,
 }: NewSalesDetailsProps) => {
-  const { dateOfBirth, id, idType, otherIdType, name } = clientInfo;
+  const { country, dateOfBirth, id, idType, otherIdType, name } = clientInfo;
   const title = holderToFill === "principalHolder" ? ADD_CLIENT.LABEL_CHOOSE_ACCOUNT_TYPE : ADD_CLIENT.SUBHEADING_JOINT;
   const subheading = clientType !== "" ? title : ADD_CLIENT.SUBHEADING;
   const keyboardType = idType === "NRIC" ? "numeric" : "default";
@@ -39,6 +39,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
 
   const setInputIdType = (value: TypeIDChoices) => setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
+  const setInputCountry = (value: string) => setClientInfo({ ...[holderToFill], country: value });
   const setInputName = (value: string) => setClientInfo({ ...[holderToFill], name: value });
   const setInputIdNumber = (value: string) => setClientInfo({ ...[holderToFill], id: value });
   const setInputDateOfBirth = (value?: Date) =>
@@ -109,6 +110,16 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             />
           </Fragment>
         )}
+        {idType === "Passport" ? (
+          <AdvancedDropdown
+            disabled={clientType !== "" && holderToFill === "principalHolder"}
+            items={DICTIONARY_COUNTRIES}
+            handleChange={setInputCountry}
+            label={ADD_CLIENT.LABEL_COUNTRY}
+            spaceToTop={sh24}
+            value={country || ""}
+          />
+        ) : null}
         {clientType === "NTB" && holderToFill === "principalHolder" ? (
           <Fragment>
             <TextSpaceArea

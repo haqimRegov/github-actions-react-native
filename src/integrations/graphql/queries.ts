@@ -89,6 +89,7 @@ const etbCheck = gql`
         result {
           message
           status
+          highRisk
           accounts {
             accountNumber
             date

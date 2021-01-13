@@ -58,13 +58,15 @@ const NewSalesComponent = ({
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState<"ageMinimum" | "ageMaximum" | undefined>(undefined);
+  const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
   const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
   const { jointHolder, principalHolder } = details!;
   const { dateOfBirth, id, idType, name } = details![holderToFill]!;
 
   const BUTTON_LABEL_UNREGISTERED = clientType !== "" ? ADD_CLIENT.BUTTON_PROCEED : ADD_CLIENT.BUTTON_STARTED;
-  const BUTTON_LABEL_PROMPT = prompt !== undefined ? ADD_CLIENT.BUTTON_ADD : BUTTON_LABEL_UNREGISTERED;
+  const BUTTON_COUNTRY_PROMPT = prompt === "highRisk" ? "Continue to New Sales" : "Back to Dashboard";
+  const BUTTON_CONTINUE_PROMPT = prompt === "highRisk" || prompt === "bannedCountry" ? BUTTON_COUNTRY_PROMPT : ADD_CLIENT.BUTTON_ADD;
+  const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_UNREGISTERED;
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
@@ -154,6 +156,7 @@ const NewSalesComponent = ({
     const req = {
       agentId: agent?.id!,
       principalHolder: {
+        country: principalHolder?.country,
         dateOfBirth: principalHolder?.dateOfBirth,
         id: principalHolder?.id,
         idType: principalIdType,
@@ -167,7 +170,13 @@ const NewSalesComponent = ({
       const { data, error } = clientCheck;
       if (error === null && data !== null) {
         setErrorMessage(undefined);
-        return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+        if (data.result.message === "NTB") {
+          if (data.result.highRisk === true) {
+            return setPrompt("highRisk");
+          }
+          return setClientType("NTB");
+        }
+        return Alert.alert("Client is ETB");
       }
       if (error !== null) {
         if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
@@ -175,6 +184,9 @@ const NewSalesComponent = ({
         }
         if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
           return setPrompt("ageMaximum");
+        }
+        if (error?.errorCode === ERROR_CODE.clientBannedCountry) {
+          return setPrompt("bannedCountry");
         }
         return setErrorMessage(error.message);
       }
@@ -231,6 +243,13 @@ const NewSalesComponent = ({
   };
 
   const handleContinue = () => {
+    if (prompt === "highRisk") {
+      setClientType("NTB");
+      return setPrompt(undefined);
+    }
+    if (prompt === "bannedCountry") {
+      return handleCancelNewSales();
+    }
     if (prompt !== undefined) {
       return handleReset();
     }
@@ -296,8 +315,9 @@ const NewSalesComponent = ({
               cancelButtonStyle={{ width: sw218 }}
               continueButtonStyle={{ width: sw218 }}
               continueDisabled={continueDisabled}
-              handleCancel={handleCancel}
+              handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}
+              labelCancel={prompt === "highRisk" ? "Back to Dashboard" : undefined}
               labelContinue={BUTTON_LABEL}
             />
           </View>

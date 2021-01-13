@@ -1,3 +1,4 @@
+import illustrationClientError from "./illustration_client_error/illustration_client_error.png";
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
@@ -16,6 +17,7 @@ export const LocalAssets = {
     risk_assessment_graph_2: riskAssessmentGraph2,
   },
   illustration: {
+    clientError: illustrationClientError,
     clientWarning: illustrationClientWarning,
     emailVerified: illustrationEmailVerified,
     orderReceived: illustrationOrderReceived,

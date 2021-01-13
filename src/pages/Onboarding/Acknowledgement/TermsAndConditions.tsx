@@ -1,11 +1,12 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
+import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
-import { BasicAccordion, CheckBox, ContentPage, CustomFlexSpacer, CustomPopup, CustomSpacer, LinkText } from "../../../components";
+import { CheckBox, ContentPage, CustomAccordion, CustomFlexSpacer, CustomPopup, CustomSpacer, LinkText } from "../../../components";
 import { Language } from "../../../constants/language";
+import { CRS, DICTIONARY_LINK_FULL_TERMS, FATCA, FEA, PRS, UTAndAMP } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
-import { CRS, FATCA, FEA, PRS, UTAndAMP } from "../../../mocks/terms-and-conditions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   alignItemsStart,
@@ -21,6 +22,7 @@ import {
   sh16,
   sh24,
   sh32,
+  sh456,
   sh5,
   sh8,
   sw12,
@@ -30,10 +32,7 @@ import {
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
-interface TermsAndConditionsProps extends OnboardingContentProps, AcknowledgementStoreProps {
-  // addOrders: (orders: IInvestmentSummary) => void;
-  // orders: IInvestmentSummary | undefined;
-}
+interface TermsAndConditionsProps extends OnboardingContentProps, AcknowledgementStoreProps {}
 
 const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = ({
   addOrders,
@@ -84,14 +83,25 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
     }
   }, [orders, addOrders]);
 
+  const GENERAL = {
+    title: "General Terms and Conditions",
+    custom: (
+      <View>
+        <PDFView style={{ height: sh456 }} resource={DICTIONARY_LINK_FULL_TERMS} resourceType="url" />
+        <CustomSpacer space={sh24} />
+      </View>
+    ),
+  };
+
   // TODO FEA to be removed
-  const TERMS_AND_CONDITION_LIST = [FATCA, CRS, FEA];
-  if (fundTypeList?.includes("PRS")) {
-    TERMS_AND_CONDITION_LIST.push(PRS);
-  }
+  const TERMS_AND_CONDITION_LIST: ICustomAccordionSection[] = [FATCA, CRS, FEA];
   if (fundTypeList?.includes("UT" || "AMP")) {
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }
+  if (fundTypeList?.includes("PRS")) {
+    TERMS_AND_CONDITION_LIST.push(PRS);
+  }
+  TERMS_AND_CONDITION_LIST.push(GENERAL);
 
   const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
 
@@ -120,7 +130,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
           </View>
         </View>
         <CustomSpacer space={sh24} />
-        <BasicAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
+        <CustomAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
         <CustomSpacer space={sh32} />
       </View>
       <View style={borderBottomBlack21} />

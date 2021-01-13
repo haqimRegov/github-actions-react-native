@@ -41,7 +41,7 @@ export const JointRelationship: FunctionComponent<JointRelationshipProps> = ({
       />
       {personalDetails.relationship! === "Others" ? (
         <CustomTextInput
-          label={PERSONAL_DETAILS.LABEL_BANK_OTHER_NAME}
+          label={PERSONAL_DETAILS.LABEL_RELATIONSHIP_OTHER}
           onChangeText={setInputOtherRelationship}
           spaceToTop={sh32}
           value={inputOtherRelationship}

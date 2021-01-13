@@ -13,15 +13,15 @@ export interface ProductOptionsProps extends ITableOptions {
 
 export const ProductOptions: FunctionComponent<ProductOptionsProps> = ({
   data,
-  handleShareDocuments,
+  // handleShareDocuments,
   // handleShowPerformance,
   handleViewDetails,
   onClose,
   shareSuccess,
 }: ProductOptionsProps) => {
-  const handleDownload = () => {
-    handleShareDocuments(data.rawData as IProduct);
-  };
+  // const handleDownload = () => {
+  //   handleShareDocuments(data.rawData as IProduct);
+  // };
 
   // const handlePerformance = () => {
   //   onClose();
@@ -51,7 +51,7 @@ export const ProductOptions: FunctionComponent<ProductOptionsProps> = ({
     <View style={{ borderRadius: sw8 }}>
       <IconText color={colorBlue._2} name="eye-show" onPress={handleDetails} text="View Details" style={itemStyle} />
       {/* <IconText color={colorBlue._2} name="performance" onPress={handlePerformance} text="Performance" style={itemStyle} /> */}
-      <IconText color={colorBlue._2} name="download" onPress={handleDownload} text="Download Reports" style={itemStyle} />
+      {/* <IconText color={colorBlue._2} name="download" onPress={handleDownload} text="Download Reports" style={itemStyle} /> */}
     </View>
   );
 };

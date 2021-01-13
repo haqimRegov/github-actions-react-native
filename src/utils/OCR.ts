@@ -3,6 +3,7 @@ import moment from "moment";
 
 import { NRIC_DATE_FORMAT } from "../constants";
 import { DICTIONARY_PLACE_OF_BIRTH, ERROR, ERROR_CODE } from "../data/dictionary";
+import { titleCaseString } from "./Value";
 
 const processMykadFront = async (filePath: string) => {
   let rightBounds = 0;
@@ -81,9 +82,9 @@ const mykadFront = async (filePath: string) => {
         const [postCode] = postCodeCity[0].split(" ");
         const [state] = split.slice(-1);
         mykad.postCode = postCode;
-        mykad.city = postCodeCity[0].split(" ").slice(1).join(" ");
+        mykad.city = titleCaseString(postCodeCity[0].split(" ").slice(1).join(" "));
         mykad.address = split.slice(0, postCodeIndex - 1).join(" ");
-        mykad.state = state;
+        mykad.state = titleCaseString(state);
       }
     }
   });

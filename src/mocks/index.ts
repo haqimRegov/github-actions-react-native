@@ -7,4 +7,3 @@ export * from "./file";
 export * from "./inbox";
 export * from "./login";
 export * from "./products";
-export * from "./terms-and-conditions";

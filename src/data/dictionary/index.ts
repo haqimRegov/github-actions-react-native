@@ -34,3 +34,4 @@ export * from "./relationship";
 export * from "./risk-assessment-questions";
 export * from "./risk-category";
 export * from "./states";
+export * from "./terms-and-conditions";

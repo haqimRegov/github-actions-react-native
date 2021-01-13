@@ -104,6 +104,7 @@ export const sh368 = scaleHeight(368);
 export const sh370 = scaleHeight(370);
 export const sh376 = scaleHeight(376);
 export const sh450 = scaleHeight(450);
+export const sh456 = scaleHeight(456);
 export const sh500 = scaleHeight(500);
 export const sh670 = scaleHeight(670);
 export const sh691 = scaleHeight(691);

@@ -19,18 +19,14 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
   jointHolder,
 }: NewSalesSummaryProps) => {
   const subheading = accountType === "Individual" ? ADD_CLIENT.LABEL_VERIFY_INDIVIDUAL : ADD_CLIENT.LABEL_VERIFY_JOINT;
+  const principalLabelName = accountType === "Individual" ? ADD_CLIENT.DETAILS_LABEL_NAME : ADD_CLIENT.DETAILS_LABEL_NAME_PRINCIPAL;
 
   return (
     <View>
       <TextSpaceArea spaceToBottom={sh24} style={fs24BoldBlack2} text={subheading} />
       <View style={flexRow}>
         <View style={{ width: sw208 }}>
-          <LabeledTitle
-            label={ADD_CLIENT.DETAILS_LABEL_NAME}
-            spaceToBottom={sh24}
-            title={principalHolder.name!}
-            titleStyle={fs16BoldBlack1}
-          />
+          <LabeledTitle label={principalLabelName} spaceToBottom={sh24} title={principalHolder.name!} titleStyle={fs16BoldBlack1} />
           <LabeledTitle label={principalHolder.idType!} spaceToBottom={sh24} title={principalHolder.id!} titleStyle={fs16BoldBlack1} />
           <LabeledTitle
             label={ADD_CLIENT.DETAILS_LABEL_DOB}
@@ -43,7 +39,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
         {jointHolder !== undefined && accountType === "Joint" ? (
           <View style={{ width: sw208 }}>
             <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_NAME}
+              label={ADD_CLIENT.DETAILS_LABEL_NAME_JOINT}
               spaceToBottom={sh24}
               title={jointHolder.name!}
               titleStyle={fs16BoldBlack1}

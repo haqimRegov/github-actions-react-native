@@ -5,12 +5,10 @@ import { ScrollView, Text, View } from "react-native";
 import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions } from "../../components";
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
-import { logout } from "../../network-actions";
 import { GlobalStoreProps } from "../../store";
 import {
   alignItemsEnd,
   alignSelfCenter,
-  borderBottomGray4,
   centerVertical,
   colorWhite,
   flexGrow,
@@ -39,7 +37,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   children,
   hideQuickActions,
   navigation,
-  resetGlobal,
+  // resetGlobal,
   title,
   titleIcon,
   titleIconOnPress,
@@ -50,36 +48,36 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     setAddClient(true);
   };
 
-  const handleTopUp = () => {
-    navigation.navigate("Onboarding");
-  };
+  // const handleTopUp = () => {
+  //   navigation.navigate("Onboarding");
+  // };
 
-  const handleLogout = () => {
-    logout(resetGlobal!, navigation);
-  };
+  // const handleLogout = () => {
+  //   logout(resetGlobal!, navigation);
+  // };
 
   const actions: IQuickAction[] = [
     {
       label: QUICK_ACTIONS.LABEL_NEW_SALES,
       onPress: handleAddClient,
-      style: borderBottomGray4,
+      // style: borderBottomGray4,
     },
-    {
-      label: QUICK_ACTIONS.LABEL_TOP_UP,
-      onPress: handleTopUp,
-    },
-    {
-      label: QUICK_ACTIONS.LABEL_SWITCHING,
-      onPress: handleTopUp,
-    },
-    {
-      label: QUICK_ACTIONS.LABEL_REDEMPTION,
-      onPress: handleTopUp,
-    },
-    {
-      label: QUICK_ACTIONS.LABEL_TRANSFER,
-      onPress: handleLogout,
-    },
+    // {
+    //   label: QUICK_ACTIONS.LABEL_TOP_UP,
+    //   onPress: handleTopUp,
+    // },
+    // {
+    //   label: QUICK_ACTIONS.LABEL_SWITCHING,
+    //   onPress: handleTopUp,
+    // },
+    // {
+    //   label: QUICK_ACTIONS.LABEL_REDEMPTION,
+    //   onPress: handleTopUp,
+    // },
+    // {
+    //   label: QUICK_ACTIONS.LABEL_TRANSFER,
+    //   onPress: handleLogout,
+    // },
   ];
 
   return (

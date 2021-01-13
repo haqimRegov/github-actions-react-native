@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from "react";
-import { Text, TextStyle, TouchableWithoutFeedback, View } from "react-native";
+import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
   centerVertical,
@@ -24,6 +24,7 @@ interface RadioButtonProps {
   selectedColor?: string;
   label: string;
   labelStyle?: TextStyle;
+  radioStyle?: ViewStyle;
   right?: ReactNode;
   selected: boolean;
   setSelected: () => void;
@@ -32,6 +33,7 @@ interface RadioButtonProps {
 export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   label,
   labelStyle,
+  radioStyle,
   right,
   selected,
   selectedColor,
@@ -45,8 +47,10 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   return (
     <TouchableWithoutFeedback onPress={setSelected}>
       <View style={{ ...centerVertical, ...flexRow }}>
-        <View style={circleBorder(sw16, borderWidth, borderColor, colorWhite._1)}>
-          <View style={circle(circleSize)} />
+        <View style={radioStyle}>
+          <View style={circleBorder(sw16, borderWidth, borderColor, colorWhite._1)}>
+            <View style={circle(circleSize)} />
+          </View>
         </View>
         <CustomSpacer space={sw12} isHorizontal={true} />
         <Text style={{ ...fs12BoldBlack2, minWidth: sw48, ...labelStyle }}>{label}</Text>

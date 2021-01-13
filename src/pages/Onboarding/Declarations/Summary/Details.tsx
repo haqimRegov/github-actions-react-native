@@ -31,6 +31,7 @@ import {
 const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
 interface DeclarationDetailsProps {
+  address: string;
   accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
   handleNextStep: (route: TypeOnboardingRoute) => void;
@@ -56,6 +57,7 @@ const TitleIcon = ({ onPress, title, titleStyle }: TitleIconProps) => {
 };
 
 export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
+  address,
   accountHolder,
   accountType,
   handleNextStep,
@@ -127,13 +129,17 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
         );
       }
       if (fatca!.confirmAddress === 0) {
-        fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_CORRESPONDENCE, title: "Address", titleStyle: fsTransformNone });
+        fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_CORRESPONDENCE, title: address, titleStyle: fsTransformNone });
       }
     }
   }
 
-  if (fatca!.agreeToFill === true) {
-    fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_HARDCOPY, title: "W-9" });
+  if (fatca!.formW9 === true) {
+    fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_FORM_W9, title: "Yes" });
+  }
+
+  if (fatca!.formW8Ben === true) {
+    fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_FORM_W8_BEN, title: "Yes" });
   }
 
   const crsSummary = isTaxResident

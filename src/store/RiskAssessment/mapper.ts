@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { GlobalActionProps } from "../Global";
 import { OnboardingActionProps } from "../Onboarding";
+import { ProductsActionProps } from "../Products";
 import { RootState } from "../rootReducer";
 import { RiskAssessmentActionProps } from "./actions";
 
@@ -13,7 +14,10 @@ export const RiskMapStateToProps = (state: RootState) => ({
 });
 
 export const RiskMapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ ...RiskAssessmentActionProps, ...GlobalActionProps, ...OnboardingActionProps }, dispatch);
+  return bindActionCreators(
+    { ...RiskAssessmentActionProps, ...ProductsActionProps, ...GlobalActionProps, ...OnboardingActionProps },
+    dispatch,
+  );
 };
 
 export type RiskStoreProps = ReturnType<typeof RiskMapStateToProps> & ReturnType<typeof RiskMapDispatchToProps>;

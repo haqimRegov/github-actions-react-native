@@ -1,12 +1,11 @@
 import moment from "moment";
 import React, { FunctionComponent } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS, OPTIONS_FATCA_NO_CERTIFICATE } from "../../../../data/dictionary";
-import { SAMPLE_PAYMENT } from "../../../../mocks/payment-summary";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, sh24 } from "../../../../styles";
@@ -145,8 +144,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
                   jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === true ? undefined : joint!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
               },
               fatca: {
-                formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.agreeToFill!}` : undefined, // "true" || "false", required if usCitizen === true
-                formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.agreeToFill!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+                formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+                formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
                 confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
                 certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
                 noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
@@ -204,8 +203,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
                 : principal!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
           },
           fatca: {
-            formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.agreeToFill!}` : undefined, // "true" || "false", required if usCitizen === true
-            formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.agreeToFill!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+            formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+            formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
             confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
             certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
             noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
@@ -272,11 +271,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       }
 
       if (error !== null) {
-        addOrders(SAMPLE_PAYMENT);
-        const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
-        updatedSteps.push(ONBOARDING_KEYS.Declarations);
-        updateFinishedSteps(updatedSteps);
-        return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
+        Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
       }
     }
     return null;
@@ -299,6 +294,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       subtitle={subtitle}>
       <CustomSpacer space={sh24} />
       <DeclarationDetails
+        address={principal!.addressInformation!.permanentAddress!.address!}
         accountHolder="Principal"
         accountType={accountType}
         handleNextStep={handleNextStep}
@@ -312,6 +308,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           <View style={borderBottomBlack21} />
           <CustomSpacer space={sh24} />
           <DeclarationDetails
+            address={joint!.addressInformation!.permanentAddress!.address!}
             accountHolder="Joint"
             accountType="Joint"
             handleNextStep={handleNextStep}

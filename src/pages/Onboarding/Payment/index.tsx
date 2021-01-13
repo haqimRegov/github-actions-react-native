@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { BlurView, CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
+import { BlurView, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
@@ -25,22 +25,31 @@ import {
   sh8,
   shadow5,
   sw24,
-  sw256,
   sw4,
 } from "../../../styles";
 import { PaymentOrder } from "./PaymentOrder";
+import { PaymentStatus } from "./PaymentStatus";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
-const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paymentSummary, updatePaymentSummary }: PaymentProps) => {
+const PaymentComponent: FunctionComponent<PaymentProps> = ({
+  accountType,
+  details,
+  orders,
+  paymentSummary,
+  setLoading,
+  updatePaymentSummary,
+}: PaymentProps) => {
   const [activeOrder, setActiveOrder] = useState<string>("");
+  const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
 
   const [viewFund, setViewFund] = useState<string>("");
 
   const handleSubmit = async () => {
+    setLoading(true);
     const paymentOrders: ISubmitProofOfPaymentOrder[] = paymentSummary!.orders.map(
       ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
         const payment: ISubmitProofOfPayment[] = payments
@@ -58,13 +67,14 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paym
     const request = { orders: paymentOrders };
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments request", request);
-    const paymentResponse: IGetReceiptSummaryListResponse = await submitProofOfPayments(request);
+    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request);
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments", paymentResponse);
+    setLoading(false);
     if (paymentResponse !== undefined) {
       const { data, error } = paymentResponse;
       if (error === null && data !== null) {
-        Alert.alert(data.result.message);
+        setPaymentResult(data.result);
         // setErrorMessage(undefined);
         // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }
@@ -109,6 +119,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paym
           .join(", ")
       : "";
 
+  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
+
+  if (accountType === "Joint") {
+    accountNames.push({ label: details!.jointHolder!.name!, value: details!.jointHolder!.name! });
+  }
+
   useEffect(() => {
     if (paymentSummary === undefined && orders !== undefined) {
       const newOrders: IPaymentOrderState[] = orders!.orders.map((order: IOrder) => {
@@ -130,7 +146,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paym
       <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={flexChild}>
           <CustomSpacer space={sh32} />
-          <View style={{ ...flexRow, ...px(sw24) }}>
+          <View style={px(sw24)}>
             <LabeledTitle
               label={PAYMENT.HEADING}
               labelStyle={fs24BoldBlack2}
@@ -138,8 +154,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paym
               title={PAYMENT.SUBHEADING}
               titleStyle={fs16SemiBoldBlack2}
             />
-            <CustomFlexSpacer />
-            <Text style={{ ...fs16RegBlack2, width: sw256 }}>{`${PAYMENT.LABEL_EMAIL} ${agent?.email}`}</Text>
           </View>
           {paymentSummary !== undefined &&
             paymentSummary.orders.map((order: IPaymentOrderState, index: number) => {
@@ -154,6 +168,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paym
                     <CustomSpacer space={sh24} />
                     <View style={{ ...px(sw24), ...shadow5 }}>
                       <PaymentOrder
+                        accountNames={accountNames}
                         setActiveOrder={setActiveOrder}
                         activeOrder={activeOrder}
                         setViewFund={setViewFund}
@@ -204,6 +219,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({ agent, orders, paym
           label={bannerText}
         />
       )}
+      <PaymentStatus result={paymentResult} setPaymentResult={setPaymentResult} />
     </SafeAreaPage>
   );
 };

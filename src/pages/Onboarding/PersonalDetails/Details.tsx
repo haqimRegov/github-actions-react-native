@@ -84,7 +84,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   };
 
   const checkEpfNumber = () => {
-    setValidations({ ...validations, epfNumber: isNumber(inputEpfNumber) === false ? ERROR.INVALID_POST_CODE : undefined });
+    setValidations({ ...validations, epfNumber: isNumber(inputEpfNumber) === false ? ERROR.INVALID_NUMBER : undefined });
   };
 
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails!.idType! as TypeClientID) !== 1;
@@ -122,7 +122,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         />
       </View>
       <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw40) }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
-      {epfInvestment === true ? (
+      {epfInvestment === true && accountHolder === "Principal" ? (
         <EPFDetails
           epfNumberError={validations.epfNumber}
           inputEpfNumber={inputEpfNumber}

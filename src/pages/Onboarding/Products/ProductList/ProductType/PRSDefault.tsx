@@ -56,6 +56,8 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       search: search,
       page: page,
     };
+    // eslint-disable-next-line no-console
+    console.log("productList", req);
     const productListResponse: IProductListResponse = await getProductList(req);
     setLoading(false);
     if (productListResponse !== undefined) {
@@ -143,6 +145,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       />
       <CustomSpacer space={248} />
       <ProductListView
+        filter={filterTemp}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
         list={recommended}

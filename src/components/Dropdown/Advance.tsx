@@ -11,6 +11,7 @@ import {
   colorGray,
   colorTransparent,
   colorWhite,
+  disabledOpacity,
   flexRow,
   fs12BoldBlack2,
   fs16BoldBlack2,
@@ -34,6 +35,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 export interface AdvancedDropdownProps {
+  disabled?: boolean;
   handleChange: (text: string) => void;
   items: TypeLabelValue[];
   label?: string;
@@ -47,6 +49,7 @@ export interface AdvancedDropdownProps {
 }
 
 export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
+  disabled,
   handleChange,
   items,
   label,
@@ -79,8 +82,10 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
   const labelExtractor = items.map((item) => item.label);
 
+  const disabledStyle = disabled === true ? disabledOpacity : {};
+
   return (
-    <View>
+    <View style={disabledStyle}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
@@ -88,7 +93,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}
-      <View style={flexRow}>
+      <View onStartShouldSetResponderCapture={() => disabled === true} style={flexRow}>
         <CollapsibleDropdown
           baseDropdownStyle={baseDropdownStyle}
           dummyBaseStyle={dummyStyle}

@@ -10,6 +10,7 @@ export const clientInitialState: ClientState = {
   details: {
     principalHolder: {
       name: "",
+      country: "",
       dateOfBirth: "",
       id: "",
       idType: DICTIONARY_ID_TYPE[0],
@@ -17,6 +18,7 @@ export const clientInitialState: ClientState = {
     },
     jointHolder: {
       name: "",
+      country: "",
       dateOfBirth: "",
       id: "",
       idType: DICTIONARY_ID_TYPE[0],

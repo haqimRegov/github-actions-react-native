@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
+import { IcoMoon } from "../../icons";
 import {
   centerHV,
   colorBlue,
@@ -12,15 +13,19 @@ import {
   fs12SemiBoldWhite1,
   px,
   py,
+  sh12,
   sh24,
   sh4,
   sw24,
+  sw4,
   sw8,
 } from "../../styles";
+import { CustomSpacer } from "../Views";
 
 export type TagColorType = "success" | "error" | "primary" | "secondary" | "warning" | "danger";
 
 interface TagProps {
+  icon?: string;
   color?: TagColorType;
   onPress?: () => void;
   style?: ViewStyle;
@@ -28,7 +33,7 @@ interface TagProps {
   textStyle?: TextStyle;
 }
 
-export const Tag: FunctionComponent<TagProps> = ({ color = "primary", onPress, style, text, textStyle }: TagProps) => {
+export const Tag: FunctionComponent<TagProps> = ({ icon, color = "primary", onPress, style, text, textStyle }: TagProps) => {
   let tagColor = colorBlue._2;
   let tagTextColor = colorWhite._1;
 
@@ -64,6 +69,7 @@ export const Tag: FunctionComponent<TagProps> = ({ color = "primary", onPress, s
 
   const tagStyle: ViewStyle = {
     ...centerHV,
+    ...flexRow,
     ...px(sw8),
     ...py(sh4),
     borderRadius: sw24,
@@ -81,6 +87,12 @@ export const Tag: FunctionComponent<TagProps> = ({ color = "primary", onPress, s
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={tagStyle}>
           <Text style={{ ...fs12SemiBoldWhite1, ...tagTextStyle }}>{text}</Text>
+          {icon !== undefined ? (
+            <Fragment>
+              <CustomSpacer isHorizontal={true} space={sw4} />
+              <IcoMoon color={tagTextColor} name={icon} size={sh12} />
+            </Fragment>
+          ) : null}
         </View>
       </TouchableWithoutFeedback>
     </View>

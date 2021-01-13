@@ -3,7 +3,14 @@ import { View } from "react-native";
 
 import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_BUSINESS_NATURE, DICTIONARY_COUNTRIES, DICTIONARY_GROSS_INCOME, DICTIONARY_OCCUPATION } from "../../../data/dictionary";
+import {
+  DICTIONARY_BUSINESS_NATURE,
+  DICTIONARY_COUNTRIES,
+  DICTIONARY_GROSS_INCOME,
+  DICTIONARY_MALAYSIA_STATES,
+  DICTIONARY_MALAYSIA_STATES_LIST,
+  DICTIONARY_OCCUPATION,
+} from "../../../data/dictionary";
 import { px, sh122, sh24, sh32, sw24 } from "../../../styles";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -32,7 +39,14 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputAddress = (value: string) => setEmploymentDetails({ address: value });
   const setInputBusinessNature = (value: string) => setEmploymentDetails({ businessNature: value });
   const setInputCity = (value: string) => setEmploymentDetails({ city: value });
-  const setInputCountry = (value: string) => setEmploymentDetails({ country: value });
+  const setInputCountry = (value: string) =>
+    setEmploymentDetails({
+      country: value,
+      state:
+        value === DICTIONARY_COUNTRIES[133].value && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputState as TypeMalaysiaState) === false
+          ? ""
+          : inputState,
+    });
   const setInputEmployerName = (value: string) => setEmploymentDetails({ employerName: value });
   const setInputGross = (value: string) => setEmploymentDetails({ grossIncome: value });
   const setInputOccupation = (value: string) => setEmploymentDetails({ occupation: value });
@@ -87,7 +101,16 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       <CustomSpacer space={sh32} />
       <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_CITY} onChangeText={setInputCity} value={inputCity} />
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_STATE} onChangeText={setInputState} value={inputState} />
+      {inputCountry === DICTIONARY_COUNTRIES[133].value ? (
+        <AdvancedDropdown
+          items={DICTIONARY_MALAYSIA_STATES}
+          handleChange={setInputState}
+          label={EMPLOYMENT_DETAILS.LABEL_STATE}
+          value={inputState}
+        />
+      ) : (
+        <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_STATE} onChangeText={setInputState} value={inputState} />
+      )}
       <CustomSpacer space={sh32} />
       <AdvancedDropdown
         items={DICTIONARY_COUNTRIES}

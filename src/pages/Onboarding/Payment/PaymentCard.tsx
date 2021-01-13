@@ -54,6 +54,7 @@ import { CashDepositMachine, Cheque, ClientTrustAccount, EPF, OnlineBanking, Rec
 const { PAYMENT } = Language.PAGE;
 
 export interface PaymentCardProps {
+  accountNames: TypeLabelValue[];
   active: boolean;
   currencies: TypeCurrencyLabelValue[];
   floatingAmount: IFloatingAmount[];
@@ -66,6 +67,7 @@ export interface PaymentCardProps {
 }
 
 export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
+  accountNames,
   active,
   currencies,
   floatingAmount,
@@ -107,12 +109,11 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
     .filter((data) => data !== "")
     .join(", ");
   const paymentTitle = draftPayments.length === 1 ? `${draftPayments[0].paymentMethod}` : `${draftPayments.length}`;
-  const completedTitle = withPayment === true ? `${PAYMENT.LABEL_PROOF} - ${paymentTitle} (${floating})` : headerTitle;
+  const floatingLabel = floating !== "" ? `(${floating})` : "";
+  const completedTitle = withPayment === true ? `${PAYMENT.LABEL_PROOF} - ${paymentTitle}${floatingLabel}` : headerTitle;
 
-  // TODO actual holder names
   // TODO no prompt if all are saved
   // TODO dont reflect current change if viewing other info
-  const recurringBankNames = [{ label: "Edgar Constantine", value: "Edgar Constantine" }];
   const modalTitle = prompt === -1 || prompt === expandedIndex ? PAYMENT.PROMPT_TITLE_CANCEL : PAYMENT.PROMPT_TITLE_VIEW;
 
   const handlePromptContinue = () => {
@@ -388,8 +389,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               payment.frequency === "" ||
               payment.frequency === undefined ||
               payment.recurringBank === "" ||
-              payment.recurringType === undefined ||
-              payment.proof === undefined;
+              payment.recurringType === undefined;
 
             let saveDisabled = onlineBankingDisabled;
 
@@ -448,7 +448,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                 saveDisabled = recurringSaveDisabled;
                 paymentMethodInfo = (
                   <Recurring
-                    bankNames={recurringBankNames}
+                    bankNames={accountNames}
                     bankAccountName={payment.bankAccountName!}
                     bankAccountNumber={payment.bankAccountNumber!}
                     frequency={payment.frequency!}
@@ -558,7 +558,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                       </Fragment>
                     )}
                     <View style={px(sw24)}>
-                      {payment.paymentMethod! === "EPF" ? null : (
+                      {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
                         <Fragment>
                           <CustomSpacer space={sh24} />
                           <TextSpaceArea spaceToBottom={sh16} text={PAYMENT.LABEL_PROOF} style={fs14BoldBlack2} />
@@ -571,7 +571,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                           />
                         </Fragment>
                       )}
-                      {payment.paymentMethod! === "Recurring" || payment.paymentMethod! === "EPF" ? null : (
+                      {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
                         <Fragment>
                           <CustomSpacer space={sh24} />
                           <Switch label={PAYMENT.LABEL_REMARK} onPress={toggleRemark} toggle={payment.remark !== undefined} />
@@ -588,7 +588,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                         </Fragment>
                       )}
                     </View>
-                    {payment.paymentMethod! === "Recurring" || payment.paymentMethod! === "EPF" ? null : (
+                    {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
                       <View style={px(sw24)}>
                         <CustomSpacer space={sh24} />
                         <OutlineButton

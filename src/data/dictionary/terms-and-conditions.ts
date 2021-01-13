@@ -1,6 +1,6 @@
 export const SUITABILITY_ASSESSMENT: ITermsAndConditions = {
   title: "Suitability Assessment",
-  sections: [
+  subsection: [
     {
       termsList: [
         {
@@ -14,7 +14,7 @@ export const SUITABILITY_ASSESSMENT: ITermsAndConditions = {
 
 export const PDPA_CONSENT: ITermsAndConditions = {
   title: "PDPA",
-  sections: [
+  subsection: [
     {
       termsList: [
         {
@@ -28,7 +28,7 @@ export const PDPA_CONSENT: ITermsAndConditions = {
 
 export const FATCA: ITermsAndConditions = {
   title: "FATCA Declaration & Definition",
-  sections: [
+  subsection: [
     {
       heading: "Declaration",
       termsList: [
@@ -52,7 +52,7 @@ export const FATCA: ITermsAndConditions = {
 
 export const CRS: ITermsAndConditions = {
   title: "CRS Declaration & Definition",
-  sections: [
+  subsection: [
     {
       heading: "Declaration",
       termsList: [
@@ -81,7 +81,7 @@ export const CRS: ITermsAndConditions = {
 
 export const FEA: ITermsAndConditions = {
   title: "FEA Declaration",
-  sections: [
+  subsection: [
     {
       heading: "PART I: Declaration And Undertaking On Domestic Ringgit Borrowing (applicable to Resident only)",
       termsList: [
@@ -106,7 +106,7 @@ export const FEA: ITermsAndConditions = {
 
 export const UTAndAMP: ITermsAndConditions = {
   title: "UT & AMP Product Terms and Conditions",
-  sections: [
+  subsection: [
     {
       heading: "Agreement, Declarations and Signatures",
       termsList: [
@@ -147,7 +147,7 @@ export const UTAndAMP: ITermsAndConditions = {
 
 export const PRS: ITermsAndConditions = {
   title: "PRS Products Terms and Conditions",
-  sections: [
+  subsection: [
     {
       heading: "Declaration & Signature",
       termsList: [

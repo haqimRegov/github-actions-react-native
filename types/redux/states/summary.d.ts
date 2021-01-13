@@ -83,7 +83,8 @@ declare interface IEmploymentDetailsState extends IAddressState {
 declare interface IFatcaState {
   acceptFatca?: boolean;
   confirmAddress?: TypeToggleButtonValue;
-  agreeToFill?: boolean;
+  formW9?: boolean;
+  formW8Ben?: boolean;
   certificate?: FileBase64;
   explanation?: string;
   explanationSaved?: boolean;

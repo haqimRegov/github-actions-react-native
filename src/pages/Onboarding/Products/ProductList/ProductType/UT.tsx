@@ -56,7 +56,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   };
 
   const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskProfile);
-  const recommendedRisk = FILTER_RISK.slice(0, riskIndex);
+  const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
       ? recommendedRisk

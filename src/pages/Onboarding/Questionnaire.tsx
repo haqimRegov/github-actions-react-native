@@ -60,6 +60,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   principalHolder,
   questionnaire,
   resetRiskAssessment,
+  resetProducts,
   riskScore,
   setLoading,
   updateFinishedSteps,
@@ -79,6 +80,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index });
 
   const handleConfirmAssessment = () => {
+    resetProducts();
     handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
     const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
     updatedSteps.push(ONBOARDING_KEYS.RiskAssessment);

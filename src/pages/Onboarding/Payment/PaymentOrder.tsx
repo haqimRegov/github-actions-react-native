@@ -31,6 +31,7 @@ import { PaymentCard } from "./PaymentCard";
 const { PAYMENT } = Language.PAGE;
 
 export interface PaymentOrderProps {
+  accountNames: TypeLabelValue[];
   activeOrder: string;
   paymentOrder: IPaymentOrderState;
   setActiveOrder: (value: string) => void;
@@ -40,6 +41,7 @@ export interface PaymentOrderProps {
 }
 
 export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
+  accountNames,
   activeOrder,
   paymentOrder,
   setActiveOrder,
@@ -203,6 +205,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
       ))}
       <CustomSpacer space={sh8} />
       <PaymentCard
+        accountNames={accountNames}
         active={activeOrder === orderNumber}
         currencies={currencies}
         floatingAmount={floatingAmount!}

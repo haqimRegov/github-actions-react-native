@@ -73,9 +73,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
     setRoute("Transactions");
     setActiveMenu(0);
   };
-  const handleEdd = () => {
-    setActiveMenu(2);
-  };
+  // const handleEdd = () => {
+  //   setActiveMenu(2);
+  // };
 
   const props = { handleRoute: handleRoute, navigation: navigation };
   let content: JSX.Element = <ApplicationHistory {...props} />;
@@ -100,7 +100,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
     { badgeCount: 2, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
-    { name: "edd", onPress: handleEdd, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
+    // { name: "edd", onPress: handleEdd, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
     { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
     { name: "logout", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];
@@ -141,7 +141,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
           <View style={borderBottomGray4} />
           <TouchableWithoutFeedback onPress={handleAims}>
             <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-              <Image source={LocalAssets.logo.aims} style={{ height: sh24, width: sw66 }} />
+              <Image source={LocalAssets.logo.aims} style={{ height: sh32, width: sw66 }} />
               <CustomFlexSpacer />
               <IcoMoon color={colorBlue._2} name="external" size={sh24} />
             </View>

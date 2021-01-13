@@ -22,8 +22,8 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
 }: FatcaDeclarationProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
-  const principalAddress = `${principal?.addressInformation?.permanentAddress?.address} ${principal?.addressInformation?.permanentAddress?.city}`;
-  const jointAddress = `${joint?.addressInformation?.permanentAddress?.address} ${joint?.addressInformation?.permanentAddress?.city}`;
+  const principalAddress = `${principal?.addressInformation?.permanentAddress?.address}, ${principal?.addressInformation?.permanentAddress?.postCode}, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${principal?.addressInformation?.permanentAddress?.country}`;
+  const jointAddress = `${joint?.addressInformation?.permanentAddress?.address}, ${joint?.addressInformation?.permanentAddress?.postCode}, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${joint?.addressInformation?.permanentAddress?.country}`;
 
   const handlePrincipalFatca = (fatcaDeclaration: IFatcaState) => {
     addPersonalInfo({

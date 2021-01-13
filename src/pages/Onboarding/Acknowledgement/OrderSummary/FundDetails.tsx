@@ -45,7 +45,11 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     scheduledSalesCharge,
   } = fund;
 
-  const isScheduled = scheduledInvestmentAmount !== undefined && scheduledSalesCharge !== undefined;
+  const isScheduled =
+    scheduledInvestmentAmount !== undefined &&
+    scheduledSalesCharge !== undefined &&
+    scheduledInvestmentAmount !== null &&
+    scheduledSalesCharge !== null;
 
   const summary: LabeledTitleProps[] = [
     {

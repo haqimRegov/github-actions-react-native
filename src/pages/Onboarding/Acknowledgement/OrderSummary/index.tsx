@@ -39,16 +39,11 @@ interface OrderSummaryProps extends AcknowledgementStoreProps {
 const { ORDER_SUMMARY } = Language.PAGE;
 
 const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({ handleNextStep, orders }: OrderSummaryProps) => {
-  // const [data, setData] = useState<IInvestmentSummary | undefined>(undefined);
   const [expandOrder, setExpandOrder] = useState<number | undefined>(0);
 
   const handleConfirm = () => {
     handleNextStep(ONBOARDING_ROUTES.TermsAndConditions);
   };
-
-  // useEffect(() => {
-  //   setData(SAMPLE_ORDERS);
-  // }, []);
 
   const handleBack = () => {
     Alert.alert("reset");

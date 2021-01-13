@@ -30,7 +30,11 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const investmentCurrencies = productSales!.map(({ investment }) =>
     investment.fundCurrency !== undefined ? investment.fundCurrency : "",
   );
-  const checkRelationship = accountType === "Individual" ? true : principal!.personalDetails?.relationship !== "";
+  const checkOtherRelationship =
+    principal!.personalDetails?.relationship === "Others"
+      ? principal!.personalDetails?.otherRelationship !== ""
+      : principal!.personalDetails?.relationship !== "";
+  const checkRelationship = accountType === "Individual" ? true : checkOtherRelationship;
   const checkLocalBank = principal!.bankSummary!.localBank!.map(
     (bank) =>
       bank.bankName !== "" &&
@@ -55,7 +59,38 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         )
       : [true];
 
-  const validateDetails = (details: IHolderInfoState) => {
+  const validatePrincipal = (details: IHolderInfoState) => {
+    const { contactDetails, epfDetails, personalDetails } = details;
+    const checkEducation =
+      personalDetails!.educationLevel !== "" ||
+      (personalDetails!.educationLevel !== "" &&
+        personalDetails!.educationLevel === "Others" &&
+        personalDetails!.otherEducationLevel !== "");
+    const checkMalaysianDetails =
+      personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
+    const checkEpf =
+      epfInvestment === true
+        ? epfDetails!.epfMemberNumber !== "" && epfDetails!.epfAccountType !== "" && validations.epfNumber === undefined
+        : true;
+
+    return (
+      Object.values(contactDetails!.contactNumber!)
+        .map((contact) => contact.value)
+        .flat()
+        .includes("") === false &&
+      Object.values(contactDetails!.contactNumber!)
+        .map((contact) => typeof contact.error)
+        .includes("string") === false &&
+      checkMalaysianDetails === true &&
+      personalDetails!.mothersMaidenName !== "" &&
+      personalDetails!.maritalStatus !== "" &&
+      checkEducation === true &&
+      personalDetails!.monthlyHouseholdIncome !== "" &&
+      checkEpf === true
+    );
+  };
+
+  const validateJoint = (details: IHolderInfoState) => {
     const { contactDetails, personalDetails } = details;
     const checkEducation =
       personalDetails!.educationLevel !== "" ||
@@ -83,11 +118,11 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
 
   const buttonDisabled =
     accountType === "Individual"
-      ? validateDetails(principal!) === false || checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true
-      : validateDetails(principal!) === false ||
+      ? validatePrincipal(principal!) === false || checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true
+      : validatePrincipal(principal!) === false ||
         checkLocalBank.includes(false) === true ||
         checkForeignBank.includes(false) === true ||
-        validateDetails(joint!) === false ||
+        validateJoint(joint!) === false ||
         checkRelationship === false;
 
   const handleSubmit = () => {

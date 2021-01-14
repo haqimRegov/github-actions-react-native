@@ -17,7 +17,9 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   accountType,
   addPersonalInfo,
   handleNextStep,
+  onboarding,
   personalInfo,
+  updateOnboarding,
 }: CrsDeclarationProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
@@ -41,10 +43,14 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
     const isFea = true;
     const defaultRoute: TypeOnboardingRoute = isFea ? "FEADeclaration" : "DeclarationSummary";
     const route: TypeOnboardingRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : defaultRoute;
-    handleNextStep(route);
     if (isFea === true && personalInfo.editDeclaration === false) {
       addPersonalInfo({ ...personalInfo, editDeclaration: true });
     }
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findFea = updatedDisabledSteps.indexOf("FEADeclaration");
+    updatedDisabledSteps.splice(findFea, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    handleNextStep(route);
   };
 
   const handleRead = () => {
@@ -55,8 +61,11 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   const isNonTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 1 || principal?.declaration!.crs!.taxResident! === 2;
   const isTinDeclaredPrincipal = principal?.declaration!.crs!.country !== "" && principal?.declaration!.crs!.tinNumber !== "";
   const noTinWithReasonPrincipal =
-    principal?.declaration!.crs!.noTin === true && (principal?.declaration!.crs!.reason === 0 || principal?.declaration!.crs!.reason === 1);
+    principal?.declaration!.crs!.country !== "" &&
+    principal?.declaration!.crs!.noTin === true &&
+    (principal?.declaration!.crs!.reason === 0 || principal?.declaration!.crs!.reason === 1);
   const noTinOtherReasonPrincipal =
+    principal?.declaration!.crs!.country !== "" &&
     principal?.declaration!.crs!.noTin === true &&
     principal?.declaration!.crs!.reason === 2 &&
     principal?.declaration!.crs!.explanation !== "";
@@ -65,9 +74,14 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   const isNonTaxResidentJoint = joint?.declaration!.crs!.taxResident! === 1 || joint?.declaration!.crs!.taxResident! === 2;
   const isTinDeclaredJoint = joint?.declaration!.crs!.country !== "" && joint?.declaration!.crs!.tinNumber !== "";
   const noTinWithReasonJoint =
-    joint?.declaration!.crs!.noTin === true && (joint?.declaration!.crs!.reason === 0 || joint?.declaration!.crs!.reason === 1);
+    joint?.declaration!.crs!.country !== "" &&
+    joint?.declaration!.crs!.noTin === true &&
+    (joint?.declaration!.crs!.reason === 0 || joint?.declaration!.crs!.reason === 1);
   const noTinOtherReasonJoint =
-    joint?.declaration!.crs!.noTin === true && joint?.declaration!.crs!.reason === 2 && joint?.declaration!.crs!.explanation !== "";
+    joint?.declaration!.crs!.country !== "" &&
+    joint?.declaration!.crs!.noTin === true &&
+    joint?.declaration!.crs!.reason === 2 &&
+    joint?.declaration!.crs!.explanation !== "";
 
   const showTermsPrincipal =
     isTaxResidentPrincipal ||

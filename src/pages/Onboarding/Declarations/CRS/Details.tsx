@@ -64,11 +64,11 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
   };
 
   const handleNoTin = () => {
-    handleCrsDeclaration({ ...initialState, noTin: !noTin, taxResident: taxResident });
+    handleCrsDeclaration({ ...initialState, country: country, noTin: !noTin, taxResident: taxResident });
   };
 
   const handleTinReason = (value: TypeAdvanceToggleButtonValue) => {
-    handleCrsDeclaration({ ...initialState, noTin: noTin, reason: value, taxResident: taxResident });
+    handleCrsDeclaration({ ...initialState, country: country, noTin: noTin, reason: value, taxResident: taxResident });
   };
 
   const handleExplanation = (value: string) => {
@@ -76,7 +76,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
     if (value === "") {
       newCrs.acceptCrs = false;
     }
-    handleCrsDeclaration({ ...newCrs, explanation: value, explanationSaved: true });
+    handleCrsDeclaration({ ...newCrs, country: country, explanation: value, explanationSaved: true });
   };
 
   const handleAcceptCrs = () => handleCrsDeclaration({ ...crs, acceptCrs: !acceptCrs });

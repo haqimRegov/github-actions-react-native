@@ -37,6 +37,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   accountType,
   details,
   orders,
+  personalInfo,
   handleResetOnboarding,
   paymentSummary,
   setLoading,
@@ -168,11 +169,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                     <View style={{ ...px(sw24), ...shadow5 }}>
                       <PaymentOrder
                         accountNames={accountNames}
-                        setActiveOrder={setActiveOrder}
                         activeOrder={activeOrder}
-                        setViewFund={setViewFund}
-                        setPaymentOrder={setPaymentOrder}
+                        epfAccountNumber={personalInfo.principal!.epfDetails!.epfMemberNumber}
                         paymentOrder={order}
+                        setActiveOrder={setActiveOrder}
+                        setPaymentOrder={setPaymentOrder}
+                        setViewFund={setViewFund}
                         viewFund={viewFund}
                       />
                     </View>

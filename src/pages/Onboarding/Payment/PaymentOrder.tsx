@@ -33,6 +33,7 @@ const { PAYMENT } = Language.PAGE;
 export interface PaymentOrderProps {
   accountNames: TypeLabelValue[];
   activeOrder: string;
+  epfAccountNumber?: string;
   paymentOrder: IPaymentOrderState;
   setActiveOrder: (value: string) => void;
   setPaymentOrder: (paymentOrder: IPaymentOrderState) => void;
@@ -43,6 +44,7 @@ export interface PaymentOrderProps {
 export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
   accountNames,
   activeOrder,
+  epfAccountNumber,
   paymentOrder,
   setActiveOrder,
   setPaymentOrder,
@@ -106,7 +108,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         initialState = {
           currency: initialCurrency,
           paymentMethod: "EPF",
-          epfAccountNumber: "",
+          epfAccountNumber: epfAccountNumber,
           epfReferenceNumber: "",
           proof: undefined,
           remark: undefined,

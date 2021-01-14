@@ -16,7 +16,6 @@ interface FatcaDeclarationProps extends PersonalInfoStoreProps, OnboardingConten
 const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   accountType,
   addPersonalInfo,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
 }: FatcaDeclarationProps) => {
@@ -128,10 +127,14 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
     accountType === "Individual" ? showButtonContinuePrincipal : showButtonContinuePrincipal && showButtonContinueJoint;
   const continueEnabled = accountType === "Individual" ? continueEnabledPrincipal : continueEnabledPrincipal && continueEnabledJoint;
 
+  const handleBack = () => {
+    handleNextStep("PersonalInfoSummary");
+  };
+
   return (
     <ContentPage
       continueDisabled={!continueEnabled}
-      handleCancel={handleCancelOnboarding}
+      handleCancel={handleBack}
       handleContinue={showButtonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.FATCA_HEADING}>

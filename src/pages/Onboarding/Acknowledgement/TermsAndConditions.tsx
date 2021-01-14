@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Alert, Text, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
@@ -46,10 +46,6 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const [expandAll, setExpandAll] = useState<boolean>(false);
   const [fundTypeList, setFundTypeList] = useState<string[]>();
 
-  const handleCancel = () => {
-    Alert.alert("Cancel");
-  };
-
   const handleAgree1 = () => {
     setAgree1(!agree1);
   };
@@ -64,6 +60,10 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
 
   const handleAgree4 = () => {
     setAgree4(!agree4);
+  };
+
+  const handleBack = () => {
+    handleNextStep("OrderSummary");
   };
 
   const handleContinue = () => {
@@ -111,7 +111,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   return (
     <ContentPage
       continueDisabled={disabled}
-      handleCancel={handleCancel}
+      handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={TERMS_AND_CONDITIONS.BUTTON_AGREE}
       subheading={TERMS_AND_CONDITIONS.HEADING}

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { CustomSpacer, RoundedButton } from "../../../../components";
 import { Language } from "../../../../constants";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
-import { flexChild, flexGrow, fsUppercase, px, py, sh152, sh56, sh810, sw136, sw24, sw323, sw56, sw88, sw96 } from "../../../../styles";
+import { flexChild, flexGrow, fsUppercase, px, sh152, sh32, sh56, sh810, sw136, sw24, sw323, sw56, sw88, sw96 } from "../../../../styles";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 import { ProductTabs } from "./Tabs";
 
@@ -22,6 +22,7 @@ interface ProductListProps extends ProductsStoreProps {
 const ProductListComponent: FunctionComponent<ProductListProps> = ({
   // handleShareDocuments,
   handleCancelProducts,
+  licenseType,
   selectedFunds,
   productType,
   updateProductType,
@@ -138,15 +139,17 @@ ProductListProps) => {
       showsVerticalScrollIndicator={false}>
       <View style={flexChild}>
         <View style={{ minHeight: sh810 }}>
-          <ProductTabs productType={productType} setProductType={updateProductType} />
+          <ProductTabs licenseType={licenseType} productType={productType} setProductType={updateProductType} />
           {content}
         </View>
         {filterVisible ? null : (
           <Fragment>
             {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
             {selectedFunds.length === 0 ? (
-              <View style={{ ...px(sw24), ...py(sh56) }}>
+              <View style={px(sw24)}>
+                <CustomSpacer space={sh32} />
                 <RoundedButton onPress={handleCancelProducts} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
+                <CustomSpacer space={sh56} />
               </View>
             ) : null}
           </Fragment>

@@ -39,7 +39,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ result, s
     setToggle(!toggle);
   };
   const handleCancel = () => {
-    setPrompt(undefined);
+    setPrompt("status");
     setPaymentResult(undefined);
   };
 
@@ -90,7 +90,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ result, s
                         );
                       })}
                     </View>
-                    <CustomSpacer space={sh32} />
+                    {result.orders.length === 1 ? null : <CustomSpacer space={sh32} />}
                   </View>
                 );
               })}

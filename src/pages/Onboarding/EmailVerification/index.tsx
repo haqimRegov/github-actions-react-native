@@ -1,20 +1,23 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Text } from "react-native";
 import { connect } from "react-redux";
 
-import { DATE_OF_BIRTH_FORMAT } from "../../../constants";
+import { ConfirmationModal } from "../../../components";
+import { DATE_OF_BIRTH_FORMAT, Language } from "../../../constants";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { fs16BoldBlack2 } from "../../../styles";
 import { EmailOTP } from "./EmailOTP";
 import { Verification } from "./Verification";
 
+const { EMAIL_VERIFICATION } = Language.PAGE;
 interface EmailVerificationProps extends OnboardingContentProps, PersonalInfoStoreProps {}
 
 const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   accountType,
   addPersonalInfo,
   details,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
   setLoading,
@@ -23,6 +26,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
   const [jointOtp, setJointOtp] = useState<string>("");
+  const [prompt, setPrompt] = useState<"cancel" | undefined>(undefined);
 
   const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
@@ -53,6 +57,25 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     }
   };
 
+  const handleBack = () => {
+    setPrompt(undefined);
+    handleNextStep("ProductRecommendation");
+    addPersonalInfo({
+      ...personalInfo,
+      emailOtpSent: false,
+      principal: { ...personalInfo.principal, contactDetails: { ...personalInfo.principal!.contactDetails, emailAddress: "" } },
+      joint: { ...personalInfo.joint, contactDetails: { ...personalInfo.joint!.contactDetails, emailAddress: "" } },
+    });
+  };
+
+  const handleCancel = () => {
+    setPrompt("cancel");
+  };
+
+  const handlePromptCancel = () => {
+    setPrompt(undefined);
+  };
+
   const handleContinue = () => {
     handleEmailVerification();
   };
@@ -74,14 +97,14 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           accountType={accountType}
           addPersonalInfo={addPersonalInfo}
           jointEmailCheck={jointEmailCheck}
-          handleCancel={handleCancelOnboarding}
+          handleCancel={handleCancel}
           handleContinue={handleContinue}
           personalInfo={personalInfo}
         />
       ) : (
         <EmailOTP
           accountType={accountType}
-          handleCancel={handleCancelOnboarding}
+          handleCancel={handleCancel}
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}
           jointEmailCheck={jointEmailCheck}
@@ -95,6 +118,15 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           setPrincipalOtp={setPrincipalOtp}
         />
       )}
+      <ConfirmationModal
+        handleCancel={handlePromptCancel}
+        handleContinue={handleBack}
+        labelCancel={EMAIL_VERIFICATION.BUTTON_NO}
+        labelContinue={EMAIL_VERIFICATION.BUTTON_YES}
+        title={EMAIL_VERIFICATION.PROMPT_TITLE}
+        visible={prompt !== undefined}>
+        <Text style={fs16BoldBlack2}>{EMAIL_VERIFICATION.PROMPT_LABEL}</Text>
+      </ConfirmationModal>
     </Fragment>
   );
 };

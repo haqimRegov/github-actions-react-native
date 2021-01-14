@@ -22,7 +22,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   accountType,
   addPersonalInfo,
   details,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
 }: IdentityConfirmationProps) => {
@@ -254,12 +253,16 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     return handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: uploaded });
   };
 
+  const handleBack = () => {
+    handleNextStep("ProductRecommendation");
+  };
+
   return (
     <Fragment>
       {page === 0 ? (
         <ContentPage
           continueDisabled={buttonDisabled}
-          handleCancel={handleCancelOnboarding!}
+          handleCancel={handleBack}
           handleContinue={handleContinue}
           subheading={IDENTITY_CONFIRMATION.HEADING}
           subtitle={defaultSubtitle}>

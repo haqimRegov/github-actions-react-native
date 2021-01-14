@@ -13,7 +13,6 @@ interface EmploymentDetailsProps extends PersonalInfoStoreProps, OnboardingConte
 const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   accountType,
   addPersonalInfo,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
 }: EmploymentDetailsProps) => {
@@ -40,6 +39,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       : validateDetails(principal!) === false || validateDetails(joint!) === false || checkJointGross === false;
 
   const handleSubmit = () => {
+    addPersonalInfo({ ...personalInfo, editPersonal: true });
     handleNextStep("PersonalInfoSummary");
   };
 
@@ -50,14 +50,15 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   const handleJointEmployment = (value: IEmploymentDetailsState) => {
     addPersonalInfo({ ...personalInfo, joint: { ...joint, employmentDetails: { ...joint?.employmentDetails, ...value } } });
   };
+
+  const handleBack = () => {
+    handleNextStep("PersonalDetails");
+  };
+
   const padding: ViewStyle = accountType === "Joint" ? px(sw48) : px(sw24);
 
   return (
-    <ContentPage
-      buttonContainerStyle={padding}
-      continueDisabled={buttonDisabled}
-      handleCancel={handleCancelOnboarding!}
-      handleContinue={handleSubmit}>
+    <ContentPage buttonContainerStyle={padding} continueDisabled={buttonDisabled} handleCancel={handleBack} handleContinue={handleSubmit}>
       <PrincipalEmploymentDetails
         accountType={accountType}
         personalDetails={principal!.personalDetails!}

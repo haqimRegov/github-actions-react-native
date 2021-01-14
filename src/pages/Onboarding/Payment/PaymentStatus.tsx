@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useState } from "react";
 import { Image, Text, View } from "react-native";
 
@@ -27,11 +26,15 @@ import {
 const { PAYMENT } = Language.PAGE;
 
 interface PaymentStatusProps {
+  handleResetOnboarding: () => void;
   result?: ISubmitProofOfPaymentsResult;
   setPaymentResult: (value?: ISubmitProofOfPaymentsResult) => void;
 }
-export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ result, setPaymentResult }: PaymentStatusProps) => {
-  const navigation = useNavigation();
+export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
+  handleResetOnboarding,
+  result,
+  setPaymentResult,
+}: PaymentStatusProps) => {
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
 
@@ -48,7 +51,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ result, s
       return setPrompt("message");
     }
     if (prompt === "message") {
-      navigation.navigate("Dashboard");
+      handleResetOnboarding();
     }
     return null;
   };

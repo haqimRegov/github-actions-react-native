@@ -15,8 +15,10 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   accountType,
   addPersonalInfo,
   handleNextStep,
+  onboarding,
   personalInfo,
   productSales,
+  updateOnboarding,
 }: PersonalDetailsProps) => {
   const [validations, setValidations] = useState<IPersonalDetailsValidations>({
     epfNumber: undefined,
@@ -127,6 +129,10 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const handleSubmit = () => {
     const route: TypeOnboardingRoute = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
     addPersonalInfo({ ...personalInfo, editPersonal: false });
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findEmploymentDetails = updatedDisabledSteps.indexOf("EmploymentDetails");
+    updatedDisabledSteps.splice(findEmploymentDetails, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);
   };
 

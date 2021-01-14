@@ -14,7 +14,7 @@ import {
   Question,
   RadioButton,
 } from "../../components";
-import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../constants";
+import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -53,19 +53,19 @@ interface QuestionnaireContentProps extends OnboardingContentProps, RiskStorePro
 const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
   addAssessmentQuestions,
   addRiskScore,
-  finishedSteps,
   handleCancelOnboarding,
   handleNextStep,
-  // handleResetOnboarding,
+  onboarding,
   principalHolder,
   questionnaire,
   resetRiskAssessment,
   resetProducts,
   riskScore,
   setLoading,
-  updateFinishedSteps,
+  updateOnboarding,
 }: QuestionnaireContentProps) => {
   const { clientId, dateOfBirth, name } = principalHolder!;
+  const { disabledSteps, finishedSteps } = onboarding;
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
@@ -82,10 +82,13 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const handleConfirmAssessment = () => {
     resetProducts();
     handleNextStep(ONBOARDING_ROUTES.ProductRecommendation);
-    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_KEYS.RiskAssessment);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    updatedFinishedSteps.push("RiskAssessment");
+    const findProducts = updatedDisabledSteps.indexOf("Products");
+    updatedDisabledSteps.splice(findProducts, 1);
     setConfirmModal(undefined);
-    updateFinishedSteps(updatedSteps);
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
   const handleRetakeAssessment = () => {
@@ -127,10 +130,12 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       // return handleResetOnboarding(false, { editMode: true });
     }
     setConfirmModal(undefined);
-    // resetOnboarding();
-    updateFinishedSteps([]);
-    // resetRiskAssessment();
-    // return true;
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const findProducts = updatedDisabledSteps.indexOf("Products");
+    if (findProducts === -1) {
+      updatedDisabledSteps.push("Products");
+    }
+    updateOnboarding({ ...onboarding, finishedSteps: [], disabledSteps: updatedDisabledSteps });
   };
 
   const handleCancelEdit = () => {
@@ -166,7 +171,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   ];
 
   useEffect(() => {
-    if (prevQuestionnaire === undefined && finishedSteps.includes(ONBOARDING_KEYS.RiskAssessment)) {
+    if (prevQuestionnaire === undefined && finishedSteps.includes("RiskAssessment")) {
       setPrevQuestionnaire(questionnaire);
     }
     if (prevQuestionnaire !== undefined && !isObjectEqual(questionnaire, prevQuestionnaire)) {

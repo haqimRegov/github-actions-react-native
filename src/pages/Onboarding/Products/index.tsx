@@ -1,9 +1,11 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, RadioButtonGroup, SelectionBanner } from "../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { DATE_OF_BIRTH_FORMAT, Language, ONBOARDING_ROUTES } from "../../../constants";
+import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1 } from "../../../mocks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
@@ -17,10 +19,12 @@ const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
 interface ProductsProps extends ProductsStoreProps, OnboardingContentProps {}
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
+  accountType,
   addInvestmentDetails,
   addPersonalInfo,
   addSelectedFund,
   addViewFund,
+  details,
   handleNextStep,
   investmentDetails,
   onboarding,
@@ -38,6 +42,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
+
+  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DATE_OF_BIRTH_FORMAT), "months");
+  const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
 
   const handleBackToAssessment = () => {
     setPrompt(undefined);
@@ -165,6 +172,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           setInvestmentDetails={addInvestmentDetails}
           setPage={setPage}
           setSelectedFund={addSelectedFund}
+          withEpf={withEpf}
         />
       ),
       onPressCancel: handleBackToListing,

@@ -38,6 +38,8 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   addOrders,
   handleNextStep,
   orders,
+  onboarding,
+  updateOnboarding,
 }: TermsAndConditionsProps) => {
   const [agree1, setAgree1] = useState<boolean>(false);
   const [agree2, setAgree2] = useState<boolean>(false);
@@ -67,6 +69,10 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   };
 
   const handleContinue = () => {
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findSignatures = updatedDisabledSteps.indexOf("Signatures");
+    updatedDisabledSteps.splice(findSignatures, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("Signatures");
   };
 

@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Alert, Text, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, CustomTooltip } from "../../../../components";
@@ -45,10 +45,6 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({ handleNex
     handleNextStep(ONBOARDING_ROUTES.TermsAndConditions);
   };
 
-  const handleBack = () => {
-    Alert.alert("reset");
-  };
-
   const popupContent = (
     <View>
       <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{ORDER_SUMMARY.INFO}</Text>
@@ -57,7 +53,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({ handleNex
   const orderSummaryHeader: ViewStyle = { ...flexRow, ...px(sw24), zIndex: 2 };
 
   return (
-    <ContentPage handleCancel={handleBack} handleContinue={handleConfirm} subheading={ORDER_SUMMARY.HEADING}>
+    <ContentPage handleContinue={handleConfirm} subheading={ORDER_SUMMARY.HEADING}>
       <CustomSpacer space={sh8} />
       <View style={orderSummaryHeader}>
         <Text style={fs16SemiBoldBlack2}>{ORDER_SUMMARY.LABEL_ORDER_SUMMARY}</Text>

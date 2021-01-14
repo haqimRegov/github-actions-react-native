@@ -16,7 +16,6 @@ interface CrsDeclarationProps extends PersonalInfoStoreProps, OnboardingContentP
 export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = ({
   accountType,
   addPersonalInfo,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
 }: CrsDeclarationProps) => {
@@ -97,10 +96,14 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
     accountType === "Individual" ? showButtonContinuePrincipal : showButtonContinuePrincipal && showButtonContinueJoint;
   const continueEnabled = accountType === "Individual" ? continueEnabledPrincipal : continueEnabledPrincipal && continueEnabledJoint;
 
+  const handleBack = () => {
+    handleNextStep("FATCADeclaration");
+  };
+
   return (
     <ContentPage
       continueDisabled={!continueEnabled}
-      handleCancel={handleCancelOnboarding}
+      handleCancel={handleBack}
       handleContinue={showButtonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.CRS_HEADING}>

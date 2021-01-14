@@ -12,6 +12,7 @@ import {
   flexChild,
   flexRow,
   fs10RegBlue38,
+  fs12BoldBlack2,
   fs12BoldBlue2,
   fsUppercase,
   px,
@@ -31,7 +32,7 @@ import {
   sw4,
   sw56,
   sw8,
-  sw88,
+  sw90,
   sw96,
 } from "../../../../styles";
 import { ProductOptions } from "./Actions";
@@ -169,9 +170,10 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
       title: PRODUCT_LIST.LABEL_COLUMN_EPF,
     },
     {
+      customItem: true,
       key: [{ key: "isSyariah" }],
       viewStyle: {
-        width: sw88,
+        width: sw90,
       },
       title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
     },
@@ -297,6 +299,14 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                     );
                   }}
                 />
+              );
+            }}
+            RenderCustomItem={(customItem: ITableCustomItem) => {
+              const type = customItem.item.rawData.isSyariah === "Yes" ? "Shariah" : "Conventional";
+              return (
+                <View style={centerHV}>
+                  <Text style={fs12BoldBlack2}>{type}</Text>
+                </View>
               );
             }}
             RenderOptions={(props: ITableOptions) => (

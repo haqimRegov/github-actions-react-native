@@ -112,6 +112,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     return page === 1 ? setPage(0) : addSelectedFund([]);
   };
 
+  const handleCancelProducts = () => {
+    setPrompt("cancel");
+  };
+
   const handleBack = () => {
     addViewFund(undefined);
   };
@@ -138,7 +142,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   let screen = {
-    content: <ProductList handleCancelProducts={handleCancel} handleShareDocuments={handleShareDocuments} />,
+    content: <ProductList handleCancelProducts={handleCancelProducts} handleShareDocuments={handleShareDocuments} />,
     onPressCancel: handleCancel,
     onPressSubmit: handleStartInvesting,
     labelSubmit: INVESTMENT.BUTTON_START_INVESTING,

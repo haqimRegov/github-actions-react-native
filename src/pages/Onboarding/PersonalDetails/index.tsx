@@ -14,7 +14,6 @@ interface PersonalDetailsProps extends PersonalInfoStoreProps, OnboardingContent
 const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   accountType,
   addPersonalInfo,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
   productSales,
@@ -127,7 +126,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
 
   const handleSubmit = () => {
     const route: TypeOnboardingRoute = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
-    addPersonalInfo({ ...personalInfo, editPersonal: true });
+    addPersonalInfo({ ...personalInfo, editPersonal: false });
     handleNextStep(route);
   };
 
@@ -166,15 +165,16 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const handleJointPersonalDetails = (value: IPersonalDetailsState) => {
     addPersonalInfo({ joint: { personalDetails: { ...joint!.personalDetails, ...value } } });
   };
+
+  const handleBack = () => {
+    handleNextStep("IdentityVerification");
+  };
+
   const padding = accountType === "Joint" ? px(sw48) : px(sw24);
   const uniqueCurrencies = investmentCurrencies.filter((currency, index) => investmentCurrencies.indexOf(currency) === index);
 
   return (
-    <ContentPage
-      buttonContainerStyle={padding}
-      continueDisabled={buttonDisabled}
-      handleCancel={handleCancelOnboarding!}
-      handleContinue={handleSubmit}>
+    <ContentPage buttonContainerStyle={padding} continueDisabled={buttonDisabled} handleCancel={handleBack} handleContinue={handleSubmit}>
       <View>
         <PrincipalDetails
           accountType={accountType}

@@ -38,9 +38,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const navigation = useNavigation();
   const [showPrompt, setShowPrompt] = useState(false);
-  const handleCancel = () => {
-    Alert.alert("Cancel");
-  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -74,6 +71,10 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       }
     }
     return undefined;
+  };
+
+  const handleBack = () => {
+    handleNextStep("TermsAndConditions");
   };
 
   const handleBackToDashboard = () => {
@@ -124,12 +125,11 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     <Fragment>
       <ContentPage
         continueDisabled={buttonDisabled}
-        handleCancel={handleCancel}
+        handleCancel={handleBack}
         handleContinue={handleSubmit}
         labelContinue={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
         subheading={TERMS_AND_CONDITIONS.HEADING}
-        subtitle={TERMS_AND_CONDITIONS.SUBTITLE}
-        spaceToBottom={sh24}>
+        subtitle={TERMS_AND_CONDITIONS.SUBTITLE}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           {receipts !== undefined &&

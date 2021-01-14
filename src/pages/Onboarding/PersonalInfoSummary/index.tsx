@@ -15,7 +15,6 @@ interface PersonalInfoSummaryProps extends PersonalInfoStoreProps, OnboardingCon
 const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> = ({
   accountType,
   finishedSteps,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
   updateFinishedSteps,
@@ -33,9 +32,13 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
     { label: SUMMARY.LABEL_SIGNATORY, title: personalInfo!.signatory! },
   ];
 
+  const handleBack = () => {
+    handleNextStep("EmploymentDetails");
+  };
+
   return (
     <ContentPage
-      handleCancel={handleCancelOnboarding!}
+      handleCancel={handleBack}
       handleContinue={handleContinue}
       noBounce={true}
       subheading={SUMMARY.HEADING}

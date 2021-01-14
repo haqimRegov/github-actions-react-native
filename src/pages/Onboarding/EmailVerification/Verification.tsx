@@ -163,7 +163,6 @@ export const Verification: FunctionComponent<VerificationProps> = ({
               <Text style={{ ...fs12RegBlack2, ...px(sw12) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
             </Fragment>
           ) : null}
-
           <View style={flexRow}>
             <CustomSpacer isHorizontal={true} space={sw16} />
             <TextSpaceArea

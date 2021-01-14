@@ -20,7 +20,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   details,
   addOrders,
   finishedSteps,
-  handleCancelOnboarding,
   handleNextStep,
   investmentDetails,
   personalInfo,
@@ -281,13 +280,17 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     handleSetupClient();
   };
 
+  const handleBack = () => {
+    handleNextStep("FEADeclaration");
+  };
+
   const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
   const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
   const subtitle = accountType === "Joint" && jointAge >= 18 ? jointSubtitle : principalSubtitle;
 
   return (
     <ContentPage
-      handleCancel={handleCancelOnboarding}
+      handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={DECLARATION_SUMMARY.BUTTON_CONFIRM}
       subheading={DECLARATION_SUMMARY.HEADING}

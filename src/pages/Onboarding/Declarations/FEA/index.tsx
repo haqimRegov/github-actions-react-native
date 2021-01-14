@@ -16,7 +16,6 @@ interface FeaDeclarationProps extends PersonalInfoStoreProps, OnboardingContentP
 export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = ({
   accountType,
   addPersonalInfo,
-  handleCancelOnboarding,
   handleNextStep,
   personalInfo,
 }: FeaDeclarationProps) => {
@@ -50,6 +49,10 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
     Alert.alert("Declaration");
   };
 
+  const handleBack = () => {
+    handleNextStep("CRSDeclaration");
+  };
+
   const validationsPrincipal =
     principal?.declaration!.fea!.acceptFea &&
     principal?.declaration!.fea!.resident !== -1 &&
@@ -69,7 +72,7 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
   return (
     <ContentPage
       continueDisabled={!continueEnabled}
-      handleCancel={handleCancelOnboarding}
+      handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.FEA_HEADING}>

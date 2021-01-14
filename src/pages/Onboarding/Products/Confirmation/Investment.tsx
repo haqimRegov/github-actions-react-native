@@ -42,9 +42,10 @@ const { INVESTMENT } = Language.PAGE;
 interface InvestmentProps {
   data: IProductSales;
   setData: (data: IProductSales) => void;
+  withEpf: boolean;
 }
 
-export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }: InvestmentProps) => {
+export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, withEpf }: InvestmentProps) => {
   const { investment, fundDetails, masterClassList } = data;
 
   const {
@@ -69,7 +70,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData }
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
   const fundingOption = [INVESTMENT.QUESTION_1_OPTION_1];
-  if (isEpf === "Yes") {
+  if (isEpf === "Yes" && withEpf === true) {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
 

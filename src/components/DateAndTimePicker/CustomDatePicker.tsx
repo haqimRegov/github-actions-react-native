@@ -179,6 +179,7 @@ export const CustomDatePicker = ({
                     mode={mode}
                     onChange={handleDateChange}
                     style={pickerStyle}
+                    textColor="black"
                     value={selectedDate}
                   />
                 </View>

@@ -43,10 +43,18 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setVi
     fundName,
     investmentAmount,
     isFea,
-    isScheduled,
     isSyariah,
     salesCharge,
+    scheduledInvestmentAmount,
+    scheduledSalesCharge,
   } = fund;
+
+  const isScheduled =
+    scheduledInvestmentAmount !== undefined &&
+    scheduledSalesCharge !== undefined &&
+    scheduledInvestmentAmount !== null &&
+    scheduledSalesCharge !== null;
+
   const expanded = viewFund === fundName;
   const icon = expanded ? "caret-up" : "caret-down";
 

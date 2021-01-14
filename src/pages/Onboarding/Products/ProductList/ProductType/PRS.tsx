@@ -42,7 +42,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   const handleFetch = async () => {
     setLoading(true);
     const req = {
-      tab: productType,
+      tab: "prs",
       fundType: filters.fundType![0] || "",
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",

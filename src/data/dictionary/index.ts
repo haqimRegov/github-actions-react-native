@@ -8,7 +8,7 @@ export * from "./countries";
 export * from "./currency";
 export * from "./declaration";
 export * from "./education-level";
-export * from "./epf-type";
+export * from "./epf";
 export * from "./errors";
 export * from "./fund-category";
 export * from "./fund-issuing-house";

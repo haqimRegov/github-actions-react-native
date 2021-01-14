@@ -34,6 +34,7 @@ export interface ProductConfirmationProps {
   setInvestmentDetails: (fundSales: IProductSales[]) => void;
   setPage: (page: number) => void;
   setSelectedFund: (fund: IProduct[]) => void;
+  withEpf: boolean;
 }
 
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
@@ -43,6 +44,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
   setInvestmentDetails,
   setPage,
   setSelectedFund,
+  withEpf,
 }: ProductConfirmationProps) => {
   useEffect(() => {
     const keyboardWillShow = () => {
@@ -126,7 +128,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                     />
                   </View>
                   <CustomSpacer space={sh24} />
-                  <Investment data={product} setData={updateData} />
+                  <Investment data={product} setData={updateData} withEpf={withEpf} />
                 </View>
               </Fragment>
             );

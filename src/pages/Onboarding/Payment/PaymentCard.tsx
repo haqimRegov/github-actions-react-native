@@ -11,6 +11,7 @@ import {
   CustomTextInput,
   Dash,
   IconButton,
+  LabeledTitle,
   OutlineButton,
   Switch,
   TextInputArea,
@@ -40,9 +41,11 @@ import {
   sh32,
   sh56,
   sh64,
+  sh8,
   sw1,
   sw16,
   sw24,
+  sw360,
   sw432,
   sw64,
   sw784,
@@ -313,12 +316,6 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               setDraftPayments(updatedPayments);
             };
 
-            const setEpfAccountNumber = (value: string) => {
-              const updatedPayments = [...draftPayments];
-              updatedPayments[index].epfAccountNumber = value;
-              setDraftPayments(updatedPayments);
-            };
-
             const setReferenceNumber = (value: string) => {
               const updatedPayments = [...draftPayments];
               updatedPayments[index].epfReferenceNumber = value;
@@ -511,12 +508,12 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                             )}
                             <CustomSpacer isHorizontal={true} space={sw64} />
                             {payment.paymentMethod! === "EPF" ? (
-                              <CustomTextInput
-                                error={amountError}
+                              <LabeledTitle
                                 label={PAYMENT.LABEL_EPF_ACCOUNT}
-                                onBlur={checkAmount}
-                                onChangeText={setEpfAccountNumber}
-                                value={payment.epfAccountNumber}
+                                spaceToLabel={sh8}
+                                title={payment.epfAccountNumber!}
+                                titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
+                                style={{ width: sw360 }}
                               />
                             ) : (
                               <AdvancedDropdown

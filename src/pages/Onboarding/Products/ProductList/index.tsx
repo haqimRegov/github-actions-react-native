@@ -15,29 +15,17 @@ interface ProductListProps extends ProductsStoreProps {
   handleCancelProducts: () => void;
   handleShareDocuments?: (fund: IProduct) => void;
   shareSuccess?: boolean;
-
-  // setSelectedFunds: (product: IProduct[]) => void;
 }
 
 const ProductListComponent: FunctionComponent<ProductListProps> = ({
-  // handleShareDocuments,
   handleCancelProducts,
   licenseType,
   selectedFunds,
   productType,
   updateProductType,
-}: // shareSuccess,
-// products,
-ProductListProps) => {
+}: ProductListProps) => {
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [filterVisible] = useState<boolean>(false);
-
-  // const [productList, setProductList] = useState<ProductType>("ut");
-  // const [, setShowBy] = useState<ProductListShowByType>();
-  // const showByRef = useRef<ProductListShowByType>("recommended");
-  // const currentProduct = products[productList];
-  // const { filters, page, pages, search } = currentProduct;
-  // const list = currentProduct[showByRef.current];
 
   const columns: ITableColumn[] = [
     {

@@ -30,7 +30,7 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
           ),
         })}
       </Fragment>
-      <Loader visible={isLoading!} />
+      <Loader visible={isLoading === true} />
     </SafeAreaProvider>
   );
 };

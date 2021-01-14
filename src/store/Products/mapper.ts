@@ -9,6 +9,7 @@ import { ProductsActionProps } from "./actions";
 
 export const ProductsMapStateToProps = (state: RootState) => ({
   licenseType: state.global.agent!.licenseType,
+  onboarding: state.onboarding,
   finishedSteps: state.onboarding.finishedSteps,
   ut: state.products.ut,
   prs: state.products.prs,

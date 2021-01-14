@@ -1,5 +1,6 @@
 import { bindActionCreators, Dispatch } from "redux";
 
+import { AcknowledgementActionProps } from "../Acknowledgement";
 import { ClientActionProps } from "../Client";
 import { PersonalInfoActionProps } from "../PersonalInfo";
 import { ProductsActionProps } from "../Products";
@@ -9,6 +10,7 @@ import { SelectedFundActionProps } from "../SelectedFund";
 import { OnboardingActionProps } from "./actions";
 
 export const OnboardingMapStateToProps = (state: RootState) => ({
+  disabledSteps: state.onboarding.disabledSteps,
   finishedSteps: state.onboarding.finishedSteps,
   // questionnaire: state.riskAssessment.questionnaire,
   // riskScore: state.riskAssessment.riskScore,
@@ -23,6 +25,7 @@ export const OnboardingMapDispatchToProps = (dispatch: Dispatch) => {
       ...ProductsActionProps,
       ...SelectedFundActionProps,
       ...PersonalInfoActionProps,
+      ...AcknowledgementActionProps,
     },
     dispatch,
   );

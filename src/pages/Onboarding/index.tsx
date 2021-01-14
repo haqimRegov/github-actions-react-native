@@ -13,55 +13,77 @@ const { ONBOARDING } = Language.PAGE;
 const isFea = true;
 
 const DECLARATION_CONTENT = [
-  { title: ONBOARDING.TITLE_FATCA_DECLARATION, route: ONBOARDING_ROUTES.FATCADeclaration },
-  { title: ONBOARDING.TITLE_CRS_DECLARATION, route: ONBOARDING_ROUTES.CRSDeclaration },
-  { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.DeclarationSummary },
+  { title: ONBOARDING.TITLE_FATCA_DECLARATION, route: ONBOARDING_ROUTES.FATCADeclaration, key: ONBOARDING_KEYS.FATCADeclaration },
+  { title: ONBOARDING.TITLE_CRS_DECLARATION, route: ONBOARDING_ROUTES.CRSDeclaration, key: ONBOARDING_KEYS.CRSDeclaration },
+  { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.DeclarationSummary, key: ONBOARDING_KEYS.DeclarationSummary },
 ];
 
 if (isFea === true) {
-  DECLARATION_CONTENT.splice(2, 0, { title: ONBOARDING.TITLE_FEA_DECLARATION, route: ONBOARDING_ROUTES.FEADeclarations });
+  DECLARATION_CONTENT.splice(2, 0, {
+    title: ONBOARDING.TITLE_FEA_DECLARATION,
+    route: ONBOARDING_ROUTES.FEADeclarations,
+    key: ONBOARDING_KEYS.FEADeclaration,
+  });
 }
 
 export const ONBOARDING_DATA: IOnboarding[] = [
   {
-    key: ONBOARDING_KEYS.RiskAssessment,
     label: ONBOARDING.TITLE_RISK_ASSESSMENT,
     route: ONBOARDING_ROUTES.RiskAssessment,
+    key: ONBOARDING_KEYS.RiskAssessment,
   },
   {
-    key: ONBOARDING_KEYS.Products,
     label: ONBOARDING.TITLE_PRODUCT_RECOMMENDATION,
     route: ONBOARDING_ROUTES.ProductRecommendation,
+    key: ONBOARDING_KEYS.Products,
   },
   {
     content: [
-      { title: ONBOARDING.TITLE_EMAIL_VERIFICATION, route: ONBOARDING_ROUTES.EmailVerification },
-      { title: ONBOARDING.TITLE_ID_VERIFICATION, route: ONBOARDING_ROUTES.IdentityVerification },
-      { title: ONBOARDING.TITLE_PERSONAL_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails },
-      { title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS, route: ONBOARDING_ROUTES.EmploymentDetails },
-      { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.PersonalInfoSummary },
+      {
+        title: ONBOARDING.TITLE_EMAIL_VERIFICATION,
+        route: ONBOARDING_ROUTES.EmailVerification,
+        key: ONBOARDING_KEYS.EmailVerification,
+      },
+      {
+        title: ONBOARDING.TITLE_ID_VERIFICATION,
+        route: ONBOARDING_ROUTES.IdentityVerification,
+        key: ONBOARDING_KEYS.IdentityVerification,
+      },
+      { title: ONBOARDING.TITLE_PERSONAL_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails, key: ONBOARDING_KEYS.PersonalDetails },
+      {
+        title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS,
+        route: ONBOARDING_ROUTES.EmploymentDetails,
+        key: ONBOARDING_KEYS.EmploymentDetails,
+      },
+      { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.PersonalInfoSummary, key: ONBOARDING_KEYS.PersonalInfoSummary },
     ],
-    key: ONBOARDING_KEYS.PersonalInformation,
+
     label: ONBOARDING.TITLE_PERSONAL_INFORMATION,
+    key: ONBOARDING_KEYS.PersonalInformation,
   },
   {
     content: DECLARATION_CONTENT,
-    key: ONBOARDING_KEYS.Declarations,
     label: ONBOARDING.TITLE_DECLARATIONS,
+    key: ONBOARDING_KEYS.Declarations,
   },
   {
     content: [
-      { title: ONBOARDING.TITLE_ORDER_SUMMARY, route: ONBOARDING_ROUTES.OrderSummary },
-      { title: ONBOARDING.TITLE_TERMS_CONDITIONS, route: ONBOARDING_ROUTES.TermsAndConditions },
-      { title: ONBOARDING.TITLE_SIGNATURES, route: ONBOARDING_ROUTES.Signatures },
+      { title: ONBOARDING.TITLE_ORDER_SUMMARY, route: ONBOARDING_ROUTES.OrderSummary, key: ONBOARDING_KEYS.OrderSummary },
+      {
+        title: ONBOARDING.TITLE_TERMS_CONDITIONS,
+        route: ONBOARDING_ROUTES.TermsAndConditions,
+        key: ONBOARDING_KEYS.TermsAndConditions,
+      },
+      { title: ONBOARDING.TITLE_SIGNATURES, route: ONBOARDING_ROUTES.Signatures, key: ONBOARDING_KEYS.Signatures },
     ],
-    key: ONBOARDING_KEYS.Acknowledgement,
+
     label: ONBOARDING.TITLE_ACKNOWLEDGEMENT,
+    key: ONBOARDING_KEYS.Acknowledgement,
   },
   {
-    key: ONBOARDING_KEYS.Payment,
     label: ONBOARDING.TITLE_PAYMENT,
     route: ONBOARDING_ROUTES.Payment,
+    key: ONBOARDING_KEYS.Payment,
   },
 ];
 
@@ -71,8 +93,10 @@ interface OnboardingPageProps extends OnboardingStoreProps {
 
 const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: OnboardingPageProps) => {
   const {
+    disabledSteps,
     finishedSteps,
     navigation,
+    resetAcknowledgement,
     resetClientDetails,
     resetPersonalInfo,
     resetRiskAssessment,
@@ -97,6 +121,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
 
   const handleResetOnboarding = () => {
     setCancelOnboarding(false);
+    resetAcknowledgement();
     resetClientDetails();
     resetPersonalInfo();
     resetRiskAssessment();
@@ -125,6 +150,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
       <OnboardingSteps
         activeContent={activeContent}
         activeSection={activeSection}
+        disabledSteps={disabledSteps}
         finishedSteps={finishedSteps}
         handleContentChange={handleContentChange}
         handleBackToDashboard={handleCancelOnboarding}

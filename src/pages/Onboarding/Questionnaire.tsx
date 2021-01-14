@@ -48,12 +48,15 @@ import { isObjectEqual } from "../../utils";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
-interface QuestionnaireContentProps extends OnboardingContentProps, RiskStoreProps {}
+interface QuestionnaireContentProps extends OnboardingContentProps, RiskStoreProps {
+  navigation: IStackNavigationProp;
+}
 
 const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
   addAssessmentQuestions,
   addRiskScore,
   handleCancelOnboarding,
+  handleResetOnboarding,
   handleNextStep,
   onboarding,
   principalHolder,
@@ -127,7 +130,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const handleConfirmEdit = () => {
     if (confirmModal === "promptDateOfBirth") {
       // TODO prefill previous principal holder details
-      // return handleResetOnboarding(false, { editMode: true });
+      return handleResetOnboarding();
     }
     setConfirmModal(undefined);
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
@@ -135,7 +138,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (findProducts === -1) {
       updatedDisabledSteps.push("Products");
     }
-    updateOnboarding({ ...onboarding, finishedSteps: [], disabledSteps: updatedDisabledSteps });
+    return updateOnboarding({ ...onboarding, finishedSteps: [], disabledSteps: updatedDisabledSteps });
   };
 
   const handleCancelEdit = () => {

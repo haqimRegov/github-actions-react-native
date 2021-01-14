@@ -12,7 +12,6 @@ import { ProductListView } from "../Listing";
 
 interface PRSDefaultProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
-  productType: ProductType;
   shareSuccess?: boolean;
 }
 
@@ -43,7 +42,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   const handleFetch = async () => {
     setLoading(true);
     const req = {
-      tab: productType,
+      tab: "prsDefault",
       fundType: filters.fundType![0] || "",
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",

@@ -81,6 +81,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     // eslint-disable-next-line no-console
     console.log("productList", req);
     const productListResponse: IProductListResponse = await getProductList(req, handleError);
+    setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
       if (error === null && data !== null) {
@@ -97,7 +98,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     Keyboard.dismiss();
     const funds = await handleFetch();
     if (funds !== undefined) {
-      setLoading(false);
       if (showBy === "all") {
         addUtAllFunds(funds);
       } else {

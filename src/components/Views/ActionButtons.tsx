@@ -41,26 +41,26 @@ export const ActionButtons = ({
   return (
     <View style={{ ...flexRow, ...buttonContainerStyle }}>
       {handleCancel !== undefined ? (
-        <RoundedButton
-          buttonStyle={cancelButtonStyle}
-          disabled={cancelDisabled}
-          onPress={handleCancel}
-          secondary={true}
-          text={buttonCancel}
-          textStyle={cancelTextStyle}
-        />
+        <Fragment>
+          <RoundedButton
+            buttonStyle={cancelButtonStyle}
+            disabled={cancelDisabled}
+            onPress={handleCancel}
+            secondary={true}
+            text={buttonCancel}
+            textStyle={cancelTextStyle}
+          />
+          <CustomSpacer isHorizontal={true} space={sw16} />
+        </Fragment>
       ) : null}
       {handleContinue !== undefined ? (
-        <Fragment>
-          <CustomSpacer isHorizontal={true} space={sw16} />
-          <RoundedButton
-            buttonStyle={continueButtonStyle}
-            disabled={continueDisabled}
-            onPress={handleContinue}
-            text={buttonContinue}
-            textStyle={continueTextStyle}
-          />
-        </Fragment>
+        <RoundedButton
+          buttonStyle={continueButtonStyle}
+          disabled={continueDisabled}
+          onPress={handleContinue}
+          text={buttonContinue}
+          textStyle={continueTextStyle}
+        />
       ) : null}
     </View>
   );

@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
@@ -10,6 +10,7 @@ import {
   flexRow,
   fs12BoldBlack2,
   fs12RegBlack2,
+  fs12RegGray7,
   fs14BoldBlack2,
   fs14RegBlack2,
   fs14RegGray7,
@@ -35,6 +36,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   activeContent,
   activeSection,
   disableNextSteps,
+  disabledSteps,
   handleContentChange,
   handleBackToDashboard,
   RenderContent,
@@ -61,24 +63,31 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
     const textStyle: TextStyle = isActive ? { ...activeTextStyle, width: sw120 } : { ...fs14RegGray7, width: sw120 };
 
     const handleChange = () => {
-      if (finishedSteps!.indexOf(step.route!) !== -1) {
-        setSections([stepIndex]);
+      if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {
+        return null;
       }
+      if (finishedSteps !== undefined && finishedSteps.indexOf(step.key!) !== -1) {
+        return setSections([stepIndex]);
+      }
+      return null;
     };
 
-    const pointerEvents = disableNextSteps === true ? undefined : "none";
+    const pointerEvents =
+      disableNextSteps === true || (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) ? undefined : "none";
 
     return (
-      <Fragment>
-        {stepIndex === 0 ? null : <CustomSpacer space={sh32} />}
+      <View>
         <TouchableWithoutFeedback onPress={handleChange}>
-          <View pointerEvents={pointerEvents} style={flexRow}>
-            <Step active={isActive} step={currentStep} visited={visited} />
-            <CustomSpacer isHorizontal={true} space={sw8} />
-            <Text style={textStyle}>{step.label}</Text>
+          <View pointerEvents={pointerEvents}>
+            {stepIndex === 0 ? null : <CustomSpacer space={sh32} />}
+            <View style={flexRow}>
+              <Step active={isActive} step={currentStep} visited={visited} />
+              <CustomSpacer isHorizontal={true} space={sw8} />
+              <Text style={textStyle}>{step.label}</Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
-      </Fragment>
+      </View>
     );
   };
 
@@ -97,8 +106,10 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
               handleContentChange(item);
             };
             const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
-            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : fs12RegBlack2;
-            const onPress = disableNextSteps === true ? undefined : handleNavigateToContent;
+            const disabledContent = disabledSteps !== undefined && disabledSteps.includes(item.key) === true;
+            const defaultTextStyle = disabledContent === true ? fs12RegGray7 : fs12RegBlack2;
+            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : defaultTextStyle;
+            const onPress = disabledContent === true ? undefined : handleNavigateToContent;
 
             return (
               <TouchableWithoutFeedback key={index} onPress={onPress}>

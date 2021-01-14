@@ -4,7 +4,7 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
-import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../../constants";
+import { Language, ONBOARDING_ROUTES } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS, OPTIONS_FATCA_NO_CERTIFICATE } from "../../../../data/dictionary";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
@@ -19,13 +19,14 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   accountType,
   details,
   addOrders,
-  finishedSteps,
   handleNextStep,
   investmentDetails,
+  onboarding,
   personalInfo,
   setLoading,
-  updateFinishedSteps,
+  updateOnboarding,
 }: DeclarationSummaryProps) => {
+  const { finishedSteps } = onboarding;
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
 
@@ -263,9 +264,18 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         // eslint-disable-next-line no-console
         console.log("data", data);
         addOrders(data.result);
-        const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
-        updatedSteps.push(ONBOARDING_KEYS.Declarations);
-        updateFinishedSteps(updatedSteps);
+        const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+        updatedFinishedSteps.push("Declarations");
+        const newDisabledStep: TypeOnboardingKey[] = [
+          "RiskAssessment",
+          "Products",
+          "PersonalInformation",
+          "Declarations",
+          "TermsAndConditions",
+          "Signatures",
+          "Payment",
+        ];
+        updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
         return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
       }
 

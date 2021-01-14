@@ -17,7 +17,9 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   accountType,
   addPersonalInfo,
   handleNextStep,
+  onboarding,
   personalInfo,
+  updateOnboarding,
 }: FatcaDeclarationProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
@@ -40,6 +42,10 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
 
   const handleContinue = () => {
     const route: TypeOnboardingRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
+    updatedDisabledSteps.splice(findCrs, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);
   };
 

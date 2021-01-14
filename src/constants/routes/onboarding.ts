@@ -15,11 +15,24 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   Signatures: "Signatures",
   TermsAndConditions: "TermsAndConditions",
 };
+
 export const ONBOARDING_KEYS: IOnboardingKeys = {
-  Acknowledgement: "Acknowledgement",
-  Declarations: "Declarations",
-  PersonalInformation: "PersonalInformation",
-  Products: "Products",
   RiskAssessment: "RiskAssessment",
+  Products: "Products",
+  PersonalInformation: "PersonalInformation",
+  EmailVerification: "EmailVerification",
+  IdentityVerification: "IdentityVerification",
+  PersonalDetails: "PersonalDetails",
+  EmploymentDetails: "EmploymentDetails",
+  PersonalInfoSummary: "PersonalInfoSummary",
+  Declarations: "Declarations",
+  FATCADeclaration: "FATCADeclaration",
+  FEADeclaration: "FEADeclaration",
+  CRSDeclaration: "CRSDeclaration",
+  DeclarationSummary: "DeclarationSummary",
+  Acknowledgement: "Acknowledgement",
+  OrderSummary: "OrderSummary",
+  TermsAndConditions: "TermsAndConditions",
+  Signatures: "Signatures",
   Payment: "Payment",
 };

@@ -58,7 +58,13 @@ export const NonTaxResident: FunctionComponent<NonTaxResidentProps> = ({
       <CustomSpacer space={sh24} />
       <CustomTextInput label={DECLARATIONS.LABEL_TIN} onChangeText={handleTinNumber} value={tinNumber} disabled={country === ""} />
       <CustomSpacer space={sh20} />
-      <CheckBox toggle={noTin} onPress={handleNoTin} label={DECLARATIONS.LABEL_NO_TIN} labelStyle={fs12BoldBlack2} />
+      <CheckBox
+        disabled={country === ""}
+        toggle={noTin}
+        onPress={handleNoTin}
+        label={DECLARATIONS.LABEL_NO_TIN}
+        labelStyle={fs12BoldBlack2}
+      />
       {noTin === true ? (
         <Fragment>
           <CustomSpacer space={sh32} />

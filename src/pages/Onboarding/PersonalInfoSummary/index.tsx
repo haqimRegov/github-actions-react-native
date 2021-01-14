@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { connect } from "react-redux";
 
 import { ContentPage, LabeledTitleProps } from "../../../components";
-import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
+import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { Joint } from "./Joint";
 import { SummaryJointDetails } from "./JointDetails";
@@ -14,17 +14,21 @@ interface PersonalInfoSummaryProps extends PersonalInfoStoreProps, OnboardingCon
 
 const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> = ({
   accountType,
-  finishedSteps,
   handleNextStep,
   personalInfo,
-  updateFinishedSteps,
+  onboarding,
+  updateOnboarding,
 }: PersonalInfoSummaryProps) => {
+  const { disabledSteps, finishedSteps } = onboarding;
   const { principal, joint } = personalInfo;
   const handleContinue = () => {
     handleNextStep(ONBOARDING_ROUTES.FATCADeclaration);
-    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_KEYS.PersonalInformation);
-    updateFinishedSteps(updatedSteps);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    updatedFinishedSteps.push("PersonalInformation");
+    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
+    updatedDisabledSteps.splice(findDeclarations, 1);
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
   const jointDetails: LabeledTitleProps[] = [

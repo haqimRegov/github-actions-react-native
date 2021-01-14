@@ -24,6 +24,10 @@ export const resetPaymentSummary = () => {
   return typedAction("acknowledgement/RESET_PAYMENT_SUMMARY");
 };
 
+export const resetAcknowledgement = () => {
+  return typedAction("acknowledgement/RESET_ACKNOWLEDGEMENT");
+};
+
 export type AcknowledgementAction = ReturnType<
   | typeof addOrders
   | typeof resetOrders
@@ -31,6 +35,7 @@ export type AcknowledgementAction = ReturnType<
   | typeof resetReceipts
   | typeof updatePaymentSummary
   | typeof resetPaymentSummary
+  | typeof resetAcknowledgement
 >;
 
 export const AcknowledgementActionProps = {
@@ -40,6 +45,7 @@ export const AcknowledgementActionProps = {
   resetReceipts,
   updatePaymentSummary,
   resetPaymentSummary,
+  resetAcknowledgement,
 };
 
 export type AcknowledgementActionTypes = typeof AcknowledgementActionProps;

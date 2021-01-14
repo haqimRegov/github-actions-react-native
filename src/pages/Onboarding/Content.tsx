@@ -27,6 +27,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
   const newProps = {
     ...props,
     handleCancelOnboarding: handleCancelOnboarding,
+    handleResetOnboarding: handleResetOnboarding,
   };
 
   let content: JSX.Element = <View />;

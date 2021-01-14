@@ -1,48 +1,26 @@
-import React from "react";
+import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { NewSignatures } from "./NewIndex";
+import { flexChild } from "../../../../styles";
+import { EditPdf } from "./EditPDF";
+import { PDFList } from "./PDFList";
 
-interface SignaturesProps extends AcknowledgementStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
-}
+interface SignaturesProps extends AcknowledgementStoreProps, OnboardingContentProps {}
 
-// const initialData = {
-//   pdf: {
-//     name: "",
-//     type: "",
-//   },
-//   index: 0,
-// };
+export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({ handleNextStep, handleResetOnboarding }: SignaturesProps) => {
+  const [editReceipt, setEditReceipt] = useState<IOnboardingReceiptState | undefined>(undefined);
 
-export const SignaturesComponent = ({ handleNextStep }: SignaturesProps) => {
-  // const [page, setPage] = useState<number>(1);
-  // const [initialPdfArray, setInitialPdfArray] = useState<FileBase64[]>([]);
-  // const [pdfList, setPdfList] = useState<PdfWithSignature[]>([]);
-  // const [currentPdf, setCurrentPdf] = useState<PdfWithIndex>(initialData);
-  // const props = {
-  //   handleNextStep: handleNextStep,
-  //   setPage: setPage,
-  //   currentPdf: currentPdf,
-  //   initialPdfArray: initialPdfArray,
-  //   setInitialPdfArray: setInitialPdfArray,
-  //   setCurrentPdf: setCurrentPdf,
-  //   pdfList: pdfList,
-  //   setPdfList: setPdfList,
-  // };
-  // let content: JSX.Element = <View />;
-  // switch (page) {
-  //   case 1:
-  //     content = <PDFList {...props} />;
-  //     break;
-  //   case 2:
-  //     content = <EditPdf {...props} />;
-  //     break;
-  //   default:
-  //     content = <PDFList {...props} />;
-  // }
-  return <NewSignatures handleNextStep={handleNextStep} />;
+  return (
+    <View style={flexChild}>
+      {editReceipt === undefined ? (
+        <PDFList handleNextStep={handleNextStep} handleResetOnboarding={handleResetOnboarding} setEditReceipt={setEditReceipt} />
+      ) : (
+        <EditPdf handleNextStep={handleNextStep} setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
+      )}
+    </View>
+  );
 };
 
 export const Signatures = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(SignaturesComponent);

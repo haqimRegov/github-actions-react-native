@@ -17,7 +17,9 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
   accountType,
   addPersonalInfo,
   handleNextStep,
+  onboarding,
   personalInfo,
+  updateOnboarding,
 }: FeaDeclarationProps) => {
   const { principal, joint } = personalInfo;
   const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
@@ -39,10 +41,14 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
   const handleContinue = () => {
     // TODO handle if FEA
     const isFea = true;
-    handleNextStep("DeclarationSummary");
     if (isFea === true && personalInfo.editDeclaration === false) {
       addPersonalInfo({ ...personalInfo, editDeclaration: true });
     }
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+    updatedDisabledSteps.splice(findDeclarationSummary, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    handleNextStep("DeclarationSummary");
   };
 
   const handleRead = () => {

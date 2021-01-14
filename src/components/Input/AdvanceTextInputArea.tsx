@@ -46,9 +46,7 @@ export const AdvanceTextInputArea: FunctionComponent<AdvanceTextInputAreaProps> 
       setShowCheck(true);
       handleContinue(input);
       setTimeout(() => {
-        if (showCheck === true) {
-          setShowCheck(false);
-        }
+        setShowCheck(false);
       }, 1000);
     }
   };

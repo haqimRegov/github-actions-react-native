@@ -8,6 +8,16 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
         ...state,
         finishedSteps: [...action.payload],
       };
+    case "onboarding/UPDATE_DISABLED_STEPS":
+      return {
+        ...state,
+        disabledSteps: [...action.payload],
+      };
+    case "onboarding/UPDATE_ONBOARDING":
+      return {
+        ...state,
+        ...action.payload,
+      };
 
     case "onboarding/RESET_STEPS":
       return {

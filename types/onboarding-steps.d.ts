@@ -1,11 +1,12 @@
 declare interface IContentItem {
   route: TypeOnboardingRoute;
   title: string;
+  key: TypeOnboardingKey;
 }
 
 declare interface IOnboarding {
   content?: IContentItem[];
-  key: string;
+  key: TypeOnboardingKey;
   label: string;
   route?: TypeOnboardingRoute;
 }
@@ -13,7 +14,7 @@ declare interface IOnboarding {
 declare interface OnboardingContentProps {
   cancelOnboarding?: boolean;
   handleCancelOnboarding?: () => void;
-  handleResetOnboarding?: () => void;
+  handleResetOnboarding: () => void;
   handleNextStep: (route: TypeOnboardingRoute) => void;
 }
 
@@ -25,6 +26,7 @@ declare interface OnboardingStepsProps {
   activeContent?: IContentItem | IOnboarding;
   activeSection: number;
   disableNextSteps?: boolean;
+  disabledSteps?: TypeOnboardingKey[];
   finishedSteps?: TypeOnboardingKey[];
   handleContentChange: (item: IContentItem | IOnboarding) => void;
   handleBackToDashboard: () => void;
@@ -52,7 +54,25 @@ declare type TypeOnboardingRoute =
   | "Signatures"
   | "TermsAndConditions";
 
-declare type TypeOnboardingKey = "Acknowledgement" | "Declarations" | "PersonalInformation" | "Products" | "RiskAssessment" | "Payment";
+declare type TypeOnboardingKey =
+  | "RiskAssessment"
+  | "Products"
+  | "PersonalInformation"
+  | "EmailVerification"
+  | "IdentityVerification"
+  | "PersonalDetails"
+  | "EmploymentDetails"
+  | "PersonalInfoSummary"
+  | "Declarations"
+  | "FATCADeclaration"
+  | "FEADeclaration"
+  | "CRSDeclaration"
+  | "DeclarationSummary"
+  | "Acknowledgement"
+  | "OrderSummary"
+  | "TermsAndConditions"
+  | "Signatures"
+  | "Payment";
 
 declare interface IOnboardingRoutes {
   CRSDeclaration: TypeOnboardingRoute;
@@ -71,12 +91,23 @@ declare interface IOnboardingRoutes {
   Signatures: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
 }
-
 declare interface IOnboardingKeys {
-  Acknowledgement: TypeOnboardingKey;
-  Declarations: TypeOnboardingKey;
-  PersonalInformation: TypeOnboardingKey;
-  Products: TypeOnboardingKey;
   RiskAssessment: TypeOnboardingKey;
+  Products: TypeOnboardingKey;
+  PersonalInformation: TypeOnboardingKey;
+  EmailVerification: TypeOnboardingKey;
+  IdentityVerification: TypeOnboardingKey;
+  PersonalDetails: TypeOnboardingKey;
+  EmploymentDetails: TypeOnboardingKey;
+  PersonalInfoSummary: TypeOnboardingKey;
+  Declarations: TypeOnboardingKey;
+  FATCADeclaration: TypeOnboardingKey;
+  FEADeclaration: TypeOnboardingKey;
+  CRSDeclaration: TypeOnboardingKey;
+  DeclarationSummary: TypeOnboardingKey;
+  Acknowledgement: TypeOnboardingKey;
+  OrderSummary: TypeOnboardingKey;
+  TermsAndConditions: TypeOnboardingKey;
+  Signatures: TypeOnboardingKey;
   Payment: TypeOnboardingKey;
 }

@@ -3,7 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, CustomTooltip } from "../../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../../constants";
+import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import {
@@ -38,11 +38,20 @@ interface OrderSummaryProps extends AcknowledgementStoreProps {
 
 const { ORDER_SUMMARY } = Language.PAGE;
 
-const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({ handleNextStep, orders }: OrderSummaryProps) => {
+const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
+  handleNextStep,
+  orders,
+  onboarding,
+  updateOnboarding,
+}: OrderSummaryProps) => {
   const [expandOrder, setExpandOrder] = useState<number | undefined>(0);
 
   const handleConfirm = () => {
-    handleNextStep(ONBOARDING_ROUTES.TermsAndConditions);
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findTermsAndConditions = updatedDisabledSteps.indexOf("TermsAndConditions");
+    updatedDisabledSteps.splice(findTermsAndConditions, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    handleNextStep("TermsAndConditions");
   };
 
   const popupContent = (

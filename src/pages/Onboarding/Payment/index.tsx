@@ -31,14 +31,13 @@ import { PaymentOrder } from "./PaymentOrder";
 import { PaymentStatus } from "./PaymentStatus";
 
 const { PAYMENT } = Language.PAGE;
-interface PaymentProps extends AcknowledgementStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
-}
+interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {}
 
 const PaymentComponent: FunctionComponent<PaymentProps> = ({
   accountType,
   details,
   orders,
+  handleResetOnboarding,
   paymentSummary,
   setLoading,
   updatePaymentSummary,
@@ -219,7 +218,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           label={bannerText}
         />
       )}
-      <PaymentStatus result={paymentResult} setPaymentResult={setPaymentResult} />
+      <PaymentStatus handleResetOnboarding={handleResetOnboarding} result={paymentResult} setPaymentResult={setPaymentResult} />
     </SafeAreaPage>
   );
 };

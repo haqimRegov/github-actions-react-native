@@ -8,6 +8,7 @@ import { RiskAssessmentActionProps } from "./actions";
 
 export const RiskMapStateToProps = (state: RootState) => ({
   finishedSteps: state.onboarding.finishedSteps,
+  onboarding: state.onboarding,
   principalHolder: state.client.details?.principalHolder,
   questionnaire: state.riskAssessment.questionnaire,
   riskScore: state.riskAssessment.riskScore,

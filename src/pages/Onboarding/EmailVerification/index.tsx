@@ -18,9 +18,11 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   accountType,
   addPersonalInfo,
   details,
+  onboarding,
   handleNextStep,
   personalInfo,
   setLoading,
+  updateOnboarding,
 }: EmailVerificationProps) => {
   const { emailOtpSent } = personalInfo;
   const [page, setPage] = useState<"verification" | "otp">("verification");
@@ -34,6 +36,11 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 
   const handleNavigate = () => {
     handleNextStep("IdentityVerification");
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findIdVerification = updatedDisabledSteps.indexOf("IdentityVerification");
+    updatedDisabledSteps.splice(findIdVerification, 1);
+    updatedDisabledSteps.push("EmailVerification");
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
   };
 
   const handleEmailVerification = async () => {

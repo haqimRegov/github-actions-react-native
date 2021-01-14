@@ -3,7 +3,7 @@ import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, RadioButtonGroup, SelectionBanner } from "../../../components";
-import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../constants";
+import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1 } from "../../../mocks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
@@ -21,15 +21,17 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addPersonalInfo,
   addSelectedFund,
   addViewFund,
-  finishedSteps,
   handleNextStep,
   investmentDetails,
+  onboarding,
   resetProducts,
+  resetSelectedFund,
   riskProfile,
   selectedFunds,
-  updateFinishedSteps,
+  updateOnboarding,
   viewFund,
 }: ProductsProps) => {
+  const { disabledSteps, finishedSteps } = onboarding;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [outsideRisk, setOutsideRisk] = useState<number>(0);
@@ -41,6 +43,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     setPrompt(undefined);
     handleNextStep("RiskAssessment");
     resetProducts();
+    resetSelectedFund();
   };
 
   const handleCancel = () => {
@@ -126,9 +129,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       addPersonalInfo({ epfInvestment: true });
     }
     handleNextStep(ONBOARDING_ROUTES.EmailVerification);
-    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_KEYS.Products);
-    updateFinishedSteps(updatedSteps);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    updatedFinishedSteps.push("Products");
+    const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
+    updatedDisabledSteps.splice(findPersonalInfo, 1);
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
   const handleShareDocuments = async () => {
@@ -143,7 +149,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   let screen = {
     content: <ProductList handleCancelProducts={handleCancelProducts} handleShareDocuments={handleShareDocuments} />,
-    onPressCancel: handleCancel,
+    onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
     labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
   };

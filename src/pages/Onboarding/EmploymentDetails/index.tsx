@@ -14,7 +14,9 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   accountType,
   addPersonalInfo,
   handleNextStep,
+  onboarding,
   personalInfo,
+  updateOnboarding,
 }: EmploymentDetailsProps) => {
   const { joint, principal } = personalInfo;
 
@@ -40,6 +42,10 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
 
   const handleSubmit = () => {
     addPersonalInfo({ ...personalInfo, editPersonal: true });
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+    updatedDisabledSteps.splice(findInfoSummary, 1);
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("PersonalInfoSummary");
   };
 

@@ -1,6 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
-import { Buffer } from "buffer";
-import { PDFDocument } from "pdf-lib";
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
@@ -8,236 +6,233 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/LocalAssets";
 import { ContentPage, CustomSpacer, PromptModal } from "../../../../components";
 import { PdfEditWithModal } from "../../../../components/PdfEdit";
-import { ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../../../constants";
+import { ONBOARDING_ROUTES } from "../../../../constants";
 import { Language } from "../../../../constants/language";
-import { SAMPLE_PDFS } from "../../../../mocks";
-import { generatePdf, getReceiptSummaryList } from "../../../../network-actions";
+import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import { centerVertical, fs12RegBlack2, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
-import { GetEmbeddedBase64 } from "../../../../utils";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
-const initialData: PdfWithSignature = {
-  adviserSignature: "",
-  principalSignature: "",
-  orderNo: "",
-  pdf: {
-    name: "",
-    type: "",
-  },
-};
-
-export interface PDFListProps extends AcknowledgementStoreProps {
-  currentPdf: PdfWithIndex;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
-  initialPdfArray: FileBase64[];
-  pdfList: PdfWithSignature[];
-  setCurrentPdf: (pdf: PdfWithIndex) => void;
-  setInitialPdfArray: (data: FileBase64[]) => void;
-  setPage: (page: number) => void;
-  setPdfList: (data: PdfWithSignature[]) => void;
+export interface PDFListProps extends AcknowledgementStoreProps, OnboardingContentProps {
+  setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 
-export const PDFListComponent: FunctionComponent<PDFListProps> = ({
+const PDFListComponent: FunctionComponent<PDFListProps> = ({
   accountType,
+  details,
   finishedSteps,
   handleNextStep,
-  initialPdfArray,
-  pdfList,
-  // setCurrentPdf,
-  setInitialPdfArray,
-  // setPage,
-  setPdfList,
-  updateFinishedSteps,
+  handleResetOnboarding,
+  onboarding,
+  receipts,
+  setEditReceipt,
+  setLoading,
+  updateOnboarding,
+  updateReceipts,
 }: PDFListProps) => {
-  const navigation = useNavigation();
+  const { clientId } = details!.principalHolder!;
   const [showPrompt, setShowPrompt] = useState(false);
-  const handleCancel = () => {
-    Alert.alert("Cancel");
-  };
 
   const handleSubmit = async () => {
-    const pdfSubmission: PdfWithSignature[] = [];
-    pdfList.map(async (pdf: PdfWithSignature) => {
-      const dataUri = GetEmbeddedBase64(pdf.pdf);
-      const loadPdf = await PDFDocument.load(dataUri);
-      const pages = loadPdf.getPages();
-      const lastPagePdf = await PDFDocument.create();
-      const [last] = await lastPagePdf.copyPages(loadPdf, [pages.length - 1]);
-      lastPagePdf.addPage(last);
-      const pdfBytes = await lastPagePdf.save();
-      const pdfBase64 = Buffer.from(pdfBytes).toString("base64");
-      const pdfLastPage: FileBase64 = {
-        ...pdf.pdf,
-        base64: pdfBase64,
+    setLoading(true);
+    const documents: ISubmitPdfDocument[] = receipts!.map((receipt) => {
+      return {
+        adviserSignature: receipt.adviserSignature!,
+        clientSignature: receipt.principalSignature!,
+        jointSignature: receipt.jointSignature,
+        orderNumber: receipt.orderNumber!,
+        pdf: receipt.signedPdf!,
       };
-      const pdfWithSignature = {
-        ...pdf,
-        pdf: pdfLastPage,
-      };
-      pdfSubmission.push(pdfWithSignature);
     });
-    setShowPrompt(true);
+    const req: ISubmitPdfRequest = {
+      clientId: clientId!,
+      documents: documents,
+    };
+    // eslint-disable-next-line no-console
+    console.log("req", req);
+    const submitPdfResponse: ISubmitPdfResponse = await submitPdf(req);
+    setLoading(false);
+    // eslint-disable-next-line no-console
+    console.log("submitPdfResponse", submitPdfResponse);
+    if (submitPdfResponse !== undefined) {
+      const { data, error } = submitPdfResponse;
+      if (error === null && data !== null) {
+        setShowPrompt(true);
+      }
+      if (error !== null) {
+        Alert.alert(error.message);
+      }
+    }
+    return undefined;
   };
 
-  const handleBackToDashboard = () => {
-    navigation.navigate("Dashboard");
+  const handleBack = () => {
+    handleNextStep("TermsAndConditions");
   };
 
   const handleContinue = () => {
     handleNextStep(ONBOARDING_ROUTES.Payment);
-    const updatedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    updatedSteps.push(ONBOARDING_KEYS.Acknowledgement);
-    updateFinishedSteps(updatedSteps);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    updatedFinishedSteps.push("Acknowledgement");
+    const newDisabledStep: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
   };
-  const sampleClientId = "fd3d5170-4d87-11eb-aae3-1d7b69c64445";
+
   const getReceiptSummary = async () => {
+    setLoading(true);
     const req = {
-      clientId: sampleClientId,
+      clientId: clientId!,
     };
     // eslint-disable-next-line no-console
-    console.log("request", req);
+    console.log("getReceiptSummaryList request", req);
     const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(req);
+    setLoading(false);
     // eslint-disable-next-line no-console
-    console.log("summary", summary);
+    console.log("getReceiptSummaryList", summary);
     if (summary !== undefined) {
       const { data, error } = summary;
       if (error === null && data !== null) {
-        // setErrorMessage(undefined);
-        // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+        updateReceipts(data.result.orders);
       }
-      // if (error !== null) {
-      //   if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
-      //     return setPrompt("ageMinimum");
-      //   }
-      //   if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
-      //     return setPrompt("ageMaximum");
-      //   }
-      //   return setErrorMessage(error.message);
-      // }
+      if (error !== null) {
+        Alert.alert(error.message);
+      }
     }
     return undefined;
   };
 
   useEffect(() => {
-    if (initialPdfArray.length === 0) {
+    if (receipts === undefined || receipts.length === 0) {
       getReceiptSummary();
     }
-    setInitialPdfArray(SAMPLE_PDFS);
-    const initialDataArray: PdfWithSignature[] = [];
-    if (pdfList.length === 0) {
-      SAMPLE_PDFS.map((pdf, index) => {
-        let active: boolean = false;
-        if (index === 0) {
-          active = true;
-        }
-        const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
-        return initialDataArray.push({ ...initialData, pdf: pdf, active: active, ...jointInitial });
-      });
-      setPdfList(initialDataArray);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pdfList, setInitialPdfArray, setPdfList, accountType]);
+  }, []);
 
-  const buttonDisabled =
-    pdfList !== [] &&
-    pdfList
-      .map(({ pdf, principalSignature, adviserSignature, jointSignature }) => {
-        const accountTypeCheck = accountType === "Joint" ? jointSignature !== "" : true;
-        return pdf.base64 !== "" && principalSignature !== "" && adviserSignature !== "" && accountTypeCheck;
-      })
-      .includes(false);
+  const incompleteIndex = receipts !== undefined ? receipts.findIndex((receipt) => receipt.completed !== true) : 0;
+  const buttonDisabled = incompleteIndex !== -1;
 
   return (
     <Fragment>
       <ContentPage
         continueDisabled={buttonDisabled}
-        handleCancel={handleCancel}
+        handleCancel={handleBack}
         handleContinue={handleSubmit}
         labelContinue={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
         subheading={TERMS_AND_CONDITIONS.HEADING}
-        subtitle={TERMS_AND_CONDITIONS.SUBTITLE}
-        spaceToBottom={sh24}>
+        subtitle={TERMS_AND_CONDITIONS.SUBTITLE}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
-          {initialPdfArray !== undefined
-            ? initialPdfArray.map((pdf, index) => {
-                const { adviserSignature, principalSignature, jointSignature } = pdfList[index];
-                const value = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
-                const completed =
-                  accountType === "Individual"
-                    ? adviserSignature !== "" && principalSignature !== ""
-                    : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
+          {receipts !== undefined &&
+            receipts.map((receipt: IOnboardingReceiptState, index: number) => {
+              const handleGetPDF = async () => {
+                setLoading(true);
+                const req = {
+                  clientId: clientId!,
+                  orderNo: receipt.orderNumber!,
+                };
+                // eslint-disable-next-line no-console
+                console.log("generatePdf request", req);
+                const onboardingReceipt: IGeneratePdfResponse = await generatePdf(req);
+                setLoading(false);
+                // eslint-disable-next-line no-console
+                console.log("generatePdf", onboardingReceipt);
+                if (onboardingReceipt !== undefined) {
+                  const { data, error } = onboardingReceipt;
+                  if (error === null && data !== null) {
+                    // setErrorMessage(undefined);
+                    const updatedReceipts = [...receipts];
 
-                const handleGetPDF = async () => {
-                  const req = {
-                    clientId: sampleClientId,
-                    orderNo: "21AA0028",
-                  };
-                  const onboardingReceipt: IGeneratePdfResponse = await generatePdf(req);
-                  // eslint-disable-next-line no-console
-                  console.log("onboardingReceipt", onboardingReceipt);
-                  if (onboardingReceipt !== undefined) {
-                    const { data, error } = onboardingReceipt;
-                    if (error === null && data !== null) {
-                      // setErrorMessage(undefined);
-                      // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
-                    }
-                    // if (error !== null) {
-                    //   if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
-                    //     return setPrompt("ageMinimum");
-                    //   }
-                    //   if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
-                    //     return setPrompt("ageMaximum");
-                    //   }
-                    //   return setErrorMessage(error.message);
-                    // }
+                    const newReceipt: IOnboardingReceiptState = {
+                      ...updatedReceipts[index],
+                      pdf: {
+                        base64: data.result.pdf.base64,
+                        date: `${moment().valueOf()}`,
+                        name: updatedReceipts[index].name!,
+                        type: "application/pdf",
+                      },
+                      signedPdf: {
+                        base64: data.result.pdf.base64,
+                        date: `${moment().valueOf()}`,
+                        name: updatedReceipts[index].name!,
+                        type: "application/pdf",
+                      },
+                      url: data.result.pdf.url,
+                      urlPageCount: data.result.pdf.urlPageCount,
+                    };
+                    updatedReceipts[index] = newReceipt;
+                    updateReceipts(updatedReceipts);
+                    setEditReceipt(newReceipt);
+                    // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
                   }
-                  return undefined;
-                };
-                const handleEdit = () => {
+                  if (error !== null) {
+                    Alert.alert(error.message);
+                  }
+                }
+                // return undefined;
+              };
+              const handleEdit = () => {
+                if (receipt.pdf === undefined) {
                   handleGetPDF();
-                  // const pdfData = pdfList[index].pdf.base64 !== undefined ? pdfList[index].pdf : pdf;
-                  // setCurrentPdf({ pdf: pdfData, index: index });
-                  // setPage(2);
+                } else {
+                  setEditReceipt(receipt);
+                }
+              };
+              const handleRemove = () => {
+                const updatedReceipts = [...receipts];
+                updatedReceipts[index] = {
+                  ...updatedReceipts[index],
+                  signedPdf: updatedReceipts[index].pdf,
+                  adviserSignature: undefined,
+                  principalSignature: undefined,
+                  jointSignature: undefined,
                 };
-                const handleRemove = () => {
-                  const dataClone = [...pdfList];
-                  const jointInitial = accountType === "Joint" ? { jointSignature: "" } : {};
-                  dataClone[index] = { ...initialData, ...jointInitial, pdf: pdf };
-                  setPdfList(dataClone);
-                };
-                const disabledCondition = pdfList[index].active === false;
-                const disabled = index === 0 ? false : disabledCondition;
-                return (
-                  <Fragment key={index}>
-                    <PdfEditWithModal
-                      active={pdfList[index].active}
-                      completed={completed}
-                      completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
-                      disabled={disabled}
-                      label={pdf.name}
-                      onPressEdit={handleEdit}
-                      onPressRemove={handleRemove}
-                      onSuccess={() => {}}
-                      resourceType="base64"
-                      setValue={() => {}}
-                      title={pdf.title}
-                      tooltipLabel={TERMS_AND_CONDITIONS.LABEL_PROCEED}
-                      value={value}
-                    />
-                    <CustomSpacer space={sh8} />
-                  </Fragment>
-                );
-              })
-            : null}
+                updateReceipts(updatedReceipts);
+              };
+
+              const baseSignatureValid =
+                "adviserSignature" in receipt &&
+                receipt.adviserSignature !== undefined &&
+                "principalSignature" in receipt &&
+                receipt.principalSignature !== undefined;
+              const completed =
+                accountType === "Individual"
+                  ? baseSignatureValid
+                  : baseSignatureValid && "jointSignature" in receipt && receipt.jointSignature !== undefined;
+              // const disable = receipt.completed !== true;
+              // const disabled = index === 0 ? false : disabledCondition;
+              const amountTitle = receipt!.orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${totalAmount.amount}`).concat();
+              const epfTitle = receipt!.isEpf === "true" ? "- EPF" : "";
+              const recurringTitle = receipt!.isScheduled === "true" ? "- Recurring" : "";
+              const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
+              return (
+                <Fragment key={index}>
+                  <PdfEditWithModal
+                    active={true}
+                    completed={completed}
+                    completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
+                    disabled={false}
+                    label={receipt.name}
+                    onPressEdit={handleEdit}
+                    onPressRemove={handleRemove}
+                    onSuccess={() => {}}
+                    resourceType="base64"
+                    setValue={() => {}}
+                    title={title}
+                    onPress={handleEdit}
+                    tooltipLabel={TERMS_AND_CONDITIONS.LABEL_PROCEED}
+                    value={receipt.signedPdf}
+                  />
+                  <CustomSpacer space={sh8} />
+                </Fragment>
+              );
+            })}
         </View>
       </ContentPage>
       <PromptModal
         labelCancel={TERMS_AND_CONDITIONS.BUTTON_DASHBOARD}
         labelContinue={TERMS_AND_CONDITIONS.BUTTON_PAY}
-        handleCancel={handleBackToDashboard}
+        handleCancel={handleResetOnboarding}
         handleContinue={handleContinue}
         illustration={LocalAssets.illustration.orderReceived}
         label={TERMS_AND_CONDITIONS.PROMPT_TITLE}

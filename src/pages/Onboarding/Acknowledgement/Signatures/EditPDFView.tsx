@@ -51,14 +51,14 @@ export type Signer = "adviser" | "principal" | "joint" | undefined;
 declare interface PDFViewProps {
   adviserSignature: string;
   completed: boolean;
-  currentPdf: PdfWithIndex;
+  editReceipt: IOnboardingReceiptState | undefined;
   principalSignature: string;
   jointSignature: string;
-  numberOfPdfPages: number;
   showSignPdf: boolean;
   signer: Signer;
   handleScroll: () => void;
   handleBack: () => void;
+  handleSave: () => void;
   handleSignature: (signature: string) => void;
   handleClose: () => void;
   handleConfirm: () => void;
@@ -68,21 +68,22 @@ declare interface PDFViewProps {
 
 export const PdfView: FunctionComponent<PDFViewProps> = ({
   adviserSignature,
-  currentPdf,
+  editReceipt,
   completed,
   principalSignature,
   jointSignature,
-  numberOfPdfPages,
   showSignPdf,
   signer,
   handleScroll,
   handleBack,
+  handleSave,
   handleSignature,
   handleClose,
   handleConfirm,
   handlePosition,
   setScrollRef,
 }: PDFViewProps) => {
+  const { urlPageCount } = editReceipt!;
   let signerLabel = "";
   let signatureToDisplay = "";
 
@@ -105,8 +106,9 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         break;
     }
   }
-  const pdfViewContainer: ViewStyle = { ...px(sw8), width: sw595, height: numberOfPdfPages * sh800 };
-  const pdfContainer: ViewStyle = { height: numberOfPdfPages * sh1600 }; // To display the page number correctly in the viewer
+  const pdfViewContainer: ViewStyle = { ...px(sw8), width: sw595, height: sh800 };
+  const remotePdfViewContainer: ViewStyle = { ...px(sw8), width: sw595, height: parseInt(urlPageCount!, 10) * sh800 };
+  const pdfContainer: ViewStyle = { height: parseInt(urlPageCount!, 10) * sh1600 }; // To display the page number correctly in the viewer
   const toolTipStyle: ViewStyle = { top: sh8, zIndex: 1 };
   const toolTipLabelStyle: ViewStyle = {
     ...centerHV,
@@ -136,14 +138,19 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
                   <View style={{ ...centerVertical, ...flexRow }}>
                     <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} />
                     <CustomSpacer isHorizontal={true} space={sw20} />
-                    <Text style={fs24BoldBlack2}>{currentPdf?.pdf.name}</Text>
+                    <Text style={fs24BoldBlack2}>{editReceipt!.name}</Text>
                   </View>
                 </View>
                 <CustomSpacer space={sh4} />
+                <View style={remotePdfViewContainer}>
+                  <View pointerEvents="none">
+                    <PDFView style={pdfContainer} resource={editReceipt!.url!} resourceType="url" />
+                  </View>
+                </View>
                 <TouchableWithoutFeedback onPress={handlePosition}>
                   <View style={pdfViewContainer}>
                     <View pointerEvents="none">
-                      <PDFView fadeInDuration={350} style={pdfContainer} resource={currentPdf.pdf.base64!} resourceType="base64" />
+                      <PDFView style={{ height: sh800 }} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
@@ -153,13 +160,13 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
             {completed === true ? (
               <View style={px(sw20)}>
                 <CustomSpacer space={sh24} />
-                <RoundedButton onPress={handleBack} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
+                <RoundedButton onPress={handleSave} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
                 <CustomSpacer space={sh56} />
               </View>
             ) : null}
           </View>
         </ScrollView>
-        {completed === false ? (
+        {completed === true ? null : (
           <TouchableWithoutFeedback onPress={handleScroll}>
             <View style={{ ...absolutePosition, right: sw40, top: sh120 }}>
               <View style={toolTipStyle}>
@@ -182,7 +189,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
               />
             </View>
           </TouchableWithoutFeedback>
-        ) : null}
+        )}
       </View>
       <SignatureModal
         handleClose={handleClose}

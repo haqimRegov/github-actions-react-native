@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { Base64 } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { ReactFileSystem } from "../../../../integrations/file-system/functions";
-import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps } from "../../../../store";
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import {
   sh100,
   sh12,
@@ -21,7 +21,6 @@ import {
   sh300,
   sh370,
   sh40,
-  sh800,
   sh90,
   sw180,
   sw20,
@@ -31,9 +30,8 @@ import {
   sw275,
   sw470,
 } from "../../../../styles";
-import { GetEmbeddedBase64 } from "../../../../utils";
+import { GetBase64String, GetEmbeddedBase64 } from "../../../../utils";
 import { PdfView, Signer } from "./EditPDFView";
-import { PDFListProps } from "./PDFList";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -43,25 +41,36 @@ const signPosition = {
   joint: { x: sw20, y: sh300 },
 };
 
-export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
+interface EditPdfProps extends AcknowledgementStoreProps {
+  editReceipt: IOnboardingReceiptState | undefined;
+  handleNextStep: (route: TypeOnboardingRoute) => void;
+  setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
+}
+
+const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   accountType,
-  currentPdf,
-  pdfList,
-  setCurrentPdf,
-  setPage,
-  setPdfList,
-}: PDFListProps) => {
-  const [adviserSignature, setAdviserSignature] = useState<string>("");
-  const [principalSignature, setPrincipalSignature] = useState<string>("");
-  const [jointSignature, setJointSignature] = useState<string>("");
-  const [numberOfPdfPages, setNumberOfPdfPages] = useState<number>(1);
+  editReceipt,
+  receipts,
+  setEditReceipt,
+  updateReceipts,
+}: EditPdfProps) => {
+  const [adviserSignature, setAdviserSignature] = useState<string>(
+    editReceipt!.adviserSignature !== undefined ? editReceipt!.adviserSignature!.base64! : "",
+  );
+  const [principalSignature, setPrincipalSignature] = useState<string>(
+    editReceipt!.principalSignature !== undefined ? editReceipt!.principalSignature!.base64! : "",
+  );
+  const [jointSignature, setJointSignature] = useState<string>(
+    editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature!.base64! : "",
+  );
+
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
 
   const modifyPdf = async (value: string) => {
-    if (value !== "" && currentPdf !== undefined && signer !== undefined) {
-      const dataUri = GetEmbeddedBase64(currentPdf.pdf);
+    if (value !== "" && editReceipt !== undefined && signer !== undefined) {
+      const dataUri = GetEmbeddedBase64(editReceipt.signedPdf!);
       const loadPdf = await PDFDocument.load(dataUri);
       const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
       loadPdf.registerFontkit(fontkit);
@@ -70,7 +79,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
       const whiteImage = await loadPdf.embedPng(Base64.background.white);
       const signatureImage = await loadPdf.embedPng(value);
       const pages = loadPdf.getPages();
-      const selectedPage = pages[numberOfPdfPages - 1];
+      const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
       const whiteBGConfig = {
         height: sh40,
@@ -144,13 +153,14 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
       }
       const pdfBytes = await loadPdf.save();
       const pdfBase64 = Buffer.from(pdfBytes).toString("base64");
-      const selectedPdf = {
+      const selectedPdf: FileBase64 = {
         base64: pdfBase64,
-        date: moment().toString(),
-        name: currentPdf.pdf.name,
+        date: `${moment().valueOf()}`,
+        name: editReceipt.name!,
         type: "application/pdf",
       };
-      setCurrentPdf({ ...currentPdf, pdf: selectedPdf });
+
+      setEditReceipt({ ...editReceipt, signedPdf: selectedPdf });
     }
   };
 
@@ -176,38 +186,11 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
 
   const handlePosition = (e: GestureResponderEvent) => {
     const { locationY, locationX } = e.nativeEvent;
-    const positionY = locationY - (numberOfPdfPages - 1) * sh800;
-    calculatePosition(locationX, positionY);
+    calculatePosition(locationX, locationY);
   };
 
   const handleBack = async () => {
-    const orderNo = currentPdf.pdf.name.slice(0, -4);
-    const accountTypeCheck = accountType === "Joint" ? jointSignature !== "" : true;
-    const newData: PdfWithSignature = {
-      orderNo: orderNo,
-      pdf: currentPdf.pdf,
-      active: true,
-      principalSignature: principalSignature !== "" ? principalSignature : pdfList[currentPdf.index].principalSignature,
-      adviserSignature: adviserSignature !== "" ? adviserSignature : pdfList[currentPdf.index].adviserSignature,
-    };
-    if (accountTypeCheck) {
-      newData.jointSignature = jointSignature !== "" ? jointSignature : pdfList[currentPdf.index].jointSignature;
-    }
-    const completed =
-      accountType === "Individual"
-        ? adviserSignature !== "" && principalSignature !== ""
-        : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
-    if (pdfList !== undefined) {
-      const dataClone = [...pdfList];
-      dataClone[currentPdf.index] = { ...dataClone[currentPdf.index], ...newData };
-      if (currentPdf.index + 1 < pdfList.length) {
-        dataClone[currentPdf.index + 1] = { ...pdfList[currentPdf.index + 1], active: completed, completed: completed };
-      }
-      setPdfList(dataClone);
-    } else {
-      setPdfList([newData]);
-    }
-    setPage(1);
+    setEditReceipt(undefined);
   };
 
   const handleConfirm = () => {
@@ -248,7 +231,7 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
     setShowSignPdf(false);
   };
 
-  const handleSignature = (value: string) => {
+  const handleSignature = async (value: string) => {
     if (signer === "adviser") {
       setAdviserSignature(value);
     } else if (signer === "principal") {
@@ -277,56 +260,54 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
       }
     }
   };
+
+  const handleSave = () => {
+    const updatedReceipts = [...receipts!];
+    const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
+    const adviser = {
+      base64: GetBase64String(adviserSignature),
+      date: `${moment().valueOf()}`,
+      name: "AdviserSignature.png",
+      type: "image/png",
+    };
+    const principal = {
+      base64: GetBase64String(principalSignature),
+      date: `${moment().valueOf()}`,
+      name: "PrincipalSignature.png",
+      type: "image/png",
+    };
+    const joint =
+      accountType === "Individual"
+        ? undefined
+        : {
+            base64: GetBase64String(jointSignature),
+            date: `${moment().valueOf()}`,
+            name: "JointSignature.png",
+            type: "image/png",
+          };
+    updatedReceipts[receiptIndex] = {
+      ...updatedReceipts[receiptIndex],
+      signedPdf: editReceipt!.signedPdf,
+      adviserSignature: adviser,
+      principalSignature: principal,
+      jointSignature: joint,
+      completed: true,
+    };
+    updateReceipts(updatedReceipts);
+    setEditReceipt(undefined);
+  };
+
   const completed =
     accountType === "Individual"
       ? adviserSignature !== "" && principalSignature !== ""
       : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
-  const props = {
-    adviserSignature: adviserSignature,
-    completed: completed,
-    currentPdf: currentPdf,
-    principalSignature: principalSignature,
-    jointSignature: jointSignature,
-    numberOfPdfPages: numberOfPdfPages,
-    showSignPdf: showSignPdf,
-    signer: signer,
-    scrollRef: scrollRef,
-    handleScroll: handleScroll,
-    handleBack: handleBack,
-    handleSignature: handleSignature,
-    handleClose: handleClose,
-    handleConfirm: handleConfirm,
-    handlePosition: handlePosition,
-    setScrollRef: setScrollRef,
-  };
-
-  useEffect(() => {
-    const calculatePages = async () => {
-      if (currentPdf !== undefined) {
-        const dataUri = GetEmbeddedBase64(currentPdf.pdf);
-        const loadPdf = await PDFDocument.load(dataUri);
-        const pages = loadPdf.getPages().length;
-        setNumberOfPdfPages(pages);
-      }
-    };
-    if (pdfList[currentPdf.index].adviserSignature !== "") {
-      setAdviserSignature(pdfList[currentPdf.index].adviserSignature);
-    }
-    if (pdfList[currentPdf.index].principalSignature !== "") {
-      setPrincipalSignature(pdfList[currentPdf.index].principalSignature);
-    }
-    if (pdfList[currentPdf.index].jointSignature !== "") {
-      setJointSignature(pdfList[currentPdf.index].jointSignature!);
-    }
-    calculatePages();
-  }, [currentPdf, pdfList]);
 
   useEffect(() => {
     if (signer !== undefined) {
       setTimeout(() => {
         calculatePosition();
         setShowSignPdf(true);
-      }, 500);
+      }, 100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
@@ -335,12 +316,30 @@ export const EditPdfComponent: FunctionComponent<PDFListProps> = ({
     if (scrollRef !== null && completed === true) {
       setTimeout(() => {
         scrollRef.scrollToEnd();
-      }, 500);
+      }, 100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completed]);
 
-  return <PdfView {...props} />;
+  return (
+    <PdfView
+      adviserSignature={adviserSignature}
+      completed={completed}
+      editReceipt={editReceipt}
+      principalSignature={principalSignature}
+      jointSignature={jointSignature}
+      showSignPdf={showSignPdf}
+      signer={signer}
+      handleScroll={handleScroll}
+      handleBack={handleBack}
+      handleSave={handleSave}
+      handleSignature={handleSignature}
+      handleClose={handleClose}
+      handleConfirm={handleConfirm}
+      handlePosition={handlePosition}
+      setScrollRef={setScrollRef}
+    />
+  );
 };
 
-export const EditPdf = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(EditPdfComponent);
+export const EditPdf = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(NewEditPdfComponent);

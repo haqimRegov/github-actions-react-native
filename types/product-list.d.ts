@@ -17,3 +17,5 @@ declare type ProductSortColumnType = "fundAbbr" | "fundName" | "riskCategory" | 
 declare type ProductSortValueType = "asc" | "desc" | "";
 declare type ProductType = "ut" | "prs" | "prsDefault" | "amp";
 declare type ProductListShowByType = "all" | "recommended";
+
+declare type LicenseType = "UT" | "PRS" | "PRSDefault" | "AMP";

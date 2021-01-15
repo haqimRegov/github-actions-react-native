@@ -24,6 +24,7 @@ export interface CheckBoxProps {
   disabled?: boolean;
   label?: string;
   labelStyle?: TextStyle;
+  numberOfLines?: number;
   onPress: () => void;
   spaceToLabel?: number;
   style?: ViewStyle;
@@ -35,6 +36,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
   disabled,
   label,
   labelStyle,
+  numberOfLines,
   onPress,
   spaceToLabel,
   style,
@@ -74,7 +76,10 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
           {label === undefined ? null : (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={defaultSpace} />
-              <Text onPress={handlePress} style={{ ...fs12RegBlack2, lineHeight: sh24, ...disabledStyle, ...labelStyle }}>
+              <Text
+                onPress={handlePress}
+                numberOfLines={numberOfLines}
+                style={{ ...fs12RegBlack2, lineHeight: sh24, ...disabledStyle, ...labelStyle }}>
                 {label}
               </Text>
             </Fragment>

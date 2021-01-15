@@ -4,16 +4,16 @@ import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
-import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, shadowBlack116, sw24 } from "../../../../../styles";
-import { AlertDialog } from "../../../../../utils";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
 interface UnitTrustProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
+  scrollEnabled: boolean;
+  setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
 }
 
@@ -29,10 +29,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   productType,
   resetSelectedFund,
   riskProfile,
+  scrollEnabled,
   selectedFunds,
   setLoading,
+  setScrollEnabled,
   shareSuccess,
-  updateUtPage,
   updateUtShowBy,
 }: UnitTrustProps) => {
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.ut;
@@ -41,19 +42,8 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>("");
   const [showMore, setShowMore] = useState<boolean>(false);
-  const prevPage = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
-
-  const hideLoading = () => {
-    setLoading(false);
-  };
-
-  const handleError = (e: any) => {
-    // eslint-disable-next-line no-console
-    console.log("handleError", e);
-    AlertDialog("Error", hideLoading);
-  };
 
   const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskProfile);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
@@ -62,7 +52,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       ? recommendedRisk
       : filters.riskCategory;
 
-  const handleFetch = async () => {
+  const handleFetch = async (newPage: string) => {
     setLoading(true);
     const req = {
       tab: "ut",
@@ -76,11 +66,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       sort: sort,
       showBy: showBy,
       search: search,
-      page: page,
+      page: newPage,
     };
     // eslint-disable-next-line no-console
     console.log("productList", req);
-    const productListResponse: IProductListResponse = await getProductList(req, handleError);
+    const productListResponse: IProductListResponse = await getProductList(req);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -94,9 +84,9 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     return undefined;
   };
 
-  const handleFetchUT = async () => {
+  const handleFetchUT = async (newPage: string) => {
     Keyboard.dismiss();
-    const funds = await handleFetch();
+    const funds = await handleFetch(newPage);
     if (funds !== undefined) {
       if (showBy === "all") {
         addUtAllFunds(funds);
@@ -111,15 +101,16 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       setShowMore(false);
     }
     setFilterVisible(!filterVisible);
+    setScrollEnabled(!scrollEnabled);
   };
 
   const handleSearch = () => {
-    updateUtPage("0");
-    addUtSearch(inputSearch);
+    if (filterVisible === false) {
+      addUtSearch(inputSearch);
+    }
   };
 
   const handleConfirmFilter = () => {
-    updateUtPage("0");
     addUtFilters(filterTemp);
     addUtSearch(inputSearch);
   };
@@ -151,20 +142,26 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     addSelectedFund(newSelectedFunds);
   };
 
-  // const scrollEnabled = !filterVisible || (filterVisible && showMore);
+  const handleNext = async () => {
+    const nextPage = parseInt(page, 10) < parseInt(pages, 10) ? parseInt(page, 10) + 1 : parseInt(pages, 10);
+    handleFetchUT(nextPage.toString());
+  };
+
+  const handlePrev = () => {
+    const prevPage = parseInt(page, 10) > 1 ? parseInt(page, 10) - 1 : 1;
+    handleFetchUT(prevPage.toString());
+  };
 
   useEffect(() => {
-    // when sort, page, search, filter is updated
-    if (prevPage !== undefined && prevPage !== "") {
-      handleFetchUT();
-    }
+    // when sort, search, filter is updated
+    handleFetchUT(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, page, search, filters]);
+  }, [sort, search, filters]);
 
   useEffect(() => {
     // initial fetch
     if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-      handleFetchUT();
+      handleFetchUT("0");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);
@@ -187,6 +184,8 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       <ProductListView
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
+        handleNext={handleNext}
+        handlePrev={handlePrev}
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
@@ -201,7 +200,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
         sort={sort}
         totalCount={totalCount}
         updateFilter={addUtFilters}
-        updatePage={updateUtPage}
         updateSort={addUtSort}
       />
     </View>

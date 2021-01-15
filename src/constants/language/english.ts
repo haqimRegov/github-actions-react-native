@@ -485,6 +485,7 @@ export const english = {
       LABEL_SHOW_ALL: "Show all",
       LABEL_SHOW_LESS: "Show less",
       LABEL_SHOW: "Show more",
+      LABEL_TYPE: "Type",
       LABEL_UT_TYPE: "UT Type",
     },
     IDENTITY_CONFIRMATION: {

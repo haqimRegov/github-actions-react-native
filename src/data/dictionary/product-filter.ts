@@ -1,8 +1,14 @@
-export const FILTER_PRODUCT_TYPE = ["Unit Trust (UT)", "Private Retirement Scheme (PRS)"];
-export const FILTER_UT_TYPE = ["Standalone", "AMP"];
+export const FILTER_CONVENTIONAL = ["Yes", "No"];
 export const FILTER_EPF = ["EPF", "Non-EPF"];
 export const FILTER_EPF_LABEL = ["Yes", "No"];
-export const FILTER_CONVENTIONAL = ["Yes", "No"];
+export const FILTER_PRODUCT_TYPE = ["Unit Trust (UT)", "Private Retirement Scheme (PRS)"];
+export const FILTER_PRS_TYPE = ["Default", "Customised"];
+export const FILTER_SHARIAH = ["Shariah", "Non-Shariah"];
+export const FILTER_SHARIAH_LABEL = ["Yes", "No"];
+export const FILTER_TYPE = ["Conventional", "Shariah"];
+export const FILTER_UT_TYPE = ["Standalone", "AMP"];
+export const FILTER_RISK = ["Low", "Medium", "High"];
+
 export const FILTER_FUND_CURRENCY = [
   { label: "MYR", value: "MYR" },
   { label: "AUD", value: "AUD" },
@@ -13,7 +19,7 @@ export const FILTER_FUND_CURRENCY = [
   { label: "USD", value: "USD" },
   { label: "JPY", value: "JPY" },
 ];
-export const FILTER_PRS_TYPE = ["Default", "Customised"];
+
 export const FILTER_FUND_TYPE = [
   { label: "Equity", value: "Equity" },
   { label: "Fixed Income / Bond / Sukuk", value: "Fixed Income / Bond / Sukuk" },
@@ -22,14 +28,13 @@ export const FILTER_FUND_TYPE = [
   { label: "Money Market", value: "Money Market" },
   { label: "Alternative", value: "Alternative" },
 ];
-export const FILTER_RISK = ["Low", "Medium", "High"];
+
 export const FILTER_RISK_CATEGORY = [
   { label: "Low", value: "Low" },
   { label: "Medium", value: "Medium" },
   { label: "High", value: "High" },
 ];
-export const FILTER_SHARIAH = ["Shariah", "Non-Shariah"];
-export const FILTER_SHARIAH_LABEL = ["Yes", "No"];
+
 export const FILTER_ISSUING_HOUSE = [
   { label: "Kenanga Investors Berhad Funds", value: "Kenanga Investors Berhad Funds" },
   { label: "Aberdeen", value: "Aberdeen" },
@@ -47,4 +52,25 @@ export const FILTER_ISSUING_HOUSE = [
   { label: "Principal", value: "Principal" },
   { label: "RHB", value: "RHB" },
   { label: "UOB", value: "UOB" },
+];
+
+export const FILTER_UTMC = [
+  { label: "KENANGA INVESTORS BERHAD", value: "KENANGA INVESTORS BERHAD" },
+  { label: "ABERDEEN ISLAMIC ASSET MANAGEMENT SDN BHD", value: "ABERDEEN ISLAMIC ASSET MANAGEMENT SDN BHD" },
+  { label: "AFFIN HWANG INVESTMENT MANAGEMENT BERHAD", value: "AFFIN HWANG INVESTMENT MANAGEMENT BERHAD" },
+  { label: "AIA PENSION AND ASSET MANAGEMENT SDN BHD", value: "AIA PENSION AND ASSET MANAGEMENT SDN BHD" },
+  { label: "AMANAHRAYA INVESTMENT MANAGEMENT SDN BHD", value: "AMANAHRAYA INVESTMENT MANAGEMENT SDN BHD" },
+  { label: "AMFUNDS MANAGEMENT BERHAD", value: "AMFUNDS MANAGEMENT BERHAD" },
+  { label: "BIMB INVESTMENT MANAGEMENT BERHAD", value: "BIMB INVESTMENT MANAGEMENT BERHAD" },
+  { label: "EASTSPRING INVESTMENTS BERHAD", value: "EASTSPRING INVESTMENTS BERHAD" },
+  { label: "FRANKLIN TEMPLETON ASSET MANAGEMENT BERHAD", value: "FRANKLIN TEMPLETON ASSET MANAGEMENT BERHAD" },
+  { label: "FRANKLIN TEMPLETON GSC ASSET MANAGEMENT SDN BHD", value: "FRANKLIN TEMPLETON GSC ASSET MANAGEMENT SDN BHD" },
+  { label: "MANULIFE INVESTMENT MANAGEMENT(M) BERHAD", value: "MANULIFE INVESTMENT MANAGEMENT(M) BERHAD" },
+  { label: "MAYBANK ASSET MANAGEMENTSDN BHD", value: "MAYBANK ASSET MANAGEMENTSDN BHD" },
+  { label: "OPUS ASSET MANAGEMENT SDN BHD", value: "OPUS ASSET MANAGEMENT SDN BHD" },
+  { label: "PHEIM UNIT TRUSTS BERHAD", value: "PHEIM UNIT TRUSTS BERHAD" },
+  { label: "PRINCIPAL ASSET MANAGEMENT BERHAD", value: "PRINCIPAL ASSET MANAGEMENT BERHAD" },
+  { label: "RHB ASSET MANAGEMENT SDN BHD", value: "RHB ASSET MANAGEMENT SDN BHD" },
+  { label: "RHB ISLAMIC INTERNATIONAL ASSET MANAGEMENT BERHAD", value: "RHB ISLAMIC INTERNATIONAL ASSET MANAGEMENT BERHAD" },
+  { label: "UOB ASSET MANAGEMENT (MALAYSIA) SDN BHD", value: "UOB ASSET MANAGEMENT (MALAYSIA) SDN BHD" },
 ];

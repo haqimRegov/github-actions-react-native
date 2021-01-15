@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
-import { FILTER_CONVENTIONAL, FILTER_ISSUING_HOUSE, FILTER_SHARIAH_LABEL } from "../../../../../data/dictionary";
+import { FILTER_ISSUING_HOUSE, FILTER_TYPE } from "../../../../../data/dictionary";
 import { centerVertical, flexRow, fs16BoldBlack1, px, sh32, sh8, sw24, sw240, sw64 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
@@ -15,30 +15,34 @@ interface PRSFilterProps {
 export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, setFilter }: PRSFilterProps) => {
   const { conventional, shariahApproved, issuingHouse } = filter;
 
-  const conventionalOnly = conventional![0] === "No" ? 0 : -1;
-  const shariahApprovedOnly = shariahApproved![0] === "No" ? 0 : -1;
-  const disabledShariah = [shariahApproved![0] === "Yes" ? 1 : -1, shariahApprovedOnly];
-  const disabledConventional = [conventional![0] === "No" ? 1 : -1, conventionalOnly];
-
-  const handleConventional = (value: string) => {
+  const handleType = (value: string) => {
     const filterClone = { ...filter };
-    const tmp = [...conventional!];
-    tmp.splice(0, tmp.includes(value) ? 1 : 0, tmp.includes(value) ? "" : value);
-    filterClone.conventional = tmp;
-    setFilter(filterClone);
-  };
 
-  const handleShariah = (value: string) => {
-    const filterClone = { ...filter };
-    const tmp = [...shariahApproved!];
-    tmp.splice(0, tmp.includes(value) ? 1 : 0, tmp.includes(value) ? "" : value);
-    filterClone.shariahApproved = tmp;
+    if (value === "Conventional") {
+      filterClone.conventional = conventional!.includes("Yes") ? [] : ["Yes"];
+    } else if (value === "Shariah") {
+      filterClone.shariahApproved = shariahApproved!.includes("Yes") ? [] : ["Yes"];
+    } else {
+      filterClone.conventional = [];
+      filterClone.shariahApproved = [];
+    }
     setFilter(filterClone);
   };
 
   const handleIssuingHouse = (value: string[]) => {
     setFilter({ ...filter, issuingHouse: value });
   };
+  const conventionalSelected = conventional![0] === "Yes";
+  const shariahSelected = shariahApproved![0] === "Yes";
+  const disabledConventionalType = conventionalSelected ? [1] : [];
+  const disabledType = shariahSelected ? [0] : disabledConventionalType;
+  let selectedType: string[] = [];
+  if (conventionalSelected === true) {
+    selectedType = [FILTER_TYPE[0]];
+  }
+  if (shariahSelected === true) {
+    selectedType = [FILTER_TYPE[1]];
+  }
 
   return (
     <View>
@@ -50,21 +54,11 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, setFilter
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View style={{ width: sw240 }}>
           <CheckBoxGroup
-            disabledIndex={disabledConventional}
-            disabled={conventional![0] === FILTER_CONVENTIONAL![1]}
-            label={PRODUCT_FILTER.LABEL_CONVENTIONAL}
-            labels={FILTER_CONVENTIONAL}
-            selected={conventional!}
-            setSelected={handleConventional}
-          />
-        </View>
-        <View style={{ width: sw240 }}>
-          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_SHARIAH} />
-          <CheckBoxGroup
-            disabledIndex={disabledShariah}
-            labels={FILTER_SHARIAH_LABEL}
-            selected={shariahApproved!}
-            setSelected={handleShariah}
+            disabledIndex={disabledType}
+            label={PRODUCT_FILTER.LABEL_TYPE}
+            labels={FILTER_TYPE}
+            selected={selectedType}
+            setSelected={handleType}
           />
         </View>
       </View>

@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
-import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, shadowBlack116, sw24 } from "../../../../../styles";
@@ -13,6 +12,8 @@ import { ProductListView } from "../Listing";
 
 interface AMPProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
+  scrollEnabled: boolean;
+  setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
 }
 
@@ -28,10 +29,11 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   productType,
   resetSelectedFund,
   riskProfile,
+  scrollEnabled,
   selectedFunds,
   setLoading,
+  setScrollEnabled,
   shareSuccess,
-  updateAmpPage,
   updateAmpShowBy,
 }: AMPProps) => {
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.amp;
@@ -40,7 +42,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>("");
-  const prevPage = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
@@ -51,7 +52,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       ? recommendedRisk
       : filters.riskCategory;
 
-  const handleFetch = async () => {
+  const handleFetch = async (newPage: string) => {
     setLoading(true);
     const sortAllFunds = showBy === "all" ? [{ column: "fundAbbr", value: "asc" }] : [];
     const req = {
@@ -63,10 +64,10 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],
+      page: newPage,
       sort: sortAllFunds,
       showBy: showBy,
       search: search,
-      page: page,
     };
     // eslint-disable-next-line no-console
     console.log("productList", req);
@@ -82,9 +83,9 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     return undefined;
   };
 
-  const handleFetchAMP = async () => {
+  const handleFetchAMP = async (newPage: string) => {
     Keyboard.dismiss();
-    const funds = await handleFetch();
+    const funds = await handleFetch(newPage);
     if (funds !== undefined) {
       if (showBy === "all") {
         addAmpAllFunds(funds);
@@ -99,15 +100,16 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       setShowMore(false);
     }
     setFilterVisible(!filterVisible);
+    setScrollEnabled(!scrollEnabled);
   };
 
   const handleSearch = () => {
-    updateAmpPage("0");
-    addAmpSearch(inputSearch);
+    if (filterVisible === false) {
+      addAmpSearch(inputSearch);
+    }
   };
 
   const handleConfirmFilter = () => {
-    updateAmpPage("0");
     addAmpFilters(filterTemp);
     addAmpSearch(inputSearch);
   };
@@ -139,20 +141,26 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     addSelectedFund(newSelectedFunds);
   };
 
-  // const scrollEnabled = !filterVisible || (filterVisible && showMore);
+  const handleNext = async () => {
+    const nextPage = parseInt(page, 10) < parseInt(pages, 10) ? parseInt(page, 10) + 1 : parseInt(pages, 10);
+    handleFetchAMP(nextPage.toString());
+  };
+
+  const handlePrev = () => {
+    const prevPage = parseInt(page, 10) > 1 ? parseInt(page, 10) - 1 : 1;
+    handleFetchAMP(prevPage.toString());
+  };
 
   useEffect(() => {
-    // when sort, page, search, filter is updated
-    if (prevPage !== undefined && prevPage !== "") {
-      handleFetchAMP();
-    }
+    // when sort, search, filter is updated
+    handleFetchAMP(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, page, search, filters]);
+  }, [sort, search, filters]);
 
   useEffect(() => {
     // initial fetch
     if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-      handleFetchAMP();
+      handleFetchAMP("0");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);
@@ -174,6 +182,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       <ProductListView
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
+        handleNext={handleNext}
+        handlePrev={handlePrev}
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
@@ -188,7 +198,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         sort={sort}
         totalCount={totalCount}
         updateFilter={addAmpFilters}
-        updatePage={updateAmpPage}
         updateSort={addAmpSort}
       />
     </View>

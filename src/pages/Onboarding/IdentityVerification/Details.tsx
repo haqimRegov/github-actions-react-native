@@ -43,7 +43,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const idType = personalDetails.idType!;
   const dateOfBirth = personalDetails!.dateOfBirth!;
   const formattedDOB = moment(dateOfBirth).format(DEFAULT_DATE_FORMAT);
-  const labelId = `${idType} Number`;
+  const labelOtherId = idType !== "Passport" ? `${idType} ID` : idType;
+  const labelId = `${labelOtherId} Number`;
   const isPassport = idType === "Passport";
   const addressType = isPassport ? "Other" : "Malaysia";
 
@@ -115,7 +116,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   };
 
   const labelSameMailing = accountHolder === "Joint" ? ID_VERIFICATION.LABEL_MAILING_SAME_PRINCIPAL : ID_VERIFICATION.LABEL_MAILING_SAME;
-  const nameLabel = `${ID_VERIFICATION.LABEL_NAME} (as per ${personalDetails.idType})`;
+  const nameLabel = `${ID_VERIFICATION.LABEL_NAME} (as per ${labelOtherId})`;
 
   return (
     <Fragment>

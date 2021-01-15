@@ -42,27 +42,30 @@ const { PRODUCT_LIST } = Language.PAGE;
 interface ProductListViewProps {
   filter: IProductFilter;
   handleAllFunds?: () => void;
+  handleNext: () => void;
+  handlePrev: () => void;
   handleRecommendedFunds?: () => void;
   handleResetSelected: () => void;
   handleSelectProduct: (product: IProduct) => void;
   list: ITableData[];
   page: number;
   pages: number;
-  totalCount: IProductTotalCount;
   productType: ProductType;
   selectedFunds: ITableData[];
   setViewFund: (fund: IProduct) => void;
   shareSuccess?: boolean;
   showBy?: ProductListShowByType;
   sort: IProductSort[];
+  totalCount: IProductTotalCount;
   updateFilter: (filter: IProductFilter) => void;
-  updatePage: (page: string) => void;
   updateSort: (sort: IProductSort[]) => void;
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   filter,
   handleAllFunds,
+  handleNext,
+  handlePrev,
   handleRecommendedFunds,
   handleResetSelected,
   handleSelectProduct,
@@ -70,14 +73,13 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   page,
   pages,
   productType,
-  setViewFund,
   selectedFunds,
-  totalCount,
+  setViewFund,
   shareSuccess,
   showBy,
   sort,
+  totalCount,
   updateFilter,
-  updatePage,
   updateSort,
 }: ProductListViewProps) => {
   // const performanceColumn = {
@@ -195,16 +197,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     //   newSections.splice(0, 1, item.index);
     // }
     // setActiveAccordion(newSections);
-  };
-
-  const handleNext = () => {
-    const nextPage = page < pages ? page + 1 : pages;
-    updatePage(nextPage.toString());
-  };
-
-  const handlePrev = () => {
-    const prevPage = page > 1 ? page - 1 : 1;
-    updatePage(prevPage.toString());
   };
 
   const onRowSelect = (data: ITableData) => {

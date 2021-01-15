@@ -107,6 +107,8 @@ const NewSalesComponent = ({
   };
 
   const handleNavigation = () => {
+    const principalClientIdType = principalHolder?.idType === "Other" ? principalHolder!.otherIdType : principalIdType;
+    const jointClientIdType = jointHolder?.idType === "Other" ? jointHolder!.otherIdType : jointIdType;
     const principalFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === principalHolder?.id!.substr(7, 2));
     const jointFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === jointHolder?.id!.substr(7, 2));
     const principalPlaceOfBirth =
@@ -124,7 +126,7 @@ const NewSalesComponent = ({
               dateOfBirth: moment(jointHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate(),
               expirationDate: undefined,
               idNumber: jointHolder?.id,
-              idType: jointHolder?.idType,
+              idType: jointClientIdType,
               name: jointHolder?.name,
               nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
               placeOfBirth: principalPlaceOfBirth,
@@ -140,7 +142,7 @@ const NewSalesComponent = ({
           dateOfBirth: moment(principalHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate(),
           expirationDate: undefined,
           idNumber: principalHolder?.id,
-          idType: principalHolder?.idType,
+          idType: principalClientIdType,
           name: principalHolder?.name,
           nationality: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
           placeOfBirth: jointPlaceOfBirth,

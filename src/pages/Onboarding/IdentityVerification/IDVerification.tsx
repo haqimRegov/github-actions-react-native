@@ -37,6 +37,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
     const { addressInformation, personalDetails } = details;
     const checkPassport =
       personalDetails!.idType === "Passport" ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined : true;
+
     return (
       personalDetails!.idNumber !== "" &&
       personalDetails!.dateOfBirth !== undefined &&

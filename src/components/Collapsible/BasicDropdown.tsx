@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { FlatList, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
@@ -25,6 +25,7 @@ import {
   sw16,
   sw2,
   sw24,
+  sw296,
 } from "../../styles";
 import { CheckBox } from "../CheckBox/CheckBox";
 import { BasicModal } from "../Modals/Basic";
@@ -45,6 +46,7 @@ export interface CollapsibleDropdownProps {
   backDropOpacity?: number;
   baseContainerStyle?: ViewStyle;
   baseDropdownStyle?: ViewStyle;
+  checkboxLabelStyle?: TextStyle;
   collapseOnBaseClick?: boolean;
   collapsibleStyle?: ViewStyle;
   dropdownInnerStyle?: ViewStyle;
@@ -71,12 +73,13 @@ interface IBasicLayout {
   y: number;
 }
 
-export const CollapsibleDropdown = ({
+export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = ({
   backDrop,
   backDropColor,
   backDropOpacity,
   baseContainerStyle,
   baseDropdownStyle,
+  checkboxLabelStyle,
   collapseOnBaseClick,
   collapsibleStyle,
   dropdownInnerStyle,
@@ -254,7 +257,8 @@ export const CollapsibleDropdown = ({
                                 <View style={itemContainer}>
                                   <CheckBox
                                     label={itemExtractor.label}
-                                    labelStyle={itemStyle}
+                                    labelStyle={{ ...itemStyle, width: sw296, ...checkboxLabelStyle }}
+                                    numberOfLines={1}
                                     onPress={handleSelect}
                                     spaceToLabel={sw12}
                                     style={{ ...flexChild, height: sh24 }}

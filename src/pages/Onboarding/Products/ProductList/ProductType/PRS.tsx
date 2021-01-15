@@ -3,7 +3,6 @@ import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
-import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, shadowBlack116, sw24 } from "../../../../../styles";
@@ -12,6 +11,8 @@ import { ProductListView } from "../Listing";
 
 interface PRSProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
+  scrollEnabled: boolean;
+  setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
 }
 
@@ -25,21 +26,21 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   products,
   productType,
   resetSelectedFund,
+  scrollEnabled,
   selectedFunds,
   setLoading,
+  setScrollEnabled,
   shareSuccess,
-  updatePrsPage,
 }: PRSProps) => {
   const { filters, page, pages, recommended, search, sort, totalCount } = products.prs;
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
-  const prevPage = usePrevious<string>(page);
   const [inputSearch, setInputSearch] = useState<string>("");
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
-  const handleFetch = async () => {
+  const handleFetch = async (newPage: string) => {
     setLoading(true);
     const req = {
       tab: "prs",
@@ -50,10 +51,10 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       riskCategory: filters.riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],
+      page: newPage,
       sort: sort,
       showBy: "recommended",
       search: search,
-      page: page,
     };
     // eslint-disable-next-line no-console
     console.log("productList", req);
@@ -69,10 +70,10 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
     return undefined;
   };
 
-  const handleFetchPRS = async () => {
+  const handleFetchPRS = async (newPage: string) => {
     Keyboard.dismiss();
     // if (recommended.length === 0) {
-    const funds = await handleFetch();
+    const funds = await handleFetch(newPage);
     if (funds !== undefined) {
       addPrsRecommendedFunds(funds);
     }
@@ -84,15 +85,16 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       setShowMore(false);
     }
     setFilterVisible(!filterVisible);
+    setScrollEnabled(!scrollEnabled);
   };
 
   const handleSearch = () => {
-    updatePrsPage("0");
-    addPrsSearch(inputSearch);
+    if (filterVisible === false) {
+      addPrsSearch(inputSearch);
+    }
   };
 
   const handleConfirmFilter = () => {
-    updatePrsPage("0");
     addPrsFilters(filterTemp);
     addPrsSearch(inputSearch);
   };
@@ -112,20 +114,26 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
     addSelectedFund(newSelectedFunds);
   };
 
-  // const scrollEnabled = !filterVisible || (filterVisible && showMore);
+  const handleNext = async () => {
+    const nextPage = parseInt(page, 10) < parseInt(pages, 10) ? parseInt(page, 10) + 1 : parseInt(pages, 10);
+    handleFetchPRS(nextPage.toString());
+  };
+
+  const handlePrev = () => {
+    const prevPage = parseInt(page, 10) > 1 ? parseInt(page, 10) - 1 : 1;
+    handleFetchPRS(prevPage.toString());
+  };
 
   useEffect(() => {
-    // when sort, page, search, filter is updated
-    if (prevPage !== undefined && prevPage !== "") {
-      handleFetchPRS();
-    }
+    // when sort, search, filter is updated
+    handleFetchPRS(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, page, search, filters]);
+  }, [sort, search, filters]);
 
   useEffect(() => {
     // initial fetch
     if (recommended.length === 0) {
-      handleFetchPRS();
+      handleFetchPRS("0");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -147,6 +155,8 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       <CustomSpacer space={248} />
       <ProductListView
         filter={filterTemp}
+        handleNext={handleNext}
+        handlePrev={handlePrev}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
         list={recommended}
@@ -159,7 +169,6 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
         sort={sort}
         totalCount={totalCount}
         updateFilter={addPrsFilters}
-        updatePage={updatePrsPage}
         updateSort={addPrsSort}
       />
     </View>

@@ -42,6 +42,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
+  const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DATE_OF_BIRTH_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
@@ -155,7 +156,14 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   let screen = {
-    content: <ProductList handleCancelProducts={handleCancelProducts} handleShareDocuments={handleShareDocuments} />,
+    content: (
+      <ProductList
+        handleCancelProducts={handleCancelProducts}
+        handleShareDocuments={handleShareDocuments}
+        scrollEnabled={scrollEnabled}
+        setScrollEnabled={setScrollEnabled}
+      />
+    ),
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
     labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
@@ -263,7 +271,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     <Fragment>
       <View style={flexChild}>
         {screen.content}
-        {fixedBottomShow === true && selectedFunds.length !== 0 && viewFund === undefined && keyboardIsShowing === false ? (
+        {fixedBottomShow === true &&
+        selectedFunds.length !== 0 &&
+        viewFund === undefined &&
+        keyboardIsShowing === false &&
+        scrollEnabled === true ? (
           <View style={flexCol}>
             <SelectionBanner
               bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}

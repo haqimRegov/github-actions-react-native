@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID, ERROR_CODE } from "../../../data/dictionary";
+import { DICTIONARY_ALL_ID, DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh40, sh56, sw24 } from "../../../styles";
 import { OCRUtils } from "../../../utils";
@@ -43,7 +43,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const principalBackPage = principal!.personalDetails!.id!.secondPage;
   const jointFrontPage = joint!.personalDetails!.id!.frontPage;
   const jointSecondPage = joint!.personalDetails!.id!.secondPage;
-  const inputJointIdType = jointHolder!.idType!;
   const principalIdType = principalHolder!.idType!;
   const jointIdType = jointHolder!.idType!;
   const principalClientIdType = principalIdType === "Other" ? principalHolder!.otherIdType : principalIdType;
@@ -71,13 +70,13 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
 
   let buttonDisabled = false;
   if (accountType === "Individual" || accountType === "Joint") {
-    buttonDisabled = principalClientIdType === "NRIC" && !individualNRIC;
+    buttonDisabled = principalClientIdType !== "Passport" && !individualNRIC;
     if (!buttonDisabled) {
       buttonDisabled = principalClientIdType === "Passport" && !individualPass;
     }
   }
   if (accountType === "Joint" && !buttonDisabled) {
-    buttonDisabled = jointClientIdType === "NRIC" && !jointNRIC;
+    buttonDisabled = jointClientIdType !== "Passport" && !jointNRIC;
     if (!buttonDisabled) {
       buttonDisabled = jointClientIdType === "Passport" && !jointPass;
     }
@@ -179,11 +178,23 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       }
     }
 
-    return handlePrincipalDetails({ ...principal!.personalDetails?.id!, frontPage: uploaded });
+    return addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...principal,
+        addressInformation: {
+          ...principal!.addressInformation,
+          mailingAddress: { ...principal!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[133].value },
+          permanentAddress: { ...principal!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[133].value },
+        },
+        personalDetails: { ...principal!.personalDetails, id: { ...principal!.personalDetails?.id!, frontPage: uploaded } },
+      },
+    });
   };
 
   const handlePrincipalBackPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined) {
+    setPrincipalBackError(undefined);
+    if (uploaded !== undefined && principalClientIdType === "NRIC") {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
         setPrincipalBackError(mykadBack.error?.message);
@@ -191,11 +202,11 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         setPrincipalBackError(undefined);
       }
     }
-    return handlePrincipalDetails({ ...principal!.personalDetails?.id!, secondPage: uploaded });
+    return handlePrincipalDetails({ ...principal!.personalDetails!.id!, secondPage: uploaded });
   };
 
   const handleJointFrontPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined && jointIdType === DICTIONARY_ALL_ID[0].value) {
+    if (uploaded !== undefined && jointClientIdType === "NRIC") {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
         if (mykad.error?.code === ERROR_CODE.invalidNricData) {
@@ -238,11 +249,23 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       }
     }
 
-    return handleJointDetails({ ...joint!.personalDetails?.id!, frontPage: uploaded });
+    return addPersonalInfo({
+      ...personalInfo,
+      joint: {
+        ...joint,
+        addressInformation: {
+          ...joint!.addressInformation,
+          mailingAddress: { ...joint!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[133].value },
+          permanentAddress: { ...joint!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[133].value },
+        },
+        personalDetails: { ...joint!.personalDetails, id: { ...joint!.personalDetails!.id!, frontPage: uploaded } },
+      },
+    });
   };
 
   const handleJointBackPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined) {
+    setJointBackError(undefined);
+    if (uploaded !== undefined && jointClientIdType === "NRIC") {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
         setJointBackError(mykadBack.error?.message);
@@ -250,7 +273,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         setJointBackError(undefined);
       }
     }
-    return handleJointDetails({ ...joint!.personalDetails?.id!, secondPage: uploaded });
+    return handleJointDetails({ ...joint!.personalDetails!.id!, secondPage: uploaded });
   };
 
   const handleBack = () => {
@@ -294,7 +317,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
                   backPage={jointSecondPage}
                   frontError={jointFrontError}
                   frontPage={jointFrontPage}
-                  idType={inputJointIdType as TypeClientID}
+                  idType={jointClientIdType!}
                   onPressCamera={handleCameraJoint}
                   onPressPicker={handlePickerJoint}
                   setBackPage={handleJointBackPage}

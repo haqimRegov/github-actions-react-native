@@ -44,6 +44,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 export interface CheckBoxDropdownProps {
+  checkBoxStyle?: TextStyle;
   handleChange: (text: string[]) => void;
   items: TypeLabelValue[];
   label?: string;
@@ -62,6 +63,7 @@ export interface moreDetails {
 }
 
 export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
+  checkBoxStyle,
   handleChange,
   items,
   label,
@@ -122,6 +124,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
       <View style={flexRow}>
         <CollapsibleDropdown
           baseDropdownStyle={baseDropdownStyle}
+          checkboxLabelStyle={checkBoxStyle}
           dummyBaseStyle={dummyStyle}
           flatlistStyle={{ maxHeight: sh192 }}
           handleReset={handleReset}

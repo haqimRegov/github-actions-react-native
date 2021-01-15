@@ -18,7 +18,6 @@ import {
   px,
   sh24,
   sh32,
-  sh40,
   sh56,
   sh8,
   sw20,
@@ -207,7 +206,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
           handleCancel={handleCancel}
           handleContinue={handleVerifyOTP}
         />
-        <CustomSpacer space={sh40} />
+        <CustomSpacer space={sh56} />
       </ScrollView>
       <PromptModal
         handleContinue={handleNavigate}

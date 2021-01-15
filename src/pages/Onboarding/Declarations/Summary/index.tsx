@@ -97,7 +97,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     });
 
     const principalId =
-      principalIdType !== "NRIC"
+      principalIdType === "Passport"
         ? [principal!.personalDetails!.id!.frontPage!]
         : [principal!.personalDetails!.id!.frontPage!, principal!.personalDetails!.id!.secondPage!];
 
@@ -124,7 +124,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     const jointConfirmAddress = joint!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
     const jointId =
-      jointIdType !== "NRIC"
+      jointIdType === "Passport"
         ? [joint?.personalDetails?.id?.frontPage!]
         : [joint?.personalDetails?.id?.frontPage!, joint?.personalDetails?.id?.secondPage!];
 

@@ -44,7 +44,9 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     addPersonalInfo({ ...personalInfo, editPersonal: true });
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
-    updatedDisabledSteps.splice(findInfoSummary, 1);
+    if (findInfoSummary !== -1) {
+      updatedDisabledSteps.splice(findInfoSummary, 1);
+    }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("PersonalInfoSummary");
   };

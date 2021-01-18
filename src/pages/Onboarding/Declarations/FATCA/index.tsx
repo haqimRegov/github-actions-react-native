@@ -44,7 +44,9 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
     const route: TypeOnboardingRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
-    updatedDisabledSteps.splice(findCrs, 1);
+    if (findCrs !== -1) {
+      updatedDisabledSteps.splice(findCrs, 1);
+    }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);
   };

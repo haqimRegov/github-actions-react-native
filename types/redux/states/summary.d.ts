@@ -140,6 +140,7 @@ declare interface IPersonalInfoState {
   editDeclaration?: boolean;
   emailOtpSent?: boolean;
   epfInvestment?: boolean;
+  epfShariah?: boolean;
   joint?: IHolderInfoState;
   principal?: IHolderInfoState;
   incomeDistribution?: string;

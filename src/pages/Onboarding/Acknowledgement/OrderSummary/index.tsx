@@ -49,7 +49,9 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
   const handleConfirm = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findTermsAndConditions = updatedDisabledSteps.indexOf("TermsAndConditions");
-    updatedDisabledSteps.splice(findTermsAndConditions, 1);
+    if (findTermsAndConditions !== -1) {
+      updatedDisabledSteps.splice(findTermsAndConditions, 1);
+    }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("TermsAndConditions");
   };

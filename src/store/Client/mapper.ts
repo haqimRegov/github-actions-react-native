@@ -1,7 +1,7 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { GlobalActionProps } from "../Global";
-import { PersonalInfoActionProps } from "../PersonalInfo";
+import { GlobalActionProps } from "../Global/actions";
+import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { RootState } from "../rootReducer";
 import { ClientActionProps } from "./actions";
 

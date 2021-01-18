@@ -22,6 +22,7 @@ interface PersonalInfoProps {
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
   epfInvestment: boolean;
+  epfShariah: boolean;
   investmentCurrencies: string[];
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
@@ -39,6 +40,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   contactDetails,
   epfDetails,
   epfInvestment,
+  epfShariah,
   investmentCurrencies,
   personalDetails,
   setBankDetails,
@@ -125,6 +127,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
       {epfInvestment === true && accountHolder === "Principal" ? (
         <EPFDetails
           epfNumberError={validations.epfNumber}
+          epfShariah={epfShariah}
           inputEpfNumber={inputEpfNumber}
           inputEpfType={inputEpfType}
           onBlurEpfNumber={checkEpfNumber}

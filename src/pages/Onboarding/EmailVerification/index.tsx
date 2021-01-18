@@ -38,7 +38,9 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     handleNextStep("IdentityVerification");
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findIdVerification = updatedDisabledSteps.indexOf("IdentityVerification");
-    updatedDisabledSteps.splice(findIdVerification, 1);
+    if (findIdVerification !== -1) {
+      updatedDisabledSteps.splice(findIdVerification, 1);
+    }
     updatedDisabledSteps.push("EmailVerification");
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
   };

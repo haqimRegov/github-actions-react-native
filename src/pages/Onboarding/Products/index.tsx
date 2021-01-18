@@ -4,7 +4,7 @@ import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, RadioButtonGroup, SelectionBanner } from "../../../components";
-import { DATE_OF_BIRTH_FORMAT, Language, ONBOARDING_ROUTES } from "../../../constants";
+import { DATE_OF_BIRTH_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1 } from "../../../mocks";
@@ -132,16 +132,22 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleConfirmIdentity = () => {
-    const isEpfInvestment = investmentDetails!.findIndex(({ investment }) => investment.fundPaymentMethod === "EPF");
-    if (isEpfInvestment !== -1) {
-      addPersonalInfo({ epfInvestment: true });
+    const epfInvestments = investmentDetails!
+      .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
+      .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
+    const epfShariah = epfInvestments.includes("Yes");
+    if (epfInvestments.length > 0) {
+      addPersonalInfo({ epfInvestment: true, epfShariah: epfShariah });
     }
-    handleNextStep(ONBOARDING_ROUTES.EmailVerification);
+    const route: TypeOnboardingRoute = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
+    handleNextStep(route);
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     updatedFinishedSteps.push("Products");
     const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
-    updatedDisabledSteps.splice(findPersonalInfo, 1);
+    if (findPersonalInfo !== -1) {
+      updatedDisabledSteps.splice(findPersonalInfo, 1);
+    }
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 

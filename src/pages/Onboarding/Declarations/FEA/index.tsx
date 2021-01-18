@@ -46,7 +46,9 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
     }
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
-    updatedDisabledSteps.splice(findDeclarationSummary, 1);
+    if (findDeclarationSummary !== -1) {
+      updatedDisabledSteps.splice(findDeclarationSummary, 1);
+    }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("DeclarationSummary");
   };

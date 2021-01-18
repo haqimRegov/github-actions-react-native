@@ -1,9 +1,9 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { AcknowledgementActionProps } from "../Acknowledgement";
-import { ClientActionProps } from "../Client";
-import { GlobalActionProps } from "../Global";
-import { OnboardingActionProps } from "../Onboarding";
+import { AcknowledgementActionProps } from "../Acknowledgement/actions";
+import { ClientActionProps } from "../Client/actions";
+import { GlobalActionProps } from "../Global/actions";
+import { OnboardingActionProps } from "../Onboarding/actions";
 import { RootState } from "../rootReducer";
 import { PersonalInfoActionProps } from "./actions";
 

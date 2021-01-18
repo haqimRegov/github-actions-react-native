@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
+import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, shadowBlack116, sw24 } from "../../../../../styles";
@@ -42,6 +43,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>("");
+  const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
@@ -153,7 +155,9 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
 
   useEffect(() => {
     // when sort, search, filter is updated
-    handleFetchAMP(page);
+    if (prevPageRef !== undefined && prevPageRef !== "") {
+      handleFetchAMP(page);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
 

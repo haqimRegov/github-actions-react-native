@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 
 import {
   AdvancedDropdown,
@@ -181,30 +181,49 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
   };
 
   useEffect(() => {
-    const cashSalesChargesTmp: TypeLabelValue[] = [];
-    const epfSalesChargesTmp: TypeLabelValue[] = [];
-    if (cashSalesCharges.length === 0) {
-      for (
-        let index = parseFloat(salesCharge.cash.min);
-        index <= parseFloat(salesCharge.cash.max);
-        index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.cash.min) - parseFloat(salesCharge.cash.max)
-      ) {
-        const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
-        cashSalesChargesTmp.push(element);
+    let mounted = true;
+    if (mounted === true) {
+      const cashSalesChargesTmp: TypeLabelValue[] = [];
+      const epfSalesChargesTmp: TypeLabelValue[] = [];
+      const dirtyData =
+        parseFloat(salesCharge.cash.min) > parseFloat(salesCharge.cash.max) ||
+        salesCharge.cash.min === null ||
+        salesCharge.cash.max ||
+        (isEpf === "Yes" && salesCharge.epf.min === null) ||
+        salesCharge.epf.max === null ||
+        (epfSalesCharges.length === 0 && parseFloat(salesCharge.epf.min) > parseFloat(salesCharge.epf.max));
+      if (dirtyData === true) {
+        Alert.alert(
+          "There seems to be an issue in the Fund (e.g Sales Charge Minimum is greater than Maximum). If you wish to proceed, please use another fund. Otherwise, please contact support.",
+        );
+      } else {
+        if (cashSalesCharges.length === 0) {
+          for (
+            let index = parseFloat(salesCharge.cash.min);
+            index <= parseFloat(salesCharge.cash.max);
+            index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.cash.min) - parseFloat(salesCharge.cash.max)
+          ) {
+            const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
+            cashSalesChargesTmp.push(element);
+          }
+          setCashSalesCharges(cashSalesChargesTmp);
+        }
+        if (isEpf === "Yes" && epfSalesCharges.length === 0) {
+          for (
+            let index = parseFloat(salesCharge.epf.min);
+            index <= parseFloat(salesCharge.epf.max);
+            index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.epf.min) - parseFloat(salesCharge.epf.max)
+          ) {
+            const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
+            epfSalesChargesTmp.push(element);
+          }
+          setEpfSalesCharges(epfSalesChargesTmp);
+        }
       }
-      setCashSalesCharges(cashSalesChargesTmp);
     }
-    if (isEpf === "Yes" && epfSalesCharges.length === 0) {
-      for (
-        let index = parseFloat(salesCharge.epf.min);
-        index <= parseFloat(salesCharge.epf.max);
-        index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.epf.min) - parseFloat(salesCharge.epf.max)
-      ) {
-        const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
-        epfSalesChargesTmp.push(element);
-      }
-      setEpfSalesCharges(epfSalesChargesTmp);
-    }
+    return () => {
+      mounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

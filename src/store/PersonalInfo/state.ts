@@ -12,6 +12,7 @@ export const personalInfoInitialState: PersonalInfoState = {
   editDeclaration: false,
   emailOtpSent: false,
   epfInvestment: false,
+  epfShariah: false,
   incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,
   signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
   principal: {

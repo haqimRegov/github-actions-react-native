@@ -190,7 +190,14 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           localBank: localBank as ISubmitBank[],
           foreignBank: foreignBank as ISubmitBank[],
         },
-        contactDetails: principal!.contactDetails! as ISubmitContactDetails,
+        contactDetails: {
+          contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
+            code: contact.code,
+            label: contact.label,
+            value: contact.value,
+          })),
+          emailAddress: principal!.contactDetails!.emailAddress!,
+        },
         declaration: {
           crs: {
             country: principalTaxResident === 0 ? undefined : principal!.declaration!.crs!.country!, // undefined if taxResident === 0
@@ -245,7 +252,14 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           ? {
               clientId: jointDetails.clientId,
               addressInformation: jointDetails.addressInformation as ISubmitAddressInformation,
-              contactDetails: jointDetails.contactDetails as ISubmitContactDetails,
+              contactDetails: {
+                contactNumber: jointDetails.contactDetails!.contactNumber!.map((contact) => ({
+                  code: contact.code,
+                  label: contact.label,
+                  value: contact.value,
+                })),
+                emailAddress: jointDetails.contactDetails!.emailAddress!,
+              },
               declaration: jointDetails.declaration as ISubmitDeclaration,
               employmentDetails: jointDetails.employmentDetails as ISubmitEmploymentJoint,
               personalDetails: jointDetails.personalDetails as ISubmitPersonalDetails,

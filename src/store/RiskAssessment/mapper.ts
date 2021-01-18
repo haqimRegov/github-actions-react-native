@@ -1,8 +1,8 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { GlobalActionProps } from "../Global";
-import { OnboardingActionProps } from "../Onboarding";
-import { ProductsActionProps } from "../Products";
+import { GlobalActionProps } from "../Global/actions";
+import { OnboardingActionProps } from "../Onboarding/actions";
+import { ProductsActionProps } from "../Products/actions";
 import { RootState } from "../rootReducer";
 import { RiskAssessmentActionProps } from "./actions";
 

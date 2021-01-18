@@ -1,10 +1,10 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { GlobalActionProps } from "../Global";
-import { OnboardingActionProps } from "../Onboarding";
-import { PersonalInfoActionProps } from "../PersonalInfo";
+import { GlobalActionProps } from "../Global/actions";
+import { OnboardingActionProps } from "../Onboarding/actions";
+import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { RootState } from "../rootReducer";
-import { SelectedFundActionProps } from "../SelectedFund";
+import { SelectedFundActionProps } from "../SelectedFund/actions";
 import { ProductsActionProps } from "./actions";
 
 export const ProductsMapStateToProps = (state: RootState) => ({

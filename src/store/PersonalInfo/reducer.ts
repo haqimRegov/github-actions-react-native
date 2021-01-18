@@ -12,9 +12,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
       };
 
     case "personalInfo/RESET_PERSONAL_INFO":
-      return {
-        ...personalInfoInitialState,
-      };
+      return { ...personalInfoInitialState };
 
     default:
       return state;

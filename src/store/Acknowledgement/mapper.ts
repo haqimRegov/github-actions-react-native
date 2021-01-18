@@ -1,13 +1,13 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { ClientActionProps } from "../Client";
-import { GlobalActionProps } from "../Global";
-import { OnboardingActionProps } from "../Onboarding";
-import { PersonalInfoActionProps } from "../PersonalInfo";
-import { ProductsActionProps } from "../Products";
-import { RiskAssessmentActionProps } from "../RiskAssessment";
+import { ClientActionProps } from "../Client/actions";
+import { GlobalActionProps } from "../Global/actions";
+import { OnboardingActionProps } from "../Onboarding/actions";
+import { PersonalInfoActionProps } from "../PersonalInfo/actions";
+import { ProductsActionProps } from "../Products/actions";
+import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
 import { RootState } from "../rootReducer";
-import { SelectedFundActionProps } from "../SelectedFund";
+import { SelectedFundActionProps } from "../SelectedFund/actions";
 import { AcknowledgementActionProps } from "./actions";
 
 export const AcknowledgementMapStateToProps = (state: RootState) => ({

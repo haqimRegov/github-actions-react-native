@@ -833,7 +833,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.KenangaOmni;
 				PRODUCT_NAME = KenangaMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "Aldrin Omni IOS Development Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "Omni Aldrin IOS Development Profile";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -863,7 +863,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.KenangaOmni;
 				PRODUCT_NAME = KenangaMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "Regov Omni Ad-Hoc Provisioning Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "Omni Ad-Hoc Provisioning Profile";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";

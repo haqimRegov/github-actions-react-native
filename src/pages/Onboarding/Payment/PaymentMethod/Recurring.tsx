@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, RadioButtonGroup, Switch, TextSpaceArea } from "../../../../components";
+import { AdvancedDropdown, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_MALAYSIA_BANK_BASE, DICTIONARY_RECURRING_FREQUENCY } from "../../../../data/dictionary";
 import { flexRow, px, sh24, sh8, sw24, sw360, sw40, sw64 } from "../../../../styles";
@@ -39,7 +39,7 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
 }: RecurringProps) => {
   const recurringOptions = [PAYMENT.OPTION_DDA];
   const ddaBank = recurringType === "FPX" ? DICTIONARY_MALAYSIA_BANK_BASE : DICTIONARY_DDA_BANK;
-  const sameRecurringInfoLabel = recurringType === "FPX" ? PAYMENT.LABEL_SAME_FPX : PAYMENT.LABEL_SAME_DDA;
+  // const sameRecurringInfoLabel = recurringType === "FPX" ? PAYMENT.LABEL_SAME_FPX : PAYMENT.LABEL_SAME_DDA;
 
   if (isFpx) {
     recurringOptions.push(PAYMENT.OPTION_FPX);
@@ -61,7 +61,7 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
             />
           </View>
           <CustomSpacer isHorizontal={true} space={sw64} />
-          <Switch label={sameRecurringInfoLabel} onPress={() => {}} toggle={false} />
+          {/* <Switch label={sameRecurringInfoLabel} onPress={() => {}} toggle={false} /> */}
         </View>
       </View>
       <View style={px(sw24)}>

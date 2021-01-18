@@ -27,7 +27,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     mobileNumber: undefined,
     officeNumber: undefined,
   });
-  const { principal, joint, epfInvestment } = personalInfo;
+  const { principal, joint, epfInvestment, epfShariah } = personalInfo;
   const investmentCurrencies = productSales!.map(({ investment }) =>
     investment.fundCurrency !== undefined ? investment.fundCurrency : "",
   );
@@ -131,7 +131,9 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     addPersonalInfo({ ...personalInfo, editPersonal: false });
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findEmploymentDetails = updatedDisabledSteps.indexOf("EmploymentDetails");
-    updatedDisabledSteps.splice(findEmploymentDetails, 1);
+    if (findEmploymentDetails !== -1) {
+      updatedDisabledSteps.splice(findEmploymentDetails, 1);
+    }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);
   };
@@ -188,6 +190,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           contactDetails={principal!.contactDetails!}
           epfDetails={principal!.epfDetails!}
           epfInvestment={epfInvestment!}
+          epfShariah={epfShariah!}
           investmentCurrencies={uniqueCurrencies}
           personalDetails={principal!.personalDetails!}
           setBankDetails={handlePrincipalBankDetails}

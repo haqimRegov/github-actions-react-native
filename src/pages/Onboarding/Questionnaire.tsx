@@ -89,7 +89,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     updatedFinishedSteps.push("RiskAssessment");
     const findProducts = updatedDisabledSteps.indexOf("Products");
-    updatedDisabledSteps.splice(findProducts, 1);
+    if (findProducts !== -1) {
+      updatedDisabledSteps.splice(findProducts, 1);
+    }
     setConfirmModal(undefined);
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };

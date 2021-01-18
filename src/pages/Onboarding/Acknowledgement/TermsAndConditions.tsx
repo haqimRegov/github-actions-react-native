@@ -71,7 +71,9 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const handleContinue = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findSignatures = updatedDisabledSteps.indexOf("Signatures");
-    updatedDisabledSteps.splice(findSignatures, 1);
+    if (findSignatures !== -1) {
+      updatedDisabledSteps.splice(findSignatures, 1);
+    }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("Signatures");
   };

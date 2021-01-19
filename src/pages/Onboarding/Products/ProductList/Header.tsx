@@ -31,7 +31,7 @@ import {
 } from "../../../../styles";
 import { ProductFilter, ProductFilterProps } from "./Filter";
 
-const { PRODUCT_LIST } = Language.PAGE;
+const { PRODUCT_LIST, PRODUCT_FILTER } = Language.PAGE;
 interface ProductHeaderProps extends ProductFilterProps {
   filterVisible: boolean;
   handleShowFilter: () => void;
@@ -243,6 +243,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           buttonContainerStyle={centerHorizontal}
           cancelButtonStyle={{ width: sw218 }}
           continueButtonStyle={{ width: sw218 }}
+          labelContinue={PRODUCT_FILTER.BUTTON_APPLY}
           handleCancel={handleCancelFilter}
           handleContinue={handleApplyFilter}
         />

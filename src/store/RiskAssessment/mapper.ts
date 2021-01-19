@@ -7,6 +7,7 @@ import { RootState } from "../rootReducer";
 import { RiskAssessmentActionProps } from "./actions";
 
 export const RiskMapStateToProps = (state: RootState) => ({
+  agent: state.global.agent,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
   onboarding: state.onboarding,

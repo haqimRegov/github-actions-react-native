@@ -132,9 +132,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
 
   const columns: ITableColumn[] = [
     {
-      icon: {
-        name: sortAbbr === "desc" ? "arrow-up" : "arrow-down",
-      },
+      icon: { name: sortAbbr === "desc" ? "arrow-up" : "arrow-down" },
       key: [{ key: "fundAbbr", textStyle: fsUppercase }],
       viewStyle: {
         width: sw136,
@@ -144,9 +142,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     },
     {
       key: [{ key: "fundName", textStyle: fsUppercase }],
-      icon: {
-        name: sortName === "desc" ? "arrow-up" : "arrow-down",
-      },
+      icon: { name: sortName === "desc" ? "arrow-up" : "arrow-down" },
       viewStyle: {
         width: sw323,
       },

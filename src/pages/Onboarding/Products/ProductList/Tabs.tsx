@@ -29,7 +29,6 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({ licenseType, 
   const container: ViewStyle = {
     ...fullWidth,
     ...px(sw24),
-    // backgroundColor: colorWhite._1,
     borderTopLeftRadius: sw24,
     borderTopRightRadius: sw24,
     position: "absolute",
@@ -37,21 +36,24 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({ licenseType, 
     zIndex: 2,
   };
 
-  const tabs: ProductType[] = ["ut", "prs", "prsDefault", "amp"];
+  const tabs: ProductType[] = [];
   const handleTabs = (index: number) => {
     setProductType(tabs[index]);
   };
 
-  const activeTab = tabs.indexOf(productType);
   const productTabs: { text: string }[] = [];
 
   if (licenseType.includes("UT")) {
     productTabs.push({ text: PRODUCT_LIST.TAB_LABEL_UT }, { text: PRODUCT_LIST.TAB_LABEL_AMP });
+    tabs.push("ut", "amp");
   }
 
   if (licenseType.includes("PRS")) {
     productTabs.splice(1, 0, { text: PRODUCT_LIST.TAB_LABEL_PRS }, { text: PRODUCT_LIST.TAB_LABEL_PRS_DEFAULT });
+    tabs.splice(1, 0, "prs", "prsDefault");
   }
+
+  const activeTab = tabs.indexOf(productType);
 
   return (
     <View style={container}>

@@ -55,6 +55,7 @@ interface QuestionnaireContentProps extends OnboardingContentProps, RiskStorePro
 const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
   addAssessmentQuestions,
   addRiskScore,
+  agent,
   handleCancelOnboarding,
   handleResetOnboarding,
   handleNextStep,
@@ -66,6 +67,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   riskScore,
   setLoading,
   updateOnboarding,
+  updateProductType,
 }: QuestionnaireContentProps) => {
   const { clientId, dateOfBirth, name } = principalHolder!;
   const { disabledSteps, finishedSteps } = onboarding;
@@ -93,6 +95,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       updatedDisabledSteps.splice(findProducts, 1);
     }
     setConfirmModal(undefined);
+    if (agent!.licenseType.includes("UT") === false) {
+      updateProductType("prs");
+    }
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 

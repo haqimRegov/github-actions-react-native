@@ -44,7 +44,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const dateOfBirth = personalDetails!.dateOfBirth!;
   const formattedDOB = moment(dateOfBirth).format(DEFAULT_DATE_FORMAT);
   const labelOtherId = idType !== "Passport" ? `${idType} ID` : idType;
-  const labelId = `${labelOtherId} Number`;
+  const labelId = idType !== "NRIC" ? `${labelOtherId} Number` : idType;
   const isPassport = idType === "Passport";
   const addressType = isPassport ? "Other" : "Malaysia";
 
@@ -151,6 +151,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             datePickerStyle={{ height: sh143 }}
             dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
+            minimumDate={moment().toDate()}
             setValue={setExpiryDate}
             value={inputExpiryDate}
           />

@@ -78,6 +78,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           </Fragment>
         )}
         <CustomTextInput
+          autoCapitalize="words"
           disabled={clientType !== "" && holderToFill === "principalHolder"}
           label={LABEL_NAME}
           onChangeText={setInputName}

@@ -99,6 +99,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
               })}
             {result !== undefined && result.account.status !== null ? (
               <View>
+                <CustomSpacer space={sh32} />
                 <View style={flexRow}>
                   <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
                   <CustomSpacer isHorizontal={true} space={sw8} />

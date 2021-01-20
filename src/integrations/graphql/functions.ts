@@ -7,7 +7,7 @@ export const gqlOperation = async <ResultType extends {}, VariablesType extends 
   headers?: HeadersType,
   handleError?: ResponseErrorType,
 ) => {
-  const serverError = { error: { errorCode: "EMXXX", message: "Internal Server Error", statusCode: "401" } };
+  const serverError = { error: { errorCode: "EMXXX", message: "Something went wrong", statusCode: "401" } };
 
   const errorHandling = () => {
     if (handleError !== undefined) {
@@ -21,7 +21,7 @@ export const gqlOperation = async <ResultType extends {}, VariablesType extends 
     };
     // eslint-disable-next-line no-console
     console.log("Response", response);
-    if ("error" in response.data) {
+    if ("error" in response.data || Object.values(response.data).includes(null)) {
       throw Error;
     }
     return response.data;

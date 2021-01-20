@@ -1,21 +1,21 @@
 import { CommonActions } from "@react-navigation/native";
 
+import { ERRORS } from "../data/dictionary";
 import { AlertDialog } from "./Alert";
 
-export const HandleSessionTokenExpired = (resetGlobal: Function, navigation?: IStackNavigationProp, withDialog?: boolean) => {
-  resetGlobal();
+export const HandleSessionTokenExpired = (navigation: IStackNavigationProp, error: ErrorType, noDialog?: boolean) => {
   const handleNavigate = () => {
     if (navigation !== undefined) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: "Auth" }],
+          routes: [{ name: "Logout" }],
         }),
       );
     }
   };
-  if (withDialog === true) {
-    AlertDialog("Session Expired", handleNavigate);
+  if (error !== undefined || noDialog === true) {
+    AlertDialog(ERRORS.unauthenticated.message, handleNavigate);
   } else {
     handleNavigate();
   }

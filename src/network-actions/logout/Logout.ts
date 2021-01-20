@@ -1,17 +1,22 @@
 import { Auth } from "aws-amplify";
 
-import { HandleSessionTokenExpired } from "../../utils";
+import { ERRORS } from "../../data/dictionary";
 
-type TypeResetGlobal = () => void;
-
-export const logout = async (resetGlobal: TypeResetGlobal, navigation?: IStackNavigationProp) => {
+export const logout = () => {
   try {
-    const currentUser = await Auth.currentAuthenticatedUser();
-    await currentUser.signOut({ global: true });
+    return Auth.currentAuthenticatedUser()
+      .then((user) => {
+        user.signOut({ global: true });
+        return undefined;
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log("Auth Sign Out Error", error);
+        return ERRORS.unauthenticated;
+      });
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in logout line 13 at Logout.ts", error);
-  } finally {
-    HandleSessionTokenExpired(resetGlobal, navigation);
+    console.log("Error in logout at Logout.ts", error);
+    return ERRORS.internal;
   }
 };

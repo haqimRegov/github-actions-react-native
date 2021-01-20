@@ -35,11 +35,12 @@ import {
   sw66,
   sw96,
 } from "../../styles";
-import { LinkUtils } from "../../utils";
+import { HandleSessionTokenExpired, LinkUtils } from "../../utils";
 import { ApplicationHistory } from "./ApplicationHistory";
 import { UploadDocuments, UploadHardCopy } from "./Documents";
 import { InboxPage } from "./Inbox";
 import { OrderDetails } from "./OrderDetails";
+import { Profile } from "./Profile";
 
 const { DASHBOARD } = Language.PAGE;
 interface DashboardPageProps extends GlobalStoreProps {
@@ -48,8 +49,8 @@ interface DashboardPageProps extends GlobalStoreProps {
 
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   agent,
+  config,
   navigation,
-  resetGlobal,
   unreadMessages,
   updatedUnreadMessages,
   setLoading,
@@ -61,8 +62,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     setRoute(nextPage);
   };
 
-  const handleLogout = () => {
-    logout(resetGlobal, navigation);
+  const handleLogout = async () => {
+    const response = await logout();
+    HandleSessionTokenExpired(navigation, response);
   };
 
   const handleAims = () => {
@@ -74,15 +76,15 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     setRoute("Inbox");
   };
 
-  const handleProfile = () => {};
+  const handleProfile = () => {
+    setRoute("Profile");
+    setActiveMenu(2);
+  };
 
   const handleDashboard = () => {
     setRoute("Transactions");
     setActiveMenu(0);
   };
-  // const handleEdd = () => {
-  //   setActiveMenu(2);
-  // };
 
   const props = { handleRoute: handleRoute, navigation: navigation };
   let content: JSX.Element = <ApplicationHistory {...props} />;
@@ -101,6 +103,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   }
   if (route === "Transactions") {
     content = <ApplicationHistory {...props} />;
+  }
+  if (route === "Profile") {
+    content = <Profile {...props} />;
   }
   const inboxCount = route === "Inbox" ? 0 : parseInt(unreadMessages!, 10);
 
@@ -128,7 +133,6 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
         console.log("data", data);
         updatedUnreadMessages(data.result.newMessageCount);
       }
-
       if (error !== null) {
         Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
       }
@@ -136,59 +140,68 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   useEffect(() => {
-    handleFetchInbox();
+    if (agent === undefined || config === undefined) {
+      handleLogout();
+    } else {
+      handleFetchInbox();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initials = agent!
-    .name!.split(" ")
-    .filter((text) => text !== "")
-    .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-    .join("");
+  const initials =
+    agent !== undefined
+      ? agent
+          .name!.split(" ")
+          .filter((text) => text !== "")
+          .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
+          .join("")
+      : "";
 
   return (
     <Fragment>
-      <View style={{ ...flexRow, ...fullHW }}>
-        <SideMenu spaceToBottom={0} spaceToContent={sh32}>
-          <View>
-            <View style={borderBottomGray4} />
-            <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh24) }}>
-              <Avatar text={initials} type="agent" />
-              <CustomSpacer isHorizontal={true} space={sw16} />
-              <View style={{ width: sw96 }}>
-                <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh24 }}>
-                  {agent?.name}
-                </Text>
-                <Text style={{ ...fs10RegBlue2, letterSpacing: -sw039 }}>{agent?.role}</Text>
+      {agent === undefined || config === undefined ? null : (
+        <View style={{ ...flexRow, ...fullHW }}>
+          <SideMenu spaceToBottom={0} spaceToContent={sh32}>
+            <View>
+              <View style={borderBottomGray4} />
+              <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh24) }}>
+                <Avatar text={initials} type="agent" />
+                <CustomSpacer isHorizontal={true} space={sw16} />
+                <View style={{ width: sw96 }}>
+                  <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh24 }}>
+                    {agent?.name}
+                  </Text>
+                  <Text style={{ ...fs10RegBlue2, letterSpacing: -sw039 }}>{agent?.role}</Text>
+                </View>
               </View>
-            </View>
-            <View style={borderBottomGray4} />
-            <View style={{ ...flexRow, ...py(sh20) }}>
-              <CustomSpacer isHorizontal={true} space={sw24} />
-              <View style={{ width: sw160 }}>
-                <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{agent?.branch}</Text>
-                <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dayToday}</Text>
-                <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dateToday}</Text>
+              <View style={borderBottomGray4} />
+              <View style={{ ...flexRow, ...py(sh20) }}>
+                <CustomSpacer isHorizontal={true} space={sw24} />
+                <View style={{ width: sw160 }}>
+                  <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{agent?.branch}</Text>
+                  <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dayToday}</Text>
+                  <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dateToday}</Text>
+                </View>
+                <CustomSpacer isHorizontal={true} space={sw16} />
               </View>
-              <CustomSpacer isHorizontal={true} space={sw16} />
+              <View style={borderBottomGray4} />
+              <MenuList activeIndex={activeMenu} items={MENU_ITEMS} />
             </View>
+            <CustomFlexSpacer />
             <View style={borderBottomGray4} />
-            <MenuList activeIndex={activeMenu} items={MENU_ITEMS} />
-          </View>
-          <CustomFlexSpacer />
-          <View style={borderBottomGray4} />
-          <TouchableWithoutFeedback onPress={handleAims}>
-            <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-              <Image source={LocalAssets.logo.aims} style={{ height: sh32, width: sw66 }} />
-              <CustomFlexSpacer />
-              <IcoMoon color={colorBlue._2} name="external" size={sh24} />
-            </View>
-          </TouchableWithoutFeedback>
-          <View style={borderBottomGray4} />
-        </SideMenu>
-        <CustomSpacer isHorizontal={true} space={sw200} />
-        <SafeAreaPage>{content}</SafeAreaPage>
-      </View>
+            <TouchableWithoutFeedback onPress={handleAims}>
+              <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
+                <Image source={LocalAssets.logo.aims} style={{ height: sh32, width: sw66 }} />
+                <CustomFlexSpacer />
+                <IcoMoon color={colorBlue._2} name="external" size={sh24} />
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={borderBottomGray4} />
+          </SideMenu>
+          <CustomSpacer isHorizontal={true} space={sw200} />
+          <SafeAreaPage>{content}</SafeAreaPage>
+        </View>
+      )}
     </Fragment>
   );
 };

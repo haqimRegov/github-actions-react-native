@@ -11,19 +11,16 @@ declare interface IResponseError {
   errorList?: string[];
   message: string;
   statusCode: string;
-  [key: string]: any;
 }
 
 declare interface IResponseErrorResult {
   error: IResponseError | null;
 }
 
-declare interface IError {
-  error: IResponseError;
-}
+declare type ErrorType = IResponseError | undefined;
 
 declare interface IResponseResult<T> {
   result: T;
 }
 
-declare type ResponseErrorType = (error: IError) => void;
+declare type ResponseErrorType = (error: ErrorType) => void;

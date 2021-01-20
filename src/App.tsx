@@ -7,14 +7,14 @@ import { connect } from "react-redux";
 import { Loader } from "./components/Modals/Loader";
 import { RootNavigator } from "./Navigator";
 import { logout } from "./network-actions";
-import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps, resetGlobal } from "./store";
+import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "./store";
 import { flexChild } from "./styles";
 
 interface AppProps extends GlobalStoreProps {}
 
 const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
   useEffect(() => {
-    logout(resetGlobal);
+    logout();
     SplashScreen.hide();
   }, []);
 

@@ -1,6 +1,7 @@
 declare type RootNavigatorType = {
-  Dashboard: undefined;
   Auth: undefined;
+  Dashboard: undefined;
+  Logout: undefined;
   Onboarding: undefined;
 };
 

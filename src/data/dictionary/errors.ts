@@ -40,4 +40,11 @@ export const ERROR_CODE = {
   clientAgeMinimum: "EM600",
   clientAgeMaximum: "EM601",
   clientBannedCountry: "EM602",
+  internal: "OMNI400",
+  unauthenticated: "OMNI401",
+};
+
+export const ERRORS = {
+  internal: { errorCode: ERROR_CODE.internal, message: "Something went wrong", statusCode: "400" },
+  unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Your session token has expired", statusCode: "401" },
 };

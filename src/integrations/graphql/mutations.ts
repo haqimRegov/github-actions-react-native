@@ -392,6 +392,25 @@ const userLogin = gql`
   }
 `;
 
+const updateInbox = gql`
+  mutation updateinbox($input: UpdateInboxInput) {
+    updateInbox(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 export const GQL_MUTATIONS = {
   clientRegister,
   emailOtpVerification,
@@ -406,6 +425,7 @@ export const GQL_MUTATIONS = {
   submitClientAccount,
   submitPdf,
   submitProofOfPayments,
+  updateInbox,
   userLogin,
   verifyLockOtp,
   verifyOtp,

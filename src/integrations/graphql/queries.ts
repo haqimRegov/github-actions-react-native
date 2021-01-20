@@ -140,6 +140,45 @@ const etbCheck = gql`
   }
 `;
 
+const getAgentProfile = gql`
+  query getAgentProfile {
+    agentProfile {
+      data {
+        result {
+          agentId
+          agentName
+          nric
+          agentCode
+          licenseCode
+          bdmName
+          channel
+          status
+          branchName
+          bdmEmail
+          omniEnabled
+          email
+          mobileNo
+          address {
+            address
+            city
+            postCode
+            state
+            country
+          }
+          region
+          rank
+          agency
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+      }
+    }
+  }
+`;
+
 const getReceiptSummaryList = gql`
   query getReceiptSummaryList($input: getReceiptSummaryListInput) {
     getReceiptSummaryList(input: $input) {
@@ -171,4 +210,4 @@ const getReceiptSummaryList = gql`
   }
 `;
 
-export const GQL_QUERIES = { etbCheck, getInbox, getReceiptSummaryList, productList };
+export const GQL_QUERIES = { etbCheck, getAgentProfile, getInbox, getReceiptSummaryList, productList };

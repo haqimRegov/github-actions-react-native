@@ -1,5 +1,23 @@
 import gql from "graphql-tag";
 
+const changePassword = gql`
+  mutation ChangePassword($input: ChangePasswordInput) {
+    changePassword(input: $input) {
+      data {
+        result {
+          status
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const clientRegister = gql`
   mutation ClientRegister($input: register) {
     clientRegister(input: $input) {
@@ -412,6 +430,7 @@ const updateInbox = gql`
 `;
 
 export const GQL_MUTATIONS = {
+  changePassword,
   clientRegister,
   emailOtpVerification,
   emailVerification,

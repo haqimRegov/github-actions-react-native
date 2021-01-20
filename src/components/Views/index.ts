@@ -8,5 +8,6 @@ export * from "./PasswordValidation";
 export * from "./Prompt";
 export * from "./Question";
 export * from "./Spacer";
+export * from "./Splash";
 export * from "./Status";
 export * from "./TextSpaceArea";

@@ -25,6 +25,7 @@ export const colorBlue = {
   _5: "#122778",
   _6: "#253052",
   _6_5: "rgba(37, 48, 82, 0.5)",
+  _7: "#132B53",
 };
 
 export const colorGray = {
@@ -44,8 +45,20 @@ export const colorGreen = {
   _1_05: "rgba(46, 204, 130, 0.05)",
 };
 
+export const colorMagenta = {
+  _1: "#5A204A",
+};
+
 export const colorMint = {
   _1: "#2CD9C5",
+};
+
+export const colorOrange = {
+  _1: "#A85846",
+};
+
+export const colorPink = {
+  _1: "#A82252",
 };
 
 export const colorRed = {

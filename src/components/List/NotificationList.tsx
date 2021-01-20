@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, ViewStyle } from "react-native";
 
 import { DEFAULT_TIME_FORMAT } from "../../constants";
-import { colorWhite, fs12RegBlue25, fs16SemiBoldBlack1, sh14, sh8 } from "../../styles";
+import { colorWhite, fs12RegBlue25, fs16RegBlack2, sh14, sh8 } from "../../styles";
 import { AvatarProps } from "../Avatar";
 import { NotificationItem } from "../Items";
 import { CustomSpacer } from "../Views/Spacer";
@@ -34,7 +34,7 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
           }
         };
         const unreadStyle: ViewStyle = isRead === true ? { backgroundColor: colorWhite._4 } : {};
-        const titleStyle: TextStyle = isRead === true ? fs16SemiBoldBlack1 : {};
+        const titleStyle: TextStyle = isRead === true ? fs16RegBlack2 : {};
 
         const avatar = avatarProps !== undefined ? avatarProps(item) : undefined;
 

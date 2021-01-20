@@ -9,8 +9,8 @@ import {
   colorMagenta,
   colorOrange,
   colorPink,
-  colorRed,
   colorWhite,
+  colorYellow,
   fs16BoldWhite1,
   fsUppercase,
   shadowBlue5,
@@ -57,7 +57,7 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
         break;
 
       case "system":
-        defaultColor = colorRed._3;
+        defaultColor = colorYellow._2;
         break;
 
       default:

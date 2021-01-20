@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
-import { FILTER_EPF_LABEL, FILTER_RISK_CATEGORY, FILTER_SHARIAH_LABEL } from "../../../../../data/dictionary";
+import { FILTER_EPF_LABEL, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
 import { centerVertical, flexRow, fs16BoldBlack1, px, sh32, sh8, sw24, sw240, sw64 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
@@ -15,8 +15,10 @@ interface AMPFilterProps {
 export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter }: AMPFilterProps) => {
   const { epfApproved, riskCategory, shariahApproved } = filter;
   const disabledEpfApproved = [epfApproved![0] === "Yes" ? 1 : -1, epfApproved![0] === "No" ? 0 : -1];
-  const shariahApprovedOnly = shariahApproved![0] === "No" ? 0 : -1;
-  const disabledShariah = [shariahApproved![0] === "Yes" ? 1 : -1, shariahApprovedOnly];
+  const shariahApprovedOnly = shariahApproved![0] === "No" ? 1 : -1;
+  const disabledShariah = [shariahApproved![0] === "Yes" ? 0 : -1, shariahApprovedOnly];
+  const conventionalSelected = shariahApproved![0] === "No" ? ["Conventional"] : [];
+  const shariahSelected = shariahApproved![0] === "Yes" ? ["Shariah"] : conventionalSelected;
 
   const handleEpf = (value: string) => {
     const filterClone = { ...filter };
@@ -31,9 +33,10 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
   };
 
   const handleShariah = (value: string) => {
+    const actualValue = value === "Conventional" ? "No" : "Yes";
     const filterClone = { ...filter };
     const tmp = [...shariahApproved!];
-    tmp.splice(0, tmp.includes(value) ? 1 : 0, tmp.includes(value) ? "" : value);
+    tmp.splice(0, tmp.includes(actualValue) ? 1 : 0, tmp.includes(actualValue) ? "" : actualValue);
     filterClone.shariahApproved = tmp;
     setFilter(filterClone);
   };
@@ -56,11 +59,11 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
           />
         </View>
         <View style={{ width: sw240 }}>
-          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_SHARIAH} />
           <CheckBoxGroup
             disabledIndex={disabledShariah}
-            labels={FILTER_SHARIAH_LABEL}
-            selected={shariahApproved!}
+            label={PRODUCT_FILTER.LABEL_TYPE}
+            labels={FILTER_TYPE}
+            selected={shariahSelected}
             setSelected={handleShariah}
           />
         </View>

@@ -1,19 +1,19 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { Alert } from "react-native";
 
+import { ERRORS } from "../../data/dictionary";
+
 export const gqlOperation = async <ResultType extends {}, VariablesType extends {}, HeadersType extends {} = {}>(
   query: string,
   variables?: VariablesType,
   headers?: HeadersType,
   handleError?: ResponseErrorType,
 ) => {
-  const serverError = { error: { errorCode: "EMXXX", message: "Something went wrong", statusCode: "401" } };
-
   const errorHandling = () => {
     if (handleError !== undefined) {
-      return handleError(serverError);
+      return handleError(ERRORS.internal);
     }
-    return Alert.alert(serverError.error.message);
+    return Alert.alert(ERRORS.internal.message);
   };
   try {
     const response = (await API.graphql(graphqlOperation(query, { input: variables }), { ...headers })) as {
@@ -26,10 +26,8 @@ export const gqlOperation = async <ResultType extends {}, VariablesType extends 
     }
     return response.data;
   } catch (error) {
-    // Alert.alert("Internal Server Error");
-    // const serverError = { data: { error: { errorCode: "EMXXX", message: "Internal Server Error", statusCode: "401" } } };
     // eslint-disable-next-line no-console
-    console.log("Error in gqlOperation line 23 at integrations/graphql/functions.ts", JSON.stringify(error));
+    console.log("Error in gqlOperation line 23 at integrations/graphql/functions.ts", error);
     errorHandling();
     return error;
   }

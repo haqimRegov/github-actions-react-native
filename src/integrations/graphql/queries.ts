@@ -1,5 +1,37 @@
 import gql from "graphql-tag";
 
+const getInbox = gql`
+  query getInbox($input: InboxInput) {
+    getInbox(input: $input) {
+      data {
+        result {
+          inbox {
+            notificationId
+            title
+            message
+            senderName
+            source
+            searchKey
+            searchType
+            isRead
+            updatedAt
+            createdOn
+          }
+          newMessageCount
+          page
+          pages
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const productList = gql`
   query productList($input: ProductFilter) {
     productList(input: $input) {
@@ -139,4 +171,4 @@ const getReceiptSummaryList = gql`
   }
 `;
 
-export const GQL_QUERIES = { etbCheck, getReceiptSummaryList, productList };
+export const GQL_QUERIES = { etbCheck, getInbox, getReceiptSummaryList, productList };

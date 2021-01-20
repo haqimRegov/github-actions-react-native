@@ -13,6 +13,10 @@ export const addGlobal = (global: GlobalState) => {
   return typedAction("global/ADD_GLOBAL", global);
 };
 
+export const updatedUnreadMessages = (count: string) => {
+  return typedAction("global/UPDATE_UNREAD_MESSAGES", count);
+};
+
 export const setLoading = (loading: boolean) => {
   return typedAction("global/SET_LOADING", loading);
 };
@@ -30,9 +34,25 @@ export const resetGlobal = () => {
 };
 
 export type GlobalAction = ReturnType<
-  typeof addAgent | typeof addConfig | typeof addGlobal | typeof resetAgent | typeof resetConfig | typeof resetGlobal | typeof setLoading
+  | typeof addAgent
+  | typeof addConfig
+  | typeof addGlobal
+  | typeof resetAgent
+  | typeof resetConfig
+  | typeof resetGlobal
+  | typeof setLoading
+  | typeof updatedUnreadMessages
 >;
 
-export const GlobalActionProps = { addAgent, addConfig, addGlobal, resetAgent, resetConfig, resetGlobal, setLoading };
+export const GlobalActionProps = {
+  addAgent,
+  addConfig,
+  addGlobal,
+  resetAgent,
+  resetConfig,
+  resetGlobal,
+  setLoading,
+  updatedUnreadMessages,
+};
 
 export type GlobalActionTypes = typeof GlobalActionProps;

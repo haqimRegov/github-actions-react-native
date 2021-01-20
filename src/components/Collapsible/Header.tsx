@@ -9,6 +9,7 @@ import {
   centerVertical,
   circleBorder,
   colorBlack,
+  colorBlue,
   colorGray,
   colorRed,
   colorTransparent,
@@ -45,6 +46,7 @@ interface CollapsibleHeaderProps {
   inputSearch: string;
   label?: string;
   noFilter?: boolean;
+  onSubmitEditing?: () => void;
   placeholder?: string;
   setInputSearch: (value: string) => void;
 }
@@ -56,6 +58,7 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
   inputSearch,
   label,
   noFilter,
+  onSubmitEditing,
   placeholder,
   setInputSearch,
 }: CollapsibleHeaderProps) => {
@@ -109,7 +112,9 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
               <View style={{ ...centerVertical, ...flexRow }}>
                 <IconInput
                   icon="search"
+                  iconColor={colorBlue._2}
                   onChangeText={setInputSearch}
+                  onSubmitEditing={onSubmitEditing}
                   placeholder={placeholder}
                   placeholderTextColor={colorBlack._2_5}
                   style={inputStyle}

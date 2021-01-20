@@ -37,6 +37,11 @@ export const globalReducer = (state = globalInitialState, action: GlobalAction):
         ...state,
         loading: action.payload,
       };
+    case "global/UPDATE_UNREAD_MESSAGES":
+      return {
+        ...state,
+        unreadMessages: action.payload,
+      };
 
     default:
       return state;

@@ -298,6 +298,13 @@ export const fs14SemiBoldBlack1: TextStyle = {
   lineHeight: sh19,
 };
 
+export const fs16BlackBlack1: TextStyle = {
+  color: colorBlack._1,
+  fontFamily: NunitoBlack,
+  fontSize: sh16,
+  lineHeight: sh24,
+};
+
 export const fs16BoldBlack1: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoBold,
@@ -321,6 +328,13 @@ export const fs16BoldBlack26: TextStyle = {
 
 export const fs16BoldBlue2: TextStyle = {
   color: colorBlue._2,
+  fontFamily: NunitoBold,
+  fontSize: sh16,
+  lineHeight: sh24,
+};
+
+export const fs16BoldWhite1: TextStyle = {
+  color: colorWhite._1,
   fontFamily: NunitoBold,
   fontSize: sh16,
   lineHeight: sh24,
@@ -454,6 +468,13 @@ export const fs24RegBlack2: TextStyle = {
 
 export const fs40BoldBlack2: TextStyle = {
   color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh40,
+  lineHeight: sh55,
+};
+
+export const fs40BoldWhite1: TextStyle = {
+  color: colorWhite._1,
   fontFamily: NunitoBold,
   fontSize: sh40,
   lineHeight: sh55,

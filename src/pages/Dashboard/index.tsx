@@ -1,6 +1,6 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Alert, Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -8,7 +8,7 @@ import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SafeAr
 import { DAY_FORMAT, FULL_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_AIMS_URL } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
-import { logout } from "../../network-actions";
+import { getInbox, logout } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import {
   borderBottomGray4,
@@ -46,7 +46,14 @@ interface DashboardPageProps extends GlobalStoreProps {
   navigation: IStackNavigationProp;
 }
 
-const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, navigation, resetGlobal }: DashboardPageProps) => {
+const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
+  agent,
+  navigation,
+  resetGlobal,
+  unreadMessages,
+  updatedUnreadMessages,
+  setLoading,
+}: DashboardPageProps) => {
   const [route, setRoute] = useState<string>("");
   const [activeMenu, setActiveMenu] = useState<number>(0);
 
@@ -95,18 +102,49 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   if (route === "Transactions") {
     content = <ApplicationHistory {...props} />;
   }
+  const inboxCount = route === "Inbox" ? 0 : parseInt(unreadMessages!, 10);
 
-  // TODO integration for inbox
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
-    { badgeCount: 2, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
-    // { name: "edd", onPress: handleEdd, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
+    { badgeCount: inboxCount, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
     { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
     { name: "logout", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];
 
   const dateToday = moment().format(FULL_DATE_FORMAT);
   const dayToday = `${moment().format(DAY_FORMAT)},`;
+
+  const handleFetchInbox = async () => {
+    setLoading(true);
+    const request: IGetInboxRequest = { page: "1", search: "" };
+    // eslint-disable-next-line no-console
+    console.log("request", request);
+    const response: IGetInboxResponse = await getInbox(request);
+    setLoading(false);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        // eslint-disable-next-line no-console
+        console.log("data", data);
+        updatedUnreadMessages(data.result.newMessageCount);
+      }
+
+      if (error !== null) {
+        Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleFetchInbox();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const initials = agent!
+    .name!.split(" ")
+    .filter((text) => text !== "")
+    .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
+    .join("");
 
   return (
     <Fragment>
@@ -115,7 +153,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
           <View>
             <View style={borderBottomGray4} />
             <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh24) }}>
-              <Avatar image={{ uri: agent?.image }} />
+              <Avatar text={initials} type="agent" />
               <CustomSpacer isHorizontal={true} space={sw16} />
               <View style={{ width: sw96 }}>
                 <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh24 }}>

@@ -7,6 +7,7 @@ export const GlobalMapStateToProps = (state: RootState) => ({
   agent: state.global.agent,
   config: state.global.config,
   isLoading: state.global.loading,
+  unreadMessages: state.global.unreadMessages,
 });
 
 export const GlobalMapDispatchToProps = (dispatch: Dispatch) => {

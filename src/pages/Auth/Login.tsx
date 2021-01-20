@@ -1,7 +1,7 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, useState } from "react";
-import { ActivityIndicator, Keyboard, View } from "react-native";
+import { ActivityIndicator, Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -51,6 +51,12 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
     setLoading(true);
     setErrorMessage(undefined);
     const credentials = await Auth.Credentials.get();
+
+    if ("sessionToken" in credentials === false) {
+      setLoading(false);
+      return Alert.alert("No Internet Connection");
+    }
+
     const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
     setLoading(true);
     const response: ILoginResponse = await login(

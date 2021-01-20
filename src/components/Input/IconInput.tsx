@@ -2,20 +2,22 @@ import React, { FunctionComponent } from "react";
 import { Image, ImageSourcePropType, ImageStyle, TextInput, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { border, centerVertical, colorGray, flexChild, fullWidth, sh24, sh40, sw1, sw16, sw20 } from "../../styles";
+import { border, centerVertical, colorBlack, colorGray, flexChild, fullWidth, sh24, sh40, sw1, sw16, sw20 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 import { CustomTextInput, CustomTextInputProps } from "./Input";
 
 interface IconInputProps extends CustomTextInputProps {
   icon?: ImageSourcePropType | string;
-  iconSize?: number;
+  iconColor?: string;
   iconPosition?: "left" | "right";
+  iconSize?: number;
   iconInputRef?: TextInput | null;
   setIconInputRef?: (instance: TextInput | null) => void;
 }
 
 export const IconInput: FunctionComponent<IconInputProps> = ({
   icon,
+  iconColor,
   iconPosition,
   iconSize,
   keyboardType,
@@ -29,10 +31,11 @@ export const IconInput: FunctionComponent<IconInputProps> = ({
   ...rest
 }: IconInputProps) => {
   const defaultIconSize = iconSize !== undefined ? iconSize : sh24;
+  const defaultIconColor = iconColor !== undefined ? iconColor : colorBlack._1;
   const imageSize: ImageStyle =
     iconSize !== undefined ? { height: iconSize, width: iconSize } : { height: defaultIconSize, width: defaultIconSize };
 
-  const icoMoon = typeof icon === "string" ? <IcoMoon name={icon} size={defaultIconSize} /> : null;
+  const icoMoon = typeof icon === "string" ? <IcoMoon color={defaultIconColor} name={icon} size={defaultIconSize} /> : null;
   const imageIcon = typeof icon === "number" ? <Image source={icon} style={imageSize} /> : null;
 
   const flexDirection: ViewStyle = iconPosition === "right" ? { flexDirection: "row-reverse" } : { flexDirection: "row" };

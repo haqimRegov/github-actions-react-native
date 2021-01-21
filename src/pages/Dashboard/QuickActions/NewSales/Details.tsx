@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
 import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
-import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_COUNTRIES, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
 import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
 
@@ -105,7 +105,6 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
             <CustomDatePicker
               disabled={clientType !== "" && holderToFill === "principalHolder"}
-              selectedFormat={DEFAULT_DATE_FORMAT}
               placeholder={ADD_CLIENT.PLACEHOLDER_DATE}
               datePickerStyle={{ height: sh143 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}

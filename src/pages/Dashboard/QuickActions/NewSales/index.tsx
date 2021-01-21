@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { connect } from "react-redux";
 
 import { ActionButtons, CustomSpacer, RNModal } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_PLACE_OF_BIRTH, ERROR_CODE } from "../../../../data/dictionary";
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
@@ -225,14 +225,17 @@ const NewSalesComponent = ({
       if (error === null && data !== null) {
         const moreJointInfo =
           data.result.jointHolder !== undefined && data.result.jointHolder !== null
-            ? { dateOfBirth: data.result.jointHolder.dateOfBirth, clientId: data.result.jointHolder.clientId }
+            ? {
+                dateOfBirth: moment(data.result.jointHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
+                clientId: data.result.jointHolder.clientId,
+              }
             : {};
         setErrorMessage(undefined);
         addClientDetails({
           ...details,
           principalHolder: {
             ...principalHolder,
-            dateOfBirth: data.result.principalHolder.dateOfBirth,
+            dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
             clientId: data.result.principalHolder.clientId,
           },
           jointHolder: { ...jointHolder, ...moreJointInfo },

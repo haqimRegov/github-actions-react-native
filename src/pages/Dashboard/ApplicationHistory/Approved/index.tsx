@@ -1,21 +1,26 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { Alert, View, ViewStyle } from "react-native";
+import { Alert, Image, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
+import { LocalAssets } from "../../../../assets/LocalAssets";
 import { AdvanceTable, CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { DASHBOARD_APPROVED_MOCKS } from "../../../../mocks";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
+  centerHV,
   colorWhite,
+  flexChild,
   fs10RegBlue38,
   fs12BoldBlue2,
   fs12RegBlue2,
   fs12RegBlue25,
   fs12RegBlue6,
+  fs16BoldBlue2,
   fsTransformNone,
   fsUppercase,
   px,
+  sh16,
   sh32,
   sw039,
   sw106,
@@ -149,15 +154,24 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
     ...px(sw16),
+    ...flexChild,
   };
 
   return (
     <View style={tableContainer}>
       <AdvanceTable
         columns={columns}
-        data={approved.orders}
+        data={[]}
         handleRowNavigation={handleOrderDetails}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
+        RenderEmptyState={() => (
+          <View style={{ ...centerHV, ...flexChild }}>
+            <Image source={LocalAssets.illustration.transactionsEmpty} style={{ height: sw176, width: sw176 }} />
+            <CustomSpacer space={sh16} />
+            <Text style={fs16BoldBlue2}>No transactions yet.</Text>
+            <Text style={fs12RegBlue2}>Your new transactions will be shown here.</Text>
+          </View>
+        )}
         RenderOptions={(props: ITableOptions) => <ApprovedOrderActions {...props} handleRoute={handleRoute} setCurrentOrder={viewOrder} />}
       />
       <CustomSpacer space={sh32} />

@@ -34,14 +34,12 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
 }
 
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
-  const { approved, handleRoute, navigation, orderCount, pending, rejected, selectedOrders } = props;
-  const tabs = { approved, pending, rejected };
+  const { handleRoute, navigation, pending, selectedOrders } = props;
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [tab, setTab] = useState<TransactionDashboardType>("pending");
   const [selectedFilter, setSelectedFilter] = useState<any>([]);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>("");
-
+  const [activeTab, setActiveTab] = useState<number>(0);
   const handleDone = () => {
     setShowModal(false);
     handleRoute("Application");
@@ -59,18 +57,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     Alert.alert("handlePress");
   };
 
-  const handlePending = () => {
-    setTab("pending");
-  };
-
-  const handleApproved = () => {
-    setTab("approved");
-  };
-
-  const handleRejected = () => {
-    setTab("rejected");
-  };
-
   const handlePrintAll = () => {
     setShowModal(true);
   };
@@ -82,9 +68,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const pageProps = { handleRoute: handleRoute, navigation: navigation };
   let content: JSX.Element = <View />;
 
-  if (tab === "pending") {
+  if (activeTab === 0) {
     content = <PendingOrders {...pageProps} />;
-  } else if (tab === "approved") {
+  } else if (activeTab === 1) {
     content = <ApprovedOrders {...pageProps} />;
   } else {
     content = <RejectedOrders {...pageProps} />;
@@ -92,10 +78,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const selectionText =
     pending?.orders !== undefined && selectedOrders.length > 1 ? DASHBOARD_HOME.LABEL_ORDERS_SELECTED : DASHBOARD_HOME.LABEL_ORDER_SELECTED;
-
-  const currentPage = tabs[tab]?.currentPage;
-  const totalPages = tabs[tab]?.totalPages;
-  const itemCount = orderCount![tab];
 
   const bannerText = `${selectedOrders!.length} ${selectionText}`;
 
@@ -114,6 +96,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           <CustomSpacer space={sh24} />
           <View
             style={{
+              ...flexChild,
               ...shadowBlack5,
               marginHorizontal: sw24,
               backgroundColor: colorWhite._1,
@@ -124,36 +107,17 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
             <View style={flexRow}>
               <TabGroup
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
                 tabs={[
-                  {
-                    badgeCount: orderCount?.pending,
-                    onPress: handlePending,
-                    text: DASHBOARD_HOME.LABEL_PENDING,
-                  },
-                  {
-                    badgeCount: orderCount?.approved,
-                    onPress: handleApproved,
-                    text: DASHBOARD_HOME.LABEL_APPROVED,
-                  },
-                  {
-                    badgeCount: orderCount?.rejected,
-                    onPress: handleRejected,
-                    text: DASHBOARD_HOME.LABEL_REJECTED,
-                  },
+                  { badgeCount: 0, text: DASHBOARD_HOME.LABEL_PENDING },
+                  { badgeCount: 0, text: DASHBOARD_HOME.LABEL_APPROVED },
+                  { badgeCount: 0, text: DASHBOARD_HOME.LABEL_REJECTED },
                 ]}
               />
-
               <View style={{ ...flexRow, ...flexChild, ...borderBottomGray4 }}>
                 <CustomFlexSpacer />
-                <Pagination
-                  label={false}
-                  onPressNext={handleNext}
-                  onPressPrev={handlePrev}
-                  page={currentPage!}
-                  totalItems={itemCount}
-                  itemsPerPage={10}
-                  totalPages={totalPages!}
-                />
+                <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={1} totalPages={1} />
                 <CustomSpacer isHorizontal={true} space={sw24} />
               </View>
             </View>
@@ -162,9 +126,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           </View>
         </View>
         <CustomSpacer space={sh36} />
-        {selectedOrders!.length !== 0 && tab === "pending" ? <CustomSpacer space={sh112} /> : null}
+        {selectedOrders!.length !== 0 && activeTab === 0 ? <CustomSpacer space={sh112} /> : null}
       </DashboardLayout>
-      {selectedOrders!.length !== 0 && tab === "pending" ? (
+      {selectedOrders!.length !== 0 && activeTab === 0 ? (
         <SelectionBanner
           bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
           cancelOnPress={handlePrintAll}

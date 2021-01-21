@@ -142,6 +142,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     titleStyle: fs16BoldBlack2,
   };
 
+  const masterClassKeys = masterClassList !== undefined ? Object.keys(masterClassList) : [];
+
   const currencies =
     masterClassList !== undefined
       ? masterClassList[inputClass].map((value) => {
@@ -192,23 +194,21 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24) }}>
-            {fund.fundCurrencies.length > 1 || fund.fundClasses.length > 1 ? (
+            {masterClassList !== undefined && masterClassKeys.length > 0 ? (
               <Fragment>
                 <View style={{ ...flexRow, ...px(sw24) }}>
-                  {fund.fundClasses.length > 1 ? (
+                  {masterClassKeys.length > 1 || "" in masterClassList === false ? (
                     <Fragment>
                       <AdvancedDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
                       <CustomSpacer isHorizontal={true} space={sw64} />
                     </Fragment>
                   ) : null}
-                  {fund.fundCurrencies.length > 1 ? (
-                    <AdvancedDropdown
-                      handleChange={setInputCurrency}
-                      items={currencies}
-                      label={PRODUCT_DETAILS.LABEL_CURRENCY}
-                      value={inputCurrency}
-                    />
-                  ) : null}
+                  <AdvancedDropdown
+                    handleChange={setInputCurrency}
+                    items={currencies}
+                    label={PRODUCT_DETAILS.LABEL_CURRENCY}
+                    value={inputCurrency}
+                  />
                 </View>
                 <CustomSpacer space={sh24} />
               </Fragment>

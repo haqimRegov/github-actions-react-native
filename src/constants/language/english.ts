@@ -75,7 +75,7 @@ export const english = {
       LABEL_SELECT_ID_TYPE: "Select ID Type:",
       LABEL_VERIFY_INDIVIDUAL: "Please verify your details",
       LABEL_VERIFY_JOINT: "Please verify details",
-      PLACEHOLDER_DATE: "mm/dd/yyyy",
+      PLACEHOLDER_DATE: "dd/mm/yyyy",
       SUBHEADING_JOINT: "Add joint account holder details",
       SUBHEADING: "Let’s open account or add new sales",
     },
@@ -286,7 +286,7 @@ export const english = {
     DATE_PICKER: {
       BUTTON_CONFIRM: "Confirm Date",
       PLACEHOLDER_TIME: "12:00 PM",
-      PLACEHOLDER_DATE: "mm/dd/yy",
+      PLACEHOLDER_DATE: "dd/mm/yyyy",
     },
     DECLARATIONS: {
       BORN_US: "Were you born in the USA?",

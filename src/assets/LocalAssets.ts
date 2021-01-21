@@ -5,6 +5,7 @@ import illustrationLoginError from "./illustration_login_error/illustration_logi
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
 import illustrationProfileSuccess from "./illustration_profile_success/illustration_profile_success.png";
 import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
+import illustrationTransactionsEmpty from "./illustration_transactions_empty/illustration_transactions_empty.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
 import kenanga from "./kenanga/kenanga.png";
 import logoAims from "./logo_aims/logo_aims.png";
@@ -25,6 +26,7 @@ export const LocalAssets = {
     profileSuccess: illustrationProfileSuccess,
     loginError: illustrationLoginError,
     submissionSummary: illustrationSubmissionSummary,
+    transactionsEmpty: illustrationTransactionsEmpty,
     uploadSuccess: illustrationUploadSuccess,
   },
   login: {

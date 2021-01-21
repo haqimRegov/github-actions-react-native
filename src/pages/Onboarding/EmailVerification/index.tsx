@@ -4,7 +4,7 @@ import { Text } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../../components";
-import { DATE_OF_BIRTH_FORMAT, Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { fs16BoldBlack2 } from "../../../styles";
@@ -90,7 +90,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   };
 
   const jointEmailCheck =
-    accountType === "Joint" && moment().diff(moment(details?.jointHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT), "years") >= 18;
+    accountType === "Joint" && moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18;
 
   useEffect(() => {
     if (emailOtpSent === true) {

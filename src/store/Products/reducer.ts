@@ -203,7 +203,107 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
       };
     case "products/RESET_PRODUCTS":
       return {
-        ...productsInitialState,
+        ut: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+          ],
+          totalCount: {
+            all: "0",
+            recommended: "0",
+          },
+        },
+        prs: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+          ],
+          totalCount: {
+            all: "0",
+            recommended: "0",
+          },
+        },
+        prsDefault: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+          ],
+          totalCount: {
+            all: "0",
+            recommended: "0",
+          },
+        },
+        amp: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+          ],
+          totalCount: {
+            all: "0",
+            recommended: "0",
+          },
+        },
+        productType: "ut",
       };
 
     default:

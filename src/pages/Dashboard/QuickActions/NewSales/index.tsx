@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { connect } from "react-redux";
 
 import { ActionButtons, CustomSpacer, RNModal } from "../../../../components";
-import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_PLACE_OF_BIRTH, ERROR_CODE } from "../../../../data/dictionary";
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
@@ -123,7 +123,7 @@ const NewSalesComponent = ({
             personalDetails: {
               ...personalInfo.joint?.personalDetails,
               countryOfBirth: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
-              dateOfBirth: moment(jointHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate(),
+              dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
               expirationDate: undefined,
               idNumber: jointHolder?.id,
               idType: jointClientIdType,
@@ -139,7 +139,7 @@ const NewSalesComponent = ({
         personalDetails: {
           ...personalInfo.principal?.personalDetails,
           countryOfBirth: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[133].value,
-          dateOfBirth: moment(principalHolder?.dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate(),
+          dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
           expirationDate: undefined,
           idNumber: principalHolder?.id,
           idType: principalClientIdType,
@@ -304,6 +304,7 @@ const NewSalesComponent = ({
                       clientInfo={details![holderToFill]!}
                       setClientInfo={setClientInfo}
                       setAccountType={setAccountType}
+                      setErrorMessage={setErrorMessage}
                     />
                   </Fragment>
                 ) : (

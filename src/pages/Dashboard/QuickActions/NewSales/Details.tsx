@@ -17,6 +17,7 @@ interface NewSalesDetailsProps {
   clientInfo: IClientBasicInfo;
   setAccountType: (value: string) => void;
   setClientInfo: (value: IClientBasicInfo) => void;
+  setErrorMessage: (value: string | undefined) => void;
 }
 
 export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
@@ -27,6 +28,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   setAccountType,
   clientInfo,
   setClientInfo,
+  setErrorMessage,
 }: NewSalesDetailsProps) => {
   const { country, dateOfBirth, id, idType, otherIdType, name } = clientInfo;
   const title = holderToFill === "principalHolder" ? ADD_CLIENT.LABEL_CHOOSE_ACCOUNT_TYPE : ADD_CLIENT.SUBHEADING_JOINT;
@@ -37,7 +39,10 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const LABEL_NAME = `${ADD_CLIENT.LABEL_NAME} ${LABEL_ID_DYNAMIC}`;
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
 
-  const setInputIdType = (value: TypeIDChoices) => setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
+  const setInputIdType = (value: TypeIDChoices) => {
+    setErrorMessage(undefined);
+    setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
+  };
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
   const setInputCountry = (value: string) => setClientInfo({ ...[holderToFill], country: value });
   const setInputName = (value: string) => setClientInfo({ ...[holderToFill], name: value });
@@ -100,11 +105,9 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
             <CustomDatePicker
               disabled={clientType !== "" && holderToFill === "principalHolder"}
-              selectedFormat={DATE_OF_BIRTH_FORMAT}
               placeholder={ADD_CLIENT.PLACEHOLDER_DATE}
               datePickerStyle={{ height: sh143 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
-              //   keyboardAvoidingRef={ref}
               mode="date"
               setValue={setInputDateOfBirth}
               value={dateValue}

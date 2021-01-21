@@ -72,6 +72,7 @@ declare interface BaseTableProps {
   onRowSelect?: (record: ITableData) => void;
   RenderAccordion?: (record: ITableData, index: number) => JSX.Element;
   RenderCustomItem?: (customItem: ITableCustomItem) => JSX.Element;
+  RenderEmptyState?: () => JSX.Element;
   RenderOptions?: (props: ITableOptions) => JSX.Element;
   rowSelection?: ITableData[];
   rowSelectionKey?: string;

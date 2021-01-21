@@ -5,7 +5,6 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import { ActionButtons, ButtonSelectionList, CustomSpacer, IconButton, IconInput, LinkText } from "../../../components";
 import { Language } from "../../../constants";
-import { IcoMoon } from "../../../icons";
 import {
   centerHorizontal,
   centerHV,
@@ -19,7 +18,6 @@ import {
   colorWhite,
   flexGrow,
   flexRow,
-  fs12RegBlue2,
   fs14RegBlue2,
   fs24BoldBlue2,
   fullHeight,
@@ -28,7 +26,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh34,
   sh48,
   shadowBlack5,
   sw02,
@@ -40,7 +37,6 @@ import {
   sw600,
   sw729,
   sw8,
-  sw85,
 } from "../../../styles";
 
 const { PRODUCT_FILTER, DASHBOARD_HOME } = Language.PAGE;
@@ -131,8 +127,6 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
 
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const inputStyle: TextStyle = { ...fs14RegBlue2, letterSpacing: -sw02 };
-  const filterToolTip: TextStyle = { top: -30, zIndex: 1, position: "absolute" };
-  const toolTipLabel: TextStyle = { position: "absolute", top: 0, left: 0, right: 0, bottom: 8, ...centerHV };
   const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
   useEffect(() => {
@@ -161,17 +155,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
                   viewStyle={{ borderRadius: sw100, height: sh48, width: sw600 }}
                 />
                 <CustomSpacer isHorizontal={true} space={sw40} />
-                <View style={{ width: sw85 }}>
-                  <View style={filterToolTip}>
-                    <IcoMoon color={colorGray._1} name="filter-tooltip" size={sh34} />
-                    <View style={toolTipLabel}>
-                      <Text style={{ ...fs12RegBlue2 }}>{PRODUCT_FILTER.LABEL_FILTER}</Text>
-                    </View>
-                  </View>
-                  <View style={centerVertical}>
-                    <IconButton color={filterColor} name="filter" onPress={handlePressFilter} size={sh24} style={filterContainer} />
-                  </View>
-                </View>
+                <IconButton color={filterColor} name="filter" onPress={handlePressFilter} size={sh24} style={filterContainer} />
               </View>
             </View>
             {filterVisible || filterValues.length === 0 ? null : (

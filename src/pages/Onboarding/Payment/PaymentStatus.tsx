@@ -55,6 +55,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
     }
     return null;
   };
+
   return (
     <View>
       <ConfirmationModal
@@ -82,7 +83,10 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
                     <View style={flexRow}>
                       <Text style={fs16BoldBlack1}>{order.orderNumber}</Text>
                       <CustomSpacer isHorizontal={true} space={sw8} />
-                      <Tag color={order.status === "Completed" ? "secondary" : "warning"} text={order.status} />
+                      <Tag
+                        color={order.status === "Completed" || order.status === "Submitted" ? "secondary" : "warning"}
+                        text={order.status}
+                      />
                     </View>
                     <View>
                       {order.remarks.map((remark, remarkIndex) => {
@@ -97,13 +101,13 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
                   </View>
                 );
               })}
-            {result !== undefined && result.account.status !== null ? (
+            {result !== undefined && result.account !== null ? (
               <View>
                 <CustomSpacer space={sh32} />
                 <View style={flexRow}>
                   <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <Tag color={result?.account.status === "Completed" ? "secondary" : "warning"} text={result!.account.status} />
+                  <Tag color={result.account.status === "Completed" ? "secondary" : "warning"} text={result!.account.status} />
                 </View>
                 <View>
                   {result!.account.remarks.map((remark, remarkIndex) => {

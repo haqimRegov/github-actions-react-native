@@ -1,8 +1,9 @@
+import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../../components";
-import { Language } from "../../../../constants";
+import { DEFAULT_DATE_FORMAT, FULL_DATE_FORMAT, Language } from "../../../../constants";
 import { flexRow, fs16BoldBlack1, fs24BoldBlack2, sh24, sw208, sw32 } from "../../../../styles";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -31,7 +32,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
           <LabeledTitle
             label={ADD_CLIENT.DETAILS_LABEL_DOB}
             spaceToBottom={sh24}
-            title={principalHolder.dateOfBirth!}
+            title={moment(principalHolder.dateOfBirth!, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
             titleStyle={fs16BoldBlack1}
           />
         </View>
@@ -48,7 +49,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_DOB}
               spaceToBottom={sh24}
-              title={jointHolder.dateOfBirth!}
+              title={moment(jointHolder.dateOfBirth!, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
               titleStyle={fs16BoldBlack1}
             />
           </View>

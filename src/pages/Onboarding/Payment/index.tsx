@@ -45,7 +45,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 }: PaymentProps) => {
   const [activeOrder, setActiveOrder] = useState<string>("");
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
-
   const [viewFund, setViewFund] = useState<string>("");
 
   const handleSubmit = async () => {
@@ -142,86 +141,88 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   }, []);
 
   return (
-    <SafeAreaPage>
-      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <View style={flexChild}>
-          <CustomSpacer space={sh32} />
-          <View style={px(sw24)}>
-            <LabeledTitle
-              label={PAYMENT.HEADING}
-              labelStyle={fs24BoldBlack2}
-              spaceToLabel={sh8}
-              title={PAYMENT.SUBHEADING}
-              titleStyle={fs16SemiBoldBlack2}
-            />
-          </View>
-          {paymentSummary !== undefined &&
-            paymentSummary.orders.map((order: IPaymentOrderState, index: number) => {
-              const setPaymentOrder = (paymentOrder: IPaymentOrderState) => {
-                const updatedPaymentOrders = [...paymentSummary.orders];
-                updatedPaymentOrders[index] = paymentOrder;
-                updatePaymentSummary({ ...paymentSummary, orders: updatedPaymentOrders });
-              };
-              return (
-                <Fragment key={index}>
-                  <BlurView visible={activeOrder === "" || activeOrder === order.orderNumber}>
-                    <CustomSpacer space={sh24} />
-                    <View style={{ ...px(sw24), ...shadow5 }}>
-                      <PaymentOrder
-                        accountNames={accountNames}
-                        activeOrder={activeOrder}
-                        epfAccountNumber={personalInfo.principal!.epfDetails!.epfMemberNumber}
-                        paymentOrder={order}
-                        setActiveOrder={setActiveOrder}
-                        setPaymentOrder={setPaymentOrder}
-                        setViewFund={setViewFund}
-                        viewFund={viewFund}
-                      />
-                    </View>
-                    <CustomSpacer space={sh24} />
-                  </BlurView>
-                  {index !== 0 ? null : (
-                    <Fragment>
-                      <View style={borderBottomBlack21} />
-                    </Fragment>
-                  )}
-                </Fragment>
-              );
-            })}
-          {activeOrder !== "" ? null : <CustomSpacer space={sh112} />}
-        </View>
-      </ScrollView>
-      {activeOrder !== "" ? null : (
-        <SelectionBanner
-          bottomContent={
-            <View>
-              <View style={{ ...centerVertical, ...flexRow }}>
-                {paymentSummary !== undefined &&
-                  paymentSummary.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                    return (
-                      <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                        {index !== 0 ? (
-                          <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
-                        ) : (
-                          <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
-                        )}
-                        <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
-                        <CustomSpacer isHorizontal={true} space={sw4} />
-                        <Text style={fs16BoldBlack2}>{`${totalAmount.amount}`}</Text>
-                      </View>
-                    );
-                  })}
-              </View>
-              {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
+    <Fragment>
+      <SafeAreaPage>
+        <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+          <View style={flexChild}>
+            <CustomSpacer space={sh32} />
+            <View style={px(sw24)}>
+              <LabeledTitle
+                label={PAYMENT.HEADING}
+                labelStyle={fs24BoldBlack2}
+                spaceToLabel={sh8}
+                title={PAYMENT.SUBHEADING}
+                titleStyle={fs16SemiBoldBlack2}
+              />
             </View>
-          }
-          labelSubmit={PAYMENT.BUTTON_SUBMIT}
-          submitOnPress={handleSubmit}
-          label={bannerText}
-        />
-      )}
+            {paymentSummary !== undefined &&
+              paymentSummary.orders.map((order: IPaymentOrderState, index: number) => {
+                const setPaymentOrder = (paymentOrder: IPaymentOrderState) => {
+                  const updatedPaymentOrders = [...paymentSummary.orders];
+                  updatedPaymentOrders[index] = paymentOrder;
+                  updatePaymentSummary({ ...paymentSummary, orders: updatedPaymentOrders });
+                };
+                return (
+                  <Fragment key={index}>
+                    <BlurView visible={activeOrder === "" || activeOrder === order.orderNumber}>
+                      <CustomSpacer space={sh24} />
+                      <View style={{ ...px(sw24), ...shadow5 }}>
+                        <PaymentOrder
+                          accountNames={accountNames}
+                          activeOrder={activeOrder}
+                          epfAccountNumber={personalInfo.principal!.epfDetails!.epfMemberNumber}
+                          paymentOrder={order}
+                          setActiveOrder={setActiveOrder}
+                          setPaymentOrder={setPaymentOrder}
+                          setViewFund={setViewFund}
+                          viewFund={viewFund}
+                        />
+                      </View>
+                      <CustomSpacer space={sh24} />
+                    </BlurView>
+                    {index !== 0 ? null : (
+                      <Fragment>
+                        <View style={borderBottomBlack21} />
+                      </Fragment>
+                    )}
+                  </Fragment>
+                );
+              })}
+            {activeOrder !== "" ? null : <CustomSpacer space={sh112} />}
+          </View>
+        </ScrollView>
+        {activeOrder !== "" ? null : (
+          <SelectionBanner
+            bottomContent={
+              <View>
+                <View style={{ ...centerVertical, ...flexRow }}>
+                  {paymentSummary !== undefined &&
+                    paymentSummary.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
+                      return (
+                        <View key={index} style={{ ...centerVertical, ...flexRow }}>
+                          {index !== 0 ? (
+                            <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
+                          ) : (
+                            <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
+                          )}
+                          <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
+                          <CustomSpacer isHorizontal={true} space={sw4} />
+                          <Text style={fs16BoldBlack2}>{`${totalAmount.amount}`}</Text>
+                        </View>
+                      );
+                    })}
+                </View>
+                {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
+              </View>
+            }
+            labelSubmit={PAYMENT.BUTTON_SUBMIT}
+            submitOnPress={handleSubmit}
+            label={bannerText}
+          />
+        )}
+      </SafeAreaPage>
       <PaymentStatus handleResetOnboarding={handleResetOnboarding} result={paymentResult} setPaymentResult={setPaymentResult} />
-    </SafeAreaPage>
+    </Fragment>
   );
 };
 export const Payment = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(PaymentComponent);

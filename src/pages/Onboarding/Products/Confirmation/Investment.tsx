@@ -61,7 +61,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
     scheduledSalesCharge,
   } = investment;
 
-  const { fundClasses, fundCurrencies, isEpf, isScheduled, masterList } = fundDetails;
+  const { isEpf, isScheduled, masterList } = fundDetails;
   const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(masterList[0]);
   const [cashSalesCharges, setCashSalesCharges] = useState<TypeLabelValue[]>([]);
   const [epfSalesCharges, setEpfSalesCharges] = useState<TypeLabelValue[]>([]);
@@ -88,16 +88,18 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
   const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
   const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minTopUpAmount})`;
 
+  const masterClassKeys = Object.keys(masterClassList);
+
   const currencies =
-    masterClassList !== undefined && fundClass !== undefined
-      ? masterClassList[fundClass].map((value) => {
+    masterClassList !== undefined
+      ? masterClassList[fundClass!].map((value) => {
           return { label: value.currency, value: value.currency };
         })
       : [];
 
   const classes =
     masterClassList !== undefined
-      ? Object.keys(masterClassList).map((value) => {
+      ? masterClassKeys.map((value) => {
           return { label: value, value: value };
         })
       : [];
@@ -197,7 +199,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
           "There seems to be an issue in the Fund (e.g Sales Charge Minimum is greater than Maximum). If you wish to proceed, please use another fund. Otherwise, please contact support.",
         );
       } else {
-        if (cashSalesCharges.length === 0) {
+        if (cashSalesCharges.length === 0 && salesCharge && salesCharge.cash && salesCharge.cash.min && salesCharge.cash.max) {
           for (
             let index = parseFloat(salesCharge.cash.min);
             index <= parseFloat(salesCharge.cash.max);
@@ -208,7 +210,14 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
           }
           setCashSalesCharges(cashSalesChargesTmp);
         }
-        if (isEpf === "Yes" && epfSalesCharges.length === 0) {
+        if (
+          isEpf === "Yes" &&
+          epfSalesCharges.length === 0 &&
+          salesCharge &&
+          salesCharge.epf &&
+          salesCharge.epf.min &&
+          salesCharge.epf.max
+        ) {
           for (
             let index = parseFloat(salesCharge.epf.min);
             index <= parseFloat(salesCharge.epf.max);
@@ -241,10 +250,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
           />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
-        {fundCurrencies.length > 1 && fundClasses.length === 1 ? (
+        {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length > 1 ? (
           <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
         ) : null}
-        {fundCurrencies.length === 1 ? (
+        {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length === 1 ? (
           <LabeledTitle
             label={INVESTMENT.LABEL_CURRENCY}
             title={fundCurrency!}
@@ -254,18 +263,16 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
         ) : null}
       </View>
       <CustomSpacer space={sh24} />
-      {fundCurrencies.length > 1 && fundClasses.length > 1 ? (
+      {masterClassList !== undefined && masterClassKeys.length > 0 && "" in masterClassList === false ? (
         <Fragment>
           <View style={{ ...flexRow, ...px(sw24) }}>
-            {fundClasses.length > 1 ? (
+            {masterClassKeys.length > 1 || "" in masterClassList === false ? (
               <Fragment>
                 <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
                 <CustomSpacer isHorizontal={true} space={sw64} />
               </Fragment>
             ) : null}
-            {fundCurrencies.length > 1 && fundClasses.length > 1 ? (
-              <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
-            ) : null}
+            <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
           </View>
           <CustomSpacer space={sh24} />
         </Fragment>

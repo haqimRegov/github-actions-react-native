@@ -4,7 +4,7 @@ import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, RadioButtonGroup, SelectionBanner } from "../../../components";
-import { DATE_OF_BIRTH_FORMAT, Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1 } from "../../../mocks";
@@ -44,7 +44,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
-  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DATE_OF_BIRTH_FORMAT), "months");
+  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
 
   const handleBackToAssessment = () => {

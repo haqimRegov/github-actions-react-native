@@ -294,7 +294,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       }
 
       if (error !== null) {
-        Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
+        const description = error.errorList !== null ? `- ${error.errorList?.join(" ")}.` : "";
+        Alert.alert(`${error.message} ${description} Please contact support.`);
       }
     }
     return null;

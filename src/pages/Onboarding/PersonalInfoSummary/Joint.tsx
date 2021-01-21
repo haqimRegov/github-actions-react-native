@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 
 import { LabeledTitleProps } from "../../../components";
-import { Language, PAYMENT_DATE_FORMAT } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ALL_ID_TYPE } from "../../../data/dictionary";
 import { fsTransformNone, fsUppercase } from "../../../styles";
 import { SummaryDetails } from "./Details";
@@ -17,8 +17,8 @@ interface JointProps {
 export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }: JointProps) => {
   const { addressInformation, bankSummary, contactDetails, employmentDetails, epfDetails, personalDetails } = summary;
 
-  const dateOfBirth = moment(personalDetails?.dateOfBirth).format(PAYMENT_DATE_FORMAT);
-  const expirationDate = moment(personalDetails!.expirationDate).format(PAYMENT_DATE_FORMAT);
+  const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
+  const expirationDate = moment(personalDetails!.expirationDate).format(DEFAULT_DATE_FORMAT);
   const idType = typeof personalDetails!.idType! === "string" ? personalDetails!.idType! : DICTIONARY_ALL_ID_TYPE[personalDetails!.idType!];
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(idType as TypeClientID) !== 1;
 

@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { Fragment, ReactNode } from "react";
 import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
 
@@ -35,7 +34,6 @@ interface LoginPageProps {
 }
 
 export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
-  const navigation = useNavigation();
   const handlePrivacyPolicy = () => {
     LinkUtils.openLink(DICTIONARY_LINK_PRIVACY);
   };
@@ -50,10 +48,6 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
 
   const handleBackToLogin = () => {
     setPage("LOGIN");
-  };
-
-  const handleTempLogin = () => {
-    navigation.navigate("Dashboard");
   };
 
   // TODO Module 1A will only support English language
@@ -119,7 +113,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
               <CustomSpacer space={sh32} />
               <View style={flexRow}>
                 <CustomFlexSpacer />
-                <TouchableWithoutFeedback onPress={handleTempLogin}>
+                <TouchableWithoutFeedback>
                   <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
                 </TouchableWithoutFeedback>
                 {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>

@@ -3,7 +3,16 @@ import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
-import { ActionButtons, CustomFlexSpacer, CustomSpacer, CustomTextInput, PasswordValidation, SafeAreaPage } from "../../../components";
+import { LocalAssets } from "../../../assets/LocalAssets";
+import {
+  ActionButtons,
+  CustomFlexSpacer,
+  CustomSpacer,
+  CustomTextInput,
+  PasswordValidation,
+  PromptModal,
+  SafeAreaPage,
+} from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_PASSWORD_MAX_LENGTH, ERROR } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
@@ -19,6 +28,7 @@ declare interface ChangePasswordProps extends GlobalStoreProps {
 }
 
 const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ config, setLoading, setPage }: ChangePasswordProps) => {
+  const [prompt, setPrompt] = useState<boolean>(false);
   const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
   const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
   const [inputNewPassword, setInputNewPassword] = useState<string>("");
@@ -48,7 +58,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
       const { data, error } = response;
       if (error === null && data !== null) {
         if (data.result.status === true) {
-          setPage("profile");
+          setPrompt(true);
         }
       }
       if (error !== null) {
@@ -123,6 +133,14 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         />
         <CustomSpacer space={sh56} />
       </ScrollView>
+      <PromptModal
+        labelContinue={PROFILE.BUTTON_DONE}
+        handleContinue={handleBack}
+        illustration={LocalAssets.illustration.profileSuccess}
+        label={PROFILE.PROMPT_TITLE}
+        title={PROFILE.PROMPT_SUBTITLE}
+        visible={prompt}
+      />
     </SafeAreaPage>
   );
 };

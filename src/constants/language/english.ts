@@ -924,6 +924,7 @@ export const english = {
       TAB_LABEL_UT: "UT",
     },
     PROFILE: {
+      BUTTON_DONE: "Done",
       BUTTON_UPDATE: "Update Password",
       HEADING_CHANGE: "Change Your Password",
       LABEL_ADDRESS: "Permanent Address",
@@ -947,6 +948,8 @@ export const english = {
       LABEL_STATE: "State",
       LABEL_STATUS: "Status",
       LABEL_SUFFIX_NUMBER: "Number",
+      PROMPT_SUBTITLE: "Your new password has been successfully saved.",
+      PROMPT_TITLE: "Password change successful!",
       TAB_LABEL_PROFILE: "Profile",
       TITLE_ACCOUNT_SUMMARY: "Account Summary",
       TITLE_ADDRESS_INFO: "Address Information",

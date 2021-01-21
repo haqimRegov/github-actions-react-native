@@ -3,6 +3,7 @@ import illustrationClientWarning from "./illustration_client_warning/illustratio
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
+import illustrationProfileSuccess from "./illustration_profile_success/illustration_profile_success.png";
 import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
 import kenanga from "./kenanga/kenanga.png";
@@ -21,6 +22,7 @@ export const LocalAssets = {
     clientWarning: illustrationClientWarning,
     emailVerified: illustrationEmailVerified,
     orderReceived: illustrationOrderReceived,
+    profileSuccess: illustrationProfileSuccess,
     loginError: illustrationLoginError,
     submissionSummary: illustrationSubmissionSummary,
     uploadSuccess: illustrationUploadSuccess,

@@ -30,7 +30,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   onboarding,
   resetProducts,
   resetSelectedFund,
-  riskProfile,
+  riskScore,
   selectedFunds,
   updateOnboarding,
   viewFund,
@@ -102,10 +102,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const checkOutsideRiskFactor = () => {
     const fundsRisk = selectedFunds.map((item) => item.riskCategory.toLowerCase());
-    if (riskProfile.toLowerCase() === "medium") {
+    if (riskScore.appetite.toLowerCase() === "medium") {
       return fundsRisk.includes("high");
     }
-    if (riskProfile.toLowerCase() === "low") {
+    if (riskScore.appetite.toLowerCase() === "low") {
       return fundsRisk.includes("high") || fundsRisk.includes("medium");
     }
 

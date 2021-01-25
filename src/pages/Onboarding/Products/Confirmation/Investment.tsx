@@ -263,10 +263,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
         ) : null}
       </View>
       <CustomSpacer space={sh24} />
-      {masterClassList !== undefined && masterClassKeys.length > 0 && "" in masterClassList === false ? (
+      {masterClassList !== undefined && masterClassKeys.length > 0 && "null" in masterClassList === false ? (
         <Fragment>
           <View style={{ ...flexRow, ...px(sw24) }}>
-            {masterClassKeys.length > 1 || "" in masterClassList === false ? (
+            {masterClassKeys.length > 1 || "null" in masterClassList === false ? (
               <Fragment>
                 <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
                 <CustomSpacer isHorizontal={true} space={sw64} />

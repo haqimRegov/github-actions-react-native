@@ -161,7 +161,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
   useEffect(() => {
     let newMasterClassList: IProductClasses = {};
     fund.masterList.forEach((list: IProductMasterList) => {
-      const classIndex = masterClassList !== undefined ? Object.keys(masterClassList).indexOf(list.class) : -1;
+      const classIndex = masterClassList !== undefined ? Object.keys(newMasterClassList).indexOf(list.class) : -1;
       if (classIndex === -1) {
         newMasterClassList = { ...newMasterClassList, [list.class]: [list] };
       } else {
@@ -194,10 +194,10 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24) }}>
-            {masterClassList !== undefined && masterClassKeys.length > 0 ? (
+            {masterClassList !== undefined && masterClassKeys.length > 0 && masterClassKeys[0] !== "null" ? (
               <Fragment>
                 <View style={{ ...flexRow, ...px(sw24) }}>
-                  {masterClassKeys.length > 1 || "" in masterClassList === false ? (
+                  {masterClassKeys.length > 1 || "null" in masterClassList === false ? (
                     <Fragment>
                       <AdvancedDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
                       <CustomSpacer isHorizontal={true} space={sw64} />

@@ -21,7 +21,7 @@ export const ProductsMapStateToProps = (state: RootState) => ({
   products: state.products,
   productType: state.products.productType,
   investmentDetails: state.selectedFund.investmentDetails,
-  riskProfile: state.riskAssessment.riskScore.appetite,
+  riskScore: state.riskAssessment.riskScore,
   selectedFunds: state.selectedFund.funds,
   viewFund: state.selectedFund.viewFund,
 });

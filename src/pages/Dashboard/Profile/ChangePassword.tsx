@@ -27,8 +27,9 @@ declare interface ChangePasswordProps extends GlobalStoreProps {
   setPage: (page: "profile" | "password") => void;
 }
 
-const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ config, setLoading, setPage }: ChangePasswordProps) => {
+const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ config, setPage }: ChangePasswordProps) => {
   const [prompt, setPrompt] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
   const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
   const [inputNewPassword, setInputNewPassword] = useState<string>("");
@@ -40,7 +41,8 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
   };
 
   const handelChangePassword = async () => {
-    setLoading(true);
+    setIsLoading(true);
+    setPrompt(true);
     setInput1Error(undefined);
     const encryptedNewPassword = await Encrypt(inputNewPassword, config!.sessionToken);
     const encryptedRetypePassword = await Encrypt(inputRetypePassword, config!.sessionToken);
@@ -51,17 +53,17 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
     // eslint-disable-next-line no-console
     console.log("request", request);
     const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken });
-    setLoading(false);
     // eslint-disable-next-line no-console
     console.log("response", response);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
         if (data.result.status === true) {
-          setPrompt(true);
+          setIsLoading(false);
         }
       }
       if (error !== null) {
+        setPrompt(false);
         setInput1Error(error.message);
       }
     }
@@ -134,10 +136,12 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         <CustomSpacer space={sh56} />
       </ScrollView>
       <PromptModal
-        labelContinue={PROFILE.BUTTON_DONE}
+        backdropOpacity={isLoading ? 0.4 : undefined}
         handleContinue={handleBack}
         illustration={LocalAssets.illustration.profileSuccess}
+        isLoading={isLoading}
         label={PROFILE.PROMPT_TITLE}
+        labelContinue={PROFILE.BUTTON_DONE}
         title={PROFILE.PROMPT_SUBTITLE}
         visible={prompt}
       />

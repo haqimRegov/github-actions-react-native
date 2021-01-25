@@ -54,3 +54,26 @@ declare type TypeMalaysiaStateLabelValue = { label: string; value: TypeMalaysiaS
 declare type TypeMalaysiaRace = "Malay" | "Chinese" | "Indian" | "Others";
 declare type TypeMalaysiaRaceValue = { value: TypeMalaysiaRace };
 declare type TypeMalaysiaRaceLabelValue = { label: string; value: TypeMalaysiaRace };
+
+declare type TypeMalaysiaUtmcValue = { value: TypeMalaysiaUtmc };
+declare type TypeMalaysiaUtmcLabelValue = { label: string; value: TypeMalaysiaUtmc };
+
+declare type TypeMalaysiaUtmc =
+  | "ABERDEEN ISLAMIC ASSET MANAGEMENT SDN BHD"
+  | "AFFIN HWANG INVESTMENT MANAGEMENT BERHAD"
+  | "AIA PENSION AND ASSET MANAGEMENT SDN BHD"
+  | "AMANAHRAYA INVESTMENT MANAGEMENT SDN BHD"
+  | "AMFUNDS MANAGEMENT BERHAD"
+  | "BIMB INVESTMENT MANAGEMENT BERHAD"
+  | "EASTSPRING INVESTMENTS BERHAD"
+  | "FRANKLIN TEMPLETON ASSET MANAGEMENT BERHAD"
+  | "FRANKLIN TEMPLETON GSC ASSET MANAGEMENT SDN BHD"
+  | "KENANGA INVESTORS BERHAD"
+  | "MANULIFE INVESTMENT MANAGEMENT(M) BERHAD"
+  | "MAYBANK ASSET MANAGEMENTSDN BHD"
+  | "OPUS ASSET MANAGEMENT SDN BHD"
+  | "PHEIM UNIT TRUSTS BERHAD"
+  | "PRINCIPAL ASSET MANAGEMENT BERHAD"
+  | "RHB ASSET MANAGEMENT SDN BHD"
+  | "RHB ISLAMIC INTERNATIONAL ASSET MANAGEMENT BERHAD"
+  | "UOB ASSET MANAGEMENT (MALAYSIA) SDN BHD";

@@ -17,8 +17,10 @@ import {
   fs12BoldBlack2,
   fsCapitalize,
   px,
+  py,
   sh16,
   sh24,
+  sh4,
   sh8,
   sh80,
   sw1,
@@ -99,9 +101,10 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 const customStyle = column.itemTextStyle !== undefined ? column.itemTextStyle(rowData) : {};
                 const textStyle = { ...fs12BoldBlack2, ...fsCapitalize, ...column.textStyle, ...customStyle };
                 const handlePressColumnItem = () => {
-                  if (column.onPressItem !== undefined) {
-                    column.onPressItem(rowData);
+                  if (column.onPressItem === undefined) {
+                    return handleRowSelection();
                   }
+                  return column.onPressItem(rowData);
                 };
 
                 const itemBorderLeft = columnIndex === 0 ? {} : borderLeftGray4;
@@ -203,20 +206,24 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 );
               })}
               {RenderOptions !== undefined ? (
-                <View style={{ ...flexRowCC, ...borderLeftGray4, width: sw56 }}>
-                  <MenuPopup
-                    RenderButton={({ show }) => {
-                      return (
-                        <TouchableWithoutFeedback onPress={show}>
-                          <IcoMoon name="action-menu" size={sh24} />
-                        </TouchableWithoutFeedback>
-                      );
-                    }}
-                    RenderContent={({ hide }) => {
-                      return <RenderOptions data={rowData} onClose={hide} />;
-                    }}
-                  />
-                </View>
+                <TouchableWithoutFeedback>
+                  <View style={{ ...flexRowCC, ...borderLeftGray4, width: sw56 }}>
+                    <MenuPopup
+                      RenderButton={({ show }) => {
+                        return (
+                          <TouchableWithoutFeedback onPress={show}>
+                            <View style={{ ...px(sw4), ...py(sh4) }}>
+                              <IcoMoon name="action-menu" size={sh24} />
+                            </View>
+                          </TouchableWithoutFeedback>
+                        );
+                      }}
+                      RenderContent={({ hide }) => {
+                        return <RenderOptions data={rowData} onClose={hide} />;
+                      }}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
               ) : null}
             </View>
             {RenderAccordion !== undefined && activeAccordion !== undefined ? (

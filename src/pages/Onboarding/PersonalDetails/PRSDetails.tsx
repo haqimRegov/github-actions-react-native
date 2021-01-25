@@ -32,7 +32,13 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={PRS.LABEL_MOTHER_NAME} onChangeText={setInputMotherName} spaceToBottom={sh32} value={inputMotherName} />
+      <CustomTextInput
+        autoCapitalize="words"
+        label={PRS.LABEL_MOTHER_NAME}
+        onChangeText={setInputMotherName}
+        spaceToBottom={sh32}
+        value={inputMotherName}
+      />
       <AdvancedDropdown
         handleChange={setInputMaritalStatus}
         items={DICTIONARY_MARITAL_STATUS}

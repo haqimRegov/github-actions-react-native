@@ -12,7 +12,7 @@ import {
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION, ERROR } from "../../../data/dictionary";
-import { colorBlue, colorTransparent, fs12BoldBlack2, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
 import { isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -95,7 +95,10 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const handleAddressToggle = () => {
     if (sameAddressToggle) {
       setSameAddressToggle(false);
-      setAddressInfo({ ...addressInfo, mailingAddress: { address: "", postCode: "", city: "", state: "", country: "" } });
+      setAddressInfo({
+        ...addressInfo,
+        mailingAddress: { ...addressInfo.mailingAddress!, address: "", postCode: "", city: "", state: "" },
+      });
     } else {
       setSameAddressToggle(true);
       const mailingAddress = accountHolder === "Joint" ? principalMailingAddress : addressInfo.permanentAddress;
@@ -212,6 +215,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             setInputCity={setInputMailingCity}
             setInputPostCode={setInputMailingPostCode}
             setInputState={setInputMailingState}
+            stateDropdownStyle={{ height: sh136 }}
           />
         </Fragment>
       )}

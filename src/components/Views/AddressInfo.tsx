@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { TextStyle, View } from "react-native";
 
 import { Language } from "../../constants/language";
@@ -12,7 +12,7 @@ export interface AddressInfoProps {
   labelAddress: string;
 }
 
-export const AddressInfo = ({ data, labelAddress }: AddressInfoProps) => {
+export const AddressInfo: FunctionComponent<AddressInfoProps> = ({ data, labelAddress }: AddressInfoProps) => {
   const { address, postCode, city, state, country } = data;
   const labelStyle: TextStyle = { lineHeight: sh16 };
   const labeledTitleStyle = {
@@ -21,6 +21,7 @@ export const AddressInfo = ({ data, labelAddress }: AddressInfoProps) => {
     spaceToLabel: sh8,
     titleStyle: fs16BoldBlack1,
   };
+
   return (
     <View style={{ width: sw240 }}>
       <LabeledTitle label={labelAddress} title={address} {...labeledTitleStyle} />

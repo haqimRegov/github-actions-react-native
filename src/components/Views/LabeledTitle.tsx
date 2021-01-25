@@ -19,6 +19,7 @@ export interface LabeledTitleProps {
   subtitleStyle?: TextStyle;
   title: string;
   titleIcon?: string;
+  titleIconStyle?: ViewStyle;
   titlePrefix?: string;
   titlePrefixStyle?: TextStyle;
   titleStyle?: TextStyle;
@@ -37,6 +38,7 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   subtitleStyle,
   title,
   titleIcon,
+  titleIconStyle,
   titlePrefix,
   titlePrefixStyle,
   titleStyle,
@@ -56,7 +58,7 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
           ) : null}
           <Text style={{ ...fs16RegBlack2, ...titleStyle }}>{title}</Text>
           {titleIcon !== undefined ? (
-            <View style={{ ...flexRow, ...centerVertical }}>
+            <View style={{ ...flexRow, ...centerVertical, ...titleIconStyle }}>
               <CustomSpacer isHorizontal={true} space={defaultIconSpace} />
               <IcoMoon color={colorBlue._1} name={titleIcon} size={iconSize} />
             </View>

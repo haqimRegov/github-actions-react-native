@@ -59,7 +59,7 @@ export const CardWrap: FunctionComponent<CardWrapProps> = ({
             <View style={itemDefaultStyle}>
               <LabeledTitle
                 {...item}
-                iconSize={sw16}
+                iconSize={item.iconSize !== undefined ? item.iconSize : sw16}
                 labelStyle={{ ...fs10BoldBlack2, ...labelStyle, ...item.labelStyle }}
                 onPress={item.onPress}
                 spaceToLabel={defaultSpaceToLabel}

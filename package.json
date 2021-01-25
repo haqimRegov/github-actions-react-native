@@ -42,7 +42,7 @@
     "@pdf-lib/fontkit": "1.0.0",
     "@react-native-community/async-storage": "1.11.0",
     "@react-native-community/blur": "3.6.0",
-    "@react-native-community/datetimepicker": "^3.0.9",
+    "@react-native-community/datetimepicker": "3.0.9",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "5.9.9",
     "@react-native-firebase/app": "8.4.5",

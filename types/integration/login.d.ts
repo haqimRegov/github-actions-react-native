@@ -11,11 +11,14 @@ declare interface ILoginHeader {
 declare interface ILoginResult {
   accessKeyId: string;
   agentId: string;
+  branch: string;
   email: string;
   identityId: string;
+  inboxCount: string;
   licenseCode: string;
   licenseType: string[];
   name: string;
+  rank: string;
   secretAccessKey: string;
   sessionToken: string;
 }

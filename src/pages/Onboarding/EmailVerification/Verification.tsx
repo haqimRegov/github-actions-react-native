@@ -30,12 +30,16 @@ import { isEmail } from "../../../utils";
 const { EMAIL_VERIFICATION } = Language.PAGE;
 
 declare interface VerificationProps {
-  addPersonalInfo: (state: IPersonalInfoState) => void;
   accountType: TypeAccountChoices;
+  addPersonalInfo: (state: IPersonalInfoState) => void;
   handleCancel?: () => void;
   handleContinue: () => void;
   jointEmailCheck: boolean;
+  jointError: string | undefined;
   personalInfo: IPersonalInfoState;
+  principalError: string | undefined;
+  setJointError: (value: string | undefined) => void;
+  setPrincipalError: (value: string | undefined) => void;
 }
 
 export const Verification: FunctionComponent<VerificationProps> = ({
@@ -44,11 +48,14 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   handleCancel,
   handleContinue,
   jointEmailCheck,
+  jointError,
   personalInfo,
+  principalError,
+  setJointError,
+  setPrincipalError,
 }: VerificationProps) => {
   const [showInfo, setShowInfo] = useState<boolean>(true);
-  const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
-  const [jointError, setJointError] = useState<string | undefined>(undefined);
+
   const { joint, principal } = personalInfo!;
   const inputPrincipalEmail = principal!.contactDetails!.emailAddress!;
   const inputJointEmail = joint!.contactDetails!.emailAddress!;

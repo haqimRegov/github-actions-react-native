@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect } from "react";
-import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
+import { NativeSyntheticEvent, TextInputFocusEventData, ViewStyle } from "react-native";
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
@@ -24,6 +24,7 @@ interface AddressFieldProps {
   setInputCountry?: (input: string) => void;
   setInputPostCode: (input: string) => void;
   setInputState: (input: string) => void;
+  stateDropdownStyle?: ViewStyle;
 }
 export const AddressField: FunctionComponent<AddressFieldProps> = ({
   addressType,
@@ -40,6 +41,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   setInputCountry,
   setInputPostCode,
   setInputState,
+  stateDropdownStyle,
 }: AddressFieldProps) => {
   useEffect(() => {
     if (addressType === "Other" && inputCountry === DICTIONARY_COUNTRIES[133].value) {
@@ -63,7 +65,13 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
       <CustomTextInput label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
       <CustomSpacer space={sh32} />
       {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[133].value ? (
-        <AdvancedDropdown items={DICTIONARY_MALAYSIA_STATES} handleChange={setInputState} label={ADDRESS.LABEL_STATE} value={inputState} />
+        <AdvancedDropdown
+          items={DICTIONARY_MALAYSIA_STATES}
+          handleChange={setInputState}
+          label={ADDRESS.LABEL_STATE}
+          style={stateDropdownStyle}
+          value={inputState}
+        />
       ) : (
         <CustomTextInput label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputState} value={inputState} />
       )}

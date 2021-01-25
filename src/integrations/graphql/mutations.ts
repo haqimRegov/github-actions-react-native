@@ -389,15 +389,18 @@ const userLogin = gql`
     userLogin(input: $input) {
       data {
         result {
-          identityId
-          secretAccessKey
-          sessionToken
           accessKeyId
-          email
-          name
           agentId
+          branch
+          email
+          identityId
+          inboxCount
           licenseCode
           licenseType
+          name
+          rank
+          secretAccessKey
+          sessionToken
         }
       }
       error {

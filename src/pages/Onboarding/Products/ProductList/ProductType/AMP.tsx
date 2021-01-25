@@ -26,10 +26,11 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   addAmpSort,
   addSelectedFund,
   addViewFund,
+  // details,
   products,
   productType,
   resetSelectedFund,
-  riskProfile,
+  riskScore,
   scrollEnabled,
   selectedFunds,
   setLoading,
@@ -42,12 +43,12 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
-  const [inputSearch, setInputSearch] = useState<string>("");
+  const [inputSearch, setInputSearch] = useState<string>(search);
   const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskProfile);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -58,18 +59,20 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     setLoading(true);
     const sortAllFunds = showBy === "all" ? [{ column: "fundAbbr", value: "asc" }] : [];
     const req = {
-      tab: "amp",
-      fundType: filters.fundType![0] || "",
+      // age: moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years").toString(),
       fundCurrency: filters.fundCurrency || [],
-      isEpf: filters.epfApproved![0] || "",
-      isSyariah: filters.shariahApproved![0] || "",
-      riskCategory: riskCategory || [],
-      issuingHouse: filters.issuingHouse || [],
+      fundType: filters.fundType![0] || "",
       isConventional: filters.conventional![0],
+      isEpf: filters.epfApproved![0] || "",
+      issuingHouse: filters.issuingHouse || [],
+      isSyariah: filters.shariahApproved![0] || "",
+      // netWorth: riskScore.netWorth,
       page: newPage,
-      sort: sortAllFunds,
-      showBy: showBy,
+      riskCategory: riskCategory || [],
       search: search,
+      showBy: showBy,
+      sort: sortAllFunds,
+      tab: "amp",
     };
     // eslint-disable-next-line no-console
     console.log("productList", req);

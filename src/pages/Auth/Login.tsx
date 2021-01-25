@@ -9,7 +9,6 @@ import { Prompt, RNModal } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
 import { updateStorageData } from "../../integrations";
-import { SAMPLE_AGENT } from "../../mocks";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
@@ -67,16 +66,25 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
       const { data, error } = response;
       if (error === null) {
         if (data !== null) {
-          const { name, licenseCode, licenseType, email, agentId } = data.result;
+          const { agentId, branch, email, inboxCount, licenseCode, licenseType, name, rank } = data.result;
           await Auth.signIn(inputNRIC, inputPassword);
           addGlobal({
-            agent: { name: name, email: email, licenseCode: licenseCode, licenseType: licenseType, id: agentId, image: SAMPLE_AGENT.image },
+            agent: {
+              name: name,
+              email: email,
+              licenseCode: licenseCode,
+              licenseType: licenseType,
+              id: agentId,
+              branch: branch,
+              rank: rank,
+            },
             config: {
               identityId: data.result.identityId,
               secretAccessKey: data.result.secretAccessKey,
               sessionToken: data.result.sessionToken,
               accessKeyId: data.result.accessKeyId,
             },
+            unreadMessages: inboxCount,
           });
           setLoading(false);
           await updateStorageData("visited", true);

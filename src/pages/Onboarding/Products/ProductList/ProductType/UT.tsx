@@ -26,10 +26,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   addUtSearch,
   addUtSort,
   addViewFund,
+  // details,
   products,
   productType,
   resetSelectedFund,
-  riskProfile,
+  riskScore,
   scrollEnabled,
   selectedFunds,
   setLoading,
@@ -41,13 +42,13 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   const list = showBy === "recommended" ? recommended : all;
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
-  const [inputSearch, setInputSearch] = useState<string>("");
+  const [inputSearch, setInputSearch] = useState<string>(search);
   const [showMore, setShowMore] = useState<boolean>(false);
   const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskProfile);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -56,19 +57,21 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
-    const req = {
-      tab: "ut",
-      fundType: filters.fundType![0] || "",
+    const req: IProductListRequest = {
+      // age: moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years").toString(),
       fundCurrency: filters.fundCurrency || [],
-      isEpf: filters.epfApproved![0] || "",
-      isSyariah: filters.shariahApproved![0] || "",
-      riskCategory: riskCategory || [],
-      issuingHouse: filters.issuingHouse || [],
+      fundType: filters.fundType![0] || "",
       isConventional: filters.conventional![0],
-      sort: sort,
-      showBy: showBy,
-      search: search,
+      isEpf: filters.epfApproved![0] || "",
+      issuingHouse: filters.issuingHouse || [],
+      isSyariah: filters.shariahApproved![0] || "",
+      // netWorth: riskScore.netWorth,
       page: newPage,
+      riskCategory: riskCategory || [],
+      search: search,
+      showBy: showBy,
+      sort: sort,
+      tab: "ut",
     };
     // eslint-disable-next-line no-console
     console.log("productList", req);

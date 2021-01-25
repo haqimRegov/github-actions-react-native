@@ -1,8 +1,10 @@
 declare interface IProductFilterRequest {
+  age?: string;
   fundType?: string;
   fundCurrency?: string[];
   isEpf?: string;
   isSyariah?: string;
+  netWorth?: string;
   isConventional?: string;
   riskCategory?: string[];
   issuingHouse?: string[];

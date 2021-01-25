@@ -3,7 +3,7 @@ export const english = {
     ADDRESS: {
       LABEL_ADDRESS: "Address",
       LABEL_CITY: "City",
-      LABEL_COUNTRY: "Country / Region",
+      LABEL_COUNTRY: "Country",
       LABEL_POSTCODE: "Post Code",
       LABEL_STATE: "State",
       LABEL_STATE_PROVINCE: "State / Province",

@@ -4,31 +4,42 @@ import { View, ViewStyle } from "react-native";
 
 import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
-import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_COUNTRIES, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
+import {
+  DICTIONARY_ACCOUNT_TYPE,
+  DICTIONARY_COUNTRIES,
+  DICTIONARY_ID_OTHER_TYPE,
+  DICTIONARY_ID_TYPE,
+  ERROR,
+} from "../../../../data/dictionary";
 import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
+import { isNonNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
 
 interface NewSalesDetailsProps {
   accountType: TypeAccountChoices;
-  holderToFill: "jointHolder" | "principalHolder";
+  clientInfo: IClientBasicInfo;
   clientType: TypeClient | "";
   errorMessage: string | undefined;
-  clientInfo: IClientBasicInfo;
+  holderToFill: "jointHolder" | "principalHolder";
+  inputError1: string | undefined;
   setAccountType: (value: string) => void;
   setClientInfo: (value: IClientBasicInfo) => void;
   setErrorMessage: (value: string | undefined) => void;
+  setInputError1: (value: string | undefined) => void;
 }
 
 export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   accountType,
-  clientType,
-  holderToFill,
-  errorMessage,
-  setAccountType,
   clientInfo,
+  clientType,
+  errorMessage,
+  holderToFill,
+  inputError1,
+  setAccountType,
   setClientInfo,
   setErrorMessage,
+  setInputError1,
 }: NewSalesDetailsProps) => {
   const { country, dateOfBirth, id, idType, otherIdType, name } = clientInfo;
   const title = holderToFill === "principalHolder" ? ADD_CLIENT.LABEL_CHOOSE_ACCOUNT_TYPE : ADD_CLIENT.SUBHEADING_JOINT;
@@ -41,6 +52,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
 
   const setInputIdType = (value: TypeIDChoices) => {
     setErrorMessage(undefined);
+    setInputError1(undefined);
     setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
   };
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
@@ -57,6 +69,11 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const handleIdType = (value: string) => {
     setInputIdType(value as TypeIDChoices);
   };
+
+  const checkName = () => {
+    setInputError1(isNonNumber(name!) === false ? ERROR.INVALID_NAME : undefined);
+  };
+
   const hideInput = clientType !== "" && holderToFill === "principalHolder";
   const disabledStyle: ViewStyle = hideInput ? { opacity: 0.5 } : {};
   const dateValue = dateOfBirth !== "" ? moment(dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate() : undefined;
@@ -85,8 +102,10 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
         <CustomTextInput
           autoCapitalize="words"
           disabled={clientType !== "" && holderToFill === "principalHolder"}
+          error={inputError1}
           label={LABEL_NAME}
           onChangeText={setInputName}
+          onBlur={checkName}
           spaceToBottom={sh24}
           spaceToTop={sh24}
           value={name}

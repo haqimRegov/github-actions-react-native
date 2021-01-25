@@ -57,6 +57,7 @@ const NewSalesComponent = ({
 }: NewSalesProps) => {
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
   const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
@@ -76,11 +77,15 @@ const NewSalesComponent = ({
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
   const setAccountType = (type: string) => addAccountType(type as TypeAccountChoices);
 
-  const continueDisabled = idType === "NRIC" ? name === "" || id === "" : name === "" || id === "" || dateOfBirth === undefined;
+  const continueDisabled =
+    idType === "NRIC"
+      ? name === "" || id === "" || inputError1 !== undefined
+      : name === "" || id === "" || dateOfBirth === undefined || inputError1 !== undefined;
 
   const handleReset = () => {
     setClientType("");
     setHolderToFill("principalHolder");
+    setInputError1(undefined);
     setErrorMessage(undefined);
     resetClientDetails();
     setPrompt(undefined);
@@ -172,6 +177,7 @@ const NewSalesComponent = ({
       const { data, error } = clientCheck;
       if (error === null && data !== null) {
         setErrorMessage(undefined);
+        setInputError1(undefined);
         if (data.result.message === "NTB") {
           if (data.result.highRisk === true) {
             return setPrompt("highRisk");
@@ -231,6 +237,7 @@ const NewSalesComponent = ({
               }
             : {};
         setErrorMessage(undefined);
+        setInputError1(undefined);
         addClientDetails({
           ...details,
           principalHolder: {
@@ -301,13 +308,15 @@ const NewSalesComponent = ({
                     <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
                     <NewSalesDetails
                       accountType={accountType}
+                      clientInfo={details![holderToFill]!}
                       clientType={clientType}
                       errorMessage={errorMessage}
                       holderToFill={holderToFill}
-                      clientInfo={details![holderToFill]!}
-                      setClientInfo={setClientInfo}
+                      inputError1={inputError1}
                       setAccountType={setAccountType}
+                      setClientInfo={setClientInfo}
                       setErrorMessage={setErrorMessage}
+                      setInputError1={setInputError1}
                     />
                   </Fragment>
                 ) : (

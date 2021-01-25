@@ -1,6 +1,6 @@
 {
   "name": "KenangaMobile",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "private": true,
   "scripts": {
     "start": "react-native start",

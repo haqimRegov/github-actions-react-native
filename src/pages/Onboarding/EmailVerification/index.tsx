@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Text } from "react-native";
+import { Alert, Text } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../../components";
@@ -29,6 +29,8 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const [principalOtp, setPrincipalOtp] = useState<string>("");
   const [jointOtp, setJointOtp] = useState<string>("");
   const [prompt, setPrompt] = useState<"cancel" | undefined>(undefined);
+  const [principalEmailError, setPrincipalEmailError] = useState<string | undefined>(undefined);
+  const [jointEmailError, setJointEmailError] = useState<string | undefined>(undefined);
 
   const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
@@ -46,6 +48,8 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   };
 
   const handleEmailVerification = async () => {
+    setPrincipalEmailError(undefined);
+    setJointEmailError(undefined);
     const jointRequest = accountType === "Joint" ? { email: inputJointEmail } : undefined;
     const req = {
       clientId: principalClientId,
@@ -62,6 +66,11 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           addPersonalInfo({ ...personalInfo, emailOtpSent: true });
           setPage("otp");
         }
+      }
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
   };
@@ -105,10 +114,14 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         <Verification
           accountType={accountType}
           addPersonalInfo={addPersonalInfo}
-          jointEmailCheck={jointEmailCheck}
           handleCancel={handleCancel}
           handleContinue={handleContinue}
+          jointEmailCheck={jointEmailCheck}
+          jointError={jointEmailError}
           personalInfo={personalInfo}
+          principalError={principalEmailError}
+          setJointError={setJointEmailError}
+          setPrincipalError={setPrincipalEmailError}
         />
       ) : (
         <EmailOTP

@@ -37,7 +37,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
-  const [inputSearch, setInputSearch] = useState<string>("");
+  const [inputSearch, setInputSearch] = useState<string>(search);
   const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;

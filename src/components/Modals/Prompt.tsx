@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
-import { centerHV, flexGrow, fullHW } from "../../styles";
+import { centerHV, colorWhite, flexGrow, fullHW } from "../../styles";
 import { Prompt, PromptProps } from "../Views";
 import { BasicModal } from "./Basic";
 
@@ -10,9 +10,10 @@ interface PromptModalProps extends PromptProps {
   animationInTiming?: number;
   animationOut?: TypeModalAnimation;
   animationOutTiming?: number;
-
+  backdropOpacity?: number;
   keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
 
+  isLoading?: boolean;
   visible: boolean;
 }
 
@@ -23,8 +24,9 @@ export const PromptModal: FunctionComponent<PromptModalProps> = ({
   animationInTiming,
   animationOut,
   animationOutTiming,
-
+  backdropOpacity,
   keyboardAvoidingRef,
+  isLoading,
   visible,
   ...rest
 }: PromptModalProps) => {
@@ -37,11 +39,12 @@ export const PromptModal: FunctionComponent<PromptModalProps> = ({
       animationInTiming={animationInTiming}
       animationOut={animationOut}
       animationOutTiming={animationOutTiming}
+      backdropOpacity={backdropOpacity}
       visible={visible}>
       <KeyboardAvoidingView ref={keyboardAvoidingRef} behavior={behavior}>
         <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
           <View style={{ ...centerHV, ...fullHW }}>
-            <Prompt {...rest} />
+            {isLoading === true ? <ActivityIndicator color={colorWhite._1} size="small" /> : <Prompt {...rest} />}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

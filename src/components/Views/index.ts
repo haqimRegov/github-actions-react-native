@@ -1,6 +1,7 @@
 export * from "./AccountHeader";
 export * from "./ActionButtons";
 export * from "./AddressField";
+export * from "./AddressInfo";
 export * from "./LabeledTitle";
 export * from "./Pagination";
 export * from "./PasswordInfo";

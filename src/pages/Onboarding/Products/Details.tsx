@@ -7,6 +7,7 @@ import {
   CardWrap,
   CardWrapProps,
   CustomSpacer,
+  Dash,
   FileViewer,
   LabeledTitle,
   LabeledTitleProps,
@@ -16,6 +17,7 @@ import {
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
+  borderBottomGray4,
   centerHV,
   centerVertical,
   colorBlue,
@@ -64,7 +66,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
 
   const { salesCharge, newSalesAmount } = filteredCurrency;
   const isAmp = fund.fundType === "AMP";
-  const fundNameLabel = fund.fundCurrencies.length > 1 ? fund.fundName : `${fund.fundName} (${inputCurrency})`;
+
   const documentList = fund.docs !== undefined ? fund.docs.map((document: IProductDocument) => document.name) : [];
   const ampLabel = isAmp ? PRODUCT_DETAILS.LABEL_LANDING_FUND : PRODUCT_DETAILS.LABEL_FUND_CATEGORY;
   const ampValue = isAmp ? fund.landingFund : fund.fundCategory;
@@ -184,7 +186,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
           </TouchableWithoutFeedback>
           <CustomSpacer isHorizontal={true} space={sw16} />
           <LabeledTitle
-            label={fundNameLabel}
+            label={fund.fundName}
             labelStyle={fs24BoldBlack2}
             spaceToLabel={sh8}
             title={fund.issuingHouse}
@@ -194,8 +196,15 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24) }}>
+            <View style={px(sw24)}>
+              <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_OBJECTIVE}</Text>
+              <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective!} />
+            </View>
+            <CustomSpacer space={sw24} />
+            <View style={borderBottomGray4} />
             {masterClassList !== undefined && masterClassKeys.length > 0 && masterClassKeys[0] !== "null" ? (
               <Fragment>
+                <CustomSpacer space={sh24} />
                 <View style={{ ...flexRow, ...px(sw24) }}>
                   {masterClassKeys.length > 1 || "null" in masterClassList === false ? (
                     <Fragment>
@@ -211,14 +220,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
                   />
                 </View>
                 <CustomSpacer space={sh24} />
+                <Dash />
               </Fragment>
             ) : null}
-            <View style={px(sw24)}>
-              <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_OBJECTIVE}</Text>
-              <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective!} />
-            </View>
-            <CustomSpacer space={sw24} />
-            <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
             <TextSpaceArea
               spaceToBottom={sh16}
               spaceToTop={sh24}

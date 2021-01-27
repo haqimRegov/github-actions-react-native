@@ -3,13 +3,13 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ConfirmationModal, RadioButtonGroup, SelectionBanner } from "../../../components";
+import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { RNShareApi } from "../../../integrations";
 import { SAMPLE_PDF_1 } from "../../../mocks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
-import { alignSelfStart, flexChild, flexCol, fs16BoldBlack2, fs16SemiBoldBlack2, sh24, sh4, sh56, sw360 } from "../../../styles";
+import { flexChild, flexCol, fs12BoldBlack2, fs16BoldBlack2, fs16SemiBoldBlack2, sh56 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
@@ -38,7 +38,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const { disabledSteps, finishedSteps } = onboarding;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
-  const [outsideRisk, setOutsideRisk] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
@@ -91,10 +90,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const handlePrompt = () => {
     if (prompt === "risk") {
-      if (outsideRisk === 1) {
-        handleInvest();
-        setPrompt(undefined);
-      }
+      handleInvest();
       return setPrompt(undefined);
     }
     return handleBackToAssessment();
@@ -243,12 +239,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     );
   });
 
-  const riskFactorOptions = [PRODUCT_LIST.PROMPT_OPTION_1, PRODUCT_LIST.PROMPT_OPTION_2];
-
-  const handleRiskOption = (value: string) => {
-    setOutsideRisk(riskFactorOptions.indexOf(value));
-  };
-
   const handleKeyboardShow = () => {
     setKeyboardIsShowing(true);
   };
@@ -269,9 +259,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const labelContinue = prompt === "cancel" ? PRODUCT_LIST.BUTTON_YES : PRODUCT_LIST.BUTTON_AGREE;
-  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
+  const riskPromptTitle = prompt === "risk" ? PRODUCT_LIST.PROMPT_TITLE_RISK : PRODUCT_LIST.PROMPT_TITLE_RISK;
+  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : riskPromptTitle;
+  const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE;
+  const promptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : riskPromptText;
 
   return (
     <Fragment>
@@ -298,24 +289,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       <ConfirmationModal
         handleCancel={handleCancel}
         handleContinue={handlePrompt}
-        labelCancel={prompt === "cancel" ? PRODUCT_LIST.BUTTON_NO : undefined}
-        labelContinue={labelContinue}
-        spaceToContent={prompt === "cancel" ? undefined : sh24}
+        labelCancel={PRODUCT_LIST.BUTTON_NO}
+        labelContinue={PRODUCT_LIST.BUTTON_YES}
         spaceToTitle={prompt === "cancel" ? undefined : sh56}
         title={promptTitle}
         visible={prompt !== undefined}>
-        {prompt === "cancel" ? (
-          <Text style={fs16BoldBlack2}>{PRODUCT_LIST.PROMPT_LABEL_CANCEL}</Text>
-        ) : (
-          <View style={{ width: sw360 }}>
-            <RadioButtonGroup
-              options={riskFactorOptions}
-              radioStyle={{ ...alignSelfStart, marginTop: sh4 }}
-              selected={riskFactorOptions[outsideRisk]}
-              setSelected={handleRiskOption}
-            />
-          </View>
-        )}
+        <Text style={prompt === "cancel" ? fs16BoldBlack2 : fs12BoldBlack2}>{promptText}</Text>
       </ConfirmationModal>
     </Fragment>
   );

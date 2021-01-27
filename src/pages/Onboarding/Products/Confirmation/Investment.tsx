@@ -11,7 +11,7 @@ import {
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants/language";
-import { ERROR } from "../../../../data/dictionary";
+import { DICTIONARY_RECURRING_CURRENCY, ERROR } from "../../../../data/dictionary";
 import {
   borderBottomBlack21,
   centerVertical,
@@ -329,7 +329,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
                 </View>
                 <CustomTextInput
                   error={scheduledAmountError}
-                  inputPrefix={fundCurrency}
+                  inputPrefix={DICTIONARY_RECURRING_CURRENCY}
                   onBlur={checkScheduledInvestmentAmount}
                   onChangeText={handleScheduledAmount}
                   value={scheduledInvestmentAmount}

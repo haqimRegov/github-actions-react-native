@@ -147,7 +147,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
         width: sw323,
       },
       onPressHeader: handleSortName,
-      title: PRODUCT_LIST.LABEL_COLUMN_NAME,
+      title: productType === "amp" ? PRODUCT_LIST.LABEL_COLUMN_PORTFOLIO : PRODUCT_LIST.LABEL_COLUMN_NAME,
     },
     {
       icon: {

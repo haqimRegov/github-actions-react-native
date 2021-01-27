@@ -13,7 +13,7 @@ export const personalInfoInitialState: PersonalInfoState = {
   emailOtpSent: false,
   epfInvestment: false,
   epfShariah: false,
-  incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,
+  incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
   signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
   principal: {
     addressInformation: {
@@ -37,7 +37,7 @@ export const personalInfoInitialState: PersonalInfoState = {
         {
           bankAccountName: "",
           bankAccountNumber: "",
-          bankLocation: DICTIONARY_COUNTRIES[133].value,
+          bankLocation: DICTIONARY_COUNTRIES[0].value,
           bankName: "",
           bankSwiftCode: "",
           currency: [DICTIONARY_CURRENCY[0].value],
@@ -98,7 +98,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       occupation: "",
       address: "",
       city: "",
-      country: DICTIONARY_COUNTRIES[133].value,
+      country: DICTIONARY_COUNTRIES[0].value,
       postCode: "",
       state: "",
     },
@@ -213,7 +213,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       occupation: "",
       address: "",
       city: "",
-      country: DICTIONARY_COUNTRIES[133].value,
+      country: DICTIONARY_COUNTRIES[0].value,
       postCode: "",
       state: "",
     },

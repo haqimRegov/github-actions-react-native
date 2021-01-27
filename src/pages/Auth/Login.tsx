@@ -53,7 +53,9 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
 
     if ("sessionToken" in credentials === false) {
       setLoading(false);
-      return Alert.alert("No Internet Connection");
+      setTimeout(() => {
+        return Alert.alert("No Internet Connection");
+      }, 100);
     }
 
     const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);

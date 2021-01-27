@@ -1,7 +1,7 @@
 import React, { Fragment, ReactNode } from "react";
 import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
 
-import { version } from "../../../package";
+import { version } from "../../../package.json";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
 import {

@@ -1,4 +1,5 @@
 export const DICTIONARY_COUNTRIES: TypeCountryLabelValue[] = [
+  { label: "Malaysia", value: "Malaysia" },
   { label: "Afghanistan", value: "Afghanistan" },
   { label: "Åland Islands", value: "Åland Islands" },
   { label: "Albania", value: "Albania" },

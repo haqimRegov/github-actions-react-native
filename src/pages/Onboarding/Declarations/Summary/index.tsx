@@ -294,8 +294,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       }
 
       if (error !== null) {
+        const errorList = `${error.errorList?.join(", ")}`;
         setTimeout(() => {
-          Alert.alert(error.message);
+          Alert.alert(error.message, errorList);
         }, 100);
       }
     }

@@ -97,13 +97,12 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
                         );
                       })}
                     </View>
-                    {result.orders.length === 1 ? null : <CustomSpacer space={sh32} />}
+                    <CustomSpacer space={sh32} />
                   </View>
                 );
               })}
             {result !== undefined && result.account !== null ? (
               <View>
-                <CustomSpacer space={sh32} />
                 <View style={flexRow}>
                   <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
                   <CustomSpacer isHorizontal={true} space={sw8} />

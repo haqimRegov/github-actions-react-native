@@ -55,6 +55,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           .map((paymentInfo: IPaymentState) => {
             return {
               ...paymentInfo,
+              currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
             };
@@ -78,7 +79,9 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }
       if (error !== null) {
-        Alert.alert(error.message);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
     return undefined;

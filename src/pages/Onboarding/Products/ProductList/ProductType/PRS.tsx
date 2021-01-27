@@ -67,7 +67,11 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       if (error === null && data !== null) {
         return data.result;
       }
-      Alert.alert(JSON.stringify(error?.message));
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
     }
     return undefined;
   };
@@ -129,7 +133,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   useEffect(() => {
     // when sort, search, filter is updated
     if (prevPageRef !== undefined && prevPageRef !== "") {
-      handleFetchPRS(page);
+      handleFetchPRS("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
@@ -137,7 +141,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   useEffect(() => {
     // initial fetch
     if (recommended.length === 0) {
-      handleFetchPRS("0");
+      handleFetchPRS("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

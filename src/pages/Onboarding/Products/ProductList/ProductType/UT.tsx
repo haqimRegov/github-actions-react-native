@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Keyboard, View } from "react-native";
+import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
@@ -82,9 +82,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       if (error === null && data !== null) {
         return data.result;
       }
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(error?.message));
-      // Alert.alert(JSON.stringify(error?.message));
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
     }
     return undefined;
   };
@@ -160,7 +162,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   useEffect(() => {
     // when sort, search, filter is updated
     if (prevPageRef !== undefined && prevPageRef !== "") {
-      handleFetchUT(page);
+      handleFetchUT("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
@@ -168,7 +170,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   useEffect(() => {
     // initial fetch
     if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-      handleFetchUT("0");
+      handleFetchUT("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);

@@ -83,7 +83,11 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       if (error === null && data !== null) {
         return data.result;
       }
-      Alert.alert(JSON.stringify(error?.message));
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
     }
     return undefined;
   };
@@ -159,7 +163,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   useEffect(() => {
     // when sort, search, filter is updated
     if (prevPageRef !== undefined && prevPageRef !== "") {
-      handleFetchAMP(page);
+      handleFetchAMP("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
@@ -167,7 +171,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   useEffect(() => {
     // initial fetch
     if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-      handleFetchAMP("0");
+      handleFetchAMP("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);

@@ -44,7 +44,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
           <TextSpaceArea spaceToBottom={sh16} spaceToTop={space} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_DISTRIBUTION} />
           <RadioButtonGroup
             direction="row"
-            options={[PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT, PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST]}
+            options={[PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST, PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT]}
             selected={inputDistribution}
             setSelected={setInputDistribution}
             space={sw48}

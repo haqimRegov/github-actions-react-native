@@ -44,7 +44,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   stateDropdownStyle,
 }: AddressFieldProps) => {
   useEffect(() => {
-    if (addressType === "Other" && inputCountry === DICTIONARY_COUNTRIES[133].value) {
+    if (addressType === "Other" && inputCountry === DICTIONARY_COUNTRIES[0].value) {
       // TODO Address field enhancement when changing to Country: Malaysia
       // setInputState("");
     }
@@ -57,14 +57,15 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         error={postCodeError}
         keyboardType="numeric"
         label={ADDRESS.LABEL_POSTCODE}
+        maxLength={15}
         onBlur={onBlurPostCode}
         onChangeText={setInputPostCode}
         spaceToTop={sh32}
         value={inputPostCode}
       />
-      <CustomTextInput label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
+      <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
       <CustomSpacer space={sh32} />
-      {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[133].value ? (
+      {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[0].value ? (
         <AdvancedDropdown
           items={DICTIONARY_MALAYSIA_STATES}
           handleChange={setInputState}

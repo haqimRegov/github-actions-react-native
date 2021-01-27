@@ -43,7 +43,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
     setEmploymentDetails({
       country: value,
       state:
-        value === DICTIONARY_COUNTRIES[133].value && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputState as TypeMalaysiaState) === false
+        value === DICTIONARY_COUNTRIES[0].value && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputState as TypeMalaysiaState) === false
           ? ""
           : inputState,
     });
@@ -94,14 +94,15 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       <CustomSpacer space={sh32} />
       <CustomTextInput
         keyboardType="numeric"
-        label={EMPLOYMENT_DETAILS.LABEL_POST_CODE}
+        label={EMPLOYMENT_DETAILS.LABEL_POSTCODE}
+        maxLength={15}
         onChangeText={setInputPostCode}
         value={inputPostCode}
       />
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_CITY} onChangeText={setInputCity} value={inputCity} />
+      <CustomTextInput autoCapitalize="words" label={EMPLOYMENT_DETAILS.LABEL_CITY} onChangeText={setInputCity} value={inputCity} />
       <CustomSpacer space={sh32} />
-      {inputCountry === DICTIONARY_COUNTRIES[133].value ? (
+      {inputCountry === DICTIONARY_COUNTRIES[0].value ? (
         <AdvancedDropdown
           items={DICTIONARY_MALAYSIA_STATES}
           handleChange={setInputState}

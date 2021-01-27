@@ -66,7 +66,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
             isRead: message.isRead,
             message: message.message,
             title: message.title,
-            sender: message.senderName,
+            sender: message.senderName || "-",
             source: message.source,
           };
           if (notificationBucket[dateLabel]) {

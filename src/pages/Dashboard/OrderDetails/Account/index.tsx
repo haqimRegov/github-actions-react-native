@@ -136,7 +136,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
     { label: DASHBOARD_ORDER_DETAILS.LABEL_NATURE_BUSINESS, title: employmentInfo.businessNature },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_MONTHLY_INCOME, title: employmentInfo.monthlyIncome },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_EMPLOYER_ADDRESS, title: employmentInfo.employerAddress },
-    { label: DASHBOARD_ORDER_DETAILS.LABEL_POST_CODE, title: employmentInfo.postCode },
+    { label: DASHBOARD_ORDER_DETAILS.LABEL_POSTCODE, title: employmentInfo.postCode },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_CITY, title: employmentInfo.city },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_STATE, title: employmentInfo.state },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_COUNTRY, title: employmentInfo.country },

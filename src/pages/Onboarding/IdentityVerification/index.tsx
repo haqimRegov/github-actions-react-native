@@ -184,8 +184,8 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         ...principal,
         addressInformation: {
           ...principal!.addressInformation,
-          mailingAddress: { ...principal!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[133].value },
-          permanentAddress: { ...principal!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[133].value },
+          mailingAddress: { ...principal!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[0].value },
+          permanentAddress: { ...principal!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[0].value },
         },
         personalDetails: { ...principal!.personalDetails, id: { ...principal!.personalDetails?.id!, frontPage: uploaded } },
       },
@@ -255,8 +255,8 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         ...joint,
         addressInformation: {
           ...joint!.addressInformation,
-          mailingAddress: { ...joint!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[133].value },
-          permanentAddress: { ...joint!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[133].value },
+          mailingAddress: { ...joint!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[0].value },
+          permanentAddress: { ...joint!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[0].value },
         },
         personalDetails: { ...joint!.personalDetails, id: { ...joint!.personalDetails!.id!, frontPage: uploaded } },
       },

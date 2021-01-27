@@ -3,6 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { CardWrap, CustomFlexSpacer, CustomSpacer, Dash, LabeledTitleProps } from "../../../../components";
 import { Language } from "../../../../constants";
+import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
 import {
   centerHorizontal,
   colorGray,
@@ -83,7 +84,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
   const recurringSummary: LabeledTitleProps[] = [
     {
       label: ORDER_SUMMARY.LABEL_RECURRING_AMOUNT,
-      title: `${fundCurrency} ${scheduledInvestmentAmount}`,
+      title: `${DICTIONARY_RECURRING_CURRENCY} ${scheduledInvestmentAmount}`,
     },
     {
       label: ORDER_SUMMARY.LABEL_RECURRING_SALES_CHARGE,

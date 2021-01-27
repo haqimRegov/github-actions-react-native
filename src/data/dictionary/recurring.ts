@@ -4,3 +4,5 @@ export const DICTIONARY_RECURRING_FREQUENCY: TypeRecurringFrequencyLabelValue[] 
 ];
 
 export const DICTIONARY_DDA_BANK = [{ label: "Public Bank", value: "Public Bank" }];
+
+export const DICTIONARY_RECURRING_CURRENCY = "MYR";

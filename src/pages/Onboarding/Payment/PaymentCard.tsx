@@ -357,7 +357,11 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               payment.clientName === undefined ||
               payment.clientTrustAccountNumber === "" ||
               payment.clientTrustAccountNumber === undefined;
-            const onlineBankingDisabled = baseCashDisabled === true || payment.transactionDate === undefined;
+            const onlineBankingDisabled =
+              baseCashDisabled === true ||
+              payment.transactionDate === undefined ||
+              payment.bankName === "" ||
+              payment.bankName === undefined;
             const chequeDisabled =
               baseCashDisabled === true ||
               payment.bankName === "" ||
@@ -397,12 +401,12 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               setTransactionDate: setTransactionDate,
               transactionDate: payment.transactionDate!,
             };
-            let paymentMethodInfo = <OnlineBanking {...paymentMethodProps} />;
+            let paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName!} />;
 
             switch (payment.paymentMethod!) {
               case "Online Banking":
                 saveDisabled = onlineBankingDisabled;
-                paymentMethodInfo = <OnlineBanking {...paymentMethodProps} />;
+                paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName!} />;
                 break;
               case "Cheque":
                 saveDisabled = chequeDisabled;

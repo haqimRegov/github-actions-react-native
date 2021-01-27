@@ -17,4 +17,4 @@ declare interface IRiskScore {
   type: string;
 }
 
-declare type TypeRiskAssessmentModal = "promptAssessment" | "assessment" | "promptDateOfBirth" | undefined;
+declare type TypeRiskAssessmentModal = "promptAssessment" | "assessment" | undefined;

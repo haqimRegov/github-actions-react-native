@@ -3,7 +3,12 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, Tag } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_DDA_BANK, DICTIONARY_KIB_BANK_ACCOUNTS, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
+import {
+  DICTIONARY_DDA_BANK,
+  DICTIONARY_KIB_BANK_ACCOUNTS,
+  DICTIONARY_RECURRING_CURRENCY,
+  DICTIONARY_RECURRING_FREQUENCY,
+} from "../../../data/dictionary";
 import {
   alignItemsEnd,
   centerVertical,
@@ -94,6 +99,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         break;
       case "Recurring":
         initialState = {
+          currency: DICTIONARY_RECURRING_CURRENCY,
           paymentMethod: "Recurring",
           bankAccountName: "",
           bankAccountNumber: "",

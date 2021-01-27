@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
-import { Image, Text, TextStyle, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Text, TextStyle, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -28,7 +28,6 @@ import {
   fs12SemiBoldBlack2,
   fs16BoldBlack1,
   fs16BoldBlack2,
-  fs16RegBlack1,
   sh143,
   sh155,
   sh16,
@@ -57,7 +56,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   addRiskScore,
   agent,
   handleCancelOnboarding,
-  handleResetOnboarding,
   handleNextStep,
   onboarding,
   principalHolder,
@@ -135,10 +133,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   };
 
   const handleConfirmEdit = () => {
-    if (confirmModal === "promptDateOfBirth") {
-      // TODO prefill previous principal holder details
-      return handleResetOnboarding();
-    }
     setConfirmModal(undefined);
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const findProducts = updatedDisabledSteps.indexOf("Products");
@@ -153,21 +147,13 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       setConfirmModal(undefined);
       addAssessmentQuestions(prevQuestionnaire);
     }
-    if (confirmModal === "promptDateOfBirth") {
-      setConfirmModal(undefined);
-    }
-  };
-
-  const handleEditDOB = () => {
-    setConfirmModal("promptDateOfBirth");
   };
 
   const isAssessment = confirmModal === "assessment";
 
   const labelCancel = isAssessment ? RISK_ASSESSMENT.BUTTON_RETAKE : RISK_ASSESSMENT.BUTTON_NO;
   const labelContinue = isAssessment ? RISK_ASSESSMENT.BUTTON_CONFIRM : RISK_ASSESSMENT.BUTTON_YES;
-  const editTitle = confirmModal === "promptDateOfBirth" ? RISK_ASSESSMENT.EDIT_TITLE_DOB : RISK_ASSESSMENT.EDIT_TITLE_ASSESSMENT;
-  const modalTitle = isAssessment ? RISK_ASSESSMENT.PROFILE_TITLE : editTitle;
+  const modalTitle = isAssessment ? RISK_ASSESSMENT.PROFILE_TITLE : RISK_ASSESSMENT.EDIT_TITLE_ASSESSMENT;
   const handleCancel = isAssessment ? handleRetakeAssessment : handleCancelEdit;
   const handleContinue = isAssessment ? handleConfirmAssessment : handleConfirmEdit;
   const modalTitleStyle: TextStyle = isAssessment ? {} : { width: sw432 };
@@ -177,7 +163,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.rangeOfReturn },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskScore.type },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_SUGGESTION, title: riskScore.fundSuggestion },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile, titleStyle: fs16RegBlack1 },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile },
   ];
 
   useEffect(() => {
@@ -200,25 +186,23 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
           <CustomSpacer isHorizontal={true} space={sw24} />
           <View>
             <CustomSpacer space={sh40} />
-            <TouchableWithoutFeedback onPress={handleEditDOB}>
-              <View onStartShouldSetResponderCapture={() => true}>
-                <LabeledTitle
-                  label={RISK_ASSESSMENT.LABEL_QUESTION_1}
-                  labelStyle={{ ...fs10BoldBlack2, ...disabledOpacity }}
-                  spaceToLabel={sh8}
-                  title={RISK_ASSESSMENT.QUESTION_1}
-                  titleStyle={{ ...fs16BoldBlack2, ...disabledOpacity }}
-                />
-                <CustomSpacer space={sh16} />
-                <CustomTextInput
-                  disabled={true}
-                  label={RISK_ASSESSMENT.LABEL_DATE_OF_BIRTH}
-                  rightIcon="calendar"
-                  rightIconColor={colorBlue._2}
-                  value={dateOfBirth}
-                />
-              </View>
-            </TouchableWithoutFeedback>
+            <View onStartShouldSetResponderCapture={() => true}>
+              <LabeledTitle
+                label={RISK_ASSESSMENT.LABEL_QUESTION_1}
+                labelStyle={{ ...fs10BoldBlack2, ...disabledOpacity }}
+                spaceToLabel={sh8}
+                title={RISK_ASSESSMENT.QUESTION_1}
+                titleStyle={{ ...fs16BoldBlack2, ...disabledOpacity }}
+              />
+              <CustomSpacer space={sh16} />
+              <CustomTextInput
+                disabled={true}
+                label={RISK_ASSESSMENT.LABEL_DATE_OF_BIRTH}
+                rightIcon="calendar"
+                rightIconColor={colorBlue._2}
+                value={dateOfBirth}
+              />
+            </View>
             <CustomSpacer space={sh32} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_2}
@@ -356,7 +340,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                   spaceToBottom={sh24}
                   spaceToLabel={sh8}
                   title={item.title}
-                  titleStyle={{ ...fs16BoldBlack1, ...item.titleStyle }}
+                  titleStyle={fs16BoldBlack1}
                 />
               ))}
             </Fragment>

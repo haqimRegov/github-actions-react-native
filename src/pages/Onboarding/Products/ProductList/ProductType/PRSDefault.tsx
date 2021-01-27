@@ -67,7 +67,11 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       if (error === null && data !== null) {
         return data.result;
       }
-      Alert.alert(JSON.stringify(error?.message));
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
     }
     return undefined;
   };
@@ -127,7 +131,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   useEffect(() => {
     // when sort, search, filter is updated
     if (prevPageRef !== undefined && prevPageRef !== "") {
-      handleFetchPRSDefault(page);
+      handleFetchPRSDefault("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
@@ -135,7 +139,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   useEffect(() => {
     // initial fetch
     if (recommended.length === 0) {
-      handleFetchPRSDefault("0");
+      handleFetchPRSDefault("1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

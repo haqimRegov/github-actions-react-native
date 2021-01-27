@@ -61,7 +61,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         setShowPrompt(true);
       }
       if (error !== null) {
-        Alert.alert(error.message);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
     return undefined;
@@ -96,7 +98,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         updateReceipts(data.result.orders);
       }
       if (error !== null) {
-        Alert.alert(error.message);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
     return undefined;
@@ -166,7 +170,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                     // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
                   }
                   if (error !== null) {
-                    Alert.alert(error.message);
+                    setTimeout(() => {
+                      Alert.alert(error.message);
+                    }, 100);
                   }
                 }
                 // return undefined;

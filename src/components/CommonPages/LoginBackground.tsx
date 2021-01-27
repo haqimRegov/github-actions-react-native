@@ -1,9 +1,9 @@
 import React, { Fragment, ReactNode } from "react";
 import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
 
+import { version } from "../../../package";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
-import { DICTIONARY_LINK_PRIVACY, DICTIONARY_LINK_TERMS } from "../../data/dictionary";
 import {
   colorWhite,
   DEVICE,
@@ -11,6 +11,7 @@ import {
   flexGrow,
   flexRow,
   fs12SemiBoldBlue2,
+  fs12SemiBoldGray8,
   sh32,
   sh56,
   sh64,
@@ -20,7 +21,6 @@ import {
   sw56,
   sw8,
 } from "../../styles";
-import { LinkUtils } from "../../utils";
 import { LinkTextGroup, LinkTextProps } from "../Touchables";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 import { SafeAreaPage } from "./SafeAreaPage";
@@ -34,13 +34,13 @@ interface LoginPageProps {
 }
 
 export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
-  const handlePrivacyPolicy = () => {
-    LinkUtils.openLink(DICTIONARY_LINK_PRIVACY);
-  };
+  // const handlePrivacyPolicy = () => {
+  //   LinkUtils.openLink(DICTIONARY_LINK_PRIVACY);
+  // };
 
-  const handleTermsAndConditions = () => {
-    LinkUtils.openLink(DICTIONARY_LINK_TERMS);
-  };
+  // const handleTermsAndConditions = () => {
+  //   LinkUtils.openLink(DICTIONARY_LINK_TERMS);
+  // };
 
   const handleAgentOnboarding = () => {
     setPage("FIRST_TIME_LOGIN");
@@ -77,15 +77,14 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   };
 
   const bottomLinks: LinkTextProps[] = [
+    // {
+    //   onPress: handlePrivacyPolicy,
+    //   text: LOGIN.LINK_PRIVACY_POLICY,
+    //   style: fs12SemiBoldBlue2,
+    // },
     {
-      onPress: handlePrivacyPolicy,
-      text: LOGIN.LINK_PRIVACY_POLICY,
-      style: fs12SemiBoldBlue2,
-    },
-    {
-      onPress: handleTermsAndConditions,
-      text: LOGIN.LINK_TERMS_AND_CONDITIONS,
-      style: fs12SemiBoldBlue2,
+      text: `Build Version ${version}`,
+      style: fs12SemiBoldGray8,
     },
   ];
 

@@ -48,6 +48,7 @@ declare interface IOrder {
   investments: IOrderInvestment[];
   orderDate: string;
   orderNumber: string;
+  allowedRecurringType?: string[];
   orderTotalAmount: IOrderAmount[];
   paymentType: TypePaymentType;
 }

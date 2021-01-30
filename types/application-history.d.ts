@@ -47,9 +47,3 @@ declare interface ITransactionTab {
   orders: IApplicationHistoryTable[];
   totalPages: number;
 }
-
-declare type TransactionDashboardOrder = Record<TransactionOrderType, ITransactionTab>;
-
-declare interface ITransactionsDashboard extends Partial<TransactionDashboardOrder> {
-  count: IOrderCount;
-}

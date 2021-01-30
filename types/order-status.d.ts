@@ -1,27 +1,25 @@
 declare type OrderStatusKey =
   | "completed"
-  | "edd"
-  | "pending"
   | "pendingDoc"
   | "pendingPayment"
+  | "pendingDocAndPayment"
+  | "pendingHardcopy"
   | "rejected"
-  | "rejectedBr"
-  | "rejectedHq"
+  | "reroutedHq"
+  | "reroutedBr"
   | "submitted"
-  | "terminated"
   | "void";
 
 declare type OrderStatusType =
-  | "BR-Rejected"
   | "Completed"
-  | "EDD"
-  | "HQ-Rejected"
   | "Pending Doc"
   | "Pending Payment"
-  | "Pending"
-  | "Rejected"
+  | "Pending Doc & Payment"
+  | "Pending Hardcopy"
   | "Submitted"
-  | "Terminated"
-  | "Void";
+  | "Rejected"
+  | "Void"
+  | "HQ - Rerouted"
+  | "BR - Rerouted";
 
-declare type OrderStatusDictionary = Record<OrderStatusKey, OrderStatusType>;
+declare type OrderStatusLabelValue = Record<OrderStatusKey, OrderStatusType>;

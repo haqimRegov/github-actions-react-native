@@ -1,13 +1,12 @@
-export const DICTIONARY_ORDER_STATUS: OrderStatusDictionary = {
+export const DICTIONARY_ORDER_STATUS: OrderStatusLabelValue = {
   completed: "Completed",
-  edd: "EDD",
-  pending: "Pending",
   pendingDoc: "Pending Doc",
+  pendingDocAndPayment: "Pending Doc & Payment",
+  pendingHardcopy: "Pending Hardcopy",
   pendingPayment: "Pending Payment",
   rejected: "Rejected",
-  rejectedBr: "BR-Rejected",
-  rejectedHq: "HQ-Rejected",
+  reroutedBr: "BR - Rerouted",
+  reroutedHq: "HQ - Rerouted",
   submitted: "Submitted",
-  terminated: "Terminated",
   void: "Void",
 };

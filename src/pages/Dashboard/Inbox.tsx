@@ -1,16 +1,24 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, ScrollView, View, ViewStyle } from "react-native";
+import { Alert, ScrollView, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { AvatarProps, CollapsibleHeader, CustomFlexSpacer, CustomSpacer, NotificationList, Pagination, Tab } from "../../components";
+import { LocalAssets } from "../../assets/LocalAssets";
+import {
+  AvatarProps,
+  CollapsibleHeader,
+  CustomFlexSpacer,
+  CustomSpacer,
+  EmptyTable,
+  NotificationList,
+  Pagination,
+  Tab,
+} from "../../components";
 import { FULL_DATE_FORMAT, Language } from "../../constants";
 import { getInbox, updateInbox } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import {
   borderBottomBlack21,
-  centerHV,
-  colorGray,
   colorWhite,
   flexChild,
   flexGrow,
@@ -25,11 +33,11 @@ import {
   sw24,
 } from "../../styles";
 
-const { INBOX } = Language.PAGE;
+const { EMPTY_STATE, INBOX } = Language.PAGE;
 
 interface InboxPageProps extends GlobalStoreProps {
   navigation: IStackNavigationProp;
-  handleRoute: (route: string) => void;
+  handleRoute: (route: DashboardPageType) => void;
 }
 
 const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages, updatedUnreadMessages }: InboxPageProps) => {
@@ -88,7 +96,9 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
       }
 
       if (error !== null) {
-        Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
   };
@@ -117,7 +127,9 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
         handleFetch(inboxList.page);
       }
       if (error !== null) {
-        Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
   };
@@ -171,6 +183,11 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
   }, []);
 
   const badgeCount = inboxList.newMessageCount === "" ? parseInt(unreadMessages!, 10) : parseInt(inboxList.newMessageCount, 10);
+  const noResults = inputSearch !== undefined && inputSearch !== "";
+  const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : INBOX.EMPTY_TITLE;
+  const subtitle = noResults === true ? `${EMPTY_STATE.TITLE_SEARCH} '${inputSearch}'` : INBOX.EMPTY_SUBTITLE;
+  const hintText = noResults === true ? EMPTY_STATE.SUBTITLE : undefined;
+  const illustration = noResults === true ? undefined : LocalAssets.illustration.inboxEmpty;
 
   return (
     <ScrollView contentContainerStyle={flexGrow} showsVerticalScrollIndicator={false}>
@@ -201,10 +218,8 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
         <View style={borderBottomBlack21} />
         <View style={{ ...px(sw24), ...flexChild }}>
           <CustomSpacer space={sh24} />
-          {initialLoading === true ? (
-            <View style={{ ...centerHV, ...flexChild }}>
-              <ActivityIndicator color={colorGray._7} size="small" />
-            </View>
+          {inboxList.notifications.length === 0 ? (
+            <EmptyTable hintText={hintText} illustration={illustration} loading={initialLoading} title={title} subtitle={subtitle} />
           ) : (
             inboxList.notifications.map((inbox: INotificationList, index: number) => {
               const label =

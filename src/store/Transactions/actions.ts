@@ -21,12 +21,32 @@ export const resetTransactions = () => {
   return typedAction("transactions/RESET_TRANSACTIONS");
 };
 
+export const updatedSelectedOrder = (orders: IDashboardOrder[]) => {
+  return typedAction("transactions/UPDATE_SELECTED_ORDER", orders);
+};
+
 export const updateTransactions = (transactions: transactionsState) => {
   return typedAction("transactions/UPDATE_TRANSACTIONS", transactions);
 };
 
-export const viewOrder = (order: string) => {
+export const updateSearch = (search: string) => {
+  return typedAction("transactions/UPDATE_SEARCH", search);
+};
+
+export const updateCurrentOrder = (order: string) => {
   return typedAction("transactions/VIEW_ORDER", order);
+};
+
+export const updatePendingSort = (sort: ITransactionsSort[]) => {
+  return typedAction("transactions/UPDATE_PENDING_SORT", sort);
+};
+
+export const updateApprovedSort = (sort: ITransactionsSort[]) => {
+  return typedAction("transactions/UPDATE_APPROVED_SORT", sort);
+};
+
+export const updateRejectedSort = (sort: ITransactionsSort[]) => {
+  return typedAction("transactions/UPDATE_REJECTED_SORT", sort);
 };
 
 export type TransactionsAction = ReturnType<
@@ -35,7 +55,13 @@ export type TransactionsAction = ReturnType<
   | typeof addRejectedOrders
   | typeof addSelectedOrders
   | typeof resetTransactions
-  | typeof viewOrder
+  | typeof updateCurrentOrder
+  | typeof updateTransactions
+  | typeof updatedSelectedOrder
+  | typeof updateSearch
+  | typeof updatePendingSort
+  | typeof updateApprovedSort
+  | typeof updateRejectedSort
 >;
 
 export const TransactionsActionProps = {
@@ -44,7 +70,13 @@ export const TransactionsActionProps = {
   addRejectedOrders,
   addSelectedOrders,
   resetTransactions,
-  viewOrder,
+  updateCurrentOrder,
+  updateTransactions,
+  updatedSelectedOrder,
+  updateSearch,
+  updatePendingSort,
+  updateApprovedSort,
+  updateRejectedSort,
 };
 
 export type TransactionsActionsType = typeof TransactionsActionProps;

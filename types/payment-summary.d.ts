@@ -13,6 +13,7 @@ declare interface IPaymentOrderState {
   orderTotalAmount: IOrderAmount[];
   payments: IPaymentState[];
 
+  allowedRecurringType?: string[];
   completed?: boolean;
   floatingAmount?: IFloatingAmount[];
 }

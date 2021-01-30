@@ -2,22 +2,23 @@ import React, { FunctionComponent, useState } from "react";
 import { Image, Text, View } from "react-native";
 
 import { LocalAssets } from "../../../assets/LocalAssets";
-import { CheckBox, ConfirmationModal, CustomSpacer, Tag } from "../../../components";
+import { CheckBox, ConfirmationModal, CustomSpacer, Tag, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import {
   alignSelfStart,
   borderBottomBlack1,
   centerHV,
   flexRow,
+  fs12RegBlack2,
   fs16BoldBlack1,
   fs16SemiBoldBlack1,
   fs24BlackBlack2,
   fs24BoldBlue2,
   fsAlignCenter,
+  sh16,
   sh24,
   sh32,
   sh4,
-  sh56,
   sh8,
   sw176,
   sw8,
@@ -28,22 +29,13 @@ const { PAYMENT } = Language.PAGE;
 interface PaymentStatusProps {
   handleResetOnboarding: () => void;
   result?: ISubmitProofOfPaymentsResult;
-  setPaymentResult: (value?: ISubmitProofOfPaymentsResult) => void;
 }
-export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
-  handleResetOnboarding,
-  result,
-  setPaymentResult,
-}: PaymentStatusProps) => {
+export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleResetOnboarding, result }: PaymentStatusProps) => {
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
 
   const handleCheckbox = () => {
     setToggle(!toggle);
-  };
-  const handleCancel = () => {
-    setPrompt("status");
-    setPaymentResult(undefined);
   };
 
   const handleContinue = () => {
@@ -60,7 +52,6 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
     <View>
       <ConfirmationModal
         continueDisabled={!toggle}
-        handleCancel={prompt === "message" ? undefined : handleCancel}
         handleContinue={handleContinue}
         labelContinue={prompt === "message" ? PAYMENT.BUTTON_DONE : undefined}
         visible={result !== undefined}>
@@ -120,11 +111,11 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({
                 <CustomSpacer space={sh32} />
               </View>
             ) : null}
-            <CustomSpacer space={sh56} />
+            <TextSpaceArea spaceToBottom={sh16} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
             <CheckBox
               checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
               onPress={handleCheckbox}
-              label={PAYMENT.CHECKBOX_LABEL}
+              label={PAYMENT.PROMPT_CHECKBOX_LABEL}
               toggle={toggle}
             />
           </View>

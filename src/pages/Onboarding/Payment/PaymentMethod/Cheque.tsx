@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
@@ -62,6 +63,8 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
               datePickerStyle={{ height: sh143 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
+              maximumDate={moment().toDate()}
+              minimumDate={moment().toDate()}
               setValue={setTransactionDate}
               value={transactionDate}
             />

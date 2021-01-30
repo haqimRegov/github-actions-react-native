@@ -44,7 +44,6 @@ declare interface EmailOTPProps {
 }
 
 export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
-  accountType,
   handleCancel,
   handleNavigate,
   handleResend,
@@ -80,7 +79,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
 
   const handleVerifyOTP = async () => {
     setPrincipalError(undefined);
-    const jointRequest = accountType === "Joint" ? { email: jointEmail, code: jointOtp } : undefined;
+    const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
     const req = {
       clientId: principalClientId,
       principalHolder: { email: principalEmail, code: principalOtp },

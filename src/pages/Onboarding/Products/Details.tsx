@@ -61,7 +61,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
   const [viewDocument, setViewDocument] = useState<FileBase64 | undefined>(undefined);
   const [masterClassList, setMasterClassList] = useState<IProductClasses | undefined>(undefined);
   const [inputCurrency, setInputCurrency] = useState<string>(fund.masterList[0].currency);
-  const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class);
+  const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "noClass" : fund.masterList[0].class);
   const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(fund.masterList[0]);
 
   const { salesCharge, newSalesAmount } = filteredCurrency;
@@ -144,8 +144,6 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     titleStyle: fs16BoldBlack2,
   };
 
-  const masterClassKeys = masterClassList !== undefined ? Object.keys(masterClassList) : [];
-
   const currencies =
     masterClassList !== undefined
       ? masterClassList[inputClass].map((value) => {
@@ -160,15 +158,19 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
         })
       : [];
 
+  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass");
+
   useEffect(() => {
     let newMasterClassList: IProductClasses = {};
     fund.masterList.forEach((list: IProductMasterList) => {
-      const classIndex = masterClassList !== undefined ? Object.keys(newMasterClassList).indexOf(list.class) : -1;
-      if (classIndex === -1) {
-        newMasterClassList = { ...newMasterClassList, [list.class]: [list] };
+      const dump = { class: list.class !== null ? list.class : "noClass", currency: list.currency };
+      const findClassIndex = Object.keys(newMasterClassList).indexOf(dump.class);
+      if (findClassIndex === -1) {
+        newMasterClassList = { ...newMasterClassList, [dump.class]: [list] };
       } else {
-        newMasterClassList[list.class].push(list);
+        newMasterClassList[dump.class].push(list);
       }
+      return dump;
     });
     setMasterClassList(newMasterClassList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -202,11 +204,10 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             </View>
             <CustomSpacer space={sw24} />
             <View style={borderBottomGray4} />
-            {masterClassList !== undefined && masterClassKeys.length > 0 && masterClassKeys[0] !== "null" ? (
+            {showMulti === true ? (
               <Fragment>
-                <CustomSpacer space={sh24} />
-                <View style={{ ...flexRow, ...px(sw24) }}>
-                  {masterClassKeys.length > 1 || "null" in masterClassList === false ? (
+                <View style={{ ...flexRow, ...px(sw24), ...py(sh24) }}>
+                  {classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass") ? (
                     <Fragment>
                       <AdvancedDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
                       <CustomSpacer isHorizontal={true} space={sw64} />
@@ -219,7 +220,6 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
                     value={inputCurrency}
                   />
                 </View>
-                <CustomSpacer space={sh24} />
                 <Dash />
               </Fragment>
             ) : null}

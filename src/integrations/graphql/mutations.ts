@@ -252,6 +252,69 @@ const riskAssessment = gql`
   }
 `;
 
+const submitHardCopyDocuments = gql`
+  mutation submitHardcopyDocuments($input: HardcopyDocumentsInput) {
+    submitHardcopyDocuments(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitSoftCopyDocuments = gql`
+  mutation submitSoftcopyDocuments($input: SoftcopyDocumentsInput) {
+    submitSoftcopyDocuments(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const summaryReceipt = gql`
+  mutation summaryReceipt($input: summaryReceiptInput) {
+    summaryReceipt(input: $input) {
+      data {
+        result {
+          message
+          status
+          pdf {
+            base64
+            name
+            date
+            type
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const verifyLockOtp = gql`
   mutation verifyOtpAgent($input: otp) {
     verifyOtpAgent(input: $input) {
@@ -281,6 +344,7 @@ const submitClientAccount = gql`
             amount
           }
           orders {
+            allowedRecurringType
             orderNumber
             orderDate
             orderTotalAmount {
@@ -447,6 +511,9 @@ export const GQL_MUTATIONS = {
   submitClientAccount,
   submitPdf,
   submitProofOfPayments,
+  submitHardCopyDocuments,
+  submitSoftCopyDocuments,
+  summaryReceipt,
   updateInbox,
   userLogin,
   verifyLockOtp,

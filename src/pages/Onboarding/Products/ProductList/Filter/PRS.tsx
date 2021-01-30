@@ -1,19 +1,20 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
+import { CheckBoxDropdown, CheckBoxGroup, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
-import { FILTER_ISSUING_HOUSE, FILTER_TYPE } from "../../../../../data/dictionary";
+import { FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
 import { centerVertical, flexRow, fs16BoldBlack1, px, sh32, sh8, sw24, sw240, sw64 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface PRSFilterProps {
   filter: IProductFilter;
+  productType: ProductType;
   setFilter: (value: IProductFilter) => void;
 }
 
-export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, setFilter }: PRSFilterProps) => {
-  const { conventional, shariahApproved, issuingHouse } = filter;
+export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, productType, setFilter }: PRSFilterProps) => {
+  const { conventional, shariahApproved, issuingHouse, riskCategory } = filter;
 
   const handleType = (value: string) => {
     const filterClone = { ...filter };
@@ -32,6 +33,11 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, setFilter
   const handleIssuingHouse = (value: string[]) => {
     setFilter({ ...filter, issuingHouse: value });
   };
+
+  const handleRiskCategory = (value: string[]) => {
+    setFilter({ ...filter, riskCategory: value });
+  };
+
   const conventionalSelected = conventional![0] === "Yes";
   const shariahSelected = shariahApproved![0] === "Yes";
   const disabledConventionalType = conventionalSelected ? [1] : [];
@@ -63,9 +69,18 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, setFilter
         </View>
       </View>
       <CustomSpacer space={sh32} />
-      <View style={px(sw24)}>
-        <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_ISSUING} />
-        <CheckBoxDropdown handleChange={handleIssuingHouse} items={FILTER_ISSUING_HOUSE} value={issuingHouse!} />
+      <View style={{ ...flexRow, ...px(sw24) }}>
+        <View>
+          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_ISSUING} />
+          <CheckBoxDropdown handleChange={handleIssuingHouse} items={FILTER_ISSUING_HOUSE} value={issuingHouse!} />
+        </View>
+        <CustomFlexSpacer />
+        {productType === "prs" ? (
+          <View>
+            <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
+            <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
+          </View>
+        ) : null}
       </View>
       <CustomSpacer space={sw64} />
     </View>

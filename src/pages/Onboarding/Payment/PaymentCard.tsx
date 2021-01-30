@@ -19,7 +19,7 @@ import {
   UploadWithModal,
 } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_DDA_BANK, DICTIONARY_KIB_BANK_ACCOUNTS, DICTIONARY_PAYMENT_METHOD, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_DDA_BANK, DICTIONARY_KIB_BANK_ACCOUNTS, ERROR } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
 import {
   borderBottomBlack21,
@@ -58,6 +58,7 @@ const { PAYMENT } = Language.PAGE;
 
 export interface PaymentCardProps {
   accountNames: TypeLabelValue[];
+  allowedRecurringType?: string[];
   active: boolean;
   currencies: TypeCurrencyLabelValue[];
   floatingAmount: IFloatingAmount[];
@@ -71,6 +72,7 @@ export interface PaymentCardProps {
 
 export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   accountNames,
+  allowedRecurringType,
   active,
   currencies,
   floatingAmount,
@@ -101,8 +103,6 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
     height: sh64,
   };
 
-  const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
-  const headerTitle = isScheduled ? PAYMENT.TITLE_RECURRING : PAYMENT.TITLE;
   const floating = floatingAmount
     .map(({ amount, currency }) => {
       const symbol = amount > 0 ? "+" : "-";
@@ -113,7 +113,12 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
     .join(", ");
   const paymentTitle = draftPayments.length === 1 ? `${draftPayments[0].paymentMethod}` : `${draftPayments.length}`;
   const floatingLabel = floating !== "" ? `(${floating})` : "";
-  const completedTitle = withPayment === true ? `${PAYMENT.LABEL_PROOF} - ${paymentTitle}${floatingLabel}` : headerTitle;
+  const headerTitle = isScheduled ? PAYMENT.TITLE_RECURRING : PAYMENT.TITLE;
+  const completedTitle = isScheduled
+    ? `${PAYMENT.LABEL_RECURRING} - ${draftPayments[0].recurringType}`
+    : `${PAYMENT.LABEL_PROOF} - ${paymentTitle}${floatingLabel}`;
+  const defaultTitle = withPayment === true ? completedTitle : headerTitle;
+  const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
 
   // TODO no prompt if all are saved
   // TODO dont reflect current change if viewing other info
@@ -174,7 +179,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               <IcoMoon color={colorBlue._2} name="file" size={sh24} />
             )}
             <CustomSpacer isHorizontal={true} space={sw16} />
-            <Text style={labelStyle}>{completedTitle}</Text>
+            <Text style={labelStyle}>{defaultTitle}</Text>
             <CustomFlexSpacer />
             <IconButton
               color={iconColor}
@@ -449,11 +454,11 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                 saveDisabled = recurringSaveDisabled;
                 paymentMethodInfo = (
                   <Recurring
+                    allowedRecurringType={allowedRecurringType}
                     bankNames={accountNames}
                     bankAccountName={payment.bankAccountName!}
                     bankAccountNumber={payment.bankAccountNumber!}
                     frequency={payment.frequency!}
-                    isFpx={true}
                     recurringBank={payment.recurringBank!}
                     recurringType={payment.recurringType!}
                     setBankAccountName={setBankAccountName}
@@ -467,6 +472,15 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
 
               default:
                 break;
+            }
+
+            const paymentMethods = [
+              { label: "Online Banking", value: "Online Banking" },
+              { label: "Client Trust Account (CTA)", value: "Client Trust Account (CTA)" },
+            ];
+
+            if (currencies.some((currency) => currency.value === "MYR")) {
+              paymentMethods.splice(1, 0, { label: "Cheque", value: "Cheque" });
             }
 
             return (
@@ -492,7 +506,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                       <Fragment>
                         <View style={px(sw24)}>
                           <View style={flexRow}>
-                            {currencies.length > 0 ? (
+                            {currencies.length > 1 ? (
                               <AdvancedDropdown
                                 items={currencies}
                                 handleChange={setCurrency}
@@ -519,20 +533,16 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                                 titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
                                 style={{ width: sw360 }}
                               />
-                            ) : (
+                            ) : null}
+                            {payment.paymentMethod! !== "EPF" && currencies.length < 2 ? (
                               <AdvancedDropdown
-                                items={DICTIONARY_PAYMENT_METHOD}
+                                items={paymentMethods}
                                 handleChange={setPaymentMethod}
                                 label={PAYMENT.LABEL_PAYMENT_METHOD}
                                 value={payment.paymentMethod!}
                               />
-                            )}
-                          </View>
-                        </View>
-                        {currencies.length > 0 ? (
-                          <View style={px(sw24)}>
-                            <CustomSpacer space={sh32} />
-                            <View style={flexRow}>
+                            ) : null}
+                            {payment.paymentMethod! !== "EPF" && currencies.length > 1 ? (
                               <CustomTextInput
                                 error={amountError}
                                 label={PAYMENT.LABEL_AMOUNT}
@@ -541,6 +551,19 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                                 onChangeText={setAmount}
                                 prefixStyle={fs16RegBlack2}
                                 value={payment.amount}
+                              />
+                            ) : null}
+                          </View>
+                        </View>
+                        {payment.paymentMethod! !== "EPF" && currencies.length > 1 ? (
+                          <View style={px(sw24)}>
+                            <CustomSpacer space={sh32} />
+                            <View style={flexRow}>
+                              <AdvancedDropdown
+                                items={paymentMethods}
+                                handleChange={setPaymentMethod}
+                                label={PAYMENT.LABEL_PAYMENT_METHOD}
+                                value={payment.paymentMethod!}
                               />
                             </View>
                           </View>

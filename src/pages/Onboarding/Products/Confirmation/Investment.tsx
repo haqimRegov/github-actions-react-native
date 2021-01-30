@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Alert, Text, View } from "react-native";
 
 import {
@@ -61,11 +61,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
     scheduledSalesCharge,
   } = investment;
 
-  const { isEpf, isScheduled, masterList } = fundDetails;
-  const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(masterList[0]);
-  const [cashSalesCharges, setCashSalesCharges] = useState<TypeLabelValue[]>([]);
-  const [epfSalesCharges, setEpfSalesCharges] = useState<TypeLabelValue[]>([]);
-  const { salesCharge, newSalesAmount, topUpAmount } = filteredCurrency;
+  const { isEpf, isScheduled } = fundDetails;
 
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
@@ -74,21 +70,30 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
 
-  const setAmountError = (value?: string) => {
-    setData({ ...data, investment: { ...investment, amountError: value } });
-  };
+  const classCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === fundCurrency);
+  const { newSalesAmount, salesCharge, topUpAmount } = masterClassList[fundClass!][classCurrencyIndex];
 
-  const setScheduledAmountError = (value?: string) => {
-    setData({ ...data, investment: { ...investment, scheduledAmountError: value } });
-  };
-  const salesCharges = fundPaymentMethod === "Cash" ? cashSalesCharges : epfSalesCharges;
-  const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${salesCharge[fundingMethod].max}%`;
+  const minSalesCharge = classCurrencyIndex !== -1 ? parseFloat(salesCharge[fundPaymentMethod.toLowerCase()].min) : parseFloat("NaN");
+  const maxSalesCharge = classCurrencyIndex !== -1 ? parseFloat(salesCharge[fundPaymentMethod.toLowerCase()].max) : parseFloat("NaN");
+
+  const salesChargeRange: TypeLabelValue[] = [];
+
+  if (minSalesCharge % 0.5 !== 0 || maxSalesCharge % 0.5 !== 0) {
+    Alert.alert(
+      `There seems to be an issue with ${fundDetails.fundName} (ID: ${fundDetails.fundId}) \n\n If you wish to proceed, please use another fund. Otherwise, please contact support.`,
+    );
+  } else {
+    for (let index = minSalesCharge; index <= maxSalesCharge; index += 0.5) {
+      const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
+      salesChargeRange.push(element);
+    }
+  }
+  const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
+
   const minNewSalesAmount = newSalesAmount[fundingMethod].min;
   const minTopUpAmount = topUpAmount[fundingMethod].min;
   const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
   const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minTopUpAmount})`;
-
-  const masterClassKeys = Object.keys(masterClassList);
 
   const currencies =
     masterClassList !== undefined
@@ -99,7 +104,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
 
   const classes =
     masterClassList !== undefined
-      ? masterClassKeys.map((value) => {
+      ? Object.keys(masterClassList).map((value) => {
           return { label: value, value: value };
         })
       : [];
@@ -130,13 +135,21 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
     if (isAmount(value) === false) {
       return ERROR.INVESTMENT_INVALID_AMOUNT;
     }
-    if (parseInt(value, 10) > parseInt(filteredCurrency[amountType][fundingMethod].max, 10)) {
+    if (parseInt(value, 10) > parseInt(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max, 10)) {
       return ERROR.INVESTMENT_MAX_AMOUNT;
     }
-    if (parseInt(value, 10) < parseInt(filteredCurrency[amountType][fundingMethod].min, 10)) {
+    if (parseInt(value, 10) < parseInt(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min, 10)) {
       return ERROR.INVESTMENT_MIN_AMOUNT;
     }
     return undefined;
+  };
+
+  const setAmountError = (value?: string) => {
+    setData({ ...data, investment: { ...investment, amountError: value } });
+  };
+
+  const setScheduledAmountError = (value?: string) => {
+    setData({ ...data, investment: { ...investment, scheduledAmountError: value } });
   };
 
   const checkInvestmentAmount = () => {
@@ -153,7 +166,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
 
   const handleClass = (value: string) => {
     const newCurrency = masterClassList[value][0].currency;
-    setFilteredCurrency(masterClassList[value][0]);
+    // setFilteredCurrency(masterClassList[value][0]);
     setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency } });
   };
 
@@ -182,59 +195,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
     setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
   };
 
-  useEffect(() => {
-    let mounted = true;
-    if (mounted === true) {
-      const cashSalesChargesTmp: TypeLabelValue[] = [];
-      const epfSalesChargesTmp: TypeLabelValue[] = [];
-      const dirtyData =
-        parseFloat(salesCharge.cash.min) > parseFloat(salesCharge.cash.max) ||
-        salesCharge.cash.min === null ||
-        salesCharge.cash.max ||
-        (isEpf === "Yes" && salesCharge.epf.min === null) ||
-        salesCharge.epf.max === null ||
-        (epfSalesCharges.length === 0 && parseFloat(salesCharge.epf.min) > parseFloat(salesCharge.epf.max));
-      if (dirtyData === true) {
-        Alert.alert(
-          "There seems to be an issue in the Fund (e.g Sales Charge Minimum is greater than Maximum). If you wish to proceed, please use another fund. Otherwise, please contact support.",
-        );
-      } else {
-        if (cashSalesCharges.length === 0 && salesCharge && salesCharge.cash && salesCharge.cash.min && salesCharge.cash.max) {
-          for (
-            let index = parseFloat(salesCharge.cash.min);
-            index <= parseFloat(salesCharge.cash.max);
-            index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.cash.min) - parseFloat(salesCharge.cash.max)
-          ) {
-            const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
-            cashSalesChargesTmp.push(element);
-          }
-          setCashSalesCharges(cashSalesChargesTmp);
-        }
-        if (
-          isEpf === "Yes" &&
-          epfSalesCharges.length === 0 &&
-          salesCharge &&
-          salesCharge.epf &&
-          salesCharge.epf.min &&
-          salesCharge.epf.max
-        ) {
-          for (
-            let index = parseFloat(salesCharge.epf.min);
-            index <= parseFloat(salesCharge.epf.max);
-            index += fundPaymentMethod === "Cash" ? 0.5 : parseFloat(salesCharge.epf.min) - parseFloat(salesCharge.epf.max)
-          ) {
-            const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
-            epfSalesChargesTmp.push(element);
-          }
-          setEpfSalesCharges(epfSalesChargesTmp);
-        }
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass");
 
   return (
     <Fragment>
@@ -263,10 +224,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
         ) : null}
       </View>
       <CustomSpacer space={sh24} />
-      {masterClassList !== undefined && masterClassKeys.length > 0 && "null" in masterClassList === false ? (
+      {showMulti === true ? (
         <Fragment>
           <View style={{ ...flexRow, ...px(sw24) }}>
-            {masterClassKeys.length > 1 || "null" in masterClassList === false ? (
+            {classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass") ? (
               <Fragment>
                 <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
                 <CustomSpacer isHorizontal={true} space={sw64} />
@@ -310,7 +271,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <AdvancedDropdown
-              items={salesCharges}
+              items={salesChargeRange}
               handleChange={handleSalesCharge}
               label={INVESTMENT.LABEL_SALES_CHARGE}
               value={investmentSalesCharge}
@@ -344,7 +305,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
               <View>
                 <AdvancedDropdown
                   handleChange={handleScheduledSalesCharge}
-                  items={salesCharges}
+                  items={salesChargeRange}
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
                   value={`${scheduledSalesCharge}`}
                 />

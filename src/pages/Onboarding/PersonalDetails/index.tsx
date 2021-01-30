@@ -210,6 +210,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
               contactDetails={joint!.contactDetails!}
               epfDetails={joint!.epfDetails!}
               epfInvestment={epfInvestment!}
+              epfShariah={epfShariah!}
               investmentCurrencies={uniqueCurrencies}
               personalDetails={joint!.personalDetails!}
               setBankDetails={handleJointBankDetails}

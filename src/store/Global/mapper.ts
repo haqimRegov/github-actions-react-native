@@ -1,6 +1,7 @@
 import { bindActionCreators, Dispatch } from "redux";
 
 import { RootState } from "../rootReducer";
+import { TransactionsActionProps } from "../Transactions";
 import { GlobalActionProps } from "./actions";
 
 export const GlobalMapStateToProps = (state: RootState) => ({
@@ -11,7 +12,7 @@ export const GlobalMapStateToProps = (state: RootState) => ({
 });
 
 export const GlobalMapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators(GlobalActionProps, dispatch);
+  return bindActionCreators({ ...GlobalActionProps, ...TransactionsActionProps }, dispatch);
 };
 
 export type GlobalStoreProps = ReturnType<typeof GlobalMapStateToProps> & ReturnType<typeof GlobalMapDispatchToProps>;

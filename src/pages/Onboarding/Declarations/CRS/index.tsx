@@ -109,8 +109,9 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   const continueEnabledJoint = showTermsJoint && joint?.declaration!.crs!.acceptCrs && joint?.declaration!.crs!.explanationSaved;
 
   const showButtonContinue =
-    accountType === "Individual" ? showButtonContinuePrincipal : showButtonContinuePrincipal && showButtonContinueJoint;
-  const continueEnabled = accountType === "Individual" ? continueEnabledPrincipal : continueEnabledPrincipal && continueEnabledJoint;
+    accountType === "Joint" && jointAge >= 18 ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
+  const continueEnabled =
+    accountType === "Joint" && jointAge >= 18 ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
 
   const handleBack = () => {
     handleNextStep("FATCADeclaration");

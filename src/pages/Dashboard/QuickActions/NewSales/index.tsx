@@ -184,7 +184,9 @@ const NewSalesComponent = ({
           }
           return setClientType("NTB");
         }
-        return Alert.alert("Client is ETB");
+        setTimeout(() => {
+          return Alert.alert("Client is ETB");
+        }, 100);
       }
       if (error !== null) {
         if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {

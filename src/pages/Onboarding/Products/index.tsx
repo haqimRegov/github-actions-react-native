@@ -62,20 +62,23 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     selectedFunds.map((item: IProduct) => {
       let newMasterClassList: IProductClasses = {};
       item.masterList.forEach((list: IProductMasterList) => {
-        const classIndex = newMasterClassList !== {} ? Object.keys(newMasterClassList).indexOf(list.class) : -1;
-        if (classIndex === -1) {
-          newMasterClassList = { ...newMasterClassList, [list.class]: [list] };
+        const dump = { class: list.class !== null ? list.class : "noClass", currency: list.currency };
+        const findClassIndex = Object.keys(newMasterClassList).indexOf(dump.class);
+        if (findClassIndex === -1) {
+          newMasterClassList = { ...newMasterClassList, [dump.class]: [list] };
         } else {
-          newMasterClassList[list.class].push(list);
+          newMasterClassList[dump.class].push(list);
         }
+        return dump;
       });
+
       const newState: IProductSales = {
         investment: {
           fundPaymentMethod: "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",
           fundCurrency: item.masterList[0].currency,
-          fundClass: item.masterList[0].class,
+          fundClass: item.masterList[0].class !== null ? item.masterList[0].class : "noClass",
           scheduledInvestment: false,
         },
         fundDetails: { ...item },
@@ -171,7 +174,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
   };
 
-  if (page === 1) {
+  if (page === 1 && selectedFunds.length > 0) {
     screen = {
       ...screen,
       content: (

@@ -1,7 +1,10 @@
 import illustrationClientError from "./illustration_client_error/illustration_client_error.png";
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
+import illustrationHardcopySuccess from "./illustration_hardcopy_success/illustration_hardcopy_success.png";
+import illustrationInboxEmpty from "./illustration_inbox_empty/illustration_inbox_empty.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
+import illustrationNoResults from "./illustration_no_results/illustration_no_results.png";
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
 import illustrationProfileSuccess from "./illustration_profile_success/illustration_profile_success.png";
 import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
@@ -22,9 +25,12 @@ export const LocalAssets = {
     clientError: illustrationClientError,
     clientWarning: illustrationClientWarning,
     emailVerified: illustrationEmailVerified,
+    hardcopySuccess: illustrationHardcopySuccess,
+    inboxEmpty: illustrationInboxEmpty,
+    loginError: illustrationLoginError,
+    noResults: illustrationNoResults,
     orderReceived: illustrationOrderReceived,
     profileSuccess: illustrationProfileSuccess,
-    loginError: illustrationLoginError,
     submissionSummary: illustrationSubmissionSummary,
     transactionsEmpty: illustrationTransactionsEmpty,
     uploadSuccess: illustrationUploadSuccess,

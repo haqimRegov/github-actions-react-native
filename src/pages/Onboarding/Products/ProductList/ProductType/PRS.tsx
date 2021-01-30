@@ -3,6 +3,7 @@ import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
+import { FILTER_RISK } from "../../../../../data/dictionary";
 import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
@@ -20,6 +21,7 @@ interface PRSProps extends ProductsStoreProps {
 const PRSComponent: FunctionComponent<PRSProps> = ({
   addPrsFilters,
   addPrsRecommendedFunds,
+  addPrsAllFunds,
   addPrsSearch,
   addPrsSort,
   addSelectedFund,
@@ -27,13 +29,16 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   products,
   productType,
   resetSelectedFund,
+  riskScore,
   scrollEnabled,
   selectedFunds,
-  setLoading,
   setScrollEnabled,
   shareSuccess,
+  updatePrsShowBy,
 }: PRSProps) => {
-  const { filters, page, pages, recommended, search, sort, totalCount } = products.prs;
+  const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.prs;
+  const [loading, setLoading] = useState<boolean>(false);
+  const list = showBy === "recommended" ? recommended : all;
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
@@ -41,6 +46,13 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
+
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
+  const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
+  const riskCategory =
+    filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
+      ? recommendedRisk
+      : filters.riskCategory;
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
@@ -50,12 +62,12 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: filters.shariahApproved![0] || "",
-      riskCategory: filters.riskCategory || [],
+      riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],
       page: newPage,
       sort: sort,
-      showBy: "recommended",
+      showBy: showBy,
       search: search,
     };
     // eslint-disable-next-line no-console
@@ -81,7 +93,11 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
     // if (recommended.length === 0) {
     const funds = await handleFetch(newPage);
     if (funds !== undefined) {
-      addPrsRecommendedFunds(funds);
+      if (showBy === "all") {
+        addPrsAllFunds(funds);
+      } else {
+        addPrsRecommendedFunds(funds);
+      }
     }
     // }
   };
@@ -89,6 +105,9 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   const handleShowFilter = () => {
     if (filterVisible && showMore) {
       setShowMore(false);
+    }
+    if (filterVisible === false) {
+      setFilterTemp(filters);
     }
     setFilterVisible(!filterVisible);
     setScrollEnabled(!scrollEnabled);
@@ -107,6 +126,18 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 
   const handleCancelFilter = () => {
     setFilterTemp(filters);
+  };
+
+  const handleAllFunds = () => {
+    if (showBy === "recommended") {
+      updatePrsShowBy("all");
+    }
+  };
+
+  const handleRecommendedFunds = () => {
+    if (showBy === "all") {
+      updatePrsShowBy("recommended");
+    }
   };
 
   const handleSelectProduct = (product: IProduct) => {
@@ -140,11 +171,11 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 
   useEffect(() => {
     // initial fetch
-    if (recommended.length === 0) {
-      handleFetchPRS("1");
-    }
+    // if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
+    handleFetchPRS("1");
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showBy]);
 
   return (
     <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadowBlack116 }}>
@@ -163,17 +194,22 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       <CustomSpacer space={248} />
       <ProductListView
         filter={filterTemp}
+        handleAllFunds={handleAllFunds}
         handleNext={handleNext}
         handlePrev={handlePrev}
+        handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={recommended}
+        list={loading === true ? [] : list}
+        loading={loading}
         page={defaultPage}
         pages={defaultPages}
+        search={search}
         productType={productType}
         selectedFunds={selectedFunds}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}
+        showBy={showBy}
         sort={sort}
         totalCount={totalCount}
         updateFilter={addPrsFilters}

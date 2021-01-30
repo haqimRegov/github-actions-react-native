@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
@@ -36,6 +37,8 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
               datePickerStyle={{ height: sh143 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
+              maximumDate={moment().toDate()}
+              minimumDate={moment().toDate()}
               setValue={setTransactionDate}
               value={transactionDate}
             />
@@ -47,6 +50,8 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
               datePickerStyle={{ height: sh143 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="time"
+              maximumDate={moment().toDate()}
+              minimumDate={moment().toDate()}
               setValue={setTransactionTime}
               value={transactionTime}
             />

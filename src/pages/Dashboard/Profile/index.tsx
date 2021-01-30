@@ -54,7 +54,7 @@ const { PROFILE } = Language.PAGE;
 
 interface ProfileProps extends GlobalStoreProps {
   navigation: IStackNavigationProp;
-  handleRoute: (route: string) => void;
+  handleRoute: (route: DashboardPageType) => void;
 }
 
 const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfileProps) => {
@@ -72,7 +72,9 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfilePro
       }
 
       if (error !== null) {
-        Alert.alert(`${error.message} - ${error.errorList?.join(" ")}`);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
       }
     }
   };

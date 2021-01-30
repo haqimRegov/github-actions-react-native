@@ -10,18 +10,18 @@ export interface ProductFilterProps {
   productType: ProductType;
 }
 
-export const ProductFilter: FunctionComponent<ProductFilterProps> = ({ productType, ...rest }: ProductFilterProps) => {
-  switch (productType) {
+export const ProductFilter: FunctionComponent<ProductFilterProps> = (props: ProductFilterProps) => {
+  switch (props.productType) {
     case "ut":
-      return <UTFilter {...rest} />;
+      return <UTFilter {...props} />;
     case "prs":
-      return <PRSFilter {...rest} />;
+      return <PRSFilter {...props} />;
     case "prsDefault":
-      return <PRSFilter {...rest} />;
+      return <PRSFilter {...props} />;
     case "amp":
-      return <AMPFilter {...rest} />;
+      return <AMPFilter {...props} />;
 
     default:
-      return <UTFilter {...rest} />;
+      return <UTFilter {...props} />;
   }
 };

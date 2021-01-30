@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, LinkText, MenuPopup, Pagination, Tag } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, LinkText, MenuPopup, Pagination, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
@@ -37,7 +37,7 @@ import {
 } from "../../../../styles";
 import { ProductOptions } from "./Actions";
 
-const { PRODUCT_LIST } = Language.PAGE;
+const { EMPTY_STATE, PRODUCT_LIST } = Language.PAGE;
 
 interface ProductListViewProps {
   filter: IProductFilter;
@@ -48,9 +48,11 @@ interface ProductListViewProps {
   handleResetSelected: () => void;
   handleSelectProduct: (product: IProduct) => void;
   list: ITableData[];
+  loading: boolean;
   page: number;
   pages: number;
   productType: ProductType;
+  search: string;
   selectedFunds: ITableData[];
   setViewFund: (fund: IProduct) => void;
   shareSuccess?: boolean;
@@ -70,9 +72,11 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   handleResetSelected,
   handleSelectProduct,
   list,
+  loading,
   page,
   pages,
   productType,
+  search,
   selectedFunds,
   setViewFund,
   shareSuccess,
@@ -210,9 +214,10 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   //   .flat(1)
   //   .filter((value) => value !== "");
 
-  // TODO temporary
   const recommendedLabel = `${PRODUCT_LIST.LABEL_RECOMMENDED} (${totalCount.recommended})`;
   const allFundsLabel = `${PRODUCT_LIST.LABEL_ALL_FUNDS} (${totalCount.all})`;
+
+  const subtitle = search !== undefined && search !== "" ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : undefined;
 
   return (
     <View style={{ ...flexChild, borderRadius: sw24 }}>
@@ -229,7 +234,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           <CustomSpacer isHorizontal={true} space={sw20} />
           <Tag color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
           <CustomSpacer isHorizontal={true} space={sw8} />
-          {productType === "prs" || productType === "prsDefault" ? null : (
+          {productType === "prsDefault" ? null : (
             <Tag color={showBy === "all" ? "primary" : "secondary"} onPress={handleAllFunds} text={allFundsLabel} />
           )}
           <CustomFlexSpacer />
@@ -250,17 +255,22 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               return (
                 <MenuPopup
                   RenderButton={({ show }) => {
-                    const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8) };
+                    const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96 };
+
                     return (
-                      <TouchableWithoutFeedback onPress={show}>
+                      <TouchableWithoutFeedback onPress={productType === "prsDefault" ? undefined : show}>
                         <View style={headerStyle}>
                           <Text style={fs10RegBlue38}>{item.title}</Text>
-                          {item.icon === undefined ? null : (
+                          {productType !== "prsDefault" ? (
                             <Fragment>
-                              <CustomSpacer isHorizontal={true} space={sw4} />
-                              <IcoMoon {...item.icon} />
+                              {item.icon === undefined ? null : (
+                                <Fragment>
+                                  <CustomSpacer isHorizontal={true} space={sw4} />
+                                  <IcoMoon {...item.icon} />
+                                </Fragment>
+                              )}
                             </Fragment>
-                          )}
+                          ) : null}
                         </View>
                       </TouchableWithoutFeedback>
                     );
@@ -297,6 +307,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                 </View>
               );
             }}
+            RenderEmptyState={() => (
+              <EmptyTable hintText={EMPTY_STATE.SUBTITLE} loading={loading} title={EMPTY_STATE.LABEL_NO_RESULTS} subtitle={subtitle} />
+            )}
             RenderOptions={(props: ITableOptions) => (
               <ProductOptions
                 {...props}

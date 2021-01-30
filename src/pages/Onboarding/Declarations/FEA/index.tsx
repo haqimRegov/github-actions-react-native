@@ -75,7 +75,7 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
     principal?.declaration!.fea!.balance !== "" &&
     principal?.declaration!.fea!.balanceError === undefined;
 
-  const continueEnabled = accountType === "Individual" ? validationsPrincipal : validationsPrincipal && validationsJoint;
+  const continueEnabled = accountType === "Joint" && jointAge >= 18 ? validationsPrincipal && validationsJoint : validationsPrincipal;
 
   return (
     <ContentPage

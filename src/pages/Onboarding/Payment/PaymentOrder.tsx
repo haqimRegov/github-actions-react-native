@@ -56,7 +56,17 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
   setViewFund,
   viewFund,
 }: PaymentOrderProps) => {
-  const { completed, floatingAmount, investments, orderDate, orderNumber, orderTotalAmount, payments, paymentType } = paymentOrder;
+  const {
+    allowedRecurringType,
+    completed,
+    floatingAmount,
+    investments,
+    orderDate,
+    orderNumber,
+    orderTotalAmount,
+    payments,
+    paymentType,
+  } = paymentOrder;
 
   const cardHeaderStyle: ViewStyle = {
     ...centerVertical,
@@ -142,7 +152,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
       const total =
         filteredPayments.length === 0
           ? 0
-          : filteredPayments.reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
+          : filteredPayments.map((amount) => amount).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
       return { currency: orderAmount.currency, amount: total - parseFloat(orderAmount.amount) };
     });
     const checkFloating = floatingTotalAmount.map((floating) => floating.amount >= 0);
@@ -170,7 +180,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
   const tagLabel = completed === true ? "Completed" : "Pending";
 
   const currencies =
-    orderTotalAmount.length > 1
+    orderTotalAmount.length > 0
       ? orderTotalAmount.map((value) => {
           return { label: value.currency, value: value.currency };
         })
@@ -213,6 +223,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
       ))}
       <CustomSpacer space={sh8} />
       <PaymentCard
+        allowedRecurringType={allowedRecurringType}
         accountNames={accountNames}
         active={activeOrder === orderNumber}
         currencies={currencies}

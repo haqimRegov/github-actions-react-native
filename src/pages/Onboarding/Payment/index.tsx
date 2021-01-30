@@ -225,7 +225,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           />
         )}
       </SafeAreaPage>
-      <PaymentStatus handleResetOnboarding={handleResetOnboarding} result={paymentResult} setPaymentResult={setPaymentResult} />
+      <PaymentStatus handleResetOnboarding={handleResetOnboarding} result={paymentResult} />
     </Fragment>
   );
 };

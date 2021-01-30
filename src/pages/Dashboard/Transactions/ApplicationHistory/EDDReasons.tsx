@@ -1,9 +1,9 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer } from "../../../components";
-import { Language } from "../../../constants/language";
-import { IcoMoon } from "../../../icons";
+import { CustomSpacer } from "../../../../components";
+import { Language } from "../../../../constants/language";
+import { IcoMoon } from "../../../../icons";
 import {
   colorRed,
   flexRow,
@@ -14,21 +14,20 @@ import {
   px,
   sh12,
   sh16,
-  sh4,
   sh8,
   sw12,
   sw16,
-  sw18,
-  sw304,
+  sw24,
+  sw296,
   sw36,
   sw716,
   sw8,
-} from "../../../styles";
+} from "../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
 declare interface EDDReasonsProps {
-  data: IEDDReason[];
+  data: IDashboardRemark[];
 }
 
 export const EDDReasons: FunctionComponent<EDDReasonsProps> = ({ data }: EDDReasonsProps) => {
@@ -40,22 +39,17 @@ export const EDDReasons: FunctionComponent<EDDReasonsProps> = ({ data }: EDDReas
         <CustomSpacer space={sh12} />
         <View style={{ ...flexWrap, width: sw716, ...flexRow }}>
           <CustomSpacer space={sh8} />
-          {data.map((reason, index) => {
-            const remark = `${DASHBOARD_HOME.LABEL_REMARK}: ${reason.remark}`;
-            let rejectionIcon: string = "";
-            if (reason.label === "Payment Not Found" || reason.label === "3rd Party Payment" || reason.label === "Duplicate Payment") {
-              rejectionIcon = "payment-not-found";
-            } else {
-              rejectionIcon = "error";
-            }
+          {data.map(({ label, remark }: IDashboardRemark, index) => {
             return (
               <Fragment key={index}>
                 {index % 2 === 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
-                <IcoMoon color={colorRed._1} name={rejectionIcon} size={sw18} style={{ marginTop: sh4 }} />
+                <IcoMoon color={colorRed._2} name={"error"} size={sw24} />
                 <CustomSpacer isHorizontal={true} space={sw12} />
-                <View style={{ width: sw304, marginBottom: sh16 }}>
-                  <Text style={fs12BoldBlack2}>{reason.label}</Text>
-                  <Text style={fs10RegBlack2}>{remark}</Text>
+                <View style={{ width: sw296, marginBottom: sh16 }}>
+                  <Text style={fs12BoldBlack2}>{label}</Text>
+                  {remark.map((text: string, remarkIndex: number) => (
+                    <Text key={remarkIndex} style={fs10RegBlack2}>{`• ${text}`}</Text>
+                  ))}
                 </View>
                 {index % 2 === 0 ? <CustomSpacer isHorizontal={true} space={sw36} /> : null}
               </Fragment>

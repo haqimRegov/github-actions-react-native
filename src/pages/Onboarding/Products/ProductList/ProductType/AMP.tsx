@@ -33,12 +33,12 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   riskScore,
   scrollEnabled,
   selectedFunds,
-  setLoading,
   setScrollEnabled,
   shareSuccess,
   updateAmpShowBy,
 }: AMPProps) => {
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.amp;
+  const [loading, setLoading] = useState<boolean>(false);
   const list = showBy === "recommended" ? recommended : all;
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
@@ -108,6 +108,9 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     if (filterVisible && showMore) {
       setShowMore(false);
     }
+    if (filterVisible === false) {
+      setFilterTemp(filters);
+    }
     setFilterVisible(!filterVisible);
     setScrollEnabled(!scrollEnabled);
   };
@@ -170,9 +173,9 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
 
   useEffect(() => {
     // initial fetch
-    if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-      handleFetchAMP("1");
-    }
+    // if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
+    handleFetchAMP("1");
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);
   return (
@@ -198,10 +201,12 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={list}
+        list={loading === true ? [] : list}
+        loading={loading}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
+        search={search}
         selectedFunds={selectedFunds}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}

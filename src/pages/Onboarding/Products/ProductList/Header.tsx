@@ -183,6 +183,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
       <View style={{ ...centerVertical, ...flexRow }}>
         <CustomSpacer isHorizontal={true} space={sw24} />
         <IconInput
+          autoCorrect={false}
           icon="search"
           iconInputRef={searchInputRef}
           onChangeText={setInputSearch}

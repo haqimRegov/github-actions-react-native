@@ -33,12 +33,12 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   riskScore,
   scrollEnabled,
   selectedFunds,
-  setLoading,
   setScrollEnabled,
   shareSuccess,
   updateUtShowBy,
 }: UnitTrustProps) => {
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.ut;
+  const [loading, setLoading] = useState<boolean>(false);
   const list = showBy === "recommended" ? recommended : all;
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
@@ -65,7 +65,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       isEpf: filters.epfApproved![0] || "",
       issuingHouse: filters.issuingHouse || [],
       isSyariah: filters.shariahApproved![0] || "",
-      // netWorth: riskScore.netWorth,
+      netWorth: riskScore.netWorth,
       page: newPage,
       riskCategory: riskCategory || [],
       search: search,
@@ -106,6 +106,9 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   const handleShowFilter = () => {
     if (filterVisible && showMore) {
       setShowMore(false);
+    }
+    if (filterVisible === false) {
+      setFilterTemp(filters);
     }
     setFilterVisible(!filterVisible);
     setScrollEnabled(!scrollEnabled);
@@ -169,9 +172,9 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
 
   useEffect(() => {
     // initial fetch
-    if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-      handleFetchUT("1");
-    }
+    // if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
+    handleFetchUT("1");
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);
 
@@ -198,10 +201,12 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={list}
+        loading={loading}
+        list={loading === true ? [] : list}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
+        search={search}
         selectedFunds={selectedFunds}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}

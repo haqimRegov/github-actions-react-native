@@ -9,7 +9,7 @@ import { DAY_FORMAT, FULL_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_AIMS_URL } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { logout } from "../../network-actions";
-import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
+import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../store";
 import {
   borderBottomGray4,
   centerVertical,
@@ -36,14 +36,12 @@ import {
   sw96,
 } from "../../styles";
 import { HandleSessionTokenExpired, LinkUtils } from "../../utils";
-import { ApplicationHistory } from "./ApplicationHistory";
-import { UploadDocuments, UploadHardCopy } from "./Documents";
 import { InboxPage } from "./Inbox";
-import { OrderDetails } from "./OrderDetails";
 import { Profile } from "./Profile";
+import { Transactions } from "./Transactions";
 
 const { DASHBOARD } = Language.PAGE;
-interface DashboardPageProps extends GlobalStoreProps {
+interface DashboardPageProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
 }
 
@@ -53,10 +51,11 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   navigation,
   unreadMessages,
 }: DashboardPageProps) => {
-  const [route, setRoute] = useState<string>("");
   const [activeMenu, setActiveMenu] = useState<number>(0);
+  const [route, setRoute] = useState<DashboardPageType>("Transactions");
+  // const [activeTab, setActiveTab] = useState<TransactionsTabType>("pending");
 
-  const handleRoute = (nextPage: string) => {
+  const handleRoute = (nextPage: DashboardPageType) => {
     setRoute(nextPage);
   };
 
@@ -85,26 +84,19 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation };
-  let content: JSX.Element = <ApplicationHistory {...props} />;
-
-  if (route === "OrderDetails") {
-    content = <OrderDetails {...props} />;
-  }
-  if (route === "UploadDocuments") {
-    content = <UploadDocuments {...props} />;
-  }
-  if (route === "UploadHardCopy") {
-    content = <UploadHardCopy {...props} />;
-  }
+  let content: JSX.Element = <Transactions {...props} />;
   if (route === "Inbox") {
     content = <InboxPage {...props} />;
   }
   if (route === "Transactions") {
-    content = <ApplicationHistory {...props} />;
+    content = <Transactions {...props} />;
   }
   if (route === "Profile") {
     content = <Profile {...props} />;
   }
+
+  // if (currentOrder !== "" && currentOrder !== undefined) {
+  // }
   const inboxCount = route === "Inbox" ? 0 : parseInt(unreadMessages!, 10);
 
   const MENU_ITEMS: MenuItemProps[] = [
@@ -178,4 +170,4 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   );
 };
 
-export const DashboardPage = connect(GlobalMapStateToProps, GlobalMapDispatchToProps)(DashboardPageComponent);
+export const DashboardPage = connect(TransactionsMapStateToProps, TransactionsMapDispatchToProps)(DashboardPageComponent);

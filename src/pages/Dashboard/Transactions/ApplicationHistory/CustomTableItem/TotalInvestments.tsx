@@ -1,8 +1,8 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CustomSpacer, CustomTooltip, TouchableWrapper } from "../../../../components";
-import { Language } from "../../../../constants/language";
+import { CustomSpacer, CustomTooltip, TouchableWrapper } from "../../../../../components";
+import { Language } from "../../../../../constants/language";
 import {
   alignFlexStart,
   centerHorizontal,
@@ -19,7 +19,7 @@ import {
   sw119,
   sw12,
   sw4,
-} from "../../../../styles";
+} from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -27,8 +27,7 @@ export interface TotalInvestmentsProps extends ITableCustomItem {}
 
 export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ item, lastIndex }: TotalInvestmentsProps) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(false);
-  const { investments } = item.rawData as IApplicationHistoryTable;
-
+  const { totalInvestment } = item.rawData as IDashboardOrder;
   const handleShowMore = () => {
     setShowToolTip(!showToolTip);
   };
@@ -38,7 +37,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
 
   const content = (
     <Fragment>
-      {investments!.map((investment: Investment, index: number) => {
+      {totalInvestment!.map((investment: IOrderAmount, index: number) => {
         return (
           <View key={index}>
             <View style={flexRow}>
@@ -53,12 +52,12 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
   );
   const tooltipPlacement = lastIndex ? "top" : "bottom";
   const topAdjustment = lastIndex ? -sh56 : undefined;
-  const style: ViewStyle = investments!.length <= 3 ? centerHorizontal : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
+  const style: ViewStyle = totalInvestment!.length <= 3 ? centerHorizontal : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
 
   return (
-    <TouchableWrapper isTouchable={investments!.length > 3} onPress={handleShowMore}>
+    <TouchableWrapper isTouchable={totalInvestment!.length > 3} onPress={handleShowMore}>
       <View style={{ ...style, ...flexChild }} onResponderStart={() => true}>
-        {investments!.map((investment: Investment, index: number) => {
+        {totalInvestment!.map((investment: IOrderAmount, index: number) => {
           return (
             <Fragment key={index}>
               {index < 3 ? (
@@ -71,7 +70,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
             </Fragment>
           );
         })}
-        {investments!.length > 3 ? (
+        {totalInvestment!.length > 3 ? (
           <Fragment>
             <CustomTooltip
               arrowSize={{ height: sh7, width: sw12 }}

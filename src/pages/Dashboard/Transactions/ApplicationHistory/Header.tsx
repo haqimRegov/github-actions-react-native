@@ -3,22 +3,20 @@ import { Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { ActionButtons, ButtonSelectionList, CustomSpacer, IconButton, IconInput, LinkText } from "../../../components";
-import { Language } from "../../../constants";
+import { ActionButtons, ButtonSelectionList, CustomSpacer, IconButton, IconInput, LinkText } from "../../../../components";
+import { Language } from "../../../../constants";
 import {
   centerHorizontal,
   centerHV,
   centerVertical,
   circleBorder,
-  colorBlack,
   colorBlue,
   colorGray,
-  colorRed,
   colorTransparent,
   colorWhite,
   flexGrow,
   flexRow,
-  fs14RegBlue2,
+  fs16SemiBoldBlack2,
   fs24BoldBlue2,
   fullHeight,
   fullWidth,
@@ -28,21 +26,20 @@ import {
   sh32,
   sh48,
   shadowBlack5,
-  sw02,
   sw1,
   sw100,
   sw218,
   sw24,
   sw40,
-  sw600,
   sw729,
   sw8,
-} from "../../../styles";
+} from "../../../../styles";
 
 const { PRODUCT_FILTER, DASHBOARD_HOME } = Language.PAGE;
 interface ApplicationHistoryHeaderProps {
   filterVisible: boolean;
   handleFilter: () => void;
+  handleSearch: () => void;
   inputSearch: string;
   selectedFilter: IProductFilter;
   setInputSearch: (value: string) => void;
@@ -52,6 +49,7 @@ interface ApplicationHistoryHeaderProps {
 export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeaderProps> = ({
   filterVisible,
   handleFilter,
+  handleSearch,
   inputSearch,
   selectedFilter,
   setInputSearch,
@@ -121,12 +119,12 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
     borderRadius: sw24,
   };
 
-  const filterBGColor = filterVisible ? colorRed._1 : colorWhite._1;
-  const filterBorderColor = filterVisible ? colorRed._1 : colorGray._3;
-  const filterColor = filterVisible ? colorWhite._1 : colorBlack._1;
+  const filterBGColor = filterVisible ? colorBlue._2 : colorWhite._1;
+  const filterBorderColor = filterVisible ? colorBlue._2 : colorGray._3;
+  const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
 
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
-  const inputStyle: TextStyle = { ...fs14RegBlue2, letterSpacing: -sw02 };
+  const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
   const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
   useEffect(() => {
@@ -145,17 +143,21 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
               <CustomSpacer space={sh16} />
               <View style={{ ...centerVertical, ...flexRow }}>
                 <IconInput
+                  autoCorrect={false}
                   icon="search"
+                  iconInputRef={searchInputRef}
                   onChangeText={setInputSearch}
+                  onSubmitEditing={handleSearch}
                   placeholder={DASHBOARD_HOME.LABEL_FILTER_PENDING}
                   placeholderTextColor={colorBlue._3_6}
-                  setRef={setSearchInputRef}
+                  returnKeyType="search"
+                  setIconInputRef={setSearchInputRef}
                   style={inputStyle}
                   value={inputSearch}
-                  viewStyle={{ borderRadius: sw100, height: sh48, width: sw600 }}
+                  viewStyle={{ borderRadius: sw100, height: sh48 }}
                 />
                 <CustomSpacer isHorizontal={true} space={sw40} />
-                <IconButton color={filterColor} name="filter" onPress={handlePressFilter} size={sh24} style={filterContainer} />
+                <IconButton color={filterColor} onPress={handlePressFilter} name="filter" size={sh24} style={filterContainer} />
               </View>
             </View>
             {filterVisible || filterValues.length === 0 ? null : (

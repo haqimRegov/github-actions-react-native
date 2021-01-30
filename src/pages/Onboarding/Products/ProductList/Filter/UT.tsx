@@ -17,6 +17,7 @@ import { centerVertical, flexRow, fs16BoldBlack1, px, sh32, sh8, sw24, sw240, sw
 const { PRODUCT_FILTER } = Language.PAGE;
 interface UTFilterProps {
   filter: IProductFilter;
+  productType: ProductType;
   setFilter: (value: IProductFilter) => void;
 }
 

@@ -9,11 +9,11 @@ import { flexRow, px, sh24, sh8, sw24, sw360, sw40, sw64 } from "../../../../sty
 const { PAYMENT } = Language.PAGE;
 
 export interface RecurringProps {
+  allowedRecurringType?: string[];
   bankNames: TypeLabelValue[];
   bankAccountName: string;
   bankAccountNumber: string;
   frequency: string;
-  isFpx: boolean;
   recurringBank: string;
   recurringType: string;
   setBankAccountName: (value: string) => void;
@@ -24,11 +24,11 @@ export interface RecurringProps {
 }
 
 export const Recurring: FunctionComponent<RecurringProps> = ({
+  allowedRecurringType,
   bankNames,
   bankAccountName,
   bankAccountNumber,
   frequency,
-  isFpx,
   recurringBank,
   recurringType,
   setBankAccountName,
@@ -41,7 +41,7 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
   const ddaBank = recurringType === "FPX" ? DICTIONARY_MALAYSIA_BANK_BASE : DICTIONARY_DDA_BANK;
   // const sameRecurringInfoLabel = recurringType === "FPX" ? PAYMENT.LABEL_SAME_FPX : PAYMENT.LABEL_SAME_DDA;
 
-  if (isFpx) {
+  if (allowedRecurringType !== undefined && allowedRecurringType.includes("FPX")) {
     recurringOptions.push(PAYMENT.OPTION_FPX);
   }
 

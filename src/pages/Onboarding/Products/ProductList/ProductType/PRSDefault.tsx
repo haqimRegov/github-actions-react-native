@@ -29,11 +29,11 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   resetSelectedFund,
   scrollEnabled,
   selectedFunds,
-  setLoading,
   setScrollEnabled,
   shareSuccess,
 }: PRSDefaultProps) => {
   const { filters, page, pages, recommended, search, sort, totalCount } = products.prsDefault;
+  const [loading, setLoading] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [showMore, setShowMore] = useState<boolean>(false);
@@ -88,6 +88,9 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     if (filterVisible && showMore) {
       setShowMore(false);
     }
+    if (filterVisible === false) {
+      setFilterTemp(filters);
+    }
     setFilterVisible(!filterVisible);
     setScrollEnabled(!scrollEnabled);
   };
@@ -138,9 +141,9 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
 
   useEffect(() => {
     // initial fetch
-    if (recommended.length === 0) {
-      handleFetchPRSDefault("1");
-    }
+    // if (recommended.length === 0) {
+    handleFetchPRSDefault("1");
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -165,10 +168,12 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
         handlePrev={handlePrev}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={recommended}
+        list={loading === true ? [] : recommended}
+        loading={loading}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
+        search={search}
         selectedFunds={selectedFunds}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}

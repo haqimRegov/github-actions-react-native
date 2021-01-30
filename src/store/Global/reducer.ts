@@ -25,7 +25,10 @@ export const globalReducer = (state = globalInitialState, action: GlobalAction):
       };
     case "global/RESET_GLOBAL":
       return {
-        ...globalInitialState,
+        agent: undefined,
+        config: undefined,
+        loading: false,
+        unreadMessages: "0",
       };
     case "global/RESET_ORDERS":
       return {

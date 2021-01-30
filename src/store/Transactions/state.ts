@@ -1,33 +1,34 @@
-export type transactionsState = {
-  approved: ITransactionTab;
-  pending: ITransactionTab;
-  rejected: ITransactionTab;
-  selectedOrders: IApplicationHistoryTable[];
-  orderCount: IOrderCount;
-  viewOrder: string;
-};
+interface ITransactionState extends ITransactionsDashboard {
+  selectedOrders: IDashboardOrder[];
+  search: string;
+  currentOrder: string;
+}
+
+export type transactionsState = ITransactionState;
 
 export const transactionsInitialState: transactionsState = {
   approved: {
-    currentPage: 0,
     orders: [],
-    totalPages: 0,
+    page: 1,
+    pages: 1,
+    sort: [],
   },
   pending: {
-    currentPage: 0,
     orders: [],
-    totalPages: 0,
+    page: 1,
+    pages: 1,
+    sort: [],
   },
   rejected: {
-    currentPage: 0,
     orders: [],
-    totalPages: 0,
+    page: 1,
+    pages: 1,
+    sort: [],
   },
   selectedOrders: [],
-  orderCount: {
-    approved: 0,
-    pending: 0,
-    rejected: 0,
-  },
-  viewOrder: "",
+  approvedCount: 0,
+  rejectedCount: 0,
+  pendingCount: 0,
+  search: "",
+  currentOrder: "",
 };

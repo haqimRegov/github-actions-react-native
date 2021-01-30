@@ -23,7 +23,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
         emailOtpSent: false,
         epfInvestment: false,
         epfShariah: false,
-        incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,
+        incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
         signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
         principal: {
           addressInformation: {

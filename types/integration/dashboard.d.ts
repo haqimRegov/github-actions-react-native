@@ -2,7 +2,7 @@ declare interface IDashboardRequest {
   tab: "pending" | "approved" | "rejected";
   page: number;
   search: string;
-  filter: [];
+  filter: any[];
   sort: ITransactionsSort[];
 }
 

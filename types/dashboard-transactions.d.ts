@@ -20,6 +20,7 @@ declare interface IDashboardOrder {
 }
 
 declare interface ITransactionsTab {
+  filter: ITransactionsFilter;
   orders: IDashboardOrder[];
   page: number;
   pages: number;
@@ -40,6 +41,15 @@ declare interface ITransactionsSort {
   value: TransactionsSortValueType;
 }
 
+declare interface ITransactionsFilter {
+  dateSorting?: string;
+  startDate?: Date;
+  endDate?: Date;
+  transactionsType?: string;
+  accountType?: string;
+  orderStatus?: string[];
+}
+
 declare type TransactionsSortColumnType =
   | "orderNumber"
   | "principal"
@@ -51,5 +61,5 @@ declare type TransactionsSortColumnType =
 
 declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";
-declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary";
+declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
 declare type DashboardPageType = "Inbox" | "Transactions" | "Profile";

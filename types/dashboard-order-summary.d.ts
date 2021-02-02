@@ -20,7 +20,7 @@ declare interface IOrderSummaryInvestment {
   productType: string;
   investmentType: string;
   feaTagged: string;
-  distributionInstructions: string;
+  distributionInstruction: string;
   recurring: string;
 }
 

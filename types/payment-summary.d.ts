@@ -10,12 +10,14 @@ declare interface IPaymentOrderState {
   paymentType: TypePaymentType;
   orderDate: string;
   orderNumber: string;
+  epfAccountNumber?: string;
   orderTotalAmount: IOrderAmount[];
   payments: IPaymentState[];
 
   allowedRecurringType?: string[];
   completed?: boolean;
   floatingAmount?: IFloatingAmount[];
+  totalPaidAmount?: IOrderAmount[];
 }
 
 declare interface IPurchaseSummary {

@@ -226,6 +226,20 @@ export const fs12SemiBoldBlue2: TextStyle = {
   lineHeight: sh16,
 };
 
+export const fs12SemiBoldBlue38: TextStyle = {
+  color: colorBlue._3_8,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh12,
+  lineHeight: sh16,
+};
+
+export const fs12SemiBoldGray3: TextStyle = {
+  color: colorGray._3,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh12,
+  lineHeight: sh16,
+};
+
 export const fs12SemiBoldGray8: TextStyle = {
   color: colorGray._8,
   fontFamily: NunitoSemiBold,
@@ -359,6 +373,13 @@ export const fs16RegBlack3: TextStyle = {
   fontFamily: NunitoRegular,
   fontSize: sh16,
   lineHeight: sh28,
+};
+
+export const fs16RegBlue2: TextStyle = {
+  color: colorBlue._2,
+  fontFamily: NunitoRegular,
+  fontSize: sh16,
+  lineHeight: sh24,
 };
 
 export const fs16RegBlue25: TextStyle = {

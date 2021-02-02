@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { TextInput, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { ActionButtons, CustomSpacer, IconButton, IconInput } from "../../../../components";
+import { ActionButtons, CustomSpacer, IconButton, IconInput, LinkText, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   centerHorizontal,
@@ -14,30 +14,38 @@ import {
   colorGray,
   colorWhite,
   flexRow,
+  flexWrap,
+  fs12BoldBlue2,
+  fs12SemiBoldBlue38,
   fs16SemiBoldBlack2,
   fullWidth,
+  px,
   sh120,
+  sh16,
   sh24,
   sh32,
   sh48,
   shadowBlack5,
   sw1,
   sw100,
-  sw2,
   sw218,
   sw24,
+  sw30,
+  sw32,
   sw40,
-  sw44,
+  sw696,
+  sw8,
 } from "../../../../styles";
 import { ProductFilter, ProductFilterProps } from "./Filter";
 
 const { PRODUCT_LIST, PRODUCT_FILTER } = Language.PAGE;
 interface ProductHeaderProps extends ProductFilterProps {
   filterVisible: boolean;
-  handleShowFilter: () => void;
   handleCancel: () => void;
   handleConfirm: () => void;
   handleSearch: () => void;
+  handleShowFilter: () => void;
+  handleUpdateFilter: (value: IProductFilter) => void;
   inputSearch: string;
   setInputSearch: (value: string) => void;
 }
@@ -47,34 +55,55 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   filterVisible,
   handleCancel,
   handleConfirm,
+  handleUpdateFilter,
   handleSearch,
   inputSearch,
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
-  // const [showMore, setShowMore] = useState<{ active: boolean; number: number }>({ active: false, number: 0 });
+  const { filter } = filterProps;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
-  // const [showMorePills, setShowMorePills] = useState<boolean>(false);
+  const [showMorePills, setShowMorePills] = useState<boolean>(false);
+  // const [showMore, setShowMore] = useState<{ active: boolean; number: number }>({ active: false, number: 0 });
   // const [filter, setFilter] = useState<IProductFilter>();
   // const [filterLabelShow, setFilterLabelShow] = useState<boolean>(true);
 
-  // const inputSearch = products[productList].search;
+  const filterKeys = Object.keys(filter);
 
-  // const setInputSearch = (value: string) => {
-  //   const newProducts = { ...products };
-  //   newProducts[productList].search = value;
-  //   updateProducts(newProducts);
-  // };
+  const generatePillLabel = (filterKey: string, value: string) => {
+    switch (filterKey as ProductFilterType) {
+      case "epfApproved":
+        return `${PRODUCT_FILTER.LABEL_EPF}: ${value}`;
+      case "shariahApproved":
+        return `${PRODUCT_FILTER.LABEL_TYPE}: ${value === "Yes" ? "Shariah" : "Conventional"}`;
+      case "fundType":
+        return `${PRODUCT_FILTER.LABEL_FUND_TYPE}: ${value}`;
+      case "fundCurrency":
+        return `${PRODUCT_FILTER.LABEL_FUND_CURRENCY}: ${value}`;
+      case "issuingHouse":
+        return `${PRODUCT_FILTER.LABEL_ISSUING}: ${value}`;
+      case "riskCategory":
+        return `${PRODUCT_FILTER.LABEL_RISK}: ${value}`;
+      case "conventional":
+        return `${PRODUCT_FILTER.LABEL_TYPE}: ${value === "Yes" ? "Conventional" : "Shariah"}`;
 
-  // const filterValues = Object.values(selectedFilter)
-  //   .flat(1)
-  //   .filter((value) => value !== "");
+      default:
+        return "";
+    }
+  };
+
+  const newPills = filterKeys.map((key) => {
+    const filtered = filter[key].filter((value) => value !== "");
+    const pillValues = filtered.map((value) => generatePillLabel(key, value));
+    return { key: key, values: filtered, pillValues: pillValues };
+  });
 
   const handlePressFilter = () => {
     if (searchInputRef !== null) {
       searchInputRef.blur();
     }
     handleShowFilter();
+    setShowMorePills(false);
   };
 
   // const handleFilterLabel = () => {
@@ -85,35 +114,10 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   //   setShowMorePills(!showMorePills);
   // };
 
-  // const handleRemoveFilter = (index: number) => {
-  //   const keys = Object.keys(selectedFilter);
-  //   const [deletedKey] = keys.filter((key: string) => selectedFilter[key].includes(filterValues[index]));
-  //   const filterClone: ProductFilterType = { ...selectedFilter };
-  //   const updatedFilter = filterClone[deletedKey].filter((filterValue: string) => filterValue !== filterValues[index]);
-  //   filterClone[deletedKey] = updatedFilter;
-  //   const values = Object.values(updatedFilter);
-  //   if (values.flat(1).length === 0) {
-  //     setShowMorePills(false);
-  //   }
-  //   setSelectedFilter(filterClone);
-  // };
-
   const handleCancelFilter = () => {
-    // Alert.alert("cancel");
     handleCancel();
-    // setFilter(products[productList].filters);
     handleShowFilter();
   };
-
-  // const handleSaveFilter = () => {
-  //   Alert.alert("save");
-  //   // const newProducts = { ...products };
-  //   // newProducts[productList].filters = filter;
-  //   // updateProducts(newProducts);
-  //   // handleFilter();
-  // };
-
-  // const filterTags = Object.values(filterProps.filter).flat();
 
   // const handlePills = async () => {
   //   const count = await CalculateCount(filterTags, 688, 32);
@@ -128,6 +132,23 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
 
   // const overlay = filterVisible ? fullHeight : {};
   // const overflow: ViewStyle = showMorePills ? {} : { height: sh48, overflow: "hidden" };
+
+  const handleShowAllFilter = () => {
+    setShowMorePills(!showMorePills);
+  };
+  const pillList = newPills.map(({ pillValues }) => pillValues).flat();
+
+  const handleRemoveFilter = (pill: string) => {
+    const findPill = newPills.findIndex(({ pillValues }) => pillValues.includes(pill));
+    const { key, pillValues, values } = newPills[findPill];
+    const filterClone: IProductFilter = { ...filter };
+    const updatedFilter = filterClone[key].filter((filterValue: string) => filterValue !== values[pillValues.indexOf(pill)]);
+    filterClone[key] = updatedFilter;
+    handleUpdateFilter(filterClone);
+  };
+
+  // const overlay = filterVisible ? fullHeight : {};
+  const overflow: ViewStyle = showMorePills ? {} : { height: sh48, overflow: "hidden" };
 
   const container: ViewStyle = {
     ...shadowBlack5,
@@ -148,7 +169,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
 
-  // const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
+  const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
   // useEffect(() => {
   //   // setFilter(selectedFilter);
@@ -208,35 +229,45 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           placement="top"
           onClose={handleFilterLabel}> */}
         <View style={{ ...centerVertical, ...flexRow }}>
-          <CustomSpacer isHorizontal={true} space={sw44} />
+          <CustomSpacer isHorizontal={true} space={sw32} />
           <TouchableWithoutFeedback onPress={handlePressFilter}>
             <IconButton color={filterColor} onPress={handlePressFilter} name="filter" size={sh24} style={filterContainer} />
           </TouchableWithoutFeedback>
-          <CustomSpacer isHorizontal={true} space={sw44} />
+          <CustomSpacer isHorizontal={true} space={sw40} />
         </View>
         {/* </CustomTooltip> */}
-        <CustomSpacer isHorizontal={true} space={sw2} />
+        {/* <CustomSpacer isHorizontal={true} space={sw2} /> */}
       </View>
-      {/* <View>
-        <CustomSpacer space={sh16} />
-        <View style={{ ...px(sw24), ...flexRow, width: 826, ...flexWrap }} onLayout={handleWidth}>
-          {filterTags.slice(0, filterTags.length - showMore.number).map((tag, index) => (
-            <View>
-              <View style={flexRow}>
-                {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
-                <Tag color="secondary" icon="close" text={tag} />
-              </View>
-              <CustomSpacer space={sh16} />
+      {filterVisible || pillList.length === 0 ? null : (
+        <View style={px(sw24)}>
+          <View style={flexRow}>
+            <View style={{ ...flexRow, ...flexWrap, ...overflow, width: sw696 }}>
+              {pillList.map((pill: string, index: number) => {
+                const handlePress = () => {
+                  handleRemoveFilter(pill);
+                };
+                return (
+                  <Fragment key={index}>
+                    {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
+                    <Tag
+                      color="secondary"
+                      icon="close"
+                      onPress={handlePress}
+                      text={pill}
+                      textStyle={fs12SemiBoldBlue38}
+                      style={{ marginRight: undefined, marginTop: sh16 }}
+                    />
+                  </Fragment>
+                );
+              })}
             </View>
-          ))}
-          {showMore.active === true && showMore.number > 0 ? (
-            <Fragment>
-              <CustomSpacer isHorizontal={true} space={sw4} />
-              <Tag color="secondary" text={showMoreText} />
-            </Fragment>
-          ) : null}
+            <CustomSpacer isHorizontal={true} space={sw30} />
+            <View style={{ ...centerHorizontal, height: sh48 }}>
+              <LinkText onPress={handleShowAllFilter} text={showLabel} style={{ ...fs12BoldBlue2, height: sh24, lineHeight: sh24 }} />
+            </View>
+          </View>
         </View>
-      </View> */}
+      )}
       <Collapsible collapsed={!filterVisible} duration={300}>
         <ProductFilter {...filterProps} />
         <CustomSpacer space={sh32} />

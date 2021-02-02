@@ -7,7 +7,7 @@ import { FILTER_RISK } from "../../../../../data/dictionary";
 import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { colorWhite, flexChild, shadowBlack116, sw24 } from "../../../../../styles";
+import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -42,11 +42,16 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const list = showBy === "recommended" ? recommended : all;
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
-  const [showMore, setShowMore] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
   const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
+
+  const filterValues = Object.values(filters)
+    .flat(1)
+    .filter((value) => value !== "");
+
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh296 : sh248;
 
   const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
@@ -97,17 +102,26 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     const funds = await handleFetch(newPage);
     if (funds !== undefined) {
       if (showBy === "all") {
-        addAmpAllFunds(funds);
+        addAmpAllFunds({
+          ...funds,
+          totalCount: {
+            ...funds.totalCount,
+            recommended: totalCount.recommended === "" ? funds.totalCount.recommended : totalCount.recommended,
+          },
+        });
       } else {
-        addAmpRecommendedFunds(funds);
+        addAmpRecommendedFunds({
+          ...funds,
+          totalCount: {
+            ...funds.totalCount,
+            all: totalCount.all === "" ? funds.totalCount.all : totalCount.all,
+          },
+        });
       }
     }
   };
 
   const handleShowFilter = () => {
-    if (filterVisible && showMore) {
-      setShowMore(false);
-    }
     if (filterVisible === false) {
       setFilterTemp(filters);
     }
@@ -128,6 +142,11 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
 
   const handleCancelFilter = () => {
     setFilterTemp(filters);
+  };
+
+  const handleUpdateFilter = (newFilter: IProductFilter) => {
+    setFilterTemp(newFilter);
+    addAmpFilters(newFilter);
   };
 
   const handleAllFunds = () => {
@@ -187,12 +206,13 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         handleConfirm={handleConfirmFilter}
         handleSearch={handleSearch}
         handleShowFilter={handleShowFilter}
+        handleUpdateFilter={handleUpdateFilter}
         inputSearch={inputSearch}
         productType={productType}
         setFilter={setFilterTemp}
         setInputSearch={setInputSearch}
       />
-      <CustomSpacer space={248} />
+      <CustomSpacer space={absoluteHeaderSpace} />
       <ProductListView
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
@@ -213,7 +233,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         showBy={showBy}
         sort={sort}
         totalCount={totalCount}
-        updateFilter={addAmpFilters}
+        updateFilter={handleUpdateFilter}
         updateSort={addAmpSort}
       />
     </View>

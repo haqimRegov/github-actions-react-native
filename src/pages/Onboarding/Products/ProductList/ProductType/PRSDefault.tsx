@@ -1,12 +1,14 @@
+import moment from "moment";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
+import { DEFAULT_DATE_FORMAT } from "../../../../../constants";
 import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { colorWhite, flexChild, shadowBlack116, sw24 } from "../../../../../styles";
+import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -24,6 +26,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   addPrsDefaultSort,
   addSelectedFund,
   addViewFund,
+  details,
   products,
   productType,
   resetSelectedFund,
@@ -36,16 +39,22 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
-  const [showMore, setShowMore] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
   const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
+  const filterValues = Object.values(filters)
+    .flat(1)
+    .filter((value) => value !== "");
+
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh296 : sh248;
+
   const handleFetch = async (newPage: string) => {
     setLoading(true);
     const req = {
-      tab: "prsDefault",
+      age: moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years").toString(),
+      tab: "prsdefault",
       fundType: filters.fundType![0] || "",
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
@@ -85,9 +94,6 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   };
 
   const handleShowFilter = () => {
-    if (filterVisible && showMore) {
-      setShowMore(false);
-    }
     if (filterVisible === false) {
       setFilterTemp(filters);
     }
@@ -108,6 +114,11 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
 
   const handleCancelFilter = () => {
     setFilterTemp(filters);
+  };
+
+  const handleUpdateFilter = (newFilter: IProductFilter) => {
+    setFilterTemp(newFilter);
+    addPrsDefaultFilters(newFilter);
   };
 
   const handleSelectProduct = (product: IProduct) => {
@@ -156,12 +167,13 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
         handleConfirm={handleConfirmFilter}
         handleSearch={handleSearch}
         handleShowFilter={handleShowFilter}
+        handleUpdateFilter={handleUpdateFilter}
         inputSearch={inputSearch}
         productType={productType}
         setFilter={setFilterTemp}
         setInputSearch={setInputSearch}
       />
-      <CustomSpacer space={248} />
+      <CustomSpacer space={absoluteHeaderSpace} />
       <ProductListView
         filter={filterTemp}
         handleNext={handleNext}
@@ -179,7 +191,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
         shareSuccess={shareSuccess}
         sort={sort}
         totalCount={totalCount}
-        updateFilter={addPrsDefaultFilters}
+        updateFilter={handleUpdateFilter}
         updateSort={addPrsDefaultSort}
       />
     </View>

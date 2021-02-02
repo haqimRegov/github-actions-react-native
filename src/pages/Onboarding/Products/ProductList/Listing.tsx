@@ -213,9 +213,10 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   // const filterPills = Object.values(filters)
   //   .flat(1)
   //   .filter((value) => value !== "");
-
-  const recommendedLabel = `${PRODUCT_LIST.LABEL_RECOMMENDED} (${totalCount.recommended})`;
-  const allFundsLabel = `${PRODUCT_LIST.LABEL_ALL_FUNDS} (${totalCount.all})`;
+  const recommendedCount = totalCount.recommended !== "" ? `(${totalCount.recommended})` : "";
+  const recommendedLabel = `${PRODUCT_LIST.LABEL_RECOMMENDED} ${recommendedCount}`;
+  const allCount = totalCount.all !== "" ? `(${totalCount.all})` : "";
+  const allFundsLabel = `${PRODUCT_LIST.LABEL_ALL_FUNDS} ${allCount}`;
 
   const subtitle = search !== undefined && search !== "" ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : undefined;
 

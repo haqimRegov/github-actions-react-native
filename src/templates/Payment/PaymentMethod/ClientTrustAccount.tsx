@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, CustomTextInput } from "../../../../components";
-import { Language } from "../../../../constants";
-import { flexRow, px, sw24, sw64 } from "../../../../styles";
+import { CustomSpacer, CustomTextInput } from "../../../components";
+import { Language } from "../../../constants";
+import { flexRow, px, sw24, sw64 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -25,7 +25,12 @@ export const ClientTrustAccount: FunctionComponent<ClientTrustAccountProps> = ({
       <View style={flexRow}>
         <CustomTextInput label={PAYMENT.LABEL_CLIENT_NAME} onChangeText={setClientName} value={clientName} />
         <CustomSpacer isHorizontal={true} space={sw64} />
-        <CustomTextInput label={PAYMENT.LABEL_TRUST_ACCOUNT_NO} onChangeText={setClientTrust} value={clientTrustAccountNumber} />
+        <CustomTextInput
+          keyboardType="numeric"
+          label={PAYMENT.LABEL_TRUST_ACCOUNT_NO}
+          onChangeText={setClientTrust}
+          value={clientTrustAccountNumber}
+        />
       </View>
     </View>
   );

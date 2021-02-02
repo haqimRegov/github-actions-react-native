@@ -20,6 +20,7 @@ import {
   fullHW,
   px,
   sh40,
+  sh48,
   sh56,
   sh96,
   sw10,
@@ -304,7 +305,7 @@ const NewSalesComponent = ({
               <NewSalesPrompt id={id!} idType={principalIdType} name={name!} prompt={prompt} />
             ) : (
               <View style={px(sw56)}>
-                <CustomSpacer space={registered === true ? sh56 : sh40} />
+                <CustomSpacer space={registered === true ? sh56 : sh48} />
                 {registered === false ? (
                   <Fragment>
                     <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>

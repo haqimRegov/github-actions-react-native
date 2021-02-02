@@ -74,7 +74,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       return {
         fundId: fundDetails.fundId!,
         fundingOption: investment.fundPaymentMethod!, // TODO backend to fix
-        fundClass: investment.fundClass,
+        fundClass: investment.fundClass !== "noClass" ? investment.fundClass : "",
         fundCurrency: investment.fundCurrency!,
         investmentAmount: investment.investmentAmount!,
         isScheduled: `${investment.scheduledInvestment!}`,
@@ -134,31 +134,36 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             clientId: details!.jointHolder?.clientId!,
             contactDetails: joint!.contactDetails,
             addressInformation: joint!.addressInformation! as ISubmitAddress,
-            declaration: {
-              crs: {
-                country: jointTaxResident === 0 ? undefined : joint!.declaration!.crs!.country!, // undefined if taxResident === 0
-                noTin: jointTaxResident === 0 ? undefined : `${joint!.declaration!.crs!.noTin!}`, // "true" || "false", undefined if taxResident === 0
-                reason: jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
-                taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
-                tinNumber:
-                  jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === true ? undefined : joint!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
-              },
-              fatca: {
-                formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-                formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-                confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-                certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
-                noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-                reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
-                usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
-                usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
-              },
-              fea: {
-                balance: joint!.declaration!.fea!.balance!,
-                borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
-                resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
-              },
-            },
+            declaration:
+              jointAge >= 18
+                ? {
+                    crs: {
+                      country: jointTaxResident === 0 ? undefined : joint!.declaration!.crs!.country!, // undefined if taxResident === 0
+                      noTin: jointTaxResident === 0 ? undefined : `${joint!.declaration!.crs!.noTin!}`, // "true" || "false", undefined if taxResident === 0
+                      reason: jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
+                      taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
+                      tinNumber:
+                        jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === true
+                          ? undefined
+                          : joint!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
+                    },
+                    fatca: {
+                      formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+                      formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+                      confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
+                      certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
+                      noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
+                      reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
+                      usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
+                      usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
+                    },
+                    fea: {
+                      balance: joint!.declaration!.fea!.balance!,
+                      borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
+                      resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
+                    },
+                  }
+                : undefined,
             employmentDetails: joint!.employmentDetails,
             personalDetails: {
               countryOfBirth: joint!.personalDetails!.countryOfBirth!,

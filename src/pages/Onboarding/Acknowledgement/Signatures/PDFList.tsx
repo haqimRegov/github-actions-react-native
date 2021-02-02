@@ -100,7 +100,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       if (error !== null) {
         setTimeout(() => {
           Alert.alert(error.message);
-        }, 100);
+        }, 200);
       }
     }
     return undefined;

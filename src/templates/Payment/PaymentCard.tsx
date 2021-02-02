@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
@@ -17,10 +17,10 @@ import {
   TextInputArea,
   TextSpaceArea,
   UploadWithModal,
-} from "../../../components";
-import { Language } from "../../../constants";
-import { DICTIONARY_DDA_BANK, DICTIONARY_KIB_BANK_ACCOUNTS, ERROR } from "../../../data/dictionary";
-import { IcoMoon } from "../../../icons";
+} from "../../components";
+import { Language } from "../../constants";
+import { DICTIONARY_DDA_BANK, DICTIONARY_KIB_BANK_ACCOUNTS, ERROR } from "../../data/dictionary";
+import { IcoMoon } from "../../icons";
 import {
   borderBottomBlack21,
   centerHorizontal,
@@ -50,16 +50,16 @@ import {
   sw64,
   sw784,
   sw8,
-} from "../../../styles";
-import { isAmount } from "../../../utils";
+} from "../../styles";
+import { isAmount } from "../../utils";
 import { CashDepositMachine, Cheque, ClientTrustAccount, EPF, OnlineBanking, Recurring } from "./PaymentMethod";
 
 const { PAYMENT } = Language.PAGE;
 
 export interface PaymentCardProps {
   accountNames: TypeLabelValue[];
-  allowedRecurringType?: string[];
   active: boolean;
+  allowedRecurringType?: string[];
   currencies: TypeCurrencyLabelValue[];
   floatingAmount: IFloatingAmount[];
   generateNewPayment: () => IPaymentState;
@@ -68,6 +68,7 @@ export interface PaymentCardProps {
   isScheduled: boolean;
   payments: IPaymentState[];
   setPayments: (value: IPaymentState[]) => void;
+  totalPaidAmount?: IOrderAmount[];
 }
 
 export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
@@ -81,13 +82,18 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   handleSavePayments,
   isScheduled,
   payments,
-}: PaymentCardProps) => {
+}: // totalPaidAmount,
+PaymentCardProps) => {
   const [prompt, setPrompt] = useState<number | undefined>(undefined);
   const [expandedIndex, setExpandedIndex] = useState<number>(0);
   const [amountError, setAmountError] = useState<string | undefined>(undefined);
-  const [draftPayments, setDraftPayments] = useState<IPaymentState[]>([]);
+  const [draftPayments, setDraftPayments] = useState<IPaymentState[]>(payments);
+  // console.log("draftPayments", draftPayments);
+  // const withPreviousPayment = totalPaidAmount !== undefined && totalPaidAmount.length > 0;
+  const withPaymentAdded = draftPayments.findIndex((payment) => payment.saved === true) !== -1;
+  const withPayment = withPaymentAdded;
 
-  const withPayment = draftPayments.findIndex((payment) => payment.saved === true) !== -1;
+  // console.log("withPayment", withPayment);
   const infoIcon = active ? "close" : "caret-down";
   const icon = active ? "minus" : "caret-down";
   const completedIcon = withPayment === true && active === false ? "check" : icon;
@@ -103,6 +109,25 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
     height: sh64,
   };
 
+  // const handleFloatingAmount = () => {
+  //   const floatingTotalAmount =
+  //     totalPaidAmount !== undefined &&
+  //     totalPaidAmount.map((orderAmount) => {
+  //       const filteredPayments = latestPayments
+  //         .filter((value) => value.currency === orderAmount.currency)
+  //         .map((payment: IPaymentState) => parseFloat(payment.amount!));
+  //       const total =
+  //         filteredPayments.length === 0
+  //           ? 0
+  //           : filteredPayments.map((amount) => amount).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
+  //       return { currency: orderAmount.currency, amount: total - parseFloat(orderAmount.amount) };
+  //     });
+  //   const checkFloating = floatingTotalAmount.map((floating) => floating.amount >= 0);
+  //   const isCompleted = paymentType === "Recurring" ? true : !checkFloating.includes(false);
+  //   const updatedPaymentOrder = { floatingAmount: floatingTotalAmount, completed: isCompleted };
+  //   return updatedPaymentOrder;
+  // };
+
   const floating = floatingAmount
     .map(({ amount, currency }) => {
       const symbol = amount > 0 ? "+" : "-";
@@ -111,12 +136,15 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
     })
     .filter((data) => data !== "")
     .join(", ");
+
   const paymentTitle = draftPayments.length === 1 ? `${draftPayments[0].paymentMethod}` : `${draftPayments.length}`;
   const floatingLabel = floating !== "" ? `(${floating})` : "";
   const headerTitle = isScheduled ? PAYMENT.TITLE_RECURRING : PAYMENT.TITLE;
-  const completedTitle = isScheduled
-    ? `${PAYMENT.LABEL_RECURRING} - ${draftPayments[0].recurringType}`
-    : `${PAYMENT.LABEL_PROOF} - ${paymentTitle}${floatingLabel}`;
+  const completedTitle =
+    isScheduled && draftPayments.length > 0
+      ? `${PAYMENT.LABEL_RECURRING} - ${draftPayments[0].recurringType}`
+      : `${PAYMENT.LABEL_PROOF} - ${paymentTitle}${floatingLabel}`;
+  // const withPaymentTitle = withPreviousPayment === true ? `${PAYMENT.LABEL_PROOF} - (${totalPaidAmount?.length})` : completedTitle;
   const defaultTitle = withPayment === true ? completedTitle : headerTitle;
   const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
 
@@ -159,12 +187,12 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
     return handleExpandPayment();
   };
 
-  useEffect(() => {
-    if (draftPayments.length === 0) {
-      setDraftPayments(payments);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (draftPayments.length === 0) {
+  //     setDraftPayments(payments);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <Fragment>
@@ -516,6 +544,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                             ) : (
                               <CustomTextInput
                                 error={amountError}
+                                keyboardType="numeric"
                                 label={PAYMENT.LABEL_AMOUNT}
                                 inputPrefix={payment.currency}
                                 onBlur={checkAmount}
@@ -545,6 +574,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                             {payment.paymentMethod! !== "EPF" && currencies.length > 1 ? (
                               <CustomTextInput
                                 error={amountError}
+                                keyboardType="numeric"
                                 label={PAYMENT.LABEL_AMOUNT}
                                 inputPrefix={payment.currency}
                                 onBlur={checkAmount}

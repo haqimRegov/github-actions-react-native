@@ -4,6 +4,7 @@ export * from "./GetAgentProfile";
 export * from "./GetInbox";
 export * from "./GetOrderSummary";
 export * from "./GetHardCopyDocuments";
+export * from "./GetPaymentRequired";
 export * from "./GetSoftCopyDocuments";
 export * from "./GetSummaryReceipts";
 export * from "./SubmitHardCopyDocuments";

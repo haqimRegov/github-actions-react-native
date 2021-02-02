@@ -16,8 +16,8 @@ import {
   flexRow,
   flexWrap,
   fs12BoldBlack2,
-  fs12SemiBoldBlue2,
-  fs12SemiBoldWhite1,
+  fs12BoldBlue2,
+  fs12SemiBoldBlue38,
   fs16RegBlack2,
   noBorderBottom,
   px,
@@ -57,11 +57,6 @@ export interface CheckBoxDropdownProps {
   value: string[];
 }
 
-export interface moreDetails {
-  active: boolean;
-  number: number;
-}
-
 export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
   checkBoxStyle,
   handleChange,
@@ -75,7 +70,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
   style,
   value,
 }: CheckBoxDropdownProps) => {
-  const [showMore, setShowMore] = useState<moreDetails>({ active: false, number: 0 });
+  const [showMore, setShowMore] = useState<ICheckBoxMoreDetails>({ active: false, number: 0 });
   const baseDropdownStyle: ViewStyle = {
     ...border(colorGray._7, sw1, sw20),
     backgroundColor: colorWhite._1,
@@ -88,8 +83,8 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
     width: sw358,
   };
 
-  const defaultLabelStyle: TextStyle = { ...fs12SemiBoldWhite1, ...labelStyle };
-  const defaultPlaceholderStyle: TextStyle = { ...fs16RegBlack2, ...placeholderStyle };
+  const defaultLabelStyle: TextStyle = { ...fs12SemiBoldBlue38, ...labelStyle };
+  const defaultPlaceholderStyle: TextStyle = { ...fs16RegBlack2, lineHeight: sh24, ...placeholderStyle };
   const valueStyle = value.length === 0 || value === undefined ? defaultPlaceholderStyle : defaultLabelStyle;
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER_MANY;
@@ -147,7 +142,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
               ...px(sw8),
               ...py(sh4),
               borderRadius: sw24,
-              backgroundColor: colorBlue._2,
+              backgroundColor: colorGray._2,
             };
 
             const handleWidth = async (event: LayoutChangeEvent) => {
@@ -167,7 +162,6 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
               height: sh24,
               overflow: "hidden",
             };
-            const showMoreText = `+${showMore.number} More`;
 
             return (
               <View style={defaultInputStyle}>
@@ -192,7 +186,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                                   <Text style={valueStyle}>{item}</Text>
                                   <CustomSpacer isHorizontal={true} space={sw4} />
                                   <View style={centerHV}>
-                                    <IcoMoon color={colorWhite._1} name="close" size={sw12} />
+                                    <IcoMoon color={colorBlue._3_8} name="close" size={sw12} />
                                   </View>
                                 </View>
                               </TouchableWithoutFeedback>
@@ -207,12 +201,12 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                 </View>
                 <View>
                   {showMore.active === true && showMore.number > 0 ? (
-                    <Fragment>
+                    <View style={{ ...centerVertical, ...flexRow }}>
                       <CustomSpacer isHorizontal={true} space={sw4} />
-                      <View style={{ ...defaultTagStyle, backgroundColor: colorGray._3 }}>
-                        <Text style={fs12SemiBoldBlue2}>{showMoreText}</Text>
-                      </View>
-                    </Fragment>
+                      <IcoMoon color={colorBlue._3_8} name="plus" size={sw16} />
+                      <CustomSpacer isHorizontal={true} space={sw4} />
+                      <Text style={fs12BoldBlue2}>{showMore.number}</Text>
+                    </View>
                   ) : null}
                 </View>
                 <CustomFlexSpacer />

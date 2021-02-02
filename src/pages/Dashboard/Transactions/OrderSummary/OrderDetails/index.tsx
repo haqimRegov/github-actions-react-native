@@ -98,7 +98,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
               { label: DASHBOARD_ORDER_DETAILS.LABEL_PRODUCT_TYPE, title: investment.productType, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_FUNDING_OPTION, title: investment.accountFund, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_TYPE, title: investment.investmentType },
-              { label: DASHBOARD_ORDER_DETAILS.LABEL_DISTRIBUTION, title: investment.distributionInstructions },
+              { label: DASHBOARD_ORDER_DETAILS.LABEL_DISTRIBUTION, title: investment.distributionInstruction || "-" },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING, title: investment.recurring },
             ];
 
@@ -152,11 +152,15 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
 
               if (payment.paymentMethod === "Recurring") {
                 paymentDetails.push(
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_TYPE, title: `${payment.recurringType}` },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME, title: `${payment.bankAccountName}` },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_TYPE, title: `${payment.recurringType}`, titleStyle: fsTransformNone },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME,
+                    title: `${payment.bankAccountName}`,
+                    titleStyle: fsTransformNone,
+                  },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NUMBER, title: `${payment.bankAccountNumber}` },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_BANK, title: `${payment.recurringBank}` },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_FREQUENCY, title: `${payment.frequency}` },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_BANK, title: `${payment.recurringBank}`, titleStyle: fsTransformNone },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_FREQUENCY, title: `${payment.frequency}`, titleStyle: fsTransformNone },
                 );
               }
 
@@ -174,15 +178,18 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,
                     title: `${payment.kibBankName || "-"}`,
+                    titleStyle: fsTransformNone,
                     subtitle: `${payment.kibBankAccountNumber || "-"}`,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
                     title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
                     title: `${payment.proofOfPayment?.name}`,
+                    titleStyle: fsTransformNone,
                     onPress: handleFile,
                     titleIcon: "file",
                   },
@@ -196,11 +203,16 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     title: `${payment.fundCurrency} ${payment.investmentAmount}`,
                     titleStyle: fsTransformNone,
                   },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME, title: `${payment.bankAccountName || "-"}` },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME,
+                    title: `${payment.bankAccountName || "-"}`,
+                    titleStyle: fsTransformNone,
+                  },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CHEQUE_NO, title: `${payment.checkNumber}` },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,
                     title: `${payment.kibBankAccountName || "-"}`,
+                    titleStyle: fsTransformNone,
                     subtitle: `${payment.bankAccountNumber || "-"}`,
                   },
                   {
@@ -210,10 +222,12 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
                     title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
                     title: `${payment.proofOfPayment?.name}`,
+                    titleStyle: fsTransformNone,
                     onPress: handleFile,
                     titleIcon: "file",
                   },
@@ -227,15 +241,17 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     title: `${payment.fundCurrency} ${payment.investmentAmount}`,
                     titleStyle: fsTransformNone,
                   },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_CLIENT_NAME, title: `${payment.clientName}` },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_CLIENT_NAME, title: `${payment.clientName}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CLIENT_TRUST, title: `${payment.clientTrustAccountNumber}` },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
                     title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
                     title: `${payment.proofOfPayment?.name}`,
+                    titleStyle: fsTransformNone,
                     onPress: handleFile,
                     titleIcon: "file",
                   },
@@ -260,7 +276,9 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
         </Fragment>
       ) : null}
       <CustomSpacer space={sh8} />
-      {file !== undefined ? <FileViewer handleClose={handleCloseViewer} value={file} visible={file !== undefined} /> : null}
+      {file !== undefined ? (
+        <FileViewer handleClose={handleCloseViewer} resourceType="url" value={file} visible={file !== undefined} />
+      ) : null}
     </Fragment>
   );
 };

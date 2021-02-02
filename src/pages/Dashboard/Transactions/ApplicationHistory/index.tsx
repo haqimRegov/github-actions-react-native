@@ -31,10 +31,8 @@ import { RejectedOrders } from "./Rejected";
 const { DASHBOARD_HOME } = Language.PAGE;
 
 interface ApplicationHistoryProps extends TransactionsStoreProps {
-  // activeTab: TransactionsTabType;
   setScreen: (route: TransactionsPageType) => void;
   navigation: IStackNavigationProp;
-  // setActiveTab: (tab: TransactionsTabType) => void;
 }
 
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
@@ -48,16 +46,19 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     updatedSelectedOrder,
     updateSearch,
     updateTransactions,
+    updatePendingFilter,
+    updateApprovedFilter,
+    updateRejectedFilter,
   } = props;
   const { approvedCount, pendingCount, rejectedCount } = transactions;
   const [activeTab, setActiveTab] = useState<TransactionsTabType>("pending");
 
+  const { filter, page, pages } = props[activeTab];
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [selectedFilter, setSelectedFilter] = useState<any>([]);
+  const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
 
-  const { page, pages } = props[activeTab];
   const tabs: TransactionsTabType[] = ["pending", "approved", "rejected"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
@@ -67,10 +68,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const handleDone = () => {
     setShowModal(false);
     updatedSelectedOrder([]);
-  };
-
-  const handleFilter = () => {
-    setFilterVisible(!filterVisible);
   };
 
   const handleNext = () => {
@@ -136,6 +133,32 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     handleSummaryReceipt({ all: false, orders: [orderNumber] });
   };
 
+  const handleShowFilter = () => {
+    if (filterVisible === false) {
+      setFilterTemp(filter);
+    }
+    setFilterVisible(!filterVisible);
+  };
+
+  const handleConfirmFilter = () => {
+    switch (activeTab) {
+      case "approved":
+        updateApprovedFilter(filterTemp);
+        break;
+      case "rejected":
+        updateRejectedFilter(filterTemp);
+        break;
+      default:
+        updatePendingFilter(filterTemp);
+        break;
+    }
+    updateSearch(inputSearch);
+  };
+
+  const handleCancelFilter = () => {
+    setFilterTemp(filter);
+  };
+
   const tabProps = { setScreen: setScreen, navigation: navigation };
   let content: JSX.Element = <View />;
 
@@ -151,7 +174,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     pending?.orders !== undefined && selectedOrders.length > 1 ? DASHBOARD_HOME.LABEL_ORDERS_SELECTED : DASHBOARD_HOME.LABEL_ORDER_SELECTED;
 
   const bannerText = `${selectedOrders!.length} ${selectionText}`;
-  const submissionSummary = `${selectedOrders} ${DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY_DOWNLOADED}`;
+  const submissionSummary = `${DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY_DOWNLOADED}`;
 
   const tableContainer: ViewStyle = {
     backgroundColor: colorWhite._1,
@@ -162,16 +185,19 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   return (
     <Fragment>
-      <DashboardLayout {...props}>
+      <DashboardLayout scrollEnabled={!filterVisible} {...props}>
         <View style={flexChild}>
           <ApplicationHistoryHeader
+            activeTab={activeTab}
+            filter={filterTemp}
             filterVisible={filterVisible}
-            handleFilter={handleFilter}
+            handleCancel={handleCancelFilter}
+            handleConfirm={handleConfirmFilter}
             handleSearch={handleSearch}
+            handleShowFilter={handleShowFilter}
             inputSearch={inputSearch}
-            selectedFilter={selectedFilter}
+            setFilter={setFilterTemp}
             setInputSearch={setInputSearch}
-            setSelectedFilter={setSelectedFilter}
           />
           <CustomSpacer space={sh24} />
           <View
@@ -222,7 +248,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       <PromptModal
         labelContinue={DASHBOARD_HOME.BUTTON_DONE}
         handleContinue={handleDone}
-        illustration={LocalAssets.illustration.submissionSummary}
+        illustration={LocalAssets.illustration.receiptSuccess}
         label={submissionSummary}
         title={DASHBOARD_HOME.LABEL_SUBMISSION_REPORT_DOWNLOADED}
         visible={showModal}

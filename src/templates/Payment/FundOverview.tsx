@@ -1,8 +1,8 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps } from "../../../components";
-import { Language } from "../../../constants";
+import { CardWrap, CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps } from "../../components";
+import { Language } from "../../constants";
 import {
   borderBottomBlack21,
   centerVertical,
@@ -23,8 +23,8 @@ import {
   sw1,
   sw24,
   sw8,
-} from "../../../styles";
-import { AnimationUtils } from "../../../utils";
+} from "../../styles";
+import { AnimationUtils } from "../../utils";
 
 const { ORDER_SUMMARY, PAYMENT } = Language.PAGE;
 

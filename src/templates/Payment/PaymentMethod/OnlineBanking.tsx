@@ -2,35 +2,43 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomDatePicker, CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../../components";
-import { Language } from "../../../../constants";
-import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../../styles";
+import { AdvancedDropdown, CustomDatePicker, CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../components";
+import { Language } from "../../../constants";
+import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
+import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
-export interface CashDepositMachineProps {
+export interface OnlineBankingProps {
+  bankName: string;
   currency: string;
   kibBankName: string;
   kibBankAccountNumber: string;
+  setBankName: (value: string) => void;
   setTransactionDate: (value?: Date | undefined) => void;
-  setTransactionTime: (value?: Date | undefined) => void;
   transactionDate: Date | undefined;
-  transactionTime: Date | undefined;
 }
 
-export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
+export const OnlineBanking: FunctionComponent<OnlineBankingProps> = ({
+  bankName,
   currency,
   kibBankName,
   kibBankAccountNumber,
+  setBankName,
   setTransactionDate,
-  setTransactionTime,
   transactionDate,
-  transactionTime,
-}: CashDepositMachineProps) => {
+}: OnlineBankingProps) => {
   return (
     <View>
       <View style={px(sw24)}>
         <View style={flexRow}>
+          <AdvancedDropdown
+            items={DICTIONARY_MALAYSIA_BANK_BASE}
+            handleChange={setBankName}
+            label={PAYMENT.LABEL_BANK_NAME}
+            value={bankName}
+          />
+          <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_DATE} />
             <CustomDatePicker
@@ -41,19 +49,6 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
               minimumDate={moment().toDate()}
               setValue={setTransactionDate}
               value={transactionDate}
-            />
-          </View>
-          <CustomSpacer isHorizontal={true} space={sw64} />
-          <View>
-            <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_TIME} />
-            <CustomDatePicker
-              datePickerStyle={{ height: sh143 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
-              mode="time"
-              maximumDate={moment().toDate()}
-              minimumDate={moment().toDate()}
-              setValue={setTransactionTime}
-              value={transactionTime}
             />
           </View>
         </View>
@@ -69,15 +64,13 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
             style={{ width: sw360 }}
           />
           <CustomSpacer isHorizontal={true} space={sw64} />
-          <View style={flexRow}>
-            <LabeledTitle
-              label={PAYMENT.LABEL_CURRENCY}
-              spaceToLabel={sh8}
-              title={currency === "" ? "-" : currency}
-              titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
-              style={{ width: sw360 }}
-            />
-          </View>
+          <LabeledTitle
+            label={PAYMENT.LABEL_CURRENCY}
+            spaceToLabel={sh8}
+            title={currency === "" ? "-" : currency}
+            titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
+            style={{ width: sw360 }}
+          />
         </View>
       </View>
     </View>

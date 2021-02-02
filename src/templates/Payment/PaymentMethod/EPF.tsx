@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, CustomTextInput } from "../../../../components";
-import { Language } from "../../../../constants";
-import { flexRow, px, sh24, sw24 } from "../../../../styles";
+import { CustomSpacer, CustomTextInput } from "../../../components";
+import { Language } from "../../../constants";
+import { flexRow, px, sh24, sw24 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 

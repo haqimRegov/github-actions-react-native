@@ -185,6 +185,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 value={item.bankName}
               />
               <CustomTextInput
+                autoCapitalize="words"
                 error={item.bankAccountNameError}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                 onBlur={checkAccountBankName}

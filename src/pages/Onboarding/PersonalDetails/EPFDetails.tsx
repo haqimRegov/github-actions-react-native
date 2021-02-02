@@ -42,6 +42,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
         <TextSpaceArea spaceToBottom={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.LABEL_EPF_DETAILS} />
         <CustomTextInput
           error={epfNumberError}
+          keyboardType="numeric"
           label={PERSONAL_DETAILS.LABEL_EPF_NUMBER}
           onBlur={onBlurEpfNumber}
           onChangeText={setInputEpfNumber}

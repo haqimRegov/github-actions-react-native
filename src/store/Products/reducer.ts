@@ -224,8 +224,8 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             { column: "fundName", value: "" },
           ],
           totalCount: {
-            all: "0",
-            recommended: "0",
+            all: "",
+            recommended: "",
           },
         },
         prs: {
@@ -249,8 +249,8 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             { column: "fundName", value: "" },
           ],
           totalCount: {
-            all: "0",
-            recommended: "0",
+            all: "",
+            recommended: "",
           },
         },
         prsDefault: {
@@ -274,8 +274,8 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             { column: "fundName", value: "" },
           ],
           totalCount: {
-            all: "0",
-            recommended: "0",
+            all: "",
+            recommended: "",
           },
         },
         amp: {
@@ -299,8 +299,8 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             { column: "fundName", value: "" },
           ],
           totalCount: {
-            all: "0",
-            recommended: "0",
+            all: "",
+            recommended: "",
           },
         },
         productType: "ut",

@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
-import { Language } from "../../../../constants";
-import { DICTIONARY_DDA_BANK, DICTIONARY_MALAYSIA_BANK_BASE, DICTIONARY_RECURRING_FREQUENCY } from "../../../../data/dictionary";
-import { flexRow, px, sh24, sh8, sw24, sw360, sw40, sw64 } from "../../../../styles";
+import { AdvancedDropdown, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { Language } from "../../../constants";
+import { DICTIONARY_DDA_BANK, DICTIONARY_MALAYSIA_BANK_BASE, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
+import { flexRow, px, sh24, sh8, sw24, sw360, sw40, sw64 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -40,7 +40,6 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
   const recurringOptions = [PAYMENT.OPTION_DDA];
   const ddaBank = recurringType === "FPX" ? DICTIONARY_MALAYSIA_BANK_BASE : DICTIONARY_DDA_BANK;
   // const sameRecurringInfoLabel = recurringType === "FPX" ? PAYMENT.LABEL_SAME_FPX : PAYMENT.LABEL_SAME_DDA;
-
   if (allowedRecurringType !== undefined && allowedRecurringType.includes("FPX")) {
     recurringOptions.push(PAYMENT.OPTION_FPX);
   }

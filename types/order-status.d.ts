@@ -22,4 +22,5 @@ declare type OrderStatusType =
   | "HQ - Rerouted"
   | "BR - Rerouted";
 
-declare type OrderStatusLabelValue = Record<OrderStatusKey, OrderStatusType>;
+declare type IOrderStatus = Record<OrderStatusKey, OrderStatusType>;
+declare type OrderStatusLabelValue = { label: OrderStatusType; value: OrderStatusType };

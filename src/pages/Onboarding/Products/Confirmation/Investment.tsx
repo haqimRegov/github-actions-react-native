@@ -93,7 +93,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
   const minNewSalesAmount = newSalesAmount[fundingMethod].min;
   const minTopUpAmount = topUpAmount[fundingMethod].min;
   const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
-  const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minTopUpAmount})`;
+  const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${DICTIONARY_RECURRING_CURRENCY} ${minTopUpAmount})`;
 
   const currencies =
     masterClassList !== undefined

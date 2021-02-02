@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState } from "react";
 import { Image, Text, View } from "react-native";
 
-import { LocalAssets } from "../../../assets/LocalAssets";
-import { CheckBox, ConfirmationModal, CustomSpacer, Tag, TextSpaceArea } from "../../../components";
-import { Language } from "../../../constants";
+import { LocalAssets } from "../../assets/LocalAssets";
+import { CheckBox, ConfirmationModal, CustomSpacer, Tag, TextSpaceArea } from "../../components";
+import { Language } from "../../constants";
 import {
   alignSelfStart,
   borderBottomBlack1,
@@ -22,15 +22,15 @@ import {
   sh8,
   sw176,
   sw8,
-} from "../../../styles";
+} from "../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
 interface PaymentStatusProps {
-  handleResetOnboarding: () => void;
+  handleDone: () => void;
   result?: ISubmitProofOfPaymentsResult;
 }
-export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleResetOnboarding, result }: PaymentStatusProps) => {
+export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDone, result }: PaymentStatusProps) => {
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleRes
       return setPrompt("message");
     }
     if (prompt === "message") {
-      handleResetOnboarding();
+      handleDone();
     }
     return null;
   };

@@ -178,6 +178,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 />
               ) : null}
               <CustomTextInput
+                autoCapitalize="words"
                 error={item.bankAccountNameError}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                 onBlur={checkAccountBankName}

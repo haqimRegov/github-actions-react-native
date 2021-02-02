@@ -45,7 +45,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
   };
 
   const handleBack = () => {
-    updateCurrentOrder("");
+    updateCurrentOrder(undefined);
     setScreen("Transactions");
   };
 
@@ -62,7 +62,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
   const handleFetch = async () => {
     // setLoading(true);
     const req: IGetOrderSummaryRequest = {
-      orderNumber: currentOrder,
+      orderNumber: currentOrder!.orderNumber,
     };
     // eslint-disable-next-line no-console
     console.log("getOrderSummary", req);
@@ -137,4 +137,4 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
   );
 };
 
-export const OrderSummary = connect(TransactionsMapStateToProps, TransactionsMapDispatchToProps)(OrderSummaryComponent);
+export const DashboardOrderSummary = connect(TransactionsMapStateToProps, TransactionsMapDispatchToProps)(OrderSummaryComponent);

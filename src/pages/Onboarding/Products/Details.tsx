@@ -236,31 +236,40 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             {/* <CustomSpacer space={sw24} />
           <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
           <ProductGraph fund={fund} layout={{ width: sw832 }} /> */}
-            <CustomSpacer space={sw24} />
-            <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
-            <View style={{ ...px(sw24) }}>
-              <CustomSpacer space={sh24} />
-              <View style={{ ...flexRow, ...centerVertical }}>
-                <Text style={{ ...fs16BoldBlack2 }}>{PRODUCT_DETAILS.LABEL_FUND_DOCUMENTS}</Text>
-                <CustomSpacer isHorizontal={true} space={sw12} />
-                {/* <TouchableWithoutFeedback onPress={handleShareDocuments}>
+            {/* <CustomSpacer space={sw24} /> */}
+            {documentList.length > 0 ? (
+              <Fragment>
+                <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
+                <View style={{ ...px(sw24) }}>
+                  <CustomSpacer space={sh24} />
+                  <View style={{ ...flexRow, ...centerVertical }}>
+                    <Text style={{ ...fs16BoldBlack2 }}>{PRODUCT_DETAILS.LABEL_FUND_DOCUMENTS}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw12} />
+                    {/* <TouchableWithoutFeedback onPress={handleShareDocuments}>
                   <IcoMoon name="share" color={colorBlue._1} size={sw16} />
                 </TouchableWithoutFeedback> */}
-              </View>
-              <CustomSpacer space={sh14} />
-              <View style={flexRow}>
-                <ButtonSelectionList
-                  color={colorBlue._2}
-                  data={documentList}
-                  icon="file"
-                  onPress={handleViewDocument}
-                  spaceBetween={sw16}
-                />
-              </View>
-              {viewDocument !== undefined ? (
-                <FileViewer handleClose={handleCloseViewer} resourceType="url" value={viewDocument} visible={viewDocument !== undefined} />
-              ) : null}
-            </View>
+                  </View>
+                  <CustomSpacer space={sh14} />
+                  <View style={flexRow}>
+                    <ButtonSelectionList
+                      color={colorBlue._2}
+                      data={documentList}
+                      icon="file"
+                      onPress={handleViewDocument}
+                      spaceBetween={sw16}
+                    />
+                  </View>
+                  {viewDocument !== undefined ? (
+                    <FileViewer
+                      handleClose={handleCloseViewer}
+                      resourceType="url"
+                      value={viewDocument}
+                      visible={viewDocument !== undefined}
+                    />
+                  ) : null}
+                </View>
+              </Fragment>
+            ) : null}
           </View>
         </View>
         <CustomSpacer space={sh56} />

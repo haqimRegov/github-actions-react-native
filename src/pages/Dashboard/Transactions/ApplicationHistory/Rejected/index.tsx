@@ -54,7 +54,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   updateRejectedSort,
   updateTransactions,
 }: RejectedOrdersProps) => {
-  const { orders, page, sort } = rejected;
+  const { filter, orders, page, sort } = rejected;
   const [loading, setLoading] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
@@ -162,7 +162,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       customHeader: true,
       customItem: true,
       icon: { name: "caret-down", size: sw16 },
-      key: [{ key: "lastUpdated", textStyle: fs12RegBlue2 }],
+      key: [{ key: showDateBy, textStyle: fs12RegBlue2 }],
       onPressHeader: handleShowDateBy,
       title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : "Last Updated",
       viewStyle: { width: sw136 },
@@ -193,12 +193,30 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
 
   const handleFetch = async () => {
     setLoading(true);
+    const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
+    const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
+
     const req: IDashboardRequest = {
       tab: "rejected",
       page: page,
       search: search,
-      filter: [],
       sort: sort,
+      filter: [
+        {
+          column: "transactionType",
+          value: "Sales-AO",
+        },
+        // {
+        //   column: "lastUpdated",
+        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
+        // },
+        // {
+        //   column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
+        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
+        // },
+        ...filterAccountType,
+        ...filterStatus,
+      ],
     };
     // eslint-disable-next-line no-console
     console.log("getDashboard", req);
@@ -229,14 +247,14 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const handleOrderDetails = (item: ITableData) => {
-    updateCurrentOrder(item.orderNumber);
+    updateCurrentOrder(item as IDashboardOrder);
     setScreen("OrderSummary");
   };
 
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, activeTab, sort, page]);
+  }, [search, activeTab, sort, page, filter]);
 
   const noResults = search !== undefined && search !== "";
   const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : DASHBOARD_HOME.EMPTY_TITLE_TRANSACTIONS;

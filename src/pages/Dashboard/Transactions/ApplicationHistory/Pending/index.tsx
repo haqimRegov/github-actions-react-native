@@ -57,6 +57,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   activeTab,
   handlePrintSummary,
   pending,
+  resetSelectedOrder,
   search,
   selectedOrders,
   setScreen,
@@ -66,7 +67,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   updatePendingSort,
   updateTransactions,
 }: PendingOrdersProps) => {
-  const { orders, page, sort } = pending;
+  const { filter, orders, page, sort } = pending;
   const [loading, setLoading] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
@@ -90,7 +91,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleOrderDetails = (item: ITableData) => {
-    updateCurrentOrder(item.orderNumber);
+    updateCurrentOrder(item as IDashboardOrder);
     setScreen("OrderSummary");
   };
 
@@ -245,13 +246,31 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
 
   const handleFetch = async () => {
     setLoading(true);
+    const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
+    const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
+    // const minimumDate =
+    // filter.startDate !== undefined ? moment(filter.startDate).valueOf() : moment("01/01/2000", DEFAULT_DATE_FORMAT).valueOf();
     const req: IDashboardRequest = {
       tab: "pending",
       page: page,
       search: search,
-      filter: [],
       sort: sort,
-      // sort: [],
+      filter: [
+        {
+          column: "transactionType",
+          value: "Sales-AO",
+        },
+        // {
+        //   column: "lastUpdated",
+        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
+        // },
+        // {
+        //   column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
+        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
+        // },
+        ...filterAccountType,
+        ...filterStatus,
+      ],
     };
     // eslint-disable-next-line no-console
     console.log("getDashboard", req);
@@ -286,7 +305,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, activeTab, sort, page]);
+  }, [search, activeTab, sort, page, filter]);
 
   const noResults = search !== undefined && search !== "";
   const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : DASHBOARD_HOME.EMPTY_TITLE_TRANSACTIONS;
@@ -352,7 +371,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           />
         )}
         RowSelectionItem={() => (
-          <TouchableWithoutFeedback onPress={() => {}}>
+          <TouchableWithoutFeedback onPress={resetSelectedOrder}>
             <View style={{ width: sw56, ...centerHV }}>
               {selectedOrders.length > 0 ? (
                 <View

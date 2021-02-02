@@ -8,6 +8,15 @@ declare interface IProductFilter {
   conventional?: string[];
 }
 
+declare type ProductFilterType =
+  | "epfApproved"
+  | "fundCurrency"
+  | "fundType"
+  | "issuingHouse"
+  | "riskCategory"
+  | "shariahApproved"
+  | "conventional";
+
 declare interface IProductSort {
   column: ProductSortColumnType;
   value: ProductSortValueType;

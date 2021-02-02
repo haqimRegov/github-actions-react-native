@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, Tag } from "../../../components";
-import { Language } from "../../../constants";
+import { CustomFlexSpacer, CustomSpacer, Tag } from "../../components";
+import { Language } from "../../constants";
 import {
   DICTIONARY_DDA_BANK,
   DICTIONARY_KIB_BANK_ACCOUNTS,
   DICTIONARY_RECURRING_CURRENCY,
   DICTIONARY_RECURRING_FREQUENCY,
-} from "../../../data/dictionary";
+} from "../../data/dictionary";
 import {
   alignItemsEnd,
   centerVertical,
@@ -28,8 +28,8 @@ import {
   sw24,
   sw4,
   sw8,
-} from "../../../styles";
-import { AnimationUtils } from "../../../utils";
+} from "../../styles";
+import { AnimationUtils } from "../../utils";
 import { FundOverview } from "./FundOverview";
 import { PaymentCard } from "./PaymentCard";
 
@@ -66,6 +66,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     orderTotalAmount,
     payments,
     paymentType,
+    totalPaidAmount,
   } = paymentOrder;
 
   const cardHeaderStyle: ViewStyle = {
@@ -103,7 +104,6 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           proof: undefined,
           remark: undefined,
           bankName: "",
-          checkNumber: "",
           saved: false,
         };
         break;
@@ -228,6 +228,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         active={activeOrder === orderNumber}
         currencies={currencies}
         floatingAmount={floatingAmount!}
+        totalPaidAmount={totalPaidAmount!}
         generateNewPayment={generateNewPaymentDraft}
         handleExpandPayment={handleExpandPayment}
         handleSavePayments={handleSavePayments}

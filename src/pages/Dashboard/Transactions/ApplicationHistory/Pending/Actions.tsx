@@ -11,7 +11,7 @@ const { DASHBOARD_HOME } = Language.PAGE;
 export interface PendingOrderActionsProps extends ITableOptions {
   handlePrintSummary: (orderNumber: string) => void;
   setScreen: (route: TransactionsPageType) => void;
-  setCurrentOrder: (orderNo: string) => void;
+  setCurrentOrder: (order: IDashboardOrder) => void;
 }
 
 export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = ({
@@ -23,36 +23,32 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
 }: PendingOrderActionsProps) => {
   const { orderNumber, status } = data.rawData as IDashboardOrder;
 
-  // const handlePrintAccountOpening = () => {
-  //   Alert.alert("Print Accoutn Opening");
-  //   onClose();
-  // };
-
   const handlePrintSubmissionSummary = () => {
     handlePrintSummary(orderNumber);
     onClose();
   };
 
   const handleViewOrder = () => {
-    setCurrentOrder(orderNumber);
+    setCurrentOrder(data.rawData as IDashboardOrder);
     setScreen("OrderSummary");
     onClose();
   };
 
   const handleUploadDocs = () => {
-    setCurrentOrder(orderNumber);
+    setCurrentOrder(data.rawData as IDashboardOrder);
     setScreen("UploadDocuments");
     onClose();
   };
 
   const handleSubmitHardCopy = () => {
-    setCurrentOrder(orderNumber);
+    setCurrentOrder(data.rawData as IDashboardOrder);
     setScreen("UploadHardCopy");
     onClose();
   };
 
   const handleUploadPayment = () => {
-    // handleRoute("");
+    setCurrentOrder(data.rawData as IDashboardOrder);
+    setScreen("DashboardPayment");
     onClose();
   };
 

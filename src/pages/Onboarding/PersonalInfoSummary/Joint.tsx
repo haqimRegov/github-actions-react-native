@@ -67,7 +67,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
     { label: SUMMARY.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
   ];
 
-  let contactDetailsSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! }];
+  let contactDetailsSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! || "-" }];
 
   const otherContactDetails: LabeledTitleProps[] = contactDetails?.contactNumber!.map((contactNumber: IContactNumberState) => {
     return { label: contactNumber.label, title: `${contactNumber.code} ${contactNumber.value}` };

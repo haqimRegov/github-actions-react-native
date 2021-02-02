@@ -27,8 +27,7 @@ import {
   sw24,
   sw4,
 } from "../../../styles";
-import { PaymentOrder } from "./PaymentOrder";
-import { PaymentStatus } from "./PaymentStatus";
+import { PaymentOrder, PaymentStatus } from "../../../templates";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {}
@@ -74,7 +73,9 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     if (paymentResponse !== undefined) {
       const { data, error } = paymentResponse;
       if (error === null && data !== null) {
-        setPaymentResult(data.result);
+        setTimeout(() => {
+          setPaymentResult(data.result);
+        }, 100);
         // setErrorMessage(undefined);
         // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }
@@ -225,7 +226,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           />
         )}
       </SafeAreaPage>
-      <PaymentStatus handleResetOnboarding={handleResetOnboarding} result={paymentResult} />
+      <PaymentStatus handleDone={handleResetOnboarding} result={paymentResult} />
     </Fragment>
   );
 };

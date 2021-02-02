@@ -28,6 +28,7 @@ interface DashboardLayoutProps extends Partial<GlobalStoreProps> {
   children: ReactNode;
   hideQuickActions?: boolean;
   navigation: StackNavigationProp<RootNavigatorType>;
+  scrollEnabled?: boolean;
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
@@ -37,7 +38,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   children,
   hideQuickActions,
   navigation,
-  // resetGlobal,
+  scrollEnabled,
   title,
   titleIcon,
   titleIconOnPress,
@@ -82,7 +83,12 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
 
   return (
     <Fragment>
-      <ScrollView bounces={true} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        bounces={true}
+        contentContainerStyle={flexGrow}
+        keyboardShouldPersistTaps="handled"
+        scrollEnabled={scrollEnabled}
+        showsVerticalScrollIndicator={false}>
         <View style={{ ...fullHeight, backgroundColor: colorWhite._4 }}>
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />

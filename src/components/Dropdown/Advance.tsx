@@ -20,6 +20,7 @@ import {
   px,
   py,
   sh200,
+  sh24,
   sh38,
   sh40,
   sh8,
@@ -27,6 +28,7 @@ import {
   sw16,
   sw20,
   sw24,
+  sw300,
   sw358,
   sw360,
 } from "../../styles";
@@ -73,8 +75,8 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
     width: sw358,
   };
 
-  const defaultLabelStyle: TextStyle = { ...fs16BoldBlack2, ...labelStyle };
-  const defaultPlaceholderStyle: TextStyle = { ...fs16RegBlack2, ...placeholderStyle };
+  const defaultLabelStyle: TextStyle = { ...fs16BoldBlack2, lineHeight: sh24, width: sw300, ...labelStyle };
+  const defaultPlaceholderStyle: TextStyle = { ...fs16RegBlack2, lineHeight: sh24, ...placeholderStyle };
   const valueStyle = value === "" || value === undefined ? defaultPlaceholderStyle : defaultLabelStyle;
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
@@ -113,7 +115,9 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
             };
             return (
               <View style={defaultInputStyle}>
-                <Text style={valueStyle}>{value || placeholderLabel}</Text>
+                <Text numberOfLines={1} style={valueStyle}>
+                  {value || placeholderLabel}
+                </Text>
                 <CustomFlexSpacer />
                 <IcoMoon color={colorBlack._2} name="caret-down" size={sw20} />
               </View>

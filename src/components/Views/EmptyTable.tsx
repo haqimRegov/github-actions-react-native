@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { ActivityIndicator, Image, ImageSourcePropType, Text, TextStyle, View } from "react-native";
 
-import { CustomSpacer } from ".";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
 import { centerHV, centerVertical, colorGray, flexChild, fs12RegBlue2, fs16BoldBlue2, sh16, sh32, sh56, sw176 } from "../../styles";
+import { CustomSpacer } from "./Spacer";
 
 const { EMPTY_STATE } = Language.PAGE;
 interface EmptyTableProps {

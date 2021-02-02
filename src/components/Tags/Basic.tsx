@@ -26,6 +26,7 @@ export type TagColorType = "success" | "error" | "primary" | "secondary" | "warn
 
 interface TagProps {
   icon?: string;
+  iconSize?: number;
   color?: TagColorType;
   onPress?: () => void;
   style?: ViewStyle;
@@ -33,7 +34,7 @@ interface TagProps {
   textStyle?: TextStyle;
 }
 
-export const Tag: FunctionComponent<TagProps> = ({ icon, color = "primary", onPress, style, text, textStyle }: TagProps) => {
+export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "primary", onPress, style, text, textStyle }: TagProps) => {
   let tagColor = colorBlue._2;
   let tagTextColor = colorWhite._1;
 
@@ -82,6 +83,7 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, color = "primary", onPr
     color: tagTextColor,
     ...textStyle,
   };
+
   return (
     <View style={flexRow}>
       <TouchableWithoutFeedback onPress={onPress}>
@@ -90,7 +92,7 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, color = "primary", onPr
           {icon !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw4} />
-              <IcoMoon color={tagTextColor} name={icon} size={sh12} />
+              <IcoMoon color={tagTextColor} name={icon} size={iconSize || sh12} />
             </Fragment>
           ) : null}
         </View>

@@ -53,6 +53,9 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputPostCode = (value: string) => setEmploymentDetails({ postCode: value });
   const setInputState = (value: string) => setEmploymentDetails({ state: value });
 
+  const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;
+  const labelEmployer = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_NAME : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME;
+
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
@@ -82,15 +85,9 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       ) : null}
 
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME} onChangeText={setInputEmployerName} value={inputEmployerName} />
+      <CustomTextInput label={labelEmployer} onChangeText={setInputEmployerName} value={inputEmployerName} />
       <CustomSpacer space={sh32} />
-      <TextInputArea
-        label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS}
-        maxLength={255}
-        onChangeText={setInputAddress}
-        showLength={true}
-        value={inputAddress}
-      />
+      <TextInputArea label={labelAddress} maxLength={255} onChangeText={setInputAddress} showLength={true} value={inputAddress} />
       <CustomSpacer space={sh32} />
       <CustomTextInput
         keyboardType="numeric"

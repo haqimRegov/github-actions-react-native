@@ -1,9 +1,9 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { OPTION_OPERATING_CONTROL } from "../../../data/dictionary";
 import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sw24, sw48 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -31,6 +31,12 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
   const space = accountType === "Joint" ? sh24 : 0;
   const padding: ViewStyle = accountType === "Joint" ? px(sw24) : {};
   const spaceToAdditional = accountType === "Joint" ? sh24 : sh32;
+  const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
+
+  const operatingControl = [PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL];
+  if (accountType === "Joint" && jointAge !== undefined && jointAge >= 18) {
+    operatingControl.push(PERSONAL_DETAILS.OPTION_CONTROL_BOTH, PERSONAL_DETAILS.OPTION_CONTROL_EITHER);
+  }
 
   return (
     <Fragment>
@@ -54,7 +60,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
               <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_SIGN} />
               <RadioButtonGroup
                 direction="row"
-                options={OPTION_OPERATING_CONTROL}
+                options={operatingControl}
                 selected={inputSignatory}
                 setSelected={setInputSignatory}
                 space={sw48}

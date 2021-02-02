@@ -8,6 +8,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         ...state,
         ...action.payload,
       };
+    case "transactions/RESET_SELECTED_ORDER":
+      return {
+        ...state,
+        selectedOrders: [],
+      };
     case "transactions/RESET_TRANSACTIONS":
       return {
         ...transactionsInitialState,
@@ -52,6 +57,39 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           ...state.rejected,
           page: 1,
           sort: action.payload,
+        },
+      };
+    case "transactions/UPDATE_PENDING_FILTER":
+      return {
+        ...state,
+        pending: {
+          ...state.pending,
+          filter: {
+            ...state.pending.filter,
+            ...action.payload,
+          },
+        },
+      };
+    case "transactions/UPDATE_APPROVED_FILTER":
+      return {
+        ...state,
+        approved: {
+          ...state.approved,
+          filter: {
+            ...state.approved.filter,
+            ...action.payload,
+          },
+        },
+      };
+    case "transactions/UPDATE_REJECTED_FILTER":
+      return {
+        ...state,
+        rejected: {
+          ...state.rejected,
+          filter: {
+            ...state.rejected.filter,
+            ...action.payload,
+          },
         },
       };
 

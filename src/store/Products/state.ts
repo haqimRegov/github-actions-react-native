@@ -70,8 +70,8 @@ export const productsInitialState: productsState = {
       { column: "fundName", value: "" },
     ],
     totalCount: {
-      all: "0",
-      recommended: "0",
+      all: "",
+      recommended: "",
     },
   },
   prs: {
@@ -87,8 +87,8 @@ export const productsInitialState: productsState = {
       { column: "fundName", value: "" },
     ],
     totalCount: {
-      all: "0",
-      recommended: "0",
+      all: "",
+      recommended: "",
     },
   },
   prsDefault: {
@@ -104,8 +104,8 @@ export const productsInitialState: productsState = {
       { column: "fundName", value: "" },
     ],
     totalCount: {
-      all: "0",
-      recommended: "0",
+      all: "",
+      recommended: "",
     },
   },
   amp: {
@@ -121,8 +121,8 @@ export const productsInitialState: productsState = {
       { column: "fundName", value: "" },
     ],
     totalCount: {
-      all: "0",
-      recommended: "0",
+      all: "",
+      recommended: "",
     },
   },
   productType: "ut",

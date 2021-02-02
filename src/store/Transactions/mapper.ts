@@ -1,6 +1,6 @@
 import { bindActionCreators, Dispatch } from "redux";
 
-import { GlobalActionProps } from "../Global";
+import { GlobalActionProps } from "../Global/actions";
 import { RootState } from "../rootReducer";
 import { TransactionsActionProps } from "./actions";
 

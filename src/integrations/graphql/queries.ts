@@ -180,7 +180,7 @@ const getOrderSummary = gql`
             productType
             investmentType
             feaTagged
-            distributionInstructions
+            distributionInstruction
             recurring
           }
           paymentSummary {
@@ -395,6 +395,57 @@ const listHardCopyDocuments = gql`
   }
 `;
 
+const listPaymentRequired = gql`
+  query listPaymentRequired($input: OrderDetailsInput) {
+    listPaymentRequired(input: $input) {
+      data {
+        result {
+          orderNumber
+          allowedRecurringType
+          epfAccountNumber
+          paymentType
+          status
+          createdOn
+          totalInvestment {
+            currency
+            amount
+          }
+          totalPaidAmount {
+            currency
+            amount
+          }
+          surplusBalance
+          paymentCount
+          funds {
+            distributionInstruction
+            fundClass
+            fundCurrency
+            fundName
+            investmentAmount
+            salesCharge
+            isSyariah
+            scheduledInvestmentAmount
+            scheduledSalesCharge
+            isFea
+          }
+          payment {
+            id
+            title
+            url
+            name
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const listSoftCopyDocuments = gql`
   query listSoftcopyDocuments($input: OrderDetailsInput) {
     listSoftcopyDocuments(input: $input) {
@@ -446,6 +497,7 @@ const productList = gql`
             issuingHouse
             riskCategory
             isEpf
+            isEpfOnly
             isSyariah
             isWholesale
             isScheduled
@@ -520,6 +572,7 @@ export const GQL_QUERIES = {
   getOrderSummary,
   getReceiptSummaryList,
   listHardCopyDocuments,
+  listPaymentRequired,
   listSoftCopyDocuments,
   productList,
 };

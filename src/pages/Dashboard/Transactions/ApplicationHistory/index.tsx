@@ -248,7 +248,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       <PromptModal
         labelContinue={DASHBOARD_HOME.BUTTON_DONE}
         handleContinue={handleDone}
-        illustration={LocalAssets.illustration.submissionSummary}
+        illustration={LocalAssets.illustration.receiptSuccess}
         label={submissionSummary}
         title={DASHBOARD_HOME.LABEL_SUBMISSION_REPORT_DOWNLOADED}
         visible={showModal}

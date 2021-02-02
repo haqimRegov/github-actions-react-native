@@ -507,6 +507,8 @@ export const english = {
       LABEL_POSTCODE: "Postcode",
       LABEL_PRINCIPAL: "Principal Account Holder",
       LABEL_JOINT: "Joint Account Holder",
+      LABEL_SCHOOL_ADDRESS: "School / College / University's Address",
+      LABEL_SCHOOL_NAME: "Name of your School / College / University",
       LABEL_STATE: "State",
       SUBHEADING: "What do you do for living?",
     },

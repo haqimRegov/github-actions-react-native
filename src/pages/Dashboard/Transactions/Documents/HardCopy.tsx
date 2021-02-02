@@ -1,36 +1,35 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, View } from "react-native";
+import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/LocalAssets";
 import { ActionButtons, AdvancedDropdown, CheckBox, CustomFlexSpacer, CustomSpacer, PromptModal } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
-import { borderBottomBlack21, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
+import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
+import { borderBottomBlack21, centerHV, colorGray, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
 import { AlertDialog } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
 const { UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
 
-interface UploadHardCopyProps {
+interface UploadHardCopyProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
   setScreen: (route: TransactionsPageType) => void;
-  orderNumber: string;
 }
 
-export const UploadHardCopy = (props: UploadHardCopyProps) => {
-  const { setScreen, orderNumber } = props;
-  const [showModal, setShowModal] = useState<boolean>(false);
+const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: UploadHardCopyProps) => {
+  const { currentOrder, setScreen, updateCurrentOrder } = props;
+  const [prompt, setPrompt] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [branch, setBranch] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
   const [documentList, setDocumentList] = useState<IGetHardCopyDocumentsResult | undefined>(undefined);
 
-  const handleBack = () => {
+  const handleBackToTransactions = () => {
     setScreen("Transactions");
-  };
-
-  const handleDone = () => {
-    setScreen("Transactions");
+    updateCurrentOrder(undefined);
   };
 
   const handleToggle = () => {
@@ -46,7 +45,7 @@ export const UploadHardCopy = (props: UploadHardCopyProps) => {
     branch === "";
 
   const handleFetch = async () => {
-    const request: IGetHardCopyDocumentsRequest = { orderNumber: orderNumber };
+    const request: IGetHardCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
     // eslint-disable-next-line no-console
     console.log("getHardCopyDocuments request", request);
     const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request);
@@ -57,17 +56,19 @@ export const UploadHardCopy = (props: UploadHardCopyProps) => {
       }
       if (error !== null) {
         setTimeout(() => {
-          AlertDialog(error.message, handleBack);
+          AlertDialog(error.message, handleBackToTransactions);
         }, 100);
       }
     }
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
+    setPrompt(true);
     const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
     const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
     const request: ISubmitHardCopyDocumentsRequest = {
-      orderNumber: orderNumber,
+      orderNumber: currentOrder!.orderNumber,
       branchId: branchId,
       hardcopy: documentList!.documents.map(({ docs, name }) => {
         return {
@@ -89,14 +90,17 @@ export const UploadHardCopy = (props: UploadHardCopyProps) => {
     // eslint-disable-next-line no-console
     console.log("submitHardCopyDocuments request", request);
     const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request);
+    setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
         if (data.result.status === true) {
-          setShowModal(true);
+          setLoading(false);
         }
       }
       if (error !== null) {
+        setPrompt(false);
+        setLoading(false);
         setTimeout(() => {
           Alert.alert(error.message);
         }, 100);
@@ -133,7 +137,7 @@ export const UploadHardCopy = (props: UploadHardCopyProps) => {
       <DashboardLayout
         {...props}
         hideQuickActions={true}
-        titleIconOnPress={handleBack}
+        titleIconOnPress={handleBackToTransactions}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMISSION}
         titleIcon="arrow-left">
         <CustomSpacer space={sh24} />
@@ -159,22 +163,30 @@ export const UploadHardCopy = (props: UploadHardCopyProps) => {
               <ActionButtons
                 continueDisabled={buttonDisabled}
                 labelContinue={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_SUBMIT}
-                handleCancel={handleBack}
+                handleCancel={handleBackToTransactions}
                 handleContinue={handleSubmit}
               />
             </View>
           </Fragment>
-        ) : null}
+        ) : (
+          <View style={{ ...centerHV, ...flexChild }}>
+            <ActivityIndicator color={colorGray._7} size="small" />
+          </View>
+        )}
         <CustomSpacer space={sh56} />
       </DashboardLayout>
       <PromptModal
-        handleContinue={handleDone}
+        backdropOpacity={loading ? 0.4 : undefined}
+        handleContinue={handleBackToTransactions}
+        isLoading={loading}
         illustration={LocalAssets.illustration.hardcopySuccess}
         label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}
         labelContinue={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_DONE}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}
-        visible={showModal}
+        visible={prompt}
       />
     </Fragment>
   );
 };
+
+export const UploadHardCopy = connect(TransactionsMapStateToProps, TransactionsMapDispatchToProps)(UploadHardCopyComponent);

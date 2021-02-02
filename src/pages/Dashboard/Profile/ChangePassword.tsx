@@ -64,6 +64,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
       }
       if (error !== null) {
         setPrompt(false);
+        setIsLoading(false);
         setInput1Error(error.message);
       }
     }

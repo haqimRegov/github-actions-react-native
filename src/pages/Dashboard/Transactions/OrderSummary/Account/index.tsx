@@ -205,7 +205,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
           title: fatca!.certificate.name!,
           titleIcon: fatca!.certificate.name === "-" ? undefined : "file",
           titleStyle: fsTransformNone,
-          onPress: () => {},
+          onPress: () => setFile(fatca!.certificate! as FileBase64),
         });
       } else {
         fatcaSummary.push(

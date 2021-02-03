@@ -93,6 +93,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
 
   const validateJoint = (details: IHolderInfoState) => {
     const { contactDetails, personalDetails } = details;
+    // const jointAge = moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years");
     const checkEducation =
       personalDetails!.educationLevel !== "" ||
       (personalDetails!.educationLevel !== "" &&
@@ -100,7 +101,13 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         personalDetails!.otherEducationLevel !== "");
     const checkMalaysianDetails =
       personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
-
+    // const checkContactNumber =
+    //   jointAge >= 18
+    //     ? Object.values(contactDetails!.contactNumber!)
+    //         .map((contact) => contact.value)
+    //         .flat()
+    //         .includes("") === false
+    //     : true;
     return (
       Object.values(contactDetails!.contactNumber!)
         .map((contact) => contact.value)

@@ -18,6 +18,7 @@ export const AcknowledgementMapStateToProps = (state: RootState) => ({
   investmentDetails: state.selectedFund.investmentDetails,
   onboarding: state.onboarding,
   orders: state.acknowledgement.orders,
+  outsideRisk: state.selectedFund.outsideRisk,
   receipts: state.acknowledgement.receipts,
   personalInfo: state.personalInfo,
   paymentSummary: state.acknowledgement.paymentSummary,

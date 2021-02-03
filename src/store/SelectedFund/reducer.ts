@@ -37,6 +37,11 @@ export function selectedFundReducer(state = selectedFundInitialState, action: Se
         ...state,
         investmentDetails: [],
       };
+    case "selectedFund/UPDATE_OUTSIDE_RISK":
+      return {
+        ...state,
+        outsideRisk: action.payload,
+      };
 
     default:
       return state;

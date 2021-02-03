@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -22,7 +21,6 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   updateOnboarding,
 }: CrsDeclarationProps) => {
   const { principal, joint } = personalInfo;
-  const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
     addPersonalInfo({
@@ -108,10 +106,8 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
 
   const continueEnabledJoint = showTermsJoint && joint?.declaration!.crs!.acceptCrs && joint?.declaration!.crs!.explanationSaved;
 
-  const showButtonContinue =
-    accountType === "Joint" && jointAge >= 18 ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
-  const continueEnabled =
-    accountType === "Joint" && jointAge >= 18 ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
+  const showButtonContinue = accountType === "Joint" ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
+  const continueEnabled = accountType === "Joint" ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
 
   const handleBack = () => {
     handleNextStep("FATCADeclaration");
@@ -136,7 +132,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
         name={principal?.personalDetails?.name!}
         validations={validationsPrincipal}
       />
-      {accountType === "Joint" && jointAge >= 18 ? (
+      {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
           <View style={borderBottomBlack21} />

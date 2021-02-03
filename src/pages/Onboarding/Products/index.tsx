@@ -33,6 +33,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   riskScore,
   selectedFunds,
   updateOnboarding,
+  updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
@@ -94,6 +95,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const handlePrompt = () => {
     if (prompt === "risk") {
       handleInvest();
+      updateOutsideRisk(true);
       return setPrompt(undefined);
     }
     return handleBackToAssessment();

@@ -7,6 +7,7 @@ export * from "./GetHardCopyDocuments";
 export * from "./GetPaymentRequired";
 export * from "./GetSoftCopyDocuments";
 export * from "./GetSummaryReceipts";
+export * from "./ResubmitOrder";
 export * from "./SubmitHardCopyDocuments";
 export * from "./SubmitSoftCopyDocuments";
 export * from "./UpdateInbox";

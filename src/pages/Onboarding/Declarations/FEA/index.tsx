@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -22,7 +21,6 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
   updateOnboarding,
 }: FeaDeclarationProps) => {
   const { principal, joint } = personalInfo;
-  const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
 
   const handlePrincipalFea = (feaDeclaration: IFeaState) => {
     addPersonalInfo({
@@ -75,7 +73,7 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
     principal?.declaration!.fea!.balance !== "" &&
     principal?.declaration!.fea!.balanceError === undefined;
 
-  const continueEnabled = accountType === "Joint" && jointAge >= 18 ? validationsPrincipal && validationsJoint : validationsPrincipal;
+  const continueEnabled = accountType === "Joint" ? validationsPrincipal && validationsJoint : validationsPrincipal;
 
   return (
     <ContentPage
@@ -95,7 +93,7 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
         handleFeaDeclaration={handlePrincipalFea}
         name={principal?.personalDetails?.name!}
       />
-      {accountType === "Joint" && jointAge >= 18 ? (
+      {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
           <View style={borderBottomBlack21} />

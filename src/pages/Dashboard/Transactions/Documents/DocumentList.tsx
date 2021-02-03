@@ -20,7 +20,6 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, setDa
             <View key={index}>
               {index === 0 ? null : <CustomSpacer space={sh32} />}
               {relatedDocuments.docs.map((document: DocumentFileBase64 | undefined, documentIndex: number) => {
-                const resourceType = document?.url !== undefined ? "url" : "file";
                 const handleProof = (file: DocumentFileBase64 | undefined) => {
                   const updatedData = [...data];
                   const newValue = document !== undefined && document.title ? { title: document.title } : undefined;
@@ -41,12 +40,10 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, setDa
                     ) : (
                       <CustomSpacer space={sh8} />
                     )}
-
                     <UploadWithModal
                       features={["camera", "file", "gallery"]}
                       label={label}
                       onSuccess={handleProof}
-                      resourceType={resourceType}
                       setValue={handleProof}
                       value={actualValue as FileBase64}
                     />

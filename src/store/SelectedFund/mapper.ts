@@ -10,6 +10,7 @@ import { SelectedFundActionProps } from "./actions";
 export const SelectedFundMapStateToProps = (state: RootState) => ({
   finishedSteps: state.onboarding.finishedSteps,
   investmentDetails: state.selectedFund.investmentDetails,
+  outsideRisk: state.selectedFund.outsideRisk,
   selectedFunds: state.selectedFund.funds,
   viewFund: state.selectedFund.viewFund,
   loading: state.global.loading,

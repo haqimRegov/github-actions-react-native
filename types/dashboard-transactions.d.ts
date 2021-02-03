@@ -56,6 +56,7 @@ declare type TransactionsSortColumnType =
   | "transactionType"
   | "totalInvestment"
   | "createdOn"
+  | "lastUpdated"
   | "dueDate"
   | "";
 

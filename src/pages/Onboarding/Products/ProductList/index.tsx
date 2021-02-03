@@ -20,6 +20,7 @@ interface ProductListProps extends ProductsStoreProps {
 }
 
 const ProductListComponent: FunctionComponent<ProductListProps> = ({
+  accountType,
   handleCancelProducts,
   licenseType,
   productType,
@@ -29,59 +30,6 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   updateProductType,
 }: ProductListProps) => {
   // const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
-
-  // const columns: ITableColumn[] = [
-  //   {
-  //     icon: {
-  //       name: "caret-down",
-  //     },
-  //     key: [{ key: "fundAbbr", textStyle: fsUppercase }],
-  //     viewStyle: {
-  //       width: sw136,
-  //     },
-  //     title: PRODUCT_LIST.LABEL_COLUMN_FUND_CODE,
-  //   },
-  //   {
-  //     key: [{ key: "fundName", textStyle: fsUppercase }],
-  //     icon: {
-  //       name: "arrow-down",
-  //     },
-  //     viewStyle: {
-  //       width: sw323,
-  //     },
-  //     title: PRODUCT_LIST.LABEL_COLUMN_NAME,
-  //   },
-  //   {
-  //     icon: {
-  //       name: "caret-down",
-  //     },
-  //     key: [{ key: "riskCategory" }],
-  //     viewStyle: {
-  //       width: sw96,
-  //     },
-  //     title: PRODUCT_LIST.LABEL_COLUMN_RISK,
-  //   },
-  //   {
-  //     icon: {
-  //       name: "caret-down",
-  //     },
-  //     key: [{ key: "isEpf" }],
-  //     viewStyle: {
-  //       width: sw56,
-  //     },
-  //     title: PRODUCT_LIST.LABEL_COLUMN_EPF,
-  //   },
-  //   {
-  //     icon: {
-  //       name: "caret-down",
-  //     },
-  //     key: [{ key: "isSyariah" }],
-  //     viewStyle: {
-  //       width: sw88,
-  //     },
-  //     title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
-  //   },
-  // ];
 
   // const handleShowPerformance = (item: ITableRowData) => {
   //   const newSections: number[] = [...activeAccordion];
@@ -133,7 +81,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
       showsVerticalScrollIndicator={false}>
       <View style={flexChild}>
         <View style={{ minHeight: sh810 }}>
-          <ProductTabs licenseType={licenseType} productType={productType} setProductType={handleProductType} />
+          <ProductTabs accountType={accountType} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
           {content}
         </View>
         <Fragment>

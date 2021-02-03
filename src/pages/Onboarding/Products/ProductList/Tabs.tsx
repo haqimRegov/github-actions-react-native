@@ -20,12 +20,18 @@ import {
 
 const { PRODUCT_LIST } = Language.PAGE;
 export interface ProductTabsProps {
+  accountType: TypeAccountChoices;
   licenseType: string[];
   productType: ProductType;
   setProductType: (tab: ProductType) => void;
 }
 
-export const ProductTabs: FunctionComponent<ProductTabsProps> = ({ licenseType, productType, setProductType }: ProductTabsProps) => {
+export const ProductTabs: FunctionComponent<ProductTabsProps> = ({
+  accountType,
+  licenseType,
+  productType,
+  setProductType,
+}: ProductTabsProps) => {
   const container: ViewStyle = {
     ...fullWidth,
     ...px(sw24),
@@ -48,7 +54,7 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({ licenseType, 
     tabs.push("ut", "amp");
   }
 
-  if (licenseType.includes("PRS")) {
+  if (licenseType.includes("PRS") && accountType === "Individual") {
     productTabs.splice(1, 0, { text: PRODUCT_LIST.TAB_LABEL_PRS }, { text: PRODUCT_LIST.TAB_LABEL_PRS_DEFAULT });
     tabs.splice(1, 0, "prs", "prsDefault");
   }

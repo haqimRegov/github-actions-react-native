@@ -49,6 +49,7 @@ declare interface IProduct {
   fundObjective: string;
   fundType: string;
   isEpf: string;
+  isEpfOnly: string;
   issuingHouse: string;
   isSyariah: string;
   isScheduled: string;

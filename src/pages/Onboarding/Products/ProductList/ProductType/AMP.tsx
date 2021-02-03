@@ -19,6 +19,7 @@ interface AMPProps extends ProductsStoreProps {
 }
 
 const AMPComponent: FunctionComponent<AMPProps> = ({
+  accountType,
   addAmpAllFunds,
   addAmpFilters,
   addAmpRecommendedFunds,
@@ -101,19 +102,22 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     Keyboard.dismiss();
     const funds = await handleFetch(newPage);
     if (funds !== undefined) {
+      const updatedFunds = accountType === "Joint" ? funds.products.filter((product) => product.isEpfOnly === "No") : funds.products;
       if (showBy === "all") {
         addAmpAllFunds({
           ...funds,
+          products: updatedFunds,
           totalCount: {
-            ...funds.totalCount,
+            all: updatedFunds.length.toString(),
             recommended: totalCount.recommended === "" ? funds.totalCount.recommended : totalCount.recommended,
           },
         });
       } else {
         addAmpRecommendedFunds({
           ...funds,
+          products: updatedFunds,
           totalCount: {
-            ...funds.totalCount,
+            recommended: updatedFunds.length.toString(),
             all: totalCount.all === "" ? funds.totalCount.all : totalCount.all,
           },
         });

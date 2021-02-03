@@ -74,7 +74,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
       const newState: IProductSales = {
         investment: {
-          fundPaymentMethod: "Cash",
+          fundPaymentMethod: item.isEpfOnly === "Yes" ? "EPF" : "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",
           fundCurrency: item.masterList[0].currency,
@@ -179,6 +179,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       ...screen,
       content: (
         <ProductConfirmation
+          accountType={accountType}
           investmentDetails={investmentDetails!}
           selectedFunds={selectedFunds}
           setFixedBottomShow={setFixedBottomShow}

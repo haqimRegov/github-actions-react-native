@@ -8,10 +8,19 @@ import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } fro
 interface LogoutPageProps extends GlobalStoreProps {
   navigation: IStackNavigationProp;
 }
-const LogoutPageComponent: FunctionComponent<LogoutPageProps> = ({ navigation, resetGlobal, resetTransactions }: LogoutPageProps) => {
+const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPageProps) => {
+  const { navigation } = props;
   useEffect(() => {
-    resetGlobal();
-    resetTransactions();
+    props.resetGlobal();
+    props.resetTransactions();
+    props.resetAcknowledgement();
+    props.resetClientDetails();
+    props.resetPersonalInfo();
+    props.resetRiskAssessment();
+    props.resetViewFund();
+    props.resetSelectedFund();
+    props.resetProducts();
+    props.resetSteps();
     setTimeout(() => {
       navigation.dispatch(
         CommonActions.reset({

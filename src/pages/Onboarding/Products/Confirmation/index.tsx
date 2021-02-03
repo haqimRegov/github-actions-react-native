@@ -28,6 +28,7 @@ import { Investment } from "./Investment";
 const { INVESTMENT } = Language.PAGE;
 
 export interface ProductConfirmationProps {
+  accountType: TypeAccountChoices;
   investmentDetails: IProductSales[];
   selectedFunds: IProduct[];
   setFixedBottomShow: (toggle: boolean) => void;
@@ -38,6 +39,7 @@ export interface ProductConfirmationProps {
 }
 
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
+  accountType,
   investmentDetails,
   selectedFunds,
   setFixedBottomShow,
@@ -128,7 +130,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                     />
                   </View>
                   <CustomSpacer space={sh24} />
-                  <Investment data={product} setData={updateData} withEpf={withEpf} />
+                  <Investment accountType={accountType} data={product} setData={updateData} withEpf={withEpf} />
                 </View>
               </Fragment>
             );

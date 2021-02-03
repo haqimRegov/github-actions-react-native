@@ -40,12 +40,13 @@ import { isAmount } from "../../../../utils";
 const { INVESTMENT } = Language.PAGE;
 
 interface InvestmentProps {
+  accountType: TypeAccountChoices;
   data: IProductSales;
   setData: (data: IProductSales) => void;
   withEpf: boolean;
 }
 
-export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, withEpf }: InvestmentProps) => {
+export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, data, setData, withEpf }: InvestmentProps) => {
   const { investment, fundDetails, masterClassList } = data;
 
   const {
@@ -65,8 +66,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ data, setData, 
 
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
-  const fundingOption = [INVESTMENT.QUESTION_1_OPTION_1];
-  if (isEpf === "Yes" && withEpf === true) {
+  const fundingOption = fundDetails.isEpfOnly === "Yes" ? [INVESTMENT.QUESTION_1_OPTION_2] : [INVESTMENT.QUESTION_1_OPTION_1];
+  if (isEpf === "Yes" && withEpf === true && accountType === "Individual" && fundDetails.isEpfOnly !== "Yes") {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
 

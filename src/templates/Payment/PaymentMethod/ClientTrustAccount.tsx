@@ -23,7 +23,7 @@ export const ClientTrustAccount: FunctionComponent<ClientTrustAccountProps> = ({
   return (
     <View style={px(sw24)}>
       <View style={flexRow}>
-        <CustomTextInput label={PAYMENT.LABEL_CLIENT_NAME} onChangeText={setClientName} value={clientName} />
+        <CustomTextInput autoCapitalize="words" label={PAYMENT.LABEL_CLIENT_NAME} onChangeText={setClientName} value={clientName} />
         <CustomSpacer isHorizontal={true} space={sw64} />
         <CustomTextInput
           keyboardType="numeric"

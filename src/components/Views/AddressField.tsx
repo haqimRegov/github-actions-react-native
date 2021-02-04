@@ -52,7 +52,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
 
   return (
     <Fragment>
-      <TextInputArea label={labelAddress} onChangeText={setInputAddress} value={inputAddress} />
+      <TextInputArea autoCapitalize="words" label={labelAddress} onChangeText={setInputAddress} value={inputAddress} />
       <CustomTextInput
         error={postCodeError}
         keyboardType="numeric"

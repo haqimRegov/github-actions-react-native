@@ -85,9 +85,16 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       ) : null}
 
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={labelEmployer} onChangeText={setInputEmployerName} value={inputEmployerName} />
+      <CustomTextInput autoCapitalize="words" label={labelEmployer} onChangeText={setInputEmployerName} value={inputEmployerName} />
       <CustomSpacer space={sh32} />
-      <TextInputArea label={labelAddress} maxLength={255} onChangeText={setInputAddress} showLength={true} value={inputAddress} />
+      <TextInputArea
+        autoCapitalize="words"
+        label={labelAddress}
+        maxLength={255}
+        onChangeText={setInputAddress}
+        showLength={true}
+        value={inputAddress}
+      />
       <CustomSpacer space={sh32} />
       <CustomTextInput
         keyboardType="numeric"

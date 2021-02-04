@@ -940,6 +940,10 @@ export const english = {
       LABEL_SALES_CASH: "Sales Charge Range (Cash)",
       LABEL_SALES_EPF: "Sales Charge Range (EPF)",
       LABEL_SHARIAH: "Shariah Approved",
+      TITLE_DOC_ANNUAL: "Annual Report",
+      TITLE_DOC_FACT: "Fund Fact Sheet",
+      TITLE_DOC_HIGHLIGHTS: "Product Highlight Sheet",
+      TITLE_DOC_PROSPECTUS: "Prospectus",
     },
     PRODUCT_GRAPH: {
       BUTTON_FIVE_YEARS: "5 Years",

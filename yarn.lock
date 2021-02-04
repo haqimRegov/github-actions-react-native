@@ -7438,6 +7438,14 @@ react-native-image-crop-picker@0.32.0:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.32.0.tgz#c881d309fb0950d63fec40cfd0a5679b381f9a75"
   integrity sha512-DRnUB3fsb/Vcg/SguGljx10PuJXaVt8XcmwgNaDZs77G2oLYiufkAlbJmHpdZT/GaYhzlRjF5aw6IPrTYxxMfw==
 
+react-native-inappbrowser-reborn@3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-inappbrowser-reborn/-/react-native-inappbrowser-reborn-3.5.1.tgz#a17e6548ac7864f074f5df6171781601d179d638"
+  integrity sha512-pEM9DSvW3LYoI7x1sfr4GtTA1/BSzSoQvHeNRtbJwOpujgRBqnEQrapBwC/24l2pIRhKDWmXGfqc12478IXY3Q==
+  dependencies:
+    invariant "^2.2.4"
+    opencollective-postinstall "^2.0.2"
+
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"

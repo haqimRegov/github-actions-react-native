@@ -251,7 +251,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     // const minimumDate =
     //   filter.startDate !== undefined ? moment(filter.startDate).format("x") : moment("01/01/2000", DEFAULT_DATE_FORMAT).format("x");
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
-    const req: IDashboardRequest = {
+
+    const request: IDashboardRequest = {
       tab: "pending",
       page: page,
       search: search,
@@ -274,8 +275,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       ],
     };
     // eslint-disable-next-line no-console
-    console.log("getDashboard", req);
-    const dashboardResponse: IDashboardResponse = await getDashboard(req);
+    console.log("getDashboard request", request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request);
 
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

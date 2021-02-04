@@ -46,7 +46,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       return {
         adviserSignature: receipt.adviserSignature!,
         clientSignature: receipt.principalSignature!,
-        jointSignature: receipt.jointSignature,
+        jointSignature: receipt.jointSignature!.base64 !== undefined ? receipt.jointSignature : undefined,
         orderNumber: receipt.orderNumber!,
         pdf: receipt.signedPdf!,
       };

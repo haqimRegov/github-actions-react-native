@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Image, Text, View } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -34,6 +34,9 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
 
+  const checkNonPendingOrder =
+    result !== undefined && result.orders.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
+
   const handleCheckbox = () => {
     setToggle(!toggle);
   };
@@ -51,7 +54,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
   return (
     <View>
       <ConfirmationModal
-        continueDisabled={!toggle}
+        continueDisabled={checkNonPendingOrder === true ? !toggle : false}
         handleContinue={handleContinue}
         labelContinue={prompt === "message" ? PAYMENT.BUTTON_DONE : undefined}
         visible={result !== undefined}>
@@ -76,7 +79,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
                       <CustomSpacer isHorizontal={true} space={sw8} />
                       <Tag
                         color={order.status === "Completed" || order.status === "Submitted" ? "secondary" : "warning"}
-                        text={order.status}
+                        text={order.status === "Completed" || order.status === "Submitted" ? "Completed" : order.status}
                       />
                     </View>
                     <View>
@@ -108,16 +111,19 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
                     );
                   })}
                 </View>
-                <CustomSpacer space={sh32} />
               </View>
             ) : null}
-            <TextSpaceArea spaceToBottom={sh16} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
-            <CheckBox
-              checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
-              onPress={handleCheckbox}
-              label={PAYMENT.PROMPT_CHECKBOX_LABEL}
-              toggle={toggle}
-            />
+            {checkNonPendingOrder === true ? (
+              <Fragment>
+                <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
+                <CheckBox
+                  checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
+                  onPress={handleCheckbox}
+                  label={PAYMENT.PROMPT_CHECKBOX_LABEL}
+                  toggle={toggle}
+                />
+              </Fragment>
+            ) : null}
           </View>
         )}
       </ConfirmationModal>

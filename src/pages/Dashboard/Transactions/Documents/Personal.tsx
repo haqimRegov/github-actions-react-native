@@ -59,6 +59,11 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           .filter(({ docs }) => docs.length > 0)
       : [];
 
+  const documentsPrincipal =
+    documentList && documentList.principal && (currentOrder!.status === "BR - Rerouted" || currentOrder!.status === "HQ - Rerouted")
+      ? documentList.principal
+      : pendingDocumentsPrincipal;
+
   const pendingDocumentsJoint =
     documentList && documentList.joint
       ? documentList.joint
@@ -70,6 +75,11 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           })
           .filter(({ docs }) => docs.length > 0)
       : [];
+
+  const documentsJoint =
+    documentList && documentList.joint && (currentOrder!.status === "BR - Rerouted" || currentOrder!.status === "HQ - Rerouted")
+      ? documentList.joint
+      : pendingDocumentsJoint;
 
   const principalDocsCount = pendingDocumentsPrincipal
     .map(({ docs }) => docs)
@@ -192,7 +202,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
               <View style={px(sw24)}>
                 {documentList.joint ? <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={"Principal Holder"} /> : null}
 
-                <DocumentList data={pendingDocumentsPrincipal} setData={handlePrincipalData} />
+                <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
               </View>
             )}
             {documentList.joint === undefined || documentList.joint === null ? null : (
@@ -202,7 +212,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 <CustomSpacer space={sh32} />
                 <View style={px(sw24)}>
                   <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={"Joint Holder"} />
-                  <DocumentList data={pendingDocumentsJoint} setData={handleJointData} />
+                  <DocumentList data={documentsJoint} setData={handleJointData} />
                 </View>
               </Fragment>
             )}

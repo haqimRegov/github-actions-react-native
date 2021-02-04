@@ -168,11 +168,13 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     setLoading(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
-    const req: IDashboardRequest = {
+    const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
+
+    const request: IDashboardRequest = {
       tab: "approved",
       page: page,
       search: search,
-      sort: sort,
+      sort: defaultSort,
       filter: [
         {
           column: "transactionType",
@@ -191,8 +193,8 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       ],
     };
     // eslint-disable-next-line no-console
-    console.log("getDashboard", req);
-    const dashboardResponse: IDashboardResponse = await getDashboard(req);
+    console.log("getDashboard request", request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request);
     setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

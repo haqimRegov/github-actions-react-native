@@ -24,6 +24,10 @@ export const resetSelectedFund = () => {
   return typedAction("selectedFund/RESET_SELECTED_FUND");
 };
 
+export const updateOutsideRisk = (outside: boolean) => {
+  return typedAction("selectedFund/UPDATE_OUTSIDE_RISK", outside);
+};
+
 export type SelectedFundAction = ReturnType<
   | typeof addSelectedFund
   | typeof addInvestmentDetails
@@ -31,6 +35,7 @@ export type SelectedFundAction = ReturnType<
   | typeof resetSelectedFund
   | typeof addViewFund
   | typeof resetViewFund
+  | typeof updateOutsideRisk
 >;
 
 export const SelectedFundActionProps = {
@@ -40,6 +45,7 @@ export const SelectedFundActionProps = {
   resetSelectedFund,
   addViewFund,
   resetViewFund,
+  updateOutsideRisk,
 };
 
 export type SelectedFundActionsType = typeof SelectedFundActionProps;

@@ -139,12 +139,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                 setFile(payment.proofOfPayment);
               };
 
-              const paymentDetails: LabeledTitleProps[] = [
-                { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
-              ];
+              const paymentDetails: LabeledTitleProps[] = [];
 
               if (payment.paymentMethod === "EPF") {
                 paymentDetails.push(
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_ACCOUNT, title: payment.epfAccountNumber! },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_REFERENCE, title: payment.epfReferenceNo! },
                 );
@@ -152,6 +151,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
 
               if (payment.paymentMethod === "Recurring") {
                 paymentDetails.push(
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_TYPE, title: `${payment.recurringType}`, titleStyle: fsTransformNone },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME,
@@ -171,6 +171,12 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     title: `${payment.fundCurrency} ${payment.investmentAmount}`,
                     titleStyle: fsTransformNone,
                   },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_NAME,
+                    title: `${payment.bankName}`,
+                    titleStyle: fsTransformNone,
+                  },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
                     title: `${moment(payment.transactionDate, "x").format(PAYMENT_DATE_FORMAT)}`,
@@ -182,16 +188,16 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     subtitle: `${payment.kibBankAccountNumber || "-"}`,
                   },
                   {
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
-                    titleStyle: fsTransformNone,
-                  },
-                  {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
                     title: `${payment.proofOfPayment?.name}`,
                     titleStyle: fsTransformNone,
                     onPress: handleFile,
                     titleIcon: "file",
+                  },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
                   },
                 );
               }
@@ -203,6 +209,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     title: `${payment.fundCurrency} ${payment.investmentAmount}`,
                     titleStyle: fsTransformNone,
                   },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME,
                     title: `${payment.bankAccountName || "-"}`,
@@ -210,19 +217,14 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                   },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CHEQUE_NO, title: `${payment.checkNumber}` },
                   {
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,
-                    title: `${payment.kibBankAccountName || "-"}`,
-                    titleStyle: fsTransformNone,
-                    subtitle: `${payment.bankAccountNumber || "-"}`,
-                  },
-                  {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
                     title: `${moment(payment.transactionDate, "x").format(PAYMENT_DATE_FORMAT)}`,
                   },
                   {
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,
+                    title: `${payment.kibBankAccountName || "-"}`,
                     titleStyle: fsTransformNone,
+                    subtitle: `${payment.bankAccountNumber || "-"}`,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
@@ -230,6 +232,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     titleStyle: fsTransformNone,
                     onPress: handleFile,
                     titleIcon: "file",
+                  },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
                   },
                 );
               }
@@ -241,19 +248,20 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
                     title: `${payment.fundCurrency} ${payment.investmentAmount}`,
                     titleStyle: fsTransformNone,
                   },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CLIENT_NAME, title: `${payment.clientName}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CLIENT_TRUST, title: `${payment.clientTrustAccountNumber}` },
-                  {
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
-                    titleStyle: fsTransformNone,
-                  },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
                     title: `${payment.proofOfPayment?.name}`,
                     titleStyle: fsTransformNone,
                     onPress: handleFile,
                     titleIcon: "file",
+                  },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
                   },
                 );
               }

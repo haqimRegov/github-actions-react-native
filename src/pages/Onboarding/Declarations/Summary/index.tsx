@@ -28,7 +28,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 }: DeclarationSummaryProps) => {
   const { finishedSteps } = onboarding;
   const { principal, joint } = personalInfo;
-  const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
 
   // TODO handle if FEA
   const isFea = 100 < 500;
@@ -134,36 +133,31 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             clientId: details!.jointHolder?.clientId!,
             contactDetails: joint!.contactDetails,
             addressInformation: joint!.addressInformation! as ISubmitAddress,
-            declaration:
-              jointAge >= 18
-                ? {
-                    crs: {
-                      country: jointTaxResident === 0 ? undefined : joint!.declaration!.crs!.country!, // undefined if taxResident === 0
-                      noTin: jointTaxResident === 0 ? undefined : `${joint!.declaration!.crs!.noTin!}`, // "true" || "false", undefined if taxResident === 0
-                      reason: jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
-                      taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
-                      tinNumber:
-                        jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === true
-                          ? undefined
-                          : joint!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
-                    },
-                    fatca: {
-                      formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-                      formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-                      confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-                      certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
-                      noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-                      reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
-                      usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
-                      usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
-                    },
-                    fea: {
-                      balance: joint!.declaration!.fea!.balance!,
-                      borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
-                      resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
-                    },
-                  }
-                : undefined,
+            declaration: {
+              crs: {
+                country: jointTaxResident === 0 ? undefined : joint!.declaration!.crs!.country!, // undefined if taxResident === 0
+                noTin: jointTaxResident === 0 ? undefined : `${joint!.declaration!.crs!.noTin!}`, // "true" || "false", undefined if taxResident === 0
+                reason: jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
+                taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
+                tinNumber:
+                  jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === true ? undefined : joint!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
+              },
+              fatca: {
+                formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+                formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+                confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
+                certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
+                noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
+                reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
+                usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
+                usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
+              },
+              fea: {
+                balance: joint!.declaration!.fea!.balance!,
+                borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
+                resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
+              },
+            },
             employmentDetails: joint!.employmentDetails,
             personalDetails: {
               countryOfBirth: joint!.personalDetails!.countryOfBirth!,
@@ -318,7 +312,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
   const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
-  const subtitle = accountType === "Joint" && jointAge >= 18 ? jointSubtitle : principalSubtitle;
+  const subtitle = accountType === "Joint" ? jointSubtitle : principalSubtitle;
   const principalAddress = `${principal?.addressInformation?.permanentAddress?.address}, ${principal?.addressInformation?.permanentAddress?.postCode}, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${principal?.addressInformation?.permanentAddress?.country}`;
   const jointAddress = `${joint?.addressInformation?.permanentAddress?.address}, ${joint?.addressInformation?.permanentAddress?.postCode}, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${joint?.addressInformation?.permanentAddress?.country}`;
 
@@ -339,7 +333,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         name={principal?.personalDetails!.name!}
         summary={personalInfo.principal?.declaration!}
       />
-      {accountType === "Joint" && jointAge >= 18 ? (
+      {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
           <View style={borderBottomBlack21} />

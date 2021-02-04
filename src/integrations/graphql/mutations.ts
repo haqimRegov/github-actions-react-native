@@ -229,6 +229,25 @@ const resetPassword = gql`
   }
 `;
 
+const resubmitOrder = gql`
+  mutation resubmitOrder($input: OrderDetailsInput) {
+    resubmitOrder(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const riskAssessment = gql`
   mutation RiskAssessment($input: risk) {
     riskAssessment(input: $input) {
@@ -507,6 +526,7 @@ export const GQL_MUTATIONS = {
   registerPassword,
   resendLockOtp,
   resetPassword,
+  resubmitOrder,
   riskAssessment,
   submitClientAccount,
   submitPdf,

@@ -1,13 +1,14 @@
 declare interface IProductFilterRequest {
+  accountType?: string;
   age?: string;
-  fundType?: string;
   fundCurrency?: string[];
+  fundType?: string;
+  isConventional?: string;
   isEpf?: string;
+  issuingHouse?: string[];
   isSyariah?: string;
   netWorth?: string;
-  isConventional?: string;
   riskCategory?: string[];
-  issuingHouse?: string[];
 }
 declare interface IProductListRequest extends IProductFilterRequest {
   tab: string;

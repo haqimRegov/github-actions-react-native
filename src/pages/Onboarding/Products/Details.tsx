@@ -8,7 +8,6 @@ import {
   CardWrapProps,
   CustomSpacer,
   Dash,
-  FileViewer,
   LabeledTitle,
   LabeledTitleProps,
   SafeAreaPage,
@@ -16,6 +15,7 @@ import {
 } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
+import { RNInAppBrowser } from "../../../integrations";
 import {
   borderBottomGray4,
   centerHV,
@@ -58,7 +58,6 @@ interface ProductDetailsProps {
   handleShareDocuments: () => void;
 }
 export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, handleBack }: ProductDetailsProps) => {
-  const [viewDocument, setViewDocument] = useState<FileBase64 | undefined>(undefined);
   const [masterClassList, setMasterClassList] = useState<IProductClasses | undefined>(undefined);
   const [inputCurrency, setInputCurrency] = useState<string>(fund.masterList[0].currency);
   const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "noClass" : fund.masterList[0].class);
@@ -67,24 +66,32 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
   const { salesCharge, newSalesAmount } = filteredCurrency;
   const isAmp = fund.fundType === "AMP";
 
-  const documentList = fund.docs !== undefined ? fund.docs.map((document: IProductDocument) => document.name) : [];
+  const documentList =
+    fund.docs !== undefined
+      ? fund.docs.map(({ name }: IProductDocument) => {
+          switch (name) {
+            case "fact":
+              return PRODUCT_DETAILS.TITLE_DOC_FACT;
+            case "prospectus":
+              return PRODUCT_DETAILS.TITLE_DOC_PROSPECTUS;
+            case "annual":
+              return PRODUCT_DETAILS.TITLE_DOC_ANNUAL;
+            case "highlights":
+              return PRODUCT_DETAILS.TITLE_DOC_HIGHLIGHTS;
+
+            default:
+              return name;
+          }
+        })
+      : [];
   const ampLabel = isAmp ? PRODUCT_DETAILS.LABEL_LANDING_FUND : PRODUCT_DETAILS.LABEL_FUND_CATEGORY;
   const ampValue = isAmp ? fund.landingFund : fund.fundCategory;
 
   const handleViewDocument = (documentIndex: number) => {
     if (fund.docs !== undefined) {
-      const document = fund.docs[documentIndex];
-      const documentFile = {
-        name: document.name,
-        type: "application/pdf",
-        url: document.url,
-      };
-      setViewDocument(documentFile);
+      const link = fund.docs[documentIndex].url;
+      RNInAppBrowser.openLink(link);
     }
-  };
-
-  const handleCloseViewer = () => {
-    setViewDocument(undefined);
   };
 
   const handleClass = (value: string) => {
@@ -259,14 +266,6 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
                       spaceBetween={sw16}
                     />
                   </View>
-                  {viewDocument !== undefined ? (
-                    <FileViewer
-                      handleClose={handleCloseViewer}
-                      resourceType="url"
-                      value={viewDocument}
-                      visible={viewDocument !== undefined}
-                    />
-                  ) : null}
                 </View>
               </Fragment>
             ) : null}

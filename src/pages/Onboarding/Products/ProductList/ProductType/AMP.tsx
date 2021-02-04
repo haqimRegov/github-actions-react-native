@@ -64,8 +64,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const handleFetch = async (newPage: string) => {
     setLoading(true);
     const sortAllFunds = showBy === "all" ? [{ column: "fundAbbr", value: "asc" }] : [];
-    const req = {
-      // age: moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years").toString(),
+    const request: IProductListRequest = {
+      accountType: accountType.toLowerCase(),
       fundCurrency: filters.fundCurrency || [],
       fundType: filters.fundType![0] || "",
       isConventional: filters.conventional![0],
@@ -81,8 +81,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       tab: "amp",
     };
     // eslint-disable-next-line no-console
-    console.log("productList", req);
-    const productListResponse: IProductListResponse = await getProductList(req);
+    console.log("productList", request);
+    const productListResponse: IProductListResponse = await getProductList(request);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -102,22 +102,19 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     Keyboard.dismiss();
     const funds = await handleFetch(newPage);
     if (funds !== undefined) {
-      const updatedFunds = accountType === "Joint" ? funds.products.filter((product) => product.isEpfOnly === "No") : funds.products;
       if (showBy === "all") {
         addAmpAllFunds({
           ...funds,
-          products: updatedFunds,
           totalCount: {
-            all: updatedFunds.length.toString(),
+            ...funds.totalCount,
             recommended: totalCount.recommended === "" ? funds.totalCount.recommended : totalCount.recommended,
           },
         });
       } else {
         addAmpRecommendedFunds({
           ...funds,
-          products: updatedFunds,
           totalCount: {
-            recommended: updatedFunds.length.toString(),
+            ...funds.totalCount,
             all: totalCount.all === "" ? funds.totalCount.all : totalCount.all,
           },
         });

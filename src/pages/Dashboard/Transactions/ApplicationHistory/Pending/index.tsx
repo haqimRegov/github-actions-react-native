@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { AdvanceTable, CustomSpacer, EmptyTable, LinkText, MenuPopup } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { IcoMoon } from "../../../../../icons";
-import { getDashboard } from "../../../../../network-actions/dashboard";
+import { getDashboard, resubmitOrder } from "../../../../../network-actions/dashboard";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
   centerHorizontal,
@@ -249,12 +249,14 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
     // const minimumDate =
-    // filter.startDate !== undefined ? moment(filter.startDate).valueOf() : moment("01/01/2000", DEFAULT_DATE_FORMAT).valueOf();
-    const req: IDashboardRequest = {
+    //   filter.startDate !== undefined ? moment(filter.startDate).format("x") : moment("01/01/2000", DEFAULT_DATE_FORMAT).format("x");
+    const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
+
+    const request: IDashboardRequest = {
       tab: "pending",
       page: page,
       search: search,
-      sort: sort,
+      sort: defaultSort,
       filter: [
         {
           column: "transactionType",
@@ -262,7 +264,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         },
         // {
         //   column: "lastUpdated",
-        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
+        //   value: `${minimumDate}~${moment(filter.endDate).format("x")}`,
         // },
         // {
         //   column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
@@ -273,8 +275,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       ],
     };
     // eslint-disable-next-line no-console
-    console.log("getDashboard", req);
-    const dashboardResponse: IDashboardResponse = await getDashboard(req);
+    console.log("getDashboard request", request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request);
 
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
@@ -295,6 +297,29 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       }
       if (error !== null) {
         setLoading(false);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
+    }
+  };
+
+  const handleResubmitOrder = async (orderNumber: string) => {
+    const request: IResubmitOrderRequest = { orderNumber: orderNumber };
+    // eslint-disable-next-line no-console
+    console.log("resubmitOrder request", request);
+    const response: IResubmitOrderResponse = await resubmitOrder(request);
+    // eslint-disable-next-line no-console
+    console.log("resubmitOrder response", response);
+
+    if (response !== undefined) {
+      const { error } = response;
+      if (error === null && response.data !== null) {
+        if (response.data.result.status === true) {
+          handleFetch();
+        }
+      }
+      if (error !== null) {
         setTimeout(() => {
           Alert.alert(error.message);
         }, 100);
@@ -365,6 +390,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         RenderOptions={(props: ITableOptions) => (
           <PendingOrderActions
             {...props}
+            handleResubmitOrder={handleResubmitOrder}
             handlePrintSummary={handlePrintSummary}
             setScreen={setScreen}
             setCurrentOrder={updateCurrentOrder}

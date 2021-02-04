@@ -8,6 +8,7 @@ import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SafeAr
 import { DAY_FORMAT, FULL_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_AIMS_URL } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
+import { RNInAppBrowser } from "../../integrations";
 import { logout } from "../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../store";
 import {
@@ -35,7 +36,7 @@ import {
   sw66,
   sw96,
 } from "../../styles";
-import { HandleSessionTokenExpired, LinkUtils } from "../../utils";
+import { HandleSessionTokenExpired } from "../../utils";
 import { InboxPage } from "./Inbox";
 import { Profile } from "./Profile";
 import { Transactions } from "./Transactions";
@@ -65,7 +66,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleAims = () => {
-    LinkUtils.openLink(DICTIONARY_AIMS_URL);
+    RNInAppBrowser.openLink(DICTIONARY_AIMS_URL);
   };
 
   const handleInbox = () => {

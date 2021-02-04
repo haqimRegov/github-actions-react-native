@@ -3,13 +3,13 @@ import { View, ViewStyle } from "react-native";
 
 import { IconText } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
-import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { borderBottomGray4, colorBlue, fs12BoldBlue2, px, sh48, sw16, sw232, sw8 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
 export interface PendingOrderActionsProps extends ITableOptions {
   handlePrintSummary: (orderNumber: string) => void;
+  handleResubmitOrder: (orderNumber: string) => void;
   setScreen: (route: TransactionsPageType) => void;
   setCurrentOrder: (order: IDashboardOrder) => void;
 }
@@ -17,14 +17,20 @@ export interface PendingOrderActionsProps extends ITableOptions {
 export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = ({
   data,
   handlePrintSummary,
+  handleResubmitOrder,
   onClose,
   setCurrentOrder,
   setScreen,
 }: PendingOrderActionsProps) => {
-  const { orderNumber, status } = data.rawData as IDashboardOrder;
+  const { orderNumber, status, remark } = data.rawData as IDashboardOrder;
 
   const handlePrintSubmissionSummary = () => {
     handlePrintSummary(orderNumber);
+    onClose();
+  };
+
+  const handleResubmit = () => {
+    handleResubmitOrder(orderNumber);
     onClose();
   };
 
@@ -63,7 +69,10 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   return (
     <View style={{ borderRadius: sw8 }}>
       <IconText color={colorBlue._2} name="eye-show" onPress={handleViewOrder} text="View Details" style={itemStyle} />
-      {status === DICTIONARY_ORDER_STATUS.pendingPayment || status === DICTIONARY_ORDER_STATUS.pendingDocAndPayment ? (
+      {status === "Pending Payment" ||
+      status === "Pending Doc & Payment" ||
+      ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
+        remark.findIndex((reason) => reason.label === "Payment" || reason.label === "Others") !== -1) ? (
         <IconText
           color={colorBlue._2}
           name="upload"
@@ -72,10 +81,13 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
           style={itemStyle}
         />
       ) : null}
-      {status === DICTIONARY_ORDER_STATUS.pendingDoc || status === DICTIONARY_ORDER_STATUS.pendingDocAndPayment ? (
+      {status === "Pending Doc" ||
+      status === "Pending Doc & Payment" ||
+      ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
+        remark.findIndex((reason) => reason.label === "Document" || reason.label === "Others") !== -1) ? (
         <IconText color={colorBlue._2} name="upload" onPress={handleUploadDocs} text={DASHBOARD_HOME.LABEL_UPLOAD} style={itemStyle} />
       ) : null}
-      {status === DICTIONARY_ORDER_STATUS.pendingHardcopy ? (
+      {status === "Pending Hardcopy" ? (
         <IconText
           color={colorBlue._2}
           name="file"
@@ -91,13 +103,18 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
         text={DASHBOARD_HOME.LABEL_PRINT_ACCOUNT_OPENING}
         style={itemStyle}
       /> */}
-      <IconText
-        color={colorBlue._2}
-        name="print"
-        onPress={handlePrintSubmissionSummary}
-        text={DASHBOARD_HOME.LABEL_PRINT_SUBMISSION_SUMMARY}
-        style={itemStyle}
-      />
+      {status === "Submitted" ? (
+        <IconText
+          color={colorBlue._2}
+          name="print"
+          onPress={handlePrintSubmissionSummary}
+          text={DASHBOARD_HOME.LABEL_PRINT_SUBMISSION_SUMMARY}
+          style={itemStyle}
+        />
+      ) : null}
+      {status === "BR - Rerouted" || status === "HQ - Rerouted" ? (
+        <IconText color={colorBlue._2} name="print" onPress={handleResubmit} text={DASHBOARD_HOME.LABEL_RESUBMIT_ORDER} style={itemStyle} />
+      ) : null}
     </View>
   );
 };

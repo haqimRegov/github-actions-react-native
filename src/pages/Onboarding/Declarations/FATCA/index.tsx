@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -22,7 +21,6 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   updateOnboarding,
 }: FatcaDeclarationProps) => {
   const { principal, joint } = personalInfo;
-  const jointAge = moment().diff(joint?.personalDetails?.dateOfBirth, "years");
   const principalAddress = `${principal?.addressInformation?.permanentAddress?.address}, ${principal?.addressInformation?.permanentAddress?.postCode}, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${principal?.addressInformation?.permanentAddress?.country}`;
   const jointAddress = `${joint?.addressInformation?.permanentAddress?.address}, ${joint?.addressInformation?.permanentAddress?.postCode}, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${joint?.addressInformation?.permanentAddress?.country}`;
 
@@ -131,10 +129,8 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
     uploadYesAddressYes: uploadYesAddressYesJoint,
   };
 
-  const showButtonContinue =
-    accountType === "Joint" && jointAge >= 18 ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
-  const continueEnabled =
-    accountType === "Joint" && jointAge >= 18 ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
+  const showButtonContinue = accountType === "Joint" ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
+  const continueEnabled = accountType === "Joint" ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
 
   const handleBack = () => {
     handleNextStep("PersonalInfoSummary");
@@ -160,7 +156,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
         name={principal?.personalDetails?.name!}
         validations={validationsPrincipal}
       />
-      {accountType === "Joint" && jointAge >= 18 ? (
+      {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
           <View style={borderBottomBlack21} />

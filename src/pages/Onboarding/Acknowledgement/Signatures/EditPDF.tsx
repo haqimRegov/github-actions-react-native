@@ -50,6 +50,7 @@ interface EditPdfProps extends AcknowledgementStoreProps {
 const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   accountType,
   editReceipt,
+  personalInfo,
   receipts,
   setEditReceipt,
   updateReceipts,
@@ -297,10 +298,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     setEditReceipt(undefined);
   };
 
+  const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
+
+  const checkJointSignature = jointAge !== undefined && jointAge >= 18 ? jointSignature !== "" : true;
   const completed =
     accountType === "Individual"
       ? adviserSignature !== "" && principalSignature !== ""
-      : adviserSignature !== "" && principalSignature !== "" && jointSignature !== "";
+      : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
 
   useEffect(() => {
     if (signer !== undefined) {

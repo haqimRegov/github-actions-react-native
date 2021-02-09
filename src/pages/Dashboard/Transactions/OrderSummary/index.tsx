@@ -56,7 +56,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
       content = <AccountDetails data={orderSummary!} />;
       break;
     default:
-      content = <OrderDetails data={orderSummary!} />;
+      content = <OrderDetails data={orderSummary!} isScheduled={currentOrder!.isScheduled} />;
   }
 
   const handleFetch = async () => {

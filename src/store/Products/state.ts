@@ -63,7 +63,7 @@ export const productsInitialState: productsState = {
     showBy: "recommended",
     all: [],
     recommended: [],
-    page: "",
+    page: "1",
     pages: "",
     sort: [
       { column: "fundAbbr", value: "" },
@@ -80,7 +80,7 @@ export const productsInitialState: productsState = {
     showBy: "recommended",
     all: [],
     recommended: [],
-    page: "",
+    page: "1",
     pages: "",
     sort: [
       { column: "fundAbbr", value: "" },
@@ -97,7 +97,7 @@ export const productsInitialState: productsState = {
     showBy: "recommended",
     all: [],
     recommended: [],
-    page: "",
+    page: "1",
     pages: "",
     sort: [
       { column: "fundAbbr", value: "" },
@@ -114,7 +114,7 @@ export const productsInitialState: productsState = {
     showBy: "recommended",
     all: [],
     recommended: [],
-    page: "",
+    page: "1",
     pages: "",
     sort: [
       { column: "fundAbbr", value: "" },

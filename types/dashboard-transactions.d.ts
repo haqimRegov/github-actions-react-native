@@ -11,6 +11,8 @@ declare interface IDashboardOrder {
     joint: string | null;
   };
   transactionType: string;
+  isScheduled: boolean;
+  withHardcopy: boolean;
   totalInvestment: IOrderAmount[];
   createdOn: string;
   status: OrderStatusType;

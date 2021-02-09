@@ -146,7 +146,7 @@ export const UTAndAMP: ITermsAndConditions = {
 };
 
 export const PRS: ITermsAndConditions = {
-  title: "PRS Products Terms and Conditions",
+  title: "PRS Product Terms and Conditions",
   subsection: [
     {
       heading: "Declaration & Signature",

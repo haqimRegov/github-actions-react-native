@@ -145,6 +145,9 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const findSavedPayment = paymentSummary !== undefined ? paymentSummary.orders.map((order) => order.payments).flat() : [];
+  const continueDisabled = findSavedPayment.findIndex((payment) => payment.saved === true) === -1;
+
   return (
     <Fragment>
       <SafeAreaPage>
@@ -220,6 +223,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
               </View>
             }
+            continueDisabled={continueDisabled}
             labelSubmit={PAYMENT.BUTTON_SUBMIT}
             submitOnPress={handleSubmit}
             label={bannerText}

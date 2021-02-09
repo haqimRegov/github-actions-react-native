@@ -44,7 +44,6 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const [agree1, setAgree1] = useState<boolean>(false);
   const [agree2, setAgree2] = useState<boolean>(false);
   const [agree3, setAgree3] = useState<boolean>(false);
-  const [agree4, setAgree4] = useState<boolean>(false);
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
   const handleAgree1 = () => {
@@ -57,10 +56,6 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
 
   const handleAgree3 = () => {
     setAgree3(!agree3);
-  };
-
-  const handleAgree4 = () => {
-    setAgree4(!agree4);
   };
 
   const handleBack = () => {
@@ -110,8 +105,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
 
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
-  const checkOutsideRisk: boolean = outsideRisk === true ? agree4 === true : true;
-  const disabled = !(agree1 === true && agree2 === true && agree3 === true && checkOutsideRisk === true);
+  const disabled = !(agree1 === true && agree2 === true && agree3 === true);
 
   return (
     <ContentPage
@@ -166,10 +160,11 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             {outsideRisk === true ? (
               <Fragment>
                 <CheckBox
+                  checkboxStyle={{ ...disabledOpacity, paddingTop: sh5 }}
                   label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4}
                   labelStyle={fs12BoldBlack2}
-                  onPress={handleAgree4}
-                  toggle={agree4}
+                  onPress={() => {}}
+                  toggle={true}
                 />
                 <CustomSpacer space={sh16} />
               </Fragment>

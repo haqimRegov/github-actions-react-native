@@ -1,10 +1,10 @@
 export const DICTIONARY_PASSWORD = [
   { label: "Must be of 8-20 characters", validation: /(?=^.{8,20}$)/ },
-  { label: "Include at least one upper-case letter (A-Z)", validation: /(?=.*[A-Z])/ },
-  { label: "Include at least one lower-case letter (a-z)", validation: /(?=.*[a-z])/ },
-  { label: "Include at least one number (0-9)", validation: /(?=.*[0-9])/ },
+  { label: "At least one upper-case letter (A-Z)", validation: /(?=.*[A-Z])/ },
+  { label: "At least one lower-case letter (a-z)", validation: /(?=.*[a-z])/ },
+  { label: "At least one number (0-9)", validation: /(?=.*[0-9])/ },
   {
-    label: "Include at least one special characters (@, #, $)",
+    label: "At least one special characters (@, #, $)",
     validation: /\W+/,
   },
 ];

@@ -9,19 +9,21 @@ declare interface IOrderSummaryTransaction {
 }
 
 declare interface IOrderSummaryInvestment {
-  fundName: string;
-  utmc: string;
-  fundCurrency: string;
-  investmentAmount: string;
-  fundCode: string;
-  fundClass: string;
-  salesCharge: string;
   accountFund: string;
-  productType: string;
-  investmentType: string;
-  feaTagged: string;
   distributionInstruction: string;
+  feaTagged: string;
+  fundClass: string;
+  fundCode: string;
+  fundCurrency: string;
+  fundName: string;
+  investmentAmount: string;
+  investmentType: string;
+  productType: string;
   recurring: string;
+  salesCharge: string;
+  scheduledInvestmentAmount: string;
+  scheduledSalesCharge: string;
+  utmc: string;
 }
 
 declare interface IOrderSummaryPayment {

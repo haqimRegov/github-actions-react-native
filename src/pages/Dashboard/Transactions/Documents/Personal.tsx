@@ -45,8 +45,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     updateCurrentOrder(undefined);
   };
 
-  const uploadedOrder = `${UPLOAD_DOCUMENTS.LABEL_UPLOADED_ORDER} ${currentOrder!.orderNumber} ${UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}`;
-
   const pendingDocumentsPrincipal =
     documentList && documentList.principal
       ? documentList.principal
@@ -236,7 +234,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         handleContinue={handleBackToTransactions}
         illustration={LocalAssets.illustration.orderReceived}
         isLoading={loading}
-        label={uploadedOrder}
+        label={UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}
         labelContinue={UPLOAD_DOCUMENTS.BUTTON_DONE}
         visible={prompt}
       />

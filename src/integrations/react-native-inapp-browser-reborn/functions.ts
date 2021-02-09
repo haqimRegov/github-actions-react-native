@@ -1,15 +1,17 @@
 import { Alert, Linking } from "react-native";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 
+import { colorRed, colorWhite } from "../../styles";
+
 export const openLink = async (url: string) => {
   try {
     if (await InAppBrowser.isAvailable()) {
       InAppBrowser.close();
       await InAppBrowser.open(url, {
         // iOS Properties
-        dismissButtonStyle: "close",
-        // preferredBarTintColor: colorBlue._1,
-        // preferredControlTintColor: colorWhite._1,
+        dismissButtonStyle: "done",
+        preferredBarTintColor: colorRed._1,
+        preferredControlTintColor: colorWhite._1,
         // readerMode: false,
         animated: true,
         modalPresentationStyle: "fullScreen",

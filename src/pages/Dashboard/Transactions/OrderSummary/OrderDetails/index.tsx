@@ -4,6 +4,7 @@ import { Alert, Text, View } from "react-native";
 
 import { CardWrap, CustomSpacer, Dash, FileViewer, LabeledTitleProps } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
+import { DICTIONARY_RECURRING_CURRENCY } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
 import {
   borderBottomGray4,
@@ -31,9 +32,10 @@ const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
 
 declare interface OrderDetailsProps {
   data: IDashboardOrderSummary;
+  isScheduled: boolean;
 }
 
-export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: OrderDetailsProps) => {
+export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isScheduled }: OrderDetailsProps) => {
   const [file, setFile] = useState<FileBase64>();
   const { transactionDetails, investmentSummary, paymentSummary, orderNumber, totalInvestment } = data;
 
@@ -87,14 +89,12 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
         <CustomSpacer space={sh32} />
         <View style={px(sw24)}>
           {investmentSummary.map((investment: IOrderSummaryInvestment, index: number) => {
+            const amountLabel =
+              isScheduled === true ? DASHBOARD_ORDER_DETAILS.LABEL_INITIAL_AMOUNT : DASHBOARD_ORDER_DETAILS.LABEL_INVESTMENT_AMOUNT;
             const fundDetails: LabeledTitleProps[] = [
               { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CODE, title: investment.fundCode, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_SALES_CHARGE, title: investment.salesCharge },
-              {
-                label: DASHBOARD_ORDER_DETAILS.LABEL_INVESTMENT_AMOUNT,
-                title: `${investment.fundCurrency} ${investment.investmentAmount}`,
-                titleStyle: fsTransformNone,
-              },
+              { label: amountLabel, title: `${investment.fundCurrency} ${investment.investmentAmount}`, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_PRODUCT_TYPE, title: investment.productType, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_FUNDING_OPTION, title: investment.accountFund, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_TYPE, title: investment.investmentType },
@@ -108,6 +108,19 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data }: Ord
 
             if (investment.feaTagged !== null) {
               fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.feaTagged });
+            }
+
+            if (isScheduled === true) {
+              fundDetails.splice(
+                -1,
+                1,
+                {
+                  label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_AMOUNT,
+                  title: `${DICTIONARY_RECURRING_CURRENCY} ${investment.investmentAmount}`,
+                  titleStyle: fsTransformNone,
+                },
+                { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_SALES_CHARGE, title: investment.salesCharge },
+              );
             }
 
             return (

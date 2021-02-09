@@ -6,7 +6,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
     case "products/ADD_UT_FILTERS":
       return {
         ...state,
-        ut: { ...state.ut, filters: action.payload },
+        ut: { ...state.ut, filters: action.payload, page: "1" },
       };
     case "products/ADD_UT_SORT":
       return {
@@ -98,7 +98,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
     case "products/ADD_PRS_FILTERS":
       return {
         ...state,
-        prs: { ...state.prs, filters: action.payload },
+        prs: { ...state.prs, filters: action.payload, page: "1" },
       };
     case "products/ADD_PRS_RECOMMENDED_FUNDS":
       return {
@@ -130,7 +130,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
     case "products/ADD_PRS_DEFAULT_FILTERS":
       return {
         ...state,
-        prsDefault: { ...state.prsDefault, filters: action.payload },
+        prsDefault: { ...state.prsDefault, filters: action.payload, page: "1" },
       };
     case "products/ADD_PRS_DEFAULT_RECOMMENDED_FUNDS":
       return {
@@ -162,7 +162,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
     case "products/ADD_AMP_FILTERS":
       return {
         ...state,
-        amp: { ...state.amp, filters: action.payload },
+        amp: { ...state.amp, filters: action.payload, page: "1" },
       };
     case "products/ADD_AMP_RECOMMENDED_FUNDS":
       return {

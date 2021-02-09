@@ -126,6 +126,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   };
 
   const orderCompleted: boolean = paymentOrder !== undefined && paymentOrder.completed === true;
+  const submitDisabled: boolean = paymentOrder !== undefined ? paymentOrder.payments.length === 0 : false;
 
   const bannerText = orderCompleted === true ? `1 ${PAYMENT.LABEL_COMPLETED}` : `1 ${PAYMENT.LABEL_PENDING_PAYMENT}`;
 
@@ -226,6 +227,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
               {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
             </View>
           }
+          continueDisabled={submitDisabled}
           labelSubmit={PAYMENT.BUTTON_SUBMIT}
           submitOnPress={handleSubmit}
           label={bannerText}

@@ -147,7 +147,7 @@ PaymentCardProps) => {
   // const withPaymentTitle = withPreviousPayment === true ? `${PAYMENT.LABEL_PROOF} - (${totalPaidAmount?.length})` : completedTitle;
   const defaultTitle = withPayment === true ? completedTitle : headerTitle;
   const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
-
+  const findPaymentLeft = floatingAmount.findIndex(({ amount }) => amount < 0);
   // TODO no prompt if all are saved
   // TODO dont reflect current change if viewing other info
   const modalTitle = prompt === -1 || prompt === expandedIndex ? PAYMENT.PROMPT_TITLE_CANCEL : PAYMENT.PROMPT_TITLE_VIEW;
@@ -642,7 +642,7 @@ PaymentCardProps) => {
                         </Fragment>
                       )}
                     </View>
-                    {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
+                    {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" || findPaymentLeft === -1 ? null : (
                       <View style={px(sw24)}>
                         <CustomSpacer space={sh24} />
                         <OutlineButton

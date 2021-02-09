@@ -21,6 +21,8 @@ const dashboard = gql`
             status
             dueDate
             lastUpdated
+            isScheduled
+            withHardcopy
             remark {
               label
               remark

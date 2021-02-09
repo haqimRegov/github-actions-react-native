@@ -5,7 +5,12 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../../constants";
-import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS, OPTIONS_FATCA_NO_CERTIFICATE } from "../../../../data/dictionary";
+import {
+  OPTION_CRS_NO_TIN_REQUIRED,
+  OPTIONS_CRS_TAX_RESIDENCY,
+  OPTIONS_CRS_TIN_REASONS,
+  OPTIONS_FATCA_NO_CERTIFICATE,
+} from "../../../../data/dictionary";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, sh24 } from "../../../../styles";
@@ -101,10 +106,12 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         : [principal!.personalDetails!.id!.frontPage!, principal!.personalDetails!.id!.secondPage!];
 
     const principalTaxResident = principal!.declaration!.crs!.taxResident!;
-    const principalTinReason =
-      principal!.declaration!.crs!.reason! === 2
-        ? principal!.declaration!.crs!.explanation!
+    const princilapNoTinReason =
+      principal!.declaration!.crs!.reason! === 1
+        ? OPTION_CRS_NO_TIN_REQUIRED
         : OPTIONS_CRS_TIN_REASONS[principal!.declaration!.crs!.reason!];
+    const principalTinReason =
+      principal!.declaration!.crs!.reason! === 2 ? principal!.declaration!.crs!.explanation! : princilapNoTinReason;
     const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
     const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
     const principalCertReason =
@@ -112,10 +119,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
     const jointTaxResident = joint!.declaration!.crs!.taxResident!;
-    const jointTinReason =
-      joint!.declaration!.crs!.reason! === 2
-        ? joint!.declaration!.crs!.explanation!
-        : OPTIONS_CRS_TIN_REASONS[joint!.declaration!.crs!.reason!];
+    const jointNoTinReason =
+      joint!.declaration!.crs!.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[joint!.declaration!.crs!.reason!];
+    const jointTinReason = joint!.declaration!.crs!.reason! === 2 ? joint!.declaration!.crs!.explanation! : jointNoTinReason;
     const jointUsCitizen = joint!.declaration!.fatca!.usCitizen! === 0;
     const jointUsBorn = joint!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
     const jointCertReason =

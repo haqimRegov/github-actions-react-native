@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
-import { usePrevious } from "../../../../../hooks";
 import { getProductList } from "../../../../../network-actions/products";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
@@ -42,7 +41,6 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
-  const prevPageRef = usePrevious<string>(page);
   const defaultPage = page !== "" ? parseInt(page, 10) : 0;
   const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
 
@@ -180,16 +178,14 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 
   useEffect(() => {
     // when sort, search, filter is updated
-    if (prevPageRef !== undefined && prevPageRef !== "") {
-      handleFetchPRS("1");
-    }
+    handleFetchPRS(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
 
   useEffect(() => {
     // initial fetch
     // if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-    handleFetchPRS("1");
+    handleFetchPRS(page);
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBy]);

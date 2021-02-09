@@ -31,16 +31,20 @@ import { RejectedOrders } from "./Rejected";
 const { DASHBOARD_HOME } = Language.PAGE;
 
 interface ApplicationHistoryProps extends TransactionsStoreProps {
-  setScreen: (route: TransactionsPageType) => void;
+  activeTab: TransactionsTabType;
   navigation: IStackNavigationProp;
+  setActiveTab: (route: TransactionsTabType) => void;
+  setScreen: (route: TransactionsPageType) => void;
 }
 
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
+    activeTab,
     navigation,
     pending,
     search,
     selectedOrders,
+    setActiveTab,
     setScreen,
     transactions,
     updatedSelectedOrder,
@@ -51,7 +55,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     updateRejectedFilter,
   } = props;
   const { approvedCount, pendingCount, rejectedCount } = transactions;
-  const [activeTab, setActiveTab] = useState<TransactionsTabType>("pending");
 
   const { filter, page, pages } = props[activeTab];
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -99,7 +102,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt request", request);
-    const response = await getSummaryReceipt(request);
+    const response: ISummaryReceiptResponse = await getSummaryReceipt(request);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt response", response);
 
@@ -107,9 +110,13 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       const { data, error } = response;
       if (error === null && data !== null) {
         const documents = data.result.pdf.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
-        const share = await RNShareApi.filesBase64([documents[0]]);
-        if (share !== undefined) {
-          setShowModal(true);
+        if (data.result.pdf.length > 0) {
+          const share = await RNShareApi.filesBase64([documents[0]]);
+          if (share !== undefined) {
+            setShowModal(true);
+          }
+        } else {
+          Alert.alert(data.result.message);
         }
       }
       if (error !== null) {

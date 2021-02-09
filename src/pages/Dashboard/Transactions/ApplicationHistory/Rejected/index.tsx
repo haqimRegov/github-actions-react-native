@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
@@ -196,7 +197,8 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
-
+    const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
+    const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
     const request: IDashboardRequest = {
       tab: "rejected",
       page: page,
@@ -207,14 +209,10 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
           column: "transactionType",
           value: "Sales-AO",
         },
-        // {
-        //   column: "lastUpdated",
-        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
-        // },
-        // {
-        //   column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
-        //   value: `${minimumDate}~${moment(filter.endDate!).valueOf()}`,
-        // },
+        {
+          column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
+          value: `${minimumDate}~${maximumDate}`,
+        },
         ...filterAccountType,
         ...filterStatus,
       ],

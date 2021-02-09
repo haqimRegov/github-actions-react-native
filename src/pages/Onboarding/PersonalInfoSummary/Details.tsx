@@ -125,7 +125,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           <CardWrap data={personalDetails} titleStyle={fsTransformNone} />
         </View>
         <View style={borderBottomBlack21}>
-          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.LABEL_ADDITIONAL} />
+          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_ADDITIONAL} />
           <CardWrap data={additionalInfo} titleStyle={fsTransformNone} />
         </View>
         <View style={borderBottomBlack21}>

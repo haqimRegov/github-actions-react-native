@@ -67,7 +67,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
     <ContentPage handleContinue={handleConfirm} subheading={ORDER_SUMMARY.HEADING}>
       <CustomSpacer space={sh8} />
       <View style={orderSummaryHeader}>
-        <Text style={fs16SemiBoldBlack2}>{ORDER_SUMMARY.LABEL_ORDER_SUMMARY}</Text>
+        <Text style={fs16SemiBoldBlack2}>{ORDER_SUMMARY.SUBHEADING}</Text>
         <CustomSpacer isHorizontal={true} space={sw12} />
         <CustomTooltip content={popupContent} contentStyle={{ width: sw376 }} />
       </View>

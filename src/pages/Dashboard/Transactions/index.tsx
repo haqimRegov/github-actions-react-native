@@ -15,11 +15,12 @@ interface TransactionsProps {
 export const Transactions: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
   const { navigation } = props;
   const [route, setRoute] = useState<TransactionsPageType>("Transactions");
+  const [activeTab, setActiveTab] = useState<TransactionsTabType>("pending");
   const setScreen = (nextPage: TransactionsPageType) => {
     setRoute(nextPage);
   };
   const pageProps = { setScreen: setScreen, navigation: navigation };
-  let transactionsPage: JSX.Element = <ApplicationHistory {...pageProps} />;
+  let transactionsPage: JSX.Element = <ApplicationHistory {...pageProps} activeTab={activeTab} setActiveTab={setActiveTab} />;
   if (route === "UploadDocuments") {
     transactionsPage = <UploadDocuments {...pageProps} />;
   }

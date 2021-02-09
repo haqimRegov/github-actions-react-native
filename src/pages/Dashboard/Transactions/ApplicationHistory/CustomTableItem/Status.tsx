@@ -6,13 +6,13 @@ import { CustomSpacer, Tag, TagColorType } from "../../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
-import { centerHorizontal, flexRow, fs10RegBlue38, sh4, sw12 } from "../../../../../styles";
+import { centerHorizontal, centerVertical, colorBlue, flexRow, fs10RegBlue38, sh16, sh4, sw12 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 export interface PendingStatusProps extends ITableCustomItem {}
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
-  const { dueDate, status } = item.rawData as IDashboardOrder;
+  const { dueDate, status, withHardcopy } = item.rawData as IDashboardOrder;
   let statusColor: TagColorType = "primary";
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
     statusColor = "error";
@@ -34,7 +34,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
 
   return (
     <View style={centerHorizontal}>
-      <View style={flexRow}>
+      <View style={{ ...flexRow, ...centerVertical }}>
         <Tag color={statusColor} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
         {rerouted === true && accordionIcon !== undefined ? (
@@ -42,6 +42,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
             <IcoMoon {...accordionIcon} />
           </Fragment>
         ) : null}
+        {status === "Submitted" && withHardcopy === true ? <IcoMoon color={colorBlue._2} name="receipt" size={sh16} /> : null}
       </View>
       {dueDate !== null ? (
         <Fragment>

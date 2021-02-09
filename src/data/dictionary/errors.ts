@@ -7,10 +7,10 @@ const INVESTMENT_MIN_AMOUNT = "The amount you have entered didn't reach the mini
 const INVESTMENT_MAX_AMOUNT = "The amount you have entered didn't exceeds the maximum amount.";
 const INVESTMENT_INVALID_AMOUNT = "The amount you have entered is invalid.";
 const INVESTMENT_INVALID_EMAIL = "The email you have entered is invalid.";
-const LOGIN_INVALID = "Invalid NRIC or Password.";
+const LOGIN_INVALID = "Incorrect password or NRIC.";
 const LOGIN_INVALID_NRIC = "Your NRIC Number is invalid.";
 const LOGIN_INVALID_OTP = "Invalid OTP entered. Please try again.";
-const PASSWORD_NOT_MATCH = "Password does not match.";
+const PASSWORD_NOT_MATCH = "Those passwords didn't match. Try again.";
 const OCR_INVALID_NRIC = "Kindly upload a valid NRIC.";
 const OCR_INVALID_NRIC_DATA = "We’re unable to capture the data from the image you uploaded.";
 

@@ -16,7 +16,7 @@ import {
   sh56,
   sh64,
   sw160,
-  sw24,
+  sw48,
   sw532,
   sw56,
   sw8,
@@ -118,7 +118,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
                 {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
                   <LinkTextGroup links={[]} spaceToDivider={sw4} />
                 </View> */}
-                <CustomSpacer isHorizontal={true} space={sw24} />
+                <CustomSpacer isHorizontal={true} space={sw48} />
               </View>
               {children}
               <CustomFlexSpacer />

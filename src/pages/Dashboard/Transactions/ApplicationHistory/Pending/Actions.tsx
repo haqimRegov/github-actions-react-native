@@ -22,7 +22,7 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   setCurrentOrder,
   setScreen,
 }: PendingOrderActionsProps) => {
-  const { orderNumber, status, remark } = data.rawData as IDashboardOrder;
+  const { orderNumber, status, remark, withHardcopy } = data.rawData as IDashboardOrder;
 
   const handlePrintSubmissionSummary = () => {
     handlePrintSummary(orderNumber);
@@ -103,7 +103,7 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
         text={DASHBOARD_HOME.LABEL_PRINT_ACCOUNT_OPENING}
         style={itemStyle}
       /> */}
-      {status === "Submitted" ? (
+      {status === "Submitted" && withHardcopy === true ? (
         <IconText
           color={colorBlue._2}
           name="print"

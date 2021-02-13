@@ -42,12 +42,12 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   setInputError1,
 }: NewSalesDetailsProps) => {
   const { country, dateOfBirth, id, idType, otherIdType, name } = clientInfo;
-  const title = holderToFill === "principalHolder" ? ADD_CLIENT.LABEL_CHOOSE_ACCOUNT_TYPE : ADD_CLIENT.SUBHEADING_JOINT;
+  const title = holderToFill === "principalHolder" ? ADD_CLIENT.SUBHEADING : ADD_CLIENT.SUBHEADING_JOINT;
   const subheading = clientType !== "" ? title : ADD_CLIENT.SUBHEADING;
   const keyboardType = idType === "NRIC" ? "numeric" : "default";
   const idMaxLength = idType === "NRIC" ? 12 : undefined;
   const LABEL_ID_DYNAMIC = idType !== "Other" ? idType : `${otherIdType} ${ADD_CLIENT.LABEL_ID}`;
-  const LABEL_NAME = `${ADD_CLIENT.LABEL_NAME} ${LABEL_ID_DYNAMIC}`;
+  const LABEL_NAME = `${ADD_CLIENT.LABEL_NAME} (${ADD_CLIENT.LABEL_NAME_AS_PER} ${LABEL_ID_DYNAMIC})`;
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
 
   const setInputIdType = (value: TypeIDChoices) => {

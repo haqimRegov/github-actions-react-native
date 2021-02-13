@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -46,6 +46,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     selectedOrders,
     setActiveTab,
     setScreen,
+    setLoading,
     transactions,
     updatedSelectedOrder,
     updateSearch,
@@ -57,7 +58,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const { approvedCount, pendingCount, rejectedCount } = transactions;
 
   const { filter, page, pages } = props[activeTab];
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [prompt, setPrompt] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
@@ -69,7 +70,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setActiveTab(tabs[index]);
   };
   const handleDone = () => {
-    setShowModal(false);
+    setPrompt(false);
     updatedSelectedOrder([]);
   };
 
@@ -100,26 +101,33 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
+    setLoading(true);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt request", request);
     const response: ISummaryReceiptResponse = await getSummaryReceipt(request);
+    setLoading(false);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt response", response);
-
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
         const documents = data.result.pdf.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
         if (data.result.pdf.length > 0) {
-          const share = await RNShareApi.filesBase64([documents[0]]);
+          const share = setTimeout(async () => {
+            await RNShareApi.filesBase64(documents);
+          }, 220);
           if (share !== undefined) {
-            setShowModal(true);
+            setPrompt(true);
           }
         } else {
-          Alert.alert(data.result.message);
+          setLoading(false);
+          setTimeout(() => {
+            Alert.alert(data.result.message);
+          }, 100);
         }
       }
       if (error !== null) {
+        setLoading(false);
         setTimeout(() => {
           Alert.alert(error.message);
         }, 100);
@@ -191,7 +199,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   return (
-    <Fragment>
+    <View>
       <DashboardLayout scrollEnabled={!filterVisible} {...props}>
         <View style={flexChild}>
           <ApplicationHistoryHeader
@@ -258,9 +266,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         illustration={LocalAssets.illustration.receiptSuccess}
         label={submissionSummary}
         title={DASHBOARD_HOME.LABEL_SUBMISSION_REPORT_DOWNLOADED}
-        visible={showModal}
+        visible={prompt}
       />
-    </Fragment>
+    </View>
   );
 };
 

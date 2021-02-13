@@ -29,7 +29,7 @@ import {
   sw4,
   sw8,
 } from "../../styles";
-import { AnimationUtils } from "../../utils";
+import { AnimationUtils, formatAmount } from "../../utils";
 import { FundOverview } from "./FundOverview";
 import { PaymentCard } from "./PaymentCard";
 
@@ -208,7 +208,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
                   {amountIndex !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
                   <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{totalAmount.amount}</Text>
+                  <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
                 </View>
               );
             })}
@@ -233,6 +233,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         handleExpandPayment={handleExpandPayment}
         handleSavePayments={handleSavePayments}
         isScheduled={paymentType === "Recurring"}
+        orderTotalAmount={orderTotalAmount}
         payments={payments}
         setPayments={setPayments}
       />

@@ -6,10 +6,12 @@ import { Provider } from "react-redux";
 import { name as appName } from "./app.json";
 import config from "./aws-exports";
 import { App } from "./src/App";
-import { COGNITO_CONFIG } from "./src/integrations";
+import { COGNITO_CONFIG, RNPushNotification } from "./src/integrations";
 import { store } from "./src/store";
 
 Amplify.configure({ ...config, ...COGNITO_CONFIG });
+
+RNPushNotification.configure();
 
 const RootApp = () => (
   <Provider store={store}>

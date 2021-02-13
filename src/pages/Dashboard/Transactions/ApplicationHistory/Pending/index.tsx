@@ -334,12 +334,15 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const subtitle = noResults === true ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : DASHBOARD_HOME.EMPTY_TRANSACTIONS_SUBTITLE;
   const hintText = noResults === true ? EMPTY_STATE.SUBTITLE : undefined;
 
+  const disabledOrders = orders.map((order, index) => (order.withHardcopy === true && order.status === "Submitted" ? -1 : index));
+
   return (
     <View style={flexChild}>
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}
         data={loading === true ? [] : orders}
+        disabledIndex={disabledOrders}
         rowSelection={selectedOrders}
         rowSelectionKey="orderNumber"
         onRowSelect={onRowSelect}

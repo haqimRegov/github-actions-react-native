@@ -91,10 +91,12 @@ declare interface RenderCustomHeaderProps {
 
 declare interface AdvanceTableProps extends BaseTableProps, BaseTableHeaderProps {
   data: ITableData[];
+  disabledIndex?: number[];
   spaceToHeader?: number;
 }
 
 declare interface AdvanceTableRowProps extends BaseTableProps {
+  disabled?: boolean;
   index: number;
   item: ITableData;
   lastIndex: boolean;

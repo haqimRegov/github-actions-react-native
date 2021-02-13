@@ -2,13 +2,14 @@ import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, useState } from "react";
 import { ActivityIndicator, Alert, Keyboard, View } from "react-native";
+import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Prompt, RNModal } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
-import { updateStorageData } from "../../integrations";
+import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
@@ -42,9 +43,11 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
     setLoading(false);
     setLockPrompt(false);
   };
+
   const handleLogin = async () => {
-    // TODO deviceToken is only available for real devices
-    // const uniqueId = DeviceInfo.getUniqueId();
+    const checkEmulator = await isEmulator();
+    const token = await RNFirebase.getToken();
+    const deviceToken = checkEmulator === true ? {} : { deviceToken: token };
     Keyboard.dismiss();
     setLockPrompt(false);
     setLoading(true);
@@ -60,10 +63,13 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
 
     const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
     setLoading(true);
-    const response: ILoginResponse = await login(
-      { username: inputNRIC, password: encryptedPassword },
-      { encryptionKey: credentials.sessionToken },
-    );
+    const request = { username: inputNRIC, password: encryptedPassword };
+    const header = { encryptionKey: credentials.sessionToken, ...deviceToken };
+    // eslint-disable-next-line no-console
+    console.log("login request", request);
+    // eslint-disable-next-line no-console
+    console.log("login header", header);
+    const response: ILoginResponse = await login(request, header);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null) {
@@ -89,7 +95,11 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
             unreadMessages: inboxCount,
           });
           setLoading(false);
+          RNPushNotification.setBadge(inboxCount);
           await updateStorageData("visited", true);
+          if (checkEmulator === false) {
+            RNPushNotification.requestPermission();
+          }
           navigation.dispatch(
             CommonActions.reset({
               index: 0,
@@ -107,6 +117,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
         setLoading(false);
       }
     }
+    setLoading(false);
     return undefined;
   };
 

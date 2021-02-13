@@ -104,6 +104,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetSelectedFund,
     resetProducts,
     resetSteps,
+    resetTransactions,
     updateFinishedSteps,
   } = props;
 
@@ -129,6 +130,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetSelectedFund();
     resetProducts();
     resetSteps();
+    resetTransactions();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

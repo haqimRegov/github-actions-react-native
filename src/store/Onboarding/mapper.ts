@@ -7,6 +7,7 @@ import { ProductsActionProps } from "../Products/actions";
 import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
 import { RootState } from "../rootReducer";
 import { SelectedFundActionProps } from "../SelectedFund/actions";
+import { TransactionsActionProps } from "../Transactions";
 import { OnboardingActionProps } from "./actions";
 
 export const OnboardingMapStateToProps = (state: RootState) => ({
@@ -26,6 +27,7 @@ export const OnboardingMapDispatchToProps = (dispatch: Dispatch) => {
       ...SelectedFundActionProps,
       ...PersonalInfoActionProps,
       ...AcknowledgementActionProps,
+      ...TransactionsActionProps,
     },
     dispatch,
   );

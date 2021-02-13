@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
@@ -67,6 +68,8 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     jointFrontError === undefined &&
     jointBackError === undefined;
   const jointPass = jointFrontPage?.path !== undefined && jointFrontError === undefined;
+
+  const jointMyKad = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") >= 12 : true;
 
   let buttonDisabled = false;
   if (accountType === "Individual" || accountType === "Joint") {
@@ -206,7 +209,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleJointFrontPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined && jointClientIdType === "NRIC") {
+    if (uploaded !== undefined && jointClientIdType === "NRIC" && jointMyKad === true) {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
         if (mykad.error?.code === ERROR_CODE.invalidNricData) {
@@ -265,7 +268,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
 
   const handleJointBackPage = async (uploaded?: FileBase64) => {
     setJointBackError(undefined);
-    if (uploaded !== undefined && jointClientIdType === "NRIC") {
+    if (uploaded !== undefined && jointClientIdType === "NRIC" && jointMyKad === true) {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
         setJointBackError(mykadBack.error?.message);

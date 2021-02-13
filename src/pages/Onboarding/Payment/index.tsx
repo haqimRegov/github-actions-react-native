@@ -28,6 +28,7 @@ import {
   sw4,
 } from "../../../styles";
 import { PaymentOrder, PaymentStatus } from "../../../templates";
+import { formatAmount } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {}
@@ -119,7 +120,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             return accumulator;
           }, [])
           .filter(({ amount }) => amount > 0)
-          .map(({ amount, currency }) => `${currency} ${amount}`)
+          .map(({ amount, currency }) => `${currency} ${formatAmount(amount)}`)
           .join(", ")
       : "";
 
@@ -215,7 +216,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           )}
                           <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs16BoldBlack2}>{`${totalAmount.amount}`}</Text>
+                          <Text style={fs16BoldBlack2}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
                         </View>
                       );
                     })}

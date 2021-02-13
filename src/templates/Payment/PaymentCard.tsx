@@ -51,7 +51,7 @@ import {
   sw784,
   sw8,
 } from "../../styles";
-import { isAmount } from "../../utils";
+import { formatAmount, isAmount } from "../../utils";
 import { CashDepositMachine, Cheque, ClientTrustAccount, EPF, OnlineBanking, Recurring } from "./PaymentMethod";
 
 const { PAYMENT } = Language.PAGE;
@@ -66,6 +66,7 @@ export interface PaymentCardProps {
   handleExpandPayment: () => void;
   handleSavePayments: (value: IPaymentState[]) => void;
   isScheduled: boolean;
+  orderTotalAmount: IOrderAmount[];
   payments: IPaymentState[];
   setPayments: (value: IPaymentState[]) => void;
   totalPaidAmount?: IOrderAmount[];
@@ -81,6 +82,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   handleExpandPayment,
   handleSavePayments,
   isScheduled,
+  orderTotalAmount,
   payments,
 }: // totalPaidAmount,
 PaymentCardProps) => {
@@ -132,7 +134,7 @@ PaymentCardProps) => {
     .map(({ amount, currency }) => {
       const symbol = amount > 0 ? "+" : "-";
       const trimAmount = amount > 0 ? amount : parseFloat(`${amount}`.substring(1));
-      return amount === 0 ? "" : `${symbol} ${currency} ${trimAmount}`;
+      return amount === 0 ? "" : `${symbol} ${currency} ${formatAmount(trimAmount)}`;
     })
     .filter((data) => data !== "")
     .join(", ");
@@ -147,7 +149,6 @@ PaymentCardProps) => {
   // const withPaymentTitle = withPreviousPayment === true ? `${PAYMENT.LABEL_PROOF} - (${totalPaidAmount?.length})` : completedTitle;
   const defaultTitle = withPayment === true ? completedTitle : headerTitle;
   const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
-  const findPaymentLeft = floatingAmount.findIndex(({ amount }) => amount < 0);
   // TODO no prompt if all are saved
   // TODO dont reflect current change if viewing other info
   const modalTitle = prompt === -1 || prompt === expandedIndex ? PAYMENT.PROMPT_TITLE_CANCEL : PAYMENT.PROMPT_TITLE_VIEW;
@@ -156,6 +157,10 @@ PaymentCardProps) => {
     if (expandedIndex !== prompt) {
       setExpandedIndex(prompt!);
       const updatedPayments = [...payments].filter((draft) => draft.saved === true);
+      const newPayment = generateNewPayment();
+      if (updatedPayments.length === 0) {
+        updatedPayments.push(newPayment);
+      }
       setDraftPayments(updatedPayments);
       handleSavePayments(updatedPayments);
       if (prompt === -1) {
@@ -228,7 +233,7 @@ PaymentCardProps) => {
               if (isAmount(value) === false) {
                 return ERROR.INVESTMENT_INVALID_AMOUNT;
               }
-              if (parseInt(value, 10) === 0) {
+              if (parseFloat(value) === 0) {
                 return ERROR.INVESTMENT_MIN_AMOUNT;
               }
               return undefined;
@@ -426,6 +431,16 @@ PaymentCardProps) => {
               payment.recurringType === undefined;
 
             let saveDisabled = onlineBankingDisabled;
+            const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
+            const findTotalIndex = orderTotalAmount.findIndex(({ currency }) => currency === payment.currency);
+            const paymentAmount = payment.amount ? parseFloat(payment.amount) : 0;
+            let calculateDifference = -1;
+            if (floatingAmount.length !== 0) {
+              calculateDifference = floatingAmount[findFloatingIndex].amount + paymentAmount;
+            } else {
+              calculateDifference = paymentAmount - parseFloat(orderTotalAmount[findTotalIndex].amount);
+            }
+            const additionalPaymentDisabled = calculateDifference >= 0 || saveDisabled;
 
             const paymentMethodProps = {
               currency: payment.currency!,
@@ -642,12 +657,12 @@ PaymentCardProps) => {
                         </Fragment>
                       )}
                     </View>
-                    {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" || findPaymentLeft === -1 ? null : (
+                    {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
                       <View style={px(sw24)}>
                         <CustomSpacer space={sh24} />
                         <OutlineButton
                           buttonType="dashed"
-                          disabled={saveDisabled}
+                          disabled={additionalPaymentDisabled}
                           icon="plus"
                           onPress={handleAddInfo}
                           text={PAYMENT.BUTTON_ADDITIONAL}

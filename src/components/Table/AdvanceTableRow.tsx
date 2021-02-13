@@ -12,6 +12,7 @@ import {
   colorBlack,
   colorGray,
   colorWhite,
+  disabledOpacity,
   flexRow,
   flexRowCC,
   fs12BoldBlack2,
@@ -39,6 +40,7 @@ import { CustomSpacer } from "../Views/Spacer";
 export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   activeAccordion,
   columns,
+  disabled,
   handleRowNavigation,
   index,
   item,
@@ -50,6 +52,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   rowSelection,
   rowSelectionKey,
 }: AdvanceTableRowProps) => {
+  const disabledCheckbox = disabled === true ? disabledOpacity : {};
   const itemSelected =
     rowSelection !== undefined && rowSelectionKey !== undefined
       ? rowSelection.findIndex((rowData) => rowData[rowSelectionKey] === item[rowSelectionKey]) > -1
@@ -66,7 +69,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   };
 
   const handleSelectRow = () => {
-    if (onRowSelect !== undefined) {
+    if (onRowSelect !== undefined && disabled === false) {
       onRowSelect(item);
     }
   };
@@ -90,7 +93,12 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
           {rowSelection === undefined ? null : (
             <TouchableWithoutFeedback onPress={handleSelectRow}>
               <View style={{ height: sh80, ...centerHV }}>
-                <CheckBox onPress={handleSelectRow} style={{ ...px(sw20), ...flexRowCC }} toggle={itemSelected} />
+                <CheckBox
+                  disabled={disabled}
+                  onPress={handleSelectRow}
+                  style={{ ...px(sw20), ...flexRowCC, ...disabledCheckbox }}
+                  toggle={itemSelected}
+                />
               </View>
             </TouchableWithoutFeedback>
           )}

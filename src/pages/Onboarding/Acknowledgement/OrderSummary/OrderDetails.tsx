@@ -25,7 +25,7 @@ import {
   sw4,
   sw8,
 } from "../../../../styles";
-import { AnimationUtils } from "../../../../utils";
+import { AnimationUtils, formatAmount } from "../../../../utils";
 import { FundDetails } from "./FundDetails";
 
 const { PAYMENT } = Language.PAGE;
@@ -87,7 +87,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
                     {amountIndex !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
                     <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{totalAmount.currency}</Text>
                     <CustomSpacer isHorizontal={true} space={sw4} />
-                    <Text style={fs16RegBlack2}>{totalAmount.amount}</Text>
+                    <Text style={fs16RegBlack2}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
                   </View>
                 );
               })}

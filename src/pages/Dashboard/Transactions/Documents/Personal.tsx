@@ -89,8 +89,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     .filter((docs) => docs !== undefined && "base64" in docs === false).length;
 
   const pendingDocCount = principalDocsCount + jointDocsCount;
-  const footer =
-    pendingDocCount === 0 ? UPLOAD_DOCUMENTS.LABEL_DOCUMENT_COMPLETED : `${pendingDocCount} ${UPLOAD_DOCUMENTS.LABEL_DOCUMENT_PENDING}`;
+  const footer = pendingDocCount === 0 ? UPLOAD_DOCUMENTS.LABEL_DOCUMENT_COMPLETED : UPLOAD_DOCUMENTS.LABEL_DOCUMENT_PENDING;
 
   const handlePrincipalData = (value: ISoftCopyDocument[]) => {
     setDocumentList({ ...documentList!, principal: value });

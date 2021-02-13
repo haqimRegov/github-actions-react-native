@@ -10,6 +10,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   activeAccordion,
   columns,
   data,
+  disabledIndex,
   handleRowNavigation,
   onRowSelect,
   RenderAccordion,
@@ -40,6 +41,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
               <AdvanceTableRow
                 activeAccordion={activeAccordion}
                 columns={columns}
+                disabled={disabledIndex !== undefined && disabledIndex.includes(index)}
                 handleRowNavigation={handleRowNavigation}
                 index={index}
                 item={row}

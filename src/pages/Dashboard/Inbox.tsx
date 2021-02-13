@@ -1,3 +1,4 @@
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, ScrollView, View, ViewStyle } from "react-native";
@@ -93,6 +94,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
           pages: data.result.pages,
         });
         updatedUnreadMessages(data.result.newMessageCount);
+        PushNotificationIOS.setApplicationIconBadgeNumber(parseInt(data.result.newMessageCount, 10));
       }
 
       if (error !== null) {

@@ -24,7 +24,7 @@ import {
   sw24,
   sw8,
 } from "../../styles";
-import { AnimationUtils } from "../../utils";
+import { AnimationUtils, formatAmount } from "../../utils";
 
 const { ORDER_SUMMARY, PAYMENT } = Language.PAGE;
 
@@ -87,7 +87,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setVi
     },
     {
       label: ORDER_SUMMARY.LABEL_TOTAL_INVESTMENT_AMOUNT,
-      title: `${fundCurrency} ${investmentAmount}`,
+      title: `${fundCurrency} ${formatAmount(parseFloat(investmentAmount))}`,
     },
   ];
   if (isScheduled === true) {

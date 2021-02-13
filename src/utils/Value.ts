@@ -1,3 +1,7 @@
+export const formatAmount = (input: number) => {
+  return input.toLocaleString("en-US", { minimumFractionDigits: 2 });
+};
+
 export const maskedString = (input: string, maskFrom?: number, maskTo?: number, mask?: string) => {
   const start = maskFrom !== undefined ? maskFrom : 0;
   const end = maskTo !== undefined ? maskTo : input.length;

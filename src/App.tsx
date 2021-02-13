@@ -5,6 +5,7 @@ import SplashScreen from "react-native-splash-screen";
 import { connect } from "react-redux";
 
 import { Loader } from "./components/Modals/Loader";
+import { RNFirebase } from "./integrations";
 import { RootNavigator } from "./Navigator";
 import { logout } from "./network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "./store";
@@ -16,6 +17,9 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
   useEffect(() => {
     logout();
     SplashScreen.hide();
+
+    const unsubscribe = RNFirebase.onMessage();
+    return unsubscribe;
   }, []);
 
   return (

@@ -160,7 +160,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             {outsideRisk === true ? (
               <Fragment>
                 <CheckBox
-                  checkboxStyle={{ ...disabledOpacity, paddingTop: sh5 }}
+                  checkboxStyle={disabledOpacity}
                   label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4}
                   labelStyle={fs12BoldBlack2}
                   onPress={() => {}}

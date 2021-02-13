@@ -23,6 +23,7 @@ import {
   sw4,
   sw648,
 } from "../../../../styles";
+import { formatAmount } from "../../../../utils";
 
 const { ORDER_SUMMARY } = Language.PAGE;
 
@@ -51,6 +52,8 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     scheduledSalesCharge !== undefined &&
     scheduledInvestmentAmount !== null &&
     scheduledSalesCharge !== null;
+
+  const scheduledAmount = scheduledInvestmentAmount ? formatAmount(parseFloat(scheduledInvestmentAmount)) : "";
 
   const summary: LabeledTitleProps[] = [
     {
@@ -84,7 +87,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
   const recurringSummary: LabeledTitleProps[] = [
     {
       label: ORDER_SUMMARY.LABEL_RECURRING_AMOUNT,
-      title: `${DICTIONARY_RECURRING_CURRENCY} ${scheduledInvestmentAmount}`,
+      title: `${DICTIONARY_RECURRING_CURRENCY} ${scheduledAmount}`,
     },
     {
       label: ORDER_SUMMARY.LABEL_RECURRING_SALES_CHARGE,
@@ -120,7 +123,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
           <View style={flexRow}>
             <Text style={{ ...fs16RegBlack2, lineHeight: sh24 }}>{fundCurrency}</Text>
             <CustomSpacer isHorizontal={true} space={sw4} />
-            <Text style={fs16BoldBlack2}>{investmentAmount}</Text>
+            <Text style={fs16BoldBlack2}>{formatAmount(parseFloat(investmentAmount))}</Text>
           </View>
         </View>
       </View>

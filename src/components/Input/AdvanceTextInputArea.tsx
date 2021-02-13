@@ -74,7 +74,7 @@ export const AdvanceTextInputArea: FunctionComponent<AdvanceTextInputAreaProps> 
 
   return (
     <View>
-      <TextInputArea onChangeText={handleInput} placeholder={placeholder} value={input} />
+      <TextInputArea maxLength={255} onChangeText={handleInput} placeholder={placeholder} value={input} />
       <CustomSpacer space={sh16} />
       <View style={{ ...flexRow, ...centerVertical }}>
         <OutlineButton text={text} onPress={handlePressSave} textStyle={{ ...fs12BoldGray7, color: color }} buttonStyle={outlineStyle} />

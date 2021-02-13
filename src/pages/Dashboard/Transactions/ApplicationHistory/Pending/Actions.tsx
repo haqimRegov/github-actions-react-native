@@ -25,8 +25,10 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   const { orderNumber, status, remark, withHardcopy } = data.rawData as IDashboardOrder;
 
   const handlePrintSubmissionSummary = () => {
-    handlePrintSummary(orderNumber);
     onClose();
+    setTimeout(() => {
+      handlePrintSummary(orderNumber);
+    }, 300);
   };
 
   const handleResubmit = () => {

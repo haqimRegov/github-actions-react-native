@@ -133,6 +133,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         value={formattedDOB}
       />
       <CustomTextInput
+        autoCapitalize="words"
         error={validations.name}
         label={nameLabel}
         onBlur={checkName}
@@ -170,7 +171,12 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       <CustomSpacer space={sh32} />
       <AdvancedDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
       <CustomSpacer space={sh32} />
-      <CustomTextInput label={ID_VERIFICATION.LABEL_POB} onChangeText={setInputPlaceOfBirth} value={inputPlaceOfBirth} />
+      <CustomTextInput
+        autoCapitalize="words"
+        label={ID_VERIFICATION.LABEL_POB}
+        onChangeText={setInputPlaceOfBirth}
+        value={inputPlaceOfBirth}
+      />
       <AdvancedDropdown
         items={DICTIONARY_COUNTRIES}
         handleChange={setInputCountryOfBirth}

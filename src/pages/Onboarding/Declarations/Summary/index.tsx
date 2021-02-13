@@ -302,7 +302,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         const errorList = `${error.errorList?.join("\n")}`;
         setTimeout(() => {
           Alert.alert(error.message, errorList);
-        }, 100);
+        }, 150);
       }
     }
     return null;

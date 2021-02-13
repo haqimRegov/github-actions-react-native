@@ -49,6 +49,7 @@ import {
   sw8,
   sw832,
 } from "../../../styles";
+import { formatAmount } from "../../../utils";
 
 const { PRODUCT_DETAILS } = Language.PAGE;
 
@@ -114,9 +115,13 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
       label: PRODUCT_DETAILS.LABEL_MINIMUM_CASH,
       titlePrefix: inputCurrency,
       titlePrefixStyle: { lineHeight: sh24 },
-      title: newSalesAmount.cash.min,
+      title: formatAmount(parseFloat(newSalesAmount.cash.min)),
     },
   ];
+
+  if (fund.isEpfOnly === "Yes") {
+    data.splice(-1, 1);
+  }
 
   const ampFeeLabel: LabeledTitleProps = { label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` };
 
@@ -138,7 +143,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
       label: PRODUCT_DETAILS.LABEL_MINIMUM_EPF,
       titlePrefix: inputCurrency,
       titlePrefixStyle: { lineHeight: sh24 },
-      title: newSalesAmount.epf.min,
+      title: formatAmount(parseFloat(newSalesAmount.epf.min)),
     });
   }
 

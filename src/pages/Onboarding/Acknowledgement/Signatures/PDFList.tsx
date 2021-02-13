@@ -11,6 +11,7 @@ import { Language } from "../../../../constants/language";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import { centerVertical, fs12RegBlack2, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
+import { formatAmount } from "../../../../utils";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -207,7 +208,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                   : baseSignatureValid && "jointSignature" in receipt && receipt.jointSignature !== undefined;
               // const disable = receipt.completed !== true;
               // const disabled = index === 0 ? false : disabledCondition;
-              const amountTitle = receipt!.orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${totalAmount.amount}`).concat();
+              const amountTitle = receipt!
+                .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(parseFloat(totalAmount.amount))}`)
+                .concat();
               const epfTitle = receipt!.isEpf === "true" ? "- EPF" : "";
               const recurringTitle = receipt!.isScheduled === "true" ? "- Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;

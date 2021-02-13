@@ -35,7 +35,7 @@ import {
   sw360,
   sw64,
 } from "../../../../styles";
-import { isAmount } from "../../../../utils";
+import { formatAmount, isAmount } from "../../../../utils";
 
 const { INVESTMENT } = Language.PAGE;
 
@@ -91,8 +91,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   }
   const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
 
-  const minNewSalesAmount = newSalesAmount[fundingMethod].min;
-  const minTopUpAmount = topUpAmount[fundingMethod].min;
+  const minNewSalesAmount = formatAmount(parseFloat(newSalesAmount[fundingMethod].min));
+  const minTopUpAmount = formatAmount(parseFloat(topUpAmount[fundingMethod].min));
   const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
   const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${DICTIONARY_RECURRING_CURRENCY} ${minTopUpAmount})`;
 
@@ -136,10 +136,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     if (isAmount(value) === false) {
       return ERROR.INVESTMENT_INVALID_AMOUNT;
     }
-    if (parseInt(value, 10) > parseInt(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max, 10)) {
+    if (parseFloat(value) > parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max)) {
       return ERROR.INVESTMENT_MAX_AMOUNT;
     }
-    if (parseInt(value, 10) < parseInt(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min, 10)) {
+    if (parseFloat(value) < parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min)) {
       return ERROR.INVESTMENT_MIN_AMOUNT;
     }
     return undefined;

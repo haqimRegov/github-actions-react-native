@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer, SafeAreaPage, SelectionBanner } from "../../../../components";
@@ -9,7 +9,9 @@ import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
+  centerHV,
   centerVertical,
+  colorGray,
   flexChild,
   flexRow,
   fs12RegBlack2,
@@ -23,7 +25,7 @@ import {
   sw4,
 } from "../../../../styles";
 import { PaymentOrder, PaymentStatus } from "../../../../templates";
-import { AlertDialog } from "../../../../utils";
+import { AlertDialog, formatAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 
 const { DASHBOARD_PAYMENT, PAYMENT } = Language.PAGE;
@@ -126,9 +128,8 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   };
 
   const orderCompleted: boolean = paymentOrder !== undefined && paymentOrder.completed === true;
-  const submitDisabled: boolean = paymentOrder !== undefined ? paymentOrder.payments.length === 0 : false;
-
-  const bannerText = orderCompleted === true ? `1 ${PAYMENT.LABEL_COMPLETED}` : `1 ${PAYMENT.LABEL_PENDING_PAYMENT}`;
+  const submitDisabled = paymentOrder !== undefined ? paymentOrder.payments.findIndex((payment) => payment.saved === true) === -1 : false;
+  const bannerText = orderCompleted === true ? PAYMENT.LABEL_PAYMENT_COMPLETED : PAYMENT.LABEL_PAYMENT_PENDING;
 
   const withFloatingAmount =
     paymentOrder !== undefined &&
@@ -152,7 +153,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
             return accumulator;
           }, [])
           .filter(({ amount }) => amount > 0)
-          .map(({ amount, currency }) => `${currency} ${amount}`)
+          .map(({ amount, currency }) => `${currency} ${formatAmount(amount)}`)
           .join(", ")
       : "";
 
@@ -198,12 +199,16 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
                 </View>
                 <CustomSpacer space={sh24} />
               </View>
-            ) : null}
+            ) : (
+              <View style={{ ...centerHV, ...flexChild }}>
+                <ActivityIndicator color={colorGray._7} size="small" />
+              </View>
+            )}
             {activeOrder !== "" ? null : <CustomSpacer space={sh112} />}
           </View>
         </SafeAreaPage>
       </DashboardLayout>
-      {activeOrder !== "" ? null : (
+      {activeOrder !== "" || paymentOrder === undefined ? null : (
         <SelectionBanner
           bottomContent={
             <View>
@@ -219,7 +224,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
                         )}
                         <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
                         <CustomSpacer isHorizontal={true} space={sw4} />
-                        <Text style={fs16BoldBlack2}>{`${totalAmount.amount}`}</Text>
+                        <Text style={fs16BoldBlack2}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
                       </View>
                     );
                   })}

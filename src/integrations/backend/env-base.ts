@@ -29,7 +29,7 @@ export const COGNITO_CONFIG_UAT = {
   aws_cognito_identity_pool_id: "ap-southeast-1:40270a5a-3d03-4f75-95f1-c24dbce00232",
 };
 
-export const COGNITO_CONFIG = {
+export const COGNITO_CONFIG_SIT = {
   aws_cognito_region: "ap-southeast-1",
   aws_user_pools_id: "ap-southeast-1_EOa6qSu6R",
   aws_user_pools_web_client_id: "3objln3im1icdndh1qui7v7i29",

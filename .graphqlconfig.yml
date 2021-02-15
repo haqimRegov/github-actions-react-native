@@ -1,5 +1,5 @@
 projects:
-  Onboarding:
+  uat-onboarding:
     schemaPath: graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -11,7 +11,7 @@ projects:
         generatedFileName: src/API.ts
         docsFilePath: graphql
         region: ap-southeast-1
-        apiId: u4agpiyz7vd27lhuveaynighre
+        apiId: 3cyv3st2r5gm5ely5cfdyzretu
 extensions:
   amplify:
     version: 3

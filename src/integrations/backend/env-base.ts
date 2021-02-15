@@ -22,6 +22,13 @@ export const COGNITO_CONFIG_DEV = {
   aws_cognito_identity_pool_id: "ap-southeast-1:15dbb055-d600-4daa-92b0-d8cce48142fc",
 };
 
+export const COGNITO_CONFIG_UAT = {
+  aws_cognito_region: "ap-southeast-1",
+  aws_user_pools_id: "ap-southeast-1_gJWaEtZ9a",
+  aws_user_pools_web_client_id: "4imb1b14vdh2cg1e4pqlfdl76j",
+  aws_cognito_identity_pool_id: "ap-southeast-1:40270a5a-3d03-4f75-95f1-c24dbce00232",
+};
+
 export const COGNITO_CONFIG = {
   aws_cognito_region: "ap-southeast-1",
   aws_user_pools_id: "ap-southeast-1_EOa6qSu6R",

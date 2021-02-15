@@ -40,7 +40,9 @@ export function acknowledgementReducer(state = acknowledgementInitialState, acti
 
     case "acknowledgement/RESET_ACKNOWLEDGEMENT":
       return {
-        ...acknowledgementInitialState,
+        orders: undefined,
+        paymentSummary: undefined,
+        receipts: [],
       };
 
     default:

@@ -17,7 +17,10 @@ export function selectedFundReducer(state = selectedFundInitialState, action: Se
 
     case "selectedFund/RESET_SELECTED_FUND":
       return {
-        ...selectedFundInitialState,
+        funds: [],
+        investmentDetails: [],
+        viewFund: undefined,
+        outsideRisk: false,
       };
 
     case "selectedFund/VIEW_FUND":

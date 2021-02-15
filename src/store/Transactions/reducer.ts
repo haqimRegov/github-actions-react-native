@@ -1,3 +1,4 @@
+import { DICTIONARY_TRANSACTIONS_DATE, DICTIONARY_TRANSACTIONS_TYPE } from "../../data/dictionary";
 import { TransactionsAction } from "./actions";
 import { transactionsInitialState, transactionsState } from "./state";
 
@@ -15,7 +16,54 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
       };
     case "transactions/RESET_TRANSACTIONS":
       return {
-        ...transactionsInitialState,
+        approved: {
+          filter: {
+            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
+            accountType: "",
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [],
+        },
+        pending: {
+          filter: {
+            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
+            accountType: "",
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [],
+        },
+        rejected: {
+          filter: {
+            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
+            accountType: "",
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [],
+        },
+        selectedOrders: [],
+        approvedCount: 0,
+        rejectedCount: 0,
+        pendingCount: 0,
+        search: "",
+        currentOrder: undefined,
       };
     case "transactions/UPDATE_SELECTED_ORDER":
       return {

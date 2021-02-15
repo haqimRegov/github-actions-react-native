@@ -21,7 +21,23 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
 
     case "onboarding/RESET_STEPS":
       return {
-        ...onboardingInitialState,
+        disabledSteps: [
+          "Products",
+          "PersonalInformation",
+          "IdentityVerification",
+          "PersonalDetails",
+          "EmploymentDetails",
+          "PersonalInfoSummary",
+          "Declarations",
+          "FEADeclaration",
+          "CRSDeclaration",
+          "DeclarationSummary",
+          "Acknowledgement",
+          "TermsAndConditions",
+          "Signatures",
+          "Payment",
+        ],
+        finishedSteps: [],
       };
 
     default:

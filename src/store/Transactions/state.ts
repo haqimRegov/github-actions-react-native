@@ -1,5 +1,3 @@
-import moment from "moment";
-
 import { DICTIONARY_TRANSACTIONS_DATE, DICTIONARY_TRANSACTIONS_TYPE } from "../../data/dictionary";
 
 interface ITransactionState extends ITransactionsDashboard {
@@ -15,7 +13,7 @@ export const transactionsInitialState: transactionsState = {
     filter: {
       dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
       startDate: undefined,
-      endDate: moment().toDate(),
+      endDate: new Date(),
       transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
       accountType: "",
       orderStatus: [],
@@ -29,7 +27,7 @@ export const transactionsInitialState: transactionsState = {
     filter: {
       dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
       startDate: undefined,
-      endDate: moment().toDate(),
+      endDate: new Date(),
       transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
       accountType: "",
       orderStatus: [],
@@ -43,7 +41,7 @@ export const transactionsInitialState: transactionsState = {
     filter: {
       dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
       startDate: undefined,
-      endDate: moment().toDate(),
+      endDate: new Date(),
       transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
       accountType: "",
       orderStatus: [],

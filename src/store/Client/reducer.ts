@@ -1,3 +1,4 @@
+import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 import { ClientAction } from "./actions";
 import { clientInitialState, ClientState } from "./state";
 
@@ -25,7 +26,26 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
       };
     case "client/RESET_DETAILS":
       return {
-        ...clientInitialState,
+        accountType: DICTIONARY_ACCOUNT_TYPE[0],
+        details: {
+          principalHolder: {
+            name: "",
+            country: "",
+            dateOfBirth: "",
+            id: "",
+            idType: DICTIONARY_ID_TYPE[0],
+            otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+          },
+          jointHolder: {
+            name: "",
+            country: "",
+            dateOfBirth: "",
+            id: "",
+            idType: DICTIONARY_ID_TYPE[0],
+            otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+          },
+          verified: false,
+        },
       };
 
     default:

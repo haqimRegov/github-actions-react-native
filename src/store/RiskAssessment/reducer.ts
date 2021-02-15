@@ -16,11 +16,35 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
     case "riskAssessment/RESET_QUESTIONNAIRE":
       return {
         ...state,
-        questionnaire: { ...riskAssessmentInitialState.questionnaire },
+        questionnaire: {
+          questionTwo: 0,
+          questionThree: 0,
+          questionFour: 0,
+          questionFive: 0,
+          questionSix: 0,
+          questionSeven: 0,
+          questionEight: -1,
+        },
       };
     case "riskAssessment/RESET_RISK_ASSESSMENT":
       return {
-        ...riskAssessmentInitialState,
+        questionnaire: {
+          questionTwo: 0,
+          questionThree: 0,
+          questionFour: 0,
+          questionFive: 0,
+          questionSix: 0,
+          questionSeven: 0,
+          questionEight: -1,
+        },
+        riskScore: {
+          appetite: "",
+          profile: "",
+          rangeOfReturn: "",
+          fundSuggestion: "",
+          netWorth: "",
+          type: "",
+        },
       };
 
     default:

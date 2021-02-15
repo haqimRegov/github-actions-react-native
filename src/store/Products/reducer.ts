@@ -217,7 +217,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           showBy: "recommended",
           all: [],
           recommended: [],
-          page: "",
+          page: "1",
           pages: "",
           sort: [
             { column: "fundAbbr", value: "" },
@@ -242,7 +242,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           showBy: "recommended",
           all: [],
           recommended: [],
-          page: "",
+          page: "1",
           pages: "",
           sort: [
             { column: "fundAbbr", value: "" },
@@ -267,7 +267,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           showBy: "recommended",
           all: [],
           recommended: [],
-          page: "",
+          page: "1",
           pages: "",
           sort: [
             { column: "fundAbbr", value: "" },
@@ -292,7 +292,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           showBy: "recommended",
           all: [],
           recommended: [],
-          page: "",
+          page: "1",
           pages: "",
           sort: [
             { column: "fundAbbr", value: "" },

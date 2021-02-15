@@ -31,6 +31,7 @@
     "amplify:remove": "amplify codegen remove",
     "amplify:set:dev": "amplify add codegen --apiId rywhnkwdhfadriy4tzrfiv65xu",
     "amplify:set:sit": "amplify add codegen --apiId u4agpiyz7vd27lhuveaynighre",
+    "amplify:set:uat": "amplify add codegen --apiId 3cyv3st2r5gm5ely5cfdyzretu",
     "amplify:codegen": "npm run amplify:add:codegen && npm run amplify:remove:codegen",
     "bump-patch": "npm version patch --no-git-tag-version && bundle exec fastlane bump",
     "bump-minor": "npm version minor --no-git-tag-version && bundle exec fastlane bump",

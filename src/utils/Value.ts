@@ -1,5 +1,18 @@
-export const formatAmount = (input: number) => {
-  return input.toLocaleString("en-US", { minimumFractionDigits: 2 });
+export const parseAmount = (input: string) => {
+  return parseFloat(input.replace(/[,]/g, ""));
+};
+
+export const parseAmountToString = (input: string) => {
+  return parseFloat(input.replace(/[,]/g, "")).toString();
+};
+
+export const formatAmount = (input: number | string) => {
+  const value = typeof input === "number" ? input : parseAmount(input);
+  return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/[^0-9,.]/g, "");
+};
+
+export const formatNumber = (input: string) => {
+  return input.replace(/[^0-9]/g, "");
 };
 
 export const maskedString = (input: string, maskFrom?: number, maskTo?: number, mask?: string) => {

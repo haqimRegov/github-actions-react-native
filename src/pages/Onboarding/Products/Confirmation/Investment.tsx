@@ -35,7 +35,7 @@ import {
   sw360,
   sw64,
 } from "../../../../styles";
-import { formatAmount, isAmount } from "../../../../utils";
+import { formatAmount, isAmount, parseAmount } from "../../../../utils";
 
 const { INVESTMENT } = Language.PAGE;
 
@@ -91,8 +91,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   }
   const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
 
-  const minNewSalesAmount = formatAmount(parseFloat(newSalesAmount[fundingMethod].min));
-  const minTopUpAmount = formatAmount(parseFloat(topUpAmount[fundingMethod].min));
+  const minNewSalesAmount = formatAmount(newSalesAmount[fundingMethod].min);
+  const minTopUpAmount = formatAmount(topUpAmount[fundingMethod].min);
   const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
   const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${DICTIONARY_RECURRING_CURRENCY} ${minTopUpAmount})`;
 
@@ -133,24 +133,25 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   };
 
   const validateAmount = (value: string, amountType: "newSalesAmount" | "topUpAmount") => {
+    const amount: IAmountValueError = { value: value, error: undefined };
     if (isAmount(value) === false) {
-      return ERROR.INVESTMENT_INVALID_AMOUNT;
+      return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
     }
-    if (parseFloat(value) > parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max)) {
-      return ERROR.INVESTMENT_MAX_AMOUNT;
+    if (parseAmount(value) > parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max)) {
+      return { ...amount, error: ERROR.INVESTMENT_MAX_AMOUNT };
     }
-    if (parseFloat(value) < parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min)) {
-      return ERROR.INVESTMENT_MIN_AMOUNT;
+    if (parseAmount(value) < parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min)) {
+      return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT };
     }
-    return undefined;
+    return { ...amount, value: formatAmount(value) };
   };
 
-  const setAmountError = (value?: string) => {
-    setData({ ...data, investment: { ...investment, amountError: value } });
+  const setAmountError = (amount: IAmountValueError) => {
+    setData({ ...data, investment: { ...investment, investmentAmount: amount.value, amountError: amount.error } });
   };
 
-  const setScheduledAmountError = (value?: string) => {
-    setData({ ...data, investment: { ...investment, scheduledAmountError: value } });
+  const setScheduledAmountError = (amount: IAmountValueError) => {
+    setData({ ...data, investment: { ...investment, scheduledInvestmentAmount: amount.value, scheduledAmountError: amount.error } });
   };
 
   const checkInvestmentAmount = () => {
@@ -183,8 +184,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     if (newData.investment.scheduledInvestment === false) {
       newData.investment.scheduledSalesCharge = "";
       newData.investment.scheduledInvestmentAmount = "";
+      newData.investment.scheduledAmountError = undefined;
     }
-    setScheduledAmountError(undefined);
     setData(newData);
   };
 

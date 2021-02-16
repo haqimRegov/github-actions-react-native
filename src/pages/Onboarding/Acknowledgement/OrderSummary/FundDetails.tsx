@@ -53,7 +53,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     scheduledInvestmentAmount !== null &&
     scheduledSalesCharge !== null;
 
-  const scheduledAmount = scheduledInvestmentAmount ? formatAmount(parseFloat(scheduledInvestmentAmount)) : "";
+  const scheduledAmount = scheduledInvestmentAmount ? formatAmount(scheduledInvestmentAmount) : "";
 
   const summary: LabeledTitleProps[] = [
     {
@@ -123,7 +123,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
           <View style={flexRow}>
             <Text style={{ ...fs16RegBlack2, lineHeight: sh24 }}>{fundCurrency}</Text>
             <CustomSpacer isHorizontal={true} space={sw4} />
-            <Text style={fs16BoldBlack2}>{formatAmount(parseFloat(investmentAmount))}</Text>
+            <Text style={fs16BoldBlack2}>{formatAmount(investmentAmount)}</Text>
           </View>
         </View>
       </View>

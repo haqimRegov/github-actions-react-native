@@ -102,6 +102,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
     <DashboardLayout
       {...props}
       hideQuickActions={true}
+      status={currentOrder!.status}
       title={DASHBOARD_ORDER_SUMMARY.HEADING}
       titleIcon="arrow-left"
       titleIconOnPress={handleBack}>

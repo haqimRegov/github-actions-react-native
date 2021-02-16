@@ -2,10 +2,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions, Tag, TagColorType } from "../../components";
 import { Language } from "../../constants";
+import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
-import { GlobalStoreProps } from "../../store";
 import {
   alignItemsEnd,
   alignSelfCenter,
@@ -17,6 +17,7 @@ import {
   fullHeight,
   px,
   sh16,
+  sw16,
   sw20,
   sw24,
 } from "../../styles";
@@ -24,11 +25,12 @@ import { NewSales } from "./QuickActions";
 
 const { QUICK_ACTIONS } = Language.PAGE;
 
-interface DashboardLayoutProps extends Partial<GlobalStoreProps> {
+interface DashboardLayoutProps {
   children: ReactNode;
   hideQuickActions?: boolean;
   navigation: StackNavigationProp<RootNavigatorType>;
   scrollEnabled?: boolean;
+  status?: string;
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
@@ -39,6 +41,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   hideQuickActions,
   navigation,
   scrollEnabled,
+  status,
   title,
   titleIcon,
   titleIconOnPress,
@@ -81,6 +84,19 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     // },
   ];
 
+  let statusColor: TagColorType = "primary";
+  if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
+    statusColor = "error";
+  } else if (status === DICTIONARY_ORDER_STATUS.submitted) {
+    statusColor = "success";
+  } else if (status === DICTIONARY_ORDER_STATUS.completed) {
+    statusColor = "secondary";
+  } else if (status === DICTIONARY_ORDER_STATUS.reroutedBr || status === DICTIONARY_ORDER_STATUS.reroutedHq) {
+    statusColor = "danger";
+  } else {
+    statusColor = "warning";
+  }
+
   return (
     <Fragment>
       <ScrollView
@@ -105,6 +121,12 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                   {title !== undefined ? <Text style={{ ...fs24BoldBlack2, ...alignItemsEnd }}>{title}</Text> : null}
                 </View>
               </View>
+              {status !== undefined ? (
+                <View style={px(sw16)}>
+                  <CustomSpacer space={sh16} />
+                  <Tag color={statusColor} text={status} />
+                </View>
+              ) : null}
               <CustomFlexSpacer />
               {hideQuickActions === true ? null : <QuickActions actions={actions} />}
             </View>

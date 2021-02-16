@@ -51,7 +51,7 @@ import {
   sw784,
   sw8,
 } from "../../styles";
-import { formatAmount, isAmount } from "../../utils";
+import { formatAmount, isAmount, parseAmount } from "../../utils";
 import { CashDepositMachine, Cheque, ClientTrustAccount, EPF, OnlineBanking, Recurring } from "./PaymentMethod";
 
 const { PAYMENT } = Language.PAGE;
@@ -66,6 +66,7 @@ export interface PaymentCardProps {
   handleExpandPayment: () => void;
   handleSavePayments: (value: IPaymentState[]) => void;
   isScheduled: boolean;
+  orderCreationDate?: Date;
   orderTotalAmount: IOrderAmount[];
   payments: IPaymentState[];
   setPayments: (value: IPaymentState[]) => void;
@@ -82,6 +83,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   handleExpandPayment,
   handleSavePayments,
   isScheduled,
+  orderCreationDate,
   orderTotalAmount,
   payments,
 }: // totalPaidAmount,
@@ -133,7 +135,7 @@ PaymentCardProps) => {
   const floating = floatingAmount
     .map(({ amount, currency }) => {
       const symbol = amount > 0 ? "+" : "-";
-      const trimAmount = amount > 0 ? amount : parseFloat(`${amount}`.substring(1));
+      const trimAmount = amount > 0 ? amount : parseAmount(`${amount}`.substring(1));
       return amount === 0 ? "" : `${symbol} ${currency} ${formatAmount(trimAmount)}`;
     })
     .filter((data) => data !== "")
@@ -227,20 +229,6 @@ PaymentCardProps) => {
           draftPayments.map((payment: IPaymentState, index: number) => {
             const viewPayment = () => {
               setPrompt(index);
-            };
-
-            const validateAmount = (value: string) => {
-              if (isAmount(value) === false) {
-                return ERROR.INVESTMENT_INVALID_AMOUNT;
-              }
-              if (parseFloat(value) === 0) {
-                return ERROR.INVESTMENT_MIN_AMOUNT;
-              }
-              return undefined;
-            };
-
-            const checkAmount = () => {
-              setAmountError(validateAmount(payment.amount!));
             };
 
             const handleSave = () => {
@@ -380,6 +368,23 @@ PaymentCardProps) => {
               setDraftPayments(updatedPayments);
             };
 
+            const validateAmount = (value: string) => {
+              const amount: IAmountValueError = { value: value, error: undefined };
+              if (isAmount(value) === false) {
+                return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
+              }
+              if (parseAmount(value) === 0) {
+                return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT };
+              }
+              return { ...amount, value: formatAmount(value) };
+            };
+
+            const checkAmount = () => {
+              const amount = validateAmount(payment.amount!);
+              setAmountError(amount.error);
+              setAmount(amount.value);
+            };
+
             const baseCashDisabled =
               payment.currency === "" ||
               payment.currency === undefined ||
@@ -433,19 +438,21 @@ PaymentCardProps) => {
             let saveDisabled = onlineBankingDisabled;
             const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
             const findTotalIndex = orderTotalAmount.findIndex(({ currency }) => currency === payment.currency);
-            const paymentAmount = payment.amount ? parseFloat(payment.amount) : 0;
+            const paymentAmount = payment.amount ? parseAmount(payment.amount) : 0;
             let calculateDifference = -1;
             if (floatingAmount.length !== 0) {
               calculateDifference = floatingAmount[findFloatingIndex].amount + paymentAmount;
             } else {
-              calculateDifference = paymentAmount - parseFloat(orderTotalAmount[findTotalIndex].amount);
+              calculateDifference = paymentAmount - parseAmount(orderTotalAmount[findTotalIndex].amount);
             }
+
             const additionalPaymentDisabled = calculateDifference >= 0 || saveDisabled;
 
             const paymentMethodProps = {
               currency: payment.currency!,
               kibBankName: payment.kibBankName!,
               kibBankAccountNumber: payment.kibBankAccountNumber!,
+              orderCreationDate: orderCreationDate,
               setTransactionDate: setTransactionDate,
               transactionDate: payment.transactionDate!,
             };

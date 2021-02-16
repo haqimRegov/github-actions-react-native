@@ -12,6 +12,7 @@ export interface CashDepositMachineProps {
   currency: string;
   kibBankName: string;
   kibBankAccountNumber: string;
+  orderCreationDate?: Date;
   setTransactionDate: (value?: Date | undefined) => void;
   setTransactionTime: (value?: Date | undefined) => void;
   transactionDate: Date | undefined;
@@ -22,6 +23,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
   currency,
   kibBankName,
   kibBankAccountNumber,
+  orderCreationDate,
   setTransactionDate,
   setTransactionTime,
   transactionDate,
@@ -38,7 +40,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
               maximumDate={moment().toDate()}
-              minimumDate={moment().toDate()}
+              minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}
               setValue={setTransactionDate}
               value={transactionDate}
             />
@@ -51,7 +53,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="time"
               maximumDate={moment().toDate()}
-              minimumDate={moment().toDate()}
+              minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}
               setValue={setTransactionTime}
               value={transactionTime}
             />

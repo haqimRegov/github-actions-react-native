@@ -14,6 +14,7 @@ export interface OnlineBankingProps {
   currency: string;
   kibBankName: string;
   kibBankAccountNumber: string;
+  orderCreationDate?: Date;
   setBankName: (value: string) => void;
   setTransactionDate: (value?: Date | undefined) => void;
   transactionDate: Date | undefined;
@@ -24,6 +25,7 @@ export const OnlineBanking: FunctionComponent<OnlineBankingProps> = ({
   currency,
   kibBankName,
   kibBankAccountNumber,
+  orderCreationDate,
   setBankName,
   setTransactionDate,
   transactionDate,
@@ -46,7 +48,7 @@ export const OnlineBanking: FunctionComponent<OnlineBankingProps> = ({
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
               maximumDate={moment().toDate()}
-              minimumDate={moment().toDate()}
+              minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}
               setValue={setTransactionDate}
               value={transactionDate}
             />

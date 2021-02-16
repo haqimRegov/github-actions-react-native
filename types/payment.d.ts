@@ -2,3 +2,8 @@ declare type TypePaymentMethod = "Online Banking" | "Cheque" | "Client Trust Acc
 
 declare type TypePaymentMethodValue = { value: TypePaymentMethod };
 declare type TypePaymentMethodLabelValue = { label: string; value: TypePaymentMethod };
+
+declare interface IAmountValueError {
+  value: string;
+  error?: string;
+}

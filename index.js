@@ -6,10 +6,10 @@ import { Provider } from "react-redux";
 import { name as appName } from "./app.json";
 import config from "./aws-exports";
 import { App } from "./src/App";
-import { COGNITO_CONFIG_SIT, RNPushNotification } from "./src/integrations";
+import { COGNITO_CONFIG_UAT, RNPushNotification } from "./src/integrations";
 import { store } from "./src/store";
 
-Amplify.configure({ ...config, ...COGNITO_CONFIG_SIT });
+Amplify.configure({ ...config, ...COGNITO_CONFIG_UAT });
 
 RNPushNotification.configure();
 

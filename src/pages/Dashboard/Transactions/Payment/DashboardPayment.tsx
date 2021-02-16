@@ -25,7 +25,7 @@ import {
   sw4,
 } from "../../../../styles";
 import { PaymentOrder, PaymentStatus } from "../../../../templates";
-import { AlertDialog, formatAmount } from "../../../../utils";
+import { AlertDialog, formatAmount, parseAmountToString } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 
 const { DASHBOARD_PAYMENT, PAYMENT } = Language.PAGE;
@@ -92,6 +92,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
       .map((paymentInfo: IPaymentState) => {
         return {
           ...paymentInfo,
+          amount: parseAmountToString(paymentInfo!.amount!),
           currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
           transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
           transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
@@ -190,6 +191,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
                     accountNames={accountNames}
                     activeOrder={activeOrder}
                     epfAccountNumber={paymentOrder.epfAccountNumber}
+                    orderCreationDate={moment(paymentOrder.orderDate, DEFAULT_DATE_FORMAT).toDate()}
                     paymentOrder={paymentOrder}
                     setActiveOrder={setActiveOrder}
                     setPaymentOrder={updatePaymentOrder}
@@ -224,7 +226,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
                         )}
                         <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
                         <CustomSpacer isHorizontal={true} space={sw4} />
-                        <Text style={fs16BoldBlack2}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
+                        <Text style={fs16BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
                       </View>
                     );
                   })}

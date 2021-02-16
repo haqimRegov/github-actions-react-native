@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { fs24RegBlack2, fs40BoldBlack2, sh24, sh28, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
 
@@ -34,6 +35,12 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
     setShowPassword(!showPassword);
   };
 
+  const handleNric = (value: string) => {
+    if (isNumber(value) || value === "") {
+      setInputNRIC(value);
+    }
+  };
+
   const HEADING = passwordRecovery === true ? LOGIN.HEADING_DONE : LOGIN.HEADING_WELCOME;
 
   return (
@@ -48,7 +55,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           keyboardType="numeric"
           label={LOGIN.LABEL_NRIC}
           maxLength={12}
-          onChangeText={setInputNRIC}
+          onChangeText={handleNric}
           secureTextEntry={false}
           value={inputNRIC}
         />

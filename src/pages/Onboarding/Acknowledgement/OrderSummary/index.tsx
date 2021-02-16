@@ -86,7 +86,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
                       {index !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
                       <Text style={{ ...fs24BoldBlack2 }}>{totalAmount.currency}</Text>
                       <CustomSpacer isHorizontal={true} space={sw4} />
-                      <Text style={fs24RegBlack2}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
+                      <Text style={fs24RegBlack2}>{formatAmount(totalAmount.amount)}</Text>
                     </View>
                   );
                 })}

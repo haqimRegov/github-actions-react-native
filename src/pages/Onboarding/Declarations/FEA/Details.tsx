@@ -20,7 +20,7 @@ import {
   sw32,
   sw600,
 } from "../../../../styles";
-import { isNumber } from "../../../../utils";
+import { formatAmount, isAmount } from "../../../../utils";
 import { FeaTerms } from "./Declaration";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -55,12 +55,18 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
   const handleBalance = (value: string) => {
     handleFeaDeclaration({ ...fea, balance: value });
   };
-  const handleBalanceError = (value?: string) => {
-    handleFeaDeclaration({ ...fea, balanceError: value });
+
+  const validateAmount = (value: string) => {
+    const amount: IAmountValueError = { value: value, error: undefined };
+    if (isAmount(value) === false) {
+      return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
+    }
+    return { ...amount, value: formatAmount(value) };
   };
 
   const checkNumber = () => {
-    handleBalanceError(isNumber(balance!) === false ? ERROR.INVALID_NUMBER : undefined);
+    const { value, error } = validateAmount(balance!);
+    handleFeaDeclaration({ ...fea, balance: value, balanceError: error });
   };
 
   const headerTitle = accountHolder === "Principal" ? DECLARATIONS.TITLE_PRINCIPAL : DECLARATIONS.TITLE_JOINT;

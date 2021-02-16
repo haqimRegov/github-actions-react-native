@@ -29,7 +29,7 @@ import {
   sw4,
   sw8,
 } from "../../styles";
-import { AnimationUtils, formatAmount } from "../../utils";
+import { AnimationUtils, formatAmount, parseAmount } from "../../utils";
 import { FundOverview } from "./FundOverview";
 import { PaymentCard } from "./PaymentCard";
 
@@ -39,6 +39,7 @@ export interface PaymentOrderProps {
   accountNames: TypeLabelValue[];
   activeOrder: string;
   epfAccountNumber?: string;
+  orderCreationDate?: Date;
   paymentOrder: IPaymentOrderState;
   setActiveOrder: (value: string) => void;
   setPaymentOrder: (paymentOrder: IPaymentOrderState) => void;
@@ -50,6 +51,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
   accountNames,
   activeOrder,
   epfAccountNumber,
+  orderCreationDate,
   paymentOrder,
   setActiveOrder,
   setPaymentOrder,
@@ -148,12 +150,12 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     const floatingTotalAmount = orderTotalAmount.map((orderAmount) => {
       const filteredPayments = latestPayments
         .filter((value) => value.currency === orderAmount.currency)
-        .map((payment: IPaymentState) => parseFloat(payment.amount!));
+        .map((payment: IPaymentState) => parseAmount(payment.amount!));
       const total =
         filteredPayments.length === 0
           ? 0
           : filteredPayments.map((amount) => amount).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
-      return { currency: orderAmount.currency, amount: total - parseFloat(orderAmount.amount) };
+      return { currency: orderAmount.currency, amount: total - parseAmount(orderAmount.amount) };
     });
     const checkFloating = floatingTotalAmount.map((floating) => floating.amount >= 0);
     const isCompleted = paymentType === "Recurring" ? true : !checkFloating.includes(false);
@@ -208,7 +210,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
                   {amountIndex !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
                   <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
+                  <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{formatAmount(totalAmount.amount)}</Text>
                 </View>
               );
             })}
@@ -233,6 +235,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         handleExpandPayment={handleExpandPayment}
         handleSavePayments={handleSavePayments}
         isScheduled={paymentType === "Recurring"}
+        orderCreationDate={orderCreationDate}
         orderTotalAmount={orderTotalAmount}
         payments={payments}
         setPayments={setPayments}

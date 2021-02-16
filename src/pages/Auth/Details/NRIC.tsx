@@ -37,6 +37,12 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
     return setError(undefined);
   };
 
+  const handleNric = (value: string) => {
+    if (isNumber(value) || value === "") {
+      setInputNRIC(value);
+    }
+  };
+
   return (
     <View>
       <CustomSpacer space={sh56} />
@@ -50,7 +56,7 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
         label={LOGIN.LABEL_NRIC}
         maxLength={DICTIONARY_NRIC_LENGTH}
         onBlur={handleValidateNRIC}
-        onChangeText={setInputNRIC}
+        onChangeText={handleNric}
         placeholder={LOGIN.LABEL_PLACEHOLDER_NRIC}
         secureTextEntry={false}
         value={inputNRIC}

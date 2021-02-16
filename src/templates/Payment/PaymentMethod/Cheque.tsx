@@ -15,6 +15,7 @@ export interface ChequeProps {
   currency: string;
   kibBankName: string;
   kibBankAccountNumber: string;
+  orderCreationDate?: Date;
   setBankName: (value: string) => void;
   setCheckNumber: (value: string) => void;
   setTransactionDate: (value: Date | undefined) => void;
@@ -27,6 +28,7 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
   currency,
   kibBankName,
   kibBankAccountNumber,
+  orderCreationDate,
   setBankName,
   setCheckNumber,
   setTransactionDate,
@@ -64,7 +66,7 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
               maximumDate={moment().toDate()}
-              minimumDate={moment().toDate()}
+              minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}
               setValue={setTransactionDate}
               value={transactionDate}
             />

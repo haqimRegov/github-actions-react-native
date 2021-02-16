@@ -28,7 +28,7 @@ import {
   sw4,
 } from "../../../styles";
 import { PaymentOrder, PaymentStatus } from "../../../templates";
-import { formatAmount } from "../../../utils";
+import { formatAmount, parseAmountToString } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {}
@@ -55,6 +55,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           .map((paymentInfo: IPaymentState) => {
             return {
               ...paymentInfo,
+              amount: parseAmountToString(paymentInfo!.amount!),
               currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
@@ -216,7 +217,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           )}
                           <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs16BoldBlack2}>{formatAmount(parseFloat(totalAmount.amount))}</Text>
+                          <Text style={fs16BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
                         </View>
                       );
                     })}

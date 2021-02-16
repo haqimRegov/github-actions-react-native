@@ -87,7 +87,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setVi
     },
     {
       label: ORDER_SUMMARY.LABEL_TOTAL_INVESTMENT_AMOUNT,
-      title: `${fundCurrency} ${formatAmount(parseFloat(investmentAmount))}`,
+      title: `${fundCurrency} ${formatAmount(investmentAmount)}`,
     },
   ];
   if (isScheduled === true) {

@@ -14,6 +14,7 @@ import {
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, sh24 } from "../../../../styles";
+import { parseAmountToString } from "../../../../utils";
 import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
@@ -80,9 +81,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         fundingOption: investment.fundPaymentMethod!, // TODO backend to fix
         fundClass: investment.fundClass !== "noClass" ? investment.fundClass : "",
         fundCurrency: investment.fundCurrency!,
-        investmentAmount: investment.investmentAmount!,
+        investmentAmount: parseAmountToString(investment.investmentAmount!),
         isScheduled: `${investment.scheduledInvestment!}`,
-        scheduledInvestmentAmount: investment.scheduledInvestmentAmount,
+        scheduledInvestmentAmount: investment.scheduledInvestmentAmount
+          ? parseAmountToString(investment.scheduledInvestmentAmount)
+          : undefined,
         salesCharge: investment.investmentSalesCharge!,
         scheduledSalesCharge: investment.scheduledSalesCharge,
       };
@@ -159,7 +162,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
                 usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
               },
               fea: {
-                balance: joint!.declaration!.fea!.balance!,
+                balance: parseAmountToString(joint!.declaration!.fea!.balance!),
                 borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
                 resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
               },
@@ -225,7 +228,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
           },
           fea: {
-            balance: principal!.declaration!.fea!.balance!,
+            balance: parseAmountToString(principal!.declaration!.fea!.balance!),
             borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
             resident: principal!.declaration!.fea!.resident! === 0 ? "true" : "false",
           },

@@ -46,7 +46,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     selectedOrders,
     setActiveTab,
     setScreen,
-    setLoading,
+    // setLoading,
     transactions,
     updatedSelectedOrder,
     updateSearch,
@@ -101,11 +101,11 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
-    setLoading(true);
+    // setLoading(true);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt request", request);
     const response: ISummaryReceiptResponse = await getSummaryReceipt(request);
-    setLoading(false);
+    // setLoading(false);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt response", response);
     if (response !== undefined) {
@@ -113,21 +113,19 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       if (error === null && data !== null) {
         const documents = data.result.pdf.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
         if (data.result.pdf.length > 0) {
-          const share = setTimeout(async () => {
-            await RNShareApi.filesBase64(documents);
-          }, 220);
+          const share = await RNShareApi.filesBase64(documents);
           if (share !== undefined) {
             setPrompt(true);
           }
         } else {
-          setLoading(false);
+          // setLoading(false);
           setTimeout(() => {
             Alert.alert(data.result.message);
           }, 100);
         }
       }
       if (error !== null) {
-        setLoading(false);
+        // setLoading(false);
         setTimeout(() => {
           Alert.alert(error.message);
         }, 100);

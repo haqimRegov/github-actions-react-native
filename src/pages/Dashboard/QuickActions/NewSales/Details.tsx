@@ -12,7 +12,7 @@ import {
   ERROR,
 } from "../../../../data/dictionary";
 import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
-import { isNonNumber } from "../../../../utils";
+import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
 
@@ -58,7 +58,13 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
   const setInputCountry = (value: string) => setClientInfo({ ...[holderToFill], country: value });
   const setInputName = (value: string) => setClientInfo({ ...[holderToFill], name: value });
-  const setInputIdNumber = (value: string) => setClientInfo({ ...[holderToFill], id: value });
+
+  const setInputIdNumber = (value: string) => {
+    if ((idType === "NRIC" && isNumber(value)) || idType !== "NRIC" || value === "") {
+      setClientInfo({ ...[holderToFill], id: value });
+    }
+  };
+
   const setInputDateOfBirth = (value?: Date) =>
     setClientInfo({ ...[holderToFill], dateOfBirth: moment(value).format(DATE_OF_BIRTH_FORMAT) });
 

@@ -107,6 +107,55 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     return undefined;
   };
 
+  const handleGetPDF = async (receipt: IOnboardingReceiptState, index: number) => {
+    setLoading(true);
+    const req = {
+      clientId: clientId!,
+      orderNo: receipt.orderNumber!,
+    };
+    // eslint-disable-next-line no-console
+    console.log("generatePdf request", req);
+    const onboardingReceipt: IGeneratePdfResponse = await generatePdf(req);
+    setLoading(false);
+    // eslint-disable-next-line no-console
+    console.log("generatePdf", onboardingReceipt);
+    if (onboardingReceipt !== undefined) {
+      const { data, error } = onboardingReceipt;
+      if (error === null && data !== null) {
+        // setErrorMessage(undefined);
+        const updatedReceipts = [...receipts!];
+
+        const newReceipt: IOnboardingReceiptState = {
+          ...updatedReceipts[index],
+          pdf: {
+            base64: data.result.pdf.base64,
+            date: `${moment().valueOf()}`,
+            name: updatedReceipts[index].name!,
+            type: "application/pdf",
+          },
+          signedPdf: {
+            base64: data.result.pdf.base64,
+            date: `${moment().valueOf()}`,
+            name: updatedReceipts[index].name!,
+            type: "application/pdf",
+          },
+          url: data.result.pdf.url,
+          urlPageCount: data.result.pdf.urlPageCount,
+        };
+        updatedReceipts[index] = newReceipt;
+        updateReceipts(updatedReceipts);
+        setEditReceipt(newReceipt);
+        // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+      }
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 150);
+      }
+    }
+    // return undefined;
+  };
+
   useEffect(() => {
     if (receipts === undefined || receipts.length === 0) {
       getReceiptSummary();
@@ -130,57 +179,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         <View style={px(sw24)}>
           {receipts !== undefined &&
             receipts.map((receipt: IOnboardingReceiptState, index: number) => {
-              const handleGetPDF = async () => {
-                setLoading(true);
-                const req = {
-                  clientId: clientId!,
-                  orderNo: receipt.orderNumber!,
-                };
-                // eslint-disable-next-line no-console
-                console.log("generatePdf request", req);
-                const onboardingReceipt: IGeneratePdfResponse = await generatePdf(req);
-                setLoading(false);
-                // eslint-disable-next-line no-console
-                console.log("generatePdf", onboardingReceipt);
-                if (onboardingReceipt !== undefined) {
-                  const { data, error } = onboardingReceipt;
-                  if (error === null && data !== null) {
-                    // setErrorMessage(undefined);
-                    const updatedReceipts = [...receipts];
-
-                    const newReceipt: IOnboardingReceiptState = {
-                      ...updatedReceipts[index],
-                      pdf: {
-                        base64: data.result.pdf.base64,
-                        date: `${moment().valueOf()}`,
-                        name: updatedReceipts[index].name!,
-                        type: "application/pdf",
-                      },
-                      signedPdf: {
-                        base64: data.result.pdf.base64,
-                        date: `${moment().valueOf()}`,
-                        name: updatedReceipts[index].name!,
-                        type: "application/pdf",
-                      },
-                      url: data.result.pdf.url,
-                      urlPageCount: data.result.pdf.urlPageCount,
-                    };
-                    updatedReceipts[index] = newReceipt;
-                    updateReceipts(updatedReceipts);
-                    setEditReceipt(newReceipt);
-                    // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
-                  }
-                  if (error !== null) {
-                    setTimeout(() => {
-                      Alert.alert(error.message);
-                    }, 100);
-                  }
-                }
-                // return undefined;
-              };
               const handleEdit = () => {
                 if (receipt.pdf === undefined) {
-                  handleGetPDF();
+                  handleGetPDF(receipt, index);
                 } else {
                   setEditReceipt(receipt);
                 }
@@ -209,8 +210,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               // const disable = receipt.completed !== true;
               // const disabled = index === 0 ? false : disabledCondition;
               const amountTitle = receipt!
-                .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(parseFloat(totalAmount.amount))}`)
-                .concat();
+                .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
+                .join(", ");
               const epfTitle = receipt!.isEpf === "true" ? "- EPF" : "";
               const recurringTitle = receipt!.isScheduled === "true" ? "- Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;

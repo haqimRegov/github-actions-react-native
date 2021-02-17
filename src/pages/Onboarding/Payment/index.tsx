@@ -55,7 +55,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           .map((paymentInfo: IPaymentState) => {
             return {
               ...paymentInfo,
-              amount: parseAmountToString(paymentInfo!.amount!),
+              amount: parseAmountToString(paymentInfo.amount!),
               currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
@@ -92,7 +92,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   };
 
   const completedOrders: IPaymentOrderState[] =
-    paymentSummary !== undefined ? paymentSummary!.orders.filter((order) => order.completed === true) : [];
+    paymentSummary !== undefined ? paymentSummary.orders.filter((order) => order.completed === true) : [];
 
   const completedText = `${completedOrders.length} ${PAYMENT.LABEL_COMPLETED}`;
   const pendingCount = paymentSummary !== undefined ? paymentSummary.orders.length - completedOrders.length : 0;
@@ -133,7 +133,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   useEffect(() => {
     if (paymentSummary === undefined && orders !== undefined) {
-      const newOrders: IPaymentOrderState[] = orders!.orders.map((order: IOrder) => {
+      const newOrders: IPaymentOrderState[] = orders.orders.map((order: IOrder) => {
         return {
           ...order,
           payments: [],
@@ -142,7 +142,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           floatingAmount: [],
         };
       });
-      updatePaymentSummary({ grandTotal: orders!.grandTotal, orders: newOrders });
+      updatePaymentSummary({ grandTotal: orders.grandTotal, orders: newOrders });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

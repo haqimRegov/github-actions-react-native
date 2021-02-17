@@ -112,7 +112,7 @@ export const BasicAccordion: FunctionComponent<IBasicAccordionProps> = ({
   useEffect(() => {
     if (expandAll === true) {
       const allActiveSections: number[] = [];
-      sections.map((_section, index) => {
+      sections.forEach((_section, index) => {
         return allActiveSections.push(index);
       });
       setActiveSections(allActiveSections);

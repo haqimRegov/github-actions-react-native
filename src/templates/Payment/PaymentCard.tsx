@@ -456,12 +456,12 @@ PaymentCardProps) => {
               setTransactionDate: setTransactionDate,
               transactionDate: payment.transactionDate!,
             };
-            let paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName!} />;
+            let paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName} />;
 
             switch (payment.paymentMethod!) {
               case "Online Banking":
                 saveDisabled = onlineBankingDisabled;
-                paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName!} />;
+                paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName} />;
                 break;
               case "Cheque":
                 saveDisabled = chequeDisabled;
@@ -470,8 +470,8 @@ PaymentCardProps) => {
                     {...paymentMethodProps}
                     bankName={payment.bankName!}
                     checkNumber={payment.checkNumber!}
-                    setBankName={setBankName!}
-                    setCheckNumber={setCheckNumber!}
+                    setBankName={setBankName}
+                    setCheckNumber={setCheckNumber}
                   />
                 );
                 break;

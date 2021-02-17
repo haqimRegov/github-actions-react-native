@@ -32,7 +32,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
           <LabeledTitle
             label={ADD_CLIENT.DETAILS_LABEL_DOB}
             spaceToBottom={sh24}
-            title={moment(principalHolder.dateOfBirth!, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
+            title={moment(principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
             titleStyle={fs16BoldBlack1}
           />
         </View>
@@ -49,7 +49,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_DOB}
               spaceToBottom={sh24}
-              title={moment(jointHolder.dateOfBirth!, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
+              title={moment(jointHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
               titleStyle={fs16BoldBlack1}
             />
           </View>

@@ -209,11 +209,11 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                   : baseSignatureValid && "jointSignature" in receipt && receipt.jointSignature !== undefined;
               // const disable = receipt.completed !== true;
               // const disabled = index === 0 ? false : disabledCondition;
-              const amountTitle = receipt!
+              const amountTitle = receipt
                 .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
                 .join(", ");
-              const epfTitle = receipt!.isEpf === "true" ? "- EPF" : "";
-              const recurringTitle = receipt!.isScheduled === "true" ? "- Recurring" : "";
+              const epfTitle = receipt.isEpf === "true" ? "- EPF" : "";
+              const recurringTitle = receipt.isScheduled === "true" ? "- Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               return (
                 <Fragment key={index}>

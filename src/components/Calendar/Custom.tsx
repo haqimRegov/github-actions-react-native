@@ -171,7 +171,7 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
       if (handleSetEndDate) {
         handleSetEndDate(undefined);
       }
-      handlePressUnselectDay(undefined);
+      handlePressUnselectDay();
       return false;
     }
     if (handleSetEndDate) {
@@ -181,7 +181,7 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
       }
       if (day.dateString === convertedEndDate.dateString) {
         handleSetEndDate(undefined);
-        handlePressUnselectDay(undefined);
+        handlePressUnselectDay();
         return false;
       }
       handleSetStartDate(moment(day.timestamp, "").toDate());

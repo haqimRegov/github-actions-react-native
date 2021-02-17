@@ -106,7 +106,7 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
           label={DECLARATIONS.LABEL_REMAINING}
           onBlur={checkNumber}
           onChangeText={handleBalance}
-          value={balance!}
+          value={balance}
         />
       </View>
       <FeaTerms accepted={acceptFea!} setAccepted={handleAcceptFea} />

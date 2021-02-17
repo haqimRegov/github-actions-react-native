@@ -230,7 +230,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         active={activeOrder === orderNumber}
         currencies={currencies}
         floatingAmount={floatingAmount!}
-        totalPaidAmount={totalPaidAmount!}
+        totalPaidAmount={totalPaidAmount}
         generateNewPayment={generateNewPaymentDraft}
         handleExpandPayment={handleExpandPayment}
         handleSavePayments={handleSavePayments}

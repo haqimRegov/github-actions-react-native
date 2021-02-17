@@ -42,7 +42,7 @@ export const shortenString = (str: string, max: number, index: number, noDots?: 
 export const isObjectEqual = (firstObject: object, secondObject: object) => {
   const keys = Object.keys(firstObject);
   let equal = true;
-  keys.map((key: string) => {
+  keys.forEach((key: string) => {
     if (firstObject[key] !== secondObject[key]) {
       equal = false;
     }

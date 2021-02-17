@@ -56,13 +56,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   updateReceipts,
 }: EditPdfProps) => {
   const [adviserSignature, setAdviserSignature] = useState<string>(
-    editReceipt!.adviserSignature !== undefined ? editReceipt!.adviserSignature!.base64! : "",
+    editReceipt!.adviserSignature !== undefined ? editReceipt!.adviserSignature.base64! : "",
   );
   const [principalSignature, setPrincipalSignature] = useState<string>(
-    editReceipt!.principalSignature !== undefined ? editReceipt!.principalSignature!.base64! : "",
+    editReceipt!.principalSignature !== undefined ? editReceipt!.principalSignature.base64! : "",
   );
   const [jointSignature, setJointSignature] = useState<string>(
-    editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature!.base64! : "",
+    editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
   );
 
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);

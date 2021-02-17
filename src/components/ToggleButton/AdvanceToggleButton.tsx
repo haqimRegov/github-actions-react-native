@@ -48,7 +48,7 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
       <View style={direction === "column" ? flexCol : flexRow}>
         {labels.map((label: string, index: number) => {
           const handlePress = () => {
-            const newIndex = index as TypeAdvanceToggleButtonValue;
+            const newIndex = index;
             onSelect(value !== newIndex ? newIndex : -1);
           };
 

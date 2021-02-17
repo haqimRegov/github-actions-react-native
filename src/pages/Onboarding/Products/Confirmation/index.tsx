@@ -78,9 +78,9 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
             titleStyle={fs16SemiBoldBlack2}
           />
           <CustomSpacer space={sh24} />
-          {investmentDetails!.map((product: IProductSales, index: number) => {
+          {investmentDetails.map((product: IProductSales, index: number) => {
             const { fundType, fundName, issuingHouse } = product.fundDetails;
-            const newData = [...investmentDetails!];
+            const newData = [...investmentDetails];
 
             const handleDelete = () => {
               const updatedProducts = [...selectedFunds];
@@ -88,7 +88,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
               if (updatedProducts.length === 0) {
                 setPage(0);
               }
-              const updatedDetails = [...investmentDetails!];
+              const updatedDetails = [...investmentDetails];
               updatedDetails.splice(index, 1);
               if (updatedDetails.length === 0) {
                 setPage(0);

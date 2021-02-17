@@ -39,7 +39,8 @@
     "bump-major": "npm version major --no-git-tag-version && bundle exec fastlane bump",
     "fix:react-native-image": "npx react-native-fix-image",
     "fix:modules": "npm run fix:react-native-image && npm run fix:collapsible",
-    "postinstall": "npm run fix:modules"
+    "postinstall": "npm run fix:modules",
+    "sonar": "node sonar-project.js"
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "1.2.2",
@@ -130,6 +131,7 @@
     "metro-react-native-babel-preset": "0.58.0",
     "prettier": "2.0.4",
     "react-test-renderer": "16.11.0",
+    "sonarqube-scanner": "2.8.0",
     "typescript": "3.8.3"
   },
   "jest": {

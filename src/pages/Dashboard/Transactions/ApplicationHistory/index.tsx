@@ -173,7 +173,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const tabProps = { setScreen: setScreen, navigation: navigation };
-  let content: JSX.Element = <View />;
+  let content: JSX.Element;
 
   if (activeTab === "pending") {
     content = <PendingOrders activeTab={activeTab === "pending"} handlePrintSummary={handlePrintSummary} {...tabProps} />;
@@ -186,7 +186,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const selectionText =
     pending?.orders !== undefined && selectedOrders.length > 1 ? DASHBOARD_HOME.LABEL_ORDERS_SELECTED : DASHBOARD_HOME.LABEL_ORDER_SELECTED;
 
-  const bannerText = `${selectedOrders!.length} ${selectionText}`;
+  const bannerText = `${selectedOrders.length} ${selectionText}`;
   const submissionSummary = `${DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY_DOWNLOADED}`;
 
   const tableContainer: ViewStyle = {
@@ -246,9 +246,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           </View>
         </View>
         <CustomSpacer space={sh24} />
-        {selectedOrders!.length !== 0 && activeTab === "pending" ? <CustomSpacer space={sh112} /> : null}
+        {selectedOrders.length !== 0 && activeTab === "pending" ? <CustomSpacer space={sh112} /> : null}
       </DashboardLayout>
-      {selectedOrders!.length !== 0 && activeTab === "pending" ? (
+      {selectedOrders.length !== 0 && activeTab === "pending" ? (
         <SelectionBanner
           bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
           cancelOnPress={handlePrintAll}

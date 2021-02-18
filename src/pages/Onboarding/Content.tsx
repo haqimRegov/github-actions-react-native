@@ -30,7 +30,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     handleResetOnboarding: handleResetOnboarding,
   };
 
-  let content: JSX.Element = <View />;
+  let content: JSX.Element;
 
   switch (newProps.route) {
     case ONBOARDING_ROUTES.RiskAssessment:
@@ -86,7 +86,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     <Fragment>
       {content}
       <ConfirmationModal
-        handleCancel={handleCancelOnboarding!}
+        handleCancel={handleCancelOnboarding}
         handleContinue={handleResetOnboarding}
         labelCancel={ONBOARDING.BUTTON_NO}
         labelContinue={ONBOARDING.BUTTON_YES}

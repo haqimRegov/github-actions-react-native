@@ -34,8 +34,8 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   };
 
   const jointDetails: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_DISTRIBUTION, title: personalInfo!.incomeDistribution! },
-    { label: SUMMARY.LABEL_SIGNATORY, title: personalInfo!.signatory! },
+    { label: SUMMARY.LABEL_DISTRIBUTION, title: personalInfo.incomeDistribution! },
+    { label: SUMMARY.LABEL_SIGNATORY, title: personalInfo.signatory! },
   ];
 
   const handleBack = () => {
@@ -49,8 +49,8 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
       noBounce={true}
       subheading={SUMMARY.HEADING}
       subtitle={SUMMARY.SUBHEADING}>
-      <Principal accountType={accountType} handleNextStep={handleNextStep} summary={personalInfo!.principal!} />
-      {accountType === "Individual" ? null : <Joint handleNextStep={handleNextStep} summary={personalInfo!.joint!} />}
+      <Principal accountType={accountType} handleNextStep={handleNextStep} summary={personalInfo.principal!} />
+      {accountType === "Individual" ? null : <Joint handleNextStep={handleNextStep} summary={personalInfo.joint!} />}
       {accountType === "Individual" ? null : (
         <SummaryJointDetails
           handleNextStep={handleNextStep}

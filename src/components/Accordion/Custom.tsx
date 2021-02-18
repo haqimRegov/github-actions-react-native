@@ -52,7 +52,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
   useEffect(() => {
     if (expandAll === true) {
       const allActiveSections: number[] = [];
-      sections.map((_section, index) => {
+      sections.forEach((_section, index) => {
         return allActiveSections.push(index);
       });
       setActiveSections(allActiveSections);

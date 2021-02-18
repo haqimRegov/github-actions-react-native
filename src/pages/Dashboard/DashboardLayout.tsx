@@ -84,7 +84,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     // },
   ];
 
-  let statusColor: TagColorType = "primary";
+  let statusColor: TagColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
     statusColor = "error";
   } else if (status === DICTIONARY_ORDER_STATUS.submitted) {

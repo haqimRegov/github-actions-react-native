@@ -55,7 +55,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   const disabledCheckbox = disabled === true ? disabledOpacity : {};
   const itemSelected =
     rowSelection !== undefined && rowSelectionKey !== undefined
-      ? rowSelection.findIndex((rowData) => rowData[rowSelectionKey] === item[rowSelectionKey]) > -1
+      ? rowSelection.findIndex((row) => row[rowSelectionKey] === item[rowSelectionKey]) > -1
       : false;
   const itemAccordionOpen = activeAccordion !== undefined ? activeAccordion.includes(index) : false;
   const itemBorder: ViewStyle = itemAccordionOpen ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {};

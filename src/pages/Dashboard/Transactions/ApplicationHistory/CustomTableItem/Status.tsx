@@ -13,7 +13,7 @@ export interface PendingStatusProps extends ITableCustomItem {}
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
   const { dueDate, status, withHardcopy } = item.rawData as IDashboardOrder;
-  let statusColor: TagColorType = "primary";
+  let statusColor: TagColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
     statusColor = "error";
   } else if (status === DICTIONARY_ORDER_STATUS.submitted) {

@@ -49,14 +49,10 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
     setScreen("Transactions");
   };
 
-  let content: JSX.Element = <View />;
+  let content: JSX.Element = <OrderDetails data={orderSummary!} isScheduled={currentOrder!.isScheduled} />;
 
-  switch (selection) {
-    case 1:
-      content = <AccountDetails data={orderSummary!} />;
-      break;
-    default:
-      content = <OrderDetails data={orderSummary!} isScheduled={currentOrder!.isScheduled} />;
+  if (selection === 1) {
+    content = <AccountDetails data={orderSummary!} />;
   }
 
   const handleFetch = async () => {

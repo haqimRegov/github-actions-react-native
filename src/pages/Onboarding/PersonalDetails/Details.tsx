@@ -89,7 +89,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
     setValidations({ ...validations, epfNumber: isNumber(inputEpfNumber) === false ? ERROR.INVALID_NUMBER : undefined });
   };
 
-  const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails!.idType! as TypeClientID) !== 1;
+  const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails.idType! as TypeClientID) !== 1;
 
   return (
     <View>

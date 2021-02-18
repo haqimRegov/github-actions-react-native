@@ -56,7 +56,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
 }: VerificationProps) => {
   const [showInfo, setShowInfo] = useState<boolean>(true);
 
-  const { joint, principal } = personalInfo!;
+  const { joint, principal } = personalInfo;
   const inputPrincipalEmail = principal!.contactDetails!.emailAddress!;
   const inputJointEmail = joint!.contactDetails!.emailAddress!;
 
@@ -118,7 +118,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   return (
     <ContentPage
       continueTextStyle={fsTransformNone}
-      handleCancel={handleCancel!}
+      handleCancel={handleCancel}
       handleContinue={handleContinue}
       labelContinue={EMAIL_VERIFICATION.LABEL_GET_OTP}
       noBounce={false}

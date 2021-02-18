@@ -92,7 +92,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
       .map((paymentInfo: IPaymentState) => {
         return {
           ...paymentInfo,
-          amount: parseAmountToString(paymentInfo!.amount!),
+          amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
           currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
           transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
           transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
@@ -114,7 +114,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
       if (error === null && data !== null) {
         setTimeout(() => {
           setPaymentResult(data.result);
-        }, 100);
+        }, 150);
         // setErrorMessage(undefined);
         // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }

@@ -142,7 +142,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
 
   const localBankDetails: LabeledTitleProps[][] = [];
   if (accountHolder === "Principal" && bankInformation.localBank !== null) {
-    bankInformation.localBank.map((bank) => {
+    bankInformation.localBank.forEach((bank) => {
       const newData: LabeledTitleProps[] = [
         { label: DASHBOARD_PROFILE.LABEL_CURRENCY, title: bank.currency.join(", "), titleStyle: fsUppercase },
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
@@ -162,7 +162,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
 
   const foreignBankDetails: LabeledTitleProps[][] = [];
   if (accountHolder === "Principal" && bankInformation.foreignBank !== null) {
-    bankInformation.foreignBank.map((bank) => {
+    bankInformation.foreignBank.forEach((bank) => {
       const newData: LabeledTitleProps[] = [
         { label: DASHBOARD_PROFILE.LABEL_CURRENCY, title: bank.currency.join(", "), titleStyle: fsUppercase },
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName, titleStyle: fsTransformNone },
@@ -195,17 +195,17 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
     { label: DASHBOARD_PROFILE.LABEL_BALANCE, title: fea.balance || "-" },
   ];
 
-  if (fatca!.usCitizen === "No") {
-    fatcaSummary.splice(1, 0, { label: DASHBOARD_PROFILE.LABEL_US_BORN, title: fatca!.usBorn as string });
-    if (fatca!.usBorn === "Yes") {
-      fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_RESIDENT, title: fatca!.confirmAddress as string });
-      if (fatca!.certificate) {
+  if (fatca.usCitizen === "No") {
+    fatcaSummary.splice(1, 0, { label: DASHBOARD_PROFILE.LABEL_US_BORN, title: fatca.usBorn as string });
+    if (fatca.usBorn === "Yes") {
+      fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_RESIDENT, title: fatca.confirmAddress as string });
+      if (fatca.certificate) {
         fatcaSummary.push({
           label: DASHBOARD_PROFILE.LABEL_CERTIFICATE,
-          title: fatca!.certificate.name!,
-          titleIcon: fatca!.certificate.name === "-" ? undefined : "file",
+          title: fatca.certificate.name!,
+          titleIcon: fatca.certificate.name === "-" ? undefined : "file",
           titleStyle: fsTransformNone,
-          onPress: () => setFile(fatca!.certificate! as FileBase64),
+          onPress: () => setFile(fatca.certificate! as FileBase64),
         });
       } else {
         fatcaSummary.push(
@@ -217,31 +217,31 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
           },
         );
       }
-      if (fatca!.confirmAddress === "Yes") {
+      if (fatca.confirmAddress === "Yes") {
         fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_CORRESPONDENCE, title: address, titleStyle: fsTransformNone });
       }
     }
   }
 
-  if (fatca!.formW9 === true) {
+  if (fatca.formW9 === true) {
     fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_FORM_W9, title: "Yes" });
   }
 
-  if (fatca!.formW8Ben === true) {
+  if (fatca.formW8Ben === true) {
     fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_FORM_W8_BEN, title: "Yes" });
   }
 
   const crsSummary = isTaxResident
     ? crsPartial
     : crsPartial.concat([
-        { label: DASHBOARD_PROFILE.LABEL_TIN_COUNTRY, title: crs!.country! || "-" },
-        { label: DASHBOARD_PROFILE.LABEL_TIN_NUMBER, title: crs!.tinNumber || "-" },
+        { label: DASHBOARD_PROFILE.LABEL_TIN_COUNTRY, title: crs.country! || "-" },
+        { label: DASHBOARD_PROFILE.LABEL_TIN_NUMBER, title: crs.tinNumber || "-" },
       ]);
 
-  if (crs!.reason) {
+  if (crs.reason) {
     crsSummary.push({
       label: DASHBOARD_PROFILE.LABEL_TIN_REMARKS,
-      title: crs!.reason || "-",
+      title: crs.reason || "-",
       titleStyle: fsTransformNone,
     });
   }
@@ -249,7 +249,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
   const uploadedDocuments: LabeledTitleProps[] = [];
 
   if (uploadedDocuments !== null) {
-    uploadedDocument.map((doc, index) => {
+    uploadedDocument.forEach((doc, index) => {
       const handleFile = () => {
         setFile(uploadedDocument[index]);
       };

@@ -41,7 +41,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
 
   const idNumber = personalDetails.idNumber!;
   const idType = personalDetails.idType!;
-  const dateOfBirth = personalDetails!.dateOfBirth!;
+  const dateOfBirth = personalDetails.dateOfBirth!;
   const formattedDOB = moment(dateOfBirth).format(DEFAULT_DATE_FORMAT);
   const labelOtherId = idType !== "Passport" ? `${idType} ID` : idType;
   const labelId = idType !== "NRIC" ? `${labelOtherId} Number` : idType;
@@ -51,18 +51,18 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const inputCountryOfBirth = personalDetails.countryOfBirth!;
   const inputExpiryDate = personalDetails.expirationDate!;
   const inputGender = personalDetails.gender!;
-  const inputMailingAddress = addressInfo!.mailingAddress!.address!;
-  const inputMailingCity = addressInfo!.mailingAddress!.city!;
-  const inputMailingCountry = addressInfo!.mailingAddress!.country!;
-  const inputMailingPostCode = addressInfo!.mailingAddress!.postCode!;
-  const inputMailingState = addressInfo!.mailingAddress!.state!;
+  const inputMailingAddress = addressInfo.mailingAddress!.address!;
+  const inputMailingCity = addressInfo.mailingAddress!.city!;
+  const inputMailingCountry = addressInfo.mailingAddress!.country!;
+  const inputMailingPostCode = addressInfo.mailingAddress!.postCode!;
+  const inputMailingState = addressInfo.mailingAddress!.state!;
   const inputName = personalDetails.name!;
   const inputNationality = personalDetails.nationality!;
-  const inputPermanentAddress = addressInfo!.permanentAddress!.address!;
-  const inputPermanentCity = addressInfo!.permanentAddress!.city!;
-  const inputPermanentCountry = addressInfo!.permanentAddress!.country!;
-  const inputPermanentPostCode = addressInfo!.permanentAddress!.postCode!;
-  const inputPermanentState = addressInfo!.permanentAddress!.state!;
+  const inputPermanentAddress = addressInfo.permanentAddress!.address!;
+  const inputPermanentCity = addressInfo.permanentAddress!.city!;
+  const inputPermanentCountry = addressInfo.permanentAddress!.country!;
+  const inputPermanentPostCode = addressInfo.permanentAddress!.postCode!;
+  const inputPermanentState = addressInfo.permanentAddress!.state!;
   const inputPlaceOfBirth = personalDetails.placeOfBirth!;
   const inputSalutation = personalDetails.salutation!;
 

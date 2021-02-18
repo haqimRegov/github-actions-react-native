@@ -66,7 +66,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
       if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {
         return null;
       }
-      if (finishedSteps !== undefined && finishedSteps.indexOf(step.key!) !== -1) {
+      if (finishedSteps !== undefined && finishedSteps.indexOf(step.key) !== -1) {
         return setSections([stepIndex]);
       }
       return null;

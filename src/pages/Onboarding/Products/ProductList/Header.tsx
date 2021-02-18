@@ -139,7 +139,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const pillList = newPills.map(({ pillValues }) => pillValues).flat();
 
   const handleRemoveFilter = (pill: string) => {
-    const findPill = newPills.findIndex(({ pillValues }) => pillValues.includes(pill));
+    const findPill = newPills.findIndex((pills) => pills.pillValues.includes(pill));
     const { key, pillValues, values } = newPills[findPill];
     const filterClone: IProductFilter = { ...filter };
     const updatedFilter = filterClone[key].filter((filterValue: string) => filterValue !== values[pillValues.indexOf(pill)]);

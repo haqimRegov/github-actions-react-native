@@ -98,7 +98,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
             handleNavigate();
           }, 5000);
         }
-        return true;
       }
       if (error !== null) {
         setPrincipalError(error.message);
@@ -124,7 +123,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
   const disabled = jointEmailCheck === false ? principalOtp === "" : principalOtp === "" || jointOtp === "";
-  const pincipalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
+  const principalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
   const otpLabel =
     jointEmailCheck === true
       ? `${EMAIL_VERIFICATION.LABEL_OTP_SENT_JOINT} ${principalEmail} & ${jointEmail}.`
@@ -162,7 +161,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
             <CustomTextInput
               keyboardType="numeric"
               error={principalError}
-              label={pincipalOtpLabel}
+              label={principalOtpLabel}
               maxLength={DICTIONARY_OTP_LENGTH}
               onBlur={checkPrincipalOtp}
               onChangeText={setPrincipalOtp}

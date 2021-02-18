@@ -21,12 +21,12 @@ export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps
   setValidations,
   validations,
 }: PrincipalVerificationProps) => {
-  const principalHolderName = personalDetails!.name !== undefined ? personalDetails.name : ID_VERIFICATION.LABEL_PRINCIPAL;
+  const principalHolderName = personalDetails.name !== undefined ? personalDetails.name : ID_VERIFICATION.LABEL_PRINCIPAL;
   const jointStyle: ViewStyle = accountType === "Joint" ? px(sw24) : {};
 
   return (
     <View style={px(sw24)}>
-      {accountType === "Individual" ? null : <AccountHeader subtitle={ID_VERIFICATION.LABEL_PRINCIPAL} title={principalHolderName!} />}
+      {accountType === "Individual" ? null : <AccountHeader subtitle={ID_VERIFICATION.LABEL_PRINCIPAL} title={principalHolderName} />}
       <View style={jointStyle}>
         <LabeledTitle
           label={ID_VERIFICATION.LABEL_ID_VERIFY}

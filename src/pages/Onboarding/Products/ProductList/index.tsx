@@ -57,7 +57,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   // columns.push(performanceColumn);
 
   const productTypeProps = { scrollEnabled: scrollEnabled, setScrollEnabled: setScrollEnabled };
-  let content = <UnitTrust {...productTypeProps} />;
+  let content: JSX.Element;
   if (productType === "prs") {
     content = <PRS {...productTypeProps} />;
   } else if (productType === "prsDefault") {

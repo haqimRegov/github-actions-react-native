@@ -109,13 +109,13 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     const response: IGetRiskProfileResponse = await getRiskProfile({
       clientId: clientId!,
       riskAssessment: {
-        questionTwo: questionTwo!,
-        questionThree: questionThree!,
-        questionFour: questionFour!,
-        questionFive: questionFive!,
-        questionSix: questionSix!,
-        questionSeven: questionSeven!,
-        questionEight: questionEight!,
+        questionTwo: questionTwo,
+        questionThree: questionThree,
+        questionFour: questionFour,
+        questionFive: questionFive,
+        questionSix: questionSix,
+        questionSeven: questionSeven,
+        questionEight: questionEight,
       },
     });
     setLoading(false);
@@ -178,7 +178,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   return (
     <Fragment>
       <ContentPage
-        handleCancel={handleCancelOnboarding!}
+        handleCancel={handleCancelOnboarding}
         handleContinue={handlePageContinue}
         heading={`${RISK_ASSESSMENT.HEADING} ${name}.`}
         subheading={RISK_ASSESSMENT.SUBHEADING}>
@@ -212,12 +212,12 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q2_OPTIONS} selected={questionTwo!} setSelected={setQ2} />
+            <CustomSlider disabled={true} options={Q2_OPTIONS} selected={questionTwo} setSelected={setQ2} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_3}
               options={Q3_OPTIONS}
-              selected={questionThree!}
+              selected={questionThree}
               setSelected={setQ3}
               title={RISK_ASSESSMENT.QUESTION_3}
             />
@@ -226,7 +226,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               label={RISK_ASSESSMENT.LABEL_QUESTION_4}
               options={Q4_OPTIONS}
               right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
-              selected={questionFour!}
+              selected={questionFour}
               setSelected={setQ4}
               title={RISK_ASSESSMENT.QUESTION_4}
             />
@@ -235,7 +235,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               label={RISK_ASSESSMENT.LABEL_QUESTION_5}
               options={Q5_OPTIONS}
               right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
-              selected={questionFive!}
+              selected={questionFive}
               setSelected={setQ5}
               title={RISK_ASSESSMENT.QUESTION_5}
             />
@@ -248,12 +248,12 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q6_OPTIONS} selected={questionSix!} setSelected={setQ6} />
+            <CustomSlider disabled={true} options={Q6_OPTIONS} selected={questionSix} setSelected={setQ6} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_7}
               options={Q7_OPTIONS}
-              selected={questionSeven!}
+              selected={questionSeven}
               setSelected={setQ7}
               title={RISK_ASSESSMENT.QUESTION_7}
             />
@@ -308,7 +308,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                       </Fragment>
                     );
                   }}
-                  selected={questionEight!}
+                  selected={questionEight}
                   setSelected={setQ8}
                   title={RISK_ASSESSMENT.QUESTION_8}
                 />

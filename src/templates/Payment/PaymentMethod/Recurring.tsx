@@ -73,7 +73,12 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
             value={bankAccountName}
           />
           <CustomSpacer isHorizontal={true} space={sw64} />
-          <CustomTextInput label={PAYMENT.LABEL_BANK_ACCOUNT_NUMBER} onChangeText={setBankAccountNumber} value={bankAccountNumber} />
+          <CustomTextInput
+            keyboardType="numeric"
+            label={PAYMENT.LABEL_BANK_ACCOUNT_NUMBER}
+            onChangeText={setBankAccountNumber}
+            value={bankAccountNumber}
+          />
         </View>
       </View>
       <View style={px(sw24)}>

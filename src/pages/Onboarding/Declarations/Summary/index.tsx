@@ -77,16 +77,16 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         isInvestmentEpf = true;
       }
       return {
-        fundId: fundDetails.fundId!,
-        fundingOption: investment.fundPaymentMethod!, // TODO backend to fix
+        fundId: fundDetails.fundId,
+        fundingOption: investment.fundPaymentMethod, // TODO backend to fix
         fundClass: investment.fundClass !== "noClass" ? investment.fundClass : "",
         fundCurrency: investment.fundCurrency!,
-        investmentAmount: parseAmountToString(investment.investmentAmount!),
-        isScheduled: `${investment.scheduledInvestment!}`,
+        investmentAmount: parseAmountToString(investment.investmentAmount),
+        isScheduled: `${investment.scheduledInvestment}`,
         scheduledInvestmentAmount: investment.scheduledInvestmentAmount
           ? parseAmountToString(investment.scheduledInvestmentAmount)
           : undefined,
-        salesCharge: investment.investmentSalesCharge!,
+        salesCharge: investment.investmentSalesCharge,
         scheduledSalesCharge: investment.scheduledSalesCharge,
       };
     });
@@ -189,8 +189,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           }
         : undefined;
     const newRequest = {
-      incomeDistribution: personalInfo!.incomeDistribution!,
-      signatory: accountType === "Joint" ? personalInfo!.signatory! : undefined,
+      incomeDistribution: personalInfo.incomeDistribution!,
+      signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
       principal: {
         clientId: details!.principalHolder!.clientId!,
         addressInformation: principal!.addressInformation! as ISubmitAddressInformation,

@@ -20,7 +20,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
 
   const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
   const expirationDate = moment(personalDetails!.expirationDate).format(DEFAULT_DATE_FORMAT);
-  const idType = typeof personalDetails!.idType! === "string" ? personalDetails!.idType! : DICTIONARY_ALL_ID_TYPE[personalDetails!.idType!];
+  const idType = typeof personalDetails!.idType! === "string" ? personalDetails!.idType : DICTIONARY_ALL_ID_TYPE[personalDetails!.idType!];
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(idType as TypeClientID) !== 1;
 
   const personalDetailsSummary: LabeledTitleProps[] = [
@@ -86,8 +86,8 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   const epfDetailsSummary: LabeledTitleProps[] =
     epfDetails !== undefined && epfDetails.epfAccountType !== "" && epfDetails.epfMemberNumber !== ""
       ? [
-          { label: SUMMARY.LABEL_EPF_NUMBER, title: epfDetails!.epfMemberNumber! },
-          { label: SUMMARY.LABEL_EPF_ACCOUNT, title: epfDetails!.epfAccountType! },
+          { label: SUMMARY.LABEL_EPF_NUMBER, title: epfDetails.epfMemberNumber! },
+          { label: SUMMARY.LABEL_EPF_ACCOUNT, title: epfDetails.epfAccountType! },
         ]
       : [];
 

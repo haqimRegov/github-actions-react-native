@@ -8,7 +8,7 @@ import { sh16 } from "../../../styles";
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
 
 interface UploadIDProps {
-  backError?: string | undefined;
+  backError?: string;
   backPage: FileBase64 | undefined;
   frontError: string | undefined;
   frontPage: FileBase64 | undefined;
@@ -31,8 +31,8 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
   setFrontPage,
   uploadRef,
 }: UploadIDProps) => {
-  const extractedIdType = typeof idType! === "string" ? idType! : DICTIONARY_ALL_ID_TYPE[idType!];
-  const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(extractedIdType as TypeClientID) !== 1;
+  const extractedIdType = typeof idType === "string" ? idType : DICTIONARY_ALL_ID_TYPE[idType];
+  const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(extractedIdType) !== 1;
 
   let firstLabel = `${idType} - ${IDENTITY_CONFIRMATION.LABEL_FRONT}`;
   let secondLabel = `${idType} - ${IDENTITY_CONFIRMATION.LABEL_BACK}`;

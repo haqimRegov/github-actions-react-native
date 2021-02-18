@@ -6,8 +6,6 @@ import { connect } from "react-redux";
 import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
-import { RNShareApi } from "../../../integrations";
-import { SAMPLE_PDF_1 } from "../../../mocks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild, flexCol, fs12BoldBlack2, fs16BoldBlack2, fs16SemiBoldBlack2, sh56 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
@@ -60,7 +58,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const handleInvest = () => {
     const initialStateArray: IProductSales[] = [];
-    selectedFunds.map((item: IProduct) => {
+    selectedFunds.forEach((item: IProduct) => {
       let newMasterClassList: IProductClasses = {};
       item.masterList.forEach((list: IProductMasterList) => {
         const dump = { class: list.class !== null ? list.class : "noClass", currency: list.currency };
@@ -154,12 +152,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const handleShareDocuments = async () => {
     // TODO integration
-    const response = [SAMPLE_PDF_1, SAMPLE_PDF_1];
-    const documents = response.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
-    const share = await RNShareApi.filesBase64(documents);
-    if (share !== undefined) {
-      setShareSuccess(true);
-    }
+    // const response = [];
+    // const documents = response.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
+    // const share = await RNShareApi.filesBase64(documents);
+    // if (share !== undefined) {
+    //   setShareSuccess(true);
+    // }
   };
 
   let screen = {
@@ -265,8 +263,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const riskPromptTitle = prompt === "risk" ? PRODUCT_LIST.PROMPT_TITLE_RISK : PRODUCT_LIST.PROMPT_TITLE_RISK;
-  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : riskPromptTitle;
+  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
   const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE;
   const promptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : riskPromptText;
 

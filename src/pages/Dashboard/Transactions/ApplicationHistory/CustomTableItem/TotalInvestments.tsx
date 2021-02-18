@@ -37,7 +37,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
 
   const content = (
     <Fragment>
-      {totalInvestment!.map((investment: IOrderAmount, index: number) => {
+      {totalInvestment.map((investment: IOrderAmount, index: number) => {
         return (
           <View key={index}>
             <View style={flexRow}>
@@ -52,12 +52,12 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
   );
   const tooltipPlacement = lastIndex ? "top" : "bottom";
   const topAdjustment = lastIndex ? -sh56 : undefined;
-  const style: ViewStyle = totalInvestment!.length <= 3 ? centerHorizontal : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
+  const style: ViewStyle = totalInvestment.length <= 3 ? centerHorizontal : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
 
   return (
-    <TouchableWrapper isTouchable={totalInvestment!.length > 3} onPress={handleShowMore}>
+    <TouchableWrapper isTouchable={totalInvestment.length > 3} onPress={handleShowMore}>
       <View style={{ ...style, ...flexChild }} onResponderStart={() => true}>
-        {totalInvestment!.map((investment: IOrderAmount, index: number) => {
+        {totalInvestment.map((investment: IOrderAmount, index: number) => {
           return (
             <Fragment key={index}>
               {index < 3 ? (
@@ -70,7 +70,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
             </Fragment>
           );
         })}
-        {totalInvestment!.length > 3 ? (
+        {totalInvestment.length > 3 ? (
           <Fragment>
             <CustomTooltip
               arrowSize={{ height: sh7, width: sw12 }}

@@ -47,6 +47,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
     }
     if (prompt === "message") {
       handleDone();
+      setPrompt("status");
     }
     return null;
   };
@@ -100,10 +101,10 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
                 <View style={flexRow}>
                   <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <Tag color={result.account.status === "Completed" ? "secondary" : "warning"} text={result!.account.status} />
+                  <Tag color={result.account.status === "Completed" ? "secondary" : "warning"} text={result.account.status} />
                 </View>
                 <View>
-                  {result!.account.remarks.map((remark, remarkIndex) => {
+                  {result.account.remarks.map((remark, remarkIndex) => {
                     return (
                       <Text key={remarkIndex} style={fs16SemiBoldBlack1}>
                         {remark}

@@ -90,7 +90,7 @@ const mykadFront = async (filePath: string) => {
   });
 
   if (idNumberIndex > -1) {
-    mykad.name = mykadBlocks!.blocks[idNumberIndex + 1]?.text!.split("\n").join(" ");
+    mykad.name = mykadBlocks.blocks[idNumberIndex + 1]?.text!.split("\n").join(" ");
   }
   if (mykad.address === "" || mykad.postCode === "" || mykad.city === "" || mykad.state === "") {
     return { error: { code: ERROR_CODE.invalidNricData, message: ERROR.OCR_INVALID_NRIC_DATA } };

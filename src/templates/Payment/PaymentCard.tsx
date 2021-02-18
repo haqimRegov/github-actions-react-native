@@ -438,12 +438,12 @@ PaymentCardProps) => {
             let saveDisabled = onlineBankingDisabled;
             const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
             const findTotalIndex = orderTotalAmount.findIndex(({ currency }) => currency === payment.currency);
-            const paymentAmount = payment.amount ? parseAmount(payment.amount) : 0;
+            const paymentAmount = payment.amount !== undefined ? parseAmount(payment.amount) : 0;
             let calculateDifference = -1;
             if (floatingAmount.length !== 0) {
               calculateDifference = floatingAmount[findFloatingIndex].amount + paymentAmount;
             } else {
-              calculateDifference = paymentAmount - parseAmount(orderTotalAmount[findTotalIndex].amount);
+              calculateDifference = paymentAmount - parseAmount(orderTotalAmount[findTotalIndex].amount || "");
             }
 
             const additionalPaymentDisabled = calculateDifference >= 0 || saveDisabled;

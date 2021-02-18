@@ -150,7 +150,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     const floatingTotalAmount = orderTotalAmount.map((orderAmount) => {
       const filteredPayments = latestPayments
         .filter((value) => value.currency === orderAmount.currency)
-        .map((payment: IPaymentState) => parseAmount(payment.amount!));
+        .map((payment: IPaymentState) => parseAmount(payment.amount || ""));
       const total =
         filteredPayments.length === 0
           ? 0

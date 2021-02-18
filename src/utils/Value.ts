@@ -1,17 +1,17 @@
-export const parseAmount = (input: string) => {
-  return parseFloat(input.replace(/[,]/g, ""));
+export const parseAmount = (input: string = "") => {
+  return input !== undefined ? parseFloat(input.replace(/[,]/g, "")) : input;
 };
 
-export const parseAmountToString = (input: string) => {
-  return parseFloat(input.replace(/[,]/g, "")).toString();
+export const parseAmountToString = (input: string = "") => {
+  return input !== undefined ? parseFloat(input.replace(/[,]/g, "")).toString() : undefined;
 };
 
-export const formatAmount = (input: number | string) => {
+export const formatAmount = (input: number | string = "") => {
   const value = typeof input === "number" ? input : parseAmount(input);
   return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/[^0-9,.]/g, "");
 };
 
-export const formatNumber = (input: string) => {
+export const formatNumber = (input: string = "") => {
   return input.replace(/[^0-9]/g, "");
 };
 

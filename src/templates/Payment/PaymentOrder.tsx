@@ -188,6 +188,8 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         })
       : [];
 
+  const totalAmountLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
+
   return (
     <View>
       <View style={cardHeaderStyle}>
@@ -200,7 +202,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           <View style={{ ...centerVertical, ...flexRow }}>
             <Tag color={tagColor} text={tagLabel} />
             <CustomSpacer isHorizontal={true} space={sw8} />
-            <Text style={fs12RegBlack2}>{PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT}</Text>
+            <Text style={fs12RegBlack2}>{totalAmountLabel}</Text>
           </View>
           <CustomSpacer space={sh8} />
           <View style={{ ...centerVertical, ...flexRow }}>

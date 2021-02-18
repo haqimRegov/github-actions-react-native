@@ -816,6 +816,7 @@ export const english = {
       LABEL_TIME: "12:00 PM",
       LABEL_TOTAL_AMOUNT: "With total investment amount of MYR ",
       LABEL_TOTAL_INVESTMENT_AMOUNT: "Total Investment Amount",
+      LABEL_TOTAL_RECURRING_AMOUNT: "Total Recurring Amount",
       LABEL_TRANSACTION_DATE: "Transaction Date",
       LABEL_TRANSACTION_TIME: "Transaction Time",
       LABEL_TRANSFER_SLIP: "Transfer Slip",

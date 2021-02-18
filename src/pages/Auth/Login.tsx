@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { ActivityIndicator, Alert, Keyboard, View } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";
@@ -25,7 +25,7 @@ interface LoginProps extends GlobalStoreProps {
   setRootPage: (page: TypeLoginPages) => void;
 }
 
-const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRootPage }: LoginProps) => {
+const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passwordRecovery, setRootPage, ...props }: LoginProps) => {
   const [inputNRIC, setInputNRIC] = useState<string>("");
   const [inputOTP, setInputOTP] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
@@ -76,7 +76,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
         if (data !== null) {
           const { agentId, branch, email, inboxCount, licenseCode, licenseType, name, rank } = data.result;
           await Auth.signIn(inputNRIC, inputPassword);
-          addGlobal({
+          props.addGlobal({
             agent: {
               name: name,
               email: email,
@@ -100,6 +100,7 @@ const LoginComponent = ({ addGlobal, navigation, page, passwordRecovery, setRoot
           if (checkEmulator === false) {
             RNPushNotification.requestPermission();
           }
+          props.resetTransactions();
           navigation.dispatch(
             CommonActions.reset({
               index: 0,

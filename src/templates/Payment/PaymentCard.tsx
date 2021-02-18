@@ -135,7 +135,7 @@ PaymentCardProps) => {
   const floating = floatingAmount
     .map(({ amount, currency }) => {
       const symbol = amount > 0 ? "+" : "-";
-      const trimAmount = amount > 0 ? amount : parseAmount(`${amount}`.substring(1));
+      const trimAmount = amount > 0 ? amount : parseAmount(`${amount || 0}`.substring(1));
       return amount === 0 ? "" : `${symbol} ${currency} ${formatAmount(trimAmount)}`;
     })
     .filter((data) => data !== "")

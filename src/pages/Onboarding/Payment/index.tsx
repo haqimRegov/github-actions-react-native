@@ -55,7 +55,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           .map((paymentInfo: IPaymentState) => {
             return {
               ...paymentInfo,
-              amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo!.amount),
+              amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
               currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,

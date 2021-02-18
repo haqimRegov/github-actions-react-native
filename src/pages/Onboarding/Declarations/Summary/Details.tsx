@@ -103,7 +103,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
       ? [
           { label: DECLARATION_SUMMARY.LABEL_MALAYSIAN_RESIDENT, title: fea?.resident === 0 ? "Yes" : "No" },
           { label: DECLARATION_SUMMARY.LABEL_FACILITY, title: fea?.facility === 0 ? "Yes" : "No" },
-          { label: DECLARATION_SUMMARY.LABEL_BALANCE, title: fea?.balance !== "" ? formatAmount(fea?.balance) : "-" },
+          { label: DECLARATION_SUMMARY.LABEL_BALANCE, title: fea?.balance !== "" ? formatAmount(fea?.balance!) : "-" },
         ]
       : [];
 

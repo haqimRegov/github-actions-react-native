@@ -47,6 +47,7 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
     }
     if (prompt === "message") {
       handleDone();
+      setPrompt("status");
     }
     return null;
   };

@@ -77,3 +77,9 @@ amplifytools.xcconfig
 # sonarqube
 .sonar
 .scannerwork
+
+# Jest
+#
+.jest/
+coverage
+test-report.xml

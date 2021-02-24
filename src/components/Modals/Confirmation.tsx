@@ -26,8 +26,10 @@ import { BasicModal } from "./Basic";
 
 interface ConfirmationModalProps extends ActionButtonsProps {
   children: JSX.Element;
+  containerStyle?: ViewStyle;
   headerStyle?: ViewStyle;
   keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
+  modalContainerStyle?: ViewStyle;
   spaceToButton?: number;
   spaceToContent?: number;
   spaceToTitle?: number;
@@ -36,12 +38,14 @@ interface ConfirmationModalProps extends ActionButtonsProps {
   visible: boolean;
 }
 
-type TypeBehavior = "height" | "position" | "padding" | undefined;
+// type TypeBehavior = "height" | "position" | "padding" | undefined;
 
 export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   children,
+  containerStyle,
   headerStyle,
   // keyboardAvoidingRef,
+  modalContainerStyle,
   spaceToButton,
   spaceToContent,
   spaceToTitle,
@@ -57,6 +61,7 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
     backgroundColor: colorGray._5,
     borderRadius: sw5,
     width: sw565,
+    ...modalContainerStyle,
   };
 
   const buttonContainer: ViewStyle = {
@@ -84,7 +89,7 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   return (
     <BasicModal visible={visible}>
       <KeyboardAwareScrollView contentContainerStyle={flexGrow}>
-        <View style={{ ...centerHV, ...fullHW }}>
+        <View style={{ ...centerHV, ...fullHW, ...containerStyle }}>
           <View style={modalContainer}>
             <View style={{ ...px(sw56), ...headerStyle }}>
               {title !== undefined ? (

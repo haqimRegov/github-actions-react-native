@@ -8,7 +8,6 @@ import {
   border,
   centerHV,
   centerVertical,
-  colorBlack,
   colorBlue,
   colorGray,
   colorTransparent,
@@ -31,14 +30,17 @@ import {
   sw12,
   sw16,
   sw20,
+  sw228,
   sw24,
-  sw240,
-  sw35,
+  sw256,
+  sw268,
+  sw304,
   sw358,
   sw360,
   sw4,
   sw8,
 } from "../../styles";
+import { shortenString } from "../../utils";
 import { CollapsibleDropdown } from "../Collapsible";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
@@ -100,7 +102,8 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
       newArray = tempArray.filter((text: string) => text !== items[index].value);
     }
     const updatedArray = reset === false ? tempArray : newArray;
-    const count = await CalculateCount(updatedArray, sw240, sw35);
+    const shortenArray = updatedArray.map((text) => shortenString(text, 25, 27));
+    const count = await CalculateCount(shortenArray, sw304, sw4, fs16RegBlack2);
     setShowMore({ ...showMore, number: count });
   };
 
@@ -143,23 +146,24 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
               ...py(sh4),
               borderRadius: sw24,
               backgroundColor: colorGray._2,
+              maxWidth: sw256,
             };
 
             const handleWidth = async (event: LayoutChangeEvent) => {
               const { height, width } = event.nativeEvent.layout;
               if (showMore.active === false) {
-                if (width >= sw240) {
+                if (width >= sw256) {
                   setShowMore({ ...showMore, active: true });
                 }
-              } else if ((height < sh24 && showMore.active === true) || width < sw240) {
+              } else if ((height < sh24 && showMore.active === true) || width < sw256) {
                 setShowMore({ ...showMore, active: false, number: 0 });
               }
             };
             const dropdownBaseStyle: ViewStyle = {
               ...flexRow,
-              maxWidth: sw240,
               ...flexWrap,
               height: sh24,
+              maxWidth: sw268,
               overflow: "hidden",
             };
 
@@ -172,18 +176,18 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                         const handleClose = async () => {
                           const valueClone = [...value];
                           valueClone.splice(index, 1);
-                          const count = await CalculateCount(valueClone, sw240, sw35);
+                          const count = await CalculateCount(valueClone, sw304, sw4, fs16RegBlack2);
                           setShowMore({ ...showMore, number: count });
                           handleChange(valueClone);
                         };
 
                         return (
-                          <Fragment key={index}>
+                          <View key={index} style={flexRow}>
                             <Fragment>
                               {index !== 0 ? <CustomSpacer isHorizontal={true} space={sw4} /> : null}
                               <TouchableWithoutFeedback onPress={handleClose}>
                                 <View style={defaultTagStyle} onStartShouldSetResponderCapture={() => true}>
-                                  <Text style={valueStyle}>{item}</Text>
+                                  <Text style={{ ...valueStyle, maxWidth: sw228 }}>{shortenString(item, 25, 27)}</Text>
                                   <CustomSpacer isHorizontal={true} space={sw4} />
                                   <View style={centerHV}>
                                     <IcoMoon color={colorBlue._3_8} name="close" size={sw12} />
@@ -191,7 +195,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                                 </View>
                               </TouchableWithoutFeedback>
                             </Fragment>
-                          </Fragment>
+                          </View>
                         );
                       })}
                     </Fragment>
@@ -210,7 +214,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                   ) : null}
                 </View>
                 <CustomFlexSpacer />
-                <IcoMoon color={colorBlack._2} name="caret-down" size={sw20} />
+                <IcoMoon color={colorBlue._2} name="caret-down" size={sw24} />
               </View>
             );
           }}

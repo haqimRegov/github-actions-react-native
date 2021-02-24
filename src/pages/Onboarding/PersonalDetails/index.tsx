@@ -15,6 +15,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   accountType,
   addPersonalInfo,
   handleNextStep,
+  investmentDetails,
   onboarding,
   personalInfo,
   productSales,
@@ -229,7 +230,12 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
             />
           </Fragment>
         )}
-        <AccountDetails accountType={accountType} personalInfo={personalInfo} setPersonalInfo={handlePersonalInfo} />
+        <AccountDetails
+          accountType={accountType}
+          investmentDetails={investmentDetails!}
+          personalInfo={personalInfo}
+          setPersonalInfo={handlePersonalInfo}
+        />
       </View>
     </ContentPage>
   );

@@ -10,12 +10,14 @@ const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface AccountDetailsProps {
   accountType: TypeAccountChoices;
+  investmentDetails: IProductSales[];
   personalInfo: IPersonalInfoState;
   setPersonalInfo: (value: IPersonalInfoState) => void;
 }
 
 export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
   accountType,
+  investmentDetails,
   personalInfo,
   setPersonalInfo,
 }: AccountDetailsProps) => {
@@ -38,6 +40,19 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
     operatingControl.push(PERSONAL_DETAILS.OPTION_CONTROL_BOTH, PERSONAL_DETAILS.OPTION_CONTROL_EITHER);
   }
 
+  const fundsWithPayout = investmentDetails.filter(({ fundDetails, investment }) => {
+    return (
+      (fundDetails.fundType !== "PRS" && investment.fundPaymentMethod !== "EPF") ||
+      (investment.fundPaymentMethod === "Cash" && fundDetails.fundType !== "PRS")
+    );
+  });
+
+  const distributionOptions = [PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST];
+
+  if (fundsWithPayout.length !== 0) {
+    distributionOptions.push(PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT);
+  }
+
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
@@ -50,7 +65,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
           <TextSpaceArea spaceToBottom={sh16} spaceToTop={space} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_DISTRIBUTION} />
           <RadioButtonGroup
             direction="row"
-            options={[PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST, PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT]}
+            options={distributionOptions}
             selected={inputDistribution}
             setSelected={setInputDistribution}
             space={sw48}

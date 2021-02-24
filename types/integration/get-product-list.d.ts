@@ -51,12 +51,30 @@ declare interface IProduct {
   fundType: string;
   isEpf: string;
   isEpfOnly: string;
+  isPrsDefault: string;
+  isScheduled: string;
   issuingHouse: string;
   isSyariah: string;
-  isScheduled: string;
   isWholesale: string;
   landingFund: string;
-  performance: string;
+  performance: {
+    benchmark: {
+      fiveYears: number[];
+      oneMonth: number[];
+      oneYear: number[];
+      sixMonths: number[];
+      tenYears: number[];
+      threeYears: number[];
+    };
+    nav: {
+      fiveYears: number[];
+      oneMonth: number[];
+      oneYear: number[];
+      sixMonths: number[];
+      tenYears: number[];
+      threeYears: number[];
+    };
+  };
   riskCategory: string;
   masterList: IProductMasterList[];
 }

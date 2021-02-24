@@ -182,15 +182,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     // when sort, search, filter is updated
     handleFetchUT(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, search, filters]);
-
-  useEffect(() => {
-    // initial fetch
-    // if ((showBy === "recommended" && recommended.length === 0) || (showBy === "all" && all.length === 0)) {
-    handleFetchUT(page);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showBy]);
+  }, [sort, search, filters, showBy]);
 
   return (
     <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadowBlack116 }}>

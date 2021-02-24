@@ -146,14 +146,6 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, search, filters]);
 
-  useEffect(() => {
-    // initial fetch
-    // if (recommended.length === 0) {
-    handleFetchPRSDefault(page);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadowBlack116 }}>
       <ProductHeader

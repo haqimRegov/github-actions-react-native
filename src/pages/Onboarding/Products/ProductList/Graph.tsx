@@ -8,7 +8,7 @@ import { flexChild, flexRow, fs10RegBlack2, fs16BoldBlack2, px, sh16, sh24, sw24
 const { PRODUCT_GRAPH } = Language.PAGE;
 
 export interface ProductGraphProps {
-  fund?: IFund;
+  fund?: IProduct;
   layout?: {
     height?: number;
     width?: number;

@@ -92,8 +92,11 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
   const generateNewPaymentDraft = () => {
     const initialCurrency = orderTotalAmount.length > 1 ? "" : orderTotalAmount[0].currency;
     let initialState: IPaymentState = {};
-    const kibBankName = initialCurrency === "" ? "" : DICTIONARY_KIB_BANK_ACCOUNTS[0].bankName;
-    const kibBankNumber = initialCurrency === "" ? "" : DICTIONARY_KIB_BANK_ACCOUNTS[0].bankAccountNumber;
+    const kibCurrencyIndex = DICTIONARY_KIB_BANK_ACCOUNTS.findIndex((bank) => bank.currency === initialCurrency);
+    const kibBank = kibCurrencyIndex !== -1 ? DICTIONARY_KIB_BANK_ACCOUNTS[kibCurrencyIndex] : DICTIONARY_KIB_BANK_ACCOUNTS[0];
+    const kibBankName = initialCurrency === "" ? "" : kibBank.bankName;
+    const kibBankNumber = initialCurrency === "" ? "" : kibBank.bankAccountNumber;
+
     switch (paymentType) {
       case "Cash":
         initialState = {

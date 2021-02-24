@@ -9,6 +9,8 @@ import {
   borderBottomBlack1,
   centerHV,
   flexRow,
+  flexWrap,
+  fs12BoldBlack2,
   fs12RegBlack2,
   fs16BoldBlack1,
   fs16SemiBoldBlack1,
@@ -17,10 +19,12 @@ import {
   fsAlignCenter,
   sh16,
   sh24,
-  sh32,
+  sh392,
   sh4,
   sh8,
   sw176,
+  sw320,
+  sw328,
   sw8,
 } from "../../styles";
 
@@ -52,11 +56,14 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
     return null;
   };
 
+  const widthStyle = result !== undefined && result.orders.length > 5 ? { width: undefined } : {};
+
   return (
     <View>
       <ConfirmationModal
         continueDisabled={checkNonPendingOrder === true ? !toggle : false}
         handleContinue={handleContinue}
+        modalContainerStyle={widthStyle}
         labelContinue={prompt === "message" ? PAYMENT.BUTTON_DONE : undefined}
         visible={result !== undefined}>
         {prompt === "message" ? (
@@ -70,58 +77,63 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
           <View>
             <Text style={{ ...fs24BlackBlack2 }}>{PAYMENT.PROMPT_TITLE_STATUS}</Text>
             <View style={borderBottomBlack1} />
-            <CustomSpacer space={sh24} />
-            {result !== undefined &&
-              result.orders.map((order: ISubmitProofOfPaymentResultOrder, index: number) => {
-                return (
-                  <View key={index}>
-                    <View style={flexRow}>
-                      <Text style={fs16BoldBlack1}>{order.orderNumber}</Text>
-                      <CustomSpacer isHorizontal={true} space={sw8} />
-                      <Tag
-                        color={order.status === "Completed" || order.status === "Submitted" ? "secondary" : "warning"}
-                        text={order.status === "Completed" || order.status === "Submitted" ? "Completed" : order.status}
-                      />
+            <CustomSpacer space={sh16} />
+            <View style={{ maxHeight: sh392, ...flexWrap }}>
+              {result !== undefined &&
+                result.orders.map((order: ISubmitProofOfPaymentResultOrder, index: number) => {
+                  return (
+                    <View key={index} style={{ width: sw320 }}>
+                      <View style={flexRow}>
+                        <Text style={fs16BoldBlack1}>{order.orderNumber}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                        <Tag
+                          color={order.status === "Completed" || order.status === "Submitted" ? "secondary" : "warning"}
+                          text={order.status === "Completed" || order.status === "Submitted" ? "Completed" : order.status}
+                        />
+                      </View>
+                      <View>
+                        {order.remarks.map((remark, remarkIndex) => {
+                          return (
+                            <Text key={remarkIndex} style={fs12RegBlack2}>
+                              {remark}
+                            </Text>
+                          );
+                        })}
+                      </View>
+                      <CustomSpacer space={sh24} />
                     </View>
-                    <View>
-                      {order.remarks.map((remark, remarkIndex) => {
-                        return (
-                          <Text key={remarkIndex} style={fs16SemiBoldBlack1}>
-                            {remark}
-                          </Text>
-                        );
-                      })}
-                    </View>
-                    <CustomSpacer space={sh32} />
+                  );
+                })}
+              {result !== undefined && result.account !== null ? (
+                <View style={{ width: sw320 }}>
+                  <View style={flexRow}>
+                    <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw8} />
+                    <Tag color={result.account.status === "Completed" ? "secondary" : "warning"} text={result.account.status} />
                   </View>
-                );
-              })}
-            {result !== undefined && result.account !== null ? (
-              <View>
-                <View style={flexRow}>
-                  <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw8} />
-                  <Tag color={result.account.status === "Completed" ? "secondary" : "warning"} text={result.account.status} />
+                  <View>
+                    {result.account.remarks.map((remark, remarkIndex) => {
+                      return (
+                        <Text key={remarkIndex} style={fs16SemiBoldBlack1}>
+                          {remark}
+                        </Text>
+                      );
+                    })}
+                  </View>
+                  <CustomSpacer space={sh24} />
                 </View>
-                <View>
-                  {result.account.remarks.map((remark, remarkIndex) => {
-                    return (
-                      <Text key={remarkIndex} style={fs16SemiBoldBlack1}>
-                        {remark}
-                      </Text>
-                    );
-                  })}
-                </View>
-              </View>
-            ) : null}
+              ) : null}
+            </View>
             {checkNonPendingOrder === true ? (
               <Fragment>
-                <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
+                <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh8} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
                 <CheckBox
                   checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
                   onPress={handleCheckbox}
                   label={PAYMENT.PROMPT_CHECKBOX_LABEL}
+                  labelStyle={fs12BoldBlack2}
                   toggle={toggle}
+                  style={{ width: sw328, ...widthStyle }}
                 />
               </Fragment>
             ) : null}

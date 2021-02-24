@@ -98,7 +98,7 @@ export const py = (points: number) =>
 
 export const shadow = {
   // shadow for android
-  elevation: 3,
+  // elevation: 3,
   // shadow for ios
   shadowColor: "#000",
   shadowOffset: {
@@ -111,7 +111,7 @@ export const shadow = {
 
 export const shadow5 = {
   // shadow for android
-  elevation: 5,
+  // elevation: 5,
   // shadow for ios
   shadowColor: "#000",
   shadowOffset: {
@@ -124,7 +124,7 @@ export const shadow5 = {
 
 export const shadowBlack116 = {
   // shadow for android
-  elevation: 1,
+  // elevation: 1,
   // shadow for ios
   shadowColor: colorBlack._1,
   shadowOffset: {
@@ -137,7 +137,7 @@ export const shadowBlack116 = {
 
 export const shadowBlack5 = {
   // shadow for android
-  elevation: 1,
+  // elevation: 1,
   // shadow for ios
   shadowColor: colorBlack._1,
   shadowOffset: {
@@ -150,7 +150,7 @@ export const shadowBlack5 = {
 
 export const shadowBlue204 = {
   // shadow for android
-  elevation: 1,
+  // elevation: 1,
   // shadow for ios
   shadowColor: colorBlue._2,
   shadowOffset: {
@@ -163,7 +163,7 @@ export const shadowBlue204 = {
 
 export const shadowBlue5 = {
   // shadow for android
-  elevation: 1,
+  // elevation: 1,
   // shadow for ios
   shadowColor: colorBlue._5,
   shadowOffset: {

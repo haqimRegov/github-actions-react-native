@@ -500,6 +500,7 @@ const productList = gql`
             riskCategory
             isEpf
             isEpfOnly
+            isPrsDefault
             isSyariah
             isWholesale
             isScheduled

@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, CustomTextInput, IconButton, OutlineButton } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, IconButton, MobileInput, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MOBILE_CODE, ERROR } from "../../../data/dictionary";
 import { centerVertical, colorBlack, colorBlue, flexRow, fs12BoldBlue2, px, py, sh16, sh24, sh8, sw16, sw24 } from "../../../styles";
@@ -49,6 +49,12 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
             setContactNumber(updatedNumber);
           };
 
+          const handleChangeCode = (input: string) => {
+            const updatedNumber = [...contactNumber];
+            updatedNumber[index].code = input;
+            setContactNumber(updatedNumber);
+          };
+
           const handleChangeNumber = (input: string) => {
             const updatedNumber = [...contactNumber];
             updatedNumber[index].value = input;
@@ -64,9 +70,21 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
           return (
             <View key={index} style={{ ...centerVertical, ...flexRow }}>
               <View>
-                <CustomTextInput
+                {/* <CustomTextInput
                   error={item.error}
                   inputPrefix={item.code}
+                  keyboardType="numeric"
+                  label={item.label}
+                  onBlur={checkNumber}
+                  onChangeText={handleChangeNumber}
+                  placeholder="12 3456 7890"
+                  spaceToTop={sh24}
+                  value={item.value}
+                /> */}
+                <MobileInput
+                  code={item.code}
+                  onChangeCode={handleChangeCode}
+                  error={item.error}
                   keyboardType="numeric"
                   label={item.label}
                   onBlur={checkNumber}

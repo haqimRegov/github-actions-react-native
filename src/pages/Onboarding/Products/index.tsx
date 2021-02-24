@@ -71,14 +71,21 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         return dump;
       });
 
+      const findExistingInvestment =
+        investmentDetails !== undefined ? investmentDetails.findIndex((fund) => fund.fundDetails.fundId === item.fundId) : -1;
+      const existingInvestmentDetails =
+        investmentDetails !== undefined && findExistingInvestment !== -1 ? investmentDetails[findExistingInvestment].investment : {};
+
       const newState: IProductSales = {
         investment: {
+          fundId: item.fundId,
           fundPaymentMethod: item.isEpfOnly === "Yes" ? "EPF" : "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",
           fundCurrency: item.masterList[0].currency,
           fundClass: item.masterList[0].class !== null ? item.masterList[0].class : "noClass",
           scheduledInvestment: false,
+          ...existingInvestmentDetails,
         },
         fundDetails: { ...item },
         masterClassList: newMasterClassList,
@@ -100,7 +107,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const checkOutsideRiskFactor = () => {
-    const fundsRisk = selectedFunds.map((item) => item.riskCategory.toLowerCase());
+    const fundsRisk = selectedFunds.map((item) => (item.isPrsDefault === "Yes" ? "" : item.riskCategory.toLowerCase()));
     if (riskScore.appetite.toLowerCase() === "medium") {
       return fundsRisk.includes("high");
     }

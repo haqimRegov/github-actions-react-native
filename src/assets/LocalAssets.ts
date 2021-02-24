@@ -1,3 +1,4 @@
+import { COUNTRY_FLAG } from "./country_flag";
 import illustrationClientError from "./illustration_client_error/illustration_client_error.png";
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
@@ -18,6 +19,9 @@ import riskAssessmentGraph1 from "./risk_assessment_graph_1/risk_assessment_grap
 import riskAssessmentGraph2 from "./risk_assessment_graph_2/risk_assessment_graph_2.png";
 
 export const LocalAssets = {
+  flag: {
+    ...COUNTRY_FLAG,
+  },
   graph: {
     risk_assessment_graph_1: riskAssessmentGraph1,
     risk_assessment_graph_2: riskAssessmentGraph2,

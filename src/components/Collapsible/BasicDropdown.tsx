@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { FlatList, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { FlatList, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewProps, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
 import { CustomSpacer } from "../../components/Views/Spacer";
@@ -46,6 +46,7 @@ export interface CollapsibleDropdownProps {
   backDropOpacity?: number;
   baseContainerStyle?: ViewStyle;
   baseDropdownStyle?: ViewStyle;
+  baseViewProps?: ViewProps;
   checkboxLabelStyle?: TextStyle;
   collapseOnBaseClick?: boolean;
   collapsibleStyle?: ViewStyle;
@@ -79,6 +80,7 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
   backDropOpacity,
   baseContainerStyle,
   baseDropdownStyle,
+  baseViewProps,
   checkboxLabelStyle,
   collapseOnBaseClick,
   collapsibleStyle,
@@ -196,7 +198,7 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
     <Fragment>
       <View ref={setRef} renderToHardwareTextureAndroid={true} style={{ ...flexRow }}>
         <TouchableWithoutFeedback onPress={handleExpand}>
-          <View onStartShouldSetResponderCapture={() => true} style={baseContainer}>
+          <View onStartShouldSetResponderCapture={() => true} style={baseContainer} {...baseViewProps}>
             <RenderBase collapse={collapse} />
           </View>
         </TouchableWithoutFeedback>

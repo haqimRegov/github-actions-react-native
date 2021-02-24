@@ -590,6 +590,9 @@ export const english = {
       PLACEHOLDER_SEARCH: "Search here",
       TAB_NOTIFICATIONS: "Notifications",
     },
+    INPUT_MOBILE: {
+      PLACEHOLDER: "12 345 6789",
+    },
     INVESTMENT: {
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",
@@ -855,7 +858,7 @@ export const english = {
       LABEL_SALES_EPF: "Sales Charge Range (EPF)",
       LABEL_SHARIAH: "Shariah Approved",
       TITLE_DOC_ANNUAL: "Annual Report",
-      TITLE_DOC_FACT: "Monthly Fund Fact",
+      TITLE_DOC_FACT: "Monthly Fund Fact Sheet",
       TITLE_DOC_HIGHLIGHTS: "Product Highlights Sheet",
       TITLE_DOC_PROSPECTUS: "Prospectus Information",
     },

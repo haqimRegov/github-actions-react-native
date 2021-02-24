@@ -115,7 +115,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
       label: PRODUCT_DETAILS.LABEL_MINIMUM_CASH,
       titlePrefix: inputCurrency,
       titlePrefixStyle: { lineHeight: sh24 },
-      title: formatAmount(newSalesAmount.cash.min),
+      title: formatAmount(newSalesAmount.cash.min || 0),
     },
   ];
 

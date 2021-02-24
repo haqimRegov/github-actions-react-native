@@ -258,7 +258,7 @@ declare type TypeMobileCodeCountry =
   | "Afghanistan"
   | "Albania"
   | "Algeria"
-  | "684 American Samoa"
+  | "American Samoa"
   | "Andorra"
   | "Angola"
   | "Anguilla"
@@ -315,7 +315,7 @@ declare type TypeMobileCodeCountry =
   | "Dominican Republic"
   | "Dominican Republic"
   | "Dominican Republic"
-  | "East Timor"
+  | "Timor Leste"
   | "Ecuador"
   | "Egypt"
   | "El Salvador"
@@ -489,6 +489,12 @@ declare type TypeMobileCodeCountry =
   | "Zimbabwe";
 
 declare interface IMobileCountryCode {
+  label: TypeMobileCodeCountry;
+  value: TypeMobileCode;
+}
+
+declare interface IMobileCountryCodeFlag {
+  flag?: import("react-native").ImageSourcePropType;
   label: TypeMobileCodeCountry;
   value: TypeMobileCode;
 }

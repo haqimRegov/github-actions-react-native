@@ -439,11 +439,13 @@ PaymentCardProps) => {
             const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
             const findTotalIndex = orderTotalAmount.findIndex(({ currency }) => currency === payment.currency);
             const paymentAmount = payment.amount !== undefined ? parseAmount(payment.amount) : 0;
+            const currencyTotalAmount = findTotalIndex !== -1 ? parseAmount(orderTotalAmount[findTotalIndex].amount) : 0;
+            const cleanAmount = Number.isNaN(paymentAmount) ? 0 : paymentAmount;
             let calculateDifference = -1;
             if (floatingAmount.length !== 0) {
-              calculateDifference = floatingAmount[findFloatingIndex].amount + paymentAmount;
+              calculateDifference = floatingAmount[findFloatingIndex].amount + cleanAmount;
             } else {
-              calculateDifference = paymentAmount - parseAmount(orderTotalAmount[findTotalIndex].amount || "");
+              calculateDifference = cleanAmount - currencyTotalAmount;
             }
 
             const additionalPaymentDisabled = calculateDifference >= 0 || saveDisabled;

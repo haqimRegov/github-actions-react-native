@@ -118,7 +118,6 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
         setLoading(false);
       }
     }
-    setLoading(false);
     return undefined;
   };
 

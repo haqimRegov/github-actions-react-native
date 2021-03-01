@@ -84,7 +84,15 @@ const mykadFront = async (filePath: string) => {
         mykad.postCode = postCode;
         mykad.city = titleCaseString(postCodeCity[0].split(" ").slice(1).join(" "));
         mykad.address = split.slice(0, postCodeIndex - 1).join(" ");
-        mykad.state = titleCaseString(state);
+        if (state.toLowerCase().includes("kl")) {
+          mykad.state = "Kuala Lumpur";
+        } else if (state.toLowerCase().includes("putra")) {
+          mykad.state = "Putrajaya";
+        } else if (state.toLowerCase().includes("labuan")) {
+          mykad.state = "Labuan";
+        } else {
+          mykad.state = titleCaseString(state);
+        }
       }
     }
   });

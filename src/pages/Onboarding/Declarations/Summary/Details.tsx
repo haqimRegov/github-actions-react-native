@@ -32,7 +32,6 @@ import { formatAmount } from "../../../../utils";
 const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
 interface DeclarationDetailsProps {
-  address: string;
   accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
   handleNextStep: (route: TypeOnboardingRoute) => void;
@@ -58,7 +57,6 @@ const TitleIcon = ({ onPress, title, titleStyle }: TitleIconProps) => {
 };
 
 export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
-  address,
   accountHolder,
   accountType,
   handleNextStep,
@@ -129,9 +127,11 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
           },
         );
       }
-      if (fatca!.confirmAddress === 0) {
-        fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_CORRESPONDENCE, title: address, titleStyle: fsTransformNone });
-      }
+      fatcaSummary.push({
+        label: DECLARATION_SUMMARY.LABEL_CORRESPONDENCE,
+        title: fatca!.confirmAddress === 0 ? "Yes" : "No",
+        titleStyle: fsTransformNone,
+      });
     }
   }
 

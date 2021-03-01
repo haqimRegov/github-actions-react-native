@@ -178,6 +178,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   return (
     <Fragment>
       <ContentPage
+        continueDebounce={true}
         handleCancel={handleCancelOnboarding}
         handleContinue={handlePageContinue}
         heading={`${RISK_ASSESSMENT.HEADING} ${name}.`}

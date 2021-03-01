@@ -4,21 +4,21 @@ import Collapsible from "react-native-collapsible";
 
 import { IcoMoon } from "../../icons";
 import {
-  borderBottomBlack21,
+  borderBottomGray1,
   centerVertical,
   colorWhite,
   flexRow,
+  fs10RegBlack2,
   fs12BoldBlack2,
   fs14BoldBlack2,
-  fs14RegBlack2,
   fs16BoldBlue2,
   noBGColor,
   px,
   sh16,
-  sh24,
   sh56,
   sh8,
   shadowBlue5,
+  sw02,
   sw20,
   sw24,
   sw8,
@@ -64,7 +64,6 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
     // ...centerVertical,
     ...shadowBlue5,
     // ...flexRow,
-    ...px(sw24),
     backgroundColor: colorWhite._1,
     borderRadius: sw8,
     minHeight: sh56,
@@ -102,14 +101,14 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
             <View style={defaultHeaderStyle}>
               <Fragment>
                 <TouchableWithoutFeedback onPress={handleSetSections}>
-                  <View style={{ ...flexRow, height: sh56, ...centerVertical }}>
+                  <View style={{ ...flexRow, height: sh56, ...centerVertical, ...px(sw24) }}>
                     <Text style={{ ...fs16BoldBlue2, ...titleStyle }}>{title}</Text>
                     <CustomFlexSpacer />
                     {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
                   </View>
                 </TouchableWithoutFeedback>
               </Fragment>
-              <Collapsible duration={200} collapsed={!active} style={{ ...noBGColor }}>
+              <Collapsible duration={200} collapsed={!active} style={noBGColor}>
                 {custom !== undefined ? (
                   custom
                 ) : (
@@ -120,28 +119,32 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                           <Fragment key={subsectionIndex}>
                             {subsectionIndex !== 0 ? (
                               <Fragment>
-                                <View style={borderBottomBlack21} />
+                                <View style={borderBottomGray1} />
                                 <CustomSpacer space={sh16} />
                               </Fragment>
                             ) : null}
-                            {terms.heading !== undefined ? <Text style={{ ...fs14BoldBlack2, ...px(sw24) }}>{terms.heading}</Text> : null}
-                            <CustomSpacer space={sh8} />
-                            {terms.termsList.map((term, insideIndex) => {
-                              return (
-                                <Fragment key={insideIndex}>
-                                  <View style={px(sw24)}>
-                                    {term.label === undefined ? null : (
-                                      <Fragment>
-                                        <CustomSpacer space={sh8} />
-                                        <Text style={fs12BoldBlack2}>{term.label}</Text>
-                                      </Fragment>
-                                    )}
-                                    <Text style={{ ...fs14RegBlack2, lineHeight: sh24 }}>{term.content}</Text>
-                                  </View>
-                                  <CustomSpacer space={sh16} />
-                                </Fragment>
-                              );
-                            })}
+                            <View style={px(sw24)}>
+                              {terms.heading !== undefined ? (
+                                <Text style={{ ...fs14BoldBlack2, letterSpacing: -sw02 }}>{terms.heading}</Text>
+                              ) : null}
+                              <CustomSpacer space={sh8} />
+                              {terms.termsList.map((term, insideIndex) => {
+                                return (
+                                  <Fragment key={insideIndex}>
+                                    <View>
+                                      {term.label === undefined ? null : (
+                                        <Fragment>
+                                          <CustomSpacer space={sh8} />
+                                          <Text style={fs12BoldBlack2}>{term.label}</Text>
+                                        </Fragment>
+                                      )}
+                                      <Text style={fs10RegBlack2}>{term.content}</Text>
+                                    </View>
+                                    <CustomSpacer space={sh16} />
+                                  </Fragment>
+                                );
+                              })}
+                            </View>
                           </Fragment>
                         );
                       })}

@@ -7,6 +7,7 @@ import illustrationInboxEmpty from "./illustration_inbox_empty/illustration_inbo
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
 import illustrationNoResults from "./illustration_no_results/illustration_no_results.png";
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
+import illustrationOrderSaved from "./illustration_order_saved/illustration_order_saved.png";
 import illustrationProfileSuccess from "./illustration_profile_success/illustration_profile_success.png";
 import illustrationReceiptSuccess from "./illustration_receipt_success/illustration_receipt_success.png";
 import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
@@ -35,6 +36,7 @@ export const LocalAssets = {
     loginError: illustrationLoginError,
     noResults: illustrationNoResults,
     orderReceived: illustrationOrderReceived,
+    orderSaved: illustrationOrderSaved,
     profileSuccess: illustrationProfileSuccess,
     receiptSuccess: illustrationReceiptSuccess,
     submissionSummary: illustrationSubmissionSummary,

@@ -25,6 +25,7 @@ import {
   sw176,
   sw320,
   sw328,
+  sw452,
   sw8,
 } from "../../styles";
 
@@ -40,6 +41,8 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
 
   const checkNonPendingOrder =
     result !== undefined && result.orders.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
+  const allOrdersSubmitted =
+    result !== undefined && result.orders.findIndex((order) => order.status !== "Completed" && order.status !== "Submitted") === -1;
 
   const handleCheckbox = () => {
     setToggle(!toggle);
@@ -57,6 +60,9 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
   };
 
   const widthStyle = result !== undefined && result.orders.length > 5 ? { width: undefined } : {};
+  const illustration = checkNonPendingOrder === true ? LocalAssets.illustration.orderReceived : LocalAssets.illustration.orderSaved;
+  const submittedMessage = allOrdersSubmitted === true ? PAYMENT.PROMPT_TITLE_SUBMITTED : PAYMENT.PROMPT_TITLE_ORDER;
+  const message = checkNonPendingOrder === true ? submittedMessage : PAYMENT.PROMPT_TITLE_SAVED;
 
   return (
     <View>
@@ -64,18 +70,20 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
         continueDisabled={checkNonPendingOrder === true ? !toggle : false}
         handleContinue={handleContinue}
         modalContainerStyle={widthStyle}
-        labelContinue={prompt === "message" ? PAYMENT.BUTTON_DONE : undefined}
+        labelContinue={prompt === "message" ? PAYMENT.BUTTON_DASHBOARD : undefined}
         visible={result !== undefined}>
         {prompt === "message" ? (
-          <View style={centerHV}>
+          <View style={{ ...centerHV, width: sw452 }}>
             <CustomSpacer space={sh24} />
-            <Image source={LocalAssets.illustration.orderReceived} style={{ height: sw176, width: sw176 }} />
-            <CustomSpacer space={sh8} />
-            <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter }}>{result?.message}</Text>
+            <Image source={illustration} style={{ height: sw176, width: sw176 }} />
+            <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue2, ...fsAlignCenter }} text={message} />
+            {checkNonPendingOrder === true && allOrdersSubmitted === true ? null : (
+              <TextSpaceArea spaceToTop={sh16} style={fs12RegBlack2} text={PAYMENT.PROMPT_SUBTITLE_PENDING} />
+            )}
           </View>
         ) : (
           <View>
-            <Text style={{ ...fs24BlackBlack2 }}>{PAYMENT.PROMPT_TITLE_STATUS}</Text>
+            <TextSpaceArea spaceToBottom={sh8} style={fs24BlackBlack2} text={PAYMENT.PROMPT_TITLE_STATUS} />
             <View style={borderBottomBlack1} />
             <CustomSpacer space={sh16} />
             <View style={{ maxHeight: sh392, ...flexWrap }}>
@@ -120,13 +128,12 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
                       );
                     })}
                   </View>
-                  <CustomSpacer space={sh24} />
                 </View>
               ) : null}
             </View>
             {checkNonPendingOrder === true ? (
               <Fragment>
-                <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh8} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
+                <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
                 <CheckBox
                   checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
                   onPress={handleCheckbox}

@@ -4,7 +4,20 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { borderBottomBlack21, fs16SemiBoldBlack2, fs24BoldBlack2, px, sh16, sh24, sh32, sw24, sw48 } from "../../../styles";
+import {
+  borderBottomBlack21,
+  fs12SemiBoldGray8,
+  fs16SemiBoldBlack2,
+  fs24BoldBlack2,
+  px,
+  sh16,
+  sh24,
+  sh32,
+  sw02,
+  sw24,
+  sw48,
+  sw520,
+} from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -70,9 +83,14 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
             setSelected={setInputDistribution}
             space={sw48}
           />
+          <TextSpaceArea
+            spaceToTop={sh16}
+            style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02, maxWidth: sw520 }}
+            text={PERSONAL_DETAILS.HINT_DISTRIBUTION}
+          />
           {accountType === "Individual" ? null : (
             <Fragment>
-              <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_SIGN} />
+              <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_SIGN} />
               <RadioButtonGroup
                 direction="row"
                 options={operatingControl}

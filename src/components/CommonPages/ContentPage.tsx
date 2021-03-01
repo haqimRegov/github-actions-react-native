@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import { ScrollView, Text, TextStyle, View } from "react-native";
 
 import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
@@ -20,7 +20,7 @@ interface ContentPageProps extends ActionButtonsProps {
   subtitleStyle?: TextStyle;
 }
 
-export const ContentPage = ({
+export const ContentPage: FunctionComponent<ContentPageProps> = ({
   children,
   heading,
   headingStyle,

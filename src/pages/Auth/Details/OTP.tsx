@@ -84,7 +84,13 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
         value={inputOTP}
       />
       <CustomSpacer space={sh32} />
-      <RoundedButton buttonStyle={{ width: sw360 }} disabled={!isNumber(inputOTP)} onPress={handleContinue} text={LOGIN.BUTTON_CONTINUE} />
+      <RoundedButton
+        buttonStyle={{ width: sw360 }}
+        disabled={!isNumber(inputOTP)}
+        onPress={handleContinue}
+        text={LOGIN.BUTTON_CONTINUE}
+        withDebounce={true}
+      />
       <CustomSpacer space={sh32} />
       <View style={flexRow}>
         <Text style={fs12SemiBoldBlue2}>{LOGIN.LABEL_DID_NOT_GET}</Text>

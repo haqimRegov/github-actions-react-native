@@ -219,7 +219,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   let prsCount = 0;
   let ampCount = 0;
   selectedFunds.forEach((fund: IProduct) => {
-    if (fund.fundType === "UT") {
+    if (fund.fundType === "UT" || fund.fundType === "UTF" || fund.fundType === "WSF") {
       utCount += 1;
     } else if (fund.fundType === "PRS") {
       prsCount += 1;

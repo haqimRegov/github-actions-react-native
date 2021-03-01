@@ -12,6 +12,7 @@ declare interface IDashboardOrder {
   };
   transactionType: string;
   isScheduled: boolean;
+  canProceed: boolean;
   withHardcopy: boolean;
   totalInvestment: IOrderAmount[];
   createdOn: string;

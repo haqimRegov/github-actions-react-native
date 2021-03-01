@@ -1,4 +1,5 @@
-import React, { Fragment, FunctionComponent } from "react";
+import debounce from "lodash.debounce";
+import React, { Fragment, FunctionComponent, useCallback } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
@@ -28,6 +29,7 @@ export interface CustomButtonProps {
   secondary?: boolean;
   text: string;
   textStyle?: TextStyle;
+  withDebounce?: boolean;
 }
 
 export const CustomButton: FunctionComponent<CustomButtonProps> = ({
@@ -39,7 +41,17 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   secondary,
   text,
   textStyle,
+  withDebounce,
 }: CustomButtonProps) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncePress = useCallback(
+    debounce(onPress, 500, {
+      leading: true,
+      trailing: false,
+    }),
+    [onPress],
+  );
+
   const defaultButtonStyle: ViewStyle = {
     ...border(colorRed._1, sw2),
     ...flexRowCC,
@@ -53,8 +65,16 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   const defaultIconColor = iconColor !== undefined ? iconColor : colorWhite._1;
   const textColor = secondary ? colorBlack._2 : colorWhite._1;
 
+  const handlePress = () => {
+    if (withDebounce === true) {
+      debouncePress();
+    } else {
+      onPress();
+    }
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={disabled === true ? undefined : onPress}>
+    <TouchableWithoutFeedback onPress={disabled === true ? undefined : handlePress}>
       <View style={defaultButtonStyle}>
         {icon === undefined ? null : (
           <Fragment>

@@ -6,6 +6,7 @@ import americanSamoa from "./AmericanSamoa/AmericanSamoa.png";
 import andorra from "./Andorra/Andorra.png";
 import angola from "./Angola/Angola.png";
 import anguilla from "./Anguilla/Anguilla.png";
+import antarctica from "./Antarctica/Antarctica.png";
 import antiguaAndBarbuda from "./AntiguaAndBarbuda/AntiguaAndBarbuda.png";
 import argentina from "./Argentina/Argentina.png";
 import armenia from "./Armenia/Armenia.png";
@@ -37,6 +38,7 @@ import caboVerde from "./CaboVerde/CaboVerde.png";
 import cambodia from "./Cambodia/Cambodia.png";
 import cameroon from "./Cameroon/Cameroon.png";
 import canada from "./Canada/Canada.png";
+import capeVerde from "./CapeVerde/CapeVerde.png";
 import caymanIslands from "./CaymanIslands/CaymanIslands.png";
 import centralAfricanRepublic from "./CentralAfricanRepublic/CentralAfricanRepublic.png";
 import chad from "./Chad/Chad.png";
@@ -59,6 +61,7 @@ import djibouti from "./Djibouti/Djibouti.png";
 import dominica from "./Dominica/Dominica.png";
 import dominicanRepublic from "./DominicanRepublic/DominicanRepublic.png";
 import ecuador from "./Ecuador/Ecuador.png";
+import egypt from "./Egypt/Egypt.png";
 import elSalvador from "./ElSalvador/ElSalvador.png";
 import england from "./England/England.png";
 import equatorialGuinea from "./EquatorialGuinea/EquatorialGuinea.png";
@@ -97,9 +100,11 @@ import hungary from "./Hungary/Hungary.png";
 import iceland from "./Iceland/Iceland.png";
 import india from "./India/India.png";
 import indonesia from "./Indonesia/Indonesia.png";
+import iran from "./Iran/Iran.png";
 import iraq from "./Iraq/Iraq.png";
 import ireland from "./Ireland/Ireland.png";
 import isleOfMan from "./IsleOfMan/IsleOfMan.png";
+import israel from "./Israel/Israel.png";
 import italy from "./Italy/Italy.png";
 import ivoryCoast from "./IvoryCoast/IvoryCoast.png";
 import jamaica from "./Jamaica/Jamaica.png";
@@ -147,6 +152,7 @@ import namibia from "./Namibia/Namibia.png";
 import nauru from "./Nauru/Nauru.png";
 import nepal from "./Nepal/Nepal.png";
 import netherlands from "./Netherlands/Netherlands.png";
+import netherlandsAntilles from "./NetherlandsAntilles/NetherlandsAntilles.png";
 import newCaledonia from "./NewCaledonia/NewCaledonia.png";
 import newZealand from "./NewZealand/NewZealand.png";
 import nicaragua from "./Nicaragua/Nicaragua.png";
@@ -156,6 +162,7 @@ import niue from "./Niue/Niue.png";
 import norfolkIsland from "./NorfolkIsland/NorfolkIsland.png";
 import northernIreland from "./NorthernIreland/NorthernIreland.png";
 import northernMarianaIslands from "./NorthernMarianaIslands/NorthernMarianaIslands.png";
+import northKorea from "./NorthKorea/NorthKorea.png";
 import northMacedonia from "./NorthMacedonia/NorthMacedonia.png";
 import norway from "./Norway/Norway.png";
 import oman from "./Oman/Oman.png";
@@ -232,9 +239,10 @@ import unitedArabEmirates from "./UnitedArabEmirates/UnitedArabEmirates.png";
 import unitedKingdom from "./UnitedKingdom/UnitedKingdom.png";
 import unitedStates from "./UnitedStates/UnitedStates.png";
 import uruguay from "./Uruguay/Uruguay.png";
-import uSVirginIslands from "./USVirginIslands/USVirginIslands.png";
+import usVirginIslands from "./USVirginIslands/USVirginIslands.png";
 import uzbekistan from "./Uzbekistan/Uzbekistan.png";
 import vanuatu from "./Vanuatu/Vanuatu.png";
+import vatican from "./Vatican/Vatican.png";
 import venezuela from "./Venezuela/Venezuela.png";
 import vietnam from "./Vietnam/Vietnam.png";
 import wales from "./Wales/Wales.png";
@@ -253,6 +261,7 @@ export const COUNTRY_FLAG = {
   andorra: andorra,
   angola: angola,
   anguilla: anguilla,
+  antarctica: antarctica,
   antiguaAndBarbuda: antiguaAndBarbuda,
   argentina: argentina,
   armenia: armenia,
@@ -284,6 +293,7 @@ export const COUNTRY_FLAG = {
   cambodia: cambodia,
   cameroon: cameroon,
   canada: canada,
+  capeVerde: capeVerde,
   caymanIslands: caymanIslands,
   centralAfricanRepublic: centralAfricanRepublic,
   chad: chad,
@@ -306,6 +316,7 @@ export const COUNTRY_FLAG = {
   dominica: dominica,
   dominicanRepublic: dominicanRepublic,
   ecuador: ecuador,
+  egypt: egypt,
   elSalvador: elSalvador,
   england: england,
   equatorialGuinea: equatorialGuinea,
@@ -344,9 +355,11 @@ export const COUNTRY_FLAG = {
   iceland: iceland,
   india: india,
   indonesia: indonesia,
+  iran: iran,
   iraq: iraq,
   ireland: ireland,
   isleOfMan: isleOfMan,
+  israel: israel,
   italy: italy,
   ivoryCoast: ivoryCoast,
   jamaica: jamaica,
@@ -394,6 +407,7 @@ export const COUNTRY_FLAG = {
   nauru: nauru,
   nepal: nepal,
   netherlands: netherlands,
+  netherlandsAntilles: netherlandsAntilles,
   newCaledonia: newCaledonia,
   newZealand: newZealand,
   nicaragua: nicaragua,
@@ -402,6 +416,7 @@ export const COUNTRY_FLAG = {
   niue: niue,
   norfolkIsland: norfolkIsland,
   northernIreland: northernIreland,
+  northKorea: northKorea,
   northernMarianaIslands: northernMarianaIslands,
   northMacedonia: northMacedonia,
   norway: norway,
@@ -479,9 +494,10 @@ export const COUNTRY_FLAG = {
   unitedKingdom: unitedKingdom,
   unitedStates: unitedStates,
   uruguay: uruguay,
-  uSVirginIslands: uSVirginIslands,
+  usVirginIslands: usVirginIslands,
   uzbekistan: uzbekistan,
   vanuatu: vanuatu,
+  vatican: vatican,
   venezuela: venezuela,
   vietnam: vietnam,
   wales: wales,

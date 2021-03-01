@@ -37,3 +37,9 @@ export const DICTIONARY_FPX_BANK = [
 ];
 
 export const DICTIONARY_RECURRING_CURRENCY = "MYR";
+
+export const DICTIONARY_RECURRING_MINIMUM_FPX = {
+  amp: "1000.00",
+  prs: "100.00",
+  ut: "300.00",
+};

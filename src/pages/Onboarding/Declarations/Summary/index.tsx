@@ -322,11 +322,10 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
   const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
   const subtitle = accountType === "Joint" ? jointSubtitle : principalSubtitle;
-  const principalAddress = `${principal?.addressInformation?.permanentAddress?.address}, ${principal?.addressInformation?.permanentAddress?.postCode}, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${principal?.addressInformation?.permanentAddress?.country}`;
-  const jointAddress = `${joint?.addressInformation?.permanentAddress?.address}, ${joint?.addressInformation?.permanentAddress?.postCode}, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${joint?.addressInformation?.permanentAddress?.country}`;
 
   return (
     <ContentPage
+      continueDebounce={true}
       handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={DECLARATION_SUMMARY.BUTTON_CONFIRM}
@@ -334,7 +333,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       subtitle={subtitle}>
       <CustomSpacer space={sh24} />
       <DeclarationDetails
-        address={principalAddress}
         accountHolder="Principal"
         accountType={accountType}
         handleNextStep={handleNextStep}
@@ -348,7 +346,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           <View style={borderBottomBlack21} />
           <CustomSpacer space={sh24} />
           <DeclarationDetails
-            address={jointAddress}
             accountHolder="Joint"
             accountType="Joint"
             handleNextStep={handleNextStep}

@@ -11,7 +11,7 @@ import {
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants/language";
-import { DICTIONARY_RECURRING_CURRENCY, ERROR } from "../../../../data/dictionary";
+import { DICTIONARY_RECURRING_CURRENCY, DICTIONARY_RECURRING_MINIMUM_FPX, ERROR } from "../../../../data/dictionary";
 import {
   borderBottomBlack21,
   centerVertical,
@@ -89,7 +89,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
       salesChargeRange.push(element);
     }
   }
-  const maxSalesChargelabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
+  const maxSalesChargeLabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
 
   const minNewSalesAmount = formatAmount(newSalesAmount[fundingMethod].min);
   const minTopUpAmount = formatAmount(topUpAmount[fundingMethod].min);
@@ -198,7 +198,17 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   };
 
   const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass");
-
+  let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
+  switch (fundDetails.fundType) {
+    case "PRS":
+      minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.prs;
+      break;
+    case "AMP":
+      minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.amp;
+      break;
+    default:
+      break;
+  }
   return (
     <Fragment>
       <View style={{ ...flexRow, ...px(sw24) }}>
@@ -278,7 +288,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               label={INVESTMENT.LABEL_SALES_CHARGE}
               value={investmentSalesCharge}
             />
-            <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargelabel} />
+            <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargeLabel} />
           </View>
         </View>
         {scheduledInvestment === true ? (
@@ -299,7 +309,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
                 />
                 <CustomSpacer space={sh8} />
                 <View style={{ ...px(sw20) }}>
-                  <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{INVESTMENT.HINT_FPX}</Text>
+                  <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{`${INVESTMENT.HINT_FPX} ${minimumFpx}`}</Text>
                   <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{INVESTMENT.HINT_DDA}</Text>
                 </View>
               </View>
@@ -311,7 +321,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
                   value={`${scheduledSalesCharge}`}
                 />
-                <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargelabel} />
+                <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargeLabel} />
               </View>
             </View>
           </Fragment>

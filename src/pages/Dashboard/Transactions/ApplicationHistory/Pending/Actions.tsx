@@ -22,7 +22,9 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   setCurrentOrder,
   setScreen,
 }: PendingOrderActionsProps) => {
-  const { orderNumber, status, remark, withHardcopy } = data.rawData as IDashboardOrder;
+  const { canProceed, isScheduled, orderNumber, remark, status, withHardcopy } = data.rawData as IDashboardOrder;
+
+  const canSubmitHardcopy = isScheduled === true ? canProceed === true : true;
 
   const handlePrintSubmissionSummary = () => {
     onClose();
@@ -89,7 +91,7 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
         remark.findIndex((reason) => reason.label === "Document" || reason.label === "Others") !== -1) ? (
         <IconText color={colorBlue._2} name="upload" onPress={handleUploadDocs} text={DASHBOARD_HOME.LABEL_UPLOAD} style={itemStyle} />
       ) : null}
-      {status === "Pending Hardcopy" ? (
+      {status === "Pending Hardcopy" && canSubmitHardcopy === true ? (
         <IconText
           color={colorBlue._2}
           name="file"

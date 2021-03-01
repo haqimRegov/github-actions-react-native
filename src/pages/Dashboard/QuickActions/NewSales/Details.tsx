@@ -61,7 +61,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
 
   const setInputIdNumber = (value: string) => {
     if ((idType === "NRIC" && isNumber(value)) || idType !== "NRIC" || value === "") {
-      setClientInfo({ ...[holderToFill], id: value });
+      setClientInfo({ ...[holderToFill], id: value.toUpperCase() });
     }
   };
 
@@ -117,6 +117,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           value={name}
         />
         <CustomTextInput
+          autoCapitalize="characters"
           disabled={clientType !== "" && holderToFill === "principalHolder"}
           error={errorMessage}
           keyboardType={keyboardType}

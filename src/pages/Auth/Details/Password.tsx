@@ -85,7 +85,13 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
         value={inputRetypePassword}
       />
       <CustomSpacer space={sh32} />
-      <RoundedButton disabled={buttonDisabled} onPress={handleSubmit} buttonStyle={{ width: sw360 }} text={LOGIN.BUTTON_CONTINUE} />
+      <RoundedButton
+        disabled={buttonDisabled}
+        onPress={handleSubmit}
+        buttonStyle={{ width: sw360 }}
+        text={LOGIN.BUTTON_CONTINUE}
+        withDebounce={true}
+      />
       <CustomSpacer space={sh32} />
     </View>
   );

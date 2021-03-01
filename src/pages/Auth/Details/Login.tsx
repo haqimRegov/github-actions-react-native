@@ -77,6 +77,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           disabled={inputNRIC === "" || inputPassword === ""}
           onPress={handleLogin}
           text={LOGIN.BUTTON_LOGIN}
+          withDebounce={true}
         />
         <CustomSpacer space={sh28} />
         <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} />

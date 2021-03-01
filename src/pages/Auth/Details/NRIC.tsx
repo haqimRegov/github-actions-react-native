@@ -62,7 +62,13 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
         value={inputNRIC}
       />
       <CustomSpacer space={sh32} />
-      <RoundedButton disabled={!isNumber(inputNRIC)} onPress={handleSubmit} buttonStyle={{ width: sw360 }} text={LOGIN.BUTTON_CONTINUE} />
+      <RoundedButton
+        disabled={!isNumber(inputNRIC)}
+        onPress={handleSubmit}
+        buttonStyle={{ width: sw360 }}
+        text={LOGIN.BUTTON_CONTINUE}
+        withDebounce={true}
+      />
       <CustomSpacer space={sh32} />
       {handleExistingLogin !== undefined ? (
         <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ height: sh16 }} />

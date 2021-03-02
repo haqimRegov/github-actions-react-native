@@ -53,9 +53,16 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
       ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
         const payment: ISubmitProofOfPayment[] = payments
           .map((paymentInfo: IPaymentState) => {
+            const updatedPaymentInfo = { ...paymentInfo };
+            delete updatedPaymentInfo.combinedBankAccountName;
+
             return {
-              ...paymentInfo,
+              ...updatedPaymentInfo,
               amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
+              bankAccountName:
+                paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
+                  ? paymentInfo.combinedBankAccountName
+                  : paymentInfo.bankAccountName,
               currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
@@ -128,7 +135,10 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
   if (accountType === "Joint") {
-    accountNames.push({ label: details!.jointHolder!.name!, value: details!.jointHolder!.name! });
+    accountNames.push(
+      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
+      { label: PAYMENT.OPTION_COMBINED, value: PAYMENT.OPTION_COMBINED },
+    );
   }
 
   useEffect(() => {

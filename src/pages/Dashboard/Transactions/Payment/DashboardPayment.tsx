@@ -74,6 +74,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
           completed: false,
           floatingAmount: [],
           totalPaidAmount: data.result.totalPaidAmount,
+          paymentCount: data.result.paymentCount,
         };
         setPaymentOrder(newOrders);
         setPaymentResult(undefined);
@@ -90,9 +91,16 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
     setLoading(true);
     const payment: ISubmitProofOfPayment[] = paymentOrder!.payments
       .map((paymentInfo: IPaymentState) => {
+        const updatedPaymentInfo = { ...paymentInfo };
+        delete updatedPaymentInfo.combinedBankAccountName;
+
         return {
-          ...paymentInfo,
+          ...updatedPaymentInfo,
           amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
+          bankAccountName:
+            paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
+              ? paymentInfo.combinedBankAccountName
+              : paymentInfo.bankAccountName,
           currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
           transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
           transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
@@ -161,7 +169,10 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   const accountNames = [{ label: currentOrder!.investorName.principal, value: currentOrder!.investorName.principal }];
 
   if (currentOrder!.accountType === "Joint") {
-    accountNames.push({ label: currentOrder!.investorName.joint!, value: currentOrder!.investorName.joint! });
+    accountNames.push(
+      { label: currentOrder!.investorName.joint!, value: currentOrder!.investorName.joint! },
+      { label: PAYMENT.OPTION_COMBINED, value: PAYMENT.OPTION_COMBINED },
+    );
   }
 
   const updatePaymentOrder = (payment: IPaymentOrderState) => {

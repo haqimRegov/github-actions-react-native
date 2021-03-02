@@ -68,6 +68,7 @@ export interface PaymentCardProps {
   isScheduled: boolean;
   orderCreationDate?: Date;
   orderTotalAmount: IOrderAmount[];
+  paymentCount?: number;
   payments: IPaymentState[];
   setPayments: (value: IPaymentState[]) => void;
   totalPaidAmount?: IOrderAmount[];
@@ -75,8 +76,8 @@ export interface PaymentCardProps {
 
 export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   accountNames,
-  allowedRecurringType,
   active,
+  allowedRecurringType,
   currencies,
   floatingAmount,
   generateNewPayment,
@@ -85,19 +86,19 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   isScheduled,
   orderCreationDate,
   orderTotalAmount,
+  paymentCount,
   payments,
-}: // totalPaidAmount,
-PaymentCardProps) => {
+  totalPaidAmount,
+}: PaymentCardProps) => {
   const [prompt, setPrompt] = useState<number | undefined>(undefined);
   const [expandedIndex, setExpandedIndex] = useState<number>(0);
   const [amountError, setAmountError] = useState<string | undefined>(undefined);
   const [draftPayments, setDraftPayments] = useState<IPaymentState[]>(payments);
-  // console.log("draftPayments", draftPayments);
-  // const withPreviousPayment = totalPaidAmount !== undefined && totalPaidAmount.length > 0;
-  const withPaymentAdded = draftPayments.findIndex((payment) => payment.saved === true) !== -1;
-  const withPayment = withPaymentAdded;
 
-  // console.log("withPayment", withPayment);
+  const withPreviousPayment = totalPaidAmount !== undefined && totalPaidAmount.length > 0;
+  const withPaymentAdded = draftPayments.findIndex((payment) => payment.saved === true) !== -1;
+  const withPayment = withPaymentAdded || withPreviousPayment;
+
   const infoIcon = active ? "close" : "caret-down";
   const icon = active ? "minus" : "caret-down";
   const completedIcon = withPayment === true && active === false ? "check" : icon;
@@ -113,26 +114,23 @@ PaymentCardProps) => {
     height: sh64,
   };
 
-  // const handleFloatingAmount = () => {
-  //   const floatingTotalAmount =
-  //     totalPaidAmount !== undefined &&
-  //     totalPaidAmount.map((orderAmount) => {
-  //       const filteredPayments = latestPayments
-  //         .filter((value) => value.currency === orderAmount.currency)
-  //         .map((payment: IPaymentState) => parseFloat(payment.amount!));
-  //       const total =
-  //         filteredPayments.length === 0
-  //           ? 0
-  //           : filteredPayments.map((amount) => amount).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
-  //       return { currency: orderAmount.currency, amount: total - parseFloat(orderAmount.amount) };
-  //     });
-  //   const checkFloating = floatingTotalAmount.map((floating) => floating.amount >= 0);
-  //   const isCompleted = paymentType === "Recurring" ? true : !checkFloating.includes(false);
-  //   const updatedPaymentOrder = { floatingAmount: floatingTotalAmount, completed: isCompleted };
-  //   return updatedPaymentOrder;
-  // };
+  const formatTotalPaidAmount: IFloatingAmount[] =
+    totalPaidAmount !== undefined && totalPaidAmount.length > 0
+      ? totalPaidAmount.map((paidAmount) => ({ currency: paidAmount.currency, amount: parseAmount(paidAmount.amount) }))
+      : [];
+  const computed = formatTotalPaidAmount.concat(floatingAmount);
+  const floatingTotalAmount = orderTotalAmount.map((orderAmount) => {
+    const filteredPayments = computed
+      .filter((value) => value.currency === orderAmount.currency)
+      .map((floating: IFloatingAmount) => floating.amount);
+    const total =
+      filteredPayments.length === 0
+        ? 0
+        : filteredPayments.map((amount) => amount).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
+    return { currency: orderAmount.currency, amount: withPaymentAdded === true ? total : total - parseAmount(orderAmount.amount) };
+  });
 
-  const floating = floatingAmount
+  const floating = floatingTotalAmount
     .map(({ amount, currency }) => {
       const symbol = amount > 0 ? "+" : "-";
       const trimAmount = amount > 0 ? amount : parseAmount(`${amount || 0}`.substring(1));
@@ -140,19 +138,24 @@ PaymentCardProps) => {
     })
     .filter((data) => data !== "")
     .join(", ");
+  const newPaymentTitle = draftPayments.length === 1 ? `${draftPayments[0].paymentMethod}` : `${draftPayments.length}`;
+  const previousPaymentCount = paymentCount !== undefined ? paymentCount : 1;
 
-  const paymentTitle = draftPayments.length === 1 ? `${draftPayments[0].paymentMethod}` : `${draftPayments.length}`;
+  const previousPaymentTitle =
+    withPreviousPayment === true && withPaymentAdded === false
+      ? `${previousPaymentCount}`
+      : `${previousPaymentCount + draftPayments.length}`;
   const floatingLabel = floating !== "" ? `(${floating})` : "";
   const headerTitle = isScheduled ? PAYMENT.TITLE_RECURRING : PAYMENT.TITLE;
+  const paymentTitle = withPreviousPayment === false ? newPaymentTitle : previousPaymentTitle;
   const completedTitle =
     isScheduled && draftPayments.length > 0
       ? `${PAYMENT.LABEL_RECURRING} - ${draftPayments[0].recurringType}`
-      : `${PAYMENT.LABEL_PROOF} - ${paymentTitle}${floatingLabel}`;
-  // const withPaymentTitle = withPreviousPayment === true ? `${PAYMENT.LABEL_PROOF} - (${totalPaidAmount?.length})` : completedTitle;
+      : `${PAYMENT.LABEL_PROOF} - ${paymentTitle} ${floatingLabel}`;
   const defaultTitle = withPayment === true ? completedTitle : headerTitle;
   const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
   // TODO no prompt if all are saved
-  // TODO dont reflect current change if viewing other info
+  // TODO don't reflect current change if viewing other info
   const modalTitle = prompt === -1 || prompt === expandedIndex ? PAYMENT.PROMPT_TITLE_CANCEL : PAYMENT.PROMPT_TITLE_VIEW;
 
   const handlePromptContinue = () => {
@@ -193,13 +196,6 @@ PaymentCardProps) => {
     setExpandedIndex(draftPayments.length - 1);
     return handleExpandPayment();
   };
-
-  // useEffect(() => {
-  //   if (draftPayments.length === 0) {
-  //     setDraftPayments(payments);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   return (
     <Fragment>
@@ -336,6 +332,12 @@ PaymentCardProps) => {
               setDraftPayments(updatedPayments);
             };
 
+            const setCombinedName = (value: string) => {
+              const updatedPayments = [...draftPayments];
+              updatedPayments[index].combinedBankAccountName = value;
+              setDraftPayments(updatedPayments);
+            };
+
             const setBankAccountNumber = (value: string) => {
               const updatedPayments = [...draftPayments];
               updatedPayments[index].bankAccountNumber = value;
@@ -369,14 +371,15 @@ PaymentCardProps) => {
             };
 
             const validateAmount = (value: string) => {
-              const amount: IAmountValueError = { value: value, error: undefined };
-              if (isAmount(value) === false) {
+              const cleanValue = value.replace(/[,]/g, "");
+              const amount: IAmountValueError = { value: cleanValue, error: undefined };
+              if (isAmount(cleanValue) === false) {
                 return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
               }
-              if (parseAmount(value) === 0) {
+              if (parseAmount(cleanValue) === 0) {
                 return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT };
               }
-              return { ...amount, value: formatAmount(value) };
+              return { ...amount, value: formatAmount(cleanValue) };
             };
 
             const checkAmount = () => {
@@ -384,6 +387,16 @@ PaymentCardProps) => {
               setAmountError(amount.error);
               setAmount(amount.value);
             };
+
+            const checkCombinedBankName =
+              payment.bankAccountName === "Combined"
+                ? payment.combinedBankAccountName === "" || payment.combinedBankAccountName === undefined
+                : false;
+
+            const checkCombinedClientName =
+              payment.clientName === "Combined"
+                ? payment.combinedBankAccountName === "" || payment.combinedBankAccountName === undefined
+                : false;
 
             const baseCashDisabled =
               payment.currency === "" ||
@@ -394,17 +407,21 @@ PaymentCardProps) => {
               payment.paymentMethod === undefined ||
               payment.proof === undefined ||
               (payment.remark !== undefined && payment.remark === "");
+
             const ctaDisabled =
               baseCashDisabled === true ||
               payment.clientName === "" ||
               payment.clientName === undefined ||
               payment.clientTrustAccountNumber === "" ||
-              payment.clientTrustAccountNumber === undefined;
+              payment.clientTrustAccountNumber === undefined ||
+              checkCombinedClientName === true;
+
             const onlineBankingDisabled =
               baseCashDisabled === true ||
               payment.transactionDate === undefined ||
               payment.bankName === "" ||
               payment.bankName === undefined;
+
             const chequeDisabled =
               baseCashDisabled === true ||
               payment.bankName === "" ||
@@ -412,7 +429,9 @@ PaymentCardProps) => {
               payment.checkNumber === "" ||
               payment.checkNumber === undefined ||
               payment.transactionDate === undefined;
+
             const cdmDisabled = baseCashDisabled === true || payment.transactionDate === undefined || payment.transactionTime === undefined;
+
             const epfSaveDisabled =
               payment.amount === "" ||
               payment.amount === undefined ||
@@ -433,7 +452,8 @@ PaymentCardProps) => {
               payment.frequency === "" ||
               payment.frequency === undefined ||
               payment.recurringBank === "" ||
-              payment.recurringType === undefined;
+              payment.recurringType === undefined ||
+              checkCombinedBankName === true;
 
             let saveDisabled = onlineBankingDisabled;
             const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
@@ -481,10 +501,13 @@ PaymentCardProps) => {
                 saveDisabled = ctaDisabled;
                 paymentMethodInfo = (
                   <ClientTrustAccount
+                    bankNames={accountNames}
                     clientName={payment.clientName!}
+                    combinedName={payment.combinedBankAccountName!}
                     clientTrustAccountNumber={payment.clientTrustAccountNumber!}
                     setClientName={setClientName}
                     setClientTrust={setClientTrust}
+                    setCombinedName={setCombinedName}
                   />
                 );
                 break;
@@ -510,11 +533,13 @@ PaymentCardProps) => {
                     bankNames={accountNames}
                     bankAccountName={payment.bankAccountName!}
                     bankAccountNumber={payment.bankAccountNumber!}
+                    combinedName={payment.combinedBankAccountName!}
                     frequency={payment.frequency!}
                     recurringBank={payment.recurringBank!}
                     recurringType={payment.recurringType!}
                     setBankAccountName={setBankAccountName}
                     setBankAccountNumber={setBankAccountNumber}
+                    setCombinedName={setCombinedName}
                     setFrequency={setFrequency}
                     setRecurringBank={setRecurringBank}
                     setRecurringType={setRecurringType}

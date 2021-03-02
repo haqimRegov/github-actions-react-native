@@ -18,6 +18,7 @@ declare interface IPaymentOrderState {
   completed?: boolean;
   floatingAmount?: IFloatingAmount[];
   totalPaidAmount?: IOrderAmount[];
+  paymentCount?: number;
 }
 
 declare interface IPurchaseSummary {
@@ -48,6 +49,7 @@ declare interface IPayment {
   epfReferenceNumber?: string;
   bankAccountName?: string;
   bankAccountNumber?: string;
+  combinedBankAccountName?: string;
   recurringType?: string;
   recurringBank?: string;
   frequency?: string;

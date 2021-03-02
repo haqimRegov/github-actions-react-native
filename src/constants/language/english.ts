@@ -125,6 +125,7 @@ export const english = {
       LABEL_SIGN: "Who will be the authorised signatory for this account?",
       OPTION_BUMIPUTERA_NO: "No",
       OPTION_BUMIPUTERA_YES: "Yes",
+      OPTION_COMBINED: "Combined",
       OPTION_CONTROL_BOTH: "Both Applicants to sign",
       OPTION_CONTROL_EITHER: "Either Applicant to sign",
       OPTION_CONTROL_PRINCIPAL: "Principal Applicant to sign",
@@ -775,6 +776,7 @@ export const english = {
       LABEL_CHANNEL: "Income Distribution Channel",
       LABEL_CHEQUE_NO: "Cheque No.",
       LABEL_CLIENT_NAME: "Client Name",
+      LABEL_COMBINED: "Specify Combined Bank Account Name",
       LABEL_COMPLETED: "completed",
       LABEL_CURRENCY: "Currency",
       LABEL_DATE_FORMAT: "dd/mm/yy",
@@ -831,6 +833,7 @@ export const english = {
       LABEL_UPLOAD_LATER: "I will upload this document later.",
       OPTION_DDA: "DDA",
       OPTION_FPX: "FPX",
+      OPTION_COMBINED: "Combined",
       PROMPT_CHECKBOX_LABEL: "This is under the assumption that the proof of payment and supporting documents are in transaction.",
       PROMPT_HINT:
         "Your completed investment will be processed today / today + 3 days provided you have met the terms and conditions below.",

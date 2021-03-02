@@ -18,6 +18,7 @@ const { PERSONAL_DETAILS } = Language.PAGE;
 interface PersonalInfoProps {
   accountType: TypeAccountChoices;
   accountHolder: TypeAccountHolder;
+  accountNames: TypeLabelValue[];
   bankDetails: IBankSummaryState;
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
@@ -36,6 +37,7 @@ interface PersonalInfoProps {
 export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   accountType,
   accountHolder,
+  accountNames,
   bankDetails,
   contactDetails,
   epfDetails,
@@ -144,6 +146,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
             <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
           </View>
           <BankDetails
+            bankNames={accountNames}
             foreignBankDetails={foreignBank!}
             investmentCurrencies={investmentCurrencies}
             localBankDetails={localBank!}

@@ -37,12 +37,14 @@ const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface IForeignBankDetailsProps {
   bankingDetails: IBankDetailsState[];
+  bankNames: TypeLabelValue[];
   investmentCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
 }
 
 export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = ({
   bankingDetails,
+  bankNames,
   investmentCurrencies,
   setBankingDetails,
 }: IForeignBankDetailsProps) => {
@@ -66,6 +68,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
     bankingDetailsClone.push(initialForeignBankState);
     setBankingDetails(bankingDetailsClone);
   };
+
   const nonMyrCurrencies = investmentCurrencies.filter((currency) => currency !== "MYR");
   const selectedNonMyrCurrencies = bankingDetails.filter((bank) => !bank.currency?.includes("MYR"));
   const noForeignBank = nonMyrCurrencies.length === 0 || selectedNonMyrCurrencies.length === nonMyrCurrencies.length;
@@ -106,6 +109,15 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
         const handleAccountName = (input: string) => {
           const updatedDetails = [...bankingDetails];
           updatedDetails[index].bankAccountName = input;
+          if (input !== "Combined" && input !== "") {
+            updatedDetails[index].combinedBankAccountName = "";
+          }
+          setBankingDetails(updatedDetails);
+        };
+
+        const handleCombinedName = (input: string) => {
+          const updatedDetails = [...bankingDetails];
+          updatedDetails[index].combinedBankAccountName = input;
           setBankingDetails(updatedDetails);
         };
 
@@ -177,22 +189,30 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                   </Fragment>
                 );
               })}
-
               <CustomTextInput
                 label={PERSONAL_DETAILS.LABEL_BANK_NAME}
                 onChangeText={handleBankName}
                 spaceToTop={sh32}
                 value={item.bankName}
               />
-              <CustomTextInput
-                autoCapitalize="words"
-                error={item.bankAccountNameError}
+              <AdvancedDropdown
+                handleChange={handleAccountName}
+                items={bankNames}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
-                onBlur={checkAccountBankName}
-                onChangeText={handleAccountName}
                 spaceToTop={sh32}
-                value={item.bankAccountName}
+                value={item.bankAccountName!}
               />
+              {item.bankAccountName === "Combined" ? (
+                <CustomTextInput
+                  autoCapitalize="words"
+                  error={item.bankAccountNameError}
+                  label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                  onBlur={checkAccountBankName}
+                  onChangeText={handleCombinedName}
+                  spaceToTop={sh32}
+                  value={item.combinedBankAccountName}
+                />
+              ) : null}
               <CustomTextInput
                 error={item.bankAccountNumberError}
                 keyboardType="numeric"

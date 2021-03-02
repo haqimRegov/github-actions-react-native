@@ -9,6 +9,7 @@ import { PersonalInfo } from "./Details";
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface PrincipalDetails {
+  accountNames: TypeLabelValue[];
   accountType: TypeAccountChoices;
   bankDetails: IBankSummaryState;
   contactDetails: IContactDetailsState;
@@ -26,6 +27,7 @@ interface PrincipalDetails {
 }
 
 export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
+  accountNames,
   accountType,
   bankDetails,
   contactDetails,
@@ -62,6 +64,7 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
         <PersonalInfo
           accountType={accountType}
           accountHolder="Principal"
+          accountNames={accountNames}
           bankDetails={bankDetails}
           contactDetails={contactDetails}
           epfDetails={epfDetails}

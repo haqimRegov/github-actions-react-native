@@ -3,17 +3,20 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
+import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { AccountDetails } from "./AccountDetails";
 import { JointDetails } from "./Joint";
 import { PrincipalDetails } from "./Principal";
 
+const { PERSONAL_DETAILS } = Language.PAGE;
 interface PersonalDetailsProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 
 const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   accountType,
   addPersonalInfo,
+  details,
   handleNextStep,
   investmentDetails,
   onboarding,
@@ -61,8 +64,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         )
       : [true];
 
-  const validatePrincipal = (details: IHolderInfoState) => {
-    const { contactDetails, epfDetails, personalDetails } = details;
+  const validatePrincipal = (info: IHolderInfoState) => {
+    const { contactDetails, epfDetails, personalDetails } = info;
     const checkEducation =
       personalDetails!.educationLevel !== "" ||
       (personalDetails!.educationLevel !== "" &&
@@ -92,8 +95,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     );
   };
 
-  const validateJoint = (details: IHolderInfoState) => {
-    const { contactDetails, personalDetails } = details;
+  const validateJoint = (info: IHolderInfoState) => {
+    const { contactDetails, personalDetails } = info;
     // const jointAge = moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years");
     const checkEducation =
       personalDetails!.educationLevel !== "" ||
@@ -189,10 +192,20 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const padding = accountType === "Joint" ? px(sw48) : px(sw24);
   const uniqueCurrencies = investmentCurrencies.filter((currency, index) => investmentCurrencies.indexOf(currency) === index);
 
+  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
+
+  if (accountType === "Joint") {
+    accountNames.push(
+      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
+      { label: PERSONAL_DETAILS.OPTION_COMBINED, value: PERSONAL_DETAILS.OPTION_COMBINED },
+    );
+  }
+
   return (
     <ContentPage buttonContainerStyle={padding} continueDisabled={buttonDisabled} handleCancel={handleBack} handleContinue={handleSubmit}>
       <View>
         <PrincipalDetails
+          accountNames={accountNames}
           accountType={accountType}
           bankDetails={principal!.bankSummary!}
           contactDetails={principal!.contactDetails!}
@@ -214,6 +227,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
             <View style={borderBottomBlack21} />
             <CustomSpacer space={sh48} />
             <JointDetails
+              accountNames={accountNames}
               bankDetails={joint!.bankSummary!}
               contactDetails={joint!.contactDetails!}
               epfDetails={joint!.epfDetails!}

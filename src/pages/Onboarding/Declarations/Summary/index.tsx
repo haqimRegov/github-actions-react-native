@@ -92,13 +92,32 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     });
 
     const localBank = principal!.bankSummary!.localBank!.map((bank) => {
-      const newBank = { ...bank, bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName! };
+      const bankAccountName =
+        bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+          ? bank.combinedBankAccountName
+          : bank.bankAccountName;
+
+      const newBank = {
+        ...bank,
+        bankAccountName: bankAccountName,
+        bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName!,
+      };
+      delete newBank.combinedBankAccountName;
       delete newBank.otherBankName;
       return newBank;
     });
 
     const foreignBank = principal!.bankSummary!.foreignBank!.map((bank) => {
-      const newBank = { ...bank, bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName! };
+      const bankAccountName =
+        bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+          ? bank.combinedBankAccountName
+          : bank.bankAccountName;
+      const newBank = {
+        ...bank,
+        bankAccountName: bankAccountName,
+        bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName!,
+      };
+      delete newBank.combinedBankAccountName;
       delete newBank.otherBankName;
       return newBank;
     });

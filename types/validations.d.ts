@@ -3,11 +3,26 @@ declare interface IIDVerificationValidations {
   permanentPostCode: string | undefined;
   mailingPostCode: string | undefined;
 }
+declare interface IIDVerificationPageValidation {
+  principal: IIDVerificationValidations;
+  joint: IIDVerificationValidations;
+}
 
 declare interface IPersonalDetailsValidations {
   epfNumber: string | undefined;
-  faxNumber: string | undefined;
-  homeNumber: string | undefined;
-  mobileNumber: string | undefined;
-  officeNumber: string | undefined;
+  mothersName: string | undefined;
+}
+
+declare interface IPersonalDetailsPageValidation {
+  principal: IPersonalDetailsValidations;
+  joint: IPersonalDetailsValidations;
+}
+
+declare interface IEmploymentDetailsValidations {
+  postCode: string | undefined;
+}
+
+declare interface IEmploymentDetailsPageValidation {
+  principal: IEmploymentDetailsValidations;
+  joint: IEmploymentDetailsValidations;
 }

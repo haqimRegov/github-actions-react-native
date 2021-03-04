@@ -64,6 +64,12 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
   const submittedMessage = allOrdersSubmitted === true ? PAYMENT.PROMPT_TITLE_SUBMITTED : PAYMENT.PROMPT_TITLE_ORDER;
   const message = checkNonPendingOrder === true ? submittedMessage : PAYMENT.PROMPT_TITLE_SAVED;
 
+  const subtitles = result?.withFloating === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_FLOATING : PAYMENT.PROMPT_SUBTITLE_PENDING;
+  const floatingSubtitle =
+    result?.withFloating === true ? (
+      <TextSpaceArea spaceToTop={sh16} style={fs12RegBlack2} text={PAYMENT.PROMPT_SUBTITLE_SUBMITTED_FLOATING} />
+    ) : null;
+
   return (
     <View>
       <ConfirmationModal
@@ -77,8 +83,10 @@ export const PaymentStatus: FunctionComponent<PaymentStatusProps> = ({ handleDon
             <CustomSpacer space={sh24} />
             <Image source={illustration} style={{ height: sw176, width: sw176 }} />
             <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue2, ...fsAlignCenter }} text={message} />
-            {checkNonPendingOrder === true && allOrdersSubmitted === true ? null : (
-              <TextSpaceArea spaceToTop={sh16} style={fs12RegBlack2} text={PAYMENT.PROMPT_SUBTITLE_PENDING} />
+            {checkNonPendingOrder === true && allOrdersSubmitted === true ? (
+              floatingSubtitle
+            ) : (
+              <TextSpaceArea spaceToTop={sh16} style={fs12RegBlack2} text={subtitles} />
             )}
           </View>
         ) : (

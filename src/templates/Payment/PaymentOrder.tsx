@@ -66,6 +66,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     orderDate,
     orderNumber,
     orderTotalAmount,
+    paymentCount,
     payments,
     paymentType,
     totalPaidAmount,
@@ -242,6 +243,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         isScheduled={paymentType === "Recurring"}
         orderCreationDate={orderCreationDate}
         orderTotalAmount={orderTotalAmount}
+        paymentCount={paymentCount}
         payments={payments}
         setPayments={setPayments}
       />

@@ -3,17 +3,20 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
+import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { AccountDetails } from "./AccountDetails";
 import { JointDetails } from "./Joint";
 import { PrincipalDetails } from "./Principal";
 
+const { PERSONAL_DETAILS } = Language.PAGE;
 interface PersonalDetailsProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 
 const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   accountType,
   addPersonalInfo,
+  details,
   handleNextStep,
   investmentDetails,
   onboarding,
@@ -21,12 +24,9 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   productSales,
   updateOnboarding,
 }: PersonalDetailsProps) => {
-  const [validations, setValidations] = useState<IPersonalDetailsValidations>({
-    epfNumber: undefined,
-    faxNumber: undefined,
-    homeNumber: undefined,
-    mobileNumber: undefined,
-    officeNumber: undefined,
+  const [validations, setValidations] = useState<IPersonalDetailsPageValidation>({
+    principal: { epfNumber: undefined, mothersName: undefined },
+    joint: { epfNumber: undefined, mothersName: undefined },
   });
   const { principal, joint, epfInvestment, epfShariah } = personalInfo;
   const investmentCurrencies = productSales!.map(({ investment }) =>
@@ -61,8 +61,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         )
       : [true];
 
-  const validatePrincipal = (details: IHolderInfoState) => {
-    const { contactDetails, epfDetails, personalDetails } = details;
+  const validatePrincipal = (info: IHolderInfoState) => {
+    const { contactDetails, epfDetails, personalDetails } = info;
     const checkEducation =
       personalDetails!.educationLevel !== "" ||
       (personalDetails!.educationLevel !== "" &&
@@ -72,7 +72,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
     const checkEpf =
       epfInvestment === true
-        ? epfDetails!.epfMemberNumber !== "" && epfDetails!.epfAccountType !== "" && validations.epfNumber === undefined
+        ? epfDetails!.epfMemberNumber !== "" && epfDetails!.epfAccountType !== "" && validations.principal.epfNumber === undefined
         : true;
 
     return (
@@ -88,12 +88,15 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails!.maritalStatus !== "" &&
       checkEducation === true &&
       personalDetails!.monthlyHouseholdIncome !== "" &&
-      checkEpf === true
+      checkEpf === true &&
+      Object.values(validations.principal)
+        .map((value) => typeof value)
+        .includes(typeof "string") === false
     );
   };
 
-  const validateJoint = (details: IHolderInfoState) => {
-    const { contactDetails, personalDetails } = details;
+  const validateJoint = (info: IHolderInfoState) => {
+    const { contactDetails, personalDetails } = info;
     // const jointAge = moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years");
     const checkEducation =
       personalDetails!.educationLevel !== "" ||
@@ -121,7 +124,10 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails!.mothersMaidenName !== "" &&
       personalDetails!.maritalStatus !== "" &&
       checkEducation === true &&
-      personalDetails!.monthlyHouseholdIncome !== ""
+      personalDetails!.monthlyHouseholdIncome !== "" &&
+      Object.values(validations.joint)
+        .map((value) => typeof value)
+        .includes(typeof "string") === false
     );
   };
 
@@ -186,13 +192,31 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     handleNextStep("IdentityVerification");
   };
 
+  const handlePrincipalValidation = (value: IPersonalDetailsValidations) => {
+    setValidations({ ...validations, principal: { ...validations.principal, ...value } });
+  };
+
+  const handleJointValidation = (value: IPersonalDetailsValidations) => {
+    setValidations({ ...validations, joint: { ...validations.joint, ...value } });
+  };
+
   const padding = accountType === "Joint" ? px(sw48) : px(sw24);
   const uniqueCurrencies = investmentCurrencies.filter((currency, index) => investmentCurrencies.indexOf(currency) === index);
+
+  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
+
+  if (accountType === "Joint") {
+    accountNames.push(
+      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
+      { label: PERSONAL_DETAILS.OPTION_COMBINED, value: PERSONAL_DETAILS.OPTION_COMBINED },
+    );
+  }
 
   return (
     <ContentPage buttonContainerStyle={padding} continueDisabled={buttonDisabled} handleCancel={handleBack} handleContinue={handleSubmit}>
       <View>
         <PrincipalDetails
+          accountNames={accountNames}
           accountType={accountType}
           bankDetails={principal!.bankSummary!}
           contactDetails={principal!.contactDetails!}
@@ -205,8 +229,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           setContactDetails={handlePrincipalContactDetails}
           setEpfDetails={handlePrincipalEpfDetails}
           setPersonalDetails={handlePrincipalPersonalDetails}
-          setValidations={setValidations}
-          validations={validations}
+          setValidations={handlePrincipalValidation}
+          validations={validations.principal}
         />
         {accountType === "Individual" ? null : (
           <Fragment>
@@ -214,6 +238,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
             <View style={borderBottomBlack21} />
             <CustomSpacer space={sh48} />
             <JointDetails
+              accountNames={accountNames}
               bankDetails={joint!.bankSummary!}
               contactDetails={joint!.contactDetails!}
               epfDetails={joint!.epfDetails!}
@@ -225,8 +250,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
               setContactDetails={handleJointContactDetails}
               setEpfDetails={handleJointEpfDetails}
               setPersonalDetails={handleJointPersonalDetails}
-              setValidations={setValidations}
-              validations={validations}
+              setValidations={handleJointValidation}
+              validations={validations.joint}
             />
           </Fragment>
         )}

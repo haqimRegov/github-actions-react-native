@@ -10,15 +10,19 @@ import {
   DICTIONARY_MALAYSIA_STATES,
   DICTIONARY_MALAYSIA_STATES_LIST,
   DICTIONARY_OCCUPATION,
+  ERROR,
 } from "../../../data/dictionary";
 import { px, sh122, sh24, sh32, sw24 } from "../../../styles";
+import { isNumber } from "../../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
 interface EmploymentInfoProps {
-  accountType: TypeAccountChoices;
   accountHolder?: TypeAccountHolder;
+  accountType: TypeAccountChoices;
   employmentDetails: IEmploymentDetailsState;
   setEmploymentDetails: (value: IEmploymentDetailsState) => void;
+  setValidations: (value: IEmploymentDetailsValidations) => void;
+  validations: IEmploymentDetailsValidations;
 }
 
 export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
@@ -26,6 +30,8 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   accountHolder,
   employmentDetails,
   setEmploymentDetails,
+  setValidations,
+  validations,
 }: EmploymentInfoProps) => {
   const inputAddress = employmentDetails.address!;
   const inputBusinessNature = employmentDetails.businessNature!;
@@ -52,6 +58,10 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputOccupation = (value: string) => setEmploymentDetails({ occupation: value });
   const setInputPostCode = (value: string) => setEmploymentDetails({ postCode: value });
   const setInputState = (value: string) => setEmploymentDetails({ state: value });
+
+  const checkPermanentPostCode = () => {
+    setValidations({ ...validations, postCode: isNumber(inputPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+  };
 
   const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;
   const labelEmployer = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_NAME : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME;
@@ -97,9 +107,11 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       />
       <CustomSpacer space={sh32} />
       <CustomTextInput
+        error={validations.postCode}
         keyboardType="numeric"
         label={EMPLOYMENT_DETAILS.LABEL_POSTCODE}
         maxLength={15}
+        onBlur={checkPermanentPostCode}
         onChangeText={setInputPostCode}
         value={inputPostCode}
       />

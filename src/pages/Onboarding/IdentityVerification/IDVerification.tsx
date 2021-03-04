@@ -27,13 +27,20 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   updateOnboarding,
 }: IDVerificationProps) => {
   const { principal, joint } = personalInfo;
-  const [validations, setValidations] = useState<IIDVerificationValidations>({
-    name: undefined,
-    permanentPostCode: undefined,
-    mailingPostCode: undefined,
+  const [validations, setValidations] = useState<IIDVerificationPageValidation>({
+    principal: {
+      name: undefined,
+      permanentPostCode: undefined,
+      mailingPostCode: undefined,
+    },
+    joint: {
+      name: undefined,
+      permanentPostCode: undefined,
+      mailingPostCode: undefined,
+    },
   });
 
-  const validateDetails = (details: IHolderInfoState) => {
+  const validateDetails = (details: IHolderInfoState, rules: IIDVerificationValidations) => {
     const { addressInformation, personalDetails } = details;
     const checkPassport =
       personalDetails!.idType === "Passport" ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined : true;
@@ -47,7 +54,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       personalDetails!.placeOfBirth !== "" &&
       Object.values(addressInformation!.permanentAddress!).includes("") === false &&
       Object.values(addressInformation!.mailingAddress!).includes("") === false &&
-      Object.values(validations)
+      Object.values(rules)
         .map((value) => typeof value)
         .includes(typeof "string") === false &&
       checkPassport === true
@@ -68,8 +75,8 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
 
   const continueDisabled =
     accountType === "Individual"
-      ? validateDetails(principal!) === false
-      : validateDetails(principal!) === false || validateDetails(joint!) === false;
+      ? validateDetails(principal!, validations.principal) === false
+      : validateDetails(principal!, validations.principal) === false || validateDetails(joint!, validations.joint) === false;
 
   const handlePrincipalDetails = (value: IPersonalDetailsState) => {
     addPersonalInfo({ principal: { personalDetails: { ...principal!.personalDetails, ...value } } });
@@ -86,6 +93,15 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   const handleJointAddress = (value: IAddressInfoState) => {
     addPersonalInfo({ joint: { addressInformation: { ...joint!.addressInformation, ...value } } });
   };
+
+  const handlePrincipalValidation = (value: IIDVerificationValidations) => {
+    setValidations({ ...validations, principal: { ...validations.principal, ...value } });
+  };
+
+  const handleJointValidation = (value: IIDVerificationValidations) => {
+    setValidations({ ...validations, joint: { ...validations.joint, ...value } });
+  };
+
   const padding: ViewStyle = accountType === "Joint" ? px(sw48) : px(sw24);
 
   return (
@@ -102,8 +118,8 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
         personalDetails={principal!.personalDetails!}
         setAddressInfo={handlePrincipalAddress}
         setPersonalDetails={handlePrincipalDetails}
-        setValidations={setValidations}
-        validations={validations}
+        setValidations={handlePrincipalValidation}
+        validations={validations.principal}
       />
       {accountType === "Individual" ? null : (
         <Fragment>
@@ -115,8 +131,8 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
             personalDetails={joint!.personalDetails!}
             setAddressInfo={handleJointAddress}
             setPersonalDetails={handleJointDetails}
-            setValidations={setValidations}
-            validations={validations}
+            setValidations={handleJointValidation}
+            validations={validations.joint}
           />
         </Fragment>
       )}

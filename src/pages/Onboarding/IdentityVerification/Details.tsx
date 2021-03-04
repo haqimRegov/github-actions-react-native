@@ -134,6 +134,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       />
       <CustomTextInput
         autoCapitalize="words"
+        disabled={true}
         error={validations.name}
         label={nameLabel}
         onBlur={checkName}

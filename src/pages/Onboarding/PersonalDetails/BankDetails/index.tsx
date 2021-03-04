@@ -7,6 +7,7 @@ import { ForeignBankDetails } from "./Foreign";
 import { LocalBankDetails } from "./Local";
 
 interface IBankDetailsProps {
+  bankNames: TypeLabelValue[];
   foreignBankDetails: IBankDetailsState[];
   localBankDetails: IBankDetailsState[];
   investmentCurrencies: string[];
@@ -15,6 +16,7 @@ interface IBankDetailsProps {
 }
 
 export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
+  bankNames,
   foreignBankDetails,
   localBankDetails,
   investmentCurrencies,
@@ -27,12 +29,14 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
     <View>
       <LocalBankDetails
         bankingDetails={localBankDetails}
+        bankNames={bankNames}
         investmentCurrencies={investmentCurrencies}
         setBankingDetails={setLocalBankDetails}
       />
       <CustomSpacer space={spaceToButton} />
       <ForeignBankDetails
         bankingDetails={foreignBankDetails}
+        bankNames={bankNames}
         investmentCurrencies={investmentCurrencies}
         setBankingDetails={setForeignBankDetails}
       />

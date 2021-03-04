@@ -133,17 +133,18 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   };
 
   const validateAmount = (value: string, amountType: "newSalesAmount" | "topUpAmount") => {
-    const amount: IAmountValueError = { value: value, error: undefined };
-    if (isAmount(value) === false) {
+    const cleanValue = value.replace(/[,]/g, "");
+    const amount: IAmountValueError = { value: cleanValue, error: undefined };
+    if (isAmount(cleanValue) === false) {
       return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
     }
-    if (parseAmount(value) > parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max)) {
+    if (parseAmount(cleanValue) > parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].max)) {
       return { ...amount, error: ERROR.INVESTMENT_MAX_AMOUNT };
     }
-    if (parseAmount(value) < parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min)) {
+    if (parseAmount(cleanValue) < parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min)) {
       return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT };
     }
-    return { ...amount, value: formatAmount(value) };
+    return { ...amount, value: formatAmount(cleanValue) };
   };
 
   const setAmountError = (amount: IAmountValueError) => {

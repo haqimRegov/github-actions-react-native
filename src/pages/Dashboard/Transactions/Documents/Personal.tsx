@@ -197,16 +197,21 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
-                {documentList.joint ? <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={"Principal Holder"} /> : null}
-
+                {documentList.joint && documentsPrincipal.length > 0 ? (
+                  <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={"Principal Holder"} />
+                ) : null}
                 <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
               </View>
             )}
             {documentList.joint === undefined || documentList.joint === null ? null : (
               <Fragment>
-                <CustomSpacer space={sh32} />
-                <View style={borderBottomGray4} />
-                <CustomSpacer space={sh32} />
+                {documentsPrincipal.length > 0 ? (
+                  <Fragment>
+                    <CustomSpacer space={sh32} />
+                    <View style={borderBottomGray4} />
+                    <CustomSpacer space={sh32} />
+                  </Fragment>
+                ) : null}
                 <View style={px(sw24)}>
                   <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={"Joint Holder"} />
                   <DocumentList data={documentsJoint} setData={handleJointData} />

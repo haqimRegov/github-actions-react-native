@@ -92,10 +92,15 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
       : [];
 
   const localBank: LabeledTitleProps[][] = bankSummary!.localBank!.map((bank: IBankDetailsState) => {
+    const bankAccountName =
+      bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+        ? bank.combinedBankAccountName
+        : bank.bankAccountName;
+
     return [
       { label: SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase },
       { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
-      { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
+      { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
       { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
       { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
@@ -105,10 +110,15 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   const foreignBank: LabeledTitleProps[][] =
     bankSummary!.foreignBank !== undefined
       ? bankSummary!.foreignBank.map((bank: IBankDetailsState) => {
+          const bankAccountName =
+            bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+              ? bank.combinedBankAccountName
+              : bank.bankAccountName;
+
           return [
             { label: SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase },
             { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
-            { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
+            { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
             { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
             { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
             { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },

@@ -9,11 +9,11 @@ declare interface IGetPaymentRequiredResult {
   epfAccountNumber: string;
   orderNumber: string;
   paymentType: string;
-  paymentCount: string;
+  paymentCount: number;
   status: string;
   surplusBalance: string;
   totalInvestment: IOrderTotalAmount[];
-  totalPaidAmount: IOrderTotalAmount[];
+  totalPaidAmount: IOrderAmount[];
 }
 declare type IGetPaymentRequiredResponse = IQueryResponse<IGetPaymentRequiredResult> | undefined;
 

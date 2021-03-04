@@ -64,6 +64,7 @@ declare interface IBankDetailsState {
   bankLocation?: string;
   bankName?: string;
   bankSwiftCode?: string;
+  combinedBankAccountName?: string;
   currency?: string[];
   otherBankName?: string;
 }

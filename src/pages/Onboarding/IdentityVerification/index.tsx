@@ -290,6 +290,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           continueDisabled={buttonDisabled}
           handleCancel={handleBack}
           handleContinue={handleContinue}
+          labelCancel={IDENTITY_CONFIRMATION.BUTTON_BACK}
           subheading={IDENTITY_CONFIRMATION.HEADING}
           subtitle={defaultSubtitle}>
           <View style={px(sw24)}>

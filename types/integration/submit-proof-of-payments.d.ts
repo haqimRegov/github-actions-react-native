@@ -47,6 +47,7 @@ declare interface ISubmitProofOfPaymentsResult {
   account: ISubmitProofOfPaymentResultAccount;
   orders: ISubmitProofOfPaymentResultOrder[];
   message: string;
+  withFloating: boolean;
 }
 declare type ISubmitProofOfPaymentsResponse = IMutationResponse<ISubmitProofOfPaymentsResult> | undefined;
 

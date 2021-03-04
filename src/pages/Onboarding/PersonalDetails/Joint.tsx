@@ -9,6 +9,7 @@ import { PersonalInfo } from "./Details";
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface JointDetails {
+  accountNames: TypeLabelValue[];
   bankDetails: IBankSummaryState;
   contactDetails: IContactDetailsState;
   epfDetails: IEpfDetailsState;
@@ -25,6 +26,7 @@ interface JointDetails {
 }
 
 export const JointDetails: FunctionComponent<JointDetails> = ({
+  accountNames,
   bankDetails,
   contactDetails,
   epfDetails,
@@ -54,6 +56,7 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
         </View>
         <PersonalInfo
           accountHolder="Joint"
+          accountNames={accountNames}
           accountType="Joint"
           bankDetails={bankDetails}
           contactDetails={contactDetails}

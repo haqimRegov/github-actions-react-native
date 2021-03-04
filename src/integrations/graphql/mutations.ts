@@ -416,6 +416,7 @@ const submitProofOfPayments = gql`
             status
             remarks
           }
+          withFloating
           message
         }
       }

@@ -5,7 +5,7 @@ import { AdvancedDropdown, CustomSpacer, TextSpaceArea } from "../../../componen
 import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_HOUSEHOLD_INCOME, ERROR } from "../../../data/dictionary";
 import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh8, sw24, sw40 } from "../../../styles";
-import { isNumber } from "../../../utils";
+import { isNonNumber, isNumber } from "../../../utils";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
 import { EPFDetails } from "./EPFDetails";
@@ -91,6 +91,10 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
     setValidations({ ...validations, epfNumber: isNumber(inputEpfNumber) === false ? ERROR.INVALID_NUMBER : undefined });
   };
 
+  const checkMothersName = () => {
+    setValidations({ ...validations, mothersName: isNonNumber(inputMotherName) === false ? ERROR.INVALID_NAME : undefined });
+  };
+
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails.idType! as TypeClientID) !== 1;
 
   return (
@@ -112,6 +116,8 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         inputMaritalStatus={inputMaritalStatus}
         inputMotherName={inputMotherName}
         inputOtherEducation={inputOtherEducation}
+        onBlurMothersName={checkMothersName}
+        mothersNameError={validations.mothersName}
         setInputEducation={setInputEducation}
         setInputMaritalStatus={setInputMaritalStatus}
         setInputMotherName={setInputMotherName}

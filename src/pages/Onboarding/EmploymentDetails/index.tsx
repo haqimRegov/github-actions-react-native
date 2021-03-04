@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -18,10 +18,15 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   personalInfo,
   updateOnboarding,
 }: EmploymentDetailsProps) => {
+  const [validations, setValidations] = useState<IEmploymentDetailsPageValidation>({
+    principal: { postCode: undefined },
+    joint: { postCode: undefined },
+  });
+
   const { joint, principal } = personalInfo;
 
   const checkJointGross = accountType === "Joint" && joint!.employmentDetails!.grossIncome !== "";
-  const validateDetails = (details: IHolderInfoState) => {
+  const validateDetails = (details: IHolderInfoState, rules: IEmploymentDetailsValidations) => {
     const { employmentDetails } = details;
     return (
       employmentDetails!.occupation !== "" &&
@@ -31,14 +36,19 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       employmentDetails!.postCode !== "" &&
       employmentDetails!.city !== "" &&
       employmentDetails!.state !== "" &&
-      employmentDetails!.country !== ""
+      employmentDetails!.country !== "" &&
+      Object.values(rules)
+        .map((value) => typeof value)
+        .includes(typeof "string") === false
     );
   };
 
   const buttonDisabled =
     accountType === "Individual"
-      ? validateDetails(principal!) === false
-      : validateDetails(principal!) === false || validateDetails(joint!) === false || checkJointGross === false;
+      ? validateDetails(principal!, validations.principal) === false
+      : validateDetails(principal!, validations.principal) === false ||
+        validateDetails(joint!, validations.joint) === false ||
+        checkJointGross === false;
 
   const handleSubmit = () => {
     addPersonalInfo({ ...personalInfo, editPersonal: true });
@@ -63,6 +73,14 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     handleNextStep("PersonalDetails");
   };
 
+  const handlePrincipalValidation = (value: IEmploymentDetailsValidations) => {
+    setValidations({ ...validations, principal: { ...validations.principal, ...value } });
+  };
+
+  const handleJointValidation = (value: IEmploymentDetailsValidations) => {
+    setValidations({ ...validations, joint: { ...validations.joint, ...value } });
+  };
+
   const padding: ViewStyle = accountType === "Joint" ? px(sw48) : px(sw24);
 
   return (
@@ -72,6 +90,8 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
         personalDetails={principal!.personalDetails!}
         employmentDetails={principal!.employmentDetails!}
         setEmploymentDetails={handlePrincipalEmployment}
+        setValidations={handlePrincipalValidation}
+        validations={validations.principal}
       />
       {accountType === "Individual" ? null : (
         <Fragment>
@@ -83,6 +103,8 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
             personalDetails={joint!.personalDetails!}
             employmentDetails={joint!.employmentDetails!}
             setEmploymentDetails={handleJointEmployment}
+            setValidations={handleJointValidation}
+            validations={validations.joint}
           />
         </Fragment>
       )}

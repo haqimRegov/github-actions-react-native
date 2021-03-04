@@ -13,6 +13,8 @@ interface PrincipalEmploymentDetails {
   employmentDetails: IEmploymentDetailsState;
   personalDetails: IPersonalDetailsState;
   setEmploymentDetails: (value: IEmploymentDetailsState) => void;
+  setValidations: (value: IEmploymentDetailsValidations) => void;
+  validations: IEmploymentDetailsValidations;
 }
 
 export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDetails> = ({
@@ -20,6 +22,8 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
   employmentDetails,
   personalDetails,
   setEmploymentDetails,
+  setValidations,
+  validations,
 }: PrincipalEmploymentDetails) => {
   const padding = accountType === "Joint" ? px(sw24) : {};
 
@@ -37,7 +41,13 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
         />
       </View>
       <View style={padding}>
-        <EmploymentInfo accountType={accountType} employmentDetails={employmentDetails} setEmploymentDetails={setEmploymentDetails} />
+        <EmploymentInfo
+          accountType={accountType}
+          employmentDetails={employmentDetails}
+          setEmploymentDetails={setEmploymentDetails}
+          setValidations={setValidations}
+          validations={validations}
+        />
       </View>
     </View>
   );

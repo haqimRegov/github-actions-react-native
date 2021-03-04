@@ -24,12 +24,9 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   productSales,
   updateOnboarding,
 }: PersonalDetailsProps) => {
-  const [validations, setValidations] = useState<IPersonalDetailsValidations>({
-    epfNumber: undefined,
-    faxNumber: undefined,
-    homeNumber: undefined,
-    mobileNumber: undefined,
-    officeNumber: undefined,
+  const [validations, setValidations] = useState<IPersonalDetailsPageValidation>({
+    principal: { epfNumber: undefined, mothersName: undefined },
+    joint: { epfNumber: undefined, mothersName: undefined },
   });
   const { principal, joint, epfInvestment, epfShariah } = personalInfo;
   const investmentCurrencies = productSales!.map(({ investment }) =>
@@ -75,7 +72,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
     const checkEpf =
       epfInvestment === true
-        ? epfDetails!.epfMemberNumber !== "" && epfDetails!.epfAccountType !== "" && validations.epfNumber === undefined
+        ? epfDetails!.epfMemberNumber !== "" && epfDetails!.epfAccountType !== "" && validations.principal.epfNumber === undefined
         : true;
 
     return (
@@ -91,7 +88,10 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails!.maritalStatus !== "" &&
       checkEducation === true &&
       personalDetails!.monthlyHouseholdIncome !== "" &&
-      checkEpf === true
+      checkEpf === true &&
+      Object.values(validations.principal)
+        .map((value) => typeof value)
+        .includes(typeof "string") === false
     );
   };
 
@@ -124,7 +124,10 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails!.mothersMaidenName !== "" &&
       personalDetails!.maritalStatus !== "" &&
       checkEducation === true &&
-      personalDetails!.monthlyHouseholdIncome !== ""
+      personalDetails!.monthlyHouseholdIncome !== "" &&
+      Object.values(validations.joint)
+        .map((value) => typeof value)
+        .includes(typeof "string") === false
     );
   };
 
@@ -189,6 +192,14 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     handleNextStep("IdentityVerification");
   };
 
+  const handlePrincipalValidation = (value: IPersonalDetailsValidations) => {
+    setValidations({ ...validations, principal: { ...validations.principal, ...value } });
+  };
+
+  const handleJointValidation = (value: IPersonalDetailsValidations) => {
+    setValidations({ ...validations, joint: { ...validations.joint, ...value } });
+  };
+
   const padding = accountType === "Joint" ? px(sw48) : px(sw24);
   const uniqueCurrencies = investmentCurrencies.filter((currency, index) => investmentCurrencies.indexOf(currency) === index);
 
@@ -218,8 +229,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           setContactDetails={handlePrincipalContactDetails}
           setEpfDetails={handlePrincipalEpfDetails}
           setPersonalDetails={handlePrincipalPersonalDetails}
-          setValidations={setValidations}
-          validations={validations}
+          setValidations={handlePrincipalValidation}
+          validations={validations.principal}
         />
         {accountType === "Individual" ? null : (
           <Fragment>
@@ -239,8 +250,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
               setContactDetails={handleJointContactDetails}
               setEpfDetails={handleJointEpfDetails}
               setPersonalDetails={handleJointPersonalDetails}
-              setValidations={setValidations}
-              validations={validations}
+              setValidations={handleJointValidation}
+              validations={validations.joint}
             />
           </Fragment>
         )}

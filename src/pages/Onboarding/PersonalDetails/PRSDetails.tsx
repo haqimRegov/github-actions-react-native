@@ -13,6 +13,8 @@ interface PRSDetailsProps {
   inputMaritalStatus: string;
   inputMotherName: string;
   inputOtherEducation: string;
+  mothersNameError?: string;
+  onBlurMothersName: () => void;
   setInputEducation: (input: string) => void;
   setInputMaritalStatus: (input: string) => void;
   setInputMotherName: (input: string) => void;
@@ -24,6 +26,8 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
   inputMaritalStatus,
   inputMotherName,
   inputOtherEducation,
+  mothersNameError,
+  onBlurMothersName,
   setInputEducation,
   setInputMaritalStatus,
   setInputMotherName,
@@ -34,7 +38,9 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
       <CustomSpacer space={sh32} />
       <CustomTextInput
         autoCapitalize="words"
+        error={mothersNameError}
         label={PRS.LABEL_MOTHER_NAME}
+        onBlur={onBlurMothersName}
         onChangeText={setInputMotherName}
         spaceToBottom={sh32}
         value={inputMotherName}

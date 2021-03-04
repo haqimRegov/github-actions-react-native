@@ -540,6 +540,7 @@ export const english = {
       LABEL_UT_TYPE: "UT Type",
     },
     IDENTITY_CONFIRMATION: {
+      BUTTON_BACK: "Back",
       BUTTON_CONFIRM: "Confirm",
       BUTTON_CONTINUE: "Continue",
       BUTTON_PROCEED: "Proceed",
@@ -839,6 +840,9 @@ export const english = {
         "Your completed investment will be processed today / today + 3 days provided you have met the terms and conditions below.",
       PROMPT_SUBTITLE_PENDING:
         "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete submission",
+      PROMPT_SUBTITLE_PENDING_FLOATING:
+        "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete submission\n\n4. Your client has a floating amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_SUBMITTED_FLOATING: "Your client has a floating amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE: "All unsaved progress will be discarded.",
       PROMPT_TITLE_CANCEL: "Are you sure you want to cancel?",
       PROMPT_TITLE_ORDER: "Your completed order have been\nsubmitted successfully",

@@ -456,19 +456,17 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               checkCombinedBankName === true;
 
             let saveDisabled = onlineBankingDisabled;
-            const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
-            const findTotalIndex = orderTotalAmount.findIndex(({ currency }) => currency === payment.currency);
-            const paymentAmount = payment.amount !== undefined ? parseAmount(payment.amount) : 0;
-            const currencyTotalAmount = findTotalIndex !== -1 ? parseAmount(orderTotalAmount[findTotalIndex].amount) : 0;
-            const cleanAmount = Number.isNaN(paymentAmount) ? 0 : paymentAmount;
-            let calculateDifference = -1;
-            if (floatingAmount.length !== 0) {
-              calculateDifference = floatingAmount[findFloatingIndex].amount + cleanAmount;
-            } else {
-              calculateDifference = cleanAmount - currencyTotalAmount;
-            }
-
-            const additionalPaymentDisabled = calculateDifference >= 0 || saveDisabled;
+            // const findFloatingIndex = floatingAmount.findIndex(({ currency }) => currency === payment.currency);
+            // const findTotalIndex = orderTotalAmount.findIndex(({ currency }) => currency === payment.currency);
+            // const paymentAmount = payment.amount !== undefined ? parseAmount(payment.amount) : 0;
+            // const currencyTotalAmount = findTotalIndex !== -1 ? parseAmount(orderTotalAmount[findTotalIndex].amount) : 0;
+            // const cleanAmount = Number.isNaN(paymentAmount) ? 0 : paymentAmount;
+            // let calculateDifference = -1;
+            // if (floatingAmount.length !== 0) {
+            //   calculateDifference = floatingAmount[findFloatingIndex].amount + cleanAmount;
+            // } else {
+            //   calculateDifference = cleanAmount - currencyTotalAmount;
+            // }
 
             const paymentMethodProps = {
               currency: payment.currency!,
@@ -559,6 +557,9 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
             if (currencies.some((currency) => currency.value === "MYR")) {
               paymentMethods.splice(1, 0, { label: "Cheque", value: "Cheque" });
             }
+
+            // add additional payment is disabled if floating label is empty
+            const additionalPaymentDisabled = floating === "" || saveDisabled;
 
             return (
               <View key={index}>

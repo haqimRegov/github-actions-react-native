@@ -2,9 +2,9 @@ export const DICTIONARY_ORDER_STATUS: IOrderStatus = {
   completed: "Completed",
   pendingDoc: "Pending Doc",
   pendingDocAndPayment: "Pending Doc & Payment",
-  pendingHardcopy: "Pending Hardcopy",
   pendingInitialOrder: "Pending Initial Order",
   pendingPayment: "Pending Payment",
+  pendingPhysicalDoc: "Pending Physical Doc",
   rejected: "Rejected",
   reroutedBr: "BR - Rerouted",
   reroutedHq: "HQ - Rerouted",
@@ -14,7 +14,7 @@ export const DICTIONARY_ORDER_STATUS: IOrderStatus = {
 
 export const DICTIONARY_PENDING_STATUS_FILTER: OrderStatusLabelValue[] = [
   { label: "Pending Doc", value: "Pending Doc" },
-  { label: "Pending Hardcopy", value: "Pending Hardcopy" },
+  { label: "Pending Physical Doc", value: "Pending Physical Doc" },
   { label: "Pending Initial Order", value: "Pending Initial Order" },
   { label: "Pending Payment", value: "Pending Payment" },
   { label: "BR - Rerouted", value: "BR - Rerouted" },

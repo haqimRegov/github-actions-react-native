@@ -128,12 +128,18 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         : [principal!.personalDetails!.id!.frontPage!, principal!.personalDetails!.id!.secondPage!];
 
     const principalTaxResident = principal!.declaration!.crs!.taxResident!;
-    const princilapNoTinReason =
-      principal!.declaration!.crs!.reason! === 1
-        ? OPTION_CRS_NO_TIN_REQUIRED
-        : OPTIONS_CRS_TIN_REASONS[principal!.declaration!.crs!.reason!];
-    const principalTinReason =
-      principal!.declaration!.crs!.reason! === 2 ? principal!.declaration!.crs!.explanation! : princilapNoTinReason;
+
+    const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
+      const principalNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+      const principalTinReason = multiTin.reason! === 2 ? multiTin.explanation! : principalNoTinReason;
+      return {
+        country: principalTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
+        noTin: principalTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
+        reason: principalTaxResident === 0 || multiTin.noTin! === false ? undefined : principalTinReason, // undefined if taxResident === 0, required if noTin === true
+        tinNumber: principalTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
+      };
+    });
+
     const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
     const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
     const principalCertReason =
@@ -141,9 +147,18 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
     const jointTaxResident = joint!.declaration!.crs!.taxResident!;
-    const jointNoTinReason =
-      joint!.declaration!.crs!.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[joint!.declaration!.crs!.reason!];
-    const jointTinReason = joint!.declaration!.crs!.reason! === 2 ? joint!.declaration!.crs!.explanation! : jointNoTinReason;
+
+    const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
+      const jointNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+      const jointTinReason = multiTin.reason! === 2 ? multiTin.explanation! : jointNoTinReason;
+      return {
+        country: jointTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
+        noTin: jointTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
+        reason: jointTaxResident === 0 || multiTin.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
+        tinNumber: jointTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
+      };
+    });
+
     const jointUsCitizen = joint!.declaration!.fatca!.usCitizen! === 0;
     const jointUsBorn = joint!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
     const jointCertReason =
@@ -163,12 +178,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             addressInformation: joint!.addressInformation! as ISubmitAddress,
             declaration: {
               crs: {
-                country: jointTaxResident === 0 ? undefined : joint!.declaration!.crs!.country!, // undefined if taxResident === 0
-                noTin: jointTaxResident === 0 ? undefined : `${joint!.declaration!.crs!.noTin!}`, // "true" || "false", undefined if taxResident === 0
-                reason: jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
                 taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
-                tinNumber:
-                  jointTaxResident === 0 || joint!.declaration!.crs!.noTin! === true ? undefined : joint!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
+                tin: jointTin,
               },
               fatca: {
                 formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
@@ -227,14 +238,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         },
         declaration: {
           crs: {
-            country: principalTaxResident === 0 ? undefined : principal!.declaration!.crs!.country!, // undefined if taxResident === 0
-            noTin: principalTaxResident === 0 ? undefined : `${principal!.declaration!.crs!.noTin!}`, // "true" || "false", undefined if taxResident === 0
-            reason: principalTaxResident === 0 || principal!.declaration!.crs!.noTin! === false ? undefined : principalTinReason, // undefined if taxResident === 0, required if noTin === true
             taxResident: OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident], // required
-            tinNumber:
-              principalTaxResident === 0 || principal!.declaration!.crs!.noTin! === true
-                ? undefined
-                : principal!.declaration!.crs!.tinNumber!, // undefined if taxResident === 0 or noTin === true
+            tin: principalTin,
           },
           fatca: {
             formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
@@ -321,7 +326,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       }
 
       if (error !== null) {
-        const errorList = `${error.errorList?.join("\n")}`;
+        const errorList = error.errorList?.join("\n");
         setTimeout(() => {
           Alert.alert(error.message, errorList);
         }, 150);

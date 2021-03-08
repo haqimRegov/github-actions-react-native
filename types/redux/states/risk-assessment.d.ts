@@ -6,6 +6,7 @@ declare interface IRiskAssessmentState {
   questionSix: number;
   questionSeven: number;
   questionEight: number;
+  questionNine: number;
 }
 
 declare type IRiskScoreState = IRiskScore;

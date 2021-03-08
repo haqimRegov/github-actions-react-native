@@ -8,6 +8,7 @@ declare interface IGetRiskProfileRequest {
     questionSix: number;
     questionSeven: number;
     questionEight: number;
+    questionNine: number;
   };
 }
 

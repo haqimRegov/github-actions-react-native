@@ -28,10 +28,10 @@ declare interface IPersonalDetailsState {
 }
 
 declare interface IBaseAddress {
-  city: string;
-  country: string;
-  postCode: string;
-  state: string;
+  city?: string;
+  country?: string;
+  postCode?: string;
+  state?: string;
 }
 
 declare interface IAddressMultiline {

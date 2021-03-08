@@ -77,14 +77,14 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const setExpiryDate = (value: Date) => setPersonalDetails({ expirationDate: value });
   const setInputCountryOfBirth = (value: string) => setPersonalDetails({ countryOfBirth: value });
   const setInputGender = (value: string) => setPersonalDetails({ gender: value });
-  const setInputMailingAddress = (value: string) => setMailingInfo({ address: value });
+  const setInputMailingAddress = (value: IAddressMultiline) => setMailingInfo({ address: { ...value } });
   const setInputMailingCity = (value: string) => setMailingInfo({ city: value });
   const setInputMailingCountry = (value: string) => setMailingInfo({ country: value });
   const setInputMailingPostCode = (value: string) => setMailingInfo({ postCode: value });
   const setInputMailingState = (value: string) => setMailingInfo({ state: value });
   const setInputName = (value: string) => setPersonalDetails({ name: value });
   const setInputNationality = (value: string) => setPersonalDetails({ nationality: value });
-  const setInputPermanentAddress = (value: string) => setPermanentInfo({ address: value });
+  const setInputPermanentAddress = (value: IAddressMultiline) => setPermanentInfo({ address: { ...value } });
   const setInputPermanentCity = (value: string) => setPermanentInfo({ city: value });
   const setInputPermanentCountry = (value: string) => setPermanentInfo({ country: value });
   const setInputPermanentPostCode = (value: string) => setPermanentInfo({ postCode: value });
@@ -97,7 +97,17 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       setSameAddressToggle(false);
       setAddressInfo({
         ...addressInfo,
-        mailingAddress: { ...addressInfo.mailingAddress!, address: "", postCode: "", city: "", state: "" },
+        mailingAddress: {
+          ...addressInfo.mailingAddress!,
+          address: {
+            line1: "",
+            line2: undefined,
+            line3: undefined,
+          },
+          postCode: "",
+          city: "",
+          state: "",
+        },
       });
     } else {
       setSameAddressToggle(true);

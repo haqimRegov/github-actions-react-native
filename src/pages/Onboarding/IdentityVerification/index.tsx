@@ -8,7 +8,7 @@ import { Language } from "../../../constants";
 import { DICTIONARY_ALL_ID, DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh40, sh56, sw24 } from "../../../styles";
-import { OCRUtils } from "../../../utils";
+import { OCRUtils, splitString } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
 import { UploadID } from "./UploadID";
@@ -148,6 +148,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           setPrincipalFrontError(mykad.error?.message);
         }
       } else {
+        const [line1, line2, line3] = splitString(mykad.address || "", 100);
         const principalInfo: IHolderInfoState = {
           ...principal,
           personalDetails: {
@@ -160,14 +161,14 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           },
           addressInformation: {
             mailingAddress: {
-              address: mykad.address || "",
+              address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",
               country: mykad.country || "",
               postCode: mykad.postCode || "",
               state: mykad.state || "",
             },
             permanentAddress: {
-              address: mykad.address || "",
+              address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",
               country: mykad.country || "",
               postCode: mykad.postCode || "",
@@ -219,6 +220,8 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           setJointFrontError(mykad.error?.message);
         }
       } else {
+        const [line1, line2, line3] = splitString(mykad.address || "", 100);
+
         const jointInfo: IHolderInfoState = {
           ...joint,
           personalDetails: {
@@ -231,14 +234,14 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           },
           addressInformation: {
             mailingAddress: {
-              address: mykad.address || "",
+              address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",
               country: mykad.country || "",
               postCode: mykad.postCode || "",
               state: mykad.state || "",
             },
             permanentAddress: {
-              address: mykad.address || "",
+              address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",
               country: mykad.country || "",
               postCode: mykad.postCode || "",

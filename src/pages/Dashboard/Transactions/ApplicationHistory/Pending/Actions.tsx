@@ -91,7 +91,7 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
         remark.findIndex((reason) => reason.label === "Document" || reason.label === "Others") !== -1) ? (
         <IconText color={colorBlue._2} name="upload" onPress={handleUploadDocs} text={DASHBOARD_HOME.LABEL_UPLOAD} style={itemStyle} />
       ) : null}
-      {status === "Pending Hardcopy" && canSubmitHardcopy === true ? (
+      {status === "Pending Physical Doc" && canSubmitHardcopy === true ? (
         <IconText
           color={colorBlue._2}
           name="file"

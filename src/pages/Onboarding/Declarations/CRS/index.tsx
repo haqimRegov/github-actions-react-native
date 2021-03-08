@@ -58,42 +58,21 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   };
 
   const isTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 0;
-  const isNonTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 1 || principal?.declaration!.crs!.taxResident! === 2;
-  const isTinDeclaredPrincipal = principal?.declaration!.crs!.country !== "" && principal?.declaration!.crs!.tinNumber !== "";
-  const noTinWithReasonPrincipal =
-    principal?.declaration!.crs!.country !== "" &&
-    principal?.declaration!.crs!.noTin === true &&
-    (principal?.declaration!.crs!.reason === 0 || principal?.declaration!.crs!.reason === 1);
-  const noTinOtherReasonPrincipal =
-    principal?.declaration!.crs!.country !== "" &&
-    principal?.declaration!.crs!.noTin === true &&
-    principal?.declaration!.crs!.reason === 2 &&
-    principal?.declaration!.crs!.explanation !== "";
+  const validateTin = (multipleTin: ITinMultiple[]) =>
+    multipleTin
+      .map(
+        (tin) =>
+          tin.country !== "" &&
+          ((tin.noTin === false && tin.tinNumber !== "") ||
+            (tin.noTin === true && (tin.reason === 0 || tin.reason === 1 || (tin.reason === 2 && tin.explanation !== "")))),
+      )
+      .includes(false) === false;
 
   const isTaxResidentJoint = joint?.declaration!.crs!.taxResident! === 0;
-  const isNonTaxResidentJoint = joint?.declaration!.crs!.taxResident! === 1 || joint?.declaration!.crs!.taxResident! === 2;
-  const isTinDeclaredJoint = joint?.declaration!.crs!.country !== "" && joint?.declaration!.crs!.tinNumber !== "";
-  const noTinWithReasonJoint =
-    joint?.declaration!.crs!.country !== "" &&
-    joint?.declaration!.crs!.noTin === true &&
-    (joint?.declaration!.crs!.reason === 0 || joint?.declaration!.crs!.reason === 1);
-  const noTinOtherReasonJoint =
-    joint?.declaration!.crs!.country !== "" &&
-    joint?.declaration!.crs!.noTin === true &&
-    joint?.declaration!.crs!.reason === 2 &&
-    joint?.declaration!.crs!.explanation !== "";
 
-  const showTermsPrincipal =
-    isTaxResidentPrincipal ||
-    (isNonTaxResidentPrincipal && isTinDeclaredPrincipal) ||
-    (isNonTaxResidentPrincipal && noTinWithReasonPrincipal) ||
-    (isNonTaxResidentPrincipal && noTinOtherReasonPrincipal);
+  const showTermsPrincipal = isTaxResidentPrincipal || validateTin(principal!.declaration!.crs!.tin!);
 
-  const showTermsJoint =
-    isTaxResidentJoint ||
-    (isNonTaxResidentJoint && isTinDeclaredJoint) ||
-    (isNonTaxResidentJoint && noTinWithReasonJoint) ||
-    (isNonTaxResidentJoint && noTinOtherReasonJoint);
+  const showTermsJoint = isTaxResidentJoint || validateTin(joint?.declaration!.crs!.tin!);
 
   const validationsPrincipal = { showTerms: showTermsPrincipal };
   const validationsJoint = { showTerms: showTermsJoint };
@@ -102,9 +81,14 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   const showButtonContinueJoint = showTermsJoint ? handleContinue : undefined;
 
   const continueEnabledPrincipal =
-    showTermsPrincipal && principal?.declaration!.crs!.acceptCrs && principal?.declaration!.crs!.explanationSaved;
+    showTermsPrincipal &&
+    principal?.declaration!.crs!.acceptCrs &&
+    principal?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false;
 
-  const continueEnabledJoint = showTermsJoint && joint?.declaration!.crs!.acceptCrs && joint?.declaration!.crs!.explanationSaved;
+  const continueEnabledJoint =
+    showTermsJoint &&
+    joint?.declaration!.crs!.acceptCrs &&
+    joint?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false;
 
   const showButtonContinue = accountType === "Joint" ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
   const continueEnabled = accountType === "Joint" ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;

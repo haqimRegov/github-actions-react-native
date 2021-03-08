@@ -53,7 +53,9 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       personalDetails!.gender !== "" &&
       personalDetails!.placeOfBirth !== "" &&
       Object.values(addressInformation!.permanentAddress!).includes("") === false &&
-      Object.values(addressInformation!.mailingAddress!).includes("") === false &&
+      Object.values(addressInformation!.mailingAddress!.address!).includes("") === false &&
+      Object.values(addressInformation!.permanentAddress!).includes("") === false &&
+      Object.values(addressInformation!.mailingAddress!.address!).includes("") === false &&
       Object.values(rules)
         .map((value) => typeof value)
         .includes(typeof "string") === false &&

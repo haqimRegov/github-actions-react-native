@@ -89,7 +89,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }
       if (error !== null) {
-        const errorList = `${error.errorList?.join("\n")}`;
+        const errorList = error.errorList?.join("\n");
         setTimeout(() => {
           Alert.alert(error.message, errorList);
         }, 100);

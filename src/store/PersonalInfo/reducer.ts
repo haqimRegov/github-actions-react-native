@@ -28,14 +28,22 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
         principal: {
           addressInformation: {
             mailingAddress: {
-              address: "",
+              address: {
+                line1: "",
+                line2: undefined,
+                line3: undefined,
+              },
               city: "",
               country: "",
               postCode: "",
               state: "",
             },
             permanentAddress: {
-              address: "",
+              address: {
+                line1: "",
+                line2: undefined,
+                line3: undefined,
+              },
               city: "",
               country: "",
               postCode: "",
@@ -69,13 +77,17 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
           declaration: {
             crs: {
               acceptCrs: false,
-              country: "",
-              explanation: "",
-              explanationSaved: true,
-              noTin: false,
-              reason: -1,
               taxResident: -1,
-              tinNumber: "",
+              tin: [
+                {
+                  country: "",
+                  explanation: "",
+                  explanationSaved: true,
+                  noTin: false,
+                  reason: -1,
+                  tinNumber: "",
+                },
+              ],
             },
             fatca: {
               acceptFatca: false,
@@ -142,14 +154,22 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
         joint: {
           addressInformation: {
             mailingAddress: {
-              address: "",
+              address: {
+                line1: "",
+                line2: undefined,
+                line3: undefined,
+              },
               city: "",
               country: "",
               postCode: "",
               state: "",
             },
             permanentAddress: {
-              address: "",
+              address: {
+                line1: "",
+                line2: undefined,
+                line3: undefined,
+              },
               city: "",
               country: "",
               postCode: "",
@@ -183,13 +203,17 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
           declaration: {
             crs: {
               acceptCrs: false,
-              country: "",
-              explanation: "",
-              explanationSaved: true,
-              noTin: false,
-              reason: -1,
               taxResident: -1,
-              tinNumber: "",
+              tin: [
+                {
+                  country: "",
+                  explanation: "",
+                  explanationSaved: true,
+                  noTin: false,
+                  reason: -1,
+                  tinNumber: "",
+                },
+              ],
             },
             fatca: {
               acceptFatca: false,

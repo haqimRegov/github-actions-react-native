@@ -249,14 +249,22 @@ const getOrderSummary = gql`
             }
             addressInformation {
               mailingAddress {
-                address
+                address {
+                  line1
+                  line2
+                  line3
+                }
                 city
                 country
                 postCode
                 state
               }
               permanentAddress {
-                address
+                address {
+                  line1
+                  line2
+                  line3
+                }
                 city
                 country
                 postCode
@@ -310,9 +318,11 @@ const getOrderSummary = gql`
               }
               crs {
                 taxResident
-                country
-                tinNumber
-                reason
+                tin {
+                  country
+                  tinNumber
+                  reason
+                }
               }
               fea {
                 resident
@@ -420,6 +430,7 @@ const listPaymentRequired = gql`
           surplusBalance
           paymentCount
           funds {
+            accountFund
             distributionInstruction
             fundClass
             fundCurrency

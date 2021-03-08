@@ -27,14 +27,22 @@ declare interface IPersonalDetailsState {
   salutation?: string;
 }
 
-declare interface IAddressState {
-  address?: string;
+declare interface IBaseAddress {
   city?: string;
   country?: string;
   postCode?: string;
   state?: string;
 }
 
+declare interface IAddressMultiline {
+  line1?: string;
+  line2?: string;
+  line3?: string;
+}
+
+declare interface IAddressState extends IBaseAddress {
+  address?: IAddressMultiline;
+}
 declare interface IAddressInfoState {
   mailingAddress?: IAddressState;
   permanentAddress?: IAddressState;
@@ -74,7 +82,8 @@ declare interface IBankSummaryState {
   localBank?: IBankDetailsState[];
 }
 
-declare interface IEmploymentDetailsState extends IAddressState {
+declare interface IEmploymentDetailsState extends IBaseAddress {
+  address?: string;
   businessNature?: string;
   employerName?: string;
   grossIncome?: string;
@@ -104,13 +113,17 @@ declare interface IFeaState {
   resident?: TypeToggleButtonValue;
 }
 
-declare interface ITinState {
+declare interface ITinMultiple {
   country?: string;
   explanation?: string;
   explanationSaved?: boolean;
   noTin?: boolean;
   reason?: TypeAdvanceToggleButtonValue;
   tinNumber?: string;
+}
+
+declare interface ITinState {
+  tin?: ITinMultiple[];
 }
 
 declare interface ICrsState extends ITinState {

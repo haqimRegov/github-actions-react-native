@@ -38,18 +38,24 @@ declare interface ISubmitContactDetails {
   contactNumber: ISubmitContactNumber[];
 }
 
-declare interface ISubmitEmploymentBase extends ISubmitAddress {
+declare interface ISubmitEmploymentBase extends IBaseAddress {
   businessNature: string;
   occupation: string;
   employerName: string;
+  address: string;
 }
 
 declare interface ISubmitEmploymentJoint extends ISubmitEmploymentBase {
   grossIncome: string;
 }
 
+declare interface ISubmitAddressMultiline {
+  line1: string;
+  line2: string;
+  line3: string;
+}
 declare interface ISubmitAddress {
-  address: string;
+  address: ISubmitAddressMultiline;
   city: string;
   country: string;
   postCode: string;
@@ -85,12 +91,16 @@ declare interface ISubmitEpfDetails {
   epfMemberNumber?: string;
 }
 
-declare interface ISubmitCrs {
+declare interface ISubmitCrsTin {
   country?: string; // undefined if taxResident === 0
   noTin?: string; // "true" || "false", undefined if taxResident === 0
   reason?: string; // undefined if taxResident === 0, required if noTin === true
-  taxResident: string; // find index
   tinNumber?: string; // undefined if taxResident === 0 or noTin === true
+}
+
+declare interface ISubmitCrs {
+  taxResident: string; // find index
+  tin: ISubmitCrsTin[]; // undefined if taxResident === 0 or noTin === true
 }
 
 declare interface ISubmitFatca {

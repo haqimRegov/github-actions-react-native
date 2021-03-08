@@ -58,9 +58,11 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   if (accountType === "Joint") {
     additionalInfoSummary.push(jointInfoSummary[0]);
   }
+  const permanentAddress = Object.values(addressInformation!.permanentAddress!.address!).join(" ");
+  const mailingAddress = Object.values(addressInformation!.mailingAddress!.address!).join(" ");
 
   const permanentAddressSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_PERMANENT_ADDRESS, title: addressInformation!.permanentAddress!.address!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_PERMANENT_ADDRESS, title: permanentAddress, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: addressInformation!.permanentAddress!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: addressInformation!.permanentAddress!.city! },
     { label: SUMMARY.LABEL_STATE, title: addressInformation!.permanentAddress!.state! },
@@ -68,7 +70,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   ];
 
   const mailingAddressSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_MAILING_ADDRESS, title: addressInformation!.mailingAddress!.address!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MAILING_ADDRESS, title: mailingAddress, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
     { label: SUMMARY.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },

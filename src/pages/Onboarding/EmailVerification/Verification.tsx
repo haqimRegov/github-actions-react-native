@@ -150,7 +150,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
           {jointEmailCheck === true ? null : (
             <TextSpaceArea
               spaceToTop={sh8}
-              style={{ ...fs12RegBlack2, ...px(sw12), letterSpacing: sw02 }}
+              style={{ ...fs12RegBlack2, ...px(sw16), letterSpacing: sw02 }}
               text={EMAIL_VERIFICATION.NOTE_LINK}
             />
           )}
@@ -167,7 +167,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                 spaceToBottom={sh8}
                 value={inputJointEmail}
               />
-              <Text style={{ ...fs12RegBlack2, ...px(sw12) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
+              <Text style={{ ...fs12RegBlack2, ...px(sw16) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
             </Fragment>
           ) : null}
           <View style={flexRow}>

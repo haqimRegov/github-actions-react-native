@@ -50,13 +50,17 @@ declare interface IOrderSummaryPayment {
   frequency?: string;
 }
 
+declare interface IOrderSummaryEmploymentAddress extends IBaseAddress {
+  address: string;
+}
+
 declare interface IOrderSummaryEmploymentDetails {
   occupation: string;
   natureOfBusiness: string;
   monthlyHouseholdIncome: string;
   annualIncome: string | null;
   nameOfEmployer: string;
-  address: IOrderSummaryAddress;
+  address: IOrderSummaryEmploymentAddress;
 }
 
 declare interface IOrderSummaryContactDetails {
@@ -92,7 +96,7 @@ declare interface IOrderSummaryPersonalDetails {
 }
 
 declare interface IOrderSummaryAddress {
-  address: string;
+  address: IAddressMultiline;
   city: string;
   country: string;
   postCode: string;
@@ -137,9 +141,7 @@ declare interface IOrderSummaryDeclaration {
   };
   crs: {
     taxResident: string | null;
-    country: string | null;
-    tinNumber: string | null;
-    reason: string | null;
+    tin: { country: string | null; tinNumber: string | null; reason: string | null }[];
   };
   fea: {
     resident: "Yes" | "No" | null;

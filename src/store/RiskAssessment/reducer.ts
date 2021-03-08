@@ -23,7 +23,8 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
           questionFive: 0,
           questionSix: 0,
           questionSeven: 0,
-          questionEight: -1,
+          questionEight: 0,
+          questionNine: -1,
         },
       };
     case "riskAssessment/RESET_RISK_ASSESSMENT":
@@ -35,7 +36,8 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
           questionFive: 0,
           questionSix: 0,
           questionSeven: 0,
-          questionEight: -1,
+          questionEight: 0,
+          questionNine: -1,
         },
         riskScore: {
           appetite: "",

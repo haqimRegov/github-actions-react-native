@@ -1,12 +1,41 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { AccountHeader, AdvanceToggleButton, CustomSpacer } from "../../../../components";
+import {
+  AccountHeader,
+  AdvancedDropdown,
+  AdvanceTextInputArea,
+  AdvanceToggleButton,
+  CheckBox,
+  CustomFlexSpacer,
+  CustomSpacer,
+  CustomTextInput,
+  IconButton,
+  OutlineButton,
+} from "../../../../components";
 import { Language } from "../../../../constants";
-import { OPTIONS_CRS_TAX_RESIDENCY } from "../../../../data/dictionary";
-import { flexChild, fs16RegBlack2, px, sh12, sh24, sw24 } from "../../../../styles";
+import { DICTIONARY_COUNTRIES, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
+import {
+  colorBlack,
+  colorBlue,
+  flexChild,
+  flexRow,
+  fs12BoldBlack2,
+  fs12BoldBlue2,
+  fs16RegBlack2,
+  fs16SemiBoldBlack2,
+  px,
+  py,
+  sh12,
+  sh16,
+  sh20,
+  sh24,
+  sh32,
+  sh8,
+  sw16,
+  sw24,
+} from "../../../../styles";
 import { CrsTerms } from "./Declaration";
-import { NonTaxResident } from "./NonTaxResident";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -30,13 +59,17 @@ interface CrsDeclarationProps {
 
 const initialState = {
   acceptCrs: false,
-  country: "",
-  explanation: "",
-  explanationSaved: true,
-  noTin: false,
-  reason: -1,
   taxResident: -1,
-  tinNumber: "",
+  tin: [
+    {
+      country: "",
+      explanation: "",
+      explanationSaved: true,
+      noTin: false,
+      reason: -1,
+      tinNumber: "",
+    },
+  ],
 };
 
 export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
@@ -47,39 +80,20 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
   name,
   validations,
 }: CrsDeclarationProps) => {
-  const { acceptCrs, country, explanation, explanationSaved, noTin, reason, taxResident, tinNumber } = crs;
+  const { acceptCrs, taxResident, tin } = crs;
   const { showTerms } = validations;
-  const setExplanationSaved = (value: boolean) => handleCrsDeclaration({ ...crs, explanationSaved: value });
 
   const handleResident = (value: TypeAdvanceToggleButtonValue) => {
     handleCrsDeclaration({ ...initialState, taxResident: value });
   };
 
-  const handleCountry = (value: string) => {
-    handleCrsDeclaration({ ...initialState, country: value, taxResident: taxResident, tinNumber: tinNumber });
-  };
-
-  const handleTinNumber = (value: string) => {
-    handleCrsDeclaration({ ...crs, tinNumber: value });
-  };
-
-  const handleNoTin = () => {
-    handleCrsDeclaration({ ...initialState, country: country, noTin: !noTin, taxResident: taxResident });
-  };
-
-  const handleTinReason = (value: TypeAdvanceToggleButtonValue) => {
-    handleCrsDeclaration({ ...initialState, country: country, noTin: noTin, reason: value, taxResident: taxResident });
-  };
-
-  const handleExplanation = (value: string) => {
-    const newCrs: ICrsState = { ...crs };
-    if (value === "") {
-      newCrs.acceptCrs = false;
-    }
-    handleCrsDeclaration({ ...newCrs, country: country, explanation: value, explanationSaved: true });
-  };
-
   const handleAcceptCrs = () => handleCrsDeclaration({ ...crs, acceptCrs: !acceptCrs });
+
+  const handleAddTin = () => {
+    const updatedTin = [...tin!];
+    updatedTin.push(initialState.tin[0]);
+    handleCrsDeclaration({ ...crs, tin: updatedTin });
+  };
 
   const headerTitle = accountHolder === "Principal" ? DECLARATIONS.TITLE_PRINCIPAL : DECLARATIONS.TITLE_JOINT;
 
@@ -96,21 +110,133 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
         <Text style={fs16RegBlack2}>{DECLARATIONS.CRS_ARE_YOU}</Text>
         <CustomSpacer space={sh12} />
         <AdvanceToggleButton direction="column" labels={OPTIONS_CRS_TAX_RESIDENCY} onSelect={handleResident} value={taxResident!} />
-        {taxResident! > 0 ? (
-          <NonTaxResident
-            country={country!}
-            explanation={explanation!}
-            explanationSaved={explanationSaved!}
-            handleCountry={handleCountry}
-            handleExplanation={handleExplanation}
-            handleNoTin={handleNoTin}
-            handleSave={setExplanationSaved}
-            handleTinNumber={handleTinNumber}
-            handleTinReason={handleTinReason}
-            noTin={noTin!}
-            reason={reason!}
-            tinNumber={tinNumber!}
-          />
+        {taxResident! > 0 && tin !== undefined ? (
+          <View>
+            <CustomSpacer space={sh32} />
+            <Text style={fs16RegBlack2}>{DECLARATIONS.LABEL_DECLARE_TIN}</Text>
+            {tin.map((tax: ITinMultiple, index: number) => {
+              const handleCountry = (value: string) => {
+                const updatedTin = [...tin];
+                updatedTin[index] = { ...initialState.tin[0], country: value, tinNumber: tax.tinNumber };
+                handleCrsDeclaration({ ...initialState, taxResident: taxResident, tin: updatedTin });
+              };
+
+              const handleTinNumber = (value: string) => {
+                const updatedTin = [...tin];
+                updatedTin[index].tinNumber = value;
+                handleCrsDeclaration({ ...crs, tin: updatedTin });
+              };
+
+              const handleNoTin = () => {
+                const updatedTin = [...tin];
+                updatedTin[index] = { ...initialState.tin[0], country: tax.country, noTin: !tax.noTin };
+                handleCrsDeclaration({ ...initialState, taxResident: taxResident, tin: updatedTin });
+              };
+
+              const handleTinReason = (value: TypeAdvanceToggleButtonValue) => {
+                const updatedTin = [...tin];
+                updatedTin[index] = { ...initialState.tin[0], country: tax.country, noTin: tax.noTin, reason: value };
+                handleCrsDeclaration({ ...initialState, taxResident: taxResident, tin: updatedTin });
+              };
+
+              const handleExplanation = (value: string) => {
+                const newCrs: ICrsState = { ...crs };
+                if (value === "") {
+                  newCrs.acceptCrs = false;
+                }
+                const updatedTin = [...tin];
+                updatedTin[index] = { ...updatedTin[index], country: tax.country, explanationSaved: true, explanation: value };
+                handleCrsDeclaration({ ...newCrs, taxResident: taxResident, tin: updatedTin });
+              };
+
+              const handleSave = (value: boolean) => {
+                const updatedTin = [...tin];
+                updatedTin[index].explanationSaved = value;
+                handleCrsDeclaration({ ...crs, tin: updatedTin });
+              };
+
+              const handleRemoveTin = () => {
+                const updatedTin = [...tin!];
+                updatedTin.splice(index, 1);
+                handleCrsDeclaration({ ...crs, tin: updatedTin });
+              };
+
+              const labelCountry =
+                index === 0 ? DECLARATIONS.LABEL_COUNTRY : `${DECLARATIONS.LABEL_COUNTRY} - ${DECLARATIONS.LABEL_ADDITIONAL} ${index}`;
+              const labelTin =
+                index === 0 ? DECLARATIONS.LABEL_TIN : `${DECLARATIONS.LABEL_TIN} - ${DECLARATIONS.LABEL_ADDITIONAL} ${index}`;
+
+              return (
+                <View key={index}>
+                  <View style={flexRow}>
+                    <AdvancedDropdown
+                      items={DICTIONARY_COUNTRIES}
+                      handleChange={handleCountry}
+                      label={labelCountry}
+                      spaceToTop={index === 0 ? sh16 : sh24}
+                      value={tax.country!}
+                    />
+                    <CustomSpacer isHorizontal={true} space={sw16} />
+                    {index === 0 ? null : (
+                      <View>
+                        <CustomFlexSpacer />
+                        <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveTin} size={sh24} style={py(sh8)} />
+                      </View>
+                    )}
+                  </View>
+                  <CustomSpacer space={sh24} />
+                  <CustomTextInput label={labelTin} onChangeText={handleTinNumber} value={tax.tinNumber} disabled={tax.country === ""} />
+                  <CustomSpacer space={sh20} />
+                  <CheckBox
+                    disabled={tax.country === ""}
+                    toggle={tax.noTin!}
+                    onPress={handleNoTin}
+                    label={DECLARATIONS.LABEL_NO_TIN}
+                    labelStyle={fs12BoldBlack2}
+                  />
+                  {tax.noTin === true ? (
+                    <Fragment>
+                      <CustomSpacer space={sh32} />
+                      <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.LABEL_REASON_HEADING}</Text>
+                      <CustomSpacer space={sh8} />
+                      <AdvanceToggleButton
+                        direction="column"
+                        labels={OPTIONS_CRS_TIN_REASONS}
+                        onSelect={handleTinReason}
+                        space={sh24}
+                        value={tax.reason!}
+                      />
+                      {tax.reason === 2 ? (
+                        <View>
+                          <CustomSpacer space={sh16} />
+                          <AdvanceTextInputArea
+                            handleContinue={handleExplanation}
+                            handleSave={handleSave}
+                            placeholder={DECLARATIONS.PLACEHOLDER}
+                            saved={tax.explanationSaved!}
+                            value={tax.explanation}
+                          />
+                        </View>
+                      ) : null}
+                    </Fragment>
+                  ) : null}
+                  {index < 6 && index === tin.length - 1 ? (
+                    <Fragment>
+                      <CustomSpacer space={sh24} />
+                      <OutlineButton
+                        buttonType="dashed"
+                        color={colorBlue._2}
+                        icon="plus"
+                        onPress={handleAddTin}
+                        text={"Add Additional Line"}
+                        textStyle={fs12BoldBlue2}
+                      />
+                    </Fragment>
+                  ) : null}
+                </View>
+              );
+            })}
+          </View>
         ) : null}
       </View>
       {showTerms ? <CrsTerms accepted={acceptCrs!} setAccepted={handleAcceptCrs} /> : null}

@@ -153,9 +153,9 @@ export const AccountDetailsContent = ({
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_ADDRESS_INFO} />
         <View style={flexRow}>
-          <AddressInfo data={permanentAddress as IAddress} labelAddress={DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} />
+          <AddressInfo data={permanentAddress} labelAddress={DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} />
           <CustomSpacer isHorizontal={true} space={sw64} />
-          <AddressInfo data={mailingAddress as IAddress} labelAddress={DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} />
+          <AddressInfo data={mailingAddress} labelAddress={DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} />
         </View>
       </View>
       <CustomSpacer space={sh16} />

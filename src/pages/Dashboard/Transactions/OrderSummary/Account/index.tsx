@@ -130,10 +130,10 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
     { label: DASHBOARD_PROFILE.LABEL_NATURE_BUSINESS, title: employmentInformation.natureOfBusiness, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME, title: employmentInformation.monthlyHouseholdIncome, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentInformation.address.address, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode },
-    { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city },
-    { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state },
-    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country },
+    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
+    { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
+    { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
+    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country! },
   ];
 
   if (employmentInformation.annualIncome) {
@@ -184,9 +184,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
 
   const fatcaSummary: LabeledTitleProps[] = [{ label: DASHBOARD_PROFILE.LABEL_CITIZENSHIP, title: fatca.usCitizen as string }];
 
-  const crsPartial: LabeledTitleProps[] = [
-    { label: DASHBOARD_PROFILE.LABEL_JURISDICTION, labelStyle: { width: sw200 }, title: crs.taxResident || "-" },
-  ];
   const address = `${addressInformation?.permanentAddress?.address}, ${addressInformation?.permanentAddress?.postCode}, ${addressInformation?.permanentAddress?.city}, ${addressInformation?.permanentAddress?.state}, ${addressInformation?.permanentAddress?.country}`;
 
   const feaSummary: LabeledTitleProps[] = [
@@ -231,18 +228,25 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
     fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_FORM_W8_BEN, title: "Yes" });
   }
 
-  const crsSummary = isTaxResident
-    ? crsPartial
-    : crsPartial.concat([
-        { label: DASHBOARD_PROFILE.LABEL_TIN_COUNTRY, title: crs.country! || "-" },
-        { label: DASHBOARD_PROFILE.LABEL_TIN_NUMBER, title: crs.tinNumber || "-" },
-      ]);
+  const crsSummary: LabeledTitleProps[] = [
+    { label: DASHBOARD_PROFILE.LABEL_JURISDICTION, labelStyle: { width: sw200 }, title: crs.taxResident || "-" },
+  ];
 
-  if (crs.reason) {
-    crsSummary.push({
-      label: DASHBOARD_PROFILE.LABEL_TIN_REMARKS,
-      title: crs.reason || "-",
-      titleStyle: fsTransformNone,
+  if (isTaxResident === false && crs.tin) {
+    crs.tin.forEach((multiTin, index) => {
+      const countLabel = crs.tin.length > 1 ? ` ${index + 1}` : "";
+      crsSummary.push(
+        { label: `${DASHBOARD_PROFILE.LABEL_TIN_COUNTRY}${countLabel}`, title: multiTin.country! || "-" },
+        { label: `${DASHBOARD_PROFILE.LABEL_TIN_NUMBER}${countLabel}`, title: multiTin.tinNumber || "-" },
+      );
+
+      if (multiTin.reason) {
+        crsSummary.push({
+          label: `${DASHBOARD_PROFILE.LABEL_TIN_REMARKS}${countLabel}`,
+          title: multiTin.reason || "-",
+          titleStyle: fsTransformNone,
+        });
+      }
     });
   }
 

@@ -58,3 +58,20 @@ export const titleCaseString = (text: string) => {
     .map((word) => word.charAt(0).toUpperCase() + word.substr(1).toLowerCase())
     .join(" ");
 };
+
+export const splitString = (str: string, max: number) => {
+  if (str.length <= max) {
+    return [str];
+  }
+  const newString: string[] = [];
+  str.split(" ").forEach((word: string) => {
+    const prevWord = newString.length === 0 || newString[newString.length - 1].length === 0 ? "" : `${newString[newString.length - 1]} `;
+    const updatedWord = `${prevWord}${word}`;
+    if (updatedWord.length <= max && newString.length > 0) {
+      newString[newString.length - 1] = updatedWord;
+    } else {
+      newString.push(word);
+    }
+  });
+  return newString;
+};

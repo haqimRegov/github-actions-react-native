@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
-import { Image, Text, TextStyle, View } from "react-native";
+import { Alert, Image, Text, TextStyle, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -15,7 +15,7 @@ import {
   RadioButton,
 } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
-import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS } from "../../data/dictionary";
+import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
@@ -72,15 +72,16 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
-  const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight } = questionnaire;
+  const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine } = questionnaire;
 
   const setQ2 = (index: number) => addAssessmentQuestions({ questionTwo: index });
   const setQ3 = (index: number) => addAssessmentQuestions({ questionThree: index });
   const setQ4 = (index: number) => addAssessmentQuestions({ questionFour: index });
   const setQ5 = (index: number) => addAssessmentQuestions({ questionFive: index });
   const setQ6 = (index: number) => addAssessmentQuestions({ questionSix: index });
-  const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index, questionEight: index > 0 ? 0 : -1 });
-  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index });
+  const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
+  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index, questionNine: index > 0 ? 0 : -1 });
+  const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
   const handleConfirmAssessment = () => {
     resetProducts();
@@ -106,7 +107,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const handlePageContinue = async () => {
     setLoading(true);
-    const response: IGetRiskProfileResponse = await getRiskProfile({
+    const request = {
       clientId: clientId!,
       riskAssessment: {
         questionTwo: questionTwo,
@@ -116,17 +117,26 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         questionSix: questionSix,
         questionSeven: questionSeven,
         questionEight: questionEight,
+        questionNine: questionNine,
       },
-    });
+    };
+    // eslint-disable-next-line no-console
+    console.log("request", request);
+    const response: IGetRiskProfileResponse = await getRiskProfile(request);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        setLoading(false);
         const riskAssessment = { ...data.result };
         addRiskScore(riskAssessment);
         setTimeout(() => {
           setConfirmModal("assessment");
+        }, 300);
+      }
+      if (error !== null) {
+        const errorList = error.errorList?.join("\n");
+        setTimeout(() => {
+          Alert.alert(error.message, errorList);
         }, 300);
       }
     }
@@ -205,28 +215,27 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               />
             </View>
             <CustomSpacer space={sh32} />
-            <LabeledTitle
+            <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_2}
+              options={Q2_OPTIONS}
+              selected={questionTwo}
+              setSelected={setQ2}
+              title={RISK_ASSESSMENT.QUESTION_2}
+            />
+            <CustomSpacer space={sh32} />
+            <LabeledTitle
+              label={RISK_ASSESSMENT.LABEL_QUESTION_3}
               labelStyle={fs10BoldBlack2}
               spaceToLabel={sh8}
-              title={RISK_ASSESSMENT.QUESTION_2}
+              title={RISK_ASSESSMENT.QUESTION_3}
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q2_OPTIONS} selected={questionTwo} setSelected={setQ2} />
-            <CustomSpacer space={sh32} />
-            <Question
-              label={RISK_ASSESSMENT.LABEL_QUESTION_3}
-              options={Q3_OPTIONS}
-              selected={questionThree}
-              setSelected={setQ3}
-              title={RISK_ASSESSMENT.QUESTION_3}
-            />
+            <CustomSlider disabled={true} options={Q3_OPTIONS} selected={questionThree} setSelected={setQ3} />
             <CustomSpacer space={sh32} />
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_4}
               options={Q4_OPTIONS}
-              right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
               selected={questionFour}
               setSelected={setQ4}
               title={RISK_ASSESSMENT.QUESTION_4}
@@ -235,35 +244,44 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_5}
               options={Q5_OPTIONS}
-              right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
+              right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
               selected={questionFive}
               setSelected={setQ5}
               title={RISK_ASSESSMENT.QUESTION_5}
             />
             <CustomSpacer space={sh32} />
-            <LabeledTitle
+            <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_6}
+              options={Q6_OPTIONS}
+              right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
+              selected={questionSix}
+              setSelected={setQ6}
+              title={RISK_ASSESSMENT.QUESTION_6}
+            />
+            <CustomSpacer space={sh32} />
+            <LabeledTitle
+              label={RISK_ASSESSMENT.LABEL_QUESTION_7}
               labelStyle={fs10BoldBlack2}
               spaceToLabel={sh8}
-              title={RISK_ASSESSMENT.QUESTION_6}
+              title={RISK_ASSESSMENT.QUESTION_7}
               titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
-            <CustomSlider disabled={true} options={Q6_OPTIONS} selected={questionSix} setSelected={setQ6} />
+            <CustomSlider disabled={true} options={Q7_OPTIONS} selected={questionSeven} setSelected={setQ7} />
             <CustomSpacer space={sh32} />
             <Question
-              label={RISK_ASSESSMENT.LABEL_QUESTION_7}
-              options={Q7_OPTIONS}
-              selected={questionSeven}
-              setSelected={setQ7}
-              title={RISK_ASSESSMENT.QUESTION_7}
+              label={RISK_ASSESSMENT.LABEL_QUESTION_8}
+              options={Q8_OPTIONS}
+              selected={questionEight}
+              setSelected={setQ8}
+              title={RISK_ASSESSMENT.QUESTION_8}
             />
-            {questionSeven !== undefined && questionSeven !== 0 ? (
+            {questionEight !== undefined && questionEight !== 0 ? (
               <Fragment>
                 <CustomSpacer space={sh32} />
                 <Question
-                  label={RISK_ASSESSMENT.LABEL_QUESTION_8}
-                  options={Q8_OPTIONS}
+                  label={RISK_ASSESSMENT.LABEL_QUESTION_9}
+                  options={Q9_OPTIONS}
                   RenderContent={(renderContentProps) => {
                     const { options, selected, setSelected } = renderContentProps;
                     return (
@@ -309,9 +327,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                       </Fragment>
                     );
                   }}
-                  selected={questionEight}
-                  setSelected={setQ8}
-                  title={RISK_ASSESSMENT.QUESTION_8}
+                  selected={questionNine}
+                  setSelected={setQ9}
+                  title={RISK_ASSESSMENT.QUESTION_9}
                 />
               </Fragment>
             ) : null}

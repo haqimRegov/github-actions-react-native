@@ -18,14 +18,22 @@ export const personalInfoInitialState: PersonalInfoState = {
   principal: {
     addressInformation: {
       mailingAddress: {
-        address: "",
+        address: {
+          line1: "",
+          line2: undefined,
+          line3: undefined,
+        },
         city: "",
         country: "",
         postCode: "",
         state: "",
       },
       permanentAddress: {
-        address: "",
+        address: {
+          line1: "",
+          line2: undefined,
+          line3: undefined,
+        },
         city: "",
         country: "",
         postCode: "",
@@ -59,13 +67,17 @@ export const personalInfoInitialState: PersonalInfoState = {
     declaration: {
       crs: {
         acceptCrs: false,
-        country: "",
-        explanation: "",
-        explanationSaved: true,
-        noTin: false,
-        reason: -1,
         taxResident: -1,
-        tinNumber: "",
+        tin: [
+          {
+            country: "",
+            explanation: "",
+            explanationSaved: true,
+            noTin: false,
+            reason: -1,
+            tinNumber: "",
+          },
+        ],
       },
       fatca: {
         acceptFatca: false,
@@ -132,14 +144,22 @@ export const personalInfoInitialState: PersonalInfoState = {
   joint: {
     addressInformation: {
       mailingAddress: {
-        address: "",
+        address: {
+          line1: "",
+          line2: undefined,
+          line3: undefined,
+        },
         city: "",
         country: "",
         postCode: "",
         state: "",
       },
       permanentAddress: {
-        address: "",
+        address: {
+          line1: "",
+          line2: undefined,
+          line3: undefined,
+        },
         city: "",
         country: "",
         postCode: "",
@@ -173,13 +193,17 @@ export const personalInfoInitialState: PersonalInfoState = {
     declaration: {
       crs: {
         acceptCrs: false,
-        country: "",
-        explanation: "",
-        explanationSaved: true,
-        noTin: false,
-        reason: -1,
         taxResident: -1,
-        tinNumber: "",
+        tin: [
+          {
+            country: "",
+            explanation: "",
+            explanationSaved: true,
+            noTin: false,
+            reason: -1,
+            tinNumber: "",
+          },
+        ],
       },
       fatca: {
         acceptFatca: false,

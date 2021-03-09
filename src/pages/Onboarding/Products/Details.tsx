@@ -149,10 +149,11 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
 
   const textCardProps: TextCardProps = {
     data: data.filter((raw) => raw.label !== ""),
-    labelStyle: fs10BoldBlack2,
-    itemStyle: { width: sw144 },
-    titleStyle: fs16BoldBlack2,
     itemsPerGroup: 5,
+    itemStyle: { width: sw144 },
+    labelStyle: fs10BoldBlack2,
+    spaceBetweenItem: sw16,
+    titleStyle: fs16BoldBlack2,
   };
 
   const currencies =

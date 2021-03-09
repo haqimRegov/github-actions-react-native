@@ -130,7 +130,7 @@ export const english = {
       OPTION_CONTROL_EITHER: "Either Applicant to sign",
       OPTION_CONTROL_PRINCIPAL: "Principal Applicant to sign",
       OPTION_DISTRIBUTION_PAYOUT: "One-time payout",
-      OPTION_DISTRIBUTION_REINVEST: "Reinvest",
+      OPTION_DISTRIBUTION_REINVEST: "Re-Invest",
       OPTION_SIGN_BOTH: "Both Applicants",
       OPTION_SIGN_EITHER: "Either Applicant",
       OPTION_SIGN_PRINCIPAL: "Principal Applicant",

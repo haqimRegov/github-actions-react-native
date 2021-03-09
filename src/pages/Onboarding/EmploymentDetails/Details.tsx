@@ -1,18 +1,17 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextInputArea } from "../../../components";
+import { AddressField, AdvancedDropdown, CustomSpacer, CustomTextInput } from "../../../components";
 import { Language } from "../../../constants";
 import {
   DICTIONARY_BUSINESS_NATURE,
   DICTIONARY_COUNTRIES,
   DICTIONARY_GROSS_INCOME,
-  DICTIONARY_MALAYSIA_STATES,
   DICTIONARY_MALAYSIA_STATES_LIST,
   DICTIONARY_OCCUPATION,
   ERROR,
 } from "../../../data/dictionary";
-import { px, sh122, sh24, sh32, sw24 } from "../../../styles";
+import { px, sh24, sh32, sw24 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -42,7 +41,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const inputOccupation = employmentDetails.occupation!;
   const inputPostCode = employmentDetails.postCode!;
   const inputState = employmentDetails.state!;
-  const setInputAddress = (value: string) => setEmploymentDetails({ address: value });
+  const setInputAddress = (value: IAddressMultiline) => setEmploymentDetails({ address: { ...value } });
   const setInputBusinessNature = (value: string) => setEmploymentDetails({ businessNature: value });
   const setInputCity = (value: string) => setEmploymentDetails({ city: value });
   const setInputCountry = (value: string) =>
@@ -97,15 +96,30 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       <CustomSpacer space={sh32} />
       <CustomTextInput autoCapitalize="words" label={labelEmployer} onChangeText={setInputEmployerName} value={inputEmployerName} />
       <CustomSpacer space={sh32} />
-      <TextInputArea
+      {/* <TextInputArea
         autoCapitalize="words"
         label={labelAddress}
         maxLength={255}
         onChangeText={setInputAddress}
         showLength={true}
         value={inputAddress}
+      /> */}
+      <AddressField
+        inputAddress={inputAddress}
+        inputCity={inputCity}
+        inputPostCode={inputPostCode}
+        inputState={inputState}
+        inputCountry={inputCountry}
+        setInputCountry={setInputCountry}
+        labelAddress={labelAddress}
+        onBlurPostCode={checkPermanentPostCode}
+        postCodeError={validations.postCode}
+        setInputAddress={setInputAddress}
+        setInputCity={setInputCity}
+        setInputPostCode={setInputPostCode}
+        setInputState={setInputState}
       />
-      <CustomSpacer space={sh32} />
+      {/* <CustomSpacer space={sh32} />
       <CustomTextInput
         error={validations.postCode}
         keyboardType="numeric"
@@ -135,7 +149,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
         label={EMPLOYMENT_DETAILS.LABEL_COUNTRY}
         style={{ height: sh122 }}
         value={inputCountry}
-      />
+      /> */}
     </View>
   );
 };

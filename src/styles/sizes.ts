@@ -113,6 +113,7 @@ export const sh500 = scaleHeight(500);
 export const sh670 = scaleHeight(670);
 export const sh691 = scaleHeight(691);
 export const sh730 = scaleHeight(730);
+export const sh796 = scaleHeight(796);
 export const sh800 = scaleHeight(800);
 export const sh810 = scaleHeight(810);
 export const sh1600 = scaleHeight(1600);

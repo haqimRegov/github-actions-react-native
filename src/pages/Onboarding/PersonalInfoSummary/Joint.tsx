@@ -51,24 +51,65 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
     personalDetailsSummary.splice(5, 0, nonMalaysianDetails[0]);
   }
 
-  const permanentAddress = Object.values(addressInformation!.permanentAddress!.address!).join(" ");
-  const mailingAddress = Object.values(addressInformation!.mailingAddress!.address!).join(" ");
+  const permanentAddressLabel =
+    addressInformation!.permanentAddress!.address!.line2 !== undefined || addressInformation!.permanentAddress!.address!.line3 !== undefined
+      ? `${SUMMARY.LABEL_PERMANENT_ADDRESS} 1`
+      : SUMMARY.LABEL_PERMANENT_ADDRESS;
 
   const permanentAddressSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_PERMANENT_ADDRESS, title: permanentAddress, titleStyle: fsTransformNone },
+    { label: permanentAddressLabel, title: addressInformation!.permanentAddress!.address!.line1!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: addressInformation!.permanentAddress!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: addressInformation!.permanentAddress!.city! },
     { label: SUMMARY.LABEL_STATE, title: addressInformation!.permanentAddress!.state! },
     { label: SUMMARY.LABEL_COUNTRY, title: addressInformation!.permanentAddress!.country! },
   ];
 
+  if (addressInformation!.permanentAddress!.address!.line2 !== undefined) {
+    permanentAddressSummary.splice(1, 0, {
+      label: `${SUMMARY.LABEL_PERMANENT_ADDRESS} 2`,
+      title: addressInformation!.permanentAddress!.address!.line2!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  if (addressInformation!.permanentAddress!.address!.line3 !== undefined) {
+    const index = addressInformation!.permanentAddress!.address!.line2 !== undefined ? 2 : 1;
+    permanentAddressSummary.splice(index, 0, {
+      label: `${SUMMARY.LABEL_PERMANENT_ADDRESS} 3`,
+      title: addressInformation!.permanentAddress!.address!.line3!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  const mailingAddressLabel =
+    addressInformation!.mailingAddress!.address!.line2 !== undefined || addressInformation!.mailingAddress!.address!.line3 !== undefined
+      ? `${SUMMARY.LABEL_MAILING_ADDRESS} 1`
+      : SUMMARY.LABEL_MAILING_ADDRESS;
+
   const mailingAddressSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_MAILING_ADDRESS, title: mailingAddress, titleStyle: fsTransformNone },
+    { label: mailingAddressLabel, title: addressInformation!.mailingAddress!.address!.line1!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
     { label: SUMMARY.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
     { label: SUMMARY.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
   ];
+
+  if (addressInformation!.mailingAddress!.address!.line2 !== undefined) {
+    mailingAddressSummary.splice(1, 0, {
+      label: `${SUMMARY.LABEL_MAILING_ADDRESS} 2`,
+      title: addressInformation!.mailingAddress!.address!.line2!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  if (addressInformation!.mailingAddress!.address!.line3 !== undefined) {
+    const index = addressInformation!.mailingAddress!.address!.line2 !== undefined ? 2 : 1;
+    mailingAddressSummary.splice(index, 0, {
+      label: `${SUMMARY.LABEL_MAILING_ADDRESS} 3`,
+      title: addressInformation!.mailingAddress!.address!.line3!,
+      titleStyle: fsTransformNone,
+    });
+  }
 
   let contactDetailsSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! || "-" }];
 
@@ -116,13 +157,35 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
   ];
 
+  const employmentAddressLabel =
+    employmentDetails!.address!.line2 !== undefined || employmentDetails!.address!.line3 !== undefined
+      ? `${SUMMARY.LABEL_EMPLOYER_ADDRESS} 1`
+      : SUMMARY.LABEL_EMPLOYER_ADDRESS;
+
   const employmentAddressSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_EMPLOYER_ADDRESS, title: employmentDetails!.address!, titleStyle: fsTransformNone },
+    { label: employmentAddressLabel, title: employmentDetails!.address!.line1!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_POSTCODE, title: employmentDetails!.postCode! },
     { label: SUMMARY.LABEL_CITY, title: employmentDetails!.city! },
     { label: SUMMARY.LABEL_STATE, title: employmentDetails!.state! },
     { label: SUMMARY.LABEL_COUNTRY, title: employmentDetails!.country! },
   ];
+
+  if (employmentDetails!.address!.line2 !== undefined) {
+    employmentAddressSummary.splice(1, 0, {
+      label: `${SUMMARY.LABEL_EMPLOYER_ADDRESS} 2`,
+      title: employmentDetails!.address!.line2!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  if (employmentDetails!.address!.line3 !== undefined) {
+    const index = employmentDetails!.address!.line2 !== undefined ? 2 : 1;
+    employmentAddressSummary.splice(index, 0, {
+      label: `${SUMMARY.LABEL_EMPLOYER_ADDRESS} 3`,
+      title: employmentDetails!.address!.line3!,
+      titleStyle: fsTransformNone,
+    });
+  }
 
   return (
     <SummaryDetails

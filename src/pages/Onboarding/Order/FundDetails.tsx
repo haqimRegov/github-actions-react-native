@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, LabeledTitleProps } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import {
   centerHorizontal,
@@ -22,6 +22,7 @@ import {
   sh80,
   sw16,
   sw24,
+  sw32,
   sw4,
 } from "../../../styles";
 
@@ -109,9 +110,9 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fundSummary }
           </View>
         </View>
       </View>
-      <View>
+      <View style={px(sw24)}>
         <CustomSpacer space={sh16} />
-        <CardWrap data={summary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+        <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
         <CustomSpacer space={sh8} />
       </View>
     </Fragment>

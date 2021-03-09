@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, LabeledTitleProps } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
@@ -86,7 +86,9 @@ export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = 
         </View>
         <View>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_ADDITIONAL} />
-          <CardWrap data={jointDetails} titleStyle={fsTransformNone} />
+          <View style={px(sw24)}>
+            <TextCard data={jointDetails} titleStyle={fsTransformNone} />
+          </View>
         </View>
       </View>
     </View>

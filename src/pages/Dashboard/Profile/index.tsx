@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 
 import {
   Avatar,
-  CardWrap,
   CustomFlexSpacer,
   CustomSpacer,
   LabeledTitle,
   LabeledTitleProps,
   RoundedButton,
   Tab,
+  TextCard,
   TextSpaceArea,
 } from "../../../components";
 import { Language } from "../../../constants";
@@ -26,7 +26,6 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  fs12BoldBlack2,
   fs12BoldBlue2,
   fs16BoldBlack2,
   fs18BoldBlack2,
@@ -103,7 +102,6 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfilePro
     .join("");
 
   const buttonStyle: ViewStyle = { ...px(sw16), height: sh24, width: "auto" };
-  const cardWrapProps = { spaceBetween: sw64, noInitialSpace: true, labelStyle: { ...fs12BoldBlack2, lineHeight: sh16 } };
 
   const accountSummary: LabeledTitleProps[] =
     agentProfile !== undefined
@@ -190,19 +188,19 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfilePro
                 <View style={borderBottomBlack21} />
                 <View style={px(sw24)}>
                   <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={PROFILE.TITLE_ACCOUNT_SUMMARY} />
-                  <CardWrap data={accountSummary} {...cardWrapProps} />
+                  <TextCard data={accountSummary} spaceBetweenItem={sw64} />
                 </View>
                 <CustomSpacer space={sh16} />
                 <View style={borderBottomBlack21} />
                 <View style={px(sw24)}>
                   <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={PROFILE.TITLE_CONTACT_DETAILS} />
-                  <CardWrap data={contactDetailsSummary} {...cardWrapProps} />
+                  <TextCard data={contactDetailsSummary} spaceBetweenItem={sw64} />
                 </View>
                 <CustomSpacer space={sh16} />
                 <View style={borderBottomBlack21} />
                 <View style={px(sw24)}>
                   <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={PROFILE.TITLE_ADDRESS_INFO} />
-                  <CardWrap data={addressInfoSummary} {...cardWrapProps} />
+                  <TextCard data={addressInfoSummary} spaceBetweenItem={sw64} />
                 </View>
                 <CustomSpacer space={sh16} />
               </View>

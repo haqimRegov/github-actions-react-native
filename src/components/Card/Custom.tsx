@@ -8,6 +8,7 @@ interface CustomCardProps {
   direction?: "row" | "column";
   items: JSX.Element[];
   itemsPerGroup?: number;
+  noLastIndexSpace?: boolean;
   spaceBetweenGroup?: number;
   spaceBetweenItem?: number;
 }
@@ -16,6 +17,7 @@ export const CustomCard: FunctionComponent<CustomCardProps> = ({
   direction,
   items,
   itemsPerGroup,
+  noLastIndexSpace,
   spaceBetweenGroup,
   spaceBetweenItem,
 }: CustomCardProps) => {
@@ -54,7 +56,9 @@ export const CustomCard: FunctionComponent<CustomCardProps> = ({
                 );
               })}
             </View>
-            <CustomSpacer isHorizontal={direction === "column"} space={spaceBetweenGroup || 0} />
+            {noLastIndexSpace === true && chunksIndex === cardItems.length - 1 ? null : (
+              <CustomSpacer isHorizontal={direction === "column"} space={spaceBetweenGroup || 0} />
+            )}
           </Fragment>
         );
       })}

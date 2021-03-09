@@ -592,16 +592,18 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                                 value={payment.currency!}
                               />
                             ) : (
-                              <CustomTextInput
-                                error={amountError}
-                                keyboardType="numeric"
-                                label={PAYMENT.LABEL_AMOUNT}
-                                inputPrefix={payment.currency}
-                                onBlur={checkAmount}
-                                onChangeText={setAmount}
-                                prefixStyle={fs16RegBlack2}
-                                value={payment.amount}
-                              />
+                              <View>
+                                <CustomTextInput
+                                  error={amountError}
+                                  keyboardType="numeric"
+                                  label={PAYMENT.LABEL_AMOUNT}
+                                  inputPrefix={payment.currency}
+                                  onBlur={checkAmount}
+                                  onChangeText={setAmount}
+                                  prefixStyle={fs16RegBlack2}
+                                  value={payment.amount}
+                                />
+                              </View>
                             )}
                             <CustomSpacer isHorizontal={true} space={sw64} />
                             {payment.paymentMethod! === "EPF" ? (
@@ -622,16 +624,18 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                               />
                             ) : null}
                             {payment.paymentMethod! !== "EPF" && currencies.length > 1 ? (
-                              <CustomTextInput
-                                error={amountError}
-                                keyboardType="numeric"
-                                label={PAYMENT.LABEL_AMOUNT}
-                                inputPrefix={payment.currency}
-                                onBlur={checkAmount}
-                                onChangeText={setAmount}
-                                prefixStyle={fs16RegBlack2}
-                                value={payment.amount}
-                              />
+                              <View>
+                                <CustomTextInput
+                                  error={amountError}
+                                  keyboardType="numeric"
+                                  label={PAYMENT.LABEL_AMOUNT}
+                                  inputPrefix={payment.currency}
+                                  onBlur={checkAmount}
+                                  onChangeText={setAmount}
+                                  prefixStyle={fs16RegBlack2}
+                                  value={payment.amount}
+                                />
+                              </View>
                             ) : null}
                           </View>
                         </View>

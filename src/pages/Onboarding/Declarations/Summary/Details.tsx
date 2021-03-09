@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CardWrap, CustomSpacer, FileViewer, LabeledTitleProps } from "../../../../components";
+import { AccountHeader, CustomSpacer, FileViewer, LabeledTitleProps, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
@@ -25,6 +25,7 @@ import {
   sw16,
   sw200,
   sw24,
+  sw32,
   sw8,
 } from "../../../../styles";
 import { formatAmount } from "../../../../utils";
@@ -92,10 +93,6 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
     { label: DECLARATION_SUMMARY.LABEL_CITIZENSHIP, title: fatca!.usCitizen === 0 ? "Yes" : "No" },
   ];
 
-  const crsPartial: LabeledTitleProps[] = [
-    { label: DECLARATION_SUMMARY.LABEL_JURISDICTION, labelStyle: { width: sw200 }, title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!] },
-  ];
-
   const feaSummary: LabeledTitleProps[] =
     isFea === true
       ? [
@@ -143,19 +140,26 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
     fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_FORM_W8_BEN, title: "Yes" });
   }
 
-  const crsSummary = isTaxResident
-    ? crsPartial
-    : crsPartial.concat([
-        { label: DECLARATION_SUMMARY.LABEL_TIN_COUNTRY, title: crs!.country !== "" ? crs!.country! : "-" },
-        { label: DECLARATION_SUMMARY.LABEL_TIN_NUMBER, title: crs!.tinNumber !== "" ? crs!.tinNumber! : "-" },
-      ]);
+  const crsSummary: LabeledTitleProps[] = [
+    { label: DECLARATION_SUMMARY.LABEL_JURISDICTION, labelStyle: { width: sw200 }, title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!] },
+  ];
 
-  if (crs!.noTin === true) {
-    const tinLabel = crs!.reason === 1 ? DECLARATION_SUMMARY.OPTION_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[crs!.reason!];
-    crsSummary.push({
-      label: DECLARATION_SUMMARY.LABEL_TIN_REMARKS,
-      title: crs!.reason === 2 ? crs!.explanation! : tinLabel,
-      titleStyle: fsTransformNone,
+  if (isTaxResident === false && crs!.tin) {
+    crs!.tin.forEach((multiTin, index) => {
+      const countLabel = crs!.tin!.length > 1 ? ` ${index + 1}` : "";
+      crsSummary.push(
+        { label: `${DECLARATION_SUMMARY.LABEL_TIN_COUNTRY}${countLabel}`, title: multiTin.country! || "-" },
+        { label: `${DECLARATION_SUMMARY.LABEL_TIN_NUMBER}${countLabel}`, title: multiTin.tinNumber || "-" },
+      );
+
+      if (multiTin.noTin === true) {
+        const tinLabel = multiTin.reason === 1 ? DECLARATION_SUMMARY.OPTION_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+        crsSummary.push({
+          label: `${DECLARATION_SUMMARY.LABEL_TIN_REMARKS}${countLabel}`,
+          title: multiTin.reason === 2 ? multiTin.explanation! : tinLabel,
+          titleStyle: fsTransformNone,
+        });
+      }
     });
   }
 
@@ -188,16 +192,22 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
           )}
           <View style={borderBottomBlack21}>
             <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
-            <CardWrap data={fatcaSummary} />
+            <View style={px(sw24)}>
+              <TextCard data={fatcaSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
+            </View>
           </View>
           <View>
             <TitleIcon onPress={handleEditCrs} title={DECLARATION_SUMMARY.TITLE_CRS} />
-            <CardWrap data={crsSummary} />
+            <View style={px(sw24)}>
+              <TextCard data={crsSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
+            </View>
           </View>
           {feaSummary.length !== 0 ? (
             <View>
               <TitleIcon onPress={handleEditFea} title={DECLARATION_SUMMARY.TITLE_FEA} />
-              <CardWrap data={feaSummary} />
+              <View style={px(sw24)}>
+                <TextCard data={feaSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
+              </View>
             </View>
           ) : null}
         </View>

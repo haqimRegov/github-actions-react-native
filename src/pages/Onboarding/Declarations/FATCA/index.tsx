@@ -21,8 +21,16 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   updateOnboarding,
 }: FatcaDeclarationProps) => {
   const { principal, joint } = personalInfo;
-  const principalAddress = `${principal?.addressInformation?.permanentAddress?.address}, ${principal?.addressInformation?.permanentAddress?.postCode}, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${principal?.addressInformation?.permanentAddress?.country}`;
-  const jointAddress = `${joint?.addressInformation?.permanentAddress?.address}, ${joint?.addressInformation?.permanentAddress?.postCode}, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${joint?.addressInformation?.permanentAddress?.country}`;
+  const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
+    principal?.addressInformation?.permanentAddress?.postCode
+  }, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${
+    principal?.addressInformation?.permanentAddress?.country
+  }`;
+  const jointAddress = `${Object.values(joint?.addressInformation?.permanentAddress?.address!).join("")}, ${
+    joint?.addressInformation?.permanentAddress?.postCode
+  }, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${
+    joint?.addressInformation?.permanentAddress?.country
+  }`;
 
   const handlePrincipalFatca = (fatcaDeclaration: IFatcaState) => {
     addPersonalInfo({

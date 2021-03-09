@@ -88,7 +88,7 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
 
   return (
     <BasicModal visible={visible}>
-      <KeyboardAwareScrollView contentContainerStyle={flexGrow}>
+      <KeyboardAwareScrollView contentContainerStyle={flexGrow} scrollEnabled={false}>
         <View style={{ ...centerHV, ...fullHW, ...containerStyle }}>
           <View style={modalContainer}>
             <View style={{ ...px(sw56), ...headerStyle }}>

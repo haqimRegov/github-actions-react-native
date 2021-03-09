@@ -124,12 +124,14 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
     contactSummary.push({ label: DASHBOARD_PROFILE.LABEL_FAX, title: contactDetails.faxNumber });
   }
 
+  const employmentAddress = Object.values(employmentInformation.address.address!).join(" ");
+
   const employmentDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_PROFILE.LABEL_OCCUPATION, title: employmentInformation.occupation, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_NAME, title: employmentInformation.nameOfEmployer, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_NATURE_BUSINESS, title: employmentInformation.natureOfBusiness, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME, title: employmentInformation.monthlyHouseholdIncome, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentInformation.address.address, titleStyle: fsTransformNone },
+    { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentAddress, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
     { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
     { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
@@ -184,8 +186,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
 
   const fatcaSummary: LabeledTitleProps[] = [{ label: DASHBOARD_PROFILE.LABEL_CITIZENSHIP, title: fatca.usCitizen as string }];
 
-  const address = `${addressInformation?.permanentAddress?.address}, ${addressInformation?.permanentAddress?.postCode}, ${addressInformation?.permanentAddress?.city}, ${addressInformation?.permanentAddress?.state}, ${addressInformation?.permanentAddress?.country}`;
-
   const feaSummary: LabeledTitleProps[] = [
     { label: DASHBOARD_PROFILE.LABEL_MALAYSIAN_RESIDENT, title: fea.resident as string },
     { label: DASHBOARD_PROFILE.LABEL_FACILITY, title: fea.borrowingFacility as string },
@@ -215,7 +215,11 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
         );
       }
       if (fatca.confirmAddress === "Yes") {
-        fatcaSummary.push({ label: DASHBOARD_PROFILE.LABEL_CORRESPONDENCE, title: address, titleStyle: fsTransformNone });
+        fatcaSummary.push({
+          label: DASHBOARD_PROFILE.LABEL_CORRESPONDENCE,
+          title: fatca.correspondenceDeclaration || "-",
+          titleStyle: fsTransformNone,
+        });
       }
     }
   }

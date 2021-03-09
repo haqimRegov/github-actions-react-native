@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CardWrap, CustomSpacer, Dash, IconText, LabeledTitleProps } from "../../../components";
+import { AccountHeader, CustomSpacer, Dash, IconText, LabeledTitleProps, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
@@ -26,6 +26,7 @@ import {
   shadowBlue204,
   sw16,
   sw24,
+  sw32,
   sw8,
 } from "../../../styles";
 
@@ -109,6 +110,8 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
+  const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: sw32, titleStyle: fsTransformNone };
+
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
@@ -122,31 +125,39 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
         )}
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_PERSONAL} />
-          <CardWrap data={personalDetails} titleStyle={fsTransformNone} />
+          <View style={px(sw24)}>
+            <TextCard data={personalDetails} {...textCardProps} />
+          </View>
         </View>
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_ADDITIONAL} />
-          <CardWrap data={additionalInfo} titleStyle={fsTransformNone} />
+          <View style={px(sw24)}>
+            <TextCard data={additionalInfo} {...textCardProps} />
+          </View>
         </View>
         <View style={borderBottomBlack21}>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_CONTACT} />
-          <CardWrap data={contactDetails} titleStyle={fsTransformNone} />
+          <View style={px(sw24)}>
+            <TextCard data={contactDetails} {...textCardProps} />
+          </View>
         </View>
         <View style={borderBottomBlack21}>
           <CustomSpacer space={sh16} />
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} viewStyle={py(0)} />
           <CustomSpacer space={sh8} />
-          <CardWrap data={permanentAddress} itemStyle={{ marginBottom: sh8, marginTop: sh8 }} titleStyle={fsTransformNone} />
           <View style={px(sw24)}>
+            <TextCard data={permanentAddress} itemStyle={{ marginBottom: sh8, marginTop: sh8 }} {...textCardProps} />
             <Dash />
+            <CustomSpacer space={sh8} />
+            <TextCard data={mailingAddress} {...textCardProps} />
           </View>
-          <CustomSpacer space={sh8} />
-          <CardWrap data={mailingAddress} titleStyle={fsTransformNone} />
         </View>
         {epfDetails !== undefined && epfDetails.length !== 0 ? (
           <View style={borderBottomBlack21}>
             <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_EPF} />
-            <CardWrap data={epfDetails} titleStyle={fsTransformNone} />
+            <View style={px(sw24)}>
+              <TextCard data={epfDetails} {...textCardProps} />
+            </View>
           </View>
         ) : null}
         {accountType === "Joint" && accountHolder === "Joint" ? null : (
@@ -162,8 +173,8 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
                     <CustomSpacer space={sh8} />
                     <Dash />
                     <CustomSpacer space={sh8} />
+                    <TextCard data={bank} {...textCardProps} />
                   </View>
-                  <CardWrap data={bank} titleStyle={fsTransformNone} />
                 </Fragment>
               );
             })}
@@ -177,8 +188,8 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
                     <CustomSpacer space={sh8} />
                     <Dash />
                     <CustomSpacer space={sh8} />
+                    <TextCard data={bank} {...textCardProps} />
                   </View>
-                  <CardWrap data={bank} titleStyle={fsTransformNone} />
                 </Fragment>
               );
             })}
@@ -188,12 +199,12 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           <CustomSpacer space={sh16} />
           <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} viewStyle={py(0)} />
           <CustomSpacer space={sh8} />
-          <CardWrap data={employmentDetails} itemStyle={{ marginBottom: sh8, marginTop: sh8 }} titleStyle={fsTransformNone} />
           <View style={px(sw24)}>
+            <TextCard data={employmentDetails} itemStyle={{ marginBottom: sh8, marginTop: sh8 }} {...textCardProps} />
             <Dash />
+            <CustomSpacer space={sh8} />
+            <TextCard data={employmentAddress} {...textCardProps} />
           </View>
-          <CustomSpacer space={sh8} />
-          <CardWrap data={employmentAddress} titleStyle={fsTransformNone} />
         </View>
       </View>
     </View>

@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, Dash, LabeledTitleProps } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, Dash, LabeledTitleProps, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
 import {
@@ -20,6 +20,7 @@ import {
   sh8,
   sh80,
   sw24,
+  sw32,
   sw4,
   sw648,
 } from "../../../../styles";
@@ -129,13 +130,17 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
       </View>
       <View>
         <CustomSpacer space={sh16} />
-        <CardWrap data={summary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+        <View style={px(sw24)}>
+          <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+        </View>
         <CustomSpacer space={sh8} />
         {isScheduled === true ? (
           <Fragment>
             <Dash />
             <CustomSpacer space={sh16} />
-            <CardWrap data={recurringSummary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+            <View style={px(sw24)}>
+              <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+            </View>
           </Fragment>
         ) : null}
         <CustomSpacer space={sh8} />

@@ -4,13 +4,13 @@ import { ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
 import {
   AdvancedDropdown,
   ButtonSelectionList,
-  CardWrap,
-  CardWrapProps,
   CustomSpacer,
   Dash,
   LabeledTitle,
   LabeledTitleProps,
   SafeAreaPage,
+  TextCard,
+  TextCardProps,
   TextSpaceArea,
 } from "../../../components";
 import { Language } from "../../../constants";
@@ -147,13 +147,12 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     });
   }
 
-  const cardWrapProps: CardWrapProps = {
+  const textCardProps: TextCardProps = {
     data: data.filter((raw) => raw.label !== ""),
-    spaceBetween: sw16,
-    noInitialSpace: true,
     labelStyle: fs10BoldBlack2,
     itemStyle: { width: sw144 },
     titleStyle: fs16BoldBlack2,
+    itemsPerGroup: 5,
   };
 
   const currencies =
@@ -241,9 +240,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
               style={{ ...fs16BoldBlack2, ...px(sw24) }}
               text={PRODUCT_DETAILS.LABEL_FUND_FACTS}
             />
-            <View style={flexRow}>
-              <CustomSpacer isHorizontal={true} space={sw24} />
-              <CardWrap {...cardWrapProps} />
+            <View style={px(sw24)}>
+              <TextCard {...textCardProps} />
             </View>
             {/* <CustomSpacer space={sw24} />
           <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />

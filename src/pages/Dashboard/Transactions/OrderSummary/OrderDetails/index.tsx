@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, Text, View } from "react-native";
 
-import { CardWrap, CustomSpacer, Dash, FileViewer, LabeledTitleProps } from "../../../../../components";
+import { CustomSpacer, Dash, FileViewer, LabeledTitleProps, TextCard } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
@@ -75,13 +75,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
     Alert.alert("payment edit route");
   };
 
-  const cardWrapProps = { spaceBetween: sw64, noInitialSpace: true, labelStyle: { ...fs12BoldBlack2, lineHeight: sh16 } };
-
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
-        <CardWrap data={transactionSummaryDetails} {...cardWrapProps} />
+        <TextCard data={transactionSummaryDetails} spaceBetweenItem={sw64} />
       </View>
       <CustomSpacer space={sh16} />
       <Dash />
@@ -133,7 +131,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 </View>
                 <Text style={fs12BoldBlack2}>{investment.utmc}</Text>
                 <CustomSpacer space={sh24} />
-                <CardWrap data={fundDetails} {...cardWrapProps} />
+                <TextCard data={fundDetails} spaceBetweenItem={sw64} />
               </Fragment>
             );
           })}
@@ -289,7 +287,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   <CustomSpacer space={sh16} />
                   <View style={borderBottomGray4} />
                   <CustomSpacer space={sh16} />
-                  <CardWrap data={paymentDetails} {...cardWrapProps} />
+                  <TextCard data={paymentDetails} spaceBetweenItem={sw64} />
                 </Fragment>
               );
             })}

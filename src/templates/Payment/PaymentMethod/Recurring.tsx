@@ -62,12 +62,14 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
     </View>,
     <View />,
     <AdvancedDropdown items={bankNames} handleChange={handleBankName} label={PAYMENT.LABEL_BANK_ACCOUNT_NAME} value={bankAccountName} />,
-    <CustomTextInput
-      keyboardType="numeric"
-      label={PAYMENT.LABEL_BANK_ACCOUNT_NUMBER}
-      onChangeText={setBankAccountNumber}
-      value={bankAccountNumber}
-    />,
+    <View>
+      <CustomTextInput
+        keyboardType="numeric"
+        label={PAYMENT.LABEL_BANK_ACCOUNT_NUMBER}
+        onChangeText={setBankAccountNumber}
+        value={bankAccountNumber}
+      />
+    </View>,
     <AdvancedDropdown
       items={DICTIONARY_RECURRING_FREQUENCY}
       handleChange={setFrequency}

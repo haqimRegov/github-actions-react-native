@@ -226,7 +226,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
       {investments.map((fund: IOrderInvestment, fundIndex: number) => (
         <View key={fundIndex}>
           <CustomSpacer space={sh8} />
-          <FundOverview viewFund={viewFund} setViewFund={setViewFund} fund={fund} />
+          <FundOverview orderNumber={orderNumber} viewFund={viewFund} setViewFund={setViewFund} fund={fund} />
         </View>
       ))}
       <CustomSpacer space={sh8} />

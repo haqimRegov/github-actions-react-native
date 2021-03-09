@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { CardWrap, CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps, TextCard } from "../../components";
 import { Language } from "../../constants";
 import {
   borderBottomBlack21,
@@ -11,7 +11,6 @@ import {
   colorGray,
   colorWhite,
   flexRow,
-  fs12BoldBlack2,
   fs16BoldBlack2,
   fs16RegBlack2,
   fsCapitalize,
@@ -22,6 +21,7 @@ import {
   sh8,
   sw1,
   sw24,
+  sw32,
   sw8,
 } from "../../styles";
 import { AnimationUtils, formatAmount } from "../../utils";
@@ -30,11 +30,12 @@ const { ORDER_SUMMARY, PAYMENT } = Language.PAGE;
 
 export interface FundOverviewProps {
   fund: IOrderInvestment;
+  orderNumber: string;
   setViewFund: (value: string) => void;
   viewFund: string;
 }
 
-export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setViewFund, viewFund }: FundOverviewProps) => {
+export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, orderNumber, setViewFund, viewFund }: FundOverviewProps) => {
   const {
     distributionInstruction,
     fundClass,
@@ -55,7 +56,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setVi
     scheduledInvestmentAmount !== null &&
     scheduledSalesCharge !== null;
 
-  const expanded = viewFund === fundName;
+  const expanded = viewFund === `${orderNumber}${fundName}`;
   const icon = expanded ? "caret-up" : "caret-down";
 
   const summary: LabeledTitleProps[] = [
@@ -108,7 +109,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setVi
 
   const handleExpand = () => {
     AnimationUtils.layout({ duration: 120 });
-    setViewFund(expanded === true ? "" : fundName);
+    setViewFund(expanded === true ? "" : `${orderNumber}${fundName}`);
   };
 
   return (
@@ -123,9 +124,9 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, setVi
       {expanded === false ? null : (
         <Fragment>
           <View style={borderBottomBlack21} />
-          <View>
+          <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
-            <CardWrap data={summary} labelStyle={fs12BoldBlack2} titleStyle={fsTransformNone} />
+            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
             <CustomSpacer space={sh8} />
           </View>
         </Fragment>

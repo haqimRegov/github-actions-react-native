@@ -240,7 +240,11 @@ const getOrderSummary = gql`
               annualIncome
               nameOfEmployer
               address {
-                address
+                address {
+                  line1
+                  line2
+                  line3
+                }
                 city
                 country
                 postCode

@@ -2,14 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import {
-  AdvancedDropdown,
-  CheckBoxDropdown,
-  CustomDatePicker,
-  CustomFlexSpacer,
-  CustomSpacer,
-  TextSpaceArea,
-} from "../../../../components";
+import { AdvancedDropdown, CheckBoxDropdown, CustomDatePicker, CustomSpacer, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   DICTIONARY_APPROVED_STATUS_FILTER,
@@ -19,7 +12,7 @@ import {
   DICTIONARY_TRANSACTIONS_DATE,
   DICTIONARY_TRANSACTIONS_TYPE,
 } from "../../../../data/dictionary";
-import { centerVertical, colorTransparent, flexRow, fs16BoldBlack1, px, sh143, sh32, sh8, sw24, sw48 } from "../../../../styles";
+import { centerVertical, colorTransparent, flexRow, fs16BoldBlack1, px, sh143, sh32, sh8, sw24, sw48, sw64 } from "../../../../styles";
 
 const { DASHBOARD_FILTER } = Language.PAGE;
 interface TransactionsFilterProps {
@@ -104,7 +97,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
             startDate={startDate!}
           /> */}
         </View>
-        <CustomFlexSpacer />
+        <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_END_DATE} />
           {/* <CustomCalendar handleSetStartDate={handleEndDate} startDate={endDate!} /> */}
@@ -126,7 +119,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
           label={DASHBOARD_FILTER.LABEL_TRANSACTIONS_TYPE}
           value={transactionsType!}
         />
-        <CustomFlexSpacer />
+        <CustomSpacer isHorizontal={true} space={sw64} />
         <CheckBoxDropdown
           handleChange={handleOrderStatus}
           items={orderStatusList}

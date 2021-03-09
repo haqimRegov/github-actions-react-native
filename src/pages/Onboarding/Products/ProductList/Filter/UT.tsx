@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CheckBoxGroup, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../../../../components";
+import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import {
   FILTER_EPF_LABEL,
@@ -96,7 +96,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ filter, setFilter }
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_FUND_TYPE} />
           <CheckBoxDropdown handleChange={handleFundType} items={FILTER_FUND_TYPE} value={fundType!} />
         </View>
-        <CustomFlexSpacer />
+        <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_FUND_CURRENCY} />
           <CheckBoxDropdown handleChange={handleCurrency} items={FILTER_FUND_CURRENCY} value={fundCurrency!} />
@@ -108,7 +108,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ filter, setFilter }
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_ISSUING} />
           <CheckBoxDropdown handleChange={handleIssuingHouse} items={FILTER_ISSUING_HOUSE} value={issuingHouse!} />
         </View>
-        <CustomFlexSpacer />
+        <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
           <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />

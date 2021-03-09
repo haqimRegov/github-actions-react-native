@@ -3,7 +3,7 @@ import { NativeSyntheticEvent, TextInputFocusEventData, View, ViewStyle } from "
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
-import { colorBlack, colorBlue, flexRow, fs12BoldBlue2, py, sh16, sh24, sh32, sh8, sw16 } from "../../styles";
+import { centerHorizontal, colorBlue, flexRow, fs12BoldBlue2, py, sh16, sh24, sh32, sh8, sw40 } from "../../styles";
 import { AdvancedDropdown } from "../Dropdown/Advance";
 import { CustomTextInput, TextInputMultiline } from "../Input";
 import { IconButton, OutlineButton } from "../Touchables";
@@ -83,12 +83,10 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
                   showLength={true}
                   value={address}
                 />
-                <CustomSpacer isHorizontal={true} space={sw16} />
+                <CustomSpacer isHorizontal={true} space={sw40} />
                 {index === 0 ? null : (
-                  <View>
-                    <CustomFlexSpacer />
-                    <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
-                    <CustomSpacer space={sh16} />
+                  <View style={centerHorizontal}>
+                    <IconButton name="trash" color={colorBlue._2} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
                   </View>
                 )}
                 <CustomFlexSpacer />

@@ -50,17 +50,13 @@ declare interface IOrderSummaryPayment {
   frequency?: string;
 }
 
-declare interface IOrderSummaryEmploymentAddress extends IBaseAddress {
-  address: string;
-}
-
 declare interface IOrderSummaryEmploymentDetails {
   occupation: string;
   natureOfBusiness: string;
   monthlyHouseholdIncome: string;
   annualIncome: string | null;
   nameOfEmployer: string;
-  address: IOrderSummaryEmploymentAddress;
+  address: IAddressState;
 }
 
 declare interface IOrderSummaryContactDetails {

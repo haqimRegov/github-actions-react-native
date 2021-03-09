@@ -82,8 +82,7 @@ declare interface IBankSummaryState {
   localBank?: IBankDetailsState[];
 }
 
-declare interface IEmploymentDetailsState extends IBaseAddress {
-  address?: string;
+declare interface IEmploymentDetailsState extends IAddressState {
   businessNature?: string;
   employerName?: string;
   grossIncome?: string;

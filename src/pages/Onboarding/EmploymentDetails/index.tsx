@@ -32,11 +32,11 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       employmentDetails!.occupation !== "" &&
       employmentDetails!.businessNature !== "" &&
       employmentDetails!.employerName !== "" &&
-      employmentDetails!.address !== "" &&
       employmentDetails!.postCode !== "" &&
       employmentDetails!.city !== "" &&
       employmentDetails!.state !== "" &&
       employmentDetails!.country !== "" &&
+      Object.values(employmentDetails!.address!).includes("") === false &&
       Object.values(rules)
         .map((value) => typeof value)
         .includes(typeof "string") === false

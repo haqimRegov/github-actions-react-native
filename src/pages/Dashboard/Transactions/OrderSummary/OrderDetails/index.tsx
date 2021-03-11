@@ -222,8 +222,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   {
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME,
-                    title: `${payment.bankAccountName || "-"}`,
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_NAME,
+                    title: `${payment.bankName}`,
                     titleStyle: fsTransformNone,
                   },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CHEQUE_NO, title: `${payment.checkNumber}` },

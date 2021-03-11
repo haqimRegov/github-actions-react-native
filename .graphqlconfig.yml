@@ -2,13 +2,13 @@ projects:
   Onboarding:
     schemaPath: graphql/schema.json
     includes:
-      - src/graphql/**/*.ts
+      - ''
     excludes:
       - ./amplify/**
     extensions:
       amplify:
         codeGenTarget: typescript
-        generatedFileName: src/API.ts
+        generatedFileName: ''
         docsFilePath: graphql
         region: ap-southeast-1
         apiId: u4agpiyz7vd27lhuveaynighre

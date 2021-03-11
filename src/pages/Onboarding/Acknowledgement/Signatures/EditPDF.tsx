@@ -14,11 +14,11 @@ import {
   sh100,
   sh12,
   sh15,
-  sh155,
+  sh164,
   sh220,
   sh25,
   sh30,
-  sh300,
+  sh308,
   sh370,
   sh40,
   sh90,
@@ -36,9 +36,9 @@ import { PdfView, Signer } from "./EditPDFView";
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
-  adviser: { x: sw20, y: sh155 },
-  principal: { x: sw275, y: sh155 },
-  joint: { x: sw20, y: sh300 },
+  adviser: { x: sw20, y: sh164 },
+  principal: { x: sw275, y: sh164 },
+  joint: { x: sw20, y: sh308 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {

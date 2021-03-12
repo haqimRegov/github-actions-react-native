@@ -141,7 +141,6 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
         <Fragment>
           <CustomSpacer space={sh16} />
           <Dash />
-          <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             {paymentSummary.map((payment: IOrderSummaryPayment, index: number) => {
               const label = `${DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT} ${index + 1}`;
@@ -233,9 +232,9 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,
-                    title: `${payment.kibBankAccountName || "-"}`,
+                    title: `${payment.kibBankName || "-"}`,
                     titleStyle: fsTransformNone,
-                    subtitle: `${payment.bankAccountNumber || "-"}`,
+                    subtitle: `${payment.kibBankAccountNumber || "-"}`,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
@@ -279,6 +278,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
 
               return (
                 <Fragment key={index}>
+                  <CustomSpacer space={sh32} />
                   <View style={{ ...flexRow, ...centerVertical }}>
                     <IcoMoon color={colorBlue._2} name="file" size={sw24} />
                     <CustomSpacer isHorizontal={true} space={sw16} />

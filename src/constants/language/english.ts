@@ -706,7 +706,7 @@ export const english = {
       LABEL_GRAND_TOTAL: "Grand Total",
       LABEL_TOTAL_AMOUNT: "Total Investment Amount",
       LABEL_FEA: "FEA Tag",
-      LABEL_DISTRIBUTION: "Distribution Instructions",
+      LABEL_DISTRIBUTION: "Mode of Income Distribution",
       LABEL_RECURRING_AMOUNT: "Recurring Payment Amount",
       LABEL_RECURRING_SALES_CHARGE: "Recurring Payment Sales Charge (%)",
       HEADING: "Acknowledgement",

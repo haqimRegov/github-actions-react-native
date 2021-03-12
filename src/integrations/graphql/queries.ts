@@ -195,6 +195,7 @@ const getOrderSummary = gql`
             proofOfPayment {
               name
               url
+              type
             }
             kibBankName
             kibBankAccountNumber

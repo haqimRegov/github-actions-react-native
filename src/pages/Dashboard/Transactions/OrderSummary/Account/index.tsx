@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 
-import { FileViewer, LabeledTitleProps } from "../../../../../components";
+import { LabeledTitleProps } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../../../../../data/dictionary";
 import { fsTransformNone, fsUppercase, sw200 } from "../../../../../styles";
@@ -11,6 +11,7 @@ const { DASHBOARD_PROFILE } = Language.PAGE;
 
 declare interface AccountDetailsProps {
   data: IDashboardOrderSummary;
+  setFile: (value?: FileBase64) => void;
 }
 
 export interface IStructuredData {
@@ -31,10 +32,9 @@ export interface IStructuredData {
   accountDocuments: LabeledTitleProps[];
 }
 
-export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }: AccountDetailsProps) => {
+export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, setFile }: AccountDetailsProps) => {
   const { profile, transactionDetails } = data;
   const [accountHolder, setAccountHolder] = useState<TypeAccountHolder>("Principal");
-  const [file, setFile] = useState<FileBase64 | undefined>(undefined);
 
   const accountHolderIndex = accountHolder === "Principal" ? 0 : 1;
 
@@ -53,10 +53,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
     uploadedDocument,
   } = profile[accountHolderIndex];
   const { fatca, fea, crs } = declaration;
-  const handleCloseViewer = () => {
-    setFile(undefined);
-  };
-
   const accountSummaryDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_PROFILE.LABEL_DATE_OF_BIRTH, title: personalDetails.dateOfBirth },
     { label: DASHBOARD_PROFILE.LABEL_SALUTATION, title: personalDetails.salutation },
@@ -306,7 +302,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data }:
         name={name}
         setAccountHolder={setAccountHolder}
       />
-      {file !== undefined ? <FileViewer handleClose={handleCloseViewer} value={file} visible={file !== undefined} /> : null}
     </Fragment>
   );
 };

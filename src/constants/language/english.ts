@@ -1188,6 +1188,8 @@ export const english = {
       BUTTON_DONE: "Done",
       LABEL_DOCUMENT_COMPLETED: "Document(s) uploaded",
       LABEL_DOCUMENT_PENDING: "Document pending",
+      LABEL_JOINT: "Joint Holder",
+      LABEL_PRINCIPAL: "Principal Holder",
       LABEL_SUBTITLE: "All related documents within the same application will be updated.",
       LABEL_UPLOAD_DOCUMENTS: "Upload Documents",
       LABEL_UPLOAD_SUCCESSFUL: "Uploaded successfully",

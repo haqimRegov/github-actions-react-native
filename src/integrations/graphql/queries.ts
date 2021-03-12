@@ -309,14 +309,17 @@ const getOrderSummary = gql`
                 certificate {
                   name
                   url
+                  type
                 }
                 formW9 {
                   name
                   url
+                  type
                 }
                 formW8Ben {
                   name
                   url
+                  type
                 }
                 reason
                 correspondenceDeclaration
@@ -338,6 +341,7 @@ const getOrderSummary = gql`
             uploadedDocument {
               name
               url
+              type
             }
           }
         }

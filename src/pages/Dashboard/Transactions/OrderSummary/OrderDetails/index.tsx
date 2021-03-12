@@ -1,8 +1,8 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Alert, Text, View } from "react-native";
 
-import { CustomSpacer, Dash, FileViewer, LabeledTitleProps, TextCard } from "../../../../../components";
+import { CustomSpacer, Dash, LabeledTitleProps, TextCard } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
@@ -33,15 +33,11 @@ const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
 declare interface OrderDetailsProps {
   data: IDashboardOrderSummary;
   isScheduled: boolean;
+  setFile: (value?: FileBase64) => void;
 }
 
-export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isScheduled }: OrderDetailsProps) => {
-  const [file, setFile] = useState<FileBase64>();
+export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isScheduled, setFile }: OrderDetailsProps) => {
   const { transactionDetails, investmentSummary, paymentSummary, orderNumber, totalInvestment } = data;
-
-  const handleCloseViewer = () => {
-    setFile(undefined);
-  };
 
   const totalInvestmentAmount = totalInvestment
     .map(({ amount, currency }, index) => {
@@ -295,9 +291,6 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
         </Fragment>
       ) : null}
       <CustomSpacer space={sh8} />
-      {file !== undefined ? (
-        <FileViewer handleClose={handleCloseViewer} resourceType="url" value={file} visible={file !== undefined} />
-      ) : null}
     </Fragment>
   );
 };

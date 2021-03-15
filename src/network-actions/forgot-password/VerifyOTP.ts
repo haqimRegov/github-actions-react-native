@@ -1,13 +1,25 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql";
+import { responseHandler } from "../../utils";
 
 export const verifyOtp = async (variables: IVerifyOTPRequest) => {
   try {
-    const data = await gqlOperation<IVerifyOTPMutation, IVerifyOTPRequest>(GQL_MUTATIONS.verifyOtp, variables);
-    return data?.verifyOtp;
+    const data = await responseHandler<IVerifyOTPMutation, IVerifyOTPRequest>(
+      GQL_MUTATIONS.verifyOtp,
+      variables,
+      undefined,
+      undefined,
+      undefined,
+      false,
+    );
+
+    if (data === undefined || "verifyOtp" in data === false) {
+      throw data;
+    }
+
+    return data.verifyOtp;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in verifyOtp line 10 at VerifyOTP.ts", error);
+    console.log("Error in verifyOtp at VerifyOTP.ts", error);
     return error;
   }
 };

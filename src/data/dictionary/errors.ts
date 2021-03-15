@@ -46,5 +46,5 @@ export const ERROR_CODE = {
 
 export const ERRORS = {
   internal: { errorCode: ERROR_CODE.internal, message: "Something went wrong", statusCode: "400" },
-  unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Your session token has expired", statusCode: "401" },
+  unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Please log in again.", statusCode: "401" },
 };

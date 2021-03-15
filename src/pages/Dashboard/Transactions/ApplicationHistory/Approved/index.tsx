@@ -47,6 +47,7 @@ export interface ApprovedOrdersProps extends TransactionsStoreProps {
 const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   activeTab,
   approved,
+  navigation,
   setScreen,
   search,
   transactions,
@@ -192,7 +193,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     };
     // eslint-disable-next-line no-console
     console.log("getDashboard request", request);
-    const dashboardResponse: IDashboardResponse = await getDashboard(request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
     setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

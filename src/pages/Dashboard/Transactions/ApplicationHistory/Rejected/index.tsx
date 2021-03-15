@@ -47,6 +47,7 @@ interface RejectedOrdersProps extends TransactionsStoreProps {
 
 const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   activeTab,
+  navigation,
   rejected,
   search,
   setScreen,
@@ -219,7 +220,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     };
     // eslint-disable-next-line no-console
     console.log("getDashboard request", request);
-    const dashboardResponse: IDashboardResponse = await getDashboard(request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
     setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

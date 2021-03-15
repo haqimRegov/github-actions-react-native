@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -36,7 +36,6 @@ import {
   sw66,
   sw96,
 } from "../../styles";
-import { HandleSessionTokenExpired } from "../../utils";
 import { InboxPage } from "./Inbox";
 import { Profile } from "./Profile";
 import { Transactions } from "./Transactions";
@@ -46,23 +45,16 @@ interface DashboardPageProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
 }
 
-const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
-  agent,
-  config,
-  navigation,
-  unreadMessages,
-}: DashboardPageProps) => {
+const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, navigation, unreadMessages }: DashboardPageProps) => {
   const [activeMenu, setActiveMenu] = useState<number>(0);
   const [route, setRoute] = useState<DashboardPageType>("Transactions");
-  // const [activeTab, setActiveTab] = useState<TransactionsTabType>("pending");
 
   const handleRoute = (nextPage: DashboardPageType) => {
     setRoute(nextPage);
   };
 
-  const handleLogout = async () => {
-    const response = await logout();
-    HandleSessionTokenExpired(navigation, response);
+  const handleLogout = () => {
+    logout(navigation);
   };
 
   const handleAims = () => {
@@ -96,8 +88,6 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     content = <Profile {...props} />;
   }
 
-  // if (currentOrder !== "" && currentOrder !== undefined) {
-  // }
   const inboxCount = route === "Inbox" ? 0 : parseInt(unreadMessages!, 10);
 
   const MENU_ITEMS: MenuItemProps[] = [
@@ -109,13 +99,6 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
 
   const dateToday = moment().format(FULL_DATE_FORMAT);
   const dayToday = `${moment().format(DAY_FORMAT)},`;
-
-  useEffect(() => {
-    if (agent === undefined || config === undefined) {
-      handleLogout();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const initials =
     agent !== undefined

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { AdvanceTable, CustomSpacer, EmptyTable, LinkText, MenuPopup } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { IcoMoon } from "../../../../../icons";
-import { getDashboard } from "../../../../../network-actions/dashboard";
+import { getDashboard } from "../../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
   centerVertical,

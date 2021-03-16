@@ -161,7 +161,7 @@ const NewSalesComponent = ({
   };
 
   const handleCheckClient = async () => {
-    const req = {
+    const request = {
       agentId: agent?.id!,
       principalHolder: {
         country: principalHolder?.country,
@@ -172,8 +172,8 @@ const NewSalesComponent = ({
       },
     };
     // eslint-disable-next-line no-console
-    console.log("etbCheck request", req);
-    const clientCheck: IEtbCheckResponse = await checkClient(req);
+    console.log("etbCheck request", request);
+    const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
     if (clientCheck !== undefined) {
       const { data, error } = clientCheck;
       if (error === null && data !== null) {
@@ -215,7 +215,7 @@ const NewSalesComponent = ({
             idType: jointIdType,
             name: jointHolder?.name!,
           };
-    const req: IClientRegisterRequest = {
+    const request: IClientRegisterRequest = {
       agentId: agent?.id!,
       accountType: accountType,
       principalHolder: {
@@ -227,8 +227,8 @@ const NewSalesComponent = ({
       jointHolder: jointInfo,
     };
     // eslint-disable-next-line no-console
-    console.log("clientRegister request", req);
-    const client: IClientRegisterResponse = await clientRegister(req);
+    console.log("clientRegister request", request);
+    const client: IClientRegisterResponse = await clientRegister(request, navigation);
     if (client !== undefined) {
       const { data, error } = client;
       if (error === null && data !== null) {

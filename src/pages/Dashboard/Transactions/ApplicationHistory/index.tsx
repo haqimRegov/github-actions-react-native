@@ -46,14 +46,13 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     selectedOrders,
     setActiveTab,
     setScreen,
-    // setLoading,
     transactions,
+    updateApprovedFilter,
     updatedSelectedOrder,
+    updatePendingFilter,
+    updateRejectedFilter,
     updateSearch,
     updateTransactions,
-    updatePendingFilter,
-    updateApprovedFilter,
-    updateRejectedFilter,
   } = props;
   const { approvedCount, pendingCount, rejectedCount } = transactions;
 
@@ -104,7 +103,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     // setLoading(true);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt request", request);
-    const response: ISummaryReceiptResponse = await getSummaryReceipt(request);
+    const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
     // setLoading(false);
     // eslint-disable-next-line no-console
     console.log("getSummaryReceipt response", response);

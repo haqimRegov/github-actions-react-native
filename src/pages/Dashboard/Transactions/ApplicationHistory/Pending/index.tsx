@@ -306,7 +306,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const request: IResubmitOrderRequest = { orderNumber: orderNumber };
     // eslint-disable-next-line no-console
     console.log("resubmitOrder request", request);
-    const response: IResubmitOrderResponse = await resubmitOrder(request);
+    const response: IResubmitOrderResponse = await resubmitOrder(request, navigation);
     // eslint-disable-next-line no-console
     console.log("resubmitOrder response", response);
 

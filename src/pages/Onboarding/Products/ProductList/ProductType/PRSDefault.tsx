@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
@@ -5,7 +6,7 @@ import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { DEFAULT_DATE_FORMAT } from "../../../../../constants";
-import { getProductList } from "../../../../../network-actions/products";
+import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
@@ -34,6 +35,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   setScrollEnabled,
   shareSuccess,
 }: PRSDefaultProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const { filters, page, pages, recommended, search, sort, totalCount } = products.prsDefault;
   const [loading, setLoading] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
@@ -50,7 +52,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
-    const req = {
+    const request = {
       age: moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years").toString(),
       tab: "prsdefault",
       fundType: filters.fundType![0] || "",
@@ -66,8 +68,8 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       search: search,
     };
     // eslint-disable-next-line no-console
-    console.log("productList", req);
-    const productListResponse: IProductListResponse = await getProductList(req);
+    console.log("productList request", request);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;

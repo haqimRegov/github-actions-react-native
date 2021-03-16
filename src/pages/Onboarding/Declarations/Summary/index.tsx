@@ -19,14 +19,17 @@ import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
 
-interface DeclarationSummaryProps extends PersonalInfoStoreProps, OnboardingContentProps {}
+interface DeclarationSummaryProps extends PersonalInfoStoreProps, OnboardingContentProps {
+  navigation: IStackNavigationProp;
+}
 
 export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryProps> = ({
   accountType,
-  details,
   addOrders,
+  details,
   handleNextStep,
   investmentDetails,
+  navigation,
   onboarding,
   personalInfo,
   setLoading,
@@ -218,7 +221,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             },
           }
         : undefined;
-    const newRequest = {
+    const request = {
       incomeDistribution: personalInfo.incomeDistribution!,
       signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
       principal: {
@@ -301,8 +304,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     };
 
     // eslint-disable-next-line no-console
-    console.log("request", newRequest);
-    const response: ISubmitClientAccountResponse = await submitClientAccount(newRequest);
+    console.log("submitClientAccount request", request);
+    const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;

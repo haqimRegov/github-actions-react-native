@@ -67,6 +67,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   agent,
   handleCancelOnboarding,
   handleNextStep,
+  navigation,
   onboarding,
   principalHolder,
   questionnaire,
@@ -132,7 +133,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     };
     // eslint-disable-next-line no-console
     console.log("request", request);
-    const response: IGetRiskProfileResponse = await getRiskProfile(request);
+    const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text } from "react-native";
@@ -24,6 +25,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   setLoading,
   updateOnboarding,
 }: EmailVerificationProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const { emailOtpSent } = personalInfo;
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
@@ -53,13 +55,13 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     setPrincipalEmailError(undefined);
     setJointEmailError(undefined);
     const jointRequest = jointEmailCheck === true ? { email: inputJointEmail } : undefined;
-    const req = {
+    const request = {
       clientId: principalClientId,
       principalHolder: { email: inputPrincipalEmail },
       jointHolder: jointRequest,
     };
     setLoading(true);
-    const response: IEmailVerificationResponse = await emailVerification(req);
+    const response: IEmailVerificationResponse = await emailVerification(request, navigation);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;

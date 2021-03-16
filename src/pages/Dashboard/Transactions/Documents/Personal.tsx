@@ -35,7 +35,7 @@ interface UploadDocumentsProps extends TransactionsStoreProps {
 }
 
 const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props: UploadDocumentsProps) => {
-  const { currentOrder, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
   const [documentList, setDocumentList] = useState<IGetSoftCopyDocumentsResult | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
@@ -100,12 +100,12 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   };
 
   const handleFetch = async () => {
-    const req: IGetSoftCopyDocumentsRequest = {
+    const request: IGetSoftCopyDocumentsRequest = {
       orderNumber: currentOrder!.orderNumber,
     };
     // eslint-disable-next-line no-console
-    console.log("getSoftCopyDocuments", req);
-    const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(req);
+    console.log("getSoftCopyDocuments request", request);
+    const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -158,8 +158,8 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       }),
     };
     // eslint-disable-next-line no-console
-    console.log("submitSoftCopyDocuments", request);
-    const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request);
+    console.log("submitSoftCopyDocuments request", request);
+    const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {

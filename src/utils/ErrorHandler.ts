@@ -15,12 +15,13 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
       );
     }
   };
-  if (error !== undefined && navigation !== undefined) {
-    const title = error !== undefined && error.errorCode === ERROR_CODE.unauthenticated ? "Session Expired" : undefined;
-    return AlertDialog(error.message, handleNavigate, title);
+  // eslint-disable-next-line no-console
+  console.log("ErrorHandler", error);
+  if (error !== undefined && error.errorCode === ERROR_CODE.unauthenticated && navigation !== undefined) {
+    return AlertDialog(error.message, handleNavigate, "Session Expired");
   }
 
   Alert.alert(ERRORS.internal.message);
   // TODO proper return type
-  return error as any;
+  return undefined as any;
 };

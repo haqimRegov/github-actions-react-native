@@ -1,18 +1,28 @@
 import { GQL_QUERIES } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const getReceiptSummaryList = async (variables: IGetReceiptSummaryListRequest, handleError?: ResponseErrorType) => {
+export const getReceiptSummaryList = async (
+  variables: IGetReceiptSummaryListRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data = await gqlOperation<IGetReceiptSummaryListMutation, IGetReceiptSummaryListRequest>(
+    const data = await responseHandler<IGetReceiptSummaryListMutation, IGetReceiptSummaryListRequest>(
       GQL_QUERIES.getReceiptSummaryList,
       variables,
       undefined,
+      navigation,
       handleError,
     );
-    return data?.getReceiptSummaryList;
+
+    if (data === undefined || "getReceiptSummaryList" in data === false) {
+      throw data;
+    }
+
+    return data.getReceiptSummaryList;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getReceiptSummaryList line 15 at GetReceiptSummaryList.ts", error);
+    console.log("Error in getReceiptSummaryList at GetReceiptSummaryList.ts", error);
     return error;
   }
 };

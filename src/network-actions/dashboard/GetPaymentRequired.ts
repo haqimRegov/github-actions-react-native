@@ -1,14 +1,24 @@
 import { GQL_QUERIES } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const getPaymentRequired = async (variables: IGetPaymentRequiredRequest, handleError?: ResponseErrorType) => {
+export const getPaymentRequired = async (
+  variables: IGetPaymentRequiredRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data: IGetPaymentRequiredQuery = await gqlOperation<IGetPaymentRequiredQuery, IGetPaymentRequiredRequest>(
+    const data: IGetPaymentRequiredQuery = await responseHandler<IGetPaymentRequiredQuery, IGetPaymentRequiredRequest>(
       GQL_QUERIES.listPaymentRequired,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "listPaymentRequired" in data === false) {
+      throw data;
+    }
+
     return data.listPaymentRequired;
   } catch (error) {
     // eslint-disable-next-line no-console

@@ -1,18 +1,28 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const clientRegister = async (variables: IClientRegisterRequest, handleError?: ResponseErrorType) => {
+export const clientRegister = async (
+  variables: IClientRegisterRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data = await gqlOperation<IClientRegisterMutation, IClientRegisterRequest>(
+    const data = await responseHandler<IClientRegisterMutation, IClientRegisterRequest>(
       GQL_MUTATIONS.clientRegister,
       variables,
       undefined,
+      navigation,
       handleError,
     );
-    return data?.clientRegister;
+
+    if (data === undefined || "clientRegister" in data === false) {
+      throw data;
+    }
+
+    return data.clientRegister;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in clientRegister line 15 at ClientRegister.ts", error);
+    console.log("Error in clientRegister at ClientRegister.ts", error);
     return error;
   }
 };

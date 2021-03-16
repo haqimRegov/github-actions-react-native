@@ -1,5 +1,5 @@
 import { GQL_QUERIES } from "../../integrations";
-import { responseHandler } from "../../utils/ResponseHandler";
+import { responseHandler } from "../../utils";
 
 export const getDashboard = async (variables: IDashboardRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
   try {
@@ -10,9 +10,11 @@ export const getDashboard = async (variables: IDashboardRequest, navigation: ISt
       navigation,
       handleError,
     );
+
     if (data === undefined || "dashboard" in data === false) {
       throw data;
     }
+
     return data.dashboard;
   } catch (error) {
     // eslint-disable-next-line no-console

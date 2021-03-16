@@ -1,14 +1,24 @@
 import { GQL_QUERIES } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const getAgentProfile = async (variables: IGetAgentProfileRequest, handleError?: ResponseErrorType) => {
+export const getAgentProfile = async (
+  variables: IGetAgentProfileRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data: IGetAgentProfileQuery = await gqlOperation<IGetAgentProfileQuery, IGetAgentProfileRequest>(
+    const data: IGetAgentProfileQuery = await responseHandler<IGetAgentProfileQuery, IGetAgentProfileRequest>(
       GQL_QUERIES.getAgentProfile,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "agentProfile" in data === false) {
+      throw data;
+    }
+
     return data.agentProfile;
   } catch (error) {
     // eslint-disable-next-line no-console

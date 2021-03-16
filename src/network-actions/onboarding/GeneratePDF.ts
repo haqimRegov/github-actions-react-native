@@ -1,18 +1,24 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const generatePdf = async (variables: IGeneratePdfRequest, handleError?: ResponseErrorType) => {
+export const generatePdf = async (variables: IGeneratePdfRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
   try {
-    const data = await gqlOperation<IGeneratePdfMutation, IGeneratePdfRequest>(
+    const data = await responseHandler<IGeneratePdfMutation, IGeneratePdfRequest>(
       GQL_MUTATIONS.generatePdf,
       variables,
       undefined,
+      navigation,
       handleError,
     );
-    return data?.generatePdf;
+
+    if (data === undefined || "generatePdf" in data === false) {
+      throw data;
+    }
+
+    return data.generatePdf;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in generatePdf line 15 at GeneratePdf.ts", error);
+    console.log("Error in generatePdf at GeneratePdf.ts", error);
     return error;
   }
 };

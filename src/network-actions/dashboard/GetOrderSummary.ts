@@ -1,14 +1,24 @@
 import { GQL_QUERIES } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const getOrderSummary = async (variables: IGetOrderSummaryRequest, handleError?: ResponseErrorType) => {
+export const getOrderSummary = async (
+  variables: IGetOrderSummaryRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data: IGetOrderSummaryQuery = await gqlOperation<IGetOrderSummaryQuery, IGetOrderSummaryRequest>(
+    const data: IGetOrderSummaryQuery = await responseHandler<IGetOrderSummaryQuery, IGetOrderSummaryRequest>(
       GQL_QUERIES.getOrderSummary,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "getOrderSummary" in data === false) {
+      throw data;
+    }
+
     return data.getOrderSummary;
   } catch (error) {
     // eslint-disable-next-line no-console

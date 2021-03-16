@@ -21,11 +21,22 @@ export const responseHandler = async <ResultType extends {}, VariablesType exten
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
     // eslint-disable-next-line no-console
     console.log("responseHandler", data);
+
+    if ("errors" in data) {
+      throw data;
+    }
+
     return data;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log("Error in response handler", error);
-    const err = error === "No current user" || error?.message === "Refresh Token has expired" ? ERRORS.unauthenticated : error;
+    let err = error;
+    if (error === "No current user" || error?.message === "Refresh Token has expired") {
+      err = ERRORS.unauthenticated;
+    } else if ("errors" in error) {
+      err = ERRORS.internal;
+    }
+
     if (handleError !== undefined) {
       return handleError(err);
     }

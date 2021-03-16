@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
-import { Alert, Image, Text, TextStyle, View } from "react-native";
+import { Alert, Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -12,14 +12,20 @@ import {
   CustomTooltip,
   LabeledTitle,
   Question,
-  RadioButton,
 } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
+import { IcoMoon } from "../../icons";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
+  alignSelfStart,
+  centerHV,
+  centerVertical,
+  circleBorder,
   colorBlue,
+  colorRed,
+  colorWhite,
   disabledOpacity,
   flexRow,
   fs10BoldBlack2,
@@ -36,12 +42,16 @@ import {
   sh40,
   sh56,
   sh8,
+  sw1,
   sw140,
+  sw16,
   sw20,
   sw221,
   sw24,
   sw256,
+  sw326,
   sw432,
+  sw8,
 } from "../../styles";
 import { isObjectEqual } from "../../utils";
 
@@ -80,7 +90,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const setQ5 = (index: number) => addAssessmentQuestions({ questionFive: index });
   const setQ6 = (index: number) => addAssessmentQuestions({ questionSix: index });
   const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
-  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index, questionNine: index > 0 ? 0 : -1 });
+  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index });
   const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
   const handleConfirmAssessment = () => {
@@ -185,10 +195,23 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     }
   }, [finishedSteps, prevQuestionnaire, questionnaire]);
 
+  const disabled =
+    questionTwo === -1 ||
+    questionThree === -1 ||
+    questionFour === -1 ||
+    questionFive === -1 ||
+    questionSix === -1 ||
+    questionSeven === -1 ||
+    questionEight === -1 ||
+    (questionEight !== 0 && questionNine === -1);
+
+  console.log("ques", questionnaire);
+
   return (
     <Fragment>
       <ContentPage
         continueDebounce={true}
+        continueDisabled={disabled}
         handleCancel={handleCancelOnboarding}
         handleContinue={handlePageContinue}
         heading={`${RISK_ASSESSMENT.HEADING} ${name}.`}
@@ -222,6 +245,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               setSelected={setQ2}
               title={RISK_ASSESSMENT.QUESTION_2}
             />
+            {/* <AdvanceToggleButton direction="column" labels={OPTIONS_CRS_TAX_RESIDENCY} /> */}
             <CustomSpacer space={sh32} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_3}
@@ -276,7 +300,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               setSelected={setQ8}
               title={RISK_ASSESSMENT.QUESTION_8}
             />
-            {questionEight !== undefined && questionEight !== 0 ? (
+            {questionEight !== -1 && questionEight !== 0 ? (
               <Fragment>
                 <CustomSpacer space={sh32} />
                 <Question
@@ -304,16 +328,25 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                             setSelected(options!.indexOf(option));
                           };
 
+                          const iconColor = index === selected ? colorWhite._1 : colorBlue._2;
+                          const circleStyle: ViewStyle =
+                            index === selected ? circleBorder(sw24, sw1, colorRed._1, colorRed._1) : circleBorder(sw24, sw1, colorBlue._2);
+
                           return (
                             <Fragment key={index}>
                               {index !== 0 ? <CustomSpacer isHorizontal={false} space={sh16} /> : null}
                               <View style={flexRow}>
-                                <RadioButton
-                                  label={option}
-                                  labelStyle={fs12BoldBlack2}
-                                  selected={index === selected}
-                                  setSelected={handleSelect}
-                                />
+                                <TouchableWithoutFeedback onPress={handleSelect}>
+                                  <View style={{ ...centerVertical, ...flexRow }}>
+                                    <View style={alignSelfStart}>
+                                      <View style={{ ...centerHV, ...circleStyle }}>
+                                        <IcoMoon name="check" size={sw16} color={iconColor} />
+                                      </View>
+                                    </View>
+                                    <CustomSpacer space={sw8} isHorizontal />
+                                    <Text style={{ ...fs12BoldBlack2, maxWidth: sw326 }}>{option}</Text>
+                                  </View>
+                                </TouchableWithoutFeedback>
                                 {index < 2 ? (
                                   <Fragment>
                                     <CustomSpacer isHorizontal={true} space={sw20} />

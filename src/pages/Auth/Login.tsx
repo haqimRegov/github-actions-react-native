@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Prompt, RNModal } from "../../components";
 import { Language } from "../../constants";
-import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
+import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
@@ -57,7 +57,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     if ("sessionToken" in credentials === false) {
       setLoading(false);
       setTimeout(() => {
-        return Alert.alert("No Internet Connection");
+        return Alert.alert(ERRORS.network.message);
       }, 100);
     }
 

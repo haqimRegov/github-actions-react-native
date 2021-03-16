@@ -1,3 +1,4 @@
+import NetInfo from "@react-native-community/netinfo";
 import { Auth } from "aws-amplify";
 
 import { ERRORS } from "../data/dictionary";
@@ -13,14 +14,24 @@ export const responseHandler = async <ResultType extends {}, VariablesType exten
   tokenCheck?: boolean,
 ) => {
   try {
+    const netInfo = await NetInfo.fetch().then((state) => {
+      // eslint-disable-next-line no-console
+      console.log("NetInfo:", state);
+      return { isInternetReachable: state.isInternetReachable, isConnected: state.isConnected };
+    });
+    // check for scenarios where it is connected but internet is not reachable
+    // netInfo.isInternetReachable === false
+    if (netInfo.isConnected === false) {
+      throw ERRORS.network;
+    }
     if (tokenCheck !== false) {
       const currentSession = await Auth.currentSession();
       // eslint-disable-next-line no-console
-      console.log("currentSession", currentSession);
+      console.log("CurrentSession:", currentSession);
     }
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
     // eslint-disable-next-line no-console
-    console.log("responseHandler", data);
+    console.log("Response Handler:", data);
 
     if ("errors" in data) {
       throw data;

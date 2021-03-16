@@ -5,6 +5,8 @@ import { ERROR_CODE, ERRORS } from "../data/dictionary";
 import { AlertDialog } from "./Alert";
 
 export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp) => {
+  const err = error !== undefined ? error : ERRORS.internal;
+
   const handleNavigate = () => {
     if (navigation !== undefined) {
       navigation.dispatch(
@@ -17,11 +19,12 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
   };
   // eslint-disable-next-line no-console
   console.log("ErrorHandler", error);
-  if (error !== undefined && error.errorCode === ERROR_CODE.unauthenticated && navigation !== undefined) {
-    return AlertDialog(error.message, handleNavigate, "Session Expired");
+  // eslint-disable-next-line no-console
+  console.log("navigation", navigation);
+  if (err.errorCode === ERROR_CODE.unauthenticated && navigation !== undefined) {
+    return AlertDialog(err.message, handleNavigate, "Session Expired");
   }
-
-  Alert.alert(ERRORS.internal.message);
+  Alert.alert(err.message);
   // TODO proper return type
   return undefined as any;
 };

@@ -91,6 +91,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           : undefined,
         salesCharge: investment.investmentSalesCharge,
         scheduledSalesCharge: investment.scheduledSalesCharge,
+        prsType: fundDetails.prsType,
       };
     });
 

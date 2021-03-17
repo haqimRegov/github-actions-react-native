@@ -10,11 +10,11 @@ import { Prompt, RNModal } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
-import { login, resendLockOtp, verifyLockOtp } from "../../network-actions";
+import { login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
 import { Encrypt, maskedString } from "../../utils";
-import { LoginDetails, OTPDetails } from "./Details";
+import { LoginDetails, OTPDetails, PasswordDetails } from "./Details";
 
 const { LOGIN } = Language.PAGE;
 
@@ -28,12 +28,16 @@ interface LoginProps extends GlobalStoreProps {
 const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passwordRecovery, setRootPage, ...props }: LoginProps) => {
   const [inputNRIC, setInputNRIC] = useState<string>("");
   const [inputOTP, setInputOTP] = useState<string>("");
-  const [inputPassword, setInputPassword] = useState<string>("");
   const [recoveryEmail, setRecoveryEmail] = useState<string | undefined>(undefined);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [inputPassword, setInputPassword] = useState<string>("");
+  const [inputNewPassword, setInputNewPassword] = useState<string>("");
+  const [inputRetypePassword, setInputRetypePassword] = useState<string>("");
+  const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
+  const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
   const [lockPrompt, setLockPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(DICTIONARY_OTP_EXPIRY);
+
   const handleForgotPassword = () => {
     setRootPage("PASSWORD_RECOVERY");
   };
@@ -51,7 +55,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     Keyboard.dismiss();
     setLockPrompt(false);
     setLoading(true);
-    setErrorMessage(undefined);
+    setInput1Error(undefined);
     const credentials = await Auth.Credentials.get();
 
     if ("sessionToken" in credentials === false) {
@@ -114,7 +118,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setRecoveryEmail(maskedString(data?.result.email, 0, 4));
         }
       } else {
-        setErrorMessage(error.message);
+        setInput1Error(error.message);
         setLoading(false);
       }
     }
@@ -123,7 +127,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
 
   const handleVerifyOTP = async () => {
     setLoading(true);
-    setErrorMessage(undefined);
+    setInput1Error(undefined);
     const response: IVerifyLockOTPResponse = await verifyLockOtp({ nric: inputNRIC, code: inputOTP });
     if (response === undefined) {
       // TODO temporary
@@ -135,24 +139,23 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     if (error === null) {
       if (data !== null) {
         if (data?.result.status === true) {
-          setInputNRIC("");
           setInputPassword("");
           setInputOTP("");
           setRecoveryEmail(undefined);
-          setRootPage("LOGIN");
+          setRootPage("LOCKED_PASSWORD");
         }
       }
     } else {
       if (error.errorCode === ERROR_CODE.otpAttempt) {
         setResendTimer(DICTIONARY_OTP_COOL_OFF);
       }
-      setErrorMessage(error.message);
+      setInput1Error(error.message);
     }
   };
 
   const handleResend = async () => {
     setLoading(true);
-    setErrorMessage(undefined);
+    setInput1Error(undefined);
     const response: IResendLockOTPResponse = await resendLockOtp({ nric: inputNRIC });
     if (response === undefined) {
       // TODO temporary
@@ -165,27 +168,79 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       if (error.errorCode === ERROR_CODE.otpAttempt) {
         setResendTimer(DICTIONARY_OTP_COOL_OFF);
       }
-      setErrorMessage(error.message);
+      setInput1Error(error.message);
     }
   };
 
-  return (
-    <Fragment>
-      {recoveryEmail !== undefined && page === "LOCKED_ACCOUNT" ? (
+  const handelNewPassword = async () => {
+    setLoading(true);
+    setInput2Error(undefined);
+    const credentials = await Auth.Credentials.get();
+    const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
+    const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
+    const response: ISignUpResponse = await resetPassword(
+      {
+        username: inputNRIC,
+        password: encryptedNewPassword,
+        confirmPassword: encryptedRetypePassword,
+      },
+      { encryptionKey: credentials.sessionToken },
+    );
+    setLoading(false);
+    if (response === undefined) {
+      // TODO temporary
+      return;
+    }
+    const { data, error } = response;
+    if (error === null) {
+      if (data?.result.status === true) {
+        setInputNRIC("");
+        setInputNewPassword("");
+        setInputRetypePassword("");
+        setRootPage("LOGIN");
+      }
+    } else {
+      setInput2Error(error.message);
+    }
+  };
+
+  let content: JSX.Element = <View />;
+
+  switch (page) {
+    case "LOCKED_ACCOUNT":
+      content = (
         <OTPDetails
-          email={recoveryEmail}
-          error={errorMessage}
+          email={recoveryEmail!}
+          error={input1Error}
           handleResend={handleResend}
           handleSubmit={handleVerifyOTP}
           inputOTP={inputOTP}
           resendTimer={resendTimer}
-          setError={setErrorMessage}
+          setError={setInput1Error}
           setInputOTP={setInputOTP}
           setResendTimer={setResendTimer}
         />
-      ) : (
+      );
+      break;
+    case "LOCKED_PASSWORD":
+      content = (
+        <PasswordDetails
+          error1={input1Error}
+          error2={input2Error}
+          handleSubmit={handelNewPassword}
+          inputNewPassword={inputNewPassword}
+          inputRetypePassword={inputRetypePassword}
+          setError1={setInput1Error}
+          setError2={setInput2Error}
+          setInputNewPassword={setInputNewPassword}
+          setInputRetypePassword={setInputRetypePassword}
+        />
+      );
+      break;
+    case "LOGIN":
+      content = (
         <LoginDetails
-          errorMessage={errorMessage}
+          errorMessage={input1Error}
           handleForgotPassword={handleForgotPassword}
           handleLogin={handleLogin}
           inputNRIC={inputNRIC}
@@ -194,7 +249,16 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setInputNRIC={setInputNRIC}
           setInputPassword={setInputPassword}
         />
-      )}
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  return (
+    <Fragment>
+      {content}
       <RNModal animationType="fade" visible={loading}>
         <Fragment>
           {lockPrompt ? (

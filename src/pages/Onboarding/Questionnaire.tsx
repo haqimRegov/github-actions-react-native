@@ -205,8 +205,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     questionEight === -1 ||
     (questionEight !== 0 && questionNine === -1);
 
-  console.log("ques", questionnaire);
-
   return (
     <Fragment>
       <ContentPage
@@ -245,7 +243,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               setSelected={setQ2}
               title={RISK_ASSESSMENT.QUESTION_2}
             />
-            {/* <AdvanceToggleButton direction="column" labels={OPTIONS_CRS_TAX_RESIDENCY} /> */}
             <CustomSpacer space={sh32} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_3}

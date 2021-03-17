@@ -17,13 +17,13 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
       return {
         ...state,
         questionnaire: {
-          questionTwo: 0,
-          questionThree: 0,
-          questionFour: 0,
-          questionFive: 0,
-          questionSix: 0,
-          questionSeven: 0,
-          questionEight: 0,
+          questionTwo: -1,
+          questionThree: -1,
+          questionFour: -1,
+          questionFive: -1,
+          questionSix: -1,
+          questionSeven: -1,
+          questionEight: -1,
           questionNine: -1,
         },
       };

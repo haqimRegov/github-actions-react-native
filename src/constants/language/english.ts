@@ -1021,7 +1021,7 @@ export const english = {
       Q7_OPTION_2: "11% to 20%",
       Q7_OPTION_3: "21% to 30%",
       Q7_OPTION_4: "More than 30%",
-      Q8_OPTION_1: "More than 300,001",
+      Q8_OPTION_1: "More than 300,000",
       Q8_OPTION_2: "200,001 to 300,000",
       Q8_OPTION_3: "100,001 to 200,000",
       Q8_OPTION_4: "50,001 to 100,000",

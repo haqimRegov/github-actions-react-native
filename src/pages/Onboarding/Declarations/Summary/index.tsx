@@ -61,8 +61,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     const jointMalaysianDetails =
       jointIdType !== "Passport"
         ? {
-            bumiputera: `${principal!.personalDetails!.bumiputera === "Yes"}`,
-            race: principal!.personalDetails!.race!,
+            bumiputera: `${joint!.personalDetails!.bumiputera === "Yes"}`,
+            race: joint!.personalDetails!.race!,
           }
         : {};
 

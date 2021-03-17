@@ -64,6 +64,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
 
   const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;
   const labelEmployer = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_NAME : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME;
+  const addressType = inputCountry !== "Malaysia" ? "Other" : "Malaysia";
 
   return (
     <View style={px(sw24)}>
@@ -105,6 +106,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
         value={inputAddress}
       /> */}
       <AddressField
+        addressType={addressType}
         inputAddress={inputAddress}
         inputCity={inputCity}
         inputPostCode={inputPostCode}

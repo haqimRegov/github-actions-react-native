@@ -18,11 +18,11 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
         ...state,
         questionnaire: {
           questionTwo: -1,
-          questionThree: -1,
+          questionThree: 0,
           questionFour: -1,
           questionFive: -1,
           questionSix: -1,
-          questionSeven: -1,
+          questionSeven: 0,
           questionEight: -1,
           questionNine: -1,
         },
@@ -31,11 +31,11 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
       return {
         questionnaire: {
           questionTwo: -1,
-          questionThree: -1,
+          questionThree: 0,
           questionFour: -1,
           questionFive: -1,
           questionSix: -1,
-          questionSeven: -1,
+          questionSeven: 0,
           questionEight: -1,
           questionNine: -1,
         },

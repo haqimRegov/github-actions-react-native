@@ -1,18 +1,24 @@
 import { GQL_QUERIES } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const checkClient = async (variables: IEtbCheckRequest, handleError?: ResponseErrorType) => {
+export const checkClient = async (variables: IEtbCheckRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
   try {
-    const data: IEtbCheckQuery = await gqlOperation<IEtbCheckQuery, IEtbCheckRequest>(
+    const data: IEtbCheckQuery = await responseHandler<IEtbCheckQuery, IEtbCheckRequest>(
       GQL_QUERIES.etbCheck,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "etbCheck" in data === false) {
+      throw data;
+    }
+
     return data.etbCheck;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in checkClient line 15 at ETBCheck.ts", error);
+    console.log("Error in checkClient at ETBCheck.ts", error);
     return error;
   }
 };

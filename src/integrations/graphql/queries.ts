@@ -510,6 +510,7 @@ const productList = gql`
       data {
         result {
           products {
+            fundCode
             fundCurrencies
             fundClasses
             fundId
@@ -521,7 +522,7 @@ const productList = gql`
             riskCategory
             isEpf
             isEpfOnly
-            isPrsDefault
+            prsType
             isSyariah
             isWholesale
             isScheduled

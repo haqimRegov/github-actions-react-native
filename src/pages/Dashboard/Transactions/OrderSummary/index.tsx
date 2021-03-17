@@ -32,7 +32,7 @@ interface OrderDetailsProps extends TransactionsStoreProps {
 }
 
 const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: OrderDetailsProps) => {
-  const { currentOrder, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, setScreen, navigation, updateCurrentOrder } = props;
   const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
   const [selection, setSelection] = useState<number>(0);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
@@ -64,12 +64,12 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
 
   const handleFetch = async () => {
     // setLoading(true);
-    const req: IGetOrderSummaryRequest = {
+    const request: IGetOrderSummaryRequest = {
       orderNumber: currentOrder!.orderNumber,
     };
     // eslint-disable-next-line no-console
-    console.log("getOrderSummary", req);
-    const dashboardResponse: IGetOrderSummaryResponse = await getOrderSummary(req);
+    console.log("getOrderSummary request", request);
+    const dashboardResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
     // setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

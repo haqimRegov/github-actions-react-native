@@ -20,7 +20,7 @@ interface UploadHardCopyProps extends TransactionsStoreProps {
 }
 
 const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: UploadHardCopyProps) => {
-  const { currentOrder, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
   const [prompt, setPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [branch, setBranch] = useState<string>("");
@@ -48,7 +48,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     const request: IGetHardCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
     // eslint-disable-next-line no-console
     console.log("getHardCopyDocuments request", request);
-    const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request);
+    const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -89,7 +89,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     };
     // eslint-disable-next-line no-console
     console.log("submitHardCopyDocuments request", request);
-    const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request);
+    const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;

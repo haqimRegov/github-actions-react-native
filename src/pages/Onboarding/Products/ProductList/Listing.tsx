@@ -52,6 +52,7 @@ interface ProductListViewProps {
   page: number;
   pages: number;
   productType: ProductType;
+  recommendedRisk?: string[];
   search: string;
   selectedFunds: ITableData[];
   setViewFund: (fund: IProduct) => void;
@@ -76,6 +77,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   page,
   pages,
   productType,
+  recommendedRisk,
   search,
   selectedFunds,
   setViewFund,
@@ -209,16 +211,13 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
-  // const scrollEnabled = !filterVisible || (filterVisible && showMore);
-  // const filterPills = Object.values(filters)
-  //   .flat(1)
-  //   .filter((value) => value !== "");
   const recommendedCount = totalCount.recommended !== "" ? `(${totalCount.recommended})` : "";
   const recommendedLabel = `${PRODUCT_LIST.LABEL_RECOMMENDED} ${recommendedCount}`;
   const allCount = totalCount.all !== "" ? `(${totalCount.all})` : "";
   const allFundsLabel = `${PRODUCT_LIST.LABEL_ALL_FUNDS} ${allCount}`;
 
   const subtitle = search !== undefined && search !== "" ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : undefined;
+  const riskCategory = recommendedRisk !== undefined ? recommendedRisk : ["Low", "Medium", "High"];
 
   return (
     <View style={{ ...flexChild, borderRadius: sw24 }}>
@@ -229,8 +228,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           borderBottomRightRadius: sw24,
           borderBottomLeftRadius: sw24,
         }}>
-        {/* <CustomSpacer space={sh234} /> */}
-        {/* {filterPills.length === 0 ? null : <CustomSpacer space={sh48} />} */}
         <View style={flexRow}>
           <CustomSpacer isHorizontal={true} space={sw20} />
           <Tag color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
@@ -249,7 +246,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             columns={columns}
             data={list}
             rowSelection={selectedFunds}
-            rowSelectionKey="fundId"
+            rowSelectionKey="fundCode"
             onRowSelect={onRowSelect}
             // RenderAccordion={renderAccordion}
             RenderCustomHeader={({ item }) => {
@@ -277,23 +274,15 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                     );
                   }}
                   RenderContent={({ hide }) => {
-                    const handleLow = () => {
-                      updateFilter({ ...filter, riskCategory: ["Low"] });
-                      hide();
-                    };
-                    const handleMedium = () => {
-                      updateFilter({ ...filter, riskCategory: ["Medium"] });
-                      hide();
-                    };
-                    const handleHigh = () => {
-                      updateFilter({ ...filter, riskCategory: ["High"] });
-                      hide();
-                    };
                     return (
                       <View style={{ width: sw120, ...px(sw16), ...py(sh8) }}>
-                        <LinkText onPress={handleLow} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"Low"} />
-                        <LinkText onPress={handleMedium} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"Medium"} />
-                        <LinkText onPress={handleHigh} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={"High"} />
+                        {riskCategory.map((risk, index) => {
+                          const handleRisk = () => {
+                            updateFilter({ ...filter, riskCategory: [risk] });
+                            hide();
+                          };
+                          return <LinkText key={index} onPress={handleRisk} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={risk} />;
+                        })}
                       </View>
                     );
                   }}
@@ -342,7 +331,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           <CustomSpacer space={sh32} />
         </View>
       </View>
-      {/* <CustomSpacer space={sh32} /> */}
     </View>
   );
 };

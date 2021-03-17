@@ -1,14 +1,24 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const submitHardCopyDocuments = async (variables: ISubmitHardCopyDocumentsRequest, handleError?: ResponseErrorType) => {
+export const submitHardCopyDocuments = async (
+  variables: ISubmitHardCopyDocumentsRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data: ISubmitHardCopyDocumentsQuery = await gqlOperation<ISubmitHardCopyDocumentsQuery, ISubmitHardCopyDocumentsRequest>(
+    const data: ISubmitHardCopyDocumentsQuery = await responseHandler<ISubmitHardCopyDocumentsQuery, ISubmitHardCopyDocumentsRequest>(
       GQL_MUTATIONS.submitHardCopyDocuments,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "submitHardcopyDocuments" in data === false) {
+      throw data;
+    }
+
     return data.submitHardcopyDocuments;
   } catch (error) {
     // eslint-disable-next-line no-console

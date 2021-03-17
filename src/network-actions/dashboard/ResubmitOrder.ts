@@ -1,14 +1,24 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const resubmitOrder = async (variables: IResubmitOrderRequest, handleError?: ResponseErrorType) => {
+export const resubmitOrder = async (
+  variables: IResubmitOrderRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data: IResubmitOrderMutation = await gqlOperation<IResubmitOrderMutation, IResubmitOrderRequest>(
+    const data: IResubmitOrderMutation = await responseHandler<IResubmitOrderMutation, IResubmitOrderRequest>(
       GQL_MUTATIONS.resubmitOrder,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "resubmitOrder" in data === false) {
+      throw data;
+    }
+
     return data.resubmitOrder;
   } catch (error) {
     // eslint-disable-next-line no-console

@@ -1,10 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
-import { getProductList } from "../../../../../network-actions/products";
+import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
@@ -35,6 +36,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   shareSuccess,
   updatePrsShowBy,
 }: PRSProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.prs;
   const [loading, setLoading] = useState<boolean>(false);
   const list = showBy === "recommended" ? recommended : all;
@@ -59,7 +61,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
-    const req = {
+    const request = {
       tab: "prs",
       fundType: filters.fundType![0] || "",
       fundCurrency: filters.fundCurrency || [],
@@ -74,8 +76,8 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       search: search,
     };
     // eslint-disable-next-line no-console
-    console.log("productList", req);
-    const productListResponse: IProductListResponse = await getProductList(req);
+    console.log("productList request", request);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -156,7 +158,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   };
 
   const handleSelectProduct = (product: IProduct) => {
-    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundId === product.fundId);
+    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundCode === product.fundCode);
     const newSelectedFunds = [...selectedFunds];
     if (sectionIndex === -1) {
       newSelectedFunds.push(product);
@@ -210,6 +212,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
         loading={loading}
         page={defaultPage}
         pages={defaultPages}
+        // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         productType={productType}
         selectedFunds={selectedFunds}

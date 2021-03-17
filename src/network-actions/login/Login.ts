@@ -1,13 +1,26 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql";
+import { responseHandler } from "../../utils/ResponseHandler";
 
 export const login = async (variables: ILoginRequest, headers: ILoginHeader) => {
   try {
-    const data: ILoginMutation = await gqlOperation<ILoginMutation, ILoginRequest>(GQL_MUTATIONS.userLogin, variables, headers);
+    const data: ILoginMutation = await responseHandler<ILoginMutation, ILoginRequest>(
+      GQL_MUTATIONS.userLogin,
+      variables,
+      headers,
+      undefined,
+      undefined,
+      false,
+    );
+
+    if (data === undefined || "userLogin" in data === false) {
+      throw data;
+    }
+
     return data.userLogin;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in login line 10 at Login.ts", error);
+    console.log("Error in login at Login.ts", error);
+
     return error;
   }
 };

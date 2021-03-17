@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -57,6 +58,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   setPage,
   setPrincipalOtp,
 }: EmailOTPProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
@@ -80,12 +82,14 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   const handleVerifyOTP = async () => {
     setPrincipalError(undefined);
     const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
-    const req = {
+    const request = {
       clientId: principalClientId,
       principalHolder: { email: principalEmail, code: principalOtp },
       jointHolder: jointRequest,
     };
-    const response: IEmailOtpVerificationResponse = await emailOtpVerification(req);
+    // eslint-disable-next-line no-console
+    console.log("emailOtpVerification request", request);
+    const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {

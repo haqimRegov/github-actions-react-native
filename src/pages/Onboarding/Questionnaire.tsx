@@ -67,10 +67,12 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   agent,
   handleCancelOnboarding,
   handleNextStep,
+  navigation,
   onboarding,
   principalHolder,
   questionnaire,
   resetRiskAssessment,
+  resetSelectedFund,
   resetProducts,
   riskScore,
   setLoading,
@@ -132,7 +134,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     };
     // eslint-disable-next-line no-console
     console.log("request", request);
-    const response: IGetRiskProfileResponse = await getRiskProfile(request);
+    const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
@@ -159,6 +161,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (findProducts === -1) {
       updatedDisabledSteps.push("Products");
     }
+    resetSelectedFund();
     return updateOnboarding({ ...onboarding, finishedSteps: [], disabledSteps: updatedDisabledSteps });
   };
 

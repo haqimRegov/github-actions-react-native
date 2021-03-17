@@ -1,17 +1,25 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql";
+import { responseHandler } from "../../utils";
 
 export const resetPassword = async (variables: IResetPasswordRequest, headers: IResetPasswordHeader) => {
   try {
-    const data = await gqlOperation<IResetPasswordMutation, IResetPasswordRequest, IResetPasswordHeader>(
+    const data = await responseHandler<IResetPasswordMutation, IResetPasswordRequest, IResetPasswordHeader>(
       GQL_MUTATIONS.resetPassword,
       variables,
       headers,
+      undefined,
+      undefined,
+      false,
     );
-    return data?.resetPassword;
+
+    if (data === undefined || "resetPassword" in data === false) {
+      throw data;
+    }
+
+    return data.resetPassword;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in resetPassword line 10 at ResetPassword.ts", error);
+    console.log("Error in resetPassword at ResetPassword.ts", error);
     return error;
   }
 };

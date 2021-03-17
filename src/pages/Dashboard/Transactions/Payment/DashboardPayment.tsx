@@ -36,7 +36,7 @@ interface DashboardPaymentProps extends TransactionsStoreProps {
 }
 
 const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (props: DashboardPaymentProps) => {
-  const { setLoading, setScreen, currentOrder, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setLoading, setScreen, updateCurrentOrder } = props;
   const [paymentOrder, setPaymentOrder] = useState<IPaymentOrderState | undefined>(undefined);
   // const [successMessage, setSuccessMessage] = useState<string>("");
 
@@ -50,12 +50,12 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   };
 
   const handleFetch = async () => {
-    const req: IGetPaymentRequiredRequest = {
+    const request: IGetPaymentRequiredRequest = {
       orderNumber: currentOrder!.orderNumber,
     };
     // eslint-disable-next-line no-console
-    console.log("getPaymentRequired", req);
-    const response: IGetPaymentRequiredResponse = await getPaymentRequired(req);
+    console.log("getPaymentRequired request", request);
+    const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation);
     if (response !== undefined) {
       // eslint-disable-next-line no-console
       console.log("response", response);
@@ -113,7 +113,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
     const request = { orders: paymentOrders };
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments request", request);
-    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request);
+    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments", paymentResponse);
     setLoading(false);

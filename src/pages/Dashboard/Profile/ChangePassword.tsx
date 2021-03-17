@@ -24,10 +24,11 @@ import { Encrypt, isPassword } from "../../../utils";
 const { PROFILE } = Language.PAGE;
 declare interface ChangePasswordProps extends GlobalStoreProps {
   page: "profile" | "password";
+  navigation: IStackNavigationProp;
   setPage: (page: "profile" | "password") => void;
 }
 
-const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ config, setPage }: ChangePasswordProps) => {
+const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ config, navigation, setPage }: ChangePasswordProps) => {
   const [prompt, setPrompt] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
@@ -51,8 +52,8 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
       confirmPassword: encryptedRetypePassword,
     };
     // eslint-disable-next-line no-console
-    console.log("request", request);
-    const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken });
+    console.log("changePassword request", request);
+    const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken }, navigation);
     // eslint-disable-next-line no-console
     console.log("response", response);
     if (response !== undefined) {

@@ -31,15 +31,18 @@ import { PaymentOrder, PaymentStatus } from "../../../templates";
 import { formatAmount, parseAmountToString } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
-interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {}
+interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {
+  navigation: IStackNavigationProp;
+}
 
 const PaymentComponent: FunctionComponent<PaymentProps> = ({
   accountType,
   details,
-  orders,
-  personalInfo,
   handleResetOnboarding,
+  navigation,
+  orders,
   paymentSummary,
+  personalInfo,
   setLoading,
   updatePaymentSummary,
 }: PaymentProps) => {
@@ -75,7 +78,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     const request = { orders: paymentOrders };
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments request", request);
-    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request);
+    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments", paymentResponse);
     setLoading(false);

@@ -41,7 +41,7 @@ interface InboxPageProps extends GlobalStoreProps {
   handleRoute: (route: DashboardPageType) => void;
 }
 
-const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages, updatedUnreadMessages }: InboxPageProps) => {
+const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unreadMessages, updatedUnreadMessages }: InboxPageProps) => {
   const [inboxList, setInboxList] = useState<IInbox>({
     notifications: [],
     newMessageCount: "",
@@ -60,7 +60,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
     const request: IGetInboxRequest = { page: newPage, search: inputSearch };
     // eslint-disable-next-line no-console
     console.log("request", request);
-    const response: IGetInboxResponse = await getInbox(request);
+    const response: IGetInboxResponse = await getInbox(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -118,8 +118,8 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ unreadMessages,
   const handleRead = async (id: string) => {
     const request: IUpdateInboxRequest = { notificationIds: [id] };
     // eslint-disable-next-line no-console
-    console.log("request", request);
-    const response: IUpdateInboxResponse = await updateInbox(request);
+    console.log("updateInbox request", request);
+    const response: IUpdateInboxResponse = await updateInbox(request, navigation);
     // setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;

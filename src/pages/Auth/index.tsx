@@ -33,7 +33,7 @@ export const AuthPage: FunctionComponent<LoginPageProps> = ({ navigation }: Logi
     content = <Registration setRootPage={setPage} setPasswordRecovery={setPasswordRecovery} />;
   }
 
-  if (page === "LOGIN" || page === "LOCKED_ACCOUNT") {
+  if (page === "LOGIN" || page === "LOCKED_ACCOUNT" || page === "LOCKED_PASSWORD") {
     content = <Login navigation={navigation} page={page} passwordRecovery={passwordRecovery} setRootPage={setPage} />;
   }
 

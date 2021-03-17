@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { AdvanceTable, CustomSpacer, EmptyTable, LinkText, MenuPopup } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { IcoMoon } from "../../../../../icons";
-import { getDashboard, resubmitOrder } from "../../../../../network-actions/dashboard";
+import { getDashboard, resubmitOrder } from "../../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
   centerHorizontal,
@@ -57,6 +57,7 @@ export interface PendingOrdersProps extends TransactionsStoreProps {
 const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   activeTab,
   handlePrintSummary,
+  navigation,
   pending,
   resetSelectedOrder,
   search,
@@ -273,7 +274,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     };
     // eslint-disable-next-line no-console
     console.log("getDashboard request", request);
-    const dashboardResponse: IDashboardResponse = await getDashboard(request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
 
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
@@ -305,7 +306,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const request: IResubmitOrderRequest = { orderNumber: orderNumber };
     // eslint-disable-next-line no-console
     console.log("resubmitOrder request", request);
-    const response: IResubmitOrderResponse = await resubmitOrder(request);
+    const response: IResubmitOrderResponse = await resubmitOrder(request, navigation);
     // eslint-disable-next-line no-console
     console.log("resubmitOrder response", response);
 

@@ -56,12 +56,12 @@ interface ProfileProps extends GlobalStoreProps {
   handleRoute: (route: DashboardPageType) => void;
 }
 
-const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfileProps) => {
+const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }: ProfileProps) => {
   const [agentProfile, setAgentProfile] = useState<IGetAgentProfileResult | undefined>(undefined);
   const [page, setPage] = useState<"profile" | "password">("profile");
 
   const handleFetch = async () => {
-    const response: IGetAgentProfileResponse = await getAgentProfile({});
+    const response: IGetAgentProfileResponse = await getAgentProfile({}, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -93,6 +93,7 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfilePro
 
   useEffect(() => {
     handleFetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initials = agent!
@@ -208,7 +209,7 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent }: ProfilePro
           </View>
         </ScrollView>
       ) : (
-        <ChangePassword page={page} setPage={setPage} />
+        <ChangePassword page={page} navigation={navigation} setPage={setPage} />
       )}
     </Fragment>
   );

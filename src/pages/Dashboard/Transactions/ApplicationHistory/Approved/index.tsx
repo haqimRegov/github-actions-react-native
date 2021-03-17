@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { AdvanceTable, CustomSpacer, EmptyTable, LinkText, MenuPopup } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { IcoMoon } from "../../../../../icons";
-import { getDashboard } from "../../../../../network-actions/dashboard";
+import { getDashboard } from "../../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
   centerVertical,
@@ -47,6 +47,7 @@ export interface ApprovedOrdersProps extends TransactionsStoreProps {
 const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   activeTab,
   approved,
+  navigation,
   setScreen,
   search,
   transactions,
@@ -192,7 +193,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     };
     // eslint-disable-next-line no-console
     console.log("getDashboard request", request);
-    const dashboardResponse: IDashboardResponse = await getDashboard(request);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
     setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

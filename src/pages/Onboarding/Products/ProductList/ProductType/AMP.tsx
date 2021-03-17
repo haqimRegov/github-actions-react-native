@@ -1,10 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
-import { getProductList } from "../../../../../network-actions/products";
+import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
@@ -37,6 +38,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   shareSuccess,
   updateAmpShowBy,
 }: AMPProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.amp;
   const [loading, setLoading] = useState<boolean>(false);
   const list = showBy === "recommended" ? recommended : all;
@@ -79,8 +81,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       tab: "amp",
     };
     // eslint-disable-next-line no-console
-    console.log("productList", request);
-    const productListResponse: IProductListResponse = await getProductList(request);
+    console.log("productList request", request);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -161,7 +163,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   };
 
   const handleSelectProduct = (product: IProduct) => {
-    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundId === product.fundId);
+    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundCode === product.fundCode);
     const newSelectedFunds = [...selectedFunds];
     if (sectionIndex === -1) {
       newSelectedFunds.push(product);
@@ -215,6 +217,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
+        // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         selectedFunds={selectedFunds}
         setViewFund={addViewFund}

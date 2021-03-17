@@ -1,18 +1,28 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const submitClientAccount = async (variables: ISubmitClientAccountRequest, handleError?: ResponseErrorType) => {
+export const submitClientAccount = async (
+  variables: ISubmitClientAccountRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data = await gqlOperation<ISubmitClientAccountMutation, ISubmitClientAccountRequest>(
+    const data = await responseHandler<ISubmitClientAccountMutation, ISubmitClientAccountRequest>(
       GQL_MUTATIONS.submitClientAccount,
       variables,
       undefined,
+      navigation,
       handleError,
     );
-    return data?.submitClientAccount;
+
+    if (data === undefined || "submitClientAccount" in data === false) {
+      throw data;
+    }
+
+    return data.submitClientAccount;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in submitClientAccount line 15 at SubmitClientAccount.ts", error);
+    console.log("Error in submitClientAccount at SubmitClientAccount.ts", error);
     return error;
   }
 };

@@ -16,4 +16,5 @@ declare interface IProductInvestment {
   scheduledInvestment: boolean;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;
+  prsType?: TypePrs;
 }

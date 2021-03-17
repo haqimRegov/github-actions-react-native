@@ -1,18 +1,28 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const getRiskProfile = async (variables: IGetRiskProfileRequest, handleError?: ResponseErrorType) => {
+export const getRiskProfile = async (
+  variables: IGetRiskProfileRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data = await gqlOperation<IGetRiskProfileMutation, IGetRiskProfileRequest>(
+    const data = await responseHandler<IGetRiskProfileMutation, IGetRiskProfileRequest>(
       GQL_MUTATIONS.riskAssessment,
       variables,
       undefined,
+      navigation,
       handleError,
     );
-    return data?.riskAssessment;
+
+    if (data === undefined || "riskAssessment" in data === false) {
+      throw data;
+    }
+
+    return data.riskAssessment;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getRiskProfile line 15 at GetRiskProfile.ts", error);
+    console.log("Error in getRiskProfile at GetRiskProfile.ts", error);
     return error;
   }
 };

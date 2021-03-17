@@ -79,7 +79,8 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
           />
           <CustomSpacer space={sh24} />
           {investmentDetails.map((product: IProductSales, index: number) => {
-            const { fundType, fundName, issuingHouse } = product.fundDetails;
+            const { fundType, fundName, issuingHouse, prsType } = product.fundDetails;
+            const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
             const newData = [...investmentDetails];
 
             const handleDelete = () => {
@@ -117,7 +118,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                   <CustomSpacer space={sh24} />
                   <View style={px(sw24)}>
                     <View style={{ ...centerVertical, ...flexRow }}>
-                      <Text style={fs10BoldBlack2}>{fundType}</Text>
+                      <Text style={fs10BoldBlack2}>{type}</Text>
                       <CustomFlexSpacer />
                       <IcoMoon name="trash" color={colorBlue._2} onPress={handleDelete} size={sh32} />
                     </View>

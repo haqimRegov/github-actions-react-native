@@ -36,6 +36,8 @@ declare interface IProductPerformance {
   details: string;
 }
 
+declare type TypePrs = "selfSelect" | "prsDefault";
+
 declare interface IProduct {
   // performanceOverview: IProductPerformance;
   ampFee: string;
@@ -44,6 +46,7 @@ declare interface IProduct {
   fundAbbr: string;
   fundCategory: string;
   fundClasses: string[];
+  fundCode: string;
   fundCurrencies: string[];
   fundId: string;
   fundName: string;
@@ -51,7 +54,7 @@ declare interface IProduct {
   fundType: string;
   isEpf: string;
   isEpfOnly: string;
-  isPrsDefault: string;
+  prsType: TypePrs;
   isScheduled: string;
   issuingHouse: string;
   isSyariah: string;

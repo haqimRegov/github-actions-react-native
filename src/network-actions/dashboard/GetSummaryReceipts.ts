@@ -1,14 +1,24 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const getSummaryReceipt = async (variables: ISummaryReceiptRequest, handleError?: ResponseErrorType) => {
+export const getSummaryReceipt = async (
+  variables: ISummaryReceiptRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data = await gqlOperation<ISummaryReceiptMutation, ISummaryReceiptRequest>(
+    const data = await responseHandler<ISummaryReceiptMutation, ISummaryReceiptRequest>(
       GQL_MUTATIONS.summaryReceipt,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "summaryReceipt" in data === false) {
+      throw data;
+    }
+
     return data.summaryReceipt;
   } catch (error) {
     // eslint-disable-next-line no-console

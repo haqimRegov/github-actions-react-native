@@ -1,18 +1,28 @@
 import { GQL_MUTATIONS } from "../../integrations";
-import { gqlOperation } from "../../integrations/graphql/functions";
+import { responseHandler } from "../../utils";
 
-export const emailOtpVerification = async (variables: IEmailOtpVerificationRequest, handleError?: ResponseErrorType) => {
+export const emailOtpVerification = async (
+  variables: IEmailOtpVerificationRequest,
+  navigation: IStackNavigationProp,
+  handleError?: ResponseErrorType,
+) => {
   try {
-    const data = await gqlOperation<IEmailOtpVerificationMutation, IEmailOtpVerificationRequest>(
+    const data = await responseHandler<IEmailOtpVerificationMutation, IEmailOtpVerificationRequest>(
       GQL_MUTATIONS.emailOtpVerification,
       variables,
       undefined,
+      navigation,
       handleError,
     );
+
+    if (data === undefined || "emailOtpVerification" in data === false) {
+      throw data;
+    }
+
     return data.emailOtpVerification;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in emailOtpVerification line 15 at EmailOTPVerification.ts", error);
+    console.log("Error in emailOtpVerification at EmailOTPVerification.ts", error);
     return error;
   }
 };

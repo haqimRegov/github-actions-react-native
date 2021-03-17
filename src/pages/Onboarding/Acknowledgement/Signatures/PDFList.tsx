@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
@@ -32,6 +33,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   updateOnboarding,
   updateReceipts,
 }: PDFListProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const { clientId } = details!.principalHolder!;
   const [showPrompt, setShowPrompt] = useState(false);
 
@@ -46,13 +48,13 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         pdf: receipt.signedPdf!,
       };
     });
-    const req: ISubmitPdfRequest = {
+    const request: ISubmitPdfRequest = {
       clientId: clientId!,
       documents: documents,
     };
     // eslint-disable-next-line no-console
-    console.log("req", req);
-    const submitPdfResponse: ISubmitPdfResponse = await submitPdf(req);
+    console.log("submitPdf request", request);
+    const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation);
     setLoading(false);
     // eslint-disable-next-line no-console
     console.log("submitPdfResponse", submitPdfResponse);
@@ -84,12 +86,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const getReceiptSummary = async () => {
     setLoading(true);
-    const req = {
+    const request = {
       clientId: clientId!,
     };
     // eslint-disable-next-line no-console
-    console.log("getReceiptSummaryList request", req);
-    const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(req);
+    console.log("getReceiptSummaryList request", request);
+    const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation);
     setLoading(false);
     // eslint-disable-next-line no-console
     console.log("getReceiptSummaryList", summary);
@@ -109,13 +111,13 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const handleGetPDF = async (receipt: IOnboardingReceiptState, index: number) => {
     setLoading(true);
-    const req = {
+    const request = {
       clientId: clientId!,
       orderNo: receipt.orderNumber!,
     };
     // eslint-disable-next-line no-console
-    console.log("generatePdf request", req);
-    const onboardingReceipt: IGeneratePdfResponse = await generatePdf(req);
+    console.log("generatePdf request", request);
+    const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation);
     setLoading(false);
     // eslint-disable-next-line no-console
     console.log("generatePdf", onboardingReceipt);

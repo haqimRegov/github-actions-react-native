@@ -42,9 +42,11 @@ export const ERROR_CODE = {
   clientBannedCountry: "EM602",
   internal: "OMNI400",
   unauthenticated: "OMNI401",
+  network: "OMNI402",
 };
 
 export const ERRORS = {
   internal: { errorCode: ERROR_CODE.internal, message: "Something went wrong", statusCode: "400" },
-  unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Your session token has expired", statusCode: "401" },
+  network: { errorCode: ERROR_CODE.network, message: "No Internet Connection", statusCode: "402" },
+  unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Please log in again.", statusCode: "401" },
 };

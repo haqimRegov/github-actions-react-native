@@ -4,6 +4,7 @@ import { GlobalActionProps } from "../Global/actions";
 import { OnboardingActionProps } from "../Onboarding/actions";
 import { ProductsActionProps } from "../Products/actions";
 import { RootState } from "../rootReducer";
+import { SelectedFundActionProps } from "../SelectedFund";
 import { RiskAssessmentActionProps } from "./actions";
 
 export const RiskMapStateToProps = (state: RootState) => ({
@@ -18,7 +19,7 @@ export const RiskMapStateToProps = (state: RootState) => ({
 
 export const RiskMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
-    { ...RiskAssessmentActionProps, ...ProductsActionProps, ...GlobalActionProps, ...OnboardingActionProps },
+    { ...RiskAssessmentActionProps, ...ProductsActionProps, ...GlobalActionProps, ...OnboardingActionProps, ...SelectedFundActionProps },
     dispatch,
   );
 };

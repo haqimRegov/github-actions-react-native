@@ -7,4 +7,4 @@ declare type RootNavigatorType = {
 
 declare type IStackNavigationProp = import("@react-navigation/stack").StackNavigationProp<RootNavigatorType>;
 
-declare type TypeLoginPages = "LOGIN" | "PASSWORD_RECOVERY" | "FIRST_TIME_LOGIN" | "LOCKED_ACCOUNT";
+declare type TypeLoginPages = "LOGIN" | "PASSWORD_RECOVERY" | "FIRST_TIME_LOGIN" | "LOCKED_ACCOUNT" | "LOCKED_PASSWORD";

@@ -158,7 +158,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   };
 
   const handleSelectProduct = (product: IProduct) => {
-    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundId === product.fundId);
+    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundCode === product.fundCode);
     const newSelectedFunds = [...selectedFunds];
     if (sectionIndex === -1) {
       newSelectedFunds.push(product);
@@ -212,6 +212,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
         loading={loading}
         page={defaultPage}
         pages={defaultPages}
+        // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         productType={productType}
         selectedFunds={selectedFunds}

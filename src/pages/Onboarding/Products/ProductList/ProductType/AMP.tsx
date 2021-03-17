@@ -163,7 +163,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   };
 
   const handleSelectProduct = (product: IProduct) => {
-    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundId === product.fundId);
+    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundCode === product.fundCode);
     const newSelectedFunds = [...selectedFunds];
     if (sectionIndex === -1) {
       newSelectedFunds.push(product);
@@ -217,6 +217,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
+        // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         selectedFunds={selectedFunds}
         setViewFund={addViewFund}

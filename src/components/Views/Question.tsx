@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { LabeledTitle } from "../../components/Views/LabeledTitle";
 import { flexRow, fs10BoldBlack2, fs16BoldBlack2, sh16, sh8, sw600 } from "../../styles";
-import { RadioButtonGroup } from "../RadioButton/RadioButtonGroup";
+import { AdvanceToggleButton } from "../ToggleButton/AdvanceToggleButton";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 
 export interface QuestionContentProps {
@@ -20,9 +20,9 @@ export interface QuestionProps extends QuestionContentProps {
 }
 
 export const Question = ({ label, options, RenderContent, right, selected, setSelected, spaceToContent, title }: QuestionProps) => {
-  const handleSelect = (answer: string) => {
+  const handleSelect = (index: TypeAdvanceToggleButtonValue) => {
     if (options !== undefined) {
-      setSelected(options?.indexOf(answer));
+      setSelected(index);
     }
   };
 
@@ -41,7 +41,7 @@ export const Question = ({ label, options, RenderContent, right, selected, setSe
       ) : (
         <View style={flexRow}>
           {options !== undefined ? (
-            <RadioButtonGroup direction="column" options={options} selected={options[selected]} setSelected={handleSelect} />
+            <AdvanceToggleButton direction="column" labels={options} value={selected} onSelect={handleSelect} />
           ) : null}
           <CustomFlexSpacer />
           {right !== undefined ? right : null}

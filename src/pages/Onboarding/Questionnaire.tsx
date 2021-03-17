@@ -200,11 +200,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const disabled =
     questionTwo === -1 ||
-    questionThree === -1 ||
     questionFour === -1 ||
     questionFive === -1 ||
     questionSix === -1 ||
-    questionSeven === -1 ||
     questionEight === -1 ||
     (questionEight !== 0 && questionNine === -1);
 
@@ -325,7 +323,8 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                           const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
 
                           const handleSelect = () => {
-                            setSelected(options!.indexOf(option));
+                            const newIndex = options!.indexOf(option);
+                            setSelected(newIndex !== questionNine ? newIndex : -1);
                           };
 
                           const iconColor = index === selected ? colorWhite._1 : colorBlue._2;

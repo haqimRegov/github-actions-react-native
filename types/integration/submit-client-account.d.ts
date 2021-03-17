@@ -11,6 +11,7 @@ declare interface ISubmitInvestment {
   fundClass?: string;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;
+  prsType?: TypePrs;
 }
 
 declare interface ISubmitBank {

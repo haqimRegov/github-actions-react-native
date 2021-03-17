@@ -72,6 +72,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   principalHolder,
   questionnaire,
   resetRiskAssessment,
+  resetSelectedFund,
   resetProducts,
   riskScore,
   setLoading,
@@ -160,6 +161,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (findProducts === -1) {
       updatedDisabledSteps.push("Products");
     }
+    resetSelectedFund();
     return updateOnboarding({ ...onboarding, finishedSteps: [], disabledSteps: updatedDisabledSteps });
   };
 

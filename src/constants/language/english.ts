@@ -712,7 +712,7 @@ export const english = {
       HEADING: "Acknowledgement",
       SUBHEADING: "Order Summary",
       INFO:
-        "1. Any excess payment will be refunded directly to the client. 2. Please ensure that the proof of payment and necessary documents are submitted within 10 days of account opening to avoid the account from becoming void.",
+        "1. Any excess payment will be refunded directly to the investor. 2. Please ensure that the proof of payment and necessary documents are submitted within 10 days of account opening to avoid the account from becoming void.",
 
       LABEL_ADD_MAILING_ADDRESS: "Add Mailing Address",
       LABEL_CHANNEL: "Income Distribution Channel",
@@ -734,7 +734,7 @@ export const english = {
       LABEL_UPLOAD_LATER: "I will upload this document later",
       LABEL_UPLOAD_PROOF_OF_ADDRESS: "Upload your proof of address",
       POPUP_ORDER_SUMMARY:
-        "1. Any excess payment will be refunded directly to the client.\n2. Please ensure that the proof of payment and necessary documents are submitted within 10 days of account opening to avoid the account from becoming void.",
+        "1. Any excess payment will be refunded directly to the investor.\n2. Please ensure that the proof of payment and necessary documents are submitted within 10 days of account opening to avoid the account from becoming void.",
     },
     PAGINATION: {
       LABEL_OUT_OF: "out of",
@@ -838,12 +838,12 @@ export const english = {
       OPTION_COMBINED: "Combined",
       PROMPT_CHECKBOX_LABEL: "This is under the assumption that the proof of payment and supporting documents are in transaction.",
       PROMPT_HINT:
-        "Your completed investment will be processed today / today + 3 days provided you have met the terms and conditions below.",
+        "Your completed investment will be processed within the next 3 business days provided you have met the terms and conditions below.",
       PROMPT_SUBTITLE_PENDING:
         "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete submission",
       PROMPT_SUBTITLE_PENDING_FLOATING:
-        "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete submission\n\n4. Your client has a floating amount in their account. This amount will be refunded.",
-      PROMPT_SUBTITLE_SUBMITTED_FLOATING: "Your client has a floating amount in their account. This amount will be refunded.",
+        "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete submission\n\n4. Your investor has a floating amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_SUBMITTED_FLOATING: "Your investor has a floating amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE: "All unsaved progress will be discarded.",
       PROMPT_TITLE_CANCEL: "Are you sure you want to cancel?",
       PROMPT_TITLE_ORDER: "Your completed order(s) have been\nsubmitted successfully",

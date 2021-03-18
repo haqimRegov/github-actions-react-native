@@ -95,6 +95,14 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     }
   };
 
+  const handleCurrency = (value: string) => {
+    if (masterClassList !== undefined) {
+      const indexOfCurrency = masterClassList[inputClass].findIndex(({ currency }) => currency === value);
+      setInputCurrency(value);
+      setFilteredCurrency(masterClassList[inputClass][indexOfCurrency]);
+    }
+  };
+
   const handleClass = (value: string) => {
     if (masterClassList !== undefined) {
       const newCurrency = masterClassList[value][0].currency;
@@ -226,7 +234,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
                     </Fragment>
                   ) : null}
                   <AdvancedDropdown
-                    handleChange={setInputCurrency}
+                    handleChange={handleCurrency}
                     items={currencies}
                     label={PRODUCT_DETAILS.LABEL_CURRENCY}
                     value={inputCurrency}

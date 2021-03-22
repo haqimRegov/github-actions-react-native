@@ -105,7 +105,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
       <View style={defaultInputStyle}>
         {inputPrefix !== undefined ? (
           <Fragment>
-            <Text style={{ ...fs16RegBlack2, ...prefixStyle }}>{inputPrefix}</Text>
+            <Text style={{ ...fs16RegBlack2, ...disabledStyle, ...prefixStyle }}>{inputPrefix}</Text>
             <CustomSpacer isHorizontal={true} space={sw8} />
           </Fragment>
         ) : null}

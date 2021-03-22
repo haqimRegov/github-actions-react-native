@@ -594,13 +594,13 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                             ) : (
                               <View>
                                 <CustomTextInput
+                                  disabled={payment.paymentMethod! === "EPF"}
                                   error={amountError}
                                   keyboardType="numeric"
                                   label={PAYMENT.LABEL_AMOUNT}
                                   inputPrefix={payment.currency}
                                   onBlur={checkAmount}
                                   onChangeText={setAmount}
-                                  prefixStyle={fs16RegBlack2}
                                   value={payment.amount}
                                 />
                               </View>
@@ -632,7 +632,6 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                                   inputPrefix={payment.currency}
                                   onBlur={checkAmount}
                                   onChangeText={setAmount}
-                                  prefixStyle={fs16RegBlack2}
                                   value={payment.amount}
                                 />
                               </View>

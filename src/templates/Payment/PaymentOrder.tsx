@@ -92,6 +92,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
 
   const generateNewPaymentDraft = () => {
     const initialCurrency = orderTotalAmount.length > 1 ? "" : orderTotalAmount[0].currency;
+    const initialAmount = orderTotalAmount.length > 1 ? "" : orderTotalAmount[0].amount;
     let initialState: IPaymentState = {};
     const kibCurrencyIndex = DICTIONARY_KIB_BANK_ACCOUNTS.findIndex((bank) => bank.currency === initialCurrency);
     const kibBank = kibCurrencyIndex !== -1 ? DICTIONARY_KIB_BANK_ACCOUNTS[kibCurrencyIndex] : DICTIONARY_KIB_BANK_ACCOUNTS[0];
@@ -128,6 +129,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         break;
       case "EPF":
         initialState = {
+          amount: formatAmount(initialAmount),
           currency: initialCurrency,
           paymentMethod: "EPF",
           epfAccountNumber: epfAccountNumber,

@@ -73,7 +73,10 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
 
           completed: false,
           floatingAmount: [],
-          totalPaidAmount: data.result.totalPaidAmount,
+          totalPaidAmount:
+            currentOrder!.status === "BR - Rerouted" || currentOrder!.status === "HQ - Rerouted" || data.result.totalPaidAmount === null
+              ? []
+              : data.result.totalPaidAmount,
           paymentCount: data.result.paymentCount,
         };
         setPaymentOrder(newOrders);

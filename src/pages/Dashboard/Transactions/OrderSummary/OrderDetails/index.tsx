@@ -149,6 +149,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
 
               if (payment.paymentMethod === "EPF") {
                 paymentDetails.push(
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_AMOUNT,
+                    title: `${payment.fundCurrency} ${payment.investmentAmount}`,
+                    titleStyle: fsTransformNone,
+                  },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_ACCOUNT, title: payment.epfAccountNumber! },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_REFERENCE, title: payment.epfReferenceNo! },

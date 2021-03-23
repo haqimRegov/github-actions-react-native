@@ -80,7 +80,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         isInvestmentEpf = true;
       }
       return {
-        fundId: fundDetails.fundId,
+        fundId: investment.fundId!,
         fundingOption: investment.fundPaymentMethod, // TODO backend to fix
         fundClass: investment.fundClass !== "noClass" ? investment.fundClass : "",
         fundCurrency: investment.fundCurrency!,

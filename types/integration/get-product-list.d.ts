@@ -85,6 +85,7 @@ declare interface IProduct {
 declare interface IProductMasterList {
   class: string;
   currency: string;
+  fundId: string;
   newSalesAmount: IProductNewSalesAmount;
   salesCharge: IProductSalesCharge;
   topUpAmount: IProductTopUpAmount;

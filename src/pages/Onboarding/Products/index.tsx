@@ -78,7 +78,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
       const newState: IProductSales = {
         investment: {
-          fundId: item.fundId,
+          fundId: item.masterList[0].fundId,
           fundPaymentMethod: item.isEpfOnly === "Yes" ? "EPF" : "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",

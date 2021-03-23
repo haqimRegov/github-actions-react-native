@@ -164,13 +164,16 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   };
 
   const handleCurrency = (value: string) => {
-    setData({ ...data, investment: { ...investment, fundCurrency: value } });
+    const newClassCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === value);
+    const newFundId = masterClassList[fundClass!][newClassCurrencyIndex].fundId;
+    setData({ ...data, investment: { ...investment, fundCurrency: value, fundId: newFundId } });
   };
 
   const handleClass = (value: string) => {
     const newCurrency = masterClassList[value][0].currency;
+    const newFundId = masterClassList[value][0].fundId;
     // setFilteredCurrency(masterClassList[value][0]);
-    setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency } });
+    setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency, fundId: newFundId } });
   };
 
   const handleSalesCharge = (value: string) => {

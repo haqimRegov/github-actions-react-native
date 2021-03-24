@@ -110,7 +110,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 1,
                 {
                   label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_AMOUNT,
-                  title: `${DICTIONARY_RECURRING_CURRENCY} ${investment.investmentAmount}`,
+                  title: `${DICTIONARY_RECURRING_CURRENCY} ${investment.scheduledPayment}`,
                   titleStyle: fsTransformNone,
                 },
                 { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_SALES_CHARGE, title: investment.salesCharge },

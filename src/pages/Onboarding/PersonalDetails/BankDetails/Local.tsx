@@ -103,7 +103,10 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
         };
         const handleAccountNumber = (input: string) => {
           const updatedDetails = [...bankingDetails];
-          updatedDetails[index].bankAccountNumber = input;
+          if (isNumber(input) === true || input === "") {
+            updatedDetails[index].bankAccountNumber = input;
+            updatedDetails[index].bankAccountNumberError = input === "" ? ERROR.INVALID_BANK_NUMBER : undefined;
+          }
           setBankingDetails(updatedDetails);
         };
 

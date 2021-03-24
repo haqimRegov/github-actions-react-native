@@ -3,9 +3,8 @@ import { View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IconButton, MobileInput, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_MOBILE_CODE, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
 import { centerVertical, colorBlack, colorBlue, flexRow, fs12BoldBlue2, px, py, sh16, sh24, sh8, sw16, sw24 } from "../../../styles";
-import { isNumber } from "../../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -49,49 +48,21 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
             setContactNumber(updatedNumber);
           };
 
-          const handleChangeCode = (input: string) => {
+          const handleContactNumber = (data: IContactNumber) => {
             const updatedNumber = [...contactNumber];
-            updatedNumber[index].code = input;
-            setContactNumber(updatedNumber);
-          };
-
-          const handleChangeNumber = (input: string) => {
-            const updatedNumber = [...contactNumber];
-            updatedNumber[index].value = input;
-            setContactNumber(updatedNumber);
-          };
-
-          const checkNumber = () => {
-            const updatedNumber = [...contactNumber];
-            updatedNumber[index].error = isNumber(item.value) === false ? ERROR.INVALID_NUMBER : undefined;
+            updatedNumber[index] = data;
             setContactNumber(updatedNumber);
           };
 
           return (
             <View key={index} style={{ ...centerVertical, ...flexRow }}>
               <View>
-                {/* <CustomTextInput
-                  error={item.error}
-                  inputPrefix={item.code}
-                  keyboardType="numeric"
-                  label={item.label}
-                  onBlur={checkNumber}
-                  onChangeText={handleChangeNumber}
-                  placeholder="12 3456 7890"
-                  spaceToTop={sh24}
-                  value={item.value}
-                /> */}
                 <MobileInput
-                  code={item.code}
-                  onChangeCode={handleChangeCode}
-                  error={item.error}
+                  data={item}
+                  handleContactNumber={handleContactNumber}
                   keyboardType="numeric"
-                  label={item.label}
-                  onBlur={checkNumber}
-                  onChangeText={handleChangeNumber}
                   placeholder="12 3456 7890"
                   spaceToTop={sh24}
-                  value={item.value}
                 />
               </View>
               <CustomSpacer isHorizontal={true} space={sw16} />

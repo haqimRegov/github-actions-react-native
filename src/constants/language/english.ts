@@ -1027,7 +1027,7 @@ export const english = {
       Q8_OPTION_4: "50,001 to 100,000",
       Q8_OPTION_5: "Less than RM 50,000",
       Q9_OPTION_1: "My annual household income is more than RM 400,000",
-      Q9_OPTION_2: "My current net asset is worth more than RM 4,000,000",
+      Q9_OPTION_2: "My current net asset is worth more than RM 3,000,000",
       Q9_OPTION_3: "No, I do not fit in any of these ",
       QUESTION_1: "What is your date of birth?",
       QUESTION_2: "What is your primary investment objective?",

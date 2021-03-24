@@ -74,6 +74,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       isSyariah: filters.shariahApproved![0] || "",
       // netWorth: riskScore.netWorth,
       page: newPage,
+      recommendedRisk: riskScore.appetite,
       riskCategory: riskCategory || [],
       search: search,
       showBy: showBy,

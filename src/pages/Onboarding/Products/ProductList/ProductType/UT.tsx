@@ -71,6 +71,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       isSyariah: filters.shariahApproved![0] || "",
       netWorth: riskScore.netWorth,
       page: newPage,
+      recommendedRisk: riskScore.appetite,
       riskCategory: riskCategory || [],
       search: search,
       showBy: showBy,

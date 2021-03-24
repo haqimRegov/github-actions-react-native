@@ -67,6 +67,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: filters.shariahApproved![0] || "",
+      recommendedRisk: riskScore.appetite,
       riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],

@@ -185,6 +185,7 @@ const getOrderSummary = gql`
             feaTagged
             distributionInstruction
             recurring
+            scheduledPayment
           }
           paymentSummary {
             fundCurrency

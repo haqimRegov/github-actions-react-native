@@ -21,7 +21,7 @@ declare interface IOrderSummaryInvestment {
   productType: string;
   recurring: string;
   salesCharge: string;
-  scheduledInvestmentAmount: string;
+  scheduledPayment: string;
   scheduledSalesCharge: string;
   utmc: string;
 }

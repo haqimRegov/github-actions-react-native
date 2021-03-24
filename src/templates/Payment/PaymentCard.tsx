@@ -249,11 +249,25 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
             const setCurrency = (value: string) => {
               const updatedPayments = [...draftPayments];
               const filteredKibAccount = DICTIONARY_KIB_BANK_ACCOUNTS.filter((bank) => bank.currency === value);
+              const blankCheque =
+                value !== "MYR" && payment.paymentMethod === "Cheque"
+                  ? {
+                      bankName: "",
+                      checkNumber: "",
+                      transactionDate: undefined,
+                    }
+                  : {};
+
               updatedPayments[index] = {
                 ...updatedPayments[index],
                 currency: value as TypeCurrency,
                 kibBankName: filteredKibAccount[0].bankName,
                 kibBankAccountNumber: filteredKibAccount[0].bankAccountNumber,
+                ...blankCheque,
+                paymentMethod:
+                  value !== "MYR" && updatedPayments[index].paymentMethod! === "Cheque"
+                    ? "Online Banking"
+                    : updatedPayments[index].paymentMethod!,
               };
 
               setDraftPayments(updatedPayments);
@@ -266,8 +280,19 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
             };
 
             const setPaymentMethod = (value: string) => {
+              const cleanInfo =
+                value === payment.paymentMethod
+                  ? {}
+                  : {
+                      clientName: "",
+                      clientTrustAccountNumber: "",
+                      bankName: "",
+                      transactionDate: undefined,
+                      checkNumber: "",
+                    };
               const updatedPayments = [...draftPayments];
-              updatedPayments[index].paymentMethod = value as TypePaymentMethod;
+              updatedPayments[index] = { ...updatedPayments[index], paymentMethod: value as TypePaymentMethod, ...cleanInfo };
+
               setDraftPayments(updatedPayments);
             };
 
@@ -554,7 +579,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               { label: "Client Trust Account (CTA)", value: "Client Trust Account (CTA)" },
             ];
 
-            if (currencies.some((currency) => currency.value === "MYR")) {
+            if (currencies.some((currency) => currency.value === "MYR" && payment.currency === "MYR")) {
               paymentMethods.splice(1, 0, { label: "Cheque", value: "Cheque" });
             }
 

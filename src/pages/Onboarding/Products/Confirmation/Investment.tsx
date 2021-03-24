@@ -79,7 +79,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
 
   const salesChargeRange: TypeLabelValue[] = [];
 
-  if (minSalesCharge % 0.5 !== 0 || maxSalesCharge % 0.5 !== 0) {
+  if (minSalesCharge % 0.5 !== 0 || maxSalesCharge % 0.5 !== 0 || minSalesCharge > maxSalesCharge) {
     Alert.alert(
       `There seems to be an issue with ${fundDetails.fundName} (ID: ${fundDetails.fundId}) \n\n If you wish to proceed, please use another fund. Otherwise, please contact support.`,
     );

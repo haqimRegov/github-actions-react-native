@@ -9,6 +9,7 @@ declare interface IProductFilterRequest {
   isSyariah?: string;
   netWorth?: string;
   riskCategory?: string[];
+  recommendedRisk?: string;
 }
 declare interface IProductListRequest extends IProductFilterRequest {
   tab: string;

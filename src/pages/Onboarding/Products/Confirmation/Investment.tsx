@@ -210,7 +210,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
   };
 
-  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass");
+  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
   let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
   switch (fundDetails.fundType) {
     case "PRS":
@@ -252,7 +252,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
       {showMulti === true ? (
         <Fragment>
           <View style={{ ...flexRow, ...px(sw24) }}>
-            {classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass") ? (
+            {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
               <Fragment>
                 <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
                 <CustomSpacer isHorizontal={true} space={sw64} />

@@ -79,14 +79,12 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const setInputGender = (value: string) => setPersonalDetails({ gender: value });
   const setInputMailingAddress = (value: IAddressMultiline) => setMailingInfo({ address: { ...value } });
   const setInputMailingCity = (value: string) => setMailingInfo({ city: value });
-  const setInputMailingCountry = (value: string) => setMailingInfo({ country: value });
   const setInputMailingPostCode = (value: string) => setMailingInfo({ postCode: value });
   const setInputMailingState = (value: string) => setMailingInfo({ state: value });
   const setInputName = (value: string) => setPersonalDetails({ name: value });
   const setInputNationality = (value: string) => setPersonalDetails({ nationality: value });
   const setInputPermanentAddress = (value: IAddressMultiline) => setPermanentInfo({ address: { ...value } });
   const setInputPermanentCity = (value: string) => setPermanentInfo({ city: value });
-  const setInputPermanentCountry = (value: string) => setPermanentInfo({ country: value });
   const setInputPermanentPostCode = (value: string) => setPermanentInfo({ postCode: value });
   const setInputPermanentState = (value: string) => setPermanentInfo({ state: value });
   const setInputPlaceOfBirth = (value: string) => setPersonalDetails({ placeOfBirth: value });
@@ -116,12 +114,37 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
     }
   };
 
+  const setInputPermanentCountry = (input: string) => {
+    if (inputPermanentCountry !== input) {
+      setPermanentInfo({ postCode: "", country: input });
+      setValidations({ ...validations, permanentPostCode: undefined });
+    } else {
+      setPermanentInfo({ country: input });
+    }
+  };
+
+  const setInputMailingCountry = (input: string) => {
+    if (inputMailingCountry !== input) {
+      setMailingInfo({ postCode: "", country: input });
+      setValidations({ ...validations, mailingPostCode: undefined });
+    } else {
+      setMailingInfo({ country: input });
+    }
+  };
+
   const checkPermanentPostCode = () => {
-    setValidations({ ...validations, permanentPostCode: isNumber(inputPermanentPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+    setValidations({
+      ...validations,
+      permanentPostCode:
+        isNumber(inputPermanentPostCode) === false && inputPermanentCountry === "Malaysia" ? ERROR.INVALID_POST_CODE : undefined,
+    });
   };
 
   const checkMailingPostCode = () => {
-    setValidations({ ...validations, mailingPostCode: isNumber(inputMailingPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+    setValidations({
+      ...validations,
+      mailingPostCode: isNumber(inputMailingPostCode) === false && inputMailingCountry === "Malaysia" ? ERROR.INVALID_POST_CODE : undefined,
+    });
   };
 
   const checkName = () => {

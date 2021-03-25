@@ -3,14 +3,7 @@ import { View } from "react-native";
 
 import { AddressField, AdvancedDropdown, CustomSpacer, CustomTextInput } from "../../../components";
 import { Language } from "../../../constants";
-import {
-  DICTIONARY_BUSINESS_NATURE,
-  DICTIONARY_COUNTRIES,
-  DICTIONARY_GROSS_INCOME,
-  DICTIONARY_MALAYSIA_STATES_LIST,
-  DICTIONARY_OCCUPATION,
-  ERROR,
-} from "../../../data/dictionary";
+import { DICTIONARY_BUSINESS_NATURE, DICTIONARY_GROSS_INCOME, DICTIONARY_OCCUPATION, ERROR } from "../../../data/dictionary";
 import { px, sh24, sh32, sw24 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
@@ -44,14 +37,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputAddress = (value: IAddressMultiline) => setEmploymentDetails({ address: { ...value } });
   const setInputBusinessNature = (value: string) => setEmploymentDetails({ businessNature: value });
   const setInputCity = (value: string) => setEmploymentDetails({ city: value });
-  const setInputCountry = (value: string) =>
-    setEmploymentDetails({
-      country: value,
-      state:
-        value === DICTIONARY_COUNTRIES[0].value && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputState as TypeMalaysiaState) === false
-          ? ""
-          : inputState,
-    });
   const setInputEmployerName = (value: string) => setEmploymentDetails({ employerName: value });
   const setInputGross = (value: string) => setEmploymentDetails({ grossIncome: value });
   const setInputOccupation = (value: string) => setEmploymentDetails({ occupation: value });
@@ -59,7 +44,19 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputState = (value: string) => setEmploymentDetails({ state: value });
 
   const checkPermanentPostCode = () => {
-    setValidations({ ...validations, postCode: isNumber(inputPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+    setValidations({
+      ...validations,
+      postCode: isNumber(inputPostCode) === false && inputCountry === "Malaysia" ? ERROR.INVALID_POST_CODE : undefined,
+    });
+  };
+
+  const setInputCountry = (input: string) => {
+    if (inputCountry !== input) {
+      setEmploymentDetails({ postCode: "", country: input });
+      setValidations({ ...validations, postCode: undefined });
+    } else {
+      setEmploymentDetails({ country: input });
+    }
   };
 
   const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;

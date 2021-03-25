@@ -61,7 +61,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     selectedFunds.forEach((item: IProduct) => {
       let newMasterClassList: IProductClasses = {};
       item.masterList.forEach((list: IProductMasterList) => {
-        const dump = { class: list.class !== null ? list.class : "noClass", currency: list.currency };
+        const dump = { class: list.class !== null ? list.class : "No Class", currency: list.currency };
         const findClassIndex = Object.keys(newMasterClassList).indexOf(dump.class);
         if (findClassIndex === -1) {
           newMasterClassList = { ...newMasterClassList, [dump.class]: [list] };
@@ -83,7 +83,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           investmentAmount: "",
           investmentSalesCharge: "",
           fundCurrency: item.masterList[0].currency,
-          fundClass: item.masterList[0].class !== null ? item.masterList[0].class : "noClass",
+          fundClass: item.masterList[0].class !== null ? item.masterList[0].class : "No Class",
           scheduledInvestment: false,
           prsType: item.prsType,
           ...existingInvestmentDetails,

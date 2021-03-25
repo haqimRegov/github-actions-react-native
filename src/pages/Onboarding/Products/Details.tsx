@@ -61,7 +61,7 @@ interface ProductDetailsProps {
 export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, handleBack }: ProductDetailsProps) => {
   const [masterClassList, setMasterClassList] = useState<IProductClasses | undefined>(undefined);
   const [inputCurrency, setInputCurrency] = useState<string>(fund.masterList[0].currency);
-  const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "noClass" : fund.masterList[0].class);
+  const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "No Class" : fund.masterList[0].class);
   const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(fund.masterList[0]);
 
   const { salesCharge, newSalesAmount } = filteredCurrency;
@@ -178,12 +178,12 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
         })
       : [];
 
-  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass");
+  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
 
   useEffect(() => {
     let newMasterClassList: IProductClasses = {};
     fund.masterList.forEach((list: IProductMasterList) => {
-      const dump = { class: list.class !== null ? list.class : "noClass", currency: list.currency };
+      const dump = { class: list.class !== null ? list.class : "No Class", currency: list.currency };
       const findClassIndex = Object.keys(newMasterClassList).indexOf(dump.class);
       if (findClassIndex === -1) {
         newMasterClassList = { ...newMasterClassList, [dump.class]: [list] };
@@ -227,7 +227,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             {showMulti === true ? (
               <Fragment>
                 <View style={{ ...flexRow, ...px(sw24), ...py(sh24) }}>
-                  {classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass") ? (
+                  {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
                     <Fragment>
                       <AdvancedDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
                       <CustomSpacer isHorizontal={true} space={sw64} />

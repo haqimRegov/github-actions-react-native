@@ -82,7 +82,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       return {
         fundId: investment.fundId!,
         fundingOption: investment.fundPaymentMethod, // TODO backend to fix
-        fundClass: investment.fundClass !== "noClass" ? investment.fundClass : "",
+        fundClass: investment.fundClass !== "No Class" ? investment.fundClass : "",
         fundCurrency: investment.fundCurrency!,
         investmentAmount: parseAmountToString(investment.investmentAmount),
         isScheduled: `${investment.scheduledInvestment}`,

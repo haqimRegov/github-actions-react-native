@@ -166,13 +166,22 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   const handleCurrency = (value: string) => {
     const newClassCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === value);
     const newFundId = masterClassList[fundClass!][newClassCurrencyIndex].fundId;
-    setData({ ...data, investment: { ...investment, fundCurrency: value, fundId: newFundId } });
+    setData({
+      ...data,
+      investment: {
+        ...investment,
+        fundCurrency: value,
+        fundId: newFundId,
+        scheduledInvestment: false,
+        scheduledSalesCharge: "",
+        scheduledInvestmentAmount: "",
+      },
+    });
   };
 
   const handleClass = (value: string) => {
     const newCurrency = masterClassList[value][0].currency;
     const newFundId = masterClassList[value][0].fundId;
-    // setFilteredCurrency(masterClassList[value][0]);
     setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency, fundId: newFundId } });
   };
 
@@ -201,7 +210,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
   };
 
-  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass");
+  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
   let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
   switch (fundDetails.fundType) {
     case "PRS":
@@ -243,7 +252,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
       {showMulti === true ? (
         <Fragment>
           <View style={{ ...flexRow, ...px(sw24) }}>
-            {classes.length > 1 || (classes.length === 1 && classes[0].label !== "noClass") ? (
+            {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
               <Fragment>
                 <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
                 <CustomSpacer isHorizontal={true} space={sw64} />
@@ -273,7 +282,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               spaceToBottom={isScheduled === "Yes" ? sh12 : undefined}
               value={investmentAmount}
             />
-            {isScheduled === "Yes" && fundPaymentMethod === "Cash" ? (
+            {isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR" ? (
               <CheckBox
                 label={INVESTMENT.LABEL_RECURRING}
                 labelStyle={fs12BoldBlack2}

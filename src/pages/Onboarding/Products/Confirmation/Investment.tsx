@@ -176,7 +176,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
         scheduledSalesCharge: "",
         scheduledInvestmentAmount: "",
       },
-      fundDetails: { ...fundDetails, isScheduled: value === "MYR" ? "Yes" : "No" },
     });
   };
 

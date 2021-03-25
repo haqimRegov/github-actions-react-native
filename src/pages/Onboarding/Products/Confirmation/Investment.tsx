@@ -166,13 +166,23 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   const handleCurrency = (value: string) => {
     const newClassCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === value);
     const newFundId = masterClassList[fundClass!][newClassCurrencyIndex].fundId;
-    setData({ ...data, investment: { ...investment, fundCurrency: value, fundId: newFundId } });
+    setData({
+      ...data,
+      investment: {
+        ...investment,
+        fundCurrency: value,
+        fundId: newFundId,
+        scheduledInvestment: false,
+        scheduledSalesCharge: "",
+        scheduledInvestmentAmount: "",
+      },
+      fundDetails: { ...fundDetails, isScheduled: value === "MYR" ? "Yes" : "No" },
+    });
   };
 
   const handleClass = (value: string) => {
     const newCurrency = masterClassList[value][0].currency;
     const newFundId = masterClassList[value][0].fundId;
-    // setFilteredCurrency(masterClassList[value][0]);
     setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency, fundId: newFundId } });
   };
 
@@ -273,7 +283,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               spaceToBottom={isScheduled === "Yes" ? sh12 : undefined}
               value={investmentAmount}
             />
-            {isScheduled === "Yes" && fundPaymentMethod === "Cash" ? (
+            {isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR" ? (
               <CheckBox
                 label={INVESTMENT.LABEL_RECURRING}
                 labelStyle={fs12BoldBlack2}

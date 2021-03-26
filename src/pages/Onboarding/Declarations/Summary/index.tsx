@@ -174,12 +174,15 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         ? [joint?.personalDetails?.id?.frontPage!]
         : [joint?.personalDetails?.id?.frontPage!, joint?.personalDetails?.id?.secondPage!];
 
+    const jointAddress = joint!.addressInformation!;
+    delete jointAddress.sameAddress;
+
     const jointDetails =
       accountType === "Joint"
         ? {
             clientId: details!.jointHolder?.clientId!,
             contactDetails: joint!.contactDetails,
-            addressInformation: joint!.addressInformation! as ISubmitAddress,
+            addressInformation: jointAddress,
             declaration: {
               crs: {
                 taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
@@ -222,12 +225,16 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             },
           }
         : undefined;
+
+    const principalAddress = principal!.addressInformation!;
+    delete principalAddress.sameAddress;
+
     const request = {
       incomeDistribution: personalInfo.incomeDistribution!,
       signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
       principal: {
         clientId: details!.principalHolder!.clientId!,
-        addressInformation: principal!.addressInformation! as ISubmitAddressInformation,
+        addressInformation: principalAddress! as ISubmitAddressInformation,
         bankSummary: {
           localBank: localBank as ISubmitBank[],
           foreignBank: foreignBank as ISubmitBank[],

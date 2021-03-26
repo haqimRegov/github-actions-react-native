@@ -66,12 +66,14 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
   const disabledStyle = disabled === true ? disabledOpacity : {};
 
+  const labelText = label || data.label;
+
   return (
     <View style={disabledStyle}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
-      {label === undefined ? null : (
+      {!labelText ? null : (
         <Fragment>
-          <Text style={{ ...fs12BoldBlack2, ...labelStyle }}>{label}</Text>
+          <Text style={{ ...fs12BoldBlack2, ...labelStyle }}>{labelText}</Text>
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}

@@ -49,6 +49,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
               postCode: "",
               state: "",
             },
+            sameAddress: true,
           },
           bankSummary: {
             localBank: [
@@ -179,6 +180,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
               postCode: "",
               state: "",
             },
+            sameAddress: true,
           },
           bankSummary: {
             localBank: [

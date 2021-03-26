@@ -62,7 +62,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
         {children}
         <CustomFlexSpacer />
         <CustomSpacer space={sh56} />
-        <ActionButtons {...actionButtonProps} />
+        <ActionButtons continueDebounce={true} {...actionButtonProps} />
         <CustomSpacer space={spaceToBottom !== undefined ? spaceToBottom : sh56} />
       </ScrollView>
     </SafeAreaPage>

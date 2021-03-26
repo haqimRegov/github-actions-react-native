@@ -76,7 +76,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
           onPress={submitOnPress}
           radius={sw24}
           text={submitLabel}
-          withDebounce={continueDebounce}
+          withDebounce={continueDebounce !== undefined ? continueDebounce : true}
         />
       </View>
     </View>

@@ -5,14 +5,13 @@ import { AddressField, AdvancedDropdown, CustomSpacer, CustomTextInput } from ".
 import { Language } from "../../../constants";
 import {
   DICTIONARY_BUSINESS_NATURE,
-  DICTIONARY_COUNTRIES,
   DICTIONARY_GROSS_INCOME,
   DICTIONARY_MALAYSIA_STATES_LIST,
   DICTIONARY_OCCUPATION,
   ERROR,
 } from "../../../data/dictionary";
 import { px, sh24, sh32, sw24 } from "../../../styles";
-import { isNumber } from "../../../utils";
+import { formatNumber, isNumber } from "../../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
 interface EmploymentInfoProps {
@@ -44,14 +43,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputAddress = (value: IAddressMultiline) => setEmploymentDetails({ address: { ...value } });
   const setInputBusinessNature = (value: string) => setEmploymentDetails({ businessNature: value });
   const setInputCity = (value: string) => setEmploymentDetails({ city: value });
-  const setInputCountry = (value: string) =>
-    setEmploymentDetails({
-      country: value,
-      state:
-        value === DICTIONARY_COUNTRIES[0].value && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputState as TypeMalaysiaState) === false
-          ? ""
-          : inputState,
-    });
   const setInputEmployerName = (value: string) => setEmploymentDetails({ employerName: value });
   const setInputGross = (value: string) => setEmploymentDetails({ grossIncome: value });
   const setInputOccupation = (value: string) => setEmploymentDetails({ occupation: value });
@@ -59,7 +50,25 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputState = (value: string) => setEmploymentDetails({ state: value });
 
   const checkPermanentPostCode = () => {
-    setValidations({ ...validations, postCode: isNumber(inputPostCode) === false ? ERROR.INVALID_POST_CODE : undefined });
+    setValidations({
+      ...validations,
+      postCode: isNumber(inputPostCode) === false && inputCountry === "Malaysia" ? ERROR.INVALID_POST_CODE : undefined,
+    });
+  };
+
+  const setInputCountry = (input: string) => {
+    if (inputCountry !== input) {
+      const newState =
+        input === "Malaysia" && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputState as TypeMalaysiaState) === false ? "" : inputState;
+      setEmploymentDetails({
+        postCode: input === "Malaysia" ? formatNumber(inputPostCode) : inputPostCode,
+        country: input,
+        state: newState,
+      });
+      setValidations({ ...validations, postCode: undefined });
+    } else {
+      setEmploymentDetails({ country: input });
+    }
   };
 
   const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;
@@ -97,61 +106,22 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       <CustomSpacer space={sh32} />
       <CustomTextInput autoCapitalize="words" label={labelEmployer} onChangeText={setInputEmployerName} value={inputEmployerName} />
       <CustomSpacer space={sh32} />
-      {/* <TextInputArea
-        autoCapitalize="words"
-        label={labelAddress}
-        maxLength={255}
-        onChangeText={setInputAddress}
-        showLength={true}
-        value={inputAddress}
-      /> */}
       <AddressField
         addressType={addressType}
         inputAddress={inputAddress}
         inputCity={inputCity}
+        inputCountry={inputCountry}
         inputPostCode={inputPostCode}
         inputState={inputState}
-        inputCountry={inputCountry}
-        setInputCountry={setInputCountry}
         labelAddress={labelAddress}
         onBlurPostCode={checkPermanentPostCode}
         postCodeError={validations.postCode}
         setInputAddress={setInputAddress}
         setInputCity={setInputCity}
+        setInputCountry={setInputCountry}
         setInputPostCode={setInputPostCode}
         setInputState={setInputState}
       />
-      {/* <CustomSpacer space={sh32} />
-      <CustomTextInput
-        error={validations.postCode}
-        keyboardType="numeric"
-        label={EMPLOYMENT_DETAILS.LABEL_POSTCODE}
-        maxLength={15}
-        onBlur={checkPermanentPostCode}
-        onChangeText={setInputPostCode}
-        value={inputPostCode}
-      />
-      <CustomSpacer space={sh32} />
-      <CustomTextInput autoCapitalize="words" label={EMPLOYMENT_DETAILS.LABEL_CITY} onChangeText={setInputCity} value={inputCity} />
-      <CustomSpacer space={sh32} />
-      {inputCountry === DICTIONARY_COUNTRIES[0].value ? (
-        <AdvancedDropdown
-          items={DICTIONARY_MALAYSIA_STATES}
-          handleChange={setInputState}
-          label={EMPLOYMENT_DETAILS.LABEL_STATE}
-          value={inputState}
-        />
-      ) : (
-        <CustomTextInput label={EMPLOYMENT_DETAILS.LABEL_STATE} onChangeText={setInputState} value={inputState} />
-      )}
-      <CustomSpacer space={sh32} />
-      <AdvancedDropdown
-        items={DICTIONARY_COUNTRIES}
-        handleChange={setInputCountry}
-        label={EMPLOYMENT_DETAILS.LABEL_COUNTRY}
-        style={{ height: sh122 }}
-        value={inputCountry}
-      /> */}
     </View>
   );
 };

@@ -46,6 +46,7 @@ declare interface IAddressState extends IBaseAddress {
 declare interface IAddressInfoState {
   mailingAddress?: IAddressState;
   permanentAddress?: IAddressState;
+  sameAddress?: boolean;
 }
 
 declare interface IContactNumberState {

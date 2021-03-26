@@ -39,6 +39,7 @@ export const personalInfoInitialState: PersonalInfoState = {
         postCode: "",
         state: "",
       },
+      sameAddress: true,
     },
     bankSummary: {
       localBank: [
@@ -169,6 +170,7 @@ export const personalInfoInitialState: PersonalInfoState = {
         postCode: "",
         state: "",
       },
+      sameAddress: true,
     },
     bankSummary: {
       localBank: [

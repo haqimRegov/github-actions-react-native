@@ -160,6 +160,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             placeOfBirth: mykad.placeOfBirth,
           },
           addressInformation: {
+            ...principal!.addressInformation!,
             mailingAddress: {
               address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",
@@ -233,6 +234,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             placeOfBirth: mykad.placeOfBirth,
           },
           addressInformation: {
+            ...joint!.addressInformation!,
             mailingAddress: {
               address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",

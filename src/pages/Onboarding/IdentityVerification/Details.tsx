@@ -11,9 +11,15 @@ import {
   TextSpaceArea,
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_GENDER, DICTIONARY_SALUTATION, ERROR } from "../../../data/dictionary";
+import {
+  DICTIONARY_COUNTRIES,
+  DICTIONARY_GENDER,
+  DICTIONARY_MALAYSIA_STATES_LIST,
+  DICTIONARY_SALUTATION,
+  ERROR,
+} from "../../../data/dictionary";
 import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
-import { isNonNumber, isNumber } from "../../../utils";
+import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
@@ -36,7 +42,6 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   setValidations,
   validations,
 }: IDDetailsProps) => {
-  const [sameAddressToggle, setSameAddressToggle] = useState<boolean>(true);
   const [principalMailingAddress] = useState<IAddressState>(addressInfo.mailingAddress!);
 
   const idNumber = personalDetails.idNumber!;
@@ -65,13 +70,14 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const inputPermanentState = addressInfo.permanentAddress!.state!;
   const inputPlaceOfBirth = personalDetails.placeOfBirth!;
   const inputSalutation = personalDetails.salutation!;
+  const sameAddressToggle = addressInfo.sameAddress!;
 
   const setPermanentInfo = (value: IAddressState) => {
     const sameMailingAddress = sameAddressToggle === true ? { mailingAddress: { ...addressInfo.mailingAddress, ...value } } : {};
-    setAddressInfo({ permanentAddress: { ...addressInfo.permanentAddress, ...value }, ...sameMailingAddress });
+    setAddressInfo({ ...addressInfo, permanentAddress: { ...addressInfo.permanentAddress, ...value }, ...sameMailingAddress });
   };
   const setMailingInfo = (value: IAddressState) => {
-    setAddressInfo({ mailingAddress: { ...addressInfo.mailingAddress, ...value } });
+    setAddressInfo({ ...addressInfo, mailingAddress: { ...addressInfo.mailingAddress, ...value } });
   };
 
   const setExpiryDate = (value: Date) => setPersonalDetails({ expirationDate: value });
@@ -92,7 +98,6 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
 
   const handleAddressToggle = () => {
     if (sameAddressToggle) {
-      setSameAddressToggle(false);
       setAddressInfo({
         ...addressInfo,
         mailingAddress: {
@@ -105,18 +110,27 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
           postCode: "",
           city: "",
           state: "",
+          country: inputPermanentCountry === "Malaysia" ? "Malaysia" : "",
         },
+        sameAddress: false,
       });
     } else {
-      setSameAddressToggle(true);
       const mailingAddress = accountHolder === "Joint" ? principalMailingAddress : addressInfo.permanentAddress;
-      setAddressInfo({ ...addressInfo, mailingAddress: { ...mailingAddress } });
+      setAddressInfo({ ...addressInfo, mailingAddress: { ...mailingAddress }, sameAddress: true });
     }
   };
 
   const setInputPermanentCountry = (input: string) => {
     if (inputPermanentCountry !== input) {
-      setPermanentInfo({ postCode: "", country: input });
+      const newState =
+        input === "Malaysia" && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputPermanentState as TypeMalaysiaState) === false
+          ? ""
+          : inputPermanentState;
+      setPermanentInfo({
+        postCode: input === "Malaysia" ? formatNumber(inputPermanentPostCode) : inputPermanentPostCode,
+        country: input,
+        state: newState,
+      });
       setValidations({ ...validations, permanentPostCode: undefined });
     } else {
       setPermanentInfo({ country: input });
@@ -125,7 +139,15 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
 
   const setInputMailingCountry = (input: string) => {
     if (inputMailingCountry !== input) {
-      setMailingInfo({ postCode: "", country: input });
+      const newState =
+        input === "Malaysia" && DICTIONARY_MALAYSIA_STATES_LIST.includes(inputMailingState as TypeMalaysiaState) === false
+          ? ""
+          : inputMailingState;
+      setMailingInfo({
+        postCode: input === "Malaysia" ? formatNumber(inputMailingPostCode) : inputMailingPostCode,
+        country: input,
+        state: newState,
+      });
       setValidations({ ...validations, mailingPostCode: undefined });
     } else {
       setMailingInfo({ country: input });
@@ -241,11 +263,11 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         <Fragment>
           <CustomSpacer space={sh32} />
           <AddressField
-            addressType={addressType}
+            addressType="Other"
             inputAddress={inputMailingAddress}
             inputCity={inputMailingCity}
-            inputCountry={isPassport ? inputMailingCountry : undefined}
-            setInputCountry={isPassport ? setInputMailingCountry : undefined}
+            inputCountry={inputMailingCountry}
+            setInputCountry={setInputMailingCountry}
             inputPostCode={inputMailingPostCode}
             inputState={inputMailingState}
             labelAddress={ID_VERIFICATION.LABEL_MAILING}

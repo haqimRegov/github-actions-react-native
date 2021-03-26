@@ -360,7 +360,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   return (
     <ContentPage
-      continueDebounce={true}
       handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={DECLARATION_SUMMARY.BUTTON_CONFIRM}

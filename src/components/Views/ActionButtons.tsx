@@ -58,7 +58,7 @@ export const ActionButtons = ({
       {handleContinue !== undefined ? (
         <RoundedButton
           buttonStyle={continueButtonStyle}
-          withDebounce={continueDebounce}
+          withDebounce={continueDebounce !== undefined ? continueDebounce : true}
           disabled={continueDisabled}
           onPress={handleContinue}
           text={buttonContinue}

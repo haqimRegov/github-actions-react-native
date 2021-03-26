@@ -332,7 +332,6 @@ const NewSalesComponent = ({
               buttonContainerStyle={buttonContainer}
               cancelButtonStyle={{ width: sw218 }}
               continueButtonStyle={{ width: sw218 }}
-              continueDebounce={true}
               continueDisabled={continueDisabled}
               handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}

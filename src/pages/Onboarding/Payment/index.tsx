@@ -238,7 +238,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
               </View>
             }
-            continueDebounce={true}
             continueDisabled={continueDisabled}
             labelSubmit={PAYMENT.BUTTON_SUBMIT}
             submitOnPress={handleSubmit}

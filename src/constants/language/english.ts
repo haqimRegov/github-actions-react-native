@@ -110,6 +110,7 @@ export const english = {
       LABEL_EPF_NUMBER: "EPF Account Number",
       LABEL_EPF_TYPE: "EPF Account Type",
       LABEL_FAX_NUMBER: "Fax Number",
+      LABEL_OPTIONAL: "(optional)",
       LABEL_HOME_NUMBER: "Home Number",
       LABEL_JOINT: "Joint Account Holder",
       LABEL_MOBILE_NUMBER: "Mobile Number",

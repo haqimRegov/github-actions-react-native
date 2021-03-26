@@ -6,10 +6,8 @@ import { IcoMoon } from "../../icons";
 import {
   centerHV,
   centerVertical,
-  circleBorder,
   colorBlack,
   colorBlue,
-  colorGray,
   colorWhite,
   flexRow,
   fs12RegBlue2,
@@ -20,7 +18,6 @@ import {
   sh24,
   sh26,
   sh34,
-  sh40,
   sh88,
   shadowBlue5,
   sw1,
@@ -36,23 +33,13 @@ import {
 } from "../../styles";
 import { shortenString } from "../../utils";
 import { Badge } from "../Badge";
-import { IconButton } from "../Touchables";
+import { UploadButton } from "../Upload/UploadButton";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle, Status } from "../Views";
 
 const { UPLOAD } = Language.PAGE;
 
 export const BYTE_TO_MEGABYTE = 1048576;
 export const BYTE_TO_KILOBYTE = 1024;
-
-const UploadButton = ({ color, icon, onPress, size }) => {
-  const iconButtonStyle: ViewStyle = circleBorder(sh40, sw1, colorGray._3, colorWhite._1);
-  return (
-    <Fragment>
-      <IconButton color={color} name={icon} onPress={onPress} size={size} style={iconButtonStyle} />
-      <CustomSpacer isHorizontal={true} space={sw16} />
-    </Fragment>
-  );
-};
 
 export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
   active,

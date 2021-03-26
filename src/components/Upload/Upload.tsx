@@ -9,9 +9,7 @@ import { IcoMoon } from "../../icons";
 import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem } from "../../integrations";
 import {
   centerVertical,
-  circleBorder,
   colorBlue,
-  colorGray,
   colorRed,
   colorWhite,
   flexRow,
@@ -19,17 +17,15 @@ import {
   fs16SemiBoldBlue2,
   px,
   sh24,
-  sh48,
   sh88,
   shadowBlue5,
-  sw1,
   sw10,
   sw16,
   sw24,
 } from "../../styles";
 import { shortenString } from "../../utils";
 import { Badge } from "../Badge";
-import { IconButton } from "../Touchables";
+import { UploadButton } from "../Upload/UploadButton";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
 
 const { UPLOAD } = Language.PAGE;
@@ -38,16 +34,6 @@ export const BYTE_TO_MEGABYTE = 1048576;
 export const BYTE_TO_KILOBYTE = 1024;
 
 const DEFAULT_MAX_SIZE_MB = BYTE_TO_MEGABYTE * 5;
-
-const UploadButton = ({ icon, onPress }) => {
-  const iconButtonStyle: ViewStyle = circleBorder(sh48, sw1, colorGray._3, colorWhite._1);
-  return (
-    <Fragment>
-      <IconButton color={colorBlue._2} name={icon} onPress={onPress} size={sw24} style={iconButtonStyle} />
-      <CustomSpacer isHorizontal={true} space={sw16} />
-    </Fragment>
-  );
-};
 
 export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props, ref) => {
   const {

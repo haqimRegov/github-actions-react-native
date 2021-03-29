@@ -5,7 +5,7 @@
   "environment": "sit",
   "scripts": {
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --config=jest.config.js",
     "lint": "eslint . --config ./.eslintrc.json --ext .js,.jsx,.ts,.tsx",
     "format_all": "prettier --write \"{src,tests}/**/*.{tsx,ts,json,js,jsx}\"",
     "build": "npm run tsc",
@@ -52,7 +52,7 @@
   "dependencies": {
     "@miblanchard/react-native-slider": "1.2.2",
     "@pdf-lib/fontkit": "1.0.0",
-    "@react-native-community/async-storage": "1.11.0",
+    "@react-native-async-storage/async-storage": "1.13.4",
     "@react-native-community/blur": "3.6.0",
     "@react-native-community/datetimepicker": "3.0.9",
     "@react-native-community/masked-view": "0.1.10",
@@ -137,11 +137,15 @@
     "eslint-plugin-react-native": "3.8.1",
     "husky": "4.2.5",
     "jest": "24.9.0",
+    "jest-sonar-reporter": "2.0.0",
+    "jest-transform-stub": "2.0.0",
     "metro-react-native-babel-preset": "0.58.0",
     "prettier": "2.0.4",
     "react-test-renderer": "16.11.0",
     "sonarqube-scanner": "2.8.0",
-    "typescript": "3.8.3"
+    "typescript": "3.8.3",
+    "react-native-typescript-transformer": "1.2.13",
+    "ts-jest": "26.5.4"
   },
   "jest": {
     "preset": "react-native",

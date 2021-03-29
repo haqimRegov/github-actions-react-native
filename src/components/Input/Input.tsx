@@ -89,7 +89,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   };
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
   const defaultIconColor = rightIconColor !== undefined ? rightIconColor : colorBlack._2;
-  const disabledStyle: TextStyle = disabled === true ? { opacity: 0.5 } : {};
+  const disabledStyle = disabled === true ? { opacity: 0.5 } : {};
 
   return (
     <View onLayout={onLayout} style={flexChild}>

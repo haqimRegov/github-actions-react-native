@@ -122,7 +122,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   const floatingTotalAmount = orderTotalAmount.map((orderAmount) => {
     const filteredPayments = computed
       .filter((value) => value.currency === orderAmount.currency)
-      .map((floating: IFloatingAmount) => floating.amount);
+      .map((filteredFloating: IFloatingAmount) => filteredFloating.amount);
     const total =
       filteredPayments.length === 0
         ? 0

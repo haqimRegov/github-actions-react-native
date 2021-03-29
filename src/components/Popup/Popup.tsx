@@ -22,6 +22,13 @@ interface CustomPopupProps {
   spaceToPopup?: number;
 }
 
+interface IIconOffset {
+  bottom?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+}
+
 export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
   children,
   containerStyle,
@@ -44,7 +51,7 @@ export const CustomPopup: FunctionComponent<CustomPopupProps> = ({
 
   let arrowIcon = "arrow-solid-left";
   let flexDirection: "row" | "column" | "row-reverse" | "column-reverse" = direction === "top" || direction === "bottom" ? "column" : "row";
-  let iconOffset: ViewStyle = { right: -sw12 };
+  let iconOffset: IIconOffset = { right: -sw12 };
   let leftPosition = basePosition.width + iconOffsetSpace;
   let topPosition = -popupPosition.height / 2 + basePosition.height / 2;
 

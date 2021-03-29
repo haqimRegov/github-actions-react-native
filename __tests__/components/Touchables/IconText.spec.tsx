@@ -1,11 +1,10 @@
-import "react-native";
-
 import React from "react";
 import renderer from "react-test-renderer";
 
-import { App } from "../src/App";
+import { IconText } from "../../../src/components";
 
+global.React = React;
 // Note: test renderer must be required after react-native.
 it("renders correctly", () => {
-  renderer.create(<App />);
+  renderer.create(<IconText name="test" onPress={() => {}} text="Test" />);
 });

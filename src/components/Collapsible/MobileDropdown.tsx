@@ -355,14 +355,14 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                           renderItem={({ index }) => {
                             const itemExtractor = items![index];
                             const itemValue = itemExtractor.value;
-                            const selected = data.value!.includes(itemValue);
+                            const selected = data.value.includes(itemValue);
                             const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh10) };
                             const itemStyle: TextStyle = selected ? fs12BoldBlack2 : fs12SemiBoldBlack2;
 
                             const handleSelect = () => {
                               let reset: boolean = false;
                               if (itemExtractor !== undefined) {
-                                let newValue = [...data.value!];
+                                let newValue = [...data.value];
                                 if (newValue.includes(itemValue)) {
                                   newValue = newValue.filter((item) => item !== itemValue);
                                   reset = true;

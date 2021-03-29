@@ -34,39 +34,39 @@ export const ProductGraph: FunctionComponent<ProductGraphProps> = ({ fund, layou
 
   const handlePerformance = (buttonIndex: number) => {
     if (fund !== undefined) {
-      const { benchmark, nav } = fund.performance!;
+      const { benchmark, nav } = fund.performance;
       let navData: number[] = [];
       let benchmarkData: number[] = [];
       let graphLabel = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN "];
       switch (buttonIndex) {
         case 0:
-          navData = nav?.oneMonth!;
-          benchmarkData = benchmark?.oneMonth!;
+          navData = nav?.oneMonth;
+          benchmarkData = benchmark?.oneMonth;
           graphLabel = ["Week 1", "Week 2", "Week 3", "Week 4"];
           break;
         case 1:
-          navData = nav?.sixMonths!;
-          benchmarkData = benchmark?.sixMonths!;
+          navData = nav?.sixMonths;
+          benchmarkData = benchmark?.sixMonths;
           graphLabel = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN"];
           break;
         case 2:
-          navData = nav?.oneYear!;
-          benchmarkData = benchmark?.oneYear!;
+          navData = nav?.oneYear;
+          benchmarkData = benchmark?.oneYear;
           graphLabel = ["JAN - MAR", "APR - JUN", "JUL - SEP", "OCT - DEC"];
           break;
         case 3:
-          navData = nav?.threeYears!;
-          benchmarkData = benchmark?.threeYears!;
+          navData = nav?.threeYears;
+          benchmarkData = benchmark?.threeYears;
           graphLabel = ["Year 1", "Year 2", "Year 3"];
           break;
         case 4:
-          navData = nav?.fiveYears!;
-          benchmarkData = benchmark?.fiveYears!;
+          navData = nav?.fiveYears;
+          benchmarkData = benchmark?.fiveYears;
           graphLabel = ["Year 1", "Year 2", "Year 3"];
           break;
         case 5:
-          navData = nav?.tenYears!;
-          benchmarkData = benchmark?.tenYears!;
+          navData = nav?.tenYears;
+          benchmarkData = benchmark?.tenYears;
           graphLabel = ["Year 1", "Year 2", "Year 3", "Year 4", "Year 5", "Year 6", "Year 7", "Year 8", "Year 9", "Year 10"];
           break;
 
@@ -83,8 +83,8 @@ export const ProductGraph: FunctionComponent<ProductGraphProps> = ({ fund, layou
 
   useEffect(() => {
     if (fund !== undefined) {
-      setNavPerformance([...fund.performance?.nav?.sixMonths!]);
-      setBenchmarkPerformance([...fund.performance?.benchmark?.sixMonths!]);
+      setNavPerformance([...fund.performance?.nav?.sixMonths]);
+      setBenchmarkPerformance([...fund.performance?.benchmark?.sixMonths]);
     }
   }, [fund]);
 

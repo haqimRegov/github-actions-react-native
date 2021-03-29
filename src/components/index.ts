@@ -3,7 +3,6 @@ export * from "./Avatar";
 export * from "./Badge";
 export * from "./Banner";
 export * from "./Blur";
-export * from "./Calendar";
 export * from "./Card";
 export * from "./CheckBox";
 export * from "./Collapsible";

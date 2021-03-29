@@ -75,7 +75,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   if (addressInformation!.permanentAddress!.address!.line2 !== undefined) {
     permanentAddressSummary.splice(1, 0, {
       label: `${SUMMARY.LABEL_PERMANENT_ADDRESS} 2`,
-      title: addressInformation!.permanentAddress!.address!.line2!,
+      title: addressInformation!.permanentAddress!.address!.line2,
       titleStyle: fsTransformNone,
     });
   }
@@ -84,7 +84,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
     const index = addressInformation!.permanentAddress!.address!.line2 !== undefined ? 2 : 1;
     permanentAddressSummary.splice(index, 0, {
       label: `${SUMMARY.LABEL_PERMANENT_ADDRESS} 3`,
-      title: addressInformation!.permanentAddress!.address!.line3!,
+      title: addressInformation!.permanentAddress!.address!.line3,
       titleStyle: fsTransformNone,
     });
   }
@@ -105,7 +105,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   if (addressInformation!.mailingAddress!.address!.line2 !== undefined) {
     mailingAddressSummary.splice(1, 0, {
       label: `${SUMMARY.LABEL_MAILING_ADDRESS} 2`,
-      title: addressInformation!.mailingAddress!.address!.line2!,
+      title: addressInformation!.mailingAddress!.address!.line2,
       titleStyle: fsTransformNone,
     });
   }
@@ -114,7 +114,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
     const index = addressInformation!.mailingAddress!.address!.line2 !== undefined ? 2 : 1;
     mailingAddressSummary.splice(index, 0, {
       label: `${SUMMARY.LABEL_MAILING_ADDRESS} 3`,
-      title: addressInformation!.mailingAddress!.address!.line3!,
+      title: addressInformation!.mailingAddress!.address!.line3,
       titleStyle: fsTransformNone,
     });
   }
@@ -192,7 +192,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   if (employmentDetails!.address!.line2 !== undefined) {
     employmentAddressSummary.splice(1, 0, {
       label: `${SUMMARY.LABEL_EMPLOYER_ADDRESS} 2`,
-      title: employmentDetails!.address!.line2!,
+      title: employmentDetails!.address!.line2,
       titleStyle: fsTransformNone,
     });
   }
@@ -201,7 +201,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
     const index = employmentDetails!.address!.line2 !== undefined ? 2 : 1;
     employmentAddressSummary.splice(index, 0, {
       label: `${SUMMARY.LABEL_EMPLOYER_ADDRESS} 3`,
-      title: employmentDetails!.address!.line3!,
+      title: employmentDetails!.address!.line3,
       titleStyle: fsTransformNone,
     });
   }

@@ -234,7 +234,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
       principal: {
         clientId: details!.principalHolder!.clientId!,
-        addressInformation: principalAddress! as ISubmitAddressInformation,
+        addressInformation: principalAddress as ISubmitAddressInformation,
         bankSummary: {
           localBank: localBank as ISubmitBank[],
           foreignBank: foreignBank as ISubmitBank[],

@@ -156,7 +156,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
               };
 
               const handleRemoveTin = () => {
-                const updatedTin = [...tin!];
+                const updatedTin = [...tin];
                 updatedTin.splice(index, 1);
                 handleCrsDeclaration({ ...crs, tin: updatedTin });
               };

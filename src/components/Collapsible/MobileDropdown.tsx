@@ -2,8 +2,6 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { FlatList, Image, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewProps, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { CustomTextInput, CustomTextInputProps } from "..";
-import { CustomSpacer } from "../../components/Views/Spacer";
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRY_CODE, ERROR } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
@@ -45,7 +43,9 @@ import {
 } from "../../styles";
 import { isNumber } from "../../utils";
 import { CheckBox } from "../CheckBox/CheckBox";
+import { CustomTextInput, CustomTextInputProps } from "../Input/Input";
 import { BasicModal } from "../Modals/Basic";
+import { CustomSpacer } from "../Views/Spacer";
 
 const { INPUT_MOBILE } = Language.PAGE;
 

@@ -21,7 +21,7 @@ import {
   sw40,
   sw8,
 } from "../../styles";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 
 interface AdvanceToggleButtonProps {
   direction?: "column" | "row";

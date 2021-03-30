@@ -87,13 +87,27 @@ export const Pagination: FunctionComponent<PaginationProps> = ({
         </Fragment>
       ) : null}
       <View style={flexRow}>
-        <IconButton color={prevColor} name="caret-left" onPress={handlePrev} size={sh24} style={{ ...buttonStyle, ...prevStyle }} />
+        <IconButton
+          color={prevColor}
+          name="caret-left"
+          onPress={handlePrev}
+          size={sh24}
+          style={{ ...buttonStyle, ...prevStyle }}
+          withDebounce={true}
+        />
         <CustomSpacer isHorizontal={true} space={sw4} />
         <View style={{ ...centerHV, width: sw36 }}>
           <Text style={fs12SemiBoldGray8}>{pageCounter}</Text>
         </View>
         <CustomSpacer isHorizontal={true} space={sw4} />
-        <IconButton color={nextColor} name="caret-right" onPress={handleNext} size={sh24} style={{ ...buttonStyle, ...nextStyle }} />
+        <IconButton
+          color={nextColor}
+          name="caret-right"
+          onPress={handleNext}
+          size={sh24}
+          style={{ ...buttonStyle, ...nextStyle }}
+          withDebounce={true}
+        />
       </View>
     </View>
   );

@@ -27,7 +27,7 @@ import {
   sw24,
   sw4,
 } from "../../../styles";
-import { PaymentOrder, PaymentStatus } from "../../../templates";
+import { PaymentOrder, PaymentPopup } from "../../../templates";
 import { formatAmount, parseAmountToString } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
@@ -43,12 +43,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   orders,
   paymentSummary,
   personalInfo,
-  setLoading,
   updatePaymentSummary,
 }: PaymentProps) => {
   const [activeOrder, setActiveOrder] = useState<string>("");
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
   const [viewFund, setViewFund] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -81,13 +81,10 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments", paymentResponse);
-    setLoading(false);
     if (paymentResponse !== undefined) {
       const { data, error } = paymentResponse;
       if (error === null && data !== null) {
-        setTimeout(() => {
-          setPaymentResult(data.result);
-        }, 150);
+        setPaymentResult(data.result);
         // setErrorMessage(undefined);
         // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
       }
@@ -245,7 +242,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           />
         )}
       </SafeAreaPage>
-      <PaymentStatus handleDone={handleResetOnboarding} result={paymentResult} />
+      <PaymentPopup handleDone={handleResetOnboarding} loading={loading} result={paymentResult} />
     </Fragment>
   );
 };

@@ -239,6 +239,7 @@ export const personalInfoInitialState: PersonalInfoState = {
     employmentDetails: {
       businessNature: "",
       employerName: "",
+      isEnabled: true,
       grossIncome: "",
       occupation: "",
       address: {

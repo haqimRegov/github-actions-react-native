@@ -88,6 +88,7 @@ declare interface IEmploymentDetailsState extends IAddressState {
   employerName?: string;
   grossIncome?: string;
   occupation?: string;
+  isEnabled?: boolean;
 }
 
 declare interface IFatcaState {

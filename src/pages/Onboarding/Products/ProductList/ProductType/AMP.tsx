@@ -175,13 +175,17 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   };
 
   const handleNext = async () => {
-    const nextPage = parseInt(page, 10) < parseInt(pages, 10) ? parseInt(page, 10) + 1 : parseInt(pages, 10);
-    handleFetchAMP(nextPage.toString());
+    if (loading === false) {
+      const nextPage = parseInt(page, 10) < parseInt(pages, 10) ? parseInt(page, 10) + 1 : parseInt(pages, 10);
+      handleFetchAMP(nextPage.toString());
+    }
   };
 
   const handlePrev = () => {
-    const prevPage = parseInt(page, 10) > 1 ? parseInt(page, 10) - 1 : 1;
-    handleFetchAMP(prevPage.toString());
+    if (loading === false) {
+      const prevPage = parseInt(page, 10) > 1 ? parseInt(page, 10) - 1 : 1;
+      handleFetchAMP(prevPage.toString());
+    }
   };
 
   useEffect(() => {

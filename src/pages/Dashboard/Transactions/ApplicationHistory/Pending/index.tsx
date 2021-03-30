@@ -50,18 +50,22 @@ const { EMPTY_STATE, DASHBOARD_HOME } = Language.PAGE;
 export interface PendingOrdersProps extends TransactionsStoreProps {
   activeTab: boolean;
   handlePrintSummary: (orderNumber: string) => void;
+  isFetching: boolean;
   navigation: IStackNavigationProp;
+  setIsFetching: (value: boolean) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 
 const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   activeTab,
   handlePrintSummary,
+  isFetching,
   navigation,
   pending,
   resetSelectedOrder,
   search,
   selectedOrders,
+  setIsFetching,
   setScreen,
   transactions,
   updateCurrentOrder,
@@ -70,7 +74,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   updateTransactions,
 }: PendingOrdersProps) => {
   const { filter, orders, page, sort } = pending;
-  const [loading, setLoading] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
 
@@ -247,7 +250,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const renderAccordion = orders.length !== 0 ? tableAccordion : undefined;
 
   const handleFetch = async () => {
-    setLoading(true);
+    setIsFetching(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
     const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
@@ -291,10 +294,10 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           approvedCount: data.result.approvedCount,
           rejectedCount: data.result.rejectedCount,
         });
-        setLoading(false);
+        setIsFetching(false);
       }
       if (error !== null) {
-        setLoading(false);
+        setIsFetching(false);
         setTimeout(() => {
           Alert.alert(error.message);
         }, 100);
@@ -342,7 +345,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}
-        data={loading === true ? [] : orders}
+        data={isFetching === true ? [] : orders}
         disabledIndex={disabledOrders}
         rowSelection={selectedOrders}
         rowSelectionKey="orderNumber"
@@ -387,7 +390,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           );
         }}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
-        RenderEmptyState={() => <EmptyTable hintText={hintText} loading={loading} title={title} subtitle={subtitle} />}
+        RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
         RenderOptions={(props: ITableOptions) => (
           <PendingOrderActions
             {...props}

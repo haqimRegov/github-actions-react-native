@@ -57,6 +57,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const { approvedCount, pendingCount, rejectedCount } = transactions;
 
   const { filter, page, pages } = props[activeTab];
+  const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
@@ -74,23 +75,27 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleNext = () => {
-    updateTransactions({
-      ...transactions,
-      [activeTab]: {
-        ...transactions[activeTab],
-        page: page + 1,
-      },
-    });
+    if (loading === false) {
+      updateTransactions({
+        ...transactions,
+        [activeTab]: {
+          ...transactions[activeTab],
+          page: page + 1,
+        },
+      });
+    }
   };
 
   const handlePrev = () => {
-    updateTransactions({
-      ...transactions,
-      [activeTab]: {
-        ...transactions[activeTab],
-        page: page - 1,
-      },
-    });
+    if (loading === false) {
+      updateTransactions({
+        ...transactions,
+        [activeTab]: {
+          ...transactions[activeTab],
+          page: page - 1,
+        },
+      });
+    }
   };
 
   const handleSearch = () => {
@@ -171,7 +176,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setFilterTemp(filter);
   };
 
-  const tabProps = { setScreen: setScreen, navigation: navigation };
+  const tabProps = { setScreen: setScreen, navigation: navigation, isFetching: loading, setIsFetching: setLoading };
   let content: JSX.Element;
 
   if (activeTab === "pending") {

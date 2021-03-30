@@ -6,8 +6,7 @@ import { ErrorHandler } from "../../utils";
 
 export const logout = async (navigation?: IStackNavigationProp) => {
   try {
-    const user = await Auth.currentAuthenticatedUser();
-    user.signOut({ global: true });
+    await Auth.signOut({ global: true });
     const handleNavigate = () => {
       if (navigation !== undefined) {
         navigation.dispatch(

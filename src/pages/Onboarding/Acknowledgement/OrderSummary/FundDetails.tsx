@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, Dash, LabeledTitleProps, TextCard } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
 import {
@@ -30,9 +30,10 @@ const { ORDER_SUMMARY } = Language.PAGE;
 
 export interface FundDetailsProps {
   fund: IOrderInvestment;
+  paymentType?: TypePaymentType;
 }
 
-export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundDetailsProps) => {
+export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, paymentType }: FundDetailsProps) => {
   const {
     distributionInstruction,
     fundClass,
@@ -40,6 +41,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     fundingOption,
     fundIssuer,
     fundName,
+    fundType,
     investmentAmount,
     isFea,
     isSyariah,
@@ -48,22 +50,17 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     scheduledSalesCharge,
   } = fund;
 
-  const isScheduled =
-    scheduledInvestmentAmount !== undefined &&
-    scheduledSalesCharge !== undefined &&
-    scheduledInvestmentAmount !== null &&
-    scheduledSalesCharge !== null;
-
   const scheduledAmount = scheduledInvestmentAmount ? formatAmount(scheduledInvestmentAmount) : "";
 
   const summary: LabeledTitleProps[] = [
     {
-      label: ORDER_SUMMARY.LABEL_FUND_CLASS,
-      title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
+      label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
+      // TODO temporary before backend fix
+      title: salesCharge.includes("%") ? salesCharge : `${salesCharge}%`,
     },
     {
-      label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
-      title: `${salesCharge}%`,
+      label: ORDER_SUMMARY.LABEL_PRODUCT_TYPE,
+      title: fundType || "-",
     },
     {
       label: ORDER_SUMMARY.LABEL_FUNDING_OPTION,
@@ -81,9 +78,16 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     {
       label: ORDER_SUMMARY.LABEL_DISTRIBUTION,
       title: distributionInstruction,
-      titleStyle: fsCapitalize,
+      titleStyle: fsTransformNone,
     },
   ];
+
+  if (fundClass) {
+    summary.splice(0, 0, {
+      label: ORDER_SUMMARY.LABEL_FUND_CLASS,
+      title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
+    });
+  }
 
   const recurringSummary: LabeledTitleProps[] = [
     {
@@ -93,6 +97,10 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
     {
       label: ORDER_SUMMARY.LABEL_RECURRING_SALES_CHARGE,
       title: `${scheduledSalesCharge}%`,
+    },
+    {
+      label: ORDER_SUMMARY.LABEL_PRODUCT_TYPE,
+      title: fundType,
     },
   ];
 
@@ -131,18 +139,12 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund }: FundD
       <View>
         <CustomSpacer space={sh16} />
         <View style={px(sw24)}>
-          <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+          {paymentType === "Recurring" ? (
+            <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+          ) : (
+            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+          )}
         </View>
-        <CustomSpacer space={sh8} />
-        {isScheduled === true ? (
-          <Fragment>
-            <Dash />
-            <CustomSpacer space={sh16} />
-            <View style={px(sw24)}>
-              <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
-            </View>
-          </Fragment>
-        ) : null}
         <CustomSpacer space={sh8} />
       </View>
     </Fragment>

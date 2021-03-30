@@ -172,20 +172,21 @@ const getOrderSummary = gql`
             accountOperationMode
           }
           investmentSummary {
-            fundName
-            utmc
-            fundCurrency
-            investmentAmount
-            fundCode
-            fundClass
-            salesCharge
             accountFund
-            productType
-            investmentType
-            feaTagged
             distributionInstruction
+            feaTagged
+            fundClass
+            fundCode
+            fundCurrency
+            fundName
+            investmentAmount
+            investmentType
+            productType
             recurring
+            salesCharge
             scheduledPayment
+            scheduledSalesCharge
+            utmc
           }
           paymentSummary {
             fundCurrency
@@ -446,11 +447,11 @@ const listPaymentRequired = gql`
             fundCurrency
             fundName
             investmentAmount
-            salesCharge
+            isFea
             isSyariah
+            salesCharge
             scheduledInvestmentAmount
             scheduledSalesCharge
-            isFea
           }
           payment {
             id

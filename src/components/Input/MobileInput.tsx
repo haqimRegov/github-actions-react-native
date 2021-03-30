@@ -32,7 +32,7 @@ import {
   sw8,
 } from "../../styles";
 import { CollapsibleMobileDropdown } from "../Collapsible/MobileDropdown";
-import { CustomSpacer } from "../Views";
+import { CustomSpacer } from "../Views/Spacer";
 import { CustomTextInputProps } from "./Input";
 
 interface MobileInputProps extends CustomTextInputProps {

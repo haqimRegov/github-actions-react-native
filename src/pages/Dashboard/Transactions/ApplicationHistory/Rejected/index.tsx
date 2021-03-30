@@ -40,16 +40,20 @@ import { EDDReasons } from "../EDDReasons";
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 
 interface RejectedOrdersProps extends TransactionsStoreProps {
-  setScreen: (route: TransactionsPageType) => void;
-  navigation: IStackNavigationProp;
   activeTab: boolean;
+  isFetching: boolean;
+  navigation: IStackNavigationProp;
+  setIsFetching: (value: boolean) => void;
+  setScreen: (route: TransactionsPageType) => void;
 }
 
 const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   activeTab,
+  isFetching,
   navigation,
   rejected,
   search,
+  setIsFetching,
   setScreen,
   transactions,
   updateCurrentOrder,
@@ -57,7 +61,6 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   updateTransactions,
 }: RejectedOrdersProps) => {
   const { filter, orders, page, sort } = rejected;
-  const [loading, setLoading] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
 
@@ -194,7 +197,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const handleFetch = async () => {
-    setLoading(true);
+    setIsFetching(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
@@ -221,7 +224,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     // eslint-disable-next-line no-console
     console.log("getDashboard request", request);
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
-    setLoading(false);
+    setIsFetching(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
@@ -266,7 +269,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}
-        data={loading === true ? [] : orders}
+        data={isFetching === true ? [] : orders}
         handleRowNavigation={handleOrderDetails}
         RenderAccordion={tableAccordion}
         RenderCustomHeader={({ item }) => {
@@ -307,7 +310,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
           );
         }}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
-        RenderEmptyState={() => <EmptyTable hintText={hintText} loading={loading} title={title} subtitle={subtitle} />}
+        RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
       />
       <CustomSpacer space={sh32} />
     </View>

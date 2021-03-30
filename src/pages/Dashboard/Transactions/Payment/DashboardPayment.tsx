@@ -24,7 +24,7 @@ import {
   sw24,
   sw4,
 } from "../../../../styles";
-import { PaymentOrder, PaymentStatus } from "../../../../templates";
+import { PaymentOrder, PaymentPopup } from "../../../../templates";
 import { AlertDialog, formatAmount, parseAmountToString } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 
@@ -36,9 +36,10 @@ interface DashboardPaymentProps extends TransactionsStoreProps {
 }
 
 const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (props: DashboardPaymentProps) => {
-  const { currentOrder, navigation, setLoading, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
   const [paymentOrder, setPaymentOrder] = useState<IPaymentOrderState | undefined>(undefined);
   // const [successMessage, setSuccessMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [activeOrder, setActiveOrder] = useState<string>("");
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
@@ -119,15 +120,10 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
     const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
     // eslint-disable-next-line no-console
     console.log("submitProofOfPayments", paymentResponse);
-    setLoading(false);
     if (paymentResponse !== undefined) {
       const { data, error } = paymentResponse;
       if (error === null && data !== null) {
-        setTimeout(() => {
-          setPaymentResult(data.result);
-        }, 150);
-        // setErrorMessage(undefined);
-        // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+        setPaymentResult(data.result);
       }
       if (error !== null) {
         const errorList = error.errorList?.join("\n");
@@ -254,7 +250,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
           label={bannerText}
         />
       )}
-      <PaymentStatus handleDone={handleBack} result={paymentResult} />
+      <PaymentPopup handleDone={handleBack} loading={loading} result={paymentResult} />
     </Fragment>
   );
 };

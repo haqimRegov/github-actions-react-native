@@ -1,5 +1,6 @@
 import React, { Fragment, FunctionComponent, useEffect } from "react";
-import { KeyboardAvoidingView, Platform } from "react-native";
+import { Platform } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import { connect } from "react-redux";
@@ -28,9 +29,9 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
         {Platform.select({
           android: <RootNavigator />,
           ios: (
-            <KeyboardAvoidingView behavior="padding" style={flexChild}>
+            <KeyboardAwareScrollView contentContainerStyle={flexChild} scrollEnabled={false}>
               <RootNavigator />
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
           ),
         })}
       </Fragment>

@@ -64,6 +64,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
 
   const { isEpf, isScheduled } = fundDetails;
 
+  const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
   const fundingOption = fundDetails.isEpfOnly === "Yes" ? [INVESTMENT.QUESTION_1_OPTION_2] : [INVESTMENT.QUESTION_1_OPTION_1];
@@ -279,10 +280,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               onBlur={checkInvestmentAmount}
               onChangeText={handleInvestmentAmount}
               prefixStyle={fs16RegBlack2}
-              spaceToBottom={isScheduled === "Yes" ? sh12 : undefined}
+              spaceToBottom={isRecurring === true ? sh12 : undefined}
               value={investmentAmount}
             />
-            {isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR" ? (
+            {isRecurring === true ? (
               <CheckBox
                 label={INVESTMENT.LABEL_RECURRING}
                 labelStyle={fs12BoldBlack2}

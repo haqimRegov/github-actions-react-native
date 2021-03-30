@@ -39,24 +39,27 @@ import { CustomTableItem } from "../CustomTableItem";
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 
 export interface ApprovedOrdersProps extends TransactionsStoreProps {
-  setScreen: (route: TransactionsPageType) => void;
-  navigation: IStackNavigationProp;
   activeTab: boolean;
+  isFetching: boolean;
+  navigation: IStackNavigationProp;
+  setIsFetching: (value: boolean) => void;
+  setScreen: (route: TransactionsPageType) => void;
 }
 
 const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   activeTab,
   approved,
+  isFetching,
   navigation,
-  setScreen,
   search,
+  setIsFetching,
+  setScreen,
   transactions,
   updateApprovedSort,
   updateCurrentOrder,
   updateTransactions,
 }: ApprovedOrdersProps) => {
   const { filter, orders, page, sort } = approved;
-  const [loading, setLoading] = useState<boolean>(false);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
 
   const handleShowDateBy = () => {
@@ -167,7 +170,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   ];
 
   const handleFetch = async () => {
-    setLoading(true);
+    setIsFetching(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
@@ -194,7 +197,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     // eslint-disable-next-line no-console
     console.log("getDashboard request", request);
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
-    setLoading(false);
+    setIsFetching(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
@@ -238,7 +241,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     <View style={{ ...flexChild, ...px(sw16) }}>
       <AdvanceTable
         columns={columns}
-        data={loading === true ? [] : orders}
+        data={isFetching === true ? [] : orders}
         handleRowNavigation={handleOrderDetails}
         RenderCustomHeader={({ item }) => {
           return (
@@ -278,7 +281,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
           );
         }}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
-        RenderEmptyState={() => <EmptyTable loading={loading} hintText={hintText} title={title} subtitle={subtitle} />}
+        RenderEmptyState={() => <EmptyTable loading={isFetching} hintText={hintText} title={title} subtitle={subtitle} />}
       />
       <CustomSpacer space={sh32} />
     </View>

@@ -68,7 +68,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           handleAddress();
         };
 
-        const labelLine = index === 0 ? "" : ` - Line ${index + 1} (Optional)`;
+        const labelLine = index === 0 ? "" : ` - Line ${index + 1}`;
 
         return (
           <View key={index}>
@@ -106,6 +106,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         );
       })}
       <CustomTextInput
+        autoCapitalize="words"
         error={postCodeError}
         keyboardType="numeric"
         label={ADDRESS.LABEL_POSTCODE}
@@ -126,7 +127,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           value={inputState}
         />
       ) : (
-        <CustomTextInput label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputState} value={inputState} />
+        <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputState} value={inputState} />
       )}
       {setInputCountry !== undefined ? (
         <AdvancedDropdown

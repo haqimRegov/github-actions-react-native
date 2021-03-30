@@ -32,6 +32,7 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface CustomTextInputProps extends TextInputProps {
+  containerStyle?: ViewStyle;
   disabled?: boolean;
   error?: string;
   inputPrefix?: string;
@@ -53,6 +54,7 @@ export interface CustomTextInputProps extends TextInputProps {
 }
 
 export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
+  containerStyle,
   disabled,
   error,
   inputPrefix,
@@ -92,7 +94,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   const disabledStyle = disabled === true ? { opacity: 0.5 } : {};
 
   return (
-    <View onLayout={onLayout} style={flexChild}>
+    <View onLayout={onLayout} style={{ ...flexChild, width: sw360, ...containerStyle }}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>

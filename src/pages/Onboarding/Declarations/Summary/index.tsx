@@ -41,275 +41,276 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   // TODO handle if FEA
   const isFea = 100 < 500;
 
-  const handleSetupClient = async () => {
-    setLoading(true);
-    const jointIdType = details?.jointHolder?.idType === "Other" ? details?.jointHolder?.otherIdType : details?.jointHolder?.idType;
-    const principalIdType =
-      details?.principalHolder?.idType === "Other" ? details?.principalHolder?.otherIdType : details?.principalHolder?.idType;
-    const jointExpirationDate =
-      joint!.personalDetails!.expirationDate !== undefined ? moment(joint!.personalDetails!.expirationDate).valueOf() : undefined;
-    const principalExpirationDate =
-      principal!.personalDetails!.expirationDate !== undefined ? moment(principal!.personalDetails!.expirationDate).valueOf() : undefined;
+  const jointIdType = details?.jointHolder?.idType === "Other" ? details?.jointHolder?.otherIdType : details?.jointHolder?.idType;
+  const principalIdType =
+    details?.principalHolder?.idType === "Other" ? details?.principalHolder?.otherIdType : details?.principalHolder?.idType;
+  const jointExpirationDate =
+    joint!.personalDetails!.expirationDate !== undefined ? moment(joint!.personalDetails!.expirationDate).valueOf() : undefined;
+  const principalExpirationDate =
+    principal!.personalDetails!.expirationDate !== undefined ? moment(principal!.personalDetails!.expirationDate).valueOf() : undefined;
 
-    const principalMalaysianDetails =
-      principalIdType !== "Passport"
-        ? {
-            bumiputera: `${principal!.personalDetails!.bumiputera === "Yes"}`,
-            race: principal!.personalDetails!.race!,
-          }
-        : {};
-    const jointMalaysianDetails =
-      jointIdType !== "Passport"
-        ? {
-            bumiputera: `${joint!.personalDetails!.bumiputera === "Yes"}`,
-            race: joint!.personalDetails!.race!,
-          }
-        : {};
+  const principalMalaysianDetails =
+    principalIdType !== "Passport"
+      ? {
+          bumiputera: `${principal!.personalDetails!.bumiputera === "Yes"}`,
+          race: principal!.personalDetails!.race!,
+        }
+      : {};
+  const jointMalaysianDetails =
+    jointIdType !== "Passport"
+      ? {
+          bumiputera: `${joint!.personalDetails!.bumiputera === "Yes"}`,
+          race: joint!.personalDetails!.race!,
+        }
+      : {};
 
-    const relationship =
-      principal!.personalDetails!.relationship === "Others"
-        ? principal!.personalDetails!.otherRelationship!
-        : principal!.personalDetails!.relationship!;
+  const relationship =
+    principal!.personalDetails!.relationship === "Others"
+      ? principal!.personalDetails!.otherRelationship!
+      : principal!.personalDetails!.relationship!;
 
-    const jointRelationship = accountType === "Joint" ? relationship : undefined;
+  const jointRelationship = accountType === "Joint" ? relationship : undefined;
 
-    let isInvestmentEpf = false;
+  let isInvestmentEpf = false;
 
-    const investments = investmentDetails!.map(({ fundDetails, investment }) => {
-      if (investment.fundPaymentMethod === "EPF") {
-        isInvestmentEpf = true;
-      }
-      return {
-        fundId: investment.fundId!,
-        fundingOption: investment.fundPaymentMethod, // TODO backend to fix
-        fundClass: investment.fundClass !== "No Class" ? investment.fundClass : "",
-        fundCurrency: investment.fundCurrency!,
-        investmentAmount: parseAmountToString(investment.investmentAmount),
-        isScheduled: `${investment.scheduledInvestment}`,
-        scheduledInvestmentAmount: investment.scheduledInvestmentAmount
-          ? parseAmountToString(investment.scheduledInvestmentAmount)
-          : undefined,
-        salesCharge: investment.investmentSalesCharge,
-        scheduledSalesCharge: investment.scheduledSalesCharge,
-        prsType: fundDetails.prsType,
-      };
-    });
+  const investments = investmentDetails!.map(({ fundDetails, investment }) => {
+    if (investment.fundPaymentMethod === "EPF") {
+      isInvestmentEpf = true;
+    }
+    return {
+      fundId: investment.fundId!,
+      fundingOption: investment.fundPaymentMethod, // TODO backend to fix
+      fundClass: investment.fundClass !== "No Class" ? investment.fundClass : "",
+      fundCurrency: investment.fundCurrency!,
+      investmentAmount: parseAmountToString(investment.investmentAmount),
+      isScheduled: `${investment.scheduledInvestment}`,
+      scheduledInvestmentAmount: investment.scheduledInvestmentAmount
+        ? parseAmountToString(investment.scheduledInvestmentAmount)
+        : undefined,
+      salesCharge: investment.investmentSalesCharge,
+      scheduledSalesCharge: investment.scheduledSalesCharge,
+      prsType: fundDetails.prsType,
+    };
+  });
 
-    const localBank = principal!.bankSummary!.localBank!.map((bank) => {
-      const bankAccountName =
-        bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
-          ? bank.combinedBankAccountName
-          : bank.bankAccountName;
+  const localBank = principal!.bankSummary!.localBank!.map((bank) => {
+    const bankAccountName =
+      bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+        ? bank.combinedBankAccountName
+        : bank.bankAccountName;
 
-      const newBank = {
-        ...bank,
-        bankAccountName: bankAccountName,
-        bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName!,
-      };
-      delete newBank.combinedBankAccountName;
-      delete newBank.otherBankName;
-      return newBank;
-    });
+    const newBank = {
+      ...bank,
+      bankAccountName: bankAccountName,
+      bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName!,
+    };
+    delete newBank.combinedBankAccountName;
+    delete newBank.otherBankName;
+    return newBank;
+  });
 
-    const foreignBank = principal!.bankSummary!.foreignBank!.map((bank) => {
-      const bankAccountName =
-        bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
-          ? bank.combinedBankAccountName
-          : bank.bankAccountName;
-      const newBank = {
-        ...bank,
-        bankAccountName: bankAccountName,
-        bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName!,
-      };
-      delete newBank.combinedBankAccountName;
-      delete newBank.otherBankName;
-      return newBank;
-    });
+  const foreignBank = principal!.bankSummary!.foreignBank!.map((bank) => {
+    const bankAccountName =
+      bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+        ? bank.combinedBankAccountName
+        : bank.bankAccountName;
+    const newBank = {
+      ...bank,
+      bankAccountName: bankAccountName,
+      bankName: bank.bankName === "Others" ? bank.otherBankName! : bank.bankName!,
+    };
+    delete newBank.combinedBankAccountName;
+    delete newBank.otherBankName;
+    return newBank;
+  });
 
-    const principalId =
-      principalIdType === "Passport"
-        ? [principal!.personalDetails!.id!.frontPage!]
-        : [principal!.personalDetails!.id!.frontPage!, principal!.personalDetails!.id!.secondPage!];
+  const principalId =
+    principalIdType === "Passport"
+      ? [principal!.personalDetails!.id!.frontPage!]
+      : [principal!.personalDetails!.id!.frontPage!, principal!.personalDetails!.id!.secondPage!];
 
-    const principalTaxResident = principal!.declaration!.crs!.taxResident!;
+  const principalTaxResident = principal!.declaration!.crs!.taxResident!;
 
-    const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
-      const principalNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
-      const principalTinReason = multiTin.reason! === 2 ? multiTin.explanation! : principalNoTinReason;
-      return {
-        country: principalTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
-        noTin: principalTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
-        reason: principalTaxResident === 0 || multiTin.noTin! === false ? undefined : principalTinReason, // undefined if taxResident === 0, required if noTin === true
-        tinNumber: principalTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
-      };
-    });
+  const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
+    const principalNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+    const principalTinReason = multiTin.reason! === 2 ? multiTin.explanation! : principalNoTinReason;
+    return {
+      country: principalTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
+      noTin: principalTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
+      reason: principalTaxResident === 0 || multiTin.noTin! === false ? undefined : principalTinReason, // undefined if taxResident === 0, required if noTin === true
+      tinNumber: principalTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
+    };
+  });
 
-    const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
-    const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-    const principalCertReason =
-      principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0];
-    const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
+  const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
+  const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
+  const principalCertReason =
+    principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0];
+  const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
-    const jointTaxResident = joint!.declaration!.crs!.taxResident!;
+  const jointTaxResident = joint!.declaration!.crs!.taxResident!;
 
-    const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
-      const jointNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
-      const jointTinReason = multiTin.reason! === 2 ? multiTin.explanation! : jointNoTinReason;
-      return {
-        country: jointTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
-        noTin: jointTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
-        reason: jointTaxResident === 0 || multiTin.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
-        tinNumber: jointTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
-      };
-    });
+  const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
+    const jointNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+    const jointTinReason = multiTin.reason! === 2 ? multiTin.explanation! : jointNoTinReason;
+    return {
+      country: jointTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
+      noTin: jointTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
+      reason: jointTaxResident === 0 || multiTin.noTin! === false ? undefined : jointTinReason, // undefined if taxResident === 0, required if noTin === true
+      tinNumber: jointTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
+    };
+  });
 
-    const jointUsCitizen = joint!.declaration!.fatca!.usCitizen! === 0;
-    const jointUsBorn = joint!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-    const jointCertReason =
-      joint!.declaration!.fatca!.reason! === 1 ? joint!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0];
-    const jointConfirmAddress = joint!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
+  const jointUsCitizen = joint!.declaration!.fatca!.usCitizen! === 0;
+  const jointUsBorn = joint!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
+  const jointCertReason =
+    joint!.declaration!.fatca!.reason! === 1 ? joint!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0];
+  const jointConfirmAddress = joint!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
-    const jointId =
-      jointIdType === "Passport"
-        ? [joint?.personalDetails?.id?.frontPage!]
-        : [joint?.personalDetails?.id?.frontPage!, joint?.personalDetails?.id?.secondPage!];
+  const jointId =
+    jointIdType === "Passport"
+      ? [joint?.personalDetails?.id?.frontPage!]
+      : [joint?.personalDetails?.id?.frontPage!, joint?.personalDetails?.id?.secondPage!];
 
-    const jointAddress = joint!.addressInformation!;
-    delete jointAddress.sameAddress;
+  const jointAddress = joint!.addressInformation!;
+  delete jointAddress.sameAddress;
 
-    const jointDetails =
-      accountType === "Joint"
-        ? {
-            clientId: details!.jointHolder?.clientId!,
-            contactDetails: joint!.contactDetails,
-            addressInformation: jointAddress,
-            declaration: {
-              crs: {
-                taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
-                tin: jointTin,
-              },
-              fatca: {
-                formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-                formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-                confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-                certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
-                noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-                reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
-                usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
-                usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
-              },
-              fea: {
-                balance: parseAmountToString(joint!.declaration!.fea!.balance!),
-                borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
-                resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
-              },
+  const jointDetails =
+    accountType === "Joint"
+      ? {
+          clientId: details!.jointHolder?.clientId!,
+          contactDetails: joint!.contactDetails,
+          addressInformation: jointAddress,
+          declaration: {
+            crs: {
+              taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
+              tin: jointTin,
             },
-            employmentDetails: joint!.employmentDetails,
-            personalDetails: {
-              countryOfBirth: joint!.personalDetails!.countryOfBirth!,
-              educationLevel:
-                joint!.personalDetails!.educationLevel === "Others"
-                  ? joint!.personalDetails!.otherEducationLevel!
-                  : joint!.personalDetails!.educationLevel!,
-              gender: joint!.personalDetails!.gender!,
-              id: jointId,
-              maritalStatus: joint!.personalDetails!.maritalStatus!,
-              monthlyHouseholdIncome: joint!.personalDetails!.monthlyHouseholdIncome!,
-              mothersMaidenName: joint!.personalDetails!.mothersMaidenName!,
-              name: joint!.personalDetails!.name!,
-              nationality: joint!.personalDetails!.nationality!,
-              placeOfBirth: joint!.personalDetails!.placeOfBirth!,
-              salutation: joint!.personalDetails!.salutation!,
-              ...jointMalaysianDetails,
-              expirationDate: jointExpirationDate,
+            fatca: {
+              formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+              formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+              confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
+              certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
+              noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
+              reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
+              usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
+              usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
             },
-          }
-        : undefined;
+            fea: {
+              balance: parseAmountToString(joint!.declaration!.fea!.balance!),
+              borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
+              resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
+            },
+          },
+          employmentDetails: joint!.employmentDetails,
+          personalDetails: {
+            countryOfBirth: joint!.personalDetails!.countryOfBirth!,
+            educationLevel:
+              joint!.personalDetails!.educationLevel === "Others"
+                ? joint!.personalDetails!.otherEducationLevel!
+                : joint!.personalDetails!.educationLevel!,
+            gender: joint!.personalDetails!.gender!,
+            id: jointId,
+            maritalStatus: joint!.personalDetails!.maritalStatus!,
+            monthlyHouseholdIncome: joint!.personalDetails!.monthlyHouseholdIncome!,
+            mothersMaidenName: joint!.personalDetails!.mothersMaidenName!,
+            name: joint!.personalDetails!.name!,
+            nationality: joint!.personalDetails!.nationality!,
+            placeOfBirth: joint!.personalDetails!.placeOfBirth!,
+            salutation: joint!.personalDetails!.salutation!,
+            ...jointMalaysianDetails,
+            expirationDate: jointExpirationDate,
+          },
+        }
+      : undefined;
 
-    const principalAddress = principal!.addressInformation!;
-    delete principalAddress.sameAddress;
+  const principalAddress = principal!.addressInformation!;
+  delete principalAddress.sameAddress;
 
-    const request = {
-      incomeDistribution: personalInfo.incomeDistribution!,
-      signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
-      principal: {
-        clientId: details!.principalHolder!.clientId!,
-        addressInformation: principalAddress as ISubmitAddressInformation,
-        bankSummary: {
-          localBank: localBank as ISubmitBank[],
-          foreignBank: foreignBank as ISubmitBank[],
+  const request = {
+    incomeDistribution: personalInfo.incomeDistribution!,
+    signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
+    principal: {
+      clientId: details!.principalHolder!.clientId!,
+      addressInformation: principalAddress as ISubmitAddressInformation,
+      bankSummary: {
+        localBank: localBank as ISubmitBank[],
+        foreignBank: foreignBank as ISubmitBank[],
+      },
+      contactDetails: {
+        contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
+          code: contact.code,
+          label: contact.label,
+          value: contact.value,
+        })),
+        emailAddress: principal!.contactDetails!.emailAddress!,
+      },
+      declaration: {
+        crs: {
+          taxResident: OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident], // required
+          tin: principalTin,
         },
-        contactDetails: {
-          contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
-            code: contact.code,
-            label: contact.label,
-            value: contact.value,
-          })),
-          emailAddress: principal!.contactDetails!.emailAddress!,
+        fatca: {
+          formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+          formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+          confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
+          certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
+          noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
+          reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
+          usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
+          usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
         },
-        declaration: {
-          crs: {
-            taxResident: OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident], // required
-            tin: principalTin,
-          },
-          fatca: {
-            formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-            formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-            confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-            certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
-            noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-            reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
-            usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
-            usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
-          },
-          fea: {
-            balance: parseAmountToString(principal!.declaration!.fea!.balance!),
-            borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
-            resident: principal!.declaration!.fea!.resident! === 0 ? "true" : "false",
-          },
-        },
-        epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
-        employmentDetails: principal!.employmentDetails! as ISubmitEmploymentBase,
-        personalDetails: {
-          countryOfBirth: principal!.personalDetails!.countryOfBirth!,
-          educationLevel:
-            principal!.personalDetails!.educationLevel === "Others"
-              ? principal!.personalDetails!.otherEducationLevel!
-              : principal!.personalDetails!.educationLevel!,
-          gender: principal!.personalDetails!.gender!,
-          id: principalId,
-          maritalStatus: principal!.personalDetails!.maritalStatus!,
-          monthlyHouseholdIncome: principal!.personalDetails!.monthlyHouseholdIncome!,
-          mothersMaidenName: principal!.personalDetails!.mothersMaidenName!,
-          name: principal!.personalDetails!.name!,
-          nationality: principal!.personalDetails!.nationality!,
-          placeOfBirth: principal!.personalDetails!.placeOfBirth!,
-          salutation: principal!.personalDetails!.salutation!,
-          ...principalMalaysianDetails,
-          relationship: jointRelationship,
-          expirationDate: principalExpirationDate,
+        fea: {
+          balance: parseAmountToString(principal!.declaration!.fea!.balance!),
+          borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
+          resident: principal!.declaration!.fea!.resident! === 0 ? "true" : "false",
         },
       },
-      joint:
-        jointDetails !== undefined
-          ? {
-              clientId: jointDetails.clientId,
-              addressInformation: jointDetails.addressInformation as ISubmitAddressInformation,
-              contactDetails: {
-                contactNumber: jointDetails.contactDetails!.contactNumber!.map((contact) => ({
-                  code: contact.code,
-                  label: contact.label,
-                  value: contact.value,
-                })),
-                emailAddress: jointDetails.contactDetails!.emailAddress!,
-              },
-              declaration: jointDetails.declaration as ISubmitDeclaration,
-              employmentDetails: jointDetails.employmentDetails as ISubmitEmploymentJoint,
-              personalDetails: jointDetails.personalDetails as ISubmitPersonalDetails,
-            }
-          : undefined,
-      investments: investments,
-    };
+      epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
+      employmentDetails: principal!.employmentDetails! as ISubmitEmploymentBase,
+      personalDetails: {
+        countryOfBirth: principal!.personalDetails!.countryOfBirth!,
+        educationLevel:
+          principal!.personalDetails!.educationLevel === "Others"
+            ? principal!.personalDetails!.otherEducationLevel!
+            : principal!.personalDetails!.educationLevel!,
+        gender: principal!.personalDetails!.gender!,
+        id: principalId,
+        maritalStatus: principal!.personalDetails!.maritalStatus!,
+        monthlyHouseholdIncome: principal!.personalDetails!.monthlyHouseholdIncome!,
+        mothersMaidenName: principal!.personalDetails!.mothersMaidenName!,
+        name: principal!.personalDetails!.name!,
+        nationality: principal!.personalDetails!.nationality!,
+        placeOfBirth: principal!.personalDetails!.placeOfBirth!,
+        salutation: principal!.personalDetails!.salutation!,
+        ...principalMalaysianDetails,
+        relationship: jointRelationship,
+        expirationDate: principalExpirationDate,
+      },
+    },
+    joint:
+      jointDetails !== undefined
+        ? {
+            clientId: jointDetails.clientId,
+            addressInformation: jointDetails.addressInformation as ISubmitAddressInformation,
+            contactDetails: {
+              contactNumber: jointDetails.contactDetails!.contactNumber!.map((contact) => ({
+                code: contact.code,
+                label: contact.label,
+                value: contact.value,
+              })),
+              emailAddress: jointDetails.contactDetails!.emailAddress!,
+            },
+            declaration: jointDetails.declaration as ISubmitDeclaration,
+            employmentDetails: jointDetails.employmentDetails as ISubmitEmploymentJoint,
+            personalDetails: jointDetails.personalDetails as ISubmitPersonalDetails,
+          }
+        : undefined,
+    investments: investments,
+  };
+
+  const handleSetupClient = async () => {
+    setLoading(true);
 
     // eslint-disable-next-line no-console
     console.log("submitClientAccount request", request);

@@ -151,11 +151,14 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
         })
       : [];
 
-  const employmentDetailsSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_OCCUPATION, title: employmentDetails!.occupation! },
-    { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
-    { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
-  ];
+  const employmentDetailsSummary: LabeledTitleProps[] =
+    employmentDetails?.isEnabled === true
+      ? [
+          { label: SUMMARY.LABEL_OCCUPATION, title: employmentDetails!.occupation! },
+          { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
+          { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
+        ]
+      : [];
 
   const employmentAddressLabel =
     employmentDetails!.address!.line2 !== undefined || employmentDetails!.address!.line3 !== undefined

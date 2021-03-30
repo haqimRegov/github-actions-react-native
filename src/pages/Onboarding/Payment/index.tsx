@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { BlurView, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
@@ -28,7 +28,7 @@ import {
   sw4,
 } from "../../../styles";
 import { PaymentOrder, PaymentPopup } from "../../../templates";
-import { formatAmount, parseAmountToString } from "../../../utils";
+import { AlertDialog, formatAmount, parseAmountToString } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {
@@ -90,9 +90,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
       }
       if (error !== null) {
         const errorList = error.errorList?.join("\n");
-        setTimeout(() => {
-          Alert.alert(error.message, errorList);
-        }, 100);
+        AlertDialog(error.message, () => setLoading(false), errorList);
       }
     }
     return undefined;

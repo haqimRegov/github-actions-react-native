@@ -26,7 +26,7 @@ import {
 } from "../../styles";
 import { AnimationUtils, formatAmount } from "../../utils";
 
-const { ORDER_SUMMARY, PAYMENT } = Language.PAGE;
+const { ORDER_SUMMARY } = Language.PAGE;
 
 export interface FundOverviewProps {
   fund: IOrderInvestment;
@@ -42,6 +42,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
     fundCurrency,
     fundingOption,
     fundName,
+    fundType,
     investmentAmount,
     isFea,
     isSyariah,
@@ -61,16 +62,19 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
 
   const summary: LabeledTitleProps[] = [
     {
-      label: ORDER_SUMMARY.LABEL_FUND_CLASS,
-      title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
+      label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
+      // TODO temporary before backend fix
+      title: salesCharge.includes("%") ? salesCharge : `${salesCharge}%`,
     },
     {
-      label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
-      title: `${salesCharge}%`,
+      label: ORDER_SUMMARY.LABEL_PRODUCT_TYPE,
+      title: fundType || "-",
     },
     {
       label: ORDER_SUMMARY.LABEL_FUNDING_OPTION,
-      title: fundingOption,
+      // TODO temporary fix until backend fix it
+      // eslint-disable-next-line dot-notation
+      title: fundingOption || fund["accountFund"],
       titleStyle: fundingOption === "EPF" ? undefined : fsCapitalize,
     },
     {
@@ -84,17 +88,25 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
     {
       label: ORDER_SUMMARY.LABEL_DISTRIBUTION,
       title: distributionInstruction,
-      titleStyle: fsCapitalize,
+      titleStyle: fsTransformNone,
     },
     {
-      label: ORDER_SUMMARY.LABEL_TOTAL_INVESTMENT_AMOUNT,
+      label: isScheduled ? ORDER_SUMMARY.LABEL_INITIAL_AMOUNT : ORDER_SUMMARY.LABEL_INVESTMENT_AMOUNT,
       title: `${fundCurrency} ${formatAmount(investmentAmount)}`,
     },
   ];
+
+  if (fundClass) {
+    summary.splice(0, 0, {
+      label: ORDER_SUMMARY.LABEL_FUND_CLASS,
+      title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
+    });
+  }
+
   if (isScheduled === true) {
     summary.push({
-      label: PAYMENT.LABEL_PAYMENT_TERM,
-      title: PAYMENT.LABEL_RECURRING_TYPE,
+      label: ORDER_SUMMARY.LABEL_PAYMENT_TERM,
+      title: ORDER_SUMMARY.LABEL_RECURRING_TYPE,
     });
   }
   const headerStyle: ViewStyle = {

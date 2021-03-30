@@ -173,7 +173,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
               value={principalOtp}
             />
             <CustomSpacer space={sh32} />
-            {jointEmailCheck === true ? (
+            {jointEmailCheck === true || jointEmail !== "" ? (
               <Fragment>
                 <CustomTextInput
                   keyboardType="numeric"

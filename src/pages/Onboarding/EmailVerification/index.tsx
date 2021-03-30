@@ -54,7 +54,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const handleEmailVerification = async () => {
     setPrincipalEmailError(undefined);
     setJointEmailError(undefined);
-    const jointRequest = jointEmailCheck === true ? { email: inputJointEmail } : undefined;
+    const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
     const request = {
       clientId: principalClientId,
       principalHolder: { email: inputPrincipalEmail },

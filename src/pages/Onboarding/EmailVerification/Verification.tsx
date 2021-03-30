@@ -27,7 +27,7 @@ import {
 } from "../../../styles";
 import { isEmail } from "../../../utils";
 
-const { EMAIL_VERIFICATION } = Language.PAGE;
+const { EMAIL_VERIFICATION, PERSONAL_DETAILS } = Language.PAGE;
 
 declare interface VerificationProps {
   accountType: TypeAccountChoices;
@@ -88,7 +88,11 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   };
 
   const checkJointEmail = () => {
-    setJointError(validateEmail(inputJointEmail));
+    if (inputJointEmail !== "" || jointEmailCheck === true) {
+      setJointError(validateEmail(inputJointEmail));
+    } else {
+      setJointError(undefined);
+    }
   };
 
   useEffect(() => {
@@ -114,6 +118,10 @@ export const Verification: FunctionComponent<VerificationProps> = ({
         validateEmail(inputPrincipalEmail) !== undefined ||
         validateEmail(inputJointEmail) !== undefined;
   const subtitle = jointEmailCheck === true ? EMAIL_VERIFICATION.SUBHEADING_JOINT : EMAIL_VERIFICATION.SUBHEADING;
+  const jointLabel =
+    jointEmailCheck === false
+      ? `${EMAIL_VERIFICATION.LABEL_EMAIL_JOINT} ${PERSONAL_DETAILS.LABEL_OPTIONAL}`
+      : EMAIL_VERIFICATION.LABEL_EMAIL_JOINT;
 
   return (
     <ContentPage
@@ -147,17 +155,17 @@ export const Verification: FunctionComponent<VerificationProps> = ({
               value={inputPrincipalEmail}
             />
           </CustomTooltip>
-          {jointEmailCheck === true ? null : (
+          {accountType === "Joint" ? null : (
             <TextSpaceArea
               spaceToTop={sh8}
               style={{ ...fs12RegBlack2, ...px(sw16), letterSpacing: sw02 }}
-              text={EMAIL_VERIFICATION.NOTE_LINK}
+              text={EMAIL_VERIFICATION.NOTE_VERIFICATION_LINK}
             />
           )}
-          {jointEmailCheck === true ? (
+          {accountType === "Joint" ? (
             <Fragment>
               <CustomSpacer space={sh32} />
-              <Text style={fs12BoldBlack2}>{EMAIL_VERIFICATION.LABEL_EMAIL_JOINT}</Text>
+              <Text style={fs12BoldBlack2}>{jointLabel}</Text>
               <CustomTextInput
                 autoCapitalize="none"
                 error={jointError}

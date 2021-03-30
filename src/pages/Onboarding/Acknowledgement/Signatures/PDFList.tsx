@@ -40,13 +40,16 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   const handleSubmit = async () => {
     setLoading(true);
     const documents: ISubmitPdfDocument[] = receipts!.map((receipt) => {
-      return {
+      const receiptData: ISubmitPdfDocument = {
         adviserSignature: receipt.adviserSignature!,
         clientSignature: receipt.principalSignature!,
-        jointSignature: receipt.jointSignature,
         orderNumber: receipt.orderNumber!,
         pdf: receipt.signedPdf!,
       };
+      if (receipt.jointSignature?.base64 !== undefined) {
+        receiptData.jointSignature = receipt.jointSignature;
+      }
+      return receiptData;
     });
     const request: ISubmitPdfRequest = {
       clientId: clientId!,

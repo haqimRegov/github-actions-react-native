@@ -51,7 +51,7 @@ import {
   sw784,
   sw8,
 } from "../../styles";
-import { formatAmount, isAmount, parseAmount } from "../../utils";
+import { formatAmount, isAmount, isNumber, parseAmount } from "../../utils";
 import { CashDepositMachine, Cheque, ClientTrustAccount, EPF, OnlineBanking, Recurring } from "./PaymentMethod";
 
 const { PAYMENT } = Language.PAGE;
@@ -93,6 +93,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   const [prompt, setPrompt] = useState<number | undefined>(undefined);
   const [expandedIndex, setExpandedIndex] = useState<number>(0);
   const [amountError, setAmountError] = useState<string | undefined>(undefined);
+  const [chequeError, setChequeError] = useState<string | undefined>(undefined);
   const [draftPayments, setDraftPayments] = useState<IPaymentState[]>(payments);
 
   const withPreviousPayment = totalPaidAmount !== undefined && totalPaidAmount.length > 0;
@@ -413,6 +414,10 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               setAmount(amount.value);
             };
 
+            const checkChequeNumber = () => {
+              setChequeError(isNumber(payment.checkNumber!) === false ? ERROR.INVALID_CHEQUE_NUMBER : undefined);
+            };
+
             const checkCombinedBankName =
               payment.bankAccountName === "Combined"
                 ? payment.combinedBankAccountName === "" || payment.combinedBankAccountName === undefined
@@ -453,8 +458,8 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
               payment.bankName === undefined ||
               payment.checkNumber === "" ||
               payment.checkNumber === undefined ||
+              chequeError !== undefined ||
               payment.transactionDate === undefined;
-
             const cdmDisabled = baseCashDisabled === true || payment.transactionDate === undefined || payment.transactionTime === undefined;
 
             const epfSaveDisabled =
@@ -515,6 +520,8 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                     {...paymentMethodProps}
                     bankName={payment.bankName!}
                     checkNumber={payment.checkNumber!}
+                    checkNumberError={chequeError}
+                    onBlurCheckNumber={checkChequeNumber}
                     setBankName={setBankName}
                     setCheckNumber={setCheckNumber}
                   />

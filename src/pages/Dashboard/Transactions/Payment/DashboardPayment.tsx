@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer, SafeAreaPage, SelectionBanner } from "../../../../components";
@@ -127,9 +127,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
       }
       if (error !== null) {
         const errorList = error.errorList?.join("\n");
-        setTimeout(() => {
-          Alert.alert(error.message, errorList);
-        }, 100);
+        AlertDialog(error.message, () => setLoading(false), errorList);
       }
     }
     return undefined;

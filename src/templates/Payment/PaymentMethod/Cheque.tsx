@@ -6,15 +6,18 @@ import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, Labe
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
 import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh24, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../styles";
+import { isNumber } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 
 export interface ChequeProps {
   bankName: string;
   checkNumber: string;
+  checkNumberError: string | undefined;
   currency: string;
-  kibBankName: string;
   kibBankAccountNumber: string;
+  kibBankName: string;
+  onBlurCheckNumber: () => void;
   orderCreationDate?: Date;
   setBankName: (value: string) => void;
   setCheckNumber: (value: string) => void;
@@ -25,15 +28,23 @@ export interface ChequeProps {
 export const Cheque: FunctionComponent<ChequeProps> = ({
   bankName,
   checkNumber,
+  checkNumberError,
   currency,
-  kibBankName,
   kibBankAccountNumber,
+  kibBankName,
+  onBlurCheckNumber,
   orderCreationDate,
   setBankName,
   setCheckNumber,
   setTransactionDate,
   transactionDate,
 }: ChequeProps) => {
+  const handleCheckNumber = (value: string) => {
+    if (isNumber(value) || value === "") {
+      setCheckNumber(value);
+    }
+  };
+
   return (
     <View>
       <View style={px(sw24)}>
@@ -45,7 +56,14 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
             value={bankName}
           />
           <CustomSpacer isHorizontal={true} space={sw64} />
-          <CustomTextInput label={PAYMENT.LABEL_CHEQUE_NO} onChangeText={setCheckNumber} value={checkNumber} />
+          <CustomTextInput
+            error={checkNumberError}
+            keyboardType="numeric"
+            label={PAYMENT.LABEL_CHEQUE_NO}
+            onBlur={onBlurCheckNumber}
+            onChangeText={handleCheckNumber}
+            value={checkNumber}
+          />
         </View>
       </View>
       <View style={px(sw24)}>

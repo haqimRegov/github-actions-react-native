@@ -372,21 +372,22 @@ const submitClientAccount = gql`
             }
             paymentType
             investments {
-              fundingOption
               distributionInstruction
               fundClass
               fundCurrency
+              fundingOption
+              fundId
               fundIssuer
               fundName
               fundType
               investmentAmount
               isEpf
+              isFea
+              isScheduled
               isSyariah
               salesCharge
-              isScheduled
               scheduledInvestmentAmount
               scheduledSalesCharge
-              isFea
             }
           }
         }

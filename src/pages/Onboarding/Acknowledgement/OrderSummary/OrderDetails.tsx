@@ -43,7 +43,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
   orderSummary,
   setExpandOrder,
 }: OrderDetailsProps) => {
-  const { orderDate, orderTotalAmount, orderNumber, investments } = orderSummary;
+  const { orderDate, orderTotalAmount, orderNumber, paymentType, investments } = orderSummary;
   const expanded = expandOrder === index;
   const icon = expanded ? "caret-up" : "caret-down";
 
@@ -68,6 +68,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
   };
   // const orderDate = moment(date).format(PAYMENT_DATE_FORMAT);
 
+  const orderLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
+
   return (
     <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8 }}>
       <TouchableWithoutFeedback onPress={handleExpand}>
@@ -78,7 +80,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
           </View>
           <CustomFlexSpacer />
           <View style={alignItemsEnd}>
-            <Text style={fs12RegBlack2}>{PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT}</Text>
+            <Text style={fs12RegBlack2}>{orderLabel}</Text>
             <CustomSpacer space={sh8} />
             <View style={{ ...centerVertical, ...flexRow }}>
               {orderTotalAmount.map((totalAmount: IOrderAmount, amountIndex: number) => {
@@ -97,7 +99,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
           <IcoMoon color={colorBlack._1} name={icon} size={sh32} />
         </View>
       </TouchableWithoutFeedback>
-      {expanded ? investments.map((fund: IOrderInvestment, fundIndex: number) => <FundDetails key={fundIndex} fund={fund} />) : null}
+      {expanded
+        ? investments.map((fund: IOrderInvestment, fundIndex: number) => (
+            <FundDetails key={fundIndex} fund={fund} paymentType={paymentType} />
+          ))
+        : null}
     </View>
   );
 };

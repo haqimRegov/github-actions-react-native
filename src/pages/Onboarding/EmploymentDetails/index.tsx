@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
+import { borderBottomBlack21, px, sh56, sw24, sw48 } from "../../../styles";
 import { JointEmploymentDetails } from "./Joint";
 import { PrincipalEmploymentDetails } from "./Principal";
 
@@ -44,7 +44,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   };
 
   const buttonDisabled =
-    accountType === "Individual"
+    accountType === "Individual" || joint?.employmentDetails?.isEnabled === false
       ? validateDetails(principal!, validations.principal) === false
       : validateDetails(principal!, validations.principal) === false ||
         validateDetails(joint!, validations.joint) === false ||
@@ -95,9 +95,9 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       />
       {accountType === "Individual" ? null : (
         <Fragment>
-          <CustomSpacer space={sh24} />
+          <CustomSpacer space={sh56} />
           <View style={borderBottomBlack21} />
-          <CustomSpacer space={sh48} />
+          <CustomSpacer space={sh56} />
           <JointEmploymentDetails
             accountType={accountType}
             personalDetails={joint!.personalDetails!}

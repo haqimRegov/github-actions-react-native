@@ -62,6 +62,10 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
 
   const summary: LabeledTitleProps[] = [
     {
+      label: ORDER_SUMMARY.LABEL_INVESTMENT_AMOUNT,
+      title: `${fundCurrency} ${formatAmount(investmentAmount || "")}`,
+    },
+    {
       label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
       title: isScheduled === true ? `${scheduledSalesCharge}%` : `${salesCharge}%`,
     },
@@ -99,14 +103,16 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
   }
 
   if (isScheduled === true) {
-    summary.push(
+    summary.splice(
+      0,
+      2,
       {
-        label: ORDER_SUMMARY.LABEL_INITIAL_AMOUNT,
-        title: `${fundCurrency} ${formatAmount(investmentAmount)}`,
+        label: ORDER_SUMMARY.LABEL_RECURRING_AMOUNT,
+        title: `${fundCurrency} ${formatAmount(scheduledInvestmentAmount || "")}`,
       },
       {
-        label: ORDER_SUMMARY.LABEL_PAYMENT_TERM,
-        title: ORDER_SUMMARY.LABEL_RECURRING_TYPE,
+        label: ORDER_SUMMARY.LABEL_RECURRING_SALES_CHARGE,
+        title: `${scheduledSalesCharge}%`,
       },
     );
   }

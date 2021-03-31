@@ -38,7 +38,8 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
   const principalClientId = details?.principalHolder?.clientId!;
   const jointEmailCheck =
-    accountType === "Joint" && moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18;
+    accountType === "Joint" &&
+    (inputJointEmail !== "" || moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18);
 
   const handleNavigate = () => {
     handleNextStep("IdentityVerification");
@@ -54,7 +55,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const handleEmailVerification = async () => {
     setPrincipalEmailError(undefined);
     setJointEmailError(undefined);
-    const jointRequest = jointEmailCheck === true ? { email: inputJointEmail } : undefined;
+    const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
     const request = {
       clientId: principalClientId,
       principalHolder: { email: inputPrincipalEmail },

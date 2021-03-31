@@ -299,6 +299,7 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                 <View onStartShouldSetResponder={() => true} style={{ ...flexChild }}>
                   <CustomTextInput
                     containerStyle={{ width: sw268 }}
+                    keyboardType="numeric"
                     onBlur={handleBlurInside}
                     onChangeText={handleChangeMobile}
                     placeholder={placeholderLabel}
@@ -342,10 +343,11 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                         </View>
                         <View onStartShouldSetResponder={() => true} style={{ ...flexChild }}>
                           <CustomTextInput
-                            value={data.value}
+                            containerStyle={{ width: sw268 }}
                             onBlur={handleBlurInside}
                             onChangeText={handleChangeMobile}
                             placeholder={placeholderLabel}
+                            value={data.value}
                             viewStyle={numberInputStyle}
                             {...textInputProps}
                           />

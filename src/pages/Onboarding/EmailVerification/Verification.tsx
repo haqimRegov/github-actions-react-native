@@ -159,7 +159,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
             <TextSpaceArea
               spaceToTop={sh8}
               style={{ ...fs12RegBlack2, ...px(sw16), letterSpacing: sw02 }}
-              text={EMAIL_VERIFICATION.NOTE_VERIFICATION_LINK}
+              text={EMAIL_VERIFICATION.NOTE_LINK}
             />
           )}
           {accountType === "Joint" ? (

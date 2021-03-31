@@ -21,7 +21,7 @@ import {
   sw1,
   sw16,
   sw160,
-  sw165,
+  sw164,
   sw24,
   sw48,
   sw532,
@@ -72,11 +72,11 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   //   },
   // ];
 
-  const agentOnboardingLink = {
-    onPress: handleAgentOnboarding,
-    text: LOGIN.LINK_AGENT_ONBOARDING,
-    style: fs12SemiBoldBlue2,
-  };
+  // const agentOnboardingLink = {
+  //   onPress: handleAgentOnboarding,
+  //   text: LOGIN.LINK_AGENT_ONBOARDING,
+  //   style: fs12SemiBoldBlue2,
+  // };
 
   const backToLoginLink = {
     onPress: handleBackToLogin,
@@ -106,7 +106,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
 
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
   const logoStyle: ImageStyle = { height: sh64, width: sw160, resizeMode: "contain" };
-  const buttonStyle: ViewStyle = { ...border(colorBlue._2, sw1, sw24), ...px(sw16), width: sw165, height: sh32 };
+  const buttonStyle: ViewStyle = { ...border(colorBlue._2, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
 
   return (
     <Fragment>

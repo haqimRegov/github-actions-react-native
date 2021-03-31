@@ -89,8 +89,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
               { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CODE, title: investment.fundCode, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_SALES_CHARGE, title: investment.salesCharge },
               { label: amountLabel, title: `${investment.fundCurrency} ${investment.investmentAmount}`, titleStyle: fsTransformNone },
-              { label: DASHBOARD_ORDER_DETAILS.LABEL_PRODUCT_TYPE, title: investment.productType, titleStyle: fsTransformNone },
-              { label: DASHBOARD_ORDER_DETAILS.LABEL_FUNDING_OPTION, title: investment.accountFund, titleStyle: fsTransformNone },
+              { label: DASHBOARD_ORDER_DETAILS.LABEL_PRODUCT_TYPE, title: investment.fundType, titleStyle: fsTransformNone },
+              { label: DASHBOARD_ORDER_DETAILS.LABEL_FUNDING_OPTION, title: investment.fundingOption, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_TYPE, title: investment.investmentType },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_DISTRIBUTION, title: investment.distributionInstruction || "-" },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING, title: investment.recurring },
@@ -100,8 +100,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
               fundDetails.splice(1, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CLASS, title: investment.fundClass });
             }
 
-            if (investment.feaTagged !== null) {
-              fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.feaTagged });
+            if (investment.isFea !== null) {
+              fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.isFea });
             }
 
             if (isScheduled === true) {
@@ -110,22 +110,23 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 1,
                 {
                   label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_AMOUNT,
-                  title: `${DICTIONARY_RECURRING_CURRENCY} ${investment.scheduledPayment}`,
+                  title: `${DICTIONARY_RECURRING_CURRENCY} ${investment.scheduledInvestmentAmount}`,
                   titleStyle: fsTransformNone,
                 },
-                { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_SALES_CHARGE, title: investment.salesCharge },
+                { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_SALES_CHARGE, title: investment.scheduledSalesCharge },
               );
             }
 
             return (
               <Fragment key={index}>
+                {index === 0 ? null : <CustomSpacer space={sh16} />}
                 <View style={{ ...flexRow, borderLeftColor: colorRed._2, borderLeftWidth: sw2 }}>
                   <CustomSpacer isHorizontal={true} space={sw8} />
                   <IcoMoon color={colorBlue._2} name="order" onPress={handleEdit} size={sw24} />
                   <CustomSpacer isHorizontal={true} space={sw8} />
                   <Text style={{ ...fs18BoldBlack2, lineHeight: sh24 }}>{investment.fundName}</Text>
                 </View>
-                <Text style={fs12BoldBlack2}>{investment.utmc}</Text>
+                <Text style={fs12BoldBlack2}>{investment.fundIssuer}</Text>
                 <CustomSpacer space={sh24} />
                 <TextCard data={fundDetails} spaceBetweenItem={sw64} />
               </Fragment>

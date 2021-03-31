@@ -37,6 +37,7 @@ import {
   sw2,
   sw20,
   sw24,
+  sw268,
   sw296,
   sw360,
   sw8,
@@ -283,10 +284,11 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                 </View>
                 <View onStartShouldSetResponder={() => true} style={{ ...flexChild }}>
                   <CustomTextInput
-                    value={data.value}
-                    onChangeText={handleChangeMobile}
+                    containerStyle={{ width: sw268 }}
                     onBlur={handleBlur}
+                    onChangeText={handleChangeMobile}
                     placeholder={placeholderLabel}
+                    value={data.value}
                     viewStyle={numberInputStyle}
                     {...textInputProps}
                   />

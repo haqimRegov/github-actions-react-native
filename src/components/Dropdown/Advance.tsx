@@ -140,7 +140,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
                     style={{ ...px(sw16), maxHeight: sh200 }}
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="always"
-                    keyExtractor={(item: string) => item}
+                    keyExtractor={(item: string, index: number) => `${item}-${index}`}
                     ListHeaderComponent={() => <CustomSpacer space={sh8} />}
                     ListFooterComponent={() => <CustomSpacer space={sh8} />}
                     renderItem={({ index }) => {

@@ -63,8 +63,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
   const summary: LabeledTitleProps[] = [
     {
       label: ORDER_SUMMARY.LABEL_SALES_CHARGE,
-      // TODO temporary before backend fix
-      title: salesCharge.includes("%") ? salesCharge : `${salesCharge}%`,
+      title: isScheduled === true ? `${scheduledSalesCharge}%` : `${salesCharge}%`,
     },
     {
       label: ORDER_SUMMARY.LABEL_PRODUCT_TYPE,
@@ -90,10 +89,6 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
       title: distributionInstruction,
       titleStyle: fsTransformNone,
     },
-    {
-      label: isScheduled ? ORDER_SUMMARY.LABEL_INITIAL_AMOUNT : ORDER_SUMMARY.LABEL_INVESTMENT_AMOUNT,
-      title: `${fundCurrency} ${formatAmount(investmentAmount)}`,
-    },
   ];
 
   if (fundClass) {
@@ -104,10 +99,16 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
   }
 
   if (isScheduled === true) {
-    summary.push({
-      label: ORDER_SUMMARY.LABEL_PAYMENT_TERM,
-      title: ORDER_SUMMARY.LABEL_RECURRING_TYPE,
-    });
+    summary.push(
+      {
+        label: ORDER_SUMMARY.LABEL_INITIAL_AMOUNT,
+        title: `${fundCurrency} ${formatAmount(investmentAmount)}`,
+      },
+      {
+        label: ORDER_SUMMARY.LABEL_PAYMENT_TERM,
+        title: ORDER_SUMMARY.LABEL_RECURRING_TYPE,
+      },
+    );
   }
   const headerStyle: ViewStyle = {
     ...centerVertical,

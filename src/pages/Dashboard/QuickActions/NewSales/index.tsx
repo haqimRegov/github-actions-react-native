@@ -66,8 +66,7 @@ const NewSalesComponent = ({
   const { dateOfBirth, id, idType, name } = details![holderToFill]!;
 
   const BUTTON_LABEL_UNREGISTERED = clientType !== "" ? ADD_CLIENT.BUTTON_PROCEED : ADD_CLIENT.BUTTON_STARTED;
-  const BUTTON_COUNTRY_PROMPT = prompt === "highRisk" ? ADD_CLIENT.BUTTON_CONTINUE : ADD_CLIENT.BUTTON_BACK;
-  const BUTTON_CONTINUE_PROMPT = prompt === "highRisk" || prompt === "bannedCountry" ? BUTTON_COUNTRY_PROMPT : ADD_CLIENT.BUTTON_ADD;
+  const BUTTON_CONTINUE_PROMPT = prompt === "bannedCountry" ? ADD_CLIENT.BUTTON_BACK : ADD_CLIENT.BUTTON_ADD;
   const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_UNREGISTERED;
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
@@ -180,9 +179,6 @@ const NewSalesComponent = ({
         setErrorMessage(undefined);
         setInputError1(undefined);
         if (data.result.message === "NTB") {
-          if (data.result.highRisk === true) {
-            return setPrompt("highRisk");
-          }
           return setClientType("NTB");
         }
         setTimeout(() => {
@@ -258,10 +254,6 @@ const NewSalesComponent = ({
   };
 
   const handleContinue = () => {
-    if (prompt === "highRisk") {
-      setClientType("NTB");
-      return setPrompt(undefined);
-    }
     if (prompt === "bannedCountry") {
       return handleCancelNewSales();
     }
@@ -335,7 +327,6 @@ const NewSalesComponent = ({
               continueDisabled={continueDisabled}
               handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}
-              labelCancel={prompt === "highRisk" ? ADD_CLIENT.BUTTON_BACK : undefined}
               labelContinue={BUTTON_LABEL}
             />
           </View>

@@ -1,9 +1,10 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
-import { Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { AccountDetails } from "./AccountDetails";
@@ -95,6 +96,9 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     );
   };
 
+  const jointContactCheck =
+    accountType === "Joint" && moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") < 18;
+
   const validateJoint = (info: IHolderInfoState) => {
     const { contactDetails, personalDetails } = info;
     // const jointAge = moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years");
@@ -113,10 +117,6 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     //         .includes("") === false
     //     : true;
     return (
-      Object.values(contactDetails!.contactNumber!)
-        .map((contact) => contact.value)
-        .flat()
-        .includes("") === false &&
       Object.values(contactDetails!.contactNumber!)
         .map((contact) => typeof contact.error)
         .includes("string") === false &&
@@ -245,6 +245,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
               epfInvestment={epfInvestment!}
               epfShariah={epfShariah!}
               investmentCurrencies={uniqueCurrencies}
+              jointContactCheck={jointContactCheck}
               personalDetails={joint!.personalDetails!}
               setBankDetails={handleJointBankDetails}
               setContactDetails={handleJointContactDetails}

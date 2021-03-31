@@ -25,6 +25,7 @@ interface PersonalInfoProps {
   epfInvestment: boolean;
   epfShariah: boolean;
   investmentCurrencies: string[];
+  jointContactCheck?: boolean;
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
   setContactDetails: (value: IContactDetailsState) => void;
@@ -44,6 +45,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   epfInvestment,
   epfShariah,
   investmentCurrencies,
+  jointContactCheck,
   personalDetails,
   setBankDetails,
   setContactDetails,
@@ -88,18 +90,25 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   };
 
   const checkEpfNumber = () => {
-    setValidations({ ...validations, epfNumber: isNumber(inputEpfNumber) === false ? ERROR.INVALID_NUMBER : undefined });
+    setValidations({
+      ...validations,
+      epfNumber: isNumber(inputEpfNumber) === false || inputEpfNumber === "" ? ERROR.INVALID_NUMBER : undefined,
+    });
   };
 
   const checkMothersName = () => {
-    setValidations({ ...validations, mothersName: isNonNumber(inputMotherName) === false ? ERROR.INVALID_NAME : undefined });
+    setValidations({
+      ...validations,
+      mothersName: isNonNumber(inputMotherName) === false || inputMotherName === "" ? ERROR.INVALID_NAME : undefined,
+    });
   };
 
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails.idType! as TypeClientID) !== 1;
+  const isContactOptional = jointContactCheck !== undefined ? jointContactCheck : false;
 
   return (
     <View>
-      <ContactDetails contactNumber={contactDetails.contactNumber!} setContactNumber={setContactNumber} />
+      <ContactDetails contactNumber={contactDetails.contactNumber!} setContactNumber={setContactNumber} optional={isContactOptional} />
       {isMalaysian ? (
         <MalaysianDetails
           inputBumiputera={inputBumiputera}

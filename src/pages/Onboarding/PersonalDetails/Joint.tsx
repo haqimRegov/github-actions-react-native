@@ -16,6 +16,7 @@ interface JointDetails {
   epfInvestment: boolean;
   epfShariah: boolean;
   investmentCurrencies: string[];
+  jointContactCheck: boolean;
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
   setContactDetails: (value: IContactDetailsState) => void;
@@ -33,6 +34,7 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
   epfInvestment,
   epfShariah,
   investmentCurrencies,
+  jointContactCheck,
   personalDetails,
   setBankDetails,
   setContactDetails,
@@ -64,6 +66,7 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
           epfInvestment={epfInvestment}
           epfShariah={epfShariah}
           investmentCurrencies={investmentCurrencies}
+          jointContactCheck={jointContactCheck}
           personalDetails={personalDetails}
           setBankDetails={setBankDetails}
           setContactDetails={setContactDetails}

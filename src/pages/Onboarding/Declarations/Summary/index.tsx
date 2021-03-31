@@ -172,7 +172,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       ? [joint?.personalDetails?.id?.frontPage!]
       : [joint?.personalDetails?.id?.frontPage!, joint?.personalDetails?.id?.secondPage!];
 
-  const jointAddress = joint!.addressInformation!;
+  const jointAddress = { ...joint!.addressInformation! };
   delete jointAddress.sameAddress;
 
   const jointDetails =
@@ -224,9 +224,13 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         }
       : undefined;
 
-  const principalAddress = principal!.addressInformation!;
+  const principalAddress = { ...principal!.addressInformation! };
   delete principalAddress.sameAddress;
+  const jointEmploymentDetails = jointDetails !== undefined ? { ...jointDetails.employmentDetails } : undefined;
 
+  if (jointEmploymentDetails !== undefined) {
+    delete jointEmploymentDetails.isEnabled;
+  }
   const request = {
     incomeDistribution: personalInfo.incomeDistribution!,
     signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
@@ -302,7 +306,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               emailAddress: jointDetails.contactDetails!.emailAddress!,
             },
             declaration: jointDetails.declaration as ISubmitDeclaration,
-            employmentDetails: jointDetails.employmentDetails as ISubmitEmploymentJoint,
+            employmentDetails:
+              jointDetails.employmentDetails?.isEnabled === true ? (jointEmploymentDetails as ISubmitEmploymentJoint) : undefined,
             personalDetails: jointDetails.personalDetails as ISubmitPersonalDetails,
           }
         : undefined,

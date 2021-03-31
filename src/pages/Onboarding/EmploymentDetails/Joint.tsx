@@ -1,8 +1,9 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { AccountHeader, CustomSpacer, LabeledTitle, Switch } from "../../../components";
-import { Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES } from "../../../data/dictionary";
 import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh56, sh8, sw24 } from "../../../styles";
 import { EmploymentInfo } from "./Details";
@@ -21,6 +22,7 @@ interface JointEmploymentDetails {
 const initialEmploymentDetails = {
   businessNature: "",
   employerName: "",
+  isEnabled: true,
   grossIncome: "",
   occupation: "",
   address: {
@@ -45,15 +47,20 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
   const padding = accountType === "Joint" ? px(sw24) : {};
 
   const handleEnable = (toggle: boolean | undefined) =>
-    setEmploymentDetails({ ...employmentDetails, isEnabled: toggle, ...initialEmploymentDetails });
+    setEmploymentDetails({ ...employmentDetails, ...initialEmploymentDetails, isEnabled: toggle });
 
+  const jointAgeCheck = accountType === "Joint" && moment().diff(moment(personalDetails?.dateOfBirth, DEFAULT_DATE_FORMAT), "years") < 18;
   const enabled = employmentDetails.isEnabled !== undefined ? employmentDetails.isEnabled : true;
 
   return (
     <View>
       <View style={px(sw24)}>
-        <Switch label={EMPLOYMENT_DETAILS.LABEL_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
-        <CustomSpacer space={sh56} />
+        {jointAgeCheck === true ? (
+          <Fragment>
+            <Switch label={EMPLOYMENT_DETAILS.LABEL_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
+            <CustomSpacer space={sh56} />
+          </Fragment>
+        ) : null}
         {employmentDetails.isEnabled === true ? (
           <Fragment>
             <AccountHeader subtitle={EMPLOYMENT_DETAILS.LABEL_JOINT} title={personalDetails.name!} />

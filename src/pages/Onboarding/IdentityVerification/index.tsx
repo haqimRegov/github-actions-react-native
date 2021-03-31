@@ -157,7 +157,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               ...principal?.personalDetails?.id,
               frontPage: uploaded,
             },
-            placeOfBirth: mykad.placeOfBirth,
           },
           addressInformation: {
             ...principal!.addressInformation!,
@@ -231,7 +230,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               ...joint?.personalDetails?.id,
               frontPage: uploaded,
             },
-            placeOfBirth: mykad.placeOfBirth,
           },
           addressInformation: {
             ...joint!.addressInformation!,

@@ -317,6 +317,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
                 <CustomTextInput
                   error={scheduledAmountError}
                   inputPrefix={DICTIONARY_RECURRING_CURRENCY}
+                  keyboardType="numeric"
                   onBlur={checkScheduledInvestmentAmount}
                   onChangeText={handleScheduledAmount}
                   value={scheduledInvestmentAmount}

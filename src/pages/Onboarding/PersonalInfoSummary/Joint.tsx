@@ -114,7 +114,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
   let contactDetailsSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! || "-" }];
 
   const otherContactDetails: LabeledTitleProps[] = contactDetails?.contactNumber!.map((contactNumber: IContactNumberState) => {
-    return { label: contactNumber.label, title: `${contactNumber.code} ${contactNumber.value}` };
+    return { label: contactNumber.label, title: contactNumber.value !== "" ? `${contactNumber.code} ${contactNumber.value}` : "-" };
   })!;
 
   contactDetailsSummary = contactDetailsSummary.concat(otherContactDetails);

@@ -1,5 +1,16 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { FlatList, Image, Keyboard, TextStyle, TouchableWithoutFeedback, View, ViewProps, ViewStyle } from "react-native";
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+  TextStyle,
+  TouchableWithoutFeedback,
+  View,
+  ViewProps,
+  ViewStyle,
+} from "react-native";
 import Collapsible from "react-native-collapsible";
 
 import { Language } from "../../constants";
@@ -61,7 +72,7 @@ interface RenderDropdownProps {
   handleClose: () => void;
 }
 
-export interface CollapsibleDropdownProps {
+export interface CollapsibleDropdownProps extends CustomTextInputProps {
   backDrop?: boolean;
   backDropColor?: string;
   backDropOpacity?: number;
@@ -87,7 +98,6 @@ export interface CollapsibleDropdownProps {
   RenderDropdown?: (props: RenderDropdownProps) => JSX.Element;
   setData: (data: IContactNumber) => void;
   style?: ViewStyle;
-  textInputProps: CustomTextInputProps;
 }
 
 interface IBasicLayout {
@@ -198,12 +208,16 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
     setData(updatedNumber);
   };
 
-  const handleBlur = () => {
-    const updatedNumber = { ...data };
-    if (isNumber(updatedNumber.value) === true || updatedNumber.value === "") {
-      updatedNumber.error = updatedNumber.value === "" ? ERROR.INVALID_NUMBER : undefined;
+  const handleBlurInside = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    if (textInputProps.onBlur !== undefined) {
+      textInputProps.onBlur(e);
+    } else {
+      const updatedNumber = { ...data };
+      if (isNumber(updatedNumber.value) === true || updatedNumber.value === "") {
+        updatedNumber.error = updatedNumber.value === "" ? ERROR.INVALID_NUMBER : undefined;
+      }
+      setData(updatedNumber);
     }
-    setData(updatedNumber);
   };
 
   const baseContainer: ViewStyle = { ...noBGColor, ...baseContainerStyle };
@@ -285,7 +299,7 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                 <View onStartShouldSetResponder={() => true} style={{ ...flexChild }}>
                   <CustomTextInput
                     containerStyle={{ width: sw268 }}
-                    onBlur={handleBlur}
+                    onBlur={handleBlurInside}
                     onChangeText={handleChangeMobile}
                     placeholder={placeholderLabel}
                     value={data.value}
@@ -329,7 +343,7 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                         <View onStartShouldSetResponder={() => true} style={{ ...flexChild }}>
                           <CustomTextInput
                             value={data.value}
-                            onBlur={handleBlur}
+                            onBlur={handleBlurInside}
                             onChangeText={handleChangeMobile}
                             placeholder={placeholderLabel}
                             viewStyle={numberInputStyle}

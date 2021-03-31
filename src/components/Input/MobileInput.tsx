@@ -66,7 +66,7 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
   const disabledStyle = disabled === true ? disabledOpacity : {};
 
-  const labelText = label || data.label;
+  const labelText = label !== undefined ? label : data.label;
 
   return (
     <View style={disabledStyle}>
@@ -84,7 +84,6 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
           data={data}
           setData={handleContactNumber}
           dummyBaseStyle={dummyStyle}
-          textInputProps={textInputProps}
           RenderDropdown={({ handleClose }) => {
             const dropdownStyle: ViewStyle = {
               backgroundColor: colorWhite._1,
@@ -145,6 +144,7 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
               </View>
             );
           }}
+          {...textInputProps}
         />
       </View>
       {data.error === undefined ? null : (

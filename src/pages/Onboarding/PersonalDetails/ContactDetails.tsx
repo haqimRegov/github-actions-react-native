@@ -3,13 +3,15 @@ import { View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IconButton, MobileInput, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
+import { DICTIONARY_MOBILE_CODE, ERROR } from "../../../data/dictionary";
 import { centerVertical, colorBlack, colorBlue, flexRow, fs12BoldBlue2, px, py, sh16, sh24, sh8, sw16, sw24 } from "../../../styles";
+import { isNumber } from "../../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface ContactDetailsProps {
   contactNumber: IContactNumberState[];
+  optional: boolean;
   setContactNumber: (input: IContactNumberState[]) => void;
 }
 
@@ -37,11 +39,24 @@ const allLabels: IContactNumberLabel[] = [
   },
 ];
 
-export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contactNumber, setContactNumber }: ContactDetailsProps) => {
+export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({
+  contactNumber,
+  optional,
+  setContactNumber,
+}: ContactDetailsProps) => {
   return (
     <View>
       <View style={px(sw24)}>
         {contactNumber.map((item: IContactNumber, index: number) => {
+          const onBlur = () => {
+            const updatedNumber = [...contactNumber];
+            if (isNumber(updatedNumber[index].value) === true || updatedNumber[index].value === "") {
+              const errorCheck = updatedNumber[index].value === "" ? ERROR.INVALID_NUMBER : undefined;
+              updatedNumber[index].error = optional === false ? errorCheck : undefined;
+            }
+            setContactNumber(updatedNumber);
+          };
+
           const handleRemoveNumber = () => {
             const updatedNumber = [...contactNumber];
             updatedNumber.splice(updatedNumber.indexOf(item), 1);
@@ -51,6 +66,7 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
           const handleContactNumber = (data: IContactNumber) => {
             const updatedNumber = [...contactNumber];
             updatedNumber[index] = data;
+            updatedNumber[index].error = data.value === "" && optional === true ? undefined : data.error;
             setContactNumber(updatedNumber);
           };
 
@@ -61,6 +77,8 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({ contact
                   data={item}
                   handleContactNumber={handleContactNumber}
                   keyboardType="numeric"
+                  label={optional === true ? `${item.label} ${PERSONAL_DETAILS.LABEL_OPTIONAL}` : undefined}
+                  onBlur={onBlur}
                   placeholder="12 3456 7890"
                   spaceToTop={sh24}
                 />

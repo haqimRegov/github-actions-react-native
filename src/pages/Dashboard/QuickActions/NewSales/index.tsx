@@ -134,7 +134,7 @@ const NewSalesComponent = ({
               idType: jointClientIdType,
               name: jointHolder?.name,
               nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
-              placeOfBirth: principalPlaceOfBirth,
+              placeOfBirth: jointPlaceOfBirth,
             },
           };
     addPersonalInfo({
@@ -150,7 +150,7 @@ const NewSalesComponent = ({
           idType: principalClientIdType,
           name: principalHolder?.name,
           nationality: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
-          placeOfBirth: jointPlaceOfBirth,
+          placeOfBirth: principalPlaceOfBirth,
         },
       },
       joint: jointDetails,

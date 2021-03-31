@@ -87,7 +87,6 @@ export interface CollapsibleDropdownProps extends CustomTextInputProps {
   dropdownStyle?: ViewStyle;
   dummyBaseStyle?: ViewStyle;
   flatlistStyle?: ViewStyle;
-  handleBlur?: () => void;
   handleChange?: (value: string[]) => void;
   handleReset?: (index: number, reset: boolean) => void;
   items?: TypeLabelValue[];

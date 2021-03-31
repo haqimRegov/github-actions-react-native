@@ -290,7 +290,7 @@ const NewSalesComponent = ({
 
   return (
     <RNModal animationType="fade" visible={visible}>
-      <KeyboardAwareScrollView bounces={false} contentContainerStyle={flexGrow}>
+      <KeyboardAwareScrollView bounces={false} extraHeight={8} contentContainerStyle={flexGrow}>
         <View style={{ ...centerHV, ...fullHW }}>
           <View style={modalContainer}>
             {prompt !== undefined ? (

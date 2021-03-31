@@ -83,12 +83,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
         <CustomSpacer space={sh32} />
         <View style={px(sw24)}>
           {investmentSummary.map((investment: IOrderSummaryInvestment, index: number) => {
-            const amountLabel =
-              isScheduled === true ? DASHBOARD_ORDER_DETAILS.LABEL_INITIAL_AMOUNT : DASHBOARD_ORDER_DETAILS.LABEL_INVESTMENT_AMOUNT;
+            const amountLabel = DASHBOARD_ORDER_DETAILS.LABEL_INVESTMENT_AMOUNT;
             const fundDetails: LabeledTitleProps[] = [
               { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CODE, title: investment.fundCode, titleStyle: fsTransformNone },
-              { label: DASHBOARD_ORDER_DETAILS.LABEL_SALES_CHARGE, title: investment.salesCharge },
               { label: amountLabel, title: `${investment.fundCurrency} ${investment.investmentAmount}`, titleStyle: fsTransformNone },
+              { label: DASHBOARD_ORDER_DETAILS.LABEL_SALES_CHARGE, title: investment.salesCharge },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_PRODUCT_TYPE, title: investment.fundType, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_FUNDING_OPTION, title: investment.fundingOption, titleStyle: fsTransformNone },
               { label: DASHBOARD_ORDER_DETAILS.LABEL_TYPE, title: investment.investmentType },
@@ -106,8 +105,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
 
             if (isScheduled === true) {
               fundDetails.splice(
-                -1,
                 1,
+                2,
                 {
                   label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_AMOUNT,
                   title: `${DICTIONARY_RECURRING_CURRENCY} ${investment.scheduledInvestmentAmount}`,

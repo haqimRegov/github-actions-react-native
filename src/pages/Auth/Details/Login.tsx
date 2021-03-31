@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
-import { fs24RegBlack2, fs40BoldBlack2, sh24, sh28, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs24RegBlack2, fs40BoldBlack2, sh24, sh28, sh32, sh40, sh56, sh8, sw360, underline } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -80,7 +80,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           withDebounce={true}
         />
         <CustomSpacer space={sh28} />
-        <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} />
+        <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} style={underline} />
       </View>
     </Fragment>
   );

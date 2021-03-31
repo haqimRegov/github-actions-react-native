@@ -1,10 +1,12 @@
 import React, { Fragment, ReactNode } from "react";
-import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
+import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { version } from "../../../package.json";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
 import {
+  border,
+  colorBlue,
   colorWhite,
   DEVICE,
   flexChild,
@@ -12,16 +14,22 @@ import {
   flexRow,
   fs12SemiBoldBlue2,
   fs12SemiBoldGray8,
+  px,
   sh32,
   sh56,
   sh64,
+  sw1,
+  sw16,
   sw160,
+  sw164,
+  sw24,
   sw48,
   sw532,
   sw56,
+  sw64,
   sw8,
 } from "../../styles";
-import { LinkTextGroup, LinkTextProps } from "../Touchables";
+import { IconText, LinkTextGroup, LinkTextProps } from "../Touchables";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 import { SafeAreaPage } from "./SafeAreaPage";
 
@@ -64,11 +72,11 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   //   },
   // ];
 
-  const agentOnboardingLink = {
-    onPress: handleAgentOnboarding,
-    text: LOGIN.LINK_AGENT_ONBOARDING,
-    style: fs12SemiBoldBlue2,
-  };
+  // const agentOnboardingLink = {
+  //   onPress: handleAgentOnboarding,
+  //   text: LOGIN.LINK_AGENT_ONBOARDING,
+  //   style: fs12SemiBoldBlue2,
+  // };
 
   const backToLoginLink = {
     onPress: handleBackToLogin,
@@ -88,9 +96,9 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
     },
   ];
 
-  if (page === "LOGIN") {
-    bottomLinks.push(agentOnboardingLink);
-  }
+  // if (page === "LOGIN") {
+  //   bottomLinks.push(agentOnboardingLink);
+  // }
 
   if (page === "PASSWORD_RECOVERY") {
     bottomLinks.push(backToLoginLink);
@@ -98,6 +106,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
 
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
   const logoStyle: ImageStyle = { height: sh64, width: sw160, resizeMode: "contain" };
+  const buttonStyle: ViewStyle = { ...border(colorBlue._2, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
 
   return (
     <Fragment>
@@ -124,6 +133,20 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
               <CustomFlexSpacer />
               <View style={flexRow}>
                 <LinkTextGroup links={bottomLinks} spaceToDivider={sw8} />
+                {page === "LOGIN" ? (
+                  <Fragment>
+                    <CustomFlexSpacer />
+                    <IconText
+                      color={colorBlue._2}
+                      iconPosition="right"
+                      name="profile"
+                      onPress={handleAgentOnboarding}
+                      text={LOGIN.LINK_AGENT_ONBOARDING}
+                      style={buttonStyle}
+                    />
+                    <CustomSpacer isHorizontal={true} space={sw64} />
+                  </Fragment>
+                ) : null}
               </View>
               <CustomSpacer space={sh56} />
             </View>

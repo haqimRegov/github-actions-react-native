@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { AccountHeader, CustomSpacer, LabeledTitle, Switch } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES } from "../../../data/dictionary";
-import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh56, sh8, sw24 } from "../../../styles";
+import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh40, sh8, sw24 } from "../../../styles";
 import { EmploymentInfo } from "./Details";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -58,7 +58,7 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
         {jointAgeCheck === true ? (
           <Fragment>
             <Switch label={EMPLOYMENT_DETAILS.LABEL_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
-            <CustomSpacer space={sh56} />
+            <CustomSpacer space={sh40} />
           </Fragment>
         ) : null}
         {employmentDetails.isEnabled === true ? (

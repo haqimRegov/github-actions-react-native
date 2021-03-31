@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomBlack21, px, sh56, sw24, sw48 } from "../../../styles";
+import { borderBottomBlack21, px, sh40, sw24, sw48 } from "../../../styles";
 import { JointEmploymentDetails } from "./Joint";
 import { PrincipalEmploymentDetails } from "./Principal";
 
@@ -95,9 +95,9 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       />
       {accountType === "Individual" ? null : (
         <Fragment>
-          <CustomSpacer space={sh56} />
+          <CustomSpacer space={sh40} />
           <View style={borderBottomBlack21} />
-          <CustomSpacer space={sh56} />
+          <CustomSpacer space={sh40} />
           <JointEmploymentDetails
             accountType={accountType}
             personalDetails={joint!.personalDetails!}

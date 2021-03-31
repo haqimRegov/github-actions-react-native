@@ -343,8 +343,7 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
                         </View>
                         <View onStartShouldSetResponder={() => true} style={{ ...flexChild }}>
                           <CustomTextInput
-                            value={data.value}
-                            onBlur={handleBlur}
+                            onBlur={handleBlurInside}
                             onChangeText={handleChangeMobile}
                             placeholder={placeholderLabel}
                             value={data.value}

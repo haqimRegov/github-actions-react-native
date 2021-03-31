@@ -29,7 +29,7 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
         {Platform.select({
           android: <RootNavigator />,
           ios: (
-            <KeyboardAwareScrollView contentContainerStyle={flexChild} scrollEnabled={false}>
+            <KeyboardAwareScrollView extraHeight={8} contentContainerStyle={flexChild} scrollEnabled={false}>
               <RootNavigator />
             </KeyboardAwareScrollView>
           ),

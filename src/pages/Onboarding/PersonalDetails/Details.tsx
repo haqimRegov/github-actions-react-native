@@ -136,7 +136,11 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         <AdvancedDropdown
           items={DICTIONARY_HOUSEHOLD_INCOME}
           handleChange={setInputMonthlyHousehold}
-          label={PERSONAL_DETAILS.LABEL_MONTHLY_INCOME}
+          label={
+            isContactOptional === true
+              ? `${PERSONAL_DETAILS.LABEL_MONTHLY_INCOME} ${PERSONAL_DETAILS.LABEL_OPTIONAL}`
+              : PERSONAL_DETAILS.LABEL_MONTHLY_INCOME
+          }
           value={inputMonthlyHousehold}
         />
       </View>

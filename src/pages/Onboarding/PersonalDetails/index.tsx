@@ -124,7 +124,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       personalDetails!.mothersMaidenName !== "" &&
       personalDetails!.maritalStatus !== "" &&
       checkEducation === true &&
-      personalDetails!.monthlyHouseholdIncome !== "" &&
+      (personalDetails!.monthlyHouseholdIncome !== "" || jointContactCheck === true) &&
       Object.values(validations.joint)
         .map((value) => typeof value)
         .includes(typeof "string") === false

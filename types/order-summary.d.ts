@@ -53,6 +53,7 @@ declare interface IOrder {
 
 declare interface IInvestmentSummary {
   grandTotal: IOrderAmount[];
+  grandTotalRecurring?: IOrderAmount;
   orders: IOrder[];
 }
 

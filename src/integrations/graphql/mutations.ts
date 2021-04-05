@@ -362,6 +362,11 @@ const submitClientAccount = gql`
             currency
             amount
           }
+          grandTotalRecurring {
+            currency
+            amount
+          }
+
           orders {
             allowedRecurringType
             orderNumber

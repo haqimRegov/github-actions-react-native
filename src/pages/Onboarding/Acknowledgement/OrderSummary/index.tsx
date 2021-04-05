@@ -11,13 +11,15 @@ import {
   centerVertical,
   colorGray,
   flexRow,
+  flexWrap,
   fs12BoldWhite1,
-  fs12RegBlack2,
   fs16RegBlack2,
   fs16SemiBoldBlack2,
   fs24BoldBlack2,
   fs24RegBlack2,
   px,
+  py,
+  sh16,
   sh24,
   sh56,
   sh8,
@@ -28,6 +30,7 @@ import {
   sw24,
   sw376,
   sw4,
+  sw588,
   sw8,
 } from "../../../../styles";
 import { formatAmount } from "../../../../utils";
@@ -74,24 +77,39 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow, ...border(colorGray._3, sw1, sw8), height: sh88, ...px(sw24) }}>
+        <View style={{ ...centerVertical, ...flexRow, ...border(colorGray._3, sw1, sw8), minHeight: sh88, ...px(sw24), ...py(sh16) }}>
           <IcoMoon color={colorGray._3} name="order-total" size={sh56} />
           <CustomSpacer isHorizontal={true} space={sw8} />
           <View>
-            <View style={{ ...centerVertical, ...flexRow }}>
-              {orders !== undefined &&
-                orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                  return (
-                    <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                      {index !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
-                      <Text style={{ ...fs24BoldBlack2 }}>{totalAmount.currency}</Text>
-                      <CustomSpacer isHorizontal={true} space={sw4} />
-                      <Text style={fs24RegBlack2}>{formatAmount(totalAmount.amount)}</Text>
-                    </View>
-                  );
-                })}
+            <View style={flexRow}>
+              <Text style={fs24RegBlack2}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
+              <CustomSpacer isHorizontal={true} space={sw4} />
+
+              <View style={{ ...flexRow, ...flexWrap, maxWidth: sw588 }}>
+                {orders !== undefined &&
+                  orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
+                    return (
+                      <View key={index} style={{ ...centerVertical, ...flexRow }}>
+                        {index !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
+                        <Text style={{ ...fs24BoldBlack2 }}>{totalAmount.currency}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw4} />
+                        <Text style={fs24RegBlack2}>{formatAmount(totalAmount.amount)}</Text>
+                      </View>
+                    );
+                  })}
+              </View>
             </View>
-            <Text style={fs12RegBlack2}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
+            <View style={flexRow}>
+              <Text style={fs16RegBlack2}>{ORDER_SUMMARY.LABEL_RECURRING}</Text>
+              <CustomSpacer isHorizontal={true} space={sw4} />
+              {orders !== undefined && orders.grandTotalRecurring !== undefined ? (
+                <View style={{ ...centerVertical, ...flexRow }}>
+                  <Text style={fs16RegBlack2}>{orders.grandTotalRecurring.currency}</Text>
+                  <CustomSpacer isHorizontal={true} space={sw4} />
+                  <Text style={fs16RegBlack2}>{formatAmount(orders.grandTotalRecurring.amount)}</Text>
+                </View>
+              ) : null}
+            </View>
           </View>
         </View>
       </View>

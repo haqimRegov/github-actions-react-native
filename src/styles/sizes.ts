@@ -280,6 +280,7 @@ export const sw544 = scaleWidth(544);
 export const sw561 = scaleWidth(561);
 export const sw562 = scaleWidth(562);
 export const sw565 = scaleWidth(565);
+export const sw588 = scaleWidth(588);
 export const sw590 = scaleWidth(590);
 export const sw595 = scaleWidth(595);
 export const sw600 = scaleWidth(600);

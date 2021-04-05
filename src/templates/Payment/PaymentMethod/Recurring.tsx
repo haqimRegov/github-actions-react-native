@@ -44,7 +44,7 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
   const recurringOptions = [PAYMENT.OPTION_DDA];
   const ddaBank = recurringType === "FPX" ? DICTIONARY_FPX_BANK : DICTIONARY_DDA_BANK;
   // const sameRecurringInfoLabel = recurringType === "FPX" ? PAYMENT.LABEL_SAME_FPX : PAYMENT.LABEL_SAME_DDA;
-  if (allowedRecurringType !== undefined && allowedRecurringType.includes("FPX")) {
+  if (allowedRecurringType !== undefined && allowedRecurringType !== null && allowedRecurringType.includes("FPX")) {
     recurringOptions.push(PAYMENT.OPTION_FPX);
   }
 

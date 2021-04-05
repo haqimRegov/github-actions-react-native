@@ -736,6 +736,7 @@ export const english = {
       LABEL_POSTCODE: "Postcode",
       LABEL_PROOF_OF_ADDRESS: "Proof of Address",
       LABEL_RECURRING_TYPE: "Recurring Type",
+      LABEL_RECURRING: "Recurring",
       LABEL_SHARIAH: "Shariah",
       LABEL_STATE: "State",
       LABEL_TOTAL_INVESTMENT_AMOUNT: "Total Investment Amount",

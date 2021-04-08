@@ -196,11 +196,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
               usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
             },
-            fea: {
-              balance: parseAmountToString(joint!.declaration!.fea!.balance!),
-              borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
-              resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
-            },
+            // fea: {
+            //   balance: parseAmountToString(joint!.declaration!.fea!.balance!),
+            //   borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
+            //   resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
+            // },
           },
           employmentDetails: joint!.employmentDetails,
           personalDetails: {
@@ -264,11 +264,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
           usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
         },
-        fea: {
-          balance: parseAmountToString(principal!.declaration!.fea!.balance!),
-          borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
-          resident: principal!.declaration!.fea!.resident! === 0 ? "true" : "false",
-        },
+        // fea: {
+        //   balance: parseAmountToString(principal!.declaration!.fea!.balance!),
+        //   borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
+        //   resident: principal!.declaration!.fea!.resident! === 0 ? "true" : "false",
+        // },
       },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
       employmentDetails: principal!.employmentDetails! as ISubmitEmploymentBase,

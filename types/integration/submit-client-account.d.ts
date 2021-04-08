@@ -138,7 +138,7 @@ declare interface ISubmitClientAccountRequest {
     declaration: {
       crs: ISubmitCrs;
       fatca: ISubmitFatca;
-      fea: ISubmitFea;
+      fea?: ISubmitFea;
     };
     epfDetails?: ISubmitEpfDetails;
     employmentDetails: ISubmitEmploymentBase;

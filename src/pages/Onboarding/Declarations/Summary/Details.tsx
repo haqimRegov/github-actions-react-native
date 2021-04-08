@@ -28,7 +28,6 @@ import {
   sw32,
   sw8,
 } from "../../../../styles";
-import { formatAmount } from "../../../../utils";
 
 const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
@@ -61,7 +60,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   accountHolder,
   accountType,
   handleNextStep,
-  isFea,
+  // isFea,
   name,
   summary,
 }: DeclarationDetailsProps) => {
@@ -74,10 +73,10 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
     handleNextStep("CRSDeclaration");
   };
 
-  const handleEditFea = () => {
-    handleNextStep("FEADeclaration");
-  };
-  const { fatca, fea, crs } = summary;
+  // const handleEditFea = () => {
+  //   handleNextStep("FEADeclaration");
+  // };
+  const { fatca, crs } = summary;
 
   const handleView = () => {
     setViewFile(fatca!.certificate);
@@ -93,14 +92,14 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
     { label: DECLARATION_SUMMARY.LABEL_CITIZENSHIP, title: fatca!.usCitizen === 0 ? "Yes" : "No" },
   ];
 
-  const feaSummary: LabeledTitleProps[] =
-    isFea === true
-      ? [
-          { label: DECLARATION_SUMMARY.LABEL_MALAYSIAN_RESIDENT, title: fea?.resident === 0 ? "Yes" : "No" },
-          { label: DECLARATION_SUMMARY.LABEL_FACILITY, title: fea?.facility === 0 ? "Yes" : "No" },
-          { label: DECLARATION_SUMMARY.LABEL_BALANCE, title: fea?.balance !== "" ? formatAmount(fea?.balance!) : "-" },
-        ]
-      : [];
+  // const feaSummary: LabeledTitleProps[] =
+  //   isFea === true
+  //     ? [
+  //         { label: DECLARATION_SUMMARY.LABEL_MALAYSIAN_RESIDENT, title: fea?.resident === 0 ? "Yes" : "No" },
+  //         { label: DECLARATION_SUMMARY.LABEL_FACILITY, title: fea?.facility === 0 ? "Yes" : "No" },
+  //         { label: DECLARATION_SUMMARY.LABEL_BALANCE, title: fea?.balance !== "" ? formatAmount(fea?.balance!) : "-" },
+  //       ]
+  //     : [];
 
   if (fatca!.usCitizen === 1) {
     fatcaSummary.splice(1, 0, { label: DECLARATION_SUMMARY.LABEL_US_BORN, title: fatca!.usBorn === 0 ? "Yes" : "No" });
@@ -202,14 +201,14 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
               <TextCard data={crsSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
             </View>
           </View>
-          {feaSummary.length !== 0 ? (
+          {/* {feaSummary.length !== 0 ? (
             <View>
               <TitleIcon onPress={handleEditFea} title={DECLARATION_SUMMARY.TITLE_FEA} />
               <View style={px(sw24)}>
                 <TextCard data={feaSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
               </View>
             </View>
-          ) : null}
+          ) : null} */}
         </View>
       </View>
       {viewFile !== undefined ? (

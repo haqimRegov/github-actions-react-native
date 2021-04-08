@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { CheckBox, ContentPage, CustomAccordion, CustomFlexSpacer, CustomPopup, CustomSpacer, LinkText } from "../../../components";
 import { Language } from "../../../constants/language";
-import { CRS, DICTIONARY_LINK_FULL_TERMS, FATCA, FEA, PRS, UTAndAMP } from "../../../data/dictionary";
+import { CRS, DICTIONARY_LINK_FULL_TERMS, FATCA, PRS, UTAndAMP } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
@@ -81,7 +81,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
       ? orders.orders.map((order: IOrder) => order.investments.map((investment: IOrderInvestment) => investment.fundType)).flat()
       : [];
 
-  const TERMS_AND_CONDITION_LIST: ICustomAccordionSection[] = [FATCA, CRS, FEA];
+  const TERMS_AND_CONDITION_LIST: ICustomAccordionSection[] = [FATCA, CRS];
   if (fundTypeArray.includes("UTF") || fundTypeArray.includes("UT") || fundTypeArray.includes("AMP") || fundTypeArray.includes("WSF")) {
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }

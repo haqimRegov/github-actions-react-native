@@ -112,14 +112,18 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
       : [];
 
   const handleFundingMethod = (option: string) => {
+    const currentSalesCharge = option === fundPaymentMethod ? investmentSalesCharge : "";
     const newData: IProductSales =
       option === "Cash"
-        ? { ...data, investment: { ...investment, investmentSalesCharge: "", fundPaymentMethod: "Cash" } }
+        ? {
+            ...data,
+            investment: { ...investment, investmentSalesCharge: currentSalesCharge, fundPaymentMethod: "Cash" },
+          }
         : {
             ...data,
             investment: {
               ...investment,
-              investmentSalesCharge: "",
+              investmentSalesCharge: currentSalesCharge,
               scheduledInvestment: false,
               fundPaymentMethod: "EPF",
               scheduledSalesCharge: undefined,

@@ -132,7 +132,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
               {children}
               <CustomFlexSpacer />
               <View style={flexRow}>
-                <LinkTextGroup links={bottomLinks} spaceToDivider={sw8} />
+                <LinkTextGroup links={bottomLinks} style={{ minHeight: sh32 }} spaceToDivider={sw8} />
                 {page === "LOGIN" ? (
                   <Fragment>
                     <CustomFlexSpacer />

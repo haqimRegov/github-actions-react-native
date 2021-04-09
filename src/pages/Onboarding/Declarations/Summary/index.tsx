@@ -360,9 +360,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     handleNextStep("FEADeclaration");
   };
 
-  const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
-  const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
-  const subtitle = accountType === "Joint" ? jointSubtitle : principalSubtitle;
+  // const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
+  // const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
+  const subtitle = accountType === "Joint" ? DECLARATION_SUMMARY.SUBHEADING_JOINT : DECLARATION_SUMMARY.SUBHEADING;
 
   return (
     <ContentPage

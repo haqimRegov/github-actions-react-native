@@ -44,7 +44,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
     fundName,
     fundType,
     investmentAmount,
-    isFea,
+    // isFea,
     isSyariah,
     salesCharge,
     scheduledInvestmentAmount,
@@ -84,10 +84,10 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
       label: ORDER_SUMMARY.LABEL_TYPE,
       title: isSyariah ? ORDER_SUMMARY.LABEL_SHARIAH : ORDER_SUMMARY.LABEL_CONVENTIONAL,
     },
-    {
-      label: ORDER_SUMMARY.LABEL_FEA,
-      title: isFea ? "Yes" : "No",
-    },
+    // {
+    //   label: ORDER_SUMMARY.LABEL_FEA,
+    //   title: isFea ? "Yes" : "No",
+    // },
     {
       label: ORDER_SUMMARY.LABEL_DISTRIBUTION,
       title: distributionInstruction,

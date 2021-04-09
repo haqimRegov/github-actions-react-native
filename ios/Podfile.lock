@@ -345,8 +345,8 @@ PODS:
     - React
   - react-native-netinfo (5.9.9):
     - React-Core
-  - react-native-safe-area-context (3.0.2):
-    - React
+  - react-native-safe-area-context (3.2.0):
+    - React-Core
   - react-native-signature-capture (0.4.10):
     - React
   - react-native-splash-screen (3.2.0):
@@ -438,8 +438,8 @@ PODS:
     - RNFBApp
   - RNFS (2.16.6):
     - React
-  - RNGestureHandler (1.6.1):
-    - React
+  - RNGestureHandler (1.10.3):
+    - React-Core
   - RNImageCropPicker (0.32.0):
     - React-Core
     - React-RCTImage
@@ -453,10 +453,37 @@ PODS:
     - React-Core
   - RNPDF (0.11.0):
     - React
-  - RNReanimated (1.9.0):
+  - RNReanimated (2.1.0):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - Folly
+    - glog
+    - RCTRequired
+    - RCTTypeSafety
     - React
-  - RNScreens (2.8.0):
-    - React
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - React-RCTVibration
+    - ReactCommon/callinvoker
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNScreens (2.18.1):
+    - React-Core
   - RNShare (3.7.0):
     - React
   - RNSVG (12.1.0):
@@ -731,7 +758,7 @@ SPEC CHECKSUMS:
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
   react-native-netinfo: 0212ce8604e88edf686f1481b925b17a42a52449
-  react-native-safe-area-context: b11a34881faac509cad5578726c98161ad4d275c
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-signature-capture: 331c29f07b4f19ccfe63c5247a956b203abb500f
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
@@ -755,12 +782,12 @@ SPEC CHECKSUMS:
   RNFBMessaging: 9287cbf850ed3524c9f915f5b3daaf1cfaabbf06
   RNFBMLVision: 2a204270209f0e36cb6260fd57d40b36b9765f05
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: fc4b4d2a4d7176eeb6442fa191ba56493c14b6d6
   RNInAppBrowser: 48b95ba7a4eaff5cc223bca338d3e319561dbd1b
   RNPDF: b575ff11a65121f346b2851e3da736e7c51c18ab
-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
+  RNReanimated: f49140a8bebe531c4cfb2c7cac3757590ed04931
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNShare: a1d5064df7a0ebe778d001869b3f0a124bf0a491
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNTextSize: 7efa06531c6bb7ab6ed070b4ce0d1248cf06fcdf

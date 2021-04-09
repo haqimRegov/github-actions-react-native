@@ -223,12 +223,12 @@ export const AccountDetailsContent = ({
       </View>
       <CustomSpacer space={sh16} />
       <View style={borderBottomGray4} />
-      <View style={px(sw24)}>
+      {/* <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={DECLARATION_SUMMARY.TITLE_FEA} />
         <TextCard data={declarations.fea} spaceBetweenItem={sw64} />
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomGray4} />
+      <View style={borderBottomGray4} /> */}
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <Text style={fs18BoldBlack2}>{DASHBOARD_PROFILE.TITLE_UPLOAD_DOCUMENTS}</Text>

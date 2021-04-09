@@ -29,7 +29,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     principal: { epfNumber: undefined, mothersName: undefined },
     joint: { epfNumber: undefined, mothersName: undefined },
   });
-  const { principal, joint, epfInvestment, epfShariah } = personalInfo;
+  const { principal, joint, epfInvestment, epfShariah, isAllEpf } = personalInfo;
   const investmentCurrencies = productSales!.map(({ investment }) =>
     investment.fundCurrency !== undefined ? investment.fundCurrency : "",
   );
@@ -131,9 +131,13 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     );
   };
 
+  const principalEpfCheck = personalInfo.isAllEpf === true ? principal?.personalDetails?.enableBankDetails === true : true;
+
   const buttonDisabled =
     accountType === "Individual"
-      ? validatePrincipal(principal!) === false || checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true
+      ? validatePrincipal(principal!) === false ||
+        (principalEpfCheck && checkLocalBank.includes(false) === true) ||
+        (principalEpfCheck && checkForeignBank.includes(false) === true)
       : validatePrincipal(principal!) === false ||
         checkLocalBank.includes(false) === true ||
         checkForeignBank.includes(false) === true ||
@@ -223,6 +227,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
           epfDetails={principal!.epfDetails!}
           epfInvestment={epfInvestment!}
           epfShariah={epfShariah!}
+          isAllEpf={isAllEpf}
           investmentCurrencies={uniqueCurrencies}
           personalDetails={principal!.personalDetails!}
           setBankDetails={handlePrincipalBankDetails}

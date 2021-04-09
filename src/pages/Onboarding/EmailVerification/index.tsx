@@ -75,7 +75,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       if (error !== null) {
         setTimeout(() => {
           Alert.alert(error.message);
-        }, 100);
+        }, 200);
       }
     }
   };

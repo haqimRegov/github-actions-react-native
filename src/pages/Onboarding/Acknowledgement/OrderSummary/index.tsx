@@ -84,7 +84,6 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
             <View style={flexRow}>
               <Text style={fs24RegBlack2}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
               <CustomSpacer isHorizontal={true} space={sw4} />
-
               <View style={{ ...flexRow, ...flexWrap, maxWidth: sw588 }}>
                 {orders !== undefined &&
                   orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {

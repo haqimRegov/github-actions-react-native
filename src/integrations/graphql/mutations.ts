@@ -366,7 +366,6 @@ const submitClientAccount = gql`
             currency
             amount
           }
-
           orders {
             allowedRecurringType
             orderNumber

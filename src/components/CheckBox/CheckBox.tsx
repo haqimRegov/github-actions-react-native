@@ -76,10 +76,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
           {label === undefined ? null : (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={defaultSpace} />
-              <Text
-                onPress={handlePress}
-                numberOfLines={numberOfLines}
-                style={{ ...fs12RegBlack2, lineHeight: sh24, ...disabledStyle, ...labelStyle }}>
+              <Text numberOfLines={numberOfLines} style={{ ...fs12RegBlack2, lineHeight: sh24, ...disabledStyle, ...labelStyle }}>
                 {label}
               </Text>
             </Fragment>

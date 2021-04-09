@@ -10,7 +10,7 @@ import { OnboardingContent } from "./Content";
 const { ONBOARDING } = Language.PAGE;
 
 // TODO handle if FEA
-const isFea = true;
+// const isFea = true;
 
 const DECLARATION_CONTENT = [
   { title: ONBOARDING.TITLE_FATCA_DECLARATION, route: ONBOARDING_ROUTES.FATCADeclaration, key: ONBOARDING_KEYS.FATCADeclaration },
@@ -18,13 +18,13 @@ const DECLARATION_CONTENT = [
   { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.DeclarationSummary, key: ONBOARDING_KEYS.DeclarationSummary },
 ];
 
-if (isFea === true) {
-  DECLARATION_CONTENT.splice(2, 0, {
-    title: ONBOARDING.TITLE_FEA_DECLARATION,
-    route: ONBOARDING_ROUTES.FEADeclarations,
-    key: ONBOARDING_KEYS.FEADeclaration,
-  });
-}
+// if (isFea === true) {
+//   DECLARATION_CONTENT.splice(2, 0, {
+//     title: ONBOARDING.TITLE_FEA_DECLARATION,
+//     route: ONBOARDING_ROUTES.FEADeclarations,
+//     key: ONBOARDING_KEYS.FEADeclaration,
+//   });
+// }
 
 export const ONBOARDING_DATA: IOnboarding[] = [
   {

@@ -99,9 +99,9 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
               fundDetails.splice(1, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CLASS, title: investment.fundClass });
             }
 
-            if (investment.isFea !== null) {
-              fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.isFea });
-            }
+            // if (investment.isFea !== null) {
+            //   fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.isFea });
+            // }
 
             if (isScheduled === true) {
               fundDetails.splice(

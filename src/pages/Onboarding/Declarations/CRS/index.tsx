@@ -38,10 +38,10 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
 
   const handleContinue = () => {
     // TODO handle if FEA
-    const isFea = true;
-    const defaultRoute: TypeOnboardingRoute = isFea ? "FEADeclaration" : "DeclarationSummary";
-    const route: TypeOnboardingRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : defaultRoute;
-    if (isFea === true && personalInfo.editDeclaration === false) {
+    // const isFea = true;
+    // const defaultRoute: TypeOnboardingRoute = "DeclarationSummary";
+    const route: TypeOnboardingRoute = "DeclarationSummary";
+    if (personalInfo.editDeclaration === false) {
       addPersonalInfo({ ...personalInfo, editDeclaration: true });
     }
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];

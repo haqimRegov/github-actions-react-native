@@ -52,7 +52,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
     personalDetails,
     uploadedDocument,
   } = profile[accountHolderIndex];
-  const { fatca, fea, crs } = declaration;
+  const { fatca, crs } = declaration;
   const accountSummaryDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_PROFILE.LABEL_DATE_OF_BIRTH, title: personalDetails.dateOfBirth },
     { label: DASHBOARD_PROFILE.LABEL_SALUTATION, title: personalDetails.salutation },
@@ -182,11 +182,11 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
 
   const fatcaSummary: LabeledTitleProps[] = [{ label: DASHBOARD_PROFILE.LABEL_CITIZENSHIP, title: fatca.usCitizen as string }];
 
-  const feaSummary: LabeledTitleProps[] = [
-    { label: DASHBOARD_PROFILE.LABEL_MALAYSIAN_RESIDENT, title: fea.resident as string },
-    { label: DASHBOARD_PROFILE.LABEL_FACILITY, title: fea.borrowingFacility as string },
-    { label: DASHBOARD_PROFILE.LABEL_BALANCE, title: fea.balance || "-" },
-  ];
+  // const feaSummary: LabeledTitleProps[] = [
+  //   { label: DASHBOARD_PROFILE.LABEL_MALAYSIAN_RESIDENT, title: fea.resident as string },
+  //   { label: DASHBOARD_PROFILE.LABEL_FACILITY, title: fea.borrowingFacility as string },
+  //   { label: DASHBOARD_PROFILE.LABEL_BALANCE, title: fea.balance || "-" },
+  // ];
 
   if (fatca.usCitizen === "No") {
     fatcaSummary.splice(1, 0, { label: DASHBOARD_PROFILE.LABEL_US_BORN, title: fatca.usBorn as string });
@@ -279,7 +279,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
     declarations: {
       crs: crsSummary,
       fatca: fatcaSummary,
-      fea: feaSummary,
+      fea: [],
     },
     employmentDetails: employmentDetails,
     epfDetails: epfSummary,

@@ -5,13 +5,13 @@ const INVALID_BANK_NUMBER = "Kindly input a bank account number.";
 const INVALID_CHEQUE_NUMBER = "Kindly input a cheque number.";
 const INVALID_POST_CODE = "Kindly input a valid post code.";
 const INVESTMENT_MIN_AMOUNT = "The amount you have entered didn't reach the minimum amount.";
-const INVESTMENT_MAX_AMOUNT = "The amount you have entered didn't exceeds the maximum amount.";
+const INVESTMENT_MAX_AMOUNT = "The amount you have entered exceeds the maximum amount.";
 const INVESTMENT_INVALID_AMOUNT = "The amount you have entered is invalid.";
 const INVESTMENT_INVALID_EMAIL = "The email you have entered is invalid.";
 const LOGIN_INVALID = "Incorrect password or NRIC.";
 const LOGIN_INVALID_NRIC = "Your NRIC Number is invalid.";
 const LOGIN_INVALID_OTP = "Invalid OTP entered. Please try again.";
-const PASSWORD_NOT_MATCH = "Those passwords didn't match. Try again.";
+const PASSWORD_NOT_MATCH = "Passwords did not match. Please try again.";
 const OCR_INVALID_NRIC = "Kindly upload a valid NRIC.";
 const OCR_INVALID_NRIC_DATA = "We’re unable to capture the data from the image you uploaded.";
 

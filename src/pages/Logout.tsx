@@ -25,7 +25,7 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: "Auth" }],
+          routes: [{ name: "Public" }],
         }),
       );
     }, 1400);

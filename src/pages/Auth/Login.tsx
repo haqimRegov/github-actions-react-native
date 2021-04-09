@@ -108,7 +108,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           navigation.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{ name: "Dashboard" }],
+              routes: [{ name: "Private" }],
             }),
           );
         }

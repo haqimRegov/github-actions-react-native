@@ -42,6 +42,8 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
     handleNextStep("EmploymentDetails");
   };
 
+  const isAllEpf = personalInfo.isAllEpf !== undefined ? personalInfo.isAllEpf : false;
+
   return (
     <ContentPage
       handleCancel={handleBack}
@@ -49,7 +51,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
       noBounce={true}
       subheading={SUMMARY.HEADING}
       subtitle={SUMMARY.SUBHEADING}>
-      <Principal accountType={accountType} handleNextStep={handleNextStep} summary={personalInfo.principal!} />
+      <Principal accountType={accountType} handleNextStep={handleNextStep} isAllEpf={isAllEpf} summary={personalInfo.principal!} />
       {accountType === "Individual" ? null : <Joint handleNextStep={handleNextStep} summary={personalInfo.joint!} />}
       {accountType === "Individual" ? null : (
         <SummaryJointDetails

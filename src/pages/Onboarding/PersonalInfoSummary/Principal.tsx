@@ -12,10 +12,11 @@ const { SUMMARY } = Language.PAGE;
 interface PrincipalProps {
   accountType: TypeAccountChoices;
   handleNextStep: (route: TypeOnboardingRoute) => void;
+  isAllEpf: boolean;
   summary: IHolderInfoState;
 }
 
-export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, handleNextStep, summary }: PrincipalProps) => {
+export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, handleNextStep, isAllEpf, summary }: PrincipalProps) => {
   const { addressInformation, bankSummary, contactDetails, employmentDetails, epfDetails, personalDetails } = summary;
 
   const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
@@ -215,9 +216,9 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
       employmentAddress={employmentAddressSummary}
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
-      foreignBankDetails={foreignBank}
+      foreignBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : foreignBank}
       handleNextStep={handleNextStep}
-      localBankDetails={localBank}
+      localBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : localBank}
       mailingAddress={mailingAddressSummary}
       name={personalDetails!.name!}
       permanentAddress={permanentAddressSummary}

@@ -160,7 +160,8 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
             </View>
           </View>
         ) : null}
-        {accountType === "Joint" && accountHolder === "Joint" ? null : (
+        {(accountType === "Joint" && accountHolder === "Joint") ||
+        (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
           <View style={borderBottomBlack21}>
             <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldBlack2} />
             {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {

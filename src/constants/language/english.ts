@@ -591,6 +591,13 @@ export const english = {
       // LABEL_COUNTRY_PASSPORT: "Country / Region",
       TITLE: "Review your details.",
     },
+    INACTIVITY: {
+      BUTTON_YES: "Yes, Keep me signed in",
+      LABEL_LOGGED_OUT: "You will be logged out in",
+      LABEL_SECONDS: "seconds",
+      LABEL_STAY: "Do you want to stay signed in?",
+      TITLE: "Your session is about to expired",
+    },
     INBOX: {
       EMPTY_TITLE: "No notifications yet.",
       EMPTY_SUBTITLE: "You’re all caught up! Check back later for new notifications.",

@@ -134,7 +134,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       : `${EMAIL_VERIFICATION.LABEL_OTP_SEND_TO} ${principalEmail}`;
 
   useEffect(() => {
-    let otpTimer: number;
+    let otpTimer: ReturnType<typeof setTimeout>;
     if (resendTimer > 0) {
       otpTimer = setInterval(() => {
         setResendTimer(resendTimer - 1);

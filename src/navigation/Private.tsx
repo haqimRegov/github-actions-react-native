@@ -8,11 +8,7 @@ import UserInactivity from "react-native-user-inactivity";
 import { LocalAssets } from "../assets/LocalAssets";
 import { PromptModal } from "../components";
 import { Language } from "../constants";
-import {
-  DICTIONARY_INACTIVITY_COUNTDOWN_DEV,
-  DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV,
-  DICTIONARY_INACTIVITY_TIMER_DEV,
-} from "../data/dictionary";
+import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";
 import { logout } from "../network-actions";
 import { DashboardPage, LogoutPage, OnboardingPage } from "../pages";
 import { fs16BoldBlack2 } from "../styles";
@@ -24,12 +20,12 @@ const { Navigator, Screen } = createStackNavigator();
 export const PrivateRoute: FunctionComponent = () => {
   const navigation = useNavigation<IStackNavigationProp>();
   const [active, setActive] = useState(true);
-  const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV);
+  const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const handleExtend = () => {
     setActive(true);
     setTimeout(() => {
-      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV);
+      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
     }, 150);
   };
 
@@ -59,7 +55,7 @@ export const PrivateRoute: FunctionComponent = () => {
       if (active === false) {
         handleLogout();
       }
-    }, DICTIONARY_INACTIVITY_COUNTDOWN_DEV);
+    }, DICTIONARY_INACTIVITY_COUNTDOWN);
     return () => {
       clearTimeout(timeout);
     };
@@ -71,7 +67,7 @@ export const PrivateRoute: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <UserInactivity isActive={active} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER_DEV}>
+      <UserInactivity isActive={active} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
         <Navigator initialRouteName="Dashboard" headerMode="none">
           <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
           <Screen name="Logout" component={LogoutPage} options={defaultOptions} />

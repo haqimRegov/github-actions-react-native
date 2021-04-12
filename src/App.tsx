@@ -1,12 +1,13 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Dimensions, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import { connect } from "react-redux";
 
-import { Loader } from "./components/Modals/Loader";
+import { Loader } from "./components";
 import { RNFirebase } from "./integrations";
-import { RootNavigator } from "./Navigator";
+import { RootNavigator } from "./navigation";
 import { logout } from "./network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "./store";
 import { flexChild } from "./styles";
@@ -40,19 +41,21 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <Fragment>
-        {Platform.select({
-          android: <RootNavigator />,
-          ios: (
-            <KeyboardAvoidingView behavior="padding" enabled={!isFloating} style={flexChild}>
-              <RootNavigator />
-            </KeyboardAvoidingView>
-          ),
-        })}
-      </Fragment>
-      <Loader visible={isLoading === true} />
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <Fragment>
+          {Platform.select({
+            android: <RootNavigator />,
+            ios: (
+              <KeyboardAvoidingView behavior="padding" enabled={!isFloating} style={flexChild}>
+                <RootNavigator />
+              </KeyboardAvoidingView>
+            ),
+          })}
+        </Fragment>
+        <Loader visible={isLoading === true} />
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 };
 

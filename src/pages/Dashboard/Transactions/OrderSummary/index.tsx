@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
@@ -27,7 +26,7 @@ import { OrderDetails } from "./OrderDetails";
 const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 interface OrderDetailsProps extends TransactionsStoreProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
   setScreen: (route: TransactionsPageType) => void;
 }
 

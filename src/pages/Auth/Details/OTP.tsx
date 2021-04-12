@@ -57,7 +57,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
 
   useEffect(() => {
-    let otpTimer: number;
+    let otpTimer: ReturnType<typeof setTimeout>;
     if (resendTimer > 0) {
       otpTimer = setInterval(() => {
         setResendTimer(resendTimer - 1);

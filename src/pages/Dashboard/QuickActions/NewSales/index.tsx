@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import moment from "moment";
 import React, { Fragment, useState } from "react";
 import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
@@ -36,7 +35,7 @@ import { NewSalesSummary } from "./Summary";
 const { ADD_CLIENT } = Language.PAGE;
 
 interface NewSalesProps extends ClientStoreProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
   setVisible: (visibility: boolean) => void;
   visible: boolean;
 }

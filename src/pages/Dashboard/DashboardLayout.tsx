@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -28,7 +27,7 @@ const { QUICK_ACTIONS } = Language.PAGE;
 interface DashboardLayoutProps {
   children: ReactNode;
   hideQuickActions?: boolean;
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
   scrollEnabled?: boolean;
   status?: string;
   title?: string;

@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
@@ -31,7 +30,7 @@ import { DashboardLayout } from "../../DashboardLayout";
 const { DASHBOARD_PAYMENT, PAYMENT } = Language.PAGE;
 
 interface DashboardPaymentProps extends TransactionsStoreProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
   setScreen: (route: TransactionsPageType) => void;
 }
 

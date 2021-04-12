@@ -1,4 +1,3 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -30,7 +29,7 @@ import { DocumentList } from "./DocumentList";
 const { UPLOAD_DOCUMENTS } = Language.PAGE;
 
 interface UploadDocumentsProps extends TransactionsStoreProps {
-  navigation: StackNavigationProp<RootNavigatorType>;
+  navigation: IStackNavigationProp;
   setScreen: (route: TransactionsPageType) => void;
 }
 

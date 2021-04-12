@@ -3,10 +3,10 @@ import "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Text } from "react-native";
 import UserInactivity from "react-native-user-inactivity";
 
-import { ConfirmationModal } from "../components";
+import { LocalAssets } from "../assets/LocalAssets";
+import { PromptModal } from "../components";
 import { Language } from "../constants";
 import {
   DICTIONARY_INACTIVITY_COUNTDOWN_DEV,
@@ -22,23 +22,24 @@ const { INACTIVITY } = Language.PAGE;
 const { Navigator, Screen } = createStackNavigator();
 
 export const PrivateRoute: FunctionComponent = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<IStackNavigationProp>();
   const [active, setActive] = useState(true);
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV);
 
-  const handleLogoutPrompt = () => {
-    logout(navigation as any);
-    setCountdown(5);
+  const handleExtend = () => {
+    setActive(true);
+    setTimeout(() => {
+      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV);
+    }, 150);
+  };
+
+  const handleLogout = async () => {
+    await logout(navigation);
     setActive(true);
   };
 
-  const handleInactivity = (isActive) => {
+  const handleInactivity = (isActive: boolean) => {
     setActive(isActive);
-    if (isActive === false) {
-      setTimeout(() => {
-        handleLogoutPrompt();
-      }, DICTIONARY_INACTIVITY_COUNTDOWN_DEV);
-    }
   };
 
   useEffect(() => {
@@ -48,8 +49,22 @@ export const PrivateRoute: FunctionComponent = () => {
         setCountdown(countdown - 1);
       }, 1000);
     }
-    return () => clearInterval(clockDrift);
+    return () => {
+      clearInterval(clockDrift);
+    };
   }, [countdown, active]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (active === false) {
+        handleLogout();
+      }
+    }, DICTIONARY_INACTIVITY_COUNTDOWN_DEV);
+    return () => {
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
 
   const defaultOptions = { animationEnabled: false };
   const subtitle = `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
@@ -63,13 +78,19 @@ export const PrivateRoute: FunctionComponent = () => {
           <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
         </Navigator>
       </UserInactivity>
-      <ConfirmationModal
-        handleContinue={handleLogoutPrompt}
+      <PromptModal
+        handleCancel={handleLogout}
+        handleContinue={handleExtend}
+        illustration={LocalAssets.illustration.sessionExpired}
+        label={INACTIVITY.TITLE}
+        labelCancel={INACTIVITY.BUTTON_NO}
         labelContinue={INACTIVITY.BUTTON_YES}
-        title={INACTIVITY.TITLE}
-        visible={!active}>
-        <Text style={fs16BoldBlack2}>{subtitle}</Text>
-      </ConfirmationModal>
+        title={subtitle}
+        titleStyle={fs16BoldBlack2}
+        visible={!active}
+      />
+      {/* <PromptModal handleContinue={handleLogout} labelContinue={INACTIVITY.BUTTON_YES} title={INACTIVITY.TITLE} visible={!active} /> */}
+      {/* <Text style={fs16BoldBlack2}>{subtitle}</Text> */}
     </Fragment>
   );
 };

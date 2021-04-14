@@ -69,14 +69,16 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const handleViewRejected = (item: ITableRowData) => {
-    const newSections: number[] = [...activeAccordion];
-    const sectionIndex = newSections.indexOf(item.index);
-    if (sectionIndex > -1) {
-      newSections.splice(sectionIndex, 1);
-    } else {
-      newSections.splice(0, 1, item.index);
+    if (item.rawData.remark) {
+      const newSections: number[] = [...activeAccordion];
+      const sectionIndex = newSections.indexOf(item.index);
+      if (sectionIndex > -1) {
+        newSections.splice(sectionIndex, 1);
+      } else {
+        newSections.splice(0, 1, item.index);
+      }
+      setActiveAccordion(newSections);
     }
-    setActiveAccordion(newSections);
   };
 
   const handleSortOrderNumber = async () => {
@@ -185,15 +187,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   ];
 
   const tableAccordion = (item: ITableData) => {
-    return (
-      <Fragment>
-        {item.remark !== undefined ? (
-          <Fragment>
-            <EDDReasons data={item.remark} />
-          </Fragment>
-        ) : null}
-      </Fragment>
-    );
+    return <Fragment>{item.remark ? <EDDReasons data={item.remark} /> : null}</Fragment>;
   };
 
   const handleFetch = async () => {

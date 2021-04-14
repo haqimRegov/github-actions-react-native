@@ -45,7 +45,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
 }: CustomButtonProps) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncePress = useCallback(
-    debounce(onPress, 500, {
+    debounce(onPress, 600, {
       leading: true,
       trailing: false,
     }),

@@ -194,6 +194,7 @@ export const english = {
       LABEL_TRANSACTION_STATUS: "Order Status",
       LABEL_TRANSACTION_TYPE: "Trans. Type",
       LABEL_UPLOAD_PROOF: "Upload Proof of Payment",
+      LABEL_UPLOAD_RECURRING: "Add Recurring Info",
       LABEL_UPLOAD: "Upload Document",
       LABEL_VIEW: "View",
     },

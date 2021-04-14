@@ -70,6 +70,8 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
     width: sw232,
   };
 
+  const labelUploadPayment = isScheduled ? DASHBOARD_HOME.LABEL_UPLOAD_RECURRING : DASHBOARD_HOME.LABEL_UPLOAD_PROOF;
+
   return (
     <View style={{ borderRadius: sw8 }}>
       <IconText color={colorBlue._2} name="eye-show" onPress={handleViewOrder} text="View Details" style={itemStyle} />
@@ -77,13 +79,7 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
         remark.findIndex((reason) => reason.label === "Payment" || reason.label === "Others") !== -1) ? (
-        <IconText
-          color={colorBlue._2}
-          name="upload"
-          onPress={handleUploadPayment}
-          text={DASHBOARD_HOME.LABEL_UPLOAD_PROOF}
-          style={itemStyle}
-        />
+        <IconText color={colorBlue._2} name="upload" onPress={handleUploadPayment} text={labelUploadPayment} style={itemStyle} />
       ) : null}
       {status === "Pending Doc" ||
       status === "Pending Doc & Payment" ||

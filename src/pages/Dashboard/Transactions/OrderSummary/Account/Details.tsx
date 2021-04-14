@@ -175,7 +175,7 @@ export const AccountDetailsContent = ({
         <TextCard data={employmentDetails} spaceBetweenItem={sw64} />
       </View>
       <CustomSpacer space={sh16} />
-      {accountHolder === "Principal" ? (
+      {accountHolder === "Principal" && (localBankDetails.length > 0 || foreignBankDetails.length > 0) ? (
         <Fragment>
           <View style={borderBottomGray4} />
           <CustomSpacer space={sh32} />

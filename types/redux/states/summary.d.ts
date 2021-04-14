@@ -8,6 +8,7 @@ declare interface IPersonalDetailsState {
   countryOfBirth?: string;
   dateOfBirth?: Date;
   educationLevel?: string;
+  enableBankDetails?: boolean;
   otherEducationLevel?: string;
   expirationDate?: Date;
   gender?: string;
@@ -156,6 +157,7 @@ declare interface IPersonalInfoState {
   emailOtpSent?: boolean;
   epfInvestment?: boolean;
   epfShariah?: boolean;
+  isAllEpf?: boolean;
   joint?: IHolderInfoState;
   principal?: IHolderInfoState;
   incomeDistribution?: string;

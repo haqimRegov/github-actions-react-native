@@ -133,7 +133,7 @@ declare interface ISubmitClientAccountRequest {
   principal: {
     clientId: string;
     addressInformation: ISubmitAddressInformation;
-    bankSummary: ISubmitBankSummary;
+    bankSummary?: ISubmitBankSummary;
     contactDetails: ISubmitContactDetails;
     declaration: {
       crs: ISubmitCrs;

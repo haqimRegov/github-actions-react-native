@@ -237,10 +237,15 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     principal: {
       clientId: details!.principalHolder!.clientId!,
       addressInformation: principalAddress as ISubmitAddressInformation,
-      bankSummary: {
-        localBank: localBank as ISubmitBank[],
-        foreignBank: foreignBank as ISubmitBank[],
-      },
+      bankSummary:
+        (principal?.personalDetails?.enableBankDetails === true && personalInfo.isAllEpf === true) || personalInfo.isAllEpf === false
+          ? {
+              localBank: localBank as ISubmitBank[],
+              foreignBank: foreignBank as ISubmitBank[],
+            }
+          : {
+              localBank: [],
+            },
       contactDetails: {
         contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
           code: contact.code,

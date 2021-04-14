@@ -1,10 +1,16 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, TextSpaceArea } from "../../../components";
+import { AdvancedDropdown, CustomSpacer, Switch, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID_TYPE, DICTIONARY_HOUSEHOLD_INCOME, ERROR } from "../../../data/dictionary";
-import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh8, sw24, sw40 } from "../../../styles";
+import {
+  DICTIONARY_ALL_ID_TYPE,
+  DICTIONARY_COUNTRIES,
+  DICTIONARY_CURRENCY,
+  DICTIONARY_HOUSEHOLD_INCOME,
+  ERROR,
+} from "../../../data/dictionary";
+import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh40, sh8, sw24, sw40 } from "../../../styles";
 import { isNonNumber, isNumber } from "../../../utils";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
@@ -25,6 +31,7 @@ interface PersonalInfoProps {
   epfInvestment: boolean;
   epfShariah: boolean;
   investmentCurrencies: string[];
+  isAllEpf?: boolean;
   jointContactCheck?: boolean;
   personalDetails: IPersonalDetailsState;
   setBankDetails: (value: IBankSummaryState) => void;
@@ -34,6 +41,16 @@ interface PersonalInfoProps {
   setValidations: (value: IPersonalDetailsValidations) => void;
   validations: IPersonalDetailsValidations;
 }
+
+const initialBankDetails: IBankDetailsState = {
+  bankAccountName: "",
+  bankAccountNumber: "",
+  bankLocation: DICTIONARY_COUNTRIES[0].value,
+  bankName: "",
+  bankSwiftCode: "",
+  currency: [DICTIONARY_CURRENCY[0].value],
+  otherBankName: "",
+};
 
 export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   accountType,
@@ -45,6 +62,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
   epfInvestment,
   epfShariah,
   investmentCurrencies,
+  isAllEpf,
   jointContactCheck,
   personalDetails,
   setBankDetails,
@@ -81,6 +99,15 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
     setBankDetails({ localBank: value });
   };
 
+  const handleEnable = (toggle: boolean | undefined) => {
+    setPersonalDetails({ ...personalDetails, enableBankDetails: toggle });
+    const bankSummary: IBankSummaryState = {
+      localBank: [{ ...initialBankDetails }],
+      foreignBank: [],
+    };
+    setBankDetails(bankSummary);
+  };
+
   const setForeignBank = (value: IBankDetailsState[]) => {
     setBankDetails({ foreignBank: value });
   };
@@ -105,6 +132,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
 
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails.idType! as TypeClientID) !== 1;
   const isContactOptional = jointContactCheck !== undefined ? jointContactCheck : false;
+  const enabled = personalDetails.enableBankDetails !== undefined ? personalDetails.enableBankDetails : true;
 
   return (
     <View>
@@ -160,18 +188,28 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
       )}
       {accountType === "Joint" && accountHolder === "Joint" ? null : (
         <Fragment>
-          <View style={borderBottomBlack21} />
-          <View style={px(sw24)}>
-            <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
-          </View>
-          <BankDetails
-            bankNames={accountNames}
-            foreignBankDetails={foreignBank!}
-            investmentCurrencies={investmentCurrencies}
-            localBankDetails={localBank!}
-            setForeignBankDetails={setForeignBank}
-            setLocalBankDetails={setLocalBank}
-          />
+          {isAllEpf === true ? (
+            <View style={px(sw24)}>
+              <Switch label={PERSONAL_DETAILS.LABEL_ADD_BANK_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
+            </View>
+          ) : null}
+          {enabled === true || isAllEpf === false ? (
+            <Fragment>
+              <CustomSpacer space={sh40} />
+              <View style={borderBottomBlack21} />
+              <View style={px(sw24)}>
+                <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
+              </View>
+              <BankDetails
+                bankNames={accountNames}
+                foreignBankDetails={foreignBank!}
+                investmentCurrencies={investmentCurrencies}
+                localBankDetails={localBank!}
+                setForeignBankDetails={setForeignBank}
+                setLocalBankDetails={setLocalBank}
+              />
+            </Fragment>
+          ) : null}
         </Fragment>
       )}
     </View>

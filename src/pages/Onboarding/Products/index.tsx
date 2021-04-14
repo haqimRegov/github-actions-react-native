@@ -143,14 +143,35 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
       .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
     const epfShariah = epfInvestments.includes("Yes");
-    if (epfInvestments.length > 0) {
-      addPersonalInfo({ epfInvestment: true, epfShariah: epfShariah });
-    }
+    const allEpf = epfInvestments.length === investmentDetails!.length;
+    const epfObject =
+      epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
+    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
     const route: TypeOnboardingRoute = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
     handleNextStep(route);
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
-    updatedFinishedSteps.push("Products");
+    const updatedFinishedSteps: TypeOnboardingKey[] =
+      epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
+        ? ["RiskAssessment", "Products"]
+        : [...finishedSteps, "Products"];
+    const updatedDisabledSteps: TypeOnboardingKey[] =
+      epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
+        ? [
+            "PersonalDetails",
+            "EmploymentDetails",
+            "PersonalInfoSummary",
+            "FATCADeclaration",
+            "CRSDeclaration",
+            "FEADeclaration",
+            "DeclarationSummary",
+            "OrderSummary",
+            "TermsAndConditions",
+            "Signatures",
+          ]
+        : [...disabledSteps];
+    if (disabledSteps.includes("EmailVerification")) {
+      updatedFinishedSteps.push("EmailVerification");
+      updatedDisabledSteps.push("EmailVerification");
+    }
     const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
     if (findPersonalInfo !== -1) {
       updatedDisabledSteps.splice(findPersonalInfo, 1);

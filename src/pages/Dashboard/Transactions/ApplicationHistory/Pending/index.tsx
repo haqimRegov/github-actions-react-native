@@ -82,8 +82,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleShowEDDReasons = (item: ITableRowData) => {
-    const { status } = item.rawData as IDashboardOrder;
-    if (status === "BR - Rerouted" || status === "HQ - Rerouted") {
+    const { remark, status } = item.rawData as IDashboardOrder;
+    if ((status === "BR - Rerouted" || status === "HQ - Rerouted") && remark) {
       const newSections: number[] = [...activeAccordion];
       const sectionIndex = newSections.indexOf(item.index);
       if (sectionIndex > -1) {
@@ -112,15 +112,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const tableAccordion = (item: ITableData) => {
-    return (
-      <Fragment>
-        {item.remark !== undefined ? (
-          <Fragment>
-            <EDDReasons data={item.remark} />
-          </Fragment>
-        ) : null}
-      </Fragment>
-    );
+    return <Fragment>{item.remark ? <EDDReasons data={item.remark} /> : null}</Fragment>;
   };
 
   const handleSortOrderNumber = async () => {

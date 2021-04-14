@@ -24,6 +24,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
         epfInvestment: false,
         epfShariah: false,
         incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
+        isAllEpf: false,
         signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
         principal: {
           addressInformation: {
@@ -134,6 +135,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             countryOfBirth: "",
             dateOfBirth: undefined,
             educationLevel: "",
+            enableBankDetails: false,
             expirationDate: undefined,
             gender: "",
             id: {

@@ -39,6 +39,7 @@ interface ApplicationHistoryHeaderProps {
   filterVisible: boolean;
   handleCancel: () => void;
   handleConfirm: () => void;
+  handleResetFilter: () => void;
   handleSearch: () => void;
   handleShowFilter: () => void;
   inputSearch: string;
@@ -52,6 +53,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   handleCancel,
   handleShowFilter,
   handleConfirm,
+  handleResetFilter,
   handleSearch,
   inputSearch,
   filter,
@@ -71,13 +73,15 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
     if (searchInputRef !== null) {
       searchInputRef.blur();
     }
+    handleCancel();
     handleShowFilter();
     AnimationUtils.layout({ duration: 180 });
   };
 
-  const handleCancelFilter = () => {
+  const handleReset = () => {
     // Alert.alert("cancel");
-    handleCancel();
+    // handleCancel();
+    handleResetFilter();
     // setFilter(products[productList].filters);
     handleShowFilter();
   };
@@ -189,8 +193,9 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
                 buttonContainerStyle={centerHorizontal}
                 cancelButtonStyle={{ width: sw218 }}
                 continueButtonStyle={{ width: sw218 }}
-                handleCancel={handleCancelFilter}
+                handleCancel={handleReset}
                 handleContinue={handleApplyFilter}
+                labelCancel={DASHBOARD_FILTER.BUTTON_RESET}
                 labelContinue={DASHBOARD_FILTER.BUTTON_APPLY}
               />
               <CustomSpacer space={sh16} />

@@ -47,6 +47,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setActiveTab,
     setScreen,
     transactions,
+    resetApprovedFilter,
+    resetPendingFilter,
+    resetRejectedFilter,
     updateApprovedFilter,
     updatedSelectedOrder,
     updatePendingFilter,
@@ -157,6 +160,21 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setFilterVisible(!filterVisible);
   };
 
+  const handleResetFilter = () => {
+    switch (activeTab) {
+      case "approved":
+        resetApprovedFilter();
+        break;
+      case "rejected":
+        resetRejectedFilter();
+        break;
+      default:
+        resetPendingFilter();
+        break;
+    }
+    updateSearch(inputSearch);
+  };
+
   const handleConfirmFilter = () => {
     switch (activeTab) {
       case "approved":
@@ -210,6 +228,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
             filterVisible={filterVisible}
             handleCancel={handleCancelFilter}
             handleConfirm={handleConfirmFilter}
+            handleResetFilter={handleResetFilter}
             handleSearch={handleSearch}
             handleShowFilter={handleShowFilter}
             inputSearch={inputSearch}

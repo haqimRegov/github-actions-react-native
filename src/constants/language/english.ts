@@ -150,6 +150,7 @@ export const english = {
     },
     DASHBOARD_FILTER: {
       BUTTON_APPLY: "Apply",
+      BUTTON_RESET: "Reset",
       LABEL_ACCOUNT_TYPE: "Account Type",
       LABEL_DATE_SORTING: "Date Sorting",
       LABEL_END_DATE: "End Date",

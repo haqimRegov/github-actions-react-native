@@ -65,6 +65,60 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         search: "",
         currentOrder: undefined,
       };
+    case "transactions/RESET_APPROVED_FILTER":
+      return {
+        ...state,
+        approved: {
+          filter: {
+            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
+            accountType: "",
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [],
+        },
+      };
+    case "transactions/RESET_REJECTED_FILTER":
+      return {
+        ...state,
+        rejected: {
+          filter: {
+            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
+            accountType: "",
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [],
+        },
+      };
+    case "transactions/RESET_PENDING_FILTER":
+      return {
+        ...state,
+        pending: {
+          filter: {
+            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
+            accountType: "",
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [],
+        },
+      };
     case "transactions/UPDATE_SELECTED_ORDER":
       return {
         ...state,

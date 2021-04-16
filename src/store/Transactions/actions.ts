@@ -21,6 +21,18 @@ export const resetTransactions = () => {
   return typedAction("transactions/RESET_TRANSACTIONS");
 };
 
+export const resetApprovedFilter = () => {
+  return typedAction("transactions/RESET_APPROVED_FILTER");
+};
+
+export const resetRejectedFilter = () => {
+  return typedAction("transactions/RESET_REJECTED_FILTER");
+};
+
+export const resetPendingFilter = () => {
+  return typedAction("transactions/RESET_PENDING_FILTER");
+};
+
 export const resetSelectedOrder = () => {
   return typedAction("transactions/RESET_SELECTED_ORDER");
 };
@@ -70,18 +82,21 @@ export type TransactionsAction = ReturnType<
   | typeof addPendingOrders
   | typeof addRejectedOrders
   | typeof addSelectedOrders
+  | typeof resetApprovedFilter
+  | typeof resetPendingFilter
+  | typeof resetRejectedFilter
   | typeof resetSelectedOrder
   | typeof resetTransactions
-  | typeof updateCurrentOrder
-  | typeof updateTransactions
-  | typeof updatedSelectedOrder
-  | typeof updateSearch
-  | typeof updatePendingSort
-  | typeof updateApprovedSort
-  | typeof updateRejectedSort
-  | typeof updatePendingFilter
   | typeof updateApprovedFilter
+  | typeof updateApprovedSort
+  | typeof updateCurrentOrder
+  | typeof updatedSelectedOrder
+  | typeof updatePendingFilter
+  | typeof updatePendingSort
   | typeof updateRejectedFilter
+  | typeof updateRejectedSort
+  | typeof updateSearch
+  | typeof updateTransactions
 >;
 
 export const TransactionsActionProps = {
@@ -89,15 +104,18 @@ export const TransactionsActionProps = {
   addPendingOrders,
   addRejectedOrders,
   addSelectedOrders,
+  resetApprovedFilter,
+  resetPendingFilter,
+  resetRejectedFilter,
   resetSelectedOrder,
   resetTransactions,
+  updateApprovedFilter,
   updateApprovedSort,
   updateCurrentOrder,
   updatedSelectedOrder,
   updatePendingFilter,
-  updateApprovedFilter,
-  updateRejectedFilter,
   updatePendingSort,
+  updateRejectedFilter,
   updateRejectedSort,
   updateSearch,
   updateTransactions,

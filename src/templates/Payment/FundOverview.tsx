@@ -99,6 +99,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
     summary.splice(0, 0, {
       label: ORDER_SUMMARY.LABEL_FUND_CLASS,
       title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
+      titleStyle: fsTransformNone,
     });
   }
 

@@ -333,7 +333,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const disabledOrders = orders.map((order, index) => (order.withHardcopy === true && order.status === "Submitted" ? -1 : index));
 
   return (
-    <View style={flexChild}>
+    <View style={{ ...flexChild }}>
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}

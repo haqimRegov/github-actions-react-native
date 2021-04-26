@@ -1158,7 +1158,7 @@ export const english = {
       LABEL_CHECKBOX_2:
         "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate.\nI acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document.",
       LABEL_CHECKBOX_3:
-        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice on pages 11 - 12 of this Account Opening & Investment Form, as may be amended or supplemented from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
+        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
       LABEL_CHECKBOX_4:
         "I have decided to purchase another unlisted capital market product that is not recommended by the authorized distributor",
       LABEL_COMPLETED: "Completed",

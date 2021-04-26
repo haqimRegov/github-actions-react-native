@@ -96,7 +96,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
             ];
 
             if (investment.fundClass !== null && investment.fundClass !== "" && investment.fundClass !== undefined) {
-              fundDetails.splice(1, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CLASS, title: investment.fundClass });
+              fundDetails.splice(1, 0, {
+                label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CLASS,
+                title: investment.fundClass,
+                titleStyle: fsTransformNone,
+              });
             }
 
             // if (investment.isFea !== null) {

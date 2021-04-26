@@ -3,12 +3,11 @@ import "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import UserInactivity from "react-native-user-inactivity";
 
 import { LocalAssets } from "../assets/LocalAssets";
 import { PromptModal } from "../components";
 import { Language } from "../constants";
-import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";
+import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS } from "../data/dictionary";
 import { logout } from "../network-actions";
 import { DashboardPage, LogoutPage, OnboardingPage } from "../pages";
 import { fs16BoldBlack2 } from "../styles";
@@ -34,9 +33,9 @@ export const PrivateRoute: FunctionComponent = () => {
     setActive(true);
   };
 
-  const handleInactivity = (isActive: boolean) => {
-    setActive(isActive);
-  };
+  // const handleInactivity = (isActive: boolean) => {
+  //   setActive(isActive);
+  // };
 
   useEffect(() => {
     let clockDrift: ReturnType<typeof setTimeout>;
@@ -67,13 +66,13 @@ export const PrivateRoute: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <UserInactivity isActive={active} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
-        <Navigator initialRouteName="Dashboard" headerMode="none">
-          <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
-          <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
-          <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
-        </Navigator>
-      </UserInactivity>
+      {/* <UserInactivity isActive={active} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}> */}
+      <Navigator initialRouteName="Dashboard" headerMode="none">
+        <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
+        <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
+        <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
+      </Navigator>
+      {/* </UserInactivity> */}
       <PromptModal
         handleCancel={handleLogout}
         handleContinue={handleExtend}

@@ -113,8 +113,8 @@ const NewSalesComponent = ({
   const handleNavigation = () => {
     const principalClientIdType = principalHolder?.idType === "Other" ? principalHolder.otherIdType : principalIdType;
     const jointClientIdType = jointHolder?.idType === "Other" ? jointHolder.otherIdType : jointIdType;
-    const principalFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === principalHolder?.id!.substr(7, 2));
-    const jointFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === jointHolder?.id!.substr(7, 2));
+    const principalFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === principalHolder?.id!.substr(6, 2));
+    const jointFilteredPlace = DICTIONARY_PLACE_OF_BIRTH.filter((code) => code.code === jointHolder?.id!.substr(6, 2));
     const principalPlaceOfBirth =
       principalHolder?.idType === "NRIC" && principalFilteredPlace.length !== 0 ? principalFilteredPlace[0].location : "";
     const jointPlaceOfBirth =

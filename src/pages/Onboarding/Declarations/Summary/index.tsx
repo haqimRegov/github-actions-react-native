@@ -228,6 +228,17 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   delete principalAddress.sameAddress;
   const jointEmploymentDetails = jointDetails !== undefined ? { ...jointDetails.employmentDetails } : undefined;
 
+  const jointContactDetails =
+    jointDetails !== undefined
+      ? jointDetails
+          .contactDetails!.contactNumber!.map((contact) => ({
+            code: contact.code,
+            label: contact.label,
+            value: contact.value,
+          }))
+          .filter((contactNumber) => contactNumber.value !== "")
+      : [];
+
   if (jointEmploymentDetails !== undefined) {
     delete jointEmploymentDetails.isEnabled;
   }
@@ -303,12 +314,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             clientId: jointDetails.clientId,
             addressInformation: jointDetails.addressInformation as ISubmitAddressInformation,
             contactDetails: {
-              contactNumber: jointDetails.contactDetails!.contactNumber!.map((contact) => ({
-                code: contact.code,
-                label: contact.label,
-                value: contact.value,
-              })),
-              emailAddress: jointDetails.contactDetails!.emailAddress!,
+              contactNumber: jointContactDetails.length > 0 ? jointContactDetails : undefined,
+              emailAddress: jointDetails.contactDetails!.emailAddress! !== "" ? jointDetails.contactDetails!.emailAddress! : undefined,
             },
             declaration: jointDetails.declaration as ISubmitDeclaration,
             employmentDetails:

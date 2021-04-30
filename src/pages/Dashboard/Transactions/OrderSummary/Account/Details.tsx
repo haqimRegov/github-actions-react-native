@@ -138,13 +138,17 @@ export const AccountDetailsContent = ({
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_ACCOUNT_SUMMARY} />
         <TextCard data={accountSummaryDetails} spaceBetweenItem={sw64} />
       </View>
-      <CustomSpacer space={sh16} />
-      <View style={borderBottomGray4} />
-      <CustomSpacer space={sh32} />
-      <View style={px(sw24)}>
-        <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_CONTACT_DETAILS} />
-        <TextCard data={contactDetails} spaceBetweenItem={sw64} />
-      </View>
+      {contactDetails.length !== 0 ? (
+        <Fragment>
+          <CustomSpacer space={sh16} />
+          <View style={borderBottomGray4} />
+          <CustomSpacer space={sh32} />
+          <View style={px(sw24)}>
+            <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_CONTACT_DETAILS} />
+            <TextCard data={contactDetails} spaceBetweenItem={sw64} />
+          </View>
+        </Fragment>
+      ) : null}
       <CustomSpacer space={sh16} />
       <View style={borderBottomGray4} />
       <CustomSpacer space={sh32} />
@@ -156,27 +160,31 @@ export const AccountDetailsContent = ({
           <AddressInfo data={mailingAddress} labelAddress={DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} />
         </View>
       </View>
-      <CustomSpacer space={sh16} />
-      <View style={borderBottomGray4} />
-      <CustomSpacer space={sh32} />
       {epfDetails.length !== 0 && accountHolder === "Principal" ? (
         <Fragment>
+          <CustomSpacer space={sh16} />
+          <View style={borderBottomGray4} />
+          <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_EPF_DETAILS} />
             <TextCard data={epfDetails} spaceBetweenItem={sw64} />
           </View>
+        </Fragment>
+      ) : null}
+      {employmentDetails.length !== 0 ? (
+        <Fragment>
           <CustomSpacer space={sh16} />
           <View style={borderBottomGray4} />
           <CustomSpacer space={sh32} />
+          <View style={px(sw24)}>
+            <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_EMPLOYMENT_INFO} />
+            <TextCard data={employmentDetails} spaceBetweenItem={sw64} />
+          </View>
         </Fragment>
       ) : null}
-      <View style={px(sw24)}>
-        <TextSpaceArea spaceToBottom={sh16} style={fs18BoldBlack2} text={DASHBOARD_PROFILE.TITLE_EMPLOYMENT_INFO} />
-        <TextCard data={employmentDetails} spaceBetweenItem={sw64} />
-      </View>
-      <CustomSpacer space={sh16} />
       {accountHolder === "Principal" && (localBankDetails.length > 0 || foreignBankDetails.length > 0) ? (
         <Fragment>
+          <CustomSpacer space={sh16} />
           <View style={borderBottomGray4} />
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>

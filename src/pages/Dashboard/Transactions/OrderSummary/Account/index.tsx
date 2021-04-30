@@ -105,10 +105,15 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
     );
   }
 
-  const contactSummary: LabeledTitleProps[] = [
-    { label: DASHBOARD_PROFILE.LABEL_EMAIL, title: contactDetails.email, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_MOBILE, title: contactDetails.mobileNumber },
-  ];
+  const contactSummary: LabeledTitleProps[] = [];
+
+  if (contactDetails.email) {
+    contactSummary.push({ label: DASHBOARD_PROFILE.LABEL_EMAIL, title: contactDetails.email, titleStyle: fsTransformNone });
+  }
+
+  if (contactDetails.mobileNumber) {
+    contactSummary.push({ label: DASHBOARD_PROFILE.LABEL_MOBILE, title: contactDetails.mobileNumber });
+  }
 
   if (contactDetails.homeNumber !== null) {
     contactSummary.push({ label: DASHBOARD_PROFILE.LABEL_HOME, title: contactDetails.homeNumber });
@@ -120,22 +125,29 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
     contactSummary.push({ label: DASHBOARD_PROFILE.LABEL_FAX, title: contactDetails.faxNumber });
   }
 
-  const employmentAddress = Object.values(employmentInformation.address.address!).join(" ");
+  let employmentDetails: LabeledTitleProps[] = [];
+  if (employmentInformation !== null) {
+    const employmentAddress = Object.values(employmentInformation.address.address!).join(" ");
 
-  const employmentDetails: LabeledTitleProps[] = [
-    { label: DASHBOARD_PROFILE.LABEL_OCCUPATION, title: employmentInformation.occupation, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_NAME, title: employmentInformation.nameOfEmployer, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_NATURE_BUSINESS, title: employmentInformation.natureOfBusiness, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME, title: employmentInformation.monthlyHouseholdIncome, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentAddress, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
-    { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
-    { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
-    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country! },
-  ];
+    employmentDetails = [
+      { label: DASHBOARD_PROFILE.LABEL_OCCUPATION, title: employmentInformation.occupation, titleStyle: fsTransformNone },
+      { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_NAME, title: employmentInformation.nameOfEmployer, titleStyle: fsTransformNone },
+      { label: DASHBOARD_PROFILE.LABEL_NATURE_BUSINESS, title: employmentInformation.natureOfBusiness, titleStyle: fsTransformNone },
+      { label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME, title: employmentInformation.monthlyHouseholdIncome, titleStyle: fsTransformNone },
+      { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentAddress, titleStyle: fsTransformNone },
+      { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
+      { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
+      { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
+      { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country! },
+    ];
 
-  if (employmentInformation.annualIncome) {
-    employmentDetails.splice(4, 0, { label: DASHBOARD_PROFILE.LABEL_GROSS, title: employmentInformation.annualIncome });
+    if (employmentInformation.annualIncome) {
+      employmentDetails.splice(4, 0, {
+        label: DASHBOARD_PROFILE.LABEL_GROSS,
+        title: employmentInformation.annualIncome,
+        titleStyle: fsTransformNone,
+      });
+    }
   }
 
   const localBankDetails: LabeledTitleProps[][] = [];

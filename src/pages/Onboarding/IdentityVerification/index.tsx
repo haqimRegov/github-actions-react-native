@@ -127,7 +127,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleContinue = () => {
-    const principalMailingAddress = personalInfo.principal!.addressInformation?.mailingAddress!;
+    const principalMailingAddress =
+      joint?.addressInformation?.sameAddress === true
+        ? personalInfo.principal!.addressInformation?.mailingAddress!
+        : joint?.addressInformation?.mailingAddress;
     setPage(1);
     if (accountType === "Joint") {
       addPersonalInfo({
@@ -160,6 +163,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           },
           addressInformation: {
             ...principal!.addressInformation!,
+            sameAddress: true,
             mailingAddress: {
               address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",
@@ -233,6 +237,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           },
           addressInformation: {
             ...joint!.addressInformation!,
+            sameAddress: true,
             mailingAddress: {
               address: { line1: line1 || "", line2: line2, line3: line3 },
               city: mykad.city || "",

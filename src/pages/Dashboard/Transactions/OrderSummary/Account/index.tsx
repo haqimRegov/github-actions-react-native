@@ -125,30 +125,58 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
     contactSummary.push({ label: DASHBOARD_PROFILE.LABEL_FAX, title: contactDetails.faxNumber });
   }
 
-  let employmentDetails: LabeledTitleProps[] = [];
+  const employmentDetails: LabeledTitleProps[] = [];
   if (employmentInformation !== null) {
-    const employmentAddress = Object.values(employmentInformation.address.address!).join(" ");
+    const employmentAddress = employmentInformation.address ? Object.values(employmentInformation.address.address!).join(" ") : "";
 
-    employmentDetails = [
-      { label: DASHBOARD_PROFILE.LABEL_OCCUPATION, title: employmentInformation.occupation, titleStyle: fsTransformNone },
-      { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_NAME, title: employmentInformation.nameOfEmployer, titleStyle: fsTransformNone },
-      { label: DASHBOARD_PROFILE.LABEL_NATURE_BUSINESS, title: employmentInformation.natureOfBusiness, titleStyle: fsTransformNone },
-      { label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME, title: employmentInformation.monthlyHouseholdIncome, titleStyle: fsTransformNone },
-      { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentAddress, titleStyle: fsTransformNone },
-      { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
-      { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
-      { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
-      { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country! },
-    ];
+    if (employmentInformation.occupation !== null) {
+      employmentDetails.push(
+        {
+          label: DASHBOARD_PROFILE.LABEL_OCCUPATION,
+          title: employmentInformation.occupation,
+          titleStyle: fsTransformNone,
+        },
+        {
+          label: DASHBOARD_PROFILE.LABEL_EMPLOYER_NAME,
+          title: employmentInformation.nameOfEmployer,
+          titleStyle: fsTransformNone,
+        },
+        {
+          label: DASHBOARD_PROFILE.LABEL_NATURE_BUSINESS,
+          title: employmentInformation.natureOfBusiness,
+          titleStyle: fsTransformNone,
+        },
+      );
+    }
+
+    if (employmentInformation.monthlyHouseholdIncome) {
+      employmentDetails.push({
+        label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME,
+        title: employmentInformation.monthlyHouseholdIncome,
+        titleStyle: fsTransformNone,
+      });
+    }
 
     if (employmentInformation.annualIncome) {
-      employmentDetails.splice(4, 0, {
+      employmentDetails.push({
         label: DASHBOARD_PROFILE.LABEL_GROSS,
         title: employmentInformation.annualIncome,
         titleStyle: fsTransformNone,
       });
     }
+
+    if (employmentInformation.address !== null) {
+      employmentDetails.push(
+        { label: DASHBOARD_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employmentAddress, titleStyle: fsTransformNone },
+        { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
+        { label: DASHBOARD_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
+        { label: DASHBOARD_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
+        { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country! },
+      );
+    }
   }
+
+  console.log("employemnt", employmentDetails);
 
   const localBankDetails: LabeledTitleProps[][] = [];
   if (accountHolder === "Principal" && bankInformation.localBank !== null) {

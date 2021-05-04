@@ -22,23 +22,19 @@ import {
   px,
   sh1,
   sh120,
-  sh1600,
   sh24,
   sh26,
   sh32,
   sh34,
   sh4,
   sh56,
-  sh796,
   sh8,
-  sh800,
   shadowBlue5,
   sw1,
   sw20,
   sw24,
   sw33,
   sw40,
-  sw595,
   sw8,
   sw80,
   sw82,
@@ -107,9 +103,10 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         break;
     }
   }
-  const pdfViewContainer: ViewStyle = { ...px(sw8), width: sw595, height: sh800 };
-  const remotePdfViewContainer: ViewStyle = { ...px(sw8), width: sw595, height: parseInt(urlPageCount!, 10) * sh796 };
-  const pdfContainer: ViewStyle = { height: parseInt(urlPageCount!, 10) * sh1600 }; // To display the page number correctly in the viewer
+  const pdfViewContainer: ViewStyle = { ...px(sw8), width: 595, height: 800 };
+  const remotePdfViewContainer: ViewStyle = { ...px(sw8), width: 595, height: parseInt(urlPageCount!, 10) * 796 };
+  const pdfContainer: ViewStyle = { height: parseInt(urlPageCount!, 10) * 1600 }; // To display the page number correctly in the viewer
+  const pdfSignContainer: ViewStyle = { height: 800 };
   const toolTipStyle: ViewStyle = { top: sh8, zIndex: 1 };
   const toolTipLabelStyle: ViewStyle = {
     ...centerHV,
@@ -151,7 +148,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
                 <TouchableWithoutFeedback onPress={handlePosition}>
                   <View style={pdfViewContainer}>
                     <View pointerEvents="none">
-                      <PDFView style={{ height: sh800 }} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
+                      <PDFView style={pdfSignContainer} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>

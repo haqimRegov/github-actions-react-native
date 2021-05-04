@@ -14,6 +14,7 @@ import {
   flexChild,
   flexRow,
   fs16SemiBoldBlack2,
+  fullHW,
   sh112,
   sh153,
   sh16,
@@ -219,7 +220,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   return (
-    <View>
+    <View style={fullHW}>
       <DashboardLayout scrollEnabled={!filterVisible} {...props}>
         <View style={flexChild}>
           <ApplicationHistoryHeader

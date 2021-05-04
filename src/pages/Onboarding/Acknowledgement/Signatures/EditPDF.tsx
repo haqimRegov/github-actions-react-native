@@ -10,35 +10,15 @@ import { Base64 } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { ReactFileSystem } from "../../../../integrations/file-system/functions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import {
-  sh100,
-  sh12,
-  sh15,
-  sh164,
-  sh220,
-  sh25,
-  sh30,
-  sh308,
-  sh370,
-  sh40,
-  sh90,
-  sw180,
-  sw20,
-  sw200,
-  sw245,
-  sw25,
-  sw275,
-  sw470,
-} from "../../../../styles";
 import { GetBase64String, GetEmbeddedBase64 } from "../../../../utils";
 import { PdfView, Signer } from "./EditPDFView";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
-  adviser: { x: sw20, y: sh164 },
-  principal: { x: sw275, y: sh164 },
-  joint: { x: sw20, y: sh308 },
+  adviser: { x: 20, y: 160 },
+  principal: { x: 275, y: 160 },
+  joint: { x: 20, y: 300 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
@@ -76,16 +56,16 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
       loadPdf.registerFontkit(fontkit);
       const customFont = await loadPdf.embedFont(fileData);
-      const textHeight = customFont.heightAtSize(sh12);
+      const textHeight = customFont.heightAtSize(12);
       const whiteImage = await loadPdf.embedPng(Base64.background.white);
       const signatureImage = await loadPdf.embedPng(value);
       const pages = loadPdf.getPages();
       const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
       const whiteBGConfig = {
-        height: sh40,
+        height: 40,
         opacity: 1,
-        width: sw180,
+        width: 180,
         x: signPosition[signer].x,
         y: height - signPosition[signer].y,
       };
@@ -116,7 +96,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         }
       }
 
-      selectedPage.moveTo(textPosition.x, height - textPosition.y + sh30);
+      selectedPage.moveTo(textPosition.x, height - textPosition.y + 30);
       selectedPage.drawImage(whiteImage, whiteBGConfig);
       selectedPage.drawImage(whiteImage, {
         ...whiteBGConfig,
@@ -131,25 +111,25 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       selectedPage.drawSvgPath(svgPath[0], { color: rgb(0, 0.537, 0.925), scale: 0.02 });
       selectedPage.drawSvgPath(svgPath[1], { color: rgb(0, 0.537, 0.925), scale: 0.02 });
       selectedPage.drawText(TERMS_AND_CONDITIONS.LABEL_SIGN_NOW, {
-        x: textPosition.x + sw25,
-        y: height - textPosition.y + sh15,
+        x: textPosition.x + 25,
+        y: height - textPosition.y + 15,
         size: textHeight,
         font: customFont,
         color: rgb(0, 0.537, 0.925),
       });
       if (Platform.OS === "ios") {
         selectedPage.drawImage(signatureImage, {
-          height: sh40,
-          width: sw180,
+          height: 40,
+          width: 180,
           x: signPosition[signer].x,
           y: height - signPosition[signer].y,
         });
       } else {
         selectedPage.drawImage(signatureImage, {
-          height: sh100,
-          width: sw200,
+          height: 100,
+          width: 200,
           x: (selectedPage.getWidth() * signPosition[signer].x) / Dimensions.get("window").width,
-          y: selectedPage.getHeight() - (selectedPage.getHeight() * signPosition[signer].y) / Dimensions.get("window").height - sh25,
+          y: selectedPage.getHeight() - (selectedPage.getHeight() * signPosition[signer].y) / Dimensions.get("window").height - 25,
         });
       }
       const pdfBytes = await loadPdf.save();
@@ -172,14 +152,14 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       coordinateX = locationX;
       coordinateY = positionY;
     }
-    if (coordinateY > sh90 && coordinateY < sh220) {
-      if (coordinateX < sw245 && coordinateX > 0) {
+    if (coordinateY > 90 && coordinateY < 220) {
+      if (coordinateX < 245 && coordinateX > 0) {
         setSigner("adviser");
-      } else if (coordinateX > sw245 && coordinateX < sw470) {
+      } else if (coordinateX > 245 && coordinateX < 470) {
         setSigner("principal");
       }
       setShowSignPdf(true);
-    } else if (coordinateX < sw245 && coordinateY > sh220 && coordinateY < sh370 && accountType === "Joint") {
+    } else if (coordinateX < 245 && coordinateY > 220 && coordinateY < 370 && accountType === "Joint") {
       setSigner("joint");
       setShowSignPdf(true);
     }

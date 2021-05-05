@@ -199,6 +199,7 @@ const getOrderSummary = gql`
               url
               type
             }
+            referenceNumber
             kibBankName
             kibBankAccountNumber
             bankName
@@ -231,6 +232,7 @@ const getOrderSummary = gql`
               maritalStatus
               riskProfile
               relationship
+              monthlyHouseholdIncome
             }
             epfDetails {
               epfMemberNumber
@@ -239,7 +241,6 @@ const getOrderSummary = gql`
             employmentInformation {
               occupation
               natureOfBusiness
-              monthlyHouseholdIncome
               annualIncome
               nameOfEmployer
               address {

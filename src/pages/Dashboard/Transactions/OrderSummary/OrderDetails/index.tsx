@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import { CustomSpacer, Dash, LabeledTitleProps, TextCard } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
@@ -67,10 +67,6 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 
-  const handleEdit = () => {
-    Alert.alert("payment edit route");
-  };
-
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
@@ -125,7 +121,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 {index === 0 ? null : <CustomSpacer space={sh16} />}
                 <View style={{ ...flexRow, borderLeftColor: colorRed._2, borderLeftWidth: sw2 }}>
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <IcoMoon color={colorBlue._2} name="order" onPress={handleEdit} size={sw24} />
+                  <IcoMoon color={colorBlue._2} name="order" size={sw24} />
                   <CustomSpacer isHorizontal={true} space={sw8} />
                   <Text style={{ ...fs18BoldBlack2, lineHeight: sh24 }}>{investment.fundName}</Text>
                 </View>

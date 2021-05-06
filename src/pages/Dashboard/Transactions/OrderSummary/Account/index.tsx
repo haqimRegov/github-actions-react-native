@@ -105,6 +105,14 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
     );
   }
 
+  if (personalDetails.monthlyHouseholdIncome) {
+    accountSummaryDetails.splice(accountSummaryDetails.length - 1, 0, {
+      label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME,
+      title: personalDetails.monthlyHouseholdIncome,
+      titleStyle: fsTransformNone,
+    });
+  }
+
   const contactSummary: LabeledTitleProps[] = [];
 
   if (contactDetails.email) {
@@ -149,14 +157,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
       );
     }
 
-    if (employmentInformation.monthlyHouseholdIncome) {
-      employmentDetails.push({
-        label: DASHBOARD_PROFILE.LABEL_MONTHLY_INCOME,
-        title: employmentInformation.monthlyHouseholdIncome,
-        titleStyle: fsTransformNone,
-      });
-    }
-
     if (employmentInformation.annualIncome) {
       employmentDetails.push({
         label: DASHBOARD_PROFILE.LABEL_GROSS,
@@ -175,8 +175,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
       );
     }
   }
-
-  console.log("employemnt", employmentDetails);
 
   const localBankDetails: LabeledTitleProps[][] = [];
   if (accountHolder === "Principal" && bankInformation.localBank !== null) {

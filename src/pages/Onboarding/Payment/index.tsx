@@ -61,6 +61,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
             return {
               ...updatedPaymentInfo,
+              referenceNumber: "amigo123", // TODO temporary
               amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
               bankAccountName:
                 paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""

@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import { CustomSpacer, Dash, LabeledTitleProps, TextCard } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
@@ -68,7 +68,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
   ];
 
   const handleEdit = () => {
-    Alert.alert("payment edit route");
+    // Alert.alert("payment edit route");
   };
 
   return (

@@ -1,9 +1,12 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Image, ImageSourcePropType, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
 
+import { IcoMoon } from "../../icons";
 import {
   centerVertical,
+  colorBlue,
   colorWhite,
+  flexRow,
   flexRowCC,
   fs16SemiBoldBlack2,
   fs24BoldBlue2,
@@ -11,6 +14,9 @@ import {
   fsTransformNone,
   px,
   sh16,
+  sh20,
+  sh24,
+  sh28,
   sh48,
   sh56,
   sh8,
@@ -18,17 +24,21 @@ import {
   sw10,
   sw176,
   sw234,
+  sw28,
   sw5,
   sw56,
   sw565,
 } from "../../styles";
 import { ActionButtons, ActionButtonsProps } from "../Views/ActionButtons";
-import { CustomSpacer } from "../Views/Spacer";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 export interface PromptProps extends ActionButtonsProps {
   children?: JSX.Element;
+  closable?: boolean;
+  handleClose: () => void;
   illustration?: ImageSourcePropType;
   spaceToButton?: number;
+  spaceToTitle?: number;
   title?: string;
   titleStyle?: TextStyle;
   label?: string;
@@ -37,8 +47,11 @@ export interface PromptProps extends ActionButtonsProps {
 
 export const Prompt: FunctionComponent<PromptProps> = ({
   children,
+  closable,
+  handleClose,
   illustration,
   spaceToButton,
+  spaceToTitle,
   title,
   titleStyle,
   label,
@@ -73,11 +86,23 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   };
 
   const illustrationStyle: ImageStyle = { height: sw176, width: sw176 };
+  const defaultTopSpace = closable === true ? sh20 : sh48;
+  const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh16;
 
   return (
     <View style={modalContainer}>
+      {closable === true ? (
+        <Fragment>
+          <CustomSpacer space={sh28} />
+          <View style={flexRow}>
+            <CustomFlexSpacer />
+            <IcoMoon color={colorBlue._2} name="close" size={sh24} onPress={handleClose} />
+            <CustomSpacer isHorizontal={true} space={sw28} />
+          </View>
+        </Fragment>
+      ) : null}
       <View style={{ ...centerVertical, ...px(sw56) }}>
-        <CustomSpacer space={sh48} />
+        <CustomSpacer space={defaultTopSpace} />
         {illustration !== undefined ? (
           <Fragment>
             <Image source={illustration} style={illustrationStyle} />
@@ -87,7 +112,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
         {label !== undefined ? (
           <Fragment>
             <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, ...labelStyle }}>{label}</Text>
-            <CustomSpacer space={sh16} />
+            <CustomSpacer space={defaultSpaceToTitle} />
           </Fragment>
         ) : null}
         {title !== undefined ? <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}

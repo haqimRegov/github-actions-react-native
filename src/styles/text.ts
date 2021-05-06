@@ -5,6 +5,7 @@ import { colorBlack, colorBlue, colorGray, colorRed, colorWhite, colorYellow } f
 import { sh10, sh11, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw03, sw033 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
+export const fsAlignLeft: TextStyle = { textAlign: "left" };
 
 export const fsCapitalize: TextStyle = {
   textTransform: "capitalize",

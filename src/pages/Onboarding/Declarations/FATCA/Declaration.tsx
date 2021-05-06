@@ -5,8 +5,8 @@ import { CheckBox, CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   borderBottomGray4,
-  fs11RegBlack2,
   fs12BoldBlack2,
+  fs12RegBlack2,
   fs16SemiBoldBlack2,
   px,
   sh16,
@@ -42,7 +42,7 @@ export const FatcaTerms: FunctionComponent<FatcaTermsProps> = ({ accepted, setAc
         {DECLARATIONS.DECLARATION_CONTENT_YES.map((item, index) => (
           <Fragment key={index}>
             <CustomSpacer space={sh16} />
-            <Text style={fs11RegBlack2}>{item}</Text>
+            <Text style={fs12RegBlack2}>{item}</Text>
           </Fragment>
         ))}
         <CustomSpacer space={sh32} />
@@ -58,7 +58,7 @@ export const FatcaTerms: FunctionComponent<FatcaTermsProps> = ({ accepted, setAc
           return (
             <Fragment key={index}>
               <CustomSpacer space={sh16} />
-              <Text style={{ ...fs11RegBlack2, paddingLeft: indent }}>{item}</Text>
+              <Text style={{ ...fs12RegBlack2, paddingLeft: indent }}>{item}</Text>
             </Fragment>
           );
         })}

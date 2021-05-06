@@ -383,8 +383,8 @@ export const english = {
       CRS_DEFINITION: [
         "1. Taxpayer Identification Number (TIN)",
         "The term TIN means Taxpayer Identification Number or a functional equivalent in the absence of a TIN. A TIN is a unique combination of letters or numbers assigned by a jurisdiction to an individual and is used to identify the individual for the purpose of administering the tax laws of such jurisdiction. For e.g. in Malaysia, the TIN will be the    identification number issued by the Inland Revenue Board of Malaysia to individuals",
-        "2. Malaysia Tax Resident",
-        "For the definition of Malaysia Tax Resident, refer to the link:",
+        "2. Malaysian Tax Resident",
+        "For the definition of Malaysian Tax Resident, refer to the link:",
       ],
       CRS_LINK: "http://lampiran.hasil.gov.my/pdf/pdfam/3656.pdf",
       DEFINITIONS_CONTENT: [
@@ -398,10 +398,10 @@ export const english = {
         "(b) One or more United States persons have the authority to control all substantial decisions of the trust.",
       ],
       DEFINITIONS_SELECTED_HEADING_A: "(A) Taxpayer Identification Number (TIN)",
-      DEFINITIONS_SELECTED_HEADING_B: "(B) Malaysia Tax Resident",
+      DEFINITIONS_SELECTED_HEADING_B: "(B) Malaysian Tax Resident",
       DEFINITIONS_SELECTED_TEXT_A:
         "The term TIN means Taxpayer Identification Number or a functional equivalent in the absence of a TIN. A TIN is a unique combination of letters or numbers assigned by a jurisdiction to an individual and is used to identify the individual for the purpose of administering the tax laws of such jurisdiction. For e.g. in Malaysia, the TIN will be the identification number issued by the Inland Revenue Board of Malaysia to individuals.",
-      DEFINITIONS_SELECTED_TEXT_B: "For definition of Malaysia Tax Resident, refer to the link: ",
+      DEFINITIONS_SELECTED_TEXT_B: "For definition of Malaysian Tax Resident, refer to the link: ",
       DEFINITIONS_SELECTED: "Definition of Selected Terms",
       DEFINITIONS: "Definitions",
       FATCA_HEADING: "FATCA Declaration",

@@ -169,8 +169,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                     title: `${payment.bankAccountName}`,
                     titleStyle: fsTransformNone,
                   },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NUMBER, title: `${payment.bankAccountNumber}` },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_BANK, title: `${payment.recurringBank}`, titleStyle: fsTransformNone },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NUMBER, title: `${payment.bankAccountNumber}` },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_FREQUENCY, title: `${payment.frequency}`, titleStyle: fsTransformNone },
                 );
               }

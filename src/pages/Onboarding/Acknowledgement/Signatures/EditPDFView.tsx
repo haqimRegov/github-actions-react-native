@@ -23,10 +23,9 @@ import {
   sh1,
   sh120,
   sh24,
-  sh26,
   sh32,
-  sh34,
   sh4,
+  sh40,
   sh56,
   sh8,
   shadowBlue5,
@@ -37,7 +36,6 @@ import {
   sw40,
   sw8,
   sw80,
-  sw82,
   sw96,
 } from "../../../../styles";
 
@@ -107,15 +105,15 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   const remotePdfViewContainer: ViewStyle = { ...px(sw8), width: 595, height: parseInt(urlPageCount!, 10) * 796 };
   const pdfContainer: ViewStyle = { height: parseInt(urlPageCount!, 10) * 1600 }; // To display the page number correctly in the viewer
   const pdfSignContainer: ViewStyle = { height: 800 };
-  const toolTipStyle: ViewStyle = { top: sh8, zIndex: 1 };
+  const toolTipStyle: ViewStyle = { top: sh8, zIndex: 1, right: sw8 };
   const toolTipLabelStyle: ViewStyle = {
     ...centerHV,
     position: "absolute",
     backgroundColor: colorWhite._1,
     left: sw1,
     right: sw1,
-    width: sw82,
-    height: sh26,
+    width: sw96,
+    height: sh32,
     borderRadius: sw8,
     top: sh1,
   };
@@ -175,7 +173,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
                   style={{ ...shadowBlue5, backgroundColor: colorTransparent }}
                   color={colorGray._1}
                   name="filter-tooltip"
-                  size={sh34}
+                  size={sh40}
                 />
               </View>
               <IconButton

@@ -1,11 +1,12 @@
-import React, { FunctionComponent } from "react";
-import { Alert, View } from "react-native";
+import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
 import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, fs12SemiBoldBlue1, px, sh24, sh8, sw24 } from "../../../../styles";
+import { CRSDefinition } from "./CRSDefinition";
 import { CrsDeclarationDetails } from "./Details";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -20,6 +21,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   personalInfo,
   updateOnboarding,
 }: CrsDeclarationProps) => {
+  const [crsDefinition, setCRSDefinition] = useState<boolean>(false);
   const { principal, joint } = personalInfo;
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
@@ -54,7 +56,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   };
 
   const handleRead = () => {
-    Alert.alert("Declaration");
+    setCRSDefinition(true);
   };
 
   const isTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 0;
@@ -130,6 +132,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
           />
         </View>
       ) : null}
+      {crsDefinition ? <CRSDefinition setVisible={setCRSDefinition} visible={crsDefinition} /> : null}
     </ContentPage>
   );
 };

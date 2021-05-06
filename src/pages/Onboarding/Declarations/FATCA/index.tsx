@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from "react";
-import { Alert, View } from "react-native";
+import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
@@ -7,6 +7,7 @@ import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomBlack21, fs12SemiBoldBlue1, px, sh24, sh8, sw24 } from "../../../../styles";
 import { FatcaDeclarationDetails } from "./Details";
+import { FatcaDefinition } from "./FatcaDefinition";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -20,6 +21,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   personalInfo,
   updateOnboarding,
 }: FatcaDeclarationProps) => {
+  const [fatcaDefinition, setFatcaDefinition] = useState<boolean>(false);
   const { principal, joint } = personalInfo;
   const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
     principal?.addressInformation?.permanentAddress?.postCode
@@ -58,7 +60,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   };
 
   const handleRead = () => {
-    Alert.alert("Declaration");
+    setFatcaDefinition(true);
   };
 
   const citizenNoBornNoPrincipal = principal?.declaration!.fatca!.usCitizen === 1 && principal?.declaration!.fatca!.usBorn === 1;
@@ -179,6 +181,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
           />
         </View>
       ) : null}
+      {fatcaDefinition ? <FatcaDefinition setVisible={setFatcaDefinition} visible={fatcaDefinition} /> : null}
     </ContentPage>
   );
 };

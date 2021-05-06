@@ -12,13 +12,14 @@ import {
   fs12BoldBlue2,
   fs12BoldWhite1,
   fs12RegBlue2,
+  fullWidth,
   sh16,
   sh56,
   sh7,
   sh8,
-  sw119,
   sw12,
   sw4,
+  sw84,
 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
@@ -43,7 +44,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
             <View style={flexRow}>
               <Text style={{ ...fs12BoldWhite1, lineHeight: sh16 }}>{investment.currency}</Text>
               <CustomSpacer isHorizontal={true} space={sw4} />
-              <Text style={{ ...fs12BoldWhite1, lineHeight: sh16 }}>{investment.amount}</Text>
+              <Text numberOfLines={1} style={{ ...fs12BoldWhite1, lineHeight: sh16 }}>
+                {investment.amount}
+              </Text>
             </View>
           </View>
         );
@@ -64,7 +67,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
                 <View style={flexRow}>
                   <Text style={fs12RegBlue2}>{investment.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={{ ...fs12BoldBlue2, lineHeight: sh16 }}>{investment.amount}</Text>
+                  <Text numberOfLines={1} style={{ ...fs12BoldBlue2, lineHeight: sh16, width: sw84 }}>
+                    {investment.amount}
+                  </Text>
                 </View>
               ) : null}
             </Fragment>
@@ -75,7 +80,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
             <CustomTooltip
               arrowSize={{ height: sh7, width: sw12 }}
               content={content}
-              contentStyle={{ width: sw119 }}
+              contentStyle={fullWidth}
               isVisible={showToolTip}
               onClose={handleClose}
               onPress={handleShowMore}

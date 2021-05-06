@@ -6,8 +6,6 @@ const baseHeight = 810;
 const baseWidth = 1080;
 
 // baseStatusBarHeight = 20
-console.log("device height", height);
-console.log("device width", width);
 const baseHypotenuse = Math.sqrt(baseWidth * baseWidth + baseHeight * baseHeight);
 const deviceHypotenuse = Math.sqrt(width * width + height * height);
 

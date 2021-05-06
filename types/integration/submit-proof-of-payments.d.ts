@@ -20,6 +20,7 @@ declare interface ISubmitProofOfPayment {
   recurringBank?: string;
   frequency?: string;
   bankName?: string;
+  referenceNumber?: string;
 }
 
 declare interface ISubmitProofOfPaymentOrder {

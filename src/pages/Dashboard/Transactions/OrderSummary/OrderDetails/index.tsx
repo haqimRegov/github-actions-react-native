@@ -175,7 +175,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 );
               }
 
-              if (payment.paymentMethod === "Online Banking") {
+              if (payment.paymentMethod === "Online Banking / TT / ATM") {
                 paymentDetails.push(
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_AMOUNT,

@@ -47,6 +47,7 @@ declare interface IPayment {
   clientTrustAccountNumber?: string;
   epfAccountNumber?: string;
   epfReferenceNumber?: string;
+  referenceNumber?: string;
   bankAccountName?: string;
   bankAccountNumber?: string;
   combinedBankAccountName?: string;

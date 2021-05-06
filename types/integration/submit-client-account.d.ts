@@ -35,8 +35,8 @@ declare interface ISubmitContactNumber {
 }
 
 declare interface ISubmitContactDetails {
-  emailAddress: string;
-  contactNumber: ISubmitContactNumber[];
+  emailAddress?: string;
+  contactNumber?: ISubmitContactNumber[];
 }
 
 declare interface ISubmitEmploymentBase extends IBaseAddress {

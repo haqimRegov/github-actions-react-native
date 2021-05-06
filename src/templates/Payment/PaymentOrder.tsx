@@ -104,7 +104,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         initialState = {
           amount: "",
           currency: initialCurrency,
-          paymentMethod: "Online Banking",
+          paymentMethod: "Online Banking / TT / ATM",
           kibBankName: kibBankName,
           kibBankAccountNumber: kibBankNumber,
           transactionDate: undefined,

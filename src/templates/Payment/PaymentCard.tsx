@@ -267,7 +267,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                 ...blankCheque,
                 paymentMethod:
                   value !== "MYR" && updatedPayments[index].paymentMethod! === "Cheque"
-                    ? "Online Banking"
+                    ? "Online Banking / TT / ATM"
                     : updatedPayments[index].paymentMethod!,
               };
 
@@ -509,7 +509,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
             let paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName} />;
 
             switch (payment.paymentMethod!) {
-              case "Online Banking":
+              case "Online Banking / TT / ATM":
                 saveDisabled = onlineBankingDisabled;
                 paymentMethodInfo = <OnlineBanking {...paymentMethodProps} bankName={payment.bankName!} setBankName={setBankName} />;
                 break;
@@ -582,7 +582,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
             }
 
             const paymentMethods = [
-              { label: "Online Banking", value: "Online Banking" },
+              { label: "Online Banking / TT / ATM", value: "Online Banking / TT / ATM" },
               { label: "Client Trust Account (CTA)", value: "Client Trust Account (CTA)" },
             ];
 

@@ -71,8 +71,8 @@ export const CRS: ITermsAndConditions = {
             "The term TIN means Taxpayer Identification Number or a functional equivalent in the absence of a TIN. A TIN is a unique combination of letters or numbers assigned by a jurisdiction to an individual and is used to identify the individual for the purpose of administering the tax laws of such jurisdiction. For e.g. in Malaysia, the TIN will be the identification number issued by the Inland Revenue Board of Malaysia to individuals.",
         },
         {
-          label: "2. Malaysia Tax Resident",
-          content: "For the definition of Malaysia Tax Resident, refer to the link:  http://lampiran.hasil.gov.my/pdf/pdfam/3656.pdf",
+          label: "2. Malaysian Tax Resident",
+          content: "For the definition of Malaysian Tax Resident, refer to the link:  http://lampiran.hasil.gov.my/pdf/pdfam/3656.pdf",
         },
       ],
     },

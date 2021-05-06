@@ -6,8 +6,8 @@ import { Language } from "../../../../constants";
 import { DICTIONARY_LINK_TAX_RESIDENT } from "../../../../data/dictionary";
 import {
   borderBottomGray4,
-  fs11RegBlack2,
   fs12BoldBlack2,
+  fs12RegBlack2,
   fs16SemiBoldBlack2,
   px,
   sh16,
@@ -46,17 +46,17 @@ export const CrsTerms: FunctionComponent<CrsTermsProps> = ({ accepted, setAccept
         {DECLARATIONS.DECLARATION_CONTENT_MALAYSIA.map((item, index) => (
           <View key={index}>
             {index === 0 ? null : <CustomSpacer space={sh16} />}
-            <Text style={fs11RegBlack2}>{item}</Text>
+            <Text style={fs12RegBlack2}>{item}</Text>
           </View>
         ))}
         <CustomSpacer space={sh32} />
         <Text style={fs12BoldBlack2}>{DECLARATIONS.DEFINITIONS_SELECTED}</Text>
         <CustomSpacer space={sh16} />
-        <Text style={fs11RegBlack2}>{DECLARATIONS.DEFINITIONS_SELECTED_HEADING_A}</Text>
-        <Text style={{ ...fs11RegBlack2, paddingLeft: sw24 }}>{DECLARATIONS.DEFINITIONS_SELECTED_TEXT_A}</Text>
+        <Text style={fs12RegBlack2}>{DECLARATIONS.DEFINITIONS_SELECTED_HEADING_A}</Text>
+        <Text style={{ ...fs12RegBlack2, paddingLeft: sw24 }}>{DECLARATIONS.DEFINITIONS_SELECTED_TEXT_A}</Text>
         <CustomSpacer space={sh16} />
-        <Text style={fs11RegBlack2}>{DECLARATIONS.DEFINITIONS_SELECTED_HEADING_B}</Text>
-        <Text style={{ ...fs11RegBlack2, paddingLeft: sw24 }}>
+        <Text style={fs12RegBlack2}>{DECLARATIONS.DEFINITIONS_SELECTED_HEADING_B}</Text>
+        <Text style={{ ...fs12RegBlack2, paddingLeft: sw24 }}>
           {DECLARATIONS.DEFINITIONS_SELECTED_TEXT_B}
           <LinkText onPress={handleTaxResidentLink} text={DICTIONARY_LINK_TAX_RESIDENT} />
         </Text>

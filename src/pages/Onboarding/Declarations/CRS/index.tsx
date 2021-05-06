@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
 import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { borderBottomBlack21, fs12SemiBoldBlue1, px, sh24, sh8, sw24 } from "../../../../styles";
+import { borderBottomBlack21, fs12SemiBoldBlue2, px, sh24, sh8, sw24 } from "../../../../styles";
 import { CRSDefinition } from "./CRSDefinition";
 import { CrsDeclarationDetails } from "./Details";
 
@@ -108,7 +108,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
       subheading={DECLARATIONS.CRS_HEADING}>
       <CustomSpacer space={sh8} />
       <View style={px(sw24)}>
-        <LinkText onPress={handleRead} text={DECLARATIONS.READ_DECLARATION} style={fs12SemiBoldBlue1} />
+        <LinkText onPress={handleRead} text={DECLARATIONS.READ_DECLARATION} style={fs12SemiBoldBlue2} />
       </View>
       <CrsDeclarationDetails
         accountHolder="Principal"

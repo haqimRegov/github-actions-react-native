@@ -255,7 +255,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               foreignBank: foreignBank as ISubmitBank[],
             }
           : {
-              localBank: [],
+              localBank: [] as ISubmitBank[],
+              foreignBank: [] as ISubmitBank[],
             },
       contactDetails: {
         contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({

@@ -99,7 +99,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
         const temporaryReference =
           updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
           updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
-            ? `${paymentOrder!.orderNumber}${index}${moment().startOf("day").format("x")}`
+            ? `${paymentOrder!.orderNumber}${index}${moment().format("x")}`
             : undefined;
 
         return {

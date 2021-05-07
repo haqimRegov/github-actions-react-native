@@ -55,13 +55,18 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     const paymentOrders: ISubmitProofOfPaymentOrder[] = paymentSummary!.orders.map(
       ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
         const payment: ISubmitProofOfPayment[] = payments
-          .map((paymentInfo: IPaymentState) => {
+          .map((paymentInfo: IPaymentState, index: number) => {
             const updatedPaymentInfo = { ...paymentInfo };
             delete updatedPaymentInfo.combinedBankAccountName;
+            const temporaryReference =
+              updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
+              updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
+                ? `${orderNumber}${index}${moment().startOf("day").format("x")}`
+                : undefined;
 
             return {
               ...updatedPaymentInfo,
-              referenceNumber: "amigo123", // TODO temporary
+              referenceNumber: temporaryReference, // TODO temporary
               amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
               bankAccountName:
                 paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""

@@ -93,17 +93,18 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   const handleSubmit = async () => {
     setLoading(true);
     const payment: ISubmitProofOfPayment[] = paymentOrder!.payments
-      .map((paymentInfo: IPaymentState) => {
+      .map((paymentInfo: IPaymentState, index: number) => {
         const updatedPaymentInfo = { ...paymentInfo };
         delete updatedPaymentInfo.combinedBankAccountName;
+        const temporaryReference =
+          updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
+          updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
+            ? `${paymentOrder!.orderNumber}${index}${moment().startOf("day").format("x")}`
+            : undefined;
 
         return {
           ...updatedPaymentInfo,
-          referenceNumber:
-            updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
-            updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
-              ? "amigo123"
-              : undefined, // TODO temporary
+          referenceNumber: temporaryReference, // TODO temporary
           amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
           bankAccountName:
             paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""

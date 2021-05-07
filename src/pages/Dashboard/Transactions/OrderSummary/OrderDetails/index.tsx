@@ -63,7 +63,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
       title: transactionDetails.accountType,
       subtitle: transactionDetails.accountNo || "-",
     },
-    { label: DASHBOARD_ORDER_DETAILS.LABEL_PROCESSING, title: transactionDetails.kibProcessingBranch },
+    { label: DASHBOARD_ORDER_DETAILS.LABEL_PROCESSING, title: transactionDetails.kibProcessingBranch, titleStyle: fsTransformNone },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 

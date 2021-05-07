@@ -5,7 +5,6 @@ export * from "./AddressInfo";
 export * from "./EmptyTable";
 export * from "./LabeledTitle";
 export * from "./Pagination";
-export * from "./PasswordInfo";
 export * from "./PasswordValidation";
 export * from "./Prompt";
 export * from "./Question";

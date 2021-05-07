@@ -86,7 +86,9 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }
 
-  if (fundTypeArray.includes("PRS")) {
+  console.log("fund type array", fundTypeArray);
+
+  if (fundTypeArray.includes("PRS") || fundTypeArray.includes("PRS Default")) {
     TERMS_AND_CONDITION_LIST.push(PRS);
   }
 

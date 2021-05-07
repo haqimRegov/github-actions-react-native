@@ -4,7 +4,7 @@ export const DICTIONARY_PASSWORD = [
   { label: "At least one lower-case letter (a-z)", validation: /(?=.*[a-z])/ },
   { label: "At least one number (0-9)", validation: /(?=.*[0-9])/ },
   {
-    label: "At least one special characters (@, #, $)",
+    label: "At least one special character (@, #, $)",
     validation: /\W+/,
   },
 ];

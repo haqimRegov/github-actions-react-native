@@ -113,7 +113,6 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
       {label === undefined ? null : (
         <Fragment>
           <View style={flexRow}>
-            <CustomSpacer isHorizontal={true} space={sw16} />
             <Text style={{ ...fs12BoldBlack2, ...labelStyle }}>{label}</Text>
           </View>
           <CustomSpacer space={defaultLabelSpace} />

@@ -167,6 +167,15 @@ export const PRS: ITermsAndConditions = {
         },
       ],
     },
+    {
+      heading: "About Private Pension Administrator Malaysia (PPA)",
+      termsList: [
+        {
+          content:
+            "I acknowledge that I have received, read and understood the Disclosure Document(s) for the Fund(s) to be invested in, Supplementary Disclosure Document(s) if any, and the terms and conditions stipulated in (i) KIB's website (www.kenangainvestors.com.my); (ii) the PPA's website (www.ppa.my); and (iii) the terms and conditions of this e-form and I undertake to be bound by them for my initial and subsequent transactions with the PRS Provider. I acknowledge that the same has been explained to me by my Provider and/or registered PRS consultant.\n\nI declare that the particulars given herein are true, correct and complete and that I have not withheld any material facts or information which may influence the acceptance of this application.\n\nI am aware of the fees and charges that will be incurred by me directly or indirectly when investing in the PRS fund(s). I declare that I have not been convicted by any court for any criminal offence, whether within or outside Malaysia.\n\nI declare that I have not been convicted by any court for any criminal offence, whether within or outside Malaysia.\n\nI agree to contact Kenanga Investors Berhad at 1-800-88-3737 or email ​investorservices@kenanga.com.my​ or access the investors portal, KenEasy at h​ttps://www.kenangainvestors.com.my/KenEasy/KIB.Application.Web/​ for a copy of my latest statement.",
+        },
+      ],
+    },
   ],
 };
 

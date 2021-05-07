@@ -1,13 +1,13 @@
 declare type TypeHouseholdIncome =
-  | "Up to RM 1,500"
-  | "RM 1,501 - RM 3,000"
-  | "RM 3,001 - RM 5,000"
-  | "RM 5,001 - RM 8,000"
-  | "RM 8,001 - RM 15,000"
-  | "RM 15,001 - RM 20,000"
-  | "RM 20,001 - RM 50,000"
-  | "RM 50,001 - RM 100,000"
-  | "RM 100,001 - RM 200,000"
-  | "> RM 200,000";
+  | "Up to 1,500"
+  | "1,501 - 3,000"
+  | "3,001 - 5,000"
+  | "5,001 - 8,000"
+  | "8,001 - 15,000"
+  | "15,001 - 20,000"
+  | "20,001 - 50,000"
+  | "50,001 - 100,000"
+  | "100,001 - 200,000"
+  | "> 200,000";
 
 declare type TypeHouseholdIncomeLabelValue = { label: string; value: TypeHouseholdIncome };

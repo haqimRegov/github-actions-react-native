@@ -61,7 +61,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             const temporaryReference =
               updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
               updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
-                ? `${orderNumber}${index}${moment().startOf("day").format("x")}`
+                ? `${orderNumber}${index}${moment().format("x")}`
                 : undefined;
 
             return {

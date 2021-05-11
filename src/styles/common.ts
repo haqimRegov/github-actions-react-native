@@ -21,6 +21,7 @@ export const spaceAroundHV = { ...spaceAroundHorizontal, ...spaceAroundVertical 
 export const flexChild = { flex: 1 } as const;
 export const flexGrow = { flexGrow: 1 } as const;
 export const flexNone = { flex: 0 } as const;
+export const flexShrink = { flexShrink: 1 } as const;
 
 export const absolutePosition = { position: "absolute" } as const;
 export const underline = { textDecorationLine: "underline" } as const;

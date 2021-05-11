@@ -3,6 +3,12 @@ declare interface ITermsAndConditions {
   subsection: IBasicAccordionSection[];
 }
 
+declare interface IAgreeTerms {
+  agree1: boolean;
+  agree2: boolean;
+  agree3: boolean;
+}
+
 declare interface ITermsList {
   label?: string;
   content: IContent[];

@@ -38,8 +38,19 @@ export function acknowledgementReducer(state = acknowledgementInitialState, acti
         paymentSummary: undefined,
       };
 
+    case "acknowledgement/UPDATE_AGREE":
+      return {
+        ...state,
+        ...action.payload,
+      };
+
     case "acknowledgement/RESET_ACKNOWLEDGEMENT":
       return {
+        agreeTerms: {
+          agree1: false,
+          agree2: false,
+          agree3: false,
+        },
         orders: undefined,
         paymentSummary: undefined,
         receipts: [],

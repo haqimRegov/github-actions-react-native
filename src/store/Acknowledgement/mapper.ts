@@ -11,6 +11,7 @@ import { SelectedFundActionProps } from "../SelectedFund/actions";
 import { AcknowledgementActionProps } from "./actions";
 
 export const AcknowledgementMapStateToProps = (state: RootState) => ({
+  agreeTerms: state.acknowledgement.agreeTerms,
   accountType: state.client.accountType,
   agent: state.global.agent,
   details: state.client.details,

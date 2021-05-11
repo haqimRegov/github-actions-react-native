@@ -1,4 +1,5 @@
 import { typedAction } from "../actionCreator";
+import { acknowledgementState } from "./state";
 
 export const addOrders = (orders: IInvestmentSummary) => {
   return typedAction("acknowledgement/ADD_ORDERS", orders);
@@ -14,6 +15,10 @@ export const resetOrders = () => {
 
 export const resetReceipts = () => {
   return typedAction("acknowledgement/RESET_RECEIPTS");
+};
+
+export const updateAgree = (acknowledgement: acknowledgementState) => {
+  return typedAction("acknowledgement/UPDATE_AGREE", acknowledgement);
 };
 
 export const updatePaymentSummary = (summary: IPurchaseSummary) => {
@@ -33,6 +38,7 @@ export type AcknowledgementAction = ReturnType<
   | typeof resetOrders
   | typeof updateReceipts
   | typeof resetReceipts
+  | typeof updateAgree
   | typeof updatePaymentSummary
   | typeof resetPaymentSummary
   | typeof resetAcknowledgement
@@ -43,6 +49,7 @@ export const AcknowledgementActionProps = {
   updateReceipts,
   resetOrders,
   resetReceipts,
+  updateAgree,
   updatePaymentSummary,
   resetPaymentSummary,
   resetAcknowledgement,

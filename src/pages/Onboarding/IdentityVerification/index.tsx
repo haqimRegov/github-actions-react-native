@@ -140,64 +140,61 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     }
   };
 
-  const handlePrincipalFrontPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined && principalClientIdType === DICTIONARY_ALL_ID[0].value) {
-      const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
-      if ("error" in mykad && mykad.error !== undefined) {
-        if (mykad.error?.code === ERROR_CODE.invalidNricData) {
-          setReviewImage(uploaded);
-          setPrincipalFrontError(undefined);
-        } else {
-          setPrincipalFrontError(mykad.error?.message);
-        }
-      } else {
-        const [line1, line2, line3] = splitString(mykad.address || "", 100);
-        const principalInfo: IHolderInfoState = {
-          ...principal,
-          personalDetails: {
-            ...principal?.personalDetails,
-            id: {
-              ...principal?.personalDetails?.id,
-              frontPage: uploaded,
-            },
-          },
-          addressInformation: {
-            ...principal!.addressInformation!,
-            sameAddress: true,
-            mailingAddress: {
-              address: { line1: line1 || "", line2: line2, line3: line3 },
-              city: mykad.city || "",
-              country: mykad.country || "",
-              postCode: mykad.postCode || "",
-              state: mykad.state || "",
-            },
-            permanentAddress: {
-              address: { line1: line1 || "", line2: line2, line3: line3 },
-              city: mykad.city || "",
-              country: mykad.country || "",
-              postCode: mykad.postCode || "",
-              state: mykad.state || "",
-            },
-          },
-        };
-        setReviewImage(undefined);
-        setPrincipalFrontError(undefined);
-        return addPersonalInfo({ ...personalInfo, principal: principalInfo });
-      }
-    }
-
-    return addPersonalInfo({
-      ...personalInfo,
-      principal: {
-        ...principal,
-        addressInformation: {
-          ...principal!.addressInformation,
-          mailingAddress: { ...principal!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[0].value },
-          permanentAddress: { ...principal!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[0].value },
+  const handleClientInfo = (clientInfo: IHolderInfoState, file: FileBase64 | undefined, mykad: IOCRNricData) => {
+    const [line1, line2, line3] = splitString(mykad.address || "", 100);
+    const newClientInfo: IHolderInfoState = {
+      ...clientInfo!,
+      personalDetails: {
+        ...clientInfo!.personalDetails,
+        id: {
+          ...clientInfo!.personalDetails?.id,
+          frontPage: file,
         },
-        personalDetails: { ...principal!.personalDetails, id: { ...principal!.personalDetails?.id!, frontPage: uploaded } },
       },
-    });
+      addressInformation: {
+        ...clientInfo!.addressInformation!,
+        sameAddress: true,
+        mailingAddress: {
+          address: { line1: line1 || "", line2: line2, line3: line3 },
+          city: mykad.city || "",
+          country: mykad.country || "",
+          postCode: mykad.postCode || "",
+          state: mykad.state || "",
+        },
+        permanentAddress: {
+          address: { line1: line1 || "", line2: line2, line3: line3 },
+          city: mykad.city || "",
+          country: mykad.country || "",
+          postCode: mykad.postCode || "",
+          state: mykad.state || "",
+        },
+      },
+    };
+    return newClientInfo;
+  };
+
+  const handlePrincipalFrontPage = async (uploaded?: FileBase64) => {
+    let principalInfo: IHolderInfoState = handleClientInfo(principal!, uploaded, { country: DICTIONARY_COUNTRIES[0].value });
+    if (uploaded !== undefined) {
+      if (principalClientIdType === DICTIONARY_ALL_ID[0].value) {
+        const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
+        if ("error" in mykad && mykad.error !== undefined) {
+          if (mykad.error!.code === ERROR_CODE.invalidNricData) {
+            setReviewImage(uploaded);
+            setPrincipalFrontError(undefined);
+          } else {
+            setPrincipalFrontError(mykad.error!.message);
+          }
+        } else {
+          principalInfo = handleClientInfo(principal!, uploaded, mykad);
+          setReviewImage(undefined);
+          setPrincipalFrontError(undefined);
+        }
+      }
+    } else {
+      principalInfo = handleClientInfo(principal!, uploaded, {});
+    }
+    addPersonalInfo({ ...personalInfo, principal: principalInfo });
   };
 
   const handlePrincipalBackPage = async (uploaded?: FileBase64) => {
@@ -205,73 +202,36 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && principalClientIdType === "NRIC") {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
-        setPrincipalBackError(mykadBack.error?.message);
+        setPrincipalBackError(mykadBack.error!.message);
       } else {
         setPrincipalBackError(undefined);
       }
     }
-    return handlePrincipalDetails({ ...principal!.personalDetails!.id!, secondPage: uploaded });
+    handlePrincipalDetails({ ...principal!.personalDetails!.id!, secondPage: uploaded });
   };
 
   const handleJointFrontPage = async (uploaded?: FileBase64) => {
-    if (uploaded !== undefined && jointClientIdType === "NRIC" && jointMyKad === true) {
-      const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
-      if ("error" in mykad && mykad.error !== undefined) {
-        if (mykad.error?.code === ERROR_CODE.invalidNricData) {
-          setReviewImage(uploaded);
-          setJointFrontError(undefined);
+    let jointInfo: IHolderInfoState = handleClientInfo(joint!, uploaded, { country: DICTIONARY_COUNTRIES[0].value });
+    if (uploaded !== undefined) {
+      if (jointClientIdType === DICTIONARY_ALL_ID[0].value) {
+        const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
+        if ("error" in mykad && mykad.error !== undefined) {
+          if (mykad.error!.code === ERROR_CODE.invalidNricData) {
+            setReviewImage(uploaded);
+            setJointFrontError(undefined);
+          } else {
+            setJointFrontError(mykad.error!.message);
+          }
         } else {
-          setJointFrontError(mykad.error?.message);
+          jointInfo = handleClientInfo(joint!, uploaded, mykad);
+          setReviewImage(undefined);
+          setJointFrontError(undefined);
         }
-      } else {
-        const [line1, line2, line3] = splitString(mykad.address || "", 100);
-
-        const jointInfo: IHolderInfoState = {
-          ...joint,
-          personalDetails: {
-            ...joint?.personalDetails,
-            id: {
-              ...joint?.personalDetails?.id,
-              frontPage: uploaded,
-            },
-          },
-          addressInformation: {
-            ...joint!.addressInformation!,
-            sameAddress: true,
-            mailingAddress: {
-              address: { line1: line1 || "", line2: line2, line3: line3 },
-              city: mykad.city || "",
-              country: mykad.country || "",
-              postCode: mykad.postCode || "",
-              state: mykad.state || "",
-            },
-            permanentAddress: {
-              address: { line1: line1 || "", line2: line2, line3: line3 },
-              city: mykad.city || "",
-              country: mykad.country || "",
-              postCode: mykad.postCode || "",
-              state: mykad.state || "",
-            },
-          },
-        };
-        setReviewImage(undefined);
-        setJointFrontError(undefined);
-        return addPersonalInfo({ ...personalInfo, joint: jointInfo });
       }
+    } else {
+      jointInfo = handleClientInfo(joint!, uploaded, {});
     }
-
-    return addPersonalInfo({
-      ...personalInfo,
-      joint: {
-        ...joint,
-        addressInformation: {
-          ...joint!.addressInformation,
-          mailingAddress: { ...joint!.addressInformation!.mailingAddress, country: DICTIONARY_COUNTRIES[0].value },
-          permanentAddress: { ...joint!.addressInformation!.permanentAddress, country: DICTIONARY_COUNTRIES[0].value },
-        },
-        personalDetails: { ...joint!.personalDetails, id: { ...joint!.personalDetails!.id!, frontPage: uploaded } },
-      },
-    });
+    addPersonalInfo({ ...personalInfo, joint: jointInfo });
   };
 
   const handleJointBackPage = async (uploaded?: FileBase64) => {
@@ -279,12 +239,12 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && jointClientIdType === "NRIC" && jointMyKad === true) {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
-        setJointBackError(mykadBack.error?.message);
+        setJointBackError(mykadBack.error!.message);
       } else {
         setJointBackError(undefined);
       }
     }
-    return handleJointDetails({ ...joint!.personalDetails!.id!, secondPage: uploaded });
+    handleJointDetails({ ...joint!.personalDetails!.id!, secondPage: uploaded });
   };
 
   const handleBack = () => {

@@ -15,8 +15,9 @@ import illustrationSubmissionSummary from "./illustration_submission_success/ill
 import illustrationTransactionsEmpty from "./illustration_transactions_empty/illustration_transactions_empty.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
 import kenanga from "./kenanga/kenanga.png";
+import kenangaBrandLogo from "./kenanga_brand_logo/kenanga_brand_logo.png";
+import kenangaFooter from "./kenanga_footer/kenanga_footer.png";
 import logoAims from "./logo_aims/logo_aims.png";
-import logoKenangaInvestors from "./logo_kenanga_investors/logo_kenanga_investors.png";
 import riskAssessmentGraph1 from "./risk_assessment_graph_1/risk_assessment_graph_1.png";
 import riskAssessmentGraph2 from "./risk_assessment_graph_2/risk_assessment_graph_2.png";
 
@@ -50,6 +51,9 @@ export const LocalAssets = {
   },
   logo: {
     aims: logoAims,
-    kenanga: logoKenangaInvestors,
+    kenangaBrand: kenangaBrandLogo,
+  },
+  splash: {
+    footer: kenangaFooter,
   },
 };

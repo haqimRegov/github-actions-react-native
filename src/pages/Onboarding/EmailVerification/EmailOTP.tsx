@@ -95,12 +95,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       if (error === null && data !== null) {
         if (data.result.status === true) {
           setShowModal(true);
-          setTimeout(() => {
-            if (showModal === true) {
-              setShowModal(false);
-            }
-            handleNavigate();
-          }, 5000);
         }
       }
       if (error !== null) {
@@ -142,6 +136,19 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
     }
     return () => clearInterval(otpTimer);
   }, [resendTimer]);
+
+  useEffect(() => {
+    let redirectTimer: ReturnType<typeof setTimeout>;
+    if (showModal === true) {
+      redirectTimer = setTimeout(() => {
+        handleNavigate();
+      }, 5000);
+    }
+    return () => {
+      return clearTimeout(redirectTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
 
   return (
     <SafeAreaPage>

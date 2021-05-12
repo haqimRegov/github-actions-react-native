@@ -122,7 +122,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
               <View style={flexRow}>
                 <CustomFlexSpacer />
                 <TouchableWithoutFeedback>
-                  <Image source={LocalAssets.logo.kenanga} style={logoStyle} />
+                  <Image source={LocalAssets.logo.kenangaBrand} style={logoStyle} />
                 </TouchableWithoutFeedback>
                 {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
                   <LinkTextGroup links={[]} spaceToDivider={sw4} />

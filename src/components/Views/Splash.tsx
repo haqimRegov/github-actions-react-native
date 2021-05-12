@@ -2,11 +2,12 @@ import React, { FunctionComponent, useEffect, useRef } from "react";
 import { Animated, Image, ImageStyle, View } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { centerHV, colorWhite, fullHW, sh120, sw306 } from "../../styles";
+import { centerHV, colorWhite, fullHW, sh16, sh56, sw120, sw298, sw306 } from "../../styles";
 
 export const Splash: FunctionComponent = () => {
   const fade = useRef(new Animated.Value(0)).current;
-  const imageStyle: ImageStyle = { width: sw306, height: sh120, resizeMode: "contain" };
+  const imageStyle: ImageStyle = { width: sw306, height: sw120, resizeMode: "contain" };
+  const footerStyle: ImageStyle = { width: sw298, height: sh16, resizeMode: "contain", position: "absolute", bottom: sh56 };
 
   useEffect(() => {
     Animated.sequence([
@@ -30,9 +31,10 @@ export const Splash: FunctionComponent = () => {
   }, []);
 
   return (
-    <Animated.View style={{ opacity: fade }}>
+    <Animated.View>
       <View style={{ ...fullHW, ...centerHV, backgroundColor: colorWhite._1 }}>
-        <Image source={LocalAssets.logo.kenanga} style={imageStyle} />
+        <Image source={LocalAssets.logo.kenangaBrand} style={imageStyle} />
+        <Image source={LocalAssets.splash.footer} style={footerStyle} />
       </View>
     </Animated.View>
   );

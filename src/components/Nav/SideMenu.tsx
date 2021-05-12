@@ -66,7 +66,7 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
       <View style={sideMenuV2Container}>
         <View style={px(sw24)}>
           <CustomSpacer space={sh44} />
-          <Image source={image || LocalAssets.logo.kenanga} style={defaultLogoStyle} />
+          <Image source={image || LocalAssets.logo.kenangaBrand} style={defaultLogoStyle} />
           <CustomSpacer space={spaceToContent || sh56} />
         </View>
         {children}

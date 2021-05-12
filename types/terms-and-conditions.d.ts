@@ -5,7 +5,15 @@ declare interface ITermsAndConditions {
 
 declare interface ITermsList {
   label?: string;
-  content: string;
+  content: IContent[];
+}
+
+declare interface IContent {
+  indentSpace?: number;
+  prefix?: string;
+  prefixIndent?: boolean;
+  prefixIndentSpace?: number;
+  text: string;
 }
 interface IBasicAccordionSection {
   heading?: string;

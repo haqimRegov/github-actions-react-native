@@ -5,20 +5,27 @@ import Collapsible from "react-native-collapsible";
 import { IcoMoon } from "../../icons";
 import {
   borderBottomGray1,
+  centerHorizontal,
   centerVertical,
   colorWhite,
   flexRow,
+  flexShrink,
+  flexWrap,
   fs10RegBlack2,
   fs12BoldBlack2,
   fs14BoldBlack2,
   fs16BoldBlue2,
+  fsAlignCenter,
+  justifyContentEnd,
   noBGColor,
   px,
   sh16,
+  sh17,
   sh56,
   sh8,
   shadowBlue5,
   sw02,
+  sw14,
   sw20,
   sw24,
   sw8,
@@ -138,7 +145,34 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                                           <Text style={fs12BoldBlack2}>{term.label}</Text>
                                         </Fragment>
                                       )}
-                                      <Text style={fs10RegBlack2}>{term.content}</Text>
+                                      {term.content.map((line: IContent, contentIndex: number) => {
+                                        const defaultWidth = line.prefix === "•" ? sw14 : sw20;
+                                        const defaultPrefixIndentSpace =
+                                          line.prefixIndentSpace !== undefined ? line.prefixIndentSpace : sw8;
+                                        return (
+                                          <>
+                                            <View key={contentIndex} style={{ ...flexRow }}>
+                                              {line.indentSpace !== undefined ? (
+                                                <CustomSpacer isHorizontal={true} space={line.indentSpace} />
+                                              ) : null}
+                                              {line.prefix !== undefined ? (
+                                                <>
+                                                  <View style={{ ...flexRow, ...justifyContentEnd, width: defaultWidth }}>
+                                                    <View style={{ ...centerHorizontal, height: sh17 }}>
+                                                      <Text style={{ ...fs10RegBlack2, ...fsAlignCenter }}>{line.prefix}</Text>
+                                                    </View>
+                                                    {line.prefixIndent !== undefined && line.prefixIndent === false ? null : (
+                                                      <CustomSpacer isHorizontal={true} space={defaultPrefixIndentSpace} />
+                                                    )}
+                                                  </View>
+                                                </>
+                                              ) : null}
+                                              <Text style={{ ...fs10RegBlack2, ...flexWrap, ...flexShrink }}>{line.text}</Text>
+                                            </View>
+                                            <CustomSpacer space={sh16} />
+                                          </>
+                                        );
+                                      })}
                                     </View>
                                     <CustomSpacer space={sh16} />
                                   </Fragment>

@@ -12,7 +12,7 @@ const { DASHBOARD_HOME } = Language.PAGE;
 export interface PendingStatusProps extends ITableCustomItem {}
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
-  const { dueDate, status, withHardcopy } = item.rawData as IDashboardOrder;
+  const { dueDate, remark, status, withHardcopy } = item.rawData as IDashboardOrder;
   let statusColor: TagColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
     statusColor = "error";
@@ -37,7 +37,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
       <View style={{ ...flexRow, ...centerVertical }}>
         <Tag color={statusColor} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
-        {rerouted === true && accordionIcon !== undefined ? (
+        {rerouted === true && accordionIcon !== undefined && remark ? (
           <Fragment>
             <IcoMoon {...accordionIcon} />
           </Fragment>

@@ -78,12 +78,14 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
       {status === "Pending Payment" ||
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
+        remark &&
         remark.findIndex((reason) => reason.label === "Payment" || reason.label === "Others") !== -1) ? (
         <IconText color={colorBlue._2} name="upload" onPress={handleUploadPayment} text={labelUploadPayment} style={itemStyle} />
       ) : null}
       {status === "Pending Doc" ||
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
+        remark &&
         remark.findIndex((reason) => reason.label === "Document" || reason.label === "Others") !== -1) ? (
         <IconText color={colorBlue._2} name="upload" onPress={handleUploadDocs} text={DASHBOARD_HOME.LABEL_UPLOAD} style={itemStyle} />
       ) : null}

@@ -35,27 +35,27 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 interface TermsAndConditionsProps extends OnboardingContentProps, AcknowledgementStoreProps {}
 
 const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = ({
+  agreeTerms,
   handleNextStep,
   orders,
   onboarding,
   outsideRisk,
+  updateAgree,
   updateOnboarding,
 }: TermsAndConditionsProps) => {
-  const [agree1, setAgree1] = useState<boolean>(false);
-  const [agree2, setAgree2] = useState<boolean>(false);
-  const [agree3, setAgree3] = useState<boolean>(false);
+  const { disabledSteps } = onboarding;
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
   const handleAgree1 = () => {
-    setAgree1(!agree1);
+    updateAgree({ agreeTerms: { ...agreeTerms, agree1: !agreeTerms.agree1 } });
   };
 
   const handleAgree2 = () => {
-    setAgree2(!agree2);
+    updateAgree({ agreeTerms: { ...agreeTerms, agree2: !agreeTerms.agree2 } });
   };
 
   const handleAgree3 = () => {
-    setAgree3(!agree3);
+    updateAgree({ agreeTerms: { ...agreeTerms, agree3: !agreeTerms.agree3 } });
   };
 
   const handleBack = () => {
@@ -105,7 +105,12 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
 
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
-  const disabled = !(agree1 === true && agree2 === true && agree3 === true);
+  const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
+
+  if (!disabledSteps.includes("Signatures") && disabled === true) {
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps, "Signatures"];
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+  }
 
   return (
     <ContentPage
@@ -137,7 +142,12 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
           <View style={borderBottomBlack21} />
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
-            <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1} labelStyle={fs12BoldBlack2} onPress={handleAgree1} toggle={agree1} />
+            <CheckBox
+              label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1}
+              labelStyle={fs12BoldBlack2}
+              onPress={handleAgree1}
+              toggle={agreeTerms.agree1}
+            />
             <CustomSpacer space={sh16} />
             <CheckBox
               checkboxStyle={{ paddingTop: sh5 }}
@@ -145,7 +155,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
               labelStyle={fs12BoldBlack2}
               style={{ ...fs12BoldBlack2, ...alignItemsStart }}
               onPress={handleAgree2}
-              toggle={agree2}
+              toggle={agreeTerms.agree2}
             />
             <CustomSpacer space={sh16} />
             <CheckBox
@@ -154,7 +164,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
               labelStyle={fs12BoldBlack2}
               style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
               onPress={handleAgree3}
-              toggle={agree3}
+              toggle={agreeTerms.agree3}
             />
             <CustomSpacer space={sh16} />
             {outsideRisk === true ? (

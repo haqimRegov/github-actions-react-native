@@ -181,7 +181,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             ) : null}
             <CheckBox
               checkboxStyle={{ ...disabledOpacity, paddingTop: sh5 }}
-              label={TERMS_AND_CONDITIONS.POPUP_CONSENT}
+              label={TERMS_AND_CONDITIONS.LABEL_CONSENT}
               labelStyle={fs12BoldBlack2}
               style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
               onPress={() => {}}

@@ -9,7 +9,7 @@ import {
   colorWhite,
   DEVICE,
   flexRow,
-  fs12RegBlue2,
+  fs12RegGray6,
   px,
   sh16,
   sh24,
@@ -59,7 +59,7 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
     width: sw200,
   };
 
-  const footerStyle: TextStyle = { ...fs12RegBlue2, ...px(sw24) };
+  const footerStyle: TextStyle = { ...fs12RegGray6, ...px(sw24) };
 
   return (
     <View style={container}>

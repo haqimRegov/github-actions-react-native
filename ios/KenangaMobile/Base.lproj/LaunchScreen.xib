@@ -13,13 +13,13 @@
             <rect key="frame" x="0.0" y="0.0" width="1080" height="810"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashIcon" id="G2S-cv-THJ">
-                    <rect key="frame" x="386" y="346" width="306" height="120"/>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="SplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Gyz-QX-CjG">
+                    <rect key="frame" x="387" y="345" width="306" height="120"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Footer" id="BC1-VU-LUD">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="SplashFooter" translatesAutoresizingMaskIntoConstraints="NO" id="dbd-4x-bZQ">
                     <rect key="frame" x="391" y="738" width="298" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -29,7 +29,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Footer" width="442.5" height="16.5"/>
-        <image name="SplashIcon" width="444" height="180"/>
+        <image name="SplashFooter" width="442.5" height="16.5"/>
+        <image name="SplashLogo" width="459" height="180"/>
     </resources>
 </document>

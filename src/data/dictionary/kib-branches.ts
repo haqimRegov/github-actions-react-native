@@ -1,0 +1,17 @@
+export const DICTIONARY_KIB_BRANCHES: IKIBBranches = {
+  Penang: { label: "Penang", code: "PG" },
+  Ipoh: { label: "Ipoh", code: "IP" },
+  Kuantan: { label: "Kuantan", code: "KT" },
+  "Damansara Uptown": { label: "Damansara Uptown", code: "DU" },
+  Klang: { label: "Klang", code: "KG" },
+  Seremban: { label: "Seremban", code: "SB" },
+  Melaka: { label: "Melaka", code: "MK" },
+  "Johor Bahru": { label: "Johor Bahru", code: "JB" },
+  Kuching: { label: "Kuching", code: "KC" },
+  "Kuching - PW Office": { label: "Kuching - PW Office", code: "KP" },
+  Miri: { label: "Miri", code: "MR" },
+  "Kota Kinabalu": { label: "Kota Kinabalu", code: "KK" },
+  "HQ - Kuala Lumpur": { label: "HQ - Kuala Lumpur", code: "HQ" },
+  "BR - Kuala Lumpur": { label: "BR - Kuala Lumpur", code: "KL" },
+  "Batu Pahat - PW Office": { label: "Batu Pahat - PW Office", code: "BP" },
+};

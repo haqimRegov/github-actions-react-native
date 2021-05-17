@@ -595,10 +595,13 @@ export const english = {
     },
     INACTIVITY: {
       BUTTON_NO: "No",
+      BUTTON_PROCEED: "Proceed",
       BUTTON_YES: "Yes",
       LABEL_LOGGED_OUT: "You will be logged out in",
       LABEL_SECONDS: "seconds",
+      LABEL_SIGN_IN: "Proceed to sign in.",
       LABEL_STAY: "Do you want to stay signed in?",
+      TITLE_EXPIRED: "Your session has expired due to inactivity",
       TITLE: "Your session is about to expire",
     },
     INBOX: {
@@ -1054,7 +1057,7 @@ export const english = {
         "By skipping the risk assessment, I decline to provide certain information required for the investor suitability assessment and acknowledge that this may adversely affect my suitability assessment.",
     },
     SIDE_MENU: {
-      LABEL_FOOTER: "Kenanga Investors © 2020",
+      LABEL_FOOTER: "KIB © All Rights Reserved",
     },
     SIGNATURE: {
       BUTTON_CANCEL: "Re-Take",
@@ -1150,9 +1153,8 @@ export const english = {
       LABEL_CHECKBOX_4:
         "I have decided to purchase another unlisted capital market product that is not recommended by the authorized distributor",
       LABEL_COMPLETED: "Completed",
-      LABEL_CONSENT: "Consent for ongoing services",
-      LABEL_CONSENT_OPTION_NO: "No",
-      LABEL_CONSENT_OPTION_YES: "Yes",
+      LABEL_CONSENT:
+        "I/We hereby give consent to the Manager to disclose to my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
       LABEL_DISCLAIMER:
         "By signing below, you agree to the Terms and Conditions of this document. I/We acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document",
       LABEL_EXPAND_ALL: "Expand all",
@@ -1161,8 +1163,6 @@ export const english = {
       LABEL_MYR: "MYR",
       LABEL_PROCEED: "Proceed",
       LABEL_SIGN_NOW: "Sign Document Now",
-      POPUP_CONSENT:
-        "I/We hereby give consent to the Manager to disclose my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
       POPUP_TERMS: "Based on your products selected, we will define the corresponding account orders and will be processed accordingly",
       PROMPT_TITLE: "We've received your application",
       PROMPT_SUBTITLE: "Thank you. You have submitted your account opening application.",

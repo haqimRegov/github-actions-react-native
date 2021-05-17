@@ -16,6 +16,7 @@ import {
   Tab,
 } from "../../components";
 import { FULL_DATE_FORMAT, Language } from "../../constants";
+import { DICTIONARY_KIB_BRANCHES } from "../../data/dictionary";
 import { getInbox, updateInbox } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import {
@@ -75,7 +76,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
             isRead: message.isRead,
             message: message.message,
             title: message.title,
-            sender: message.senderName || "-",
+            sender: message.senderName,
             source: message.source,
           };
           if (notificationBucket[dateLabel]) {
@@ -157,14 +158,14 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
   };
 
   const handleAvatar = ({ sender, source }: INotificationItem) => {
-    const initials =
-      sender !== undefined
-        ? sender
-            .split(" ")
-            .filter((text) => text !== "")
-            .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-            .join("")
-        : "OMNI";
+    const customSender = sender
+      ? sender
+          .split(" ")
+          .filter((text) => text !== "")
+          .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
+          .join("")
+      : "-";
+    const initials = sender && sender in DICTIONARY_KIB_BRANCHES ? DICTIONARY_KIB_BRANCHES[sender].code : customSender;
     const defaultInitials = sender === "system" ? "KIB" : initials;
     const avatar: AvatarProps = { text: defaultInitials, type: source as AvatarType };
     return avatar;

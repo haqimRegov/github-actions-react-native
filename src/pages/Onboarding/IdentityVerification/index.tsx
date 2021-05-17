@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_ALL_ID, DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
+import { DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh40, sh56, sw24 } from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
@@ -69,7 +69,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     jointBackError === undefined;
   const jointPass = jointFrontPage?.path !== undefined && jointFrontError === undefined;
 
-  const jointMyKad = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") >= 12 : true;
+  const jointMyKad =
+    accountType === "Joint" && jointClientIdType === "NRIC"
+      ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") >= 12
+      : true;
 
   let buttonDisabled = false;
   if (accountType === "Individual" || accountType === "Joint") {
@@ -174,25 +177,23 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handlePrincipalFrontPage = async (uploaded?: FileBase64) => {
-    let principalInfo: IHolderInfoState = handleClientInfo(principal!, uploaded, { country: DICTIONARY_COUNTRIES[0].value });
-    if (uploaded !== undefined) {
-      if (principalClientIdType === DICTIONARY_ALL_ID[0].value) {
-        const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
-        if ("error" in mykad && mykad.error !== undefined) {
-          if (mykad.error!.code === ERROR_CODE.invalidNricData) {
-            setReviewImage(uploaded);
-            setPrincipalFrontError(undefined);
-          } else {
-            setPrincipalFrontError(mykad.error!.message);
-          }
-        } else {
-          principalInfo = handleClientInfo(principal!, uploaded, mykad);
-          setReviewImage(undefined);
+    let principalInfo: IHolderInfoState = handleClientInfo(principal!, uploaded, {
+      country: principalClientIdType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+    });
+    if (uploaded !== undefined && principalClientIdType === "NRIC") {
+      const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
+      if ("error" in mykad && mykad.error !== undefined) {
+        if (mykad.error!.code === ERROR_CODE.invalidNricData) {
+          setReviewImage(uploaded);
           setPrincipalFrontError(undefined);
+        } else {
+          setPrincipalFrontError(mykad.error!.message);
         }
+      } else {
+        principalInfo = handleClientInfo(principal!, uploaded, mykad);
+        setReviewImage(undefined);
+        setPrincipalFrontError(undefined);
       }
-    } else {
-      principalInfo = handleClientInfo(principal!, uploaded, {});
     }
     addPersonalInfo({ ...personalInfo, principal: principalInfo });
   };
@@ -211,25 +212,23 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleJointFrontPage = async (uploaded?: FileBase64) => {
-    let jointInfo: IHolderInfoState = handleClientInfo(joint!, uploaded, { country: DICTIONARY_COUNTRIES[0].value });
-    if (uploaded !== undefined) {
-      if (jointClientIdType === DICTIONARY_ALL_ID[0].value) {
-        const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
-        if ("error" in mykad && mykad.error !== undefined) {
-          if (mykad.error!.code === ERROR_CODE.invalidNricData) {
-            setReviewImage(uploaded);
-            setJointFrontError(undefined);
-          } else {
-            setJointFrontError(mykad.error!.message);
-          }
-        } else {
-          jointInfo = handleClientInfo(joint!, uploaded, mykad);
-          setReviewImage(undefined);
+    let jointInfo: IHolderInfoState = handleClientInfo(joint!, uploaded, {
+      country: jointClientIdType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+    });
+    if (uploaded !== undefined && jointMyKad === true) {
+      const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
+      if ("error" in mykad && mykad.error !== undefined) {
+        if (mykad.error!.code === ERROR_CODE.invalidNricData) {
+          setReviewImage(uploaded);
           setJointFrontError(undefined);
+        } else {
+          setJointFrontError(mykad.error!.message);
         }
+      } else {
+        jointInfo = handleClientInfo(joint!, uploaded, mykad);
+        setReviewImage(undefined);
+        setJointFrontError(undefined);
       }
-    } else {
-      jointInfo = handleClientInfo(joint!, uploaded, {});
     }
     addPersonalInfo({ ...personalInfo, joint: jointInfo });
   };

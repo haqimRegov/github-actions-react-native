@@ -14,6 +14,7 @@ export const DICTIONARY_ORDER_STATUS: IOrderStatus = {
 
 export const DICTIONARY_PENDING_STATUS_FILTER: OrderStatusLabelValue[] = [
   { label: "Pending Doc", value: "Pending Doc" },
+  { label: "Pending Doc & Payment", value: "Pending Doc & Payment" },
   { label: "Pending Physical Doc", value: "Pending Physical Doc" },
   { label: "Pending Initial Order", value: "Pending Initial Order" },
   { label: "Pending Payment", value: "Pending Payment" },

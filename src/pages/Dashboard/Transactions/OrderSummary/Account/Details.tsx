@@ -31,6 +31,7 @@ import {
   sh24,
   sh32,
   sh8,
+  sw1,
   sw120,
   sw16,
   sw20,
@@ -77,7 +78,7 @@ export const AccountDetailsContent = ({
     accountDocuments,
   } = data;
 
-  const buttonStyle: ViewStyle = { ...px(sw16), height: sh24, width: "auto" };
+  const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: "auto" };
   const holder = accountHolder === "Principal" ? DASHBOARD_PROFILE.LABEL_JOINT_ACCOUNT : DASHBOARD_PROFILE.LABEL_PRINCIPAL_ACCOUNT;
   const initials = name
     .split(" ")

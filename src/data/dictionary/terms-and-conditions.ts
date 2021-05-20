@@ -11,7 +11,7 @@
 //     },
 //   ],
 // };
-import { sw16, sw24 } from "../../styles";
+import { sw16, sw24, sw32 } from "../../styles";
 
 // export const PDPA_CONSENT: ITermsAndConditions = {
 //   title: "PDPA",
@@ -86,12 +86,12 @@ export const FATCA: ITermsAndConditions = {
             },
             { indentSpace: sw16, prefix: "5.", text: "any trust if—" },
             {
-              indentSpace: sw24,
+              indentSpace: sw32,
               prefix: "a.",
               text: "A court within the United States is able to exercise primary supervision over the administration of the trust, and",
             },
             {
-              indentSpace: sw24,
+              indentSpace: sw32,
               prefix: "b.",
               text: "One or more United States persons have the authority to control all substantial decisions of the trust.",
             },

@@ -150,8 +150,8 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                                         const defaultPrefixIndentSpace =
                                           line.prefixIndentSpace !== undefined ? line.prefixIndentSpace : sw8;
                                         return (
-                                          <>
-                                            <View key={contentIndex} style={{ ...flexRow }}>
+                                          <Fragment key={contentIndex}>
+                                            <View style={{ ...flexRow }}>
                                               {line.indentSpace !== undefined ? (
                                                 <CustomSpacer isHorizontal={true} space={line.indentSpace} />
                                               ) : null}
@@ -170,7 +170,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                                               <Text style={{ ...fs10RegBlack2, ...flexWrap, ...flexShrink }}>{line.text}</Text>
                                             </View>
                                             <CustomSpacer space={sh16} />
-                                          </>
+                                          </Fragment>
                                         );
                                       })}
                                     </View>

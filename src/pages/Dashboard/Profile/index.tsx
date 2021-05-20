@@ -39,6 +39,7 @@ import {
   sh48,
   sh8,
   shadowBlue5,
+  sw1,
   sw120,
   sw16,
   sw24,
@@ -102,7 +103,7 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
     .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
     .join("");
 
-  const buttonStyle: ViewStyle = { ...px(sw16), height: sh24, width: "auto" };
+  const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: "auto" };
 
   const accountSummary: LabeledTitleProps[] =
     agentProfile !== undefined

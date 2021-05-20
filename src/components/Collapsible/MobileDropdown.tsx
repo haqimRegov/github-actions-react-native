@@ -14,7 +14,7 @@ import {
 import Collapsible from "react-native-collapsible";
 
 import { Language } from "../../constants";
-import { DICTIONARY_COUNTRY_CODE, ERROR } from "../../data/dictionary";
+import { DICTIONARY_MOBILE_CODE, ERROR } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import {
   border,
@@ -263,8 +263,8 @@ export const CollapsibleMobileDropdown: FunctionComponent<CollapsibleDropdownPro
     width: sw360,
     ...inputBorder,
   };
-  const countryCodeIndex = DICTIONARY_COUNTRY_CODE.findIndex((countryCode) => countryCode.value === data.code);
-  const valueExtractor = DICTIONARY_COUNTRY_CODE[countryCodeIndex];
+  const countryCodeIndex = DICTIONARY_MOBILE_CODE.findIndex((countryCode) => countryCode.value === data.code);
+  const valueExtractor = DICTIONARY_MOBILE_CODE[countryCodeIndex];
   const numberInputStyle: ViewStyle = {
     borderRadius: undefined,
     borderWidth: 0,

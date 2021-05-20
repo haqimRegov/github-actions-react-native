@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { FlatList, Image, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { DICTIONARY_COUNTRY_CODE } from "../../data/dictionary";
+import { DICTIONARY_MOBILE_CODE } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import {
   border,
@@ -97,7 +97,7 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
                 <View style={borderBottomGray7} />
                 <View style={dropdownStyle}>
                   <FlatList
-                    data={DICTIONARY_COUNTRY_CODE.map((item) => item.label)}
+                    data={DICTIONARY_MOBILE_CODE.map((item) => item.label)}
                     style={{ ...px(sw16), maxHeight: sh200 }}
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="always"
@@ -106,7 +106,7 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
                     ListFooterComponent={() => <CustomSpacer space={sh8} />}
                     renderItem={({ index }) => {
                       const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh8) };
-                      const itemExtractor = DICTIONARY_COUNTRY_CODE[index];
+                      const itemExtractor = DICTIONARY_MOBILE_CODE[index];
 
                       const handleSelect = () => {
                         handleClose();

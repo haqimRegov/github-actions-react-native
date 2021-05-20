@@ -11,12 +11,10 @@ import illustrationOrderSaved from "./illustration_order_saved/illustration_orde
 import illustrationProfileSuccess from "./illustration_profile_success/illustration_profile_success.png";
 import illustrationReceiptSuccess from "./illustration_receipt_success/illustration_receipt_success.png";
 import illustrationSessionExpired from "./illustration_session_expired/illustration_session_expired.png";
-import illustrationSubmissionSummary from "./illustration_submission_success/illustration_submission_success.png";
-import illustrationTransactionsEmpty from "./illustration_transactions_empty/illustration_transactions_empty.png";
 import illustrationUploadSuccess from "./illustration_upload_success/illustration_upload_success.png";
-import kenanga from "./kenanga/kenanga.png";
 import kenangaBrandLogo from "./kenanga_brand_logo/kenanga_brand_logo.png";
 import kenangaFooter from "./kenanga_footer/kenanga_footer.png";
+import kenangaTower from "./kenanga_tower/kenanga_tower.png";
 import logoAims from "./logo_aims/logo_aims.png";
 import riskAssessmentGraph1 from "./risk_assessment_graph_1/risk_assessment_graph_1.png";
 import riskAssessmentGraph2 from "./risk_assessment_graph_2/risk_assessment_graph_2.png";
@@ -42,12 +40,10 @@ export const LocalAssets = {
     profileSuccess: illustrationProfileSuccess,
     receiptSuccess: illustrationReceiptSuccess,
     sessionExpired: illustrationSessionExpired,
-    submissionSummary: illustrationSubmissionSummary,
-    transactionsEmpty: illustrationTransactionsEmpty,
     uploadSuccess: illustrationUploadSuccess,
   },
   login: {
-    background: kenanga,
+    background: kenangaTower,
   },
   logo: {
     aims: logoAims,

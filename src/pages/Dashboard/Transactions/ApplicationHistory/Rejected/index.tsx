@@ -35,7 +35,7 @@ import {
   sw8,
 } from "../../../../../styles";
 import { CustomTableItem } from "../CustomTableItem";
-import { EDDReasons } from "../EDDReasons";
+import { OrderRemarks } from "../OrderRemarks";
 
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 
@@ -68,8 +68,9 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     setShowDateBy(showDateBy === "createdOn" ? "lastUpdated" : "createdOn");
   };
 
-  const handleViewRejected = (item: ITableRowData) => {
-    if (item.rawData.remark) {
+  const handleShowRemarks = (item: ITableRowData) => {
+    const { remark } = item.rawData as IDashboardOrder;
+    if (remark) {
       const newSections: number[] = [...activeAccordion];
       const sectionIndex = newSections.indexOf(item.index);
       if (sectionIndex > -1) {
@@ -179,7 +180,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       key: [{ key: "status" }],
       icon: { name: sortDueDate === "descending" ? "arrow-up" : "arrow-down" },
       onPressHeader: handleSortDueDate,
-      onPressItem: handleViewRejected,
+      onPressItem: handleShowRemarks,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       viewStyle: { width: sw123 },
       withAccordion: true,
@@ -187,7 +188,8 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   ];
 
   const tableAccordion = (item: ITableData) => {
-    return <Fragment>{item.remark ? <EDDReasons data={item.remark} /> : null}</Fragment>;
+    const { remark, status } = item.rawData as IDashboardOrder;
+    return <Fragment>{item.remark ? <OrderRemarks remarks={remark} status={status} /> : null}</Fragment>;
   };
 
   const handleFetch = async () => {

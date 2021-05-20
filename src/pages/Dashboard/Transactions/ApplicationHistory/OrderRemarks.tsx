@@ -26,20 +26,26 @@ import {
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-declare interface EDDReasonsProps {
-  data: IDashboardRemark[];
+declare interface OrderRemarksProps {
+  remarks: IDashboardRemark[];
+  status: OrderStatusType;
 }
 
-export const EDDReasons: FunctionComponent<EDDReasonsProps> = ({ data }: EDDReasonsProps) => {
+export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({ remarks, status }: OrderRemarksProps) => {
+  const title =
+    status === "BR - Rerouted" || status === "HQ - Rerouted"
+      ? DASHBOARD_HOME.LABEL_REASONS_REROUTED
+      : DASHBOARD_HOME.LABEL_REASONS_REJECTED;
+
   return (
     <Fragment>
       <CustomSpacer space={sh16} />
       <View style={px(sw16)}>
-        <Text style={fs16BoldBlack1}>{DASHBOARD_HOME.LABEL_REJECTED_REASONS}</Text>
+        <Text style={fs16BoldBlack1}>{title}</Text>
         <CustomSpacer space={sh12} />
         <View style={{ ...flexWrap, width: sw716, ...flexRow }}>
           <CustomSpacer space={sh8} />
-          {data.map(({ label, remark }: IDashboardRemark, index) => {
+          {remarks.map(({ label, remark }: IDashboardRemark, index) => {
             return (
               <Fragment key={index}>
                 {index % 2 === 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}

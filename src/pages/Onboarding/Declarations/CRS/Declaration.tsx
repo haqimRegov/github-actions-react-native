@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 import { CheckBox, CustomSpacer, LinkText } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_LINK_TAX_RESIDENT } from "../../../../data/dictionary";
+import { RNInAppBrowser } from "../../../../integrations";
 import {
   borderBottomGray4,
   fs12BoldBlack2,
@@ -17,7 +18,6 @@ import {
   sw24,
   sw648,
 } from "../../../../styles";
-import { LinkUtils } from "../../../../utils";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -32,7 +32,7 @@ export const CrsTerms: FunctionComponent<CrsTermsProps> = ({ accepted, setAccept
   };
 
   const handleTaxResidentLink = () => {
-    LinkUtils.openLink(DICTIONARY_LINK_TAX_RESIDENT);
+    RNInAppBrowser.openLink(DICTIONARY_LINK_TAX_RESIDENT);
   };
 
   return (

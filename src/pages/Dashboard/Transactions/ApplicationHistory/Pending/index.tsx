@@ -43,7 +43,7 @@ import {
   sw96,
 } from "../../../../../styles";
 import { CustomTableItem } from "../CustomTableItem";
-import { EDDReasons } from "../EDDReasons";
+import { OrderRemarks } from "../OrderRemarks";
 import { PendingOrderActions } from "./Actions";
 
 const { EMPTY_STATE, DASHBOARD_HOME } = Language.PAGE;
@@ -82,7 +82,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     setShowDateBy(showDateBy === "createdOn" ? "lastUpdated" : "createdOn");
   };
 
-  const handleShowEDDReasons = (item: ITableRowData) => {
+  const handleShowRemarks = (item: ITableRowData) => {
     const { remark, status } = item.rawData as IDashboardOrder;
     if ((status === "BR - Rerouted" || status === "HQ - Rerouted") && remark) {
       const newSections: number[] = [...activeAccordion];
@@ -113,7 +113,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const tableAccordion = (item: ITableData) => {
-    return <Fragment>{item.remark ? <EDDReasons data={item.remark} /> : null}</Fragment>;
+    const { remark, status } = item.rawData as IDashboardOrder;
+    return <Fragment>{item.remark ? <OrderRemarks remarks={remark} status={status} /> : null}</Fragment>;
   };
 
   const handleSortOrderNumber = async () => {
@@ -231,7 +232,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       viewStyle: { width: sw158 },
       customItem: true,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
-      onPressItem: handleShowEDDReasons,
+      onPressItem: handleShowRemarks,
       withAccordion: true,
     },
   ];

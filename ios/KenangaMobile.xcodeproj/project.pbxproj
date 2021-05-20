@@ -820,7 +820,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development: Aldrin Castro (FUA23QX2X7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: Aldrin Castro (FUA23QX2X7)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 64;
 				DEVELOPMENT_TEAM = U74L8938DC;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -855,7 +855,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution: ReGov Technologies Sdn. Bhd. (U74L8938DC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: ReGov Technologies Sdn. Bhd. (U74L8938DC)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 64;
 				DEVELOPMENT_TEAM = U74L8938DC;
 				INFOPLIST_FILE = KenangaMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

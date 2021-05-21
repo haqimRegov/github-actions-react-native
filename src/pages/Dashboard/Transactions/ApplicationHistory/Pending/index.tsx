@@ -113,8 +113,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const tableAccordion = (item: ITableData) => {
-    const { remark, status } = item.rawData as IDashboardOrder;
-    return <Fragment>{item.remark ? <OrderRemarks remarks={remark} status={status} /> : null}</Fragment>;
+    const { remark, status } = item as IDashboardOrder;
+    return <Fragment>{remark ? <OrderRemarks remarks={remark} status={status} /> : null}</Fragment>;
   };
 
   const handleSortOrderNumber = async () => {

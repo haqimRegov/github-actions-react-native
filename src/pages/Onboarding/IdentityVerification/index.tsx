@@ -215,7 +215,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     let jointInfo: IHolderInfoState = handleClientInfo(joint!, uploaded, {
       country: jointClientIdType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
     });
-    if (uploaded !== undefined && jointMyKad === true) {
+    if (uploaded !== undefined && jointMyKad === true && jointClientIdType === "NRIC") {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
         if (mykad.error!.code === ERROR_CODE.invalidNricData) {

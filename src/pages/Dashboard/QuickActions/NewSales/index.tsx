@@ -62,7 +62,7 @@ const NewSalesComponent = ({
   const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
   const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
   const { jointHolder, principalHolder } = details!;
-  const { dateOfBirth, id, idType, name } = details![holderToFill]!;
+  const { dateOfBirth, id, idType, name, country } = details![holderToFill]!;
 
   const BUTTON_LABEL_UNREGISTERED = clientType !== "" ? ADD_CLIENT.BUTTON_PROCEED : ADD_CLIENT.BUTTON_STARTED;
   const BUTTON_CONTINUE_PROMPT = prompt === "bannedCountry" ? ADD_CLIENT.BUTTON_BACK : ADD_CLIENT.BUTTON_ADD;
@@ -76,10 +76,21 @@ const NewSalesComponent = ({
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
   const setAccountType = (type: string) => addAccountType(type as TypeAccountChoices);
 
-  const continueDisabled =
-    idType === "NRIC"
-      ? name === "" || id === "" || inputError1 !== undefined
-      : name === "" || id === "" || dateOfBirth === undefined || inputError1 !== undefined;
+  let continueDisabled: boolean = true;
+
+  switch (idType) {
+    case "NRIC":
+      continueDisabled = name === "" || id === "" || inputError1 !== undefined;
+      break;
+    case "Passport":
+      continueDisabled = name === "" || id === "" || dateOfBirth === "" || inputError1 !== undefined || country === "";
+      break;
+    case "Other":
+      continueDisabled = name === "" || id === "" || inputError1 !== undefined || dateOfBirth === "";
+      break;
+    default:
+      return name === "" || id === "" || inputError1 !== undefined;
+  }
 
   const handleReset = () => {
     setClientType("");

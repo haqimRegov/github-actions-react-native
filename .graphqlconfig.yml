@@ -9,7 +9,7 @@ projects:
       amplify:
         codeGenTarget: typescript
         generatedFileName: ''
-        docsFilePath: graphql
+        docsFilePath: .
         region: ap-southeast-1
         apiId: u4agpiyz7vd27lhuveaynighre
 extensions:

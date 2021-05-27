@@ -97,8 +97,8 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
         const updatedPaymentInfo = { ...paymentInfo };
         delete updatedPaymentInfo.combinedBankAccountName;
         const temporaryReference =
-          updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
-          updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
+          updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
+          updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
             ? `${paymentOrder!.orderNumber}${index}${moment().format("x")}`
             : undefined;
 

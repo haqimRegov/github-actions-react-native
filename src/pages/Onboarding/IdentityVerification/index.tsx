@@ -146,16 +146,16 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const handleClientInfo = (clientInfo: IHolderInfoState, file: FileBase64 | undefined, mykad: IOCRNricData) => {
     const [line1, line2, line3] = splitString(mykad.address || "", 100);
     const newClientInfo: IHolderInfoState = {
-      ...clientInfo!,
+      ...clientInfo,
       personalDetails: {
-        ...clientInfo!.personalDetails,
+        ...clientInfo.personalDetails,
         id: {
-          ...clientInfo!.personalDetails?.id,
+          ...clientInfo.personalDetails?.id,
           frontPage: file,
         },
       },
       addressInformation: {
-        ...clientInfo!.addressInformation!,
+        ...clientInfo.addressInformation!,
         sameAddress: true,
         mailingAddress: {
           address: { line1: line1 || "", line2: line2, line3: line3 },
@@ -183,11 +183,11 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && principalClientIdType === "NRIC") {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
-        if (mykad.error!.code === ERROR_CODE.invalidNricData) {
+        if (mykad.error.code === ERROR_CODE.invalidNricData) {
           setReviewImage(uploaded);
           setPrincipalFrontError(undefined);
         } else {
-          setPrincipalFrontError(mykad.error!.message);
+          setPrincipalFrontError(mykad.error.message);
         }
       } else {
         principalInfo = handleClientInfo(principal!, uploaded, mykad);
@@ -203,7 +203,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && principalClientIdType === "NRIC") {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
-        setPrincipalBackError(mykadBack.error!.message);
+        setPrincipalBackError(mykadBack.error.message);
       } else {
         setPrincipalBackError(undefined);
       }
@@ -218,11 +218,11 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && jointMyKad === true && jointClientIdType === "NRIC") {
       const mykad: IOCRNricData = await OCRUtils.mykadFront(uploaded.path!);
       if ("error" in mykad && mykad.error !== undefined) {
-        if (mykad.error!.code === ERROR_CODE.invalidNricData) {
+        if (mykad.error.code === ERROR_CODE.invalidNricData) {
           setReviewImage(uploaded);
           setJointFrontError(undefined);
         } else {
-          setJointFrontError(mykad.error!.message);
+          setJointFrontError(mykad.error.message);
         }
       } else {
         jointInfo = handleClientInfo(joint!, uploaded, mykad);
@@ -238,7 +238,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     if (uploaded !== undefined && jointClientIdType === "NRIC" && jointMyKad === true) {
       const mykadBack: IOCRNricData = await OCRUtils.mykadBack(uploaded.path!);
       if ("error" in mykadBack && mykadBack.error !== undefined) {
-        setJointBackError(mykadBack.error!.message);
+        setJointBackError(mykadBack.error.message);
       } else {
         setJointBackError(undefined);
       }

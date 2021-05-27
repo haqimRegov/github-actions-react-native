@@ -59,8 +59,8 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             const updatedPaymentInfo = { ...paymentInfo };
             delete updatedPaymentInfo.combinedBankAccountName;
             const temporaryReference =
-              updatedPaymentInfo!.paymentMethod === "Online Banking / TT / ATM" ||
-              updatedPaymentInfo!.paymentMethod === "Client Trust Account (CTA)"
+              updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
+              updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
                 ? `${orderNumber}${index}${moment().format("x")}`
                 : undefined;
 

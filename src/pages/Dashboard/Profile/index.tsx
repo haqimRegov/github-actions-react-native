@@ -108,11 +108,11 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
   const accountSummary: LabeledTitleProps[] =
     agentProfile !== undefined
       ? [
-          { label: PROFILE.LABEL_ADVISER_CODE, title: agentProfile.agentCode || "-" },
-          { label: PROFILE.LABEL_STATUS, title: agentProfile.status || "-" },
+          { label: PROFILE.LABEL_ADVISER_CODE, title: agentProfile.agentCode || "-", titleStyle: fsTransformNone },
+          { label: PROFILE.LABEL_STATUS, title: agentProfile.status || "-", titleStyle: fsTransformNone },
           { label: PROFILE.LABEL_LICENSE_CODE, title: agentProfile.licenseCode || "-", titleStyle: fsTransformNone },
-          { label: PROFILE.LABEL_PROCESSING_BRANCH, title: agentProfile.branchName || "-" },
-          { label: PROFILE.LABEL_ASSIGNED_BDM, title: agentProfile.bdmName || "-" },
+          { label: PROFILE.LABEL_PROCESSING_BRANCH, title: agentProfile.branchName || "-", titleStyle: fsTransformNone },
+          { label: PROFILE.LABEL_ASSIGNED_BDM, title: agentProfile.bdmName || "-", titleStyle: fsTransformNone },
           { label: PROFILE.LABEL_BDM_EMAIL, title: agentProfile.bdmEmail || "-", titleStyle: fsTransformNone },
           { label: PROFILE.LABEL_DISTRIBUTION_CHANNEL, title: agentProfile.channel || "-", titleStyle: fsTransformNone },
           { label: PROFILE.LABEL_OMNI_ENABLED, title: agentProfile.omniEnabled || "-" },

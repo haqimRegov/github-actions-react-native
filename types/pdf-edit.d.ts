@@ -14,6 +14,5 @@ declare interface PdfEditCardProps {
   setValue: (value?: FileBase64) => void;
   title?: string;
   titleStyle?: import("react-native").TextStyle;
-  tooltipLabel?: string;
   value?: FileBase64;
 }

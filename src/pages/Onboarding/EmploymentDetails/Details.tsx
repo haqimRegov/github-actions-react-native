@@ -10,7 +10,7 @@ import {
   DICTIONARY_OCCUPATION,
   ERROR,
 } from "../../../data/dictionary";
-import { px, sh24, sh32, sw24 } from "../../../styles";
+import { px, sh152, sh24, sh32, sw24 } from "../../../styles";
 import { formatNumber, isNumber } from "../../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -108,6 +108,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       <CustomSpacer space={sh32} />
       <AddressField
         addressType={addressType}
+        countryDropdownStyle={{ height: sh152 }}
         inputAddress={inputAddress}
         inputCity={inputCity}
         inputCountry={inputCountry}

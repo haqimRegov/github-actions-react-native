@@ -12,6 +12,7 @@ import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 const { ADDRESS } = Language.PAGE;
 interface AddressFieldProps {
   addressType?: "Malaysia" | "Other";
+  countryDropdownStyle?: ViewStyle;
   inputAddress: IAddressMultiline;
   inputCity: string;
   inputCountry?: string;
@@ -29,6 +30,7 @@ interface AddressFieldProps {
 }
 export const AddressField: FunctionComponent<AddressFieldProps> = ({
   addressType,
+  countryDropdownStyle,
   inputAddress,
   inputCity,
   inputCountry,
@@ -135,6 +137,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           handleChange={setInputCountry}
           label={ADDRESS.LABEL_COUNTRY}
           spaceToTop={sh32}
+          style={countryDropdownStyle}
           value={inputCountry || ""}
         />
       ) : null}

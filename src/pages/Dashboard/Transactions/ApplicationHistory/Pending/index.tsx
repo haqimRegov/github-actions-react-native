@@ -21,6 +21,7 @@ import {
   fs12RegBlue2,
   fs12RegBlue6,
   fsTransformNone,
+  justifyContentStart,
   px,
   py,
   sh2,
@@ -31,16 +32,16 @@ import {
   sw1,
   sw120,
   sw128,
-  sw152,
-  sw158,
+  sw148,
   sw16,
+  sw170,
   sw32,
   sw4,
   sw56,
   sw8,
   sw80,
-  sw88,
-  sw96,
+  sw84,
+  sw92,
 } from "../../../../../styles";
 import { CustomTableItem } from "../CustomTableItem";
 import { OrderRemarks } from "../OrderRemarks";
@@ -174,7 +175,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       key: [{ key: "orderNumber", textStyle: { ...fs12RegBlue6, ...fsTransformNone, letterSpacing: -sw039 } }],
       onPressHeader: handleSortOrderNumber,
       viewStyle: {
-        width: sw88,
+        width: sw84,
       },
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
     },
@@ -185,7 +186,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       titleStyle: { paddingLeft: sw32 },
       onPressHeader: handleSortInvestor,
       viewStyle: {
-        width: sw152,
+        width: sw148,
       },
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
     },
@@ -218,8 +219,9 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       },
       key: [{ key: showDateBy, textStyle: fs12RegBlue2 }],
       onPressHeader: handleShowDateBy,
+      itemStyle: { ...justifyContentStart, ...px(sw8) },
       viewStyle: {
-        width: sw96,
+        width: sw92,
         ...px(0),
         ...centerHorizontal,
       },
@@ -229,7 +231,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       icon: { name: sortDueDate === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "status" }],
       onPressHeader: handleSortDueDate,
-      viewStyle: { width: sw158 },
+      viewStyle: { width: sw170 },
       customItem: true,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       onPressItem: handleShowRemarks,
@@ -350,7 +352,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           return (
             <MenuPopup
               RenderButton={({ show }) => {
-                const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96 };
+                const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw92 };
                 return (
                   <TouchableWithoutFeedback onPress={show}>
                     <View style={headerStyle}>

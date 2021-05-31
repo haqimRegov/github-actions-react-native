@@ -14,7 +14,7 @@ import {
   sh14,
   sh4,
   sw01,
-  sw104,
+  sw100,
   sw14,
   sw24,
   sw8,
@@ -25,8 +25,8 @@ export interface InvestorNameProps extends ITableCustomItem {}
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
   const { accountType, investorName } = item.rawData as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar-2";
-  const titleStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -sw01, lineHeight: sh14, width: sw104 };
-  const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, width: sw104 };
+  const titleStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -sw01, lineHeight: sh14, width: sw100 };
+  const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, width: sw100 };
 
   return (
     <View style={centerHV}>

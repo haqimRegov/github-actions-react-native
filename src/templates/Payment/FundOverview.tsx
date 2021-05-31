@@ -21,7 +21,6 @@ import {
   sh8,
   sw1,
   sw24,
-  sw32,
   sw8,
 } from "../../styles";
 import { AnimationUtils, formatAmount } from "../../utils";
@@ -146,7 +145,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
           <View style={borderBottomBlack21} />
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
-            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={32} titleStyle={fsTransformNone} />
             <CustomSpacer space={sh8} />
           </View>
         </Fragment>

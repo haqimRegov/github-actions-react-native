@@ -11,6 +11,7 @@ export const centerHorizontal = { justifyContent: "center" } as const;
 export const centerVertical = { alignItems: "center" } as const;
 export const centerHV = { ...centerHorizontal, ...centerVertical } as const;
 export const justifyContentEnd = { justifyContent: "flex-end" } as const;
+export const justifyContentStart = { justifyContent: "flex-start" } as const;
 export const spaceBetweenHorizontal = { justifyContent: "space-between" } as const;
 export const spaceBetweenVertical = { alignContent: "space-between" } as const;
 export const spaceBetweenHV = { ...spaceBetweenHorizontal, ...spaceBetweenVertical } as const;

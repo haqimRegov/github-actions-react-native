@@ -1,41 +1,33 @@
 import React, { FunctionComponent } from "react";
-import { GestureResponderEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { GestureResponderEvent, Image, ImageStyle, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 
+import { LocalAssets } from "../../../../assets/LocalAssets";
 import { CustomSpacer, IconButton, RoundedButton, SafeAreaPage, SignatureModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
 import {
   absolutePosition,
-  centerHV,
   centerVertical,
   circleBorder,
   colorBlack,
   colorBlue,
   colorGray,
-  colorTransparent,
   colorWhite,
   flexGrow,
   flexRow,
-  fs12RegBlue1,
   fs24BoldBlack2,
   px,
-  sh1,
   sh120,
   sh24,
   sh32,
   sh4,
-  sh40,
   sh56,
-  sh8,
-  shadowBlue5,
-  sw1,
+  sw100,
   sw20,
   sw24,
-  sw33,
   sw40,
   sw8,
-  sw80,
   sw96,
 } from "../../../../styles";
 
@@ -105,17 +97,12 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   const remotePdfViewContainer: ViewStyle = { ...px(sw8), width: 595, height: parseInt(urlPageCount!, 10) * 796 };
   const pdfContainer: ViewStyle = { height: parseInt(urlPageCount!, 10) * 1600 }; // To display the page number correctly in the viewer
   const pdfSignContainer: ViewStyle = { height: 800 };
-  const toolTipStyle: ViewStyle = { top: sh8, zIndex: 1, right: sw8 };
-  const toolTipLabelStyle: ViewStyle = {
-    ...centerHV,
+  const defaultTooltipStyle: ImageStyle = {
+    bottom: 72,
+    height: 34,
     position: "absolute",
-    backgroundColor: colorWhite._1,
-    left: sw1,
-    right: sw1,
-    width: sw96,
-    height: sh32,
-    borderRadius: sw8,
-    top: sh1,
+    width: 84,
+    zIndex: 1,
   };
 
   return (
@@ -165,24 +152,16 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         {completed === true ? null : (
           <TouchableWithoutFeedback onPress={handleScroll}>
             <View style={{ ...absolutePosition, right: sw40, top: sh120 }}>
-              <View style={toolTipStyle}>
-                <View style={toolTipLabelStyle}>
-                  <Text style={fs12RegBlue1}>{TERMS_AND_CONDITIONS.LABEL_ADD_SIGN}</Text>
-                </View>
-                <IcoMoon
-                  style={{ ...shadowBlue5, backgroundColor: colorTransparent }}
-                  color={colorGray._1}
-                  name="filter-tooltip"
-                  size={sh40}
+              <View style={{ width: sw100, ...centerVertical }}>
+                <Image source={LocalAssets.tooltip.addSign} style={defaultTooltipStyle} />
+                <IconButton
+                  color={colorBlue._2}
+                  name="sign"
+                  onPress={handleScroll}
+                  size={48}
+                  style={circleBorder(80, 1, colorGray._3, colorWhite._1)}
                 />
               </View>
-              <IconButton
-                color={colorBlue._2}
-                name="sign"
-                onPress={handleScroll}
-                size={sw33}
-                style={circleBorder(sw80, sw1, colorGray._3, colorWhite._1)}
-              />
             </View>
           </TouchableWithoutFeedback>
         )}

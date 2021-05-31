@@ -1,35 +1,30 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
+import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
-  centerHV,
   centerVertical,
   colorBlack,
   colorBlue,
   colorWhite,
   flexRow,
-  fs12RegBlue2,
   fs12RegBlue38,
   fs16SemiBoldBlue2,
   px,
-  sh1,
   sh24,
-  sh26,
   sh34,
+  sh42,
   sh88,
   shadowBlue5,
-  sw1,
   sw10,
   sw16,
   sw24,
   sw32,
   sw4,
   sw40,
-  sw8,
-  sw82,
-  sw85,
+  sw84,
 } from "../../styles";
 import { shortenString } from "../../utils";
 import { Badge } from "../Badge";
@@ -54,7 +49,6 @@ export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
   setValue,
   title,
   titleStyle,
-  tooltipLabel,
   value,
 }: PdfEditCardProps) => {
   let uploadLabel = UPLOAD.LABEL_NO_FILE;
@@ -96,28 +90,11 @@ export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
     opacity: completed === true || disabled === true ? opacity : 1,
   };
   const iconBadgeOffset = { bottom: 0.5 };
-  const proceedToolTip: TextStyle = {
-    ...centerVertical,
-    top: -30,
-    zIndex: 1,
-    position: "absolute",
-    borderRadius: sw8,
-  };
-  const toolTipLabelStyle: TextStyle = {
-    ...centerHV,
-    position: "absolute",
-    top: sh1,
-    left: sw1,
-    right: sw1,
-    backgroundColor: colorWhite._1,
-    alignContent: "center",
-    borderRadius: sw8,
-    width: sw82,
-    height: sh26,
-  };
   const iconData = completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
   const editPress = completed === true ? onPress : handleEdit;
   const cardPress = disabled === true ? undefined : editPress;
+
+  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh42 };
 
   return (
     <Fragment>
@@ -146,17 +123,10 @@ export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
           {active === false || completed === true ? (
             <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
           ) : (
-            <View>
-              <View style={{ width: sw85 }}>
-                <View style={proceedToolTip}>
-                  <IcoMoon color={colorBlue._1} name="filter-tooltip" size={sh34} />
-                  <View style={toolTipLabelStyle}>
-                    <Text style={{ ...fs12RegBlue2 }}>{tooltipLabel}</Text>
-                  </View>
-                </View>
-                <View style={centerVertical}>
-                  <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
-                </View>
+            <View style={{ width: sw84 }}>
+              <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} />
+              <View style={centerVertical}>
+                <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </View>
             </View>
           )}

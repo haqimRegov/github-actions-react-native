@@ -23,6 +23,7 @@ import {
   sw104,
   sw14,
   sw15,
+  sw152,
   sw18,
   sw24,
   sw25,
@@ -77,7 +78,7 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
             ...justifyContentEnd,
             height: sh48,
             // TODO make the position and width dynamic
-            left: index === 0 ? 0 : index * 152,
+            left: index === 0 ? 0 : index * sw152,
             position: "absolute",
             top: -sh32,
             width: sw72,

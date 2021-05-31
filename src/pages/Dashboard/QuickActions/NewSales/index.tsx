@@ -89,7 +89,8 @@ const NewSalesComponent = ({
       continueDisabled = name === "" || id === "" || inputError1 !== undefined || dateOfBirth === "";
       break;
     default:
-      return name === "" || id === "" || inputError1 !== undefined;
+      continueDisabled = name === "" || id === "" || inputError1 !== undefined;
+      break;
   }
 
   const handleReset = () => {

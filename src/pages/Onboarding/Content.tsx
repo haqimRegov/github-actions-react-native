@@ -31,6 +31,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
   };
 
   let content: JSX.Element;
+  let backToDashboardLabel = ONBOARDING.LABEL_BACK_ONBOARDING;
 
   switch (newProps.route) {
     case ONBOARDING_ROUTES.RiskAssessment:
@@ -77,6 +78,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
       break;
     case ONBOARDING_ROUTES.Payment:
       content = <Payment {...newProps} />;
+      backToDashboardLabel = ONBOARDING.LABEL_BACK_PAYMENT;
       break;
     default:
       content = <View />;
@@ -92,7 +94,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
         labelContinue={ONBOARDING.BUTTON_YES}
         title={ONBOARDING.EDIT_TITLE}
         visible={cancelOnboarding!}>
-        <Text style={fs16BoldBlack2}>{ONBOARDING.EDIT_LABEL}</Text>
+        <Text style={fs16BoldBlack2}>{backToDashboardLabel}</Text>
       </ConfirmationModal>
     </Fragment>
   );

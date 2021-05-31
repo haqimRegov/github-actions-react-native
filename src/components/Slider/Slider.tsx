@@ -20,7 +20,7 @@ import {
   sh6,
   sh8,
   sw10,
-  sw100,
+  sw104,
   sw14,
   sw15,
   sw18,
@@ -72,7 +72,7 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
       <CustomSpacer space={sh8} />
       <View style={flexRowSbSb}>
         {options.map((option: string, index: number) => {
-          let optionStyle: ViewStyle = { ...centerVertical, maxWidth: sw100 };
+          let optionStyle: ViewStyle = { ...centerVertical, maxWidth: sw104 };
           const touchAreaStyle: ViewStyle = {
             ...justifyContentEnd,
             height: sh48,

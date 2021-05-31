@@ -187,6 +187,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           setReviewImage(uploaded);
           setPrincipalFrontError(undefined);
         } else {
+          setReviewImage(undefined);
           setPrincipalFrontError(mykad.error.message);
         }
       } else {

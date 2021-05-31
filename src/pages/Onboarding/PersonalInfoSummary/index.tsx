@@ -26,7 +26,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     updatedFinishedSteps.push("PersonalInformation");
-    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
+    const findDeclarations = updatedDisabledSteps.indexOf("FATCADeclaration");
     if (findDeclarations !== -1) {
       updatedDisabledSteps.splice(findDeclarations, 1);
     }

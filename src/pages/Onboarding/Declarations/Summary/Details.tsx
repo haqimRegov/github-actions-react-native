@@ -25,7 +25,6 @@ import {
   sw16,
   sw200,
   sw24,
-  sw32,
   sw8,
 } from "../../../../styles";
 
@@ -192,13 +191,13 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
           <View style={borderBottomBlack21}>
             <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
             <View style={px(sw24)}>
-              <TextCard data={fatcaSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
+              <TextCard data={fatcaSummary} itemsPerGroup={3} spaceBetweenItem={32} />
             </View>
           </View>
           <View>
             <TitleIcon onPress={handleEditCrs} title={DECLARATION_SUMMARY.TITLE_CRS} />
             <View style={px(sw24)}>
-              <TextCard data={crsSummary} itemsPerGroup={3} spaceBetweenItem={sw32} />
+              <TextCard data={crsSummary} itemsPerGroup={3} spaceBetweenItem={32} />
             </View>
           </View>
           {/* {feaSummary.length !== 0 ? (

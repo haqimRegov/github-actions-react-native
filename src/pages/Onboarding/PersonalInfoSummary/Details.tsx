@@ -26,7 +26,6 @@ import {
   shadowBlue204,
   sw16,
   sw24,
-  sw32,
   sw8,
 } from "../../../styles";
 
@@ -110,7 +109,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: sw32, titleStyle: fsTransformNone };
+  const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: 32, titleStyle: fsTransformNone };
 
   return (
     <View style={px(sw24)}>

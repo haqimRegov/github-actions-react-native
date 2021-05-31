@@ -160,7 +160,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     itemsPerGroup: 5,
     itemStyle: { width: sw144 },
     labelStyle: fs10BoldBlack2,
-    spaceBetweenItem: sw16,
+    spaceBetweenItem: 16,
     titleStyle: fs16BoldBlack2,
   };
 

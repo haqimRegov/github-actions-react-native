@@ -20,7 +20,6 @@ import {
   sh8,
   sh80,
   sw24,
-  sw32,
   sw4,
   sw648,
 } from "../../../../styles";
@@ -141,9 +140,9 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, payment
         <CustomSpacer space={sh16} />
         <View style={px(sw24)}>
           {paymentType === "Recurring" ? (
-            <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+            <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={32} titleStyle={fsTransformNone} />
           ) : (
-            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={sw32} titleStyle={fsTransformNone} />
+            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={32} titleStyle={fsTransformNone} />
           )}
         </View>
         <CustomSpacer space={sh8} />

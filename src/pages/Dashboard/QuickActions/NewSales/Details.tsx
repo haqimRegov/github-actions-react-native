@@ -11,7 +11,7 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
-import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
+import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh172, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -147,6 +147,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             handleChange={setInputCountry}
             label={ADD_CLIENT.LABEL_COUNTRY}
             spaceToTop={sh24}
+            style={{ height: sh172 }}
             value={country || ""}
           />
         ) : null}

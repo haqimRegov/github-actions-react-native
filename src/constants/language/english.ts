@@ -686,7 +686,8 @@ export const english = {
     ONBOARDING: {
       BUTTON_NO: "No",
       BUTTON_YES: "Yes",
-      EDIT_LABEL: "All progress in the onboarding session will be lost.",
+      LABEL_BACK_ONBOARDING: "All progress in the onboarding session will be lost.",
+      LABEL_BACK_PAYMENT: "All progress in the payment session will be lost.",
       EDIT_TITLE: "Are you sure you want to quit?",
       HEADING: "Your financial freedom in just 5 simple steps.",
       STEP: "STEP",

@@ -18,6 +18,8 @@ import kenangaTower from "./kenanga_tower/kenanga_tower.png";
 import logoAims from "./logo_aims/logo_aims.png";
 import riskAssessmentGraph1 from "./risk_assessment_graph_1/risk_assessment_graph_1.png";
 import riskAssessmentGraph2 from "./risk_assessment_graph_2/risk_assessment_graph_2.png";
+import tooltipAddSign from "./tooltip_add_sign/tooltip_add_sign.png";
+import tooltipProceed from "./tooltip_proceed/tooltip_proceed.png";
 
 export const LocalAssets = {
   flag: {
@@ -51,5 +53,9 @@ export const LocalAssets = {
   },
   splash: {
     footer: kenangaFooter,
+  },
+  tooltip: {
+    addSign: tooltipAddSign,
+    proceed: tooltipProceed,
   },
 };

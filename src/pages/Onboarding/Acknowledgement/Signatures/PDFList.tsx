@@ -235,7 +235,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                     setValue={() => {}}
                     title={title}
                     onPress={handleEdit}
-                    tooltipLabel={TERMS_AND_CONDITIONS.LABEL_PROCEED}
                     value={receipt.signedPdf}
                   />
                   <CustomSpacer space={sh8} />

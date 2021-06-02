@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, FileViewer, LabeledTitleProps, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -63,6 +63,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   name,
   summary,
 }: DeclarationDetailsProps) => {
+  const { width } = Dimensions.get("window");
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
   const handleEditFatca = () => {
     handleNextStep("FATCADeclaration");
@@ -176,6 +177,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   };
 
   const headerTitle = accountHolder === "Principal" ? DECLARATION_SUMMARY.TITLE_PRINCIPAL : DECLARATION_SUMMARY.TITLE_JOINT;
+  const scaledSpaceBetweenItem = width < 1080 ? 30 : 32;
 
   return (
     <Fragment>
@@ -191,13 +193,13 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
           <View style={borderBottomBlack21}>
             <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
             <View style={px(sw24)}>
-              <TextCard data={fatcaSummary} itemsPerGroup={3} spaceBetweenItem={32} />
+              <TextCard data={fatcaSummary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} />
             </View>
           </View>
           <View>
             <TitleIcon onPress={handleEditCrs} title={DECLARATION_SUMMARY.TITLE_CRS} />
             <View style={px(sw24)}>
-              <TextCard data={crsSummary} itemsPerGroup={3} spaceBetweenItem={32} />
+              <TextCard data={crsSummary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} />
             </View>
           </View>
           {/* {feaSummary.length !== 0 ? (

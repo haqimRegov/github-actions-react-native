@@ -26,9 +26,13 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     updatedFinishedSteps.push("PersonalInformation");
-    const findDeclarations = updatedDisabledSteps.indexOf("FATCADeclaration");
+    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
     if (findDeclarations !== -1) {
       updatedDisabledSteps.splice(findDeclarations, 1);
+    }
+    const findFATCA = updatedDisabledSteps.indexOf("FATCADeclaration");
+    if (findFATCA !== -1) {
+      updatedDisabledSteps.splice(findFATCA, 1);
     }
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };

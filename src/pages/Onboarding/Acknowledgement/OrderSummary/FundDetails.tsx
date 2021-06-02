@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Dimensions, Text, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -33,6 +33,7 @@ export interface FundDetailsProps {
 }
 
 export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, paymentType }: FundDetailsProps) => {
+  const { width } = Dimensions.get("window");
   const {
     distributionInstruction,
     fundClass,
@@ -111,6 +112,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, payment
     backgroundColor: colorGray._5,
     height: sh80,
   };
+  const scaledSpaceBetweenItem = width < 1080 ? 30 : 32;
 
   return (
     <Fragment>
@@ -140,9 +142,9 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, payment
         <CustomSpacer space={sh16} />
         <View style={px(sw24)}>
           {paymentType === "Recurring" ? (
-            <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={32} titleStyle={fsTransformNone} />
+            <TextCard data={recurringSummary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} titleStyle={fsTransformNone} />
           ) : (
-            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={32} titleStyle={fsTransformNone} />
+            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} titleStyle={fsTransformNone} />
           )}
         </View>
         <CustomSpacer space={sh8} />

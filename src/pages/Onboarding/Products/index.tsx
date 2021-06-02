@@ -159,13 +159,16 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
             "PersonalDetails",
             "EmploymentDetails",
             "PersonalInfoSummary",
+            "Declarations",
             "FATCADeclaration",
             "CRSDeclaration",
             "FEADeclaration",
             "DeclarationSummary",
             "OrderSummary",
+            "Acknowledgement",
             "TermsAndConditions",
             "Signatures",
+            "Payment",
           ]
         : [...disabledSteps];
     if (disabledSteps.includes("EmailVerification")) {

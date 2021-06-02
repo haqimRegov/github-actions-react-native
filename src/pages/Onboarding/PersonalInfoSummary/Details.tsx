@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, Dash, IconText, LabeledTitleProps, TextCard } from "../../../components";
 import { Language } from "../../../constants";
@@ -81,6 +81,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   permanentAddress,
   personalDetails,
 }: SummaryDetailsProps) => {
+  const { width } = Dimensions.get("window");
   const headerStyle: ViewStyle = {
     ...centerVertical,
     ...flexRow,
@@ -109,7 +110,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: 32, titleStyle: fsTransformNone };
+  const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: width < 1080 ? 30 : 32, titleStyle: fsTransformNone };
 
   return (
     <View style={px(sw24)}>

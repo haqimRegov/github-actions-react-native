@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Dimensions, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps, TextCard } from "../../components";
 import { Language } from "../../constants";
@@ -35,6 +35,7 @@ export interface FundOverviewProps {
 }
 
 export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, orderNumber, setViewFund, viewFund }: FundOverviewProps) => {
+  const { width } = Dimensions.get("window");
   const {
     distributionInstruction,
     fundClass,
@@ -130,6 +131,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
     AnimationUtils.layout({ duration: 120 });
     setViewFund(expanded === true ? "" : `${orderNumber}${fundName}`);
   };
+  const scaledSpaceBetweenItem = width < 1080 ? 30 : 32;
 
   return (
     <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8 }}>
@@ -145,7 +147,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
           <View style={borderBottomBlack21} />
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
-            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={32} titleStyle={fsTransformNone} />
+            <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} titleStyle={fsTransformNone} />
             <CustomSpacer space={sh8} />
           </View>
         </Fragment>

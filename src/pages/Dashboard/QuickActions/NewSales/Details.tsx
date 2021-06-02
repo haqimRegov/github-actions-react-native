@@ -11,7 +11,7 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
-import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh143, sh172, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
+import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh140, sh172, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -132,7 +132,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             <CustomDatePicker
               disabled={clientType !== "" && holderToFill === "principalHolder"}
               placeholder={ADD_CLIENT.PLACEHOLDER_DATE}
-              datePickerStyle={{ height: sh143 }}
+              datePickerStyle={{ height: sh140 }}
               dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
               setValue={setInputDateOfBirth}

@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Dimensions, ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import {
   AdvancedDropdown,
@@ -59,6 +59,7 @@ interface ProductDetailsProps {
   handleShareDocuments: () => void;
 }
 export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, handleBack }: ProductDetailsProps) => {
+  const { width } = Dimensions.get("window");
   const [masterClassList, setMasterClassList] = useState<IProductClasses | undefined>(undefined);
   const [inputCurrency, setInputCurrency] = useState<string>(fund.masterList[0].currency);
   const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "No Class" : fund.masterList[0].class);
@@ -160,7 +161,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     itemsPerGroup: 5,
     itemStyle: { width: sw144 },
     labelStyle: fs10BoldBlack2,
-    spaceBetweenItem: 16,
+    spaceBetweenItem: width < 1080 ? 15 : 16,
     titleStyle: fs16BoldBlack2,
   };
 

@@ -47,9 +47,9 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
       addPersonalInfo({ ...personalInfo, editDeclaration: true });
     }
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findFea = updatedDisabledSteps.indexOf("FEADeclaration");
-    if (findFea !== -1) {
-      updatedDisabledSteps.splice(findFea, 1);
+    const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+    if (findDeclarationSummary !== -1) {
+      updatedDisabledSteps.splice(findDeclarationSummary, 1);
     }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);

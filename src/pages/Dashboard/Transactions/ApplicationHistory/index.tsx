@@ -19,7 +19,6 @@ import {
   sh153,
   sh16,
   sh24,
-  sh443,
   shadowBlack5,
   sw24,
 } from "../../../../styles";
@@ -213,10 +212,10 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const submissionSummary = `${DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY_DOWNLOADED}`;
 
   const tableContainer: ViewStyle = {
+    ...flexChild,
     backgroundColor: colorWhite._1,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
-    minHeight: sh443,
   };
 
   return (
@@ -244,7 +243,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
               marginHorizontal: sw24,
               backgroundColor: colorWhite._1,
               borderRadius: sw24,
-              ...flexChild,
             }}>
             <CustomSpacer space={sh153} />
             <CustomSpacer space={sh16} />

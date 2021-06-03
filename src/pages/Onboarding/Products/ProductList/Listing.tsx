@@ -206,8 +206,8 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   };
 
   const tableContainer: ViewStyle = {
-    backgroundColor: colorWhite._2,
     ...flexChild,
+    backgroundColor: colorWhite._2,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };

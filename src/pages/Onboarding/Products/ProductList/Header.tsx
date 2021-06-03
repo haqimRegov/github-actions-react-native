@@ -279,7 +279,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           handleCancel={handleCancelFilter}
           handleContinue={handleApplyFilter}
         />
-        <CustomSpacer space={sh32} />
+        <CustomSpacer space={sh16} />
       </Collapsible>
       <CustomSpacer space={sh24} />
     </View>

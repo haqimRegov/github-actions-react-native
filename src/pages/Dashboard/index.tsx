@@ -1,10 +1,11 @@
 import moment from "moment";
 import React, { FunctionComponent, useState } from "react";
-import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Image, ImageStyle, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/LocalAssets";
-import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SafeAreaPage, SideMenu } from "../../components";
+import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
 import { DAY_FORMAT, FULL_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_AIMS_URL } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
@@ -15,6 +16,8 @@ import {
   borderBottomGray4,
   centerVertical,
   colorBlue,
+  colorGray,
+  flexChild,
   flexRow,
   fs10RegBlue2,
   fs12BoldBlue2,
@@ -46,6 +49,7 @@ interface DashboardPageProps extends TransactionsStoreProps {
 }
 
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, navigation, unreadMessages }: DashboardPageProps) => {
+  const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
   const [route, setRoute] = useState<DashboardPageType>("Transactions");
 
@@ -109,6 +113,8 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
           .join("")
       : "";
 
+  const logoAimsStyle: ImageStyle = { height: sh32, width: sw66, resizeMode: "contain" };
+
   return (
     <View style={{ ...flexRow, ...fullHW }}>
       <SideMenu spaceToBottom={0} spaceToContent={sh32}>
@@ -141,7 +147,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
         <View style={borderBottomGray4} />
         <TouchableWithoutFeedback onPress={handleAims}>
           <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-            <Image source={LocalAssets.logo.aims} style={{ height: sh32, width: sw66 }} />
+            <Image source={LocalAssets.logo.aims} style={logoAimsStyle} />
             <CustomFlexSpacer />
             <IcoMoon color={colorBlue._2} name="external" size={sh24} />
           </View>
@@ -149,7 +155,10 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
         <View style={borderBottomGray4} />
       </SideMenu>
       <CustomSpacer isHorizontal={true} space={sw200} />
-      <SafeAreaPage>{content}</SafeAreaPage>
+      <View style={{ ...flexChild, backgroundColor: colorGray._5 }}>
+        <CustomSpacer space={top} />
+        {content}
+      </View>
     </View>
   );
 };

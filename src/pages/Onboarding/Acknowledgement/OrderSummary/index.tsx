@@ -98,17 +98,17 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
                   })}
               </View>
             </View>
-            <View style={flexRow}>
-              <Text style={fs16RegBlack2}>{ORDER_SUMMARY.LABEL_RECURRING}</Text>
-              <CustomSpacer isHorizontal={true} space={sw4} />
-              {orders !== undefined && orders.grandTotalRecurring !== undefined ? (
+            {orders !== undefined && orders.grandTotalRecurring ? (
+              <View style={flexRow}>
+                <Text style={fs16RegBlack2}>{ORDER_SUMMARY.LABEL_RECURRING}</Text>
+                <CustomSpacer isHorizontal={true} space={sw4} />
                 <View style={{ ...centerVertical, ...flexRow }}>
                   <Text style={fs16RegBlack2}>{orders.grandTotalRecurring.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <Text style={fs16RegBlack2}>{formatAmount(orders.grandTotalRecurring.amount)}</Text>
                 </View>
-              ) : null}
-            </View>
+              </View>
+            ) : null}
           </View>
         </View>
       </View>

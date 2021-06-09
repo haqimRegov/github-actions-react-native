@@ -165,8 +165,8 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const continueDisabled = findSavedPayment.findIndex((payment) => payment.saved === true) === -1;
 
   return (
-    <Fragment>
-      <SafeAreaPage>
+    <SafeAreaPage>
+      <View style={flexChild}>
         <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={flexChild}>
             <CustomSpacer space={sh32} />
@@ -188,6 +188,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 };
                 return (
                   <Fragment key={index}>
+                    {index === 0 ? null : (
+                      <Fragment>
+                        <View style={borderBottomBlack21} />
+                      </Fragment>
+                    )}
                     <BlurView visible={activeOrder === "" || activeOrder === order.orderNumber}>
                       <CustomSpacer space={sh24} />
                       <View style={{ ...px(sw24), ...shadow5 }}>
@@ -204,11 +209,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                       </View>
                       <CustomSpacer space={sh24} />
                     </BlurView>
-                    {index !== 0 ? null : (
-                      <Fragment>
-                        <View style={borderBottomBlack21} />
-                      </Fragment>
-                    )}
                   </Fragment>
                 );
               })}
@@ -245,9 +245,9 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             label={bannerText}
           />
         )}
-      </SafeAreaPage>
+      </View>
       <PaymentPopup handleDone={handleResetOnboarding} loading={loading} result={paymentResult} />
-    </Fragment>
+    </SafeAreaPage>
   );
 };
 export const Payment = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(PaymentComponent);

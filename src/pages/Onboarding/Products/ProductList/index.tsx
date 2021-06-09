@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer, RoundedButton } from "../../../../components";
+import { CustomSpacer, RoundedButton, SafeAreaPage } from "../../../../components";
 import { Language } from "../../../../constants";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
 import { flexChild, flexGrow, px, sh152, sh32, sh56, sh810, sw24 } from "../../../../styles";
@@ -74,28 +74,30 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={flexGrow}
-      keyboardShouldPersistTaps="handled"
-      scrollEnabled={scrollEnabled}
-      showsVerticalScrollIndicator={false}>
-      <View style={flexChild}>
-        <View style={{ minHeight: sh810 }}>
-          <ProductTabs accountType={accountType} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
-          {content}
+    <SafeAreaPage>
+      <ScrollView
+        contentContainerStyle={flexGrow}
+        keyboardShouldPersistTaps="handled"
+        scrollEnabled={scrollEnabled}
+        showsVerticalScrollIndicator={false}>
+        <View style={flexChild}>
+          <View style={{ minHeight: sh810 }}>
+            <ProductTabs accountType={accountType} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
+            {content}
+          </View>
+          <Fragment>
+            {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
+            {selectedFunds.length === 0 ? (
+              <View style={px(sw24)}>
+                <CustomSpacer space={sh32} />
+                <RoundedButton onPress={handleCancelProducts} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
+                <CustomSpacer space={sh56} />
+              </View>
+            ) : null}
+          </Fragment>
         </View>
-        <Fragment>
-          {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
-          {selectedFunds.length === 0 ? (
-            <View style={px(sw24)}>
-              <CustomSpacer space={sh32} />
-              <RoundedButton onPress={handleCancelProducts} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
-              <CustomSpacer space={sh56} />
-            </View>
-          ) : null}
-        </Fragment>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaPage>
   );
 };
 

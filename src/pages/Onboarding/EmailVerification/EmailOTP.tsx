@@ -10,6 +10,7 @@ import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, 
 import { IcoMoon } from "../../../icons";
 import { emailOtpVerification } from "../../../network-actions";
 import {
+  centerHorizontal,
   colorWhite,
   flexGrow,
   flexRow,
@@ -160,7 +161,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         <CustomSpacer space={sh56} />
         <View style={flexRow}>
           <CustomSpacer space={sw4} />
-          <View>
+          <View style={{ ...centerHorizontal, height: sh32 }}>
             <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw20} />

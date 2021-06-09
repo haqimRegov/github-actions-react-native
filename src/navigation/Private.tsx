@@ -2,12 +2,15 @@ import "react-native-gesture-handler";
 
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import moment from "moment";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
+import { AppState, AppStateStatus } from "react-native";
+import UserInactivity from "react-native-user-inactivity";
 
 import { LocalAssets } from "../assets/LocalAssets";
 import { PromptModal } from "../components";
 import { Language } from "../constants";
-import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS } from "../data/dictionary";
+import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";
 import { logout } from "../network-actions";
 import { DashboardPage, LogoutPage, OnboardingPage } from "../pages";
 import { fs16BoldBlack2 } from "../styles";
@@ -16,13 +19,19 @@ const { INACTIVITY } = Language.PAGE;
 
 const { Navigator, Screen } = createStackNavigator();
 
+type AppStateType = "foreground" | "inactive" | "background";
+type InactivityStatusType = "active" | AppStateType;
+
 export const PrivateRoute: FunctionComponent = () => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const [active, setActive] = useState(true);
+  const appState = useRef<AppStateType>("foreground");
+  const expired = useRef<boolean>(false);
+  const lastActive = useRef<number | undefined>(undefined);
+  const [inactivityStatus, setInactivityStatus] = useState<InactivityStatusType>("active");
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const handleExtend = () => {
-    setActive(true);
+    setInactivityStatus("active");
     setTimeout(() => {
       setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
     }, 150);
@@ -30,16 +39,34 @@ export const PrivateRoute: FunctionComponent = () => {
 
   const handleLogout = async () => {
     await logout(navigation);
-    setActive(true);
+    setInactivityStatus("active");
   };
 
-  // const handleInactivity = (isActive: boolean) => {
-  //   setActive(isActive);
-  // };
+  const handleInactivity = (isActive: boolean) => {
+    const isExpired = moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER;
+    expired.current = isExpired;
+    setInactivityStatus(isActive === true ? "active" : appState.current);
+  };
+
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (nextAppState === "inactive" || nextAppState === "background") {
+      lastActive.current = parseInt(moment().format("x"), 10);
+      appState.current = nextAppState;
+    } else if (expired.current === false) {
+      lastActive.current = undefined;
+    }
+  };
 
   useEffect(() => {
+    AppState.addEventListener("change", handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener("change", handleAppStateChange);
+    };
+  }, []);
+  useEffect(() => {
     let clockDrift: ReturnType<typeof setTimeout>;
-    if (countdown > 0 && active === false) {
+    if (countdown > 0 && inactivityStatus !== "active" && expired.current === false) {
       clockDrift = setInterval(() => {
         setCountdown(countdown - 1);
       }, 1000);
@@ -47,11 +74,11 @@ export const PrivateRoute: FunctionComponent = () => {
     return () => {
       clearInterval(clockDrift);
     };
-  }, [countdown, active]);
+  }, [countdown, inactivityStatus, expired]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (active === false) {
+      if (inactivityStatus !== "active") {
         handleLogout();
       }
     }, DICTIONARY_INACTIVITY_COUNTDOWN);
@@ -59,33 +86,34 @@ export const PrivateRoute: FunctionComponent = () => {
       clearTimeout(timeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
+  }, [inactivityStatus]);
 
   const defaultOptions = { animationEnabled: false };
-  const subtitle = `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
+  const subtitle =
+    expired.current === true
+      ? INACTIVITY.LABEL_SIGN_IN
+      : `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
 
   return (
     <Fragment>
-      {/* <UserInactivity isActive={active} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}> */}
-      <Navigator initialRouteName="Dashboard" headerMode="none">
-        <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
-        <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
-        <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
-      </Navigator>
-      {/* </UserInactivity> */}
+      <UserInactivity isActive={inactivityStatus === "active"} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
+        <Navigator initialRouteName="Dashboard" headerMode="none">
+          <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
+          <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
+          <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
+        </Navigator>
+      </UserInactivity>
       <PromptModal
-        handleCancel={handleLogout}
-        handleContinue={handleExtend}
+        handleCancel={expired.current === true ? undefined : handleLogout}
+        handleContinue={expired.current === true ? handleLogout : handleExtend}
         illustration={LocalAssets.illustration.sessionExpired}
-        label={INACTIVITY.TITLE}
+        label={expired.current === true ? INACTIVITY.TITLE_EXPIRED : INACTIVITY.TITLE}
         labelCancel={INACTIVITY.BUTTON_NO}
-        labelContinue={INACTIVITY.BUTTON_YES}
+        labelContinue={expired.current === true ? INACTIVITY.BUTTON_PROCEED : INACTIVITY.BUTTON_YES}
         title={subtitle}
         titleStyle={fs16BoldBlack2}
-        visible={!active}
+        visible={inactivityStatus !== "active"}
       />
-      {/* <PromptModal handleContinue={handleLogout} labelContinue={INACTIVITY.BUTTON_YES} title={INACTIVITY.TITLE} visible={!active} /> */}
-      {/* <Text style={fs16BoldBlack2}>{subtitle}</Text> */}
     </Fragment>
   );
 };

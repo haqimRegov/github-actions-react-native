@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { GestureResponderEvent, Image, ImageStyle, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 
 import { LocalAssets } from "../../../../assets/LocalAssets";
-import { CustomSpacer, IconButton, RoundedButton, SafeAreaPage, SignatureModal } from "../../../../components";
+import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
 import {
@@ -14,6 +14,7 @@ import {
   colorBlue,
   colorGray,
   colorWhite,
+  flexChild,
   flexGrow,
   flexRow,
   fs24BoldBlack2,
@@ -106,8 +107,8 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   };
 
   return (
-    <SafeAreaPage>
-      <View>
+    <Fragment>
+      <View style={flexChild}>
         <ScrollView
           ref={setScrollRef}
           contentContainerStyle={flexGrow}
@@ -174,6 +175,6 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         title={signerLabel}
         visible={showSignPdf}
       />
-    </SafeAreaPage>
+    </Fragment>
   );
 };

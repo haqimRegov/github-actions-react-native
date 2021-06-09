@@ -43,8 +43,8 @@ import {
   sw120,
   sw16,
   sw24,
-  sw240,
   sw40,
+  sw432,
   sw5,
   sw64,
 } from "../../../styles";
@@ -160,13 +160,14 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
                     <Avatar size={sw120} text={initials} textStyle={fs40BoldWhite1} type="agent" />
                   </View>
                   <CustomSpacer isHorizontal={true} space={sw40} />
-                  <View style={{ width: sw240 }}>
+                  <View>
                     <LabeledTitle
                       label={PROFILE.LABEL_NAME}
                       labelStyle={{ lineHeight: sh16 }}
                       spaceToLabel={sh8}
                       title={agent!.name!}
                       titleStyle={fs16BoldBlack2}
+                      style={{ maxWidth: sw432 }}
                     />
                     <CustomSpacer space={sh16} />
                     <LabeledTitle

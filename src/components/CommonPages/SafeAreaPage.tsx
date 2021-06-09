@@ -1,33 +1,41 @@
 import React, { Fragment, ReactNode } from "react";
-import { SafeAreaView, StatusBar, StatusBarStyle, ViewStyle } from "react-native";
+import { StatusBar, StatusBarStyle, View, ViewStyle } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colorGray, flexChild, flexNone } from "../../styles";
+import { colorGray, flexChild } from "../../styles";
 
 interface SafeArePageProps {
   barStyle?: StatusBarStyle;
   bottomBackgroundColor?: string;
+  bottomSpace?: number;
   children: ReactNode;
   topBackgroundColor?: string;
 }
 
-export const SafeAreaPage = ({ barStyle, bottomBackgroundColor, children, topBackgroundColor }: SafeArePageProps) => {
+export const SafeAreaPage = ({ barStyle, bottomBackgroundColor, bottomSpace, children, topBackgroundColor }: SafeArePageProps) => {
+  const { top } = useSafeAreaInsets();
   const defaultBarStyle = barStyle !== undefined ? barStyle : "default";
 
-  const safeAreaTopStyle: ViewStyle = {
-    ...flexNone,
+  const topStyle: ViewStyle = {
     backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorGray._5,
+    height: top,
   };
 
-  const safeAreaBottomStyle: ViewStyle = {
-    ...flexChild,
+  const bottomStyle: ViewStyle = {
     backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorGray._5,
+    height: bottomSpace !== undefined ? bottomSpace : 0,
   };
 
   return (
     <Fragment>
       <StatusBar barStyle={defaultBarStyle} />
-      <SafeAreaView style={safeAreaTopStyle} />
-      <SafeAreaView style={safeAreaBottomStyle}>{children}</SafeAreaView>
+      <View style={flexChild}>
+        <View style={topStyle} />
+        <View style={{ ...flexChild, backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorGray._5 }}>
+          {children}
+        </View>
+        <View style={bottomStyle} />
+      </View>
     </Fragment>
   );
 };

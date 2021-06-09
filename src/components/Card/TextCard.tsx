@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { fs12BoldBlack2, fs16BoldBlack1, fsCapitalize, sh16, sh8, sw144, sw16, sw240, sw32 } from "../../styles";
+import { fs12BoldBlack2, fs16BoldBlack1, fsCapitalize, sh16, sw144, sw16, sw240, sw32 } from "../../styles";
 import { LabeledTitle, LabeledTitleProps } from "../Views/LabeledTitle";
 import { CustomCard } from "./Custom";
 
@@ -26,9 +26,7 @@ export const TextCard: FunctionComponent<TextCardProps> = ({
   titleStyle,
   ...customCardProps
 }: TextCardProps) => {
-  // TODO this component is created for personal information summary
-  // TODO spacing in between items is constant
-  const defaultSpaceToLabel = spaceToLabel !== undefined ? spaceToLabel : sh8;
+  const defaultSpaceToLabel = spaceToLabel !== undefined ? spaceToLabel : 0;
   const items = data.map((item: LabeledTitleProps, index: number) => {
     const itemDefaultStyle: ViewStyle = { width: sw240, ...itemStyle, ...item.style };
     return (
@@ -36,7 +34,7 @@ export const TextCard: FunctionComponent<TextCardProps> = ({
         <LabeledTitle
           {...item}
           iconSize={item.iconSize !== undefined ? item.iconSize : sw16}
-          labelStyle={{ ...fs12BoldBlack2, lineHeight: sh16, ...labelStyle, ...item.labelStyle }}
+          labelStyle={{ ...fs12BoldBlack2, ...labelStyle, ...item.labelStyle }}
           onPress={item.onPress}
           spaceToLabel={defaultSpaceToLabel}
           style={{ minWidth: sw144, ...item.style }}

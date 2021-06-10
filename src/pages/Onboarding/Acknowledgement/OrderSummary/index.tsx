@@ -31,6 +31,7 @@ import {
   sw376,
   sw4,
   sw588,
+  sw7,
   sw8,
 } from "../../../../styles";
 import { formatAmount } from "../../../../utils";
@@ -73,7 +74,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
       <View style={orderSummaryHeader}>
         <Text style={fs16SemiBoldBlack2}>{ORDER_SUMMARY.SUBHEADING}</Text>
         <CustomSpacer isHorizontal={true} space={sw12} />
-        <CustomTooltip content={popupContent} contentStyle={{ width: sw376 }} />
+        <CustomTooltip arrowSize={{ width: sw12, height: sw7 }} content={popupContent} contentStyle={{ width: sw376 }} />
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...px(sw24) }}>

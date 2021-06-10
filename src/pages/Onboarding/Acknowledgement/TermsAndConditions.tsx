@@ -3,10 +3,9 @@ import { Text, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
-import { CheckBox, ContentPage, CustomAccordion, CustomFlexSpacer, CustomPopup, CustomSpacer, LinkText } from "../../../components";
+import { CheckBox, ContentPage, CustomAccordion, CustomFlexSpacer, CustomSpacer, CustomTooltip, LinkText } from "../../../components";
 import { Language } from "../../../constants/language";
 import { CRS, DICTIONARY_LINK_FULL_TERMS, FATCA, PRS, UTAndAMP } from "../../../data/dictionary";
-import { IcoMoon } from "../../../icons";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   alignItemsStart,
@@ -15,6 +14,7 @@ import {
   disabledOpacity,
   flexRow,
   fs12BoldBlack2,
+  fs12BoldWhite1,
   fs12SemiBoldBlue2,
   fs16SemiBoldBlack2,
   justifyContentEnd,
@@ -27,6 +27,8 @@ import {
   sh8,
   sw12,
   sw24,
+  sw265,
+  sw7,
   sw800,
 } from "../../../styles";
 
@@ -127,9 +129,11 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             <View style={termsHeader}>
               <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
               <CustomSpacer isHorizontal={true} space={sw12} />
-              <CustomPopup popupText={TERMS_AND_CONDITIONS.POPUP_TERMS}>
-                <IcoMoon name="info" size={sw24} />
-              </CustomPopup>
+              <CustomTooltip
+                arrowSize={{ width: sw12, height: sw7 }}
+                content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
+                contentStyle={{ width: sw265 }}
+              />
               <CustomFlexSpacer />
               <View style={justifyContentEnd}>
                 <LinkText onPress={handleExpandAll} style={{ ...fs12SemiBoldBlue2, lineHeight: sh16 }} text={headerText} />

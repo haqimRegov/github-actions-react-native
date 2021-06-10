@@ -19,6 +19,7 @@ import {
   sw317,
   sw32,
   sw600,
+  sw7,
 } from "../../../../styles";
 import { formatAmount, isAmount } from "../../../../utils";
 import { FeaTerms } from "./Declaration";
@@ -85,6 +86,7 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
           <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.LABEL_MALAYSIAN}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
           <CustomTooltip
+            arrowSize={{ width: sw12, height: sw7 }}
             content={
               <View>
                 <Text style={fs12BoldWhite1}>{DECLARATIONS.TOOLTIP_RESIDENT}</Text>

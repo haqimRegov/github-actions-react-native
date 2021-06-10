@@ -15,6 +15,7 @@ import {
   sh8,
   sw12,
   sw24,
+  sw7,
 } from "../../../../styles";
 import { FatcaTerms } from "./Declaration";
 import { FatcaUSBorn } from "./USBorn";
@@ -148,6 +149,7 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
           <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.LABEL_CITIZEN}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
           <CustomTooltip
+            arrowSize={{ width: sw12, height: sw7 }}
             content={
               <View>
                 <Text style={fs12BoldWhite1}>{DECLARATIONS.TOOLTIP_US_CITIZEN}</Text>

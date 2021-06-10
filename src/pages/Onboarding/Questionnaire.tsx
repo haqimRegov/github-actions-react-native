@@ -43,6 +43,7 @@ import {
   sh56,
   sh8,
   sw1,
+  sw12,
   sw140,
   sw16,
   sw20,
@@ -51,6 +52,7 @@ import {
   sw256,
   sw326,
   sw432,
+  sw7,
   sw8,
 } from "../../styles";
 import { isObjectEqual } from "../../utils";
@@ -348,7 +350,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                                 {index < 2 ? (
                                   <Fragment>
                                     <CustomSpacer isHorizontal={true} space={sw20} />
-                                    <CustomTooltip content={defaultCondition} />
+                                    <CustomTooltip content={defaultCondition} arrowSize={{ width: sw12, height: sw7 }} />
                                   </Fragment>
                                 ) : null}
                               </View>

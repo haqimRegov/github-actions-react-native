@@ -10,7 +10,7 @@ import {
   DICTIONARY_OCCUPATION,
   ERROR,
 } from "../../../data/dictionary";
-import { px, sh136, sh24, sh32, sw24 } from "../../../styles";
+import { px, sh136, sh176, sh24, sh32, sw24 } from "../../../styles";
 import { formatNumber, isNumber } from "../../../utils";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -74,6 +74,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;
   const labelEmployer = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_NAME : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME;
   const addressType = inputCountry !== "Malaysia" ? "Other" : "Malaysia";
+  const countryHeight = accountType === "Joint" && accountHolder !== "Joint" ? sh176 : sh136;
 
   return (
     <View style={px(sw24)}>
@@ -108,7 +109,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       <CustomSpacer space={sh32} />
       <AddressField
         addressType={addressType}
-        countryDropdownStyle={{ height: sh136 }}
+        countryDropdownStyle={{ height: countryHeight }}
         inputAddress={inputAddress}
         inputCity={inputCity}
         inputCountry={inputCountry}

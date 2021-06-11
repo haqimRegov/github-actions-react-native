@@ -106,6 +106,14 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
     zIndex: 1,
   };
 
+  const handleContinue = () => {
+    if (editReceipt !== undefined && editReceipt.completed === true) {
+      handleBack();
+    } else {
+      handleSave();
+    }
+  };
+
   return (
     <Fragment>
       <View style={flexChild}>
@@ -144,7 +152,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
             {completed === true ? (
               <View style={px(sw20)}>
                 <CustomSpacer space={sh24} />
-                <RoundedButton onPress={handleSave} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
+                <RoundedButton onPress={handleContinue} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
                 <CustomSpacer space={sh56} />
               </View>
             ) : null}

@@ -72,7 +72,7 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
               title={EMPLOYMENT_DETAILS.SUBHEADING}
               titleStyle={fs16SemiBoldBlack2}
             />
-            <View style={padding}>
+            <View>
               <EmploymentInfo
                 accountType={accountType}
                 accountHolder="Joint"

@@ -36,6 +36,7 @@ export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps
           titleStyle={fs16SemiBoldBlack2}
         />
         <IDDetails
+          accountType={accountType}
           addressInfo={addressInfo}
           personalDetails={personalDetails}
           setAddressInfo={setAddressInfo}

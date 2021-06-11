@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { CustomSpacer, RoundedButton, SafeAreaPage } from "../../../../components";
 import { Language } from "../../../../constants";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
-import { flexChild, flexGrow, px, sh152, sh32, sh56, sh810, sw24 } from "../../../../styles";
+import { flexChild, flexGrow, px, sh152, sh16, sh56, sh810, sw24 } from "../../../../styles";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 import { ProductTabs } from "./Tabs";
 
@@ -89,7 +89,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
             {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
             {selectedFunds.length === 0 ? (
               <View style={px(sw24)}>
-                <CustomSpacer space={sh32} />
+                <CustomSpacer space={sh16} />
                 <RoundedButton onPress={handleCancelProducts} secondary={true} text={PRODUCT_LIST.BUTTON_CANCEL} />
                 <CustomSpacer space={sh56} />
               </View>

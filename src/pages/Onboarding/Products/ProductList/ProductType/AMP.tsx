@@ -7,7 +7,7 @@ import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { colorWhite, flexChild, sh248, sh296, shadowBlack116, sw24 } from "../../../../../styles";
+import { colorWhite, flexChild, sh232, sh272, shadowBlack116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -52,7 +52,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     .flat(1)
     .filter((value) => value !== "");
 
-  const absoluteHeaderSpace = filterValues.length > 0 ? sh296 : sh248;
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh272 : sh232;
 
   const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);

@@ -1,7 +1,8 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { TextInput, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
+import { LocalAssets } from "../../../../assets/LocalAssets";
 import { ActionButtons, CustomSpacer, IconButton, IconInput, LinkText, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
@@ -19,11 +20,15 @@ import {
   fs12SemiBoldBlue38,
   fs16SemiBoldBlack2,
   fullWidth,
+  justifyContentEnd,
   px,
   sh120,
   sh16,
   sh24,
   sh32,
+  sh34,
+  sh38,
+  sh40,
   sh48,
   shadowBlack5,
   sw1,
@@ -31,10 +36,11 @@ import {
   sw218,
   sw24,
   sw30,
-  sw32,
-  sw40,
+  sw48,
   sw696,
   sw8,
+  sw80,
+  sw84,
 } from "../../../../styles";
 import { ProductFilter, ProductFilterProps } from "./Filter";
 
@@ -64,9 +70,6 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const { filter } = filterProps;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   const [showMorePills, setShowMorePills] = useState<boolean>(false);
-  // const [showMore, setShowMore] = useState<{ active: boolean; number: number }>({ active: false, number: 0 });
-  // const [filter, setFilter] = useState<IProductFilter>();
-  // const [filterLabelShow, setFilterLabelShow] = useState<boolean>(true);
 
   const filterKeys = Object.keys(filter);
 
@@ -106,32 +109,15 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     setShowMorePills(false);
   };
 
-  // const handleFilterLabel = () => {
-  //   setFilterLabelShow(!filterLabelShow);
-  // };
-
-  // const handleShowAllFilter = () => {
-  //   setShowMorePills(!showMorePills);
-  // };
-
   const handleCancelFilter = () => {
     handleCancel();
     handleShowFilter();
   };
 
-  // const handlePills = async () => {
-  //   const count = await CalculateCount(filterTags, 688, 32);
-  //   setShowMore({ ...showMore, number: count });
-  // };
-
   const handleApplyFilter = () => {
     handleConfirm();
     handleShowFilter();
-    // handlePills();
   };
-
-  // const overlay = filterVisible ? fullHeight : {};
-  // const overflow: ViewStyle = showMorePills ? {} : { height: sh48, overflow: "hidden" };
 
   const handleShowAllFilter = () => {
     setShowMorePills(!showMorePills);
@@ -147,8 +133,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     handleUpdateFilter(filterClone);
   };
 
-  // const overlay = filterVisible ? fullHeight : {};
-  const overflow: ViewStyle = showMorePills ? {} : { height: sh48, overflow: "hidden" };
+  const overflow: ViewStyle = showMorePills ? {} : { height: sh40, overflow: "hidden" };
 
   const container: ViewStyle = {
     ...shadowBlack5,
@@ -165,42 +150,18 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const filterBGColor = filterVisible ? colorBlue._2 : colorWhite._1;
   const filterBorderColor = filterVisible ? colorBlue._2 : colorGray._3;
   const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
+  const filterIcon = filterVisible ? "close" : "filter";
+  const filterIconSize = filterVisible ? sh32 : sh24;
+  const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
+  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh38 };
 
-  const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
 
   const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
-  // useEffect(() => {
-  //   // setFilter(selectedFilter);
-  //   const filterTimer = setTimeout(() => {
-  //     setFilterLabelShow(false);
-  //   }, 3000);
-  //   return () => {
-  //     clearTimeout(filterTimer);
-  //   };
-  // }, []);
-
-  // const handleWidth = async (event: LayoutChangeEvent) => {
-  //   const { height, width } = event.nativeEvent.layout;
-  //   if (showMore.active === false) {
-  //     if (width >= 826) {
-  //       setShowMore({ ...showMore, active: true });
-  //     }
-  //   } else if ((height < sh24 && showMore.active === true) || width < 826) {
-  //     setShowMore({ ...showMore, active: false, number: 0 });
-  //   }
-  // };
-  // const showMoreText = `+${showMore.number} More`;
-  // console.log("showMore", showMore);
-  // useEffect(() => {
-  //   handlePills();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <View style={container}>
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
       <View style={{ ...centerVertical, ...flexRow }}>
         <CustomSpacer isHorizontal={true} space={sw24} />
         <IconInput
@@ -217,26 +178,13 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           value={inputSearch}
           viewStyle={{ borderRadius: sw100, height: sh48 }}
         />
-        {/* <CustomTooltip
-          color={colorWhite._1}
-          topAdjustment={32}
-          contentStyle={{ ...px(0), ...py(0), height: sh28, width: sw84, ...centerHV }}
-          showChild={false}
-          overlayColor={colorTransparent}
-          tooltipStyle={shadow}
-          isVisible={false}
-          content={<Text style={{ ...fs12RegBlue2, letterSpacing: -sw033 }}>Filter</Text>}
-          placement="top"
-          onClose={handleFilterLabel}> */}
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <CustomSpacer isHorizontal={true} space={sw32} />
-          <TouchableWithoutFeedback onPress={handlePressFilter}>
-            <IconButton color={filterColor} onPress={handlePressFilter} name="filter" size={sh24} style={filterContainer} />
-          </TouchableWithoutFeedback>
-          <CustomSpacer isHorizontal={true} space={sw40} />
+        <View style={{ width: sw80 }}>
+          {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}
+          <View style={centerVertical}>
+            <IconButton color={filterColor} onPress={handlePressFilter} name={filterIcon} size={filterIconSize} style={filterContainer} />
+          </View>
         </View>
-        {/* </CustomTooltip> */}
-        {/* <CustomSpacer isHorizontal={true} space={sw2} /> */}
+        <CustomSpacer isHorizontal={true} space={sw24} />
       </View>
       {filterVisible || pillList.length === 0 ? null : (
         <View style={px(sw24)}>
@@ -262,7 +210,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
               })}
             </View>
             <CustomSpacer isHorizontal={true} space={sw30} />
-            <View style={{ ...centerHorizontal, height: sh48 }}>
+            <View style={{ ...justifyContentEnd, height: sh40 }}>
               <LinkText onPress={handleShowAllFilter} text={showLabel} style={{ ...fs12BoldBlue2, height: sh24, lineHeight: sh24 }} />
             </View>
           </View>
@@ -270,7 +218,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
       )}
       <Collapsible collapsed={!filterVisible} duration={300}>
         <ProductFilter {...filterProps} />
-        <CustomSpacer space={sh32} />
+        <CustomSpacer space={sh40} />
         <ActionButtons
           buttonContainerStyle={centerHorizontal}
           cancelButtonStyle={{ width: sw218 }}

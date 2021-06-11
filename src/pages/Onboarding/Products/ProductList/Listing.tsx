@@ -5,6 +5,7 @@ import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, LinkText, Men
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
+  borderBottomGray4,
   centerHV,
   centerVertical,
   colorRed,
@@ -17,7 +18,7 @@ import {
   fsUppercase,
   px,
   py,
-  sh15,
+  sh16,
   sh2,
   sh32,
   sh4,
@@ -228,7 +229,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           borderBottomRightRadius: sw24,
           borderBottomLeftRadius: sw24,
         }}>
-        <View style={flexRow}>
+        <View style={{ ...flexRow, ...centerVertical }}>
           <CustomSpacer isHorizontal={true} space={sw20} />
           <Tag color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
           <CustomSpacer isHorizontal={true} space={sw8} />
@@ -239,7 +240,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
           <CustomSpacer isHorizontal={true} space={sw24} />
         </View>
-        <CustomSpacer space={sh15} />
+        <CustomSpacer space={sh8} />
+        <View style={borderBottomGray4} />
+        <CustomSpacer space={sh16} />
         <View style={tableContainer}>
           <AdvanceTable
             // activeAccordion={activeAccordion}

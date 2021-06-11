@@ -6,6 +6,7 @@ import { LocalAssets } from "../../../../assets/LocalAssets";
 import { ActionButtons, CustomSpacer, IconButton, IconInput, LinkText, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
+  absolutePosition,
   centerHorizontal,
   centerHV,
   centerVertical,
@@ -22,8 +23,10 @@ import {
   fullWidth,
   justifyContentEnd,
   px,
+  sh118,
   sh120,
   sh16,
+  sh2,
   sh24,
   sh32,
   sh34,
@@ -136,15 +139,24 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const overflow: ViewStyle = showMorePills ? {} : { height: sh40, overflow: "hidden" };
 
   const container: ViewStyle = {
+    ...absolutePosition,
     ...shadowBlack5,
     ...fullWidth,
     backgroundColor: colorWhite._1,
-    marginBottom: sh24,
     borderBottomLeftRadius: sw24,
     borderBottomRightRadius: sw24,
-    position: "absolute",
+    marginBottom: sh24,
     top: sh120,
     zIndex: 1,
+  };
+
+  const shadowFix: ViewStyle = {
+    ...absolutePosition,
+    ...fullWidth,
+    backgroundColor: colorWhite._1,
+    height: sh2,
+    top: sh118,
+    zIndex: 2,
   };
 
   const filterBGColor = filterVisible ? colorBlue._2 : colorWhite._1;
@@ -160,76 +172,79 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
   return (
-    <View style={container}>
-      <CustomSpacer space={sh24} />
-      <View style={{ ...centerVertical, ...flexRow }}>
-        <CustomSpacer isHorizontal={true} space={sw24} />
-        <IconInput
-          autoCorrect={false}
-          icon="search"
-          iconInputRef={searchInputRef}
-          onChangeText={setInputSearch}
-          onSubmitEditing={handleSearch}
-          placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
-          placeholderTextColor={colorBlack._2_5}
-          returnKeyType="search"
-          setIconInputRef={setSearchInputRef}
-          style={inputStyle}
-          value={inputSearch}
-          viewStyle={{ borderRadius: sw100, height: sh48 }}
-        />
-        <View style={{ width: sw80 }}>
-          {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}
-          <View style={centerVertical}>
-            <IconButton color={filterColor} onPress={handlePressFilter} name={filterIcon} size={filterIconSize} style={filterContainer} />
+    <View>
+      <View style={shadowFix} />
+      <View style={container}>
+        <CustomSpacer space={sh24} />
+        <View style={{ ...centerVertical, ...flexRow }}>
+          <CustomSpacer isHorizontal={true} space={sw24} />
+          <IconInput
+            autoCorrect={false}
+            icon="search"
+            iconInputRef={searchInputRef}
+            onChangeText={setInputSearch}
+            onSubmitEditing={handleSearch}
+            placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
+            placeholderTextColor={colorBlack._2_5}
+            returnKeyType="search"
+            setIconInputRef={setSearchInputRef}
+            style={inputStyle}
+            value={inputSearch}
+            viewStyle={{ borderRadius: sw100, height: sh48 }}
+          />
+          <View style={{ width: sw80 }}>
+            {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}
+            <View style={centerVertical}>
+              <IconButton color={filterColor} onPress={handlePressFilter} name={filterIcon} size={filterIconSize} style={filterContainer} />
+            </View>
           </View>
+          <CustomSpacer isHorizontal={true} space={sw24} />
         </View>
-        <CustomSpacer isHorizontal={true} space={sw24} />
+        {filterVisible || pillList.length === 0 ? null : (
+          <View style={px(sw24)}>
+            <View style={flexRow}>
+              <View style={{ ...flexRow, ...flexWrap, ...overflow, width: sw696 }}>
+                {pillList.map((pill: string, index: number) => {
+                  const handlePress = () => {
+                    handleRemoveFilter(pill);
+                  };
+                  return (
+                    <Fragment key={index}>
+                      {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
+                      <Tag
+                        color="secondary"
+                        icon="close"
+                        onPress={handlePress}
+                        text={pill}
+                        textStyle={fs12SemiBoldBlue38}
+                        style={{ marginRight: undefined, marginTop: sh16 }}
+                      />
+                    </Fragment>
+                  );
+                })}
+              </View>
+              <CustomSpacer isHorizontal={true} space={sw30} />
+              <View style={{ ...justifyContentEnd, height: sh40 }}>
+                <LinkText onPress={handleShowAllFilter} text={showLabel} style={{ ...fs12BoldBlue2, height: sh24, lineHeight: sh24 }} />
+              </View>
+            </View>
+          </View>
+        )}
+        <Collapsible collapsed={!filterVisible} duration={300}>
+          <ProductFilter {...filterProps} />
+          <CustomSpacer space={sh40} />
+          <ActionButtons
+            buttonContainerStyle={centerHorizontal}
+            cancelButtonStyle={{ width: sw218 }}
+            continueButtonStyle={{ width: sw218 }}
+            labelContinue={PRODUCT_FILTER.BUTTON_APPLY}
+            handleCancel={handleCancelFilter}
+            handleContinue={handleApplyFilter}
+          />
+          <CustomSpacer space={sh16} />
+        </Collapsible>
+        <CustomSpacer space={sh24} />
       </View>
-      {filterVisible || pillList.length === 0 ? null : (
-        <View style={px(sw24)}>
-          <View style={flexRow}>
-            <View style={{ ...flexRow, ...flexWrap, ...overflow, width: sw696 }}>
-              {pillList.map((pill: string, index: number) => {
-                const handlePress = () => {
-                  handleRemoveFilter(pill);
-                };
-                return (
-                  <Fragment key={index}>
-                    {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
-                    <Tag
-                      color="secondary"
-                      icon="close"
-                      onPress={handlePress}
-                      text={pill}
-                      textStyle={fs12SemiBoldBlue38}
-                      style={{ marginRight: undefined, marginTop: sh16 }}
-                    />
-                  </Fragment>
-                );
-              })}
-            </View>
-            <CustomSpacer isHorizontal={true} space={sw30} />
-            <View style={{ ...justifyContentEnd, height: sh40 }}>
-              <LinkText onPress={handleShowAllFilter} text={showLabel} style={{ ...fs12BoldBlue2, height: sh24, lineHeight: sh24 }} />
-            </View>
-          </View>
-        </View>
-      )}
-      <Collapsible collapsed={!filterVisible} duration={300}>
-        <ProductFilter {...filterProps} />
-        <CustomSpacer space={sh40} />
-        <ActionButtons
-          buttonContainerStyle={centerHorizontal}
-          cancelButtonStyle={{ width: sw218 }}
-          continueButtonStyle={{ width: sw218 }}
-          labelContinue={PRODUCT_FILTER.BUTTON_APPLY}
-          handleCancel={handleCancelFilter}
-          handleContinue={handleApplyFilter}
-        />
-        <CustomSpacer space={sh16} />
-      </Collapsible>
-      <CustomSpacer space={sh24} />
     </View>
   );
 };

@@ -7,8 +7,6 @@ export const colorBlack = {
   _2: "#333333",
   _2_1: "rgba(51,51,51,0.1)",
   _2_5: "rgba(51,51,51,0.5)",
-  _2_6: "rgba(51,51,51,0.6)",
-  _3: "#101426",
 };
 
 export const colorBlue = {
@@ -20,11 +18,8 @@ export const colorBlue = {
   _3: "#2A365A",
   _3_6: "rgba(42, 54, 90, 0.6)",
   _3_8: "rgba(42, 54, 90, 0.8)",
-  _4: "#29365A",
-  _4_7: "rgba(41,54,90, 0.7)",
   _5: "#122778",
   _6: "#253052",
-  _6_5: "rgba(37, 48, 82, 0.5)",
   _7: "#132B53",
 };
 
@@ -34,7 +29,6 @@ export const colorGray = {
   _3: "#C6CBD4",
   _4: "#EAEBEE",
   _5: "#F4F4F4",
-  _5_5: "rgba(244,244,244, 0.5)",
   _6: "#A3A3A3",
   _7: "#C9C9CD",
   _8: "#4D4D4D",
@@ -49,10 +43,6 @@ export const colorMagenta = {
   _1: "#5A204A",
 };
 
-export const colorMint = {
-  _1: "#2CD9C5",
-};
-
 export const colorOrange = {
   _1: "#A85846",
 };
@@ -63,7 +53,6 @@ export const colorPink = {
 
 export const colorRed = {
   _1: "#C61230",
-  _1_5: "rgba(198, 18, 48, 0.5)",
   _2: "#E84C3D",
   _2_05: "rgba(232, 76, 61, 0.05)",
   _3: "#AB001D",
@@ -74,8 +63,6 @@ export const colorRed = {
 export const colorWhite = {
   _1: "#FFFFFF",
   _2: "#FDFEFE",
-  _3: "#FBFBFB",
-  _3_5: "rgba(251,251,251,0.5)",
   _4: "#F2F4F6",
 };
 

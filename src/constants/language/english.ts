@@ -649,6 +649,7 @@ export const english = {
       BUTTON_CONTINUE: "Continue",
       BUTTON_ENTER: "Enter OTP",
       BUTTON_LOGIN: "Login",
+      FOOTER_KIB: "Kenanga Investors Berhad 199501024358 (353563-P)",
       FORGOT_PASSWORD: "Forgot Password?",
       HEADING_DONE: "Done",
       HEADING_OTP: "OTP",

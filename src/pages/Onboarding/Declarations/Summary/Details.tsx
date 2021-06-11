@@ -19,6 +19,7 @@ import {
   py,
   sh16,
   sh24,
+  sh4,
   sh64,
   shadowBlack116,
   shadowBlue204,
@@ -140,7 +141,12 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   }
 
   const crsSummary: LabeledTitleProps[] = [
-    { label: DECLARATION_SUMMARY.LABEL_JURISDICTION, labelStyle: { width: sw200 }, title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!] },
+    {
+      label: DECLARATION_SUMMARY.LABEL_JURISDICTION,
+      labelStyle: { width: sw200, lineHeight: sh16 },
+      spaceToLabel: sh4,
+      title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!],
+    },
   ];
 
   if (isTaxResident === false && crs!.tin) {

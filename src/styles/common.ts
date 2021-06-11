@@ -44,12 +44,10 @@ export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const borderBottomBlack1 = { borderBottomWidth: 1, borderBottomColor: colorBlack._1 } as const;
 export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: colorBlack._2_1 } as const;
 export const borderBottomGray1 = { borderBottomWidth: 1, borderBottomColor: colorGray._1 } as const;
-export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderBottomGray7 = { borderBottomWidth: 1, borderBottomColor: colorGray._7 } as const;
 export const borderBottomRed4 = { borderBottomWidth: 1, borderBottomColor: colorRed._4 } as const;
 export const borderLeftGray4 = { borderLeftWidth: 1, borderLeftColor: colorGray._4 } as const;
-export const borderTopGray2 = { borderTopWidth: 1, borderTopColor: colorGray._2 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const borderDashed = { borderStyle: "dashed" } as const;
 export const noMargin = { margin: 0 } as const;
@@ -99,19 +97,6 @@ export const py = (points: number) =>
     paddingTop: points,
     paddingBottom: points,
   } as const);
-
-export const shadow = {
-  // shadow for android
-  // elevation: 3,
-  // shadow for ios
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 3,
-  },
-  shadowOpacity: 0.15,
-  shadowRadius: 3,
-} as const;
 
 export const shadow5 = {
   // shadow for android

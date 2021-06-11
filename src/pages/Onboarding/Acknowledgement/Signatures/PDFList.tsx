@@ -199,6 +199,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                   adviserSignature: undefined,
                   principalSignature: undefined,
                   jointSignature: undefined,
+                  completed: false,
                 };
                 updateReceipts(updatedReceipts);
               };

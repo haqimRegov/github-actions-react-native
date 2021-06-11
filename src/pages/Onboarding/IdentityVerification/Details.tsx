@@ -18,12 +18,13 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8, sw48 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
 export interface IDDetailsProps {
+  accountType?: TypeAccountChoices;
   accountHolder?: TypeAccountHolder;
   addressInfo: IAddressInfoState;
   personalDetails: IPersonalDetailsState;
@@ -34,6 +35,7 @@ export interface IDDetailsProps {
 }
 
 export const IDDetails: FunctionComponent<IDDetailsProps> = ({
+  accountType,
   accountHolder,
   addressInfo,
   personalDetails,
@@ -175,6 +177,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
 
   const labelSameMailing = accountHolder === "Joint" ? ID_VERIFICATION.LABEL_MAILING_SAME_PRINCIPAL : ID_VERIFICATION.LABEL_MAILING_SAME;
   const nameLabel = `${ID_VERIFICATION.LABEL_NAME} (as per ${labelOtherId})`;
+  const countryHeight = accountType === "Joint" && accountHolder !== "Joint" ? sh176 : sh136;
 
   return (
     <Fragment>
@@ -243,7 +246,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       <CustomSpacer space={sh32} />
       <AddressField
         addressType={addressType}
-        countryDropdownStyle={{ height: sh136 }}
+        countryDropdownStyle={{ height: countryHeight }}
         inputAddress={inputPermanentAddress}
         inputCity={inputPermanentCity}
         inputCountry={isPassport ? inputPermanentCountry : undefined}
@@ -265,7 +268,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
           <CustomSpacer space={sh32} />
           <AddressField
             addressType="Other"
-            countryDropdownStyle={{ height: sh136 }}
+            countryDropdownStyle={{ height: countryHeight }}
             inputAddress={inputMailingAddress}
             inputCity={inputMailingCity}
             inputCountry={inputMailingCountry}

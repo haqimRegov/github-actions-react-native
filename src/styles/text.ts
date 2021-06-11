@@ -2,7 +2,7 @@ import { TextStyle } from "react-native";
 
 import { NunitoBlack, NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite, colorYellow } from "./colors";
-import { sh10, sh11, sh12, sh14, sh16, sh18, sh19, sh24, sh28, sh32, sh40, sh55, sw005, sw02, sw03, sw033 } from "./sizes";
+import { sh10, sh11, sh12, sh14, sh16, sh18, sh19, sh24, sh32, sh40, sh55, sw005, sw02, sw03, sw033 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsAlignLeft: TextStyle = { textAlign: "left" };
@@ -359,21 +359,21 @@ export const fs16RegBlack1: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoRegular,
   fontSize: sh16,
-  lineHeight: sh28,
+  lineHeight: sh24,
 };
 
 export const fs16RegBlack2: TextStyle = {
   color: colorBlack._2,
   fontFamily: NunitoRegular,
   fontSize: sh16,
-  lineHeight: sh28,
+  lineHeight: sh24,
 };
 
 export const fs16RegBlack3: TextStyle = {
   color: colorBlack._3,
   fontFamily: NunitoRegular,
   fontSize: sh16,
-  lineHeight: sh28,
+  lineHeight: sh24,
 };
 
 export const fs16RegBlue2: TextStyle = {
@@ -387,14 +387,14 @@ export const fs16RegBlue25: TextStyle = {
   color: colorBlue._2_5,
   fontFamily: NunitoRegular,
   fontSize: sh16,
-  lineHeight: sh28,
+  lineHeight: sh24,
 };
 
 export const fs16RegGray7: TextStyle = {
   color: colorGray._7,
   fontFamily: NunitoRegular,
   fontSize: sh16,
-  lineHeight: sh28,
+  lineHeight: sh24,
 };
 
 export const fs16SemiBoldBlue1: TextStyle = {

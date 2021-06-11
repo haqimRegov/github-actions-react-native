@@ -101,21 +101,13 @@ export const AccountDetailsContent = ({
         </View>
         <CustomSpacer isHorizontal={true} space={sw40} />
         <View style={{ width: sw240 }}>
-          <LabeledTitle
-            label={DASHBOARD_PROFILE.LABEL_FULL_NAME}
-            labelStyle={{ lineHeight: sh16 }}
-            spaceToLabel={sh8}
-            title={name}
-            titleStyle={fs16BoldBlack2}
-          />
+          <LabeledTitle label={DASHBOARD_PROFILE.LABEL_FULL_NAME} title={name} titleStyle={fs16BoldBlack2} />
           <CustomSpacer space={sh16} />
           <LabeledTitle
             iconSize={sw20}
             label={labelId}
-            labelStyle={{ lineHeight: sh16 }}
             onPress={handleViewId}
             spaceToIcon={sw20}
-            spaceToLabel={sh8}
             title={idNumber}
             titleIcon="profile-card"
             titleStyle={fs16BoldBlack2}

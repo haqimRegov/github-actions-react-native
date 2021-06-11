@@ -18,7 +18,7 @@ import {
   px,
   py,
   sh10,
-  sh200,
+  sh176,
   sh24,
   sh6,
   sw12,
@@ -226,7 +226,7 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
                         <FlatList
                           extraData={value}
                           data={items!.map((item) => item.label)}
-                          style={{ ...px(sw16), maxHeight: sh200, ...flatlistStyle }}
+                          style={{ ...px(sw16), maxHeight: sh176, ...flatlistStyle }}
                           keyboardDismissMode="on-drag"
                           keyboardShouldPersistTaps="always"
                           keyExtractor={(item: string) => item}

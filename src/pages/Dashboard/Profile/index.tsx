@@ -37,7 +37,6 @@ import {
   sh24,
   sh32,
   sh48,
-  sh8,
   shadowBlue5,
   sw1,
   sw120,
@@ -161,22 +160,9 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
                   </View>
                   <CustomSpacer isHorizontal={true} space={sw40} />
                   <View>
-                    <LabeledTitle
-                      label={PROFILE.LABEL_NAME}
-                      labelStyle={{ lineHeight: sh16 }}
-                      spaceToLabel={sh8}
-                      title={agent!.name!}
-                      titleStyle={fs16BoldBlack2}
-                      style={{ maxWidth: sw432 }}
-                    />
+                    <LabeledTitle label={PROFILE.LABEL_NAME} title={agent!.name!} titleStyle={fs16BoldBlack2} style={{ maxWidth: sw432 }} />
                     <CustomSpacer space={sh16} />
-                    <LabeledTitle
-                      label={PROFILE.LABEL_NRIC}
-                      labelStyle={{ lineHeight: sh16 }}
-                      spaceToLabel={sh8}
-                      title={agentProfile.nric}
-                      titleStyle={fs16BoldBlack2}
-                    />
+                    <LabeledTitle label={PROFILE.LABEL_NRIC} title={agentProfile.nric} titleStyle={fs16BoldBlack2} />
                   </View>
                   <CustomFlexSpacer />
                   <RoundedButton

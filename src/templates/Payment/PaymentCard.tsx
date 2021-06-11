@@ -36,9 +36,11 @@ import {
   fs16BoldBlack2,
   fs16RegBlack2,
   px,
+  py,
   sh16,
   sh24,
   sh32,
+  sh40,
   sh56,
   sh64,
   sh8,
@@ -728,8 +730,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                       )}
                     </View>
                     {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
-                      <View style={px(sw24)}>
-                        <CustomSpacer space={sh24} />
+                      <View style={{ ...px(sw24), ...py(sh24) }}>
                         <OutlineButton
                           buttonType="dashed"
                           disabled={additionalPaymentDisabled}
@@ -740,14 +741,14 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                         />
                       </View>
                     )}
-                    <CustomSpacer space={sh32} />
+                    <CustomSpacer space={sh8} />
                     <ActionButtons
                       handleContinue={handleSave}
                       continueDisabled={saveDisabled}
                       labelContinue={PAYMENT.BUTTON_SAVE}
                       buttonContainerStyle={centerHorizontal}
                     />
-                    <CustomSpacer space={sh56} />
+                    <CustomSpacer space={sh40} />
                   </Fragment>
                 ) : (
                   <Fragment>

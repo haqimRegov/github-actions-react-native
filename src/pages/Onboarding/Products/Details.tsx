@@ -221,7 +221,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
           <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24) }}>
             <View style={px(sw24)}>
               <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_OBJECTIVE}</Text>
-              <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective} />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs16RegBlack2, lineHeight: sh24 }} text={fund.fundObjective} />
             </View>
             <CustomSpacer space={sw24} />
             <View style={borderBottomGray4} />

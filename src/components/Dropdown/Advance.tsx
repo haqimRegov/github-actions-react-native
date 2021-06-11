@@ -19,7 +19,7 @@ import {
   noBorderBottom,
   px,
   py,
-  sh200,
+  sh176,
   sh24,
   sh38,
   sh40,
@@ -137,7 +137,7 @@ export const AdvancedDropdown: FunctionComponent<AdvancedDropdownProps> = ({
                 <View style={dropdownStyle}>
                   <FlatList
                     data={labelExtractor}
-                    style={{ ...px(sw16), maxHeight: sh200 }}
+                    style={{ ...px(sw16), maxHeight: sh176 }}
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="always"
                     keyExtractor={(item: string, index: number) => `${item}-${index}`}

@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import { FILTER_EPF_LABEL, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
-import { centerVertical, flexRow, fs16BoldBlack1, px, sh32, sh8, sw24, sw240, sw64 } from "../../../../../styles";
+import { centerVertical, flexRow, fs16BoldBlack1, px, sh24, sh8, sw24, sw240 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface AMPFilterProps {
@@ -46,7 +46,7 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
     <View>
       <View style={{ ...px(sw24) }}>
         <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs16BoldBlack1} text={PRODUCT_FILTER.LABEL_FILTER_AMP} />
+          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs16BoldBlack1} text={PRODUCT_FILTER.LABEL_FILTER_AMP} />
         </View>
       </View>
       <View style={{ ...flexRow, ...px(sw24) }}>
@@ -69,12 +69,11 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
           />
         </View>
       </View>
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
         <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
       </View>
-      <CustomSpacer space={sw64} />
     </View>
   );
 };

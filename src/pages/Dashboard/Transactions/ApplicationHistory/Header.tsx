@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
-import { Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
+import { LocalAssets } from "../../../../assets/LocalAssets";
 import { ActionButtons, CustomSpacer, IconButton, IconInput } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
@@ -21,6 +22,8 @@ import {
   sh16,
   sh24,
   sh32,
+  sh34,
+  sh38,
   sh40,
   sh48,
   sh8,
@@ -29,7 +32,9 @@ import {
   sw100,
   sw218,
   sw24,
-  sw40,
+  sw48,
+  sw80,
+  sw84,
 } from "../../../../styles";
 import { TransactionsFilter } from "./Filter";
 
@@ -136,7 +141,11 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   const filterBorderColor = filterVisible ? colorBlue._2 : colorGray._3;
   const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
 
-  const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
+  const filterIcon = filterVisible ? "close" : "filter";
+  const filterIconSize = filterVisible ? sh32 : sh24;
+  const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
+  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh38 };
+
   const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
   // const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
@@ -164,8 +173,18 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
                 value={inputSearch}
                 viewStyle={{ borderRadius: sw100, height: sh48 }}
               />
-              <CustomSpacer isHorizontal={true} space={sw40} />
-              <IconButton color={filterColor} onPress={handlePressFilter} name="filter" size={sh24} style={filterContainer} />
+              <View style={{ width: sw80 }}>
+                {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}
+                <View style={centerVertical}>
+                  <IconButton
+                    color={filterColor}
+                    onPress={handlePressFilter}
+                    name={filterIcon}
+                    size={filterIconSize}
+                    style={filterContainer}
+                  />
+                </View>
+              </View>
             </View>
           </View>
           {/* {filterVisible || filterValues.length === 0 ? null : (

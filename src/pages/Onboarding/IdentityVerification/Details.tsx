@@ -18,7 +18,7 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh152, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh24, sh32, sh8, sw48 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -243,6 +243,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       <CustomSpacer space={sh32} />
       <AddressField
         addressType={addressType}
+        countryDropdownStyle={{ height: sh136 }}
         inputAddress={inputPermanentAddress}
         inputCity={inputPermanentCity}
         inputCountry={isPassport ? inputPermanentCountry : undefined}
@@ -264,7 +265,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
           <CustomSpacer space={sh32} />
           <AddressField
             addressType="Other"
-            countryDropdownStyle={{ height: sh152 }}
+            countryDropdownStyle={{ height: sh136 }}
             inputAddress={inputMailingAddress}
             inputCity={inputMailingCity}
             inputCountry={inputMailingCountry}
@@ -278,7 +279,6 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             setInputCountry={setInputMailingCountry}
             setInputPostCode={setInputMailingPostCode}
             setInputState={setInputMailingState}
-            stateDropdownStyle={{ height: sh136 }}
           />
         </Fragment>
       )}

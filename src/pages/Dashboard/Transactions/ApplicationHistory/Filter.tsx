@@ -12,7 +12,20 @@ import {
   DICTIONARY_TRANSACTIONS_DATE,
   DICTIONARY_TRANSACTIONS_TYPE,
 } from "../../../../data/dictionary";
-import { centerVertical, colorTransparent, flexRow, fs16BoldBlack1, px, sh143, sh32, sh8, sw24, sw48, sw64 } from "../../../../styles";
+import {
+  centerVertical,
+  colorTransparent,
+  flexRow,
+  fs16BoldBlack1,
+  px,
+  sh143,
+  sh24,
+  sh32,
+  sh8,
+  sw24,
+  sw48,
+  sw64,
+} from "../../../../styles";
 
 const { DASHBOARD_FILTER } = Language.PAGE;
 interface TransactionsFilterProps {
@@ -80,7 +93,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
           value={dateSorting!}
         />
       </View>
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_START_DATE} />
@@ -111,7 +124,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
           />
         </View>
       </View>
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <AdvancedDropdown
           handleChange={handleTransactionsType}
@@ -127,7 +140,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
           value={orderStatus!}
         />
       </View>
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <AdvancedDropdown
           handleChange={handleAccountType}

@@ -19,7 +19,7 @@ import {
   px,
   py,
   sh16,
-  sh200,
+  sh176,
   sh38,
   sh8,
   shadowBlue5,
@@ -98,7 +98,7 @@ export const MobileInput: FunctionComponent<MobileInputProps> = ({
                 <View style={dropdownStyle}>
                   <FlatList
                     data={DICTIONARY_MOBILE_CODE.map((item) => item.label)}
-                    style={{ ...px(sw16), maxHeight: sh200 }}
+                    style={{ ...px(sw16), maxHeight: sh176 }}
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="always"
                     keyExtractor={(item, index) => `${item}-${index}`}

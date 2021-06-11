@@ -1,5 +1,6 @@
 import React, { Fragment, ReactNode } from "react";
 import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { version } from "../../../package.json";
 import { LocalAssets } from "../../assets/LocalAssets";
@@ -12,11 +13,13 @@ import {
   flexChild,
   flexGrow,
   flexRow,
+  fs12RegBlack2,
   fs12SemiBoldBlue2,
   fs12SemiBoldGray8,
   px,
+  scaleHeight,
+  sh12,
   sh32,
-  sh56,
   sh64,
   sw1,
   sw16,
@@ -30,7 +33,7 @@ import {
   sw8,
 } from "../../styles";
 import { IconText, LinkTextGroup, LinkTextProps } from "../Touchables";
-import { CustomFlexSpacer, CustomSpacer } from "../Views";
+import { CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../Views";
 import { SafeAreaPage } from "./SafeAreaPage";
 
 const { LOGIN } = Language.PAGE;
@@ -42,6 +45,7 @@ interface LoginPageProps {
 }
 
 export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
+  const { bottom } = useSafeAreaInsets();
   // const handlePrivacyPolicy = () => {
   //   LinkUtils.openLink(DICTIONARY_LINK_PRIVACY);
   // };
@@ -108,6 +112,9 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   const logoStyle: ImageStyle = { height: sh64, width: sw160, resizeMode: "contain" };
   const buttonStyle: ViewStyle = { ...border(colorBlue._2, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
 
+  // issue with importing scaled size
+  const bottomSpace = scaleHeight(24) + bottom;
+
   return (
     <Fragment>
       <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
@@ -148,7 +155,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
                   </Fragment>
                 ) : null}
               </View>
-              <CustomSpacer space={sh56} />
+              <TextSpaceArea spaceToBottom={bottomSpace} spaceToTop={sh12} style={fs12RegBlack2} text={LOGIN.FOOTER_KIB} />
             </View>
           </SafeAreaPage>
         </View>

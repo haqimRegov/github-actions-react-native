@@ -1,7 +1,7 @@
 import { TextStyle } from "react-native";
 
 import { NunitoBlack, NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
-import { colorBlack, colorBlue, colorGray, colorRed, colorWhite, colorYellow } from "./colors";
+import { colorBlack, colorBlue, colorGray, colorRed, colorWhite } from "./colors";
 import { sh10, sh11, sh12, sh14, sh16, sh18, sh19, sh24, sh32, sh40, sh55, sw005, sw02, sw03, sw033 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
@@ -57,13 +57,6 @@ export const fs10RegBlue2: TextStyle = {
   lineHeight: sh12,
 };
 
-export const fs10RegBlue21: TextStyle = {
-  color: colorBlack._2_1,
-  fontFamily: NunitoRegular,
-  fontSize: sh10,
-  lineHeight: sh16,
-};
-
 export const fs10RegBlue38: TextStyle = {
   color: colorBlue._3_8,
   fontFamily: NunitoRegular,
@@ -87,13 +80,6 @@ export const fs11RegBlack2: TextStyle = {
 
 export const fs12BoldBlack2: TextStyle = {
   color: colorBlack._2,
-  fontFamily: NunitoBold,
-  fontSize: sh12,
-  lineHeight: sh24,
-};
-
-export const fs12BoldBlack26: TextStyle = {
-  color: colorBlack._2_6,
   fontFamily: NunitoBold,
   fontSize: sh12,
   lineHeight: sh24,
@@ -169,13 +155,6 @@ export const fs12RegBlue6: TextStyle = {
   lineHeight: sh16,
 };
 
-export const fs12RegBlue65: TextStyle = {
-  color: colorBlue._6_5,
-  fontFamily: NunitoRegular,
-  fontSize: sh12,
-  lineHeight: sh16,
-};
-
 export const fs12RegBlue38: TextStyle = {
   color: colorBlue._3_8,
   fontFamily: NunitoRegular,
@@ -197,13 +176,6 @@ export const fs12RegGray7: TextStyle = {
   fontSize: sh12,
   letterSpacing: -sw03,
   lineHeight: sh14,
-};
-
-export const fs12RegWhite1: TextStyle = {
-  color: colorWhite._1,
-  fontFamily: NunitoRegular,
-  fontSize: sh12,
-  lineHeight: sh16,
 };
 
 export const fs12SemiBoldBlack2: TextStyle = {
@@ -255,25 +227,11 @@ export const fs12SemiBoldRed2: TextStyle = {
   lineHeight: sh16,
 };
 
-export const fs12SemiBoldRed3: TextStyle = {
-  color: colorRed._3,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh12,
-  lineHeight: sh14,
-};
-
 export const fs12SemiBoldWhite1: TextStyle = {
   color: colorWhite._1,
   fontFamily: NunitoSemiBold,
   fontSize: sh12,
   lineHeight: sh16,
-};
-
-export const fs12SemiBoldYellow2: TextStyle = {
-  color: colorYellow._2,
-  fontFamily: NunitoSemiBold,
-  fontSize: sh12,
-  lineHeight: sh14,
 };
 
 export const fs14BoldBlack2: TextStyle = {
@@ -285,14 +243,6 @@ export const fs14BoldBlack2: TextStyle = {
 
 export const fs14RegBlack2: TextStyle = {
   color: colorBlack._2,
-  fontFamily: NunitoRegular,
-  fontSize: sh14,
-  letterSpacing: -sw02,
-  lineHeight: sh24,
-};
-
-export const fs14RegBlue2: TextStyle = {
-  color: colorBlue._2,
   fontFamily: NunitoRegular,
   fontSize: sh14,
   letterSpacing: -sw02,
@@ -313,13 +263,6 @@ export const fs14SemiBoldBlack1: TextStyle = {
   lineHeight: sh19,
 };
 
-export const fs16BlackBlack1: TextStyle = {
-  color: colorBlack._1,
-  fontFamily: NunitoBlack,
-  fontSize: sh16,
-  lineHeight: sh24,
-};
-
 export const fs16BoldBlack1: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoBold,
@@ -329,13 +272,6 @@ export const fs16BoldBlack1: TextStyle = {
 
 export const fs16BoldBlack2: TextStyle = {
   color: colorBlack._2,
-  fontFamily: NunitoBold,
-  fontSize: sh16,
-  lineHeight: sh24,
-};
-
-export const fs16BoldBlack26: TextStyle = {
-  color: colorBlack._2_6,
   fontFamily: NunitoBold,
   fontSize: sh16,
   lineHeight: sh24,
@@ -355,22 +291,8 @@ export const fs16BoldWhite1: TextStyle = {
   lineHeight: sh24,
 };
 
-export const fs16RegBlack1: TextStyle = {
-  color: colorBlack._1,
-  fontFamily: NunitoRegular,
-  fontSize: sh16,
-  lineHeight: sh24,
-};
-
 export const fs16RegBlack2: TextStyle = {
   color: colorBlack._2,
-  fontFamily: NunitoRegular,
-  fontSize: sh16,
-  lineHeight: sh24,
-};
-
-export const fs16RegBlack3: TextStyle = {
-  color: colorBlack._3,
   fontFamily: NunitoRegular,
   fontSize: sh16,
   lineHeight: sh24,
@@ -385,13 +307,6 @@ export const fs16RegBlue2: TextStyle = {
 
 export const fs16RegBlue25: TextStyle = {
   color: colorBlue._2_5,
-  fontFamily: NunitoRegular,
-  fontSize: sh16,
-  lineHeight: sh24,
-};
-
-export const fs16RegGray7: TextStyle = {
-  color: colorGray._7,
   fontFamily: NunitoRegular,
   fontSize: sh16,
   lineHeight: sh24,

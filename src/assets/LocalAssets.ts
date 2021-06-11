@@ -19,6 +19,7 @@ import logoAims from "./logo_aims/logo_aims.png";
 import riskAssessmentGraph1 from "./risk_assessment_graph_1/risk_assessment_graph_1.png";
 import riskAssessmentGraph2 from "./risk_assessment_graph_2/risk_assessment_graph_2.png";
 import tooltipAddSign from "./tooltip_add_sign/tooltip_add_sign.png";
+import tooltipFilter from "./tooltip_filter/tooltip_filter.png";
 import tooltipProceed from "./tooltip_proceed/tooltip_proceed.png";
 
 export const LocalAssets = {
@@ -56,6 +57,7 @@ export const LocalAssets = {
   },
   tooltip: {
     addSign: tooltipAddSign,
+    filter: tooltipFilter,
     proceed: tooltipProceed,
   },
 };

@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomCard, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { AdvancedDropdown, CustomCard, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
-import { px, sh32, sh8, sw24, sw360, sw40, sw64 } from "../../../styles";
+import { flexRow, sh32, sh8, sw24, sw360, sw40, sw64 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -89,7 +89,8 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
 
   return (
     <View>
-      <View style={px(sw24)}>
+      <View style={flexRow}>
+        <CustomSpacer isHorizontal={true} space={sw24} />
         <CustomCard spaceBetweenGroup={sh32} spaceBetweenItem={sw64} items={items} />
         {/* <Switch label={sameRecurringInfoLabel} onPress={() => {}} toggle={false} /> */}
       </View>

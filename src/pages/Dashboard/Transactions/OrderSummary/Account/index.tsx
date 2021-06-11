@@ -4,7 +4,7 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { LabeledTitleProps } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../../../../../data/dictionary";
-import { fsTransformNone, fsUppercase, sw200 } from "../../../../../styles";
+import { fsTransformNone, fsUppercase, sh16, sh4, sw200 } from "../../../../../styles";
 import { AccountDetailsContent } from "./Details";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;
@@ -248,7 +248,12 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
   }
 
   const crsSummary: LabeledTitleProps[] = [
-    { label: DASHBOARD_PROFILE.LABEL_JURISDICTION, labelStyle: { width: sw200 }, title: crs.taxResident || "-" },
+    {
+      label: DASHBOARD_PROFILE.LABEL_JURISDICTION,
+      labelStyle: { width: sw200, lineHeight: sh16 },
+      spaceToLabel: sh4,
+      title: crs.taxResident || "-",
+    },
   ];
 
   if (isTaxResident === false && crs.tin) {

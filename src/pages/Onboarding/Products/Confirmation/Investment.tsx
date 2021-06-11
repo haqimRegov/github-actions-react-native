@@ -231,7 +231,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     <Fragment>
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea style={{ ...fs12BoldBlack2, width: sw360 }} text={INVESTMENT.LABEL_FUNDING_OPTION} />
+          <TextSpaceArea style={{ ...fs12BoldBlack2, width: sw360 }} spaceToBottom={sh8} text={INVESTMENT.LABEL_FUNDING_OPTION} />
           <RadioButtonGroup
             options={fundingOption}
             space={sh16}

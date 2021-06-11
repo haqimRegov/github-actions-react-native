@@ -29,6 +29,8 @@ export const TextCard: FunctionComponent<TextCardProps> = ({
   const defaultSpaceToLabel = spaceToLabel !== undefined ? spaceToLabel : 0;
   const items = data.map((item: LabeledTitleProps, index: number) => {
     const itemDefaultStyle: ViewStyle = { width: sw240, ...itemStyle, ...item.style };
+    const itemSpaceToLabel = item.spaceToLabel !== undefined ? item.spaceToLabel : defaultSpaceToLabel;
+
     return (
       <View key={index} style={itemDefaultStyle}>
         <LabeledTitle
@@ -36,7 +38,7 @@ export const TextCard: FunctionComponent<TextCardProps> = ({
           iconSize={item.iconSize !== undefined ? item.iconSize : sw16}
           labelStyle={{ ...fs12BoldBlack2, ...labelStyle, ...item.labelStyle }}
           onPress={item.onPress}
-          spaceToLabel={defaultSpaceToLabel}
+          spaceToLabel={itemSpaceToLabel}
           style={{ minWidth: sw144, ...item.style }}
           titleStyle={{ ...fs16BoldBlack1, ...fsCapitalize, ...titleStyle, ...item.titleStyle }}
         />

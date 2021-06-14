@@ -235,6 +235,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                     resourceType="base64"
                     setValue={() => {}}
                     title={title}
+                    tooltip={incompleteIndex === index}
                     onPress={handleEdit}
                     value={receipt.signedPdf}
                   />

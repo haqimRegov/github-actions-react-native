@@ -19,19 +19,15 @@ const { INACTIVITY } = Language.PAGE;
 
 const { Navigator, Screen } = createStackNavigator();
 
-type AppStateType = "foreground" | "inactive" | "background";
-type InactivityStatusType = "active" | AppStateType;
-
 export const PrivateRoute: FunctionComponent = () => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const appState = useRef<AppStateType>("foreground");
   const expired = useRef<boolean>(false);
   const lastActive = useRef<number | undefined>(undefined);
-  const [inactivityStatus, setInactivityStatus] = useState<InactivityStatusType>("active");
+  const [inactivityStatus, setInactivityStatus] = useState<boolean>(true);
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const handleExtend = () => {
-    setInactivityStatus("active");
+    setInactivityStatus(true);
     setTimeout(() => {
       setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
     }, 150);
@@ -39,19 +35,17 @@ export const PrivateRoute: FunctionComponent = () => {
 
   const handleLogout = async () => {
     await logout(navigation);
-    setInactivityStatus("active");
+    setInactivityStatus(true);
   };
 
   const handleInactivity = (isActive: boolean) => {
-    const isExpired = moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER;
-    expired.current = isExpired;
-    setInactivityStatus(isActive === true ? "active" : appState.current);
+    expired.current = moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER;
+    setInactivityStatus(isActive);
   };
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     if (nextAppState === "inactive" || nextAppState === "background") {
       lastActive.current = parseInt(moment().format("x"), 10);
-      appState.current = nextAppState;
     } else if (expired.current === false) {
       lastActive.current = undefined;
     }
@@ -59,14 +53,14 @@ export const PrivateRoute: FunctionComponent = () => {
 
   useEffect(() => {
     AppState.addEventListener("change", handleAppStateChange);
-
     return () => {
       AppState.removeEventListener("change", handleAppStateChange);
     };
   }, []);
+
   useEffect(() => {
     let clockDrift: ReturnType<typeof setTimeout>;
-    if (countdown > 0 && inactivityStatus !== "active" && expired.current === false) {
+    if (countdown > 0 && inactivityStatus === false && expired.current === false) {
       clockDrift = setInterval(() => {
         setCountdown(countdown - 1);
       }, 1000);
@@ -78,7 +72,7 @@ export const PrivateRoute: FunctionComponent = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (inactivityStatus !== "active") {
+      if (inactivityStatus === false) {
         handleLogout();
       }
     }, DICTIONARY_INACTIVITY_COUNTDOWN);
@@ -96,7 +90,7 @@ export const PrivateRoute: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <UserInactivity isActive={inactivityStatus === "active"} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
+      <UserInactivity isActive={inactivityStatus} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
         <Navigator initialRouteName="Dashboard" headerMode="none">
           <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
           <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
@@ -112,7 +106,7 @@ export const PrivateRoute: FunctionComponent = () => {
         labelContinue={expired.current === true ? INACTIVITY.BUTTON_PROCEED : INACTIVITY.BUTTON_YES}
         title={subtitle}
         titleStyle={fs16BoldBlack2}
-        visible={inactivityStatus !== "active"}
+        visible={inactivityStatus === false}
       />
     </Fragment>
   );

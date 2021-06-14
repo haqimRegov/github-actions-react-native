@@ -49,6 +49,7 @@ export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
   setValue,
   title,
   titleStyle,
+  tooltip,
   value,
 }: PdfEditCardProps) => {
   let uploadLabel = UPLOAD.LABEL_NO_FILE;
@@ -87,7 +88,7 @@ export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
     height: sh88,
-    opacity: completed === true || disabled === true ? opacity : 1,
+    opacity: completed === true || disabled === true || tooltip === false ? opacity : 1,
   };
   const iconBadgeOffset = { bottom: 0.5 };
   const iconData = completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
@@ -124,7 +125,7 @@ export const PdfEditCard: FunctionComponent<PdfEditCardProps> = ({
             <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
           ) : (
             <View style={{ width: sw84 }}>
-              <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} />
+              {tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}
               <View style={centerVertical}>
                 <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </View>

@@ -19,7 +19,7 @@ export const login = async (variables: ILoginRequest, headers: ILoginHeader) => 
     return data.userLogin;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in login at Login.ts", error);
+    console.warn("Error in login at Login.ts", error);
 
     return error;
   }

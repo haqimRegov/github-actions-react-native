@@ -22,7 +22,7 @@ export const clientRegister = async (
     return data.clientRegister;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in clientRegister at ClientRegister.ts", error);
+    console.warn("Error in clientRegister at ClientRegister.ts", error);
     return error;
   }
 };

@@ -23,8 +23,14 @@ export const logout = async (navigation?: IStackNavigationProp) => {
     return undefined;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in logout", error);
-    const err = error === "No current user" || error === "The user is not authenticated" ? ERRORS.unauthenticated : error;
+    console.warn("Error in Logout", error);
+    const err =
+      error === "No current user" ||
+      error === "The user is not authenticated" ||
+      error.message === "Access Token has been revoked" ||
+      error.message === "Refresh Token has been revoked"
+        ? ERRORS.unauthenticated
+        : error;
     if (navigation !== undefined) {
       return ErrorHandler(err, navigation);
     }

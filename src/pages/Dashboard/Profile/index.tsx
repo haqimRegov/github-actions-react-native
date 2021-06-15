@@ -65,8 +65,6 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        // eslint-disable-next-line no-console
-        console.log("data", data);
         setAgentProfile(data.result);
       }
 

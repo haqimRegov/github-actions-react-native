@@ -19,7 +19,7 @@ export const registerPassword = async (variables: ISignUpRequest, headers: ISign
     return data.signUp;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in registerPassword at Password.ts", error);
+    console.warn("Error in registerPassword at Password.ts", error);
     return error;
   }
 };

@@ -76,8 +76,6 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       showBy: showBy,
       search: search,
     };
-    // eslint-disable-next-line no-console
-    console.log("productList request", request);
     const productListResponse: IProductListResponse = await getProductList(request, navigation);
     setLoading(false);
     if (productListResponse !== undefined) {

@@ -82,11 +82,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
       },
     );
     const request = { orders: paymentOrders };
-    // eslint-disable-next-line no-console
-    console.log("submitProofOfPayments request", request);
     const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
-    // eslint-disable-next-line no-console
-    console.log("submitProofOfPayments", paymentResponse);
     if (paymentResponse !== undefined) {
       const { data, error } = paymentResponse;
       if (error === null && data !== null) {

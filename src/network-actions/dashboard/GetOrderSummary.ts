@@ -22,7 +22,7 @@ export const getOrderSummary = async (
     return data.getOrderSummary;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getGetOrderSummary at GetOrderSummary.ts", error);
+    console.warn("Error in getGetOrderSummary at GetOrderSummary.ts", error);
     return error;
   }
 };

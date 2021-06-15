@@ -19,7 +19,7 @@ export const resetPassword = async (variables: IResetPasswordRequest, headers: I
     return data.resetPassword;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in resetPassword at ResetPassword.ts", error);
+    console.warn("Error in resetPassword at ResetPassword.ts", error);
     return error;
   }
 };

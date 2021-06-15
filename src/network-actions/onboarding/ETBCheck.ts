@@ -18,7 +18,7 @@ export const checkClient = async (variables: IEtbCheckRequest, navigation: IStac
     return data.etbCheck;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in checkClient at ETBCheck.ts", error);
+    console.warn("Error in checkClient at ETBCheck.ts", error);
     return error;
   }
 };

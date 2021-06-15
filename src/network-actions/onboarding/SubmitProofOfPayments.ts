@@ -22,7 +22,7 @@ export const submitProofOfPayments = async (
     return data.submitProofOfPayments;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in submitProofOfPayments at SubmitProofOfPayments.ts", error);
+    console.warn("Error in submitProofOfPayments at SubmitProofOfPayments.ts", error);
     return error;
   }
 };

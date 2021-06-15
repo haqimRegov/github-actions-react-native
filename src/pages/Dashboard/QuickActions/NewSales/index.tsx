@@ -181,8 +181,6 @@ const NewSalesComponent = ({
         name: principalHolder?.name,
       },
     };
-    // eslint-disable-next-line no-console
-    console.log("etbCheck request", request);
     const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
     if (clientCheck !== undefined) {
       const { data, error } = clientCheck;
@@ -233,8 +231,6 @@ const NewSalesComponent = ({
       },
       jointHolder: jointInfo,
     };
-    // eslint-disable-next-line no-console
-    console.log("clientRegister request", request);
     const client: IClientRegisterResponse = await clientRegister(request, navigation);
     if (client !== undefined) {
       const { data, error } = client;

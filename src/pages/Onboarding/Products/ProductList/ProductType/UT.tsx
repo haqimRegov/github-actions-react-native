@@ -78,8 +78,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       sort: sort,
       tab: "ut",
     };
-    // eslint-disable-next-line no-console
-    console.log("productList request", request);
     const productListResponse: IProductListResponse = await getProductList(request, navigation);
     setLoading(false);
     if (productListResponse !== undefined) {

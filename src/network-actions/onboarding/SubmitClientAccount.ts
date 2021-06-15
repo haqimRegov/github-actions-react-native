@@ -22,7 +22,7 @@ export const submitClientAccount = async (
     return data.submitClientAccount;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in submitClientAccount at SubmitClientAccount.ts", error);
+    console.warn("Error in submitClientAccount at SubmitClientAccount.ts", error);
     return error;
   }
 };

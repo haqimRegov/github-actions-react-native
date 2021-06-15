@@ -172,7 +172,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
   return (
-    <View>
+    <Fragment>
       <View style={shadowFix} />
       <View style={container}>
         <CustomSpacer space={sh24} />
@@ -245,6 +245,6 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
         </Collapsible>
         <CustomSpacer space={sh24} />
       </View>
-    </View>
+    </Fragment>
   );
 };

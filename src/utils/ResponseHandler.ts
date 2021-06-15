@@ -15,23 +15,27 @@ export const responseHandler = async <ResultType extends {}, VariablesType exten
 ) => {
   try {
     const netInfo = await NetInfo.fetch().then((state) => {
-      // eslint-disable-next-line no-console
-      console.log("NetInfo:", state);
+      // // eslint-disable-next-line no-console
+      // console.log("NetInfo:", state);
       return { isInternetReachable: state.isInternetReachable, isConnected: state.isConnected };
     });
-    // check for scenarios where it is connected but internet is not reachable
+    // TODO check for scenarios where it is connected but internet is not reachable
     // netInfo.isInternetReachable === false
     if (netInfo.isConnected === false) {
       throw ERRORS.network;
     }
     if (tokenCheck !== false) {
-      const currentSession = await Auth.currentSession();
-      // eslint-disable-next-line no-console
-      console.log("CurrentSession:", currentSession);
+      await Auth.currentSession();
+      // // eslint-disable-next-line no-console
+      // console.log("CurrentSession:", currentSession);
     }
+    // // eslint-disable-next-line no-console
+    // console.log("Request Variables:", variables);
+    // // eslint-disable-next-line no-console
+    // console.log("Request Headers:", headers);
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
-    // eslint-disable-next-line no-console
-    console.log("Response Handler:", data);
+    // // eslint-disable-next-line no-console
+    // console.log("Response:", data);
 
     if ("errors" in data) {
       throw data;
@@ -40,7 +44,7 @@ export const responseHandler = async <ResultType extends {}, VariablesType exten
     return data;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in response handler", error);
+    console.warn("Error in ResponseHandler", error);
     let err = error;
     if (error === "No current user" || error?.message === "Refresh Token has expired") {
       err = ERRORS.unauthenticated;

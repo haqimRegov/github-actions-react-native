@@ -18,7 +18,7 @@ export const submitPdf = async (variables: ISubmitPdfRequest, navigation: IStack
     return data.submitPdf;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in submitPdf at SubmitPDF.ts", error);
+    console.warn("Error in submitPdf at SubmitPDF.ts", error);
     return error;
   }
 };

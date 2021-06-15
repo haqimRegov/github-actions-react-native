@@ -18,7 +18,7 @@ export const generatePdf = async (variables: IGeneratePdfRequest, navigation: IS
     return data.generatePdf;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in generatePdf at GeneratePdf.ts", error);
+    console.warn("Error in generatePdf at GeneratePdf.ts", error);
     return error;
   }
 };

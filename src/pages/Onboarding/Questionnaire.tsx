@@ -134,8 +134,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         questionNine: questionNine,
       },
     };
-    // eslint-disable-next-line no-console
-    console.log("request", request);
     const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
     setLoading(false);
     if (response !== undefined) {

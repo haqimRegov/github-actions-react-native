@@ -55,12 +55,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       clientId: clientId!,
       documents: documents,
     };
-    // eslint-disable-next-line no-console
-    console.log("submitPdf request", request);
     const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation);
     setLoading(false);
-    // eslint-disable-next-line no-console
-    console.log("submitPdfResponse", submitPdfResponse);
     if (submitPdfResponse !== undefined) {
       const { data, error } = submitPdfResponse;
       if (error === null && data !== null) {
@@ -89,15 +85,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const getReceiptSummary = async () => {
     setLoading(true);
-    const request = {
-      clientId: clientId!,
-    };
-    // eslint-disable-next-line no-console
-    console.log("getReceiptSummaryList request", request);
+    const request = { clientId: clientId! };
     const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation);
     setLoading(false);
-    // eslint-disable-next-line no-console
-    console.log("getReceiptSummaryList", summary);
     if (summary !== undefined) {
       const { data, error } = summary;
       if (error === null && data !== null) {
@@ -114,16 +104,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const handleGetPDF = async (receipt: IOnboardingReceiptState, index: number) => {
     setLoading(true);
-    const request = {
-      clientId: clientId!,
-      orderNo: receipt.orderNumber!,
-    };
-    // eslint-disable-next-line no-console
-    console.log("generatePdf request", request);
+    const request = { clientId: clientId!, orderNo: receipt.orderNumber! };
     const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation);
     setLoading(false);
-    // eslint-disable-next-line no-console
-    console.log("generatePdf", onboardingReceipt);
     if (onboardingReceipt !== undefined) {
       const { data, error } = onboardingReceipt;
       if (error === null && data !== null) {

@@ -50,15 +50,9 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   };
 
   const handleFetch = async () => {
-    const request: IGetPaymentRequiredRequest = {
-      orderNumber: currentOrder!.orderNumber,
-    };
-    // eslint-disable-next-line no-console
-    console.log("getPaymentRequired request", request);
+    const request: IGetPaymentRequiredRequest = { orderNumber: currentOrder!.orderNumber };
     const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation);
     if (response !== undefined) {
-      // eslint-disable-next-line no-console
-      console.log("response", response);
       const { data, error } = response;
       if (error === null && data !== null) {
         const newOrders: IPaymentOrderState = {
@@ -120,11 +114,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
       { orderNumber: paymentOrder!.orderNumber, paymentType: paymentOrder!.paymentType, payments: payment },
     ];
     const request = { orders: paymentOrders };
-    // eslint-disable-next-line no-console
-    console.log("submitProofOfPayments request", request);
     const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
-    // eslint-disable-next-line no-console
-    console.log("submitProofOfPayments", paymentResponse);
     if (paymentResponse !== undefined) {
       const { data, error } = paymentResponse;
       if (error === null && data !== null) {

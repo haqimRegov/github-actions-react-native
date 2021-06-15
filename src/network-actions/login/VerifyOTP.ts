@@ -19,7 +19,7 @@ export const verifyLockOtp = async (variables: IVerifyLockOTPRequest) => {
     return data.verifyOtpAgent;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in verifyLockOtp at VerifyOTP.ts", error);
+    console.warn("Error in verifyLockOtp at VerifyOTP.ts", error);
     return error;
   }
 };

@@ -109,12 +109,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
     // setLoading(true);
-    // eslint-disable-next-line no-console
-    console.log("getSummaryReceipt request", request);
     const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
     // setLoading(false);
-    // eslint-disable-next-line no-console
-    console.log("getSummaryReceipt response", response);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {

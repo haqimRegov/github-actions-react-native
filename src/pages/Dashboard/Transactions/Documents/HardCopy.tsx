@@ -46,8 +46,6 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
 
   const handleFetch = async () => {
     const request: IGetHardCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
-    // eslint-disable-next-line no-console
-    console.log("getHardCopyDocuments request", request);
     const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
@@ -87,8 +85,6 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         };
       }),
     };
-    // eslint-disable-next-line no-console
-    console.log("submitHardCopyDocuments request", request);
     const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation);
     setLoading(false);
     if (response !== undefined) {

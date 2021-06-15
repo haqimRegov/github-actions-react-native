@@ -22,7 +22,7 @@ export const getSoftCopyDocuments = async (
     return data.listSoftcopyDocuments;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getSoftCopyDocuments at GetSoftCopyDocuments.ts", error);
+    console.warn("Error in getSoftCopyDocuments at GetSoftCopyDocuments.ts", error);
     return error;
   }
 };

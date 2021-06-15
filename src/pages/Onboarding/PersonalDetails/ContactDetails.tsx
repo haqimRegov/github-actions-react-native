@@ -78,6 +78,7 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({
                   handleContactNumber={handleContactNumber}
                   keyboardType="numeric"
                   label={optional === true ? `${item.label} ${PERSONAL_DETAILS.LABEL_OPTIONAL}` : undefined}
+                  maxLength={15}
                   onBlur={onBlur}
                   placeholder="12 3456 7890"
                   spaceToTop={sh24}

@@ -63,17 +63,11 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
 
   const handleFetch = async () => {
     // setLoading(true);
-    const request: IGetOrderSummaryRequest = {
-      orderNumber: currentOrder!.orderNumber,
-    };
-    // eslint-disable-next-line no-console
-    console.log("getOrderSummary request", request);
+    const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
     const dashboardResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
     // setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
-      // eslint-disable-next-line no-console
-      console.log(data);
       if (error === null && data !== null) {
         setOrderSummary(data.result);
         setSelection(0);

@@ -47,15 +47,8 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
     setInput1Error(undefined);
     const encryptedNewPassword = await Encrypt(inputNewPassword, config!.sessionToken);
     const encryptedRetypePassword = await Encrypt(inputRetypePassword, config!.sessionToken);
-    const request = {
-      password: encryptedNewPassword,
-      confirmPassword: encryptedRetypePassword,
-    };
-    // eslint-disable-next-line no-console
-    console.log("changePassword request", request);
+    const request = { password: encryptedNewPassword, confirmPassword: encryptedRetypePassword };
     const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken }, navigation);
-    // eslint-disable-next-line no-console
-    console.log("response", response);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {

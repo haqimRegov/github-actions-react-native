@@ -88,8 +88,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       principalHolder: { email: principalEmail, code: principalOtp },
       jointHolder: jointRequest,
     };
-    // eslint-disable-next-line no-console
-    console.log("emailOtpVerification request", request);
     const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;

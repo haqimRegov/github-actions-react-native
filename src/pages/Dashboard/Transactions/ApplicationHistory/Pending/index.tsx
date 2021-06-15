@@ -271,8 +271,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         ...filterStatus,
       ],
     };
-    // eslint-disable-next-line no-console
-    console.log("getDashboard request", request);
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
 
     if (dashboardResponse !== undefined) {
@@ -303,12 +301,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
 
   const handleResubmitOrder = async (orderNumber: string) => {
     const request: IResubmitOrderRequest = { orderNumber: orderNumber };
-    // eslint-disable-next-line no-console
-    console.log("resubmitOrder request", request);
     const response: IResubmitOrderResponse = await resubmitOrder(request, navigation);
-    // eslint-disable-next-line no-console
-    console.log("resubmitOrder response", response);
-
     if (response !== undefined) {
       const { error } = response;
       if (error === null && response.data !== null) {

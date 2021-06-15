@@ -329,16 +329,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   const handleSetupClient = async () => {
     setLoading(true);
-
-    // eslint-disable-next-line no-console
-    console.log("submitClientAccount request", request);
     const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation);
     setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        // eslint-disable-next-line no-console
-        console.log("data", data);
         addOrders(data.result);
         const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
         updatedFinishedSteps.push("Declarations");

@@ -99,11 +99,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   };
 
   const handleFetch = async () => {
-    const request: IGetSoftCopyDocumentsRequest = {
-      orderNumber: currentOrder!.orderNumber,
-    };
-    // eslint-disable-next-line no-console
-    console.log("getSoftCopyDocuments request", request);
+    const request: IGetSoftCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
     const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
@@ -156,8 +152,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         };
       }),
     };
-    // eslint-disable-next-line no-console
-    console.log("submitSoftCopyDocuments request", request);
     const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;

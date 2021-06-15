@@ -217,8 +217,6 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
         ...filterStatus,
       ],
     };
-    // eslint-disable-next-line no-console
-    console.log("getDashboard request", request);
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
     setIsFetching(false);
     if (dashboardResponse !== undefined) {

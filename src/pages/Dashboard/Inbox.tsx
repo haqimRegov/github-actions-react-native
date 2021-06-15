@@ -59,14 +59,10 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
 
   const handleFetch = async (newPage: string) => {
     const request: IGetInboxRequest = { page: newPage, search: inputSearch };
-    // eslint-disable-next-line no-console
-    console.log("request", request);
     const response: IGetInboxResponse = await getInbox(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        // eslint-disable-next-line no-console
-        console.log("data", data);
         let notificationBucket = {};
         data.result.inbox.forEach((message: IGetInboxMessage) => {
           const dateLabel = moment(message.createdOn, "x").format(FULL_DATE_FORMAT);
@@ -118,15 +114,11 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
 
   const handleRead = async (id: string) => {
     const request: IUpdateInboxRequest = { notificationIds: [id] };
-    // eslint-disable-next-line no-console
-    console.log("updateInbox request", request);
     const response: IUpdateInboxResponse = await updateInbox(request, navigation);
     // setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        // eslint-disable-next-line no-console
-        console.log("data", data);
         handleFetch(inboxList.page);
       }
       if (error !== null) {

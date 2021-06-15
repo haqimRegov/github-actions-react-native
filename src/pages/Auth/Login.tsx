@@ -69,10 +69,6 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     setLoading(true);
     const request = { username: inputNRIC, password: encryptedPassword };
     const header = { encryptionKey: credentials.sessionToken, ...deviceToken };
-    // eslint-disable-next-line no-console
-    console.log("login request", request);
-    // eslint-disable-next-line no-console
-    console.log("login header", header);
     const response: ILoginResponse = await login(request, header);
     if (response !== undefined) {
       const { data, error } = response;

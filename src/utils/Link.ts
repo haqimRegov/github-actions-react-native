@@ -11,7 +11,7 @@ const openLink = async (URL: string) => {
     }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("An error occurred", error);
+    console.warn("An error occurred", error);
   }
 };
 

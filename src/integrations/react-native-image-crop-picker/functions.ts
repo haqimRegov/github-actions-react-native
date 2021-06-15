@@ -26,12 +26,12 @@ export const imageOpenPicker = async (handleSuccess: SuccessCallback) => {
     handleSuccess(image);
   } catch (error) {
     if (JSON.stringify(error).includes("cancelled")) {
-      // eslint-disable-next-line no-console
-      console.log("User Cancelled", error);
+      // // eslint-disable-next-line no-console
+      // console.log("User Cancelled", error);
       return "";
     }
     // eslint-disable-next-line no-console
-    return console.log("error", error);
+    return console.warn("Error", error);
   }
   return false;
 };
@@ -46,12 +46,12 @@ export const imageOpenCamera = async (handleSuccess: SuccessCallback) => {
     handleSuccess(image);
   } catch (error) {
     if (JSON.stringify(error).includes("cancelled")) {
-      // eslint-disable-next-line no-console
-      console.log("User Cancelled", error);
+      // // eslint-disable-next-line no-console
+      // console.log("User Cancelled", error);
       return "";
     }
     // eslint-disable-next-line no-console
-    return console.log("error", error);
+    return console.warn("Error", error);
   }
   return false;
 };

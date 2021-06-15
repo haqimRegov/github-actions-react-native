@@ -5,7 +5,7 @@ const filesBase64 = async (base64List: string[]) => {
     .then((res) => res)
     .catch((err) => {
       // eslint-disable-next-line no-console
-      console.log(err);
+      console.warn(err);
     });
   return share;
 };

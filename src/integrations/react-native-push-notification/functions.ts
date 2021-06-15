@@ -5,15 +5,15 @@ const configure = () => {
   // Must be outside of any component LifeCycle (such as `componentDidMount`).
   PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
-    onRegister: (token) => {
-      // eslint-disable-next-line no-console
-      console.log("TOKEN:", token);
+    onRegister: () => {
+      // // eslint-disable-next-line no-console
+      // console.log("Notification Token:", token);
     },
 
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification: (notification) => {
-      // eslint-disable-next-line no-console
-      console.log("NOTIFICATION:", notification);
+      // // eslint-disable-next-line no-console
+      // console.log("Notification:", notification);
 
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened
@@ -23,7 +23,7 @@ const configure = () => {
     // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
     onRegistrationError: (err) => {
       // eslint-disable-next-line no-console
-      console.error(err.message, err);
+      console.warn(err.message, err);
     },
 
     // IOS ONLY (optional): default: all - Permissions to register.

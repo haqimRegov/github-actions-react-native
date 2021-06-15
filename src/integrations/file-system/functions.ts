@@ -5,7 +5,7 @@ const readFile = async (path: string) => {
     return await RNFS.readFile(path, "base64");
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(error);
+    console.warn(error);
     return "An Error Occurred";
   }
 };
@@ -15,7 +15,7 @@ const readFileMainBundle = async (path: string) => {
     return await RNFS.readFile(`${RNFS.MainBundlePath}/${path}`, "base64");
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(error);
+    console.warn(error);
     return "An Error Occurred";
   }
 };
@@ -25,7 +25,7 @@ const readFileTemp = async (fileName: string) => {
     return await RNFS.readFile(`${RNFS.TemporaryDirectoryPath}/${fileName}`, "base64");
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(error);
+    console.warn(error);
     return "An Error Occurred";
   }
 };
@@ -35,7 +35,7 @@ const writeFile = async (path: string, base64: string) => {
     return await RNFS.writeFile(path, base64, "base64");
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(error);
+    console.warn(error);
     return "An Error Occurred";
   }
 };
@@ -47,7 +47,7 @@ const writeFileTemp = async (fileName: string, base64: string) => {
     return { path };
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(error);
+    console.warn(error);
     return "An Error Occurred";
   }
 };

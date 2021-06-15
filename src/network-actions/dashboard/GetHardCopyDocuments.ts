@@ -22,7 +22,7 @@ export const getHardCopyDocuments = async (
     return data.listHardcopyDocuments;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getHardCopyDocuments at GetHardCopyDocuments.ts", error);
+    console.warn("Error in getHardCopyDocuments at GetHardCopyDocuments.ts", error);
     return error;
   }
 };

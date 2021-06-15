@@ -19,7 +19,7 @@ export const forgotPassword = async (variables: IForgotPasswordRequest) => {
     return data.forgotPassword;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in forgotPassword at ForgotPassword.ts", error);
+    console.warn("Error in forgotPassword at ForgotPassword.ts", error);
     return error;
   }
 };

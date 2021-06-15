@@ -19,7 +19,7 @@ export const resendLockOtp = async (variables: IResendLockOTPRequest) => {
     return data.resendLockOtp;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in resendLockOtp at ResendOTP.ts", error);
+    console.warn("Error in resendLockOtp at ResendOTP.ts", error);
     return error;
   }
 };

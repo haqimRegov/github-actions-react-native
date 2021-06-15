@@ -22,7 +22,7 @@ export const getRiskProfile = async (
     return data.riskAssessment;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getRiskProfile at GetRiskProfile.ts", error);
+    console.warn("Error in getRiskProfile at GetRiskProfile.ts", error);
     return error;
   }
 };

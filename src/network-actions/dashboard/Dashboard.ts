@@ -18,7 +18,7 @@ export const getDashboard = async (variables: IDashboardRequest, navigation: ISt
     return data.dashboard;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getDashboard at Dashboard.ts", error);
+    console.warn("Error in getDashboard at Dashboard.ts", error);
     return error;
   }
 };

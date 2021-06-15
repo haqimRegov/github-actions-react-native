@@ -22,7 +22,7 @@ export const emailOtpVerification = async (
     return data.emailOtpVerification;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in emailOtpVerification at EmailOTPVerification.ts", error);
+    console.warn("Error in emailOtpVerification at EmailOTPVerification.ts", error);
     return error;
   }
 };

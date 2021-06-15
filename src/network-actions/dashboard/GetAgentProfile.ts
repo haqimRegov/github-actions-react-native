@@ -22,7 +22,7 @@ export const getAgentProfile = async (
     return data.agentProfile;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getAgentProfile at GetAgentProfile.ts", error);
+    console.warn("Error in getAgentProfile at GetAgentProfile.ts", error);
     return error;
   }
 };

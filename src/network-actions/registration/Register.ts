@@ -19,7 +19,7 @@ export const register = async (variables: IVerifyAgentRequest) => {
     return data.firstTimeSignUp;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in register at Register.ts", error);
+    console.warn("Error in register at Register.ts", error);
     return error;
   }
 };

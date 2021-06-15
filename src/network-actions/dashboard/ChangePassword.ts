@@ -23,7 +23,7 @@ export const changePassword = async (
     return data.changePassword;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in changePassword at ChangePassword.ts", error);
+    console.warn("Error in changePassword at ChangePassword.ts", error);
     return error;
   }
 };

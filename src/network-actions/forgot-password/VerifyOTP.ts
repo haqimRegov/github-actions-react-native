@@ -19,7 +19,7 @@ export const verifyOtp = async (variables: IVerifyOTPRequest) => {
     return data.verifyOtp;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in verifyOtp at VerifyOTP.ts", error);
+    console.warn("Error in verifyOtp at VerifyOTP.ts", error);
     return error;
   }
 };

@@ -18,7 +18,7 @@ export const getInbox = async (variables: IGetInboxRequest, navigation: IStackNa
     return data.getInbox;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getInbox at GetInbox.ts", error);
+    console.warn("Error in getInbox at GetInbox.ts", error);
     return error;
   }
 };

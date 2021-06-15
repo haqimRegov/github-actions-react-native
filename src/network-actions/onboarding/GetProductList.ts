@@ -18,7 +18,7 @@ export const getProductList = async (variables: IProductListRequest, navigation:
     return data.productList;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getProductList at ProductList.ts", error);
+    console.warn("Error in getProductList at ProductList.ts", error);
     return error;
   }
 };

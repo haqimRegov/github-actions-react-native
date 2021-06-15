@@ -22,7 +22,7 @@ export const submitHardCopyDocuments = async (
     return data.submitHardcopyDocuments;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in submitHardCopyDocuments at SubmitHardCopyDocuments.ts", error);
+    console.warn("Error in submitHardCopyDocuments at SubmitHardCopyDocuments.ts", error);
     return error;
   }
 };

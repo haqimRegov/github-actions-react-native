@@ -22,7 +22,7 @@ export const emailVerification = async (
     return data.emailVerification;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in emailVerification at EmailVerification.ts", error);
+    console.warn("Error in emailVerification at EmailVerification.ts", error);
     return error;
   }
 };

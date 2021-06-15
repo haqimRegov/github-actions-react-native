@@ -22,7 +22,7 @@ export const getPaymentRequired = async (
     return data.listPaymentRequired;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getPaymentRequired at GetPaymentRequired.ts", error);
+    console.warn("Error in getPaymentRequired at GetPaymentRequired.ts", error);
     return error;
   }
 };

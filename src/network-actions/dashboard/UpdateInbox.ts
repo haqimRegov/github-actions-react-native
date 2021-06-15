@@ -18,7 +18,7 @@ export const updateInbox = async (variables: IUpdateInboxRequest, navigation: IS
     return data.updateInbox;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in updateInbox at UpdateInbox.ts", error);
+    console.warn("Error in updateInbox at UpdateInbox.ts", error);
     return error;
   }
 };

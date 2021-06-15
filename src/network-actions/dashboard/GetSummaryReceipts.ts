@@ -22,7 +22,7 @@ export const getSummaryReceipt = async (
     return data.summaryReceipt;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in getSummaryReceipt at SummaryReceipt.ts", error);
+    console.warn("Error in getSummaryReceipt at SummaryReceipt.ts", error);
     return error;
   }
 };

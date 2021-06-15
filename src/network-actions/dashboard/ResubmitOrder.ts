@@ -22,7 +22,7 @@ export const resubmitOrder = async (
     return data.resubmitOrder;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log("Error in resubmitOrder at ResubmitOrder.ts", error);
+    console.warn("Error in resubmitOrder at ResubmitOrder.ts", error);
     return error;
   }
 };

@@ -6,8 +6,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { LocalAssets } from "../../../assets/LocalAssets";
 import { ActionButtons, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, PromptModal, SafeAreaPage } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, ERROR, ERROR_CODE } from "../../../data/dictionary";
+import { ERROR, ERROR_CODE } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
+import { OTP_CONFIG } from "../../../integrations";
 import { emailOtpVerification } from "../../../network-actions";
 import {
   centerHorizontal,
@@ -60,7 +61,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   setPrincipalOtp,
 }: EmailOTPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
+  const [resendTimer, setResendTimer] = useState(OTP_CONFIG.EXPIRY);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
   const [jointError, setJointError] = useState<string | undefined>(undefined);
@@ -100,7 +101,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         setPrincipalError(error.message);
         setJointError(error.message);
         if (error.errorCode === ERROR_CODE.otpAttempt) {
-          setResendTimer(DICTIONARY_OTP_COOL_OFF);
+          setResendTimer(OTP_CONFIG.COOL_OFF);
         }
       }
     }
@@ -109,7 +110,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
 
   const handleResendOtp = () => {
     handleResend();
-    setResendTimer(DICTIONARY_OTP_EXPIRY);
+    setResendTimer(OTP_CONFIG.EXPIRY);
   };
 
   const handleBack = () => {
@@ -172,7 +173,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
               keyboardType="numeric"
               error={principalError}
               label={principalOtpLabel}
-              maxLength={DICTIONARY_OTP_LENGTH}
+              maxLength={OTP_CONFIG.LENGTH}
               onBlur={checkPrincipalOtp}
               onChangeText={setPrincipalOtp}
               placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
@@ -186,7 +187,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
                   error={jointError}
                   label={EMAIL_VERIFICATION.LABEL_OTP_JOINT}
                   onBlur={checkJointOtp}
-                  maxLength={DICTIONARY_OTP_LENGTH}
+                  maxLength={OTP_CONFIG.LENGTH}
                   onChangeText={setJointOtp}
                   placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
                   value={jointOtp}

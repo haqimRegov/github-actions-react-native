@@ -8,8 +8,8 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Prompt, RNModal } from "../../components";
 import { Language } from "../../constants";
-import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE, ERRORS } from "../../data/dictionary";
-import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
+import { ERROR_CODE, ERRORS } from "../../data/dictionary";
+import { OTP_CONFIG, RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
@@ -36,7 +36,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
   const [lockPrompt, setLockPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [resendTimer, setResendTimer] = useState<number>(DICTIONARY_OTP_EXPIRY);
+  const [resendTimer, setResendTimer] = useState<number>(OTP_CONFIG.EXPIRY);
 
   const handleForgotPassword = () => {
     setRootPage("PASSWORD_RECOVERY");
@@ -143,7 +143,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       }
     } else {
       if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(DICTIONARY_OTP_COOL_OFF);
+        setResendTimer(OTP_CONFIG.COOL_OFF);
       }
       setInput1Error(error.message);
     }
@@ -162,7 +162,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     const { error } = response;
     if (error !== null) {
       if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(DICTIONARY_OTP_COOL_OFF);
+        setResendTimer(OTP_CONFIG.COOL_OFF);
       }
       setInput1Error(error.message);
     }

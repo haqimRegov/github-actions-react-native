@@ -3,7 +3,8 @@ import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
+import { ERROR_CODE } from "../../data/dictionary";
+import { OTP_CONFIG } from "../../integrations";
 import { register, registerPassword, verifySignUp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { Encrypt, maskedString } from "../../utils";
@@ -26,7 +27,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
   const [inputOTP, setInputOTP] = useState<string>("");
   const [inputNewPassword, setInputNewPassword] = useState<string>("");
   const [inputRetypePassword, setInputRetypePassword] = useState<string>("");
-  const [resendTimer, setResendTimer] = useState(DICTIONARY_OTP_EXPIRY);
+  const [resendTimer, setResendTimer] = useState(OTP_CONFIG.EXPIRY);
   const [page, setPage] = useState<TypePage>("NRIC");
 
   const handleExistingLogin = () => {
@@ -99,7 +100,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
       }
     } else {
       if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(DICTIONARY_OTP_COOL_OFF);
+        setResendTimer(OTP_CONFIG.COOL_OFF);
       }
       setInput1Error(error.message);
     }

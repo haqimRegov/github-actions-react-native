@@ -3,7 +3,8 @@ import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_OTP_EXPIRY, DICTIONARY_OTP_LENGTH, ERROR } from "../../../data/dictionary";
+import { ERROR } from "../../../data/dictionary";
+import { OTP_CONFIG } from "../../../integrations";
 import { flexRow, fs12SemiBoldBlue2, fs16SemiBoldBlack2, fs40BoldBlack2, sh32, sh40, sh56, sh8, sw360, sw4 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
@@ -38,7 +39,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
 }: OTPDetailsProps) => {
   const handleResendOTP = useCallback(() => {
     handleResend();
-    setResendTimer(DICTIONARY_OTP_EXPIRY);
+    setResendTimer(OTP_CONFIG.EXPIRY);
   }, [handleResend, setResendTimer]);
 
   const handleValidateOTP = () => {
@@ -77,7 +78,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
         error={error}
         keyboardType="numeric"
         label={LOGIN.LABEL_OTP}
-        maxLength={DICTIONARY_OTP_LENGTH}
+        maxLength={OTP_CONFIG.LENGTH}
         onBlur={handleValidateOTP}
         onChangeText={setInputOTP}
         placeholder={LOGIN.PLACEHOLDER_OTP}

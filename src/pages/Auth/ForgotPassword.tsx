@@ -4,7 +4,8 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { Language } from "../../constants";
-import { DICTIONARY_OTP_COOL_OFF, DICTIONARY_OTP_EXPIRY, ERROR_CODE } from "../../data/dictionary";
+import { ERROR_CODE } from "../../data/dictionary";
+import { OTP_CONFIG } from "../../integrations";
 import { forgotPassword, resetPassword, verifyOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { Encrypt, maskedString } from "../../utils";
@@ -29,7 +30,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
   const [inputOTP, setInputOTP] = useState<string>("");
   const [inputNewPassword, setInputNewPassword] = useState<string>("");
   const [inputRetypePassword, setInputRetypePassword] = useState<string>("");
-  const [resendTimer, setResendTimer] = useState<number>(DICTIONARY_OTP_EXPIRY);
+  const [resendTimer, setResendTimer] = useState<number>(OTP_CONFIG.EXPIRY);
   const [page, setPage] = useState<TypePage>("NRIC");
 
   const handleVerifyOTP = async () => {
@@ -48,7 +49,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
       }
     } else {
       if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(DICTIONARY_OTP_COOL_OFF);
+        setResendTimer(OTP_CONFIG.COOL_OFF);
       }
       setInput1Error(error.message);
     }

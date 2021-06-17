@@ -19,7 +19,6 @@ export * from "./marital-status";
 export * from "./mobile-code";
 export * from "./occupation";
 export * from "./order-status";
-export * from "./otp";
 export * from "./password";
 export * from "./payment-method";
 export * from "./personal";

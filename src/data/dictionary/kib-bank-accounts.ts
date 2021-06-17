@@ -48,4 +48,11 @@ export const DICTIONARY_KIB_BANK_ACCOUNTS: IKibBankAccounts[] = [
     bankAccountNumber: "312193179235",
     bankSwiftCode: "SCBLMYKXXXX",
   },
+  {
+    currency: "RMB",
+    bankName: "Standard Chartered",
+    bankAccountName: "Kenanga Investors Berhad - Collection Trust Account",
+    bankAccountNumber: "312192963846",
+    bankSwiftCode: "SCBLMYKXXXX",
+  },
 ];

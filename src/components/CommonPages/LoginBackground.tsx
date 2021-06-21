@@ -123,7 +123,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
             <Image source={LocalAssets.login.background} style={backgroundStyle} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw56} />
-          <SafeAreaPage barStyle="dark-content" bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
+          <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
             <View style={flexChild}>
               <CustomSpacer space={sh32} />
               <View style={flexRow}>

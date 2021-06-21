@@ -22,7 +22,9 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
   if (err.errorCode === ERROR_CODE.unauthenticated && navigation !== undefined) {
     return AlertDialog(err.message, handleNavigate, "Session Expired");
   }
-  Alert.alert(err.message);
+  setTimeout(() => {
+    Alert.alert(err.message);
+  }, 100);
   // TODO proper return type
   return undefined as any;
 };

@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Dimensions, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { Dimensions, Keyboard, KeyboardAvoidingView, Platform, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import { connect } from "react-redux";
@@ -43,6 +43,7 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
+        <StatusBar barStyle="dark-content" />
         <Fragment>
           {Platform.select({
             android: <RootNavigator />,

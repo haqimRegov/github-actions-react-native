@@ -144,9 +144,9 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
         <View style={borderBottomBlack21}>
           <CustomSpacer space={sh16} />
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} viewStyle={py(0)} />
-          <CustomSpacer space={sh8} />
+          <CustomSpacer space={sh16} />
           <View style={px(sw24)}>
-            <TextCard data={permanentAddress} itemStyle={{ marginBottom: sh8, marginTop: sh8 }} {...textCardProps} />
+            <TextCard data={permanentAddress} {...textCardProps} />
             <Dash />
             <CustomSpacer space={sh8} />
             <TextCard data={mailingAddress} {...textCardProps} />
@@ -200,9 +200,9 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           <View>
             <CustomSpacer space={sh16} />
             <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} viewStyle={py(0)} />
-            <CustomSpacer space={sh8} />
+            <CustomSpacer space={sh16} />
             <View style={px(sw24)}>
-              <TextCard data={employmentDetails} itemStyle={{ marginBottom: sh8, marginTop: sh8 }} {...textCardProps} />
+              <TextCard data={employmentDetails} {...textCardProps} />
               <Dash />
               <CustomSpacer space={sh8} />
               <TextCard data={employmentAddress} {...textCardProps} />

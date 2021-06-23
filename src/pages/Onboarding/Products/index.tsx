@@ -156,6 +156,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const updatedDisabledSteps: TypeOnboardingKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
         ? [
+            "IdentityVerification",
             "PersonalDetails",
             "EmploymentDetails",
             "PersonalInfoSummary",

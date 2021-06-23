@@ -25,7 +25,7 @@ const { ID_VERIFICATION } = Language.PAGE;
 
 export interface IDDetailsProps {
   accountType?: TypeAccountChoices;
-  accountHolder?: TypeAccountHolder;
+  accountHolder: TypeAccountHolder;
   addressInfo: IAddressInfoState;
   personalDetails: IPersonalDetailsState;
   setAddressInfo: (value: IAddressInfoState) => void;
@@ -75,7 +75,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const sameAddressToggle = addressInfo.sameAddress!;
 
   const setPermanentInfo = (value: IAddressState) => {
-    const sameMailingAddress = sameAddressToggle === true ? { mailingAddress: { ...addressInfo.mailingAddress, ...value } } : {};
+    const sameMailingAddress =
+      sameAddressToggle === true && accountHolder === "Principal" ? { mailingAddress: { ...addressInfo.mailingAddress, ...value } } : {};
     setAddressInfo({ ...addressInfo, permanentAddress: { ...addressInfo.permanentAddress, ...value }, ...sameMailingAddress });
   };
   const setMailingInfo = (value: IAddressState) => {

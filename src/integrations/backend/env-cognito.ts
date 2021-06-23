@@ -19,6 +19,12 @@ export const config = {
     aws_user_pools_web_client_id: "3objln3im1icdndh1qui7v7i29",
     aws_cognito_identity_pool_id: "ap-southeast-1:2d1e3a4b-2f0a-4ed0-bffc-fa81999080f7",
   },
+  staging: {
+    aws_cognito_region: "ap-southeast-1",
+    aws_user_pools_id: "ap-southeast-1_iDvVn1jp7",
+    aws_user_pools_web_client_id: "4vvcjpikvccuomsa63rj2tlopl",
+    aws_cognito_identity_pool_id: "ap-southeast-1:d67b882c-5686-4b43-9390-85977df1adad",
+  },
   uat: {
     aws_cognito_region: "ap-southeast-1",
     aws_user_pools_id: "ap-southeast-1_gJWaEtZ9a",

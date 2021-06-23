@@ -22,7 +22,7 @@ export const config = {
   staging: {
     aws_cognito_region: "ap-southeast-1",
     aws_user_pools_id: "ap-southeast-1_iDvVn1jp7",
-    aws_user_pools_web_client_id: "4vvcjpikvccuomsa63rj2tlopl",
+    aws_user_pools_web_client_id: "2v9bhor3ksbc15v7is3s294f4s",
     aws_cognito_identity_pool_id: "ap-southeast-1:d67b882c-5686-4b43-9390-85977df1adad",
   },
   uat: {

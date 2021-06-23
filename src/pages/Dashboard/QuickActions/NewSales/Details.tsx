@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
 import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
-import { DATE_OF_BIRTH_FORMAT, Language } from "../../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_ACCOUNT_TYPE,
   DICTIONARY_COUNTRIES,
@@ -65,8 +65,9 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
     }
   };
 
-  const setInputDateOfBirth = (value?: Date) =>
-    setClientInfo({ ...[holderToFill], dateOfBirth: moment(value).format(DATE_OF_BIRTH_FORMAT) });
+  const setInputDateOfBirth = (value?: Date) => {
+    setClientInfo({ ...[holderToFill], dateOfBirth: moment(value).format(DEFAULT_DATE_FORMAT) });
+  };
 
   const handleOtherIdType = (value: string) => {
     setInputOtherIdType(value as TypeIDOther);
@@ -82,7 +83,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
 
   const hideInput = clientType !== "" && holderToFill === "principalHolder";
   const disabledStyle: ViewStyle = hideInput ? { opacity: 0.5 } : {};
-  const dateValue = dateOfBirth !== "" ? moment(dateOfBirth, DATE_OF_BIRTH_FORMAT).toDate() : undefined;
+  const dateValue = dateOfBirth !== "" ? moment(dateOfBirth, DEFAULT_DATE_FORMAT).toDate() : undefined;
 
   return (
     <View>

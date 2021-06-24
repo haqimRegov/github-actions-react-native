@@ -175,7 +175,7 @@ const NewSalesComponent = ({
       agentId: agent?.id!,
       principalHolder: {
         country: principalHolder?.country,
-        dateOfBirth: principalHolder?.dateOfBirth,
+        dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
         id: principalHolder?.id,
         idType: principalIdType,
         name: principalHolder?.name,
@@ -215,7 +215,7 @@ const NewSalesComponent = ({
       accountType === "Individual"
         ? undefined
         : {
-            dateOfBirth: jointHolder?.dateOfBirth!,
+            dateOfBirth: moment(jointHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
             id: jointHolder?.id!,
             idType: jointIdType,
             name: jointHolder?.name!,
@@ -224,7 +224,7 @@ const NewSalesComponent = ({
       agentId: agent?.id!,
       accountType: accountType,
       principalHolder: {
-        dateOfBirth: principalHolder?.dateOfBirth!,
+        dateOfBirth: moment(principalHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
         id: principalHolder?.id!,
         idType: principalIdType,
         name: principalHolder?.name!,

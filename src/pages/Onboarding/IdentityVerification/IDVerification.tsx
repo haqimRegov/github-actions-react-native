@@ -85,7 +85,11 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   };
 
   const handlePrincipalAddress = (value: IAddressInfoState) => {
-    addPersonalInfo({ principal: { addressInformation: { ...principal!.addressInformation, ...value } } });
+    const jointMailingAddress =
+      joint!.addressInformation!.sameAddress === true && accountType === "Joint"
+        ? { joint: { addressInformation: { ...joint!.addressInformation, mailingAddress: { ...value.mailingAddress } } } }
+        : {};
+    addPersonalInfo({ principal: { addressInformation: { ...principal!.addressInformation, ...value } }, ...jointMailingAddress });
   };
 
   const handleJointDetails = (value: IPersonalDetailsState) => {
@@ -93,7 +97,9 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   };
 
   const handleJointAddress = (value: IAddressInfoState) => {
-    addPersonalInfo({ joint: { addressInformation: { ...joint!.addressInformation, ...value } } });
+    const jointMailingAddress =
+      joint!.addressInformation!.sameAddress === true && accountType === "Joint" ? {} : { mailingAddress: { ...value.mailingAddress } };
+    addPersonalInfo({ joint: { addressInformation: { ...joint!.addressInformation, ...value, ...jointMailingAddress } } });
   };
 
   const handlePrincipalValidation = (value: IIDVerificationValidations) => {
@@ -116,6 +122,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       labelContinue={ID_VERIFICATION.BUTTON_VERIFY}>
       <PrincipalVerification
         accountType={accountType}
+        accountHolder="Principal"
         addressInfo={principal!.addressInformation!}
         personalDetails={principal!.personalDetails!}
         setAddressInfo={handlePrincipalAddress}
@@ -129,6 +136,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
           <View style={borderBottomBlack21} />
           <CustomSpacer space={sh48} />
           <JointVerification
+            accountHolder="Joint"
             addressInfo={joint!.addressInformation!}
             personalDetails={joint!.personalDetails!}
             setAddressInfo={handleJointAddress}

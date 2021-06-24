@@ -13,7 +13,7 @@ import { OTP_CONFIG, RNFirebase, RNPushNotification, updateStorageData } from ".
 import { login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
-import { Encrypt, maskedString } from "../../utils";
+import { AlertDialog, Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails, PasswordDetails } from "./Details";
 
 const { LOGIN } = Language.PAGE;
@@ -49,76 +49,79 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   };
 
   const handleLogin = async () => {
-    const checkEmulator = await isEmulator();
-    const token = await RNFirebase.getToken();
-    const deviceToken = checkEmulator === true ? {} : { deviceToken: token };
-    Keyboard.dismiss();
-    setLockPrompt(false);
-    setLoading(true);
-    setInput1Error(undefined);
-    const credentials = await Auth.Credentials.get();
+    try {
+      const checkEmulator = await isEmulator();
+      const token = await RNFirebase.getToken();
+      const deviceToken = checkEmulator === true ? {} : { deviceToken: token };
+      Keyboard.dismiss();
+      setLockPrompt(false);
+      setLoading(true);
+      setInput1Error(undefined);
+      const credentials = await Auth.Credentials.get();
 
-    if ("sessionToken" in credentials === false) {
-      setLoading(false);
-      setTimeout(() => {
-        return Alert.alert(ERRORS.network.message);
-      }, 100);
-    }
-
-    const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
-    setLoading(true);
-    const request = { username: inputNRIC, password: encryptedPassword };
-    const header = { encryptionKey: credentials.sessionToken, ...deviceToken };
-    const response: ILoginResponse = await login(request, header);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null) {
-        if (data !== null) {
-          const { agentId, branch, email, inboxCount, licenseCode, licenseType, name, rank } = data.result;
-          await Auth.signIn(inputNRIC, inputPassword);
-          props.addGlobal({
-            agent: {
-              name: name,
-              email: email,
-              licenseCode: licenseCode,
-              licenseType: licenseType,
-              id: agentId,
-              branch: branch,
-              rank: rank,
-            },
-            config: {
-              identityId: data.result.identityId,
-              secretAccessKey: data.result.secretAccessKey,
-              sessionToken: data.result.sessionToken,
-              accessKeyId: data.result.accessKeyId,
-            },
-            unreadMessages: inboxCount,
-          });
-          setLoading(false);
-          RNPushNotification.setBadge(inboxCount);
-          await updateStorageData("visited", true);
-          if (checkEmulator === false) {
-            RNPushNotification.requestPermission();
-          }
-          props.resetTransactions();
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: "Private" }],
-            }),
-          );
-        }
-      } else if (error.errorCode === ERROR_CODE.lockedAccount) {
-        if (data?.result.email !== undefined) {
-          setLockPrompt(true);
-          setRecoveryEmail(maskedString(data?.result.email, 0, 4));
-        }
-      } else {
-        setInput1Error(error.message);
+      if ("sessionToken" in credentials === false) {
         setLoading(false);
+        setTimeout(() => {
+          return Alert.alert(ERRORS.network.message);
+        }, 100);
       }
+
+      const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
+      setLoading(true);
+      const request = { username: inputNRIC, password: encryptedPassword };
+      const header = { encryptionKey: credentials.sessionToken, ...deviceToken };
+      const response: ILoginResponse = await login(request, header);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null) {
+          if (data !== null) {
+            const { agentId, branch, email, inboxCount, licenseCode, licenseType, name, rank } = data.result;
+            await Auth.signIn(inputNRIC, inputPassword);
+            props.addGlobal({
+              agent: {
+                name: name,
+                email: email,
+                licenseCode: licenseCode,
+                licenseType: licenseType,
+                id: agentId,
+                branch: branch,
+                rank: rank,
+              },
+              config: {
+                identityId: data.result.identityId,
+                secretAccessKey: data.result.secretAccessKey,
+                sessionToken: data.result.sessionToken,
+                accessKeyId: data.result.accessKeyId,
+              },
+              unreadMessages: inboxCount,
+            });
+            setLoading(false);
+            RNPushNotification.setBadge(inboxCount);
+            await updateStorageData("visited", true);
+            if (checkEmulator === false) {
+              RNPushNotification.requestPermission();
+            }
+            props.resetTransactions();
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Private" }],
+              }),
+            );
+          }
+        } else if (error.errorCode === ERROR_CODE.lockedAccount) {
+          if (data?.result.email !== undefined) {
+            setLockPrompt(true);
+            setRecoveryEmail(maskedString(data?.result.email, 0, 4));
+          }
+        } else {
+          setInput1Error(error.message);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      AlertDialog(ERRORS.internal.message, () => setLoading(false));
     }
-    return undefined;
   };
 
   const handleVerifyOTP = async () => {

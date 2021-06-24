@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
 import { Image, ImageStyle, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
-import Collapsible from "react-native-collapsible";
 
 import { LocalAssets } from "../../../../assets/LocalAssets";
 import { ActionButtons, CustomSpacer, IconButton, IconInput } from "../../../../components";
@@ -36,6 +35,7 @@ import {
   sw80,
   sw84,
 } from "../../../../styles";
+import { AnimationUtils } from "../../../../utils";
 import { TransactionsFilter } from "./Filter";
 
 // import { AnimationUtils } from "../../../../utils";
@@ -82,7 +82,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
     }
     handleCancel();
     handleShowFilter();
-    // AnimationUtils.layout({ duration: 180 });
+    AnimationUtils.layout({ duration: 180 });
   };
 
   const handleReset = () => {
@@ -205,24 +205,24 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
               </View>
             </View>
           )} */}
-          <Collapsible collapsed={!filterVisible} duration={300}>
-            {filterVisible ? (
-              <View>
-                <TransactionsFilter filter={filter} activeTab={activeTab} setFilter={setFilter} />
-                <CustomSpacer space={sh40} />
-                <ActionButtons
-                  buttonContainerStyle={centerHorizontal}
-                  cancelButtonStyle={{ width: sw218 }}
-                  continueButtonStyle={{ width: sw218 }}
-                  handleCancel={handleReset}
-                  handleContinue={handleApplyFilter}
-                  labelCancel={DASHBOARD_FILTER.BUTTON_RESET}
-                  labelContinue={DASHBOARD_FILTER.BUTTON_APPLY}
-                />
-                <CustomSpacer space={sh8} />
-              </View>
-            ) : null}
-          </Collapsible>
+          {/* <Collapsible collapsed={!filterVisible} duration={300}> */}
+          {filterVisible ? (
+            <View>
+              <TransactionsFilter filter={filter} activeTab={activeTab} setFilter={setFilter} />
+              <CustomSpacer space={sh40} />
+              <ActionButtons
+                buttonContainerStyle={centerHorizontal}
+                cancelButtonStyle={{ width: sw218 }}
+                continueButtonStyle={{ width: sw218 }}
+                handleCancel={handleReset}
+                handleContinue={handleApplyFilter}
+                labelCancel={DASHBOARD_FILTER.BUTTON_RESET}
+                labelContinue={DASHBOARD_FILTER.BUTTON_APPLY}
+              />
+              <CustomSpacer space={sh8} />
+            </View>
+          ) : null}
+          {/* </Collapsible> */}
           <CustomSpacer space={sh24} />
         </View>
       </View>

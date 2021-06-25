@@ -22,6 +22,11 @@ const otpConfig = {
     EXPIRY: 120,
     LENGTH: 6,
   },
+  staging: {
+    COOL_OFF: 300,
+    EXPIRY: 120,
+    LENGTH: 6,
+  },
   uat: {
     COOL_OFF: 120,
     EXPIRY: 120,

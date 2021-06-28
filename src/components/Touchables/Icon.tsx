@@ -17,7 +17,7 @@ interface IconButtonProps {
 export const IconButton: FunctionComponent<IconButtonProps> = ({ color, name, onPress, size, style, withDebounce }: IconButtonProps) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncePress = useCallback(
-    debounce(onPress !== undefined ? onPress : () => {}, 500, {
+    debounce(onPress !== undefined ? onPress : () => {}, 1000, {
       leading: true,
       trailing: false,
     }),

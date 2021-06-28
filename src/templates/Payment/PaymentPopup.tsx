@@ -1,5 +1,5 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
-import { ActivityIndicator, Image, Text, View, ViewStyle } from "react-native";
+import React, { FunctionComponent, useState } from "react";
+import { ActivityIndicator, Image, LayoutChangeEvent, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { ActionButtons, CheckBox, CustomSpacer, RNModal, Tag, TextSpaceArea } from "../../components";
@@ -15,7 +15,6 @@ import {
   fs12BoldBlack2,
   fs12RegBlack2,
   fs16BoldBlack1,
-  fs16SemiBoldBlack1,
   fs24BlackBlack2,
   fs24BoldBlue2,
   fsAlignCenter,
@@ -24,8 +23,8 @@ import {
   sh16,
   sh24,
   sh32,
-  sh392,
   sh4,
+  sh403,
   sh56,
   sh8,
   sh96,
@@ -38,6 +37,8 @@ import {
   sw5,
   sw56,
   sw565,
+  sw588,
+  sw752,
   sw8,
 } from "../../styles";
 
@@ -48,10 +49,11 @@ interface PaymentPopupProps {
   loading: boolean;
   result?: ISubmitProofOfPaymentsResult;
 }
+
 export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone, loading, result }: PaymentPopupProps) => {
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
-
+  const [multipleColumn, setMultipleColumn] = useState<boolean>(false);
   const checkNonPendingOrder =
     result !== undefined && result.orders.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
   const allOrdersSubmitted =
@@ -72,7 +74,17 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
     return null;
   };
 
-  const widthStyle = result !== undefined && result.orders.length > 5 ? { width: undefined } : {};
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout;
+    if (height >= sh403) {
+      setMultipleColumn(true);
+    } else {
+      setMultipleColumn(false);
+    }
+  };
+
+  const widthStyle = multipleColumn === true && prompt === "status" ? { width: sw752 } : {};
+  const hintTextStyle = multipleColumn === true ? { width: sw588 } : {};
   const illustration = checkNonPendingOrder === true ? LocalAssets.illustration.orderReceived : LocalAssets.illustration.orderSaved;
   const submittedMessage = allOrdersSubmitted === true ? PAYMENT.PROMPT_TITLE_SUBMITTED : PAYMENT.PROMPT_TITLE_ORDER;
   const message = checkNonPendingOrder === true ? submittedMessage : PAYMENT.PROMPT_TITLE_SAVED;
@@ -87,6 +99,8 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
     backgroundColor: colorWhite._4,
     borderRadius: sw5,
     width: sw565,
+    minWidth: sw565,
+    ...widthStyle,
   };
 
   const buttonContainer: ViewStyle = {
@@ -118,10 +132,10 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                 </View>
               ) : (
                 <View>
-                  <TextSpaceArea spaceToBottom={sh8} style={fs24BlackBlack2} text={PAYMENT.PROMPT_TITLE_STATUS} />
+                  <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs24BlackBlack2} text={PAYMENT.PROMPT_TITLE_STATUS} />
                   <View style={borderBottomBlack1} />
                   <CustomSpacer space={sh16} />
-                  <View style={{ maxHeight: sh392, ...flexWrap }}>
+                  <View onLayout={handleLayout} style={{ maxHeight: sh403, ...flexWrap }}>
                     {result !== undefined &&
                       result.orders.map((order: ISubmitProofOfPaymentResultOrder, index: number) => {
                         return (
@@ -157,31 +171,32 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                         <View>
                           {result.account.remarks.map((remark, remarkIndex) => {
                             return (
-                              <Text key={remarkIndex} style={fs16SemiBoldBlack1}>
+                              <Text key={remarkIndex} style={fs12RegBlack2}>
                                 {remark}
                               </Text>
                             );
                           })}
                         </View>
+                        <CustomSpacer space={sh24} />
                       </View>
                     ) : null}
                   </View>
                   {checkNonPendingOrder === true ? (
-                    <Fragment>
-                      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
+                    <View style={{ width: sw452, ...hintTextStyle }}>
+                      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh8} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
                       <CheckBox
                         checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
                         onPress={handleCheckbox}
                         label={PAYMENT.PROMPT_CHECKBOX_LABEL}
                         labelStyle={fs12BoldBlack2}
                         toggle={toggle}
-                        style={{ width: sw328, ...widthStyle }}
+                        style={{ width: sw328, ...hintTextStyle }}
                       />
-                    </Fragment>
+                    </View>
                   ) : null}
                 </View>
               )}
-              <CustomSpacer space={sh56} />
+              <CustomSpacer space={checkNonPendingOrder === true ? sh56 : sh32} />
             </View>
             <ActionButtons
               buttonContainerStyle={buttonContainer}

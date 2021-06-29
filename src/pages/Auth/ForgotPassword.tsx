@@ -1,5 +1,5 @@
 import { Auth } from "aws-amplify";
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
@@ -23,6 +23,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
   setPasswordRecovery,
   setRootPage,
 }: ForgotPasswordProps) => {
+  const fetching = useRef<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
   const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
@@ -34,73 +35,86 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
   const [page, setPage] = useState<TypePage>("NRIC");
 
   const handleVerifyOTP = async () => {
-    setLoading(true);
-    setInput1Error(undefined);
-    const response: IVerifySignUpResponse = await verifyOtp({ nric: inputNRIC, code: inputOTP });
-    setLoading(false);
-    if (response === undefined) {
-      // TODO temporary
-      return;
-    }
-    const { data, error } = response;
-    if (error === null) {
-      if (data?.result.status === true) {
-        setPage("PASSWORD");
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setInput1Error(undefined);
+      const response: IVerifySignUpResponse = await verifyOtp({ nric: inputNRIC, code: inputOTP });
+      fetching.current = false;
+      setLoading(false);
+      if (response === undefined) {
+        // TODO temporary
+        return;
       }
-    } else {
-      if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(OTP_CONFIG.COOL_OFF);
+      const { data, error } = response;
+      if (error === null) {
+        if (data?.result.status === true) {
+          setPage("PASSWORD");
+        }
+      } else {
+        if (error.errorCode === ERROR_CODE.otpAttempt) {
+          setResendTimer(OTP_CONFIG.COOL_OFF);
+        }
+        setInput1Error(error.message);
       }
-      setInput1Error(error.message);
     }
   };
+
   const handelNewPassword = async () => {
-    setLoading(true);
-    setInput2Error(undefined);
-    const credentials = await Auth.Credentials.get();
-    const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
-    const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
-    const response: ISignUpResponse = await resetPassword(
-      {
-        username: inputNRIC,
-        password: encryptedNewPassword,
-        confirmPassword: encryptedRetypePassword,
-      },
-      { encryptionKey: credentials.sessionToken },
-    );
-    setLoading(false);
-    if (response === undefined) {
-      // TODO temporary
-      return;
-    }
-    const { data, error } = response;
-    if (error === null) {
-      if (data?.result.status === true) {
-        setRootPage("LOGIN");
-        setPasswordRecovery(true);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setInput2Error(undefined);
+      const credentials = await Auth.Credentials.get();
+      const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
+      const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
+      const response: ISignUpResponse = await resetPassword(
+        {
+          username: inputNRIC,
+          password: encryptedNewPassword,
+          confirmPassword: encryptedRetypePassword,
+        },
+        { encryptionKey: credentials.sessionToken },
+      );
+      fetching.current = false;
+      setLoading(false);
+      if (response === undefined) {
+        // TODO temporary
+        return;
       }
-    } else {
-      setInput2Error(error.message);
+      const { data, error } = response;
+      if (error === null) {
+        if (data?.result.status === true) {
+          setRootPage("LOGIN");
+          setPasswordRecovery(true);
+        }
+      } else {
+        setInput2Error(error.message);
+      }
     }
   };
 
   const handleForgotPassword = async () => {
-    setLoading(true);
-    setInput1Error(undefined);
-    const response: IVerifyAgentResponse = await forgotPassword({ nric: inputNRIC });
-    setLoading(false);
-    if (response === undefined) {
-      // TODO temporary
-      return;
-    }
-    const { data, error } = response;
-    if (error === null) {
-      if (data?.result.status === true) {
-        setPage("OTP");
-        setEmail(maskedString(data.result.email, 0, 4));
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setInput1Error(undefined);
+      const response: IVerifyAgentResponse = await forgotPassword({ nric: inputNRIC });
+      fetching.current = false;
+      setLoading(false);
+      if (response === undefined) {
+        // TODO temporary
+        return;
       }
-    } else {
-      setInput1Error(error.message);
+      const { data, error } = response;
+      if (error === null) {
+        if (data?.result.status === true) {
+          setPage("OTP");
+          setEmail(maskedString(data.result.email, 0, 4));
+        }
+      } else {
+        setInput1Error(error.message);
+      }
     }
   };
 

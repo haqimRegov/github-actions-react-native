@@ -154,6 +154,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       icon: { name: sortTransactionType === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "transactionType", textStyle: fs12BoldBlue2 }],
       onPressHeader: handleSortTransactionType,
+      textStyle: fsTransformNone,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_TYPE,
       titleStyle: fsTransformNone,
       viewStyle: { width: sw104 },

@@ -78,6 +78,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       orderStatusList = DICTIONARY_PENDING_STATUS_FILTER;
       break;
   }
+
   return (
     <View>
       <View style={{ ...px(sw24) }}>
@@ -101,7 +102,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
             datePickerStyle={{ height: sh143 }}
             dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
-            maximumDate={moment().toDate()}
+            maximumDate={endDate || moment().toDate()}
             setValue={handleStartDate}
             value={startDate}
           />
@@ -118,7 +119,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
             datePickerStyle={{ height: sh143 }}
             dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
-            minimumDate={startDate !== undefined ? moment(startDate).toDate() : undefined}
+            minimumDate={startDate}
             maximumDate={moment().toDate()}
             setValue={handleEndDate}
             value={endDate}

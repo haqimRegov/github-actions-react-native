@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -21,6 +21,7 @@ interface UploadHardCopyProps extends TransactionsStoreProps {
 
 const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: UploadHardCopyProps) => {
   const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
+  const fetching = useRef<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [branch, setBranch] = useState<string>("");
@@ -61,45 +62,49 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setPrompt(true);
-    const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
-    const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
-    const request: ISubmitHardCopyDocumentsRequest = {
-      orderNumber: currentOrder!.orderNumber,
-      branchId: branchId,
-      hardcopy: documentList!.documents.map(({ docs, name }) => {
-        return {
-          docs: docs.map((documents) => ({
-            title: documents!.title!,
-            file: {
-              base64: documents!.base64!,
-              name: documents!.name!,
-              size: documents!.size!,
-              type: documents!.type!,
-              date: documents!.date!,
-              path: documents!.path!,
-            },
-          })),
-          name: name,
-        };
-      }),
-    };
-    const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation);
-    setLoading(false);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        if (data.result.status === true) {
-          setLoading(false);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setPrompt(true);
+      const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
+      const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
+      const request: ISubmitHardCopyDocumentsRequest = {
+        orderNumber: currentOrder!.orderNumber,
+        branchId: branchId,
+        hardcopy: documentList!.documents.map(({ docs, name }) => {
+          return {
+            docs: docs.map((documents) => ({
+              title: documents!.title!,
+              file: {
+                base64: documents!.base64!,
+                name: documents!.name!,
+                size: documents!.size!,
+                type: documents!.type!,
+                date: documents!.date!,
+                path: documents!.path!,
+              },
+            })),
+            name: name,
+          };
+        }),
+      };
+      const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          if (data.result.status === true) {
+            setLoading(false);
+          }
         }
-      }
-      if (error !== null) {
-        setPrompt(false);
-        setLoading(false);
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 100);
+        if (error !== null) {
+          setPrompt(false);
+          setLoading(false);
+          setTimeout(() => {
+            Alert.alert(error.message);
+          }, 100);
+        }
       }
     }
   };

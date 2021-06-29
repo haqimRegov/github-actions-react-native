@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -76,6 +76,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   updateTransactions,
 }: PendingOrdersProps) => {
   const { filter, orders, page, sort } = pending;
+  const fetching = useRef<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
 
@@ -301,19 +302,23 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleResubmitOrder = async (orderNumber: string) => {
-    const request: IResubmitOrderRequest = { orderNumber: orderNumber };
-    const response: IResubmitOrderResponse = await resubmitOrder(request, navigation);
-    if (response !== undefined) {
-      const { error } = response;
-      if (error === null && response.data !== null) {
-        if (response.data.result.status === true) {
-          handleFetch();
+    if (fetching.current === false) {
+      fetching.current = true;
+      const request: IResubmitOrderRequest = { orderNumber: orderNumber };
+      const response: IResubmitOrderResponse = await resubmitOrder(request, navigation);
+      fetching.current = false;
+      if (response !== undefined) {
+        const { error } = response;
+        if (error === null && response.data !== null) {
+          if (response.data.result.status === true) {
+            handleFetch();
+          }
         }
-      }
-      if (error !== null) {
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 100);
+        if (error !== null) {
+          setTimeout(() => {
+            Alert.alert(error.message);
+          }, 100);
+        }
       }
     }
   };

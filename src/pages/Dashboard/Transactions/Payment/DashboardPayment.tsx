@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -35,6 +35,7 @@ interface DashboardPaymentProps extends TransactionsStoreProps {
 }
 
 const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (props: DashboardPaymentProps) => {
+  const fetching = useRef<boolean>(false);
   const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
   const [paymentOrder, setPaymentOrder] = useState<IPaymentOrderState | undefined>(undefined);
   // const [successMessage, setSuccessMessage] = useState<string>("");
@@ -85,44 +86,48 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    const payment: ISubmitProofOfPayment[] = paymentOrder!.payments
-      .map((paymentInfo: IPaymentState, index: number) => {
-        const updatedPaymentInfo = { ...paymentInfo };
-        delete updatedPaymentInfo.combinedBankAccountName;
-        const temporaryReference =
-          updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
-          updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
-            ? `${paymentOrder!.orderNumber}${index}${moment().format("x")}`
-            : undefined;
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const payment: ISubmitProofOfPayment[] = paymentOrder!.payments
+        .map((paymentInfo: IPaymentState, index: number) => {
+          const updatedPaymentInfo = { ...paymentInfo };
+          delete updatedPaymentInfo.combinedBankAccountName;
+          const temporaryReference =
+            updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
+            updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
+              ? `${paymentOrder!.orderNumber}${index}${moment().format("x")}`
+              : undefined;
 
-        return {
-          ...updatedPaymentInfo,
-          referenceNumber: temporaryReference, // TODO temporary
-          amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
-          bankAccountName:
-            paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
-              ? paymentInfo.combinedBankAccountName
-              : paymentInfo.bankAccountName,
-          currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
-          transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
-          transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
-        };
-      })
-      .filter((value) => value.saved === true);
-    const paymentOrders: ISubmitProofOfPaymentOrder[] = [
-      { orderNumber: paymentOrder!.orderNumber, paymentType: paymentOrder!.paymentType, payments: payment },
-    ];
-    const request = { orders: paymentOrders };
-    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
-    if (paymentResponse !== undefined) {
-      const { data, error } = paymentResponse;
-      if (error === null && data !== null) {
-        setPaymentResult(data.result);
-      }
-      if (error !== null) {
-        const errorList = error.errorList?.join("\n");
-        AlertDialog(error.message, () => setLoading(false), errorList);
+          return {
+            ...updatedPaymentInfo,
+            referenceNumber: temporaryReference, // TODO temporary
+            amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
+            bankAccountName:
+              paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
+                ? paymentInfo.combinedBankAccountName
+                : paymentInfo.bankAccountName,
+            currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
+            transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
+            transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
+          };
+        })
+        .filter((value) => value.saved === true);
+      const paymentOrders: ISubmitProofOfPaymentOrder[] = [
+        { orderNumber: paymentOrder!.orderNumber, paymentType: paymentOrder!.paymentType, payments: payment },
+      ];
+      const request = { orders: paymentOrders };
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
+      fetching.current = false;
+      if (paymentResponse !== undefined) {
+        const { data, error } = paymentResponse;
+        if (error === null && data !== null) {
+          setPaymentResult(data.result);
+        }
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          AlertDialog(error.message, () => setLoading(false), errorList);
+        }
       }
     }
     return undefined;
@@ -237,6 +242,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
               {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
             </View>
           }
+          continueDebounce={false}
           continueDisabled={submitDisabled}
           labelSubmit={PAYMENT.BUTTON_SUBMIT}
           submitOnPress={handleSubmit}

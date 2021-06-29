@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -35,6 +35,7 @@ interface UploadDocumentsProps extends TransactionsStoreProps {
 
 const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props: UploadDocumentsProps) => {
   const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
+  const fetching = useRef<boolean>(false);
   const [documentList, setDocumentList] = useState<IGetSoftCopyDocumentsResult | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
@@ -115,57 +116,61 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setPrompt(true);
-    const request: ISubmitSoftCopyDocumentsRequest = {
-      orderNumber: currentOrder!.orderNumber,
-      principal: pendingDocumentsPrincipal.map(({ docs, name }) => {
-        return {
-          docs: docs.map((documents) => ({
-            title: documents!.title!,
-            file: {
-              base64: documents!.base64!,
-              name: documents!.name!,
-              size: documents!.size!,
-              type: documents!.type!,
-              date: documents!.date!,
-              path: documents!.path!,
-            },
-          })),
-          name: name,
-        };
-      }),
-      joint: pendingDocumentsJoint.map(({ docs, name }) => {
-        return {
-          docs: docs.map((documents) => ({
-            title: documents!.title!,
-            file: {
-              base64: documents!.base64!,
-              name: documents!.name!,
-              size: documents!.size!,
-              type: documents!.type!,
-              date: documents!.date!,
-              path: documents!.path!,
-            },
-          })),
-          name: name,
-        };
-      }),
-    };
-    const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        if (data.result.status === true) {
-          setLoading(false);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setPrompt(true);
+      const request: ISubmitSoftCopyDocumentsRequest = {
+        orderNumber: currentOrder!.orderNumber,
+        principal: pendingDocumentsPrincipal.map(({ docs, name }) => {
+          return {
+            docs: docs.map((documents) => ({
+              title: documents!.title!,
+              file: {
+                base64: documents!.base64!,
+                name: documents!.name!,
+                size: documents!.size!,
+                type: documents!.type!,
+                date: documents!.date!,
+                path: documents!.path!,
+              },
+            })),
+            name: name,
+          };
+        }),
+        joint: pendingDocumentsJoint.map(({ docs, name }) => {
+          return {
+            docs: docs.map((documents) => ({
+              title: documents!.title!,
+              file: {
+                base64: documents!.base64!,
+                name: documents!.name!,
+                size: documents!.size!,
+                type: documents!.type!,
+                date: documents!.date!,
+                path: documents!.path!,
+              },
+            })),
+            name: name,
+          };
+        }),
+      };
+      const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation);
+      fetching.current = false;
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          if (data.result.status === true) {
+            setLoading(false);
+          }
         }
-      }
-      if (error !== null) {
-        setPrompt(false);
-        setLoading(false);
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 100);
+        if (error !== null) {
+          setPrompt(false);
+          setLoading(false);
+          setTimeout(() => {
+            Alert.alert(error.message);
+          }, 100);
+        }
       }
     }
   };

@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
@@ -55,6 +55,7 @@ const NewSalesComponent = ({
   setVisible,
   visible,
 }: NewSalesProps) => {
+  const fetching = useRef<boolean>(false);
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
@@ -171,91 +172,99 @@ const NewSalesComponent = ({
   };
 
   const handleCheckClient = async () => {
-    const request = {
-      agentId: agent?.id!,
-      principalHolder: {
-        country: principalHolder?.country,
-        dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
-        id: principalHolder?.id,
-        idType: principalIdType,
-        name: principalHolder?.name,
-      },
-    };
-    const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
-    if (clientCheck !== undefined) {
-      const { data, error } = clientCheck;
-      if (error === null && data !== null) {
-        setErrorMessage(undefined);
-        setInputError1(undefined);
-        if (data.result.message === "NTB") {
-          return setClientType("NTB");
+    if (fetching.current === false) {
+      fetching.current = true;
+      const request = {
+        agentId: agent?.id!,
+        principalHolder: {
+          country: principalHolder?.country,
+          dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
+          id: principalHolder?.id,
+          idType: principalIdType,
+          name: principalHolder?.name,
+        },
+      };
+      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      fetching.current = false;
+      if (clientCheck !== undefined) {
+        const { data, error } = clientCheck;
+        if (error === null && data !== null) {
+          setErrorMessage(undefined);
+          setInputError1(undefined);
+          if (data.result.message === "NTB") {
+            return setClientType("NTB");
+          }
+          setTimeout(() => {
+            return Alert.alert("Client is ETB");
+          }, 100);
         }
-        setTimeout(() => {
-          return Alert.alert("Client is ETB");
-        }, 100);
-      }
-      if (error !== null) {
-        if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
-          return setPrompt("ageMinimum");
+        if (error !== null) {
+          if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
+            return setPrompt("ageMinimum");
+          }
+          if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
+            return setPrompt("ageMaximum");
+          }
+          if (error?.errorCode === ERROR_CODE.clientBannedCountry) {
+            return setPrompt("bannedCountry");
+          }
+          return setErrorMessage(error.message);
         }
-        if (error?.errorCode === ERROR_CODE.clientAgeMaximum) {
-          return setPrompt("ageMaximum");
-        }
-        if (error?.errorCode === ERROR_CODE.clientBannedCountry) {
-          return setPrompt("bannedCountry");
-        }
-        return setErrorMessage(error.message);
       }
     }
     return undefined;
   };
 
   const handleClientRegister = async () => {
-    const jointInfo =
-      accountType === "Individual"
-        ? undefined
-        : {
-            dateOfBirth: moment(jointHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
-            id: jointHolder?.id!,
-            idType: jointIdType,
-            name: jointHolder?.name!,
-          };
-    const request: IClientRegisterRequest = {
-      agentId: agent?.id!,
-      accountType: accountType,
-      principalHolder: {
-        dateOfBirth: moment(principalHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
-        id: principalHolder?.id!,
-        idType: principalIdType,
-        name: principalHolder?.name!,
-      },
-      jointHolder: jointInfo,
-    };
-    const client: IClientRegisterResponse = await clientRegister(request, navigation);
-    if (client !== undefined) {
-      const { data, error } = client;
-      if (error === null && data !== null) {
-        const moreJointInfo =
-          data.result.jointHolder !== undefined && data.result.jointHolder !== null
-            ? {
-                dateOfBirth: moment(data.result.jointHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
-                clientId: data.result.jointHolder.clientId,
-              }
-            : {};
-        setErrorMessage(undefined);
-        setInputError1(undefined);
-        addClientDetails({
-          ...details,
-          principalHolder: {
-            ...principalHolder,
-            dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
-            clientId: data.result.principalHolder.clientId,
-          },
-          jointHolder: { ...jointHolder, ...moreJointInfo },
-        });
-        return setRegistered(true);
+    if (fetching.current === false) {
+      fetching.current = true;
+      const jointInfo =
+        accountType === "Individual"
+          ? undefined
+          : {
+              dateOfBirth: moment(jointHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
+              id: jointHolder?.id!,
+              idType: jointIdType,
+              name: jointHolder?.name!,
+            };
+      const request: IClientRegisterRequest = {
+        agentId: agent?.id!,
+        accountType: accountType,
+        principalHolder: {
+          dateOfBirth: moment(principalHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
+          id: principalHolder?.id!,
+          idType: principalIdType,
+          name: principalHolder?.name!,
+        },
+        jointHolder: jointInfo,
+      };
+      const client: IClientRegisterResponse = await clientRegister(request, navigation);
+      fetching.current = false;
+      if (client !== undefined) {
+        const { data, error } = client;
+        if (error === null && data !== null) {
+          const moreJointInfo =
+            data.result.jointHolder !== undefined && data.result.jointHolder !== null
+              ? {
+                  dateOfBirth: moment(data.result.jointHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
+                  clientId: data.result.jointHolder.clientId,
+                }
+              : {};
+          setErrorMessage(undefined);
+          setInputError1(undefined);
+          addClientDetails({
+            ...details,
+            principalHolder: {
+              ...principalHolder,
+              dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
+              clientId: data.result.principalHolder.clientId,
+            },
+            jointHolder: { ...jointHolder, ...moreJointInfo },
+          });
+          return setRegistered(true);
+        }
+        setErrorMessage(error?.message);
       }
-      setErrorMessage(error?.message);
     }
     return undefined;
   };

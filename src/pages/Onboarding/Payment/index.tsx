@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -45,54 +45,59 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   personalInfo,
   updatePaymentSummary,
 }: PaymentProps) => {
+  const fetching = useRef<boolean>(false);
   const [activeOrder, setActiveOrder] = useState<string>("");
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
   const [viewFund, setViewFund] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async () => {
-    setLoading(true);
-    const paymentOrders: ISubmitProofOfPaymentOrder[] = paymentSummary!.orders.map(
-      ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
-        const payment: ISubmitProofOfPayment[] = payments
-          .map((paymentInfo: IPaymentState, index: number) => {
-            const updatedPaymentInfo = { ...paymentInfo };
-            delete updatedPaymentInfo.combinedBankAccountName;
-            const temporaryReference =
-              updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
-              updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
-                ? `${orderNumber}${index}${moment().format("x")}`
-                : undefined;
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const paymentOrders: ISubmitProofOfPaymentOrder[] = paymentSummary!.orders.map(
+        ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
+          const payment: ISubmitProofOfPayment[] = payments
+            .map((paymentInfo: IPaymentState, index: number) => {
+              const updatedPaymentInfo = { ...paymentInfo };
+              delete updatedPaymentInfo.combinedBankAccountName;
+              const temporaryReference =
+                updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
+                updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
+                  ? `${orderNumber}${index}${moment().format("x")}`
+                  : undefined;
 
-            return {
-              ...updatedPaymentInfo,
-              referenceNumber: temporaryReference, // TODO temporary
-              amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
-              bankAccountName:
-                paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
-                  ? paymentInfo.combinedBankAccountName
-                  : paymentInfo.bankAccountName,
-              currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
-              transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
-              transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
-            };
-          })
-          .filter((value) => value.saved === true);
-        return { orderNumber: orderNumber, paymentType: paymentType, payments: payment };
-      },
-    );
-    const request = { orders: paymentOrders };
-    const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
-    if (paymentResponse !== undefined) {
-      const { data, error } = paymentResponse;
-      if (error === null && data !== null) {
-        setPaymentResult(data.result);
-        // setErrorMessage(undefined);
-        // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
-      }
-      if (error !== null) {
-        const errorList = error.errorList?.join("\n");
-        AlertDialog(error.message, () => setLoading(false), errorList);
+              return {
+                ...updatedPaymentInfo,
+                referenceNumber: temporaryReference, // TODO temporary
+                amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
+                bankAccountName:
+                  paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
+                    ? paymentInfo.combinedBankAccountName
+                    : paymentInfo.bankAccountName,
+                currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
+                transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
+                transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
+              };
+            })
+            .filter((value) => value.saved === true);
+          return { orderNumber: orderNumber, paymentType: paymentType, payments: payment };
+        },
+      );
+      const request = { orders: paymentOrders };
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
+      fetching.current = false;
+      if (paymentResponse !== undefined) {
+        const { data, error } = paymentResponse;
+        if (error === null && data !== null) {
+          setPaymentResult(data.result);
+          // setErrorMessage(undefined);
+          // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+        }
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          AlertDialog(error.message, () => setLoading(false), errorList);
+        }
       }
     }
     return undefined;

@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, Text } from "react-native";
 import { connect } from "react-redux";
 
@@ -27,6 +27,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 }: EmailVerificationProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { emailOtpSent } = personalInfo;
+  const fetching = useRef<boolean>(false);
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
   const [jointOtp, setJointOtp] = useState<string>("");
@@ -53,29 +54,33 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   };
 
   const handleEmailVerification = async () => {
-    setPrincipalEmailError(undefined);
-    setJointEmailError(undefined);
-    const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
-    const request = {
-      clientId: principalClientId,
-      principalHolder: { email: inputPrincipalEmail },
-      jointHolder: jointRequest,
-    };
-    setLoading(true);
-    const response: IEmailVerificationResponse = await emailVerification(request, navigation);
-    setLoading(false);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        if (data.result.status === true) {
-          addPersonalInfo({ ...personalInfo, emailOtpSent: true });
-          setPage("otp");
+    if (fetching.current === false) {
+      fetching.current = true;
+      setPrincipalEmailError(undefined);
+      setJointEmailError(undefined);
+      const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
+      const request = {
+        clientId: principalClientId,
+        principalHolder: { email: inputPrincipalEmail },
+        jointHolder: jointRequest,
+      };
+      setLoading(true);
+      const response: IEmailVerificationResponse = await emailVerification(request, navigation);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          if (data.result.status === true) {
+            addPersonalInfo({ ...personalInfo, emailOtpSent: true });
+            setPage("otp");
+          }
         }
-      }
-      if (error !== null) {
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 200);
+        if (error !== null) {
+          setTimeout(() => {
+            Alert.alert(error.message);
+          }, 200);
+        }
       }
     }
   };

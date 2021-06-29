@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from "react-redux";
@@ -29,6 +29,7 @@ declare interface ChangePasswordProps extends GlobalStoreProps {
 }
 
 const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ config, navigation, setPage }: ChangePasswordProps) => {
+  const fetching = useRef<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
@@ -42,23 +43,27 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
   };
 
   const handelChangePassword = async () => {
-    setIsLoading(true);
-    setPrompt(true);
-    setInput1Error(undefined);
-    const encryptedNewPassword = await Encrypt(inputNewPassword, config!.sessionToken);
-    const encryptedRetypePassword = await Encrypt(inputRetypePassword, config!.sessionToken);
-    const request = { password: encryptedNewPassword, confirmPassword: encryptedRetypePassword };
-    const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken }, navigation);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        if (data.result.status === true) {
-          setIsLoading(false);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setIsLoading(true);
+      setPrompt(true);
+      setInput1Error(undefined);
+      const encryptedNewPassword = await Encrypt(inputNewPassword, config!.sessionToken);
+      const encryptedRetypePassword = await Encrypt(inputRetypePassword, config!.sessionToken);
+      const request = { password: encryptedNewPassword, confirmPassword: encryptedRetypePassword };
+      const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken }, navigation);
+      fetching.current = false;
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          if (data.result.status === true) {
+            setIsLoading(false);
+          }
         }
-      }
-      if (error !== null) {
-        setPrompt(false);
-        setInput1Error(error.message);
+        if (error !== null) {
+          setPrompt(false);
+          setInput1Error(error.message);
+        }
       }
     }
   };

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -60,6 +60,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const { approvedCount, pendingCount, rejectedCount } = transactions;
 
   const { filter, page, pages } = props[activeTab];
+  const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
@@ -109,29 +110,33 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
     // setLoading(true);
-    const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
-    // setLoading(false);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        const documents = data.result.pdf.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
-        if (data.result.pdf.length > 0) {
-          const share = await RNShareApi.filesBase64(documents);
-          if (share !== undefined) {
-            setPrompt(true);
+    if (fetching.current === false) {
+      fetching.current = true;
+      const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
+      fetching.current = false;
+      // setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          const documents = data.result.pdf.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
+          if (data.result.pdf.length > 0) {
+            const share = await RNShareApi.filesBase64(documents);
+            if (share !== undefined) {
+              setPrompt(true);
+            }
+          } else {
+            // setLoading(false);
+            setTimeout(() => {
+              Alert.alert(data.result.message);
+            }, 100);
           }
-        } else {
+        }
+        if (error !== null) {
           // setLoading(false);
           setTimeout(() => {
-            Alert.alert(data.result.message);
+            Alert.alert(error.message);
           }, 100);
         }
-      }
-      if (error !== null) {
-        // setLoading(false);
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 100);
       }
     }
   };

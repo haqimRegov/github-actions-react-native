@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -35,37 +35,42 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { clientId } = details!.principalHolder!;
+  const fetching = useRef<boolean>(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
   const handleSubmit = async () => {
-    setLoading(true);
-    const documents: ISubmitPdfDocument[] = receipts!.map((receipt) => {
-      const receiptData: ISubmitPdfDocument = {
-        adviserSignature: receipt.adviserSignature!,
-        clientSignature: receipt.principalSignature!,
-        orderNumber: receipt.orderNumber!,
-        pdf: receipt.signedPdf!,
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const documents: ISubmitPdfDocument[] = receipts!.map((receipt) => {
+        const receiptData: ISubmitPdfDocument = {
+          adviserSignature: receipt.adviserSignature!,
+          clientSignature: receipt.principalSignature!,
+          orderNumber: receipt.orderNumber!,
+          pdf: receipt.signedPdf!,
+        };
+        if (receipt.jointSignature?.base64 !== undefined) {
+          receiptData.jointSignature = receipt.jointSignature;
+        }
+        return receiptData;
+      });
+      const request: ISubmitPdfRequest = {
+        clientId: clientId!,
+        documents: documents,
       };
-      if (receipt.jointSignature?.base64 !== undefined) {
-        receiptData.jointSignature = receipt.jointSignature;
-      }
-      return receiptData;
-    });
-    const request: ISubmitPdfRequest = {
-      clientId: clientId!,
-      documents: documents,
-    };
-    const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation);
-    setLoading(false);
-    if (submitPdfResponse !== undefined) {
-      const { data, error } = submitPdfResponse;
-      if (error === null && data !== null) {
-        setShowPrompt(true);
-      }
-      if (error !== null) {
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 100);
+      const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation);
+      fetching.current = false;
+      setLoading(false);
+      if (submitPdfResponse !== undefined) {
+        const { data, error } = submitPdfResponse;
+        if (error === null && data !== null) {
+          setShowPrompt(true);
+        }
+        if (error !== null) {
+          setTimeout(() => {
+            Alert.alert(error.message);
+          }, 100);
+        }
       }
     }
     return undefined;
@@ -103,42 +108,46 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleGetPDF = async (receipt: IOnboardingReceiptState, index: number) => {
-    setLoading(true);
-    const request = { clientId: clientId!, orderNo: receipt.orderNumber! };
-    const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation);
-    setLoading(false);
-    if (onboardingReceipt !== undefined) {
-      const { data, error } = onboardingReceipt;
-      if (error === null && data !== null) {
-        // setErrorMessage(undefined);
-        const updatedReceipts = [...receipts!];
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const request = { clientId: clientId!, orderNo: receipt.orderNumber! };
+      const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation);
+      fetching.current = false;
+      setLoading(false);
+      if (onboardingReceipt !== undefined) {
+        const { data, error } = onboardingReceipt;
+        if (error === null && data !== null) {
+          // setErrorMessage(undefined);
+          const updatedReceipts = [...receipts!];
 
-        const newReceipt: IOnboardingReceiptState = {
-          ...updatedReceipts[index],
-          pdf: {
-            base64: data.result.pdf.base64,
-            date: `${moment().valueOf()}`,
-            name: updatedReceipts[index].name!,
-            type: "application/pdf",
-          },
-          signedPdf: {
-            base64: data.result.pdf.base64,
-            date: `${moment().valueOf()}`,
-            name: updatedReceipts[index].name!,
-            type: "application/pdf",
-          },
-          url: data.result.pdf.url,
-          urlPageCount: data.result.pdf.urlPageCount,
-        };
-        updatedReceipts[index] = newReceipt;
-        updateReceipts(updatedReceipts);
-        setEditReceipt(newReceipt);
-        // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
-      }
-      if (error !== null) {
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 150);
+          const newReceipt: IOnboardingReceiptState = {
+            ...updatedReceipts[index],
+            pdf: {
+              base64: data.result.pdf.base64,
+              date: `${moment().valueOf()}`,
+              name: updatedReceipts[index].name!,
+              type: "application/pdf",
+            },
+            signedPdf: {
+              base64: data.result.pdf.base64,
+              date: `${moment().valueOf()}`,
+              name: updatedReceipts[index].name!,
+              type: "application/pdf",
+            },
+            url: data.result.pdf.url,
+            urlPageCount: data.result.pdf.urlPageCount,
+          };
+          updatedReceipts[index] = newReceipt;
+          updateReceipts(updatedReceipts);
+          setEditReceipt(newReceipt);
+          // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+        }
+        if (error !== null) {
+          setTimeout(() => {
+            Alert.alert(error.message);
+          }, 150);
+        }
       }
     }
     // return undefined;

@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Keyboard, View } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";
@@ -26,6 +26,7 @@ interface LoginProps extends GlobalStoreProps {
 }
 
 const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passwordRecovery, setRootPage, ...props }: LoginProps) => {
+  const fetching = useRef<boolean>(false);
   const [inputNRIC, setInputNRIC] = useState<string>("");
   const [inputOTP, setInputOTP] = useState<string>("");
   const [recoveryEmail, setRecoveryEmail] = useState<string | undefined>(undefined);
@@ -125,81 +126,93 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   };
 
   const handleVerifyOTP = async () => {
-    setLoading(true);
-    setInput1Error(undefined);
-    const response: IVerifyLockOTPResponse = await verifyLockOtp({ nric: inputNRIC, code: inputOTP });
-    if (response === undefined) {
-      // TODO temporary
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setInput1Error(undefined);
+      const response: IVerifyLockOTPResponse = await verifyLockOtp({ nric: inputNRIC, code: inputOTP });
+      fetching.current = false;
+      if (response === undefined) {
+        // TODO temporary
+        setLoading(false);
+        return;
+      }
       setLoading(false);
-      return;
-    }
-    setLoading(false);
-    const { data, error } = response;
-    if (error === null) {
-      if (data !== null) {
-        if (data?.result.status === true) {
-          setInputPassword("");
-          setInputOTP("");
-          setRecoveryEmail(undefined);
-          setRootPage("LOCKED_PASSWORD");
+      const { data, error } = response;
+      if (error === null) {
+        if (data !== null) {
+          if (data?.result.status === true) {
+            setInputPassword("");
+            setInputOTP("");
+            setRecoveryEmail(undefined);
+            setRootPage("LOCKED_PASSWORD");
+          }
         }
+      } else {
+        if (error.errorCode === ERROR_CODE.otpAttempt) {
+          setResendTimer(OTP_CONFIG.COOL_OFF);
+        }
+        setInput1Error(error.message);
       }
-    } else {
-      if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(OTP_CONFIG.COOL_OFF);
-      }
-      setInput1Error(error.message);
     }
   };
 
   const handleResend = async () => {
-    setLoading(true);
-    setInput1Error(undefined);
-    const response: IResendLockOTPResponse = await resendLockOtp({ nric: inputNRIC });
-    if (response === undefined) {
-      // TODO temporary
-      setLoading(false);
-      return;
-    }
-    setLoading(false);
-    const { error } = response;
-    if (error !== null) {
-      if (error.errorCode === ERROR_CODE.otpAttempt) {
-        setResendTimer(OTP_CONFIG.COOL_OFF);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setInput1Error(undefined);
+      const response: IResendLockOTPResponse = await resendLockOtp({ nric: inputNRIC });
+      fetching.current = false;
+      if (response === undefined) {
+        // TODO temporary
+        setLoading(false);
+        return;
       }
-      setInput1Error(error.message);
+      setLoading(false);
+      const { error } = response;
+      if (error !== null) {
+        if (error.errorCode === ERROR_CODE.otpAttempt) {
+          setResendTimer(OTP_CONFIG.COOL_OFF);
+        }
+        setInput1Error(error.message);
+      }
     }
   };
 
   const handelNewPassword = async () => {
-    setLoading(true);
-    setInput2Error(undefined);
-    const credentials = await Auth.Credentials.get();
-    const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
-    const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
-    const response: ISignUpResponse = await resetPassword(
-      {
-        username: inputNRIC,
-        password: encryptedNewPassword,
-        confirmPassword: encryptedRetypePassword,
-      },
-      { encryptionKey: credentials.sessionToken },
-    );
-    setLoading(false);
-    if (response === undefined) {
-      // TODO temporary
-      return;
-    }
-    const { data, error } = response;
-    if (error === null) {
-      if (data?.result.status === true) {
-        setInputNRIC("");
-        setInputNewPassword("");
-        setInputRetypePassword("");
-        setRootPage("LOGIN");
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      setInput2Error(undefined);
+      const credentials = await Auth.Credentials.get();
+      const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
+      const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
+      const response: ISignUpResponse = await resetPassword(
+        {
+          username: inputNRIC,
+          password: encryptedNewPassword,
+          confirmPassword: encryptedRetypePassword,
+        },
+        { encryptionKey: credentials.sessionToken },
+      );
+      fetching.current = false;
+      setLoading(false);
+      if (response === undefined) {
+        // TODO temporary
+        return;
       }
-    } else {
-      setInput2Error(error.message);
+      const { data, error } = response;
+      if (error === null) {
+        if (data?.result.status === true) {
+          setInputNRIC("");
+          setInputNewPassword("");
+          setInputRetypePassword("");
+          setRootPage("LOGIN");
+        }
+      } else {
+        setInput2Error(error.message);
+      }
     }
   };
 

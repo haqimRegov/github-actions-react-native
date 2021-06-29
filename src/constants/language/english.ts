@@ -994,7 +994,7 @@ export const english = {
       EDIT_TITLE_ASSESSMENT: "Are you sure you want to edit your Risk Assessment?",
       EDIT_TITLE_DOB: "Are you sure you want to edit your Date of Birth?",
       HEADING: "Hello",
-      SUBHEADING: "Before we continue, complete your risk assessment to continue",
+      SUBHEADING: "Complete your risk assessment to continue.",
       LABEL_DATE_OF_BIRTH: "Date of Birth",
       LABEL_QUESTION_1: "Question 1:",
       LABEL_QUESTION_2: "Question 2:",

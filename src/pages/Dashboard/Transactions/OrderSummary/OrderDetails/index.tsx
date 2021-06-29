@@ -42,9 +42,9 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
   const totalInvestmentAmount = totalInvestment
     .map(({ amount, currency }, index) => {
       const plus = index === 0 ? "" : " + ";
-      return `${plus} ${currency} ${amount}`;
+      return `${plus}${currency} ${amount}`;
     })
-    .join(", ");
+    .join("");
 
   const transactionSummaryDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_ORDER_DETAILS.LABEL_ORDER_NUMBER, title: orderNumber, titleStyle: fsTransformNone },

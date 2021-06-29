@@ -118,6 +118,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
             datePickerStyle={{ height: sh143 }}
             dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
+            minimumDate={startDate !== undefined ? moment(startDate).toDate() : undefined}
             maximumDate={moment().toDate()}
             setValue={handleEndDate}
             value={endDate}

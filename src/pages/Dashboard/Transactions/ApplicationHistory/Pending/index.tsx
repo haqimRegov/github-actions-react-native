@@ -197,6 +197,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       viewStyle: {
         width: sw80,
       },
+      textStyle: fsTransformNone,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_TYPE,
       titleStyle: fsTransformNone,
     },

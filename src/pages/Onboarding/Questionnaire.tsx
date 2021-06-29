@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, ReactElement, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, ReactElement, useEffect, useRef, useState } from "react";
 import { Alert, Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -84,6 +84,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const { clientId, dateOfBirth, name } = principalHolder!;
   const { disabledSteps, finishedSteps } = onboarding;
 
+  const fetching = useRef<boolean>(false);
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
   const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine } = questionnaire;
@@ -120,36 +121,40 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   };
 
   const handlePageContinue = async () => {
-    setLoading(true);
-    const request = {
-      clientId: clientId!,
-      riskAssessment: {
-        questionTwo: questionTwo,
-        questionThree: questionThree,
-        questionFour: questionFour,
-        questionFive: questionFive,
-        questionSix: questionSix,
-        questionSeven: questionSeven,
-        questionEight: questionEight,
-        questionNine: questionNine,
-      },
-    };
-    const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
-    setLoading(false);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        const riskAssessment = { ...data.result };
-        addRiskScore(riskAssessment);
-        setTimeout(() => {
-          setConfirmModal("assessment");
-        }, 300);
-      }
-      if (error !== null) {
-        const errorList = error.errorList?.join("\n");
-        setTimeout(() => {
-          Alert.alert(error.message, errorList);
-        }, 300);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const request = {
+        clientId: clientId!,
+        riskAssessment: {
+          questionTwo: questionTwo,
+          questionThree: questionThree,
+          questionFour: questionFour,
+          questionFive: questionFive,
+          questionSix: questionSix,
+          questionSeven: questionSeven,
+          questionEight: questionEight,
+          questionNine: questionNine,
+        },
+      };
+      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          const riskAssessment = { ...data.result };
+          addRiskScore(riskAssessment);
+          setTimeout(() => {
+            setConfirmModal("assessment");
+          }, 300);
+        }
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 300);
+        }
       }
     }
   };

@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useRef } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -37,6 +37,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 }: DeclarationSummaryProps) => {
   const { finishedSteps } = onboarding;
   const { principal, joint } = personalInfo;
+
+  const fetching = useRef<boolean>(false);
 
   // TODO handle if FEA
   const isFea = 100 < 500;
@@ -328,33 +330,37 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   };
 
   const handleSetupClient = async () => {
-    setLoading(true);
-    const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation);
-    setLoading(false);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        addOrders(data.result);
-        const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-        updatedFinishedSteps.push("Declarations");
-        const newDisabledStep: TypeOnboardingKey[] = [
-          "RiskAssessment",
-          "Products",
-          "PersonalInformation",
-          "Declarations",
-          "TermsAndConditions",
-          "Signatures",
-          "Payment",
-        ];
-        updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
-        return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
-      }
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          addOrders(data.result);
+          const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+          updatedFinishedSteps.push("Declarations");
+          const newDisabledStep: TypeOnboardingKey[] = [
+            "RiskAssessment",
+            "Products",
+            "PersonalInformation",
+            "Declarations",
+            "TermsAndConditions",
+            "Signatures",
+            "Payment",
+          ];
+          updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+          return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
+        }
 
-      if (error !== null) {
-        const errorList = error.errorList?.join("\n");
-        setTimeout(() => {
-          Alert.alert(error.message, errorList);
-        }, 150);
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
       }
     }
     return null;

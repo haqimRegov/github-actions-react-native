@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -61,6 +61,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   setPrincipalOtp,
 }: EmailOTPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const fetching = useRef<boolean>(false);
   const [resendTimer, setResendTimer] = useState(OTP_CONFIG.EXPIRY);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
@@ -82,26 +83,30 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   };
 
   const handleVerifyOTP = async () => {
-    setPrincipalError(undefined);
-    const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
-    const request = {
-      clientId: principalClientId,
-      principalHolder: { email: principalEmail, code: principalOtp },
-      jointHolder: jointRequest,
-    };
-    const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation);
-    if (response !== undefined) {
-      const { data, error } = response;
-      if (error === null && data !== null) {
-        if (data.result.status === true) {
-          setShowModal(true);
+    if (fetching.current === false) {
+      fetching.current = true;
+      setPrincipalError(undefined);
+      const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
+      const request = {
+        clientId: principalClientId,
+        principalHolder: { email: principalEmail, code: principalOtp },
+        jointHolder: jointRequest,
+      };
+      const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation);
+      fetching.current = false;
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          if (data.result.status === true) {
+            setShowModal(true);
+          }
         }
-      }
-      if (error !== null) {
-        setPrincipalError(error.message);
-        setJointError(error.message);
-        if (error.errorCode === ERROR_CODE.otpAttempt) {
-          setResendTimer(OTP_CONFIG.COOL_OFF);
+        if (error !== null) {
+          setPrincipalError(error.message);
+          setJointError(error.message);
+          if (error.errorCode === ERROR_CODE.otpAttempt) {
+            setResendTimer(OTP_CONFIG.COOL_OFF);
+          }
         }
       }
     }

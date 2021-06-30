@@ -174,7 +174,8 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
       return floating.amount + paidAmount >= 0;
     });
     const isCompleted = paymentType === "Recurring" ? true : !checkFloating.includes(false);
-    const updatedPaymentOrder = { floatingAmount: floatingTotalAmount, completed: isCompleted };
+    const computedFloating = latestPayments.length === 1 && latestPayments[0].amount === "" ? [] : floatingTotalAmount;
+    const updatedPaymentOrder = { floatingAmount: computedFloating, completed: isCompleted };
     return updatedPaymentOrder;
   };
 

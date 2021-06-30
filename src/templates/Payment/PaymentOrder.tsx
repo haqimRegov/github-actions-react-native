@@ -163,7 +163,16 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           : filteredPayments.map((amount) => amount).reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount);
       return { currency: orderAmount.currency, amount: total - parseAmount(orderAmount.amount) };
     });
-    const checkFloating = floatingTotalAmount.map((floating) => floating.amount >= 0);
+    const checkFloating = floatingTotalAmount.map((floating) => {
+      const filteredPaidAmount =
+        totalPaidAmount !== undefined
+          ? totalPaidAmount
+              .filter((value) => value.currency === floating.currency)
+              .map((payment: IOrderAmount) => parseAmount(payment.amount || ""))
+          : [];
+      const paidAmount = filteredPaidAmount.length === 0 ? 0 : filteredPaidAmount[0];
+      return floating.amount + paidAmount >= 0;
+    });
     const isCompleted = paymentType === "Recurring" ? true : !checkFloating.includes(false);
     const updatedPaymentOrder = { floatingAmount: floatingTotalAmount, completed: isCompleted };
     return updatedPaymentOrder;

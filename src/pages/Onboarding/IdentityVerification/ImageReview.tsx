@@ -8,6 +8,7 @@ import {
   fs16SemiBoldBlack2,
   fs24BoldBlue2,
   fsAlignCenter,
+  imageContain,
   px,
   py,
   sh16,
@@ -48,7 +49,7 @@ export const ImageReview: FunctionComponent<ImageReviewProps> = ({ handleReuploa
       visible={visible}>
       <Fragment>
         <View style={imageStyle}>
-          <Image source={{ uri: image?.path }} style={{ height: sh240, width: sw320 }} resizeMode="contain" />
+          <Image source={{ uri: image?.path }} style={{ ...imageContain, height: sh240, width: sw320 }} />
         </View>
         <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue2, ...fsAlignCenter }} text={IDENTITY_CONFIRMATION.LABEL_CHECK} />
         <TextSpaceArea style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter }} spaceToTop={sh16} text={IDENTITY_CONFIRMATION.LABEL_UNABLE} />

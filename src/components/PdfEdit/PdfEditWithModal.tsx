@@ -14,6 +14,7 @@ import {
   fs12BoldWhite1,
   fullHW,
   fullWidth,
+  imageContain,
   px,
   sh24,
   sh32,
@@ -68,7 +69,7 @@ export const PdfEditWithModal: FunctionComponent<PdfEditWithModalProps> = ({
   const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorBlack._2 : colorWhite._1;
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
   const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow5 };
-  const imageStyle: ImageStyle = { height: sh500, resizeMode: "contain", width: sw750 };
+  const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
 
   const modalAnimationInTiming = value !== undefined && value.type === "application/pdf" ? 0 : 450;
 

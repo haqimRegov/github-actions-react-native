@@ -3,7 +3,19 @@ import { ActivityIndicator, Image, ImageSourcePropType, Text, TextStyle, View } 
 
 import { LocalAssets } from "../../assets/LocalAssets";
 import { Language } from "../../constants";
-import { centerHV, centerVertical, colorGray, flexChild, fs12RegBlue2, fs16BoldBlue2, sh16, sh32, sh56, sw176 } from "../../styles";
+import {
+  centerHV,
+  centerVertical,
+  colorGray,
+  flexChild,
+  fs12RegBlue2,
+  fs16BoldBlue2,
+  imageContain,
+  sh16,
+  sh32,
+  sh56,
+  sw176,
+} from "../../styles";
 import { CustomSpacer } from "./Spacer";
 
 const { EMPTY_STATE } = Language.PAGE;
@@ -40,7 +52,7 @@ export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
       ) : (
         <Fragment>
           <CustomSpacer space={sh56} />
-          <Image source={defaultIllustration} style={{ height: sw176, width: sw176 }} />
+          <Image source={defaultIllustration} style={{ ...imageContain, height: sw176, width: sw176 }} />
           <CustomSpacer space={sh16} />
           <Text style={{ ...fs16BoldBlue2, ...titleStyle }}>{defaultTitle}</Text>
           {subtitle !== undefined ? <Text style={{ ...fs12RegBlue2, ...subtitleStyle }}>{subtitle}</Text> : null}

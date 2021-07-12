@@ -12,6 +12,7 @@ import {
   fs24BoldBlue2,
   fsAlignCenter,
   fsTransformNone,
+  imageContain,
   px,
   sh16,
   sh20,
@@ -85,7 +86,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
     ...rest,
   };
 
-  const illustrationStyle: ImageStyle = { height: sw176, width: sw176 };
+  const illustrationStyle: ImageStyle = { ...imageContain, height: sw176, width: sw176 };
   const defaultTopSpace = closable === true ? sh20 : sh48;
   const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh16;
 

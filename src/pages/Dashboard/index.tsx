@@ -23,6 +23,7 @@ import {
   fs12BoldBlue2,
   fs18BoldBlue2,
   fullHW,
+  imageContain,
   px,
   py,
   sh16,
@@ -113,7 +114,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
           .join("")
       : "";
 
-  const logoAimsStyle: ImageStyle = { height: sh32, width: sw66, resizeMode: "contain" };
+  const logoAimsStyle: ImageStyle = { ...imageContain, height: sh32, width: sw66 };
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>

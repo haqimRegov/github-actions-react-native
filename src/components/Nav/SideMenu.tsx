@@ -10,6 +10,7 @@ import {
   DEVICE,
   flexRow,
   fs12RegGray6,
+  imageContain,
   px,
   sh16,
   sh24,
@@ -40,7 +41,7 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
   spaceToBottom,
   spaceToContent,
 }: SideMenuProps) => {
-  const defaultLogoStyle: ImageStyle = { width: sw94, height: sh40, resizeMode: "contain", ...logoStyle };
+  const defaultLogoStyle: ImageStyle = { ...imageContain, width: sw94, height: sh40, ...logoStyle };
   const container: ViewStyle = {
     ...flexRow,
     backgroundColor: colorTransparent,

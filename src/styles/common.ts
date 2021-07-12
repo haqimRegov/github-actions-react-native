@@ -19,6 +19,8 @@ export const spaceAroundHorizontal = { justifyContent: "space-around" } as const
 export const spaceAroundVertical = { alignContent: "space-around" } as const;
 export const spaceAroundHV = { ...spaceAroundHorizontal, ...spaceAroundVertical } as const;
 
+export const imageContain = { resizeMode: "contain" } as const;
+
 export const flexChild = { flex: 1 } as const;
 export const flexGrow = { flexGrow: 1 } as const;
 export const flexNone = { flex: 0 } as const;

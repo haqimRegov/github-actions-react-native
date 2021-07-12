@@ -19,6 +19,7 @@ import {
   fs24BoldBlue2,
   fsAlignCenter,
   fullHW,
+  imageContain,
   px,
   sh16,
   sh24,
@@ -122,7 +123,7 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
               {prompt === "message" ? (
                 <View style={{ ...centerHV, width: sw452 }}>
                   <CustomSpacer space={sh24} />
-                  <Image source={illustration} style={{ height: sw176, width: sw176 }} />
+                  <Image source={illustration} style={{ ...imageContain, height: sw176, width: sw176 }} />
                   <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue2, ...fsAlignCenter }} text={message} />
                   {checkNonPendingOrder === true && allOrdersSubmitted === true ? (
                     floatingSubtitle

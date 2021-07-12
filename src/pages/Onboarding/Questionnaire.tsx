@@ -34,6 +34,7 @@ import {
   fs12SemiBoldBlack2,
   fs16BoldBlack1,
   fs16BoldBlack2,
+  imageContain,
   sh143,
   sh155,
   sh16,
@@ -270,7 +271,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_5}
               options={Q5_OPTIONS}
-              right={<Image style={{ height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
+              right={<Image style={{ ...imageContain, height: sh143, width: sw140 }} source={LocalAssets.graph.risk_assessment_graph_1} />}
               selected={questionFive}
               setSelected={setQ5}
               title={RISK_ASSESSMENT.QUESTION_5}
@@ -279,7 +280,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <Question
               label={RISK_ASSESSMENT.LABEL_QUESTION_6}
               options={Q6_OPTIONS}
-              right={<Image style={{ height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
+              right={<Image style={{ ...imageContain, height: sh155, width: sw221 }} source={LocalAssets.graph.risk_assessment_graph_2} />}
               selected={questionSix}
               setSelected={setQ6}
               title={RISK_ASSESSMENT.QUESTION_6}

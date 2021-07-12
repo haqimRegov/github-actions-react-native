@@ -6,7 +6,13 @@ import { connect } from "react-redux";
 
 import { ActionButtons, CustomSpacer, RNModal } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_PLACE_OF_BIRTH, ERROR_CODE } from "../../../../data/dictionary";
+import {
+  DICTIONARY_COUNTRIES,
+  DICTIONARY_ID_OTHER_TYPE,
+  DICTIONARY_ID_TYPE,
+  DICTIONARY_PLACE_OF_BIRTH,
+  ERROR_CODE,
+} from "../../../../data/dictionary";
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
 import {
@@ -178,7 +184,9 @@ const NewSalesComponent = ({
         agentId: agent?.id!,
         principalHolder: {
           country: principalHolder?.country,
-          dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
+          dateOfBirth: principalHolder?.dateOfBirth
+            ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+            : "",
           id: principalHolder?.id,
           idType: principalIdType,
           name: principalHolder?.name,
@@ -222,7 +230,9 @@ const NewSalesComponent = ({
         accountType === "Individual"
           ? undefined
           : {
-              dateOfBirth: moment(jointHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
+              dateOfBirth: jointHolder?.dateOfBirth
+                ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+                : "",
               id: jointHolder?.id!,
               idType: jointIdType,
               name: jointHolder?.name!,
@@ -231,7 +241,9 @@ const NewSalesComponent = ({
         agentId: agent?.id!,
         accountType: accountType,
         principalHolder: {
-          dateOfBirth: moment(principalHolder?.dateOfBirth!, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT),
+          dateOfBirth: principalHolder?.dateOfBirth
+            ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+            : "",
           id: principalHolder?.id!,
           idType: principalIdType,
           name: principalHolder?.name!,
@@ -243,6 +255,17 @@ const NewSalesComponent = ({
       if (client !== undefined) {
         const { data, error } = client;
         if (error === null && data !== null) {
+          const resetJointInfo =
+            accountType === "Individual" &&
+            (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
+          const initialJointInfo = {
+            name: "",
+            country: "",
+            dateOfBirth: "",
+            id: "",
+            idType: DICTIONARY_ID_TYPE[0],
+            otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+          };
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
@@ -259,7 +282,7 @@ const NewSalesComponent = ({
               dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
               clientId: data.result.principalHolder.clientId,
             },
-            jointHolder: { ...jointHolder, ...moreJointInfo },
+            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
           });
           return setRegistered(true);
         }

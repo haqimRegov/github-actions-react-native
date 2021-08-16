@@ -9,10 +9,10 @@ const INVESTMENT_INVALID_EMAIL = "The email you have entered is invalid.";
 const INVESTMENT_MAX_AMOUNT = "The amount you have entered exceeds the maximum amount.";
 const INVESTMENT_MIN_AMOUNT = "The amount you have entered didn't reach the minimum amount.";
 const LOGIN_INVALID_NRIC = "Your NRIC Number is invalid.";
-const LOGIN_INVALID_OTP = "Invalid OTP entered. Please try again.";
+const LOGIN_INVALID_OTP = "Invalid OTP. Please try again.";
 const OCR_INVALID_NRIC = "Kindly upload a valid NRIC.";
 const OCR_INVALID_NRIC_DATA = "We’re unable to capture the data from the image you uploaded.";
-const PASSWORD_NOT_MATCH = "Passwords did not match. Please try again.";
+const PASSWORD_NOT_MATCH = "Those passwords didn't match. Try again.";
 
 export const ERROR = {
   INVALID_BANK_NAME,

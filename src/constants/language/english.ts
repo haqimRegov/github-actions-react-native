@@ -68,7 +68,7 @@ export const english = {
       HEADING_JOINT: "Joint Account Holder",
       HINT_DISTRIBUTION:
         "The distribution instruction selected will be applied for all UT and AMP cash accounts. PRS and EPF accounts are defaulted to Re-Invest.",
-      HINT_SWIFT_CODE: "Please provide the Swift code to avoid delays in payment.",
+      HINT_SWIFT_CODE: "If you are investing in a foreign currency, please provide the Swift code to avoid delays for payment.",
       LABEL_ADDITIONAL: "Additional Details",
       LABEL_AND: "&",
       LABEL_BANK_ACCOUNT_NAME: "Account Holder’s Name",

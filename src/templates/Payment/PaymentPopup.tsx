@@ -33,7 +33,7 @@ import {
   sw176,
   sw218,
   sw320,
-  sw328,
+  sw400,
   sw452,
   sw5,
   sw56,
@@ -184,14 +184,14 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                   </View>
                   {checkNonPendingOrder === true ? (
                     <View style={{ width: sw452, ...hintTextStyle }}>
-                      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh8} style={fs12RegBlack2} text={PAYMENT.PROMPT_HINT} />
+                      <CustomSpacer space={sh8} />
                       <CheckBox
                         checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
                         onPress={handleCheckbox}
                         label={PAYMENT.PROMPT_CHECKBOX_LABEL}
                         labelStyle={fs12BoldBlack2}
                         toggle={toggle}
-                        style={{ width: sw328, ...hintTextStyle }}
+                        style={{ width: sw400, ...hintTextStyle }}
                       />
                     </View>
                   ) : null}

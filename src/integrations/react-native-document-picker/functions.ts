@@ -5,7 +5,7 @@ type SuccessCallback = (result: DocumentPickerResponse) => void;
 export const documentPicker = async (handleSuccess: SuccessCallback) => {
   try {
     const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+      type: [DocumentPicker.types.pdf],
     });
 
     return handleSuccess(res);

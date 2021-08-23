@@ -471,7 +471,7 @@ export const english = {
     EMAIL_VERIFICATION: {
       BUTTON_NO: "No",
       BUTTON_YES: "Yes",
-      HEADING: "Email Verification",
+      HEADING: "Investor Email Verification",
       LABEL_EMAIL_JOINT: "Joint Account Holder Email Address",
       LABEL_EMAIL_PRINCIPAL: "Principle Account Holder Email Address",
       LABEL_EMAIL_VERIFIED_TITLE:
@@ -496,7 +496,8 @@ export const english = {
       PROMPT_TITLE: "Are you sure you want to cancel?",
       SUBHEADING_JOINT: "We need your email address to open your account.",
       SUBHEADING: "We’ll need to verify your email address to continue",
-      TOOLTIP_CONTENT: "Please use a secure email address as confidential documents will be sent to this address.",
+      TOOLTIP_CONTENT:
+        "Please provide your frequently used personal email address as confidential investment documents will be sent to this email.",
     },
     EMPLOYMENT_DETAILS: {
       BUTTON_CANCEL: "Cancel",
@@ -851,13 +852,14 @@ export const english = {
       OPTION_DDA: "DDA",
       OPTION_FPX: "FPX",
       OPTION_COMBINED: "Combined",
-      PROMPT_CHECKBOX_LABEL: "This is under the assumption that the proof of payment and supporting documents are in transaction.",
+      PROMPT_CHECKBOX_LABEL:
+        "Your investment application will be processed once we've received your complete proof of payment and supporting documents (if any).",
       PROMPT_HINT:
-        "Your completed investment will be processed within the next 3 business days provided you have met the terms and conditions below.",
+        "Your investment application will be processed once we've received your complete proof of payment and supporting documents (if any).",
       PROMPT_SUBTITLE_PENDING:
-        "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.",
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.",
       PROMPT_SUBTITLE_PENDING_FLOATING:
-        "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.\n\n4. Your investor has a floating amount in their account. This amount will be refunded.",
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.\n\n4. Your investor has a floating amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE_SUBMITTED_FLOATING: "Your investor has a floating amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE: "All unsaved progress will be discarded.",
       PROMPT_TITLE_CANCEL: "Are you sure you want to cancel?",
@@ -886,11 +888,12 @@ export const english = {
       LABEL_MINIMUM_EPF: "Min. Investment Amount (EPF)",
       LABEL_RISK_CATEGORY: "Risk Category",
       LABEL_RISK: "Risk Category",
-      LABEL_SALES_CASH: "Sales Charge Range (Cash)",
-      LABEL_SALES_EPF: "Sales Charge Range (EPF)",
+      LABEL_SALES_CASH: "Sales Charge (Cash)",
+      LABEL_SALES_EPF: "Sales Charge (EPF)",
       LABEL_SHARIAH: "Shariah Approved",
+      LABEL_UP_TO: "Up to",
       TITLE_DOC_ANNUAL: "Annual Report",
-      TITLE_DOC_FACT: "Monthly Fund Fact Sheet",
+      TITLE_DOC_FACT: "Fund Fact Sheet",
       TITLE_DOC_HIGHLIGHTS: "Product Highlights Sheet",
       TITLE_DOC_PROSPECTUS: "Prospectus Information",
     },
@@ -1150,7 +1153,7 @@ export const english = {
       LABEL_PRINCIPAL_SIGNATURE: "Principal Holder's Signature",
       LABEL_CHECKBOX_1: "I/We have read, understood and accepted the Terms and Conditions above.",
       LABEL_CHECKBOX_2:
-        "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate.\nI acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document.",
+        "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
       LABEL_CHECKBOX_3:
         "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
       LABEL_CHECKBOX_4:
@@ -1158,8 +1161,6 @@ export const english = {
       LABEL_COMPLETED: "Completed",
       LABEL_CONSENT:
         "I/We hereby give consent to the Manager to disclose to my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
-      LABEL_DISCLAIMER:
-        "By signing below, you agree to the Terms and Conditions of this document. I/We acknowledged receipt of the copy of the Product Highlights Sheet and relevant disclosure document",
       LABEL_EXPAND_ALL: "Expand all",
       LABEL_FUND: "Fund",
       LABEL_JOINT_SIGNATURE: "Joint Holder's Signature",
@@ -1170,7 +1171,7 @@ export const english = {
       PROMPT_TITLE: "We've received your application",
       PROMPT_SUBTITLE: "Thank you. You have submitted your account opening application.",
       PROMPT_TEXT_1:
-        "1. Please note that the investment will be processed once we have received proof of payment along with relevant supporting documents.",
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).",
       PROMPT_TEXT_2:
         "2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.",
       SUBTITLE: "Signatures",

@@ -29,21 +29,21 @@ declare type TypeMalaysiaBank =
 
 declare type TypeMalaysiaState =
   | "Johor"
-  | "Sabah"
-  | "Sarawak"
-  | "Selangor"
-  | "Terengganu"
-  | "Kuala Lumpur"
-  | "Labuan"
-  | "Putrajaya"
   | "Kedah"
   | "Kelantan"
   | "Melaka"
   | "Negeri Sembilan"
   | "Pahang"
-  | "Pulau Pinang"
   | "Perak"
-  | "Perlis";
+  | "Perlis"
+  | "Pulau Pinang"
+  | "Sabah"
+  | "Sarawak"
+  | "Selangor"
+  | "Terengganu"
+  | "Wilayah Persekutuan Labuan"
+  | "Wilayah Persekutuan Putrajaya"
+  | "Wilayah Persekutuan";
 
 declare type TypeMalaysiaBankValue = { value: TypeMalaysiaBank };
 declare type TypeMalaysiaBankLabelValue = { label: string; value: TypeMalaysiaBank };

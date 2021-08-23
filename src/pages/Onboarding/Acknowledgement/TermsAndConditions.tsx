@@ -157,7 +157,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
               checkboxStyle={{ paddingTop: sh5 }}
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_2}
               labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart }}
+              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
               onPress={handleAgree2}
               toggle={agreeTerms.agree2}
             />

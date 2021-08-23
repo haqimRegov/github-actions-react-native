@@ -191,7 +191,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: riskScore.appetite },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.rangeOfReturn },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskScore.type },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_SUGGESTION, title: riskScore.fundSuggestion },
     { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile },
   ];
 

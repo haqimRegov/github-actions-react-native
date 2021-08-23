@@ -119,7 +119,11 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     { label: PRODUCT_DETAILS.LABEL_RISK, title: fund.riskCategory },
     { label: PRODUCT_DETAILS.LABEL_SHARIAH, title: fund.isSyariah },
     { label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf },
-    { label: PRODUCT_DETAILS.LABEL_SALES_CASH, title: `${salesCharge.cash.min}% - ${salesCharge.cash.max}%` },
+    {
+      label: PRODUCT_DETAILS.LABEL_SALES_CASH,
+      title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.cash.max}%`,
+      titleStyle: fsTransformNone,
+    },
     {
       label: PRODUCT_DETAILS.LABEL_MINIMUM_CASH,
       titlePrefix: inputCurrency,
@@ -140,7 +144,11 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
   }
 
   if (fund.isEpf === "Yes") {
-    data.splice(-1, 0, { label: PRODUCT_DETAILS.LABEL_SALES_EPF, title: `${salesCharge.epf.min}% - ${salesCharge.epf.max}%` });
+    data.splice(-1, 0, {
+      label: PRODUCT_DETAILS.LABEL_SALES_EPF,
+      title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`,
+      titleStyle: fsTransformNone,
+    });
   }
 
   if (!isAmp) {

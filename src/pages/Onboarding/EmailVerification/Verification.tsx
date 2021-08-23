@@ -20,7 +20,7 @@ import {
   sw12,
   sw16,
   sw24,
-  sw264,
+  sw260,
   sw320,
   sw7,
   sw8,
@@ -106,7 +106,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       <Text style={fs12BoldWhite1}>{EMAIL_VERIFICATION.TOOLTIP_CONTENT}</Text>
     </View>
   );
-  const contentStyle: ViewStyle = { width: sw264 };
+  const contentStyle: ViewStyle = { width: sw260 };
   const principalEmailLabel = accountType === "Individual" ? EMAIL_VERIFICATION.LABEL_EMAIL : EMAIL_VERIFICATION.LABEL_EMAIL_PRINCIPAL;
   const disabled =
     jointEmailCheck === false

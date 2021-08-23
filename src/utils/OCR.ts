@@ -85,11 +85,11 @@ const mykadFront = async (filePath: string) => {
         mykad.city = titleCaseString(postCodeCity[0].split(" ").slice(1).join(" "));
         mykad.address = split.slice(0, postCodeIndex - 1).join(" ");
         if (state.toLowerCase().includes("kl")) {
-          mykad.state = "Kuala Lumpur";
+          mykad.state = "Wilayah Persekutuan";
         } else if (state.toLowerCase().includes("putra")) {
-          mykad.state = "Putrajaya";
+          mykad.state = "Wilayah Persekutuan Putrajaya";
         } else if (state.toLowerCase().includes("labuan")) {
-          mykad.state = "Labuan";
+          mykad.state = "Wilayah Persekutuan Labuan";
         } else {
           mykad.state = titleCaseString(state);
         }

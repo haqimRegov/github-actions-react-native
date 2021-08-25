@@ -219,7 +219,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
         </View>
       </View>
       {viewFile !== undefined ? (
-        <FileViewer handleClose={handleCloseViewer} resourceType="file" value={viewFile} visible={viewFile !== undefined} />
+        <FileViewer handleClose={handleCloseViewer} resourceType="base64" value={viewFile} visible={viewFile !== undefined} />
       ) : null}
     </Fragment>
   );

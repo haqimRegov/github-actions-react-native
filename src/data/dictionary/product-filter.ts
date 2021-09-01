@@ -1,4 +1,3 @@
-export const FILTER_EPF = ["EPF", "Non-EPF"];
 export const FILTER_EPF_LABEL = ["Yes", "No"];
 export const FILTER_PRODUCT_TYPE = ["Unit Trust (UT)", "Private Retirement Scheme (PRS)"];
 export const FILTER_TYPE = ["Conventional", "Shariah"];

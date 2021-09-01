@@ -2,9 +2,8 @@ import React, { FunctionComponent, useCallback, useEffect } from "react";
 import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
-import { Language } from "../../../constants";
+import { Language, OTP_CONFIG } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
-import { OTP_CONFIG } from "../../../integrations";
 import { flexRow, fs12SemiBoldBlue2, fs16SemiBoldBlack2, fs40BoldBlack2, sh32, sh40, sh56, sh8, sw360, sw4 } from "../../../styles";
 import { isNumber } from "../../../utils";
 

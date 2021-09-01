@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent, ReactElement, useEffect, useRef, us
 import { Alert, Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import {
   ConfirmationModal,
   ContentPage,

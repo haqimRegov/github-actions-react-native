@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text } from "react-native";
 
-import { LocalAssets } from "../../../../assets/LocalAssets";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { Prompt } from "../../../../components";
 import { Language } from "../../../../constants";
 import { fs12SemiBoldBlack2, fs16BoldBlack2, sw452 } from "../../../../styles";

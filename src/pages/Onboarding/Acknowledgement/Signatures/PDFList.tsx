@@ -4,7 +4,7 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../../assets/LocalAssets";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ContentPage, CustomSpacer, PromptModal } from "../../../../components";
 import { PdfEditWithModal } from "../../../../components/PdfEdit";
 import { ONBOARDING_ROUTES } from "../../../../constants";

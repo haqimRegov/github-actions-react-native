@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../assets/LocalAssets";
+import { LocalAssets } from "../../../assets/images/LocalAssets";
 import {
   ActionButtons,
   CustomFlexSpacer,

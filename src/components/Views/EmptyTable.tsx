@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { ActivityIndicator, Image, ImageSourcePropType, Text, TextStyle, View } from "react-native";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
 import {
   centerHV,

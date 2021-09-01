@@ -3,3 +3,14 @@ amplify/
 graphql/
 aws-exports.js
 API.ts
+
+
+# sonarqube
+.sonar
+.scannerwork
+
+# Jest
+#
+.jest/
+coverage
+test-report.xml

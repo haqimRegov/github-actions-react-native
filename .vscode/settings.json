@@ -89,5 +89,11 @@
   "typescriptHero.imports.multiLineWrapThreshold": 140,
   "typescriptHero.imports.organizeOnSave": true,
   "typescriptHero.imports.stringQuoteStyle": "\"",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }

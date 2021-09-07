@@ -3,12 +3,7 @@
     /* Basic Options */
     "target": "esnext",
     "module": "commonjs",
-    "lib": [
-      "es5",
-      "es6",
-      "es7",
-      "esnext"
-    ],
+    "lib": ["es5", "es6", "es7", "esnext"],
     "allowJs": true,
     // "checkJs": true,
     "jsx": "react-native",
@@ -42,10 +37,7 @@
     "baseUrl": "./",
     // "paths": {},
     // "rootDirs": [],
-    "typeRoots": [
-      "src/types/**",
-      "node_modules/@types/"
-    ],
+    "typeRoots": ["src/types/**", "node_modules/@types/"],
     // "types": [],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -60,14 +52,6 @@
     // "experimentalDecorators": true,
     // "emitDecoratorMetadata": true,
   },
-  "exclude": [
-    "node_modules",
-    "babel.config.js",
-    "metro.config.js",
-    "jest.config.js"
-  ],
-  "include": [
-    "src",
-    "types"
-  ]
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],
+  "include": ["src", "types"]
 }

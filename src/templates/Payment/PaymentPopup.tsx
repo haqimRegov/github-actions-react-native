@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { ActivityIndicator, Image, LayoutChangeEvent, Text, View, ViewStyle } from "react-native";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { ActionButtons, CheckBox, CustomSpacer, RNModal, Tag, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
 import {

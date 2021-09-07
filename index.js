@@ -6,7 +6,8 @@ import { Provider } from "react-redux";
 import { name as appName } from "./app.json";
 import config from "./aws-exports";
 import { App } from "./src/App";
-import { cognitoConfig, RNPushNotification } from "./src/integrations";
+import { cognitoConfig } from "./src/constants";
+import { RNPushNotification } from "./src/integrations";
 import { store } from "./src/store";
 
 Amplify.configure({ ...config, ...cognitoConfig });

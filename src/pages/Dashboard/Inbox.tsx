@@ -4,7 +4,7 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, ScrollView, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import {
   AvatarProps,
   CollapsibleHeader,

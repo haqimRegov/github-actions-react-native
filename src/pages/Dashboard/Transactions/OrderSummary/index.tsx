@@ -3,7 +3,7 @@ import { ActivityIndicator, Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer, FileViewer, Tab } from "../../../../components";
-import { Language } from "../../../../constants/language";
+import { Language } from "../../../../constants";
 import { getOrderSummary } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {

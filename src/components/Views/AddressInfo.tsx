@@ -27,10 +27,10 @@ export const AddressInfo: FunctionComponent<AddressInfoProps> = ({ data, labelAd
   return (
     <View style={{ width: sw240 }}>
       <LabeledTitle label={labelAddress} title={formattedAddress} {...labeledTitleStyle} />
-      <LabeledTitle label={ADDRESS.LABEL_POSTCODE} title={postCode} {...labeledTitleStyle} />
-      <LabeledTitle label={ADDRESS.LABEL_CITY} title={city} {...labeledTitleStyle} />
-      <LabeledTitle label={ADDRESS.LABEL_STATE} title={state} {...labeledTitleStyle} />
-      <LabeledTitle label={ADDRESS.LABEL_COUNTRY} title={country} {...labeledTitleStyle} />
+      <LabeledTitle label={ADDRESS.LABEL_POSTCODE} title={postCode || "-"} {...labeledTitleStyle} />
+      <LabeledTitle label={ADDRESS.LABEL_CITY} title={city || "-"} {...labeledTitleStyle} />
+      <LabeledTitle label={ADDRESS.LABEL_STATE} title={state || "-"} {...labeledTitleStyle} />
+      <LabeledTitle label={ADDRESS.LABEL_COUNTRY} title={country || "-"} {...labeledTitleStyle} />
     </View>
   );
 };

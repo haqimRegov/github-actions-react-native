@@ -3,7 +3,7 @@ import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View, ViewStyl
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { version } from "../../../package.json";
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
 import {
   border,

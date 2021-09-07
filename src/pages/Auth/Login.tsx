@@ -5,11 +5,11 @@ import { ActivityIndicator, Alert, Keyboard, View } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Prompt, RNModal } from "../../components";
-import { Language } from "../../constants";
+import { Language, OTP_CONFIG } from "../../constants";
 import { ERROR_CODE, ERRORS } from "../../data/dictionary";
-import { OTP_CONFIG, RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
+import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
@@ -59,7 +59,6 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       setLoading(true);
       setInput1Error(undefined);
       const credentials = await Auth.Credentials.get();
-
       if ("sessionToken" in credentials === false) {
         setLoading(false);
         setTimeout(() => {

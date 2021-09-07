@@ -3,12 +3,11 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { LocalAssets } from "../../../assets/LocalAssets";
+import { LocalAssets } from "../../../assets/images/LocalAssets";
 import { ActionButtons, CustomFlexSpacer, CustomSpacer, CustomTextInput, LinkText, PromptModal, SafeAreaPage } from "../../../components";
-import { Language } from "../../../constants";
+import { Language, OTP_CONFIG } from "../../../constants";
 import { ERROR, ERROR_CODE } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
-import { OTP_CONFIG } from "../../../integrations";
 import { emailOtpVerification } from "../../../network-actions";
 import {
   centerHorizontal,

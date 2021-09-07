@@ -1,6 +1,4 @@
-export * from "./account-operating-control";
 export * from "./account-type";
-export * from "./aims";
 export * from "./banks";
 export * from "./business-nature";
 export * from "./countries";
@@ -20,7 +18,6 @@ export * from "./mobile-code";
 export * from "./occupation";
 export * from "./order-status";
 export * from "./password";
-export * from "./payment-method";
 export * from "./personal";
 export * from "./place-of-birth";
 export * from "./product-filter";

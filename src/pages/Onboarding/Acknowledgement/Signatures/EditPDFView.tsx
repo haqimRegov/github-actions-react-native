@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { GestureResponderEvent, Image, ImageStyle, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 
-import { LocalAssets } from "../../../../assets/LocalAssets";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";

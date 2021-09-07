@@ -34,7 +34,6 @@ export const FATCA: ITermsAndConditions = {
       heading: "Declaration",
       termsList: [
         {
-          // eslint-disable-next-line quotes
           content: [
             {
               prefix: "•",
@@ -241,7 +240,6 @@ export const UTAndAMP: ITermsAndConditions = {
             {
               prefix: "•",
               text:
-                // eslint-disable-next-line prettier/prettier
                 // eslint-disable-next-line quotes
                 'I/We undertake to provide such information and documents as the Manager may reasonably require for the purpose of due diligence/enhanced due diligence as required under the Anti-Money Laundering, Anti-Terrorism Financing and Proceeds of Unlawful Activities Act ("AMLATPUAA").',
             },

@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Image, ImageStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {

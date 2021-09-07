@@ -7,7 +7,7 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { AppState, AppStateStatus } from "react-native";
 import UserInactivity from "react-native-user-inactivity";
 
-import { LocalAssets } from "../assets/LocalAssets";
+import { LocalAssets } from "../assets/images/LocalAssets";
 import { PromptModal } from "../components";
 import { Language } from "../constants";
 import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";

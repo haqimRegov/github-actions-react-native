@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef } from "react";
 import { Animated, Image, ImageStyle, View } from "react-native";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { centerHV, colorWhite, fullHW, imageContain, sh16, sh56, sw120, sw298, sw306 } from "../../styles";
 
 export const Splash: FunctionComponent = () => {

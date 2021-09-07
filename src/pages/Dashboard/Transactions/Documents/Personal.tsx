@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { ActivityIndicator, Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../../assets/LocalAssets";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomSpacer, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";

@@ -735,7 +735,6 @@ export const english = {
       SUBHEADING: "Order Summary",
       INFO:
         "1. Any excess payment will be refunded directly to the investor.\n2. Please ensure that the proof of payment and necessary documents are submitted within 10 days of account opening to avoid the account from becoming void.",
-
       LABEL_ADD_MAILING_ADDRESS: "Add Mailing Address",
       LABEL_CHANNEL: "Income Distribution Channel",
       LABEL_CITY: "City",

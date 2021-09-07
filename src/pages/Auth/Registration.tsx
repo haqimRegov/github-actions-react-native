@@ -3,8 +3,8 @@ import React, { FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
+import { OTP_CONFIG } from "../../constants";
 import { ERROR_CODE } from "../../data/dictionary";
-import { OTP_CONFIG } from "../../integrations";
 import { register, registerPassword, verifySignUp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { Encrypt, maskedString } from "../../utils";

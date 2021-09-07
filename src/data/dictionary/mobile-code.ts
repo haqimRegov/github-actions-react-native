@@ -1,4 +1,4 @@
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 
 export const DICTIONARY_MOBILE_CODE: IMobileCountryCodeFlag[] = [
   { label: "Malaysia", value: "+60", flag: LocalAssets.flag.malaysia },

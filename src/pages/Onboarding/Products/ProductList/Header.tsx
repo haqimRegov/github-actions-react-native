@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { Image, ImageStyle, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { LocalAssets } from "../../../../assets/LocalAssets";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, IconButton, IconInput, LinkText, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import {

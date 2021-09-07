@@ -4,10 +4,10 @@ import { Image, ImageStyle, Text, TouchableWithoutFeedback, View } from "react-n
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../assets/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
 import { DAY_FORMAT, FULL_DATE_FORMAT, Language } from "../../constants";
-import { DICTIONARY_AIMS_URL } from "../../data/dictionary";
+import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
 import { logout } from "../../network-actions";
@@ -63,7 +63,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   };
 
   const handleAims = () => {
-    RNInAppBrowser.openLink(DICTIONARY_AIMS_URL);
+    RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
   };
 
   const handleInbox = () => {

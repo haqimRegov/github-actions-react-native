@@ -2,7 +2,7 @@ import React, { FunctionComponent, useRef, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../../assets/LocalAssets";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomFlexSpacer, CustomSpacer, Pagination, PromptModal, SelectionBanner, TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
 import { RNShareApi } from "../../../../integrations";

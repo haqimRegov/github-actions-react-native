@@ -678,6 +678,7 @@ export const english = {
       LINK_TERMS_AND_CONDITIONS: "Terms & Conditions",
       PLACEHOLDER_OTP: "Enter the 6 digit code",
       REMEMBER_ME: "Remember Me",
+      SUBHEADING_EXPIRED: "Password expired. Please change your password.",
       SUBHEADING_FIRST_TIME: "Let's get you started.",
       SUBHEADING_LOGIN: "Log in to your account.",
       SUBHEADING_OTP: "one-time password has been sent to your registered email ID",

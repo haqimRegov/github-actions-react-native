@@ -10,7 +10,7 @@ import { Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
 import { ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
-import { login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
+import { changePassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
 import { AlertDialog, Encrypt, maskedString } from "../../utils";
@@ -75,39 +75,44 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
         const { data, error } = response;
         if (error === null) {
           if (data !== null) {
-            const { agentId, branch, email, inboxCount, licenseCode, licenseType, name, rank } = data.result;
+            const { agentId, branch, email, inboxCount, isExpired, licenseCode, licenseType, name, rank } = data.result;
             await Auth.signIn(inputNRIC, inputPassword);
-            props.addGlobal({
-              agent: {
-                name: name,
-                email: email,
-                licenseCode: licenseCode,
-                licenseType: licenseType,
-                id: agentId,
-                branch: branch,
-                rank: rank,
-              },
-              config: {
-                identityId: data.result.identityId,
-                secretAccessKey: data.result.secretAccessKey,
-                sessionToken: data.result.sessionToken,
-                accessKeyId: data.result.accessKeyId,
-              },
-              unreadMessages: inboxCount,
-            });
-            setLoading(false);
-            RNPushNotification.setBadge(inboxCount);
-            await updateStorageData("visited", true);
-            if (checkEmulator === false) {
-              RNPushNotification.requestPermission();
+            if (isExpired === false) {
+              props.addGlobal({
+                agent: {
+                  name: name,
+                  email: email,
+                  licenseCode: licenseCode,
+                  licenseType: licenseType,
+                  id: agentId,
+                  branch: branch,
+                  rank: rank,
+                },
+                config: {
+                  identityId: data.result.identityId,
+                  secretAccessKey: data.result.secretAccessKey,
+                  sessionToken: data.result.sessionToken,
+                  accessKeyId: data.result.accessKeyId,
+                },
+                unreadMessages: inboxCount,
+              });
+              setLoading(false);
+              RNPushNotification.setBadge(inboxCount);
+              await updateStorageData("visited", true);
+              if (checkEmulator === false) {
+                RNPushNotification.requestPermission();
+              }
+              props.resetTransactions();
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: "Private" }],
+                }),
+              );
+            } else {
+              setLoading(false);
+              setRootPage("EXPIRED_PASSWORD");
             }
-            props.resetTransactions();
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{ name: "Private" }],
-              }),
-            );
           }
         } else if (error.errorCode === ERROR_CODE.lockedAccount) {
           if (data?.result.email !== undefined) {
@@ -187,14 +192,12 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       const credentials = await Auth.Credentials.get();
       const encryptedNewPassword = await Encrypt(inputNewPassword, credentials.sessionToken);
       const encryptedRetypePassword = await Encrypt(inputRetypePassword, credentials.sessionToken);
-      const response: ISignUpResponse = await resetPassword(
-        {
-          username: inputNRIC,
-          password: encryptedNewPassword,
-          confirmPassword: encryptedRetypePassword,
-        },
-        { encryptionKey: credentials.sessionToken },
-      );
+      const baseParams = { password: encryptedNewPassword, confirmPassword: encryptedRetypePassword };
+      const header = { encryptionKey: credentials.sessionToken };
+      const response: ISignUpResponse | IChangePasswordResponse =
+        page === "EXPIRED_PASSWORD"
+          ? await changePassword(baseParams, header)
+          : await resetPassword({ ...baseParams, username: inputNRIC }, header);
       fetching.current = false;
       setLoading(false);
       if (response === undefined) {
@@ -205,6 +208,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       if (error === null) {
         if (data?.result.status === true) {
           setInputNRIC("");
+          setInputPassword("");
           setInputNewPassword("");
           setInputRetypePassword("");
           setRootPage("LOGIN");
@@ -234,6 +238,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       );
       break;
     case "LOCKED_PASSWORD":
+    case "EXPIRED_PASSWORD":
       content = (
         <PasswordDetails
           error1={input1Error}
@@ -245,6 +250,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setError2={setInput2Error}
           setInputNewPassword={setInputNewPassword}
           setInputRetypePassword={setInputRetypePassword}
+          subheading={page === "EXPIRED_PASSWORD" ? LOGIN.SUBHEADING_EXPIRED : undefined}
         />
       );
       break;

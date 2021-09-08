@@ -4,7 +4,7 @@ import { responseHandler } from "../../utils";
 export const changePassword = async (
   variables: IChangePasswordRequest,
   headers: IChangePasswordHeader,
-  navigation: IStackNavigationProp,
+  navigation?: IStackNavigationProp,
   handleError?: ResponseErrorType,
 ) => {
   try {

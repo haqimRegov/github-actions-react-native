@@ -15,6 +15,7 @@ declare interface ILoginResult {
   email: string;
   identityId: string;
   inboxCount: string;
+  isExpired: boolean;
   licenseCode: string;
   licenseType: string[];
   name: string;

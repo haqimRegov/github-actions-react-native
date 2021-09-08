@@ -484,6 +484,7 @@ const userLogin = gql`
           email
           identityId
           inboxCount
+          isExpired
           licenseCode
           licenseType
           name

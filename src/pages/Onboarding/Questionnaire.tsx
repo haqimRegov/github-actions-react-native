@@ -235,8 +235,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
               <CustomTextInput
                 disabled={true}
                 label={RISK_ASSESSMENT.LABEL_DATE_OF_BIRTH}
-                rightIcon="calendar"
-                rightIconColor={colorBlue._2}
+                rightIcon={{ name: "calendar" }}
                 value={dateOfBirth}
               />
             </View>

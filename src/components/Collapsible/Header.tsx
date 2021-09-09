@@ -9,11 +9,11 @@ import {
   centerVertical,
   circleBorder,
   colorBlack,
-  colorBlue,
   colorGray,
   colorRed,
   colorTransparent,
   colorWhite,
+  flexChild,
   flexGrow,
   flexRow,
   fs12RegBlue2,
@@ -26,15 +26,14 @@ import {
   sh24,
   sh32,
   sh34,
-  sh48,
   shadowBlack5,
   sw1,
-  sw100,
   sw24,
   sw40,
+  sw784,
   sw85,
 } from "../../styles";
-import { IconInput } from "../Input/IconInput";
+import { CustomTextInput } from "../Input";
 import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -110,16 +109,17 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
               {label !== undefined ? <Text style={fs24BoldBlue2}>{label}</Text> : null}
               <CustomSpacer space={sh16} />
               <View style={{ ...centerVertical, ...flexRow }}>
-                <IconInput
-                  icon="search"
-                  iconColor={colorBlue._2}
+                <CustomTextInput
+                  autoCorrect={false}
+                  containerStyle={flexChild}
+                  leftIcon={{ name: "search-new" }}
                   onChangeText={setInputSearch}
                   onSubmitEditing={onSubmitEditing}
                   placeholder={placeholder}
-                  placeholderTextColor={colorBlack._2_5}
+                  returnKeyType="search"
                   style={inputStyle}
                   value={inputSearch}
-                  viewStyle={{ borderRadius: sw100, height: sh48 }}
+                  viewStyle={{ width: sw784 }}
                 />
                 {noFilter === true ? null : (
                   <Fragment>

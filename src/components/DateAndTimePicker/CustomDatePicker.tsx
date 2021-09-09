@@ -138,7 +138,7 @@ export const CustomDatePicker = ({
                 disabled={disabled}
                 editable={false}
                 placeholder={placeholder || defaultPlaceholder}
-                rightIcon={icon}
+                rightIcon={{ name: icon }}
                 value={selectedValue}
                 viewStyle={baseInputStyle}
               />

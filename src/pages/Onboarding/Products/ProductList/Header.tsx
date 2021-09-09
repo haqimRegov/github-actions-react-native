@@ -3,7 +3,7 @@ import { Image, ImageStyle, TextInput, TextStyle, View, ViewStyle } from "react-
 import Collapsible from "react-native-collapsible";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomSpacer, IconButton, IconInput, LinkText, Tag } from "../../../../components";
+import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   absolutePosition,
@@ -11,10 +11,10 @@ import {
   centerHV,
   centerVertical,
   circleBorder,
-  colorBlack,
   colorBlue,
   colorGray,
   colorWhite,
+  flexChild,
   flexRow,
   flexWrap,
   fs12BoldBlue2,
@@ -32,14 +32,13 @@ import {
   sh34,
   sh38,
   sh40,
-  sh48,
   shadowBlack5,
   sw1,
-  sw100,
   sw218,
   sw24,
   sw30,
   sw48,
+  sw692,
   sw696,
   sw8,
   sw80,
@@ -178,19 +177,18 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
         <CustomSpacer space={sh24} />
         <View style={{ ...centerVertical, ...flexRow }}>
           <CustomSpacer isHorizontal={true} space={sw24} />
-          <IconInput
+          <CustomTextInput
             autoCorrect={false}
-            icon="search"
-            iconInputRef={searchInputRef}
+            containerStyle={flexChild}
+            leftIcon={{ name: "search-new" }}
             onChangeText={setInputSearch}
             onSubmitEditing={handleSearch}
             placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
-            placeholderTextColor={colorBlack._2_5}
             returnKeyType="search"
-            setIconInputRef={setSearchInputRef}
+            setRef={setSearchInputRef}
             style={inputStyle}
             value={inputSearch}
-            viewStyle={{ borderRadius: sw100, height: sh48 }}
+            viewStyle={{ width: sw692 }}
           />
           <View style={{ width: sw80 }}>
             {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}

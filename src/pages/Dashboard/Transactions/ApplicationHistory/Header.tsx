@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { Image, ImageStyle, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomSpacer, IconButton, IconInput } from "../../../../components";
+import { ActionButtons, CustomSpacer, CustomTextInput, IconButton } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   centerHorizontal,
@@ -13,6 +13,7 @@ import {
   colorGray,
   colorTransparent,
   colorWhite,
+  flexChild,
   flexRow,
   fs16SemiBoldBlack2,
   fs24BoldBlue2,
@@ -24,14 +25,13 @@ import {
   sh34,
   sh38,
   sh40,
-  sh48,
   sh8,
   shadowBlack5,
   sw1,
-  sw100,
   sw218,
   sw24,
   sw48,
+  sw692,
   sw80,
   sw84,
 } from "../../../../styles";
@@ -159,19 +159,18 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
             <Text style={fs24BoldBlue2}>{DASHBOARD_HOME.LABEL_HEADER}</Text>
             <CustomSpacer space={sh16} />
             <View style={{ ...centerVertical, ...flexRow }}>
-              <IconInput
+              <CustomTextInput
                 autoCorrect={false}
-                icon="search"
-                iconInputRef={searchInputRef}
+                containerStyle={flexChild}
+                leftIcon={{ name: "search-new" }}
                 onChangeText={setInputSearch}
                 onSubmitEditing={handleSearch}
                 placeholder={DASHBOARD_HOME.LABEL_FILTER_PENDING}
-                placeholderTextColor={colorBlue._3_6}
                 returnKeyType="search"
-                setIconInputRef={setSearchInputRef}
+                setRef={setSearchInputRef}
                 style={inputStyle}
                 value={inputSearch}
-                viewStyle={{ borderRadius: sw100, height: sh48 }}
+                viewStyle={{ width: sw692 }}
               />
               <View style={{ width: sw80 }}>
                 {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}

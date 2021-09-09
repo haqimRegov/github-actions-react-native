@@ -10,7 +10,7 @@ import {
   DICTIONARY_HOUSEHOLD_INCOME,
   ERROR,
 } from "../../../data/dictionary";
-import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh40, sh8, sw24, sw40 } from "../../../styles";
+import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh40, sh8, sw24, sw360, sw40 } from "../../../styles";
 import { isNonNumber, isNumber } from "../../../utils";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
@@ -172,7 +172,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
           value={inputMonthlyHousehold}
         />
       </View>
-      <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw40) }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
+      <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw40), width: sw360 }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
       {epfInvestment === true && accountHolder === "Principal" ? (
         <EPFDetails
           epfNumberError={validations.epfNumber}

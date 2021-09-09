@@ -18,7 +18,7 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { colorTransparent, fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8, sw48 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -175,8 +175,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       <CustomTextInput
         disabled={true}
         label={ID_VERIFICATION.LABEL_DOB}
-        rightIcon="calendar"
-        rightIconColor={colorBlue._2}
+        rightIcon={{ name: "calendar" }}
         spaceToTop={sh32}
         value={formattedDOB}
       />

@@ -3,7 +3,6 @@ import { Keyboard, Text, TextInput, View, ViewStyle } from "react-native";
 
 import {
   colorBlack,
-  colorGray,
   colorTransparent,
   flexRow,
   fs12BoldBlack2,
@@ -93,7 +92,6 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         multiline={true}
         onFocus={handleMultilineFocus}
         placeholder={placeholder}
-        placeholderTextColor={colorGray._7}
         selectionColor={colorBlack._2}
         setRef={setTextAreaRef}
         style={{ height: sh80, width: inputWidth, lineHeight: sh24, letterSpacing: sw02 }}

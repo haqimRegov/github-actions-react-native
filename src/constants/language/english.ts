@@ -144,7 +144,7 @@ export const english = {
       EMPTY_TRANSACTIONS_SUBTITLE: "Your new transactions will be displayed here.",
       LABEL_ACTIONS: "Actions",
       LABEL_APPROVED: "Approved",
-      LABEL_CREATED_ON: "Created on",
+      LABEL_CREATED_ON: "Created On",
       LABEL_DUE_DATE: "Due Date",
       LABEL_DUE: "Due",
       LABEL_FILTER_PENDING: "Search by Order number, Investor name, Account type, Transaction type",

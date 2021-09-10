@@ -124,4 +124,5 @@ declare interface TableHeaderPopupProps {
   title?: string;
   titleIcon?: IIcon;
   titleStyle?: import("react-native").TextStyle;
+  viewStyle?: import("react-native").ViewStyle;
 }

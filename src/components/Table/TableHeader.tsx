@@ -5,11 +5,13 @@ import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import { centerVertical, colorBlue, flexRow, fs10RegBlue38, px, sh24, sw4, sw8 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
+import { TableHeaderPopup } from "./HeaderPopup";
 
 const { PRODUCT_LIST } = Language.PAGE;
 
 export const TableHeader: FunctionComponent<TableHeaderProps> = ({
   columns,
+  headerPopup,
   RenderCustomHeader,
   RowSelectionItem,
   withActions,
@@ -31,8 +33,11 @@ export const TableHeader: FunctionComponent<TableHeaderProps> = ({
 
         return (
           <Fragment key={index}>
-            {RenderCustomHeader !== undefined && item.customHeader === true ? (
-              <RenderCustomHeader item={item} />
+            {item.customHeader === true || item.withHeaderPopup === true ? (
+              <Fragment>
+                {RenderCustomHeader !== undefined && <RenderCustomHeader item={item} />}
+                {headerPopup !== undefined && <TableHeaderPopup title={item.title} titleIcon={item.icon} {...headerPopup} />}
+              </Fragment>
             ) : (
               <TouchableWithoutFeedback onPress={item.onPressHeader}>
                 <View style={headerStyle}>

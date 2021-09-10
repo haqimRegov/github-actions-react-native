@@ -1,38 +1,28 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AdvanceTable, CustomSpacer, EmptyTable, LinkText, MenuPopup } from "../../../../../components";
+import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
-import { IcoMoon } from "../../../../../icons";
 import { getDashboard } from "../../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
-  centerVertical,
   flexChild,
-  flexRow,
-  fs10RegBlue38,
   fs12BoldBlue2,
   fs12RegBlue2,
   fs12RegBlue6,
   fsTransformNone,
   px,
-  py,
   sh32,
-  sh4,
-  sh8,
   sw039,
   sw104,
-  sw120,
   sw123,
   sw136,
   sw152,
   sw16,
   sw176,
   sw32,
-  sw4,
-  sw8,
 } from "../../../../../styles";
 import { CustomTableItem } from "../CustomTableItem";
 import { OrderRemarks } from "../OrderRemarks";
@@ -64,8 +54,8 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
 
-  const handleShowDateBy = () => {
-    setShowDateBy(showDateBy === "createdOn" ? "lastUpdated" : "createdOn");
+  const handleShowDateBy = (text: string) => {
+    setShowDateBy(text === "Last Updated" ? "lastUpdated" : "createdOn");
   };
 
   const handleShowRemarks = (item: ITableRowData) => {
@@ -172,8 +162,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       customItem: true,
       icon: { name: "caret-down", size: sw16 },
       key: [{ key: showDateBy, textStyle: fs12RegBlue2 }],
-      onPressHeader: handleShowDateBy,
-      title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : "Last Updated",
+      title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
       viewStyle: { width: sw136 },
     },
     {
@@ -266,44 +255,16 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
         columns={columns}
         data={isFetching === true ? [] : orders}
         handleRowNavigation={handleOrderDetails}
-        RenderAccordion={tableAccordion}
-        RenderCustomHeader={({ item }) => {
-          return (
-            <MenuPopup
-              RenderButton={({ show }) => {
-                const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw136 };
-                return (
-                  <TouchableWithoutFeedback onPress={show}>
-                    <View style={headerStyle}>
-                      <Text style={fs10RegBlue38}>{item.title}</Text>
-                      {item.icon === undefined ? null : (
-                        <Fragment>
-                          <CustomSpacer isHorizontal={true} space={sw4} />
-                          <IcoMoon {...item.icon} />
-                        </Fragment>
-                      )}
-                    </View>
-                  </TouchableWithoutFeedback>
-                );
-              }}
-              RenderContent={({ hide }) => {
-                const handleToggle = () => {
-                  handleShowDateBy();
-                  hide();
-                };
-                return (
-                  <View style={{ width: sw120, ...px(sw16), ...py(sh8) }}>
-                    <LinkText
-                      onPress={handleToggle}
-                      style={{ ...fs12BoldBlue2, ...py(sh4) }}
-                      text={showDateBy === "createdOn" ? "Last Updated" : DASHBOARD_HOME.LABEL_CREATED_ON}
-                    />
-                  </View>
-                );
-              }}
-            />
-          );
+        headerPopup={{
+          content: [{ text: DASHBOARD_HOME.LABEL_CREATED_ON }, { text: DASHBOARD_HOME.LABEL_LAST_UPDATED }],
+          onPressContent: ({ hide, text }) => {
+            handleShowDateBy(text);
+            hide();
+          },
+          selectedIndex: showDateBy === "createdOn" ? [0] : [1],
+          title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
         }}
+        RenderAccordion={tableAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
         RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
       />

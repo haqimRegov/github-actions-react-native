@@ -61,8 +61,8 @@ export const Pagination: FunctionComponent<PaginationProps> = ({
   const showListLabel = `${PAGINATION.LABEL_SHOWING} ${currentItems} ${PAGINATION.LABEL_OUT_OF} ${totalItems} ${PAGINATION.LABEL_RESULTS}`;
   const prevEnabled = page > 1;
   const nextEnabled = page < totalPages;
-  const prevStyle = prevEnabled ? {} : { opacity: 0.6 };
-  const nextStyle = nextEnabled ? {} : { opacity: 0.6 };
+  const prevStyle = prevEnabled ? {} : { opacity: 0.4 };
+  const nextStyle = nextEnabled ? {} : { opacity: 0.4 };
 
   const handlePrev = () => {
     if (prevEnabled) {

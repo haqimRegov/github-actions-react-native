@@ -17,6 +17,7 @@ import {
   sw12,
   sw144,
   sw16,
+  sw184,
   sw24,
   sw4,
   sw8,
@@ -33,11 +34,12 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
   title,
   titleIcon,
   titleStyle,
+  viewStyle,
 }: TableHeaderPopupProps) => {
   return (
     <MenuPopup
       RenderButton={({ show }) => {
-        const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96 };
+        const container: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96, ...viewStyle };
         const handlePress = () => {
           if (onPressTitle !== undefined) {
             onPressTitle({ show: show });
@@ -47,7 +49,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
         };
         return (
           <TouchableWithoutFeedback onPress={handlePress}>
-            <View style={headerStyle}>
+            <View style={container}>
               {title && <Text style={{ ...fs10RegBlue38, ...titleStyle }}>{title}</Text>}
               {titleIcon === undefined ? null : (
                 <Fragment>
@@ -66,7 +68,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
       }}
       RenderContent={({ hide }) => {
         return (
-          <View style={{ width: sw144, ...py(sh8) }}>
+          <View style={{ minWidth: sw144, maxWidth: sw184, ...py(sh8) }}>
             {content.map((item, index) => {
               const handlePress = () => {
                 onPressContent({ hide: hide, text: item.text });
@@ -82,7 +84,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
                           color={item.icon.color || colorBlue._2}
                           name={item.icon.name}
                           onPress={item.icon.onPress}
-                          size={item.icon.size || sw12}
+                          size={item.icon.size || sw16}
                         />
                         <CustomSpacer isHorizontal={true} space={sw8} />
                       </Fragment>

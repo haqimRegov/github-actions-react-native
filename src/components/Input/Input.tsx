@@ -98,7 +98,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
     ...border(isFocused ? colorBlue._2 : colorWhite._3, isFocused ? sw2 : sw1, sw32),
     ...centerVertical,
     ...flexRow,
-    ...px(isFocused ? sw15 : sw16),
+    ...px(isFocused === false && error === undefined ? sw16 : sw15),
     backgroundColor: colorWhite._1,
     height: sh48,
     width: sw360,

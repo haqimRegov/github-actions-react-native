@@ -1,0 +1,108 @@
+import React, { Fragment, FunctionComponent } from "react";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+
+import { IcoMoon } from "../../icons";
+import {
+  centerVertical,
+  colorBlue,
+  colorGreen,
+  colorWhite,
+  flexRow,
+  fs10RegBlue38,
+  fs12BoldBlue2,
+  px,
+  py,
+  sh4,
+  sh8,
+  sw12,
+  sw144,
+  sw16,
+  sw24,
+  sw4,
+  sw8,
+  sw96,
+} from "../../styles";
+import { MenuPopup } from "../Touchables/Menu";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
+
+export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
+  content,
+  onPressContent,
+  onPressTitle,
+  selectedIndex,
+  title,
+  titleIcon,
+  titleStyle,
+}: TableHeaderPopupProps) => {
+  return (
+    <MenuPopup
+      RenderButton={({ show }) => {
+        const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96 };
+        const handlePress = () => {
+          if (onPressTitle !== undefined) {
+            onPressTitle({ show: show });
+          } else {
+            show();
+          }
+        };
+        return (
+          <TouchableWithoutFeedback onPress={handlePress}>
+            <View style={headerStyle}>
+              {title && <Text style={{ ...fs10RegBlue38, ...titleStyle }}>{title}</Text>}
+              {titleIcon === undefined ? null : (
+                <Fragment>
+                  <CustomSpacer isHorizontal={true} space={sw4} />
+                  <IcoMoon
+                    color={titleIcon.color || colorBlue._2}
+                    name={titleIcon.name}
+                    onPress={titleIcon.onPress}
+                    size={titleIcon.size || sw12}
+                  />
+                </Fragment>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        );
+      }}
+      RenderContent={({ hide }) => {
+        return (
+          <View style={{ width: sw144, ...py(sh8) }}>
+            {content.map((item, index) => {
+              const handlePress = () => {
+                onPressContent({ hide: hide, text: item.text });
+              };
+              const selected = selectedIndex !== undefined && selectedIndex.includes(index);
+              const backgroundColor = selected === true ? { backgroundColor: colorWhite._4 } : {};
+              return (
+                <TouchableWithoutFeedback key={index} onPress={handlePress}>
+                  <View style={{ ...flexRow, ...centerVertical, ...px(sw16), ...py(sh4), ...backgroundColor }}>
+                    {item.icon === undefined ? null : (
+                      <Fragment>
+                        <IcoMoon
+                          color={item.icon.color || colorBlue._2}
+                          name={item.icon.name}
+                          onPress={item.icon.onPress}
+                          size={item.icon.size || sw12}
+                        />
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                      </Fragment>
+                    )}
+                    <Text style={{ ...fs12BoldBlue2, ...item.textStyle }}>{item.text}</Text>
+                    {selected === false ? null : (
+                      <Fragment>
+                        <CustomFlexSpacer />
+                        <CustomSpacer isHorizontal={true} space={sw12} />
+                        <IcoMoon color={colorGreen._1} name="success-filled" size={sw24} />
+                        <CustomSpacer isHorizontal={true} space={sw4} />
+                      </Fragment>
+                    )}
+                  </View>
+                </TouchableWithoutFeedback>
+              );
+            })}
+          </View>
+        );
+      }}
+    />
+  );
+};

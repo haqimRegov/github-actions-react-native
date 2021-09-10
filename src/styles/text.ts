@@ -85,6 +85,13 @@ export const fs12BoldBlack2: TextStyle = {
   lineHeight: sh24,
 };
 
+export const fs12BoldBlack3: TextStyle = {
+  color: colorBlack._3,
+  fontFamily: NunitoBold,
+  fontSize: sh12,
+  lineHeight: sh24,
+};
+
 export const fs12BoldBlue1: TextStyle = {
   color: colorBlue._1,
   fontFamily: NunitoBold,
@@ -172,6 +179,14 @@ export const fs12RegGray6: TextStyle = {
 
 export const fs12RegGray7: TextStyle = {
   color: colorGray._7,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+  letterSpacing: -sw03,
+  lineHeight: sh14,
+};
+
+export const fs12RegGray9: TextStyle = {
+  color: colorGray._9,
   fontFamily: NunitoRegular,
   fontSize: sh12,
   letterSpacing: -sw03,

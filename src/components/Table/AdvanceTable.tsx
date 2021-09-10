@@ -12,6 +12,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   data,
   disabledIndex,
   handleRowNavigation,
+  headerPopup,
   onRowSelect,
   RenderAccordion,
   RenderCustomHeader,
@@ -29,6 +30,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
     <View style={flexChild}>
       <TableHeader
         columns={columns}
+        headerPopup={headerPopup}
         RenderCustomHeader={RenderCustomHeader}
         RowSelectionItem={RowSelectionItem}
         withActions={RenderOptions !== undefined}

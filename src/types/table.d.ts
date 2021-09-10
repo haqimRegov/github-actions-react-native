@@ -46,6 +46,7 @@ declare interface ITableColumn {
   type?: "checkbox" | "radio";
   viewStyle?: import("react-native").ViewStyle;
   withAccordion?: boolean;
+  withHeaderPopup?: boolean;
 }
 
 declare interface ITableOptions {
@@ -79,6 +80,7 @@ declare interface BaseTableProps {
 }
 
 declare interface BaseTableHeaderProps {
+  headerPopup?: TableHeaderPopupProps;
   RenderCustomHeader?: RenderCustomHeaderType;
   RowSelectionItem?: () => JSX.Element;
 }
@@ -106,4 +108,20 @@ declare interface AdvanceTableRowProps extends BaseTableProps {
 declare interface TableHeaderProps extends BaseTableHeaderProps {
   columns: ITableColumn[];
   withActions?: boolean;
+}
+
+declare interface IHeaderPopupContent {
+  icon?: IIcon;
+  text: string;
+  textStyle?: import("react-native").TextStyle;
+}
+
+declare interface TableHeaderPopupProps {
+  content: IHeaderPopupContent[];
+  onPressContent: (props: { hide: () => void; text: string }) => void;
+  onPressTitle?: (props: { show: () => void }) => void;
+  selectedIndex?: number[];
+  title?: string;
+  titleIcon?: IIcon;
+  titleStyle?: import("react-native").TextStyle;
 }

@@ -53,7 +53,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
 
   const handleShowDateBy = (text: string) => {
-    setShowDateBy(text === "Last Updated" ? "lastUpdated" : "createdOn");
+    setShowDateBy(text === DASHBOARD_HOME.LABEL_LAST_UPDATED ? "lastUpdated" : "createdOn");
   };
 
   const handleSortOrderNumber = async () => {
@@ -232,13 +232,17 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
         data={isFetching === true ? [] : orders}
         handleRowNavigation={handleOrderDetails}
         headerPopup={{
-          content: [{ text: DASHBOARD_HOME.LABEL_CREATED_ON }, { text: DASHBOARD_HOME.LABEL_LAST_UPDATED }],
+          content: [
+            { icon: { name: "arrow-down" }, text: DASHBOARD_HOME.LABEL_CREATED_ON },
+            { icon: { name: "arrow-down" }, text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
+          ],
           onPressContent: ({ hide, text }) => {
             handleShowDateBy(text);
             hide();
           },
           selectedIndex: showDateBy === "createdOn" ? [0] : [1],
           title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
+          viewStyle: { width: sw136 },
         }}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
         RenderEmptyState={() => <EmptyTable loading={isFetching} hintText={hintText} title={title} subtitle={subtitle} />}

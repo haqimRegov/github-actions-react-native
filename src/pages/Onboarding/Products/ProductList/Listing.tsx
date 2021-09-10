@@ -1,9 +1,8 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, LinkText, MenuPopup, Pagination, Tag } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
-import { IcoMoon } from "../../../../icons";
 import {
   borderBottomGray4,
   centerHV,
@@ -12,19 +11,13 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs10RegBlue38,
   fs12BoldBlack2,
-  fs12BoldBlue2,
   fsUppercase,
-  px,
-  py,
   sh16,
   sh2,
   sh32,
-  sh4,
   sh8,
   sw1,
-  sw120,
   sw136,
   sw16,
   sw20,
@@ -248,50 +241,15 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             // activeAccordion={activeAccordion}
             columns={columns}
             data={list}
-            rowSelection={selectedFunds}
-            rowSelectionKey="fundCode"
-            onRowSelect={onRowSelect}
-            // RenderAccordion={renderAccordion}
-            RenderCustomHeader={({ item }) => {
-              return (
-                <MenuPopup
-                  RenderButton={({ show }) => {
-                    const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96 };
-
-                    return (
-                      <TouchableWithoutFeedback onPress={productType === "prsDefault" ? undefined : show}>
-                        <View style={headerStyle}>
-                          <Text style={fs10RegBlue38}>{item.title}</Text>
-                          {productType !== "prsDefault" ? (
-                            <Fragment>
-                              {item.icon === undefined ? null : (
-                                <Fragment>
-                                  <CustomSpacer isHorizontal={true} space={sw4} />
-                                  <IcoMoon {...item.icon} />
-                                </Fragment>
-                              )}
-                            </Fragment>
-                          ) : null}
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  }}
-                  RenderContent={({ hide }) => {
-                    return (
-                      <View style={{ width: sw120, ...px(sw16), ...py(sh8) }}>
-                        {riskCategory.map((risk, index) => {
-                          const handleRisk = () => {
-                            updateFilter({ ...filter, riskCategory: [risk] });
-                            hide();
-                          };
-                          return <LinkText key={index} onPress={handleRisk} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={risk} />;
-                        })}
-                      </View>
-                    );
-                  }}
-                />
-              );
+            headerPopup={{
+              content: riskCategory.map((contentRisk) => ({ text: contentRisk })),
+              onPressContent: ({ hide, text }) => {
+                updateFilter({ ...filter, riskCategory: [text] });
+                hide();
+              },
+              selectedIndex: riskCategory.map((contentRisk, index) => (filter.riskCategory!.includes(contentRisk) ? index : -1)),
             }}
+            onRowSelect={onRowSelect}
             RenderCustomItem={(customItem: ITableCustomItem) => {
               const type = customItem.item.rawData.isSyariah === "Yes" ? "Shariah" : "Conventional";
               return (
@@ -330,6 +288,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                 </View>
               </TouchableWithoutFeedback>
             )}
+            // RenderAccordion={renderAccordion}
+            rowSelection={selectedFunds}
+            rowSelectionKey="fundCode"
           />
           <CustomSpacer space={sh32} />
         </View>

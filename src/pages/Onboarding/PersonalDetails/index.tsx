@@ -65,7 +65,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const validatePrincipal = (info: IHolderInfoState) => {
     const { contactDetails, epfDetails, personalDetails } = info;
     const checkEducation =
-      personalDetails!.educationLevel !== "" ||
+      (personalDetails!.educationLevel !== "Others" && personalDetails!.educationLevel !== "") ||
       (personalDetails!.educationLevel !== "" &&
         personalDetails!.educationLevel === "Others" &&
         personalDetails!.otherEducationLevel !== "");
@@ -103,7 +103,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
     const { contactDetails, personalDetails } = info;
     // const jointAge = moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years");
     const checkEducation =
-      personalDetails!.educationLevel !== "" ||
+      (personalDetails!.educationLevel !== "Others" && personalDetails!.educationLevel !== "") ||
       (personalDetails!.educationLevel !== "" &&
         personalDetails!.educationLevel === "Others" &&
         personalDetails!.otherEducationLevel !== "");

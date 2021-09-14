@@ -11,7 +11,6 @@ import illustrationOrderSaved from "./images/illustration_order_saved/illustrati
 import illustrationProfileSuccess from "./images/illustration_profile_success/illustration_profile_success.png";
 import illustrationReceiptSuccess from "./images/illustration_receipt_success/illustration_receipt_success.png";
 import illustrationSessionExpired from "./images/illustration_session_expired/illustration_session_expired.png";
-import illustrationUploadSuccess from "./images/illustration_upload_success/illustration_upload_success.png";
 import kenangaBrandLogo from "./images/kenanga_brand_logo/kenanga_brand_logo.png";
 import kenangaFooter from "./images/kenanga_footer/kenanga_footer.png";
 import kenangaTower from "./images/kenanga_tower/kenanga_tower.png";
@@ -43,7 +42,6 @@ export const LocalAssets = {
     profileSuccess: illustrationProfileSuccess,
     receiptSuccess: illustrationReceiptSuccess,
     sessionExpired: illustrationSessionExpired,
-    uploadSuccess: illustrationUploadSuccess,
   },
   login: {
     background: kenangaTower,

@@ -11,12 +11,18 @@ import {
   colorTransparent,
   colorWhite,
   flexRow,
+  px,
   sh228,
-  sh38,
+  sh44,
+  sh46,
   sw1,
+  sw15,
+  sw16,
+  sw2,
   sw20,
   sw24,
   sw32,
+  sw356,
   sw358,
   sw360,
 } from "../../styles";
@@ -86,42 +92,44 @@ export const CustomDatePicker = ({
     borderBottomColor: colorTransparent,
     borderBottomLeftRadius: sw32,
     borderBottomRightRadius: sw32,
-    borderColor: colorGray._7,
+    borderColor: colorBlue._2,
     borderTopLeftRadius: sw20,
     borderTopRightRadius: sw20,
-    borderWidth: sw1,
+    borderWidth: sw2,
     width: sw360,
     ...dropdownStyle,
   };
 
   const dummyInputStyle: ViewStyle = {
-    width: sw358,
+    width: sw356,
     borderWidth: 0,
   };
 
-  const pickerStyle: ViewStyle = { width: sw360, height: sh228, ...datePickerStyle };
+  const pickerStyle: ViewStyle = { height: sh228, ...datePickerStyle };
 
   const buttonStyle: ViewStyle = {
     backgroundColor: colorBlue._2,
     borderWidth: 0,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
-    width: sw358,
+    width: sw356,
   };
 
   return (
     <View onStartShouldSetResponderCapture={() => disabled === true} style={flexRow}>
       <CollapsibleDropdown
         baseDropdownStyle={baseDropdownStyle}
+        dropdownInnerStyle={{ width: sw356 }}
         dummyBaseStyle={dummyInputStyle}
         onBackdropPress={handleOnClose}
         onExpandedBasePress={handleOnClose}
         keyboardAvoidingRef={keyboardAvoidingRef}
-        RenderBase={({ dummyBaseStyle }) => {
+        RenderBase={({ collapse, dummyBaseStyle }) => {
           const baseInputStyle: ViewStyle = {
-            height: sh38,
+            ...px(collapse === true ? sw16 : sw15),
             borderWidth: 0,
-            width: sw358,
+            height: collapse === true ? sh46 : sh44,
+            width: collapse === true ? sw358 : sw356,
           };
 
           const containerStyle: ViewStyle = {
@@ -139,6 +147,7 @@ export const CustomDatePicker = ({
                 editable={false}
                 placeholder={placeholder || defaultPlaceholder}
                 rightIcon={{ name: icon }}
+                style={{ height: sh46 }}
                 value={selectedValue}
                 viewStyle={baseInputStyle}
               />
@@ -155,11 +164,10 @@ export const CustomDatePicker = ({
           const collapseContainer: ViewStyle = collapse
             ? {}
             : {
-                borderTopWidth: sw1,
-                borderColor: colorGray._7,
+                borderTopWidth: sw2,
+                borderColor: colorBlue._2,
                 borderBottomLeftRadius: sw24,
                 borderBottomRightRadius: sw24,
-                width: sw358,
               };
 
           const handleConfirmDate = () => {

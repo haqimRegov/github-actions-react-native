@@ -2,9 +2,9 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomDatePicker, CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../components";
+import { CustomSpacer, LabeledTitle, NewDatePicker, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../styles";
+import { flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw64 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -35,9 +35,8 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
         <View style={flexRow}>
           <View>
             <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_DATE} />
-            <CustomDatePicker
+            <NewDatePicker
               datePickerStyle={{ height: sh143 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
               maximumDate={moment().toDate()}
               minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}
@@ -48,9 +47,8 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_TIME} />
-            <CustomDatePicker
+            <NewDatePicker
               datePickerStyle={{ height: sh143 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="time"
               maximumDate={moment().toDate()}
               minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}

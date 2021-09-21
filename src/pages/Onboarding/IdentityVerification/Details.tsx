@@ -1,15 +1,7 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 
-import {
-  AddressField,
-  AdvancedDropdown,
-  CheckBox,
-  CustomDatePicker,
-  CustomSpacer,
-  CustomTextInput,
-  TextSpaceArea,
-} from "../../../components";
+import { AddressField, AdvancedDropdown, CheckBox, CustomSpacer, CustomTextInput, NewDatePicker, TextSpaceArea } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import {
   DICTIONARY_COUNTRIES,
@@ -18,7 +10,7 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { colorTransparent, fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -199,9 +191,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             value={inputNationality}
           />
           <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
-          <CustomDatePicker
+          <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
             minimumDate={moment().toDate()}
             setValue={setExpiryDate}

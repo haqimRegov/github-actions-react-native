@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
+import { AdvancedDropdown, CustomSpacer, CustomTextInput, NewDatePicker, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_ACCOUNT_TYPE,
@@ -11,7 +11,7 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
-import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh136, sh140, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
+import { fs16RegBlack2, fs24BoldBlack2, sh120, sh136, sh24, sh8, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -130,11 +130,9 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
         {idType === "NRIC" ? null : (
           <Fragment>
             <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
-            <CustomDatePicker
+            <NewDatePicker
               disabled={clientType !== "" && holderToFill === "principalHolder"}
-              placeholder={ADD_CLIENT.PLACEHOLDER_DATE}
-              datePickerStyle={{ height: sh140 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
+              datePickerStyle={{ height: sh120 }}
               mode="date"
               setValue={setInputDateOfBirth}
               value={dateValue}

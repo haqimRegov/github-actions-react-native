@@ -2,10 +2,10 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, LabeledTitle, TextSpaceArea } from "../../../components";
+import { AdvancedDropdown, CustomSpacer, CustomTextInput, LabeledTitle, NewDatePicker, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
-import { colorTransparent, flexRow, fs16BoldBlack2, px, sh143, sh24, sh32, sh8, sw16, sw24, sw360, sw48, sw64 } from "../../../styles";
+import { flexRow, fs16BoldBlack2, px, sh143, sh24, sh32, sh8, sw16, sw24, sw360, sw64 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
@@ -79,9 +79,8 @@ export const Cheque: FunctionComponent<ChequeProps> = ({
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_DATE} />
-            <CustomDatePicker
+            <NewDatePicker
               datePickerStyle={{ height: sh143 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
               mode="date"
               maximumDate={moment().toDate()}
               minimumDate={orderCreationDate !== undefined ? orderCreationDate : moment().toDate()}

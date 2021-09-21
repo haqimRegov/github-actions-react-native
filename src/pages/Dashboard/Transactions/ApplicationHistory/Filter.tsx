@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CheckBoxDropdown, CustomDatePicker, CustomSpacer, TextSpaceArea } from "../../../../components";
+import { AdvancedDropdown, CheckBoxDropdown, CustomSpacer, NewDatePicker, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   DICTIONARY_APPROVED_STATUS_FILTER,
@@ -12,20 +12,7 @@ import {
   DICTIONARY_TRANSACTIONS_DATE,
   DICTIONARY_TRANSACTIONS_TYPE,
 } from "../../../../data/dictionary";
-import {
-  centerVertical,
-  colorTransparent,
-  flexRow,
-  fs16BoldBlack1,
-  px,
-  sh143,
-  sh24,
-  sh32,
-  sh8,
-  sw24,
-  sw48,
-  sw64,
-} from "../../../../styles";
+import { centerVertical, flexRow, fs16BoldBlack1, px, sh143, sh24, sh32, sh8, sw24, sw64 } from "../../../../styles";
 
 const { DASHBOARD_FILTER } = Language.PAGE;
 interface TransactionsFilterProps {
@@ -98,9 +85,8 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_START_DATE} />
-          <CustomDatePicker
+          <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
             maximumDate={endDate || moment().toDate()}
             setValue={handleStartDate}
@@ -115,9 +101,8 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_END_DATE} />
           {/* <CustomCalendar handleSetStartDate={handleEndDate} startDate={endDate!} /> */}
-          <CustomDatePicker
+          <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
             minimumDate={startDate}
             maximumDate={moment().toDate()}

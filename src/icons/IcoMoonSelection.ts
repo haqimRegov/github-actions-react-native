@@ -737,7 +737,7 @@ export const IcoMoonSelection = {
         isMulticolor: false,
         isMulticolor2: false,
         grid: 0,
-        tags: ["file-upload-new"],
+        tags: ["file-upload"],
         colorPermutations: {
           "2321510123276611462041301": [{}],
           "198184812552552551": [{}],
@@ -747,7 +747,7 @@ export const IcoMoonSelection = {
       properties: {
         order: 137,
         id: 83,
-        name: "file-upload-new",
+        name: "file-upload",
         prevSize: 32,
         code: 59730,
       },

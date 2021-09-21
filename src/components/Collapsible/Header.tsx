@@ -112,7 +112,7 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
                 <CustomTextInput
                   autoCorrect={false}
                   containerStyle={flexChild}
-                  leftIcon={{ name: "search-new" }}
+                  leftIcon={{ name: "search" }}
                   onChangeText={setInputSearch}
                   onSubmitEditing={onSubmitEditing}
                   placeholder={placeholder}

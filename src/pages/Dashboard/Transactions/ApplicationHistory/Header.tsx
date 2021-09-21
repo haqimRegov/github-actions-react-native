@@ -30,6 +30,8 @@ import {
   sw1,
   sw218,
   sw24,
+  sw28,
+  sw32,
   sw48,
   sw692,
   sw80,
@@ -142,7 +144,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
 
   const filterIcon = filterVisible ? "close" : "filter";
-  const filterIconSize = filterVisible ? sh32 : sh24;
+  const filterIconSize = filterVisible ? sw32 : sw28;
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh38 };
 
@@ -162,7 +164,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
               <CustomTextInput
                 autoCorrect={false}
                 containerStyle={flexChild}
-                leftIcon={{ name: "search-new" }}
+                leftIcon={{ name: "search" }}
                 onChangeText={setInputSearch}
                 onSubmitEditing={handleSearch}
                 placeholder={DASHBOARD_HOME.LABEL_FILTER_PENDING}

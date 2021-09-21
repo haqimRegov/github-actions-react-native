@@ -28,7 +28,6 @@ import {
   sh16,
   sh2,
   sh24,
-  sh32,
   sh34,
   sh38,
   sh40,
@@ -36,7 +35,9 @@ import {
   sw1,
   sw218,
   sw24,
+  sw28,
   sw30,
+  sw32,
   sw48,
   sw692,
   sw696,
@@ -162,7 +163,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const filterBorderColor = filterVisible ? colorBlue._2 : colorGray._3;
   const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
   const filterIcon = filterVisible ? "close" : "filter";
-  const filterIconSize = filterVisible ? sh32 : sh24;
+  const filterIconSize = filterVisible ? sw32 : sw28;
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh38 };
 
@@ -180,7 +181,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           <CustomTextInput
             autoCorrect={false}
             containerStyle={flexChild}
-            leftIcon={{ name: "search-new" }}
+            leftIcon={{ name: "search" }}
             onChangeText={setInputSearch}
             onSubmitEditing={handleSearch}
             placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}

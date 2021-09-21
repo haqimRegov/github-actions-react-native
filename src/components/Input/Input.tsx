@@ -85,7 +85,8 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const borderWidth = noBorder === true ? { borderWidth: 0 } : {};
-  const disabledStyle = disabled === true ? { backgroundColor: colorGray._5, opacity: 0.6 } : {};
+  const disabledOpacity = disabled === true ? { opacity: 0.6 } : {};
+  const disabledStyle = disabled === true ? { ...disabledOpacity, backgroundColor: colorGray._5 } : {};
   const errorStyle: ViewStyle = error !== undefined ? { backgroundColor: colorRed._3_08, borderWidth: sw2, borderColor: colorRed._2 } : {};
   const focusedShadow = isFocused ? customShadow(colorBlue._2, 0, 0, 0.02, sw4) : {};
 
@@ -134,7 +135,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   return (
     <View onLayout={onLayout} style={{ width: sw360, ...defaultContainerStyle, ...containerStyle }}>
       {label === undefined ? null : (
-        <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle }}>
+        <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...disabledOpacity, ...labelStyle }}>
           {label}
         </Text>
       )}

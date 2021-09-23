@@ -1,6 +1,6 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment, { isDate } from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
@@ -67,6 +67,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
   const [ref, setRef] = useState<View | null>(null);
   const [collapse, setCollapse] = useState<boolean>(true);
   const [collapsibleModal, setCollapsibleModal] = useState<boolean>(false);
+  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
   const defaultInitialDate = initialDate !== undefined ? initialDate : new Date();
   const defaultDate = isDate(value) ? value : defaultInitialDate;
@@ -115,7 +116,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
 
   const handleExpand = () => {
     Keyboard.dismiss();
-    if (ref !== null) {
+    if (ref !== null && keyboardVisible === false) {
       ref.measure((_x, _y, _width, _height, pageX, pageY) => {
         let measurement = { x: pageX, y: pageY, height: _height, width: _width };
         if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
@@ -155,6 +156,22 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
     borderBottomLeftRadius: sw16,
     width: sw356,
   };
+
+  const handleKeyboardDidShow = () => {
+    setKeyboardVisible(true);
+  };
+  const handleKeyboardHide = () => {
+    setKeyboardVisible(false);
+  };
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", handleKeyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", handleKeyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", handleKeyboardHide);
+    };
+  }, []);
 
   return (
     <Fragment>

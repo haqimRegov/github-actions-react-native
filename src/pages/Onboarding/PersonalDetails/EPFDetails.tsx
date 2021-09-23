@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextSpaceArea } from "../../../components";
+import { CustomSpacer, CustomTextInput, NewDropdown, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_EPF_TYPE_CONVENTIONAL, DICTIONARY_EPF_TYPE_SHARIAH } from "../../../data/dictionary";
 import { borderBottomBlack21, fs24BoldBlack2, px, sh32, sw24 } from "../../../styles";
@@ -48,7 +48,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
           onChangeText={setInputEpfNumber}
           value={inputEpfNumber}
         />
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={setInputEpfType}
           items={epfTypeOptions}
           label={PERSONAL_DETAILS.LABEL_EPF_TYPE}

@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 
 import {
   AccountHeader,
-  AdvancedDropdown,
   AdvanceTextInputArea,
   AdvanceToggleButton,
   CheckBox,
@@ -11,6 +10,7 @@ import {
   CustomSpacer,
   CustomTextInput,
   IconButton,
+  NewDropdown,
   OutlineButton,
 } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -169,7 +169,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
               return (
                 <View key={index}>
                   <View style={flexRow}>
-                    <AdvancedDropdown
+                    <NewDropdown
                       items={DICTIONARY_COUNTRIES}
                       handleChange={handleCountry}
                       label={labelCountry}

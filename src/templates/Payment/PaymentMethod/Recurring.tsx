@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomCard, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { CustomCard, CustomSpacer, CustomTextInput, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
 import { flexRow, sh32, sh8, sw24, sw360, sw40, sw64 } from "../../../styles";
@@ -61,7 +61,7 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
       <RadioButtonGroup direction="row" options={recurringOptions} selected={recurringType} setSelected={setRecurringType} space={sw40} />
     </View>,
     <View />,
-    <AdvancedDropdown items={bankNames} handleChange={handleBankName} label={PAYMENT.LABEL_BANK_ACCOUNT_NAME} value={bankAccountName} />,
+    <NewDropdown items={bankNames} handleChange={handleBankName} label={PAYMENT.LABEL_BANK_ACCOUNT_NAME} value={bankAccountName} />,
     <View>
       <CustomTextInput
         keyboardType="numeric"
@@ -70,13 +70,8 @@ export const Recurring: FunctionComponent<RecurringProps> = ({
         value={bankAccountNumber}
       />
     </View>,
-    <AdvancedDropdown
-      items={DICTIONARY_RECURRING_FREQUENCY}
-      handleChange={setFrequency}
-      label={PAYMENT.LABEL_FREQUENCY}
-      value={frequency}
-    />,
-    <AdvancedDropdown items={ddaBank} handleChange={setRecurringBank} label={PAYMENT.LABEL_SELECT_RECURRING_BANK} value={recurringBank} />,
+    <NewDropdown items={DICTIONARY_RECURRING_FREQUENCY} handleChange={setFrequency} label={PAYMENT.LABEL_FREQUENCY} value={frequency} />,
+    <NewDropdown items={ddaBank} handleChange={setRecurringBank} label={PAYMENT.LABEL_SELECT_RECURRING_BANK} value={recurringBank} />,
   ];
 
   if (bankAccountName === "Combined") {

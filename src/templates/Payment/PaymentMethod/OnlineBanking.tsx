@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, LabeledTitle, NewDatePicker, TextSpaceArea } from "../../../components";
+import { CustomSpacer, LabeledTitle, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
 import { flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw64 } from "../../../styles";
@@ -34,12 +34,7 @@ export const OnlineBanking: FunctionComponent<OnlineBankingProps> = ({
     <View>
       <View style={px(sw24)}>
         <View style={flexRow}>
-          <AdvancedDropdown
-            items={DICTIONARY_MALAYSIA_BANK_BASE}
-            handleChange={setBankName}
-            label={PAYMENT.LABEL_BANK_NAME}
-            value={bankName}
-          />
+          <NewDropdown items={DICTIONARY_MALAYSIA_BANK_BASE} handleChange={setBankName} label={PAYMENT.LABEL_BANK_NAME} value={bankName} />
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_DATE} />

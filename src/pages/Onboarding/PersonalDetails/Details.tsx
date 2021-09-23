@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, Switch, TextSpaceArea } from "../../../components";
+import { CustomSpacer, NewDropdown, Switch, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import {
   DICTIONARY_ALL_ID_TYPE,
@@ -161,7 +161,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         setInputOtherEducation={setInputOtherEducation}
       />
       <View style={px(sw24)}>
-        <AdvancedDropdown
+        <NewDropdown
           items={DICTIONARY_HOUSEHOLD_INCOME}
           handleChange={setInputMonthlyHousehold}
           label={

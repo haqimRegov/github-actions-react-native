@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CheckBoxDropdown, CustomSpacer, NewDatePicker, TextSpaceArea } from "../../../../components";
+import { CheckBoxDropdown, CustomSpacer, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   DICTIONARY_APPROVED_STATUS_FILTER,
@@ -74,7 +74,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
         </View>
       </View>
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={handleDateSorting}
           items={DICTIONARY_TRANSACTIONS_DATE}
           label={DASHBOARD_FILTER.LABEL_DATE_SORTING}
@@ -113,7 +113,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={handleTransactionsType}
           items={DICTIONARY_TRANSACTIONS_TYPE}
           label={DASHBOARD_FILTER.LABEL_TRANSACTIONS_TYPE}
@@ -129,7 +129,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={handleAccountType}
           items={DICTIONARY_TRANSACTIONS_ACCOUNT_TYPE}
           label={DASHBOARD_FILTER.LABEL_ACCOUNT_TYPE}

@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, NewDatePicker, RadioButtonGroup, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_ACCOUNT_TYPE,
@@ -98,7 +98,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
         {idType !== "Other" || hideInput ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <AdvancedDropdown
+            <NewDropdown
               handleChange={handleOtherIdType}
               items={DICTIONARY_ID_OTHER_TYPE}
               label={ADD_CLIENT.LABEL_ID_TYPE}
@@ -140,7 +140,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           </Fragment>
         )}
         {idType === "Passport" ? (
-          <AdvancedDropdown
+          <NewDropdown
             disabled={clientType !== "" && holderToFill === "principalHolder"}
             items={DICTIONARY_COUNTRIES}
             handleChange={setInputCountry}

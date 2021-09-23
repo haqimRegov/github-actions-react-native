@@ -2,11 +2,11 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import {
-  AdvancedDropdown,
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
   IconButton,
+  NewDropdown,
   OutlineButton,
   TextSpaceArea,
 } from "../../../../components";
@@ -159,7 +159,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
                   return (
                     <View key={currencyIndex} style={{ ...centerVertical, ...flexRow }}>
-                      <AdvancedDropdown
+                      <NewDropdown
                         handleChange={handleOtherCurrency}
                         items={currencyExtractor}
                         label={PERSONAL_DETAILS.LABEL_OTHER_CURRENCY}
@@ -175,7 +175,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                   );
                 })}
 
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={handleOtherBank}
                 items={DICTIONARY_MALAYSIA_BANK}
                 label={PERSONAL_DETAILS.LABEL_BANK_NAME}
@@ -190,7 +190,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                   value={item.otherBankName}
                 />
               ) : null}
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={handleAccountName}
                 items={bankNames}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}

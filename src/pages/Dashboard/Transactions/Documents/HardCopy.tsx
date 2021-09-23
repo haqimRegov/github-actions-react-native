@@ -3,7 +3,7 @@ import { ActivityIndicator, Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, AdvancedDropdown, CheckBox, CustomFlexSpacer, CustomSpacer, PromptModal } from "../../../../components";
+import { ActionButtons, CheckBox, CustomFlexSpacer, CustomSpacer, NewDropdown, PromptModal } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
@@ -151,7 +151,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
             <View style={borderBottomBlack21} />
             <View style={{ ...flexChild, ...px(sw24) }}>
               <CustomSpacer space={sh24} />
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={setBranch}
                 items={branchList}
                 label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_SUBMISSION_BRANCH}

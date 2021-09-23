@@ -2,11 +2,11 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import {
-  AdvancedDropdown,
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
   IconButton,
+  NewDropdown,
   OutlineButton,
   TextSpaceArea,
 } from "../../../../components";
@@ -180,7 +180,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                   <Fragment key={currencyIndex}>
                     {currencyIndex === 0 ? null : <CustomSpacer space={sh32} />}
                     <View style={{ ...centerVertical, ...flexRow }}>
-                      <AdvancedDropdown handleChange={handleOtherCurrency} items={currencyExtractor} label={label} value={value} />
+                      <NewDropdown handleChange={handleOtherCurrency} items={currencyExtractor} label={label} value={value} />
                       <CustomSpacer isHorizontal={true} space={sw16} />
                       {currencyIndex === 0 ? null : (
                         <View>
@@ -198,7 +198,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 spaceToTop={sh32}
                 value={item.bankName}
               />
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={handleAccountName}
                 items={bankNames}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
@@ -225,7 +225,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 spaceToTop={sh32}
                 value={item.bankAccountNumber}
               />
-              <AdvancedDropdown
+              <NewDropdown
                 items={DICTIONARY_COUNTRIES}
                 handleChange={handleBankLocation}
                 label={PERSONAL_DETAILS.LABEL_BANK_LOCATION}

@@ -2,12 +2,12 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Dimensions, ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import {
-  AdvancedDropdown,
   ButtonSelectionList,
   CustomSpacer,
   Dash,
   LabeledTitle,
   LabeledTitleProps,
+  NewDropdown,
   SafeAreaPage,
   TextCard,
   TextCardProps,
@@ -238,11 +238,11 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
                 <View style={{ ...flexRow, ...px(sw24), ...py(sh24) }}>
                   {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
                     <Fragment>
-                      <AdvancedDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
+                      <NewDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
                       <CustomSpacer isHorizontal={true} space={sw64} />
                     </Fragment>
                   ) : null}
-                  <AdvancedDropdown
+                  <NewDropdown
                     handleChange={handleCurrency}
                     items={currencies}
                     label={PRODUCT_DETAILS.LABEL_CURRENCY}

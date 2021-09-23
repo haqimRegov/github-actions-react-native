@@ -4,7 +4,7 @@ import { NativeSyntheticEvent, TextInputFocusEventData, View, ViewStyle } from "
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
 import { centerHorizontal, colorBlue, flexRow, fs12BoldBlue2, py, sh16, sh24, sh32, sh8, sw40 } from "../../styles";
-import { AdvancedDropdown } from "../Dropdown/Advance";
+import { NewDropdown } from "../Dropdown/NewDropdown";
 import { CustomTextInput, TextInputMultiline } from "../Input";
 import { IconButton, OutlineButton } from "../Touchables";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
@@ -121,7 +121,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
       <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
       <CustomSpacer space={sh32} />
       {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[0].value ? (
-        <AdvancedDropdown
+        <NewDropdown
           items={DICTIONARY_MALAYSIA_STATES}
           handleChange={setInputState}
           label={ADDRESS.LABEL_STATE}
@@ -132,7 +132,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputState} value={inputState} />
       )}
       {setInputCountry !== undefined ? (
-        <AdvancedDropdown
+        <NewDropdown
           items={DICTIONARY_COUNTRIES}
           handleChange={setInputCountry}
           label={ADDRESS.LABEL_COUNTRY}

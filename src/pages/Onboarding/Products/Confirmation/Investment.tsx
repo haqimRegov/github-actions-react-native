@@ -2,11 +2,11 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Alert, Text, View } from "react-native";
 
 import {
-  AdvancedDropdown,
   CheckBox,
   CustomSpacer,
   CustomTextInput,
   LabeledTitle,
+  NewDropdown,
   RadioButtonGroup,
   TextSpaceArea,
 } from "../../../../components";
@@ -242,7 +242,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length > 1 ? (
-          <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
+          <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
         ) : null}
         {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length === 1 ? (
           <LabeledTitle
@@ -259,11 +259,11 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
           <View style={{ ...flexRow, ...px(sw24) }}>
             {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
               <Fragment>
-                <AdvancedDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
+                <NewDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
                 <CustomSpacer isHorizontal={true} space={sw64} />
               </Fragment>
             ) : null}
-            <AdvancedDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
+            <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
           </View>
           <CustomSpacer space={sh24} />
         </Fragment>
@@ -300,7 +300,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
           </View>
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
-            <AdvancedDropdown
+            <NewDropdown
               items={salesChargeRange}
               handleChange={handleSalesCharge}
               label={INVESTMENT.LABEL_SALES_CHARGE}
@@ -334,7 +334,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               </View>
               <CustomSpacer isHorizontal={true} space={sw64} />
               <View>
-                <AdvancedDropdown
+                <NewDropdown
                   handleChange={handleScheduledSalesCharge}
                   items={salesChargeRange}
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}

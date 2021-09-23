@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 
-import { AddressField, AdvancedDropdown, CheckBox, CustomSpacer, CustomTextInput, NewDatePicker, TextSpaceArea } from "../../../components";
+import { AddressField, CheckBox, CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import {
   DICTIONARY_COUNTRIES,
@@ -183,7 +183,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       />
       {isPassport ? (
         <Fragment>
-          <AdvancedDropdown
+          <NewDropdown
             items={DICTIONARY_COUNTRIES}
             handleChange={setInputNationality}
             label={ID_VERIFICATION.LABEL_NATIONALITY}
@@ -200,7 +200,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
           />
         </Fragment>
       ) : null}
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_SALUTATION}
         handleChange={setInputSalutation}
         label={ID_VERIFICATION.LABEL_SALUTATION}
@@ -208,7 +208,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         value={inputSalutation}
       />
       <CustomSpacer space={sh32} />
-      <AdvancedDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
+      <NewDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
       <CustomSpacer space={sh32} />
       <CustomTextInput
         autoCapitalize="words"
@@ -216,7 +216,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         onChangeText={setInputPlaceOfBirth}
         value={inputPlaceOfBirth}
       />
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_COUNTRIES}
         handleChange={setInputCountryOfBirth}
         label={ID_VERIFICATION.LABEL_COB}

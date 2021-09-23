@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomCard, CustomTextInput } from "../../../components";
+import { CustomCard, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { px, sh24, sw24, sw64 } from "../../../styles";
 
@@ -34,7 +34,7 @@ export const ClientTrustAccount: FunctionComponent<ClientTrustAccountProps> = ({
   };
 
   const items = [
-    <AdvancedDropdown items={bankNames} handleChange={handleClientName} label={PAYMENT.LABEL_CLIENT_NAME} value={clientName} />,
+    <NewDropdown items={bankNames} handleChange={handleClientName} label={PAYMENT.LABEL_CLIENT_NAME} value={clientName} />,
     <CustomTextInput
       keyboardType="numeric"
       label={PAYMENT.LABEL_TRUST_ACCOUNT_NO}

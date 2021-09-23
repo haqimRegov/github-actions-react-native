@@ -3,7 +3,6 @@ import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
   ActionButtons,
-  AdvancedDropdown,
   Badge,
   ConfirmationModal,
   CustomFlexSpacer,
@@ -12,6 +11,7 @@ import {
   Dash,
   IconButton,
   LabeledTitle,
+  NewDropdown,
   OutlineButton,
   Switch,
   TextInputArea,
@@ -619,7 +619,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                         <View style={px(sw24)}>
                           <View style={flexRow}>
                             {currencies.length > 1 ? (
-                              <AdvancedDropdown
+                              <NewDropdown
                                 items={currencies}
                                 handleChange={setCurrency}
                                 label={PAYMENT.LABEL_CURRENCY}
@@ -650,7 +650,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                               />
                             ) : null}
                             {payment.paymentMethod! !== "EPF" && currencies.length < 2 ? (
-                              <AdvancedDropdown
+                              <NewDropdown
                                 items={paymentMethods}
                                 handleChange={setPaymentMethod}
                                 label={PAYMENT.LABEL_PAYMENT_METHOD}
@@ -676,7 +676,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                           <View style={px(sw24)}>
                             <CustomSpacer space={sh32} />
                             <View style={flexRow}>
-                              <AdvancedDropdown
+                              <NewDropdown
                                 items={paymentMethods}
                                 handleChange={setPaymentMethod}
                                 label={PAYMENT.LABEL_PAYMENT_METHOD}

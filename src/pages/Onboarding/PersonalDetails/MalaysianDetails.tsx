@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_RACE } from "../../../data/dictionary";
 import { fs16SemiBoldBlack2, px, sh16, sh32, sw24, sw44 } from "../../../styles";
@@ -23,7 +23,7 @@ export const MalaysianDetails: FunctionComponent<MalaysianDetailsProps> = ({
 }: MalaysianDetailsProps) => {
   return (
     <View style={px(sw24)}>
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_MALAYSIA_RACE}
         handleChange={setInputRace}
         label={PERSONAL_DETAILS.LABEL_RACE}

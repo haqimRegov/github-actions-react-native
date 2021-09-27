@@ -50,6 +50,7 @@ interface NewDropdownProps {
   spaceToTop?: number;
   style?: ViewStyle;
   value: string;
+  viewStyle?: ViewStyle;
 }
 
 export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
@@ -64,6 +65,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
   spaceToTop,
   style,
   value,
+  viewStyle,
 }: NewDropdownProps) => {
   const [layout, setLayout] = useState<IBasicLayout>({ x: 0, y: 0, width: 0, height: 0 });
   const [ref, setRef] = useState<View | null>(null);
@@ -126,6 +128,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
     top: layout.y,
     width: sw360,
     zIndex: 3,
+    ...viewStyle,
   };
 
   const placeholderStyle: TextStyle = value ? {} : { color: colorBlack._3, fontFamily: NunitoRegular };
@@ -166,7 +169,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                 placeholder={placeholderLabel}
                 placeholderTextColor={colorBlack._3}
                 rightIcon={{ name: "caret-down" }}
-                viewStyle={inputStyle}
+                viewStyle={{ ...inputStyle, ...viewStyle }}
                 value={value}
               />
             </View>

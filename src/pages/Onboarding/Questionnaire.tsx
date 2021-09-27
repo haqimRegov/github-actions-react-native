@@ -342,7 +342,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                                   <View style={{ ...centerVertical, ...flexRow }}>
                                     <View style={alignSelfStart}>
                                       <View style={{ ...centerHV, ...circleStyle }}>
-                                        <IcoMoon name="check" size={sw16} color={iconColor} />
+                                        <IcoMoon name="success" size={sw16} color={iconColor} />
                                       </View>
                                     </View>
                                     <CustomSpacer space={sw8} isHorizontal />

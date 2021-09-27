@@ -20,7 +20,7 @@ export const Step = ({ active, step, visited }: StepProps) => {
   return (
     <View style={{ ...stepColor, ...centerHV, ...visitedStepStyle }}>
       {visited && !active ? (
-        <IcoMoon name="check" color={colorWhite._1} size={sh16} />
+        <IcoMoon name="success" color={colorWhite._1} size={sh16} />
       ) : (
         <Text style={{ ...fs12RegBlack2, ...activeLabelStyle }}>{step}</Text>
       )}

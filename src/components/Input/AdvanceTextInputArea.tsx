@@ -86,7 +86,7 @@ export const AdvanceTextInputArea: FunctionComponent<AdvanceTextInputAreaProps> 
         <CustomSpacer isHorizontal={true} space={sw16} />
         {showCheck === true ? (
           <View style={{ ...centerHV, ...circleBorder(sw32, sw1, colorGreen._1, colorGreen._1) }}>
-            <IcoMoon name="check" size={sw24} color={colorWhite._1} />
+            <IcoMoon name="success" size={sw24} color={colorWhite._1} />
           </View>
         ) : null}
       </View>

@@ -14,7 +14,7 @@ export const Badge: FunctionComponent<BadgeProps> = ({ children }: BadgeProps) =
     <View style={flexRow}>
       {children}
       <View style={badgeStyle}>
-        <IcoMoon color={colorWhite._1} name="check" size={sh6} />
+        <IcoMoon color={colorWhite._1} name="success" size={sh6} />
       </View>
     </View>
   );

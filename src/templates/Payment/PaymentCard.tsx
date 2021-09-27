@@ -104,7 +104,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
 
   const infoIcon = active ? "close" : "caret-down";
   const icon = active ? "minus" : "caret-down";
-  const completedIcon = withPayment === true && active === false ? "check" : icon;
+  const completedIcon = withPayment === true && active === false ? "success" : icon;
   const iconColor = withPayment === true && active === false ? colorWhite._1 : colorBlue._2;
   const iconBGColor = withPayment === true && active === false ? colorGreen._1 : colorWhite._1;
   const iconBorderColor = withPayment === true && active === false ? colorGreen._1 : colorGray._7;
@@ -754,7 +754,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                   <Fragment>
                     {index === 0 ? null : <Dash />}
                     <View style={headerStyle}>
-                      <IcoMoon color={colorBlue._2} name="check" size={sh24} />
+                      <IcoMoon color={colorBlue._2} name="success" size={sh24} />
                       <CustomSpacer isHorizontal={true} space={sw16} />
                       <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_ADDED_PAYMENT} - ${payment.paymentMethod!} ${payment.currency} ${
                         payment.amount

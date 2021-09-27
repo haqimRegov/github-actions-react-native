@@ -23,10 +23,12 @@ import {
   sh32,
   sw039,
   sw1,
+  sw10,
   sw128,
   sw148,
   sw16,
   sw170,
+  sw18,
   sw32,
   sw4,
   sw56,
@@ -167,9 +169,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       icon: { name: sortOrderNumber === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "orderNumber", textStyle: { ...fs12RegBlue6, ...fsTransformNone, letterSpacing: -sw039 } }],
       onPressHeader: handleSortOrderNumber,
-      viewStyle: {
-        width: sw84,
-      },
+      viewStyle: { width: sw84 },
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
     },
     {
@@ -178,18 +178,14 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       key: [{ key: "investorName", textStyle: { ...fsTransformNone, ...fs12BoldBlue2 } }],
       titleStyle: { paddingLeft: sw32 },
       onPressHeader: handleSortInvestor,
-      viewStyle: {
-        width: sw148,
-      },
+      viewStyle: { width: sw148 },
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
     },
     {
       icon: { name: sortTransactionType === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "transactionType", textStyle: fs12BoldBlue2 }],
       onPressHeader: handleSortTransactionType,
-      viewStyle: {
-        width: sw80,
-      },
+      viewStyle: { width: sw80 },
       textStyle: fsTransformNone,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_TYPE,
       titleStyle: fsTransformNone,
@@ -199,25 +195,16 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       icon: { name: sortAmount === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "totalInvestment" }],
       onPressHeader: handleSortAmount,
-      viewStyle: {
-        width: sw128,
-      },
+      viewStyle: { width: sw128 },
       title: DASHBOARD_HOME.LABEL_TOTAL_INVESTMENTS,
     },
     {
       customHeader: true,
       customItem: true,
-      icon: {
-        name: "caret-down",
-        size: sw16,
-      },
+      icon: { name: "caret-down", size: sw16 },
       key: [{ key: showDateBy, textStyle: fs12RegBlue2 }],
       itemStyle: { ...justifyContentStart, ...px(sw8) },
-      viewStyle: {
-        width: sw92,
-        ...px(0),
-        ...centerHorizontal,
-      },
+      viewStyle: { width: sw92, ...px(0), ...centerHorizontal },
       title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
     },
     {
@@ -371,10 +358,10 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
                     ...centerHV,
                     backgroundColor: colorRed._1,
                     borderRadius: sw4,
-                    height: sw16,
-                    width: sw16,
+                    height: sw18,
+                    width: sw18,
                   }}>
-                  <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
+                  <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw10, borderRadius: sw1 }} />
                 </View>
               ) : null}
             </View>

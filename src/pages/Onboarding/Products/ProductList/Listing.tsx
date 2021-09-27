@@ -20,6 +20,7 @@ import {
   sw1,
   sw136,
   sw16,
+  sw18,
   sw20,
   sw24,
   sw323,
@@ -134,45 +135,33 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     {
       icon: { name: sortAbbr === "desc" ? "arrow-up" : "arrow-down" },
       key: [{ key: "fundAbbr", textStyle: fsUppercase }],
-      viewStyle: {
-        width: sw136,
-      },
+      viewStyle: { width: sw136 },
       onPressHeader: handleSortAbbr,
       title: PRODUCT_LIST.LABEL_COLUMN_FUND_CODE,
     },
     {
       key: [{ key: "fundName", textStyle: fsUppercase }],
       icon: { name: sortName === "desc" ? "arrow-up" : "arrow-down" },
-      viewStyle: {
-        width: sw323,
-      },
+      viewStyle: { width: sw323 },
       onPressHeader: handleSortName,
       title: productType === "amp" ? PRODUCT_LIST.LABEL_COLUMN_PORTFOLIO : PRODUCT_LIST.LABEL_COLUMN_NAME,
     },
     {
-      icon: {
-        name: "caret-down",
-      },
+      icon: { name: "caret-down", size: sw16 },
       key: [{ key: "riskCategory" }],
-      viewStyle: {
-        width: sw96,
-      },
+      viewStyle: { width: sw96 },
       customHeader: true,
       title: PRODUCT_LIST.LABEL_COLUMN_RISK,
     },
     {
       key: [{ key: "isEpf" }],
-      viewStyle: {
-        width: sw56,
-      },
+      viewStyle: { width: sw56 },
       title: PRODUCT_LIST.LABEL_COLUMN_EPF,
     },
     {
       customItem: true,
       key: [{ key: "isSyariah" }],
-      viewStyle: {
-        width: sw90,
-      },
+      viewStyle: { width: sw90 },
       title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
     },
   ];
@@ -279,8 +268,8 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                         ...centerHV,
                         backgroundColor: colorRed._1,
                         borderRadius: sw4,
-                        height: sw16,
-                        width: sw16,
+                        height: sw18,
+                        width: sw18,
                       }}>
                       <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
                     </View>

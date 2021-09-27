@@ -12,6 +12,7 @@ export interface QuestionContentProps {
   setSelected: (name: number) => void;
 }
 export interface QuestionProps extends QuestionContentProps {
+  disabledIndex?: number[];
   label: string;
   RenderContent?: (props: QuestionContentProps) => JSX.Element;
   right?: ReactNode;
@@ -19,7 +20,17 @@ export interface QuestionProps extends QuestionContentProps {
   title: string;
 }
 
-export const Question = ({ label, options, RenderContent, right, selected, setSelected, spaceToContent, title }: QuestionProps) => {
+export const Question = ({
+  disabledIndex,
+  label,
+  options,
+  RenderContent,
+  right,
+  selected,
+  setSelected,
+  spaceToContent,
+  title,
+}: QuestionProps) => {
   const handleSelect = (index: TypeAdvanceToggleButtonValue) => {
     if (options !== undefined) {
       setSelected(index);
@@ -41,7 +52,13 @@ export const Question = ({ label, options, RenderContent, right, selected, setSe
       ) : (
         <View style={flexRow}>
           {options !== undefined ? (
-            <AdvanceToggleButton direction="column" labels={options} value={selected} onSelect={handleSelect} />
+            <AdvanceToggleButton
+              direction="column"
+              disabledIndex={disabledIndex}
+              labels={options}
+              value={selected}
+              onSelect={handleSelect}
+            />
           ) : null}
           <CustomFlexSpacer />
           {right !== undefined ? right : null}

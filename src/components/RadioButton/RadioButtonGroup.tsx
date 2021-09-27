@@ -8,6 +8,7 @@ import { RadioButton } from "./RadioButton";
 
 export interface RadioButtonGroupProps {
   direction?: "row" | "column";
+  disabledIndex?: number[];
   label?: string;
   labelStyle?: TextStyle;
   options: string[];
@@ -23,6 +24,7 @@ export interface RadioButtonGroupProps {
 
 export const RadioButtonGroup: FunctionComponent<RadioButtonGroupProps> = ({
   direction,
+  disabledIndex,
   label,
   labelStyle,
   options,
@@ -53,6 +55,7 @@ export const RadioButtonGroup: FunctionComponent<RadioButtonGroupProps> = ({
             <Fragment key={index}>
               {index === 0 ? null : <CustomSpacer isHorizontal={direction === "row"} space={radioSpace} />}
               <RadioButton
+                disabled={disabledIndex !== undefined && disabledIndex.includes(index)}
                 label={option}
                 labelStyle={optionStyle}
                 radioStyle={radioStyle}

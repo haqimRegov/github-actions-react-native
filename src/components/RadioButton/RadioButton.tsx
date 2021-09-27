@@ -1,26 +1,29 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
+import { NunitoBold, NunitoRegular } from "../../constants";
 import {
   centerVertical,
   circle,
   circleBorder,
   colorBlue,
+  colorGray,
   colorRed,
   colorWhite,
   flexRow,
   fs12BoldBlack2,
   sw1,
+  sw10,
   sw12,
-  sw14,
   sw16,
+  sw18,
   sw4,
   sw48,
-  sw8,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 interface RadioButtonProps {
+  disabled?: boolean;
   selectedColor?: string;
   label: string;
   labelStyle?: TextStyle;
@@ -31,6 +34,7 @@ interface RadioButtonProps {
 }
 
 export const RadioButton: FunctionComponent<RadioButtonProps> = ({
+  disabled,
   label,
   labelStyle,
   radioStyle,
@@ -40,20 +44,29 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   setSelected,
 }: RadioButtonProps) => {
   const color = selectedColor !== undefined ? selectedColor : colorRed._1;
-  const borderColor = selected ? color : colorBlue._3_8;
+  const borderColor = selected ? color : colorBlue._2;
   const borderWidth = selected ? sw4 : sw1;
-  const circleSize = selected ? sw8 : sw14;
+  const circleSize = selected ? sw10 : sw16;
+  const disabledColor: TextStyle = disabled === true && selected === false ? { backgroundColor: colorGray._9 } : {};
+  const disabledStyle: ViewStyle = disabled === true ? { opacity: 0.6 } : {};
+  const fontFamily = selected ? NunitoBold : NunitoRegular;
+
+  const handlePress = () => {
+    if (!disabled) {
+      setSelected();
+    }
+  };
 
   return (
-    <TouchableWithoutFeedback onPress={setSelected}>
-      <View style={{ ...centerVertical, ...flexRow }}>
-        <View style={radioStyle}>
-          <View style={circleBorder(sw16, borderWidth, borderColor, colorWhite._1)}>
-            <View style={circle(circleSize)} />
+    <TouchableWithoutFeedback onPress={handlePress}>
+      <View style={{ ...centerVertical, ...flexRow, ...disabledStyle }}>
+        <View style={{ ...radioStyle }}>
+          <View style={circleBorder(sw18, borderWidth, borderColor, colorWhite._1)}>
+            <View style={{ ...circle(circleSize), ...disabledColor }} />
           </View>
         </View>
         <CustomSpacer space={sw12} isHorizontal={true} />
-        <Text style={{ ...fs12BoldBlack2, minWidth: sw48, ...labelStyle }}>{label}</Text>
+        <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, minWidth: sw48, ...labelStyle }}>{label}</Text>
         {right}
       </View>
     </TouchableWithoutFeedback>

@@ -35,6 +35,7 @@ import { CustomFlexSpacer } from "../Views";
 const { DATE_PICKER } = Language.PAGE;
 
 interface NewDatePickerProps {
+  buttonStyle?: ViewStyle;
   buttonText?: string;
   datePickerStyle?: ViewStyle;
   disabled?: boolean;
@@ -47,9 +48,11 @@ interface NewDatePickerProps {
   selectedFormat?: string;
   setValue: (value: Date) => void;
   value?: Date;
+  viewStyle?: ViewStyle;
 }
 
 export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
+  buttonStyle,
   buttonText,
   datePickerStyle,
   disabled,
@@ -62,6 +65,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
   selectedFormat,
   setValue,
   value,
+  viewStyle,
 }: NewDatePickerProps) => {
   const [layout, setLayout] = useState<IBasicLayout>({ x: 0, y: 0, width: 0, height: 0 });
   const [ref, setRef] = useState<View | null>(null);
@@ -144,17 +148,19 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
     top: layout.y,
     width: sw360,
     zIndex: 3,
+    ...viewStyle,
   };
 
   const placeholderStyle: TextStyle = selectedValue ? {} : { color: colorGray._9, fontFamily: NunitoRegular };
   const pickerStyle: ViewStyle = { height: sh228, ...datePickerStyle };
 
-  const buttonStyle: ViewStyle = {
+  const defaultButtonStyle: ViewStyle = {
     backgroundColor: colorBlue._2,
     borderWidth: 0,
     borderBottomRightRadius: sw16,
     borderBottomLeftRadius: sw16,
     width: sw356,
+    ...buttonStyle,
   };
 
   const handleKeyboardDidShow = () => {
@@ -184,6 +190,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
               placeholder={customPlaceholder}
               rightIcon={{ name: icon }}
               value={selectedValue}
+              viewStyle={viewStyle}
             />
           </View>
         </TouchableWithoutFeedback>
@@ -213,7 +220,11 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
                     />
                   </View>
                   <View style={{ backgroundColor: colorBlue._2, borderBottomRightRadius: sw12, borderBottomLeftRadius: sw12 }}>
-                    <CustomButton buttonStyle={buttonStyle} onPress={handleConfirmDate} text={buttonText || DATE_PICKER.BUTTON_CONFIRM} />
+                    <CustomButton
+                      buttonStyle={defaultButtonStyle}
+                      onPress={handleConfirmDate}
+                      text={buttonText || DATE_PICKER.BUTTON_CONFIRM}
+                    />
                   </View>
                 </View>
               </Collapsible>

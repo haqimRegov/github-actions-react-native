@@ -33,7 +33,7 @@ export const ToggleButton: FunctionComponent<ToggleButtonProps> = ({ labelNo, la
         <OutlineButton
           buttonStyle={value === 0 ? activeStyle : deactiveStyle}
           color="white"
-          icon={value === 0 ? "check" : undefined}
+          icon={value === 0 ? "success" : undefined}
           onPress={handleYes}
           text={labelYes !== undefined ? labelYes : TOGGLE.LABEL_YES}
           textStyle={value === 0 ? fs12SemiBoldWhite1 : fs12SemiBoldBlue2}
@@ -42,7 +42,7 @@ export const ToggleButton: FunctionComponent<ToggleButtonProps> = ({ labelNo, la
         <OutlineButton
           buttonStyle={value === 1 ? activeStyle : deactiveStyle}
           color="white"
-          icon={value === 1 ? "check" : undefined}
+          icon={value === 1 ? "success" : undefined}
           onPress={handleNo}
           text={labelNo !== undefined ? labelNo : TOGGLE.LABEL_NO}
           textStyle={value === 1 ? fs12SemiBoldWhite1 : fs12SemiBoldBlue2}

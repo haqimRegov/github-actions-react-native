@@ -11,7 +11,7 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
-import { fs16RegBlack2, fs24BoldBlack2, sh120, sh136, sh24, sh8, sw56, sw74 } from "../../../../styles";
+import { fs16RegBlack2, fs24BoldBlack2, sh120, sh136, sh24, sh8, sw440, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -103,6 +103,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
               items={DICTIONARY_ID_OTHER_TYPE}
               label={ADD_CLIENT.LABEL_ID_TYPE}
               value={otherIdType!}
+              viewStyle={{ width: sw440 }}
             />
           </Fragment>
         )}
@@ -116,6 +117,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           spaceToBottom={sh24}
           spaceToTop={sh24}
           value={name}
+          viewStyle={{ width: sw440 }}
         />
         <CustomTextInput
           autoCapitalize="characters"
@@ -126,16 +128,19 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           maxLength={idMaxLength}
           onChangeText={setInputIdNumber}
           value={id}
+          viewStyle={{ width: sw440 }}
         />
         {idType === "NRIC" ? null : (
           <Fragment>
             <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
             <NewDatePicker
+              buttonStyle={{ width: sw440 }}
               disabled={clientType !== "" && holderToFill === "principalHolder"}
               datePickerStyle={{ height: sh120 }}
               mode="date"
               setValue={setInputDateOfBirth}
               value={dateValue}
+              viewStyle={{ width: sw440 }}
             />
           </Fragment>
         )}
@@ -148,6 +153,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             spaceToTop={sh24}
             style={{ height: sh136 }}
             value={country || ""}
+            viewStyle={{ width: sw440 }}
           />
         ) : null}
         {clientType === "NTB" && holderToFill === "principalHolder" ? (

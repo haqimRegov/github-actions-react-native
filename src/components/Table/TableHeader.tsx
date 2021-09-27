@@ -3,7 +3,7 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
-import { centerVertical, colorBlue, flexRow, fs10RegBlue38, px, sh24, sw4, sw8 } from "../../styles";
+import { centerVertical, colorBlue, flexRow, fs10RegBlue38, px, sh24, sw16, sw4, sw8 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 import { TableHeaderPopup } from "./HeaderPopup";
 
@@ -45,7 +45,7 @@ export const TableHeader: FunctionComponent<TableHeaderProps> = ({
                   {item.icon === undefined ? null : (
                     <Fragment>
                       <CustomSpacer isHorizontal={true} space={sw4} />
-                      <IcoMoon color={colorBlue._2} {...item.icon} />
+                      <IcoMoon color={colorBlue._2} size={sw16} {...item.icon} />
                     </Fragment>
                   )}
                 </View>

@@ -27,7 +27,7 @@ import {
   sw1,
   sw12,
   sw16,
-  sw20,
+  sw19,
   sw4,
   sw56,
   sw8,
@@ -96,7 +96,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 <CheckBox
                   disabled={disabled}
                   onPress={handleSelectRow}
-                  style={{ ...px(sw20), ...flexRowCC, ...disabledCheckbox }}
+                  style={{ ...px(sw19), ...flexRowCC, ...disabledCheckbox }}
                   toggle={itemSelected}
                 />
               </View>

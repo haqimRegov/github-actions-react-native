@@ -17,7 +17,6 @@ import {
   px,
   py,
   sh24,
-  sh32,
   sh8,
   sh96,
   shadowBlue5,
@@ -96,7 +95,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
             </View>
           </View>
           <CustomSpacer isHorizontal={true} space={sw8} />
-          <IcoMoon color={colorBlack._1} name={icon} size={sh32} />
+          <IcoMoon color={colorBlack._1} name={icon} size={sh24} />
         </View>
       </TouchableWithoutFeedback>
       {expanded

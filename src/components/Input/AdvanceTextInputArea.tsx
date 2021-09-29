@@ -22,11 +22,11 @@ import {
 } from "../../styles";
 import { OutlineButton } from "../Touchables/OutlineButton";
 import { CustomSpacer } from "../Views/Spacer";
-import { TextInputArea, TextInputAreaProps } from "./TextInputArea";
+import { TextInputMultiline, TextInputMultilineProps } from "./TextInputMultiline";
 
 const { TEXT_INPUT_AREA } = Language.PAGE;
 
-interface AdvanceTextInputAreaProps extends TextInputAreaProps {
+interface AdvanceTextInputAreaProps extends TextInputMultilineProps {
   handleContinue: (value: string) => void;
   handleSave: (value: boolean) => void;
   saved: boolean;
@@ -74,7 +74,7 @@ export const AdvanceTextInputArea: FunctionComponent<AdvanceTextInputAreaProps> 
 
   return (
     <View>
-      <TextInputArea maxLength={255} onChangeText={handleInput} placeholder={placeholder} value={input} />
+      <TextInputMultiline maxLength={255} onChangeText={handleInput} placeholder={placeholder} value={input} />
       <CustomSpacer space={sh16} />
       <View style={{ ...flexRow, ...centerVertical }}>
         <OutlineButton

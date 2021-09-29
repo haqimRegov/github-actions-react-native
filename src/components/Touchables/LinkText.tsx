@@ -1,34 +1,41 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerVertical, colorBlack, flexCol, flexRow, fs12RegBlue1, sh16, sw1 } from "../../styles";
+import { centerVertical, colorBlack, colorBlue, flexCol, flexRow, flexWrap, fs12RegBlue1, sh16, sw1, sw2 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface LinkTextProps {
   onPress?: () => void;
   style?: TextStyle;
   text: string;
+  withUnderline?: boolean;
 }
 
 export interface LinkTextGroupProps {
   direction?: "row" | "column";
   divider?: JSX.Element;
   links: LinkTextProps[];
-  noDividier?: boolean;
+  noDivider?: boolean;
   spaceToDivider?: number;
   style?: ViewStyle;
   textStyle?: TextStyle;
 }
 
-export const LinkText = ({ onPress, style, text }: LinkTextProps) => {
+export const LinkText: FunctionComponent<LinkTextProps> = ({ onPress, style, text, withUnderline }: LinkTextProps) => {
+  const underline = withUnderline === true ? { borderBottomWidth: sw2, borderBottomColor: colorBlue._2 } : {};
+
   return (
-    <Text onPress={onPress} style={{ ...fs12RegBlue1, ...style }}>
-      {text}
-    </Text>
+    <View style={flexWrap}>
+      <View style={underline}>
+        <Text onPress={onPress} style={{ ...fs12RegBlue1, ...style }}>
+          {text}
+        </Text>
+      </View>
+    </View>
   );
 };
 
-export const LinkTextGroup = ({ direction, divider, links, noDividier, spaceToDivider, style }: LinkTextGroupProps) => {
+export const LinkTextGroup = ({ direction, divider, links, noDivider, spaceToDivider, style }: LinkTextGroupProps) => {
   const viewStyle = direction === "column" ? { ...flexCol, ...style } : { ...flexRow, ...centerVertical, ...style };
   const defaultSpace = spaceToDivider !== undefined ? spaceToDivider : 0;
   const isHorizontal = direction !== "column";
@@ -43,7 +50,7 @@ export const LinkTextGroup = ({ direction, divider, links, noDividier, spaceToDi
             {index === 0 ? null : (
               <Fragment>
                 <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />
-                {noDividier === true ? null : linkDivider}
+                {noDivider === true ? null : linkDivider}
               </Fragment>
             )}
             {index === 0 ? null : <CustomSpacer isHorizontal={isHorizontal} space={defaultSpace} />}

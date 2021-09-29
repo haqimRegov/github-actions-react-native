@@ -14,7 +14,7 @@ import {
   NewDropdown,
   OutlineButton,
   Switch,
-  TextInputArea,
+  TextInputMultiline,
   TextSpaceArea,
   UploadWithModal,
 } from "../../components";
@@ -717,14 +717,16 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                           <CustomSpacer space={sh24} />
                           <Switch label={PAYMENT.LABEL_REMARK} onPress={toggleRemark} toggle={payment.remark !== undefined} />
                           {payment.remark === undefined ? null : (
-                            <TextInputArea
-                              width={sw784}
-                              maxLength={255}
-                              showLength={true}
-                              spaceToTop={sh24}
-                              onChangeText={setRemark}
-                              value={payment.remark}
-                            />
+                            <Fragment>
+                              <TextInputMultiline
+                                maxLength={255}
+                                onChangeText={setRemark}
+                                showLength={true}
+                                spaceToTop={sh24}
+                                value={payment.remark}
+                                width={sw784}
+                              />
+                            </Fragment>
                           )}
                         </Fragment>
                       )}

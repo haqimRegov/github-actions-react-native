@@ -13,7 +13,7 @@ import {
   LabeledTitle,
   Question,
 } from "../../components";
-import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { Language, NunitoBold, NunitoRegular, ONBOARDING_ROUTES } from "../../constants";
 import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { getRiskProfile } from "../../network-actions";
@@ -52,6 +52,7 @@ import {
   sw24,
   sw256,
   sw326,
+  sw328,
   sw432,
   sw7,
   sw8,
@@ -96,7 +97,8 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const setQ5 = (index: number) => addAssessmentQuestions({ questionFive: index });
   const setQ6 = (index: number) => addAssessmentQuestions({ questionSix: index });
   const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
-  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index });
+  const setQ8 = (index: number) =>
+    addAssessmentQuestions({ questionEight: index, questionNine: index === 0 || index === -1 ? -1 : questionNine });
   const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
   const handleConfirmAssessment = () => {
@@ -333,20 +335,21 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                           const iconColor = index === selected ? colorWhite._1 : colorBlue._2;
                           const circleStyle: ViewStyle =
                             index === selected ? circleBorder(sw24, sw1, colorRed._1, colorRed._1) : circleBorder(sw24, sw1, colorBlue._2);
+                          const fontFamily = index === selected ? NunitoBold : NunitoRegular;
 
                           return (
                             <Fragment key={index}>
                               {index !== 0 ? <CustomSpacer isHorizontal={false} space={sh16} /> : null}
                               <View style={flexRow}>
                                 <TouchableWithoutFeedback onPress={handleSelect}>
-                                  <View style={{ ...centerVertical, ...flexRow }}>
+                                  <View style={{ ...centerVertical, ...flexRow, width: sw328 }}>
                                     <View style={alignSelfStart}>
                                       <View style={{ ...centerHV, ...circleStyle }}>
                                         <IcoMoon name="success" size={sw16} color={iconColor} />
                                       </View>
                                     </View>
                                     <CustomSpacer space={sw8} isHorizontal />
-                                    <Text style={{ ...fs12BoldBlack2, maxWidth: sw326 }}>{option}</Text>
+                                    <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, maxWidth: sw326 }}>{option}</Text>
                                   </View>
                                 </TouchableWithoutFeedback>
                                 {index < 2 ? (

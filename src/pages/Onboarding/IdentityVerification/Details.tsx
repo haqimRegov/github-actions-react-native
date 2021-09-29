@@ -10,7 +10,7 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8 } from "../../../styles";
+import { sh136, sh143, sh176, sh24, sh32, sh8 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -242,7 +242,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         setInputState={setInputPermanentState}
       />
       <CustomSpacer space={sh32} />
-      <CheckBox label={labelSameMailing} labelStyle={fs12BoldBlack2} onPress={handleAddressToggle} toggle={sameAddressToggle} />
+      <CheckBox label={labelSameMailing} onPress={handleAddressToggle} toggle={sameAddressToggle} />
       {sameAddressToggle === true ? null : (
         <Fragment>
           <CustomSpacer space={sh32} />

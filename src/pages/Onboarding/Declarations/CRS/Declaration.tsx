@@ -1,10 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CheckBox, CustomSpacer, LinkText } from "../../../../components";
+import { CheckBox, CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_LINK_TAX_RESIDENT } from "../../../../data/dictionary";
-import { RNInAppBrowser } from "../../../../integrations";
 import {
   borderBottomGray4,
   fs12BoldBlack2,
@@ -31,9 +30,9 @@ export const CrsTerms: FunctionComponent<CrsTermsProps> = ({ accepted, setAccept
     setAccepted(!accepted);
   };
 
-  const handleTaxResidentLink = () => {
-    RNInAppBrowser.openLink(DICTIONARY_LINK_TAX_RESIDENT);
-  };
+  // const handleTaxResidentLink = () => {
+  //   RNInAppBrowser.openLink(DICTIONARY_LINK_TAX_RESIDENT);
+  // };
 
   return (
     <View>
@@ -60,11 +59,10 @@ export const CrsTerms: FunctionComponent<CrsTermsProps> = ({ accepted, setAccept
         <Text style={fs12RegBlack2}>{DECLARATIONS.DEFINITIONS_SELECTED_HEADING_B}</Text>
         <CustomSpacer space={sh8} />
         <Text style={{ ...fs12RegBlack2, paddingLeft: sw24 }}>
-          {DECLARATIONS.DEFINITIONS_SELECTED_TEXT_B}
-          <LinkText onPress={handleTaxResidentLink} text={DICTIONARY_LINK_TAX_RESIDENT} />
+          {`${DECLARATIONS.DEFINITIONS_SELECTED_TEXT_B}${DICTIONARY_LINK_TAX_RESIDENT}`}
         </Text>
         <CustomSpacer space={sh40} />
-        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_CRS} labelStyle={fs12BoldBlack2} />
+        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_CRS} />
       </View>
     </View>
   );

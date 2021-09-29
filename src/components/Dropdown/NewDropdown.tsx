@@ -98,7 +98,6 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
   };
 
   const handleExpand = () => {
-    console.log("expand");
     Keyboard.dismiss();
     if (ref !== null && keyboardVisible === false) {
       ref.measure((_x, _y, _width, _height, pageX, pageY) => {

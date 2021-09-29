@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_NRIC_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegBlack2, fs40BoldBlack2, sh16, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs12BoldBlue2, fs24RegBlack2, fs40BoldBlack2, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -71,7 +71,7 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
       />
       <CustomSpacer space={sh32} />
       {handleExistingLogin !== undefined ? (
-        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ height: sh16 }} />
+        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={fs12BoldBlue2} withUnderline={true} />
       ) : null}
     </View>
   );

@@ -12,7 +12,6 @@ import {
   flexRow,
   flexRowCC,
   flexWrap,
-  fs12BoldBlack2,
   fs12RegBlack2,
   fs16BoldBlack1,
   fs24BlackBlack2,
@@ -189,7 +188,6 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                         checkboxStyle={{ ...alignSelfStart, marginTop: sh4 }}
                         onPress={handleCheckbox}
                         label={PAYMENT.PROMPT_CHECKBOX_LABEL}
-                        labelStyle={fs12BoldBlack2}
                         toggle={toggle}
                         style={{ width: sw400, ...hintTextStyle }}
                       />

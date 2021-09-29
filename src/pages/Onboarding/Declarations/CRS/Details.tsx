@@ -20,7 +20,6 @@ import {
   colorBlue,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
   fs12BoldBlue2,
   fs16RegBlack2,
   fs16SemiBoldBlack2,
@@ -187,13 +186,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
                   <CustomSpacer space={sh24} />
                   <CustomTextInput label={labelTin} onChangeText={handleTinNumber} value={tax.tinNumber} disabled={tax.country === ""} />
                   <CustomSpacer space={sh20} />
-                  <CheckBox
-                    disabled={tax.country === ""}
-                    toggle={tax.noTin!}
-                    onPress={handleNoTin}
-                    label={DECLARATIONS.LABEL_NO_TIN}
-                    labelStyle={fs12BoldBlack2}
-                  />
+                  <CheckBox disabled={tax.country === ""} toggle={tax.noTin!} onPress={handleNoTin} label={DECLARATIONS.LABEL_NO_TIN} />
                   {tax.noTin === true ? (
                     <Fragment>
                       <CustomSpacer space={sh32} />
@@ -202,6 +195,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
                       <AdvanceToggleButton
                         direction="column"
                         labels={OPTIONS_CRS_TIN_REASONS}
+                        labelStyle={{ lineHeight: sh16 }}
                         onSelect={handleTinReason}
                         space={sh24}
                         value={tax.reason!}

@@ -52,7 +52,7 @@ export const FeaTerms: FunctionComponent<FeaTermsProps> = ({ accepted, setAccept
           </Fragment>
         ))}
         <CustomSpacer space={sh32} />
-        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_FEA} labelStyle={fs12BoldBlack2} />
+        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_FEA} />
       </View>
     </View>
   );

@@ -67,7 +67,7 @@ export const FatcaUSBorn: FunctionComponent<FatcaUSBornProps> = ({
           />
           <CustomSpacer space={sh32} />
           {certificate !== undefined ? null : (
-            <CheckBox toggle={noCertificate} onPress={handleNoCertificate} label={DECLARATIONS.LABEL_CANT} labelStyle={fs12BoldBlack2} />
+            <CheckBox toggle={noCertificate} onPress={handleNoCertificate} label={DECLARATIONS.LABEL_CANT} />
           )}
           {noCertificate ? (
             <Fragment>

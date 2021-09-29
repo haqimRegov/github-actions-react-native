@@ -13,7 +13,6 @@ import {
   borderBottomBlack21,
   disabledOpacity,
   flexRow,
-  fs12BoldBlack2,
   fs12BoldWhite1,
   fs12SemiBoldBlue2,
   fs16SemiBoldBlack2,
@@ -146,18 +145,12 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
           <View style={borderBottomBlack21} />
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
-            <CheckBox
-              label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1}
-              labelStyle={fs12BoldBlack2}
-              onPress={handleAgree1}
-              toggle={agreeTerms.agree1}
-            />
+            <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1} onPress={handleAgree1} toggle={agreeTerms.agree1} />
             <CustomSpacer space={sh16} />
             <CheckBox
               checkboxStyle={{ paddingTop: sh5 }}
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_2}
-              labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+              style={{ ...alignItemsStart, width: sw800 }}
               onPress={handleAgree2}
               toggle={agreeTerms.agree2}
             />
@@ -165,29 +158,21 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             <CheckBox
               checkboxStyle={{ paddingTop: sh5 }}
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_3}
-              labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+              style={{ ...alignItemsStart, width: sw800 }}
               onPress={handleAgree3}
               toggle={agreeTerms.agree3}
             />
             <CustomSpacer space={sh16} />
             {outsideRisk === true ? (
               <Fragment>
-                <CheckBox
-                  checkboxStyle={disabledOpacity}
-                  label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4}
-                  labelStyle={fs12BoldBlack2}
-                  onPress={() => {}}
-                  toggle={true}
-                />
+                <CheckBox checkboxStyle={disabledOpacity} label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4} onPress={() => {}} toggle={true} />
                 <CustomSpacer space={sh16} />
               </Fragment>
             ) : null}
             <CheckBox
               checkboxStyle={{ ...disabledOpacity, paddingTop: sh5 }}
               label={TERMS_AND_CONDITIONS.LABEL_CONSENT}
-              labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+              style={{ ...alignItemsStart, width: sw800 }}
               onPress={() => {}}
               toggle={true}
             />

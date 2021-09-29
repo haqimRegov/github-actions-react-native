@@ -63,7 +63,7 @@ export const FatcaTerms: FunctionComponent<FatcaTermsProps> = ({ accepted, setAc
           );
         })}
         <CustomSpacer space={sh40} />
-        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_FATCA} labelStyle={fs12BoldBlack2} />
+        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_FATCA} />
       </View>
     </View>
   );

@@ -290,7 +290,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
             {isRecurring === true ? (
               <CheckBox
                 label={INVESTMENT.LABEL_RECURRING}
-                labelStyle={fs12BoldBlack2}
                 onPress={handleScheduled}
                 spaceToLabel={sw12}
                 style={px(sw16)}

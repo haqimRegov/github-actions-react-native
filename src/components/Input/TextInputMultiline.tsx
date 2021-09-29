@@ -94,10 +94,10 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         placeholder={placeholder}
         selectionColor={colorBlack._2}
         setRef={setTextAreaRef}
-        style={{ height: sh80, width: inputWidth, lineHeight: sh24, letterSpacing: sw02 }}
+        style={{ height: sh80, lineHeight: sh24, letterSpacing: sw02 }}
         underlineColorAndroid={colorTransparent}
         {...rest}
-        viewStyle={{ borderRadius: sw8, height: sh88, ...rest.viewStyle }}
+        viewStyle={{ borderRadius: sw8, height: sh88, width: inputWidth, ...rest.viewStyle }}
       />
       <CustomTextInput
         onFocus={handleDummyInputFocus}

@@ -51,10 +51,11 @@ declare interface IAddressInfoState {
 }
 
 declare interface IContactNumberState {
-  label: string;
   code: string;
-  value: string;
   error?: string;
+  id: string;
+  label: string;
+  value: string;
 }
 declare interface IContactDetailsState {
   emailAddress?: string;

@@ -494,6 +494,7 @@ declare interface IMobileCountryCode {
 }
 
 declare interface IMobileCountryCodeFlag {
+  id: string;
   flag?: import("react-native").ImageSourcePropType;
   label: TypeMobileCodeCountry;
   value: TypeMobileCode;

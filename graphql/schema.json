@@ -344,6 +344,9 @@
           "isDeprecated" : false,
           "deprecationReason" : null
 <<<<<<< develop
+<<<<<<< develop
+=======
+>>>>>>> updated schema
         }, {
           "name" : "caseResponse",
           "description" : null,
@@ -384,8 +387,11 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+<<<<<<< develop
 =======
 >>>>>>> latest schema
+=======
+>>>>>>> updated schema
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -3009,6 +3015,9 @@
           "isDeprecated" : false,
           "deprecationReason" : null
 <<<<<<< develop
+<<<<<<< develop
+=======
+>>>>>>> updated schema
         }, {
           "name" : "remark",
           "description" : null,
@@ -3024,6 +3033,7 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+<<<<<<< develop
         }, {
           "name" : "isSeen",
           "description" : null,
@@ -3037,6 +3047,8 @@
           "deprecationReason" : null
 =======
 >>>>>>> latest schema
+=======
+>>>>>>> updated schema
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -6846,6 +6858,7 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+<<<<<<< develop
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -6877,6 +6890,8 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+=======
+>>>>>>> updated schema
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -7079,6 +7094,7 @@
           "description" : null,
           "args" : [ ],
           "type" : {
+<<<<<<< develop
             "kind" : "OBJECT",
             "name" : "CaseResponseMain",
             "ofType" : null
@@ -7099,11 +7115,14 @@
           "description" : null,
           "args" : [ ],
           "type" : {
+=======
+>>>>>>> updated schema
             "kind" : "LIST",
             "name" : null,
             "ofType" : {
               "kind" : "OBJECT",
               "name" : "CaseResponseRes",
+<<<<<<< develop
               "ofType" : null
             }
           },
@@ -7913,6 +7932,362 @@
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "Mutation",
+        "description" : null,
+        "fields" : [ {
+          "name" : "userLogin",
+          "description" : null,
+          "args" : [ {
+            "name" : "input",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "LoginInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "AgentLogin",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "agentRegister",
+          "description" : "  agent",
+          "args" : [ {
+            "name" : "input",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "RegisterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "AgentRegistration",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "activate",
+          "description" : null,
+          "args" : [ {
+            "name" : "input",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ActivateInput",
+=======
+>>>>>>> updated schema
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "CaseResponseRes",
+        "description" : null,
+        "fields" : [ {
+          "name" : "agent",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "AmlaTitle",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "amla",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "AmlaTitle",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "data",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "OBJECT",
+              "name" : "EddData",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "count",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Int",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "amlaRemark",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "questions",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "OBJECT",
+              "name" : "EddData",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "EddData",
+        "description" : null,
+        "fields" : [ {
+          "name" : "question",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "questionId",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Int",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "description",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "answers",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "amlaRemark",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "CaseResponseInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "caseId",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "isReroute",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "PreviousResponseOutput",
+        "description" : null,
+        "fields" : [ {
+          "name" : "data",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "PreviousResponseResult",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "error",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "Error",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "PreviousResponseResult",
+        "description" : null,
+        "fields" : [ {
+          "name" : "result",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "PreviousResponseRes",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "PreviousResponseRes",
+        "description" : null,
+        "fields" : [ {
+          "name" : "answer",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "questionId",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "PreviousResponseInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "caseId",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "question",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
         "enumValues" : null,
         "possibleTypes" : null
       }, {
@@ -13337,6 +13712,7 @@
 >>>>>>> latest schema
           "description" : null,
           "type" : {
+<<<<<<< develop
             "kind" : "LIST",
             "name" : null,
             "ofType" : {
@@ -13417,31 +13793,11 @@
 >>>>>>> latest schema
           "description" : null,
           "type" : {
+=======
+>>>>>>> updated schema
             "kind" : "SCALAR",
             "name" : "String",
             "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "subSection",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "EddSubSection",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "document",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "FileBase64Input",
-              "ofType" : null
-            }
           },
           "defaultValue" : null
         } ],
@@ -13544,37 +13900,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "CutOffUnits",
+        "name" : "JWTResult",
         "description" : null,
         "fields" : [ {
-          "name" : "batch",
+          "name" : "result",
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "redemption",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "sales",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
+            "kind" : "OBJECT",
+            "name" : "JWT",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -13731,26 +14065,37 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "DeleteAgent",
+        "name" : "AmlaRemark",
         "description" : null,
         "fields" : [ {
-          "name" : "data",
+          "name" : "title",
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "OBJECT",
-            "name" : "CommonResult",
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "error",
+          "name" : "remark",
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "OBJECT",
-            "name" : "Error",
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "questionId",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -13762,93 +14107,10 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "JWTResult",
+        "name" : "CutOffUnits",
         "description" : null,
         "fields" : [ {
-          "name" : "result",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "JWT",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        } ],
-        "inputFields" : null,
-        "interfaces" : [ ],
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "DeleteInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "username",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "SnsInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "deviceToken",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "PhoneNumberInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "mobileCode",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "number",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "OBJECT",
-        "name" : "Bank",
-        "description" : null,
-        "fields" : [ {
-          "name" : "bankAccountName",
+          "name" : "batch",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13859,7 +14121,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "bankAccountNumber",
+          "name" : "redemption",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -13870,50 +14132,13 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "bankLocation",
+          "name" : "sales",
           "description" : null,
           "args" : [ ],
           "type" : {
             "kind" : "SCALAR",
             "name" : "String",
             "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "bankName",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "bankSwiftCode",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "currency",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            }
           },
           "isDeprecated" : false,
           "deprecationReason" : null
@@ -15262,8 +15487,6 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-<<<<<<< develop
-=======
         }, {
           "name" : "dailyDistribution",
           "description" : null,
@@ -15275,7 +15498,6 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
->>>>>>> latest schema
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -15283,15 +15505,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-<<<<<<< develop
-        "name" : "AmlaRemark",
-        "description" : null,
-        "fields" : [ {
-          "name" : "title",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-=======
         "name" : "EpfCash",
         "description" : null,
         "fields" : [ {
@@ -15330,17 +15543,10 @@
           "description" : null,
           "args" : [ ],
           "type" : {
->>>>>>> latest schema
             "kind" : "SCALAR",
             "name" : "String",
             "ofType" : null
           },
-<<<<<<< develop
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "remark",
-=======
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
@@ -15387,7 +15593,6 @@
           "deprecationReason" : null
         }, {
           "name" : "transferOut",
->>>>>>> latest schema
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -15397,12 +15602,10 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
-        }, {
 <<<<<<< develop
-          "name" : "questionId",
 =======
+        }, {
           "name" : "balanceHoldings",
->>>>>>> latest schema
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -15412,22 +15615,28 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+>>>>>>> latest schema
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
         "enumValues" : null,
         "possibleTypes" : null
       }, {
-<<<<<<< develop
-        "kind" : "INPUT_OBJECT",
-        "name" : "SnsInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "deviceToken",
-=======
         "kind" : "OBJECT",
+<<<<<<< develop
+<<<<<<< develop
+        "name" : "AmlaRemark",
+        "description" : null,
+        "fields" : [ {
+          "name" : "title",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+=======
+        "name" : "EpfCash",
+=======
         "name" : "NonBusinessDay",
+>>>>>>> updated schema
         "description" : null,
         "fields" : [ {
           "name" : "fromDate",
@@ -15465,10 +15674,17 @@
           "description" : null,
           "args" : [ ],
           "type" : {
+>>>>>>> latest schema
             "kind" : "SCALAR",
             "name" : "String",
             "ofType" : null
           },
+<<<<<<< develop
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "remark",
+=======
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
@@ -15489,7 +15705,201 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
+        "name" : "Bank",
+        "description" : null,
+        "fields" : [ {
+          "name" : "bankAccountName",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "bankAccountNumber",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+<<<<<<< develop
+          "name" : "transferOut",
+>>>>>>> latest schema
+=======
+          "name" : "bankLocation",
+>>>>>>> updated schema
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+<<<<<<< develop
+<<<<<<< develop
+          "name" : "questionId",
+=======
+          "name" : "balanceHoldings",
+>>>>>>> latest schema
+=======
+          "name" : "bankName",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "bankSwiftCode",
+>>>>>>> updated schema
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "currency",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+<<<<<<< develop
+        "kind" : "INPUT_OBJECT",
+        "name" : "SnsInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "deviceToken",
+=======
+        "kind" : "OBJECT",
         "name" : "ProductList",
+        "description" : null,
+        "fields" : [ {
+          "name" : "data",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "DataProducts",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "error",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "Error",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "SnsInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "deviceToken",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "DeleteInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "username",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "PhoneNumberInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "mobileCode",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "number",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "DeleteAgent",
         "description" : null,
         "fields" : [ {
           "name" : "data",
@@ -15497,7 +15907,7 @@
           "description" : null,
           "type" : {
             "kind" : "OBJECT",
-            "name" : "DataProducts",
+            "name" : "CommonResult",
             "ofType" : null
           },
 <<<<<<< develop
@@ -16305,6 +16715,7 @@
         "onFragment" : false,
         "onField" : true
       }, {
+<<<<<<< develop
         "name" : "deprecated",
         "description" : null,
         "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
@@ -16328,6 +16739,14 @@
         "args" : [ {
           "name" : "subscriptions",
           "description" : "List of subscriptions which will be published to when this mutation is called.",
+=======
+        "name" : "aws_auth",
+        "description" : "Directs the schema to enforce authorization on a field",
+        "locations" : [ "FIELD_DEFINITION" ],
+        "args" : [ {
+          "name" : "cognito_groups",
+          "description" : "List of cognito user pool groups which have access on this field",
+>>>>>>> updated schema
           "type" : {
             "kind" : "LIST",
             "name" : null,
@@ -16343,8 +16762,13 @@
         "onFragment" : false,
         "onField" : false
       }, {
+<<<<<<< develop
         "name" : "aws_oidc",
         "description" : "Tells the service this field/object has access authorized by an OIDC token.",
+=======
+        "name" : "aws_api_key",
+        "description" : "Tells the service this field/object has access authorized by an API key.",
+>>>>>>> updated schema
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
         "args" : [ ],
         "onOperation" : false,
@@ -16354,27 +16778,6 @@
         "name" : "aws_cognito_user_pools",
         "description" : "Tells the service this field/object has access authorized by a Cognito User Pools token.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
-        "args" : [ {
-          "name" : "cognito_groups",
-          "description" : "List of cognito user pool groups which have access on this field",
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
-        "name" : "aws_auth",
-        "description" : "Directs the schema to enforce authorization on a field",
-        "locations" : [ "FIELD_DEFINITION" ],
         "args" : [ {
           "name" : "cognito_groups",
           "description" : "List of cognito user pool groups which have access on this field",
@@ -16414,6 +16817,66 @@
         "onFragment" : false,
         "onField" : false
       }, {
+<<<<<<< develop
+        "name" : "aws_subscribe",
+        "description" : "Tells the service which mutation triggers this subscription.",
+=======
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "aws_oidc",
+        "description" : "Tells the service this field/object has access authorized by an OIDC token.",
+        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
+        "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "aws_iam",
+        "description" : "Tells the service this field/object has access authorized by sigv4 signing.",
+        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
+        "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "aws_publish",
+        "description" : "Tells the service which subscriptions will be published to when this mutation is called. This directive is deprecated use @aws_susbscribe directive instead.",
+>>>>>>> updated schema
+        "locations" : [ "FIELD_DEFINITION" ],
+        "args" : [ {
+          "name" : "mutations",
+          "description" : "List of mutations which will trigger this subscription when they are called.",
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+<<<<<<< develop
         "name" : "aws_api_key",
         "description" : "Tells the service this field/object has access authorized by an API key.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
@@ -16430,6 +16893,8 @@
         "onFragment" : false,
         "onField" : false
       }, {
+=======
+>>>>>>> updated schema
         "name" : "aws_lambda",
         "description" : "Tells the service this field/object has access authorized by a Lambda Authorizer.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],

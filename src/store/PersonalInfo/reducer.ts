@@ -71,6 +71,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             contactNumber: [
               {
                 code: DICTIONARY_MOBILE_CODE[0].value,
+                id: DICTIONARY_MOBILE_CODE[0].id,
                 label: PERSONAL_DETAILS.LABEL_MOBILE_NUMBER,
                 value: "",
               },
@@ -203,6 +204,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             contactNumber: [
               {
                 code: DICTIONARY_MOBILE_CODE[0].value,
+                id: DICTIONARY_MOBILE_CODE[0].id,
                 label: PERSONAL_DETAILS.LABEL_MOBILE_NUMBER,
                 value: "",
               },

@@ -61,6 +61,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       contactNumber: [
         {
           code: DICTIONARY_MOBILE_CODE[0].value,
+          id: DICTIONARY_MOBILE_CODE[0].id,
           label: PERSONAL_DETAILS.LABEL_MOBILE_NUMBER,
           value: "",
         },
@@ -193,6 +194,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       contactNumber: [
         {
           code: DICTIONARY_MOBILE_CODE[0].value,
+          id: DICTIONARY_MOBILE_CODE[0].id,
           label: PERSONAL_DETAILS.LABEL_MOBILE_NUMBER,
           value: "",
         },

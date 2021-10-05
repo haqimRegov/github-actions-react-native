@@ -83,6 +83,7 @@ export const sw16 = scaleWidth(16);
 export const sw18 = scaleWidth(18);
 export const sw19 = scaleWidth(19);
 export const sw20 = scaleWidth(20);
+export const sw23 = scaleWidth(23);
 export const sw24 = scaleWidth(24);
 export const sw25 = scaleWidth(25);
 export const sw28 = scaleWidth(28);

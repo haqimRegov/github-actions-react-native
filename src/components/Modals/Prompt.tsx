@@ -3,7 +3,7 @@ import { ActivityIndicator, KeyboardAvoidingView, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { centerHV, colorWhite, flexChild, fullHW } from "../../styles";
-import { Prompt, PromptProps } from "../Views";
+import { Prompt, PromptProps } from "../Views/Prompt";
 import { BasicModal } from "./Basic";
 
 interface PromptModalProps extends PromptProps {

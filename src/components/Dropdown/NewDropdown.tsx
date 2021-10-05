@@ -2,7 +2,6 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { FlatList, Keyboard, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { BasicModal } from "..";
 import { NunitoRegular } from "../../constants";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
@@ -34,7 +33,8 @@ import {
   sw360,
 } from "../../styles";
 import { CustomTextInput } from "../Input";
-import { CustomFlexSpacer, CustomSpacer } from "../Views";
+import { BasicModal } from "../Modals";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 
@@ -107,8 +107,9 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
           const keyboardOffset = keyboardAvoidingRef.state.bottom;
           measurement = { ...measurement, y: measurement.y + keyboardOffset };
           setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
+        } else {
+          setLayout(measurement);
         }
-        setLayout(measurement);
       });
       setCollapsibleModal(!collapsibleModal);
       setTimeout(() => {

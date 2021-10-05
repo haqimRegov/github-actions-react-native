@@ -26,7 +26,8 @@ import {
 import { shortenString } from "../../utils";
 import { Badge } from "../Badge";
 import { UploadButton } from "../Upload/UploadButton";
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
+import { LabeledTitle } from "../Views/LabeledTitle";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { UPLOAD } = Language.PAGE;
 

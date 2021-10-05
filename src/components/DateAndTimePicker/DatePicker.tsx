@@ -4,7 +4,6 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { BasicModal } from "..";
 import { DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT, NunitoRegular } from "../../constants";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
@@ -29,6 +28,7 @@ import {
   sw360,
 } from "../../styles";
 import { CustomTextInput } from "../Input";
+import { BasicModal } from "../Modals";
 import { CustomButton } from "../Touchables";
 import { CustomFlexSpacer } from "../Views";
 
@@ -128,8 +128,9 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
           const keyboardOffset = keyboardAvoidingRef.state.bottom;
           measurement = { ...measurement, y: measurement.y + keyboardOffset };
           setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
+        } else {
+          setLayout(measurement);
         }
-        setLayout(measurement);
       });
       setCollapsibleModal(!collapsibleModal);
       setTimeout(() => {

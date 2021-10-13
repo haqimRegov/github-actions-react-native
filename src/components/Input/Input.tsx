@@ -112,11 +112,13 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           </Fragment>
         ) : null}
         <TextInput
+          autoCorrect={false}
           editable={!disabled}
           placeholder={rest.placeholder}
           placeholderTextColor={colorGray._7}
           ref={setRef}
           selectionColor={colorBlack._2}
+          spellCheck={false}
           style={{ ...fs16BoldBlack2, ...flexChild, height: sh38, ...disabledStyle, ...style, ...fsNoLineHeight }}
           underlineColorAndroid={colorTransparent}
           value={value}

@@ -16,6 +16,7 @@ declare interface UploadProps {
   title?: string;
   titleStyle?: import("react-native").TextStyle;
   value?: FileBase64;
+  withCropping?: boolean;
 }
 
 declare interface IUploadDocumentRef {

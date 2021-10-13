@@ -66,6 +66,7 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
         ref={uploadRef}
         setValue={setFrontPage}
         value={frontPage}
+        withCropping={idType === "NRIC"}
         withPreview={true}
       />
       {idType === "Passport" ? null : (
@@ -80,6 +81,7 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
             onSuccess={handleSecondUpload}
             setValue={setBackPage}
             value={backPage}
+            withCropping={idType === "NRIC"}
             withPreview={true}
           />
         </Fragment>

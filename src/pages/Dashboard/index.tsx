@@ -16,7 +16,7 @@ import {
   borderBottomGray4,
   centerVertical,
   colorBlue,
-  colorGray,
+  colorWhite,
   flexChild,
   flexRow,
   fs10RegBlue2,
@@ -156,7 +156,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
         <View style={borderBottomGray4} />
       </SideMenu>
       <CustomSpacer isHorizontal={true} space={sw200} />
-      <View style={{ ...flexChild, backgroundColor: colorGray._5 }}>
+      <View style={{ ...flexChild, backgroundColor: colorWhite._4 }}>
         <CustomSpacer space={top} />
         {content}
       </View>

@@ -52,6 +52,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     title,
     titleStyle,
     value,
+    withCropping,
   } = props;
   const [error, setError] = useState<string>("");
 
@@ -131,7 +132,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     if (onPressCamera) {
       onPressCamera();
     }
-    imageOpenCamera(handleImageResult);
+    imageOpenCamera(handleImageResult, { cropping: withCropping === true });
   };
 
   const handleOpenDocument = () => {
@@ -145,7 +146,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     if (onPressPicker) {
       onPressPicker();
     }
-    imageOpenPicker(handleImageResult);
+    imageOpenPicker(handleImageResult, { cropping: withCropping === true });
   };
 
   useImperativeHandle(ref, () => ({ handleOpenCamera, handleOpenPicker, handleOpenDocument }));

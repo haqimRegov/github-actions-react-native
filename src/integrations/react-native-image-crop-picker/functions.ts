@@ -1,7 +1,7 @@
 import ImagePicker, { Image, Options } from "react-native-image-crop-picker";
 
-const options: Options = {
-  cropping: true,
+const defaultOptions: Options = {
+  cropping: false,
   includeBase64: true,
   mediaType: "photo",
   multiple: false,
@@ -16,12 +16,13 @@ const SIZES = {
 
 type SuccessCallback = (image: Image | Image[]) => void;
 
-export const imageOpenPicker = async (handleSuccess: SuccessCallback) => {
+export const imageOpenPicker = async (handleSuccess: SuccessCallback, options?: Options) => {
   try {
     const image = await ImagePicker.openPicker({
-      ...options,
+      ...defaultOptions,
       height: SIZES.height,
       width: SIZES.width,
+      ...options,
     });
     handleSuccess(image);
   } catch (error) {
@@ -36,12 +37,13 @@ export const imageOpenPicker = async (handleSuccess: SuccessCallback) => {
   return false;
 };
 
-export const imageOpenCamera = async (handleSuccess: SuccessCallback) => {
+export const imageOpenCamera = async (handleSuccess: SuccessCallback, options?: Options) => {
   try {
     const image = await ImagePicker.openCamera({
-      ...options,
+      ...defaultOptions,
       height: SIZES.height,
       width: SIZES.width,
+      ...options,
     });
     handleSuccess(image);
   } catch (error) {

@@ -10,7 +10,7 @@ import { Base64 } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { ReactFileSystem } from "../../../../integrations/file-system/functions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { GetBase64String, GetEmbeddedBase64 } from "../../../../utils";
+import { GetEmbeddedBase64 } from "../../../../utils";
 import { PdfView, Signer } from "./EditPDFView";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -58,7 +58,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       const customFont = await loadPdf.embedFont(fileData);
       const textHeight = customFont.heightAtSize(12);
       const whiteImage = await loadPdf.embedPng(Base64.background.white);
-      const signatureImage = await loadPdf.embedPng(value);
+      const base64Value = `data:image/png;base64,${value}`;
+      const signatureImage = await loadPdf.embedPng(base64Value);
       const pages = loadPdf.getPages();
       const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
@@ -246,13 +247,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     const updatedReceipts = [...receipts!];
     const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
     const adviser = {
-      base64: GetBase64String(adviserSignature),
+      base64: adviserSignature,
       date: `${moment().valueOf()}`,
       name: "AdviserSignature.png",
       type: "image/png",
     };
     const principal = {
-      base64: GetBase64String(principalSignature),
+      base64: principalSignature,
       date: `${moment().valueOf()}`,
       name: "PrincipalSignature.png",
       type: "image/png",
@@ -261,7 +262,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       accountType === "Individual"
         ? undefined
         : {
-            base64: GetBase64String(jointSignature),
+            base64: jointSignature,
             date: `${moment().valueOf()}`,
             name: "JointSignature.png",
             type: "image/png",

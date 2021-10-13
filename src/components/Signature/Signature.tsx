@@ -59,8 +59,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   const saveEvent = (result: SaveEventParams) => {
     if (result.encoded !== "") {
       setDisabled(false);
-      const base64String = `data:image/png;base64,${result.encoded}`;
-      setSignature(base64String);
+      setSignature(result.encoded);
     }
   };
 
@@ -95,13 +94,15 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   const confirmText = primaryText !== undefined ? primaryText : SIGNATURE.BUTTON_CONFIRM;
   const confirmDisabled = disabled;
 
+  const base64Signature = `data:image/png;base64,${signature}`;
+
   return (
     <View style={container}>
       <View style={signatureStyle}>
         {signature === "" ? (
           <SignatureCapture onDragEvent={handleDisabled} onSaveEvent={saveEvent} ref={setSignRef} style={fullHW} {...defaultProps} />
         ) : (
-          <Image source={{ uri: signature }} style={fullHW} />
+          <Image source={{ uri: base64Signature }} style={fullHW} />
         )}
       </View>
       <CustomSpacer space={defaultSpaceToButtons} />

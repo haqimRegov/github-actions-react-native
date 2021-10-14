@@ -16,9 +16,9 @@ import { PdfView, Signer } from "./EditPDFView";
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
-  adviser: { x: 20, y: 160 },
-  principal: { x: 275, y: 160 },
-  joint: { x: 20, y: 308 },
+  adviser: { x: 16, y: 160 },
+  principal: { x: 271, y: 160 },
+  joint: { x: 16, y: 300 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
@@ -56,7 +56,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
       loadPdf.registerFontkit(fontkit);
       const customFont = await loadPdf.embedFont(fileData);
-      const textHeight = customFont.heightAtSize(8);
+      const textHeight = customFont.heightAtSize(6);
       const whiteImage = await loadPdf.embedPng(Base64.background.white);
       const base64Value = `data:image/png;base64,${value}`;
       const signatureImage = value !== "" ? await loadPdf.embedPng(base64Value) : undefined;
@@ -109,11 +109,11 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         "M772.378 753.020h-487.099c-31.605 0-57.306-25.702-57.306-57.306s25.702-57.306 57.306-57.306h57.306c15.816 0 28.653-12.834 28.653-28.651s-12.837-28.655-28.653-28.655h-57.306c-63.209 0-114.612 51.405-114.612 114.611 0 63.211 51.403 114.611 114.612 114.611h487.099c15.817 0 28.655-12.834 28.655-28.651s-12.838-28.655-28.655-28.655z",
         "M821.312 245.708c-42.752-42.693-112.32-42.75-155.157 0l-43.84 43.84c-0.542 0.459-1.203 0.631-1.715 1.146-0.516 0.516-0.691 1.175-1.148 1.719l-147.017 147.016c-28.309 28.369-43.9 66.074-43.9 106.163v64.179c0 15.817 12.838 28.655 28.655 28.655h64.183c40.085 0 77.79-15.586 106.214-43.925l193.694-193.694c42.722-42.75 42.722-112.349 0.030-155.099zM587.102 553.954c-17.562 17.51-40.917 27.166-65.728 27.166h-35.533v-35.529c0-24.815 9.655-48.166 27.136-65.702l128.162-128.166 74.099 74.096-128.137 128.135zM780.766 360.291l-25.011 25.014-74.099-74.096 24.986-24.985c20.429-20.401 53.696-20.372 74.095 0 20.403 20.429 20.403 53.666 0.030 74.067z",
       ];
-      selectedPage.drawSvgPath(svgPath[0], { color: rgb(0, 0.537, 0.925), scale: 0.02 });
-      selectedPage.drawSvgPath(svgPath[1], { color: rgb(0, 0.537, 0.925), scale: 0.02 });
+      selectedPage.drawSvgPath(svgPath[0], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
+      selectedPage.drawSvgPath(svgPath[1], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawText(TERMS_AND_CONDITIONS.LABEL_SIGN_NOW, {
-        x: textPosition.x + 25,
-        y: height - textPosition.y + 15,
+        x: textPosition.x + 18,
+        y: height - textPosition.y + 20,
         size: textHeight,
         font: customFont,
         color: rgb(0, 0.537, 0.925),

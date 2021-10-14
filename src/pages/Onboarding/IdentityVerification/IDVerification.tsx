@@ -98,7 +98,9 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
 
   const handleJointAddress = (value: IAddressInfoState) => {
     const jointMailingAddress =
-      joint!.addressInformation!.sameAddress === true && accountType === "Joint" ? {} : { mailingAddress: { ...value.mailingAddress } };
+      value.sameAddress === true && accountType === "Joint"
+        ? { mailingAddress: { ...principal!.addressInformation!.mailingAddress } }
+        : { mailingAddress: { ...value.mailingAddress } };
     addPersonalInfo({ joint: { addressInformation: { ...joint!.addressInformation, ...value, ...jointMailingAddress } } });
   };
 

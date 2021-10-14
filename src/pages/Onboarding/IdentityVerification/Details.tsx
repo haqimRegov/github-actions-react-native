@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 
 import {
   AddressField,
@@ -44,8 +44,6 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   setValidations,
   validations,
 }: IDDetailsProps) => {
-  const [principalMailingAddress] = useState<IAddressState>(addressInfo.mailingAddress!);
-
   const idNumber = personalDetails.idNumber!;
   const idType = personalDetails.idType!;
   const dateOfBirth = personalDetails.dateOfBirth!;
@@ -100,27 +98,18 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const setInputSalutation = (value: string) => setPersonalDetails({ salutation: value });
 
   const handleAddressToggle = () => {
-    if (sameAddressToggle) {
-      setAddressInfo({
-        ...addressInfo,
-        mailingAddress: {
+    const mailingAddress = sameAddressToggle
+      ? {
           ...addressInfo.mailingAddress!,
-          address: {
-            line1: "",
-            line2: undefined,
-            line3: undefined,
-          },
+          address: { line1: "", line2: undefined, line3: undefined },
           postCode: "",
           city: "",
           state: "",
           country: inputPermanentCountry === "Malaysia" ? "Malaysia" : "",
-        },
-        sameAddress: false,
-      });
-    } else {
-      const mailingAddress = accountHolder === "Joint" ? principalMailingAddress : addressInfo.permanentAddress;
-      setAddressInfo({ ...addressInfo, mailingAddress: { ...mailingAddress }, sameAddress: true });
-    }
+        }
+      : { ...addressInfo.permanentAddress };
+
+    setAddressInfo({ ...addressInfo, mailingAddress: { ...mailingAddress }, sameAddress: !sameAddressToggle });
   };
 
   const setInputPermanentCountry = (input: string) => {

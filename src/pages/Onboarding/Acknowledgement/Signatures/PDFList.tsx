@@ -49,7 +49,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
           orderNumber: receipt.orderNumber!,
           pdf: receipt.signedPdf!,
         };
-        if (receipt.jointSignature?.base64 !== undefined) {
+        if (receipt.jointSignature?.base64) {
           receiptData.jointSignature = receipt.jointSignature;
         }
         return receiptData;

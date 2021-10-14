@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Image, View, ViewStyle } from "react-native";
 import SignatureCapture, { SaveEventParams, SignatureCaptureProps } from "react-native-signature-capture";
 
@@ -92,9 +92,14 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   const defaultSpaceToButtons = spaceToButtons === undefined ? sh16 : spaceToButtons;
   const cancelText = secondaryText !== undefined ? secondaryText : SIGNATURE.BUTTON_CANCEL;
   const confirmText = primaryText !== undefined ? primaryText : SIGNATURE.BUTTON_CONFIRM;
-  const confirmDisabled = disabled;
 
   const base64Signature = `data:image/png;base64,${signature}`;
+
+  useEffect(() => {
+    if (signature === "") {
+      setDisabled(true);
+    }
+  }, [signature]);
 
   return (
     <View style={container}>
@@ -109,7 +114,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
       <View style={flexRowCC}>
         <RoundedButton buttonStyle={{ width: sw205 }} onPress={handlePressCancel} secondary={true} text={cancelText} />
         <CustomSpacer isHorizontal={true} space={sw16} />
-        <RoundedButton buttonStyle={{ width: sw205 }} disabled={confirmDisabled} onPress={handlePressConfirm} text={confirmText} />
+        <RoundedButton buttonStyle={{ width: sw205 }} disabled={disabled} onPress={handlePressConfirm} text={confirmText} />
       </View>
       <CustomSpacer space={defaultSpaceToBottom} />
     </View>

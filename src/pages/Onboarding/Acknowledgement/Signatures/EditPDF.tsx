@@ -18,7 +18,7 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 const signPosition = {
   adviser: { x: 20, y: 160 },
   principal: { x: 275, y: 160 },
-  joint: { x: 20, y: 300 },
+  joint: { x: 20, y: 308 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
@@ -50,16 +50,16 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
 
   const modifyPdf = async (value: string) => {
-    if (value !== "" && editReceipt !== undefined && signer !== undefined) {
+    if (editReceipt !== undefined && signer !== undefined) {
       const dataUri = GetEmbeddedBase64(editReceipt.signedPdf!);
       const loadPdf = await PDFDocument.load(dataUri);
       const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
       loadPdf.registerFontkit(fontkit);
       const customFont = await loadPdf.embedFont(fileData);
-      const textHeight = customFont.heightAtSize(12);
+      const textHeight = customFont.heightAtSize(8);
       const whiteImage = await loadPdf.embedPng(Base64.background.white);
       const base64Value = `data:image/png;base64,${value}`;
-      const signatureImage = await loadPdf.embedPng(base64Value);
+      const signatureImage = value !== "" ? await loadPdf.embedPng(base64Value) : undefined;
       const pages = loadPdf.getPages();
       const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
@@ -118,20 +118,22 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         font: customFont,
         color: rgb(0, 0.537, 0.925),
       });
-      if (Platform.OS === "ios") {
-        selectedPage.drawImage(signatureImage, {
-          height: 40,
-          width: 180,
-          x: signPosition[signer].x,
-          y: height - signPosition[signer].y,
-        });
-      } else {
-        selectedPage.drawImage(signatureImage, {
-          height: 100,
-          width: 200,
-          x: (selectedPage.getWidth() * signPosition[signer].x) / Dimensions.get("window").width,
-          y: selectedPage.getHeight() - (selectedPage.getHeight() * signPosition[signer].y) / Dimensions.get("window").height - 25,
-        });
+      if (signatureImage !== undefined) {
+        if (Platform.OS === "ios") {
+          selectedPage.drawImage(signatureImage, {
+            height: 40,
+            width: 180,
+            x: signPosition[signer].x,
+            y: height - signPosition[signer].y,
+          });
+        } else {
+          selectedPage.drawImage(signatureImage, {
+            height: 100,
+            width: 200,
+            x: (selectedPage.getWidth() * signPosition[signer].x) / Dimensions.get("window").width,
+            y: selectedPage.getHeight() - (selectedPage.getHeight() * signPosition[signer].y) / Dimensions.get("window").height - 25,
+          });
+        }
       }
       const pdfBytes = await loadPdf.save();
       const pdfBase64 = Buffer.from(pdfBytes).toString("base64");

@@ -185,6 +185,14 @@ export const fs12RegGray7: TextStyle = {
   lineHeight: sh14,
 };
 
+export const fs12RegGray8: TextStyle = {
+  color: colorGray._8,
+  fontFamily: NunitoRegular,
+  fontSize: sh12,
+  letterSpacing: -sw03,
+  lineHeight: sh14,
+};
+
 export const fs12RegGray9: TextStyle = {
   color: colorGray._9,
   fontFamily: NunitoRegular,

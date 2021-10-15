@@ -25,7 +25,7 @@ import {
   sw40,
   sw750,
 } from "../../styles";
-import { BYTE_TO_MEGABYTE } from "../Upload/Upload";
+import { BYTE_TO_MEGABYTE } from "../Upload/UploadDocument";
 import { LabeledTitle } from "../Views/LabeledTitle";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";

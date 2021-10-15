@@ -31,7 +31,7 @@ import {
 } from "../../styles";
 import { BasicModal } from "../Modals";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
-import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./Upload";
+import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
 
 interface UploadWithModalProps extends UploadProps {
   resourceType?: "url" | "file" | "base64";

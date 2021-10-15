@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { forwardRef, Fragment, useImperativeHandle, useState } from "react";
-import { Platform, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Platform, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 import { Image } from "react-native-image-crop-picker";
 
@@ -8,26 +8,34 @@ import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem } from "../../integrations";
 import {
+  centerHV,
   centerVertical,
+  circle,
   colorBlue,
+  colorGreen,
   colorRed,
   colorWhite,
   flexRow,
-  fs12BoldBlue38,
-  fs16SemiBoldBlue2,
+  fs12RegGray8,
+  fs16BoldBlue2,
   px,
-  sh24,
-  sh88,
+  sh16,
+  sh32,
+  sh40,
+  sh72,
+  sh8,
   shadowBlue5,
   sw10,
   sw16,
+  sw2,
   sw24,
+  sw4,
+  sw40,
 } from "../../styles";
 import { shortenString } from "../../utils";
 import { Badge } from "../Badge";
-import { UploadButton } from "../Upload/UploadButton";
-import { LabeledTitle } from "../Views/LabeledTitle";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
+import { UploadButton } from "./UploadButton";
 
 const { UPLOAD } = Language.PAGE;
 
@@ -155,42 +163,75 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
   const container: ViewStyle = {
     ...centerVertical,
     ...flexRow,
-    ...px(sw24),
+    ...px(sw40),
     ...shadowBlue5,
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
-    height: sh88,
+    height: sh72,
   };
   const errorStyle: TextStyle = defaultError !== "" ? { color: colorRed._2 } : {};
-  const iconBadgeOffset = { bottom: 0.5 };
+  const iconBadgeOffset = value === undefined || defaultError !== "" ? {} : { bottom: 0.5, right: 2 };
+  const iconContainer = { ...centerHV, height: sh40, width: sw40, ...iconBadgeOffset };
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={container}>
         {value === undefined || defaultError !== "" ? (
-          <IcoMoon color={colorBlue._2} name="file" size={sh24} />
+          <View style={iconContainer}>
+            <IcoMoon color={colorBlue._2} name="file-upload" size={sh32} />
+          </View>
         ) : (
-          <View style={iconBadgeOffset}>
-            <Badge>
-              <IcoMoon color={colorBlue._2} name="file" size={sh24} />
+          <View style={iconContainer}>
+            <Badge icon={{ name: "success", size: sh8 }} style={circle(sw16, colorGreen._1)}>
+              <IcoMoon color={colorBlue._2} name="file" size={sh32} />
             </Badge>
           </View>
         )}
         <CustomSpacer isHorizontal={true} space={sw16} />
-        <LabeledTitle
-          label={label || ""}
-          labelStyle={{ ...fs16SemiBoldBlue2, ...labelStyle }}
-          title={title || defaultLabel}
-          titleStyle={{ ...fs12BoldBlue38, ...errorStyle, ...titleStyle }}
-        />
+        <View>
+          <Text style={{ ...fs16BoldBlue2, ...labelStyle }}>{label || ""}</Text>
+          <View style={{ ...centerVertical, ...flexRow }}>
+            {defaultError ? (
+              <Fragment>
+                <View style={{ right: sw2 }}>
+                  <IcoMoon color={colorRed._2} name="error-filled" size={sw16} />
+                </View>
+                <CustomSpacer isHorizontal={true} space={sw4} />
+              </Fragment>
+            ) : null}
+            <Text style={{ ...fs12RegGray8, lineHeight: sh16, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
+          </View>
+        </View>
         <CustomFlexSpacer />
         {value !== undefined ? (
           <UploadButton icon="trash" onPress={handleRemove} />
         ) : (
           <Fragment>
-            {features.includes("camera") ? <UploadButton icon="camera" onPress={handleOpenCamera} /> : null}
-            {features.includes("gallery") ? <UploadButton icon="gallery" onPress={handleOpenPicker} /> : null}
-            {features.includes("file") ? <UploadButton icon="upload" onPress={handleOpenDocument} /> : null}
+            {features.map((feature, index) => {
+              const handlePress = () => {
+                switch (feature) {
+                  case "camera":
+                    handleOpenCamera();
+                    break;
+                  case "file":
+                    handleOpenDocument();
+                    break;
+                  case "gallery":
+                    handleOpenPicker();
+                    break;
+
+                  default:
+                    break;
+                }
+              };
+
+              return (
+                <Fragment key={index}>
+                  {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw24} />}
+                  <UploadButton icon={feature === "file" ? "upload" : feature} onPress={handlePress} />
+                </Fragment>
+              );
+            })}
           </Fragment>
         )}
       </View>

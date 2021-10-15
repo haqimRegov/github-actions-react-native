@@ -704,7 +704,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                           <CustomSpacer space={sh24} />
                           <TextSpaceArea spaceToBottom={sh16} text={PAYMENT.LABEL_PROOF} style={fs14BoldBlack2} />
                           <UploadWithModal
-                            features={["camera", "file", "gallery"]}
+                            features={["camera", "gallery", "file"]}
                             label={payment.proof !== undefined ? PAYMENT.LABEL_PROOF_ADDED : PAYMENT.LABEL_PROOF_ADD}
                             value={payment.proof}
                             setValue={setProof}

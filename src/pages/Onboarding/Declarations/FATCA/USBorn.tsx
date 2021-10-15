@@ -59,7 +59,7 @@ export const FatcaUSBorn: FunctionComponent<FatcaUSBornProps> = ({
           <Text style={fs12BoldBlack2}>{DECLARATIONS.UPLOAD}</Text>
           <CustomSpacer space={sh16} />
           <UploadWithModal
-            features={["camera", "file", "gallery"]}
+            features={["camera", "gallery", "file"]}
             label={DECLARATIONS.LABEL_LOSS}
             value={certificate}
             setValue={setCertificate}

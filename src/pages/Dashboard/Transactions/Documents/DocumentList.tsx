@@ -41,7 +41,7 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, setDa
                       <CustomSpacer space={sh8} />
                     )}
                     <UploadWithModal
-                      features={["camera", "file", "gallery"]}
+                      features={["camera", "gallery", "file"]}
                       label={label}
                       onSuccess={handleProof}
                       setValue={handleProof}

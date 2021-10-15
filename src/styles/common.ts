@@ -55,6 +55,7 @@ export const borderDashed = { borderStyle: "dashed" } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
 export const noBGColor = { backgroundColor: colorTransparent } as const;
+export const overflowHidden = { overflow: "hidden" } as const;
 
 export const border = (color: string, width: number, radius?: number, style?: "solid" | "dotted" | "dashed") => ({
   borderColor: color,

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
+import { CheckBoxGroup, CustomSpacer, NewCheckBoxDropdown, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import {
   FILTER_EPF_LABEL,
@@ -94,24 +94,24 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ filter, setFilter }
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_FUND_TYPE} />
-          <CheckBoxDropdown handleChange={handleFundType} items={FILTER_FUND_TYPE} value={fundType!} />
+          <NewCheckBoxDropdown handleChange={handleFundType} items={FILTER_FUND_TYPE} value={fundType!} />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_FUND_CURRENCY} />
-          <CheckBoxDropdown handleChange={handleCurrency} items={FILTER_FUND_CURRENCY} value={fundCurrency!} />
+          <NewCheckBoxDropdown handleChange={handleCurrency} items={FILTER_FUND_CURRENCY} value={fundCurrency!} />
         </View>
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_ISSUING} />
-          <CheckBoxDropdown handleChange={handleIssuingHouse} items={FILTER_ISSUING_HOUSE} value={issuingHouse!} />
+          <NewCheckBoxDropdown handleChange={handleIssuingHouse} items={FILTER_ISSUING_HOUSE} value={issuingHouse!} />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
           <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
-          <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
+          <NewCheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
         </View>
       </View>
     </View>

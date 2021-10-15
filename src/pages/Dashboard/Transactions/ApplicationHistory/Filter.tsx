@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CustomSpacer, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, NewCheckBoxDropdown, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   DICTIONARY_APPROVED_STATUS_FILTER,
@@ -120,7 +120,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
           value={transactionsType!}
         />
         <CustomSpacer isHorizontal={true} space={sw64} />
-        <CheckBoxDropdown
+        <NewCheckBoxDropdown
           handleChange={handleOrderStatus}
           items={orderStatusList}
           label={DASHBOARD_FILTER.LABEL_ORDER_STATUS}

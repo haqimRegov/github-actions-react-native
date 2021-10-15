@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
+import { CheckBoxGroup, CustomSpacer, NewCheckBoxDropdown, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import { FILTER_EPF_LABEL, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
 import { centerVertical, flexRow, fs16BoldBlack1, px, sh24, sh8, sw24, sw240 } from "../../../../../styles";
@@ -72,7 +72,7 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
-        <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
+        <NewCheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
       </View>
     </View>
   );

@@ -39,6 +39,7 @@ interface NewDatePickerProps {
   buttonText?: string;
   datePickerStyle?: ViewStyle;
   disabled?: boolean;
+  error?: string;
   initialDate?: Date;
   keyboardAvoidingRef?: TypeKeyboardAvoidingView;
   maximumDate?: Date;
@@ -56,6 +57,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
   buttonText,
   datePickerStyle,
   disabled,
+  error,
   mode,
   initialDate,
   keyboardAvoidingRef,
@@ -119,23 +121,25 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
   };
 
   const handleExpand = () => {
-    Keyboard.dismiss();
-    if (ref !== null && keyboardVisible === false) {
-      ref.measure((_x, _y, _width, _height, pageX, pageY) => {
-        let measurement = { x: pageX, y: pageY, height: _height, width: _width };
-        if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
-          Keyboard.dismiss();
-          const keyboardOffset = keyboardAvoidingRef.state.bottom;
-          measurement = { ...measurement, y: measurement.y + keyboardOffset };
-          setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
-        } else {
-          setLayout(measurement);
-        }
-      });
-      setCollapsibleModal(!collapsibleModal);
-      setTimeout(() => {
-        setCollapse(false);
-      }, 80);
+    if (disabled !== true) {
+      Keyboard.dismiss();
+      if (ref !== null && keyboardVisible === false) {
+        ref.measure((_x, _y, _width, _height, pageX, pageY) => {
+          let measurement = { x: pageX, y: pageY, height: _height, width: _width };
+          if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
+            Keyboard.dismiss();
+            const keyboardOffset = keyboardAvoidingRef.state.bottom;
+            measurement = { ...measurement, y: measurement.y + keyboardOffset };
+            setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
+          } else {
+            setLayout(measurement);
+          }
+        });
+        setCollapsibleModal(!collapsibleModal);
+        setTimeout(() => {
+          setCollapse(false);
+        }, 80);
+      }
     }
   };
 
@@ -187,6 +191,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
           <View onStartShouldSetResponderCapture={() => true}>
             <CustomTextInput
               disabled={disabled}
+              error={error}
               editable={false}
               placeholder={customPlaceholder}
               rightIcon={{ name: icon }}

@@ -10,7 +10,6 @@ export const getDashboard = async (variables: IDashboardRequest, navigation: ISt
       navigation,
       handleError,
     );
-
     if (data === undefined || "dashboard" in data === false) {
       throw data;
     }

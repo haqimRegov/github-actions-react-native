@@ -10,7 +10,6 @@ import {
   centerVertical,
   colorBlue,
   colorGray,
-  colorTransparent,
   colorWhite,
   flexRow,
   flexWrap,
@@ -21,6 +20,7 @@ import {
   noBorderBottom,
   px,
   py,
+  sh16,
   sh192,
   sh24,
   sh38,
@@ -29,6 +29,7 @@ import {
   sw1,
   sw12,
   sw16,
+  sw2,
   sw20,
   sw228,
   sw24,
@@ -74,7 +75,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
 }: CheckBoxDropdownProps) => {
   const [showMore, setShowMore] = useState<ICheckBoxMoreDetails>({ active: false, number: 0 });
   const baseDropdownStyle: ViewStyle = {
-    ...border(colorGray._7, sw1, sw20),
+    // ...border(colorGray._7, sw1, sw20),
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
   };
@@ -83,6 +84,13 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
     borderWidth: 0,
     height: sh38,
     width: sw358,
+  };
+
+  const contentStyle: ViewStyle = {
+    borderWidth: sw2,
+    borderColor: colorBlue._2,
+    borderTopWidth: 0,
+    ...style,
   };
 
   const defaultLabelStyle: TextStyle = { ...fs12SemiBoldBlue38, ...labelStyle };
@@ -94,7 +102,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
 
   const handleReset = async (index: number, reset: boolean) => {
-    const tempArray = value;
+    const tempArray = [...value];
     let newArray = value;
     if (reset === false) {
       tempArray.push(items[index].value);
@@ -126,7 +134,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
           flatlistStyle={{ maxHeight: sh192 }}
           handleReset={handleReset}
           RenderBase={({ collapse, dummyBaseStyle }) => {
-            const inputBorder: ViewStyle = collapse === false ? { ...noBorderBottom, borderBottomColor: colorTransparent } : {};
+            const inputBorder: ViewStyle = collapse === false ? { ...noBorderBottom, borderColor: colorBlue._2, borderWidth: sw2 } : {};
 
             const defaultInputStyle: ViewStyle = {
               ...border(colorGray._7, sw1, sw20),
@@ -135,16 +143,16 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
               ...px(sw16),
               backgroundColor: colorWhite._1,
               height: sh40,
-              width: sw360,
-              ...inputBorder,
+              width: collapse === false ? sw358 : sw360,
               ...dummyBaseStyle,
+              ...inputBorder,
             };
             const defaultTagStyle: ViewStyle = {
               ...flexRow,
               ...px(sw8),
               ...py(sh4),
               borderRadius: sw24,
-              backgroundColor: colorGray._2,
+              backgroundColor: colorBlue._9,
               maxWidth: sw256,
             };
 
@@ -186,10 +194,10 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
                               {index !== 0 ? <CustomSpacer isHorizontal={true} space={sw4} /> : null}
                               <TouchableWithoutFeedback onPress={handleClose}>
                                 <View style={defaultTagStyle} onStartShouldSetResponderCapture={() => true}>
-                                  <Text style={{ ...valueStyle, maxWidth: sw228 }}>{shortenString(item, 25, 27)}</Text>
+                                  <Text style={{ ...fs12BoldBlue2, lineHeight: sh16, maxWidth: sw228 }}>{shortenString(item, 25, 27)}</Text>
                                   <CustomSpacer isHorizontal={true} space={sw4} />
                                   <View style={centerHV}>
-                                    <IcoMoon color={colorBlue._3_8} name="close" size={sw12} />
+                                    <IcoMoon color={colorBlue._2} name="close" size={sw12} />
                                   </View>
                                 </View>
                               </TouchableWithoutFeedback>
@@ -220,7 +228,7 @@ export const CheckBoxDropdown: FunctionComponent<CheckBoxDropdownProps> = ({
           value={value}
           handleChange={handleChange}
           items={items}
-          style={style}
+          style={contentStyle}
         />
       </View>
     </View>

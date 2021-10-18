@@ -38,12 +38,14 @@ export interface PromptProps extends ActionButtonsProps {
   closable?: boolean;
   handleClose?: () => void;
   illustration?: ImageSourcePropType;
-  spaceToButton?: number;
-  spaceToTitle?: number;
-  title?: string;
-  titleStyle?: TextStyle;
   label?: string;
   labelStyle?: TextStyle;
+  spaceToButton?: number;
+  spaceToTitle?: number;
+  spaceToTop?: number;
+  contentStyle?: ViewStyle;
+  title?: string;
+  titleStyle?: TextStyle;
 }
 
 export const Prompt: FunctionComponent<PromptProps> = ({
@@ -51,12 +53,14 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   closable,
   handleClose,
   illustration,
-  spaceToButton,
-  spaceToTitle,
-  title,
-  titleStyle,
   label,
   labelStyle,
+  spaceToButton,
+  spaceToTitle,
+  spaceToTop,
+  contentStyle,
+  title,
+  titleStyle,
   ...rest
 }: PromptProps) => {
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
@@ -87,7 +91,8 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   };
 
   const illustrationStyle: ImageStyle = { ...imageContain, height: sw176, width: sw176 };
-  const defaultTopSpace = closable === true ? sh20 : sh48;
+  const topSpace = spaceToTop !== undefined ? spaceToTop : sh48;
+  const defaultTopSpace = closable === true ? sh20 : topSpace;
   const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh16;
 
   return (
@@ -102,7 +107,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
           </View>
         </Fragment>
       ) : null}
-      <View style={{ ...centerVertical, ...px(sw56) }}>
+      <View style={{ ...centerVertical, ...px(sw56), ...contentStyle }}>
         <CustomSpacer space={defaultTopSpace} />
         {illustration !== undefined ? (
           <Fragment>

@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 
 import { acknowledgementReducer } from "./Acknowledgement";
 import { clientReducer } from "./Client";
+import { eddReducer } from "./EDD";
 import { globalReducer } from "./Global";
 import { onboardingReducer } from "./Onboarding";
 import { personalInfoReducer } from "./PersonalInfo";
@@ -13,6 +14,7 @@ import { transactionsReducer } from "./Transactions";
 export const rootReducer = combineReducers({
   acknowledgement: acknowledgementReducer,
   client: clientReducer,
+  edd: eddReducer,
   global: globalReducer,
   onboarding: onboardingReducer,
   personalInfo: personalInfoReducer,

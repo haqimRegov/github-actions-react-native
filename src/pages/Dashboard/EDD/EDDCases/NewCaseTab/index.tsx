@@ -33,7 +33,6 @@ import {
   sw16,
   sw20,
   sw24,
-  sw32,
   sw64,
   sw8,
   sw95,
@@ -266,7 +265,6 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       customItem: true,
       icon: { name: sortName === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "clientName", textStyle: { ...fsTransformNone, ...fs12RegBlue2 } }],
-      titleStyle: { paddingLeft: sw32 },
       onPressHeader: handleSortName,
       viewStyle: {
         width: sw159,

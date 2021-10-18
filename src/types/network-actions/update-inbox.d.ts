@@ -1,6 +1,4 @@
-declare interface IUpdateInboxRequest {
-  notificationIds: string[];
-}
+declare type IUpdateInboxRequest = {};
 
 declare interface IUpdateInboxResult {
   status: string;

@@ -8,6 +8,7 @@ export * from "./Pagination";
 export * from "./PasswordValidation";
 export * from "./Prompt";
 export * from "./Question";
+export * from "./Reason";
 export * from "./Spacer";
 export * from "./Splash";
 export * from "./Status";

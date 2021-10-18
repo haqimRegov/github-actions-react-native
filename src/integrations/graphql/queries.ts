@@ -18,6 +18,7 @@ const dashboard = gql`
               amount
             }
             createdOn
+            isSeen
             status
             dueDate
             lastUpdated
@@ -596,9 +597,350 @@ const productList = gql`
   }
 `;
 
+const eddDashboard = gql`
+  query eddDashboard($input: DashboardInput) {
+    eddDashboard(input: $input) {
+      data {
+        result {
+          cases {
+            caseId
+            clientId
+            caseNo
+            clientName
+            createdOn
+            targetDate
+            closeDate
+            status
+            isSeen
+            accountNo
+            lastUpdated
+            daysRemaining
+            remark {
+              label
+              remark
+            }
+          }
+          pendingCount
+          reroutedCount
+          newCount
+          historyCount
+          submittedCount
+          page
+          pages
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const eddCaseQuestions = gql`
+  query caseQuestions($input: EddCommonInput) {
+    caseQuestions(input: $input) {
+      data {
+        result {
+          client {
+            name
+            status
+          }
+          data {
+            amlaTitle {
+              user
+              status
+              time
+            }
+            questions {
+              id
+              description
+              title
+              options {
+                type
+                title
+                hasDoc
+                hasRemark
+                autoHide
+                id
+                parent
+                values
+                info
+                valuesDescription
+                multiSelection
+                description
+                options {
+                  id
+                  title
+                  type
+                  parent
+                  info
+                  values
+                  valuesDescription
+                  multiSelection
+                  description
+                  options {
+                    id
+                    title
+                    type
+                    parent
+                    info
+                    values
+                    valuesDescription
+                    multiSelection
+                    description
+                  }
+                }
+              }
+            }
+            additionalQuestions {
+              title
+              options {
+                type
+                hasRemark
+                hasDoc
+              }
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
+const clientProfile = gql`
+  query clientProfile($input: EddCommonInput) {
+    clientProfile(input: $input) {
+      data {
+        result {
+          profile {
+            createdAt
+            incomeDistribution
+            signatory
+            accountType
+            client {
+              name
+              idNumber
+              idType
+              personalDetails {
+                dateOfBirth
+                salutation
+                gender
+                nationality
+                bumiputera
+                race
+                placeOfBirth
+                countryOfBirth
+                educationLevel
+                mothersMaidenName
+                maritalStatus
+                riskProfile
+                relationship
+                monthlyHouseholdIncome
+              }
+              epfDetails {
+                epfMemberNumber
+                epfAccountType
+              }
+              employmentInformation {
+                occupation
+                natureOfBusiness
+                annualIncome
+                nameOfEmployer
+                address {
+                  address {
+                    line1
+                    line2
+                    line3
+                  }
+                  city
+                  country
+                  postCode
+                  state
+                }
+              }
+              addressInformation {
+                mailingAddress {
+                  address {
+                    line1
+                    line2
+                    line3
+                  }
+                  city
+                  country
+                  postCode
+                  state
+                }
+                permanentAddress {
+                  address {
+                    line1
+                    line2
+                    line3
+                  }
+                  city
+                  country
+                  postCode
+                  state
+                }
+              }
+              contactDetails {
+                officeNumber
+                homeNumber
+                mobileNumber
+                faxNumber
+                email
+              }
+              bankInformation {
+                localBank {
+                  currency
+                  bankName
+                  bankAccountName
+                  bankAccountNumber
+                  bankLocation
+                  bankSwiftCode
+                }
+                foreignBank {
+                  currency
+                  bankName
+                  bankAccountName
+                  bankAccountNumber
+                  bankLocation
+                  bankSwiftCode
+                }
+              }
+              declaration {
+                fatca {
+                  usCitizen
+                  usBorn
+                  confirmAddress
+                  certificate {
+                    name
+                    url
+                    type
+                  }
+                  formW9 {
+                    name
+                    url
+                    type
+                  }
+                  formW8Ben {
+                    name
+                    url
+                    type
+                  }
+                  reason
+                  correspondenceDeclaration
+                }
+                crs {
+                  taxResident
+                  tin {
+                    country
+                    tinNumber
+                    reason
+                  }
+                }
+                fea {
+                  resident
+                  borrowingFacility
+                  balance
+                }
+              }
+              uploadedDocument {
+                name
+                url
+                type
+              }
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
+const caseResponse = gql`
+  query caseResponse($input: CaseResponseInput) {
+    caseResponse(input: $input) {
+      data {
+        result {
+          response {
+            agent {
+              time
+              user
+              status
+            }
+            amla {
+              time
+              user
+              status
+            }
+            count
+            data {
+              question
+              questionId
+              description
+              answers
+              amlaRemark
+            }
+            questions {
+              question
+              questionId
+              description
+              amlaRemark
+            }
+          }
+          client {
+            name
+            status
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
+const previousResponse = gql`
+  query previousResponse($input: PreviousResponseInput) {
+    previousResponse(input: $input) {
+      data {
+        result {
+          questionId
+          answer
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
 export const GQL_QUERIES = {
+  caseResponse,
+  clientProfile,
   dashboard,
   etbCheck,
+  eddDashboard,
+  eddCaseQuestions,
   getAgentProfile,
   getInbox,
   getOrderSummary,
@@ -606,5 +948,6 @@ export const GQL_QUERIES = {
   listHardCopyDocuments,
   listPaymentRequired,
   listSoftCopyDocuments,
+  previousResponse,
   productList,
 };

@@ -504,8 +504,46 @@ const userLogin = gql`
 `;
 
 const updateInbox = gql`
-  mutation updateinbox($input: UpdateInboxInput) {
-    updateInbox(input: $input) {
+  mutation updateInbox {
+    updateInbox {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitEDDCase = gql`
+  mutation submitEdd($input: SubmitEddInput) {
+    submitEdd(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const updateSeen = gql`
+  mutation updateSeen($input: SeenInput) {
+    updateSeen(input: $input) {
       data {
         result {
           status
@@ -536,12 +574,14 @@ export const GQL_MUTATIONS = {
   resubmitOrder,
   riskAssessment,
   submitClientAccount,
+  submitEDDCase,
   submitPdf,
   submitProofOfPayments,
   submitHardCopyDocuments,
   submitSoftCopyDocuments,
   summaryReceipt,
   updateInbox,
+  updateSeen,
   userLogin,
   verifyLockOtp,
   verifyOtp,

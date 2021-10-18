@@ -150,7 +150,11 @@ declare interface IOrderSummaryProfile {
   name: string;
   idNumber: string;
   idType: TypeClientID;
-
+  accountType?: TypeAccountChoices;
+  registrationDate?: string;
+  signatory?: string;
+  accountOperationMode?: string;
+  incomeDistribution?: string;
   addressInformation: IOrderSummaryAddressInfo;
   bankInformation: IOrderSummaryBankInfo;
   contactDetails: IOrderSummaryContactDetails;

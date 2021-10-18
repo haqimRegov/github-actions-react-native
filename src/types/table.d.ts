@@ -113,12 +113,13 @@ declare interface TableHeaderProps extends BaseTableHeaderProps {
 declare interface IHeaderPopupContent {
   icon?: IIcon;
   text: string;
+  key?: string;
   textStyle?: import("react-native").TextStyle;
 }
 
 declare interface TableHeaderPopupProps {
   content: IHeaderPopupContent[];
-  onPressContent: (props: { hide: () => void; text: string }) => void;
+  onPressContent: (props: { hide: () => void; text: string; key?: string }) => void;
   onPressTitle?: (props: { show: () => void }) => void;
   selectedIndex?: number[];
   title?: string;

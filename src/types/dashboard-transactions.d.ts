@@ -12,6 +12,7 @@ declare interface IDashboardOrder {
   };
   transactionType: string;
   isScheduled: boolean;
+  isSeen: boolean;
   canProceed: boolean;
   withHardcopy: boolean;
   totalInvestment: IOrderAmount[];
@@ -66,4 +67,4 @@ declare type TransactionsSortColumnType =
 declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";
 declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
-declare type DashboardPageType = "Inbox" | "Transactions" | "Profile";
+declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD";

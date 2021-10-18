@@ -13,7 +13,7 @@ export interface CheckBoxGroupProps {
   disabled?: boolean;
   disabledIndex?: number[];
   label?: string;
-  labels: string[];
+  labels: ICheckBoxWithSubLabel[];
   labelStyle?: TextStyle;
   selected: string[];
   setSelected: (selected: string) => void;
@@ -49,12 +49,13 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
       ) : null}
 
       <View style={{ ...flexDirection, ...flexWrap, ...style }}>
-        {labels.map((option: string, index: number) => {
+        {labels.map((option: ICheckBoxWithSubLabel, index: number) => {
           const handleSelect = () => {
-            setSelected(option);
+            setSelected(option.value!);
           };
 
           const disabledOption = disabledIndex !== undefined ? disabledIndex.includes(index) : false;
+          const { label: optionLabel, value } = option;
 
           return (
             <Fragment key={index}>
@@ -62,12 +63,12 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
               <CheckBox
                 disabled={disabled === true ? true : disabledOption}
                 key={index}
-                label={option}
+                label={optionLabel}
                 labelStyle={{ ...fs14RegBlack2, ...checkboxLabelStyle }}
                 onPress={handleSelect}
                 spaceToLabel={sw12}
                 style={checkBoxStyle}
-                toggle={selected.includes(option)}
+                toggle={selected.includes(value!)}
               />
             </Fragment>
           );

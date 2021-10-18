@@ -1,12 +1,13 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View } from "react-native";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CustomSpacer } from "../../../../../components";
+import { Badge, CustomSpacer } from "../../../../../components";
 import { IcoMoon } from "../../../../../icons";
 import {
   centerHV,
   circle,
   colorBlue,
+  colorRed,
   flexRow,
   fs10RegBlue38,
   fs12BoldBlue2,
@@ -15,6 +16,7 @@ import {
   sh4,
   sw01,
   sw100,
+  sw12,
   sw14,
   sw24,
   sw8,
@@ -23,10 +25,14 @@ import {
 export interface InvestorNameProps extends ITableCustomItem {}
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
-  const { accountType, investorName } = item.rawData as IDashboardOrder;
+  const { accountType, investorName, isSeen } = item.rawData as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
   const titleStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -sw01, lineHeight: sh14, width: sw100 };
   const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, width: sw100 };
+  const badgeStyle: ViewStyle = {
+    ...circle(sw8, colorRed._1),
+    top: 0,
+  };
 
   return (
     <View style={centerHV}>
@@ -36,9 +42,20 @@ export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: Inv
         </View>
         <CustomSpacer isHorizontal={true} space={sw8} />
         <View>
-          <Text style={titleStyle} numberOfLines={2}>
-            {investorName.principal}
-          </Text>
+          {isSeen === false ? (
+            <Badge style={badgeStyle} withoutIcon={false}>
+              <View style={flexRow}>
+                <Text style={titleStyle} numberOfLines={2}>
+                  {investorName.principal}
+                </Text>
+                <CustomSpacer isHorizontal space={sw12} />
+              </View>
+            </Badge>
+          ) : (
+            <Text style={titleStyle} numberOfLines={2}>
+              {investorName.principal}
+            </Text>
+          )}
           {accountType === "Joint" ? (
             <Fragment>
               <CustomSpacer space={sh4} />

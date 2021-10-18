@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { getDashboard, resubmitOrder } from "../../../../../network-actions";
+import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
   centerHorizontal,
@@ -252,7 +253,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       ],
     };
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
-
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
@@ -301,8 +301,25 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     }
   };
 
+  const handleSeen = async () => {
+    fetching.current = true;
+    const request: IUpdateSeenRequest = { dashboard: "dashboard", tab: ["pending"] };
+    const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    if (updateSeenResponse !== undefined) {
+      const { error } = updateSeenResponse;
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
+    }
+  };
+
   useEffect(() => {
     handleFetch();
+    return () => {
+      handleSeen();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter]);
 

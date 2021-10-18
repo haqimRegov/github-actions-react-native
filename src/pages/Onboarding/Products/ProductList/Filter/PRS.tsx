@@ -44,10 +44,10 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ filter, productTy
   const disabledType = shariahSelected ? [0] : disabledConventionalType;
   let selectedType: string[] = [];
   if (conventionalSelected === true) {
-    selectedType = [FILTER_TYPE[0]];
+    selectedType = [FILTER_TYPE[0].label];
   }
   if (shariahSelected === true) {
-    selectedType = [FILTER_TYPE[1]];
+    selectedType = [FILTER_TYPE[1].label];
   }
 
   return (

@@ -195,7 +195,6 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
                       <AdvanceToggleButton
                         direction="column"
                         labels={OPTIONS_CRS_TIN_REASONS}
-                        labelStyle={{ lineHeight: sh16 }}
                         onSelect={handleTinReason}
                         space={sh24}
                         value={tax.reason!}

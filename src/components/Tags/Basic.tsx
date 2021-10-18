@@ -41,11 +41,11 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "prim
   switch (color) {
     case "success":
       tagTextColor = colorGreen._1;
-      tagColor = colorGreen._1_05;
+      tagColor = colorGreen._2;
       break;
     case "error":
       tagTextColor = colorRed._2;
-      tagColor = colorRed._2_05;
+      tagColor = colorRed._6;
       break;
     case "primary":
       tagTextColor = colorWhite._1;
@@ -53,15 +53,15 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "prim
       break;
     case "secondary":
       tagTextColor = colorBlue._2;
-      tagColor = colorBlue._2_05;
+      tagColor = colorWhite._4;
       break;
     case "warning":
       tagTextColor = colorYellow._2;
-      tagColor = colorYellow._2_05;
+      tagColor = colorYellow._3;
       break;
     case "danger":
       tagTextColor = colorRed._3;
-      tagColor = colorRed._3_05;
+      tagColor = colorRed._6;
       break;
 
     default:

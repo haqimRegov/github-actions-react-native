@@ -18,6 +18,7 @@ import {
 import { FULL_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_KIB_BRANCHES } from "../../data/dictionary";
 import { getInbox, updateInbox } from "../../network-actions";
+import { updateSeen } from "../../network-actions/dashboard/UpdateSeen";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import {
   borderBottomBlack21,
@@ -58,6 +59,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
   };
 
   const handleFetch = async (newPage: string) => {
+    // setInitialLoading(true);
     const request: IGetInboxRequest = { page: newPage, search: inputSearch };
     const response: IGetInboxResponse = await getInbox(request, navigation);
     if (response !== undefined) {
@@ -93,7 +95,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
         updatedUnreadMessages(data.result.newMessageCount);
         PushNotificationIOS.setApplicationIconBadgeNumber(parseInt(data.result.newMessageCount, 10));
       }
-
+      // setInitialLoading(false);
       if (error !== null) {
         setTimeout(() => {
           Alert.alert(error.message);
@@ -109,17 +111,36 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
   };
 
   const handleSearch = async () => {
+    setInitialLoading(true);
     await handleFetch(inboxList.page);
+    setInitialLoading(false);
   };
 
-  const handleRead = async (id: string) => {
-    const request: IUpdateInboxRequest = { notificationIds: [id] };
+  const handleReadAll = async () => {
+    setInitialLoading(true);
+    const request = {};
     const response: IUpdateInboxResponse = await updateInbox(request, navigation);
-    // setLoading(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        handleFetch(inboxList.page);
+        await handleFetch(inboxList.page);
+        setInitialLoading(false);
+      }
+      if (error !== null) {
+        setInitialLoading(false);
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
+    }
+  };
+
+  const handleRead = async (request: IUpdateSeenRequest) => {
+    const response: IUpdateInboxResponse = await updateSeen(request, navigation);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        await handleFetch(inboxList.page);
       }
       if (error !== null) {
         setTimeout(() => {
@@ -131,21 +152,28 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
 
   const handleMessage = async (notification: INotificationItem) => {
     if (notification.isRead === false) {
-      await handleRead(notification.id);
+      const request: IUpdateSeenRequest = { dashboard: "getinbox", tab: ["notification"], referenceKey: notification.id };
+      await handleRead(request);
     }
   };
 
-  const handleNext = () => {
-    if (inboxList !== undefined) {
+  const handleNext = async () => {
+    if (inboxList !== undefined && initialLoading === false) {
+      setInboxList({ ...inboxList, page: (parseInt(inboxList.page, 10) + 1).toString() });
+      setInitialLoading(true);
       const newPage = parseInt(inboxList.page, 10) + 1;
-      handleFetch(newPage.toString());
+      await handleFetch(newPage.toString());
+      setInitialLoading(false);
     }
   };
 
-  const handlePrev = () => {
-    if (inboxList !== undefined) {
+  const handlePrev = async () => {
+    if (inboxList !== undefined && initialLoading === false) {
+      setInboxList({ ...inboxList, page: (parseInt(inboxList.page, 10) - 1).toString() });
+      setInitialLoading(true);
       const newPage = parseInt(inboxList.page, 10) - 1;
-      handleFetch(newPage.toString());
+      await handleFetch(newPage.toString());
+      setInitialLoading(false);
     }
   };
 
@@ -213,7 +241,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
         <View style={borderBottomBlack21} />
         <View style={{ ...px(sw24), ...flexChild }}>
           <CustomSpacer space={sh24} />
-          {inboxList.notifications.length === 0 ? (
+          {inboxList.notifications.length === 0 || initialLoading === true ? (
             <EmptyTable hintText={hintText} illustration={illustration} loading={initialLoading} title={title} subtitle={subtitle} />
           ) : (
             inboxList.notifications.map((inbox: INotificationList, index: number) => {
@@ -222,7 +250,15 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
               return (
                 <Fragment key={index}>
                   {index === 0 ? null : <CustomSpacer space={sh32} />}
-                  <NotificationList avatarProps={handleAvatar} items={inbox.messages} label={label} onPress={handleMessage} />
+                  <NotificationList
+                    avatarProps={handleAvatar}
+                    items={inbox.messages}
+                    label={label}
+                    markAll={index === 0}
+                    notificationsCount={badgeCount}
+                    handleReadAll={handleReadAll}
+                    onPress={handleMessage}
+                  />
                 </Fragment>
               );
             })

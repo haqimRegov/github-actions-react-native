@@ -33,6 +33,8 @@ export const LocalAssets = {
     clientError: illustrationClientError,
     clientWarning: illustrationClientWarning,
     emailVerified: illustrationEmailVerified,
+    eddEmpty: illustrationEDDEmpty,
+    eddSubmitted: illustrationEDDSubmitted,
     hardcopySuccess: illustrationHardcopySuccess,
     inboxEmpty: illustrationInboxEmpty,
     loginError: illustrationLoginError,

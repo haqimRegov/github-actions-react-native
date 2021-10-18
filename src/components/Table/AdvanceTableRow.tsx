@@ -7,6 +7,7 @@ import {
   border,
   borderBottomGray4,
   borderLeftGray4,
+  centerHorizontal,
   centerHV,
   centerVertical,
   colorBlack,
@@ -177,11 +178,13 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                           <Fragment>
                             <View>
                               {itemLabel.map((label: IColumnItem, labelIndex: number) => {
+                                const defaultLabel = label.label !== null ? label.label : "-";
+                                const defaultContentStyle: ViewStyle = label.label === null ? { ...flexRow, ...centerHorizontal } : {};
                                 return (
                                   <Fragment key={labelIndex}>
                                     {label.label !== undefined ? (
                                       <Fragment>
-                                        <View key={labelIndex} style={flexRow}>
+                                        <View key={labelIndex} style={defaultContentStyle}>
                                           {label.prefix !== undefined ? (
                                             <Fragment>
                                               <Text style={{ ...textStyle, ...label.prefixStyle, lineHeight: sh16 }}>{label.prefix}</Text>
@@ -189,7 +192,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                                             </Fragment>
                                           ) : null}
                                           <Text numberOfLines={2} style={{ ...textStyle, ...label.textStyle, lineHeight: sh16 }}>
-                                            {label.label}
+                                            {defaultLabel}
                                           </Text>
                                         </View>
                                       </Fragment>

@@ -2,11 +2,13 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { Image, ImageSourcePropType, ImageStyle, TextStyle, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import { IcoMoon } from "../../icons";
 import {
   centerHV,
   centerVertical,
   colorBlack,
+  colorBlue,
   colorTransparent,
   colorWhite,
   flexChild,
@@ -18,27 +20,34 @@ import {
   px,
   sh24,
   sh32,
+  sh34,
   sh40,
+  sh42,
   sh500,
   sh96,
   shadow5,
+  sw16,
+  sw18,
+  sw24,
   sw40,
   sw750,
+  sw84,
 } from "../../styles";
 import { BasicModal } from "../Modals";
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
-import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, PdfEditCard } from "./PdfEditCard";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitle, Status } from "../Views";
+import { UploadButton } from "./UploadButton";
+import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
 
-interface PdfEditWithModalProps extends PdfEditCardProps {
+interface SignatureUploadWithModalProps extends PdfEditCardProps {
   resourceType?: "url" | "file" | "base64";
 }
 
-export const PdfEditWithModal: FunctionComponent<PdfEditWithModalProps> = ({
+export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModalProps> = ({
   onPress,
   resourceType,
   value,
   ...uploadProps
-}: PdfEditWithModalProps) => {
+}: SignatureUploadWithModalProps) => {
   const [viewFile, setViewFile] = useState<boolean>(false);
 
   const handleViewFile = () => {
@@ -90,9 +99,52 @@ export const PdfEditWithModal: FunctionComponent<PdfEditWithModalProps> = ({
     imageValue = { uri: value.url };
   }
 
+  const handleRemove = () => {
+    if (uploadProps.onPressRemove) {
+      uploadProps.onPressRemove();
+    }
+    uploadProps.setValue(undefined);
+  };
+
+  const handleEdit = () => {
+    if (uploadProps.onPressEdit && uploadProps.disabled === false) {
+      uploadProps.onPressEdit();
+    }
+  };
+
+  const iconData = uploadProps.completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
+  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh42 };
+  const container: ViewStyle = uploadProps.completed === true ? { opacity: 0.6 } : { paddingRight: sw18 };
+
   return (
     <Fragment>
-      <PdfEditCard onPress={handleViewFile} value={value} {...uploadProps} />
+      <UploadDocument
+        badgeOffset={{ right: 0.5 }}
+        containerStyle={container}
+        customFeature={
+          <Fragment>
+            {uploadProps.completed === true ? (
+              <Fragment>
+                <Status text={uploadProps.completedText!} />
+                <CustomSpacer isHorizontal={true} space={sw16} />
+                <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
+              </Fragment>
+            ) : (
+              <View style={{ width: sw84 }}>
+                {uploadProps.tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}
+                <View style={centerVertical}>
+                  <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
+                </View>
+              </View>
+            )}
+          </Fragment>
+        }
+        features={["custom"]}
+        icon={{ active: "order", inactive: "order" }}
+        onPress={handleViewFile}
+        value={value}
+        {...uploadProps}
+      />
       <BasicModal animationInTiming={modalAnimationInTiming} hasBackdrop={false} visible={viewFile}>
         <Fragment>
           {value !== undefined ? (

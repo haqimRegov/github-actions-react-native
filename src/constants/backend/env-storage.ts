@@ -6,7 +6,7 @@ const config = {
     region: "ap-southeast-1",
   },
   prod: {
-    bucket: "omni-documents-prod",
+    bucket: "omni-prod-documents",
     region: "ap-southeast-1",
   },
   sit: {
@@ -14,11 +14,11 @@ const config = {
     region: "ap-southeast-1",
   },
   staging: {
-    bucket: "omni-documents-staging",
+    bucket: "omni-nonprod-documents",
     region: "ap-southeast-1",
   },
   uat: {
-    bucket: "omni-documents-uat",
+    bucket: "omni-documents",
     region: "ap-southeast-1",
   },
 };

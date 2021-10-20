@@ -59,8 +59,10 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
           const disabled = disabledIndex !== undefined && disabledIndex.includes(index);
 
           const handlePress = () => {
-            const newIndex = index;
-            onSelect(value !== newIndex ? newIndex : -1);
+            if (!disabled) {
+              const newIndex = index;
+              onSelect(value !== newIndex ? newIndex : -1);
+            }
           };
 
           const iconColor = value === index ? colorWhite._1 : colorBlue._2;

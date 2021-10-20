@@ -179,7 +179,8 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                             <View>
                               {itemLabel.map((label: IColumnItem, labelIndex: number) => {
                                 const defaultLabel = label.label !== null ? label.label : "-";
-                                const defaultContentStyle: ViewStyle = label.label === null ? { ...flexRow, ...centerHorizontal } : {};
+                                const defaultContentStyle: ViewStyle =
+                                  label.label === null ? { ...flexRow, ...centerHorizontal } : { ...flexRow };
                                 return (
                                   <Fragment key={labelIndex}>
                                     {label.label !== undefined ? (

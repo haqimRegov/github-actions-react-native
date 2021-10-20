@@ -5,8 +5,7 @@ import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ContentPage, CustomSpacer, PromptModal } from "../../../../components";
-import { PdfEditWithModal } from "../../../../components/PdfEdit";
+import { ContentPage, CustomSpacer, PromptModal, SignatureUploadWithModal } from "../../../../components";
 import { ONBOARDING_ROUTES } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
@@ -215,7 +214,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               return (
                 <Fragment key={index}>
-                  <PdfEditWithModal
+                  <SignatureUploadWithModal
                     active={true}
                     completed={completed}
                     completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}

@@ -38,8 +38,8 @@ import {
 const { DASHBOARD_EDD_CASE } = Language.PAGE;
 
 declare interface IDataDropdown {
-  value: string;
   description?: string;
+  value: string;
 }
 
 declare interface IPreviousDataProps {

@@ -1,6 +1,7 @@
 import { Storage } from "aws-amplify";
 import { Alert } from "react-native";
 
+import { deleteKey } from "../../../utils";
 import { IKey } from "./NewCase";
 
 const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, reRouteCount: number) => {
@@ -33,18 +34,17 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
     });
     const promiseResolved: IKey[] = (await Promise.all(promises)) as IKey[];
     const tempAnswers: IQuestionDataRequest[] = [];
-    // eslint-disable-next-line array-callback-return
-    answers.map((tempAnswer: IQuestionData, tempIndex: number) => {
+    answers.forEach((tempAnswer: IQuestionData, tempIndex: number) => {
       const { hasDoc } = tempAnswer;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { checkboxToggle, document, ...restAnswer } = tempAnswer;
+      const updatedTempAnswer: IQuestionData = deleteKey(tempAnswer, ["checkboxToggle"]);
+      const { document } = updatedTempAnswer;
       const checkHasSub = "subSection" in tempAnswer ? { hasSub: true } : {};
       if (hasDoc === true) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { base64, path, ...rest } = document!;
-        tempAnswers.push({ ...restAnswer, document: [{ ...rest, url: promiseResolved[tempIndex].key }], ...checkHasSub });
+        const deleteUnwanted: FileBase64 = deleteKey(document!, ["base64", "path"]) as FileBase64;
+        tempAnswers.push({ ...updatedTempAnswer, document: [{ ...deleteUnwanted, url: promiseResolved[tempIndex].key }], ...checkHasSub });
       } else {
-        tempAnswers.push({ ...restAnswer, ...checkHasSub });
+        const deleteDocument = deleteKey(updatedTempAnswer, ["document"]);
+        tempAnswers.push({ ...deleteDocument, ...checkHasSub });
       }
     });
     // Additional question does not have id. So we need to send the title as per backend.
@@ -60,8 +60,7 @@ export const handleDataToSubmit = async (responseToSubmit: IEDDResponse, caseId:
   const allAnswers: IAnswer[] = [];
   const formattedAdditionalData: IAnswerStringified[] = [];
   const formattedAnswers: IAnswerStringified[] = [];
-  // eslint-disable-next-line array-callback-return
-  responseToSubmit.questions.map((eachQuestion: IEDDQuestion, eachQuestionIndex: number) => {
+  responseToSubmit.questions.forEach((eachQuestion: IEDDQuestion, eachQuestionIndex: number) => {
     const { title, id } = eachQuestion;
 
     if (title === defaultAnswers[eachQuestionIndex].question || defaultAnswers[eachQuestionIndex].question === undefined) {
@@ -72,14 +71,12 @@ export const handleDataToSubmit = async (responseToSubmit: IEDDResponse, caseId:
   });
   const filteredAnswers: IAnswer[] = allAnswers.filter((answerToFilter: IAnswer) => answerToFilter.answers.length > 0);
   const filteredAdditionalAnswers: IAnswer[] = additionalAnswers.filter((answerToFilter: IAnswer) => answerToFilter.answers.length > 0);
-  // eslint-disable-next-line array-callback-return
-  filteredAnswers.map((answer: IAnswer) => {
+  filteredAnswers.forEach((answer: IAnswer) => {
     const { question, answers } = answer;
     formattedAnswers.push({ question: question, answers: JSON.stringify(answers) });
   });
   if (filteredAdditionalAnswers.length > 0) {
-    // eslint-disable-next-line array-callback-return
-    filteredAdditionalAnswers.map((additional: IAnswer) => {
+    filteredAdditionalAnswers.forEach((additional: IAnswer) => {
       const { question, answers } = additional;
       formattedAdditionalData.push({
         question: question,

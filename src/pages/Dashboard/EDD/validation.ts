@@ -45,15 +45,13 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                                       return true;
                                     }
 
-                                    const defaultInnerKey = optionId !== null ? optionId : "eddProceed";
-
                                     switch (innerNestedType) {
                                       case "radiobutton":
-                                        if (data.answers[findIndex].subSection![defaultInnerKey] === innerNestedTitle) {
+                                        if (data.answers[findIndex].subSection![optionId] === innerNestedTitle) {
                                           return (
-                                            !(defaultInnerKey in data.answers[findIndex].subSection!) ||
-                                            data.answers[findIndex].subSection![defaultInnerKey] === undefined ||
-                                            data.answers[findIndex].subSection![defaultInnerKey] === ""
+                                            !(optionId in data.answers[findIndex].subSection!) ||
+                                            data.answers[findIndex].subSection![optionId] === undefined ||
+                                            data.answers[findIndex].subSection![optionId] === ""
                                           );
                                         }
                                         return false;

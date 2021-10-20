@@ -1,8 +1,8 @@
 declare type IUpdateInboxRequest = {};
 
 declare interface IUpdateInboxResult {
-  status: string;
   message: string;
+  status: string;
 }
 
 declare type IUpdateInboxResponse = IQueryResponse<IUpdateInboxResult> | undefined;

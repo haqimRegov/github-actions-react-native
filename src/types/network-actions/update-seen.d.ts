@@ -1,12 +1,12 @@
 declare interface IUpdateSeenRequest {
   dashboard: string;
-  tab: string[];
   referenceKey?: string;
+  tab: string[];
 }
 
 declare interface IUpdateSeenResult {
-  status: string;
   message: string;
+  status: string;
 }
 
 declare type IUpdateSeenResponse = IQueryResponse<IUpdateSeenResult> | undefined;

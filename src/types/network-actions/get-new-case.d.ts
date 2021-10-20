@@ -8,8 +8,8 @@ declare interface IEDDClientData {
 }
 
 declare interface IEDDNewCaseResult {
-  data: IEDDResponse;
   client: IEDDClientData;
+  data: IEDDResponse;
 }
 
 declare type INewCaseResponse = IQueryResponse<IEDDNewCaseResult> | undefined;

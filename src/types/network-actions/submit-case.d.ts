@@ -1,22 +1,22 @@
 declare interface IAnswer {
-  question: string;
   answers: IQuestionDataRequest[];
+  question: string;
 }
 
 declare interface IAnswerStringified {
-  question: string;
   answers: string;
+  question: string;
 }
 
 declare interface ISubmitCaseRequest {
-  caseId: string;
-  allAnswers: IAnswerStringified[];
   additionalAnswers: IAnswerStringified[];
+  allAnswers: IAnswerStringified[];
+  caseId: string;
 }
 
 declare interface ISubmitCaseResult {
-  status: boolean;
   message: string;
+  status: boolean;
 }
 
 declare type ISubmitCaseResponse = IMutationResponse<ISubmitCaseResult> | undefined;

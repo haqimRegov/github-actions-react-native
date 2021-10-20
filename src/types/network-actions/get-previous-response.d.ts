@@ -4,8 +4,8 @@ declare interface IPreviousResponseRequest {
 }
 
 declare interface IPreviousResponseStructure {
-  questionId: string;
   answer: string;
+  questionId: string;
 }
 
 declare type IPreviousResponseResult = IPreviousResponseStructure;

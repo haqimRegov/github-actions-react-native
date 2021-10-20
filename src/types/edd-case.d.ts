@@ -7,24 +7,24 @@ declare type TCasePage = "EDD Case" | "Profile";
 declare interface ICheckBoxWithSubLabel {
   label: string;
   labelStyle?: import("react-native").TextStyle;
-  value?: string;
   subLabel?: string;
   subLabelStyle?: import("react-native").TextStyle;
+  value?: string;
 }
 
 declare interface ILabeledTitleWithFile {
-  label: string;
   data: string | FileBase64[] | string[];
   isMulti?: boolean;
+  label: string;
 }
 
 declare interface IQuestionDataWithoutDocument {
-  checkboxToggle?: boolean;
   answer?: string;
-  optionIndex?: number;
-  hasRemark?: boolean;
+  checkboxToggle?: boolean;
   hasDoc?: boolean;
+  hasRemark?: boolean;
   hasSub?: boolean;
+  optionIndex?: number;
   remark?: string;
   subSection?: {
     value?: string;
@@ -38,24 +38,24 @@ declare interface IOptionField {
   hasDoc?: boolean;
   hasRemark?: boolean;
   id: string;
+  info?: string;
   key?: string;
   multiSelection?: boolean;
   optionIndex?: number;
   options?: IOptionField[];
   parent?: string[];
   title?: string;
-  info?: string;
   type: TInputTypes;
   values?: string[];
   valuesDescription?: string[];
 }
 
 declare interface IPreviousData {
-  title: string;
-  label?: string;
-  description?: string;
-  multiSelect?: boolean;
   data?: ILabeledTitleWithFile[];
+  description?: string;
+  label?: string;
+  multiSelect?: boolean;
+  title: string;
 }
 
 declare interface IQuestionData extends IQuestionDataWithoutDocument {
@@ -67,51 +67,51 @@ declare interface IQuestionDataRequest extends IQuestionDataWithoutDocument {
 }
 
 declare interface IQuestionDataWithHide {
-  autoHide: boolean;
   answers: IQuestionData[];
+  autoHide: boolean;
 }
 
 declare interface IEDDQuestion {
-  id: string;
-  title: string;
-  description?: string;
   data?: IQuestionDataWithHide;
+  description?: string;
+  id: string;
   options?: IOptionField[];
   previousData?: IPreviousData[];
+  title: string;
 }
 
 declare interface IEDDViewQuestion {
-  title: string;
-  id: string | null;
   description: string | null;
+  id: string | null;
   previousData: IPreviousData[];
+  title: string;
 }
 
 declare interface IEDDResponseTitle {
-  user: string;
-  time: string;
   status: string;
+  time: string;
+  user: string;
 }
 
 declare interface IEDDViewResponse {
-  questions: IEDDViewQuestion[];
   amlaTitle: IEDDResponseTitle;
+  questions: IEDDViewQuestion[];
   userTitle: IEDDResponseTitle;
 }
 
 declare interface IEDDViewCase {
-  responses?: IEDDViewResponse[];
   profile?: IOrderSummaryProfile;
+  responses?: IEDDViewResponse[];
 }
 
 declare interface IEDDResponse {
-  questions: IEDDQuestion[];
   additionalQuestions?: IEDDQuestion[];
   amlaTitle: IEDDResponseTitle;
+  questions: IEDDQuestion[];
   userTitle?: IEDDResponseTitle;
 }
 
 declare interface IEDDCase {
-  responses?: IEDDResponse[];
   profile?: IOrderSummaryProfile;
+  responses?: IEDDResponse[];
 }

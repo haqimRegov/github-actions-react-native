@@ -4,24 +4,24 @@ declare interface ICaseResponseRequest {
 }
 
 declare interface ICaseResponseData {
+  amlaRemark: string | null;
+  answers: string;
+  description: string | null;
   question: string;
   questionId: string;
-  description: string | null;
-  answers: string;
-  amlaRemark: string | null;
 }
 
 declare interface ICaseResponseStructure {
-  count: string;
-  questions: ICaseResponseData[] | null;
-  data: ICaseResponseData[] | null;
   agent: IEDDResponseTitle;
   amla: IEDDResponseTitle;
+  count: string;
+  data: ICaseResponseData[] | null;
+  questions: ICaseResponseData[] | null;
 }
 
 declare interface ICaseResponseResult {
-  response: ICaseResponseStructure[];
   client: IEDDClientData;
+  response: ICaseResponseStructure[];
 }
 
 declare type ICaseResponse = IQueryResponse<ICaseResponseResult> | undefined;

@@ -3,11 +3,11 @@ declare interface IClientProfileRequest {
 }
 
 declare interface IClientProfileStructure {
+  accountType: TypeAccountChoices;
+  client: IOrderSummaryProfile;
   createdAt: string;
   incomeDistribution: string;
   signatory: string;
-  accountType: TypeAccountChoices;
-  client: IOrderSummaryProfile;
 }
 
 declare interface IClientProfileResult {

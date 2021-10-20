@@ -4,23 +4,23 @@ declare interface IDashboardRemark {
 }
 
 declare interface IDashboardOrder {
-  orderNumber: string;
   accountType: TypeAccountChoices;
+  canProceed: boolean;
+  createdOn: string;
+  dueDate: string;
   investorName: {
     principal: string;
     joint: string | null;
   };
-  transactionType: string;
   isScheduled: boolean;
   isSeen: boolean;
-  canProceed: boolean;
-  withHardcopy: boolean;
-  totalInvestment: IOrderAmount[];
-  createdOn: string;
-  status: OrderStatusType;
-  dueDate: string;
   lastUpdated: string;
+  orderNumber: string;
   remark: IDashboardRemark[];
+  status: OrderStatusType;
+  totalInvestment: IOrderAmount[];
+  transactionType: string;
+  withHardcopy: boolean;
 }
 
 declare interface ITransactionsTab {
@@ -32,12 +32,12 @@ declare interface ITransactionsTab {
 }
 
 declare interface ITransactionsDashboard {
-  pending: ITransactionsTab;
   approved: ITransactionsTab;
-  rejected: ITransactionsTab;
   approvedCount: number;
-  rejectedCount: number;
+  pending: ITransactionsTab;
   pendingCount: number;
+  rejected: ITransactionsTab;
+  rejectedCount: number;
 }
 
 declare interface ITransactionsSort {
@@ -46,23 +46,23 @@ declare interface ITransactionsSort {
 }
 
 declare interface ITransactionsFilter {
-  dateSorting?: string;
-  startDate?: Date;
-  endDate?: Date;
-  transactionsType?: string;
   accountType?: string;
+  dateSorting?: string;
+  endDate?: Date;
   orderStatus?: string[];
+  startDate?: Date;
+  transactionsType?: string;
 }
 
 declare type TransactionsSortColumnType =
+  | ""
+  | "createdOn"
+  | "dueDate"
+  | "lastUpdated"
   | "orderNumber"
   | "principal"
-  | "transactionType"
   | "totalInvestment"
-  | "createdOn"
-  | "lastUpdated"
-  | "dueDate"
-  | "";
+  | "transactionType";
 
 declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";

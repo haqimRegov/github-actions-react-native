@@ -1,27 +1,21 @@
-declare type EDDPageType = "Cases" | "NewCase" | "ViewCase" | "RerouteCase";
-
-declare type EDDTabType = "new" | "history";
-
 declare type EDDNewCaseTagKey = "pending" | "rerouted" | "submitted" | "history";
-
 declare type EDDNewCaseTagValue = "Pending" | "Rerouted" | "Submitted";
-
+declare type EDDPageType = "Cases" | "NewCase" | "ViewCase" | "RerouteCase";
+declare type EDDTabType = "new" | "history";
 declare type IEDDStatusKey = "pending" | "completed" | "overdue1" | "overdue2" | "cancelled" | "submitted";
-
 declare type IEDDStatusType = "Pending" | "Completed" | "Overdue-1" | "Overdue-2" | "Submitted" | "Cancelled";
+declare type IEDDStatus = Record<IEDDStatusKey, IEDDStatusType>;
 
 declare interface IEDDStatusLabelValue {
   label: IEDDStatusType;
   value: IEDDStatusType;
 }
 
-declare type IEDDStatus = Record<IEDDStatusKey, IEDDStatusType>;
-
 declare interface IEDDFilter {
-  dateSorting?: string;
-  startDate?: Date;
-  endDate?: Date;
   caseStatus?: string[];
+  dateSorting?: string;
+  endDate?: Date;
+  startDate?: Date;
 }
 
 declare interface IEDDDashboardCase {
@@ -38,8 +32,8 @@ declare interface IEDDDashboardCase {
 }
 
 declare interface IEDDTab {
-  filter: IEDDFilter;
   cases: IEDDDashboardCase[];
+  filter: IEDDFilter;
   page: number;
   pages: number;
   pill: EDDNewCaseTagKey;
@@ -47,15 +41,15 @@ declare interface IEDDTab {
 }
 
 declare type IEDDDashboardSortType =
+  | "accountNo"
+  | "caseCreated"
   | "caseId"
   | "caseNo"
   | "clientName"
-  | "accountNo"
-  | "caseCreated"
-  | "targetDate"
-  | "status"
   | "closeDate"
-  | "lastUpdated";
+  | "lastUpdated"
+  | "status"
+  | "targetDate";
 
 declare interface IEDDDashboardSort {
   column: IEDDDashboardSortType;
@@ -63,11 +57,11 @@ declare interface IEDDDashboardSort {
 }
 
 declare interface IEDDDashboard {
-  new: IEDDTab;
   history: IEDDTab;
-  newCount: number;
   historyCount: number;
+  new: IEDDTab;
+  newCount: number;
+  pendingCount: number;
   reroutedCount: number;
   submittedCount: number;
-  pendingCount: number;
 }

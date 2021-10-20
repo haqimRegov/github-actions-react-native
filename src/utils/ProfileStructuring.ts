@@ -11,8 +11,6 @@ const { DASHBOARD_PROFILE } = Language.PAGE;
 
 export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderSummaryProfile, setFile: (value?: FileBase64) => void) => {
   const {
-    idType,
-    registrationDate,
     accountOperationMode,
     accountType,
     addressInformation,
@@ -21,7 +19,9 @@ export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderS
     declaration,
     employmentInformation,
     epfDetails,
+    idType,
     personalDetails,
+    registrationDate,
     uploadedDocument,
   } = data;
   const { fatca, crs } = declaration;

@@ -40,9 +40,9 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
   avatarProps,
   handleReadAll,
   items,
+  label,
   markAll,
   notificationsCount,
-  label,
   onPress,
 }: NotificationListProps) => {
   return (

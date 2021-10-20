@@ -36,6 +36,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 export interface PromptProps extends ActionButtonsProps {
   children?: JSX.Element;
   closable?: boolean;
+  contentStyle?: ViewStyle;
   handleClose?: () => void;
   illustration?: ImageSourcePropType;
   label?: string;
@@ -43,7 +44,6 @@ export interface PromptProps extends ActionButtonsProps {
   spaceToButton?: number;
   spaceToTitle?: number;
   spaceToTop?: number;
-  contentStyle?: ViewStyle;
   title?: string;
   titleStyle?: TextStyle;
 }
@@ -51,6 +51,7 @@ export interface PromptProps extends ActionButtonsProps {
 export const Prompt: FunctionComponent<PromptProps> = ({
   children,
   closable,
+  contentStyle,
   handleClose,
   illustration,
   label,
@@ -58,7 +59,6 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   spaceToButton,
   spaceToTitle,
   spaceToTop,
-  contentStyle,
   title,
   titleStyle,
   ...rest

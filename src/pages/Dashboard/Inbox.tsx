@@ -39,8 +39,8 @@ import {
 const { EMPTY_STATE, INBOX } = Language.PAGE;
 
 interface InboxPageProps extends GlobalStoreProps {
-  navigation: IStackNavigationProp;
   handleRoute: (route: DashboardPageType) => void;
+  navigation: IStackNavigationProp;
 }
 
 const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unreadMessages, updatedUnreadMessages }: InboxPageProps) => {
@@ -59,7 +59,6 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
   };
 
   const handleFetch = async (newPage: string) => {
-    // setInitialLoading(true);
     const request: IGetInboxRequest = { page: newPage, search: inputSearch };
     const response: IGetInboxResponse = await getInbox(request, navigation);
     if (response !== undefined) {
@@ -95,7 +94,6 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
         updatedUnreadMessages(data.result.newMessageCount);
         PushNotificationIOS.setApplicationIconBadgeNumber(parseInt(data.result.newMessageCount, 10));
       }
-      // setInitialLoading(false);
       if (error !== null) {
         setTimeout(() => {
           Alert.alert(error.message);
@@ -221,10 +219,10 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
           filterVisible={filterVisible}
           handleFilter={handleFilter}
           inputSearch={inputSearch}
+          label={INBOX.HEADER}
           noFilter={true}
           onSubmitEditing={handleSearch}
           placeholder={INBOX.PLACEHOLDER_SEARCH}
-          label={INBOX.HEADER}
           setInputSearch={setInputSearch}
         />
         <View style={flexRow}>
@@ -252,11 +250,11 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
                   {index === 0 ? null : <CustomSpacer space={sh32} />}
                   <NotificationList
                     avatarProps={handleAvatar}
+                    handleReadAll={handleReadAll}
                     items={inbox.messages}
                     label={label}
                     markAll={index === 0}
                     notificationsCount={badgeCount}
-                    handleReadAll={handleReadAll}
                     onPress={handleMessage}
                   />
                 </Fragment>

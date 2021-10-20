@@ -4,6 +4,7 @@ export * from "./Encryption";
 export * from "./ErrorHandler";
 export * from "./GetEmbeddedBase64";
 export * from "./Link";
+export * from "./Object";
 export * from "./OCR";
 export * from "./OSAction";
 export * from "./ResponseHandler";

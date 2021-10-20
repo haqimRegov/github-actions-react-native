@@ -1264,7 +1264,7 @@ export const english = {
         "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
       LABEL_CHECKBOX_4:
         "I have decided to purchase another unlisted capital market product that is not recommended by the authorized distributor",
-      LABEL_COMPLETED: "Completed",
+      LABEL_COMPLETED: "Signed",
       LABEL_CONSENT:
         "I/We hereby give consent to the Manager to disclose to my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
       LABEL_EXPAND_ALL: "Expand all",

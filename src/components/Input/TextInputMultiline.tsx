@@ -41,7 +41,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   const [multilineFocus, setMultilineFocus] = useState(false);
 
   const inputWidth = style?.width !== undefined ? style.width : sw360;
-  const inputHeight: number = style?.height !== undefined ? parseInt(style.height as string, 10) : sh88;
+  const inputHeight: number = style?.height !== undefined ? (style.height as number) : sh88;
 
   const handleMultilineFocus = () => {
     if (textInputDummy !== null) {

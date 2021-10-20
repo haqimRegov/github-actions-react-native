@@ -8,12 +8,13 @@ import {
   flexRow,
   fs12BoldBlack2,
   fs12SemiBoldGray8,
+  fullWidth,
   sh05,
   sh24,
   sh8,
   sh88,
+  sh96,
   sw02,
-  sw360,
   sw8,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
@@ -33,15 +34,12 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
-  style,
+  viewStyle,
   ...rest
 }: TextInputMultilineProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
   const [textInputDummy, setTextInputDummy] = useState<TextInput | null>(null);
   const [multilineFocus, setMultilineFocus] = useState(false);
-
-  const inputWidth = style?.width !== undefined ? style.width : sw360;
-  const inputHeight: number = style?.height !== undefined ? (style.height as number) : sh88;
 
   const handleMultilineFocus = () => {
     if (textInputDummy !== null) {
@@ -91,15 +89,16 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         </Fragment>
       )}
       <CustomTextInput
+        containerStyle={{ ...fullWidth, ...viewStyle }}
         multiline={true}
         onFocus={handleMultilineFocus}
         placeholder={placeholder}
         selectionColor={colorBlack._2}
         setRef={setTextAreaRef}
-        style={{ height: inputHeight - sh8, lineHeight: sh24, letterSpacing: sw02 }}
+        style={{ height: sh88, lineHeight: sh24, letterSpacing: sw02 }}
         underlineColorAndroid={colorTransparent}
+        viewStyle={{ borderRadius: sw8, height: sh96, ...fullWidth, ...viewStyle }}
         {...rest}
-        viewStyle={{ borderRadius: sw8, height: inputHeight, width: inputWidth }}
       />
       <CustomTextInput
         onFocus={handleDummyInputFocus}
@@ -110,7 +109,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         viewStyle={dummyInputStyle}
       />
       {showLength === true && rest.maxLength !== undefined ? (
-        <View style={{ ...flexRow, width: inputWidth }}>
+        <View style={{ ...flexRow, ...fullWidth, ...viewStyle }}>
           <CustomFlexSpacer />
           <Text style={{ ...fs12SemiBoldGray8, paddingTop: sh8 }}>{charRemaining}</Text>
         </View>

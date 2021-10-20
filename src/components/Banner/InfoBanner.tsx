@@ -21,18 +21,18 @@ import {
   sw24,
   sw8,
 } from "../../styles";
-import { CustomSpacer } from "./Spacer";
+import { CustomSpacer } from "../Views/Spacer";
 
 const { DASHBOARD_EDD_CASE } = Language.PAGE;
 
-declare interface IReasonProps {
+declare interface IInfoBannerProps {
+  icon: IIcon;
   reason: string;
   remark: string;
   status: string;
-  icon: IIcon;
 }
 
-export const Reason: FunctionComponent<IReasonProps> = ({ icon, reason, remark, status }: IReasonProps) => {
+export const InfoBanner: FunctionComponent<IInfoBannerProps> = ({ icon, reason, remark, status }: IInfoBannerProps) => {
   let containerStatusStyle: ViewStyle = {};
 
   switch (status) {

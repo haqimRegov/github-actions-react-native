@@ -68,8 +68,8 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
           <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_START_DATE} />
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            mode="date"
             maximumDate={endDate || moment().toDate()}
+            mode="date"
             setValue={handleStartDate}
             value={startDate}
           />
@@ -79,9 +79,9 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
           <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_END_DATE} />
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            mode="date"
-            minimumDate={startDate}
             maximumDate={moment().toDate()}
+            minimumDate={startDate}
+            mode="date"
             setValue={handleEndDate}
             value={endDate}
           />

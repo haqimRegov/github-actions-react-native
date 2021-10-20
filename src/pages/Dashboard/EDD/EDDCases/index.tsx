@@ -23,17 +23,17 @@ interface EDDCasesProps extends EDDStoreProps {
 export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCasesProps) => {
   const {
     activeTab,
+    edd,
     navigation,
-    resetNewCasesFilter,
     resetHistoryFilter,
+    resetNewCasesFilter,
     search,
     setActiveTab,
     setScreen,
     updateCases,
-    updateNewCasesFilter,
     updateHistoryFilter,
+    updateNewCasesFilter,
     updateSearch,
-    edd,
   } = props;
   const { newCount, historyCount } = edd;
 

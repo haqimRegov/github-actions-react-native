@@ -56,16 +56,16 @@ interface EDDDashboardHeaderProps {
 
 export const EDDDashboardHeader: FunctionComponent<EDDDashboardHeaderProps> = ({
   activeTab,
+  filter,
   filterVisible,
   handleCancel,
-  handleShowFilter,
   handleConfirm,
   handleResetFilter,
   handleSearch,
+  handleShowFilter,
   inputSearch,
-  filter,
-  setInputSearch,
   setFilter,
+  setInputSearch,
 }: EDDDashboardHeaderProps) => {
   // TODO hide show all pills is only 1 line
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);

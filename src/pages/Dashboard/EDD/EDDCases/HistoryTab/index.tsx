@@ -44,10 +44,10 @@ export interface HistoryProps extends EDDStoreProps {
 }
 
 const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
-  isFetching,
-  navigation,
   edd,
   history,
+  isFetching,
+  navigation,
   search,
   setIsFetching,
   setScreen,

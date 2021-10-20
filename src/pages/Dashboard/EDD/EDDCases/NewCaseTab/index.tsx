@@ -59,8 +59,8 @@ export type TDateType = "Case Created On" | "Last Updated";
 export type TSortType = "ascending" | "descending";
 
 export interface IShowDateBy {
-  type: TDateType;
   key: TSortType;
+  type: TDateType;
 }
 
 const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({

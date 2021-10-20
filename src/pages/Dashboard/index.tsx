@@ -40,6 +40,7 @@ import {
   sw66,
   sw96,
 } from "../../styles";
+import { EDD } from "./EDD";
 import { InboxPage } from "./Inbox";
 import { Profile } from "./Profile";
 import { Transactions } from "./Transactions";
@@ -73,12 +74,17 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
 
   const handleProfile = () => {
     setRoute("Profile");
-    setActiveMenu(2);
+    setActiveMenu(3);
   };
 
   const handleDashboard = () => {
     setRoute("Transactions");
     setActiveMenu(0);
+  };
+
+  const handleEDD = () => {
+    setRoute("EDD");
+    setActiveMenu(2);
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation };
@@ -89,6 +95,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   if (route === "Transactions") {
     content = <Transactions {...props} />;
   }
+  if (route === "EDD") {
+    content = <EDD {...props} />;
+  }
   if (route === "Profile") {
     content = <Profile {...props} />;
   }
@@ -98,6 +107,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
     { badgeCount: inboxCount, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
+    { name: "edd", onPress: handleEDD, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
     { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
     { name: "logout", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];

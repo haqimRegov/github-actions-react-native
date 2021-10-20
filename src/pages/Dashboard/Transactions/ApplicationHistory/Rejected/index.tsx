@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { getDashboard } from "../../../../../network-actions";
+import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
   flexChild,
@@ -238,8 +239,25 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     setScreen("OrderSummary");
   };
 
+  const handleSeen = async () => {
+    setIsFetching(true);
+    const request: IUpdateSeenRequest = { dashboard: "dashboard", tab: ["rejected"] };
+    const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    if (updateSeenResponse !== undefined) {
+      const { error } = updateSeenResponse;
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
+    }
+  };
+
   useEffect(() => {
     handleFetch();
+    return () => {
+      handleSeen();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter]);
 

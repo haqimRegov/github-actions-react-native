@@ -31,6 +31,7 @@ export interface SwitchProps {
   label?: string;
   labelStyle?: TextStyle;
   onPress?: (value?: boolean) => void;
+  style?: ViewStyle;
   thumbColor?: ISwitchColor;
   toggle: boolean;
   trackColor?: ISwitchColor;
@@ -41,6 +42,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
   label,
   labelStyle,
   onPress,
+  style,
   thumbColor,
   toggle,
   trackColor,
@@ -61,6 +63,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
     ...direction,
     ...centerVertical,
     ...px(sw2),
+    ...style,
   };
   const thumbStyle: ViewStyle = { ...circle(sw12, colorWhite._1), backgroundColor: baseThumbColor };
   const fontFamily = toggle ? NunitoBold : NunitoRegular;

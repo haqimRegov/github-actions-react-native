@@ -4,6 +4,8 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 import { NunitoBold, NunitoRegular } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
+  alignSelfStart,
+  centerHorizontal,
   centerHV,
   centerVertical,
   colorBlue,
@@ -12,6 +14,7 @@ import {
   colorWhite,
   flexRow,
   fs12RegBlack2,
+  fs12RegGray8,
   sh24,
   sw1,
   sw10,
@@ -87,7 +90,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
     <View style={flexRow}>
       <TouchableWithoutFeedback onPress={handlePress}>
         <View style={{ ...centerVertical, ...flexRow, ...style }}>
-          <View style={checkboxStyle}>
+          <View style={{ ...centerHorizontal, ...alignSelfStart, height: sh24, ...checkboxStyle }}>
             <View style={toggleStyle}>{toggle ? <IcoMoon color={colorWhite._1} name="success" size={defaultIconSize} /> : null}</View>
           </View>
           {label === undefined ? null : (
@@ -102,7 +105,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
                 {subLabel !== undefined ? (
                   <Fragment>
                     {spaceToSubLabel !== undefined ? <CustomSpacer space={spaceToSubLabel} /> : null}
-                    <Text style={{ ...fs12RegBlack2, ...subLabelStyle }}>{subLabel}</Text>
+                    <Text style={{ ...fs12RegGray8, ...subLabelStyle }}>{subLabel}</Text>
                   </Fragment>
                 ) : null}
               </View>

@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { AcknowledgementActionProps } from "../Acknowledgement";
 import { ClientActionProps } from "../Client";
+import { EDDActionProps } from "../EDD";
 import { OnboardingActionProps } from "../Onboarding";
 import { PersonalInfoActionProps } from "../PersonalInfo";
 import { ProductsActionProps } from "../Products";
@@ -23,6 +24,7 @@ export const GlobalMapDispatchToProps = (dispatch: Dispatch) => {
     {
       ...AcknowledgementActionProps,
       ...ClientActionProps,
+      ...EDDActionProps,
       ...GlobalActionProps,
       ...OnboardingActionProps,
       ...PersonalInfoActionProps,

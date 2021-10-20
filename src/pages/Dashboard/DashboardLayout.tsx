@@ -4,6 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions, Tag, TagColorType } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
+import { DICTIONARY_EDD_STATUS } from "../../data/dictionary/edd";
 import { IcoMoon } from "../../icons";
 import {
   alignItemsEnd,
@@ -29,6 +30,7 @@ interface DashboardLayoutProps {
   hideQuickActions?: boolean;
   navigation: IStackNavigationProp;
   scrollEnabled?: boolean;
+  sideElement?: ReactNode;
   status?: string;
   title?: string;
   titleIcon?: string;
@@ -40,6 +42,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   hideQuickActions,
   navigation,
   scrollEnabled,
+  sideElement,
   status,
   title,
   titleIcon,
@@ -84,7 +87,11 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   ];
 
   let statusColor: TagColorType;
-  if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
+  if (
+    status === DICTIONARY_ORDER_STATUS.void ||
+    status === DICTIONARY_ORDER_STATUS.rejected ||
+    status === DICTIONARY_EDD_STATUS.cancelled
+  ) {
     statusColor = "error";
   } else if (status === DICTIONARY_ORDER_STATUS.submitted) {
     statusColor = "success";
@@ -95,6 +102,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   } else {
     statusColor = "warning";
   }
+  const defaultSideElement = sideElement !== undefined ? sideElement : null;
 
   return (
     <Fragment>
@@ -121,13 +129,13 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                 </View>
               </View>
               {status !== undefined ? (
-                <View style={px(sw16)}>
+                <View style={{ ...px(sw16), ...centerVertical }}>
                   <CustomSpacer space={sh16} />
                   <Tag color={statusColor} text={status} />
                 </View>
               ) : null}
               <CustomFlexSpacer />
-              {hideQuickActions === true ? null : <QuickActions actions={actions} />}
+              {hideQuickActions === true ? defaultSideElement : <QuickActions actions={actions} />}
             </View>
           </View>
           {children}

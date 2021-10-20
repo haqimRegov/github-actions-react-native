@@ -7,7 +7,7 @@ import { AdvanceToggleButton } from "../ToggleButton/AdvanceToggleButton";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
 
 export interface QuestionContentProps {
-  options?: string[];
+  options?: ICheckBoxWithSubLabel[];
   selected: number;
   setSelected: (name: number) => void;
 }

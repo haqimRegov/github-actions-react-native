@@ -313,7 +313,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                     const { options, selected, setSelected } = renderContentProps;
                     return (
                       <Fragment>
-                        {options!.map((option: string, index: number) => {
+                        {options!.map((option: ICheckBoxWithSubLabel, index: number) => {
                           const infoContent =
                             index === 1 ? (
                               <View>
@@ -328,7 +328,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                           const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
 
                           const handleSelect = () => {
-                            const newIndex = options!.indexOf(option);
+                            const newIndex = options!.findIndex((search: ICheckBoxWithSubLabel) => search.label === option.label);
                             setSelected(newIndex !== questionNine ? newIndex : -1);
                           };
 
@@ -349,7 +349,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                                       </View>
                                     </View>
                                     <CustomSpacer space={sw8} isHorizontal />
-                                    <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, maxWidth: sw326 }}>{option}</Text>
+                                    <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, maxWidth: sw326 }}>{option.label}</Text>
                                   </View>
                                 </TouchableWithoutFeedback>
                                 {index < 2 ? (

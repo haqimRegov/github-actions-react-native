@@ -46,6 +46,7 @@ export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const borderBottomBlack1 = { borderBottomWidth: 1, borderBottomColor: colorBlack._1 } as const;
 export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: colorBlack._2_1 } as const;
 export const borderBottomGray1 = { borderBottomWidth: 1, borderBottomColor: colorGray._1 } as const;
+export const borderBottomGray3 = { borderBottomWidth: 1, borderBottomColor: colorGray._1 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderBottomGray7 = { borderBottomWidth: 1, borderBottomColor: colorGray._7 } as const;
 export const borderBottomRed4 = { borderBottomWidth: 1, borderBottomColor: colorRed._4 } as const;

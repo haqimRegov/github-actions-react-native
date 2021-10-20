@@ -1,6 +1,8 @@
 import { COUNTRY_FLAG } from "./country_flag";
 import illustrationClientError from "./illustration_client_error/illustration_client_error.png";
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
+import illustrationEDDEmpty from "./illustration_edd_empty/illustration_edd_empty.png";
+import illustrationEDDSubmitted from "./illustration_edd_submitted/illustration_edd_submitted.png";
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
 import illustrationHardcopySuccess from "./illustration_hardcopy_success/illustration_hardcopy_success.png";
 import illustrationInboxEmpty from "./illustration_inbox_empty/illustration_inbox_empty.png";
@@ -33,6 +35,8 @@ export const LocalAssets = {
     clientError: illustrationClientError,
     clientWarning: illustrationClientWarning,
     emailVerified: illustrationEmailVerified,
+    eddEmpty: illustrationEDDEmpty,
+    eddSubmitted: illustrationEDDSubmitted,
     hardcopySuccess: illustrationHardcopySuccess,
     inboxEmpty: illustrationInboxEmpty,
     loginError: illustrationLoginError,

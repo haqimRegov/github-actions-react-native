@@ -1,11 +1,11 @@
 declare interface IOrderSummaryTransaction {
-  registrationDate: string;
-  servicingAdviserName: string;
-  servicingAdviserCode: string;
-  kibProcessingBranch: string;
-  accountType: TypeAccountChoices;
   accountNo: string;
   accountOperationMode: string;
+  accountType: TypeAccountChoices;
+  kibProcessingBranch: string;
+  registrationDate: string;
+  servicingAdviserCode: string;
+  servicingAdviserName: string;
 }
 
 declare interface IOrderSummaryInvestment {
@@ -27,43 +27,43 @@ declare interface IOrderSummaryInvestment {
 }
 
 declare interface IOrderSummaryPayment {
-  fundCurrency?: TypeCurrency | "";
-  paymentMethod?: TypePaymentMethod;
-  investmentAmount?: string;
-  kibBankAccountNumber?: string;
-  kibBankAccountName?: string;
-  kibBankName?: string;
-  transactionDate?: number;
-  transactionTime?: number;
-  proofOfPayment?: FileBase64;
-  remark?: string;
+  bankAccountName?: string;
+  bankAccountNumber?: string;
   bankName?: string;
   checkNumber?: string;
   clientName?: string;
   clientTrustAccountNumber?: string;
   epfAccountNumber?: string;
   epfReferenceNo?: string;
-  bankAccountName?: string;
-  bankAccountNumber?: string;
-  recurringType?: string;
-  recurringBank?: string;
   frequency?: string;
+  fundCurrency?: TypeCurrency | "";
+  investmentAmount?: string;
+  kibBankAccountName?: string;
+  kibBankAccountNumber?: string;
+  kibBankName?: string;
+  paymentMethod?: TypePaymentMethod;
+  proofOfPayment?: FileBase64;
+  recurringBank?: string;
+  recurringType?: string;
+  remark?: string;
+  transactionDate?: number;
+  transactionTime?: number;
 }
 
 declare interface IOrderSummaryEmploymentDetails {
-  occupation: string;
-  natureOfBusiness: string;
-  monthlyHouseholdIncome: string;
-  annualIncome: string | null;
-  nameOfEmployer: string;
   address: IAddressState;
+  annualIncome: string | null;
+  monthlyHouseholdIncome: string;
+  nameOfEmployer: string;
+  natureOfBusiness: string;
+  occupation: string;
 }
 
 declare interface IOrderSummaryContactDetails {
   email: string;
-  mobileNumber: string;
   faxNumber: string | null;
   homeNumber: string | null;
+  mobileNumber: string;
   officeNumber: string | null;
 }
 
@@ -72,21 +72,21 @@ declare interface IOrderSummaryPersonalDetails {
   countryOfBirth: string;
   dateOfBirth: string;
   educationLevel: string;
-  otherEducationLevel?: string | null;
   expirationDate?: string | null;
   gender: string;
   id: FileBase64;
   idNumber: string;
   idType: string;
   maritalStatus: string;
-  mothersMaidenName: string;
   monthlyHouseholdIncome: string;
+  mothersMaidenName: string;
   name: string;
   nationality: string;
+  otherEducationLevel?: string | null;
+  otherRelationship?: string | null;
   placeOfBirth: string;
   race: string | null;
   relationship: string;
-  otherRelationship?: string | null;
   riskProfile: string;
   salutation: string;
 }
@@ -125,51 +125,54 @@ declare interface IOrderSummaryEpf {
 }
 
 declare interface IOrderSummaryDeclaration {
-  fatca: {
-    usCitizen: "Yes" | "No" | null;
-    usBorn: "Yes" | "No" | null;
-    confirmAddress: "Yes" | "No" | null;
-    certificate: DocumentFileBase64 | null;
-    formW9: DocumentFileBase64 | null;
-    formW8Ben: DocumentFileBase64 | null;
-    reason: string | null;
-    correspondenceDeclaration: "Yes" | "No" | null;
-  };
   crs: {
     taxResident: string | null;
     tin: { country: string | null; tinNumber: string | null; reason: string | null }[];
   };
+  fatca: {
+    certificate: DocumentFileBase64 | null;
+    confirmAddress: "Yes" | "No" | null;
+    correspondenceDeclaration: "Yes" | "No" | null;
+    formW8Ben: DocumentFileBase64 | null;
+    formW9: DocumentFileBase64 | null;
+    reason: string | null;
+    usBorn: "Yes" | "No" | null;
+    usCitizen: "Yes" | "No" | null;
+  };
   fea: {
-    resident: "Yes" | "No" | null;
-    borrowingFacility: "Yes" | "No" | null;
     balance: string;
+    borrowingFacility: "Yes" | "No" | null;
+    resident: "Yes" | "No" | null;
   };
 }
 
 declare interface IOrderSummaryProfile {
-  name: string;
-  idNumber: string;
-  idType: TypeClientID;
-
+  accountOperationMode?: string;
+  accountType?: TypeAccountChoices;
   addressInformation: IOrderSummaryAddressInfo;
   bankInformation: IOrderSummaryBankInfo;
   contactDetails: IOrderSummaryContactDetails;
-  employmentInformation: IOrderSummaryEmploymentDetails;
-  personalDetails: IOrderSummaryPersonalDetails;
-  epfDetails: IOrderSummaryEpf | null;
-  uploadedDocument: FileBase64[];
-
   declaration: IOrderSummaryDeclaration;
+  employmentInformation: IOrderSummaryEmploymentDetails;
+  epfDetails: IOrderSummaryEpf | null;
+  idNumber: string;
+  idType: TypeClientID;
+  incomeDistribution?: string;
+  name: string;
+  personalDetails: IOrderSummaryPersonalDetails;
+  registrationDate?: string;
+  signatory?: string;
+  uploadedDocument: FileBase64[];
 }
 
 declare interface IDashboardOrderSummary {
-  status: string;
-  orderNumber: string;
-  remark: string;
   extensionRemark: string;
-  totalInvestment: IOrderAmount[];
-  transactionDetails: IOrderSummaryTransaction;
   investmentSummary: IOrderSummaryInvestment[];
+  orderNumber: string;
   paymentSummary: IOrderSummaryPayment[];
   profile: IOrderSummaryProfile[];
+  remark: string;
+  status: string;
+  totalInvestment: IOrderAmount[];
+  transactionDetails: IOrderSummaryTransaction;
 }

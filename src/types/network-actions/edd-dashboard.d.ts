@@ -1,0 +1,24 @@
+declare interface IEDDDashboardRequest {
+  filter: any;
+  page: number;
+  search: string;
+  sort: IEDDDashboardSort[];
+  tab: "pending" | "rerouted" | "submitted" | "history";
+}
+
+declare interface IEDDDashboardResult {
+  cases: IEDDDashboardCase[];
+  historyCount: number;
+  newCount: number;
+  page: number;
+  pages: number;
+  pendingCount: number;
+  reroutedCount: number;
+  submittedCount: number;
+}
+
+declare type IEDDDashboardResponse = IQueryResponse<IEDDDashboardResult> | undefined;
+
+declare interface IEDDDashboardQuery {
+  eddDashboard: IEDDDashboardResponse;
+}

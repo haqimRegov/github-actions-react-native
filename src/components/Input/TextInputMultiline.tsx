@@ -4,13 +4,13 @@ import { Keyboard, Text, TextInput, View, ViewStyle } from "react-native";
 import {
   colorBlack,
   colorTransparent,
+  flexChild,
   flexRow,
   fs12BoldBlack2,
   fs12SemiBoldGray8,
   sh05,
   sh24,
   sh8,
-  sh80,
   sh88,
   sw02,
   sw360,
@@ -21,7 +21,7 @@ import { CustomTextInput, CustomTextInputProps } from "./Input";
 
 export interface TextInputMultilineProps extends CustomTextInputProps {
   showLength?: boolean;
-  width?: number;
+  style?: ViewStyle;
 }
 
 export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
@@ -33,14 +33,15 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
-  width,
+  style,
   ...rest
 }: TextInputMultilineProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
   const [textInputDummy, setTextInputDummy] = useState<TextInput | null>(null);
   const [multilineFocus, setMultilineFocus] = useState(false);
 
-  const inputWidth = width !== undefined ? width : sw360;
+  const inputWidth = style?.width !== undefined ? style.width : sw360;
+  const inputHeight: number = style?.height !== undefined ? (style.height as number) : sh88;
 
   const handleMultilineFocus = () => {
     if (textInputDummy !== null) {
@@ -75,10 +76,11 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   }, []);
 
   const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
-  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${rest.value?.length}/${rest.maxLength}` : "";
+  const defaultCharLength = rest.value !== undefined ? rest.value.length : 0;
+  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${defaultCharLength}/${rest.maxLength}` : "";
 
   return (
-    <View>
+    <View style={flexChild}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
@@ -94,10 +96,10 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         placeholder={placeholder}
         selectionColor={colorBlack._2}
         setRef={setTextAreaRef}
-        style={{ height: sh80, lineHeight: sh24, letterSpacing: sw02 }}
+        style={{ height: inputHeight - sh8, lineHeight: sh24, letterSpacing: sw02 }}
         underlineColorAndroid={colorTransparent}
         {...rest}
-        viewStyle={{ borderRadius: sw8, height: sh88, width: inputWidth, ...rest.viewStyle }}
+        viewStyle={{ borderRadius: sw8, height: inputHeight, width: inputWidth }}
       />
       <CustomTextInput
         onFocus={handleDummyInputFocus}

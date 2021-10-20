@@ -12,9 +12,9 @@ declare interface ITableIcon {
 
 declare interface ITableItemPrefix {
   key: string;
-  value?: string;
   targetKey: string;
   textStyle?: import("react-native").TextStyle;
+  value?: string;
 }
 
 declare interface ITableItemKey {
@@ -112,13 +112,14 @@ declare interface TableHeaderProps extends BaseTableHeaderProps {
 
 declare interface IHeaderPopupContent {
   icon?: IIcon;
+  key?: string;
   text: string;
   textStyle?: import("react-native").TextStyle;
 }
 
 declare interface TableHeaderPopupProps {
   content: IHeaderPopupContent[];
-  onPressContent: (props: { hide: () => void; text: string }) => void;
+  onPressContent: (props: { hide: () => void; text: string; key?: string }) => void;
   onPressTitle?: (props: { show: () => void }) => void;
   selectedIndex?: number[];
   title?: string;

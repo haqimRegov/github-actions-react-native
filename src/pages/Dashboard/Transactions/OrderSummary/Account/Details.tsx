@@ -52,7 +52,7 @@ declare interface AccountDetailsContentProps {
   idNumber: string;
   idType: TypeClientID;
   name: string;
-  setAccountHolder: (holder: TypeAccountHolder) => void;
+  setAccountHolder?: (holder: TypeAccountHolder) => void;
 }
 
 export const AccountDetailsContent = ({
@@ -89,7 +89,9 @@ export const AccountDetailsContent = ({
   const labelOtherId = idType !== "Passport" ? `${idType} ID` : idType;
   const labelId = idType !== "NRIC" ? `${labelOtherId} Number` : idType;
   const handleAccountHolder = () => {
-    setAccountHolder(accountHolder === "Principal" ? "Joint" : "Principal");
+    if (setAccountHolder !== undefined) {
+      setAccountHolder(accountHolder === "Principal" ? "Joint" : "Principal");
+    }
   };
 
   return (

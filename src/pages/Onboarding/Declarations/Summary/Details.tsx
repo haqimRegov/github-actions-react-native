@@ -145,7 +145,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
       label: DECLARATION_SUMMARY.LABEL_JURISDICTION,
       labelStyle: { width: sw200, lineHeight: sh16 },
       spaceToLabel: sh4,
-      title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!],
+      title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!].label,
     },
   ];
 
@@ -158,7 +158,8 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
       );
 
       if (multiTin.noTin === true) {
-        const tinLabel = multiTin.reason === 1 ? DECLARATION_SUMMARY.OPTION_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+        const tinLabel =
+          multiTin.reason === 1 ? DECLARATION_SUMMARY.OPTION_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label;
         crsSummary.push({
           label: `${DECLARATION_SUMMARY.LABEL_TIN_REMARKS}${countLabel}`,
           title: multiTin.reason === 2 ? multiTin.explanation! : tinLabel,

@@ -25,11 +25,11 @@ import {
   sh12,
   sh16,
   sh176,
-  sh22,
+  sh24,
+  sh4,
   sh44,
   sh48,
   sh8,
-  sh9,
   sw1,
   sw12,
   sw14,
@@ -416,10 +416,12 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
                       ListHeaderComponent={() => <CustomSpacer space={sh8} />}
                       ListFooterComponent={() => <CustomSpacer space={sh8} />}
                       renderItem={({ index }) => {
+                        const originalItem: TypeLabelValue = items[index];
                         const itemExtractor = itemsWithId![index];
                         const itemValue = itemExtractor.value;
                         const selected = value!.includes(itemValue);
                         const itemContainer: ViewStyle = { ...px(sw16) };
+                        const itemStyle: ViewStyle = originalItem.subLabel === undefined ? { ...py(sh4) } : {};
 
                         const handleSelect = () => {
                           // let reset: boolean = false;
@@ -434,11 +436,12 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
                             <View style={itemContainer}>
                               <CheckBox
                                 label={itemExtractor.label}
-                                labelStyle={{ fontSize: sh16, lineHeight: sh22 }}
+                                labelStyle={{ fontSize: sh16, lineHeight: sh24 }}
                                 numberOfLines={1}
                                 onPress={handleSelect}
                                 spaceToLabel={sw12}
-                                style={{ ...py(sh9) }}
+                                subLabel={originalItem.subLabel}
+                                style={itemStyle}
                                 toggle={selected}
                               />
                               {index !== labelExtractor.length - 1 && <CustomSpacer space={sh8} />}

@@ -1,8 +1,12 @@
-declare type TypeUploadFeature = "camera" | "gallery" | "file";
+declare type TypeUploadFeature = "camera" | "gallery" | "file" | "custom";
 
 declare interface UploadProps {
+  badgeOffset?: { bottom?: number; left?: number; right?: number; top?: number };
+  containerStyle?: import("react-native").ViewStyle;
+  customFeature?: import("react").ReactNode;
   errorMessage?: string;
   features: TypeUploadFeature[];
+  icon?: { active?: string; inactive?: string };
   label?: string;
   labelStyle?: import("react-native").TextStyle;
   maxFileSizeMB?: number;

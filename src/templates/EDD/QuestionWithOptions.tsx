@@ -16,7 +16,6 @@ import {
   sh16,
   sh18,
   sh4,
-  sh96,
   sw100,
   sw12,
   sw14,
@@ -24,7 +23,6 @@ import {
   sw296,
   sw54,
   sw66,
-  sw672,
   sw7,
 } from "../../styles";
 
@@ -124,7 +122,6 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                       <CustomSpacer space={sh18} />
                       <TextInputMultiline
                         maxLength={255}
-                        style={{ width: sw672, height: sh96 }}
                         label={insideOption.title}
                         onChangeText={handleRemark}
                         showLength={true}

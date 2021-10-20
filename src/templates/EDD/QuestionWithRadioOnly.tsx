@@ -18,7 +18,6 @@ import {
   sh16,
   sh18,
   sh4,
-  sh96,
   sw100,
   sw12,
   sw14,
@@ -27,7 +26,6 @@ import {
   sw36,
   sw54,
   sw66,
-  sw672,
   sw7,
 } from "../../styles";
 import { AnimationUtils } from "../../utils";
@@ -155,7 +153,6 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                           maxLength={255}
                           onChangeText={handleRemark}
                           showLength={true}
-                          style={{ width: sw672, height: sh96 }}
                           value={remark}
                         />
                         <CustomSpacer space={sh16} />

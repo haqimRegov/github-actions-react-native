@@ -20,13 +20,11 @@ import {
   sh24,
   sh26,
   sh4,
-  sh96,
   sw14,
   sw20,
   sw22,
   sw32,
   sw600,
-  sw672,
 } from "../../styles";
 import { AnimationUtils, formatAmount, isNumber } from "../../utils";
 
@@ -159,7 +157,6 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                             <TextInputMultiline
                               maxLength={255}
                               label={title !== null ? title : undefined}
-                              style={{ width: sw672, height: sh96 }}
                               onChangeText={handleRemark}
                               showLength={true}
                               value={remark}
@@ -220,13 +217,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                   {data.hasRemark === true ? (
                     <Fragment>
                       <CustomSpacer space={sh18} />
-                      <TextInputMultiline
-                        maxLength={255}
-                        onChangeText={handleRemark}
-                        style={{ width: sw672, height: sh96 }}
-                        showLength={true}
-                        value={remark}
-                      />
+                      <TextInputMultiline maxLength={255} onChangeText={handleRemark} showLength={true} value={remark} />
                     </Fragment>
                   ) : null}
                 </Fragment>

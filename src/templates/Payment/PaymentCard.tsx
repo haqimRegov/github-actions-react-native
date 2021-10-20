@@ -50,7 +50,6 @@ import {
   sw360,
   sw432,
   sw64,
-  sw784,
   sw8,
 } from "../../styles";
 import { formatAmount, isAmount, isNumber, parseAmount } from "../../utils";
@@ -724,7 +723,6 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                                 showLength={true}
                                 spaceToTop={sh24}
                                 value={payment.remark}
-                                width={sw784}
                               />
                             </Fragment>
                           )}

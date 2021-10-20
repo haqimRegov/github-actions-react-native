@@ -37,7 +37,6 @@ import {
   sh32,
   sh4,
   sh68,
-  sh96,
   sw1,
   sw100,
   sw16,
@@ -46,7 +45,6 @@ import {
   sw36,
   sw54,
   sw638,
-  sw672,
   sw8,
 } from "../../styles";
 import { AnimationUtils, deleteKey } from "../../utils";
@@ -267,7 +265,6 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 const handleDocumentToggle = () => {
                   if (data !== undefined && answerOptionIndex !== undefined && data.answers.length > 0) {
                     const updatedData = deleteKey(data?.answers[answerOptionIndex], ["document"]);
-                    console.log("upated", updatedData);
                     const updatedDocument =
                       data!.answers[answerOptionIndex].hasDoc !== undefined && data!.answers[answerOptionIndex].hasDoc === true
                         ? {}
@@ -352,7 +349,6 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                             label={title}
                             onChangeText={handleInput}
                             showLength={true}
-                            style={{ width: sw672, height: sh96 }}
                             value={data!.answers.length > 0 ? data!.answers[answerOptionIndex!].answer : ""}
                           />
                         </View>
@@ -422,7 +418,6 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                               maxLength={255}
                               onChangeText={handleRemark}
                               placeholder={DASHBOARD_EDD_CASE.LABEL_REMARK_PLACEHOLDER}
-                              style={{ width: sw672, height: sh96 }}
                               showLength={true}
                               value={
                                 data !== undefined && data.answers.length > 0 && answerOptionIndex !== undefined

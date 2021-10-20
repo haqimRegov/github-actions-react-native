@@ -2,6 +2,11 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
+import { NewDropdown } from "../../components/Dropdown";
+import { TextInputMultiline } from "../../components/Input";
+import { Switch } from "../../components/Switch";
+import { UploadWithModal } from "../../components/Upload";
+import { CustomSpacer, LabeledTitle } from "../../components/Views";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
 import { PreviousData } from "../../pages/Dashboard/EDD/PreviousData";
@@ -44,15 +49,10 @@ import {
   sw672,
   sw8,
 } from "../../styles";
-import { CheckBoxWithInput } from "../../templates/EDD/CheckBoxWithInput";
-import { QuestionWithOptions } from "../../templates/EDD/QuestionWithOptions";
-import { QuestionWithRadioOnly } from "../../templates/EDD/QuestionWithRadioOnly";
-import { AnimationUtils } from "../../utils";
-import { NewDropdown } from "../Dropdown";
-import { TextInputMultiline } from "../Input";
-import { Switch } from "../Switch";
-import { UploadWithModal } from "../Upload";
-import { CustomSpacer, LabeledTitle } from "../Views";
+import { AnimationUtils, deleteKey } from "../../utils";
+import { CheckBoxWithInput } from "./CheckBoxWithInput";
+import { QuestionWithOptions } from "./QuestionWithOptions";
+import { QuestionWithRadioOnly } from "./QuestionWithRadioOnly";
 
 const { DASHBOARD_EDD_CASE } = Language.PAGE;
 
@@ -187,8 +187,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 const questionDropdownValues: TypeLabelValue[] = [];
 
                 if (values !== undefined && values !== null) {
-                  // eslint-disable-next-line array-callback-return
-                  values.map((label: string, valueIndex: number) => {
+                  values.forEach((label: string, valueIndex: number) => {
                     const valueDescription =
                       valuesDescription !== undefined && valuesDescription !== null && valuesDescription[valueIndex] !== ""
                         ? { subLabel: valuesDescription[valueIndex] }
@@ -243,9 +242,8 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 };
 
                 const handleRemarkToggle = () => {
-                  if (data !== undefined && answerOptionIndex !== undefined) {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const { remark, ...rest } = data?.answers[answerOptionIndex] as IQuestionData;
+                  if (data !== undefined && answerOptionIndex !== undefined && data.answers.length > 0) {
+                    const updatedData = deleteKey(data?.answers[answerOptionIndex], ["remark"]);
                     const updatedRemark =
                       data.answers[answerOptionIndex].hasRemark !== undefined && data.answers[answerOptionIndex].hasRemark === true
                         ? {}
@@ -255,7 +253,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                         ...data,
                         answers: [
                           {
-                            ...rest,
+                            ...updatedData,
                             hasRemark:
                               data.answers[answerOptionIndex].hasRemark !== undefined ? !data.answers[answerOptionIndex].hasRemark : true,
                             ...updatedRemark,
@@ -267,9 +265,9 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 };
 
                 const handleDocumentToggle = () => {
-                  if (data !== undefined && answerOptionIndex !== undefined) {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const { document, ...rest } = data?.answers[answerOptionIndex] as IQuestionData;
+                  if (data !== undefined && answerOptionIndex !== undefined && data.answers.length > 0) {
+                    const updatedData = deleteKey(data?.answers[answerOptionIndex], ["document"]);
+                    console.log("upated", updatedData);
                     const updatedDocument =
                       data!.answers[answerOptionIndex].hasDoc !== undefined && data!.answers[answerOptionIndex].hasDoc === true
                         ? {}
@@ -279,7 +277,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                         ...data,
                         answers: [
                           {
-                            ...rest,
+                            ...updatedData,
                             hasDoc: data.answers[answerOptionIndex].hasDoc !== undefined ? !data.answers[answerOptionIndex].hasDoc : true,
                             ...updatedDocument,
                           },

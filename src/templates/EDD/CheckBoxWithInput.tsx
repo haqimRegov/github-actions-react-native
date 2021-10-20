@@ -37,22 +37,22 @@ export type InputType = "number" | "string";
 
 declare interface ICheckBoxWithInput {
   data: IQuestionData;
-  hasRemark?: boolean;
   hasDoc?: boolean;
-  options?: IOptionField[];
+  hasRemark?: boolean;
   label: string;
-  subLabel?: string;
+  options?: IOptionField[];
   setData: (data: IQuestionData) => void;
+  subLabel?: string;
 }
 
 export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
   data,
-  hasRemark,
   hasDoc,
+  hasRemark,
   label,
-  subLabel,
   options,
   setData,
+  subLabel,
 }: ICheckBoxWithInput) => {
   const { checkboxToggle, remark, document, subSection } = data;
 
@@ -124,12 +124,12 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
         boxStyle={{ ...centerVertical, width: sw20, height: sh20 }}
         checkboxStyle={alignFlexStart}
         iconSize={sw14}
-        numberOfLines={1}
-        onPress={handleToggle}
         label={label}
         labelStyle={{ ...fs16RegBlack3, ...selectedCheckbox }}
-        subLabel={checkSubLabel}
+        numberOfLines={1}
+        onPress={handleToggle}
         style={{ maxWidth: sw600, ...alignFlexStart }}
+        subLabel={checkSubLabel}
         toggle={checkboxToggle!}
       />
       {checkboxToggle === true ? (
@@ -143,8 +143,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                     const checkBoxDropdownValues: TypeLabelValue[] = [];
 
                     if (option.values !== undefined && option.values !== null) {
-                      // eslint-disable-next-line array-callback-return
-                      option.values.map((dropdownValue: string, valueIndex: number) => {
+                      option.values.forEach((dropdownValue: string, valueIndex: number) => {
                         const valueDescription =
                           valuesDescription !== undefined && valuesDescription !== null && valuesDescription[valueIndex] !== ""
                             ? { subLabel: valuesDescription[valueIndex] }

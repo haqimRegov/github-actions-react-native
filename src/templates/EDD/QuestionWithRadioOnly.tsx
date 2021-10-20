@@ -150,12 +150,12 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                       <View style={{ ...px(sw36) }}>
                         <CustomSpacer space={sh18} />
                         <TextInputMultiline
-                          maxLength={255}
-                          style={{ width: sw672, height: sh96 }}
                           label={insideOption.title}
                           labelStyle={{ lineHeight: sh16 }}
+                          maxLength={255}
                           onChangeText={handleRemark}
                           showLength={true}
+                          style={{ width: sw672, height: sh96 }}
                           value={remark}
                         />
                         <CustomSpacer space={sh16} />
@@ -168,8 +168,8 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                         <CustomTextInput
                           label={insideOption.title}
                           onChangeText={(text: string) => handleInput(defaultKey, text)}
-                          spaceToTop={sh16}
                           spaceToLabel={sh4}
+                          spaceToTop={sh16}
                           value={subSection !== undefined ? subSection![defaultKey] : ""}
                         />
                       </View>

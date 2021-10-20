@@ -3,13 +3,11 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { ActivityIndicator, Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomFlexSpacer, CustomSpacer, FileViewer, Reason, Tab } from "../../../../components";
-import { QuestionCard } from "../../../../components/Card/QuestionCard";
-import { Toggle } from "../../../../components/Toggle";
+import { CustomFlexSpacer, CustomSpacer, FileViewer, InfoBanner, Tab, Toggle } from "../../../../components";
+import { DEFAULT_DATE_TIME_FORMAT } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
-import { getClientProfile } from "../../../../network-actions/client-profile";
-import { getCaseResponse } from "../../../../network-actions/edd/GetCaseResponse";
+import { getCaseResponse, getClientProfile } from "../../../../network-actions";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../store/EDD";
 import {
   borderBottomBlack21,
@@ -47,6 +45,7 @@ import {
   sw66,
   sw8,
 } from "../../../../styles";
+import { QuestionCard } from "../../../../templates/EDD/QuestionCard";
 import { AnimationUtils } from "../../../../utils/Animation";
 import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -106,13 +105,11 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
           const { response, client } = upperData.result;
           fetching.current = false;
           const formattedData: IEDDViewResponse[] = [];
-          // eslint-disable-next-line array-callback-return
-          response.map((currentResponse: ICaseResponseStructure) => {
+          response.forEach((currentResponse: ICaseResponseStructure) => {
             const { amla, agent, data } = currentResponse;
             const questionsData: IEDDViewQuestion[] = [];
             if (data !== null && data.length > 0) {
-              // eslint-disable-next-line array-callback-return
-              data.map((question: ICaseResponseData) => {
+              data.forEach((question: ICaseResponseData) => {
                 const { questionId, description, answers, amlaRemark } = question;
                 const parsedAnswers: IPreviousData[] = JSON.parse(answers);
                 // Make the title as amlaRemark to maintain consistency while viewing previous data.
@@ -237,7 +234,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
           <CustomSpacer space={sh24} />
           {currentCase?.remark && currentCase.status === "Cancelled" ? (
             <View>
-              <Reason
+              <InfoBanner
                 icon={{ color: colorRed._2, name: "reject", size: sw16 }}
                 status={currentCase.status.toLowerCase()}
                 reason={DASHBOARD_EDD_CASE.LABEL_CASE_CANCELLED_BY_AMLA}
@@ -285,7 +282,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={fs16BoldBlack3}>{userTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(userTitle.time, "x").format("DD/MM/YYYY, h:mma")}</Text>
+                          <Text style={fs12RegGray8}>{moment(userTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
                           <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />
@@ -300,7 +297,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                               <IcoMoon name={defaultIcon} size={sw20} />
                             </View>
                           </TouchableWithoutFeedback>
-                          {expand[index] === true ? (
+                          {expand.length > 0 && expand[index] === true ? (
                             <View style={{ ...py(sh32), ...px(sw24) }}>
                               {response.questions.map((question: IEDDViewQuestion, questionIndex: number) => {
                                 const { title, description, previousData, id } = question;
@@ -333,7 +330,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={fs16BoldBlack3}>{amlaTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format("DD/MM/YYYY,h:mm:ss a")}</Text>
+                          <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
                           <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />

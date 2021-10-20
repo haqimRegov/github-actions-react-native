@@ -4,15 +4,11 @@ import { ActivityIndicator, Alert, Text, TouchableWithoutFeedback, View, ViewSty
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomFlexSpacer, CustomSpacer, FileViewer, PromptModal, Tab } from "../../../../components";
-import { QuestionCard } from "../../../../components/Card/QuestionCard";
-import { Toggle } from "../../../../components/Toggle";
+import { ActionButtons, CustomFlexSpacer, CustomSpacer, FileViewer, PromptModal, Tab, Toggle } from "../../../../components";
+import { DEFAULT_DATE_TIME_FORMAT } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
-import { getClientProfile } from "../../../../network-actions/client-profile";
-import { submitCase } from "../../../../network-actions/edd";
-import { getCaseResponse } from "../../../../network-actions/edd/GetCaseResponse";
-import { getPreviousResponse } from "../../../../network-actions/edd/GetPreviousResponse";
+import { getCaseResponse, getClientProfile, getPreviousResponse, submitCase } from "../../../../network-actions";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../store/EDD";
 import {
   borderBottomBlack21,
@@ -51,6 +47,7 @@ import {
   sw66,
   sw8,
 } from "../../../../styles";
+import { QuestionCard } from "../../../../templates/EDD/QuestionCard";
 import { AnimationUtils } from "../../../../utils/Animation";
 import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -61,14 +58,14 @@ import { validateSubmitCase } from "../validation";
 const { DASHBOARD_EDD, DASHBOARD_EDD_CASE, ACTION_BUTTONS, DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 declare interface ReroutedCaseProps extends EDDStoreProps {
-  setScreen: (route: EDDPageType) => void;
   navigation: IStackNavigationProp;
+  setScreen: (route: EDDPageType) => void;
 }
 
 export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
-  setScreen,
   currentCase,
   setLoading,
+  setScreen,
   updateCurrentCase,
   ...props
 }: ReroutedCaseProps) => {
@@ -128,13 +125,11 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
 
   const handleDataFormatting = (result: ICaseResponseStructure[]) => {
     const formattedData: IEDDResponse[] = [];
-    // eslint-disable-next-line array-callback-return
-    result.map((response: ICaseResponseStructure) => {
+    result.forEach((response: ICaseResponseStructure) => {
       const { amla, agent, data, questions } = response;
       const questionsData: IEDDQuestion[] = [];
       if (data !== null && data.length > 0) {
-        // eslint-disable-next-line array-callback-return
-        data.map((question: ICaseResponseData) => {
+        data.forEach((question: ICaseResponseData) => {
           const { questionId, description, answers, amlaRemark } = question;
           const parsedAnswers: IPreviousData[] = JSON.parse(answers);
           // Make the title as amlaRemark to maintain consistency while viewing previous data.
@@ -150,8 +145,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
           });
         });
       } else if (questions !== null) {
-        // eslint-disable-next-line array-callback-return
-        questions.map((eachQuestion: ICaseResponseData) => {
+        questions.forEach((eachQuestion: ICaseResponseData) => {
           const { question, questionId, amlaRemark } = eachQuestion;
           // For rerouted questions, we use the AMLA remark and create the same format as for the other template questions.
           // TODO Backend should send rerouted question in the same format as we receive in new case.
@@ -329,14 +323,12 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
 
                     const handleReset = () => {
                       const initialQuestions: IEDDQuestion[] = [];
-                      // eslint-disable-next-line array-callback-return
-                      response.questions.map((question: IEDDQuestion) => {
+                      response.questions.forEach((question: IEDDQuestion) => {
                         const { options } = question;
                         const answerArray: IQuestionData[] = [];
                         if (options !== undefined) {
                           let count: number = 0;
-                          // eslint-disable-next-line array-callback-return
-                          options.map((option: IOptionField) => {
+                          options.forEach((option: IOptionField) => {
                             const { type } = option;
                             if (type === "radiobutton") {
                               count += 1;
@@ -394,7 +386,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={fs16BoldBlack3}>{topTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(topTitle.time, "x").format("DD/MM/YYYY, h:mma")}</Text>
+                          <Text style={fs12RegGray8}>{moment(topTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
                           <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />
@@ -409,7 +401,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                               <IcoMoon name={defaultIcon} size={sw20} />
                             </View>
                           </TouchableWithoutFeedback>
-                          {expand[index] === true ? (
+                          {expand.length > 0 && expand[index] === true ? (
                             <View style={{ ...py(sh32), ...px(sw24) }}>
                               {response.questions.map((question: IEDDQuestion, questionIndex: number) => {
                                 const { title, description, options, data, previousData, id } = question;
@@ -422,6 +414,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                                   newData[index].questions = tempData;
                                   setCases({ ...cases, responses: newData });
                                 };
+
                                 return (
                                   <View key={questionIndex}>
                                     {questionIndex !== 0 ? <CustomSpacer space={sh16} /> : null}
@@ -476,7 +469,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                               <CustomSpacer isHorizontal={true} space={sw8} />
                               <Text style={fs16BoldBlack3}>{amlaTitle.user}</Text>
                               <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format("DD/MM/YYYY,h:mm:ss a")}</Text>
+                              <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                               <CustomSpacer isHorizontal={true} space={sw4} />
                               <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
                               <CustomSpacer isHorizontal={true} space={sw4} />
@@ -532,13 +525,13 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
       </DashboardLayout>
       <PromptModal
         backdropOpacity={0.7}
-        labelContinue={ACTION_BUTTONS.BUTTON_DONE}
+        contentStyle={{ ...px(sw48) }}
         handleContinue={handleDone}
         illustration={LocalAssets.illustration.eddSubmitted}
         label={DASHBOARD_EDD_CASE.LABEL_EDD_CASE_SUBMITTED}
-        contentStyle={{ ...px(sw48) }}
-        spaceToTop={sh40}
+        labelContinue={ACTION_BUTTONS.BUTTON_DONE}
         spaceToButton={sh40}
+        spaceToTop={sh40}
         visible={modal}
       />
       {file !== undefined ? (

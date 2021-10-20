@@ -4,13 +4,11 @@ import { ActivityIndicator, Alert, Text, TouchableWithoutFeedback, View, ViewSty
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomFlexSpacer, CustomSpacer, FileViewer, PromptModal, Tab } from "../../../../components";
-import { QuestionCard } from "../../../../components/Card/QuestionCard";
-import { Toggle } from "../../../../components/Toggle";
+import { ActionButtons, CustomFlexSpacer, CustomSpacer, FileViewer, PromptModal, Tab, Toggle } from "../../../../components";
+import { DEFAULT_DATE_TIME_FORMAT } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
-import { getClientProfile } from "../../../../network-actions/client-profile";
-import { getEDDNewCase, submitCase } from "../../../../network-actions/edd";
+import { getClientProfile, getEDDNewCase, submitCase } from "../../../../network-actions";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../store/EDD";
 import {
   borderBottomBlack21,
@@ -47,6 +45,7 @@ import {
   sw66,
   sw8,
 } from "../../../../styles";
+import { QuestionCard } from "../../../../templates/EDD/QuestionCard";
 import { AnimationUtils } from "../../../../utils";
 import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -61,14 +60,14 @@ export interface IKey extends Object {
 const { DASHBOARD_EDD, DASHBOARD_EDD_CASE, ACTION_BUTTONS, DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 declare interface NewCaseProps extends EDDStoreProps {
-  setScreen: (route: EDDPageType) => void;
   navigation: IStackNavigationProp;
+  setScreen: (route: EDDPageType) => void;
 }
 
 export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   currentCase,
-  setScreen,
   setLoading,
+  setScreen,
   updateCurrentCase,
   ...props
 }: NewCaseProps) => {
@@ -133,19 +132,17 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   };
 
   const handleDataFormatting = (data: IEDDResponse) => {
-    let initialResponse: IEDDResponse;
+    const initialResponse: IEDDResponse[] = [];
     const { questions, additionalQuestions } = data;
     const initialQuestions: IEDDQuestion[] = [];
     const initialAdditionalQuestions: IEDDQuestion[] = [];
-    // eslint-disable-next-line array-callback-return
-    questions.map((question: IEDDQuestion) => {
+    questions.forEach((question: IEDDQuestion) => {
       const { options } = question;
       const answerArray: IQuestionData[] = [];
       const optionsArray: IOptionField[] = [];
       if (options !== undefined && options.length > 0) {
         let count: number = 0;
-        // eslint-disable-next-line array-callback-return
-        options.map((option: IOptionField) => {
+        options.forEach((option: IOptionField) => {
           const { type } = option;
           // To identify the initial number of answers depending on the options type. If it's a radiobutton, we consider that group of radiobuttons as 1 answer.
           if (type === "radiobutton") {
@@ -170,13 +167,11 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
       initialQuestions.push({ ...question, data: { autoHide: true, answers: answerArray }, ...checkOptionsArray });
     });
     if (additionalQuestions !== undefined) {
-      // eslint-disable-next-line array-callback-return
-      additionalQuestions.map((additionalQuestion: IEDDQuestion) => {
+      additionalQuestions.forEach((additionalQuestion: IEDDQuestion) => {
         const optionsArray: IOptionField[] = [];
         const { options: additionalOptions } = additionalQuestion;
         if (additionalOptions !== undefined) {
-          // eslint-disable-next-line array-callback-return
-          additionalOptions.map((additionalOption: IOptionField) => {
+          additionalOptions.forEach((additionalOption: IOptionField) => {
             optionsArray.push({ ...additionalOption, optionIndex: 0 });
           });
         }
@@ -194,9 +189,8 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
       initialQuestions.push(...initialAdditionalQuestions);
     }
     initialQuestions.push(lastElement!);
-    // eslint-disable-next-line prefer-const
-    initialResponse = { ...data, questions: initialQuestions };
-    setNewCase({ ...newCase, responses: [initialResponse] });
+    initialResponse.push({ ...data, questions: initialQuestions });
+    setNewCase({ ...newCase, responses: initialResponse });
   };
 
   const handleFetchCase = async () => {
@@ -311,14 +305,12 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
 
                     const handleReset = () => {
                       const initialQuestions: IEDDQuestion[] = [];
-                      // eslint-disable-next-line array-callback-return
-                      response.questions.map((question: IEDDQuestion) => {
+                      response.questions.forEach((question: IEDDQuestion) => {
                         const { options } = question;
                         const answerArray: IQuestionData[] = [];
                         if (options !== undefined) {
                           let count: number = 0;
-                          // eslint-disable-next-line array-callback-return
-                          options.map((option: IOptionField) => {
+                          options.forEach((option: IOptionField) => {
                             const { type } = option;
                             if (type === "radiobutton") {
                               count += 1;
@@ -354,7 +346,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={fs16BoldBlack3}>{amlaTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format("DD/MM/YYYY, h:mma")}</Text>
+                          <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
                           <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />

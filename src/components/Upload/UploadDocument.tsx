@@ -46,8 +46,12 @@ const DEFAULT_MAX_SIZE_MB = BYTE_TO_MEGABYTE * 5;
 
 export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props, ref) => {
   const {
+    badgeOffset,
+    containerStyle,
+    customFeature,
     errorMessage,
     features,
+    icon,
     label,
     labelStyle,
     maxFileSizeMB,
@@ -168,9 +172,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
     height: sh72,
+    ...containerStyle,
   };
   const errorStyle: TextStyle = defaultError !== "" ? { color: colorRed._2 } : {};
-  const iconBadgeOffset = value === undefined || defaultError !== "" ? {} : { bottom: 0.5, right: 2 };
+  const iconBadgeOffset = value === undefined || defaultError !== "" ? {} : { bottom: 0.5, right: 2, ...badgeOffset };
   const iconContainer = { ...centerHV, height: sh40, width: sw40, ...iconBadgeOffset };
 
   return (
@@ -178,12 +183,12 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
       <View style={container}>
         {value === undefined || defaultError !== "" ? (
           <View style={iconContainer}>
-            <IcoMoon color={colorBlue._2} name="file-upload" size={sh32} />
+            <IcoMoon color={colorBlue._2} name={icon?.inactive || "file-upload"} size={sh32} />
           </View>
         ) : (
           <View style={iconContainer}>
             <Badge icon={{ name: "success", size: sh8 }} style={circle(sw16, colorGreen._1)}>
-              <IcoMoon color={colorBlue._2} name="file" size={sh32} />
+              <IcoMoon color={colorBlue._2} name={icon?.active || "file"} size={sh32} />
             </Badge>
           </View>
         )}
@@ -203,7 +208,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
           </View>
         </View>
         <CustomFlexSpacer />
-        {value !== undefined ? (
+        {value !== undefined && customFeature === undefined ? (
           <UploadButton icon="trash" onPress={handleRemove} />
         ) : (
           <Fragment>
@@ -227,8 +232,14 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
 
               return (
                 <Fragment key={index}>
-                  {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw24} />}
-                  <UploadButton icon={feature === "file" ? "upload" : feature} onPress={handlePress} />
+                  {feature === "custom" ? (
+                    customFeature
+                  ) : (
+                    <Fragment>
+                      {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw24} />}
+                      <UploadButton icon={feature === "file" ? "upload" : feature} onPress={handlePress} />
+                    </Fragment>
+                  )}
                 </Fragment>
               );
             })}

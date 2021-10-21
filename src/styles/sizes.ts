@@ -24,6 +24,7 @@ export const sh26 = scaleHeight(26);
 export const sh28 = scaleHeight(28);
 export const sh32 = scaleHeight(32);
 export const sh34 = scaleHeight(34);
+export const sh36 = scaleHeight(36);
 export const sh38 = scaleHeight(38);
 export const sh40 = scaleHeight(40);
 export const sh42 = scaleHeight(42);

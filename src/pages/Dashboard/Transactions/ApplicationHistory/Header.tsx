@@ -23,6 +23,7 @@ import {
   sh24,
   sh32,
   sh34,
+  sh36,
   sh40,
   sh8,
   shadowBlack5,
@@ -145,7 +146,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   const filterIcon = filterVisible ? "close" : "filter";
   const filterIconSize = filterVisible ? sw32 : sw28;
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
-  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh32 };
+  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh36 };
 
   const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
   // const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;

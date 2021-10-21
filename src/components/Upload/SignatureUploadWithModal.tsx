@@ -22,7 +22,6 @@ import {
   sh32,
   sh34,
   sh40,
-  sh42,
   sh500,
   sh96,
   shadow5,
@@ -113,7 +112,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
   };
 
   const iconData = uploadProps.completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
-  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh42 };
+  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh32 };
   const container: ViewStyle = uploadProps.completed === true ? { opacity: 0.6 } : { paddingRight: sw18 };
 
   return (

@@ -142,6 +142,7 @@
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
     "babel-jest": "24.9.0",
+    "dot-json": "1.2.2",
     "eslint": "6.5.1",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-config-prettier": "6.11.0",

@@ -1,7 +1,8 @@
 import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IQuickAction, QuickActions, Tag, TagColorType } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, IQuickAction, Tag, TagColorType } from "../../components";
+import { NewQuickActions } from "../../components/Collapsible/NewQuickActions";
 import { Language } from "../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
 import { DICTIONARY_EDD_STATUS } from "../../data/dictionary/edd";
@@ -135,7 +136,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                 </View>
               ) : null}
               <CustomFlexSpacer />
-              {hideQuickActions === true ? defaultSideElement : <QuickActions actions={actions} />}
+              {hideQuickActions === true ? defaultSideElement : <NewQuickActions actions={actions} />}
             </View>
           </View>
           {children}

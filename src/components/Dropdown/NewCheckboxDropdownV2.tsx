@@ -2,7 +2,6 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { FlatList, Keyboard, LayoutChangeEvent, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { BasicModal } from "..";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
 import {
@@ -42,8 +41,9 @@ import {
   sw4,
   sw8,
 } from "../../styles";
-import { CheckBox } from "../CheckBox";
-import { CustomFlexSpacer, CustomSpacer } from "../Views";
+import { CheckBox } from "../CheckBox/CheckBox";
+import { BasicModal } from "../Modals/Basic";
+import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 

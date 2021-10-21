@@ -24,6 +24,7 @@ import {
   sh24,
   sh32,
   sh34,
+  sh36,
   sh40,
   sh8,
   shadowBlack5,
@@ -144,7 +145,7 @@ export const EDDDashboardHeader: FunctionComponent<EDDDashboardHeaderProps> = ({
   const filterIcon = filterVisible ? "close" : "filter";
   const filterIconSize = filterVisible ? sh32 : sh24;
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
-  const tooltipStyle: ImageStyle = { ...absolutePosition, height: sh34, width: sw84, zIndex: 1, bottom: sh32 };
+  const tooltipStyle: ImageStyle = { ...absolutePosition, height: sh34, width: sw84, zIndex: 1, bottom: sh36 };
 
   const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
   // const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;

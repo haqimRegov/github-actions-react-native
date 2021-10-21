@@ -61,7 +61,10 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
         <Fragment>
           {data.map((card: IPreviousData, index: number) => {
             const { title, data: contentData, label: titleLabel } = card;
-            const headerBorder: ViewStyle = card.data === undefined || card.data.length === 0 ? { borderRadius: sw16 } : {};
+            const headerBorder: ViewStyle =
+              card.data === undefined || card.data.length === 0
+                ? { borderRadius: sw16 }
+                : { borderColor: colorWhite._3, borderBottomWidth: sw1 };
             // const headerBackground: ViewStyle =
             //   card.data === undefined || card.data.length === 0 ? { backgroundColor: colorWhite._1 } : {};
             const marginBottom: ViewStyle = index <= data.length - 3 ? { marginBottom: sh16 } : {};
@@ -79,7 +82,7 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
             return (
               <Fragment key={index}>
                 {index !== 0 && index % 2 !== 0 ? <CustomSpacer isHorizontal space={sw62} /> : null}
-                <View style={{ ...border(colorGray._10, sw1, sw16), width: sw336, ...marginBottom }}>
+                <View style={{ ...border(colorWhite._3, sw1, sw16), width: sw336, ...marginBottom }}>
                   {checkTitle !== null ? (
                     <View style={{ ...cardHeaderStyle, ...headerBorder }}>
                       <Text style={fs10RegGray8}>{defaultTitleLabel}</Text>

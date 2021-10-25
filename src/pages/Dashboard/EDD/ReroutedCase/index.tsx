@@ -52,7 +52,7 @@ import { AnimationUtils } from "../../../../utils/Animation";
 import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountDetailsContent } from "../../Transactions/OrderSummary/Account/Details";
-import { handleDataToSubmit } from "../functions";
+import { handleDataToSubmit } from "../helpers";
 import { validateSubmitCase } from "../validation";
 
 const { DASHBOARD_EDD, DASHBOARD_EDD_CASE, ACTION_BUTTONS, DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
@@ -64,8 +64,10 @@ declare interface ReroutedCaseProps extends EDDStoreProps {
 
 export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
   currentCase,
+  loading,
   setLoading,
   setScreen,
+  updatePill,
   updateCurrentCase,
   ...props
 }: ReroutedCaseProps) => {
@@ -96,6 +98,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
   };
 
   const handleDone = () => {
+    updatePill("submitted");
     setScreen("Cases");
   };
 
@@ -216,6 +219,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
         const { data: upperData, error } = caseResponse;
         if (error === null && upperData !== null) {
           const { response, client } = upperData.result;
+          console.log("data", response);
           fetching.current = false;
           const structuredData: IEDDResponse[] = handleDataFormatting(response);
           if (currentCase === undefined) {
@@ -449,7 +453,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                                   <CustomSpacer space={sh32} />
                                   <View style={centerHV}>
                                     <ActionButtons
-                                      continueDisabled={checkSubmit}
+                                      continueDisabled={checkSubmit || loading}
                                       labelCancel={ACTION_BUTTONS.BUTTON_RESET}
                                       labelContinue={ACTION_BUTTONS.BUTTON_SUBMIT}
                                       handleCancel={handleReset}

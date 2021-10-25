@@ -219,7 +219,6 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
         const { data: upperData, error } = caseResponse;
         if (error === null && upperData !== null) {
           const { response, client } = upperData.result;
-          console.log("data", response);
           fetching.current = false;
           const structuredData: IEDDResponse[] = handleDataFormatting(response);
           if (currentCase === undefined) {

@@ -29,6 +29,12 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                                   : !("subSection" in data.answers[findIndex]) ||
                                       !(defaultKey in data.answers[findIndex].subSection!) ||
                                       data.answers[findIndex].subSection![defaultKey] === "";
+                              case "textarea":
+                                return type === "checkbox" || (type === "radiobutton" && option!.options!.length === 1)
+                                  ? false
+                                  : !("subSection" in data.answers[findIndex]) ||
+                                      !(defaultKey in data.answers[findIndex].subSection!) ||
+                                      data.answers[findIndex].subSection![defaultKey] === "";
                               case "dropdown":
                                 return type === "checkbox"
                                   ? !(defaultKey in data.answers[findIndex].subSection!) ||

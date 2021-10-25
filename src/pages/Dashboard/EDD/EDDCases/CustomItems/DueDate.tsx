@@ -8,10 +8,10 @@ import { centerHorizontal, fs10RegBlue8, fs12RegBlue2 } from "../../../../../sty
 export interface DueDateProps extends ITableCustomItem {}
 
 export const DueDate: FunctionComponent<DueDateProps> = ({ item }: DueDateProps) => {
-  const { createdOn, daysRemaining } = item.rawData as IEDDDashboardCase;
+  const { targetDate, daysRemaining } = item.rawData as IEDDDashboardCase;
   return (
     <View style={centerHorizontal}>
-      <Text style={fs12RegBlue2}>{moment(createdOn, "x").format(PAYMENT_DATE_FORMAT)}</Text>
+      <Text style={fs12RegBlue2}>{moment(targetDate, "x").format(PAYMENT_DATE_FORMAT)}</Text>
       <Text style={fs10RegBlue8}>{daysRemaining}</Text>
     </View>
   );

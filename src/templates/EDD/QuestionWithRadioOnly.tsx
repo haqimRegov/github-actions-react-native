@@ -28,7 +28,7 @@ import {
   sw66,
   sw7,
 } from "../../styles";
-import { AnimationUtils } from "../../utils";
+import { AnimationUtils, deleteKey } from "../../utils";
 
 declare interface IQuestionWithRadioOnly {
   data: IQuestionDataWithHide;
@@ -54,7 +54,13 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
               const handleOption1 = () => {
                 const tempAnswers = [...data.answers];
                 tempAnswers[answerOptionIndex!].answer = title;
-                setData({ answers: tempAnswers, autoHide: data.autoHide });
+                const checkInnerOptions =
+                  findIndex !== -1 && options[findIndex].options!.length === 1 && options[findIndex].options![0].type === "textarea"
+                    ? { hasRemark: true }
+                    : {};
+                const answerWithoutSubSection = deleteKey(tempAnswers[0], ["subSection"]);
+                tempAnswers[0] = answerWithoutSubSection;
+                setData({ answers: tempAnswers, autoHide: data.autoHide, ...checkInnerOptions });
                 AnimationUtils.layout();
               };
 

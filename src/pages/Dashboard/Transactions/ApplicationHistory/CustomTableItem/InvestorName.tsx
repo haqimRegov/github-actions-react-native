@@ -28,7 +28,7 @@ export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: Inv
   const { accountType, investorName, isSeen } = item.rawData as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
   const titleStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -sw01, lineHeight: sh14, maxWidth: sw100 };
-  const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, width: sw100 };
+  const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, maxWidth: sw100 };
   const badgeStyle: ViewStyle = {
     ...circle(sw8, colorRed._1),
     top: 0,

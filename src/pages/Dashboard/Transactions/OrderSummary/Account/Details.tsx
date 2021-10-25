@@ -66,6 +66,7 @@ export const AccountDetailsContent = ({
   setAccountHolder,
 }: AccountDetailsContentProps) => {
   const {
+    accountDocuments,
     accountSummaryDetails,
     contactDetails,
     declarations,
@@ -75,7 +76,7 @@ export const AccountDetailsContent = ({
     localBankDetails,
     mailingAddress,
     permanentAddress,
-    accountDocuments,
+    showJointToggle,
   } = data;
 
   const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: "auto" };
@@ -116,7 +117,7 @@ export const AccountDetailsContent = ({
           />
         </View>
         <CustomFlexSpacer />
-        {accountType === "Joint" ? (
+        {accountType === "Joint" && showJointToggle !== false ? (
           <RoundedButton
             buttonStyle={buttonStyle}
             onPress={handleAccountHolder}

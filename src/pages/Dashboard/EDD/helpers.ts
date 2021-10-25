@@ -1,8 +1,11 @@
 import { Storage } from "aws-amplify";
 import { Alert } from "react-native";
+import RNFetchBlob from "rn-fetch-blob";
 
 import { deleteKey } from "../../../utils";
 import { IKey } from "./NewCase";
+
+const Blob: IPolyfillBlob = RNFetchBlob.polyfill.Blob as IPolyfillBlob;
 
 const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, reRouteCount: number) => {
   const dataToSubmit = responseToSubmit.questions.map(async (question: IEDDQuestion) => {
@@ -10,11 +13,18 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
     const { answers } = data!;
     const promises = answers.map(async (answer: IQuestionData) => {
       const { hasDoc, document } = answer;
-      if (hasDoc === true) {
+      if (hasDoc === true && document !== undefined) {
         const path = `edd/${caseId}/${reRouteCount}/document/${document!.name}`;
         // Cannot upload the base64. So, using the path to get file and convert it to blob.
-        const documentPath = await fetch(document!.path!);
-        const documentBlob = await documentPath.blob();
+        const documentObject = document.type !== "application/pdf" ? await fetch(document!.path!) : undefined;
+        let pdfObject: Response | undefined;
+        if (documentObject === undefined) {
+          const blobObject = await Blob.build(document.base64, { type: "application/pdf;base64" });
+          const pdfPath = blobObject.getRNFetchBlobRef();
+          pdfObject = await fetch(pdfPath);
+        }
+        const documentBlob =
+          documentObject === undefined && pdfObject !== undefined ? await pdfObject.blob() : await documentObject!.blob();
         const params = {
           contentType: document!.type,
           level: "public",

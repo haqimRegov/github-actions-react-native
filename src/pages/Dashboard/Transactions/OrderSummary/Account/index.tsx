@@ -10,6 +10,7 @@ declare interface AccountDetailsProps {
 }
 
 export interface IStructuredData {
+  accountDocuments: LabeledTitleProps[];
   accountSummaryDetails: LabeledTitleProps[];
   contactDetails: LabeledTitleProps[];
   employmentDetails: LabeledTitleProps[];
@@ -24,7 +25,7 @@ export interface IStructuredData {
   mailingAddress: IAddressState;
   permanentAddress: IAddressState;
   profilePic?: FileBase64;
-  accountDocuments: LabeledTitleProps[];
+  showJointToggle?: boolean;
 }
 
 export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, setFile }: AccountDetailsProps) => {

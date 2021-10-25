@@ -50,7 +50,7 @@ import { AnimationUtils } from "../../../../utils";
 import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountDetailsContent } from "../../Transactions/OrderSummary/Account/Details";
-import { handleDataToSubmit } from "../functions";
+import { handleDataToSubmit } from "../helpers";
 import { validateSubmitCase } from "../validation";
 
 export interface IKey extends Object {
@@ -66,9 +66,11 @@ declare interface NewCaseProps extends EDDStoreProps {
 
 export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   currentCase,
+  loading,
   setLoading,
   setScreen,
   updateCurrentCase,
+  updatePill,
   ...props
 }: NewCaseProps) => {
   const [expand, setExpand] = useState<boolean>(true);
@@ -123,12 +125,36 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   };
 
   const handleDone = () => {
+    updatePill("submitted");
     setScreen("Cases");
   };
 
   const handleExpand = () => {
     setExpand(!expand);
     AnimationUtils.layout({ duration: 150 });
+  };
+
+  const handleFormatOptions = (answerArray: IQuestionData[], optionsArray: IOptionField[], options: IOptionField[]) => {
+    let count: number = 0;
+    options.forEach((option: IOptionField) => {
+      const { type } = option;
+      // To identify the initial number of answers depending on the options type. If it's a radiobutton, we consider that group of radiobuttons as 1 answer.
+      if (type === "radiobutton") {
+        count += 1;
+      } else {
+        count = 0;
+      }
+      if (type !== "checkbox") {
+        if (count <= 1) {
+          answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+        }
+        // Option index is used to index the answer while handling data
+        optionsArray.push({ ...option, optionIndex: answerArray.length - 1 });
+      } else {
+        optionsArray.push(option);
+      }
+    });
+    return { answerArray, optionsArray, options };
   };
 
   const handleDataFormatting = (data: IEDDResponse) => {
@@ -141,25 +167,9 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
       const answerArray: IQuestionData[] = [];
       const optionsArray: IOptionField[] = [];
       if (options !== undefined && options.length > 0) {
-        let count: number = 0;
-        options.forEach((option: IOptionField) => {
-          const { type } = option;
-          // To identify the initial number of answers depending on the options type. If it's a radiobutton, we consider that group of radiobuttons as 1 answer.
-          if (type === "radiobutton") {
-            count += 1;
-          } else {
-            count = 0;
-          }
-          if (type !== "checkbox") {
-            if (count <= 1) {
-              answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
-            }
-            // Option index is used to index the answer while handling data
-            optionsArray.push({ ...option, optionIndex: answerArray.length - 1 });
-          } else {
-            optionsArray.push(option);
-          }
-        });
+        const formattedOptions = handleFormatOptions(answerArray, optionsArray, options);
+        answerArray.concat(formattedOptions.answerArray);
+        optionsArray.concat(formattedOptions.optionsArray);
       } else {
         answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
       }
@@ -237,6 +247,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
             ...clientProfile.client,
             registrationDate: clientProfile.createdAt,
             accountType: clientProfile.accountType,
+            accountOperationMode: clientProfile.signatory,
           },
         });
       }
@@ -398,7 +409,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                                   <CustomSpacer space={sh32} />
                                   <View style={centerHV}>
                                     <ActionButtons
-                                      continueDisabled={checkSubmit}
+                                      continueDisabled={checkSubmit || loading}
                                       labelCancel={ACTION_BUTTONS.BUTTON_RESET}
                                       labelContinue={ACTION_BUTTONS.BUTTON_SUBMIT}
                                       handleCancel={handleReset}
@@ -435,7 +446,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                       <AccountDetailsContent
                         accountHolder={"Principal"}
                         accountType={profile.accountType!}
-                        data={structureProfile("Principal", profile, setFile)}
+                        data={structureProfile("Principal", profile, setFile, false)}
                         handleViewId={handleViewId}
                         idNumber={profile.idNumber}
                         idType={profile.idType}

@@ -54,13 +54,18 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
               const handleOption1 = () => {
                 const tempAnswers = [...data.answers];
                 tempAnswers[answerOptionIndex!].answer = title;
+                const insideFindIndex = options.findIndex(
+                  (findOption: IOptionField) => findOption.title === tempAnswers[answerOptionIndex!].answer,
+                );
                 const checkInnerOptions =
-                  findIndex !== -1 && options[findIndex].options!.length === 1 && options[findIndex].options![0].type === "textarea"
-                    ? { hasRemark: true }
+                  insideFindIndex !== -1 &&
+                  options[insideFindIndex].options!.length === 1 &&
+                  options[insideFindIndex].options![0].type === "textarea"
+                    ? { hasRemark: true, remark: "" }
                     : {};
                 const answerWithoutSubSection = deleteKey(tempAnswers[0], ["subSection"]);
-                tempAnswers[0] = answerWithoutSubSection;
-                setData({ answers: tempAnswers, autoHide: data.autoHide, ...checkInnerOptions });
+                tempAnswers[0] = { ...answerWithoutSubSection, ...checkInnerOptions };
+                setData({ answers: tempAnswers, autoHide: data.autoHide });
                 AnimationUtils.layout();
               };
 

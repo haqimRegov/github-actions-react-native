@@ -9,7 +9,12 @@ import { fsTransformNone, fsUppercase, sh16, sh4, sw200 } from "../styles";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;
 
-export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderSummaryProfile, setFile: (value?: FileBase64) => void) => {
+export const structureProfile = (
+  accountHolder: TypeAccountHolder,
+  data: IOrderSummaryProfile,
+  setFile: (value?: FileBase64) => void,
+  showJointToggle?: boolean,
+) => {
   const {
     accountOperationMode,
     accountType,
@@ -62,7 +67,7 @@ export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderS
     });
   }
 
-  if (accountType === "Joint" && accountHolder === "Principal") {
+  if (accountType === "Joint" && accountHolder === "Principal" && showJointToggle !== false) {
     accountSummaryDetails.splice(-1, 0, {
       label: DASHBOARD_PROFILE.LABEL_RELATIONSHIP,
       title: personalDetails.relationship,
@@ -130,7 +135,7 @@ export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderS
   }
 
   const localBankDetails: LabeledTitleProps[][] = [];
-  if (accountHolder === "Principal" && bankInformation.localBank !== null) {
+  if (accountHolder === "Principal" && bankInformation !== null && bankInformation.localBank !== null) {
     bankInformation.localBank.forEach((bank) => {
       const newData: LabeledTitleProps[] = [
         { label: DASHBOARD_PROFILE.LABEL_CURRENCY, title: bank.currency.join(", "), titleStyle: fsUppercase },
@@ -150,7 +155,7 @@ export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderS
   }
 
   const foreignBankDetails: LabeledTitleProps[][] = [];
-  if (accountHolder === "Principal" && bankInformation.foreignBank !== null) {
+  if (accountHolder === "Principal" && bankInformation !== null && bankInformation.foreignBank !== null) {
     bankInformation.foreignBank.forEach((bank) => {
       const newData: LabeledTitleProps[] = [
         { label: DASHBOARD_PROFILE.LABEL_CURRENCY, title: bank.currency.join(", "), titleStyle: fsUppercase },
@@ -169,7 +174,7 @@ export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderS
     });
   }
 
-  const isTaxResident = crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0];
+  const isTaxResident = crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0].label;
 
   const fatcaSummary: LabeledTitleProps[] = [{ label: DASHBOARD_PROFILE.LABEL_CITIZENSHIP, title: fatca.usCitizen as string }];
 
@@ -280,6 +285,7 @@ export const structureProfile = (accountHolder: TypeAccountHolder, data: IOrderS
     mailingAddress: addressInformation.mailingAddress,
     permanentAddress: addressInformation.permanentAddress,
     accountDocuments: uploadedDocuments,
+    showJointToggle: showJointToggle !== undefined ? showJointToggle : true,
   };
 
   return structuredData;

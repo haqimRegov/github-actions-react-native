@@ -671,6 +671,10 @@ const eddCaseQuestions = gql`
                 valuesDescription
                 multiSelection
                 description
+                format {
+                  type
+                  limit
+                }
                 options {
                   id
                   title
@@ -681,6 +685,10 @@ const eddCaseQuestions = gql`
                   valuesDescription
                   multiSelection
                   description
+                  format {
+                    type
+                    limit
+                  }
                   options {
                     id
                     title
@@ -691,6 +699,10 @@ const eddCaseQuestions = gql`
                     valuesDescription
                     multiSelection
                     description
+                    format {
+                      type
+                      limit
+                    }
                   }
                 }
               }
@@ -875,6 +887,10 @@ const caseResponse = gql`
     caseResponse(input: $input) {
       data {
         result {
+          client {
+            name
+            status
+          }
           response {
             agent {
               time
@@ -898,12 +914,13 @@ const caseResponse = gql`
               question
               questionId
               description
-              amlaRemark
+              amlaRemark {
+                type
+                title
+                hasDoc
+                hasRemark
+              }
             }
-          }
-          client {
-            name
-            status
           }
         }
       }

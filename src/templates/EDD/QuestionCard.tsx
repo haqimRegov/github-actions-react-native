@@ -357,6 +357,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                     );
                     break;
                   case "label":
+                  case "reroute":
                     content = (
                       <View>
                         <LabeledTitle

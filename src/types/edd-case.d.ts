@@ -1,8 +1,10 @@
 declare type TQuestionType = "dropdown" | "options" | "optionWithInputs";
 
-declare type TInputTypes = "checkbox" | "multiline" | "inputtext" | "radiobutton" | "dropdown" | "label" | "textarea";
+declare type TInputTypes = "checkbox" | "multiline" | "inputtext" | "radiobutton" | "dropdown" | "label" | "textarea" | "reroute";
 
 declare type TCasePage = "EDD Case" | "Profile";
+
+declare type TInputType = "number" | "amount" | "alphanumeric";
 
 declare interface ICheckBoxWithSubLabel {
   label: string;
@@ -10,6 +12,10 @@ declare interface ICheckBoxWithSubLabel {
   subLabel?: string;
   subLabelStyle?: import("react-native").TextStyle;
   value?: string;
+}
+declare interface IInputFormat {
+  type: TInputType;
+  limit?: number;
 }
 
 declare interface ILabeledTitleWithFile {
@@ -35,6 +41,7 @@ declare interface IQuestionDataWithoutDocument {
 declare interface IOptionField {
   autoHide?: boolean;
   description?: string;
+  format?: IInputFormat;
   hasDoc?: boolean;
   hasRemark?: boolean;
   id: string;

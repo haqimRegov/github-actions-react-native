@@ -19,8 +19,11 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
         const documentObject = document.type !== "application/pdf" ? await fetch(document!.path!) : undefined;
         let pdfObject: Response | undefined;
         if (documentObject === undefined) {
+          // Create a blob from the base64 stored. We don't use path because the path stored is a temporary path and gets an error if we read by path after some time.This happened only for pdf.
           const blobObject = await Blob.build(document.base64, { type: "application/pdf;base64" });
+          // Get the path of file from the created blob
           const pdfPath = blobObject.getRNFetchBlobRef();
+          // Fetch to get the file
           pdfObject = await fetch(pdfPath);
         }
         const documentBlob =

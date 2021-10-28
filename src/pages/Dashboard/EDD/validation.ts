@@ -82,7 +82,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                     nestedOptionValid.includes(true)
                   );
                 }
-                if (type === "label") {
+                if (type === "label" || type === "reroute") {
                   return (
                     (data.answers[0].hasRemark === false && data.answers[0].hasDoc === false) ||
                     (data.answers[0].hasRemark === true && data.answers[0].remark === "") ||

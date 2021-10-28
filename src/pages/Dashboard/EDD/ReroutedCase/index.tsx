@@ -148,20 +148,19 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
           });
         });
       } else if (questions !== null) {
-        questions.forEach((eachQuestion: ICaseResponseData) => {
+        questions.forEach((eachQuestion: ICaseResponseQuestion) => {
           const { question, questionId, amlaRemark } = eachQuestion;
           // For rerouted questions, we use the AMLA remark and create the same format as for the other template questions.
-          // TODO Backend should send rerouted question in the same format as we receive in new case.
           const checkOptions: IOptionField[] =
             amlaRemark !== null
               ? [
                   {
                     id: "",
                     title: DASHBOARD_EDD_CASE.LABEL_AMLA_REMARK,
-                    description: amlaRemark,
-                    type: "label",
-                    hasRemark: true,
-                    hasDoc: true,
+                    description: amlaRemark.title,
+                    type: amlaRemark.type,
+                    hasRemark: amlaRemark.hasDoc,
+                    hasDoc: amlaRemark.hasDoc,
                     optionIndex: 0,
                   },
                 ]

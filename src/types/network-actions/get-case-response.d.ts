@@ -3,8 +3,23 @@ declare interface ICaseResponseRequest {
   isReroute: boolean;
 }
 
+declare interface IRerouteQuestion {
+  hasDoc: boolean;
+  hasRemark: boolean;
+  title: string;
+  type: "reroute";
+}
+
 declare interface ICaseResponseData {
   amlaRemark: string | null;
+  answers: string;
+  description: string | null;
+  question: string;
+  questionId: string;
+}
+
+declare interface ICaseResponseQuestion {
+  amlaRemark: IRerouteQuestion | null;
   answers: string;
   description: string | null;
   question: string;
@@ -16,7 +31,7 @@ declare interface ICaseResponseStructure {
   amla: IEDDResponseTitle;
   count: string;
   data: ICaseResponseData[] | null;
-  questions: ICaseResponseData[] | null;
+  questions: ICaseResponseQuestion[] | null;
 }
 
 declare interface ICaseResponseResult {

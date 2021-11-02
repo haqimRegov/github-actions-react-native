@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { ActivityIndicator, Alert, LayoutChangeEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
@@ -76,6 +76,8 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
   const [modal, setModal] = useState<boolean>(false);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const [cases, setCases] = useState<IEDDCase>({});
+  const [scrollRef, setScrollRef] = useState<ScrollView | undefined>(undefined);
+  const [positionArray, setPositionArray] = useState<IAxisY[]>([]);
   const fetching = useRef(true);
   const { profile, responses } = cases;
 
@@ -270,6 +272,21 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
   };
 
   useEffect(() => {
+    if (scrollRef !== undefined && positionArray.length === responses!.length) {
+      const checkPositionArray = positionArray.every(
+        (eachPosition) => typeof eachPosition === "object" && typeof eachPosition.y === "number",
+      );
+      if (checkPositionArray === true) {
+        const findIndex = expand.findIndex((expandCheck) => expandCheck === true);
+        if (findIndex !== -1 && positionArray[findIndex] !== undefined && findIndex !== 0) {
+          scrollRef.scrollTo({ y: positionArray[findIndex].y, animated: true });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [positionArray]);
+
+  useEffect(() => {
     if (toggle === "EDD Case") {
       handleFetchCase();
     } else {
@@ -305,6 +322,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
       <DashboardLayout
         {...props}
         hideQuickActions={true}
+        setScrollRef={setScrollRef}
         sideElement={
           <View style={justifyContentStart}>
             <Toggle labels={[DASHBOARD_EDD.LABEL_EDD_CASE, DASHBOARD_EDD.LABEL_PROFILE]} selected={toggle} setSelected={handleToggle} />
@@ -363,6 +381,13 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                       AnimationUtils.layout({ duration: 180 });
                     };
 
+                    const handleLayout = (event: LayoutChangeEvent) => {
+                      const { y } = event.nativeEvent.layout;
+                      const tempPositionArray = [...positionArray];
+                      tempPositionArray[index] = { y };
+                      setPositionArray(tempPositionArray);
+                    };
+
                     const defaultIcon = expand[index] ? "caret-up" : "caret-down";
                     const border: ViewStyle =
                       expand[index] === false ? { borderRadius: sw8 } : { borderTopRightRadius: sw8, borderTopLeftRadius: sw8 };
@@ -383,7 +408,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                           <View style={{ ...flexChild, ...borderBottomGray3 }} />
                         </View>
                         <CustomSpacer space={sh16} />
-                        <View style={{ ...px(topTitlePadding), ...flexRow, ...centerVertical, ...topTitleStyle }}>
+                        <View onLayout={handleLayout} style={{ ...px(topTitlePadding), ...flexRow, ...centerVertical, ...topTitleStyle }}>
                           <View style={{ backgroundColor: color, height: sh16, width: sw2 }} />
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={fs16BoldBlack3}>{topTitle.user}</Text>

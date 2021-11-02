@@ -31,6 +31,7 @@ interface DashboardLayoutProps {
   hideQuickActions?: boolean;
   navigation: IStackNavigationProp;
   scrollEnabled?: boolean;
+  setScrollRef?: (ref: ScrollView) => void;
   sideElement?: ReactNode;
   status?: string;
   title?: string;
@@ -43,6 +44,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   hideQuickActions,
   navigation,
   scrollEnabled,
+  setScrollRef,
   sideElement,
   status,
   title,
@@ -111,6 +113,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
         bounces={true}
         contentContainerStyle={flexGrow}
         keyboardShouldPersistTaps="handled"
+        ref={setScrollRef}
         scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}>
         <View style={{ ...fullHeight, backgroundColor: colorWhite._4 }}>

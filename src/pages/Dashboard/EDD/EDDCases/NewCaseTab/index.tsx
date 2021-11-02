@@ -191,6 +191,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
         updatedPill = "pending";
     }
     handleSeen();
+    updateCases({ ...edd, new: { ...edd.new, page: 1, pages: 1 } });
     updatePill(updatedPill);
   };
 

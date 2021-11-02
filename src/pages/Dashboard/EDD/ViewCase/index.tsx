@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { ActivityIndicator, Alert, LayoutChangeEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, FileViewer, InfoBanner, Tab, Toggle } from "../../../../components";
@@ -74,6 +74,8 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
   const [toggle, setToggle] = useState<TCasePage>(toggleArray[0]);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const [viewCase, setViewCase] = useState<IEDDViewCase>({});
+  const [scrollRef, setScrollRef] = useState<ScrollView | undefined>(undefined);
+  const [positionArray, setPositionArray] = useState<IAxisY[]>([]);
   const fetching = useRef(true);
   const { profile, responses } = viewCase;
 
@@ -182,6 +184,21 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
   };
 
   useEffect(() => {
+    if (scrollRef !== undefined && positionArray.length === responses!.length) {
+      const checkPositionArray = positionArray.every(
+        (eachPosition) => typeof eachPosition === "object" && typeof eachPosition.y === "number",
+      );
+      if (checkPositionArray === true) {
+        const findIndex = expand.findIndex((expandCheck) => expandCheck === true);
+        if (findIndex !== -1 && positionArray[findIndex] !== undefined && findIndex !== 0) {
+          scrollRef.scrollTo({ y: positionArray[findIndex].y, animated: true });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [positionArray]);
+
+  useEffect(() => {
     if (toggle === "EDD Case") {
       handleFetchCase();
     } else {
@@ -225,6 +242,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
       <DashboardLayout
         {...props}
         hideQuickActions={true}
+        setScrollRef={setScrollRef}
         sideElement={checkSideElement}
         status={currentCase?.status}
         title={currentCase!.clientName}
@@ -262,6 +280,13 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                       AnimationUtils.layout({ duration: 180 });
                     };
 
+                    const handleLayout = (event: LayoutChangeEvent) => {
+                      const { y } = event.nativeEvent.layout;
+                      const tempPositionArray = [...positionArray];
+                      tempPositionArray[index] = { y };
+                      setPositionArray(tempPositionArray);
+                    };
+
                     const collapsibleTitle =
                       index !== responses.length - 1 ? DASHBOARD_EDD_CASE.LABEL_FOLLOW_UP_ANSWERS : DASHBOARD_EDD_CASE.LABEL_ANSWER;
                     const border: ViewStyle =
@@ -289,7 +314,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                           <Text style={fs12RegGray8}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${userTitle.status}`}</Text>
                         </View>
                         <CustomSpacer space={sh8} />
-                        <View key={index} style={containerStyle}>
+                        <View key={index} onLayout={handleLayout} style={containerStyle}>
                           <TouchableWithoutFeedback onPress={handleExpand}>
                             <View style={{ ...headerStyle, ...border }}>
                               <Text style={{ ...fs16BoldBlue2 }}>{collapsibleTitle}</Text>

@@ -126,6 +126,7 @@ const getInbox = gql`
             searchKey
             searchType
             isRead
+            isSeen
             updatedAt
             createdOn
           }

@@ -74,40 +74,42 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
               return (
                 <Fragment key={optionIndex}>
                   {optionIndex !== 0 ? <CustomSpacer isHorizontal space={sw54} /> : null}
-                  <AdvanceToggleButton
-                    labels={[
-                      {
-                        label: title!,
-                        labelStyle: answer !== title ? { fontFamily: NunitoRegular } : {},
-                        ...checkDescription,
-                      },
-                    ]}
-                    onSelect={handleOption1}
-                    sideElement={
-                      info !== undefined && info !== null ? (
-                        <CustomTooltip
-                          arrowSize={{ width: sw12, height: sw7 }}
-                          content={
-                            <View>
-                              <Text style={fs12RegWhite1}>{info}</Text>
-                            </View>
-                          }
-                          contentStyle={{ width: sw148 }}
-                          children={
-                            <View style={{ ...flexChild, ...centerHV }}>
-                              <View style={{ width: sw14, height: sw14, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._2 }}>
-                                <Text style={{ fontSize: sh11, color: colorWhite._1 }}>i</Text>
+                  <View style={{ width: sw296 }}>
+                    <AdvanceToggleButton
+                      labels={[
+                        {
+                          label: title!,
+                          labelStyle: answer !== title ? { fontFamily: NunitoRegular } : {},
+                          ...checkDescription,
+                        },
+                      ]}
+                      onSelect={handleOption1}
+                      sideElement={
+                        info !== undefined && info !== null ? (
+                          <CustomTooltip
+                            arrowSize={{ width: sw12, height: sw7 }}
+                            content={
+                              <View>
+                                <Text style={fs12RegWhite1}>{info}</Text>
                               </View>
-                            </View>
-                          }
-                          spacing={0}
-                        />
-                      ) : undefined
-                    }
-                    space={sw66}
-                    textContainer={{ width: sw296 }}
-                    value={answer === title ? 0 : 1}
-                  />
+                            }
+                            contentStyle={{ width: sw148 }}
+                            children={
+                              <View style={{ ...flexChild, ...centerHV }}>
+                                <View
+                                  style={{ width: sw14, height: sw14, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._2 }}>
+                                  <Text style={{ fontSize: sh11, color: colorWhite._1 }}>i</Text>
+                                </View>
+                              </View>
+                            }
+                            spacing={0}
+                          />
+                        ) : undefined
+                      }
+                      space={sw66}
+                      value={answer === title ? 0 : 1}
+                    />
+                  </View>
                 </Fragment>
               );
             })
@@ -212,14 +214,15 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                                   return (
                                     <Fragment key={nestedOptionIndex}>
                                       {nestedOptionIndex !== 0 ? <CustomSpacer isHorizontal space={sw54} /> : null}
-                                      <AdvanceToggleButton
-                                        direction="row"
-                                        labels={[{ label: nestedOption.title! }]}
-                                        onSelect={() => handleOption2(optionId, nestedOption.title)}
-                                        space={sw66}
-                                        textContainer={{ width: sw296 }}
-                                        value={subSection !== undefined && subSection![optionId] === nestedOption.title ? 0 : 1}
-                                      />
+                                      <View style={{ width: sw296 }}>
+                                        <AdvanceToggleButton
+                                          direction="row"
+                                          labels={[{ label: nestedOption.title! }]}
+                                          onSelect={() => handleOption2(optionId, nestedOption.title)}
+                                          space={sw66}
+                                          value={subSection !== undefined && subSection![optionId] === nestedOption.title ? 0 : 1}
+                                        />
+                                      </View>
                                     </Fragment>
                                   );
                                 })

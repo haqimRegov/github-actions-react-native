@@ -71,6 +71,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
             createdAt: message.createdOn,
             id: message.notificationId,
             isRead: message.isRead,
+            isSeen: message.isSeen,
             message: message.message,
             title: message.title,
             sender: message.senderName,
@@ -148,6 +149,19 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
     }
   };
 
+  const handleSeen = async () => {
+    const request: IUpdateSeenRequest = { dashboard: "getinbox", tab: ["notification"] };
+    const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    if (updateSeenResponse !== undefined) {
+      const { error } = updateSeenResponse;
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
+    }
+  };
+
   const handleMessage = async (notification: INotificationItem) => {
     if (notification.isRead === false) {
       const request: IUpdateSeenRequest = { dashboard: "getinbox", tab: ["notification"], referenceKey: notification.id };
@@ -200,6 +214,9 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
 
   useEffect(() => {
     handleInitialFetch();
+    return () => {
+      handleSeen();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -243,8 +260,9 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
             <EmptyTable hintText={hintText} illustration={illustration} loading={initialLoading} title={title} subtitle={subtitle} />
           ) : (
             inboxList.notifications.map((inbox: INotificationList, index: number) => {
-              const label =
-                moment().diff(inbox.date, "days") === 0 ? "Today" : moment(inbox.date, FULL_DATE_FORMAT).format(FULL_DATE_FORMAT);
+              const newDateFormat: Date = new Date(inbox.date);
+              const newMoment = moment(newDateFormat);
+              const label = moment().diff(newMoment, "days") === 0 ? "Today" : moment(newMoment, FULL_DATE_FORMAT).format(FULL_DATE_FORMAT);
               return (
                 <Fragment key={index}>
                   {index === 0 ? null : <CustomSpacer space={sh32} />}

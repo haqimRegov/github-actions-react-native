@@ -11,8 +11,8 @@ import {
   colorWhite,
   flexRow,
   flexWrap,
-  fs12BoldBlack2,
-  fs12RegBlack2,
+  fs10BoldBlack2,
+  fs10RegBlack2,
   fs16BoldBlack1,
   px,
   sh12,
@@ -20,7 +20,7 @@ import {
   sh4,
   sw12,
   sw16,
-  sw28,
+  sw24,
   sw296,
   sw36,
   sw716,
@@ -58,18 +58,18 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({ remarks, re
                     {showIcon !== false ? (
                       <Fragment>
                         <View style={centerHorizontal}>
-                          <IcoMoon color={colorRed._2} name={"error-octagon"} size={sw28} />
+                          <IcoMoon color={colorRed._2} name={"error-octagon"} size={sw24} />
                         </View>
                         <CustomSpacer isHorizontal={true} space={sw12} />
                       </Fragment>
                     ) : null}
                     <View style={{ ...centerHorizontal, width: sw296 }}>
-                      <Text style={{ ...fs12BoldBlack2, lineHeight: sh12 }}>{label}</Text>
+                      <Text style={{ ...fs10BoldBlack2, lineHeight: sh12 }}>{label}</Text>
                       {remark.length > 0
                         ? remark.map((text: string, remarkIndex: number) => {
                             const updatedText = remarkIndex !== 0 ? `• ${text}` : text;
                             return (
-                              <Text key={remarkIndex} style={{ ...fs12RegBlack2, lineHeight: sh12 }}>
+                              <Text key={remarkIndex} style={{ ...fs10RegBlack2, lineHeight: sh12 }}>
                                 {updatedText}
                               </Text>
                             );

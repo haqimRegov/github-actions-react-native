@@ -10,7 +10,7 @@ import { ONBOARDING_ROUTES } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { centerVertical, fs12RegBlack2, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
+import { centerVertical, fs12RegGray6, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
 import { formatAmount } from "../../../../utils";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -248,9 +248,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         <View style={centerVertical}>
           <CustomSpacer space={sh8} />
           <View style={{ width: sw452 }}>
-            <Text style={fs12RegBlack2}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
+            <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
             <CustomSpacer space={sh8} />
-            <Text style={fs12RegBlack2}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
+            <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
           </View>
         </View>
       </PromptModal>

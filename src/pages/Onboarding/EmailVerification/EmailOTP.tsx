@@ -11,12 +11,12 @@ import { IcoMoon } from "../../../icons";
 import { emailOtpVerification } from "../../../network-actions";
 import {
   centerHorizontal,
-  colorWhite,
+  colorBlue,
   flexGrow,
   flexRow,
-  fs16SemiBoldBlack2,
-  fs16SemiBoldBlue1,
-  fs24BoldBlack2,
+  fs16SemiBoldBlue8,
+  fs16SemiBoldGray6,
+  fs24BoldGray6,
   px,
   sh24,
   sh32,
@@ -160,7 +160,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         contentContainerStyle={flexGrow}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        style={{ ...px(sw24), backgroundColor: colorWhite._4 }}>
+        style={{ ...px(sw24), backgroundColor: colorBlue._2 }}>
         <CustomSpacer space={sh56} />
         <View style={flexRow}>
           <CustomSpacer space={sw4} />
@@ -169,9 +169,9 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
           </View>
           <CustomSpacer isHorizontal={true} space={sw20} />
           <View>
-            <Text style={fs24BoldBlack2}>{EMAIL_VERIFICATION.HEADING}</Text>
+            <Text style={fs24BoldGray6}>{EMAIL_VERIFICATION.HEADING}</Text>
             <CustomSpacer space={sh8} />
-            <Text style={fs16SemiBoldBlack2}>{otpLabel}</Text>
+            <Text style={fs16SemiBoldGray6}>{otpLabel}</Text>
             <CustomSpacer space={sh24} />
             <CustomTextInput
               keyboardType="numeric"
@@ -200,12 +200,12 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
               </Fragment>
             ) : null}
             <View style={flexRow}>
-              <Text style={fs16SemiBoldBlack2}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>
+              <Text style={fs16SemiBoldGray6}>{EMAIL_VERIFICATION.LABEL_RESEND}</Text>
               <CustomSpacer isHorizontal={true} space={sw4} />
               {resendTimer <= 0 ? (
-                <LinkText onPress={handleResendOtp} style={fs16SemiBoldBlue1} text={EMAIL_VERIFICATION.LINK_RESEND} />
+                <LinkText onPress={handleResendOtp} style={fs16SemiBoldBlue8} text={EMAIL_VERIFICATION.LINK_RESEND} />
               ) : (
-                <Text style={fs16SemiBoldBlack2}>{`${EMAIL_VERIFICATION.LABEL_RESEND_IN} ${resendMinutes}:${formattedResendSeconds}`}</Text>
+                <Text style={fs16SemiBoldGray6}>{`${EMAIL_VERIFICATION.LABEL_RESEND_IN} ${resendMinutes}:${formattedResendSeconds}`}</Text>
               )}
             </View>
           </View>

@@ -3,7 +3,7 @@ import { Text, TextStyle, View } from "react-native";
 
 import { CustomSpacer, PromptModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
-import { fs10RegBlack2, fs14BoldBlack2, fsAlignLeft, sh16, sh8, sw16, sw452 } from "../../../../styles";
+import { fs10RegGray6, fs14BoldGray6, fsAlignLeft, sh16, sh8, sw16, sw452 } from "../../../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -18,7 +18,7 @@ export const FatcaDefinition: FunctionComponent<IFatcaPrompt> = ({ setVisible, v
   };
 
   const titleStyle: TextStyle = {
-    ...fs14BoldBlack2,
+    ...fs14BoldGray6,
     ...fsAlignLeft,
     width: sw452,
     marginTop: sh8,
@@ -47,7 +47,7 @@ export const FatcaDefinition: FunctionComponent<IFatcaPrompt> = ({ setVisible, v
           return (
             <Fragment key={index}>
               <CustomSpacer space={sh16} />
-              <Text style={{ ...fs10RegBlack2, paddingLeft: indent }}>{item}</Text>
+              <Text style={{ ...fs10RegGray6, paddingLeft: indent }}>{item}</Text>
             </Fragment>
           );
         })}

@@ -4,14 +4,14 @@ import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-na
 import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, Tag } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   centerHV,
   centerVertical,
   colorRed,
   colorWhite,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
+  fs12BoldBlue1,
   fsUppercase,
   sh16,
   sh2,
@@ -190,7 +190,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
 
   const tableContainer: ViewStyle = {
     ...flexChild,
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
@@ -223,7 +223,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           <CustomSpacer isHorizontal={true} space={sw24} />
         </View>
         <CustomSpacer space={sh8} />
-        <View style={borderBottomGray4} />
+        <View style={borderBottomGray2} />
         <CustomSpacer space={sh16} />
         <View style={tableContainer}>
           <AdvanceTable
@@ -243,7 +243,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               const type = customItem.item.rawData.isSyariah === "Yes" ? "Shariah" : "Conventional";
               return (
                 <View style={centerHV}>
-                  <Text style={fs12BoldBlack2}>{type}</Text>
+                  <Text style={fs12BoldBlue1}>{type}</Text>
                 </View>
               );
             }}

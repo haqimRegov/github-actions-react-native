@@ -10,7 +10,7 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { sh136, sh143, sh176, sh24, sh32, sh8 } from "../../../styles";
+import { sh136, sh143, sh176, sh24, sh32, sh4 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -190,7 +190,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
             spaceToTop={sh32}
             value={inputNationality}
           />
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
+          <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}
             mode="date"

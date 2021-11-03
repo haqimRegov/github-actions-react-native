@@ -13,7 +13,7 @@ import {
 } from "../../../../data/dictionary";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { borderBottomBlack21, sh24 } from "../../../../styles";
+import { borderBottomGray2, sh24 } from "../../../../styles";
 import { parseAmountToString } from "../../../../utils";
 import { DeclarationDetails } from "./Details";
 
@@ -134,7 +134,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const principalTaxResident = principal!.declaration!.crs!.taxResident!;
 
   const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
-    const reason = multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+    const reason =
+      multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label;
     const principalNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
     const principalTinReason = multiTin.reason! === 2 ? multiTin.explanation! : principalNoTinReason;
     return {
@@ -275,8 +276,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         crs: {
           taxResident:
             principalTaxResident === -1
-              ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident]
-              : OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label, // required
+              ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label
+              : OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident!].label, // required
           tin: principalTin,
         },
         fatca: {
@@ -403,7 +404,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <CustomSpacer space={sh24} />
           <DeclarationDetails
             accountHolder="Joint"

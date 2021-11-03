@@ -8,22 +8,22 @@ import { Language } from "../../../constants";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
-  borderBottomBlack21,
+  borderBottomGray2,
   centerVertical,
   flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
-  fs16SemiBoldBlack2,
-  fs24BoldBlack2,
+  fs12RegGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
+  fs16SemiBoldGray6,
+  fs24BoldGray6,
   px,
   sh112,
   sh24,
   sh32,
   sh8,
-  shadow5,
+  shadow50Black115,
   sw24,
   sw4,
 } from "../../../styles";
@@ -174,10 +174,10 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             <View style={px(sw24)}>
               <LabeledTitle
                 label={PAYMENT.HEADING}
-                labelStyle={fs24BoldBlack2}
+                labelStyle={fs24BoldGray6}
                 spaceToLabel={sh8}
                 title={PAYMENT.SUBHEADING}
-                titleStyle={fs16SemiBoldBlack2}
+                titleStyle={fs16SemiBoldGray6}
               />
             </View>
             {paymentSummary !== undefined &&
@@ -191,12 +191,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                   <Fragment key={index}>
                     {index === 0 ? null : (
                       <Fragment>
-                        <View style={borderBottomBlack21} />
+                        <View style={borderBottomGray2} />
                       </Fragment>
                     )}
                     <BlurView visible={activeOrder === "" || activeOrder === order.orderNumber}>
                       <CustomSpacer space={sh24} />
-                      <View style={{ ...px(sw24), ...shadow5 }}>
+                      <View style={{ ...px(sw24), ...shadow50Black115 }}>
                         <PaymentOrder
                           accountNames={accountNames}
                           activeOrder={activeOrder}
@@ -226,18 +226,18 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                       return (
                         <View key={index} style={{ ...centerVertical, ...flexRow }}>
                           {index !== 0 ? (
-                            <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
+                            <Text style={{ ...fs16RegGray6, ...px(sw4) }}>+</Text>
                           ) : (
-                            <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
+                            <Text style={fs16RegGray6}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
                           )}
-                          <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
+                          <Text style={fs16RegGray6}>{totalAmount.currency}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs16BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
+                          <Text style={fs16BoldGray6}>{formatAmount(totalAmount.amount)}</Text>
                         </View>
                       );
                     })}
                 </View>
-                {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
+                {floatingLabel !== "" ? <Text style={fs12RegGray6}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
               </View>
             }
             continueDisabled={continueDisabled}

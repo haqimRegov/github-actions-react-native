@@ -13,21 +13,19 @@ import {
 import { Language } from "../../../../constants/language";
 import { DICTIONARY_RECURRING_CURRENCY, DICTIONARY_RECURRING_MINIMUM_FPX, ERROR } from "../../../../data/dictionary";
 import {
-  borderBottomBlack21,
+  borderBottomGray2,
   centerVertical,
   colorBlack,
   flexRow,
-  fs12BoldBlack2,
-  fs12RegBlack2,
-  fs12SemiBoldGray8,
-  fs16BoldBlack2,
-  fs16RegBlack2,
+  fs12BoldGray6,
+  fs12RegGray5,
+  fs12RegGray6,
   px,
   sh12,
   sh16,
   sh24,
+  sh4,
   sh8,
-  sw02,
   sw12,
   sw16,
   sw20,
@@ -231,7 +229,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     <Fragment>
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea style={{ ...fs12BoldBlack2, width: sw360 }} spaceToBottom={sh8} text={INVESTMENT.LABEL_FUNDING_OPTION} />
+          <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh8} text={INVESTMENT.LABEL_FUNDING_OPTION} />
           <RadioButtonGroup
             options={fundingOption}
             space={sh16}
@@ -245,12 +243,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
           <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
         ) : null}
         {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length === 1 ? (
-          <LabeledTitle
-            label={INVESTMENT.LABEL_CURRENCY}
-            title={fundCurrency!}
-            titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
-            style={{ width: sw360 }}
-          />
+          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} titleStyle={px(sw16)} style={{ width: sw360 }} />
         ) : null}
       </View>
       <CustomSpacer space={sh24} />
@@ -268,14 +261,14 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
           <CustomSpacer space={sh24} />
         </Fragment>
       ) : null}
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray2} />
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <View style={flexRow}>
           <View>
             <View style={{ ...flexRow, ...centerVertical }}>
-              <Text style={fs12BoldBlack2}>{INVESTMENT.LABEL_AMOUNT}</Text>
-              <Text style={fs12RegBlack2}>{minNewSalesAmountLabel}</Text>
+              <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_AMOUNT}</Text>
+              <Text style={fs12RegGray6}>{minNewSalesAmountLabel}</Text>
             </View>
             <CustomTextInput
               error={amountError}
@@ -283,8 +276,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               keyboardType="numeric"
               onBlur={checkInvestmentAmount}
               onChangeText={handleInvestmentAmount}
-              prefixStyle={fs16RegBlack2}
               spaceToBottom={isRecurring === true ? sh12 : undefined}
+              spaceToTop={sh4}
               value={investmentAmount}
             />
             {isRecurring === true ? (
@@ -305,7 +298,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               label={INVESTMENT.LABEL_SALES_CHARGE}
               value={investmentSalesCharge}
             />
-            <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargeLabel} />
+            <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, ...px(sw16) }} text={maxSalesChargeLabel} />
           </View>
         </View>
         {scheduledInvestment === true ? (
@@ -314,8 +307,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
             <View style={flexRow}>
               <View>
                 <View style={{ ...flexRow, ...centerVertical }}>
-                  <Text style={fs12BoldBlack2}>{INVESTMENT.LABEL_AMOUNT}</Text>
-                  <Text style={fs12RegBlack2}>{minTopUpAmountLabel}</Text>
+                  <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_AMOUNT}</Text>
+                  <Text style={fs12RegGray6}>{minTopUpAmountLabel}</Text>
                 </View>
                 <CustomTextInput
                   error={scheduledAmountError}
@@ -323,12 +316,13 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
                   keyboardType="numeric"
                   onBlur={checkScheduledInvestmentAmount}
                   onChangeText={handleScheduledAmount}
+                  spaceToTop={sh4}
                   value={scheduledInvestmentAmount}
                 />
                 <CustomSpacer space={sh8} />
                 <View style={{ ...px(sw20) }}>
-                  <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{`${INVESTMENT.HINT_FPX} ${minimumFpx}`}</Text>
-                  <Text style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02 }}>{INVESTMENT.HINT_DDA}</Text>
+                  <Text style={fs12RegGray5}>{`${INVESTMENT.HINT_FPX} ${minimumFpx}`}</Text>
+                  <Text style={fs12RegGray5}>{INVESTMENT.HINT_DDA}</Text>
                 </View>
               </View>
               <CustomSpacer isHorizontal={true} space={sw64} />
@@ -339,7 +333,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
                   value={`${scheduledSalesCharge}`}
                 />
-                <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw16) }} text={maxSalesChargeLabel} />
+                <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, ...px(sw16) }} text={maxSalesChargeLabel} />
               </View>
             </View>
           </Fragment>

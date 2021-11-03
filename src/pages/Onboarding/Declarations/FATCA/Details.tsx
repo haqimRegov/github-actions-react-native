@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { AccountHeader, CheckBox, CustomSpacer, CustomTooltip, ToggleButton } from "../../../../components";
 import { Language } from "../../../../constants";
-import { flexChild, flexRow, fs12BoldWhite1, fs16SemiBoldBlack2, px, sh24, sh32, sh8, sw12, sw24, sw7 } from "../../../../styles";
+import { flexChild, flexRow, fs12BoldWhite1, fs16SemiBoldGray6, px, sh24, sh32, sh8, sw12, sw24, sw7 } from "../../../../styles";
 import { FatcaTerms } from "./Declaration";
 import { FatcaUSBorn } from "./USBorn";
 
@@ -133,7 +133,7 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
         )}
         <CustomSpacer space={sh24} />
         <View style={flexRow}>
-          <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.LABEL_CITIZEN}</Text>
+          <Text style={fs16SemiBoldGray6}>{DECLARATIONS.LABEL_CITIZEN}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
           <CustomTooltip
             arrowSize={{ width: sw12, height: sw7 }}

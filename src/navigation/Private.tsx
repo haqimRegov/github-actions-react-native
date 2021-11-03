@@ -13,7 +13,6 @@ import { Language } from "../constants";
 import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";
 import { logout } from "../network-actions";
 import { DashboardPage, LogoutPage, OnboardingPage } from "../pages";
-import { fs16BoldBlack2 } from "../styles";
 
 const { INACTIVITY } = Language.PAGE;
 
@@ -105,7 +104,6 @@ export const PrivateRoute: FunctionComponent = () => {
         labelCancel={INACTIVITY.BUTTON_NO}
         labelContinue={expired.current === true ? INACTIVITY.BUTTON_PROCEED : INACTIVITY.BUTTON_YES}
         title={subtitle}
-        titleStyle={fs16BoldBlack2}
         visible={inactivityStatus === false}
       />
     </Fragment>

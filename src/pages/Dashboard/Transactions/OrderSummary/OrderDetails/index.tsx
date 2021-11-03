@@ -7,14 +7,14 @@ import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   centerVertical,
   colorBlue,
   colorRed,
   flexRow,
-  fs12BoldBlack2,
-  fs12BoldBlue2,
-  fs18BoldBlack2,
+  fs12BoldBlue1,
+  fs12BoldGray6,
+  fs18BoldGray6,
   fsTransformNone,
   px,
   sh16,
@@ -121,11 +121,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 {index === 0 ? null : <CustomSpacer space={sh16} />}
                 <View style={{ ...flexRow, borderLeftColor: colorRed._2, borderLeftWidth: sw2 }}>
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <IcoMoon color={colorBlue._2} name="clipboard" size={sw24} />
+                  <IcoMoon color={colorBlue._1} name="clipboard" size={sw24} />
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <Text style={{ ...fs18BoldBlack2, lineHeight: sh24 }}>{investment.fundName}</Text>
+                  <Text style={fs18BoldGray6}>{investment.fundName}</Text>
                 </View>
-                <Text style={fs12BoldBlack2}>{investment.fundIssuer}</Text>
+                <Text style={fs12BoldGray6}>{investment.fundIssuer}</Text>
                 <CustomSpacer space={sh24} />
                 <TextCard data={fundDetails} spaceBetweenItem={sw64} />
               </Fragment>
@@ -281,12 +281,12 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 <Fragment key={index}>
                   <CustomSpacer space={sh32} />
                   <View style={{ ...flexRow, ...centerVertical }}>
-                    <IcoMoon color={colorBlue._2} name="file" size={sw24} />
+                    <IcoMoon color={colorBlue._1} name="file" size={sw24} />
                     <CustomSpacer isHorizontal={true} space={sw16} />
-                    <Text style={fs12BoldBlue2}>{label}</Text>
+                    <Text style={fs12BoldBlue1}>{label}</Text>
                   </View>
                   <CustomSpacer space={sh16} />
-                  <View style={borderBottomGray4} />
+                  <View style={borderBottomGray2} />
                   <CustomSpacer space={sh16} />
                   <TextCard data={paymentDetails} spaceBetweenItem={sw64} />
                 </Fragment>

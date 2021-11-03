@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Image, ImageStyle, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Text, TextInput, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, CustomTextInput, IconButton } from "../../../../components";
@@ -10,13 +10,11 @@ import {
   centerVertical,
   circleBorder,
   colorBlue,
-  colorGray,
   colorTransparent,
   colorWhite,
   flexChild,
   flexRow,
-  fs16SemiBoldBlack2,
-  fs24BoldBlue2,
+  fs24BoldBlue1,
   fullWidth,
   px,
   sh16,
@@ -26,7 +24,7 @@ import {
   sh36,
   sh40,
   sh8,
-  shadowBlack5,
+  shadow12Black112,
   sw1,
   sw218,
   sw24,
@@ -132,23 +130,22 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   };
 
   const container: ViewStyle = {
-    ...shadowBlack5,
+    ...shadow12Black112,
     backgroundColor: colorWhite._1,
     marginHorizontal: sw24,
     marginBottom: sh24,
     borderRadius: sw24,
   };
 
-  const filterBGColor = filterVisible ? colorBlue._2 : colorWhite._1;
-  const filterBorderColor = filterVisible ? colorBlue._2 : colorGray._3;
-  const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
+  const filterBGColor = filterVisible ? colorBlue._1 : colorWhite._1;
+  const filterBorderColor = filterVisible ? colorBlue._1 : colorBlue._4;
+  const filterColor = filterVisible ? colorWhite._1 : colorBlue._1;
 
   const filterIcon = filterVisible ? "close" : "filter";
   const filterIconSize = filterVisible ? sw32 : sw28;
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh36 };
 
-  const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
   // const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
   return (
@@ -158,7 +155,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
         <View>
           <View style={px(sw24)}>
             <CustomSpacer space={sh32} />
-            <Text style={fs24BoldBlue2}>{DASHBOARD_HOME.LABEL_HEADER}</Text>
+            <Text style={fs24BoldBlue1}>{DASHBOARD_HOME.LABEL_HEADER}</Text>
             <CustomSpacer space={sh16} />
             <View style={{ ...centerVertical, ...flexRow }}>
               <CustomTextInput
@@ -170,7 +167,6 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
                 placeholder={DASHBOARD_HOME.LABEL_FILTER_PENDING}
                 returnKeyType="search"
                 setRef={setSearchInputRef}
-                style={inputStyle}
                 value={inputSearch}
                 viewStyle={{ width: sw692 }}
               />

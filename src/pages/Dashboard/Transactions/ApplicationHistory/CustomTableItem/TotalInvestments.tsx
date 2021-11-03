@@ -8,12 +8,11 @@ import {
   centerHorizontal,
   flexChild,
   flexRow,
-  fs12BoldBlue1,
-  fs12BoldBlue2,
+  fs12BoldBlue8,
   fs12BoldWhite1,
-  fs12RegBlue2,
+  fs12RegBlue1,
+  fs12RegGray4,
   fullWidth,
-  sh16,
   sh56,
   sh7,
   sh8,
@@ -42,9 +41,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
         return (
           <View key={index}>
             <View style={flexRow}>
-              <Text style={{ ...fs12BoldWhite1, lineHeight: sh16 }}>{investment.currency}</Text>
+              <Text style={fs12BoldWhite1}>{investment.currency}</Text>
               <CustomSpacer isHorizontal={true} space={sw4} />
-              <Text numberOfLines={1} style={{ ...fs12BoldWhite1, lineHeight: sh16 }}>
+              <Text numberOfLines={1} style={fs12BoldWhite1}>
                 {investment.amount}
               </Text>
             </View>
@@ -65,9 +64,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
             <Fragment key={index}>
               {index < 3 ? (
                 <View style={flexRow}>
-                  <Text style={fs12RegBlue2}>{investment.currency}</Text>
+                  <Text style={fs12RegGray4}>{investment.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text numberOfLines={1} style={{ ...fs12BoldBlue2, lineHeight: sh16, width: sw84 }}>
+                  <Text numberOfLines={1} style={{ ...fs12RegBlue1, width: sw84 }}>
                     {investment.amount}
                   </Text>
                 </View>
@@ -88,7 +87,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
               topAdjustment={topAdjustment}
               spacing={0}>
               <View>
-                <Text style={{ ...fs12BoldBlue1, lineHeight: sh16 }}>{DASHBOARD_HOME.LABEL_SHOW_ALL}</Text>
+                <Text style={fs12BoldBlue8}>{DASHBOARD_HOME.LABEL_SHOW_ALL}</Text>
               </View>
             </CustomTooltip>
           </Fragment>

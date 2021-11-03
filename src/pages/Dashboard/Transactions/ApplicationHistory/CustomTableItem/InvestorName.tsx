@@ -7,14 +7,12 @@ import {
   centerHV,
   circle,
   colorBlue,
+  colorGray,
   colorRed,
   flexRow,
-  fs10RegBlue38,
-  fs12BoldBlue2,
-  sh12,
-  sh14,
+  fs10RegBlue6,
+  fs12RegBlue1,
   sh4,
-  sw01,
   sw100,
   sw12,
   sw14,
@@ -27,8 +25,8 @@ export interface InvestorNameProps extends ITableCustomItem {}
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
   const { accountType, investorName, isSeen } = item.rawData as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
-  const titleStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -sw01, lineHeight: sh14, maxWidth: sw100 };
-  const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, maxWidth: sw100 };
+  const titleStyle: TextStyle = { ...fs12RegBlue1, maxWidth: sw100 };
+  const subtitleStyle: TextStyle = { ...fs10RegBlue6, maxWidth: sw100 };
   const badgeStyle: ViewStyle = {
     ...circle(sw8, colorRed._1),
     top: 0,
@@ -37,8 +35,8 @@ export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: Inv
   return (
     <View style={centerHV}>
       <View style={{ ...flexRow, ...centerHV }}>
-        <View style={{ ...circle(sw24, colorBlue._2_1), ...centerHV }}>
-          <IcoMoon color={colorBlue._2} name={iconName} size={sw14} />
+        <View style={{ ...circle(sw24, colorGray._1), ...centerHV }}>
+          <IcoMoon color={colorBlue._1} name={iconName} size={sw14} />
         </View>
         <CustomSpacer isHorizontal={true} space={sw8} />
         <View>

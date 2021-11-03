@@ -14,8 +14,8 @@ import {
   centerHV,
   colorWhite,
   flexChild,
-  fs10BoldBlue2,
-  fs12RegBlue2,
+  fs10BoldBlue1,
+  fs12RegBlue1,
   fsTransformNone,
   justifyContentStart,
   px,
@@ -177,30 +177,24 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   const columns: ITableColumn[] = [
     {
       icon: { name: sortCaseId === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "caseNo", textStyle: { ...fs12RegBlue2, ...fsTransformNone } }],
+      key: [{ key: "caseNo", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
       onPressHeader: handleSortCaseId,
-      viewStyle: {
-        width: sw112,
-      },
+      viewStyle: { width: sw112 },
       title: DASHBOARD_EDD.LABEL_EDD_CASE_ID,
     },
     {
       customItem: true,
       icon: { name: sortName === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "clientName", textStyle: { ...fsTransformNone, ...fs12RegBlue2 } }],
+      key: [{ key: "clientName", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
       onPressHeader: handleSortName,
-      viewStyle: {
-        width: sw159,
-      },
+      viewStyle: { width: sw159 },
       title: DASHBOARD_EDD.LABEL_INVESTOR_NAME,
     },
     {
       icon: { name: sortAccountNo === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "accountNo", textStyle: fs12RegBlue2 }],
+      key: [{ key: "accountNo", textStyle: fs12RegBlue1 }],
       onPressHeader: handleSortAccountNo,
-      viewStyle: {
-        width: sw103,
-      },
+      viewStyle: { width: sw103 },
       textStyle: fsTransformNone,
       title: DASHBOARD_EDD.LABEL_ACCOUNT_NO,
       titleStyle: fsTransformNone,
@@ -208,27 +202,19 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
     {
       customItem: true,
       customHeader: true,
-      icon: {
-        name: "caret-down",
-      },
-      key: [{ key: "createdOn", textStyle: fs12RegBlue2 }],
+      icon: { name: "caret-down" },
+      key: [{ key: "createdOn", textStyle: fs12RegBlue1 }],
       onPressHeader: handleSortCreatedOn,
       itemStyle: { ...justifyContentStart, ...px(sw8) },
-      viewStyle: {
-        width: sw119,
-        ...px(0),
-        ...centerHorizontal,
-      },
+      viewStyle: { width: sw119, ...px(0), ...centerHorizontal },
       title: showDateBy.type,
     },
     {
       customItem: true,
       icon: { name: sortClosedOn === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "lastUpdated", textStyle: fs12RegBlue2 }],
+      key: [{ key: "lastUpdated", textStyle: fs12RegBlue1 }],
       onPressHeader: handleSortClosedOn,
-      viewStyle: {
-        width: sw119,
-      },
+      viewStyle: { width: sw119 },
       title: DASHBOARD_EDD.LABEL_CASE_CLOSED_ON,
     },
     {
@@ -329,7 +315,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   const illustration = noResults === true ? undefined : LocalAssets.illustration.eddEmpty;
 
   return (
-    <View style={{ ...flexChild, ...px(sw16), backgroundColor: colorWhite._5, borderRadius: sw24 }}>
+    <View style={{ ...flexChild, ...px(sw16), backgroundColor: colorWhite._2, borderRadius: sw24 }}>
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}
@@ -343,7 +329,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
           },
           selectedIndex: [popupContentIndex],
           title: showDateBy.type,
-          titleStyle: fs10BoldBlue2,
+          titleStyle: fs10BoldBlue1,
           viewStyle: { width: sw119 },
         }}
         RenderAccordion={renderAccordion}

@@ -20,7 +20,7 @@ export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, it
   } else if (status === DICTIONARY_EDD_STATUS.submitted) {
     statusColor = "success";
   } else if (status === DICTIONARY_EDD_STATUS.completed) {
-    statusColor = "secondary";
+    statusColor = "complete";
   } else {
     statusColor = "warning";
   }

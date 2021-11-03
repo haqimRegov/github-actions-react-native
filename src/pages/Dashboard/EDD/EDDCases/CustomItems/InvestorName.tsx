@@ -2,13 +2,13 @@ import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { Badge, CustomSpacer } from "../../../../../components";
-import { centerHV, circle, colorRed, flexRow, fs12RegBlue2, sh14, sw01, sw100, sw12, sw8 } from "../../../../../styles";
+import { centerHV, circle, colorRed, flexRow, fs12RegBlue1, sw100, sw12, sw8 } from "../../../../../styles";
 
 export interface InvestorNameProps extends ITableCustomItem {}
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
   const { clientName, isSeen } = item.rawData as IEDDDashboardCase;
-  const titleStyle: TextStyle = { ...fs12RegBlue2, letterSpacing: -sw01, lineHeight: sh14, maxWidth: sw100 };
+  const titleStyle: TextStyle = { ...fs12RegBlue1, maxWidth: sw100 };
   const badgeStyle: ViewStyle = {
     ...circle(sw8, colorRed._1),
     top: 0,

@@ -16,10 +16,10 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs10BoldBlue2,
-  fs10RegBlue8,
-  fs12RegBlue2,
-  fs12RegGray9,
+  fs10BoldBlue1,
+  fs10RegBlue6,
+  fs12RegBlue1,
+  fs12RegGray4,
   fsTransformNone,
   justifyContentStart,
   px,
@@ -255,80 +255,66 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   const columns: ITableColumn[] = [
     {
       icon: { name: sortCaseId === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "caseNo", textStyle: { ...fs12RegBlue2, ...fsTransformNone } }],
+      key: [{ key: "caseNo", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
       onPressHeader: handleSortCaseId,
-      viewStyle: {
-        width: sw112,
-      },
       title: DASHBOARD_EDD.LABEL_EDD_CASE_ID,
+      viewStyle: { width: sw112 },
     },
     {
       customItem: true,
       icon: { name: sortName === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "clientName", textStyle: { ...fsTransformNone, ...fs12RegBlue2 } }],
+      key: [{ key: "clientName" }],
       onPressHeader: handleSortName,
-      viewStyle: {
-        width: sw159,
-      },
       title: DASHBOARD_EDD.LABEL_INVESTOR_NAME,
+      viewStyle: { width: sw159 },
     },
     {
       icon: { name: sortAccountNo === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "accountNo", textStyle: fs12RegBlue2 }],
+      key: [{ key: "accountNo", textStyle: fs12RegBlue1 }],
       onPressHeader: handleSortAccountNo,
-      viewStyle: {
-        width: sw103,
-      },
       textStyle: fsTransformNone,
       title: DASHBOARD_EDD.LABEL_ACCOUNT_NO,
       titleStyle: fsTransformNone,
+      viewStyle: { width: sw103 },
     },
     {
       customHeader: true,
       customItem: true,
-      icon: {
-        name: "caret-down",
-      },
-      key: [{ key: showDateBy.type === DASHBOARD_EDD.LABEL_CASE_CREATED_ON ? "createdOn" : "lastUpdated", textStyle: fs12RegBlue2 }],
-      onPressHeader: handleSortCreatedOn,
+      icon: { name: "caret-down" },
       itemStyle: { ...justifyContentStart, ...px(sw8) },
-      viewStyle: {
-        width: sw119,
-        ...px(0),
-        ...centerHorizontal,
-      },
+      key: [{ key: showDateBy.type === DASHBOARD_EDD.LABEL_CASE_CREATED_ON ? "createdOn" : "lastUpdated" }],
+      onPressHeader: handleSortCreatedOn,
       title: showDateBy.type,
-      titleStyle: fs10BoldBlue2,
+      titleStyle: fs10BoldBlue1,
+      viewStyle: { width: sw119, ...px(0), ...centerHorizontal },
     },
     {
       customItem: true,
       icon: { name: sortDueDate === "descending" ? "arrow-up" : "arrow-down" },
       key: [
-        { key: "targetDate", textStyle: fs12RegBlue2 },
-        { key: "daysRemaining", textStyle: fs10RegBlue8 },
+        { key: "targetDate", textStyle: fs12RegBlue1 },
+        { key: "daysRemaining", textStyle: fs10RegBlue6 },
       ],
       onPressHeader: handleSortDueDate,
-      viewStyle: {
-        width: sw95,
-      },
       title: DASHBOARD_EDD.LABEL_DUE_DATE,
+      viewStyle: { width: sw95 },
     },
     {
       customItem: true,
       icon: { name: sortStatus === "descending" ? "arrow-up" : "arrow-down" },
       key: [{ key: "status" }],
       onPressHeader: handleSortStatus,
-      viewStyle: { width: sw143 },
-      title: DASHBOARD_EDD.LABEL_STATUS,
       onPressItem: handleShowRemarks,
+      title: DASHBOARD_EDD.LABEL_STATUS,
+      viewStyle: { width: sw143 },
       withAccordion: true,
     },
     {
       itemIcon: { name: "eye-show", size: sw20 },
       key: [],
       onPressItem: handleView,
-      viewStyle: { ...centerHV, width: sw64 },
       title: DASHBOARD_EDD.LABEL_VIEW,
+      viewStyle: { ...centerHV, width: sw64 },
     },
   ];
 
@@ -395,9 +381,9 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   const illustration = noResults === true ? undefined : LocalAssets.illustration.eddEmpty;
 
   return (
-    <View style={{ ...flexChild, ...px(sw16), backgroundColor: colorWhite._5, borderRadius: sw24 }}>
+    <View style={{ ...flexChild, ...px(sw16), backgroundColor: colorWhite._2, borderRadius: sw24 }}>
       <View style={{ ...flexRow, ...centerVertical }}>
-        <Text style={fs12RegGray9}>{DASHBOARD_EDD.LABEL_TYPES}</Text>
+        <Text style={fs12RegGray4}>{DASHBOARD_EDD.LABEL_TYPES}</Text>
         <CustomSpacer isHorizontal={true} space={sw8} />
         {pills.map((currentPill: TagData, index: number) => {
           const { text, pillCount } = currentPill;
@@ -406,6 +392,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
               handlePill(index);
             }
           };
+
           return (
             <View key={index} style={flexRow}>
               <Tag
@@ -433,7 +420,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
           },
           selectedIndex: [popupContentIndex],
           title: showDateBy.type,
-          titleStyle: fs10BoldBlue2,
+          titleStyle: fs10BoldBlue1,
           viewStyle: { width: sw119 },
         }}
         RenderAccordion={renderAccordion}

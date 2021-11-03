@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { CustomFlexSpacer, CustomSpacer, Pagination, TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../store/EDD";
-import { borderBottomGray4, colorWhite, flexChild, flexRow, fullHW, sh153, sh16, sh24, shadowBlack5, sw24 } from "../../../../styles";
+import { borderBottomGray2, colorWhite, flexChild, flexRow, fullHW, sh153, sh16, sh24, shadow12Black112, sw24 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { EDDDashboardHeader } from "./Header";
 import { HistoryTab } from "./HistoryTab";
@@ -133,7 +133,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
 
   const tableContainer: ViewStyle = {
     ...flexChild,
-    backgroundColor: colorWhite._1,
+    backgroundColor: colorWhite._2,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
@@ -159,9 +159,9 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
           <View
             style={{
               ...flexChild,
-              ...shadowBlack5,
+              ...shadow12Black112,
               marginHorizontal: sw24,
-              backgroundColor: colorWhite._5,
+              backgroundColor: colorWhite._2,
               borderRadius: sw24,
             }}>
             <CustomSpacer space={sh153} />
@@ -176,7 +176,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
                   { badgeCount: historyCount, text: DASHBOARD_EDD.LABEL_HISTORY },
                 ]}
               />
-              <View style={{ ...flexRow, ...flexChild, ...borderBottomGray4 }}>
+              <View style={{ ...flexRow, ...flexChild, ...borderBottomGray2 }}>
                 <CustomFlexSpacer />
                 <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
                 <CustomSpacer isHorizontal={true} space={sw24} />

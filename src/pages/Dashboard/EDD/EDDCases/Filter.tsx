@@ -5,9 +5,9 @@ import { View } from "react-native";
 import { CustomSpacer, NewCheckBoxDropdownV2, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_EDD_DATE, DICTIONARY_HISTORY_TAB_STATUS, DICTIONARY_NEW_TAB_STATUS } from "../../../../data/dictionary/edd";
-import { centerVertical, flexRow, fs16BoldBlack1, px, sh143, sh24, sh32, sh8, sw24, sw64 } from "../../../../styles";
+import { centerVertical, flexRow, fs16BoldBlack2, px, sh143, sh24, sh32, sh8, sw24, sw64 } from "../../../../styles";
 
-const { DASHBOARD_FILTER } = Language.PAGE;
+const { DASHBOARD_FILTER, DASHBOARD_EDD } = Language.PAGE;
 interface EDDFilterProps {
   activeTab: EDDTabType;
   filter: IEDDFilter;
@@ -51,7 +51,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
     <View>
       <View style={{ ...px(sw24) }}>
         <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs16BoldBlack1} text={DASHBOARD_FILTER.TITLE} />
+          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs16BoldBlack2} text={DASHBOARD_EDD.LABEL_FILTER_TITLE} />
         </View>
       </View>
       <View style={{ ...flexRow, ...px(sw24) }}>

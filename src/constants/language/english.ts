@@ -154,7 +154,6 @@ export const english = {
       LABEL_EDD_CASES: "EDD Cases",
       LABEL_EMPTY_SUBTITLE: "You don't have an EDD case for review.",
       LABEL_EMPTY_TITLE: "No EDD case",
-      LABEL_FILTER_TITLE: "Filter Cases by",
       LABEL_HISTORY: "History",
       LABEL_INVESTOR_NAME: "Investor Name",
       LABEL_NEW: "New",

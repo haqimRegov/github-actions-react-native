@@ -5,7 +5,7 @@ import { PAYMENT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
 import { IStructuredData } from "../pages/Dashboard/Transactions/OrderSummary/Account";
-import { fsTransformNone, fsUppercase, sh16, sh4, sw200 } from "../styles";
+import { fsTransformNone, fsUppercase, sh4, sw200 } from "../styles";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;
 
@@ -227,7 +227,7 @@ export const structureProfile = (
   const crsSummary: LabeledTitleProps[] = [
     {
       label: DASHBOARD_PROFILE.LABEL_JURISDICTION,
-      labelStyle: { width: sw200, lineHeight: sh16 },
+      labelStyle: { width: sw200 },
       spaceToLabel: sh4,
       title: crs.taxResident || "-",
     },

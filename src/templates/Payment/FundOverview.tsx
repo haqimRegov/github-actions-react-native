@@ -4,15 +4,14 @@ import { Dimensions, Text, TouchableWithoutFeedback, View, ViewStyle } from "rea
 import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps, TextCard } from "../../components";
 import { Language } from "../../constants";
 import {
-  borderBottomBlack21,
+  borderBottomGray2,
   centerVertical,
   circleBorder,
-  colorBlack,
-  colorGray,
+  colorBlue,
   colorWhite,
   flexRow,
-  fs16BoldBlack2,
-  fs16RegBlack2,
+  fs16BoldGray6,
+  fs16RegGray6,
   fsCapitalize,
   fsTransformNone,
   px,
@@ -125,7 +124,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
     height: sh64,
   };
 
-  const labelStyle = expanded === true ? fs16BoldBlack2 : fs16RegBlack2;
+  const labelStyle = expanded === true ? fs16BoldGray6 : fs16RegGray6;
 
   const handleExpand = () => {
     AnimationUtils.layout({ duration: 120 });
@@ -139,12 +138,12 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({ fund, order
         <View style={headerStyle}>
           <Text style={labelStyle}>{fundName}</Text>
           <CustomFlexSpacer />
-          <IconButton color={colorBlack._1} onPress={handleExpand} name={icon} size={sh16} style={circleBorder(sw24, sw1, colorGray._7)} />
+          <IconButton color={colorBlue._1} onPress={handleExpand} name={icon} size={sh16} style={circleBorder(sw24, sw1, colorBlue._4)} />
         </View>
       </TouchableWithoutFeedback>
       {expanded === false ? null : (
         <Fragment>
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
             <TextCard data={summary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} titleStyle={fsTransformNone} />

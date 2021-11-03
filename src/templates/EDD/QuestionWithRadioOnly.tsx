@@ -6,18 +6,18 @@ import { NunitoRegular } from "../../constants";
 import {
   centerHV,
   colorBlue,
+  colorGray,
   colorWhite,
   flexChild,
   flexRow,
   fs12RegWhite1,
-  fs16BoldBlack3,
+  fs16BoldBlack2,
   fullWidth,
   px,
   py,
   sh11,
   sh16,
   sh18,
-  sh4,
   sw100,
   sw12,
   sw14,
@@ -40,7 +40,7 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
   const { answers } = data;
   const { answer, remark, subSection } = answers[0];
 
-  const border = { borderBottomWidth: 0.5, borderBottomColor: colorWhite._3 };
+  const border = { borderBottomWidth: 0.5, borderBottomColor: colorGray._3 };
   const findIndex = options !== undefined ? options.findIndex((findOption: IOptionField) => findOption.title === answer) : -1;
   const checkOption: ViewStyle = options !== null && options !== undefined && options.length <= 2 ? { ...flexRow } : {};
 
@@ -162,7 +162,6 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                         <CustomSpacer space={sh18} />
                         <TextInputMultiline
                           label={insideOption.title}
-                          labelStyle={{ lineHeight: sh16 }}
                           maxLength={255}
                           onChangeText={handleRemark}
                           showLength={true}
@@ -178,7 +177,6 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                         <CustomTextInput
                           label={insideOption.title}
                           onChangeText={(text: string) => handleInput(defaultKey, text)}
-                          spaceToLabel={sh4}
                           spaceToTop={sh16}
                           value={subSection !== undefined ? subSection![defaultKey] : ""}
                         />
@@ -193,7 +191,6 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                           handleChange={(text: string) => handleDropdown(defaultKey, text)}
                           items={questionDropdownValues}
                           label={insideOption.title}
-                          spaceToLabel={sh4}
                           value={subSection !== undefined ? subSection[defaultKey]! : ""}
                         />
                       </View>
@@ -206,7 +203,7 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                         <View style={{ ...border, ...fullWidth }} />
                         <View style={{ ...px(sw36) }}>
                           <CustomSpacer space={sh16} />
-                          <Text style={fs16BoldBlack3}>{insideOption.title}</Text>
+                          <Text style={fs16BoldBlack2}>{insideOption.title}</Text>
                           <CustomSpacer space={sh16} />
                           <View style={flexRow}>
                             {insideOption.options !== undefined && insideOption.options !== null

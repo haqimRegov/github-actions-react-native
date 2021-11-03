@@ -1,4 +1,3 @@
-export * from "./Accordion";
 export * from "./Avatar";
 export * from "./Badge";
 export * from "./Banner";
@@ -15,7 +14,6 @@ export * from "./Items";
 export * from "./List";
 export * from "./Modals";
 export * from "./Nav";
-export * from "./Popup";
 export * from "./RadioButton";
 export * from "./Signature";
 export * from "./Slider";

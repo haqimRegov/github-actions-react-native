@@ -135,9 +135,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
     const reason =
-      multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label;
-    const principalNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
-    const principalTinReason = multiTin.reason! === 2 ? multiTin.explanation! : principalNoTinReason;
+      multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason].label;
+    const principalNoTinReason = multiTin.reason === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
+    const principalTinReason = multiTin.reason === 2 ? multiTin.explanation! : principalNoTinReason;
     return {
       country: principalTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
       noTin: principalTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
@@ -155,9 +155,10 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const jointTaxResident = joint!.declaration!.crs!.taxResident!;
 
   const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
-    const reason = multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
-    const jointNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
-    const jointTinReason = multiTin.reason! === 2 ? multiTin.explanation! : jointNoTinReason;
+    const reason =
+      multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason].label;
+    const jointNoTinReason = multiTin.reason === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
+    const jointTinReason = multiTin.reason === 2 ? multiTin.explanation! : jointNoTinReason;
     return {
       country: jointTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
       noTin: jointTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
@@ -277,7 +278,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           taxResident:
             principalTaxResident === -1
               ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label
-              : OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident!].label, // required
+              : OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label, // required
           tin: principalTin,
         },
         fatca: {

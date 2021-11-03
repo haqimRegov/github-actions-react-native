@@ -105,11 +105,11 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
       Keyboard.dismiss();
       if (ref !== null && keyboardVisible === false) {
         ref.measure((_x, _y, _width, _height, pageX, pageY) => {
-          let measurement = { x: pageX, y: pageY, height: _height, width: _width };
+          const measurement = { x: pageX, y: pageY, height: _height, width: _width };
           if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
             Keyboard.dismiss();
             const keyboardOffset = keyboardAvoidingRef.state.bottom;
-            measurement = { ...measurement, y: measurement.y + keyboardOffset };
+            measurement.y += keyboardOffset;
             setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
           } else {
             setLayout(measurement);

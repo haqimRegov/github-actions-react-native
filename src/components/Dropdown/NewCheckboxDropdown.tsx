@@ -122,11 +122,11 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
       Keyboard.dismiss();
       if (ref !== null && keyboardVisible === false) {
         ref.measure((_x, _y, _width, _height, pageX, pageY) => {
-          let measurement = { x: pageX, y: pageY, height: _height, width: _width };
+          const measurement = { x: pageX, y: pageY, height: _height, width: _width };
           if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
             Keyboard.dismiss();
             const keyboardOffset = keyboardAvoidingRef.state.bottom;
-            measurement = { ...measurement, y: measurement.y + keyboardOffset };
+            measurement.y += keyboardOffset;
             setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
           } else {
             setLayout(measurement);
@@ -322,24 +322,24 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
                       ListFooterComponent={() => <CustomSpacer space={sh16} />}
                       renderItem={({ index }) => {
                         const originalItem: TypeLabelValue = items[index];
-                        const itemExtractor = itemsWithId![index];
+                        const itemExtractor = itemsWithId[index];
                         const itemValue = itemExtractor.value;
-                        const selected = value!.includes(itemValue);
+                        const selected = value.includes(itemValue);
                         const itemContainer: ViewStyle = { ...px(sw16) };
                         const itemStyle: ViewStyle = originalItem.subLabel === undefined ? py(sh4) : {};
 
                         const handleSelect = () => {
                           let reset: boolean = false;
                           if (itemExtractor !== undefined) {
-                            let newValue = [...value!];
+                            let newValue = [...value];
                             if (newValue.includes(itemValue)) {
                               newValue = newValue.filter((item) => item !== itemValue);
                               reset = true;
                             } else {
                               newValue.push(itemValue);
                             }
-                            handleChange!(newValue);
-                            handleReset!(index, reset);
+                            handleChange(newValue);
+                            handleReset(index, reset);
                           }
                         };
                         return (

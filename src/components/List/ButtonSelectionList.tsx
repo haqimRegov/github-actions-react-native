@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { colorRed, flexRow, flexWrap, sw4 } from "../../styles";
+import { colorBlue, colorRed, flexRow, flexWrap, sw4 } from "../../styles";
 import { OutlineButton } from "../Touchables";
 import { CustomSpacer } from "../Views";
 
@@ -43,7 +43,7 @@ export const ButtonSelectionList: FunctionComponent<ButtonSelectionListProps> = 
             <OutlineButton
               buttonStyle={{ ...buttonStyle, ...activeStyle }}
               icon={icon}
-              color={color}
+              color={color || colorBlue._1}
               onPress={handlePress}
               text={item}
               textStyle={textStyle}

@@ -9,17 +9,17 @@ import { RNShareApi } from "../../../../integrations";
 import { getSummaryReceipt } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   colorWhite,
   flexChild,
   flexRow,
-  fs16SemiBoldBlack2,
+  fs16RegGray6,
   fullHW,
   sh112,
   sh153,
   sh16,
   sh24,
-  shadowBlack5,
+  shadow12Black112,
   sw24,
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -214,7 +214,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const tableContainer: ViewStyle = {
     ...flexChild,
-    backgroundColor: colorWhite._1,
+    backgroundColor: colorWhite._2,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
@@ -240,9 +240,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           <View
             style={{
               ...flexChild,
-              ...shadowBlack5,
+              ...shadow12Black112,
               marginHorizontal: sw24,
-              backgroundColor: colorWhite._1,
+              backgroundColor: colorWhite._2,
               borderRadius: sw24,
             }}>
             <CustomSpacer space={sh153} />
@@ -258,7 +258,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
                   { badgeCount: rejectedCount, text: DASHBOARD_HOME.LABEL_REJECTED },
                 ]}
               />
-              <View style={{ ...flexRow, ...flexChild, ...borderBottomGray4 }}>
+              <View style={{ ...flexRow, ...flexChild, ...borderBottomGray2 }}>
                 <CustomFlexSpacer />
                 <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
                 <CustomSpacer isHorizontal={true} space={sw24} />
@@ -273,7 +273,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       </DashboardLayout>
       {selectedOrders.length !== 0 && activeTab === "pending" ? (
         <SelectionBanner
-          bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
+          bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
           cancelOnPress={handlePrintAll}
           label={DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY}
           labelCancel={DASHBOARD_HOME.LABEL_PRINT_ALL}

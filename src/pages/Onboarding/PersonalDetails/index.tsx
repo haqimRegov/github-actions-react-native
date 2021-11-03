@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
+import { borderBottomGray2, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { AccountDetails } from "./AccountDetails";
 import { JointDetails } from "./Joint";
 import { PrincipalDetails } from "./Principal";
@@ -241,7 +241,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         {accountType === "Individual" ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <View style={borderBottomBlack21} />
+            <View style={borderBottomGray2} />
             <CustomSpacer space={sh48} />
             <JointDetails
               accountNames={accountNames}

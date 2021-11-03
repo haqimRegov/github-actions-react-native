@@ -11,7 +11,7 @@ import {
   colorRed,
   colorWhite,
   flexRow,
-  fs12BoldBlack2,
+  fs16BoldBlack2,
   sw1,
   sw10,
   sw12,
@@ -44,10 +44,10 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   setSelected,
 }: RadioButtonProps) => {
   const color = selectedColor !== undefined ? selectedColor : colorRed._1;
-  const borderColor = selected ? color : colorBlue._2;
+  const borderColor = selected ? color : colorBlue._1;
   const borderWidth = selected ? sw4 : sw1;
   const circleSize = selected ? sw10 : sw16;
-  const disabledColor: TextStyle = disabled === true && selected === false ? { backgroundColor: colorGray._9 } : {};
+  const disabledColor: TextStyle = disabled === true && selected === false ? { backgroundColor: colorGray._4 } : {};
   const disabledStyle: ViewStyle = disabled === true ? { opacity: 0.6 } : {};
   const fontFamily = selected ? NunitoBold : NunitoRegular;
 
@@ -66,7 +66,7 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
           </View>
         </View>
         <CustomSpacer space={sw12} isHorizontal={true} />
-        <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, minWidth: sw48, ...labelStyle }}>{label}</Text>
+        <Text style={{ ...fs16BoldBlack2, fontFamily: fontFamily, minWidth: sw48, ...labelStyle }}>{label}</Text>
         {right}
       </View>
     </TouchableWithoutFeedback>

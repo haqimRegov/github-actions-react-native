@@ -14,16 +14,17 @@ import {
   colorGreen,
   colorTransparent,
   colorWhite,
-  disabledOpacity,
+  disabledOpacity5,
   flexRow,
-  fs12BoldBlack2,
-  fs16BoldBlue2,
+  fs12BoldGray6,
+  fs16BoldBlue1,
   fullHW,
   noBGColor,
   px,
   py,
   sh12,
   sh176,
+  sh4,
   sh44,
   sh8,
   sw15,
@@ -77,10 +78,10 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
 
-  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
   const labelExtractor = items.map((item) => item.label);
 
-  const disabledStyle = disabled === true ? disabledOpacity : {};
+  const disabledStyle = disabled === true ? disabledOpacity5 : {};
 
   // TODO
   /**
@@ -124,7 +125,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
 
   const dropdownContainer: ViewStyle = {
     backgroundColor: colorWhite._1,
-    borderColor: colorBlue._2,
+    borderColor: colorBlue._1,
     borderRadius: sw16,
     borderWidth: sw2,
     left: layout.x,
@@ -135,7 +136,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
     ...viewStyle,
   };
 
-  const placeholderStyle: TextStyle = value ? {} : { color: colorBlack._3, fontFamily: NunitoRegular };
+  const placeholderStyle: TextStyle = value ? {} : { color: colorBlack._2, fontFamily: NunitoRegular };
   const inputStyle: ViewStyle = collapsibleModal ? { borderColor: colorTransparent } : {};
 
   const handleKeyboardDidShow = () => {
@@ -160,7 +161,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
         {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
         {label === undefined ? null : (
           <Fragment>
-            <Text style={{ ...fs12BoldBlack2, ...disabledStyle, ...labelStyle }}>{label}</Text>
+            <Text style={{ ...fs12BoldGray6, ...disabledStyle, ...labelStyle }}>{label}</Text>
             <CustomSpacer space={defaultLabelSpace} />
           </Fragment>
         )}
@@ -172,7 +173,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                 error={error}
                 editable={false}
                 placeholder={placeholderLabel}
-                placeholderTextColor={colorBlack._3}
+                placeholderTextColor={colorBlack._2}
                 rightIcon={{ name: "caret-down" }}
                 viewStyle={{ ...inputStyle, ...viewStyle }}
                 value={value}
@@ -186,12 +187,12 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
           <View style={fullHW}>
             <View style={dropdownContainer}>
               <View style={{ ...centerVertical, ...flexRow, height: sh44, ...px(sw15) }}>
-                <Text style={{ ...fs16BoldBlue2, ...placeholderStyle }}>{value || placeholderLabel}</Text>
+                <Text style={{ ...fs16BoldBlue1, ...placeholderStyle }}>{value || placeholderLabel}</Text>
                 <CustomFlexSpacer />
-                <IcoMoon color={colorBlue._2} name="caret-down" size={sw24} />
+                <IcoMoon color={colorBlue._1} name="caret-down" size={sw24} />
               </View>
               <Collapsible duration={100} collapsed={collapse} style={noBGColor}>
-                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._2 }}>
+                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._1 }}>
                   <View style={style}>
                     <FlatList
                       data={labelExtractor}
@@ -204,8 +205,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                       renderItem={({ index }) => {
                         const itemExtractor = items[index];
                         const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh8), ...px(sw16) };
-                        const selectedStyle: ViewStyle = value === itemExtractor.label ? { backgroundColor: colorWhite._4 } : {};
-                        const itemStyle: TextStyle = { ...fs16BoldBlue2, letterSpacing: -0.44 };
+                        const selectedStyle: ViewStyle = value === itemExtractor.label ? { backgroundColor: colorBlue._2 } : {};
 
                         const handleSelect = () => {
                           handleAnimationClose();
@@ -220,7 +220,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                           <TouchableWithoutFeedback key={index} onPress={handleSelect}>
                             <View style={{ ...itemContainer, ...selectedStyle }}>
                               {index === 0 || <CustomSpacer space={sh8} />}
-                              <Text numberOfLines={1} style={itemStyle}>
+                              <Text numberOfLines={1} style={fs16BoldBlue1}>
                                 {itemExtractor.label}
                               </Text>
                               {value === itemExtractor.label ? (

@@ -13,9 +13,9 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlack2,
-  fs12SemiBoldBlue2,
-  fs12SemiBoldGray8,
+  fs12RegBlue1,
+  fs12RegGray6,
+  fs12SemiBoldBlue1,
   imageContain,
   px,
   scaleHeight,
@@ -72,7 +72,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   //   },
   //   {
   //     onPress: undefined,
-  //     style: fs12RegBlack2,
+  //     style: fs12RegGray6,
   //     text: LOGIN.LANGUAGE_ENGLISH,
   //   },
   // ];
@@ -80,24 +80,24 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   // const agentOnboardingLink = {
   //   onPress: handleAgentOnboarding,
   //   text: LOGIN.LINK_AGENT_ONBOARDING,
-  //   style: fs12SemiBoldBlue2,
+  //   style: fs12SemiBoldBlue1,
   // };
 
   const backToLoginLink = {
     onPress: handleBackToLogin,
     text: LOGIN.LINK_BACK_TO_LOGIN,
-    style: fs12SemiBoldBlue2,
+    style: fs12SemiBoldBlue1,
   };
 
   const bottomLinks: LinkTextProps[] = [
     // {
     //   onPress: handlePrivacyPolicy,
     //   text: LOGIN.LINK_PRIVACY_POLICY,
-    //   style: fs12SemiBoldBlue2,
+    //   style: fs12SemiBoldBlue1,
     // },
     {
       text: `Build Version ${version}`,
-      style: fs12SemiBoldGray8,
+      style: fs12RegGray6,
     },
   ];
 
@@ -111,7 +111,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
 
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
   const logoStyle: ImageStyle = { ...imageContain, height: sh64, width: sw160 };
-  const buttonStyle: ViewStyle = { ...border(colorBlue._2, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
+  const buttonStyle: ViewStyle = { ...border(colorBlue._1, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
 
   // issue with importing scaled size
   const bottomSpace = scaleHeight(24) + bottom;
@@ -145,18 +145,18 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
                   <Fragment>
                     <CustomFlexSpacer />
                     <IconText
-                      color={colorBlue._2}
                       iconPosition="right"
                       name="profile"
                       onPress={handleAgentOnboarding}
-                      text={LOGIN.LINK_AGENT_ONBOARDING}
                       style={buttonStyle}
+                      text={LOGIN.LINK_AGENT_ONBOARDING}
+                      textStyle={fs12RegBlue1}
                     />
                     <CustomSpacer isHorizontal={true} space={sw64} />
                   </Fragment>
                 ) : null}
               </View>
-              <TextSpaceArea spaceToBottom={bottomSpace} spaceToTop={sh12} style={fs12RegBlack2} text={LOGIN.FOOTER_KIB} />
+              <TextSpaceArea spaceToBottom={bottomSpace} spaceToTop={sh12} style={fs12RegGray6} text={LOGIN.FOOTER_KIB} />
             </View>
           </SafeAreaPage>
         </View>

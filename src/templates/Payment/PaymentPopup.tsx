@@ -1,21 +1,22 @@
 import React, { FunctionComponent, useState } from "react";
-import { ActivityIndicator, Image, LayoutChangeEvent, Text, View, ViewStyle } from "react-native";
+import { Image, LayoutChangeEvent, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
-import { ActionButtons, CheckBox, CustomSpacer, RNModal, Tag, TextSpaceArea } from "../../components";
+import { ActionButtons, CheckBox, CustomSpacer, Loading, RNModal, Tag, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
 import {
   alignSelfStart,
-  borderBottomBlack1,
+  borderBottomBlue5,
   centerHV,
+  colorBlack,
+  colorBlue,
   colorWhite,
   flexRow,
   flexRowCC,
   flexWrap,
-  fs12RegBlack2,
-  fs16BoldBlack1,
-  fs24BlackBlack2,
-  fs24BoldBlue2,
+  fs12RegGray6,
+  fs16BoldBlack2,
+  fs24BoldBlue1,
   fsAlignCenter,
   fullHW,
   imageContain,
@@ -29,7 +30,7 @@ import {
   sh8,
   sh96,
   sw10,
-  sw176,
+  sw136,
   sw218,
   sw320,
   sw400,
@@ -92,11 +93,11 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
   const subtitles = result?.withFloating === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_FLOATING : PAYMENT.PROMPT_SUBTITLE_PENDING;
   const floatingSubtitle =
     result?.withFloating === true ? (
-      <TextSpaceArea spaceToTop={sh16} style={fs12RegBlack2} text={PAYMENT.PROMPT_SUBTITLE_SUBMITTED_FLOATING} />
+      <TextSpaceArea spaceToTop={sh16} style={fs12RegGray6} text={PAYMENT.PROMPT_SUBTITLE_SUBMITTED_FLOATING} />
     ) : null;
 
   const modalContainer: ViewStyle = {
-    backgroundColor: colorWhite._4,
+    backgroundColor: colorBlue._2,
     borderRadius: sw5,
     width: sw565,
     minWidth: sw565,
@@ -106,14 +107,16 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
   };
 
+  const modalStyle = result !== undefined ? undefined : { backgroundColor: colorBlack._1_4 };
+
   return (
-    <RNModal animationType="fade" visible={loading}>
+    <RNModal animationType="fade" style={modalStyle} visible={loading}>
       <View style={{ ...centerHV, ...fullHW }}>
         {result !== undefined ? (
           <View style={modalContainer}>
@@ -122,18 +125,18 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
               {prompt === "message" ? (
                 <View style={{ ...centerHV, width: sw452 }}>
                   <CustomSpacer space={sh24} />
-                  <Image source={illustration} style={{ ...imageContain, height: sw176, width: sw176 }} />
-                  <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue2, ...fsAlignCenter }} text={message} />
+                  <Image source={illustration} style={{ ...imageContain, height: sw136, width: sw136 }} />
+                  <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue1, ...fsAlignCenter }} text={message} />
                   {checkNonPendingOrder === true && allOrdersSubmitted === true ? (
                     floatingSubtitle
                   ) : (
-                    <TextSpaceArea spaceToTop={sh16} style={fs12RegBlack2} text={subtitles} />
+                    <TextSpaceArea spaceToTop={sh16} style={fs12RegGray6} text={subtitles} />
                   )}
                 </View>
               ) : (
                 <View>
-                  <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs24BlackBlack2} text={PAYMENT.PROMPT_TITLE_STATUS} />
-                  <View style={borderBottomBlack1} />
+                  <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs24BoldBlue1} text={PAYMENT.PROMPT_TITLE_STATUS} />
+                  <View style={borderBottomBlue5} />
                   <CustomSpacer space={sh16} />
                   <View onLayout={handleLayout} style={{ maxHeight: sh403, ...flexWrap }}>
                     {result !== undefined &&
@@ -141,17 +144,18 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                         return (
                           <View key={index} style={{ width: sw320 }}>
                             <View style={flexRow}>
-                              <Text style={fs16BoldBlack1}>{order.orderNumber}</Text>
+                              <Text style={fs16BoldBlack2}>{order.orderNumber}</Text>
                               <CustomSpacer isHorizontal={true} space={sw8} />
                               <Tag
-                                color={order.status === "Completed" || order.status === "Submitted" ? "secondary" : "warning"}
+                                color={order.status === "Completed" || order.status === "Submitted" ? "complete" : "warning"}
                                 text={order.status === "Completed" || order.status === "Submitted" ? "Completed" : order.status}
                               />
                             </View>
+                            <CustomSpacer space={sh4} />
                             <View>
                               {order.remarks.map((remark, remarkIndex) => {
                                 return (
-                                  <Text key={remarkIndex} style={fs12RegBlack2}>
+                                  <Text key={remarkIndex} style={fs12RegGray6}>
                                     {remark}
                                   </Text>
                                 );
@@ -164,14 +168,14 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                     {result !== undefined && result.account !== null ? (
                       <View style={{ width: sw320 }}>
                         <View style={flexRow}>
-                          <Text style={fs16BoldBlack1}>{PAYMENT.LABEL_ACCOUNT}</Text>
+                          <Text style={fs16BoldBlack2}>{PAYMENT.LABEL_ACCOUNT}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Tag color={result.account.status === "Completed" ? "secondary" : "warning"} text={result.account.status} />
+                          <Tag color={result.account.status === "Completed" ? "complete" : "warning"} text={result.account.status} />
                         </View>
                         <View>
                           {result.account.remarks.map((remark, remarkIndex) => {
                             return (
-                              <Text key={remarkIndex} style={fs12RegBlack2}>
+                              <Text key={remarkIndex} style={fs12RegGray6}>
                                 {remark}
                               </Text>
                             );
@@ -206,7 +210,7 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
             />
           </View>
         ) : (
-          <ActivityIndicator color={colorWhite._1} size="small" />
+          <Loading color={colorWhite._1} />
         )}
       </View>
     </RNModal>

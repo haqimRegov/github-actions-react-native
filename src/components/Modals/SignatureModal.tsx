@@ -4,11 +4,11 @@ import { Text, TextStyle, View, ViewStyle } from "react-native";
 import {
   circleBorder,
   colorBlack,
-  colorGray,
+  colorBlue,
   colorWhite,
   flexColCC,
   flexRow,
-  fs16BoldBlack2,
+  fs16BoldGray6,
   px,
   sh24,
   sh368,
@@ -49,14 +49,14 @@ export const SignatureModal: FunctionComponent<SignatureModalProps> = ({
         <View style={modalContainer}>
           <CustomSpacer space={sh24} />
           <View style={{ ...flexRow, ...px(sw24) }}>
-            <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{title}</Text>
+            <Text style={{ ...fs16BoldGray6, ...titleStyle }}>{title}</Text>
             <CustomFlexSpacer />
             <IconButton
               color={colorBlack._1}
               name="close"
               onPress={handleClose}
               size={sw14}
-              style={circleBorder(sw24, sw1, colorGray._3)}
+              style={circleBorder(sw24, sw1, colorBlue._4)}
             />
           </View>
           <CustomSpacer space={sh24} />

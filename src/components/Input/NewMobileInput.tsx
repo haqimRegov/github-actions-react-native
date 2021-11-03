@@ -20,20 +20,19 @@ import {
   centerHV,
   centerVertical,
   circle,
-  colorBlack,
   colorBlue,
   colorGray,
   colorGreen,
   colorRed,
   colorTransparent,
   colorWhite,
-  disabledOpacity,
+  disabledOpacity5,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
-  fs12SemiBoldRed2,
-  fs16BoldBlue2,
-  fs16RegBlue25,
+  fs12BoldGray6,
+  fs12RegRed2,
+  fs16BoldBlue1,
+  fs16RegGray5,
   fullHeight,
   fullHW,
   fullWidth,
@@ -43,10 +42,11 @@ import {
   sh12,
   sh16,
   sh176,
+  sh4,
   sh44,
   sh48,
   sh8,
-  shadowBlue5,
+  shadow16Blue112,
   sw1,
   sw11,
   sw16,
@@ -158,7 +158,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
 
   const dropdownContainer: ViewStyle = {
     backgroundColor: colorWhite._1,
-    borderColor: colorBlue._2,
+    borderColor: colorBlue._1,
     borderRadius: sw16,
     borderWidth: sw2,
     left: layout.x,
@@ -176,9 +176,9 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
     ...style,
   };
 
-  const disabledStyle = disabled === true ? disabledOpacity : {};
+  const disabledStyle = disabled === true ? disabledOpacity5 : {};
   const errorStyle: ViewStyle =
-    data.error !== undefined ? { backgroundColor: colorRed._3_08, borderWidth: sw2, borderColor: colorRed._2 } : {};
+    data.error !== undefined ? { backgroundColor: colorRed._5, borderWidth: sw2, borderColor: colorRed._2 } : {};
 
   const baseInputStyle = {
     ...centerVertical,
@@ -189,7 +189,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
   };
 
   const collapsedInputStyle: ViewStyle = {
-    ...border(colorWhite._3, sw1, sw32),
+    ...border(colorGray._3, sw1, sw32),
     height: sh48,
     width: sw360,
     ...baseInputStyle,
@@ -222,7 +222,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
     ...px(sw16),
   };
 
-  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
   const placeholderLabel = textInputProps.placeholder ? textInputProps.placeholder : INPUT_MOBILE.PLACEHOLDER;
   const labelText = label !== undefined ? label : data.label;
 
@@ -245,16 +245,16 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
           ...centerVertical,
           ...flexRow,
           ...fullHeight,
-          borderRightColor: colorGray._7,
+          borderRightColor: colorGray._3,
           borderRightWidth: sw1,
         }}>
         {valueExtractor.flag !== undefined ? (
-          <Image source={valueExtractor.flag} style={{ width: sw24, height: sw24, ...shadowBlue5 }} />
+          <Image source={valueExtractor.flag} style={{ width: sw24, height: sw24, ...shadow16Blue112 }} />
         ) : (
-          <View style={{ width: sw24, height: sw24, backgroundColor: colorBlack._2 }} />
+          <View style={{ width: sw24, height: sw24, backgroundColor: colorGray._6 }} />
         )}
         <CustomSpacer isHorizontal={true} space={sw11} />
-        <IcoMoon color={colorBlue._2} name="caret-down" size={sw24} />
+        <IcoMoon color={colorBlue._1} name="caret-down" size={sw24} />
         <CustomSpacer isHorizontal={true} space={sw16} />
       </View>
       <CustomTextInput
@@ -294,7 +294,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
         {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
         {!labelText ? null : (
           <Fragment>
-            <Text style={{ ...fs12BoldBlack2, ...labelStyle }}>{labelText}</Text>
+            <Text style={{ ...fs12BoldGray6, ...labelStyle }}>{labelText}</Text>
             <CustomSpacer space={defaultLabelSpace} />
           </Fragment>
         )}
@@ -310,7 +310,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
               <CustomSpacer isHorizontal={true} space={sw16} />
               <IcoMoon color={colorRed._2} name="error-filled" size={sw16} />
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={{ ...fs12SemiBoldRed2, width: sw304 }}>{data.error}</Text>
+              <Text style={{ ...fs12RegRed2, width: sw304 }}>{data.error}</Text>
             </View>
           </Fragment>
         )}
@@ -321,7 +321,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
             <View style={dropdownContainer}>
               <View style={expandedInputStyle}>{input}</View>
               <Collapsible duration={100} collapsed={collapse} style={noBGColor}>
-                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._2 }}>
+                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._1 }}>
                   <View onStartShouldSetResponderCapture={() => disabled === true} style={flexRow}>
                     <View style={dropdownStyle}>
                       {withSearch === true ? (
@@ -345,7 +345,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
                           const findItem = DICTIONARY_MOBILE_CODE.filter((code) => code.id === item);
                           const itemExtractor = findItem.length === 0 ? DICTIONARY_MOBILE_CODE[0] : findItem[0];
                           const selected = data.id === itemExtractor.id;
-                          const selectedStyle = selected ? { backgroundColor: colorWhite._4 } : {};
+                          const selectedStyle = selected ? { backgroundColor: colorBlue._2 } : {};
                           const itemContainer: ViewStyle = {
                             ...centerVertical,
                             ...flexRow,
@@ -368,16 +368,16 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
                             <TouchableWithoutFeedback key={itemExtractor.label} onPress={handleSelect}>
                               <View style={itemContainer}>
                                 {itemExtractor.flag !== undefined ? (
-                                  <Image source={itemExtractor.flag} style={{ width: sw24, height: sw24, ...shadowBlue5 }} />
+                                  <Image source={itemExtractor.flag} style={{ width: sw24, height: sw24, ...shadow16Blue112 }} />
                                 ) : (
-                                  <View style={{ width: sw24, height: sw24, backgroundColor: colorBlack._2 }} />
+                                  <View style={{ width: sw24, height: sw24, backgroundColor: colorGray._6 }} />
                                 )}
                                 <CustomSpacer isHorizontal={true} space={sw8} />
-                                <Text numberOfLines={1} style={fs16BoldBlue2}>
+                                <Text numberOfLines={1} style={fs16BoldBlue1}>
                                   {itemExtractor.label}
                                 </Text>
                                 <CustomSpacer isHorizontal={true} space={sw8} />
-                                <Text numberOfLines={1} style={fs16RegBlue25}>
+                                <Text numberOfLines={1} style={fs16RegGray5}>
                                   {itemExtractor.value}
                                 </Text>
                                 <CustomFlexSpacer />

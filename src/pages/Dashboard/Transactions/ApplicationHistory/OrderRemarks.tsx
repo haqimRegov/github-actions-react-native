@@ -11,11 +11,12 @@ import {
   colorWhite,
   flexRow,
   flexWrap,
-  fs10BoldBlack2,
-  fs10RegBlack2,
-  fs16BoldBlack1,
+  fs10BoldGray5,
+  fs10RegGray5,
+  fs16BoldBlack2,
   px,
   sh12,
+  sh13,
   sh16,
   sh4,
   sw12,
@@ -47,7 +48,7 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({ remarks, re
       <View style={{ backgroundColor: colorWhite._1, borderBottomLeftRadius: sw12, borderBottomRightRadius: sw12 }}>
         <CustomSpacer space={sh16} />
         <View style={{ ...px(sw16) }}>
-          <Text style={fs16BoldBlack1}>{defaultTitle}</Text>
+          <Text style={fs16BoldBlack2}>{defaultTitle}</Text>
           <CustomSpacer space={sh4} />
           <View style={{ ...flexWrap, width: sw716, ...flexRow }}>
             {remarks.map(({ label, remark }: IDashboardRemark, index) => {
@@ -58,18 +59,18 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({ remarks, re
                     {showIcon !== false ? (
                       <Fragment>
                         <View style={centerHorizontal}>
-                          <IcoMoon color={colorRed._2} name={"error-octagon"} size={sw24} />
+                          <IcoMoon color={colorRed._2} name="error-octagon" size={sw24} />
                         </View>
                         <CustomSpacer isHorizontal={true} space={sw12} />
                       </Fragment>
                     ) : null}
                     <View style={{ ...centerHorizontal, width: sw296 }}>
-                      <Text style={{ ...fs10BoldBlack2, lineHeight: sh12 }}>{label}</Text>
+                      <Text style={{ ...fs10BoldGray5, lineHeight: sh13 }}>{label}</Text>
                       {remark.length > 0
                         ? remark.map((text: string, remarkIndex: number) => {
                             const updatedText = remarkIndex !== 0 ? `• ${text}` : text;
                             return (
-                              <Text key={remarkIndex} style={{ ...fs10RegBlack2, lineHeight: sh12 }}>
+                              <Text key={remarkIndex} style={{ ...fs10RegGray5, lineHeight: sh12 }}>
                                 {updatedText}
                               </Text>
                             );

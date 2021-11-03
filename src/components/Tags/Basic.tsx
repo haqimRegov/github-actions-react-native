@@ -1,16 +1,19 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
+import { NunitoBold, NunitoSemiBold } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
   centerHV,
   colorBlue,
+  colorGray,
   colorGreen,
+  colorPurple,
   colorRed,
   colorWhite,
   colorYellow,
   flexRow,
-  fs12SemiBoldWhite1,
+  fs12BoldWhite1,
   px,
   py,
   sh12,
@@ -22,7 +25,7 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views";
 
-export type TagColorType = "success" | "error" | "primary" | "secondary" | "warning" | "danger";
+export type TagColorType = "success" | "error" | "primary" | "secondary" | "warning" | "danger" | "review" | "complete";
 
 interface TagProps {
   icon?: string;
@@ -35,33 +38,41 @@ interface TagProps {
 }
 
 export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "primary", onPress, style, text, textStyle }: TagProps) => {
-  let tagColor = colorBlue._2;
+  let tagColor = colorBlue._1;
   let tagTextColor = colorWhite._1;
 
   switch (color) {
+    case "complete":
+      tagTextColor = colorBlue._9;
+      tagColor = colorGray._7;
+      break;
+    case "danger":
+      tagTextColor = colorRed._3;
+      tagColor = colorRed._5;
+      break;
+    case "error":
+      tagTextColor = colorRed._2;
+      tagColor = colorRed._4;
+      break;
+    case "primary":
+      tagTextColor = colorWhite._1;
+      tagColor = colorBlue._1;
+      break;
+    case "review":
+      tagTextColor = colorPurple._1;
+      tagColor = colorPurple._2;
+      break;
+    case "secondary":
+      tagTextColor = colorBlue._1;
+      tagColor = colorBlue._2;
+      break;
     case "success":
       tagTextColor = colorGreen._1;
       tagColor = colorGreen._2;
       break;
-    case "error":
-      tagTextColor = colorRed._2;
-      tagColor = colorRed._6;
-      break;
-    case "primary":
-      tagTextColor = colorWhite._1;
-      tagColor = colorBlue._2;
-      break;
-    case "secondary":
-      tagTextColor = colorBlue._2;
-      tagColor = colorWhite._4;
-      break;
     case "warning":
       tagTextColor = colorYellow._2;
       tagColor = colorYellow._3;
-      break;
-    case "danger":
-      tagTextColor = colorRed._3;
-      tagColor = colorRed._6;
       break;
 
     default:
@@ -80,7 +91,9 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "prim
   };
 
   const tagTextStyle: TextStyle = {
+    ...fs12BoldWhite1,
     color: tagTextColor,
+    fontFamily: color === "secondary" ? NunitoSemiBold : NunitoBold,
     ...textStyle,
   };
 
@@ -88,7 +101,7 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "prim
     <View style={flexRow}>
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={tagStyle}>
-          <Text style={{ ...fs12SemiBoldWhite1, ...tagTextStyle }}>{text}</Text>
+          <Text style={tagTextStyle}>{text}</Text>
           {icon !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw4} />

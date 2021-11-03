@@ -12,12 +12,11 @@ import {
   circleBorder,
   colorBlack,
   colorBlue,
-  colorGray,
   colorWhite,
   flexChild,
   flexGrow,
   flexRow,
-  fs24BoldBlack2,
+  fs24BoldGray6,
   px,
   sh120,
   sh24,
@@ -130,7 +129,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
                   <View style={{ ...centerVertical, ...flexRow }}>
                     <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} />
                     <CustomSpacer isHorizontal={true} space={sw20} />
-                    <Text style={fs24BoldBlack2}>{editReceipt!.name}</Text>
+                    <Text style={fs24BoldGray6}>{editReceipt!.name}</Text>
                   </View>
                 </View>
                 <CustomSpacer space={sh4} />
@@ -164,11 +163,11 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
               <View style={{ width: sw100, ...centerVertical }}>
                 <Image source={LocalAssets.tooltip.addSign} style={defaultTooltipStyle} />
                 <IconButton
-                  color={colorBlue._2}
+                  color={colorBlue._1}
                   name="sign"
                   onPress={handleScroll}
                   size={48}
-                  style={circleBorder(80, 1, colorGray._3, colorWhite._1)}
+                  style={circleBorder(80, 1, colorBlue._4, colorWhite._1)}
                 />
               </View>
             </View>

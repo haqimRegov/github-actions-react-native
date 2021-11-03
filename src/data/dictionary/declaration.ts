@@ -1,5 +1,4 @@
 import { Language } from "../../constants";
-import { sh16 } from "../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -20,9 +19,9 @@ export const OPTIONS_CRS_TAX_RESIDENCY: ICheckBoxWithSubLabel[] = [
 ];
 
 export const OPTIONS_CRS_TIN_REASONS: ICheckBoxWithSubLabel[] = [
-  { label: DECLARATIONS.OPTION_NO_TIN_COUNTRY, labelStyle: { lineHeight: sh16 } },
-  { label: DECLARATIONS.OPTION_NO_TIN_REQUIRED, labelStyle: { lineHeight: sh16 } },
-  { label: DECLARATIONS.OPTION_NO_TIN_OTHER, labelStyle: { lineHeight: sh16 } },
+  { label: DECLARATIONS.OPTION_NO_TIN_COUNTRY },
+  { label: DECLARATIONS.OPTION_NO_TIN_REQUIRED },
+  { label: DECLARATIONS.OPTION_NO_TIN_OTHER },
 ];
 
 export const OPTION_CRS_NO_TIN_REQUIRED: string = DECLARATIONS.OPTION_NO_TIN_REQUIRED_ACTUAL;

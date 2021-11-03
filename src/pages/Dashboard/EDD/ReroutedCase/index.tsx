@@ -1,18 +1,18 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, LayoutChangeEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Alert, LayoutChangeEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomFlexSpacer, CustomSpacer, FileViewer, PromptModal, Tab, Toggle } from "../../../../components";
+import { ActionButtons, CustomFlexSpacer, CustomSpacer, FileViewer, Loading, PromptModal, Tab, Toggle } from "../../../../components";
 import { DEFAULT_DATE_TIME_FORMAT } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
 import { getCaseResponse, getClientProfile, getPreviousResponse, submitCase } from "../../../../network-actions";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../store/EDD";
 import {
-  borderBottomBlack21,
-  borderBottomGray3,
+  borderBottomBlue4,
+  borderBottomGray2,
   centerHV,
   centerVertical,
   colorBlue,
@@ -21,21 +21,21 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs12RegGray8,
-  fs16BoldBlack3,
-  fs16BoldBlue2,
+  fs12BoldBlack2,
+  fs12RegGray5,
+  fs16BoldBlack2,
+  fs16BoldBlue1,
   fullHeight,
   justifyContentStart,
   px,
   py,
   sh16,
-  sh22,
   sh24,
   sh32,
   sh40,
   sh56,
   sh8,
-  shadowBlue5,
+  shadow16Blue112,
   sw1,
   sw16,
   sw2,
@@ -306,13 +306,13 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
     ...flexRow,
     ...centerVertical,
     ...px(sw24),
-    ...shadowBlue5,
+    ...shadow16Blue112,
     height: sh56,
     backgroundColor: colorWhite._1,
   };
   const cardStyle: ViewStyle = {
     ...flexChild,
-    ...shadowBlue5,
+    ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
   };
@@ -392,7 +392,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                     const border: ViewStyle =
                       expand[index] === false ? { borderRadius: sw8 } : { borderTopRightRadius: sw8, borderTopLeftRadius: sw8 };
                     const topTitle = userTitle !== null && userTitle !== undefined ? userTitle : amlaTitle;
-                    const color = userTitle !== null && userTitle !== undefined ? colorRed._4 : colorBlue._7;
+                    const color = userTitle !== null && userTitle !== undefined ? colorRed._1 : colorBlue._7;
                     const topTitleStyle: ViewStyle = userTitle === undefined ? { ...px(24) } : {};
                     const answerTitle =
                       index !== responses.length - 1 ? DASHBOARD_EDD_CASE.LABEL_FOLLOW_UP_ANSWERS : DASHBOARD_EDD_CASE.LABEL_ANSWER;
@@ -403,27 +403,27 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                       <Fragment key={index}>
                         {index !== 0 ? <CustomSpacer space={sh40} /> : null}
                         <View style={{ ...flexRow, ...centerVertical }}>
-                          <Text style={{ ...fs16BoldBlack3, lineHeight: sh22 }}>{`${DASHBOARD_EDD.LABEL_RESPONSE} ${responseNumber}`}</Text>
+                          <Text style={fs16BoldBlack2}>{`${DASHBOARD_EDD.LABEL_RESPONSE} ${responseNumber}`}</Text>
                           <CustomSpacer isHorizontal={true} space={sw16} />
-                          <View style={{ ...flexChild, ...borderBottomGray3 }} />
+                          <View style={{ ...flexChild, ...borderBottomBlue4 }} />
                         </View>
                         <CustomSpacer space={sh16} />
                         <View onLayout={handleLayout} style={{ ...px(topTitlePadding), ...flexRow, ...centerVertical, ...topTitleStyle }}>
                           <View style={{ backgroundColor: color, height: sh16, width: sw2 }} />
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs16BoldBlack3}>{topTitle.user}</Text>
+                          <Text style={fs12BoldBlack2}>{topTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(topTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
+                          <Text style={fs12RegGray5}>{moment(topTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
+                          <View style={{ backgroundColor: colorGray._5, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs12RegGray8}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${topTitle.status}`}</Text>
+                          <Text style={fs12RegGray5}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${topTitle.status}`}</Text>
                         </View>
                         <CustomSpacer space={sh8} />
                         <View key={index} style={containerStyle}>
                           <TouchableWithoutFeedback onPress={handleExpand}>
                             <View style={{ ...headerStyle, ...border }}>
-                              <Text style={{ ...fs16BoldBlue2 }}>{collapsibleTitle}</Text>
+                              <Text style={{ ...fs16BoldBlue1 }}>{collapsibleTitle}</Text>
                               <CustomFlexSpacer />
                               <IcoMoon name={defaultIcon} size={sw20} />
                             </View>
@@ -494,13 +494,13 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                             <View style={{ ...px(sw24), ...flexRow, ...centerVertical }}>
                               <View style={{ backgroundColor: colorBlue._7, height: sh16, width: sw2 }} />
                               <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Text style={fs16BoldBlack3}>{amlaTitle.user}</Text>
+                              <Text style={fs12BoldBlack2}>{amlaTitle.user}</Text>
                               <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
+                              <Text style={fs12RegGray5}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                               <CustomSpacer isHorizontal={true} space={sw4} />
-                              <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
+                              <View style={{ backgroundColor: colorGray._5, height: sh16, width: sw1 }} />
                               <CustomSpacer isHorizontal={true} space={sw4} />
-                              <Text style={fs12RegGray8}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${amlaTitle.status}`}</Text>
+                              <Text style={fs12RegGray5}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${amlaTitle.status}`}</Text>
                             </View>
                           </Fragment>
                         ) : null}
@@ -510,9 +510,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                 </Fragment>
               ) : (
                 <View style={flexChild}>
-                  <View style={{ ...centerHV, ...flexChild }}>
-                    <ActivityIndicator color={colorGray._7} size="small" />
-                  </View>
+                  <Loading />
                 </View>
               )}
             </Fragment>
@@ -524,11 +522,11 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                   <Tab selected={true} style={{ height: sh56 }} text={DASHBOARD_ORDER_SUMMARY.TAB_PROFILE} />
                   <CustomSpacer isHorizontal={true} space={sw24} />
                 </View>
-                <View style={borderBottomBlack21} />
+                <View style={borderBottomGray2} />
                 <View style={{ ...flexChild }}>
                   {profile !== undefined ? (
                     <AccountDetailsContent
-                      accountHolder={"Principal"}
+                      accountHolder="Principal"
                       accountType={profile.accountType!}
                       data={structureProfile("Principal", profile, setFile)}
                       handleViewId={handleViewId}
@@ -538,9 +536,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                     />
                   ) : (
                     <View style={flexChild}>
-                      <View style={{ ...centerHV, ...flexChild }}>
-                        <ActivityIndicator color={colorGray._7} size="small" />
-                      </View>
+                      <Loading />
                     </View>
                   )}
                 </View>

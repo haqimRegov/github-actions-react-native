@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, LabeledTitle, NewDatePicker, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import { flexRow, fs16BoldBlack2, px, sh143, sh32, sh8, sw16, sw24, sw360, sw64 } from "../../../styles";
+import { flexRow, px, sh143, sh32, sh4, sh8, sw16, sw24, sw360, sw64 } from "../../../styles";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -34,7 +34,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
       <View style={px(sw24)}>
         <View style={flexRow}>
           <View>
-            <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_DATE} />
+            <TextSpaceArea spaceToBottom={sh4} text={PAYMENT.LABEL_TRANSACTION_DATE} />
             <NewDatePicker
               datePickerStyle={{ height: sh143 }}
               mode="date"
@@ -46,7 +46,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
           </View>
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
-            <TextSpaceArea text={PAYMENT.LABEL_TRANSACTION_TIME} />
+            <TextSpaceArea spaceToBottom={sh4} text={PAYMENT.LABEL_TRANSACTION_TIME} />
             <NewDatePicker
               datePickerStyle={{ height: sh143 }}
               mode="time"
@@ -65,7 +65,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
             label={PAYMENT.LABEL_KIB_ACCOUNT}
             spaceToLabel={sh8}
             title={`${kibBankName} - ${kibBankAccountNumber}`}
-            titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
+            titleStyle={px(sw16)}
             style={{ width: sw360 }}
           />
           <CustomSpacer isHorizontal={true} space={sw64} />
@@ -74,7 +74,7 @@ export const CashDepositMachine: FunctionComponent<CashDepositMachineProps> = ({
               label={PAYMENT.LABEL_CURRENCY}
               spaceToLabel={sh8}
               title={currency === "" ? "-" : currency}
-              titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
+              titleStyle={px(sw16)}
               style={{ width: sw360 }}
             />
           </View>

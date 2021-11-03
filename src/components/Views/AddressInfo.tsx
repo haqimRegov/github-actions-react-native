@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
-import { TextStyle, View } from "react-native";
+import { View } from "react-native";
 
 import { Language } from "../../constants/language";
-import { fs16BoldBlack1, sh16, sh8, sw240 } from "../../styles";
+import { sh16, sh8, sw240 } from "../../styles";
 import { LabeledTitle } from "./LabeledTitle";
 
 const { ADDRESS } = Language.PAGE;
@@ -14,13 +14,7 @@ export interface AddressInfoProps {
 
 export const AddressInfo: FunctionComponent<AddressInfoProps> = ({ data, labelAddress }: AddressInfoProps) => {
   const { address, postCode, city, state, country } = data;
-  const labelStyle: TextStyle = { lineHeight: sh16 };
-  const labeledTitleStyle = {
-    labelStyle: labelStyle,
-    spaceToBottom: sh16,
-    spaceToLabel: sh8,
-    titleStyle: fs16BoldBlack1,
-  };
+  const labeledTitleStyle = { spaceToBottom: sh16, spaceToLabel: sh8 };
 
   const formattedAddress = Object.values(address!).join(" ");
 

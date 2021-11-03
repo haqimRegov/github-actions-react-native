@@ -6,17 +6,17 @@ import { Language } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
 import {
   flexRow,
-  fs12BoldBlack2,
+  fs12BoldGray6,
   fs12BoldWhite1,
-  fs12RegBlack2,
+  fs12RegGray5,
   fsTransformNone,
   px,
   sh136,
   sh16,
   sh24,
   sh32,
+  sh4,
   sh8,
-  sw02,
   sw12,
   sw16,
   sw24,
@@ -136,8 +136,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       <View style={flexRow}>
         <CustomSpacer isHorizontal={true} space={sw24} />
         <View>
-          <CustomSpacer space={sh24} />
-          <Text style={fs12BoldBlack2}>{principalEmailLabel}</Text>
+          <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh24} style={fs12BoldGray6} text={principalEmailLabel} />
           <CustomTooltip
             content={tooltipContent}
             contentStyle={contentStyle}
@@ -156,16 +155,11 @@ export const Verification: FunctionComponent<VerificationProps> = ({
             />
           </CustomTooltip>
           {accountType === "Joint" ? null : (
-            <TextSpaceArea
-              spaceToTop={sh8}
-              style={{ ...fs12RegBlack2, ...px(sw16), letterSpacing: sw02 }}
-              text={EMAIL_VERIFICATION.NOTE_LINK}
-            />
+            <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, ...px(sw16) }} text={EMAIL_VERIFICATION.NOTE_LINK} />
           )}
           {accountType === "Joint" ? (
             <Fragment>
-              <CustomSpacer space={sh32} />
-              <Text style={fs12BoldBlack2}>{jointLabel}</Text>
+              <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh32} style={fs12BoldGray6} text={jointLabel} />
               <CustomTextInput
                 autoCapitalize="none"
                 error={jointError}
@@ -175,7 +169,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                 spaceToBottom={sh8}
                 value={inputJointEmail}
               />
-              <Text style={{ ...fs12RegBlack2, ...px(sw16) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
+              <Text style={{ ...fs12RegGray5, ...px(sw16) }}> {EMAIL_VERIFICATION.NOTE_LINK}</Text>
             </Fragment>
           ) : null}
           <View style={flexRow}>
@@ -183,7 +177,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
             <TextSpaceArea
               spaceToBottom={jointEmailCheck === true ? sh32 : 0}
               spaceToTop={sh16}
-              style={{ ...fs12RegBlack2, letterSpacing: sw02, maxWidth: sw320 }}
+              style={{ ...fs12RegGray5, maxWidth: sw320 }}
               text={EMAIL_VERIFICATION.NOTE_SPAM}
             />
           </View>

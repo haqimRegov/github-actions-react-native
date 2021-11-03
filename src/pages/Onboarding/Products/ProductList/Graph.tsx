@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { ButtonSelectionList, CustomGraph, CustomSpacer, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
-import { flexChild, flexRow, fs10RegBlack2, fs16BoldBlack2, px, sh16, sh24, sw24 } from "../../../../styles";
+import { flexChild, flexRow, fs10RegGray6, fs16BoldGray6, px, sh16, sh24, sw24 } from "../../../../styles";
 
 const { PRODUCT_GRAPH } = Language.PAGE;
 
@@ -91,7 +91,7 @@ export const ProductGraph: FunctionComponent<ProductGraphProps> = ({ fund, layou
   return (
     <View>
       <TextSpaceArea
-        style={{ ...fs16BoldBlack2, ...px(sw24) }}
+        style={{ ...fs16BoldGray6, ...px(sw24) }}
         spaceToBottom={sh16}
         spaceToTop={sh24}
         text={PRODUCT_GRAPH.LABEL_FUND_PERFORMANCE}
@@ -107,7 +107,7 @@ export const ProductGraph: FunctionComponent<ProductGraphProps> = ({ fund, layou
             onPress={handlePerformance}
           />
           <CustomSpacer space={sw24} isHorizontal={true} />
-          <Text style={{ ...fs10RegBlack2, ...flexChild }}>{PRODUCT_GRAPH.LABEL_DISCLAIMER}</Text>
+          <Text style={{ ...fs10RegGray6, ...flexChild }}>{PRODUCT_GRAPH.LABEL_DISCLAIMER}</Text>
         </View>
       </View>
     </View>

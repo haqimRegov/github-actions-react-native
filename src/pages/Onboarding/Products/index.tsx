@@ -7,7 +7,7 @@ import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
-import { flexChild, flexCol, fs12BoldBlack2, fs16BoldBlack2, fs16SemiBoldBlack2, sh56 } from "../../../styles";
+import { flexChild, flexCol, fs16RegGray6, sh56 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
@@ -311,7 +311,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         scrollEnabled === true ? (
           <View style={flexCol}>
             <SelectionBanner
-              bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
+              bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
               cancelOnPress={screen.onPressCancel}
               continueDisabled={disableContinue !== undefined && page === 1}
               labelCancel={INVESTMENT.BUTTON_CANCEL}
@@ -330,7 +330,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         spaceToTitle={prompt === "cancel" ? undefined : sh56}
         title={promptTitle}
         visible={prompt !== undefined}>
-        <Text style={prompt === "cancel" ? fs16BoldBlack2 : fs12BoldBlack2}>{promptText}</Text>
+        <Text style={fs16RegGray6}>{promptText}</Text>
       </ConfirmationModal>
     </Fragment>
   );

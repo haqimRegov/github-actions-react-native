@@ -15,18 +15,15 @@ import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, ERROR } from "../../../../da
 import {
   centerVertical,
   colorBlack,
-  colorBlue,
   flexRow,
-  fs12BoldBlue2,
-  fs12SemiBoldGray8,
-  fs16BoldBlue2,
+  fs12RegGray5,
+  fs16BoldBlue1,
   px,
   py,
   sh16,
   sh24,
   sh32,
   sh8,
-  sw02,
   sw16,
   sw24,
   sw328,
@@ -151,7 +148,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
         return (
           <View key={index}>
             <View style={{ ...centerVertical, ...flexRow, ...px(sw24) }}>
-              <TextSpaceArea style={fs16BoldBlue2} text={foreignBankLabel} />
+              <TextSpaceArea style={fs16BoldBlue1} text={foreignBankLabel} />
               <CustomSpacer isHorizontal={true} space={sw16} />
               <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} />
             </View>
@@ -240,20 +237,13 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
               />
               <TextSpaceArea
                 spaceToTop={sh8}
-                style={{ ...fs12SemiBoldGray8, ...px(sw16), letterSpacing: -sw02, maxWidth: sw328 }}
+                style={{ ...fs12RegGray5, ...px(sw16), maxWidth: sw328 }}
                 text={PERSONAL_DETAILS.HINT_SWIFT_CODE}
               />
               {item.currency!.length === currencyExtractor.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
-                  <OutlineButton
-                    buttonType="dashed"
-                    color={colorBlue._2}
-                    icon="plus"
-                    onPress={handleAddCurrency}
-                    text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
-                    textStyle={fs12BoldBlue2}
-                  />
+                  <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
                 </Fragment>
               )}
             </View>
@@ -264,14 +254,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
       {noForeignBank === true ? null : (
         <View style={px(sw24)}>
           <CustomSpacer space={sh24} />
-          <OutlineButton
-            buttonType="dashed"
-            color={colorBlue._2}
-            icon="plus"
-            onPress={handleAddForeignBank}
-            text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN}
-            textStyle={fs12BoldBlue2}
-          />
+          <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddForeignBank} text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN} />
         </View>
       )}
     </View>

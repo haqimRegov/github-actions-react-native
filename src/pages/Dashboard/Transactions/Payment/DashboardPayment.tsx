@@ -1,25 +1,23 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer, SafeAreaPage, SelectionBanner } from "../../../../components";
+import { CustomSpacer, Loading, SafeAreaPage, SelectionBanner } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
-  centerHV,
   centerVertical,
-  colorGray,
   flexChild,
   flexRow,
-  fs12RegBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
+  fs12RegGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
   px,
   sh112,
   sh24,
-  shadow5,
+  shadow50Black115,
   sw24,
   sw4,
 } from "../../../../styles";
@@ -194,7 +192,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
             {paymentOrder !== undefined ? (
               <View>
                 <CustomSpacer space={sh24} />
-                <View style={{ ...px(sw24), ...shadow5 }}>
+                <View style={{ ...px(sw24), ...shadow50Black115 }}>
                   <PaymentOrder
                     accountNames={accountNames}
                     activeOrder={activeOrder}
@@ -210,9 +208,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
                 <CustomSpacer space={sh24} />
               </View>
             ) : (
-              <View style={{ ...centerHV, ...flexChild }}>
-                <ActivityIndicator color={colorGray._7} size="small" />
-              </View>
+              <Loading />
             )}
             {activeOrder !== "" ? null : <CustomSpacer space={sh112} />}
           </View>
@@ -228,18 +224,18 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
                     return (
                       <View key={index} style={{ ...centerVertical, ...flexRow }}>
                         {index !== 0 ? (
-                          <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
+                          <Text style={{ ...fs16RegGray6, ...px(sw4) }}>+</Text>
                         ) : (
-                          <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
+                          <Text style={fs16RegGray6}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
                         )}
-                        <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
+                        <Text style={fs16RegGray6}>{totalAmount.currency}</Text>
                         <CustomSpacer isHorizontal={true} space={sw4} />
-                        <Text style={fs16BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
+                        <Text style={fs16BoldGray6}>{formatAmount(totalAmount.amount)}</Text>
                       </View>
                     );
                   })}
               </View>
-              {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
+              {floatingLabel !== "" ? <Text style={fs12RegGray6}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
             </View>
           }
           continueDebounce={false}

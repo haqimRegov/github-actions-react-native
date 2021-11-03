@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View } from "react-native";
 
-import { CustomTextInput, NewCheckBoxDropdownV2, UploadWithModal } from "../../components";
+import { CustomTextInput, NewCheckBoxDropdown, UploadWithModal } from "../../components";
 import { CheckBox } from "../../components/CheckBox/CheckBox";
 import { TextInputMultiline } from "../../components/Input/TextInputMultiline";
 import { Switch } from "../../components/Switch";
@@ -13,13 +13,12 @@ import {
   centerVertical,
   flexChild,
   flexRow,
-  fs16RegBlack3,
+  fs16RegBlack2,
   sh16,
   sh18,
   sh20,
   sh24,
   sh26,
-  sh4,
   sw14,
   sw20,
   sw22,
@@ -123,7 +122,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
         checkboxStyle={alignFlexStart}
         iconSize={sw14}
         label={label}
-        labelStyle={{ ...fs16RegBlack3, ...selectedCheckbox }}
+        labelStyle={{ ...fs16RegBlack2, ...selectedCheckbox }}
         numberOfLines={1}
         onPress={handleToggle}
         style={{ maxWidth: sw600, ...alignFlexStart }}
@@ -172,7 +171,6 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                               label={title}
                               onChangeText={(text: string) => handleValue(optionId, text)}
                               onBlur={() => handleBlur(optionId)}
-                              spaceToLabel={sh4}
                               value={subSection![optionId]}
                             />
                             <CustomSpacer space={sh16} />
@@ -185,11 +183,10 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                             {multiSelection === true ? (
                               <Fragment>
                                 <CustomSpacer space={sh18} />
-                                <NewCheckBoxDropdownV2
+                                <NewCheckBoxDropdown
                                   handleChange={(values: string[]) => handleValues(optionId, values)}
                                   items={checkBoxDropdownValues}
                                   label={title}
-                                  labelStyle={{ lineHeight: sh16 }}
                                   value={subSection !== undefined ? subSection![optionId] : []}
                                 />
                                 <CustomSpacer space={sh16} />
@@ -209,7 +206,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                   <CustomSpacer space={sh26} />
                   <Switch
                     label={DASHBOARD_EDD_CASE.LABEL_ADD_REMARK}
-                    labelStyle={{ ...fs16RegBlack3, ...selectedRemark }}
+                    labelStyle={{ ...fs16RegBlack2, ...selectedRemark }}
                     onPress={handleRemarkToggle}
                     style={{ width: sw32 }}
                     toggle={data.hasRemark!}
@@ -227,7 +224,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                   <CustomSpacer space={sh18} />
                   <Switch
                     label={DASHBOARD_EDD_CASE.LABEL_ADD_DOCUMENT}
-                    labelStyle={{ ...fs16RegBlack3, ...selectedDoc }}
+                    labelStyle={{ ...fs16RegBlack2, ...selectedDoc }}
                     onPress={handleDocumentToggle}
                     style={{ width: sw32 }}
                     toggle={data.hasDoc!}

@@ -2,19 +2,18 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, TextInput, View, ViewStyle } from "react-native";
 
 import {
-  colorBlack,
+  colorGray,
   colorTransparent,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
-  fs12SemiBoldGray8,
+  fs12BoldGray6,
+  fs12RegGray5,
   fullWidth,
   sh05,
-  sh24,
+  sh4,
   sh8,
   sh88,
   sh96,
-  sw02,
   sw8,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
@@ -73,7 +72,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
     };
   }, []);
 
-  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
   const defaultCharLength = rest.value !== undefined ? rest.value.length : 0;
   const charRemaining = showLength === true && rest.maxLength !== undefined ? `${defaultCharLength}/${rest.maxLength}` : "";
 
@@ -82,7 +81,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
-          <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle }}>
+          <Text onPress={onPressLabel} style={{ ...fs12BoldGray6, ...labelStyle }}>
             {label}
           </Text>
           <CustomSpacer space={defaultLabelSpace} />
@@ -93,9 +92,9 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         multiline={true}
         onFocus={handleMultilineFocus}
         placeholder={placeholder}
-        selectionColor={colorBlack._2}
+        selectionColor={colorGray._6}
         setRef={setTextAreaRef}
-        style={{ height: sh88, lineHeight: sh24, letterSpacing: sw02 }}
+        style={{ height: sh88 }}
         underlineColorAndroid={colorTransparent}
         viewStyle={{ borderRadius: sw8, height: sh96, ...fullWidth, ...viewStyle }}
         {...rest}
@@ -111,7 +110,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
       {showLength === true && rest.maxLength !== undefined ? (
         <View style={{ ...flexRow, ...fullWidth, ...viewStyle }}>
           <CustomFlexSpacer />
-          <Text style={{ ...fs12SemiBoldGray8, paddingTop: sh8 }}>{charRemaining}</Text>
+          <Text style={{ ...fs12RegGray5, paddingTop: sh8 }}>{charRemaining}</Text>
         </View>
       ) : null}
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}

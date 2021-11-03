@@ -8,8 +8,8 @@ import {
   colorWhite,
   flexRow,
   flexRowCC,
-  fs16SemiBoldBlack2,
-  fs24BoldBlue2,
+  fs16RegGray6,
+  fs24BoldBlue1,
   fsAlignCenter,
   fsTransformNone,
   imageContain,
@@ -23,7 +23,7 @@ import {
   sh8,
   sh96,
   sw10,
-  sw176,
+  sw136,
   sw234,
   sw28,
   sw5,
@@ -66,7 +66,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
   const modalContainer: ViewStyle = {
-    backgroundColor: colorWhite._4,
+    backgroundColor: colorBlue._2,
     borderRadius: sw5,
     width: sw565,
   };
@@ -74,7 +74,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
@@ -90,7 +90,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
     ...rest,
   };
 
-  const illustrationStyle: ImageStyle = { ...imageContain, height: sw176, width: sw176 };
+  const illustrationStyle: ImageStyle = { ...imageContain, height: sw136, width: sw136 };
   const topSpace = spaceToTop !== undefined ? spaceToTop : sh48;
   const defaultTopSpace = closable === true ? sh20 : topSpace;
   const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh16;
@@ -102,7 +102,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
           <CustomSpacer space={sh28} />
           <View style={flexRow}>
             <CustomFlexSpacer />
-            <IcoMoon color={colorBlue._2} name="close" size={sh24} onPress={handleClose} />
+            <IcoMoon color={colorBlue._1} name="close" size={sh24} onPress={handleClose} />
             <CustomSpacer isHorizontal={true} space={sw28} />
           </View>
         </Fragment>
@@ -117,11 +117,11 @@ export const Prompt: FunctionComponent<PromptProps> = ({
         ) : null}
         {label !== undefined ? (
           <Fragment>
-            <Text style={{ ...fs24BoldBlue2, ...fsAlignCenter, ...labelStyle }}>{label}</Text>
+            <Text style={{ ...fs24BoldBlue1, ...fsAlignCenter, ...labelStyle }}>{label}</Text>
             <CustomSpacer space={defaultSpaceToTitle} />
           </Fragment>
         ) : null}
-        {title !== undefined ? <Text style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}
+        {title !== undefined ? <Text style={{ ...fs16RegGray6, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}
         {children}
         <CustomSpacer space={defaultSpaceToButton} />
       </View>

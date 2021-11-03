@@ -14,17 +14,17 @@ import {
   centerVertical,
   colorWhite,
   flexRow,
-  fs12BoldBlack2,
-  fs12RegBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
-  fs24BoldBlack2,
+  fs12BoldGray6,
+  fs12RegGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
+  fs24BoldGray6,
   px,
   py,
   sh24,
   sh8,
   sh96,
-  shadowBlue5,
+  shadow16Blue112,
   sw24,
   sw4,
   sw8,
@@ -77,7 +77,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     ...flexRow,
     ...px(sw24),
     ...py(sh24),
-    ...shadowBlue5,
+    ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
@@ -194,7 +194,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const tagColor = completed === true ? "secondary" : "warning";
+  const tagColor = completed === true ? "complete" : "warning";
   const tagLabel = completed === true ? "Completed" : "Pending";
 
   const currencies =
@@ -210,25 +210,25 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
     <View>
       <View style={cardHeaderStyle}>
         <View>
-          <Text style={fs24BoldBlack2}>{orderNumber}</Text>
-          <Text style={fs12BoldBlack2}>{orderDate}</Text>
+          <Text style={fs24BoldGray6}>{orderNumber}</Text>
+          <Text style={fs12BoldGray6}>{orderDate}</Text>
         </View>
         <CustomFlexSpacer />
         <View style={alignItemsEnd}>
           <View style={{ ...centerVertical, ...flexRow }}>
             <Tag color={tagColor} text={tagLabel} />
             <CustomSpacer isHorizontal={true} space={sw8} />
-            <Text style={fs12RegBlack2}>{totalAmountLabel}</Text>
+            <Text style={fs12RegGray6}>{totalAmountLabel}</Text>
           </View>
           <CustomSpacer space={sh8} />
           <View style={{ ...centerVertical, ...flexRow }}>
             {orderTotalAmount.map((totalAmount: IOrderAmount, amountIndex: number) => {
               return (
                 <View key={amountIndex} style={{ ...centerVertical, ...flexRow }}>
-                  {amountIndex !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
-                  <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
+                  {amountIndex !== 0 ? <Text style={{ ...fs16RegGray6, ...px(sw4) }}>+</Text> : null}
+                  <Text style={fs16RegGray6}>{totalAmount.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{formatAmount(totalAmount.amount)}</Text>
+                  <Text style={fs16BoldGray6}>{formatAmount(totalAmount.amount)}</Text>
                 </View>
               );
             })}

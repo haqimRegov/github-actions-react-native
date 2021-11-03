@@ -12,7 +12,7 @@ import {
   DICTIONARY_TRANSACTIONS_DATE,
   DICTIONARY_TRANSACTIONS_TYPE,
 } from "../../../../data/dictionary";
-import { centerVertical, flexRow, fs16BoldBlack1, px, sh143, sh24, sh32, sh8, sw24, sw64 } from "../../../../styles";
+import { flexRow, fs16BoldGray6, px, sh143, sh16, sh24, sh32, sh4, sw24, sw64 } from "../../../../styles";
 
 const { DASHBOARD_FILTER } = Language.PAGE;
 interface TransactionsFilterProps {
@@ -68,11 +68,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
 
   return (
     <View>
-      <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs16BoldBlack1} text={DASHBOARD_FILTER.TITLE} />
-        </View>
-      </View>
+      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={{ ...fs16BoldGray6, ...px(sw24) }} text={DASHBOARD_FILTER.TITLE} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <NewDropdown
           handleChange={handleDateSorting}
@@ -84,7 +80,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_START_DATE} />
+          <TextSpaceArea spaceToBottom={sh4} text={DASHBOARD_FILTER.LABEL_START_DATE} />
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}
             mode="date"
@@ -99,7 +95,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_END_DATE} />
+          <TextSpaceArea spaceToBottom={sh4} text={DASHBOARD_FILTER.LABEL_END_DATE} />
           {/* <CustomCalendar handleSetStartDate={handleEndDate} startDate={endDate!} /> */}
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}

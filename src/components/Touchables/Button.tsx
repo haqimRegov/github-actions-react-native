@@ -5,12 +5,12 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 import { IcoMoon } from "../../icons";
 import {
   border,
-  colorBlack,
+  colorGray,
   colorRed,
   colorTransparent,
   colorWhite,
   flexRowCC,
-  fs16SemiBoldWhite1,
+  fs16BoldWhite1,
   fsCapitalize,
   sh16,
   sh48,
@@ -63,7 +63,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   };
 
   const defaultIconColor = iconColor !== undefined ? iconColor : colorWhite._1;
-  const textColor = secondary ? colorBlack._2 : colorWhite._1;
+  const textColor = secondary ? colorGray._6 : colorWhite._1;
 
   const handlePress = () => {
     if (withDebounce === true) {
@@ -82,7 +82,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
             <CustomSpacer isHorizontal={true} space={sw8} />
           </Fragment>
         )}
-        <Text style={{ ...fs16SemiBoldWhite1, ...fsCapitalize, color: textColor, ...textStyle }}>{text}</Text>
+        <Text style={{ ...fs16BoldWhite1, ...fsCapitalize, color: textColor, ...textStyle }}>{text}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

@@ -5,8 +5,8 @@ import { ConfirmationModal, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import {
   centerHV,
-  fs16SemiBoldBlack2,
-  fs24BoldBlue2,
+  fs16RegGray6,
+  fs24BoldBlue1,
   fsAlignCenter,
   imageContain,
   px,
@@ -51,8 +51,8 @@ export const ImageReview: FunctionComponent<ImageReviewProps> = ({ handleReuploa
         <View style={imageStyle}>
           <Image source={{ uri: image?.path }} style={{ ...imageContain, height: sh240, width: sw320 }} />
         </View>
-        <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue2, ...fsAlignCenter }} text={IDENTITY_CONFIRMATION.LABEL_CHECK} />
-        <TextSpaceArea style={{ ...fs16SemiBoldBlack2, ...fsAlignCenter }} spaceToTop={sh16} text={IDENTITY_CONFIRMATION.LABEL_UNABLE} />
+        <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue1, ...fsAlignCenter }} text={IDENTITY_CONFIRMATION.LABEL_CHECK} />
+        <TextSpaceArea style={{ ...fs16RegGray6, ...fsAlignCenter }} spaceToTop={sh16} text={IDENTITY_CONFIRMATION.LABEL_UNABLE} />
       </Fragment>
     </ConfirmationModal>
   );

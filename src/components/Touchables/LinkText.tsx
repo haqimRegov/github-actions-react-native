@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { centerVertical, colorBlack, colorBlue, flexCol, flexRow, flexWrap, fs12RegBlue1, sh16, sw1, sw2 } from "../../styles";
+import { centerVertical, colorBlue, colorGray, flexCol, flexRow, flexWrap, fs12RegBlue8, sh16, sw1, sw2 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 export interface LinkTextProps {
@@ -22,12 +22,12 @@ export interface LinkTextGroupProps {
 }
 
 export const LinkText: FunctionComponent<LinkTextProps> = ({ onPress, style, text, withUnderline }: LinkTextProps) => {
-  const underline = withUnderline === true ? { borderBottomWidth: sw2, borderBottomColor: colorBlue._2 } : {};
+  const underline = withUnderline === true ? { borderBottomWidth: sw2, borderBottomColor: colorBlue._1 } : {};
 
   return (
     <View style={flexWrap}>
       <View style={underline}>
-        <Text onPress={onPress} style={{ ...fs12RegBlue1, ...style }}>
+        <Text onPress={onPress} style={{ ...fs12RegBlue8, ...style }}>
           {text}
         </Text>
       </View>
@@ -40,7 +40,7 @@ export const LinkTextGroup = ({ direction, divider, links, noDivider, spaceToDiv
   const defaultSpace = spaceToDivider !== undefined ? spaceToDivider : 0;
   const isHorizontal = direction !== "column";
 
-  const linkDivider = divider !== undefined ? divider : <View style={{ backgroundColor: colorBlack._2, height: sh16, width: sw1 }} />;
+  const linkDivider = divider !== undefined ? divider : <View style={{ backgroundColor: colorGray._6, height: sh16, width: sw1 }} />;
 
   return (
     <View style={viewStyle}>

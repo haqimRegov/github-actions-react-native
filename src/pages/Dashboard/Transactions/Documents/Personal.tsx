@@ -1,27 +1,13 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomSpacer, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import {
-  borderBottomGray4,
-  centerHV,
-  colorGray,
-  flexChild,
-  fs12BoldBlack2,
-  fs16RegBlack2,
-  px,
-  sh176,
-  sh24,
-  sh32,
-  sh8,
-  sw24,
-  sw64,
-} from "../../../../styles";
+import { borderBottomGray2, fs12BoldGray6, fs16SemiBoldGray6, px, sh176, sh24, sh32, sh8, sw24, sw68 } from "../../../../styles";
 import { AlertDialog } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
@@ -188,15 +174,19 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         titleIconOnPress={handleBackToTransactions}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
         titleIcon="arrow-left">
-        <View style={px(sw64)}>
-          <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16RegBlack2} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
+        <View style={px(sw68)}>
+          <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>
         {documentList !== undefined ? (
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
                 {documentList.joint && documentsPrincipal.length > 0 ? (
-                  <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL} />
+                  <TextSpaceArea
+                    spaceToBottom={sh8}
+                    style={{ ...fs12BoldGray6, lineHeight: sh24 }}
+                    text={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
+                  />
                 ) : null}
                 <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
               </View>
@@ -206,13 +196,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 {documentsPrincipal.length > 0 && documentsJoint.length > 0 ? (
                   <Fragment>
                     <CustomSpacer space={sh32} />
-                    <View style={borderBottomGray4} />
+                    <View style={borderBottomGray2} />
                     <CustomSpacer space={sh32} />
                   </Fragment>
                 ) : null}
                 <View style={px(sw24)}>
                   {documentList.joint && documentsJoint.length > 0 ? (
-                    <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={UPLOAD_DOCUMENTS.LABEL_JOINT} />
+                    <TextSpaceArea spaceToBottom={sh8} style={{ ...fs12BoldGray6, lineHeight: sh24 }} text={UPLOAD_DOCUMENTS.LABEL_JOINT} />
                   ) : null}
                   <DocumentList data={documentsJoint} setData={handleJointData} />
                 </View>
@@ -220,9 +210,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
             )}
           </Fragment>
         ) : (
-          <View style={{ ...centerHV, ...flexChild }}>
-            <ActivityIndicator color={colorGray._7} size="small" />
-          </View>
+          <Loading />
         )}
         <CustomSpacer space={sh176} />
       </DashboardLayout>
@@ -235,6 +223,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         />
       ) : null}
       <PromptModal
+        backdropOpacity={loading ? 0.4 : undefined}
         handleContinue={handleBackToTransactions}
         illustration={LocalAssets.illustration.orderReceived}
         isLoading={loading}

@@ -1,18 +1,18 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Keyboard, View } from "react-native";
+import { Alert, Keyboard, View } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
-import { Prompt, RNModal } from "../../components";
+import { Loading, Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
 import { ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { changePassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
+import { centerHV, colorBlack, colorWhite, fullHeight, fullHW } from "../../styles";
 import { AlertDialog, Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails, PasswordDetails } from "./Details";
 
@@ -273,10 +273,12 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       break;
   }
 
+  const modalStyle = lockPrompt ? undefined : { backgroundColor: colorBlack._1_4 };
+
   return (
     <Fragment>
       {content}
-      <RNModal animationType="fade" visible={loading}>
+      <RNModal animationType="fade" style={modalStyle} visible={loading}>
         <Fragment>
           {lockPrompt ? (
             <View style={{ ...centerHV, ...fullHW }}>
@@ -289,9 +291,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
               />
             </View>
           ) : (
-            <View style={{ ...fullHeight, ...centerHV }}>
-              <ActivityIndicator color={colorWhite._1} size="small" />
-            </View>
+            <Loading color={colorWhite._1} style={fullHeight} />
           )}
         </Fragment>
       </RNModal>

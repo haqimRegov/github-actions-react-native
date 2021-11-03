@@ -13,7 +13,7 @@ import {
   colorGray,
   colorWhite,
   flexRow,
-  fs16BoldBlue2,
+  fs16BoldBlue1,
   fullHW,
   noBGColor,
   px,
@@ -145,7 +145,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
 
   const dropdownContainer: ViewStyle = {
     backgroundColor: colorWhite._1,
-    borderColor: colorBlue._2,
+    borderColor: colorBlue._1,
     borderRadius: sw16,
     borderWidth: sw2,
     left: layout.x,
@@ -156,11 +156,11 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
     ...viewStyle,
   };
 
-  const placeholderStyle: TextStyle = selectedValue ? {} : { color: colorGray._9, fontFamily: NunitoRegular };
+  const placeholderStyle: TextStyle = selectedValue ? {} : { color: colorGray._4, fontFamily: NunitoRegular };
   const pickerStyle: ViewStyle = { height: sh228, ...datePickerStyle };
 
   const defaultButtonStyle: ViewStyle = {
-    backgroundColor: colorBlue._2,
+    backgroundColor: colorBlue._1,
     borderWidth: 0,
     borderBottomRightRadius: sw16,
     borderBottomLeftRadius: sw16,
@@ -206,12 +206,12 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
           <View style={fullHW}>
             <View style={dropdownContainer}>
               <View style={{ ...centerVertical, ...flexRow, height: sh44, ...px(sw15) }}>
-                <Text style={{ ...fs16BoldBlue2, ...placeholderStyle }}>{selectedValue || customPlaceholder}</Text>
+                <Text style={{ ...fs16BoldBlue1, ...placeholderStyle }}>{selectedValue || customPlaceholder}</Text>
                 <CustomFlexSpacer />
-                <IcoMoon color={colorBlue._2} name={icon} size={sw24} />
+                <IcoMoon color={colorBlue._1} name={icon} size={sw24} />
               </View>
               <Collapsible duration={100} collapsed={collapse} style={noBGColor}>
-                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._2 }}>
+                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._1 }}>
                   <View style={pickerStyle}>
                     <DateTimePicker
                       display="spinner"
@@ -225,7 +225,7 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
                       value={selectedDate}
                     />
                   </View>
-                  <View style={{ backgroundColor: colorBlue._2, borderBottomRightRadius: sw12, borderBottomLeftRadius: sw12 }}>
+                  <View style={{ backgroundColor: colorBlue._1, borderBottomRightRadius: sw12, borderBottomLeftRadius: sw12 }}>
                     <CustomButton
                       buttonStyle={defaultButtonStyle}
                       onPress={handleConfirmDate}

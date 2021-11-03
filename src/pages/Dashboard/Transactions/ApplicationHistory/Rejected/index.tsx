@@ -8,23 +8,7 @@ import { Language } from "../../../../../constants/language";
 import { getDashboard } from "../../../../../network-actions";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
-import {
-  flexChild,
-  fs12BoldBlue2,
-  fs12RegBlue2,
-  fs12RegBlue6,
-  fsTransformNone,
-  px,
-  sh32,
-  sw039,
-  sw104,
-  sw123,
-  sw136,
-  sw152,
-  sw16,
-  sw176,
-  sw32,
-} from "../../../../../styles";
+import { flexChild, fs12RegBlue1, fsTransformNone, px, sh32, sw104, sw123, sw136, sw152, sw16, sw176, sw32 } from "../../../../../styles";
 import { CustomTableItem } from "../CustomTableItem";
 import { OrderRemarks } from "../OrderRemarks";
 
@@ -127,7 +111,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   const columns: ITableColumn[] = [
     {
       icon: { name: sortOrderNumber === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "orderNumber", textStyle: { ...fs12RegBlue6, ...fsTransformNone, letterSpacing: -sw039 } }],
+      key: [{ key: "orderNumber", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
       onPressHeader: handleSortOrderNumber,
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
       viewStyle: { width: sw104 },
@@ -135,7 +119,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     {
       customItem: true,
       icon: { name: sortPrincipal === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "investorName", textStyle: { ...fsTransformNone, ...fs12BoldBlue2 } }],
+      key: [{ key: "investorName" }],
       onPressHeader: handleSortInvestor,
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
       titleStyle: { paddingLeft: sw32 },
@@ -143,7 +127,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     },
     {
       icon: { name: sortTransactionType === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "transactionType", textStyle: fs12BoldBlue2 }],
+      key: [{ key: "transactionType", textStyle: fs12RegBlue1 }],
       onPressHeader: handleSortTransactionType,
       textStyle: fsTransformNone,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_TYPE,
@@ -162,14 +146,14 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       customHeader: true,
       customItem: true,
       icon: { name: "caret-down", size: sw16 },
-      key: [{ key: showDateBy, textStyle: fs12RegBlue2 }],
+      key: [{ key: showDateBy }],
       title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
       viewStyle: { width: sw136 },
     },
     {
       customItem: true,
-      key: [{ key: "status" }],
       icon: { name: sortDueDate === "descending" ? "arrow-up" : "arrow-down" },
+      key: [{ key: "status" }],
       onPressHeader: handleSortDueDate,
       onPressItem: handleShowRemarks,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,

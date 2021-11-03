@@ -1,24 +1,12 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, View, ViewStyle } from "react-native";
+import { Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer, FileViewer, Tab } from "../../../../components";
+import { CustomSpacer, FileViewer, Loading, Tab } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getOrderSummary } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import {
-  borderBottomBlack21,
-  centerHV,
-  colorGray,
-  colorWhite,
-  flexChild,
-  flexRow,
-  sh16,
-  sh24,
-  sh56,
-  shadowBlue5,
-  sw24,
-} from "../../../../styles";
+import { borderBottomGray2, colorWhite, flexChild, flexRow, sh16, sh24, sh56, shadow16Blue112, sw24 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountDetails } from "./Account";
 import { OrderDetails } from "./OrderDetails";
@@ -87,7 +75,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
 
   const cardStyle: ViewStyle = {
     ...flexChild,
-    ...shadowBlue5,
+    ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
     marginHorizontal: sw24,
@@ -121,14 +109,8 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
               />
               <CustomSpacer isHorizontal={true} space={sw24} />
             </View>
-            <View style={borderBottomBlack21} />
-            {orderSummary !== undefined ? (
-              content
-            ) : (
-              <View style={{ ...centerHV, ...flexChild }}>
-                <ActivityIndicator color={colorGray._7} size="small" />
-              </View>
-            )}
+            <View style={borderBottomGray2} />
+            {orderSummary !== undefined ? content : <Loading />}
           </View>
         </View>
       </DashboardLayout>

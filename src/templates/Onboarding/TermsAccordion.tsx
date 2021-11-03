@@ -2,19 +2,20 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
+import { CustomFlexSpacer, CustomSpacer } from "../../components";
 import { IcoMoon } from "../../icons";
 import {
-  borderBottomGray1,
+  borderBottomGray2,
   centerHorizontal,
   centerVertical,
   colorWhite,
   flexRow,
   flexShrink,
   flexWrap,
-  fs10RegBlack2,
-  fs12BoldBlack2,
-  fs14BoldBlack2,
-  fs16BoldBlue2,
+  fs10RegGray6,
+  fs12BoldGray6,
+  fs14BoldGray6,
+  fs16BoldBlue1,
   fsAlignCenter,
   justifyContentEnd,
   noBGColor,
@@ -23,37 +24,34 @@ import {
   sh17,
   sh56,
   sh8,
-  shadowBlue5,
-  sw02,
+  shadow16Blue112,
   sw14,
   sw20,
   sw24,
   sw8,
 } from "../../styles";
-import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
-interface CustomAccordionProps {
-  sections: ICustomAccordionSection[];
-
+interface TermsAccordionProps {
   expandAll?: boolean;
   expandMultiple?: boolean;
   headerStyle?: ViewStyle;
-  titleStyle?: TextStyle;
   hideIcon?: boolean;
   icon?: string;
+  sections: ITermsAccordionSection[];
   spaceInBetween?: number;
+  titleStyle?: TextStyle;
 }
 
-export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
-  sections,
+export const TermsAccordion: FunctionComponent<TermsAccordionProps> = ({
   expandAll,
   expandMultiple,
   headerStyle,
   hideIcon,
   icon,
+  sections,
   spaceInBetween,
   titleStyle,
-}: CustomAccordionProps) => {
+}: TermsAccordionProps) => {
   const [activeSections, setActiveSections] = useState<number[]>([]);
 
   useEffect(() => {
@@ -69,7 +67,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
   }, [expandAll, sections]);
   const defaultHeaderStyle: ViewStyle = {
     // ...centerVertical,
-    ...shadowBlue5,
+    ...shadow16Blue112,
     // ...flexRow,
     backgroundColor: colorWhite._1,
     borderRadius: sw8,
@@ -81,7 +79,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
 
   return (
     <View>
-      {sections.map((section: ICustomAccordionSection, index: number) => {
+      {sections.map((section: ITermsAccordionSection, index: number) => {
         const { custom, subsection, title } = section;
         const active = activeSections.includes(index);
         // const defaultStyle = active ? { ...defaultHeaderStyle, ...noBorderBottom } : defaultHeaderStyle;
@@ -109,7 +107,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
               <Fragment>
                 <TouchableWithoutFeedback onPress={handleSetSections}>
                   <View style={{ ...flexRow, height: sh56, ...centerVertical, ...px(sw24) }}>
-                    <Text style={{ ...fs16BoldBlue2, ...titleStyle }}>{title}</Text>
+                    <Text style={{ ...fs16BoldBlue1, ...titleStyle }}>{title}</Text>
                     <CustomFlexSpacer />
                     {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
                   </View>
@@ -126,14 +124,12 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                           <Fragment key={subsectionIndex}>
                             {subsectionIndex !== 0 ? (
                               <Fragment>
-                                <View style={borderBottomGray1} />
+                                <View style={borderBottomGray2} />
                                 <CustomSpacer space={sh16} />
                               </Fragment>
                             ) : null}
                             <View style={px(sw24)}>
-                              {terms.heading !== undefined ? (
-                                <Text style={{ ...fs14BoldBlack2, letterSpacing: -sw02 }}>{terms.heading}</Text>
-                              ) : null}
+                              {terms.heading !== undefined ? <Text style={fs14BoldGray6}>{terms.heading}</Text> : null}
                               <CustomSpacer space={sh8} />
                               {terms.termsList.map((term, insideIndex) => {
                                 return (
@@ -142,7 +138,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                                       {term.label === undefined ? null : (
                                         <Fragment>
                                           <CustomSpacer space={sh8} />
-                                          <Text style={fs12BoldBlack2}>{term.label}</Text>
+                                          <Text style={fs12BoldGray6}>{term.label}</Text>
                                         </Fragment>
                                       )}
                                       {term.content.map((line: IContent, contentIndex: number) => {
@@ -159,7 +155,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                                                 <>
                                                   <View style={{ ...flexRow, ...justifyContentEnd, width: defaultWidth }}>
                                                     <View style={{ ...centerHorizontal, height: sh17 }}>
-                                                      <Text style={{ ...fs10RegBlack2, ...fsAlignCenter }}>{line.prefix}</Text>
+                                                      <Text style={{ ...fs10RegGray6, ...fsAlignCenter }}>{line.prefix}</Text>
                                                     </View>
                                                     {line.prefixIndent !== undefined && line.prefixIndent === false ? null : (
                                                       <CustomSpacer isHorizontal={true} space={defaultPrefixIndentSpace} />
@@ -167,7 +163,7 @@ export const CustomAccordion: FunctionComponent<CustomAccordionProps> = ({
                                                   </View>
                                                 </>
                                               ) : null}
-                                              <Text style={{ ...fs10RegBlack2, ...flexWrap, ...flexShrink }}>{line.text}</Text>
+                                              <Text style={{ ...fs10RegGray6, ...flexWrap, ...flexShrink }}>{line.text}</Text>
                                             </View>
                                             <CustomSpacer space={sh16} />
                                           </Fragment>

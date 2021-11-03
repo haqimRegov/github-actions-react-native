@@ -1,8 +1,7 @@
 import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IQuickAction, Tag, TagColorType } from "../../components";
-import { NewQuickActions } from "../../components/Collapsible/NewQuickActions";
+import { CustomFlexSpacer, CustomSpacer, IQuickAction, NewQuickActions, Tag, TagColorType } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
 import { DICTIONARY_EDD_STATUS } from "../../data/dictionary/edd";
@@ -11,10 +10,10 @@ import {
   alignItemsEnd,
   alignSelfCenter,
   centerVertical,
-  colorWhite,
+  colorBlue,
   flexGrow,
   flexRow,
-  fs24BoldBlack2,
+  fs24BoldGray6,
   fullHeight,
   px,
   sh16,
@@ -69,7 +68,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     {
       label: QUICK_ACTIONS.LABEL_NEW_SALES,
       onPress: handleAddClient,
-      // style: borderBottomGray4,
+      // style: borderBottomGray2,
     },
     // {
     //   label: QUICK_ACTIONS.LABEL_TOP_UP,
@@ -98,8 +97,8 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     statusColor = "error";
   } else if (status === DICTIONARY_ORDER_STATUS.submitted) {
     statusColor = "success";
-  } else if (status === DICTIONARY_ORDER_STATUS.completed) {
-    statusColor = "secondary";
+  } else if (status === DICTIONARY_ORDER_STATUS.completed || status === DICTIONARY_ORDER_STATUS.pendingInitialOrder) {
+    statusColor = "complete";
   } else if (status === DICTIONARY_ORDER_STATUS.reroutedBr || status === DICTIONARY_ORDER_STATUS.reroutedHq) {
     statusColor = "danger";
   } else {
@@ -116,7 +115,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
         ref={setScrollRef}
         scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}>
-        <View style={{ ...fullHeight, backgroundColor: colorWhite._4 }}>
+        <View style={{ ...fullHeight, backgroundColor: colorBlue._2 }}>
           <View style={px(sw24)}>
             <CustomSpacer space={sh16} />
             <View style={{ ...centerVertical, ...flexRow }}>
@@ -129,7 +128,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                       <CustomSpacer isHorizontal={true} space={sw20} />
                     </Fragment>
                   ) : null}
-                  {title !== undefined ? <Text style={{ ...fs24BoldBlack2, ...alignItemsEnd }}>{title}</Text> : null}
+                  {title !== undefined ? <Text style={{ ...fs24BoldGray6, ...alignItemsEnd }}>{title}</Text> : null}
                 </View>
               </View>
               {status !== undefined ? (

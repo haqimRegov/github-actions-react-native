@@ -21,7 +21,7 @@ import { getInbox, updateInbox } from "../../network-actions";
 import { updateSeen } from "../../network-actions/dashboard/UpdateSeen";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import {
-  borderBottomBlack21,
+  borderBottomGray2,
   colorWhite,
   flexChild,
   flexGrow,
@@ -32,7 +32,7 @@ import {
   sh24,
   sh32,
   sh48,
-  shadowBlue5,
+  shadow16Blue112,
   sw24,
 } from "../../styles";
 
@@ -205,8 +205,8 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
 
   const cardStyle: ViewStyle = {
     ...flexChild,
-    ...shadowBlue5,
-    backgroundColor: colorWhite._1,
+    ...shadow16Blue112,
+    backgroundColor: colorWhite._2,
     borderRadius: sw24,
     marginHorizontal: sw24,
     marginVertical: sh24,
@@ -253,7 +253,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
           />
           <CustomSpacer isHorizontal={true} space={sw24} />
         </View>
-        <View style={borderBottomBlack21} />
+        <View style={borderBottomGray2} />
         <View style={{ ...px(sw24), ...flexChild }}>
           <CustomSpacer space={sh24} />
           {inboxList.notifications.length === 0 || initialLoading === true ? (

@@ -7,6 +7,7 @@ import {
   centerHV,
   centerVertical,
   colorBlack,
+  colorGray,
   colorTransparent,
   colorWhite,
   flexChild,
@@ -23,7 +24,7 @@ import {
   sh40,
   sh500,
   sh96,
-  shadow5,
+  shadow50Black115,
   sw10,
   sw204,
   sw40,
@@ -67,9 +68,9 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
     height: sh32,
   };
   const headerBGColor = value !== undefined && value.type === "application/pdf" ? { backgroundColor: colorWhite._1 } : {};
-  const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorBlack._2 : colorWhite._1;
+  const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorGray._6 : colorWhite._1;
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
-  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow5 };
+  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow50Black115 };
   const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
   const previewStyle: ImageStyle = { ...imageContain, height: sh140, width: sw204 };
 
@@ -148,7 +149,7 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
                       />
                     </View>
                   ) : (
-                    <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_85 }}>
+                    <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_7 }}>
                       <Image source={imageValue} style={imageStyle} />
                     </View>
                   )}

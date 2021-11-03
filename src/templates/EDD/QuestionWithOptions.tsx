@@ -5,17 +5,17 @@ import { AdvanceToggleButton, CustomSpacer, CustomTextInput, CustomTooltip, NewD
 import {
   centerHV,
   colorBlue,
+  colorGray,
   colorWhite,
   flexChild,
   flexCol,
   flexRow,
   fs12RegWhite1,
-  fs16BoldBlack3,
+  fs16BoldBlack2,
   fullWidth,
   sh11,
   sh16,
   sh18,
-  sh4,
   sw100,
   sw12,
   sw14,
@@ -63,7 +63,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
     setData(tempData);
   };
 
-  const border = { borderBottomWidth: 0.5, borderBottomColor: colorWhite._3 };
+  const border = { borderBottomWidth: 0.5, borderBottomColor: colorGray._3 };
 
   return (
     <View style={{ flexDirection: direction }}>
@@ -139,7 +139,6 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                         label={insideOption.title}
                         onChangeText={(text: string) => handleInput(defaultKey, text)}
                         spaceToTop={sh16}
-                        spaceToLabel={sh4}
                         value={subSection !== undefined ? subSection![defaultKey] : ""}
                       />
                     </View>
@@ -153,7 +152,6 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                         handleChange={(text: string) => handleDropdown(defaultKey, text)}
                         items={questionDropdownValues}
                         label={insideOption.title}
-                        spaceToLabel={sh4}
                         value={subSection !== undefined ? subSection[defaultKey]! : ""}
                       />
                     </View>
@@ -168,7 +166,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                           <View style={{ ...border, ...fullWidth }} />
                           <View>
                             <CustomSpacer space={sh16} />
-                            <Text style={fs16BoldBlack3}>{insideOption.title}</Text>
+                            <Text style={fs16BoldBlack2}>{insideOption.title}</Text>
                             <CustomSpacer space={sh16} />
                             <View style={flexRow}>
                               {insideOption.options !== undefined && insideOption.options !== null

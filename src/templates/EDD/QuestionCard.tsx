@@ -12,7 +12,7 @@ import { IcoMoon } from "../../icons";
 import { PreviousData } from "../../pages/Dashboard/EDD/PreviousData";
 import {
   border,
-  borderBottomGray4,
+  borderBottomGray2,
   centerHorizontal,
   centerHV,
   centerVertical,
@@ -21,16 +21,14 @@ import {
   colorWhite,
   flexRow,
   flexWrap,
-  fs10RegBlack3,
-  fs10RegGray8,
-  fs11RegGray8,
-  fs12BoldBlue1,
-  fs16BoldBlack3,
+  fs10RegBlack2,
+  fs10RegGray5,
+  fs12BoldBlue8,
+  fs16BoldBlack2,
   fullWidth,
   px,
   py,
   sh12,
-  sh14,
   sh16,
   sh18,
   sh20,
@@ -99,13 +97,13 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
   };
 
   const containerStyle: ViewStyle = {
-    ...border(colorGray._10, sw1, sw16),
+    ...border(colorGray._2, sw1, sw16),
   };
   const headerStyle: ViewStyle = {
     ...flexRow,
     ...centerVertical,
     height: sh68,
-    backgroundColor: colorBlue._9,
+    backgroundColor: colorBlue._3,
     borderTopLeftRadius: sw16,
     borderTopRightRadius: sw16,
   };
@@ -131,15 +129,15 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
       <View style={headerStyle}>
         <CustomSpacer isHorizontal={true} space={sw32} />
         <View style={numberStyle}>
-          <Text style={fs10RegBlack3}>{questionLabel}</Text>
+          <Text style={fs10RegBlack2}>{questionLabel}</Text>
         </View>
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View style={centerHorizontal}>
-          <Text style={{ ...fs16BoldBlack3, ...flexWrap, maxWidth: sw638 }}>{question}</Text>
+          <Text style={{ ...fs16BoldBlack2, ...flexWrap, maxWidth: sw638 }}>{question}</Text>
           {subQuestion !== undefined && subQuestion !== null ? (
             <Fragment>
               <CustomSpacer space={sh4} />
-              <Text style={fs11RegGray8}>{subQuestion}</Text>
+              <Text style={fs10RegGray5}>{subQuestion}</Text>
             </Fragment>
           ) : null}
         </View>
@@ -155,15 +153,15 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   <CustomSpacer isHorizontal space={sw8} />
                   <TouchableWithoutFeedback onPress={handleShow}>
                     <View style={{ ...flexRow, ...centerHV }}>
-                      <Text style={{ ...fs12BoldBlue1, lineHeight: sh16 }}>{showText}</Text>
-                      <IcoMoon color={colorBlue._1} name={icon} size={sh12} />
+                      <Text style={fs12BoldBlue8}>{showText}</Text>
+                      <IcoMoon color={colorBlue._8} name={icon} size={sh12} />
                     </View>
                   </TouchableWithoutFeedback>
                 </View>
               </Fragment>
             ) : null}
           </View>
-          {showPrevious !== false ? <View style={borderBottomGray4} /> : null}
+          {showPrevious !== false ? <View style={borderBottomGray2} /> : null}
         </Fragment>
       ) : null}
       {options !== undefined && options !== null && options.length > 0 ? (
@@ -297,8 +295,8 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 };
 
                 let content = <View />;
-                const borderBottom: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._10 };
-                const optionsBorder: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._10 };
+                const borderBottom: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._2 };
+                const optionsBorder: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._2 };
                 const topSpace =
                   title !== undefined && title !== null && title === "Others" && optionIndex !== options.length - 1 ? sh16 : sh20;
                 const defaultRemarkToggle: boolean =
@@ -360,12 +358,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   case "reroute":
                     content = (
                       <View>
-                        <LabeledTitle
-                          label={title!}
-                          labelStyle={{ ...fs10RegGray8, lineHeight: sh14 }}
-                          title={description!}
-                          titleStyle={fs16BoldBlack3}
-                        />
+                        <LabeledTitle label={title!} labelStyle={fs10RegGray5} title={description!} titleStyle={fs16BoldBlack2} />
                       </View>
                     );
                     break;

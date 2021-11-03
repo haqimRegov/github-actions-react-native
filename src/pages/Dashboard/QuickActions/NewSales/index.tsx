@@ -17,14 +17,14 @@ import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
 import {
   centerHV,
+  colorBlue,
   colorWhite,
   flexGrow,
   flexRowCC,
-  fs24BoldBlack1,
-  fs40BoldBlack2,
+  fs24BoldBlue1,
+  fs36BoldBlack2,
   fullHW,
   px,
-  sh40,
   sh48,
   sh56,
   sh96,
@@ -77,7 +77,7 @@ const NewSalesComponent = ({
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
-  const titleStyle: TextStyle = registered === true ? {} : { ...fs40BoldBlack2, lineHeight: sh40 };
+  const titleStyle: TextStyle = registered === true ? {} : fs36BoldBlack2;
 
   const setClientInfo = (info: IClientBasicInfo) =>
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
@@ -313,7 +313,7 @@ const NewSalesComponent = ({
   };
 
   const modalContainer: ViewStyle = {
-    backgroundColor: colorWhite._4,
+    backgroundColor: colorBlue._2,
     borderRadius: sw5,
     width: sw565,
   };
@@ -321,7 +321,7 @@ const NewSalesComponent = ({
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
@@ -339,7 +339,7 @@ const NewSalesComponent = ({
                 <CustomSpacer space={registered === true ? sh56 : sh48} />
                 {registered === false ? (
                   <Fragment>
-                    <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
+                    <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
                     <NewSalesDetails
                       accountType={accountType}
                       clientInfo={details![holderToFill]!}

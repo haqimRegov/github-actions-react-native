@@ -1,6 +1,7 @@
 export const english = {
   PAGE: {
     ADDRESS: {
+      BUTTON_ADD: "Add Additional Line",
       LABEL_ADDRESS: "Address",
       LABEL_CITY: "City",
       LABEL_COUNTRY: "Country",
@@ -121,6 +122,7 @@ export const english = {
       SUBTITLE_REACH: "How can we reach you?",
     },
     DASHBOARD: {
+      BUTTON_QUICK_ACTIONS: "Quick Actions",
       LABEL_ID: "ID",
       MENU_DASHBOARD: "Transactions",
       MENU_EDD: "EDD",
@@ -152,7 +154,6 @@ export const english = {
       LABEL_EDD_CASES: "EDD Cases",
       LABEL_EMPTY_SUBTITLE: "You don't have an EDD case for review.",
       LABEL_EMPTY_TITLE: "No EDD case",
-      LABEL_FILTER_TITLE: "Filter Cases by",
       LABEL_HISTORY: "History",
       LABEL_INVESTOR_NAME: "Investor Name",
       LABEL_NEW: "New",
@@ -167,6 +168,7 @@ export const english = {
       LABEL_SUBMITTED: "Submitted",
       LABEL_TYPES: "Types:",
       LABEL_VIEW: "View",
+      TITLE: "Filter Cases by",
     },
     DASHBOARD_HOME: {
       BUTTON_DONE: "Done",
@@ -425,6 +427,7 @@ export const english = {
     DECLARATIONS: {
       BORN_US: "Were you born in the USA?",
       BUTTON_ACCEPT: "Accept & Continue",
+      BUTTON_ADD_TIN: "Add Additional TIN",
       CONFIRM_ADDRESS: "I hereby confirm that I reside in Malaysia and my correspondence address is P O Box",
       CRS_ARE_YOU: "Are you a...",
       CRS_HEADING: "Common Reporting Standard (CRS) Declaration",
@@ -788,7 +791,7 @@ export const english = {
       SUBHEADING_EXPIRED: "Password expired. Please change your password.",
       SUBHEADING_FIRST_TIME: "Let's get you started.",
       SUBHEADING_LOGIN: "Log in to your account.",
-      SUBHEADING_OTP: "one-time password has been sent to your registered email ID",
+      SUBHEADING_OTP: "One-time password has been sent to your registered email ID",
       SUBHEADING_PASSWORD: "Create your password.",
       SUBHEADING_RECOVERY: "Reset your password.",
       TITLE_LOCKED_ACCOUNT: "Please check your email for the OTP to access your account.",
@@ -991,8 +994,8 @@ export const english = {
       LABEL_FUND_OBJECTIVE: "Fund Objective",
       LABEL_FUND_TYPE: "Fund Type",
       LABEL_LANDING_FUND: "Landing Fund",
-      LABEL_MINIMUM_CASH: "Min. Investment Amount (Cash)",
-      LABEL_MINIMUM_EPF: "Min. Investment Amount (EPF)",
+      LABEL_MINIMUM_CASH: "Minimum Investment (Cash)",
+      LABEL_MINIMUM_EPF: "Minimum Investment (EPF)",
       LABEL_RISK_CATEGORY: "Risk Category",
       LABEL_RISK: "Risk Category",
       LABEL_SALES_CASH: "Sales Charge (Cash)",

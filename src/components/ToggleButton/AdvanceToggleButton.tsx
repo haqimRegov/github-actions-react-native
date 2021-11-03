@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactNode } from "react";
-import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular } from "../../constants";
 import { IcoMoon } from "../../icons";
@@ -14,12 +14,12 @@ import {
   colorWhite,
   flexCol,
   flexRow,
-  fs12BoldBlack2,
-  fs12RegGray8,
+  fs12BoldGray6,
+  fs12RegGray5,
   sh16,
   sw1,
+  sw12,
   sw16,
-  sw24,
   sw326,
   sw40,
   sw8,
@@ -27,9 +27,12 @@ import {
 import { CustomSpacer } from "../Views/Spacer";
 
 interface AdvanceToggleButtonProps {
+  buttonStyle?: ViewStyle;
   direction?: "column" | "row";
   disabledIndex?: number[];
+  iconSize?: number;
   labels: ICheckBoxWithSubLabel[];
+  labelStyle?: TextStyle;
   onSelect: (index: TypeAdvanceToggleButtonValue) => void;
   sideElement?: ReactNode;
   space?: number;
@@ -38,9 +41,12 @@ interface AdvanceToggleButtonProps {
 }
 
 export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = ({
+  buttonStyle,
   direction,
   disabledIndex,
+  iconSize,
   labels,
+  labelStyle: mainLabelStyle,
   onSelect,
   sideElement,
   space,
@@ -65,11 +71,11 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
             }
           };
 
-          const iconColor = value === index ? colorWhite._1 : colorBlue._2;
+          const iconColor = value === index ? colorWhite._1 : colorBlue._1;
           const circleStyle: ViewStyle =
-            value === index ? circleBorder(sw24, sw1, colorRed._1, colorRed._1) : circleBorder(sw24, sw1, colorBlue._2);
+            value === index ? circleBorder(sw16, sw1, colorRed._1, colorRed._1) : circleBorder(sw16, sw1, colorBlue._1);
 
-          const disabledBackground: ViewStyle = disabled === true && selected === false ? { backgroundColor: colorGray._9 } : {};
+          const disabledBackground: ViewStyle = disabled === true && selected === false ? { backgroundColor: colorGray._4 } : {};
           const disabledStyle: ViewStyle = disabled ? { opacity: 0.6 } : {};
           const fontFamily = selected ? NunitoBold : NunitoRegular;
 
@@ -79,14 +85,23 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
               <TouchableWithoutFeedback onPress={handlePress}>
                 <View style={{ ...centerVertical, ...flexRow, ...disabledStyle }}>
                   <View style={alignSelfStart}>
-                    <View style={{ ...centerHV, ...circleStyle, ...disabledBackground }}>
-                      <IcoMoon name="success" size={sw16} color={iconColor} />
+                    <View style={{ ...centerHV, ...circleStyle, ...disabledBackground, ...buttonStyle }}>
+                      <IcoMoon name="success" size={iconSize || sw12} color={iconColor} />
                     </View>
                   </View>
                   <CustomSpacer space={sw8} isHorizontal />
                   <View style={{ ...alignSelfStart, ...textContainer }}>
                     <View style={flexRow}>
-                      <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, maxWidth: sw326, ...labelStyle }}>{label}</Text>
+                      <Text
+                        style={{
+                          ...fs12BoldGray6,
+                          fontFamily: fontFamily,
+                          maxWidth: sw326,
+                          ...mainLabelStyle,
+                          ...labelStyle,
+                        }}>
+                        {label}
+                      </Text>
                       {sideElement !== undefined ? (
                         <Fragment>
                           <CustomSpacer isHorizontal space={sw8} />
@@ -94,7 +109,7 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
                         </Fragment>
                       ) : null}
                     </View>
-                    {subLabel !== undefined ? <Text style={{ ...fs12RegGray8, maxWidth: sw326, ...subLabelStyle }}>{subLabel}</Text> : null}
+                    {subLabel !== undefined ? <Text style={{ ...fs12RegGray5, maxWidth: sw326, ...subLabelStyle }}>{subLabel}</Text> : null}
                   </View>
                 </View>
               </TouchableWithoutFeedback>

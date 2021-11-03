@@ -8,7 +8,7 @@ import { ConfirmationModal } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { fs16BoldBlack2 } from "../../../styles";
+import { fs16RegGray6 } from "../../../styles";
 import { EmailOTP } from "./EmailOTP";
 import { Verification } from "./Verification";
 
@@ -154,7 +154,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         labelContinue={EMAIL_VERIFICATION.BUTTON_YES}
         title={EMAIL_VERIFICATION.PROMPT_TITLE}
         visible={prompt !== undefined}>
-        <Text style={fs16BoldBlack2}>{EMAIL_VERIFICATION.PROMPT_LABEL}</Text>
+        <Text style={fs16RegGray6}>{EMAIL_VERIFICATION.PROMPT_LABEL}</Text>
       </ConfirmationModal>
     </Fragment>
   );

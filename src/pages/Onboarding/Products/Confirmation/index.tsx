@@ -11,15 +11,15 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  fs10BoldBlack2,
-  fs16SemiBoldBlack2,
-  fs24BoldBlack2,
+  fs10BoldGray6,
+  fs16SemiBoldGray6,
+  fs24BoldGray6,
   px,
   sh176,
   sh24,
   sh32,
   sh8,
-  shadowBlue5,
+  shadow16Blue112,
   sw24,
   sw8,
 } from "../../../../styles";
@@ -72,10 +72,10 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
           <CustomSpacer space={sh32} />
           <LabeledTitle
             label={INVESTMENT.HEADING}
-            labelStyle={fs24BoldBlack2}
+            labelStyle={fs24BoldGray6}
             spaceToLabel={sh8}
             title={INVESTMENT.SUBHEADING}
-            titleStyle={fs16SemiBoldBlack2}
+            titleStyle={fs16SemiBoldGray6}
           />
           <CustomSpacer space={sh24} />
           {investmentDetails.map((product: IProductSales, index: number) => {
@@ -106,7 +106,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
 
             const container: ViewStyle = {
               ...flexChild,
-              ...shadowBlue5,
+              ...shadow16Blue112,
               backgroundColor: colorWhite._1,
               borderRadius: sw8,
             };
@@ -118,16 +118,16 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                   <CustomSpacer space={sh24} />
                   <View style={px(sw24)}>
                     <View style={{ ...centerVertical, ...flexRow }}>
-                      <Text style={fs10BoldBlack2}>{type}</Text>
+                      <Text style={fs10BoldGray6}>{type}</Text>
                       <CustomFlexSpacer />
-                      <IcoMoon name="trash" color={colorBlue._2} onPress={handleDelete} size={sh32} />
+                      <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sh32} />
                     </View>
                     <LabeledTitle
                       label={fundName}
-                      labelStyle={fs24BoldBlack2}
+                      labelStyle={fs24BoldGray6}
                       spaceToLabel={sh8}
                       title={issuingHouse}
-                      titleStyle={fs16SemiBoldBlack2}
+                      titleStyle={fs16SemiBoldGray6}
                     />
                   </View>
                   <CustomSpacer space={sh24} />

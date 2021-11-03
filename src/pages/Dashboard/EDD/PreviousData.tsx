@@ -1,13 +1,12 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { ActivityIndicator, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { CustomSpacer } from "../../../components";
+import { CustomSpacer, Loading } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
   alignFlexStart,
   border,
-  centerHV,
   centerVertical,
   colorBlue,
   colorGray,
@@ -15,9 +14,9 @@ import {
   flexChild,
   flexRow,
   flexWrap,
-  fs10RegGray8,
-  fs12RegBlack2,
-  fs16BoldBlack2,
+  fs10RegGray5,
+  fs12RegGray6,
+  fs16BoldGray6,
   px,
   py,
   sh12,
@@ -53,8 +52,9 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
     ...padding,
     borderTopLeftRadius: sw16,
     borderTopRightRadius: sw16,
-    backgroundColor: colorWhite._5,
+    backgroundColor: colorWhite._2,
   };
+
   return (
     <View style={{ ...px(sw24), ...flexWrap, ...flexRow, ...alignFlexStart }}>
       {data.length > 0 ? (
@@ -64,7 +64,7 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
             const headerBorder: ViewStyle =
               card.data === undefined || card.data.length === 0
                 ? { borderRadius: sw16 }
-                : { borderColor: colorWhite._3, borderBottomWidth: sw1 };
+                : { borderColor: colorGray._3, borderBottomWidth: sw1 };
             // const headerBackground: ViewStyle =
             //   card.data === undefined || card.data.length === 0 ? { backgroundColor: colorWhite._1 } : {};
             const marginBottom: ViewStyle = index <= data.length - 3 ? { marginBottom: sh16 } : {};
@@ -74,18 +74,18 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
             const defaultTitleLabel = titleLabel !== undefined ? titleLabel : checkAdditional;
             const bodyData =
               contentData !== undefined && contentData.length > 1 && title === undefined
-                ? contentData.filter((eachContent: ILabeledTitleWithFile, filterIndex: number) => filterIndex !== 0)
+                ? contentData.filter((_eachContent: ILabeledTitleWithFile, filterIndex: number) => filterIndex !== 0)
                 : contentData;
             const checkBackground: ViewStyle =
-              checkTitle === null ? { backgroundColor: colorWhite._5, borderTopEndRadius: sw16, borderTopLeftRadius: sw16 } : {};
+              checkTitle === null ? { backgroundColor: colorWhite._2, borderTopEndRadius: sw16, borderTopLeftRadius: sw16 } : {};
 
             return (
               <Fragment key={index}>
                 {index !== 0 && index % 2 !== 0 ? <CustomSpacer isHorizontal space={sw62} /> : null}
-                <View style={{ ...border(colorWhite._3, sw1, sw16), width: sw336, ...marginBottom }}>
+                <View style={{ ...border(colorGray._3, sw1, sw16), width: sw336, ...marginBottom }}>
                   {checkTitle !== null ? (
                     <View style={{ ...cardHeaderStyle, ...headerBorder }}>
-                      <Text style={fs10RegGray8}>{defaultTitleLabel}</Text>
+                      <Text style={fs10RegGray5}>{defaultTitleLabel}</Text>
                       <CustomSpacer space={sh4} />
                       <View style={flexRow}>
                         {defaultTitleLabel !== DASHBOARD_EDD_CASE.LABEL_AMLA_REMARK &&
@@ -93,13 +93,13 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                           <Fragment>
                             <View>
                               <CustomSpacer space={sh4} />
-                              <IcoMoon color={colorBlue._2} name="check" size={sw14} />
+                              <IcoMoon color={colorBlue._1} name="check" size={sw14} />
                             </View>
                             <CustomSpacer isHorizontal space={sw8} />
                           </Fragment>
                         ) : null}
                         <View style={centerVertical}>
-                          <Text style={{ ...fs16BoldBlack2, maxWidth: sw280 }}>{checkTitle}</Text>
+                          <Text style={{ ...fs16BoldGray6, maxWidth: sw280 }}>{checkTitle}</Text>
                         </View>
                       </View>
                     </View>
@@ -133,15 +133,15 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                               {currentDataIndex !== 0 ? <CustomSpacer space={sh16} /> : null}
                               {label !== undefined && label !== null ? (
                                 <Fragment>
-                                  <Text style={{ ...fs10RegGray8, lineHeight: sh12 }}>{checkRemark}</Text>
+                                  <Text style={fs10RegGray5}>{checkRemark}</Text>
                                   <CustomSpacer space={sh4} />
                                 </Fragment>
                               ) : null}
                               {typeof cardContent !== "object" ? (
                                 <View style={checkDirection}>
                                   <View>
-                                    <Text style={fs16BoldBlack2}>{cardContent}</Text>
-                                    {/* {subtitle !== null ? <Text style={fs12BoldBlack2}>{subtitle}</Text> : null} */}
+                                    <Text style={fs16BoldGray6}>{cardContent}</Text>
+                                    {/* {subtitle !== null ? <Text style={fs12BoldGray6}>{subtitle}</Text> : null} */}
                                   </View>
                                 </View>
                               ) : (
@@ -153,13 +153,13 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                                         const { description, value } = eachData;
                                         return (
                                           <View key={eachDataIndex}>
-                                            <View style={{ ...flexRow }}>
-                                              <Text style={fs16BoldBlack2}>•</Text>
+                                            <View style={flexRow}>
+                                              <Text style={fs16BoldGray6}>•</Text>
                                               <CustomSpacer isHorizontal space={sw4} />
                                               <View>
-                                                <Text style={fs16BoldBlack2}>{value}</Text>
+                                                <Text style={fs16BoldGray6}>{value}</Text>
                                                 {description !== undefined ? (
-                                                  <Text style={fs12RegBlack2}>{eachData.description}</Text>
+                                                  <Text style={fs12RegGray6}>{eachData.description}</Text>
                                                 ) : null}
                                               </View>
                                             </View>
@@ -181,10 +181,10 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                                             }>
                                             <View key={eachDataIndex}>
                                               <View style={flexRow}>
-                                                <Text style={fs16BoldBlack2}>{eachData.name}</Text>
+                                                <Text style={fs16BoldGray6}>{eachData.name}</Text>
                                                 <View style={{ ...flexRow, ...centerVertical }}>
                                                   <CustomSpacer isHorizontal={true} space={sw12} />
-                                                  <IcoMoon color={colorBlue._1} name={"file"} size={sh12} />
+                                                  <IcoMoon color={colorBlue._8} name="file" size={sh12} />
                                                 </View>
                                               </View>
                                             </View>
@@ -207,10 +207,8 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
           })}
         </Fragment>
       ) : (
-        <View style={{ ...flexChild }}>
-          <View style={{ ...centerHV, ...flexChild }}>
-            <ActivityIndicator color={colorGray._7} size="small" />
-          </View>
+        <View style={flexChild}>
+          <Loading />
         </View>
       )}
     </View>

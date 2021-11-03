@@ -6,22 +6,21 @@ import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
-import { DAY_FORMAT, FULL_DATE_FORMAT, Language } from "../../constants";
+import { DAY_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
 import { logout } from "../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../store";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   centerVertical,
   colorBlue,
-  colorWhite,
   flexChild,
   flexRow,
-  fs10RegBlue2,
-  fs12BoldBlue2,
-  fs18BoldBlue2,
+  fs12BoldGray6,
+  fs12RegGray5,
+  fs18BoldBlue1,
   fullHW,
   imageContain,
   px,
@@ -30,9 +29,6 @@ import {
   sh20,
   sh24,
   sh32,
-  sw033,
-  sw039,
-  sw05,
   sw16,
   sw160,
   sw200,
@@ -112,9 +108,6 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
     { name: "logout", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];
 
-  const dateToday = moment().format(FULL_DATE_FORMAT);
-  const dayToday = `${moment().format(DAY_FORMAT)},`;
-
   const initials =
     agent !== undefined
       ? agent
@@ -130,43 +123,42 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
     <View style={{ ...flexRow, ...fullHW }}>
       <SideMenu spaceToBottom={0} spaceToContent={sh32}>
         <View>
-          <View style={borderBottomGray4} />
+          <View style={borderBottomGray2} />
           <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh24) }}>
             <Avatar text={initials} type="agent" />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ width: sw96 }}>
-              <Text numberOfLines={2} style={{ ...fs18BoldBlue2, letterSpacing: -sw05, lineHeight: sh24 }}>
+              <Text numberOfLines={2} style={fs18BoldBlue1}>
                 {agent?.name}
               </Text>
-              <Text style={{ ...fs10RegBlue2, letterSpacing: -sw039 }}>{agent?.role}</Text>
             </View>
           </View>
-          <View style={borderBottomGray4} />
+          <View style={borderBottomGray2} />
           <View style={{ ...flexRow, ...py(sh20) }}>
             <CustomSpacer isHorizontal={true} space={sw24} />
             <View style={{ width: sw160 }}>
-              <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{agent?.branch}</Text>
-              <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dayToday}</Text>
-              <Text style={{ ...fs12BoldBlue2, letterSpacing: -sw033, lineHeight: sh16 }}>{dateToday}</Text>
+              <Text style={fs12BoldGray6}>{agent?.rank}</Text>
+              <Text style={fs12RegGray5}>{agent?.branch}</Text>
+              <Text style={fs12RegGray5}>{`${moment().format(DAY_DATE_FORMAT)}`}</Text>
             </View>
             <CustomSpacer isHorizontal={true} space={sw16} />
           </View>
-          <View style={borderBottomGray4} />
+          <View style={borderBottomGray2} />
           <MenuList activeIndex={activeMenu} items={MENU_ITEMS} />
         </View>
         <CustomFlexSpacer />
-        <View style={borderBottomGray4} />
+        <View style={borderBottomGray2} />
         <TouchableWithoutFeedback onPress={handleAims}>
           <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
             <Image source={LocalAssets.logo.aims} style={logoAimsStyle} />
             <CustomFlexSpacer />
-            <IcoMoon color={colorBlue._2} name="external" size={sh24} />
+            <IcoMoon color={colorBlue._1} name="external" size={sh24} />
           </View>
         </TouchableWithoutFeedback>
-        <View style={borderBottomGray4} />
+        <View style={borderBottomGray2} />
       </SideMenu>
       <CustomSpacer isHorizontal={true} space={sw200} />
-      <View style={{ ...flexChild, backgroundColor: colorWhite._4 }}>
+      <View style={{ ...flexChild, backgroundColor: colorBlue._2 }}>
         <CustomSpacer space={top} />
         {content}
       </View>

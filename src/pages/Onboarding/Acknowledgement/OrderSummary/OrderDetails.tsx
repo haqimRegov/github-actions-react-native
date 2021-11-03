@@ -10,17 +10,18 @@ import {
   colorBlack,
   colorWhite,
   flexRow,
-  fs12RegBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
-  fs24BoldBlack2,
+  fs12RegGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
+  fs24BoldGray6,
   px,
   py,
   sh24,
   sh8,
   sh96,
-  shadowBlue5,
+  shadow12Blue104,
   sw24,
+  sw32,
   sw4,
   sw8,
 } from "../../../../styles";
@@ -51,7 +52,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
     ...flexRow,
     ...px(sw24),
     ...py(sh24),
-    ...shadowBlue5,
+    ...shadow12Blue104,
     backgroundColor: colorWhite._1,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
@@ -74,27 +75,27 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
       <TouchableWithoutFeedback onPress={handleExpand}>
         <View style={cardHeaderStyle}>
           <View>
-            <Text style={fs24BoldBlack2}>{orderNumber}</Text>
-            <Text style={fs12RegBlack2}>{orderDate}</Text>
+            <Text style={fs24BoldGray6}>{orderNumber}</Text>
+            <Text style={fs12RegGray6}>{orderDate}</Text>
           </View>
           <CustomFlexSpacer />
           <View style={alignItemsEnd}>
-            <Text style={fs12RegBlack2}>{orderLabel}</Text>
+            <Text style={fs12RegGray6}>{orderLabel}</Text>
             <CustomSpacer space={sh8} />
             <View style={{ ...centerVertical, ...flexRow }}>
               {orderTotalAmount.map((totalAmount: IOrderAmount, amountIndex: number) => {
                 return (
                   <View key={amountIndex} style={{ ...centerVertical, ...flexRow }}>
-                    {amountIndex !== 0 ? <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text> : null}
-                    <Text style={{ ...fs16BoldBlack2, lineHeight: sh24 }}>{totalAmount.currency}</Text>
+                    {amountIndex !== 0 ? <Text style={{ ...fs16RegGray6, ...px(sw4) }}>+</Text> : null}
+                    <Text style={fs16BoldGray6}>{totalAmount.currency}</Text>
                     <CustomSpacer isHorizontal={true} space={sw4} />
-                    <Text style={fs16RegBlack2}>{formatAmount(totalAmount.amount)}</Text>
+                    <Text style={fs16RegGray6}>{formatAmount(totalAmount.amount)}</Text>
                   </View>
                 );
               })}
             </View>
           </View>
-          <CustomSpacer isHorizontal={true} space={sw8} />
+          <CustomSpacer isHorizontal={true} space={sw32} />
           <IcoMoon color={colorBlack._1} name={icon} size={sh24} />
         </View>
       </TouchableWithoutFeedback>

@@ -22,19 +22,17 @@ import { Language } from "../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_KIB_BANK_ACCOUNTS, ERROR } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import {
-  borderBottomBlack21,
+  borderBottomGray2,
   centerHorizontal,
   centerVertical,
   circleBorder,
   colorBlue,
-  colorGray,
   colorGreen,
   colorWhite,
   flexRow,
-  fs12BoldBlack2,
-  fs14BoldBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
+  fs14BoldGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
   px,
   py,
   sh16,
@@ -104,9 +102,9 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
   const infoIcon = active ? "close" : "caret-down";
   const icon = active ? "minus" : "caret-down";
   const completedIcon = withPayment === true && active === false ? "success" : icon;
-  const iconColor = withPayment === true && active === false ? colorWhite._1 : colorBlue._2;
+  const iconColor = withPayment === true && active === false ? colorWhite._1 : colorBlue._1;
   const iconBGColor = withPayment === true && active === false ? colorGreen._1 : colorWhite._1;
-  const iconBorderColor = withPayment === true && active === false ? colorGreen._1 : colorGray._7;
+  const iconBorderColor = withPayment === true && active === false ? colorGreen._1 : colorBlue._4;
 
   const headerStyle: ViewStyle = {
     ...centerVertical,
@@ -155,7 +153,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
       ? `${PAYMENT.LABEL_RECURRING} - ${draftPayments[0].recurringType}`
       : `${PAYMENT.LABEL_PROOF} - ${paymentTitle} ${floatingLabel}`;
   const defaultTitle = withPayment === true ? completedTitle : headerTitle;
-  const labelStyle = active === true ? fs16BoldBlack2 : fs16RegBlack2;
+  const labelStyle = active === true ? fs16BoldGray6 : fs16RegGray6;
   // TODO no prompt if all are saved
   // TODO don't reflect current change if viewing other info
   const modalTitle = prompt === -1 || prompt === expandedIndex ? PAYMENT.PROMPT_TITLE_CANCEL : PAYMENT.PROMPT_TITLE_VIEW;
@@ -206,10 +204,10 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
           <View style={headerStyle}>
             {withPayment === true ? (
               <Badge>
-                <IcoMoon color={colorBlue._2} name="file" size={sh24} />
+                <IcoMoon color={colorBlue._1} name="file" size={sh24} />
               </Badge>
             ) : (
-              <IcoMoon color={colorBlue._2} name="file" size={sh24} />
+              <IcoMoon color={colorBlue._1} name="file" size={sh24} />
             )}
             <CustomSpacer isHorizontal={true} space={sw16} />
             <Text style={labelStyle}>{defaultTitle}</Text>
@@ -596,18 +594,18 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
 
             return (
               <View key={index}>
-                {index === 0 ? <View style={borderBottomBlack21} /> : null}
+                {index === 0 ? <View style={borderBottomGray2} /> : null}
                 {index === 0 && expandedIndex === 0 ? <CustomSpacer space={sh24} /> : null}
                 {index === expandedIndex && index !== 0 ? (
                   <View style={headerStyle}>
-                    <Text style={fs16BoldBlack2}>{PAYMENT.LABEL_ADD_PAYMENT}</Text>
+                    <Text style={fs16BoldGray6}>{PAYMENT.LABEL_ADD_PAYMENT}</Text>
                     <CustomFlexSpacer />
                     <IconButton
-                      color={colorBlue._2}
+                      color={colorBlue._1}
                       onPress={viewPayment}
                       name={infoIcon}
                       size={sh16}
-                      style={circleBorder(sw24, sw1, colorGray._7)}
+                      style={circleBorder(sw24, sw1, colorBlue._4)}
                     />
                   </View>
                 ) : null}
@@ -644,7 +642,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                                 label={PAYMENT.LABEL_EPF_ACCOUNT}
                                 spaceToLabel={sh8}
                                 title={payment.epfAccountNumber!}
-                                titleStyle={{ ...fs16BoldBlack2, ...px(sw16) }}
+                                titleStyle={px(sw16)}
                                 style={{ width: sw360 }}
                               />
                             ) : null}
@@ -701,7 +699,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                       {payment.paymentMethod! === "EPF" || payment.paymentMethod! === "Recurring" ? null : (
                         <Fragment>
                           <CustomSpacer space={sh24} />
-                          <TextSpaceArea spaceToBottom={sh16} text={PAYMENT.LABEL_PROOF} style={fs14BoldBlack2} />
+                          <TextSpaceArea spaceToBottom={sh16} text={PAYMENT.LABEL_PROOF} style={fs14BoldGray6} />
                           <UploadWithModal
                             features={["camera", "gallery", "file"]}
                             label={payment.proof !== undefined ? PAYMENT.LABEL_PROOF_ADDED : PAYMENT.LABEL_PROOF_ADD}
@@ -737,7 +735,6 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                           icon="plus"
                           onPress={handleAddInfo}
                           text={PAYMENT.BUTTON_ADDITIONAL}
-                          textStyle={fs12BoldBlack2}
                         />
                       </View>
                     )}
@@ -754,18 +751,18 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
                   <Fragment>
                     {index === 0 ? null : <Dash />}
                     <View style={headerStyle}>
-                      <IcoMoon color={colorBlue._2} name="success" size={sh24} />
+                      <IcoMoon color={colorBlue._1} name="success" size={sh24} />
                       <CustomSpacer isHorizontal={true} space={sw16} />
-                      <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_ADDED_PAYMENT} - ${payment.paymentMethod!} ${payment.currency} ${
+                      <Text style={fs16RegGray6}>{`${PAYMENT.LABEL_ADDED_PAYMENT} - ${payment.paymentMethod!} ${payment.currency} ${
                         payment.amount
                       }`}</Text>
                       <CustomFlexSpacer />
                       <IconButton
-                        color={colorBlue._2}
+                        color={colorBlue._1}
                         onPress={viewPayment}
                         name="caret-down"
                         size={sh16}
-                        style={circleBorder(sw24, sw1, colorGray._7)}
+                        style={circleBorder(sw24, sw1, colorBlue._4)}
                       />
                     </View>
                     {index === draftPayments.length - 1 && index !== expandedIndex ? null : <Dash />}
@@ -786,7 +783,7 @@ export const PaymentCard: FunctionComponent<PaymentCardProps> = ({
         title={modalTitle}
         titleStyle={{ width: sw432 }}
         visible={prompt !== undefined}>
-        <Text style={fs16BoldBlack2}>{PAYMENT.PROMPT_SUBTITLE}</Text>
+        <Text style={fs16RegGray6}>{PAYMENT.PROMPT_SUBTITLE}</Text>
       </ConfirmationModal>
     </Fragment>
   );

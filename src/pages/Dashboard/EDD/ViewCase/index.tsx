@@ -1,18 +1,17 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, LayoutChangeEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Alert, LayoutChangeEvent, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomFlexSpacer, CustomSpacer, FileViewer, InfoBanner, Tab, Toggle } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, FileViewer, InfoBanner, Loading, Tab, Toggle } from "../../../../components";
 import { DEFAULT_DATE_TIME_FORMAT } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { IcoMoon } from "../../../../icons";
 import { getCaseResponse, getClientProfile } from "../../../../network-actions";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../store/EDD";
 import {
-  borderBottomBlack21,
-  borderBottomGray3,
-  centerHV,
+  borderBottomBlue4,
+  borderBottomGray2,
   centerVertical,
   colorBlue,
   colorGray,
@@ -20,21 +19,21 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs12RegGray8,
-  fs16BoldBlack3,
-  fs16BoldBlue2,
+  fs12BoldBlack2,
+  fs12RegGray5,
+  fs16BoldBlack2,
+  fs16BoldBlue1,
   fullHeight,
   justifyContentStart,
   px,
   py,
   sh16,
-  sh22,
   sh24,
   sh32,
   sh40,
   sh56,
   sh8,
-  shadowBlue5,
+  shadow16Blue112,
   sw1,
   sw16,
   sw2,
@@ -226,13 +225,13 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
     ...flexRow,
     ...centerVertical,
     ...px(sw24),
-    ...shadowBlue5,
+    ...shadow16Blue112,
     height: sh56,
     backgroundColor: colorWhite._1,
   };
   const cardStyle: ViewStyle = {
     ...flexChild,
-    ...shadowBlue5,
+    ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
   };
@@ -297,27 +296,27 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                       <Fragment key={index}>
                         {index !== 0 ? <CustomSpacer space={sh40} /> : null}
                         <View style={{ ...flexRow, ...centerVertical }}>
-                          <Text style={{ ...fs16BoldBlack3, lineHeight: sh22 }}>{`${DASHBOARD_EDD.LABEL_RESPONSE} ${responseNumber}`}</Text>
+                          <Text style={fs16BoldBlack2}>{`${DASHBOARD_EDD.LABEL_RESPONSE} ${responseNumber}`}</Text>
                           <CustomSpacer isHorizontal={true} space={sw16} />
-                          <View style={{ ...flexChild, ...borderBottomGray3 }} />
+                          <View style={{ ...flexChild, ...borderBottomBlue4 }} />
                         </View>
                         <CustomSpacer space={sh16} />
                         <View style={{ ...px(sw56), ...flexRow, ...centerVertical }}>
-                          <View style={{ backgroundColor: colorRed._4, height: sh16, width: sw2 }} />
+                          <View style={{ backgroundColor: colorRed._1, height: sh16, width: sw2 }} />
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs16BoldBlack3}>{userTitle.user}</Text>
+                          <Text style={fs12BoldBlack2}>{userTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(userTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
+                          <Text style={fs12RegGray5}>{moment(userTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
+                          <View style={{ backgroundColor: colorGray._5, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs12RegGray8}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${userTitle.status}`}</Text>
+                          <Text style={fs12RegGray5}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${userTitle.status}`}</Text>
                         </View>
                         <CustomSpacer space={sh8} />
                         <View key={index} onLayout={handleLayout} style={containerStyle}>
                           <TouchableWithoutFeedback onPress={handleExpand}>
                             <View style={{ ...headerStyle, ...border }}>
-                              <Text style={{ ...fs16BoldBlue2 }}>{collapsibleTitle}</Text>
+                              <Text style={{ ...fs16BoldBlue1 }}>{collapsibleTitle}</Text>
                               <CustomFlexSpacer />
                               <IcoMoon name={defaultIcon} size={sw20} />
                             </View>
@@ -353,13 +352,13 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                         <View style={{ ...px(sw24), ...flexRow, ...centerVertical }}>
                           <View style={{ backgroundColor: colorBlue._7, height: sh16, width: sw2 }} />
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs16BoldBlack3}>{amlaTitle.user}</Text>
+                          <Text style={fs12BoldBlack2}>{amlaTitle.user}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs12RegGray8}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
+                          <Text style={fs12RegGray5}>{moment(amlaTitle.time, "x").format(DEFAULT_DATE_TIME_FORMAT)}</Text>
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <View style={{ backgroundColor: colorGray._8, height: sh16, width: sw1 }} />
+                          <View style={{ backgroundColor: colorGray._5, height: sh16, width: sw1 }} />
                           <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs12RegGray8}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${amlaTitle.status}`}</Text>
+                          <Text style={fs12RegGray5}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${amlaTitle.status}`}</Text>
                         </View>
                       </Fragment>
                     );
@@ -367,9 +366,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                 </Fragment>
               ) : (
                 <View style={flexChild}>
-                  <View style={{ ...centerHV, ...flexChild }}>
-                    <ActivityIndicator color={colorGray._7} size="small" />
-                  </View>
+                  <Loading />
                 </View>
               )}
             </Fragment>
@@ -381,11 +378,11 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                   <Tab selected={true} style={{ height: sh56 }} text={DASHBOARD_ORDER_SUMMARY.TAB_PROFILE} />
                   <CustomSpacer isHorizontal={true} space={sw24} />
                 </View>
-                <View style={borderBottomBlack21} />
+                <View style={borderBottomGray2} />
                 <View style={{ ...flexChild }}>
                   {profile !== undefined ? (
                     <AccountDetailsContent
-                      accountHolder={"Principal"}
+                      accountHolder="Principal"
                       accountType={profile.accountType!}
                       data={structureProfile("Principal", profile, setFile)}
                       handleViewId={handleViewId}
@@ -395,9 +392,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                     />
                   ) : (
                     <View style={flexChild}>
-                      <View style={{ ...centerHV, ...flexChild }}>
-                        <ActivityIndicator color={colorGray._7} size="small" />
-                      </View>
+                      <Loading />
                     </View>
                   )}
                 </View>

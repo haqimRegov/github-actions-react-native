@@ -8,10 +8,10 @@ import {
   centerHorizontal,
   colorGray,
   flexRow,
-  fs12BoldBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
-  fs24BoldBlack2,
+  fs12BoldGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
+  fs24BoldGray6,
   fsCapitalize,
   fsTransformNone,
   px,
@@ -109,7 +109,7 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, payment
     ...centerHorizontal,
     ...flexRow,
     ...px(sw24),
-    backgroundColor: colorGray._5,
+    backgroundColor: colorGray._1,
     height: sh80,
   };
   const scaledSpaceBetweenItem = width < 1080 ? 30 : 32;
@@ -120,10 +120,10 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, payment
         <View>
           <CustomSpacer space={sh16} />
           <View style={{ width: sw648 }}>
-            <Text numberOfLines={1} style={fs24BoldBlack2}>
+            <Text numberOfLines={1} style={fs24BoldGray6}>
               {fundName}
             </Text>
-            <Text numberOfLines={1} style={fs12BoldBlack2}>
+            <Text numberOfLines={1} style={{ ...fs12BoldGray6, lineHeight: sh24 }}>
               {fundIssuer}
             </Text>
           </View>
@@ -132,9 +132,9 @@ export const FundDetails: FunctionComponent<FundDetailsProps> = ({ fund, payment
         <View>
           <CustomSpacer space={sh24} />
           <View style={flexRow}>
-            <Text style={{ ...fs16RegBlack2, lineHeight: sh24 }}>{fundCurrency}</Text>
+            <Text style={fs16RegGray6}>{fundCurrency}</Text>
             <CustomSpacer isHorizontal={true} space={sw4} />
-            <Text style={fs16BoldBlack2}>{formatAmount(investmentAmount)}</Text>
+            <Text style={fs16BoldGray6}>{formatAmount(investmentAmount)}</Text>
           </View>
         </View>
       </View>

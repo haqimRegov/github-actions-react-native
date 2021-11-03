@@ -9,8 +9,8 @@ import {
   colorRed,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
-  fs12RegBlack2,
+  fs12BoldGray6,
+  fs12RegGray6,
   fs14BoldBlack2,
   px,
   py,
@@ -38,7 +38,7 @@ export const InfoBanner: FunctionComponent<IInfoBannerProps> = ({ icon, reason, 
   switch (status) {
     case "cancelled":
     case "rejected":
-      containerStatusStyle = { borderColor: colorRed._2, backgroundColor: colorRed._6 };
+      containerStatusStyle = { borderColor: colorRed._2, backgroundColor: colorRed._4 };
       break;
     default:
       containerStatusStyle = {};
@@ -58,14 +58,14 @@ export const InfoBanner: FunctionComponent<IInfoBannerProps> = ({ icon, reason, 
         <View style={{ ...centerHorizontal, height: sh24 }}>
           <IcoMoon color={icon.color} name={icon.name} size={icon.size} />
         </View>
-        <CustomSpacer isHorizontal space={sw8} />
+        <CustomSpacer isHorizontal={true} space={sw8} />
         <View>
           <Text style={fs14BoldBlack2}>{reason}</Text>
           <CustomSpacer space={sh8} />
           <View style={{ ...flexRow, ...centerVertical }}>
-            <Text style={fs12BoldBlack2}>{`${DASHBOARD_EDD_CASE.LABEL_REMARKS}:`}</Text>
-            <CustomSpacer isHorizontal space={sw8} />
-            <Text style={fs12RegBlack2}>{remark}</Text>
+            <Text style={fs12BoldGray6}>{`${DASHBOARD_EDD_CASE.LABEL_REMARKS}:`}</Text>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <Text style={fs12RegGray6}>{remark}</Text>
           </View>
         </View>
       </View>

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { borderBottomGray4, flexRow } from "../../styles";
+import { borderBottomGray2, flexRow } from "../../styles";
 import { Tab, TabProps } from "./Tab";
 
 interface TabGroupProps {
@@ -21,7 +21,7 @@ export const TabGroup: FunctionComponent<TabGroupProps> = ({ activeTab, setActiv
           setActiveTab(index);
         };
 
-        const borderStyle: ViewStyle = activeTab !== index ? borderBottomGray4 : {};
+        const borderStyle: ViewStyle = activeTab !== index ? borderBottomGray2 : {};
         const tabStyle: ViewStyle = { ...borderStyle, ...tab.style };
 
         return <Tab {...tab} key={index} selected={activeTab === index} style={tabStyle} onPress={handleTabPress} />;

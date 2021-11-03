@@ -1,13 +1,13 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CheckBox, CustomFlexSpacer, CustomSpacer, NewDropdown, PromptModal } from "../../../../components";
+import { ActionButtons, CheckBox, CustomFlexSpacer, CustomSpacer, Loading, NewDropdown, PromptModal } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import { borderBottomBlack21, centerHV, colorGray, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
+import { borderBottomGray2, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
 import { AlertDialog } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
@@ -148,7 +148,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
               <DocumentList data={physicalDocuments} setData={handleSetDocument} />
             </View>
             <CustomSpacer space={sh32} />
-            <View style={borderBottomBlack21} />
+            <View style={borderBottomGray2} />
             <View style={{ ...flexChild, ...px(sw24) }}>
               <CustomSpacer space={sh24} />
               <NewDropdown
@@ -170,9 +170,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
             </View>
           </Fragment>
         ) : (
-          <View style={{ ...centerHV, ...flexChild }}>
-            <ActivityIndicator color={colorGray._7} size="small" />
-          </View>
+          <Loading />
         )}
         <CustomSpacer space={sh56} />
       </DashboardLayout>

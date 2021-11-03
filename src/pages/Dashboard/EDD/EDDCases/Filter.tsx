@@ -2,10 +2,10 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, NewCheckBoxDropdownV2, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, NewCheckBoxDropdown, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_EDD_DATE, DICTIONARY_HISTORY_TAB_STATUS, DICTIONARY_NEW_TAB_STATUS } from "../../../../data/dictionary/edd";
-import { centerVertical, flexRow, fs16BoldBlack2, px, sh143, sh24, sh32, sh8, sw24, sw64 } from "../../../../styles";
+import { flexRow, fs16BoldGray6, px, sh143, sh16, sh24, sh32, sh4, sw24, sw64 } from "../../../../styles";
 
 const { DASHBOARD_FILTER, DASHBOARD_EDD } = Language.PAGE;
 interface EDDFilterProps {
@@ -49,11 +49,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
 
   return (
     <View>
-      <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs16BoldBlack2} text={DASHBOARD_EDD.LABEL_FILTER_TITLE} />
-        </View>
-      </View>
+      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={{ ...fs16BoldGray6, ...px(sw24) }} text={DASHBOARD_EDD.TITLE} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <NewDropdown
           handleChange={handleDateSorting}
@@ -65,7 +61,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_START_DATE} />
+          <TextSpaceArea spaceToBottom={sh4} text={DASHBOARD_FILTER.LABEL_START_DATE} />
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}
             maximumDate={endDate || moment().toDate()}
@@ -76,7 +72,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_END_DATE} />
+          <TextSpaceArea spaceToBottom={sh4} text={DASHBOARD_FILTER.LABEL_END_DATE} />
           <NewDatePicker
             datePickerStyle={{ height: sh143 }}
             maximumDate={moment().toDate()}
@@ -89,7 +85,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <NewCheckBoxDropdownV2
+        <NewCheckBoxDropdown
           handleChange={handleCaseStatus}
           items={caseStatusList}
           label={DASHBOARD_FILTER.LABEL_ORDER_STATUS}

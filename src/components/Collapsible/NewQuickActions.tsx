@@ -2,39 +2,40 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
+import { Language } from "../../constants";
 import {
   centerHV,
   colorBlue,
-  colorGray,
   colorWhite,
   flexRow,
-  fs12BoldBlue2,
-  fs16BoldBlue2,
+  fs12BoldBlue1,
+  fs16BoldBlue1,
+  fs16BoldWhite1,
   fullHW,
   noBGColor,
-  sh24,
   sh38,
   sh4,
   sh40,
   sh8,
-  shadowBlack5,
+  shadow12Black112,
   sw1,
-  sw160,
-  sw162,
+  sw16,
+  sw184,
+  sw186,
   sw20,
   sw24,
 } from "../../styles";
-import { IQuickAction } from "../Collapsible";
 import { BasicModal } from "../Modals";
 import { IconText } from "../Touchables";
 import { CustomSpacer } from "../Views/Spacer";
 
-// export interface IQuickAction {
-//   label: string;
-//   labelStyle?: TextStyle;
-//   onPress?: () => void;
-//   style?: ViewStyle;
-// }
+const { DASHBOARD } = Language.PAGE;
+export interface IQuickAction {
+  label: string;
+  labelStyle?: TextStyle;
+  onPress?: () => void;
+  style?: ViewStyle;
+}
 
 interface NewQuickActions {
   actions: IQuickAction[];
@@ -106,19 +107,19 @@ export const NewQuickActions: FunctionComponent<NewQuickActions> = ({ actions, d
     backgroundColor: colorWhite._1,
     borderRadius: sw20,
     borderWidth: sw1,
-    borderColor: colorGray._2,
+    borderColor: colorBlue._2,
     left: layout.x,
     position: "absolute",
     top: layout.y,
     zIndex: 3,
-    ...shadowBlack5,
+    ...shadow12Black112,
   };
 
   const collapseContainerStyle: ViewStyle = {
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
     height: sh40,
-    width: sw162,
+    width: sw186,
   };
 
   const collapseIconStyle: ViewStyle = {
@@ -126,22 +127,22 @@ export const NewQuickActions: FunctionComponent<NewQuickActions> = ({ actions, d
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
     height: sh40,
-    width: sw162,
+    width: sw186,
   };
 
   const expandedContainerStyle: ViewStyle = {
-    backgroundColor: colorWhite._1,
+    backgroundColor: colorBlue._1,
     borderRadius: sw24,
     height: sh40,
-    width: sw160,
+    width: sw184,
   };
 
   const expandedIconStyle: ViewStyle = {
     ...centerHV,
-    backgroundColor: colorGray._2,
+    backgroundColor: colorBlue._1,
     borderRadius: sw24,
     height: sh38,
-    width: sw160,
+    width: sw184,
   };
 
   const dropdownStyle: ViewStyle = {
@@ -158,12 +159,11 @@ export const NewQuickActions: FunctionComponent<NewQuickActions> = ({ actions, d
             <View onStartShouldSetResponderCapture={() => true}>
               <View style={collapseContainerStyle}>
                 <IconText
-                  color={colorBlue._2}
-                  iconSize={sh24}
+                  iconSize={sw16}
                   name="quick-action"
                   style={collapseIconStyle}
-                  text="Quick Actions"
-                  textStyle={fs16BoldBlue2}
+                  text={DASHBOARD.BUTTON_QUICK_ACTIONS}
+                  textStyle={fs16BoldBlue1}
                 />
               </View>
             </View>
@@ -176,19 +176,19 @@ export const NewQuickActions: FunctionComponent<NewQuickActions> = ({ actions, d
             <View style={collapsibleContainer}>
               <View style={expandedContainerStyle}>
                 <IconText
-                  color={colorBlue._2}
-                  iconSize={sh24}
+                  color={colorWhite._1}
+                  iconSize={sw16}
                   name="quick-action"
                   style={expandedIconStyle}
                   text="Quick Actions"
-                  textStyle={fs16BoldBlue2}
+                  textStyle={fs16BoldWhite1}
                 />
               </View>
               <Collapsible duration={100} collapsed={collapse} style={noBGColor}>
                 {collapse ? null : (
                   <View style={dropdownStyle}>
                     {actions.map((action: IQuickAction, index: number) => {
-                      const actionTextStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -0.44, ...action.labelStyle };
+                      const actionTextStyle: TextStyle = { ...fs12BoldBlue1, ...action.labelStyle };
                       const actionStyle: ViewStyle = { ...centerHV, ...flexRow, height: sh40, ...action.style };
 
                       const handlePress = () => {

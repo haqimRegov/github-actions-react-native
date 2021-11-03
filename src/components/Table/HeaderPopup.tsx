@@ -6,10 +6,9 @@ import {
   centerVertical,
   colorBlue,
   colorGreen,
-  colorWhite,
   flexRow,
-  fs10RegBlue38,
-  fs12BoldBlue2,
+  fs10RegBlue6,
+  fs12BoldBlue1,
   px,
   py,
   sh4,
@@ -50,12 +49,12 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
         return (
           <TouchableWithoutFeedback onPress={handlePress}>
             <View style={container}>
-              {title && <Text style={{ ...fs10RegBlue38, ...titleStyle }}>{title}</Text>}
+              {title && <Text style={{ ...fs10RegBlue6, ...titleStyle }}>{title}</Text>}
               {titleIcon === undefined ? null : (
                 <Fragment>
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <IcoMoon
-                    color={titleIcon.color || colorBlue._2}
+                    color={titleIcon.color || colorBlue._1}
                     name={titleIcon.name}
                     onPress={titleIcon.onPress}
                     size={titleIcon.size || sw12}
@@ -74,14 +73,14 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
                 onPressContent({ hide: hide, text: item.text });
               };
               const selected = selectedIndex !== undefined && selectedIndex.includes(index);
-              const backgroundColor = selected === true ? { backgroundColor: colorWhite._4 } : {};
+              const backgroundColor = selected === true ? { backgroundColor: colorBlue._2 } : {};
               return (
                 <TouchableWithoutFeedback key={index} onPress={handlePress}>
                   <View style={{ ...flexRow, ...centerVertical, ...px(sw16), ...py(sh4), ...backgroundColor }}>
                     {item.icon === undefined ? null : (
                       <Fragment>
                         <IcoMoon
-                          color={item.icon.color || colorBlue._2}
+                          color={item.icon.color || colorBlue._1}
                           name={item.icon.name}
                           onPress={item.icon.onPress}
                           size={item.icon.size || sw16}
@@ -89,7 +88,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
                         <CustomSpacer isHorizontal={true} space={sw8} />
                       </Fragment>
                     )}
-                    <Text style={{ ...fs12BoldBlue2, ...item.textStyle }}>{item.text}</Text>
+                    <Text style={{ ...fs12BoldBlue1, ...item.textStyle }}>{item.text}</Text>
                     {selected === false ? null : (
                       <Fragment>
                         <CustomFlexSpacer />

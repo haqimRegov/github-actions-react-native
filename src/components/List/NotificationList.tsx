@@ -1,24 +1,12 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { DEFAULT_TIME_FORMAT } from "../../constants";
 import { Language } from "../../constants/language";
 import { IcoMoon } from "../../icons";
-import {
-  centerVertical,
-  colorBlue,
-  colorWhite,
-  flexRow,
-  fs12BoldBlue2,
-  fs12RegBlue25,
-  fs16RegBlack2,
-  sh14,
-  sh16,
-  sh8,
-  sw4,
-} from "../../styles";
+import { centerVertical, colorBlue, flexRow, fs12BoldBlue1, fs12RegGray4, sh16, sh8, shadow12Blue104, sw4 } from "../../styles";
 import { AvatarProps } from "../Avatar";
 import { NotificationItem } from "../Items";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
@@ -48,15 +36,15 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
   return (
     <Fragment>
       <View style={flexRow}>
-        {label !== undefined ? <TextSpaceArea spaceToBottom={sh8} style={{ ...fs12RegBlue25, lineHeight: sh14 }} text={label} /> : null}
+        {label !== undefined ? <TextSpaceArea spaceToBottom={sh8} style={fs12RegGray4} text={label} /> : null}
         {markAll && notificationsCount > 0 ? (
           <Fragment>
             <CustomFlexSpacer />
             <TouchableWithoutFeedback onPress={handleReadAll}>
               <View style={{ ...flexRow, ...centerVertical }}>
-                <IcoMoon color={colorBlue._2} name="check" size={sh16} />
+                <IcoMoon color={colorBlue._1} name="check" size={sh16} />
                 <CustomSpacer isHorizontal space={sw4} />
-                <Text style={fs12BoldBlue2}>{`${INBOX.READ_ALL} (${notificationsCount})`}</Text>
+                <Text style={fs12BoldBlue1}>{`${INBOX.READ_ALL} (${notificationsCount})`}</Text>
               </View>
             </TouchableWithoutFeedback>
           </Fragment>
@@ -70,8 +58,7 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
             onPress(item);
           }
         };
-        const unreadStyle: ViewStyle = isRead === true ? { backgroundColor: colorWhite._4 } : {};
-        const titleStyle: TextStyle = isRead === true ? fs16RegBlack2 : {};
+        const unreadStyle: ViewStyle = isRead === true ? { backgroundColor: colorBlue._2 } : shadow12Blue104;
 
         const avatar = avatarProps !== undefined ? avatarProps(item) : undefined;
 
@@ -85,7 +72,6 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
               label={title}
               onPress={handlePress}
               title={message}
-              titleStyle={titleStyle}
               style={unreadStyle}
               subtitle={subtitle}
             />

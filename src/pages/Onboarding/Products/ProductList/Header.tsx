@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, ImageStyle, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, TextInput, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
@@ -12,14 +12,11 @@ import {
   centerVertical,
   circleBorder,
   colorBlue,
-  colorGray,
   colorWhite,
   flexChild,
   flexRow,
   flexWrap,
-  fs12BoldBlue2,
-  fs12SemiBoldBlue38,
-  fs16SemiBoldBlack2,
+  fs12BoldBlue1,
   fullWidth,
   justifyContentEnd,
   px,
@@ -31,7 +28,7 @@ import {
   sh34,
   sh36,
   sh40,
-  shadowBlack5,
+  shadow12Black112,
   sw1,
   sw218,
   sw24,
@@ -140,7 +137,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
 
   const container: ViewStyle = {
     ...absolutePosition,
-    ...shadowBlack5,
+    ...shadow12Black112,
     ...fullWidth,
     backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw24,
@@ -159,15 +156,13 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     zIndex: 2,
   };
 
-  const filterBGColor = filterVisible ? colorBlue._2 : colorWhite._1;
-  const filterBorderColor = filterVisible ? colorBlue._2 : colorGray._3;
-  const filterColor = filterVisible ? colorWhite._1 : colorBlue._2;
+  const filterBGColor = filterVisible ? colorBlue._1 : colorWhite._1;
+  const filterBorderColor = filterVisible ? colorBlue._1 : colorBlue._4;
+  const filterColor = filterVisible ? colorWhite._1 : colorBlue._1;
   const filterIcon = filterVisible ? "close" : "filter";
   const filterIconSize = filterVisible ? sw32 : sw28;
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh36 };
-
-  const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
 
   const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
@@ -187,7 +182,6 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
             placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
             returnKeyType="search"
             setRef={setSearchInputRef}
-            style={inputStyle}
             value={inputSearch}
             viewStyle={{ width: sw692 }}
           />
@@ -215,7 +209,6 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                         icon="close"
                         onPress={handlePress}
                         text={pill}
-                        textStyle={fs12SemiBoldBlue38}
                         style={{ marginRight: undefined, marginTop: sh16 }}
                       />
                     </Fragment>
@@ -224,7 +217,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
               </View>
               <CustomSpacer isHorizontal={true} space={sw30} />
               <View style={{ ...justifyContentEnd, height: sh40 }}>
-                <LinkText onPress={handleShowAllFilter} text={showLabel} style={{ ...fs12BoldBlue2, height: sh24, lineHeight: sh24 }} />
+                <LinkText onPress={handleShowAllFilter} text={showLabel} style={{ ...fs12BoldBlue1, height: sh24 }} />
               </View>
             </View>
           </View>

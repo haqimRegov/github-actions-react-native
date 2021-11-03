@@ -8,14 +8,16 @@ import {
   border,
   centerVertical,
   colorBlue,
+  colorGray,
   colorWhite,
-  disabledOpacity,
+  disabledOpacity5,
   flexChild,
   flexRow,
   flexWrap,
-  fs12BoldBlack2,
-  fs12BoldBlue2,
-  fs16RegBlack2,
+  fs12BoldBlue1,
+  fs12BoldGray6,
+  fs16BoldBlue1,
+  fs16RegGray6,
   fullHW,
   noBGColor,
   overflowHidden,
@@ -24,7 +26,6 @@ import {
   sh12,
   sh16,
   sh176,
-  sh24,
   sh4,
   sh44,
   sh48,
@@ -47,7 +48,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 const { DROPDOWN } = Language.PAGE;
 
-interface NewCheckBoxDropdownV2Props {
+interface POCCheckboxDropdownProps {
   disabled?: boolean;
   handleChange: (text: string[]) => void;
   items: TypeLabelValue[];
@@ -68,7 +69,7 @@ interface IOverflow {
   overflow: boolean;
 }
 
-export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props> = ({
+export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = ({
   disabled,
   handleChange,
   items,
@@ -81,7 +82,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
   style,
   value,
   viewStyle,
-}: NewCheckBoxDropdownV2Props) => {
+}: POCCheckboxDropdownProps) => {
   const [layout, setLayout] = useState<IBasicLayout>({ x: 0, y: 0, width: 0, height: 0 });
   const [ref, setRef] = useState<View | null>(null);
   const pillRef = useRef<View | null>(null);
@@ -100,11 +101,11 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
 
-  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
+  const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
   const labelExtractor = items.map((item) => item.label);
   const itemsWithId = items.map((item, index) => ({ ...item, id: index }));
 
-  const disabledStyle = disabled === true ? disabledOpacity : {};
+  const disabledStyle = disabled === true ? disabledOpacity5 : {};
 
   // TODO
   /**
@@ -146,7 +147,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
 
   const dropdownContainer: ViewStyle = {
     backgroundColor: colorWhite._1,
-    borderColor: colorBlue._2,
+    borderColor: colorBlue._1,
     borderRadius: sw16,
     borderWidth: sw2,
     left: layout.x,
@@ -157,7 +158,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
     ...viewStyle,
   };
 
-  // const placeholderStyle: TextStyle = value.length > 0 ? {} : { color: colorBlack._3, fontFamily: NunitoRegular };
+  // const placeholderStyle: TextStyle = value.length > 0 ? {} : { color: colorBlack._2, fontFamily: NunitoRegular };
   // const inputStyle: ViewStyle = collapsibleModal ? { borderColor: colorTransparent } : {};
 
   const handleKeyboardDidShow = () => {
@@ -185,7 +186,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
   // };
 
   // const defaultInputStyle: ViewStyle = {
-  //   ...border(colorGray._7, sw1, sw20),
+  //   ...border(colorGray._4, sw1, sw20),
   //   ...centerVertical,
   //   ...flexRow,
   //   ...px(sw16),
@@ -196,7 +197,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
   // };
 
   const defaultInputStyle: ViewStyle = {
-    ...border(colorWhite._3, sw1, sw32),
+    ...border(colorGray._3, sw1, sw32),
     ...centerVertical,
     ...flexRow,
     ...px(sw1),
@@ -364,9 +365,9 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
                         ...flexRow,
                         ...centerVertical,
                       }}>
-                      <Text style={{ ...fs12BoldBlue2 }}>{selectedValue}</Text>
+                      <Text style={{ ...fs12BoldBlue1 }}>{selectedValue}</Text>
                       <CustomSpacer isHorizontal={true} space={sw4} />
-                      <IcoMoon color={colorBlue._2} name="close" size={sh12} />
+                      <IcoMoon color={colorBlue._1} name="close" size={sh12} />
                     </View>
                   </TouchableWithoutFeedback>
                   <CustomSpacer isHorizontal={true} space={sw8} />
@@ -374,12 +375,12 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
               );
             })
         ) : (
-          <Text style={fs16RegBlack2}>{placeholderLabel}</Text>
+          <Text style={fs16RegGray6}>{placeholderLabel}</Text>
         )}
       </View>
-      {overflowCount.length === 0 ? null : <Text style={fs16RegBlack2}>+ {overflowCount.length}</Text>}
+      {overflowCount.length === 0 ? null : <Text style={fs16BoldBlue1}>+ {overflowCount.length}</Text>}
       <CustomFlexSpacer />
-      <IcoMoon color={colorBlue._2} name="caret-down" size={sw24} />
+      <IcoMoon color={colorBlue._1} name="caret-down" size={sw24} />
     </View>
   );
 
@@ -389,7 +390,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
         {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
         {label === undefined ? null : (
           <Fragment>
-            <Text style={{ ...fs12BoldBlack2, ...disabledStyle, ...labelStyle }}>{label}</Text>
+            <Text style={{ ...fs12BoldGray6, ...disabledStyle, ...labelStyle }}>{label}</Text>
             <CustomSpacer space={defaultLabelSpace} />
           </Fragment>
         )}
@@ -405,7 +406,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
             <View style={dropdownContainer}>
               {input}
               <Collapsible duration={100} collapsed={collapse} style={noBGColor}>
-                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._2 }}>
+                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._1 }}>
                   <View style={style}>
                     <FlatList
                       data={labelExtractor}
@@ -436,7 +437,7 @@ export const NewCheckBoxDropdownV2: FunctionComponent<NewCheckBoxDropdownV2Props
                             <View style={itemContainer}>
                               <CheckBox
                                 label={itemExtractor.label}
-                                labelStyle={{ fontSize: sh16, lineHeight: sh24 }}
+                                labelStyle={{ fontSize: sh16 }}
                                 numberOfLines={1}
                                 onPress={handleSelect}
                                 spaceToLabel={sw12}

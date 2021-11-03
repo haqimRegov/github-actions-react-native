@@ -11,7 +11,7 @@ sonarqubeScanner(
       "sonar.exclusions": "src/mocks/**, src/graphql/**, src/store/**, src/icons/**",
       "sonar.projectVersion": version,
       "sonar.tests": "__tests__",
-      "sonar.testExecutionReportPaths": "test-report.xml",
+      // "sonar.testExecutionReportPaths": "test-report.xml",
       "sonar.javascript.lcov.reportPaths": "coverage/lcov.info",
       "sonar.scm.disabled": "false",
     },

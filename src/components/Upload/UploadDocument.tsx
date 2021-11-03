@@ -16,15 +16,14 @@ import {
   colorRed,
   colorWhite,
   flexRow,
-  fs12RegGray8,
-  fs16BoldBlue2,
+  fs12RegGray5,
+  fs16BoldBlue1,
   px,
-  sh16,
   sh32,
   sh40,
   sh72,
   sh8,
-  shadowBlue5,
+  shadow16Blue112,
   sw10,
   sw16,
   sw2,
@@ -168,7 +167,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
     ...centerVertical,
     ...flexRow,
     ...px(sw40),
-    ...shadowBlue5,
+    ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
     height: sh72,
@@ -183,18 +182,18 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
       <View style={container}>
         {value === undefined || defaultError !== "" ? (
           <View style={iconContainer}>
-            <IcoMoon color={colorBlue._2} name={icon?.inactive || "file-upload"} size={sh32} />
+            <IcoMoon color={colorBlue._1} name={icon?.inactive || "file-upload"} size={sh32} />
           </View>
         ) : (
           <View style={iconContainer}>
             <Badge icon={{ name: "success", size: sh8 }} style={circle(sw16, colorGreen._1)}>
-              <IcoMoon color={colorBlue._2} name={icon?.active || "file"} size={sh32} />
+              <IcoMoon color={colorBlue._1} name={icon?.active || "file"} size={sh32} />
             </Badge>
           </View>
         )}
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View>
-          <Text style={{ ...fs16BoldBlue2, ...labelStyle }}>{label || ""}</Text>
+          <Text style={{ ...fs16BoldBlue1, ...labelStyle }}>{label || ""}</Text>
           <View style={{ ...centerVertical, ...flexRow }}>
             {defaultError ? (
               <Fragment>
@@ -204,7 +203,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
                 <CustomSpacer isHorizontal={true} space={sw4} />
               </Fragment>
             ) : null}
-            <Text style={{ ...fs12RegGray8, lineHeight: sh16, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
+            <Text style={{ ...fs12RegGray5, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
           </View>
         </View>
         <CustomFlexSpacer />

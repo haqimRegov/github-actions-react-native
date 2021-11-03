@@ -7,13 +7,11 @@ import {
   centerHV,
   centerVertical,
   circleBorder,
-  colorBlack,
   colorBlue,
   colorGray,
   colorGreen,
   colorWhite,
   flexRow,
-  fs12BoldGray7,
   sh16,
   sw1,
   sw16,
@@ -58,9 +56,9 @@ export const AdvanceTextInputArea: FunctionComponent<AdvanceTextInputAreaProps> 
     setInput(text);
   };
 
-  const defaultColor = input === "" && input === value ? colorGray._7 : colorBlack._2;
-  const color = input !== value ? colorBlue._1 : defaultColor;
-  const borderColor = input !== value ? colorBlue._1 : colorGray._7;
+  const defaultColor = input === "" && input === value ? colorGray._4 : colorGray._6;
+  const color = input !== value ? colorBlue._8 : defaultColor;
+  const borderColor = input !== value ? colorBlue._8 : colorGray._4;
   const defaultText = input === "" && input === value ? TEXT_INPUT_AREA.BUTTON_ADD : TEXT_INPUT_AREA.BUTTON_SAVED;
   const buttonText = input !== value ? TEXT_INPUT_AREA.BUTTON_CONTINUE : defaultText;
 
@@ -77,12 +75,7 @@ export const AdvanceTextInputArea: FunctionComponent<AdvanceTextInputAreaProps> 
       <TextInputMultiline maxLength={255} onChangeText={handleInput} placeholder={placeholder} value={input} />
       <CustomSpacer space={sh16} />
       <View style={{ ...flexRow, ...centerVertical }}>
-        <OutlineButton
-          text={buttonText}
-          onPress={handlePressSave}
-          textStyle={{ ...fs12BoldGray7, color: color }}
-          buttonStyle={outlineStyle}
-        />
+        <OutlineButton buttonStyle={outlineStyle} onPress={handlePressSave} text={buttonText} textStyle={{ color: color }} />
         <CustomSpacer isHorizontal={true} space={sw16} />
         {showCheck === true ? (
           <View style={{ ...centerHV, ...circleBorder(sw32, sw1, colorGreen._1, colorGreen._1) }}>

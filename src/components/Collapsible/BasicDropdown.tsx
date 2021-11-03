@@ -11,9 +11,9 @@ import {
   colorWhite,
   flexChild,
   flexRow,
-  fs12RegGray8,
-  fs16BoldBlack3,
-  fs16RegBlack3,
+  fs12RegGray5,
+  fs16BoldBlack2,
+  fs16RegBlack2,
   fullHW,
   noBGColor,
   px,
@@ -241,8 +241,8 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
                             const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, height: sh40 };
                             const labelHeight = itemExtractor.subLabel !== undefined ? { lineHeight: sh20 } : { lineHeight: sh22 };
                             const itemStyle: TextStyle = selected
-                              ? { ...fs16BoldBlack3, ...labelHeight }
-                              : { ...fs16RegBlack3, ...labelHeight };
+                              ? { ...fs16BoldBlack2, ...labelHeight }
+                              : { ...fs16RegBlack2, ...labelHeight };
 
                             const handleSelect = () => {
                               let reset: boolean = false;
@@ -272,7 +272,7 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
                                       onPress={handleSelect}
                                       spaceToLabel={sw12}
                                       subLabel={itemExtractor.subLabel}
-                                      subLabelStyle={fs12RegGray8}
+                                      subLabelStyle={fs12RegGray5}
                                       style={{ ...flexChild, ...alignFlexStart }}
                                       toggle={selected}
                                     />

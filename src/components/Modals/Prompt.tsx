@@ -12,9 +12,8 @@ interface PromptModalProps extends PromptProps {
   animationOut?: TypeModalAnimation;
   animationOutTiming?: number;
   backdropOpacity?: number;
-  keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
-
   isLoading?: boolean;
+  keyboardAvoidingRef?: (ref: KeyboardAvoidingView | null) => void;
   visible: boolean;
 }
 

@@ -9,6 +9,7 @@ import {
   centerVertical,
   colorBlack,
   colorBlue,
+  colorGray,
   colorTransparent,
   colorWhite,
   flexChild,
@@ -24,7 +25,7 @@ import {
   sh40,
   sh500,
   sh96,
-  shadow5,
+  shadow50Black115,
   sw16,
   sw18,
   sw24,
@@ -33,7 +34,8 @@ import {
   sw84,
 } from "../../styles";
 import { BasicModal } from "../Modals";
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle, Status } from "../Views";
+import { Tag } from "../Tags/Basic";
+import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
 import { UploadButton } from "./UploadButton";
 import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
 
@@ -74,9 +76,9 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
     height: sh32,
   };
   const headerBGColor = value !== undefined && value.type === "application/pdf" ? { backgroundColor: colorWhite._1 } : {};
-  const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorBlack._2 : colorWhite._1;
+  const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorGray._6 : colorWhite._1;
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
-  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow5 };
+  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow50Black115 };
   const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
 
   const modalAnimationInTiming = value !== undefined && value.type === "application/pdf" ? 0 : 450;
@@ -124,15 +126,15 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
           <Fragment>
             {uploadProps.completed === true ? (
               <Fragment>
-                <Status text={uploadProps.completedText!} />
+                <Tag color="complete" text={uploadProps.completedText!} />
                 <CustomSpacer isHorizontal={true} space={sw16} />
-                <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
+                <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </Fragment>
             ) : (
               <View style={{ width: sw84 }}>
                 {uploadProps.tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}
                 <View style={centerVertical}>
-                  <UploadButton color={colorBlue._2} icon={iconData.icon} onPress={iconData.function} size={sw24} />
+                  <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
                 </View>
               </View>
             )}
@@ -170,7 +172,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
                       />
                     </View>
                   ) : (
-                    <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_85 }}>
+                    <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_7 }}>
                       <Image source={imageValue} style={imageStyle} />
                     </View>
                   )}

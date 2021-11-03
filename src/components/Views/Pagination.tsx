@@ -1,20 +1,16 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { Language } from "../../constants";
 import {
   centerVertical,
   circleBorder,
   colorBlue,
-  colorGray,
   flexRow,
-  fs10RegBlue25,
-  fs12BoldBlack3,
-  fs12RegGray9,
+  fs12BoldBlack2,
+  fs12RegGray4,
   sh16,
   sh40,
   sw1,
-  sw16,
   sw2,
   sw24,
   sw40,
@@ -23,42 +19,18 @@ import {
 import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "./Spacer";
 
-const { PAGINATION } = Language.PAGE;
-
 interface PaginationProps {
-  itemsPerPage?: number;
   onPressNext: () => void;
   onPressPrev: () => void;
   page: number;
-  totalItems?: number;
   totalPages: number;
-  withLabel?: boolean;
 }
 
-export const Pagination: FunctionComponent<PaginationProps> = ({
-  itemsPerPage,
-  onPressNext,
-  onPressPrev,
-  page,
-  totalItems,
-  totalPages,
-  withLabel,
-}: PaginationProps) => {
-  const buttonStyle: ViewStyle = circleBorder(sw40, sw1, colorGray._3);
-  let currentMinItems = 0;
-  let currentMaxItems = 0;
-  let lastItem = 0;
-  let currentItems = "";
+export const Pagination: FunctionComponent<PaginationProps> = ({ onPressNext, onPressPrev, page, totalPages }: PaginationProps) => {
+  const buttonStyle: ViewStyle = circleBorder(sw40, sw1, colorBlue._4);
 
-  if (withLabel === true && itemsPerPage !== undefined && totalItems !== undefined) {
-    currentMinItems = page * itemsPerPage - itemsPerPage + 1;
-    currentMaxItems = page * itemsPerPage;
-    lastItem = currentMaxItems > totalItems ? totalItems : currentMaxItems;
-    currentItems = `${currentMinItems}-${lastItem}`;
-  }
   const totalPage = `of ${totalPages}`;
 
-  const showListLabel = `${PAGINATION.LABEL_SHOWING} ${currentItems} ${PAGINATION.LABEL_OUT_OF} ${totalItems} ${PAGINATION.LABEL_RESULTS}`;
   const prevEnabled = page > 1;
   const nextEnabled = page < totalPages;
   const prevStyle = prevEnabled ? {} : { opacity: 0.4 };
@@ -78,22 +50,16 @@ export const Pagination: FunctionComponent<PaginationProps> = ({
 
   return (
     <View style={{ ...centerVertical, ...flexRow, height: sh40 }}>
-      {withLabel === true ? (
-        <Fragment>
-          <Text style={fs10RegBlue25}>{showListLabel}</Text>
-          <CustomSpacer isHorizontal={true} space={sw16} />
-        </Fragment>
-      ) : null}
       <View style={{ ...centerVertical, ...flexRow }}>
         <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-          <Text style={{ ...fs12BoldBlack3, lineHeight: sh16 }}>{page}</Text>
+          <Text style={fs12BoldBlack2}>{page}</Text>
           <CustomSpacer isHorizontal={true} space={sw2} />
-          <Text style={{ ...fs12RegGray9, lineHeight: sh16 }}>{totalPage}</Text>
+          <Text style={fs12RegGray4}>{totalPage}</Text>
         </View>
         <CustomSpacer isHorizontal={true} space={sw24} />
         <View style={flexRow}>
           <IconButton
-            color={colorBlue._2}
+            color={colorBlue._1}
             name="caret-left"
             onPress={handlePrev}
             size={sw24}
@@ -102,7 +68,7 @@ export const Pagination: FunctionComponent<PaginationProps> = ({
           />
           <CustomSpacer isHorizontal={true} space={sw8} />
           <IconButton
-            color={colorBlue._2}
+            color={colorBlue._1}
             name="caret-right"
             onPress={handleNext}
             size={sw24}

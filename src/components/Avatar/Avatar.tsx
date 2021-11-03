@@ -6,14 +6,14 @@ import {
   circle,
   circleBorder,
   colorBlue,
-  colorMagenta,
   colorOrange,
   colorPink,
+  colorPurple,
   colorWhite,
   colorYellow,
   fs16BoldWhite1,
   fsUppercase,
-  shadowBlue5,
+  shadow16Blue112,
   sw2,
   sw24,
   sw46,
@@ -34,10 +34,10 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
   const container: ViewStyle = {
     ...centerHV,
     ...circleBorder(defaultSize, sw2, colorWhite._1),
-    ...shadowBlue5,
+    ...shadow16Blue112,
   };
 
-  let defaultColor = color !== undefined ? color : colorBlue._2;
+  let defaultColor = color !== undefined ? color : colorBlue._1;
   if (type !== undefined) {
     switch (type) {
       case "agent":
@@ -45,7 +45,7 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
         break;
 
       case "branch":
-        defaultColor = colorMagenta._1;
+        defaultColor = colorPurple._2;
         break;
 
       case "hq":

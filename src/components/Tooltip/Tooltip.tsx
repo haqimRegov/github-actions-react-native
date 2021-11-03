@@ -3,7 +3,7 @@ import { TouchableWithoutFeedback, ViewStyle } from "react-native";
 import Tooltip, { TooltipSize } from "react-native-walkthrough-tooltip";
 
 import { IcoMoon } from "../../icons";
-import { colorBlack, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208, sw7, sw8 } from "../../styles";
+import { colorGray, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208, sw7, sw8 } from "../../styles";
 
 export interface CustomTooltipProps {
   arrowSize?: TooltipSize;
@@ -66,7 +66,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   };
 
   const visible = isVisible !== undefined ? isVisible : popup;
-  const defaultColor = color !== undefined ? color : colorBlack._2;
+  const defaultColor = color !== undefined ? color : colorGray._6;
   const defaultContentStyle: ViewStyle = {
     ...px(sw16),
     ...py(sh16),

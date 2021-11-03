@@ -6,10 +6,10 @@ import {
   alignFlexStart,
   border,
   centerHV,
+  colorBlue,
   colorRed,
-  colorWhite,
   flexRow,
-  fs10BoldBlue2,
+  fs10BoldBlue1,
   fs10BoldWhite1,
   fullHeight,
   px,
@@ -40,8 +40,8 @@ export const Toggle: FunctionComponent<IToggle> = ({ labels, selected, setSelect
     <View style={alignFlexStart}>
       <View style={containerStyle}>
         {labels.map((label: string, index: number) => {
-          const selectedText = label === selected ? fs10BoldWhite1 : fs10BoldBlue2;
-          const selectedBackground = label === selected ? colorRed._1 : colorWhite._4;
+          const selectedText = label === selected ? fs10BoldWhite1 : fs10BoldBlue1;
+          const selectedBackground = label === selected ? colorRed._1 : colorBlue._2;
           const borderLast: ViewStyle = index === labels.length - 1 ? { borderTopRightRadius: sw24, borderBottomRightRadius: sw24 } : {};
           const borderContent: ViewStyle = index === 0 ? { borderTopLeftRadius: sw24, borderBottomLeftRadius: sw24 } : borderLast;
 

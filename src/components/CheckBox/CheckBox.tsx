@@ -14,7 +14,7 @@ import {
   colorWhite,
   flexRow,
   fs12RegBlack2,
-  fs12RegGray8,
+  fs12RegGray5,
   sh24,
   sw1,
   sw10,
@@ -60,13 +60,13 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
 }: CheckBoxProps) => {
   const defaultColor = toggleColor !== undefined ? toggleColor : colorRed._1;
   const selectedStyle: ViewStyle = toggle ? { backgroundColor: defaultColor, borderColor: defaultColor } : {};
-  const disabledBackground: TextStyle = disabled === true ? { backgroundColor: colorGray._9 } : {};
+  const disabledBackground: TextStyle = disabled === true ? { backgroundColor: colorGray._4 } : {};
   const disabledStyle: TextStyle = disabled === true ? { opacity: 0.6 } : {};
   const defaultIconSize: number = iconSize !== undefined ? iconSize : sw14;
 
   const toggleStyle: ViewStyle = {
     ...centerHV,
-    borderColor: colorBlue._2,
+    borderColor: colorBlue._1,
     borderRadius: sw4,
     borderWidth: sw1,
     height: sw18,
@@ -78,7 +78,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
   };
   const fontFamily = toggle ? NunitoBold : NunitoRegular;
 
-  const defaultSpace = spaceToLabel !== undefined ? spaceToLabel : sw10;
+  const defaultLabelSpace = spaceToLabel !== undefined ? spaceToLabel : sw10;
 
   const handlePress = () => {
     if (disabled !== true) {
@@ -95,7 +95,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
           </View>
           {label === undefined ? null : (
             <Fragment>
-              <CustomSpacer isHorizontal={true} space={defaultSpace} />
+              <CustomSpacer isHorizontal={true} space={defaultLabelSpace} />
               <View>
                 <Text
                   numberOfLines={numberOfLines}
@@ -105,7 +105,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
                 {subLabel !== undefined ? (
                   <Fragment>
                     {spaceToSubLabel !== undefined ? <CustomSpacer space={spaceToSubLabel} /> : null}
-                    <Text style={{ ...fs12RegGray8, ...subLabelStyle }}>{subLabel}</Text>
+                    <Text style={{ ...fs12RegGray5, ...subLabelStyle }}>{subLabel}</Text>
                   </Fragment>
                 ) : null}
               </View>

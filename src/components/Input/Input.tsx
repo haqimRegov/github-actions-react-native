@@ -6,7 +6,6 @@ import { IcoMoon } from "../../icons";
 import {
   border,
   centerVertical,
-  colorBlack,
   colorBlue,
   colorGray,
   colorRed,
@@ -15,9 +14,9 @@ import {
   customShadow,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
+  fs12BoldGray6,
   fs12RegRed2,
-  fs16RegBlack2,
+  fs16RegGray6,
   px,
   sh16,
   sh4,
@@ -75,6 +74,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   rightIcon,
   setRef,
   spaceToBottom,
+  spaceToLabel,
   spaceToTop,
   style,
   testID,
@@ -86,9 +86,9 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
 
   const borderWidth = noBorder === true ? { borderWidth: 0 } : {};
   const disabledOpacity = disabled === true ? { opacity: 0.6 } : {};
-  const disabledStyle = disabled === true ? { ...disabledOpacity, backgroundColor: colorGray._5 } : {};
-  const errorStyle: ViewStyle = error !== undefined ? { backgroundColor: colorRed._3_08, borderWidth: sw2, borderColor: colorRed._2 } : {};
-  const focusedShadow = isFocused ? customShadow(colorBlue._2, 0, 0, 0.02, sw4) : {};
+  const disabledStyle = disabled === true ? { ...disabledOpacity, backgroundColor: colorGray._1 } : {};
+  const errorStyle: ViewStyle = error !== undefined ? { backgroundColor: colorRed._5, borderWidth: sw2, borderColor: colorRed._2 } : {};
+  const focusedShadow = isFocused ? customShadow(colorBlue._1, 0, 0, 0.02, sw4) : {};
 
   const defaultContainerStyle: ViewStyle = {
     paddingTop: spaceToTop !== undefined ? spaceToTop : 0,
@@ -96,7 +96,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   };
 
   const defaultInputStyle: ViewStyle = {
-    ...border(isFocused ? colorBlue._2 : colorWhite._3, isFocused ? sw2 : sw1, sw32),
+    ...border(isFocused ? colorBlue._1 : colorGray._3, isFocused ? sw2 : sw1, sw32),
     ...centerVertical,
     ...flexRow,
     ...px(isFocused === false && error === undefined ? sw16 : sw15),
@@ -110,8 +110,9 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
     ...viewStyle,
   };
 
-  const inputStyle = {
+  const inputStyle: TextStyle = {
     ...flexChild,
+    color: isFocused ? colorBlue._1 : colorGray._6,
     fontFamily: placeholder !== undefined && !value ? NunitoRegular : NunitoBold,
     fontSize: sh16,
     height: isFocused ? sh50 : sh48, // height is more than the input view size to adjust the keyboard avoiding view
@@ -135,7 +136,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   return (
     <View onLayout={onLayout} style={{ width: sw360, ...defaultContainerStyle, ...containerStyle }}>
       {label === undefined ? null : (
-        <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...disabledOpacity, ...labelStyle }}>
+        <Text onPress={onPressLabel} style={{ ...fs12BoldGray6, ...disabledOpacity, paddingBottom: spaceToLabel || sh4, ...labelStyle }}>
           {label}
         </Text>
       )}
@@ -143,7 +144,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
         {leftIcon === undefined ? null : (
           <Fragment>
             <IcoMoon
-              color={leftIcon.color || colorBlue._2}
+              color={leftIcon.color || colorBlue._1}
               name={leftIcon.name}
               onPress={disabled === true ? undefined : leftIcon.onPress}
               size={leftIcon.size || sw24}
@@ -153,7 +154,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
         )}
         {inputPrefix !== undefined ? (
           <Fragment>
-            <Text style={{ ...fs16RegBlack2, ...prefixStyle }}>{inputPrefix}</Text>
+            <Text style={{ ...fs16RegGray6, ...prefixStyle }}>{inputPrefix}</Text>
             <CustomSpacer isHorizontal={true} space={sw8} />
           </Fragment>
         ) : null}
@@ -163,9 +164,9 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           onBlur={handleBlur}
           onFocus={handleFocus}
           placeholder={placeholder}
-          placeholderTextColor={colorGray._9}
+          placeholderTextColor={colorGray._4}
           ref={setRef}
-          selectionColor={colorBlack._2}
+          selectionColor={colorGray._6}
           spellCheck={false}
           style={inputStyle}
           testID={testID}
@@ -177,7 +178,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           <Fragment>
             <CustomSpacer isHorizontal={true} space={sw16} />
             <IcoMoon
-              color={rightIcon.color || colorBlue._2}
+              color={rightIcon.color || colorBlue._1}
               name={rightIcon.name}
               onPress={disabled === true ? undefined : rightIcon.onPress}
               size={rightIcon.size || sw24}
@@ -191,7 +192,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           <View style={flexRow}>
             <IcoMoon color={colorRed._2} name="error-filled" size={sw16} />
             <CustomSpacer isHorizontal={true} space={sw8} />
-            <Text style={{ ...fs12RegRed2, width: sw336 }}>{error}</Text>
+            <Text style={{ ...fs12RegRed2, lineHeight: sh16, width: sw336 }}>{error}</Text>
           </View>
         </View>
       )}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, ViewStyle } from "react-native";
 import { Menu, Position } from "react-native-enhanced-popup-menu";
 
-import { shadow5, sw8 } from "../../styles";
+import { shadow50Black115, sw8 } from "../../styles";
 
 interface MenuContentProps {
   hide: () => void;
@@ -49,7 +49,7 @@ export const MenuPopup = ({ RenderButton, RenderContent }: MenuPopupProps) => {
   return (
     <View>
       <ElementToStick show={showMenu} ref={setElementRef} RenderChildren={() => <RenderButton show={showMenu} />} />
-      <Menu ref={setMenuRef} style={{ ...shadow5, borderRadius: sw8 }}>
+      <Menu ref={setMenuRef} style={{ ...shadow50Black115, borderRadius: sw8 }}>
         <RenderContent hide={hideMenu} />
       </Menu>
     </View>

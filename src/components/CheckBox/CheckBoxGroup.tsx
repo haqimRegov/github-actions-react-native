@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { flexCol, flexRow, flexWrap, fs12BoldBlack2, fs14RegBlack2, sh16, sh8, sw12, sw16 } from "../../styles";
+import { disabledOpacity5, flexCol, flexRow, flexWrap, fs12BoldGray6, sh16, sh4, sw12, sw16 } from "../../styles";
 import { CustomSpacer, TextSpaceArea } from "../Views";
 import { CheckBox } from "./CheckBox";
 
@@ -41,13 +41,13 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
   const radioSpace = space !== undefined ? space : defaultSpace;
   const flexDirection = direction === "row" ? flexRow : flexCol;
 
-  const labelDisabled = disabled === true ? { opacity: 0.5 } : {};
+  const labelDisabled = disabled === true ? disabledOpacity5 : {};
+
   return (
     <View>
       {label !== undefined ? (
-        <TextSpaceArea spaceToBottom={spaceToLabel || sh8} style={{ ...fs12BoldBlack2, ...labelDisabled, ...labelStyle }} text={label} />
+        <TextSpaceArea spaceToBottom={spaceToLabel || sh4} style={{ ...fs12BoldGray6, ...labelDisabled, ...labelStyle }} text={label} />
       ) : null}
-
       <View style={{ ...flexDirection, ...flexWrap, ...style }}>
         {labels.map((option: ICheckBoxWithSubLabel, index: number) => {
           const handleSelect = () => {
@@ -64,7 +64,7 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
                 disabled={disabled === true ? true : disabledOption}
                 key={index}
                 label={optionLabel}
-                labelStyle={{ ...fs14RegBlack2, ...checkboxLabelStyle }}
+                labelStyle={checkboxLabelStyle}
                 onPress={handleSelect}
                 spaceToLabel={sw12}
                 style={checkBoxStyle}

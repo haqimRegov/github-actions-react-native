@@ -7,12 +7,11 @@ import {
   centerHV,
   centerVertical,
   circleBorder,
-  colorBlack,
+  colorGray,
   colorGreen,
   colorWhite,
   flexRow,
-  fs12SemiBoldBlack2,
-  sh16,
+  fs12RegGray5,
   sh8,
   sw1,
   sw11,
@@ -30,8 +29,8 @@ export const PasswordValidation: FunctionComponent<PasswordValidationProps> = ({
     <View>
       {DICTIONARY_PASSWORD.map(({ label, validation }, index: number) => {
         const valid = validation.test(password);
-        const iconColor = valid ? colorWhite._1 : colorBlack._2;
-        const iconBorder = valid ? colorGreen._1 : colorBlack._2;
+        const iconColor = valid ? colorWhite._1 : colorGray._6;
+        const iconBorder = valid ? colorGreen._1 : colorGray._6;
         const iconBackground = valid ? colorGreen._1 : colorWhite._1;
         return (
           <Fragment key={index}>
@@ -43,7 +42,7 @@ export const PasswordValidation: FunctionComponent<PasswordValidationProps> = ({
                 </View>
               </View>
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={{ ...fs12SemiBoldBlack2, lineHeight: sh16 }}>{label}</Text>
+              <Text style={fs12RegGray5}>{label}</Text>
             </View>
           </Fragment>
         );

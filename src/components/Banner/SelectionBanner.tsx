@@ -6,7 +6,7 @@ import {
   centerVertical,
   colorYellow,
   flexRowCC,
-  fs24BoldBlue2,
+  fs24BoldBlack2,
   fullWidth,
   px,
   sh112,
@@ -60,7 +60,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     <View style={{ ...centerVertical, ...px(sw24) }}>
       <View style={bottomContainer}>
         <View style={centerHorizontal}>
-          <Text style={{ ...fs24BoldBlue2, ...labelStyle }}>{label}</Text>
+          <Text style={{ ...fs24BoldBlack2, ...labelStyle }}>{label}</Text>
           {bottomContent}
         </View>
         <CustomFlexSpacer />

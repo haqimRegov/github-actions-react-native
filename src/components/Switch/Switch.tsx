@@ -10,7 +10,7 @@ import {
   colorWhite,
   flexRow,
   flexRowReverse,
-  fs12BoldBlack2,
+  fs12BoldGray6,
   px,
   sh16,
   sw12,
@@ -49,7 +49,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
 }: SwitchProps) => {
   const direction: ViewStyle = toggle === true ? flexRowReverse : flexRow;
   const activeTrackColor = trackColor !== undefined ? trackColor.true : colorRed._1;
-  const inactiveTrackColor = trackColor !== undefined ? trackColor.false : colorGray._9;
+  const inactiveTrackColor = trackColor !== undefined ? trackColor.false : colorGray._4;
   const baseTrackColor = toggle === true ? activeTrackColor : inactiveTrackColor;
   const activeThumbColor = thumbColor !== undefined ? thumbColor.true : colorWhite._1;
   const inactiveThumbColor = thumbColor !== undefined ? thumbColor.false : colorWhite._1;
@@ -87,7 +87,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
           {label !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={{ ...fs12BoldBlack2, fontFamily: fontFamily, ...labelStyle }}>{label}</Text>
+              <Text style={{ ...fs12BoldGray6, fontFamily: fontFamily, ...labelStyle }}>{label}</Text>
             </Fragment>
           ) : null}
         </View>

@@ -3,7 +3,7 @@ import { NativeSyntheticEvent, TextInputFocusEventData, View, ViewStyle } from "
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
-import { centerHorizontal, colorBlue, flexRow, fs12BoldBlue2, py, sh16, sh24, sh32, sh8, sw360, sw40, sw424 } from "../../styles";
+import { centerHorizontal, colorBlue, flexRow, py, sh16, sh24, sh32, sh8, sw360, sw40, sw424 } from "../../styles";
 import { NewDropdown } from "../Dropdown/NewDropdown";
 import { CustomTextInput, TextInputMultiline } from "../Input";
 import { IconButton, OutlineButton } from "../Touchables";
@@ -90,21 +90,14 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
                   <Fragment>
                     <CustomSpacer isHorizontal={true} space={sw40} />
                     <View style={{ ...centerHorizontal }}>
-                      <IconButton name="trash" color={colorBlue._2} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
+                      <IconButton name="trash" color={colorBlue._1} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
                     </View>
                   </Fragment>
                 )}
               </View>
             ) : null}
             {address === undefined && index === addressValues.indexOf(undefined) ? (
-              <OutlineButton
-                buttonType="dashed"
-                color={colorBlue._2}
-                icon="plus"
-                onPress={handleAddLine}
-                text={"Add Additional Line"}
-                textStyle={fs12BoldBlue2}
-              />
+              <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddLine} text={ADDRESS.BUTTON_ADD} />
             ) : null}
           </View>
         );

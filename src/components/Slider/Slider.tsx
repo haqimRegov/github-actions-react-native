@@ -6,12 +6,13 @@ import {
   centerHV,
   centerVertical,
   circle,
+  colorBlue,
   colorGray,
   colorRed,
   colorWhite,
   customShadow,
   flexRowSbSb,
-  fs12BoldBlack2,
+  fs12BoldGray5,
   fullWidth,
   justifyContentEnd,
   px,
@@ -40,7 +41,7 @@ export interface SliderProps {
 
 export const CustomSlider = ({ disabled, options, selected, setSelected }: SliderProps) => {
   const sliderContainer: ViewStyle = {
-    ...customShadow(colorGray._3, 0, 0, 0.8, sw15),
+    ...customShadow(colorBlue._4, 0, 0, 0.8, sw15),
     ...px(sw24),
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
@@ -61,7 +62,7 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
         animateTransitions={true}
         containerStyle={{ height: sh16 }}
         disabled={disabled}
-        maximumTrackTintColor={colorGray._4}
+        maximumTrackTintColor={colorGray._2}
         maximumValue={options.length - 1}
         minimumTrackTintColor={selected === 0 ? colorWhite._1 : colorRed._1}
         minimumValue={0}
@@ -93,7 +94,7 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
           return (
             <View key={index}>
               <View style={optionStyle}>
-                <Text style={fs12BoldBlack2}>{option}</Text>
+                <Text style={fs12BoldGray5}>{option}</Text>
               </View>
               <TouchableWithoutFeedback onPress={handleSeek}>
                 <View style={touchAreaStyle} />

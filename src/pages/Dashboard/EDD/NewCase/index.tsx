@@ -146,7 +146,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
       }
       if (type !== "checkbox") {
         if (count <= 1) {
-          answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+          answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
         }
         // Option index is used to index the answer while handling data
         optionsArray.push({ ...option, optionIndex: answerArray.length - 1 });
@@ -171,7 +171,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
         answerArray.concat(formattedOptions.answerArray);
         optionsArray.concat(formattedOptions.optionsArray);
       } else {
-        answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+        answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
       }
       const checkOptionsArray = optionsArray.length > 0 ? { options: optionsArray } : {};
       initialQuestions.push({ ...question, data: { autoHide: true, answers: answerArray }, ...checkOptionsArray });
@@ -329,11 +329,11 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                               count = 0;
                             }
                             if (count <= 1 && type !== "checkbox") {
-                              answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+                              answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
                             }
                           });
                         } else {
-                          answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+                          answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
                         }
                         initialQuestions.push({ ...question, data: { autoHide: true, answers: answerArray } });
                       });

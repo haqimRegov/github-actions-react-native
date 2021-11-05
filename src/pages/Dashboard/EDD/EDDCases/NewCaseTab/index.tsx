@@ -334,7 +334,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       sort: defaultSort,
       filter: [
         {
-          column: filter.dateSorting === "Creation Date" ? "caseCreated" : "lastUpdated",
+          column: filter.dateSorting === "Case Created On" ? "caseCreated" : "lastUpdated",
           value: `${minimumDate}~${maximumDate}`,
         },
         ...filterStatus,

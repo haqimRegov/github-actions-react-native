@@ -20,6 +20,7 @@ import {
   sw12,
   sw14,
   sw148,
+  sw18,
   sw296,
   sw54,
   sw66,
@@ -49,12 +50,12 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
   const { answer, remark, subSection } = data;
 
   const handleInput = (key: string, text: string) => {
-    const tempData: IQuestionData = { ...data, subSection: { ...data.subSection, [key]: text } };
+    const tempData: IQuestionData = { ...data, subSection: { ...data.subSection, [key]: { answer: text } } };
     setData(tempData);
   };
 
   const handleOption1 = () => {
-    const tempData: IQuestionData = { ...data, answer: title };
+    const tempData: IQuestionData = { ...data, answer: { answer: title } };
     setData(tempData);
   };
 
@@ -69,6 +70,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
     <View style={{ flexDirection: direction }}>
       <View style={{ width: sw296 }}>
         <AdvanceToggleButton
+          iconSize={sw18}
           labels={[{ label: title, subLabel: subLabel }]}
           onSelect={handleOption1}
           sideElement={
@@ -97,17 +99,17 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
         />
       </View>
       <View>
-        {options !== undefined && options !== null && options.length > 0 && title === answer
+        {options !== undefined && options !== null && options.length > 0 && title === answer?.answer
           ? options.map((insideOption: IOptionField, optionIndex: number) => {
               const { type, values, id: optionId } = insideOption;
               const questionDropdownValues: TypeLabelValue[] = [];
 
               const handleDropdown = (insideKey: string, text: string) => {
-                setData({ ...data, subSection: { ...subSection, [insideKey]: text } });
+                setData({ ...data, subSection: { ...subSection, [insideKey]: { answer: text } } });
               };
 
               const handleOption2 = (key: string, text: string | undefined) => {
-                const tempData: IQuestionData = { ...data, subSection: { ...data.subSection, [key]: text } };
+                const tempData: IQuestionData = { ...data, subSection: { ...data.subSection, [key]: { answer: text } } };
                 setData(tempData);
               };
 
@@ -139,7 +141,11 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                         label={insideOption.title}
                         onChangeText={(text: string) => handleInput(defaultKey, text)}
                         spaceToTop={sh16}
-                        value={subSection !== undefined ? subSection![defaultKey] : ""}
+                        value={
+                          subSection !== undefined && defaultKey !== undefined && subSection![defaultKey] !== undefined
+                            ? (subSection![defaultKey].answer as string)
+                            : ""
+                        }
                       />
                     </View>
                   );
@@ -152,7 +158,11 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                         handleChange={(text: string) => handleDropdown(defaultKey, text)}
                         items={questionDropdownValues}
                         label={insideOption.title}
-                        value={subSection !== undefined ? subSection[defaultKey]! : ""}
+                        value={
+                          subSection !== undefined && defaultKey !== undefined && subSection![defaultKey] !== undefined
+                            ? (subSection[defaultKey].answer as string)
+                            : ""
+                        }
                       />
                     </View>
                   );
@@ -160,7 +170,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                 case "label":
                   content = (
                     <View>
-                      {answer === title ? (
+                      {answer.answer === title ? (
                         <Fragment>
                           <CustomSpacer space={sh18} />
                           <View style={{ ...border, ...fullWidth }} />
@@ -177,6 +187,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                                         <View style={{ width: sw296 }}>
                                           <AdvanceToggleButton
                                             direction="row"
+                                            iconSize={sw18}
                                             labels={[{ label: nestedOption.title! }]}
                                             onSelect={() => handleOption2(optionId, nestedOption.title)}
                                             space={sw66}

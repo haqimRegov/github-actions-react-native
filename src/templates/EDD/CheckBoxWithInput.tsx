@@ -8,6 +8,7 @@ import { Switch } from "../../components/Switch";
 import { CustomSpacer } from "../../components/Views";
 import { NunitoBold } from "../../constants";
 import { Language } from "../../constants/language";
+import { ERROR } from "../../data/dictionary";
 import {
   alignFlexStart,
   centerVertical,
@@ -25,7 +26,7 @@ import {
   sw32,
   sw600,
 } from "../../styles";
-import { AnimationUtils, formatAmount, isNumber } from "../../utils";
+import { AnimationUtils, formatAmount, isAmount, validateInput } from "../../utils";
 
 const { DASHBOARD_EDD_CASE } = Language.PAGE;
 
@@ -65,12 +66,13 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
         ? options[checkDropdownIndex].id
         : "values";
     const addRemark = checkRemark !== -1 ? { remark: "" } : {};
-    const addInput = options !== undefined && checkInputIndex !== -1 ? { subSection: { [options[checkInputIndex].id]: "" } } : {};
-    const addDropdown = checkDropdownIndex !== -1 ? { subSection: { [dropdownKey]: "" } } : {};
+    const addInput =
+      options !== undefined && checkInputIndex !== -1 ? { subSection: { [options[checkInputIndex].id]: { answer: "" } } } : {};
+    const addDropdown = checkDropdownIndex !== -1 ? { subSection: { [dropdownKey]: { answer: "" } } } : {};
     setData({
       ...data,
       checkboxToggle: checkboxToggle !== undefined ? !checkboxToggle : true,
-      answer: label,
+      answer: { answer: label },
       hasRemark: options !== undefined && options !== null && checkRemark !== -1,
       hasDoc: false,
       ...addRemark,
@@ -96,18 +98,8 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
     setData({ ...data, hasRemark: true, remark: text });
   };
 
-  const handleValue = (key: string, text: string) => {
-    setData({ ...data, subSection: { [key]: isNumber(text) ? text : "" } });
-  };
-
-  const handleBlur = (key: string) => {
-    if (subSection![key] !== undefined) {
-      setData({ ...data, subSection: { [key]: formatAmount(parseInt(subSection![key], 10)) } });
-    }
-  };
-
   const handleValues = (key: string, selected: string[]) => {
-    setData({ ...data, subSection: { [key]: selected } });
+    setData({ ...data, subSection: { [key]: { answer: selected } } });
   };
 
   const checkSubLabel = subLabel !== undefined && subLabel !== null ? subLabel : undefined;
@@ -136,7 +128,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
             <View style={flexChild}>
               {options !== undefined && options !== null && options.length > 0
                 ? options.map((option: IOptionField, optionIndex: number) => {
-                    const { type, title, valuesDescription, id: optionId, multiSelection } = option;
+                    const { format, type, title, valuesDescription, id: optionId, multiSelection } = option;
                     const checkBoxDropdownValues: TypeLabelValue[] = [];
 
                     if (option.values !== undefined && option.values !== null) {
@@ -148,6 +140,50 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                         checkBoxDropdownValues.push({ label: dropdownValue, value: dropdownValue, ...valueDescription });
                       });
                     }
+
+                    const handleValue = (key: string, text: string) => {
+                      const tempAnswers: IQuestionData = { ...data };
+                      let checkInput: IInputValidation = { error: false, errorMessage: "" };
+                      const cleanValue = text.replace(/[,.]/g, "");
+                      if (format !== null && format !== undefined && format.type !== null) {
+                        const dataToValidate = format.type === "amount" ? cleanValue : text;
+                        checkInput = validateInput(dataToValidate, format.type);
+                      }
+                      const checkAnswer =
+                        "subSection" in tempAnswers && tempAnswers.subSection !== undefined && key in tempAnswers.subSection
+                          ? tempAnswers.subSection![key].answer
+                          : "";
+                      const updatedAnswer = checkInput.error === false || text === "" ? text : checkAnswer;
+                      setData({ ...data, subSection: { [key]: { answer: updatedAnswer } } });
+                    };
+
+                    const handleBlur = (key: string) => {
+                      let updatedAnswer = "";
+                      const answerObject = { ...data.subSection![key] };
+                      const value = answerObject.answer! as string;
+                      let checkInput: IInputValidation = { error: false, errorMessage: "" };
+                      if (subSection![key] !== undefined && format !== undefined && format.type === "amount") {
+                        const cleanValue = value.replace(/[,]/g, "");
+                        checkInput =
+                          isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === true
+                            ? { ...checkInput }
+                            : { ...checkInput, errorMessage: ERROR.INVESTMENT_INVALID_AMOUNT };
+                        updatedAnswer =
+                          isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === false
+                            ? (data.subSection![key].answer as string)
+                            : formatAmount(cleanValue);
+                      } else if (format !== null && format !== undefined && format.type !== undefined) {
+                        updatedAnswer = value;
+                        checkInput = validateInput(value, format.type);
+                      }
+                      const error = checkInput.errorMessage !== "" ? { error: checkInput.errorMessage } : {};
+                      setData({
+                        ...data,
+                        subSection: {
+                          [key]: { answer: updatedAnswer, ...error },
+                        },
+                      });
+                    };
                     switch (type) {
                       case "textarea":
                         content = (
@@ -168,10 +204,17 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                           <View>
                             <CustomSpacer space={sh18} />
                             <CustomTextInput
+                              error={subSection![optionId].error}
+                              keyboardType={
+                                format !== null && (format?.type === "amount" || format?.type === "number") ? "numeric" : "default"
+                              }
                               label={title}
+                              maxLength={
+                                format !== null && format!.limit !== null && format!.limit !== undefined ? format!.limit : undefined
+                              }
                               onChangeText={(text: string) => handleValue(optionId, text)}
                               onBlur={() => handleBlur(optionId)}
-                              value={subSection![optionId]}
+                              value={subSection![optionId].answer as string}
                             />
                             <CustomSpacer space={sh16} />
                           </View>
@@ -187,7 +230,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                                   handleChange={(values: string[]) => handleValues(optionId, values)}
                                   items={checkBoxDropdownValues}
                                   label={title}
-                                  value={subSection !== undefined ? subSection![optionId] : []}
+                                  value={subSection !== undefined ? (subSection![optionId].answer as string[]) : []}
                                 />
                                 <CustomSpacer space={sh16} />
                               </Fragment>

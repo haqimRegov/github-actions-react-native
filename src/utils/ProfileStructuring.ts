@@ -67,7 +67,7 @@ export const structureProfile = (
     });
   }
 
-  if (accountType === "Joint" && accountHolder === "Principal" && showJointToggle !== false) {
+  if (accountType === "Joint" && accountHolder === "Principal" && personalDetails.relationship !== null) {
     accountSummaryDetails.splice(-1, 0, {
       label: DASHBOARD_PROFILE.LABEL_RELATIONSHIP,
       title: personalDetails.relationship,

@@ -22,8 +22,13 @@ declare interface IInputFormat {
   limit?: number;
 }
 
+declare interface IDataDropdown {
+  description?: string;
+  value: string;
+}
+
 declare interface ILabeledTitleWithFile {
-  data: string | FileBase64[] | string[];
+  data: string | FileBase64[] | IDataDropdown[];
   isMulti?: boolean;
   label: string;
 }

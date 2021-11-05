@@ -31,7 +31,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                                       data.answers[findIndex].subSection![defaultKey].answer === "" ||
                                       data.answers[findIndex].subSection![defaultKey].error !== undefined;
                               case "textarea":
-                                return type === "checkbox" || (type === "radiobutton" && option!.options!.length === 1)
+                                return type === "checkbox" || (type === "radiobutton" && option.options!.length === 1)
                                   ? false
                                   : !("subSection" in data.answers[findIndex]) ||
                                       !(defaultKey in data.answers[findIndex].subSection!) ||
@@ -54,18 +54,15 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                                       return true;
                                     }
 
-                                    switch (innerNestedType) {
-                                      case "radiobutton":
-                                        if (data.answers[findIndex].subSection![optionId] === innerNestedTitle) {
-                                          return (
-                                            !(optionId in data.answers[findIndex].subSection!) ||
-                                            data.answers[findIndex].subSection![optionId] === undefined ||
-                                            data.answers[findIndex].subSection![optionId].answer === ""
-                                          );
-                                        }
-                                        return false;
-                                      default:
-                                        return false;
+                                    if (innerNestedType === "radiobutton") {
+                                      if (data.answers[findIndex].subSection![optionId] === innerNestedTitle) {
+                                        return (
+                                          !(optionId in data.answers[findIndex].subSection!) ||
+                                          data.answers[findIndex].subSection![optionId] === undefined ||
+                                          data.answers[findIndex].subSection![optionId].answer === ""
+                                        );
+                                      }
+                                      return false;
                                     }
                                   });
                                   return innerNestedValid.includes(true);

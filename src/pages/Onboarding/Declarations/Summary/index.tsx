@@ -187,8 +187,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           addressInformation: jointAddress,
           declaration: {
             crs: {
-              taxResident:
-                jointTaxResident === -1 ? OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident] : OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident].label, // required
+              taxResident: jointTaxResident === -1 ? OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident] : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
               tin: jointTin,
             },
             fatca: {
@@ -274,9 +273,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       declaration: {
         crs: {
           taxResident:
-            principalTaxResident === -1
-              ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label
-              : OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label, // required
+            principalTaxResident === -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
           tin: principalTin,
         },
         fatca: {

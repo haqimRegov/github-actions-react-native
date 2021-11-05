@@ -134,7 +134,9 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
     AnimationUtils.layout({ duration: 150 });
   };
 
-  const handleFormatOptions = (answerArray: IQuestionData[], optionsArray: IOptionField[], options: IOptionField[]) => {
+  const handleFormatOptions = (options: IOptionField[]) => {
+    const formatAnswerArray: IQuestionData[] = [];
+    const formatOptionsArray: IOptionField[] = [];
     let count: number = 0;
     options.forEach((option: IOptionField) => {
       const { type } = option;
@@ -146,15 +148,15 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
       }
       if (type !== "checkbox") {
         if (count <= 1) {
-          answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
+          formatAnswerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
         }
         // Option index is used to index the answer while handling data
-        optionsArray.push({ ...option, optionIndex: answerArray.length - 1 });
+        formatOptionsArray.push({ ...option, optionIndex: formatAnswerArray.length - 1 });
       } else {
-        optionsArray.push(option);
+        formatOptionsArray.push(option);
       }
     });
-    return { answerArray, optionsArray, options };
+    return { formatAnswerArray, formatOptionsArray, options };
   };
 
   const handleDataFormatting = (data: IEDDResponse) => {
@@ -167,9 +169,9 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
       const answerArray: IQuestionData[] = [];
       const optionsArray: IOptionField[] = [];
       if (options !== undefined && options.length > 0) {
-        const formattedOptions = handleFormatOptions(answerArray, optionsArray, options);
-        answerArray.concat(formattedOptions.answerArray);
-        optionsArray.concat(formattedOptions.optionsArray);
+        const formattedOptions = handleFormatOptions(options);
+        answerArray.push(...formattedOptions.formatAnswerArray);
+        optionsArray.push(...formattedOptions.formatOptionsArray);
       } else {
         answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
       }
@@ -389,7 +391,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                                     {questionIndex !== 0 ? <CustomSpacer space={sh16} /> : null}
                                     <QuestionCard
                                       options={options}
-                                      data={data!}
+                                      data={data}
                                       question={title}
                                       subQuestion={description}
                                       questionLabel={

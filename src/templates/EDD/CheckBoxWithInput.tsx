@@ -151,7 +151,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                       }
                       const checkAnswer =
                         "subSection" in tempAnswers && tempAnswers.subSection !== undefined && key in tempAnswers.subSection
-                          ? tempAnswers.subSection![key].answer
+                          ? tempAnswers.subSection[key].answer
                           : "";
                       const updatedAnswer = checkInput.error === false || text === "" ? text : checkAnswer;
                       setData({ ...data, subSection: { [key]: { answer: updatedAnswer } } });
@@ -230,7 +230,7 @@ export const CheckBoxWithInput: FunctionComponent<ICheckBoxWithInput> = ({
                                   handleChange={(values: string[]) => handleValues(optionId, values)}
                                   items={checkBoxDropdownValues}
                                   label={title}
-                                  value={subSection !== undefined ? (subSection![optionId].answer as string[]) : []}
+                                  value={subSection !== undefined ? (subSection[optionId].answer as string[]) : []}
                                 />
                                 <CustomSpacer space={sh16} />
                               </Fragment>

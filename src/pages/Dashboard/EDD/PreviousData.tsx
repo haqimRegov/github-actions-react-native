@@ -36,11 +36,6 @@ import {
 
 const { DASHBOARD_EDD_CASE } = Language.PAGE;
 
-declare interface IDataDropdown {
-  description?: string;
-  value: string;
-}
-
 declare interface IPreviousDataProps {
   data: IPreviousData[];
   setFile: (file: FileBase64) => void;
@@ -113,16 +108,7 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                         ...checkBackground,
                       }}>
                       {bodyData.map((currentData: ILabeledTitleWithFile, currentDataIndex: number) => {
-                        const { label, data: previousDataTitle, isMulti } = currentData;
-                        let cardContent;
-                        if (isMulti === true) {
-                          cardContent = previousDataTitle as string[];
-                        }
-                        if (typeof previousDataTitle === "object") {
-                          cardContent = previousDataTitle as FileBase64[];
-                        } else {
-                          cardContent = previousDataTitle as string;
-                        }
+                        const { label, data: content, isMulti } = currentData;
                         const checkAttachment = label === "document" ? DASHBOARD_EDD_CASE.LABEL_ATTACHMENTS : label;
                         const checkRemark = label === "remark" ? DASHBOARD_EDD_CASE.LABEL_REMARKS : checkAttachment;
                         const checkDirection: ViewStyle = isMulti === true ? { ...flexRow } : {};
@@ -137,10 +123,10 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                                   <CustomSpacer space={sh4} />
                                 </Fragment>
                               ) : null}
-                              {typeof cardContent !== "object" ? (
+                              {typeof content !== "object" ? (
                                 <View style={checkDirection}>
                                   <View>
-                                    <Text style={fs16BoldGray6}>{cardContent}</Text>
+                                    <Text style={fs16BoldGray6}>{content}</Text>
                                     {/* {subtitle !== null ? <Text style={fs12BoldGray6}>{subtitle}</Text> : null} */}
                                   </View>
                                 </View>
@@ -149,48 +135,50 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                                 <Fragment key={currentDataIndex}>
                                   {isMulti === true ? (
                                     <Fragment>
-                                      {cardContent.map((eachData: IDataDropdown, eachDataIndex: number) => {
-                                        const { description, value } = eachData;
-                                        return (
-                                          <View key={eachDataIndex}>
-                                            <View style={flexRow}>
-                                              <Text style={fs16BoldGray6}>•</Text>
-                                              <CustomSpacer isHorizontal space={sw4} />
-                                              <View>
-                                                <Text style={fs16BoldGray6}>{value}</Text>
-                                                {description !== undefined ? (
-                                                  <Text style={fs12RegGray6}>{eachData.description}</Text>
-                                                ) : null}
+                                      {content.length > 0
+                                        ? (content as IDataDropdown[]).map((eachData: IDataDropdown, eachDataIndex: number) => {
+                                            const { description, value } = eachData;
+                                            return (
+                                              <View key={eachDataIndex}>
+                                                <View style={flexRow}>
+                                                  <Text style={fs16BoldGray6}>•</Text>
+                                                  <CustomSpacer isHorizontal space={sw4} />
+                                                  <View>
+                                                    <Text style={fs16BoldGray6}>{value}</Text>
+                                                    {description !== undefined ? (
+                                                      <Text style={fs12RegGray6}>{eachData.description}</Text>
+                                                    ) : null}
+                                                  </View>
+                                                </View>
                                               </View>
-                                            </View>
-                                          </View>
-                                        );
-                                      })}
+                                            );
+                                          })
+                                        : null}
                                     </Fragment>
                                   ) : (
                                     // Display the array of documents
                                     <Fragment>
-                                      {cardContent.map((eachData: FileBase64, eachDataIndex: number) => {
-                                        return (
-                                          <TouchableWithoutFeedback
-                                            key={eachDataIndex}
-                                            onPress={() =>
-                                              eachData.url !== undefined && eachData.url !== null
-                                                ? setFile(eachData as FileBase64)
-                                                : undefined
-                                            }>
-                                            <View key={eachDataIndex}>
-                                              <View style={flexRow}>
-                                                <Text style={fs16BoldGray6}>{eachData.name}</Text>
-                                                <View style={{ ...flexRow, ...centerVertical }}>
-                                                  <CustomSpacer isHorizontal={true} space={sw12} />
-                                                  <IcoMoon color={colorBlue._8} name="file" size={sh12} />
+                                      {content.length > 0
+                                        ? (content as FileBase64[]).map((eachData: FileBase64, eachDataIndex: number) => {
+                                            return (
+                                              <TouchableWithoutFeedback
+                                                key={eachDataIndex}
+                                                onPress={() =>
+                                                  eachData.url !== undefined && eachData.url !== null ? setFile(eachData) : undefined
+                                                }>
+                                                <View key={eachDataIndex}>
+                                                  <View style={flexRow}>
+                                                    <Text style={fs16BoldGray6}>{eachData.name}</Text>
+                                                    <View style={{ ...flexRow, ...centerVertical }}>
+                                                      <CustomSpacer isHorizontal={true} space={sw12} />
+                                                      <IcoMoon color={colorBlue._8} name="file" size={sh12} />
+                                                    </View>
+                                                  </View>
                                                 </View>
-                                              </View>
-                                            </View>
-                                          </TouchableWithoutFeedback>
-                                        );
-                                      })}
+                                              </TouchableWithoutFeedback>
+                                            );
+                                          })
+                                        : null}
                                     </Fragment>
                                   )}
                                 </Fragment>

@@ -140,7 +140,7 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                   }
                   const checkAnswer =
                     "subSection" in tempAnswers[0] && tempAnswers[0].subSection !== undefined && insideKey in tempAnswers[0].subSection
-                      ? tempAnswers[0].subSection![insideKey].answer
+                      ? tempAnswers[0].subSection[insideKey].answer
                       : "";
                   const updatedAnswer = checkInput.error === false || text === "" ? text : checkAnswer;
                   tempAnswers[0] = {
@@ -196,9 +196,9 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                 };
 
                 if (values !== undefined && values !== null) {
-                  values.map((label: string) => questionDropdownValues.push({ label: label, value: label }));
+                  values.forEach((label: string) => questionDropdownValues.push({ label: label, value: label }));
                 }
-                let content: JSX.Element = <View />;
+                let content;
                 switch (type) {
                   case "textarea":
                     content = (
@@ -220,8 +220,8 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                       <View style={{ ...px(sw36) }}>
                         <CustomTextInput
                           error={
-                            subSection !== undefined && subSection![defaultKey] !== undefined && subSection![defaultKey].error !== undefined
-                              ? subSection![defaultKey].error
+                            subSection !== undefined && subSection[defaultKey] !== undefined && subSection[defaultKey].error !== undefined
+                              ? subSection[defaultKey].error
                               : undefined
                           }
                           keyboardType={
@@ -235,10 +235,8 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                           onBlur={handleBlur}
                           spaceToTop={sh16}
                           value={
-                            subSection !== undefined &&
-                            subSection![defaultKey] !== undefined &&
-                            subSection![defaultKey].answer !== undefined
-                              ? (subSection![defaultKey].answer as string)
+                            subSection !== undefined && subSection[defaultKey] !== undefined && subSection[defaultKey].answer !== undefined
+                              ? (subSection[defaultKey].answer as string)
                               : ""
                           }
                         />
@@ -254,10 +252,8 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                           items={questionDropdownValues}
                           label={insideOption.title}
                           value={
-                            subSection !== undefined &&
-                            subSection![defaultKey] !== undefined &&
-                            subSection![defaultKey].answer !== undefined
-                              ? (subSection[defaultKey].answer! as string)
+                            subSection !== undefined && subSection[defaultKey] !== undefined && subSection[defaultKey].answer !== undefined
+                              ? (subSection[defaultKey].answer as string)
                               : ""
                           }
                         />
@@ -286,7 +282,7 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                                           labels={[{ label: nestedOption.title! }]}
                                           onSelect={() => handleOption2(optionId, nestedOption.title)}
                                           space={sw66}
-                                          value={subSection !== undefined && subSection![optionId].answer === nestedOption.title ? 0 : 1}
+                                          value={subSection !== undefined && subSection[optionId].answer === nestedOption.title ? 0 : 1}
                                         />
                                       </View>
                                     </Fragment>

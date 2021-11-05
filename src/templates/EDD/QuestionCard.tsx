@@ -202,7 +202,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                     : ({ checkboxToggle: false, answer: { answer: title } } as IQuestionData);
 
                 const handleCheckbox = (updatedData: IQuestionData) => {
-                  const tempData = [...data?.answers!];
+                  const tempData = [...data.answers];
                   if (findIndex < 0) {
                     tempData.push(updatedData);
                   } else if (updatedData.checkboxToggle === true) {
@@ -266,7 +266,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   if (data !== undefined && answerOptionIndex !== undefined && data.answers.length > 0) {
                     const updatedData = deleteKey(data?.answers[answerOptionIndex], ["document"]);
                     const updatedDocument =
-                      data!.answers[answerOptionIndex].hasDoc !== undefined && data!.answers[answerOptionIndex].hasDoc === true
+                      data.answers[answerOptionIndex].hasDoc !== undefined && data.answers[answerOptionIndex].hasDoc === true
                         ? {}
                         : { document: undefined };
                     if (setData !== undefined && data !== undefined) {
@@ -296,7 +296,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   }
                 };
 
-                let content = <View />;
+                let content;
                 const borderBottom: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._2 };
                 const optionsBorder: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._2 };
                 const topSpace =
@@ -348,7 +348,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                             label={title}
                             onChangeText={handleInput}
                             spaceToLabel={sh4}
-                            value={data!.answers.length > 0 ? data!.answers[answerOptionIndex!].answer?.answer : ""}
+                            value={data.answers.length > 0 ? (data.answers[answerOptionIndex!].answer?.answer as string) : ""}
                           />
                         </View>
                         <CustomSpacer space={sh16} />
@@ -369,7 +369,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                       <Fragment>
                         {optionIndex !== 0 ? <CustomSpacer isHorizontal space={sw54} /> : null}
                         <QuestionWithOptions
-                          data={data!.answers.length > 0 ? data!.answers[answerOptionIndex!] : {}}
+                          data={data.answers.length > 0 ? data.answers[answerOptionIndex!] : {}}
                           direction={optionIndex !== 0 ? "row" : "column"}
                           title={title!}
                           subLabel={description}
@@ -386,7 +386,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                         handleChange={handleDropdown}
                         items={questionDropdownValues}
                         label={title}
-                        value={data!.answers.length > 0 ? data!.answers[answerOptionIndex!].answer!.answer! : ""}
+                        value={data.answers.length > 0 ? (data.answers[answerOptionIndex!].answer!.answer as string) : ""}
                       />
                     );
                     break;

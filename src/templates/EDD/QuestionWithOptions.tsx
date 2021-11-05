@@ -114,10 +114,10 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
               };
 
               if (values !== undefined && values !== null) {
-                values.map((label: string) => questionDropdownValues.push({ label: label, value: label }));
+                values.forEach((label: string) => questionDropdownValues.push({ label: label, value: label }));
               }
               const defaultKey = optionId !== null ? optionId : "remark";
-              let content: JSX.Element = <View />;
+              let content;
               switch (type) {
                 case "inputtext":
                   content = (
@@ -142,8 +142,8 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                         onChangeText={(text: string) => handleInput(defaultKey, text)}
                         spaceToTop={sh16}
                         value={
-                          subSection !== undefined && defaultKey !== undefined && subSection![defaultKey] !== undefined
-                            ? (subSection![defaultKey].answer as string)
+                          subSection !== undefined && defaultKey !== undefined && subSection[defaultKey] !== undefined
+                            ? (subSection[defaultKey].answer as string)
                             : ""
                         }
                       />
@@ -159,7 +159,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                         items={questionDropdownValues}
                         label={insideOption.title}
                         value={
-                          subSection !== undefined && defaultKey !== undefined && subSection![defaultKey] !== undefined
+                          subSection !== undefined && defaultKey !== undefined && subSection[defaultKey] !== undefined
                             ? (subSection[defaultKey].answer as string)
                             : ""
                         }
@@ -191,7 +191,7 @@ export const QuestionWithOptions: FunctionComponent<IQuestionWithOptions> = ({
                                             labels={[{ label: nestedOption.title! }]}
                                             onSelect={() => handleOption2(optionId, nestedOption.title)}
                                             space={sw66}
-                                            value={subSection !== undefined && subSection![optionId] === nestedOption.title ? 0 : 1}
+                                            value={subSection !== undefined && subSection[optionId] === nestedOption.title ? 0 : 1}
                                           />
                                         </View>
                                       </Fragment>

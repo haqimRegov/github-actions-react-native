@@ -3,6 +3,10 @@ declare interface IAnswer {
   question: string;
 }
 
+declare interface ISubSection {
+  [key: string]: string | string[];
+}
+
 declare interface IAnswerStringified {
   answers: string;
   question: string;

@@ -134,8 +134,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const principalTaxResident = principal!.declaration!.crs!.taxResident!;
 
   const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
-    const reason =
-      multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason].label;
+    const reason = multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[0].label;
     const principalNoTinReason = multiTin.reason === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
     const principalTinReason = multiTin.reason === 2 ? multiTin.explanation! : principalNoTinReason;
     return {
@@ -155,8 +154,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const jointTaxResident = joint!.declaration!.crs!.taxResident!;
 
   const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
-    const reason =
-      multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[multiTin.reason].label;
+    const reason = multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[0].label;
     const jointNoTinReason = multiTin.reason === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
     const jointTinReason = multiTin.reason === 2 ? multiTin.explanation! : jointNoTinReason;
     return {

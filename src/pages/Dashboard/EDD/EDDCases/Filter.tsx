@@ -33,6 +33,11 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
     setFilter({ ...filter, caseStatus: value });
   };
 
+  const dateSortingList = [...DICTIONARY_EDD_DATE];
+  if (activeTab === "new") {
+    dateSortingList.pop();
+  }
+
   let caseStatusList: IEDDStatusLabelValue[] = [];
   switch (activeTab) {
     case "new":
@@ -53,7 +58,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
       <View style={{ ...flexRow, ...px(sw24) }}>
         <NewDropdown
           handleChange={handleDateSorting}
-          items={DICTIONARY_EDD_DATE}
+          items={dateSortingList}
           label={DASHBOARD_FILTER.LABEL_DATE_SORTING}
           value={dateSorting!}
         />
@@ -88,7 +93,7 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
         <NewCheckBoxDropdown
           handleChange={handleCaseStatus}
           items={caseStatusList}
-          label={DASHBOARD_FILTER.LABEL_ORDER_STATUS}
+          label={DASHBOARD_EDD.LABEL_STATUS}
           value={caseStatus!}
         />
       </View>

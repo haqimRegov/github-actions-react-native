@@ -70,7 +70,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
           <View style={{ minWidth: sw144, maxWidth: sw184, ...py(sh8) }}>
             {content.map((item, index) => {
               const handlePress = () => {
-                onPressContent({ hide: hide, text: item.text });
+                onPressContent({ hide: hide, text: item.text, key: item.key });
               };
               const selected = selectedIndex !== undefined && selectedIndex.includes(index);
               const backgroundColor = selected === true ? { backgroundColor: colorBlue._2 } : {};

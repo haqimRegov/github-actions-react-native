@@ -84,7 +84,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
 
   const handleShowDateBy = (text: TDateType, key: TSortType) => {
     setShowDateBy({ type: text, key: key });
-    const sortColumns = sort.map((sortType) => sortType.column);
+    const sortColumns = sort.map((eachSortType) => eachSortType.column);
     const sortType = text === "Case Created On" ? "caseCreated" : "lastUpdated";
     const newSort: IEDDDashboardSort = sortColumns.includes(sortType) ? { ...sort[0], value: key } : { column: sortType, value: key };
     updateNewCasesSort([newSort]);
@@ -176,11 +176,8 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   };
 
   const handlePill = async (index: number) => {
-    let updatedPill: EDDNewCaseTagKey = "pending";
+    let updatedPill: EDDNewCaseTagKey;
     switch (index) {
-      case 0:
-        updatedPill = "pending";
-        break;
       case 1:
         updatedPill = "rerouted";
         break;
@@ -334,7 +331,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       sort: defaultSort,
       filter: [
         {
-          column: filter.dateSorting === "Creation Date" ? "caseCreated" : "lastUpdated",
+          column: filter.dateSorting === "Case Created On" ? "caseCreated" : "lastUpdated",
           value: `${minimumDate}~${maximumDate}`,
         },
         ...filterStatus,

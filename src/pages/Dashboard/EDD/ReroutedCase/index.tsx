@@ -171,7 +171,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
           const checkAnswer =
             amlaRemark !== null
               ? {
-                  answers: [{ hasRemark: false, hasDoc: false }],
+                  answers: [{ answer: {}, hasRemark: false, hasDoc: false }],
                   autoHide: true,
                 }
               : { autoHide: true, answers: [] };
@@ -260,6 +260,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
             ...clientProfile.client,
             registrationDate: clientProfile.createdAt,
             accountType: clientProfile.accountType,
+            accountOperationMode: clientProfile.signatory,
           },
         });
       }
@@ -278,7 +279,9 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
       );
       if (checkPositionArray === true) {
         const findIndex = expand.findIndex((expandCheck) => expandCheck === true);
-        if (findIndex !== -1 && positionArray[findIndex] !== undefined && findIndex !== 0) {
+        if (expand.every((eachExpand) => eachExpand === false)) {
+          scrollRef.scrollTo({ y: 0 });
+        } else if (findIndex !== -1 && positionArray[findIndex] !== undefined && findIndex !== 0) {
           scrollRef.scrollTo({ y: positionArray[findIndex].y, animated: true });
         }
       }
@@ -356,11 +359,11 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                               count = 0;
                             }
                             if (count <= 1 && type !== "checkbox") {
-                              answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+                              answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
                             }
                           });
                         } else {
-                          answerArray.push({ answer: "", hasRemark: false, hasDoc: false });
+                          answerArray.push({ answer: { answer: "" }, hasRemark: false, hasDoc: false });
                         }
                         initialQuestions.push({ ...question, data: { autoHide: true, answers: answerArray } });
                       });
@@ -408,7 +411,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                           <View style={{ ...flexChild, ...borderBottomBlue4 }} />
                         </View>
                         <CustomSpacer space={sh16} />
-                        <View onLayout={handleLayout} style={{ ...px(topTitlePadding), ...flexRow, ...centerVertical, ...topTitleStyle }}>
+                        <View style={{ ...px(topTitlePadding), ...flexRow, ...centerVertical, ...topTitleStyle }}>
                           <View style={{ backgroundColor: color, height: sh16, width: sw2 }} />
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={fs12BoldBlack2}>{topTitle.user}</Text>
@@ -420,7 +423,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                           <Text style={fs12RegGray5}>{`${DASHBOARD_EDD.LABEL_STATUS}: ${topTitle.status}`}</Text>
                         </View>
                         <CustomSpacer space={sh8} />
-                        <View key={index} style={containerStyle}>
+                        <View onLayout={handleLayout} key={index} style={containerStyle}>
                           <TouchableWithoutFeedback onPress={handleExpand}>
                             <View style={{ ...headerStyle, ...border }}>
                               <Text style={{ ...fs16BoldBlue1 }}>{collapsibleTitle}</Text>
@@ -528,7 +531,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                     <AccountDetailsContent
                       accountHolder="Principal"
                       accountType={profile.accountType!}
-                      data={structureProfile("Principal", profile, setFile)}
+                      data={structureProfile("Principal", profile, setFile, false)}
                       handleViewId={handleViewId}
                       idNumber={profile.idNumber}
                       idType={profile.idType}

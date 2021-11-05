@@ -11,7 +11,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                 const { type, title: optionTitle } = option;
                 let findIndex: number = -1;
                 findIndex = data.answers.findIndex(
-                  (stateData: IQuestionData) => stateData.answer !== undefined && stateData.answer === optionTitle,
+                  (stateData: IQuestionData) => stateData.answer!.answer !== undefined && stateData.answer!.answer === optionTitle,
                 );
                 let nestedOptionValid: boolean[] = [];
                 if (findIndex !== -1) {
@@ -25,23 +25,26 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                             switch (nestedType) {
                               case "inputtext":
                                 return type === "checkbox"
-                                  ? data.answers[findIndex].subSection![defaultKey] === ""
+                                  ? data.answers[findIndex].subSection![defaultKey].answer === ""
                                   : !("subSection" in data.answers[findIndex]) ||
                                       !(defaultKey in data.answers[findIndex].subSection!) ||
-                                      data.answers[findIndex].subSection![defaultKey] === "";
+                                      data.answers[findIndex].subSection![defaultKey].answer === "" ||
+                                      data.answers[findIndex].subSection![defaultKey].error !== undefined;
                               case "textarea":
-                                return type === "checkbox" || (type === "radiobutton" && option!.options!.length === 1)
+                                return type === "checkbox" || (type === "radiobutton" && option.options!.length === 1)
                                   ? false
                                   : !("subSection" in data.answers[findIndex]) ||
                                       !(defaultKey in data.answers[findIndex].subSection!) ||
-                                      data.answers[findIndex].subSection![defaultKey] === "";
+                                      data.answers[findIndex].subSection![defaultKey].answer === "" ||
+                                      data.answers[findIndex].subSection![defaultKey].error !== undefined;
                               case "dropdown":
                                 return type === "checkbox"
                                   ? !(defaultKey in data.answers[findIndex].subSection!) ||
-                                      data.answers[findIndex].subSection![defaultKey].length === 0
+                                      data.answers[findIndex].subSection![defaultKey].answer!.length === 0
                                   : !("subSection" in data.answers[findIndex]) ||
                                       !(defaultKey in data.answers[findIndex].subSection!) ||
-                                      data.answers[findIndex].subSection![defaultKey] === "";
+                                      data.answers[findIndex].subSection![defaultKey].answer === "" ||
+                                      data.answers[findIndex].subSection![defaultKey].error !== undefined;
                               case "label":
                                 // Case label will have an additional inner nested options
                                 if (innerNestedOptions !== undefined && innerNestedOptions.length > 0) {
@@ -51,18 +54,15 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                                       return true;
                                     }
 
-                                    switch (innerNestedType) {
-                                      case "radiobutton":
-                                        if (data.answers[findIndex].subSection![optionId] === innerNestedTitle) {
-                                          return (
-                                            !(optionId in data.answers[findIndex].subSection!) ||
-                                            data.answers[findIndex].subSection![optionId] === undefined ||
-                                            data.answers[findIndex].subSection![optionId] === ""
-                                          );
-                                        }
-                                        return false;
-                                      default:
-                                        return false;
+                                    if (innerNestedType === "radiobutton") {
+                                      if (data.answers[findIndex].subSection![optionId] === innerNestedTitle) {
+                                        return (
+                                          !(optionId in data.answers[findIndex].subSection!) ||
+                                          data.answers[findIndex].subSection![optionId] === undefined ||
+                                          data.answers[findIndex].subSection![optionId].answer === ""
+                                        );
+                                      }
+                                      return false;
                                     }
                                   });
                                   return innerNestedValid.includes(true);
@@ -95,7 +95,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
         const valid =
           checkAnswer === true
             ? optionsValid.includes(true) ||
-              data.answers.filter((singleData: IQuestionData) => singleData.answer === "").length !== 0 ||
+              data.answers.filter((singleData: IQuestionData) => singleData.answer!.answer === "").length !== 0 ||
               data.answers.length === 0
             : optionsValid.includes(true);
         return valid;

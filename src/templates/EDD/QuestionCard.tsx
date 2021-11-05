@@ -3,7 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { NewDropdown } from "../../components/Dropdown";
-import { TextInputMultiline } from "../../components/Input";
+import { CustomTextInput, TextInputMultiline } from "../../components/Input";
 import { Switch } from "../../components/Switch";
 import { UploadWithModal } from "../../components/Upload";
 import { CustomSpacer, LabeledTitle } from "../../components/Views";
@@ -193,14 +193,16 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 }
                 const findIndex =
                   data !== undefined && type === "checkbox"
-                    ? data.answers.findIndex((item: IQuestionData) => item.answer === option.title)
+                    ? data.answers.findIndex((item: IQuestionData) => item.answer!.answer === option.title)
                     : -1;
                 // const subLabelOptional = option.description !== undefined ? { subLabel: description } : {};
                 const currentData: IQuestionData =
-                  findIndex >= 0 && data !== undefined ? data.answers[findIndex] : { checkboxToggle: false, answer: title };
+                  findIndex >= 0 && data !== undefined
+                    ? data.answers[findIndex]
+                    : ({ checkboxToggle: false, answer: { answer: title } } as IQuestionData);
 
                 const handleCheckbox = (updatedData: IQuestionData) => {
-                  const tempData = [...data?.answers!];
+                  const tempData = [...data.answers];
                   if (findIndex < 0) {
                     tempData.push(updatedData);
                   } else if (updatedData.checkboxToggle === true) {
@@ -224,7 +226,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 const handleDropdown = (text: string) => {
                   if (setData !== undefined && data !== undefined && answerOptionIndex !== undefined) {
                     const tempAnswers = [...data.answers];
-                    tempAnswers[answerOptionIndex] = { ...tempAnswers[answerOptionIndex], answer: text };
+                    tempAnswers[answerOptionIndex] = { ...tempAnswers[answerOptionIndex], answer: { answer: text } };
                     setData({ ...data, answers: tempAnswers });
                   }
                 };
@@ -232,7 +234,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                 const handleInput = (text: string) => {
                   if (data !== undefined && setData !== undefined && answerOptionIndex !== undefined) {
                     const tempAnswers = [...data.answers];
-                    tempAnswers[answerOptionIndex] = { answer: text, hasRemark: false, hasDoc: false };
+                    tempAnswers[answerOptionIndex] = { answer: { answer: text }, hasRemark: false, hasDoc: false };
                     setData({ ...data, answers: tempAnswers });
                   }
                 };
@@ -264,7 +266,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   if (data !== undefined && answerOptionIndex !== undefined && data.answers.length > 0) {
                     const updatedData = deleteKey(data?.answers[answerOptionIndex], ["document"]);
                     const updatedDocument =
-                      data!.answers[answerOptionIndex].hasDoc !== undefined && data!.answers[answerOptionIndex].hasDoc === true
+                      data.answers[answerOptionIndex].hasDoc !== undefined && data.answers[answerOptionIndex].hasDoc === true
                         ? {}
                         : { document: undefined };
                     if (setData !== undefined && data !== undefined) {
@@ -294,7 +296,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   }
                 };
 
-                let content = <View />;
+                let content;
                 const borderBottom: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._2 };
                 const optionsBorder: ViewStyle = { borderBottomWidth: 1, borderBottomColor: colorGray._2 };
                 const topSpace =
@@ -342,12 +344,11 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                       <View style={fullWidth}>
                         <CustomSpacer space={sh18} />
                         <View>
-                          <TextInputMultiline
-                            maxLength={255}
+                          <CustomTextInput
                             label={title}
                             onChangeText={handleInput}
-                            showLength={true}
-                            value={data!.answers.length > 0 ? data!.answers[answerOptionIndex!].answer : ""}
+                            spaceToLabel={sh4}
+                            value={data.answers.length > 0 ? (data.answers[answerOptionIndex!].answer?.answer as string) : ""}
                           />
                         </View>
                         <CustomSpacer space={sh16} />
@@ -368,7 +369,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                       <Fragment>
                         {optionIndex !== 0 ? <CustomSpacer isHorizontal space={sw54} /> : null}
                         <QuestionWithOptions
-                          data={data!.answers.length > 0 ? data!.answers[answerOptionIndex!] : {}}
+                          data={data.answers.length > 0 ? data.answers[answerOptionIndex!] : {}}
                           direction={optionIndex !== 0 ? "row" : "column"}
                           title={title!}
                           subLabel={description}
@@ -385,7 +386,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                         handleChange={handleDropdown}
                         items={questionDropdownValues}
                         label={title}
-                        value={data!.answers.length > 0 ? data!.answers[answerOptionIndex!].answer! : ""}
+                        value={data.answers.length > 0 ? (data.answers[answerOptionIndex!].answer!.answer as string) : ""}
                       />
                     );
                     break;

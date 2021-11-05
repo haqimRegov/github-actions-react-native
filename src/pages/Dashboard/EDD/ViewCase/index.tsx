@@ -170,6 +170,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
             ...clientProfile.client,
             registrationDate: clientProfile.createdAt,
             accountType: clientProfile.accountType,
+            accountOperationMode: clientProfile.signatory,
           },
         });
         fetching.current = false;
@@ -384,7 +385,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                     <AccountDetailsContent
                       accountHolder="Principal"
                       accountType={profile.accountType!}
-                      data={structureProfile("Principal", profile, setFile)}
+                      data={structureProfile("Principal", profile, setFile, false)}
                       handleViewId={handleViewId}
                       idNumber={profile.idNumber}
                       idType={profile.idType}

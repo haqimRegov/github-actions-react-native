@@ -5,6 +5,10 @@ declare type TInputTypes = "checkbox" | "multiline" | "inputtext" | "radiobutton
 declare type TCasePage = "EDD Case" | "Profile";
 
 declare type TInputType = "number" | "amount" | "alphanumeric";
+declare interface IAnswerObject {
+  answer?: string | string[];
+  error?: string;
+}
 
 declare interface ICheckBoxWithSubLabel {
   label: string;
@@ -18,14 +22,19 @@ declare interface IInputFormat {
   limit?: number;
 }
 
+declare interface IDataDropdown {
+  description?: string;
+  value: string;
+}
+
 declare interface ILabeledTitleWithFile {
-  data: string | FileBase64[] | string[];
+  data: string | FileBase64[] | IDataDropdown[];
   isMulti?: boolean;
   label: string;
 }
 
 declare interface IQuestionDataWithoutDocument {
-  answer?: string;
+  answer?: IAnswerObject;
   checkboxToggle?: boolean;
   hasDoc?: boolean;
   hasRemark?: boolean;
@@ -33,8 +42,7 @@ declare interface IQuestionDataWithoutDocument {
   optionIndex?: number;
   remark?: string;
   subSection?: {
-    value?: string;
-    [key: string]: any;
+    [key: string]: IAnswerObject;
   };
 }
 
@@ -69,8 +77,18 @@ declare interface IQuestionData extends IQuestionDataWithoutDocument {
   document?: FileBase64;
 }
 
-declare interface IQuestionDataRequest extends IQuestionDataWithoutDocument {
+declare interface IQuestionDataRequest {
+  answer?: IAnswerObject;
+  checkboxToggle?: boolean;
   document?: FileBase64[];
+  hasDoc?: boolean;
+  hasRemark?: boolean;
+  hasSub?: boolean;
+  optionIndex?: number;
+  remark?: string;
+  subSection?: {
+    [key: string]: string | string[];
+  };
 }
 
 declare interface IQuestionDataWithHide {

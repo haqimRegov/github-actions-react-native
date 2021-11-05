@@ -1,9 +1,11 @@
+const INVALID_ALPHANUMERIC = "Kindly input a valid alphanumeric.";
 const INVALID_BANK_NAME = "Kindly input a bank account name.";
 const INVALID_BANK_NUMBER = "Kindly input a bank account number.";
 const INVALID_CHEQUE_NUMBER = "Kindly input a cheque number.";
 const INVALID_NAME = "Kindly input a valid name.";
 const INVALID_NUMBER = "Kindly input a valid number.";
 const INVALID_POST_CODE = "Kindly input a valid post code.";
+const INVALID_STRING = "Kindly input a valid text.";
 const INVESTMENT_INVALID_AMOUNT = "The amount you have entered is invalid.";
 const INVESTMENT_INVALID_EMAIL = "The email you have entered is invalid.";
 const INVESTMENT_MAX_AMOUNT = "The amount you have entered exceeds the maximum amount.";
@@ -15,12 +17,14 @@ const OCR_INVALID_NRIC_DATA = "We’re unable to capture the data from the image
 const PASSWORD_NOT_MATCH = "Those passwords didn't match. Try again.";
 
 export const ERROR = {
+  INVALID_ALPHANUMERIC,
   INVALID_BANK_NAME,
   INVALID_BANK_NUMBER,
   INVALID_CHEQUE_NUMBER,
   INVALID_NAME,
   INVALID_NUMBER,
   INVALID_POST_CODE,
+  INVALID_STRING,
   INVESTMENT_INVALID_AMOUNT,
   INVESTMENT_INVALID_EMAIL,
   INVESTMENT_MAX_AMOUNT,

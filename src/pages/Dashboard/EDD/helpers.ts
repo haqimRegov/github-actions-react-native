@@ -14,9 +14,9 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
     const promises = answers.map(async (answer: IQuestionData) => {
       const { hasDoc, document } = answer;
       if (hasDoc === true && document !== undefined) {
-        const path = `edd/${caseId}/${reRouteCount}/document/${document!.name}`;
+        const path = `edd/${caseId}/${reRouteCount}/document/${document.name}`;
         // Cannot upload the base64. So, using the path to get file and convert it to blob.
-        const documentObject = document.type !== "application/pdf" ? await fetch(document!.path!) : undefined;
+        const documentObject = document.type !== "application/pdf" ? await fetch(document.path!) : undefined;
         let pdfObject: Response | undefined;
         if (documentObject === undefined) {
           // Create a blob from the base64 stored. We don't use path because the path stored is a temporary path and gets an error if we read by path after some time.This happened only for pdf.
@@ -29,7 +29,7 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
         const documentBlob =
           documentObject === undefined && pdfObject !== undefined ? await pdfObject.blob() : await documentObject!.blob();
         const params = {
-          contentType: document!.type,
+          contentType: document.type,
           level: "public",
           // If not specified, the upload will go by default inside a public directory.
           customPrefix: {
@@ -48,15 +48,28 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
     const promiseResolved: IKey[] = (await Promise.all(promises)) as IKey[];
     const tempAnswers: IQuestionDataRequest[] = [];
     answers.forEach((tempAnswer: IQuestionData, tempIndex: number) => {
-      const { hasDoc } = tempAnswer;
-      const updatedTempAnswer: IQuestionData = deleteKey(tempAnswer, ["checkboxToggle"]);
+      const { hasDoc, answer } = tempAnswer;
+      const actualAnswers = { ...tempAnswer, answer: answer!.answer };
+
+      const updatedTempAnswer: IQuestionDataRequest = deleteKey(actualAnswers, ["checkboxToggle"]);
+      const formattedTempAnswer = updatedTempAnswer.answer !== undefined ? updatedTempAnswer : deleteKey(updatedTempAnswer, ["answer"]);
       const { document } = updatedTempAnswer;
-      const checkHasSub = "subSection" in tempAnswer ? { hasSub: true } : {};
+      let subSectionObject: ISubSection = {};
+      if ("subSection" in tempAnswer && tempAnswer.subSection !== undefined) {
+        Object.keys(tempAnswer.subSection).forEach((eachKey: string) => {
+          subSectionObject = { ...subSectionObject, [eachKey]: tempAnswer.subSection![eachKey].answer! };
+        });
+      }
+      const checkHasSub = "subSection" in tempAnswer ? { hasSub: true, subSection: subSectionObject } : {};
       if (hasDoc === true) {
         const deleteUnwanted: FileBase64 = deleteKey(document!, ["base64", "path"]) as FileBase64;
-        tempAnswers.push({ ...updatedTempAnswer, document: [{ ...deleteUnwanted, url: promiseResolved[tempIndex].key }], ...checkHasSub });
+        tempAnswers.push({
+          ...formattedTempAnswer,
+          document: [{ ...deleteUnwanted, url: promiseResolved[tempIndex].key }],
+          ...checkHasSub,
+        });
       } else {
-        const deleteDocument = deleteKey(updatedTempAnswer, ["document"]);
+        const deleteDocument = deleteKey(formattedTempAnswer, ["document"]);
         tempAnswers.push({ ...deleteDocument, ...checkHasSub });
       }
     });

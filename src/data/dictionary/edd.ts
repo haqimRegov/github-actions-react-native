@@ -1,6 +1,7 @@
 export const DICTIONARY_EDD_DATE = [
-  { label: "Creation Date", value: "Creation Date" },
-  { label: "Last Updated Date", value: "Last Updated Date" },
+  { label: "Case Created On", value: "Case Created On" },
+  { label: "Last Updated", value: "Last Updated" },
+  { label: "Case Closed On", value: "Case Closed On" },
 ];
 
 export const DICTIONARY_NEW_TAB_STATUS: IEDDStatusLabelValue[] = [

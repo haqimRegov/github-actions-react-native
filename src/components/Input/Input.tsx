@@ -47,7 +47,7 @@ export interface CustomTextInputProps extends TextInputProps {
   onPressLabel?: () => void;
   prefixStyle?: TextStyle;
   rightIcon?: IIcon;
-  setRef?: string | ((instance: TextInput | null) => void) | RefObject<TextInput> | null | undefined;
+  setRef?: string | ((instance: TextInput | null) => void) | RefObject<TextInput> | null;
   spaceToBottom?: number;
   spaceToLabel?: number;
   spaceToTop?: number;

@@ -128,11 +128,11 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
     Keyboard.dismiss();
     if (ref !== null && keyboardVisible === false) {
       ref.measure((_x, _y, _width, _height, pageX, pageY) => {
-        let measurement = { x: pageX, y: pageY, height: _height, width: _width };
+        const measurement = { x: pageX, y: pageY, height: _height, width: _width };
         if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
           Keyboard.dismiss();
           const keyboardOffset = keyboardAvoidingRef.state.bottom;
-          measurement = { ...measurement, y: measurement.y + keyboardOffset };
+          measurement.y += keyboardOffset;
           setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
         } else {
           setLayout(measurement);
@@ -232,14 +232,13 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
 
   const handleValue = (searchValue: string) => {
     // let reset: boolean = false;
-    let newValue = [...value!];
+    let newValue = [...value];
     if (newValue.includes(searchValue)) {
       newValue = newValue.filter((item) => item !== searchValue);
 
       // setPillTotalWidth(0);
       // reset = true;
-      let newOverflowValue = [...overflowValue];
-      newOverflowValue = overflowValue.filter((item) => item.value !== searchValue);
+      let newOverflowValue = overflowValue.filter((item) => item.value !== searchValue);
       let widthSum = 0;
       if (newOverflowValue.length > 0) {
         newOverflowValue = newOverflowValue.map((ofv) => {
@@ -260,9 +259,9 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
     } else {
       newValue.push(searchValue);
     }
-    handleChange!(newValue);
+    handleChange(newValue);
     // console.log("after handleChange");
-    // handleReset!(index, reset);
+    // handleReset(index, reset);
   };
 
   // console.log("pillTotalWidth", pillTotalWidth);
@@ -418,9 +417,9 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
                       ListFooterComponent={() => <CustomSpacer space={sh8} />}
                       renderItem={({ index }) => {
                         const originalItem: TypeLabelValue = items[index];
-                        const itemExtractor = itemsWithId![index];
+                        const itemExtractor = itemsWithId[index];
                         const itemValue = itemExtractor.value;
-                        const selected = value!.includes(itemValue);
+                        const selected = value.includes(itemValue);
                         const itemContainer: ViewStyle = { ...px(sw16) };
                         const itemStyle: ViewStyle = originalItem.subLabel === undefined ? { ...py(sh4) } : {};
 
@@ -428,7 +427,7 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
                           // let reset: boolean = false;
                           if (itemExtractor !== undefined) {
                             handleValue(itemValue);
-                            // handleReset!(index, reset);
+                            // handleReset(index, reset);
                           }
                         };
 

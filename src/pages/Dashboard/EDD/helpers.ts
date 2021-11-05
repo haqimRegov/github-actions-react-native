@@ -48,15 +48,28 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
     const promiseResolved: IKey[] = (await Promise.all(promises)) as IKey[];
     const tempAnswers: IQuestionDataRequest[] = [];
     answers.forEach((tempAnswer: IQuestionData, tempIndex: number) => {
-      const { hasDoc } = tempAnswer;
-      const updatedTempAnswer: IQuestionData = deleteKey(tempAnswer, ["checkboxToggle"]);
+      const { hasDoc, answer } = tempAnswer;
+      const actualAnswers = { ...tempAnswer, answer: answer!.answer };
+
+      const updatedTempAnswer: IQuestionDataRequest = deleteKey(actualAnswers, ["checkboxToggle"]);
+      const formattedTempAnswer = updatedTempAnswer.answer !== undefined ? updatedTempAnswer : deleteKey(updatedTempAnswer, ["answer"]);
       const { document } = updatedTempAnswer;
-      const checkHasSub = "subSection" in tempAnswer ? { hasSub: true } : {};
+      let subSectionObject: ISubSection = {};
+      if ("subSection" in tempAnswer && tempAnswer.subSection !== undefined) {
+        Object.keys(tempAnswer.subSection).forEach((eachKey: string) => {
+          subSectionObject = { ...subSectionObject, [eachKey]: tempAnswer!.subSection![eachKey].answer! };
+        });
+      }
+      const checkHasSub = "subSection" in tempAnswer ? { hasSub: true, subSection: subSectionObject } : {};
       if (hasDoc === true) {
         const deleteUnwanted: FileBase64 = deleteKey(document!, ["base64", "path"]) as FileBase64;
-        tempAnswers.push({ ...updatedTempAnswer, document: [{ ...deleteUnwanted, url: promiseResolved[tempIndex].key }], ...checkHasSub });
+        tempAnswers.push({
+          ...formattedTempAnswer,
+          document: [{ ...deleteUnwanted, url: promiseResolved[tempIndex].key }],
+          ...checkHasSub,
+        });
       } else {
-        const deleteDocument = deleteKey(updatedTempAnswer, ["document"]);
+        const deleteDocument = deleteKey(formattedTempAnswer, ["document"]);
         tempAnswers.push({ ...deleteDocument, ...checkHasSub });
       }
     });

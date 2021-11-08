@@ -64,6 +64,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                                       }
                                       return false;
                                     }
+                                    return false;
                                   });
                                   return innerNestedValid.includes(true);
                                 }

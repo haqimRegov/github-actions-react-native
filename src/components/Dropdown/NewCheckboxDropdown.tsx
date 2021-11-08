@@ -169,6 +169,12 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
     };
   }, []);
 
+  const handleCalculate = async (texts: string[]) => {
+    const shortenArray = texts.map((text: string) => shortenString(text, 25, 27));
+    const count = await CalculateCount(shortenArray, sw268, sw32, fs12BoldBlue1);
+    return count;
+  };
+
   const handleReset = async (index: number, reset: boolean) => {
     const tempArray = [...value];
     let newArray = value;
@@ -178,8 +184,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
       newArray = tempArray.filter((text: string) => text !== items[index].value);
     }
     const updatedArray = reset === false ? tempArray : newArray;
-    const shortenArray = updatedArray.map((text) => shortenString(text, 25, 27));
-    const count = await CalculateCount(shortenArray, sw256, sw8, fs12BoldBlue1);
+    const count = await handleCalculate(updatedArray);
     setShowMore({ ...showMore, number: count });
   };
 
@@ -236,7 +241,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
               const handleClose = async () => {
                 const valueClone = [...value];
                 valueClone.splice(index, 1);
-                const count = await CalculateCount(valueClone, sw256, sw8, fs12BoldBlue1);
+                const count = await handleCalculate(valueClone);
                 setShowMore({ ...showMore, number: count });
                 handleChange(valueClone);
               };

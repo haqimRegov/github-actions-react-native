@@ -100,7 +100,7 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                             children={
                               <View style={{ ...flexChild, ...centerHV }}>
                                 <View
-                                  style={{ width: sw14, height: sw14, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._2 }}>
+                                  style={{ width: sw14, height: sw14, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._1 }}>
                                   <Text style={{ fontSize: sh11, color: colorWhite._1 }}>i</Text>
                                 </View>
                               </View>

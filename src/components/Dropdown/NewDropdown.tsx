@@ -31,6 +31,9 @@ import {
   sw16,
   sw2,
   sw24,
+  sw286,
+  sw296,
+  sw328,
   sw360,
 } from "../../styles";
 import { CustomTextInput } from "../Input";
@@ -187,7 +190,9 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
           <View style={fullHW}>
             <View style={dropdownContainer}>
               <View style={{ ...centerVertical, ...flexRow, height: sh44, ...px(sw15) }}>
-                <Text style={{ ...fs16BoldBlue1, ...placeholderStyle }}>{value || placeholderLabel}</Text>
+                <Text numberOfLines={1} style={{ ...fs16BoldBlue1, ...placeholderStyle, maxWidth: sw286 }}>
+                  {value || placeholderLabel}
+                </Text>
                 <CustomFlexSpacer />
                 <IcoMoon color={colorBlue._1} name="caret-down" size={sw24} />
               </View>
@@ -220,7 +225,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                           <TouchableWithoutFeedback key={index} onPress={handleSelect}>
                             <View style={{ ...itemContainer, ...selectedStyle }}>
                               {index === 0 || <CustomSpacer space={sh8} />}
-                              <Text numberOfLines={1} style={fs16BoldBlue1}>
+                              <Text numberOfLines={1} style={{ ...fs16BoldBlue1, maxWidth: value === itemExtractor.label ? sw296 : sw328 }}>
                                 {itemExtractor.label}
                               </Text>
                               {value === itemExtractor.label ? (

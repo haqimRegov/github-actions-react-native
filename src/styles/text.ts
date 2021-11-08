@@ -1,9 +1,9 @@
 import { TextStyle } from "react-native";
 
-import { scaleHeight, sh36 } from ".";
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite } from "./colors";
-import { sh10, sh12, sh14, sh16, sh18, sh20, sh24, sh40 } from "./sizes";
+import { scaleHeight } from "./scaler";
+import { sh10, sh12, sh14, sh16, sh18, sh20, sh24, sh36, sh40 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsAlignLeft: TextStyle = { textAlign: "left" };

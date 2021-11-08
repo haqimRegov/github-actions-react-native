@@ -31,6 +31,7 @@
     "ios:pro:11:2": "react-native run-ios --simulator=\"iPad Pro (11-inch) (2nd generation)\"",
     "ios:pro:12": "react-native run-ios --simulator=\"iPad Pro (12.9-inch) (4th generation)\"",
     "fix:collapsible:js": "cp ./fixes/react-native-collapsible--collapsible ./node_modules/react-native-collapsible/Collapsible.js",
+    "fix:imagePicker": "cp ./fixes/react-native-image-crop-picker--imageCropPicker ./node_modules/react-native-image-crop-picker/ios/src/imageCropPicker.m",
     "fix:collapsible:accordion": "cp ./fixes/react-native-collapsible--accordion ./node_modules/react-native-collapsible/Accordion.js",
     "fix:collapsible": "npm run fix:collapsible:js && npm run fix:collapsible:accordion",
     "env:set:dev": "dot-json package.json environment \"dev\"",
@@ -59,7 +60,7 @@
     "bump-major": "npm version major --no-git-tag-version && bundle exec fastlane bump",
     "bump-manual": "bundle exec fastlane bump",
     "fix:react-native-image": "npx react-native-fix-image",
-    "fix:modules": "npm run fix:react-native-image && npm run fix:collapsible",
+    "fix:modules": "npm run fix:react-native-image && npm run fix:collapsible && npm run fix:imagePicker",
     "postinstall": "npm run fix:modules",
     "sonar": "node sonar-project.js"
   },

@@ -38,6 +38,7 @@ const { EMPTY_STATE, DASHBOARD_EDD, DASHBOARD_HOME } = Language.PAGE;
 
 export interface HistoryProps extends EDDStoreProps {
   isFetching: boolean;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: EDDPageType) => void;
@@ -47,6 +48,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   edd,
   history,
   isFetching,
+  isLogout,
   navigation,
   search,
   setIsFetching,
@@ -301,10 +303,16 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   };
 
   useEffect(() => {
-    handleFetch();
     return () => {
-      handleSeen();
+      if (isLogout !== true) {
+        handleSeen();
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogout]);
+
+  useEffect(() => {
+    handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, sort, page, filter]);
 

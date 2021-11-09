@@ -50,6 +50,7 @@ const { EMPTY_STATE, DASHBOARD_EDD, DASHBOARD_HOME } = Language.PAGE;
 export interface NewCasesProps extends EDDStoreProps {
   activeTab: boolean;
   isFetching: boolean;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: EDDPageType) => void;
@@ -67,6 +68,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   activeTab,
   edd,
   isFetching,
+  isLogout,
   navigation,
   search,
   setIsFetching,
@@ -365,6 +367,15 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (isLogout !== true) {
+        handleSeen();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogout]);
 
   useEffect(() => {
     handleFetch();

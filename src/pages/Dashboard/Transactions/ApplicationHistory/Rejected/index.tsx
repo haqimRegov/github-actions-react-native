@@ -17,6 +17,7 @@ const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 interface RejectedOrdersProps extends TransactionsStoreProps {
   activeTab: boolean;
   isFetching: boolean;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: TransactionsPageType) => void;
@@ -25,6 +26,7 @@ interface RejectedOrdersProps extends TransactionsStoreProps {
 const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   activeTab,
   isFetching,
+  isLogout,
   navigation,
   rejected,
   search,
@@ -238,10 +240,16 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   useEffect(() => {
-    handleFetch();
     return () => {
-      handleSeen();
+      if (isLogout !== true) {
+        handleSeen();
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogout]);
+
+  useEffect(() => {
+    handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter]);
 

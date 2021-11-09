@@ -32,6 +32,7 @@ const { DASHBOARD_HOME } = Language.PAGE;
 
 interface ApplicationHistoryProps extends TransactionsStoreProps {
   activeTab: TransactionsTabType;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
   setActiveTab: (route: TransactionsTabType) => void;
   setScreen: (route: TransactionsPageType) => void;
@@ -195,7 +196,13 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setFilterTemp(filter);
   };
 
-  const tabProps = { setScreen: setScreen, navigation: navigation, isFetching: loading, setIsFetching: setLoading };
+  const tabProps = {
+    setScreen: setScreen,
+    navigation: navigation,
+    isFetching: loading,
+    isLogout: props.isLogout,
+    setIsFetching: setLoading,
+  };
   let content: JSX.Element;
 
   if (activeTab === "pending") {

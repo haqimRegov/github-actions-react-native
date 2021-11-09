@@ -16,6 +16,7 @@ const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 export interface ApprovedOrdersProps extends TransactionsStoreProps {
   activeTab: boolean;
   isFetching: boolean;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: TransactionsPageType) => void;
@@ -25,6 +26,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   activeTab,
   approved,
   isFetching,
+  isLogout,
   navigation,
   search,
   setIsFetching,
@@ -215,10 +217,16 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   };
 
   useEffect(() => {
-    handleFetch();
     return () => {
-      handleSeen();
+      if (isLogout !== true) {
+        handleSeen();
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogout]);
+
+  useEffect(() => {
+    handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter]);
 

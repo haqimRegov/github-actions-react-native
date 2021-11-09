@@ -49,6 +49,7 @@ interface DashboardPageProps extends TransactionsStoreProps {
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, navigation, unreadMessages }: DashboardPageProps) => {
   const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
+  const [isLogout, setIsLogout] = useState<boolean>(false);
   const [route, setRoute] = useState<DashboardPageType>("Transactions");
 
   const handleRoute = (nextPage: DashboardPageType) => {
@@ -56,6 +57,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
   };
 
   const handleLogout = () => {
+    setIsLogout(true);
     logout(navigation);
   };
 
@@ -83,7 +85,8 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
     setActiveMenu(2);
   };
 
-  const props = { handleRoute: handleRoute, navigation: navigation };
+  const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
+
   let content: JSX.Element = <Transactions {...props} />;
   if (route === "Inbox") {
     content = <InboxPage {...props} />;

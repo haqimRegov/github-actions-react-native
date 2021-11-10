@@ -92,7 +92,9 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   if (
     status === DICTIONARY_ORDER_STATUS.void ||
     status === DICTIONARY_ORDER_STATUS.rejected ||
-    status === DICTIONARY_EDD_STATUS.cancelled
+    status === DICTIONARY_EDD_STATUS.cancelled ||
+    status === DICTIONARY_EDD_STATUS.overdue1 ||
+    status === DICTIONARY_EDD_STATUS.overdue2
   ) {
     statusColor = "error";
   } else if (status === DICTIONARY_ORDER_STATUS.submitted) {

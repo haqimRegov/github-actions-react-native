@@ -9,18 +9,19 @@ import { ViewCase } from "./ViewCase";
 
 interface TransactionsProps {
   handleRoute: (route: DashboardPageType) => void;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
 }
 
 export const EDD: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { navigation } = props;
+  const { navigation, isLogout } = props;
   const [route, setRoute] = useState<EDDPageType>("Cases");
   const [activeTab, setActiveTab] = useState<EDDTabType>("new");
   const setScreen = (nextPage: EDDPageType) => {
     setRoute(nextPage);
   };
   const pageProps = { setScreen: setScreen, navigation: navigation };
-  let eddCases: JSX.Element = <EDDCases {...pageProps} activeTab={activeTab} setActiveTab={setActiveTab} />;
+  let eddCases: JSX.Element = <EDDCases {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
   if (route === "NewCase") {
     eddCases = <NewCase {...pageProps} />;
   }

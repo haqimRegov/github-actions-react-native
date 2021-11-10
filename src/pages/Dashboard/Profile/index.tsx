@@ -48,8 +48,9 @@ import { ChangePassword } from "./ChangePassword";
 const { PROFILE } = Language.PAGE;
 
 interface ProfileProps extends GlobalStoreProps {
-  navigation: IStackNavigationProp;
   handleRoute: (route: DashboardPageType) => void;
+  isLogout: boolean;
+  navigation: IStackNavigationProp;
 }
 
 const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }: ProfileProps) => {

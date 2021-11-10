@@ -40,10 +40,16 @@ const { EMPTY_STATE, INBOX } = Language.PAGE;
 
 interface InboxPageProps extends GlobalStoreProps {
   handleRoute: (route: DashboardPageType) => void;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
 }
 
-const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unreadMessages, updatedUnreadMessages }: InboxPageProps) => {
+const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
+  isLogout,
+  navigation,
+  unreadMessages,
+  updatedUnreadMessages,
+}: InboxPageProps) => {
   const [inboxList, setInboxList] = useState<IInbox>({
     notifications: [],
     newMessageCount: "",
@@ -213,10 +219,16 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({ navigation, unr
   };
 
   useEffect(() => {
-    handleInitialFetch();
     return () => {
-      handleSeen();
+      if (isLogout !== true) {
+        handleSeen();
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogout]);
+
+  useEffect(() => {
+    handleInitialFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

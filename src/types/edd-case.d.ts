@@ -1,6 +1,15 @@
 declare type TQuestionType = "dropdown" | "options" | "optionWithInputs";
 
-declare type TInputTypes = "checkbox" | "multiline" | "inputtext" | "radiobutton" | "dropdown" | "label" | "textarea" | "reroute";
+declare type TInputTypes =
+  | "checkbox"
+  | "multiline"
+  | "inputtext"
+  | "radiobutton"
+  | "dropdown"
+  | "label"
+  | "textarea"
+  | "reroute"
+  | "default";
 
 declare type TCasePage = "EDD Case" | "Profile";
 

@@ -23,6 +23,7 @@ export const PrivateRoute: FunctionComponent = () => {
   const expired = useRef<boolean>(false);
   const lastActive = useRef<number | undefined>(undefined);
   const [inactivityStatus, setInactivityStatus] = useState<boolean>(true);
+  const [isLogout, setIsLogout] = useState<boolean>(false);
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const handleExtend = () => {
@@ -33,8 +34,9 @@ export const PrivateRoute: FunctionComponent = () => {
   };
 
   const handleLogout = async () => {
-    await logout(navigation);
+    setIsLogout(true);
     setInactivityStatus(true);
+    logout(navigation);
   };
 
   const handleInactivity = (isActive: boolean) => {
@@ -91,7 +93,12 @@ export const PrivateRoute: FunctionComponent = () => {
     <Fragment>
       <UserInactivity isActive={inactivityStatus} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
         <Navigator initialRouteName="Dashboard" headerMode="none">
-          <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
+          <Screen
+            name="Dashboard"
+            component={DashboardPage}
+            initialParams={{ isLogout: isLogout, setIsLogout: setIsLogout }}
+            options={defaultOptions}
+          />
           <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
           <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
         </Navigator>

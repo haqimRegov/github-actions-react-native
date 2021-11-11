@@ -6,7 +6,7 @@ declare type RootNavigatorType = {
 };
 
 declare type PrivateNavigatorType = {
-  Dashboard: undefined;
+  Dashboard: { isLogout: boolean; setIsLogout: (state: boolean) => void };
   Logout: undefined;
   Onboarding: undefined;
   Public: undefined;

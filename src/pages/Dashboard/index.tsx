@@ -1,3 +1,4 @@
+import { RouteProp } from "@react-navigation/native";
 import moment from "moment";
 import React, { FunctionComponent, useState } from "react";
 import { Image, ImageStyle, Text, TouchableWithoutFeedback, View } from "react-native";
@@ -44,16 +45,22 @@ import { Transactions } from "./Transactions";
 const { DASHBOARD } = Language.PAGE;
 interface DashboardPageProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
+  route: RouteProp<PrivateNavigatorType, "Dashboard">;
 }
 
-const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, navigation, unreadMessages }: DashboardPageProps) => {
+const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
+  agent,
+  navigation,
+  route,
+  unreadMessages,
+}: DashboardPageProps) => {
+  const { isLogout, setIsLogout } = route.params;
   const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
-  const [isLogout, setIsLogout] = useState<boolean>(false);
-  const [route, setRoute] = useState<DashboardPageType>("Transactions");
+  const [page, setPage] = useState<DashboardPageType>("Transactions");
 
   const handleRoute = (nextPage: DashboardPageType) => {
-    setRoute(nextPage);
+    setPage(nextPage);
   };
 
   const handleLogout = () => {
@@ -67,41 +74,41 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({ agent, 
 
   const handleInbox = () => {
     setActiveMenu(1);
-    setRoute("Inbox");
+    setPage("Inbox");
   };
 
   const handleProfile = () => {
-    setRoute("Profile");
+    setPage("Profile");
     setActiveMenu(3);
   };
 
   const handleDashboard = () => {
-    setRoute("Transactions");
+    setPage("Transactions");
     setActiveMenu(0);
   };
 
   const handleEDD = () => {
-    setRoute("EDD");
+    setPage("EDD");
     setActiveMenu(2);
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
 
   let content: JSX.Element = <Transactions {...props} />;
-  if (route === "Inbox") {
+  if (page === "Inbox") {
     content = <InboxPage {...props} />;
   }
-  if (route === "Transactions") {
+  if (page === "Transactions") {
     content = <Transactions {...props} />;
   }
-  if (route === "EDD") {
+  if (page === "EDD") {
     content = <EDD {...props} />;
   }
-  if (route === "Profile") {
+  if (page === "Profile") {
     content = <Profile {...props} />;
   }
 
-  const inboxCount = route === "Inbox" ? 0 : parseInt(unreadMessages!, 10);
+  const inboxCount = page === "Inbox" ? 0 : parseInt(unreadMessages!, 10);
 
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },

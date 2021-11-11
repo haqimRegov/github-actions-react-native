@@ -6,7 +6,6 @@ import { ErrorHandler } from "../../utils";
 
 export const logout = async (navigation?: IStackNavigationProp) => {
   try {
-    await Auth.signOut({ global: true });
     const handleNavigate = () => {
       if (navigation !== undefined) {
         navigation.dispatch(
@@ -20,6 +19,7 @@ export const logout = async (navigation?: IStackNavigationProp) => {
     if (navigation !== undefined) {
       handleNavigate();
     }
+    await Auth.signOut({ global: true });
     return undefined;
   } catch (error) {
     // eslint-disable-next-line no-console

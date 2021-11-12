@@ -1,6 +1,7 @@
 import debounce from "lodash.debounce";
-import React, { Fragment, FunctionComponent, useCallback } from "react";
-import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useCallback, useState } from "react";
+import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
+import { CircleSnail } from "react-native-progress";
 
 import { IcoMoon } from "../../icons";
 import {
@@ -15,6 +16,7 @@ import {
   sh16,
   sh48,
   sw2,
+  sw20,
   sw240,
   sw8,
 } from "../../styles";
@@ -25,6 +27,7 @@ export interface CustomButtonProps {
   disabled?: boolean;
   icon?: string;
   iconColor?: string;
+  loading?: boolean;
   onPress: () => void;
   secondary?: boolean;
   text: string;
@@ -37,12 +40,15 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   disabled,
   icon,
   iconColor,
+  loading,
   onPress,
   secondary,
   text,
   textStyle,
   withDebounce,
 }: CustomButtonProps) => {
+  const [hover, setHover] = useState<boolean>(false);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncePress = useCallback(
     debounce(onPress, 1000, {
@@ -52,10 +58,12 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
     [onPress],
   );
 
+  const color = hover === true && secondary !== true ? colorRed._11 : colorRed._1;
+
   const defaultButtonStyle: ViewStyle = {
-    ...border(colorRed._1, sw2),
+    ...border(color, sw2),
     ...flexRowCC,
-    backgroundColor: secondary ? colorTransparent : colorRed._1,
+    backgroundColor: secondary ? colorTransparent : color,
     height: sh48,
     opacity: disabled === true ? 0.5 : 1,
     width: sw240,
@@ -74,8 +82,14 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={disabled === true ? undefined : handlePress}>
+    <Pressable onPress={disabled === true ? undefined : handlePress} onPressIn={() => setHover(true)} onPressOut={() => setHover(false)}>
       <View style={defaultButtonStyle}>
+        {loading === true ? (
+          <Fragment>
+            <CircleSnail color={colorWhite._1} size={sw20} thickness={sw2} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+          </Fragment>
+        ) : null}
         {icon === undefined ? null : (
           <Fragment>
             <IcoMoon color={defaultIconColor} name={icon} size={sh16} />
@@ -84,6 +98,6 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
         )}
         <Text style={{ ...fs16BoldWhite1, ...fsCapitalize, color: textColor, ...textStyle }}>{text}</Text>
       </View>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 };

@@ -62,6 +62,7 @@ const NewSalesComponent = ({
   visible,
 }: NewSalesProps) => {
   const fetching = useRef<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
@@ -180,6 +181,7 @@ const NewSalesComponent = ({
   const handleCheckClient = async () => {
     if (fetching.current === false) {
       fetching.current = true;
+      setLoading(true);
       const request = {
         agentId: agent?.id!,
         principalHolder: {
@@ -193,6 +195,7 @@ const NewSalesComponent = ({
         },
       };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      setLoading(false);
       fetching.current = false;
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
@@ -226,6 +229,7 @@ const NewSalesComponent = ({
   const handleClientRegister = async () => {
     if (fetching.current === false) {
       fetching.current = true;
+      setLoading(true);
       const jointInfo =
         accountType === "Individual"
           ? undefined
@@ -251,6 +255,7 @@ const NewSalesComponent = ({
         jointHolder: jointInfo,
       };
       const client: IClientRegisterResponse = await clientRegister(request, navigation);
+      setLoading(false);
       fetching.current = false;
       if (client !== undefined) {
         const { data, error } = client;
@@ -311,6 +316,7 @@ const NewSalesComponent = ({
     }
     return handleCheckClient();
   };
+  console.log("fetching.current", fetching.current);
 
   const modalContainer: ViewStyle = {
     backgroundColor: colorBlue._2,
@@ -363,6 +369,7 @@ const NewSalesComponent = ({
               buttonContainerStyle={buttonContainer}
               cancelButtonStyle={{ width: sw218 }}
               continueButtonStyle={{ width: sw218 }}
+              continueLoading={loading}
               continueDisabled={continueDisabled}
               handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}

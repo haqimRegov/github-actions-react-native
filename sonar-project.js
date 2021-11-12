@@ -1,6 +1,6 @@
-/* eslint-disable import/newline-after-import */
-/* eslint-disable import/no-extraneous-dependencies */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const sonarqubeScanner = require("sonarqube-scanner");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { version } = require("./package.json");
 sonarqubeScanner(
   {

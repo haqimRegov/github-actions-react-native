@@ -16,6 +16,7 @@ export interface ActionButtonsProps {
   continueButtonStyle?: ViewStyle;
   continueDebounce?: boolean;
   continueDisabled?: boolean;
+  continueLoading?: boolean;
   continueTextStyle?: TextStyle;
   handleCancel?: () => void;
   handleContinue?: () => void;
@@ -31,6 +32,7 @@ export const ActionButtons = ({
   continueButtonStyle,
   continueDebounce,
   continueDisabled,
+  continueLoading,
   continueTextStyle,
   handleCancel,
   handleContinue,
@@ -58,6 +60,7 @@ export const ActionButtons = ({
       {handleContinue !== undefined ? (
         <RoundedButton
           buttonStyle={continueButtonStyle}
+          loading={continueLoading}
           withDebounce={continueDebounce !== undefined ? continueDebounce : true}
           disabled={continueDisabled}
           onPress={handleContinue}

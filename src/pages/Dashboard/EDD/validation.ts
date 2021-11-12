@@ -11,7 +11,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
                 const { type, title: optionTitle } = option;
                 let findIndex: number = -1;
                 findIndex = data.answers.findIndex(
-                  (stateData: IQuestionData) => stateData.answer?.answer !== undefined && stateData.answer!.answer === optionTitle,
+                  (stateData: IQuestionData) => stateData.answer?.answer !== undefined && stateData.answer.answer === optionTitle,
                 );
                 let nestedOptionValid: boolean[] = [];
                 if (findIndex !== -1) {
@@ -96,9 +96,8 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
         const valid =
           checkAnswer === true
             ? optionsValid.includes(true) ||
-              data.answers.filter(
-                (singleData: IQuestionData) => singleData.answer?.answer !== undefined && singleData.answer!.answer === "",
-              ).length !== 0 ||
+              data.answers.filter((singleData: IQuestionData) => singleData.answer?.answer !== undefined && singleData.answer.answer === "")
+                .length !== 0 ||
               data.answers.length === 0
             : optionsValid.includes(true);
         return valid;

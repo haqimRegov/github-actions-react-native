@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { centerHorizontal, fs12RegBlue1 } from "../../../../../styles";
 
-export interface ClosedDateProps extends ITableCustomItem {}
+export type ClosedDateProps = ITableCustomItem;
 
 export const ClosedDate: FunctionComponent<ClosedDateProps> = ({ item }: ClosedDateProps) => {
   const { closeDate } = item.rawData as IEDDDashboardCase;

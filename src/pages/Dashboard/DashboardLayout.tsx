@@ -126,7 +126,13 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                 <View style={flexRow}>
                   {titleIcon !== undefined ? (
                     <Fragment>
-                      <IcoMoon name={titleIcon} onPress={titleIconOnPress} size={sw24} style={alignSelfCenter} />
+                      <IcoMoon
+                        name={titleIcon}
+                        onPress={titleIconOnPress}
+                        size={sw24}
+                        style={alignSelfCenter}
+                        suppressHighlighting={true}
+                      />
                       <CustomSpacer isHorizontal={true} space={sw20} />
                     </Fragment>
                   ) : null}

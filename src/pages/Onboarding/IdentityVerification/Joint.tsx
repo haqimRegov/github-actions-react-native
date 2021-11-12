@@ -8,7 +8,7 @@ import { IDDetails, IDDetailsProps } from "./Details";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
-interface JointVerificationProps extends IDDetailsProps {}
+type JointVerificationProps = IDDetailsProps;
 
 export const JointVerification: FunctionComponent<JointVerificationProps> = ({
   addressInfo,

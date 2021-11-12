@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../../../../styles";
 
-export interface DueDateProps extends ITableCustomItem {}
+export type DueDateProps = ITableCustomItem;
 
 export const DueDate: FunctionComponent<DueDateProps> = ({ item }: DueDateProps) => {
   const { targetDate, daysRemaining } = item.rawData as IEDDDashboardCase;

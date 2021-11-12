@@ -43,7 +43,7 @@ export const BYTE_TO_KILOBYTE = 1024;
 
 const DEFAULT_MAX_SIZE_MB = BYTE_TO_MEGABYTE * 5;
 
-export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props, ref) => {
+export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadProps>((props, ref) => {
   const {
     badgeOffset,
     containerStyle,
@@ -93,6 +93,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef, UploadProps>((props
   const handleDocumentResult = async (results: DocumentPickerResponse) => {
     if (!Array.isArray(results)) {
       const { uri, name, size, type } = results;
+      if (size === null || type === null) {
+        return setError(UPLOAD.LABEL_ERROR);
+      }
+
       const realURI = Platform.select({
         android: uri,
         ios: decodeURI(uri),

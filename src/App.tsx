@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Dimensions, Keyboard, KeyboardAvoidingView, Platform, StatusBar } from "react-native";
+import { Dimensions, Keyboard, KeyboardAvoidingView, KeyboardEventListener, Platform, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import { connect } from "react-redux";
@@ -12,7 +12,7 @@ import { logout } from "./network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "./store";
 import { flexChild } from "./styles";
 
-interface AppProps extends GlobalStoreProps {}
+type AppProps = GlobalStoreProps;
 
 const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
   const [isFloating, setFloating] = useState(false);
@@ -26,16 +26,16 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
     return unsubscribe;
   }, []);
 
-  const onKeyboardWillChangeFrame = (event: any) => {
+  const onKeyboardWillChangeFrame = (event: KeyboardEventListener) => {
     setFloating(
       event.endCoordinates.width !== width || (event.endCoordinates.width === width && event.endCoordinates.height / height < 0.4),
     );
   };
 
   useEffect(() => {
-    Keyboard.addListener("keyboardWillChangeFrame", onKeyboardWillChangeFrame);
+    const keyboardWillChangeFrame = Keyboard.addListener("keyboardWillChangeFrame", onKeyboardWillChangeFrame);
     return () => {
-      Keyboard.removeListener("keyboardWillChangeFrame", onKeyboardWillChangeFrame);
+      keyboardWillChangeFrame.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

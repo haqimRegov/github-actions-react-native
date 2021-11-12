@@ -58,6 +58,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
                     name={titleIcon.name}
                     onPress={titleIcon.onPress}
                     size={titleIcon.size || sw12}
+                    suppressHighlighting={true}
                   />
                 </Fragment>
               )}
@@ -84,6 +85,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
                           name={item.icon.name}
                           onPress={item.icon.onPress}
                           size={item.icon.size || sw16}
+                          suppressHighlighting={true}
                         />
                         <CustomSpacer isHorizontal={true} space={sw8} />
                       </Fragment>

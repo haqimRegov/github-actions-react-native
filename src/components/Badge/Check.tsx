@@ -16,7 +16,9 @@ export const Badge: FunctionComponent<BadgeProps> = ({ children, icon, style, wi
   return (
     <View style={flexRow}>
       {children}
-      <View style={badgeStyle}>{withoutIcon === false ? null : <IcoMoon color={colorWhite._1} name="success" size={sh6} {...icon} />}</View>
+      <View style={badgeStyle}>
+        {withoutIcon === false ? null : <IcoMoon color={colorWhite._1} name="success" size={sh6} {...icon} suppressHighlighting={true} />}
+      </View>
     </View>
   );
 };

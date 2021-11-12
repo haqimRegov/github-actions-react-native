@@ -149,8 +149,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const calculatePosition = (locationX?: number, positionY?: number) => {
-    let coordinateX: number = 0;
-    let coordinateY: number = 0;
+    let coordinateX = 0;
+    let coordinateY = 0;
     if (locationX !== undefined && positionY !== undefined) {
       coordinateX = locationX;
       coordinateY = positionY;

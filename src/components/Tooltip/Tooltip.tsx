@@ -12,7 +12,7 @@ export interface CustomTooltipProps {
   color?: string;
   content: ReactElement;
   contentStyle?: ViewStyle;
-  insets?: Object;
+  insets?: Record<string, unknown>;
   isVisible?: boolean;
   onClose?: () => void;
   onPress?: () => void;

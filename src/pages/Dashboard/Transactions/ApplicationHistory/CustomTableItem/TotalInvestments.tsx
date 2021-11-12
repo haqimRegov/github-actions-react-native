@@ -23,7 +23,7 @@ import {
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-export interface TotalInvestmentsProps extends ITableCustomItem {}
+export type TotalInvestmentsProps = ITableCustomItem;
 
 export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ item, lastIndex }: TotalInvestmentsProps) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(false);

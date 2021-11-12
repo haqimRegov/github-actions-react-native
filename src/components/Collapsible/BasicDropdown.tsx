@@ -245,7 +245,7 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
                               : { ...fs16RegBlack2, ...labelHeight };
 
                             const handleSelect = () => {
-                              let reset: boolean = false;
+                              let reset = false;
                               if (itemExtractor !== undefined) {
                                 let newValue = [...value!];
                                 if (newValue.includes(itemValue)) {

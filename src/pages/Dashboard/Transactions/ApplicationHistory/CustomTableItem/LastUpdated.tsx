@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { DEFAULT_TIME_FORMAT, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../../../../styles";
 
-export interface LastUpdatedProps extends ITableCustomItem {}
+export type LastUpdatedProps = ITableCustomItem;
 
 export const LastUpdated: FunctionComponent<LastUpdatedProps> = ({ item }: LastUpdatedProps) => {
   const { lastUpdated } = item.rawData as IDashboardOrder;

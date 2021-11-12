@@ -1,6 +1,6 @@
-const { defaults: tsjPreset } = require("ts-jest/presets");
+import { defaults as tsjPreset } from "ts-jest/presets";
 
-module.exports = {
+export default {
   ...tsjPreset,
   cacheDirectory: ".jest/cache",
   collectCoverage: true,

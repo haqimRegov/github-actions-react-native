@@ -161,11 +161,11 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
   };
 
   useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", handleKeyboardDidShow);
-    Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+    const keyboardDidShow = Keyboard.addListener("keyboardDidShow", handleKeyboardDidShow);
+    const keyboardDidHide = Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
     return () => {
-      Keyboard.removeListener("keyboardDidShow", handleKeyboardDidShow);
-      Keyboard.removeListener("keyboardDidHide", handleKeyboardHide);
+      keyboardDidShow.remove();
+      keyboardDidHide.remove();
     };
   }, []);
 
@@ -334,7 +334,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
                         const itemStyle: ViewStyle = originalItem.subLabel === undefined ? py(sh4) : {};
 
                         const handleSelect = () => {
-                          let reset: boolean = false;
+                          let reset = false;
                           if (itemExtractor !== undefined) {
                             let newValue = [...value];
                             if (newValue.includes(itemValue)) {

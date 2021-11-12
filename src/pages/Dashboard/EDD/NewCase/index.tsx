@@ -137,7 +137,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   const handleFormatOptions = (options: IOptionField[]) => {
     const formatAnswerArray: IQuestionData[] = [];
     const formatOptionsArray: IOptionField[] = [];
-    let count: number = 0;
+    let count = 0;
     options.forEach((option: IOptionField) => {
       const { type } = option;
       // To identify the initial number of answers depending on the options type. If it's a radiobutton, we consider that group of radiobuttons as 1 answer.
@@ -322,7 +322,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                         const { options } = question;
                         const answerArray: IQuestionData[] = [];
                         if (options !== undefined) {
-                          let count: number = 0;
+                          let count = 0;
                           options.forEach((option: IOptionField) => {
                             const { type } = option;
                             if (type === "radiobutton") {

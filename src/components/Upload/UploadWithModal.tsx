@@ -39,7 +39,7 @@ interface UploadWithModalProps extends UploadProps {
   withPreview?: boolean;
 }
 
-export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalProps>((props, ref) => {
+export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, UploadWithModalProps>((props, ref) => {
   const { onPress, resourceType, value, withPreview, ...uploadProps }: UploadWithModalProps = props;
   const [viewFile, setViewFile] = useState<boolean>(false);
 
@@ -132,7 +132,7 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
                 <View style={viewImageHeader}>
                   <LabeledTitle label={value.name} labelStyle={headerTextStyle} title={fileSizeLabel} titleStyle={headerTextStyle} />
                   <CustomFlexSpacer />
-                  <IcoMoon color={headerTextColor} name="close" onPress={handleCloseFile} size={sh24} />
+                  <IcoMoon color={headerTextColor} name="close" onPress={handleCloseFile} size={sh24} suppressHighlighting={true} />
                 </View>
                 <CustomSpacer space={sh24} />
               </View>

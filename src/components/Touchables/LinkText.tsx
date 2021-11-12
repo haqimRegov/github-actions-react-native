@@ -27,7 +27,7 @@ export const LinkText: FunctionComponent<LinkTextProps> = ({ onPress, style, tex
   return (
     <View style={flexWrap}>
       <View style={underline}>
-        <Text onPress={onPress} style={{ ...fs12RegBlue8, ...style }}>
+        <Text onPress={onPress} style={{ ...fs12RegBlue8, ...style }} suppressHighlighting={true}>
           {text}
         </Text>
       </View>

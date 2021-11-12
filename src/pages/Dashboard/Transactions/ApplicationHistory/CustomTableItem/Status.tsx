@@ -9,7 +9,7 @@ import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, colorBlue, flexRow, fs10RegBlue6, sh16, sh4, sw12 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
-export interface PendingStatusProps extends ITableCustomItem {}
+export type PendingStatusProps = ITableCustomItem;
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
   const { dueDate, remark, status, withHardcopy } = item.rawData as IDashboardOrder;
@@ -40,7 +40,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
         <CustomSpacer isHorizontal={true} space={sw12} />
         {rerouted === true && accordionIcon !== undefined && remark ? (
           <Fragment>
-            <IcoMoon {...accordionIcon} />
+            <IcoMoon {...accordionIcon} suppressHighlighting={true} />
           </Fragment>
         ) : null}
         {status === "Submitted" && withHardcopy === true ? <IcoMoon color={colorBlue._1} name="receipt" size={sh16} /> : null}

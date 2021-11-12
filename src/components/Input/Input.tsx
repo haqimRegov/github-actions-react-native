@@ -136,7 +136,10 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   return (
     <View onLayout={onLayout} style={{ width: sw360, ...defaultContainerStyle, ...containerStyle }}>
       {label === undefined ? null : (
-        <Text onPress={onPressLabel} style={{ ...fs12BoldGray6, ...disabledOpacity, paddingBottom: spaceToLabel || sh4, ...labelStyle }}>
+        <Text
+          onPress={onPressLabel}
+          style={{ ...fs12BoldGray6, ...disabledOpacity, paddingBottom: spaceToLabel || sh4, ...labelStyle }}
+          suppressHighlighting={true}>
           {label}
         </Text>
       )}
@@ -148,6 +151,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
               name={leftIcon.name}
               onPress={disabled === true ? undefined : leftIcon.onPress}
               size={leftIcon.size || sw24}
+              suppressHighlighting={true}
             />
             <CustomSpacer isHorizontal={true} space={sw16} />
           </Fragment>
@@ -182,6 +186,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
               name={rightIcon.name}
               onPress={disabled === true ? undefined : rightIcon.onPress}
               size={rightIcon.size || sw24}
+              suppressHighlighting={true}
             />
           </Fragment>
         )}

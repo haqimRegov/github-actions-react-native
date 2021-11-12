@@ -32,7 +32,7 @@ declare interface OnboardingStepsProps {
   handleBackToDashboard: () => void;
   RenderContent: (props: OnboardingStepsContentProps) => JSX.Element;
   setActiveContent: (content: IContentItem | IOnboarding) => void;
-  setActiveSection: (section: any) => void;
+  setActiveSection: (section: number) => void;
   setFinishedStep: (step: TypeOnboardingKey[]) => void;
   steps: IOnboarding[];
 }

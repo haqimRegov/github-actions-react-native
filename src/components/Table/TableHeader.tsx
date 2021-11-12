@@ -45,7 +45,7 @@ export const TableHeader: FunctionComponent<TableHeaderProps> = ({
                   {item.icon === undefined ? null : (
                     <Fragment>
                       <CustomSpacer isHorizontal={true} space={sw4} />
-                      <IcoMoon color={colorBlue._1} size={sw16} {...item.icon} />
+                      <IcoMoon color={colorBlue._1} size={sw16} {...item.icon} suppressHighlighting={true} />
                     </Fragment>
                   )}
                 </View>

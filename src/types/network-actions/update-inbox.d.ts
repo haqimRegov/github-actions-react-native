@@ -1,4 +1,4 @@
-declare type IUpdateInboxRequest = {};
+declare type IUpdateInboxRequest = Record<string, unknown>;
 
 declare interface IUpdateInboxResult {
   message: string;

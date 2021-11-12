@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, MutableRefObject } from "react";
 
 import { CustomSpacer, UploadWithModal } from "../../../components";
 import { Language } from "../../../constants";
@@ -17,7 +17,7 @@ interface UploadIDProps {
   onPressPicker: () => void;
   setBackPage: (value: FileBase64 | undefined) => void;
   setFrontPage: (value: FileBase64 | undefined) => void;
-  uploadRef?: any;
+  uploadRef?: MutableRefObject<IUploadDocumentRef | undefined>;
 }
 export const UploadID: FunctionComponent<UploadIDProps> = ({
   backError,

@@ -1,5 +1,5 @@
 declare interface ITableData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 declare interface ITableIcon {

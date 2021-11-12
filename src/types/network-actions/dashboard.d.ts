@@ -1,8 +1,13 @@
+declare interface IDashboardFilter {
+  column: string;
+  value: string;
+}
+
 declare interface IDashboardRequest {
   tab: "pending" | "approved" | "rejected";
   page: number;
   search: string;
-  filter: any[];
+  filter: IDashboardFilter[];
   sort: ITransactionsSort[];
 }
 

@@ -25,6 +25,5 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
   setTimeout(() => {
     Alert.alert(err.message);
   }, 100);
-  // TODO proper return type
-  return undefined as any;
+  return undefined as unknown;
 };

@@ -5,7 +5,11 @@ import { ERRORS } from "../data/dictionary";
 import { gqlOperation } from "../integrations";
 import { ErrorHandler } from "./ErrorHandler";
 
-export const responseHandler = async <ResultType extends {}, VariablesType extends {}, HeadersType extends {} = {}>(
+export const responseHandler = async <
+  ResultType extends Record<string, unknown>,
+  VariablesType extends Record<string, unknown>,
+  HeadersType extends Record<string, unknown> = Record<string, never>,
+>(
   query: string,
   variables?: VariablesType,
   headers?: HeadersType,

@@ -155,7 +155,7 @@ declare interface ISubmitClientAccountRequest {
   investments: ISubmitInvestment[];
 }
 
-declare interface ISubmitClientAccountResult extends IInvestmentSummary {}
+type ISubmitClientAccountResult = IInvestmentSummary;
 
 declare interface ISubmitClientAccountMutation {
   submitClientAccount: ISubmitClientAccountResponse;

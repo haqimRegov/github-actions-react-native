@@ -127,7 +127,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
                 <CustomSpacer space={sh32} />
                 <View style={px(sw24)}>
                   <View style={{ ...centerVertical, ...flexRow }}>
-                    <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} />
+                    <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} suppressHighlighting={true} />
                     <CustomSpacer isHorizontal={true} space={sw20} />
                     <Text style={fs24BoldGray6}>{editReceipt!.name}</Text>
                   </View>

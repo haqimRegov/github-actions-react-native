@@ -3,7 +3,6 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import { usePrevious } from "../../hooks";
 import {
-  centerVertical,
   colorWhite,
   flexChild,
   flexRow,
@@ -13,7 +12,8 @@ import {
   px,
   py,
   sh16,
-  sh88,
+  sh4,
+  sh78,
   sw10,
   sw16,
   sw24,
@@ -51,13 +51,13 @@ export const NotificationItem: FunctionComponent<NotificationItemProps> = ({
   const prevId = usePrevious(id);
 
   const container: ViewStyle = {
-    ...centerVertical,
+    // ...centerVertical,
     ...flexRow,
     ...px(sw24),
     ...py(sh16),
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
-    minHeight: sh88,
+    minHeight: sh78,
     ...style,
   };
 
@@ -92,6 +92,7 @@ export const NotificationItem: FunctionComponent<NotificationItemProps> = ({
             <CustomFlexSpacer />
             <Text style={fs12RegBlue5}>{subtitle}</Text>
           </View>
+          <CustomSpacer space={sh4} />
           <Text numberOfLines={readMore === true ? undefined : 1} style={fs14RegGray5}>
             {title}
           </Text>

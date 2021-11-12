@@ -12,6 +12,7 @@ import {
   fs12RegGray6,
   fs14BoldGray6,
   fs14RegGray4,
+  fs14RegGray6,
   fullHW,
   px,
   py,
@@ -58,7 +59,8 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   const accordionHeader = (step: IOnboarding, stepIndex: number, isActive: boolean) => {
     const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.key) : false;
     const currentStep = (stepIndex + 1).toString();
-    const textStyle: TextStyle = isActive && step.content === undefined ? fs14BoldGray6 : fs14RegGray4;
+    const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegGray6 : fs14BoldGray6;
+    const textStyle: TextStyle = isActive ? activeTextStyle : { ...fs14RegGray4, opacity: 0.6 };
 
     const handleChange = () => {
       if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {
@@ -103,10 +105,10 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
             const handleNavigateToContent = () => {
               handleContentChange(item);
             };
-            const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
+            const activeKey = activeContent !== undefined && "title" in activeContent ? activeContent.key : "";
             const disabledContent = disabledSteps !== undefined && disabledSteps.includes(item.key) === true;
             const defaultTextStyle = disabledContent === true ? fs12RegGray4 : fs12RegGray6;
-            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldGray6 : defaultTextStyle;
+            const textStyle: TextStyle = item.key === activeKey ? fs12BoldGray6 : defaultTextStyle;
             const onPress = disabledContent === true ? undefined : handleNavigateToContent;
 
             return (
@@ -124,7 +126,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   };
 
   const handleNextStep = (nextRoute: string) => {
-    let newIndex: number = 0;
+    let newIndex = 0;
     const parentRoute = steps.filter((item: IOnboarding, index: number) => {
       if (item.route === nextRoute) {
         newIndex = index;

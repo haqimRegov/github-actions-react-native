@@ -169,11 +169,11 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   };
 
   useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", handleKeyboardDidShow);
-    Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+    const keyboardDidShow = Keyboard.addListener("keyboardDidShow", handleKeyboardDidShow);
+    const keyboardDidHide = Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
     return () => {
-      Keyboard.removeListener("keyboardDidShow", handleKeyboardDidShow);
-      Keyboard.removeListener("keyboardDidHide", handleKeyboardHide);
+      keyboardDidShow.remove();
+      keyboardDidHide.remove();
     };
   }, []);
 

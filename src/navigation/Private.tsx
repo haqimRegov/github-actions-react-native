@@ -92,7 +92,7 @@ export const PrivateRoute: FunctionComponent = () => {
   return (
     <Fragment>
       <UserInactivity isActive={inactivityStatus} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
-        <Navigator initialRouteName="Dashboard" headerMode="none">
+        <Navigator initialRouteName="Dashboard" screenOptions={{ headerShown: false }}>
           <Screen
             name="Dashboard"
             component={DashboardPage}

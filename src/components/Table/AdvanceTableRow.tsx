@@ -204,7 +204,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                             {column.itemIcon !== undefined || column.withAccordion === true ? (
                               <Fragment>
                                 {itemLabel.length > 0 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
-                                <IcoMoon {...itemIcon} />
+                                <IcoMoon {...itemIcon} suppressHighlighting={true} />
                               </Fragment>
                             ) : null}
                           </Fragment>

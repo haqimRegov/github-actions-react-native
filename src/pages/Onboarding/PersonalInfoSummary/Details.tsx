@@ -61,7 +61,7 @@ const TitleIcon = ({ onPress, title, titleStyle, viewStyle }: TitleIconProps) =>
     <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16), ...viewStyle }}>
       <Text style={{ ...fs16BoldGray6, ...titleStyle }}>{title}</Text>
       <CustomSpacer isHorizontal={true} space={sw16} />
-      <IcoMoon color={colorBlue._8} name="edit" onPress={onPress} size={sh24} />
+      <IcoMoon color={colorBlue._8} name="edit" onPress={onPress} size={sh24} suppressHighlighting={true} />
     </View>
   );
 };

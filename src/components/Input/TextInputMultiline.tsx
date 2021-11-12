@@ -66,9 +66,9 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   const dummyInputStyle: ViewStyle = { borderWidth: 0, backgroundColor: colorTransparent, height: sh05 };
 
   useEffect(() => {
-    Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+    const keyboardDidHide = Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
     return () => {
-      Keyboard.removeListener("keyboardDidHide", handleKeyboardHide);
+      keyboardDidHide.remove();
     };
   }, []);
 
@@ -81,7 +81,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
-          <Text onPress={onPressLabel} style={{ ...fs12BoldGray6, ...labelStyle }}>
+          <Text onPress={onPressLabel} style={{ ...fs12BoldGray6, ...labelStyle }} suppressHighlighting={true}>
             {label}
           </Text>
           <CustomSpacer space={defaultLabelSpace} />

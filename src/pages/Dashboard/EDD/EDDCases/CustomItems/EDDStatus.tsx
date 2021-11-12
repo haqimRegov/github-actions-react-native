@@ -6,7 +6,7 @@ import { DICTIONARY_EDD_STATUS } from "../../../../../data/dictionary/edd";
 import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, flexRow, sw12 } from "../../../../../styles";
 
-export interface EDDStatusProps extends ITableCustomItem {}
+export type EDDStatusProps = ITableCustomItem;
 
 export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, item }: EDDStatusProps) => {
   const { remark, status } = item.rawData as IEDDDashboardCase;
@@ -32,7 +32,7 @@ export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, it
         <CustomSpacer isHorizontal={true} space={sw12} />
         {accordionIcon !== undefined && remark ? (
           <Fragment>
-            <IcoMoon {...accordionIcon} />
+            <IcoMoon {...accordionIcon} suppressHighlighting={true} />
           </Fragment>
         ) : null}
       </View>

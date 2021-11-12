@@ -49,19 +49,19 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
   withEpf,
 }: ProductConfirmationProps) => {
   useEffect(() => {
-    const keyboardWillShow = () => {
+    const handleKeyboardShow = () => {
       setFixedBottomShow(false);
     };
 
-    const keyboardWillHide = () => {
+    const handleKeyboardHide = () => {
       setFixedBottomShow(true);
     };
 
-    Keyboard.addListener("keyboardWillShow", keyboardWillShow);
-    Keyboard.addListener("keyboardWillHide", keyboardWillHide);
+    const keyboardWillShow = Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
+    const keyboardWillHide = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
     return () => {
-      Keyboard.removeListener("keyboardWillShow", keyboardWillShow);
-      Keyboard.removeListener("keyboardWillHide", keyboardWillHide);
+      keyboardWillShow.remove();
+      keyboardWillHide.remove();
     };
   }, [setFixedBottomShow]);
 
@@ -120,7 +120,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                     <View style={{ ...centerVertical, ...flexRow }}>
                       <Text style={fs10BoldGray6}>{type}</Text>
                       <CustomFlexSpacer />
-                      <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sh32} />
+                      <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sh32} suppressHighlighting={true} />
                     </View>
                     <LabeledTitle
                       label={fundName}

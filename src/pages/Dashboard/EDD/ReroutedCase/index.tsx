@@ -350,7 +350,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                         const { options } = question;
                         const answerArray: IQuestionData[] = [];
                         if (options !== undefined) {
-                          let count: number = 0;
+                          let count = 0;
                           options.forEach((option: IOptionField) => {
                             const { type } = option;
                             if (type === "radiobutton") {

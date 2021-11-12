@@ -1,5 +1,5 @@
 declare interface IObject {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 export const deleteKey = (object: IObject, keys: string[]) => {
   let tempObject = { ...object };

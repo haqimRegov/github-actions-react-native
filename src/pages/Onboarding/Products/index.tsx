@@ -288,11 +288,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     if (finishedSteps.includes("Products")) {
       setPage(1);
     }
-    Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
-    Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
+    const keyboardWillHide = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
+    const keyboardWillShow = Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
     return () => {
-      Keyboard.removeListener("keyboardWillHide", handleKeyboardHide);
-      Keyboard.removeListener("keyboardWillShow", handleKeyboardShow);
+      keyboardWillHide.remove();
+      keyboardWillShow.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

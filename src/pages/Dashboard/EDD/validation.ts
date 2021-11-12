@@ -9,7 +9,7 @@ export const validateSubmitCase = (dataToValidate: IEDDResponse, checkAnswer: bo
           options !== undefined
             ? options.map((option: IOptionField) => {
                 const { type, title: optionTitle } = option;
-                let findIndex: number = -1;
+                let findIndex = -1;
                 findIndex = data.answers.findIndex(
                   (stateData: IQuestionData) => stateData.answer?.answer !== undefined && stateData.answer.answer === optionTitle,
                 );

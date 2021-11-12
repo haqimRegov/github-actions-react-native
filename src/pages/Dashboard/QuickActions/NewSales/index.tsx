@@ -83,7 +83,7 @@ const NewSalesComponent = ({
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
   const setAccountType = (type: string) => addAccountType(type as TypeAccountChoices);
 
-  let continueDisabled: boolean = true;
+  let continueDisabled = true;
 
   switch (idType) {
     case "NRIC":

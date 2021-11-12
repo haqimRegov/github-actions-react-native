@@ -1,5 +1,5 @@
 declare interface IEDDDashboardRequest {
-  filter: any;
+  filter: IDashboardFilter[];
   page: number;
   search: string;
   sort: IEDDDashboardSort[];

@@ -102,7 +102,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
           <CustomSpacer space={sh28} />
           <View style={flexRow}>
             <CustomFlexSpacer />
-            <IcoMoon color={colorBlue._1} name="close" size={sh24} onPress={handleClose} />
+            <IcoMoon color={colorBlue._1} name="close" onPress={handleClose} size={sh24} suppressHighlighting={true} />
             <CustomSpacer isHorizontal={true} space={sw28} />
           </View>
         </Fragment>

@@ -165,7 +165,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         <View style={flexRow}>
           <CustomSpacer space={sw4} />
           <View style={{ ...centerHorizontal, height: sh32 }}>
-            <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} />
+            <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} suppressHighlighting={true} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw20} />
           <View>

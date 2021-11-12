@@ -90,7 +90,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         style={{ ...px(sw24), backgroundColor: colorBlue._2 }}>
         <CustomSpacer space={sh16} />
         <View style={{ ...flexRow, ...centerVertical }}>
-          <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} />
+          <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} suppressHighlighting={true} />
           <CustomSpacer isHorizontal={true} space={sw16} />
           <Text style={fs24BoldGray6}>{PROFILE.HEADING_CHANGE}</Text>
         </View>

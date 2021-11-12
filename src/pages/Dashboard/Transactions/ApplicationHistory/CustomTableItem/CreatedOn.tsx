@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { DEFAULT_TIME_FORMAT, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../../../../styles";
 
-export interface CreatedOnProps extends ITableCustomItem {}
+export type CreatedOnProps = ITableCustomItem;
 
 export const CreatedOn: FunctionComponent<CreatedOnProps> = ({ item }: CreatedOnProps) => {
   const { createdOn } = item.rawData as IDashboardOrder;

@@ -20,7 +20,7 @@ import {
   sw8,
 } from "../../../../../styles";
 
-export interface InvestorNameProps extends ITableCustomItem {}
+export type InvestorNameProps = ITableCustomItem;
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
   const { accountType, investorName, isSeen } = item.rawData as IDashboardOrder;

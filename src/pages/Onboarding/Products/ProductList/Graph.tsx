@@ -83,8 +83,8 @@ export const ProductGraph: FunctionComponent<ProductGraphProps> = ({ fund, layou
 
   useEffect(() => {
     if (fund !== undefined) {
-      setNavPerformance([...fund.performance?.nav?.sixMonths]);
-      setBenchmarkPerformance([...fund.performance?.benchmark?.sixMonths]);
+      setNavPerformance([...fund.performance.nav.sixMonths]);
+      setBenchmarkPerformance([...fund.performance.benchmark.sixMonths]);
     }
   }, [fund]);
 

@@ -17,8 +17,8 @@ export const MeasureTextSize = async (params: TSMeasureParams, textStyle?: TSFon
 };
 
 export const CalculateCount = async (textArray: string[], width: number, remainingSpace: number, textStyle?: TSFontSpecs) => {
-  let count: number = 0;
-  let total: number = 0;
+  let count = 0;
+  let total = 0;
   const promiseArray = textArray.map(async (text) => {
     const size = await MeasureTextSize({ text: text }, textStyle);
     total += size.width + remainingSpace;

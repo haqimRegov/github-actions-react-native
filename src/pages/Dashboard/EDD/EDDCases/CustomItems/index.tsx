@@ -8,7 +8,7 @@ import { DueDate } from "./DueDate";
 import { EDDStatus } from "./EDDStatus";
 import { InvestorName } from "./InvestorName";
 
-export interface CustomTableItemProps extends ITableCustomItem {}
+export type CustomTableItemProps = ITableCustomItem;
 export const EDDCustomTableItem: FunctionComponent<CustomTableItemProps> = (data: CustomTableItemProps) => {
   switch (data.keyName.key) {
     case "status":

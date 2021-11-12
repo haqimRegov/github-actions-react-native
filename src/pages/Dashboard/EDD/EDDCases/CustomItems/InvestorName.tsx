@@ -4,7 +4,7 @@ import { Text, TextStyle, View, ViewStyle } from "react-native";
 import { Badge, CustomSpacer } from "../../../../../components";
 import { centerHV, circle, colorRed, flexRow, fs12RegBlue1, sw100, sw12, sw8 } from "../../../../../styles";
 
-export interface InvestorNameProps extends ITableCustomItem {}
+export type InvestorNameProps = ITableCustomItem;
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
   const { clientName, isSeen } = item.rawData as IEDDDashboardCase;

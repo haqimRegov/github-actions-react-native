@@ -1,10 +1,10 @@
 type KeyboardAvoidingView = import("react-native").KeyboardAvoidingView;
 
 declare interface IKeyboardAvoidingView extends KeyboardAvoidingView {
-  [key: string]: any;
+  [key: string]: unknown;
   state: {
     bottom: number;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 

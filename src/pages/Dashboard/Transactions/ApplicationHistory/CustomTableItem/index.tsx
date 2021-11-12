@@ -7,7 +7,7 @@ import { LastUpdated } from "./LastUpdated";
 import { PendingStatus } from "./Status";
 import { TotalInvestments } from "./TotalInvestments";
 
-export interface CustomTableItemProps extends ITableCustomItem {}
+export type CustomTableItemProps = ITableCustomItem;
 export const CustomTableItem: FunctionComponent<CustomTableItemProps> = (data: CustomTableItemProps) => {
   switch (data.keyName.key) {
     case "investorName":

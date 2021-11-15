@@ -23,6 +23,7 @@ interface SelectionBannerProps {
   cancelOnPress?: () => void;
   continueDebounce?: boolean;
   continueDisabled?: boolean;
+  continueLoading?: boolean;
   label: string;
   labelCancel?: string;
   labelStyle?: TextStyle;
@@ -35,6 +36,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
   cancelOnPress,
   continueDebounce,
   continueDisabled,
+  continueLoading,
   label,
   labelCancel,
   labelStyle,
@@ -73,6 +75,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
         <RoundedButton
           disabled={continueDisabled}
           buttonStyle={{ width: sw200 }}
+          loading={continueLoading}
           onPress={submitOnPress}
           radius={sw24}
           text={submitLabel}

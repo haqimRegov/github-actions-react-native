@@ -63,6 +63,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const { filter, page, pages } = props[activeTab];
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
@@ -110,12 +111,12 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
-    // setLoading(true);
+    setButtonLoading(true);
     if (fetching.current === false) {
       fetching.current = true;
       const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
       fetching.current = false;
-      // setLoading(false);
+      setButtonLoading(false);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
@@ -282,6 +283,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         <SelectionBanner
           bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
           cancelOnPress={handlePrintAll}
+          continueLoading={buttonLoading}
           label={DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY}
           labelCancel={DASHBOARD_HOME.LABEL_PRINT_ALL}
           labelSubmit={DASHBOARD_HOME.LABEL_PRINT_SELECTED}

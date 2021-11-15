@@ -54,6 +54,7 @@ export const colorRed = {
   _3: "#AB001D",
   _4: "#FDF1EF",
   _5: "#F8EBED",
+  _11: "#9E0E26",
 };
 
 export const colorWhite = {

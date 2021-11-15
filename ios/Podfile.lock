@@ -498,7 +498,7 @@ PODS:
     - React-Core
   - RNPDF (0.11.0):
     - React
-  - RNReanimated (2.2.4):
+  - RNReanimated (2.2.3):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -532,6 +532,8 @@ PODS:
     - React-RCTImage
   - RNShare (7.2.1):
     - React-Core
+  - RNSVG (12.1.1):
+    - React
   - RNTextSize (4.0.0-rc.1):
     - React
   - RNVectorIcons (9.0.0):
@@ -618,6 +620,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - RNTextSize (from `../node_modules/react-native-text-size/ios`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -764,6 +767,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNShare:
     :path: "../node_modules/react-native-share"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   RNTextSize:
     :path: "../node_modules/react-native-text-size/ios"
   RNVectorIcons:
@@ -852,9 +857,10 @@ SPEC CHECKSUMS:
   RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNInAppBrowser: 3ff3a3b8f458aaf25aaee879d057352862edf357
   RNPDF: b575ff11a65121f346b2851e3da736e7c51c18ab
-  RNReanimated: 65583befd5706cc9c86ae9a081786181ced37b93
+  RNReanimated: b04ef2a4f0cb61b062bbcf033f84a9e470f4f60b
   RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
   RNShare: edd621a71124961e29a7ba43a84bd1c6f9980d88
+  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNTextSize: 7efa06531c6bb7ab6ed070b4ce0d1248cf06fcdf
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38

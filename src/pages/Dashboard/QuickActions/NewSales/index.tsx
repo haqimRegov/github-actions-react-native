@@ -316,7 +316,6 @@ const NewSalesComponent = ({
     }
     return handleCheckClient();
   };
-  console.log("fetching.current", fetching.current);
 
   const modalContainer: ViewStyle = {
     backgroundColor: colorBlue._2,

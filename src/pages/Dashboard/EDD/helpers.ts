@@ -49,10 +49,12 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
     const tempAnswers: IQuestionDataRequest[] = [];
     answers.forEach((tempAnswer: IQuestionData, tempIndex: number) => {
       const { hasDoc, answer } = tempAnswer;
-      const actualAnswers = { ...tempAnswer, answer: answer!.answer };
+      const checkAnswer = answer?.answer !== undefined ? { answer: answer.answer } : {};
+      const actualAnswers = { ...tempAnswer, ...checkAnswer };
 
-      const updatedTempAnswer: IQuestionDataRequest = deleteKey(actualAnswers, ["checkboxToggle"]);
-      const formattedTempAnswer = updatedTempAnswer.answer !== undefined ? updatedTempAnswer : deleteKey(updatedTempAnswer, ["answer"]);
+      const updatedTempAnswer: IQuestionData = deleteKey(actualAnswers, ["checkboxToggle"]);
+      const formattedTempAnswer: IQuestionDataRequest =
+        updatedTempAnswer.answer !== undefined ? updatedTempAnswer : deleteKey(updatedTempAnswer, ["answer"]);
       const { document } = updatedTempAnswer;
       let subSectionObject: ISubSection = {};
       if ("subSection" in tempAnswer && tempAnswer.subSection !== undefined) {

@@ -104,8 +104,8 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
     setScreen("Cases");
   };
 
-  const handleFetching = (loading: boolean) => {
-    fetching.current = loading;
+  const handleFetching = (isLoading: boolean) => {
+    fetching.current = isLoading;
   };
 
   const handleSubmit = async () => {

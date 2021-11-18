@@ -134,8 +134,8 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
     AnimationUtils.layout({ duration: 150 });
   };
 
-  const handleFetching = (loading: boolean) => {
-    fetching.current = loading;
+  const handleFetching = (isLoading: boolean) => {
+    fetching.current = isLoading;
   };
 
   const handleFormatOptions = (options: IOptionField[]) => {

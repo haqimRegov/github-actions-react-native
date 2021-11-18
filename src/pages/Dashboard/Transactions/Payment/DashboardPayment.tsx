@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 
 import { CustomSpacer, Loading, SafeAreaPage, SelectionBanner } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { ERRORS } from "../../../../data/dictionary";
+import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
@@ -36,7 +38,6 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
   const fetching = useRef<boolean>(false);
   const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
   const [paymentOrder, setPaymentOrder] = useState<IPaymentOrderState | undefined>(undefined);
-  // const [successMessage, setSuccessMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const [activeOrder, setActiveOrder] = useState<string>("");
@@ -87,36 +88,73 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const payment: ISubmitProofOfPayment[] = paymentOrder!.payments
-        .map((paymentInfo: IPaymentState, index: number) => {
-          const updatedPaymentInfo = { ...paymentInfo };
-          delete updatedPaymentInfo.combinedBankAccountName;
-          const temporaryReference =
-            updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
-            updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
-              ? `${paymentOrder!.orderNumber}${index}${moment().format("x")}`
-              : undefined;
+      const paymentWithKeys = await Promise.all(
+        paymentOrder!.payments.map(async (paymentInfo: IPaymentState, index: number) => {
+          try {
+            let proofWithUrl: FileBase64 | undefined;
+            if (paymentOrder!.paymentType === "Cash") {
+              const url = S3UrlGenerator.payment(
+                currentOrder!.clientId,
+                currentOrder!.orderNumber,
+                paymentOrder!.paymentType,
+                paymentInfo.paymentMethod!,
+                paymentInfo.proof!.type,
+              );
+              const uploadedFile = await StorageUtil.put(paymentInfo.proof!.path!, url, paymentInfo.proof!.type);
+              if (uploadedFile === undefined) {
+                throw new Error();
+              }
+              proofWithUrl = { ...paymentInfo.proof!, url: uploadedFile.key ? uploadedFile.key : undefined, base64: undefined };
+            }
 
-          return {
-            ...updatedPaymentInfo,
-            referenceNumber: temporaryReference, // TODO temporary
-            amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
-            bankAccountName:
-              paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
-                ? paymentInfo.combinedBankAccountName
-                : paymentInfo.bankAccountName,
-            currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
-            transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
-            transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
-          };
-        })
-        .filter((value) => value.saved === true);
+            const updatedPaymentInfo = { ...paymentInfo };
+            delete updatedPaymentInfo.combinedBankAccountName;
+            const temporaryReference =
+              updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
+              updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
+                ? `${paymentOrder!.orderNumber}${index}${moment().format("x")}`
+                : undefined;
+
+            return {
+              ...updatedPaymentInfo,
+              referenceNumber: temporaryReference, // TODO temporary
+              amount: paymentOrder!.paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
+              bankAccountName:
+                paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
+                  ? paymentInfo.combinedBankAccountName
+                  : paymentInfo.bankAccountName,
+              currency: paymentOrder!.paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
+              transactionDate: paymentOrder!.paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
+              transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
+              proof: proofWithUrl,
+            };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (error: any) {
+            // eslint-disable-next-line no-console
+            console.log("Error in Uploading", error);
+            return ERRORS.storage;
+          }
+        }),
+      );
+
+      if (paymentWithKeys === undefined || paymentWithKeys.some((pay) => "errorCode" in pay)) {
+        AlertDialog(ERRORS.storage.message, () => setLoading(false));
+        fetching.current = false;
+        return undefined;
+      }
+      // this should cause an issue since we are already returning undefined to cancel the function when there is an error in paymentWithKeys
+      const payment: ISubmitProofOfPayment[] =
+        paymentWithKeys.some((pay) => "errorCode" in pay) === false
+          ? (paymentWithKeys.filter((value) => value.saved === true) as ISubmitProofOfPayment[])
+          : [];
+
       const paymentOrders: ISubmitProofOfPaymentOrder[] = [
         { orderNumber: paymentOrder!.orderNumber, paymentType: paymentOrder!.paymentType, payments: payment },
       ];
       const request = { orders: paymentOrders };
       const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
       fetching.current = false;
+
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;
         if (error === null && data !== null) {

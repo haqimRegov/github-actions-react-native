@@ -51,7 +51,7 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
         ) : null}
       </View>
       {items.map((item: INotificationItem, index: number) => {
-        const { createdAt, id, isRead, title, message } = item;
+        const { createdAt, id, isRead, isSeen, title, message } = item;
         const subtitle = moment(createdAt, "x").format(DEFAULT_TIME_FORMAT);
         const handlePress = () => {
           if (onPress !== undefined) {
@@ -67,7 +67,7 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
             {index === 0 ? null : <CustomSpacer space={sh8} />}
             <NotificationItem
               avatarProps={avatar}
-              badge={!isRead}
+              badge={!isSeen}
               id={id}
               label={title}
               onPress={handlePress}

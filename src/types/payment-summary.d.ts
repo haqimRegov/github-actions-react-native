@@ -32,29 +32,29 @@ declare interface IPurchaseSummaryState {
 }
 
 declare interface IPayment {
-  currency?: TypeCurrency | "";
-  paymentMethod?: TypePaymentMethod;
   amount?: string;
-  kibBankAccountNumber?: string;
-  kibBankAccountName?: string;
-  kibBankName?: string;
-  transactionDate?: Date;
-  transactionTime?: Date;
-  proof?: FileBase64;
-  remark?: string;
+  bankAccountName?: string;
+  bankAccountNumber?: string;
+  bankName?: string;
   checkNumber?: string;
   clientName?: string;
   clientTrustAccountNumber?: string;
+  combinedBankAccountName?: string;
+  currency?: TypeCurrency | "";
   epfAccountNumber?: string;
   epfReferenceNumber?: string;
-  referenceNumber?: string;
-  bankAccountName?: string;
-  bankAccountNumber?: string;
-  combinedBankAccountName?: string;
-  recurringType?: string;
-  recurringBank?: string;
   frequency?: string;
-  bankName?: string;
+  kibBankAccountName?: string;
+  kibBankAccountNumber?: string;
+  kibBankName?: string;
+  paymentMethod?: TypePaymentMethod;
+  proof?: FileBase64;
+  recurringBank?: string;
+  recurringType?: string;
+  referenceNumber?: string;
+  remark?: string;
+  transactionDate?: Date;
+  transactionTime?: Date;
 }
 
 declare interface IPaymentState extends IPayment {

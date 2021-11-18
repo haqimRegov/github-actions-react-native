@@ -2,6 +2,7 @@ import ImagePicker, { Image, Options } from "react-native-image-crop-picker";
 
 const defaultOptions: Options = {
   cropping: false,
+  forceJpg: true,
   includeBase64: true,
   mediaType: "photo",
   multiple: false,

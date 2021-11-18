@@ -7,6 +7,8 @@ const dashboard = gql`
         result {
           orders {
             orderNumber
+            clientId
+            jointId
             accountType
             investorName {
               principal

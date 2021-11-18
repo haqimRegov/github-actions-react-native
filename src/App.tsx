@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Dimensions, Keyboard, KeyboardAvoidingView, KeyboardEventListener, Platform, StatusBar } from "react-native";
+import { Dimensions, Keyboard, KeyboardAvoidingView, KeyboardEvent, Platform, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import { connect } from "react-redux";
@@ -26,7 +26,7 @@ const AppComponent: FunctionComponent<AppProps> = ({ isLoading }: AppProps) => {
     return unsubscribe;
   }, []);
 
-  const onKeyboardWillChangeFrame = (event: KeyboardEventListener) => {
+  const onKeyboardWillChangeFrame = (event: KeyboardEvent) => {
     setFloating(
       event.endCoordinates.width !== width || (event.endCoordinates.width === width && event.endCoordinates.height / height < 0.4),
     );

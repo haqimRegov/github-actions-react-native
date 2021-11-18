@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
+import { ERRORS } from "../../../../data/dictionary";
+import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { borderBottomGray2, fs12BoldGray6, fs16SemiBoldGray6, px, sh176, sh24, sh32, sh8, sw24, sw68 } from "../../../../styles";
@@ -101,45 +103,86 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     }
   };
 
+  const handleUpload = async (personalDocs: ISoftCopyDocument[], clientId: string) => {
+    const personalDocsWithKeys = await Promise.all(
+      personalDocs.map(async ({ docs, name }: ISoftCopyDocument) => {
+        return {
+          docs: await Promise.all(
+            docs.map(async (documents) => {
+              try {
+                let title = "";
+                if (documents!.title === "Passport") {
+                  title = "passport";
+                } else if (documents!.title === "Certificate of Loss of Nationality") {
+                  title = "certificate";
+                } else {
+                  title = `${documents!.title!.toLowerCase().replace(" - ", "_")}`;
+                }
+
+                const url = S3UrlGenerator.document(clientId, title, documents!.type!);
+                const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
+
+                if (uploadedFile === undefined) {
+                  throw new Error();
+                }
+                return {
+                  title: documents!.title!,
+                  file: {
+                    // base64: documents!.base64!,
+                    name: documents!.name!,
+                    size: documents!.size!,
+                    type: documents!.type!,
+                    date: documents!.date!,
+                    path: documents!.path!,
+                    url: uploadedFile.key,
+                  },
+                };
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } catch (error: any) {
+                // eslint-disable-next-line no-console
+                console.log("Error in Uploading", error);
+                AlertDialog(ERRORS.storage.message, () => setLoading(false));
+                fetching.current = true;
+                return error;
+              }
+            }),
+          ),
+          name: name,
+        };
+      }),
+    );
+    return personalDocsWithKeys;
+  };
+
   const handleSubmit = async () => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
       setPrompt(true);
+      let pendingDocumentsPrincipalWithKeys: ISubmitSoftCopyDocuments[] = [];
+      let pendingDocumentsJointWithKeys: ISubmitSoftCopyDocuments[] = [];
+
+      if (pendingDocumentsPrincipal.length !== 0) {
+        pendingDocumentsPrincipalWithKeys = await handleUpload(pendingDocumentsPrincipal, currentOrder!.clientId!);
+        if (pendingDocumentsPrincipalWithKeys === undefined) {
+          AlertDialog(ERRORS.storage.message, () => setLoading(false));
+          return undefined;
+        }
+      }
+
+      if (pendingDocumentsJoint.length !== 0) {
+        pendingDocumentsJointWithKeys = await handleUpload(pendingDocumentsJoint, currentOrder!.jointId!);
+        if (pendingDocumentsJointWithKeys === undefined) {
+          AlertDialog(ERRORS.storage.message, () => setLoading(false));
+          return undefined;
+        }
+      }
+
       const request: ISubmitSoftCopyDocumentsRequest = {
         orderNumber: currentOrder!.orderNumber,
-        principal: pendingDocumentsPrincipal.map(({ docs, name }) => {
-          return {
-            docs: docs.map((documents) => ({
-              title: documents!.title!,
-              file: {
-                base64: documents!.base64!,
-                name: documents!.name!,
-                size: documents!.size!,
-                type: documents!.type!,
-                date: documents!.date!,
-                path: documents!.path!,
-              },
-            })),
-            name: name,
-          };
-        }),
-        joint: pendingDocumentsJoint.map(({ docs, name }) => {
-          return {
-            docs: docs.map((documents) => ({
-              title: documents!.title!,
-              file: {
-                base64: documents!.base64!,
-                name: documents!.name!,
-                size: documents!.size!,
-                type: documents!.type!,
-                date: documents!.date!,
-                path: documents!.path!,
-              },
-            })),
-            name: name,
-          };
-        }),
+        principal: pendingDocumentsPrincipalWithKeys,
+        joint: pendingDocumentsJointWithKeys,
       };
       const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation, setLoading);
       fetching.current = false;
@@ -159,6 +202,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         }
       }
     }
+    return undefined;
   };
 
   useEffect(() => {

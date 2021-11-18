@@ -62,7 +62,8 @@
     "fix:react-native-image": "npx react-native-fix-image",
     "fix:modules": "npm run fix:react-native-image && npm run fix:collapsible && npm run fix:image:picker",
     "postinstall": "npm run fix:image:picker",
-    "sonar": "node sonar-project.js"
+    "sonar": "node sonar-project.js",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@miblanchard/react-native-slider": "2.0.2",
@@ -117,7 +118,8 @@
     "redux": "4.1.2",
     "redux-devtools-extension": "2.13.9",
     "redux-thunk": "2.4.0",
-    "rn-fetch-blob": "0.12.0"
+    "rn-fetch-blob": "0.12.0",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@babel/core": "7.12.9",
@@ -131,6 +133,7 @@
     "@types/react-native-signature-capture": "0.4.2",
     "@types/react-native-vector-icons": "6.4.9",
     "@types/react-test-renderer": "17.0.1",
+    "@types/uuid": "8.3.1",
     "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "5.3.1",
     "babel-jest": "26.6.3",
@@ -144,7 +147,7 @@
     "eslint-plugin-react": "7.26.1",
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-plugin-react-native": "3.11.0",
-    "husky": "7.0.4",
+    "husky": "7.0.0",
     "jest": "27.3.1",
     "jest-sonar-reporter": "2.0.0",
     "jest-transform-stub": "2.0.0",
@@ -166,10 +169,5 @@
       "json",
       "node"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run lint && npm run format_all"
-    }
   }
 }

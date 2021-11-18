@@ -6,6 +6,8 @@ declare interface IDashboardRemark {
 declare interface IDashboardOrder {
   accountType: TypeAccountChoices;
   canProceed: boolean;
+  clientId: string;
+  jointId: string | null;
   createdOn: string;
   dueDate: string;
   investorName: {

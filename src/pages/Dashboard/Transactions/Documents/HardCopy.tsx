@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CheckBox, CustomFlexSpacer, CustomSpacer, Loading, NewDropdown, PromptModal } from "../../../../components";
 import { Language } from "../../../../constants";
+import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { borderBottomGray2, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
@@ -61,6 +62,54 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     }
   };
 
+  const handleUpload = async () => {
+    const personalDocsWithKeys = await Promise.all(
+      documentList!.documents.map(async ({ docs, name }: ISoftCopyDocument) => {
+        return {
+          docs: await Promise.all(
+            docs.map(async (documents) => {
+              try {
+                const url = S3UrlGenerator.hardcopy(
+                  currentOrder!.clientId,
+                  currentOrder!.orderNumber,
+                  name,
+                  documents!.title!,
+                  documents!.type!,
+                );
+                const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
+                if (uploadedFile === undefined) {
+                  throw new Error();
+                }
+                return {
+                  title: documents!.title!,
+                  file: {
+                    // base64: documents!.base64!,
+                    name: documents!.name!,
+                    size: documents!.size!,
+                    type: documents!.type!,
+                    date: documents!.date!,
+                    path: documents!.path!,
+                    url: uploadedFile.key,
+                  },
+                };
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } catch (error: any) {
+                // eslint-disable-next-line no-console
+                console.log("Error in Uploading", error);
+                AlertDialog(error, () => setLoading(false));
+                fetching.current = true;
+                return error;
+              }
+            }),
+          ),
+          name: name,
+        };
+      }),
+    );
+    return personalDocsWithKeys;
+  };
+
   const handleSubmit = async () => {
     if (fetching.current === false) {
       fetching.current = true;
@@ -68,25 +117,12 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       setPrompt(true);
       const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
       const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
+      const documentWithKeys = await handleUpload();
+
       const request: ISubmitHardCopyDocumentsRequest = {
         orderNumber: currentOrder!.orderNumber,
         branchId: branchId,
-        hardcopy: documentList!.documents.map(({ docs, name }) => {
-          return {
-            docs: docs.map((documents) => ({
-              title: documents!.title!,
-              file: {
-                base64: documents!.base64!,
-                name: documents!.name!,
-                size: documents!.size!,
-                type: documents!.type!,
-                date: documents!.date!,
-                path: documents!.path!,
-              },
-            })),
-            name: name,
-          };
-        }),
+        hardcopy: documentWithKeys,
       };
       const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setLoading);
       fetching.current = false;

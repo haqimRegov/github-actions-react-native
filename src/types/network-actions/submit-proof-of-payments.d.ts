@@ -1,26 +1,26 @@
 declare interface ISubmitProofOfPayment {
-  currency?: TypeCurrency | "";
-  paymentMethod?: TypePaymentMethod;
   amount?: string;
-  kibBankAccountNumber?: string;
-  kibBankAccountName?: string;
-  kibBankName?: string;
-  transactionDate?: number;
-  transactionTime?: number;
-  proof?: FileBase64;
-  remark?: string;
+  bankAccountName?: string;
+  bankAccountNumber?: string;
+  bankName?: string;
   checkNumber?: string;
   clientName?: string;
   clientTrustAccountNumber?: string;
+  currency?: TypeCurrency | "";
   epfAccountNumber?: string;
   epfReferenceNumber?: string;
-  bankAccountName?: string;
-  bankAccountNumber?: string;
-  recurringType?: string;
-  recurringBank?: string;
   frequency?: string;
-  bankName?: string;
+  kibBankAccountName?: string;
+  kibBankAccountNumber?: string;
+  kibBankName?: string;
+  paymentMethod?: TypePaymentMethod;
+  proof?: FileBase64;
+  recurringBank?: string;
+  recurringType?: string;
   referenceNumber?: string;
+  remark?: string;
+  transactionDate?: number;
+  transactionTime?: number;
 }
 
 declare interface ISubmitProofOfPaymentOrder {
@@ -53,5 +53,5 @@ declare interface ISubmitProofOfPaymentsResult {
 declare type ISubmitProofOfPaymentsResponse = IMutationResponse<ISubmitProofOfPaymentsResult> | undefined;
 
 declare interface ISubmitProofOfPaymentsMutation {
-  getReceiptSummaryList: ISubmitProofOfPaymentsResponse;
+  submitProofOfPayments: ISubmitProofOfPaymentsResponse;
 }

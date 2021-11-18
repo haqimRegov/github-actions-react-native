@@ -58,7 +58,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
     [onPress],
   );
 
-  const color = hover === true && secondary !== true ? colorRed._11 : colorRed._1;
+  const color = (hover === true && secondary !== true) || loading === true ? colorRed._11 : colorRed._1;
 
   const defaultButtonStyle: ViewStyle = {
     ...border(color, sw2),

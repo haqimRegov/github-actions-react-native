@@ -1,8 +1,8 @@
 import { Storage } from "aws-amplify";
-import { Alert } from "react-native";
 import RNFetchBlob from "rn-fetch-blob";
 
-import { deleteKey } from "../../../utils";
+import { ERRORS } from "../../../data/dictionary";
+import { AlertDialog, deleteKey } from "../../../utils";
 import { IKey } from "./NewCase";
 
 const Blob: IPolyfillBlob = RNFetchBlob.polyfill.Blob as IPolyfillBlob;
@@ -45,12 +45,12 @@ const handleS3Upload = async (
           .then((result) => {
             return result;
           })
-          .catch((error) => {
-            if (error.message.includes("503") && handleLoading !== undefined) {
-              handleLoading(false);
-            } else {
-              Alert.alert(error.message);
-            }
+          .catch(() => {
+            AlertDialog(ERRORS.storage.message, () => {
+              if (handleLoading !== undefined) {
+                handleLoading(false);
+              }
+            });
           });
         return upload;
       }

@@ -57,7 +57,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         clientId: clientId!,
         documents: documents,
       };
-      const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation);
+      const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (submitPdfResponse !== undefined) {
@@ -90,7 +90,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   const getReceiptSummary = async () => {
     setLoading(true);
     const request = { clientId: clientId! };
-    const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation);
+    const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation, setLoading);
     setLoading(false);
     if (summary !== undefined) {
       const { data, error } = summary;
@@ -111,7 +111,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       fetching.current = true;
       setLoading(true);
       const request = { clientId: clientId!, orderNo: receipt.orderNumber! };
-      const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation);
+      const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (onboardingReceipt !== undefined) {

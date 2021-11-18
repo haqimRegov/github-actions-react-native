@@ -66,7 +66,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
 
   const handleFetch = async (newPage: string) => {
     const request: IGetInboxRequest = { page: newPage, search: inputSearch };
-    const response: IGetInboxResponse = await getInbox(request, navigation);
+    const response: IGetInboxResponse = await getInbox(request, navigation, setInitialLoading);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -124,7 +124,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
   const handleReadAll = async () => {
     setInitialLoading(true);
     const request = {};
-    const response: IUpdateInboxResponse = await updateInbox(request, navigation);
+    const response: IUpdateInboxResponse = await updateInbox(request, navigation, setInitialLoading);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {

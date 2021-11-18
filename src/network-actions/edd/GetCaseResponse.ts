@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getCaseResponse = async (
   variables: ICaseResponseRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getCaseResponse = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "caseResponse" in data === false) {
       throw data;

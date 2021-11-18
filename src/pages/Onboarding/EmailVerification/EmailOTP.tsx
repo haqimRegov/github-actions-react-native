@@ -81,6 +81,10 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
     setJointError(validateOtp(jointOtp));
   };
 
+  const handleFetching = (loading: boolean) => {
+    fetching.current = loading;
+  };
+
   const handleVerifyOTP = async () => {
     if (fetching.current === false) {
       fetching.current = true;
@@ -91,7 +95,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         principalHolder: { email: principalEmail, code: principalOtp },
         jointHolder: jointRequest,
       };
-      const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation);
+      const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation, handleFetching);
       fetching.current = false;
       if (response !== undefined) {
         const { data, error } = response;

@@ -1,7 +1,12 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const generatePdf = async (variables: IGeneratePdfRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const generatePdf = async (
+  variables: IGeneratePdfRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data = await responseHandler<IGeneratePdfMutation, IGeneratePdfRequest>(
       GQL_MUTATIONS.generatePdf,
@@ -9,6 +14,7 @@ export const generatePdf = async (variables: IGeneratePdfRequest, navigation: IS
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "generatePdf" in data === false) {

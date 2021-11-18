@@ -1,7 +1,12 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const updateInbox = async (variables: IUpdateInboxRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const updateInbox = async (
+  variables: IUpdateInboxRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: IUpdateInboxQuery = await responseHandler<IUpdateInboxQuery, IUpdateInboxRequest>(
       GQL_MUTATIONS.updateInbox,
@@ -9,6 +14,7 @@ export const updateInbox = async (variables: IUpdateInboxRequest, navigation: IS
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "updateInbox" in data === false) {

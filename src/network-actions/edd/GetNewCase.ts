@@ -1,7 +1,12 @@
 import { GQL_QUERIES } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const getEDDNewCase = async (variables: IEDDNewCaseRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const getEDDNewCase = async (
+  variables: IEDDNewCaseRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: IEDDNewCaseQuery = await responseHandler<IEDDNewCaseQuery, IEDDNewCaseRequest>(
       GQL_QUERIES.eddCaseQuestions,
@@ -9,6 +14,7 @@ export const getEDDNewCase = async (variables: IEDDNewCaseRequest, navigation: I
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "caseQuestions" in data === false) {
       throw data;

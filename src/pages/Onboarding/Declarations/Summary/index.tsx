@@ -336,7 +336,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation);
+      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {

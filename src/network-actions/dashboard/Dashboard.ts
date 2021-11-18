@@ -1,7 +1,12 @@
 import { GQL_QUERIES } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const getDashboard = async (variables: IDashboardRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const getDashboard = async (
+  variables: IDashboardRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: IDashboardQuery = await responseHandler<IDashboardQuery, IDashboardRequest>(
       GQL_QUERIES.dashboard,
@@ -9,6 +14,7 @@ export const getDashboard = async (variables: IDashboardRequest, navigation: ISt
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "dashboard" in data === false) {
       throw data;

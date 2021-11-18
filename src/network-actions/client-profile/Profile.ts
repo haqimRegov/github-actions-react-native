@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getClientProfile = async (
   variables: IClientProfileRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getClientProfile = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "clientProfile" in data === false) {
       throw data;

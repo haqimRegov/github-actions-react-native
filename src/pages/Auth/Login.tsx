@@ -70,7 +70,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       setLoading(true);
       const request = { username: inputNRIC, password: encryptedPassword };
       const header = { encryptionKey: credentials.sessionToken, ...deviceToken };
-      const response: ILoginResponse = await login(request, header);
+      const response: ILoginResponse = await login(request, header, setLoading);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null) {
@@ -134,7 +134,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       fetching.current = true;
       setLoading(true);
       setInput1Error(undefined);
-      const response: IVerifyLockOTPResponse = await verifyLockOtp({ nric: inputNRIC, code: inputOTP });
+      const response: IVerifyLockOTPResponse = await verifyLockOtp({ nric: inputNRIC, code: inputOTP }, setLoading);
       fetching.current = false;
       if (response === undefined) {
         // TODO temporary
@@ -166,7 +166,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       fetching.current = true;
       setLoading(true);
       setInput1Error(undefined);
-      const response: IResendLockOTPResponse = await resendLockOtp({ nric: inputNRIC });
+      const response: IResendLockOTPResponse = await resendLockOtp({ nric: inputNRIC }, setLoading);
       fetching.current = false;
       if (response === undefined) {
         // TODO temporary
@@ -196,8 +196,8 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       const header = { encryptionKey: credentials.sessionToken };
       const response: ISignUpResponse | IChangePasswordResponse =
         page === "EXPIRED_PASSWORD"
-          ? await changePassword(baseParams, header)
-          : await resetPassword({ ...baseParams, username: inputNRIC }, header);
+          ? await changePassword(baseParams, header, undefined, setLoading)
+          : await resetPassword({ ...baseParams, username: inputNRIC }, header, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response === undefined) {

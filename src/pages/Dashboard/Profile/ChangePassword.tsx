@@ -51,7 +51,12 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
       const encryptedNewPassword = await Encrypt(inputNewPassword, config!.sessionToken);
       const encryptedRetypePassword = await Encrypt(inputRetypePassword, config!.sessionToken);
       const request = { password: encryptedNewPassword, confirmPassword: encryptedRetypePassword };
-      const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken }, navigation);
+      const response: IChangePasswordResponse = await changePassword(
+        request,
+        { encryptionKey: config!.sessionToken },
+        navigation,
+        setIsLoading,
+      );
       fetching.current = false;
       if (response !== undefined) {
         const { data, error } = response;

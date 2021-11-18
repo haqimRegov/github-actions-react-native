@@ -78,7 +78,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       sort: sort,
       tab: "ut",
     };
-    const productListResponse: IProductListResponse = await getProductList(request, navigation);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation, setLoading);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;

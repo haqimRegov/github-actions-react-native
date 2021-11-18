@@ -5,6 +5,7 @@ export const changePassword = async (
   variables: IChangePasswordRequest,
   headers: IChangePasswordHeader,
   navigation?: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -14,6 +15,7 @@ export const changePassword = async (
       headers,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "changePassword" in data === false) {

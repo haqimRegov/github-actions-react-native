@@ -81,7 +81,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       sort: sortAllFunds,
       tab: "amp",
     };
-    const productListResponse: IProductListResponse = await getProductList(request, navigation);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation, setLoading);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;

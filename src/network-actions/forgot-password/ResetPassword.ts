@@ -1,7 +1,11 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const resetPassword = async (variables: IResetPasswordRequest, headers: IResetPasswordHeader) => {
+export const resetPassword = async (
+  variables: IResetPasswordRequest,
+  headers: IResetPasswordHeader,
+  handleLoading?: (loading: boolean) => void,
+) => {
   try {
     const data = await responseHandler<IResetPasswordMutation, IResetPasswordRequest, IResetPasswordHeader>(
       GQL_MUTATIONS.resetPassword,
@@ -9,6 +13,7 @@ export const resetPassword = async (variables: IResetPasswordRequest, headers: I
       headers,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

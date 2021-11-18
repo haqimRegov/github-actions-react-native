@@ -194,7 +194,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
         ...filterStatus,
       ],
     };
-    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
     setIsFetching(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

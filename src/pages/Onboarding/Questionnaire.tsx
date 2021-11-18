@@ -140,7 +140,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
           questionNine: questionNine,
         },
       };
-      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
+      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {

@@ -99,7 +99,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   const handleSubmit = async () => {
     setLoading(true);
     const responseToSubmit = { ...responses![0] };
-    const answers = await handleDataToSubmit(responseToSubmit, currentCase!.caseId.toString(), responses!.length - 1);
+    const answers = await handleDataToSubmit(responseToSubmit, currentCase!.caseId.toString(), responses!.length - 1, setLoading);
     const requestData = {
       caseId: currentCase!.caseId,
       allAnswers: answers.formattedAnswers,
@@ -132,6 +132,10 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   const handleExpand = () => {
     setExpand(!expand);
     AnimationUtils.layout({ duration: 150 });
+  };
+
+  const handleFetching = (loading: boolean) => {
+    fetching.current = loading;
   };
 
   const handleFormatOptions = (options: IOptionField[]) => {
@@ -238,7 +242,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
 
   const handleFetchProfile = async () => {
     const request = { caseId: currentCase!.caseId };
-    const newCaseResponse: IClientProfileResponse = await getClientProfile(request, props.navigation);
+    const newCaseResponse: IClientProfileResponse = await getClientProfile(request, props.navigation, handleFetching);
     if (newCaseResponse !== undefined) {
       const { data: upperData, error } = newCaseResponse;
       if (error === null && upperData !== null) {

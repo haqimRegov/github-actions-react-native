@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getPreviousResponse = async (
   variables: IPreviousResponseRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getPreviousResponse = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "previousResponse" in data === false) {
       throw data;

@@ -104,10 +104,14 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
     setScreen("Cases");
   };
 
+  const handleFetching = (loading: boolean) => {
+    fetching.current = loading;
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     const responseToSubmit = { ...responses![0] };
-    const answers = await handleDataToSubmit(responseToSubmit, currentCase!.caseId.toString(), responses!.length - 1);
+    const answers = await handleDataToSubmit(responseToSubmit, currentCase!.caseId.toString(), responses!.length - 1, handleFetching);
     const requestData = {
       caseId: currentCase!.caseId,
       allAnswers: answers.formattedAnswers,
@@ -249,7 +253,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
 
   const handleFetchProfile = async () => {
     const request: IClientProfileRequest = { caseId: currentCase!.caseId };
-    const newCaseResponse: IClientProfileResponse = await getClientProfile(request, props.navigation);
+    const newCaseResponse: IClientProfileResponse = await getClientProfile(request, props.navigation, handleFetching);
     if (newCaseResponse !== undefined) {
       const { data: upperData, error } = newCaseResponse;
       if (error === null && upperData !== null) {

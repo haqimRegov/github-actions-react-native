@@ -1,7 +1,12 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const submitPdf = async (variables: ISubmitPdfRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const submitPdf = async (
+  variables: ISubmitPdfRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data = await responseHandler<ISubmitPdfMutation, ISubmitPdfRequest>(
       GQL_MUTATIONS.submitPdf,
@@ -9,6 +14,7 @@ export const submitPdf = async (variables: ISubmitPdfRequest, navigation: IStack
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "submitPdf" in data === false) {

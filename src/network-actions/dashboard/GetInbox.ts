@@ -1,7 +1,12 @@
 import { GQL_QUERIES } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const getInbox = async (variables: IGetInboxRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const getInbox = async (
+  variables: IGetInboxRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: IGetInboxQuery = await responseHandler<IGetInboxQuery, IGetInboxRequest>(
       GQL_QUERIES.getInbox,
@@ -9,6 +14,7 @@ export const getInbox = async (variables: IGetInboxRequest, navigation: IStackNa
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "getInbox" in data === false) {

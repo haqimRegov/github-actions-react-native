@@ -87,7 +87,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
 
   const handleFetch = async () => {
     const request: IGetSoftCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
-    const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(request, navigation);
+    const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(request, navigation, setLoading);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -141,7 +141,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           };
         }),
       };
-      const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation);
+      const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation, setLoading);
       fetching.current = false;
       if (response !== undefined) {
         const { data, error } = response;

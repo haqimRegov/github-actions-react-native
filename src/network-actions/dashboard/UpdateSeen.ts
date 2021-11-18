@@ -1,7 +1,12 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const updateSeen = async (variables: IUpdateSeenRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const updateSeen = async (
+  variables: IUpdateSeenRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: IUpdateSeenQuery = await responseHandler<IUpdateSeenQuery, IUpdateSeenRequest>(
       GQL_MUTATIONS.updateSeen,
@@ -9,6 +14,7 @@ export const updateSeen = async (variables: IUpdateSeenRequest, navigation: ISta
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "updateSeen" in data === false) {

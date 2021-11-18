@@ -7,7 +7,12 @@ import { IKey } from "./NewCase";
 
 const Blob: IPolyfillBlob = RNFetchBlob.polyfill.Blob as IPolyfillBlob;
 
-const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, reRouteCount: number) => {
+const handleS3Upload = async (
+  responseToSubmit: IEDDResponse,
+  caseId: string,
+  reRouteCount: number,
+  handleLoading?: (loading: boolean) => void,
+) => {
   const dataToSubmit = responseToSubmit.questions.map(async (question: IEDDQuestion) => {
     const { data, id, title } = question;
     const { answers } = data!;
@@ -40,7 +45,13 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
           .then((result) => {
             return result;
           })
-          .catch((error) => Alert.alert(error.message));
+          .catch((error) => {
+            if (error.message.includes("503") && handleLoading !== undefined) {
+              handleLoading(false);
+            } else {
+              Alert.alert(error.message);
+            }
+          });
         return upload;
       }
       return false;
@@ -81,8 +92,13 @@ const handleS3Upload = async (responseToSubmit: IEDDResponse, caseId: string, re
   return Promise.all(dataToSubmit);
 };
 
-export const handleDataToSubmit = async (responseToSubmit: IEDDResponse, caseId: string, reRerouteCount: number) => {
-  const resolvedDataToSubmit = await handleS3Upload(responseToSubmit, caseId, reRerouteCount);
+export const handleDataToSubmit = async (
+  responseToSubmit: IEDDResponse,
+  caseId: string,
+  reRerouteCount: number,
+  handleLoading: (loading: boolean) => void,
+) => {
+  const resolvedDataToSubmit = await handleS3Upload(responseToSubmit, caseId, reRerouteCount, handleLoading);
   const defaultAnswers: IAnswer[] = [...resolvedDataToSubmit];
   const additionalAnswers: IAnswer[] = [];
   const allAnswers: IAnswer[] = [];

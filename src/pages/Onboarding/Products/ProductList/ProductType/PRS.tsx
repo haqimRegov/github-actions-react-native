@@ -76,7 +76,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       showBy: showBy,
       search: search,
     };
-    const productListResponse: IProductListResponse = await getProductList(request, navigation);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation, setLoading);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;

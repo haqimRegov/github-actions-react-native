@@ -194,7 +194,7 @@ const NewSalesComponent = ({
           name: principalHolder?.name,
         },
       };
-      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation, setLoading);
       setLoading(false);
       fetching.current = false;
       if (clientCheck !== undefined) {
@@ -254,7 +254,7 @@ const NewSalesComponent = ({
         },
         jointHolder: jointInfo,
       };
-      const client: IClientRegisterResponse = await clientRegister(request, navigation);
+      const client: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
       setLoading(false);
       fetching.current = false;
       if (client !== undefined) {

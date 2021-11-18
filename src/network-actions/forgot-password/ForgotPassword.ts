@@ -1,7 +1,7 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const forgotPassword = async (variables: IForgotPasswordRequest) => {
+export const forgotPassword = async (variables: IForgotPasswordRequest, handleLoading?: (loading: boolean) => void) => {
   try {
     const data = await responseHandler<IForgotPasswordMutation, IForgotPasswordRequest>(
       GQL_MUTATIONS.forgotPassword,
@@ -9,6 +9,7 @@ export const forgotPassword = async (variables: IForgotPasswordRequest) => {
       undefined,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

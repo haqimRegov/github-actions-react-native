@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const clientRegister = async (
   variables: IClientRegisterRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const clientRegister = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "clientRegister" in data === false) {

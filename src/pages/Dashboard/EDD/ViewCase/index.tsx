@@ -96,6 +96,10 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
     setToggle(text as TCasePage);
   };
 
+  const handleFetching = (loading: boolean) => {
+    fetching.current = loading;
+  };
+
   const handleFetchCase = async () => {
     if (fetching.current === true) {
       const request = { caseId: currentCase!.caseId, isReroute: false };
@@ -159,7 +163,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
 
   const handleFetchProfile = async () => {
     const request: IClientProfileRequest = { caseId: currentCase!.caseId };
-    const newCaseResponse: IClientProfileResponse = await getClientProfile(request, props.navigation);
+    const newCaseResponse: IClientProfileResponse = await getClientProfile(request, props.navigation, handleFetching);
     if (newCaseResponse !== undefined) {
       const { data: upperData, error } = newCaseResponse;
       if (error === null && upperData !== null) {

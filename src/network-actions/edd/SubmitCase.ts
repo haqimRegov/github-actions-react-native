@@ -1,7 +1,12 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const submitCase = async (variables: ISubmitCaseRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const submitCase = async (
+  variables: ISubmitCaseRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: ISubmitCaseMutation = await responseHandler<ISubmitCaseMutation, ISubmitCaseRequest>(
       GQL_MUTATIONS.submitEDDCase,
@@ -9,6 +14,7 @@ export const submitCase = async (variables: ISubmitCaseRequest, navigation: ISta
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "submitEdd" in data === false) {
       throw data;

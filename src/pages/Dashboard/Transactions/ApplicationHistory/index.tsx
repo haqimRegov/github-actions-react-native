@@ -114,7 +114,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setButtonLoading(true);
     if (fetching.current === false) {
       fetching.current = true;
-      const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
+      const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation, setLoading);
       fetching.current = false;
       setButtonLoading(false);
       if (response !== undefined) {

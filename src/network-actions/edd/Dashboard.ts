@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getEDDDashboard = async (
   variables: IEDDDashboardRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getEDDDashboard = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
     if (data === undefined || "eddDashboard" in data === false) {
       throw data;

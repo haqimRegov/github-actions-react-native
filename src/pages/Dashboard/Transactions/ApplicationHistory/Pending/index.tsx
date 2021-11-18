@@ -251,7 +251,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         ...filterStatus,
       ],
     };
-    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
@@ -282,7 +282,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       const request: IResubmitOrderRequest = { orderNumber: orderNumber };
-      const response: IResubmitOrderResponse = await resubmitOrder(request, navigation);
+      const response: IResubmitOrderResponse = await resubmitOrder(request, navigation, setIsFetching);
       fetching.current = false;
       if (response !== undefined) {
         const { error } = response;

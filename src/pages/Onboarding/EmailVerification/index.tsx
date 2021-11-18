@@ -65,7 +65,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         jointHolder: jointRequest,
       };
       setLoading(true);
-      const response: IEmailVerificationResponse = await emailVerification(request, navigation);
+      const response: IEmailVerificationResponse = await emailVerification(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {

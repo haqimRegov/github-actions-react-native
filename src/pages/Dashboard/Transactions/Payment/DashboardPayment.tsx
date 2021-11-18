@@ -50,7 +50,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
 
   const handleFetch = async () => {
     const request: IGetPaymentRequiredRequest = { orderNumber: currentOrder!.orderNumber };
-    const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation);
+    const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation, setLoading);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -115,7 +115,7 @@ const DashboardPaymentComponent: FunctionComponent<DashboardPaymentProps> = (pro
         { orderNumber: paymentOrder!.orderNumber, paymentType: paymentOrder!.paymentType, payments: payment },
       ];
       const request = { orders: paymentOrders };
-      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
       fetching.current = false;
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;

@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getSoftCopyDocuments = async (
   variables: IGetSoftCopyDocumentsRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getSoftCopyDocuments = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "listSoftcopyDocuments" in data === false) {

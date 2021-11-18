@@ -6,6 +6,7 @@ export const documentPicker = async (handleSuccess: SuccessCallback) => {
   try {
     const res = await DocumentPicker.pickSingle({
       type: [DocumentPicker.types.pdf],
+      copyTo: "cachesDirectory",
     });
 
     return handleSuccess(res);

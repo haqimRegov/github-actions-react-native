@@ -1,4 +1,6 @@
+export * from "./amplify";
 export * from "./async-storage";
+export * from "./backend";
 export * from "./file-system";
 export * from "./graphql";
 export * from "./react-native-document-picker";

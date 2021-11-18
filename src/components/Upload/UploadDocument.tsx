@@ -3,8 +3,9 @@ import React, { forwardRef, Fragment, useImperativeHandle, useState } from "reac
 import { Platform, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 import { Image } from "react-native-image-crop-picker";
+import { Bar } from "react-native-progress";
 
-import { Language } from "../../constants";
+import { CALENDAR_FORMAT, Language, TIME_SECONDS_FORMAT } from "../../constants";
 import { IcoMoon } from "../../icons";
 import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem } from "../../integrations";
 import {
@@ -16,9 +17,12 @@ import {
   colorRed,
   colorWhite,
   flexRow,
+  fs12RegBlack2,
   fs12RegGray5,
   fs16BoldBlue1,
   px,
+  py,
+  sh16,
   sh32,
   sh40,
   sh72,
@@ -30,6 +34,7 @@ import {
   sw24,
   sw4,
   sw40,
+  sw520,
 } from "../../styles";
 import { shortenString } from "../../utils";
 import { Badge } from "../Badge";
@@ -60,9 +65,11 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     onPressRemove,
     onPressPicker,
     onSuccess,
+    progress,
     setValue,
     title,
     titleStyle,
+    useOriginalName,
     value,
     withCropping,
   } = props;
@@ -77,7 +84,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     const selectedName = fileNameArray.splice(fileNameArray.length - 2, 1).join("");
     const [selectedExtension] = fileNameArray.slice(-1);
 
-    const shortFileName = shortenString(selectedName, 20, 20);
+    const shortFileName = shortenString(selectedName, 37, 40);
     const valueSize = value.size !== undefined ? value.size : -1;
     const fileSizeUnit = valueSize >= 100000 ? "MB" : "KB";
     const fileSize = valueSize >= 100000 ? valueSize / BYTE_TO_MEGABYTE : valueSize / BYTE_TO_KILOBYTE;
@@ -90,25 +97,31 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   const defaultLabel = defaultError !== "" ? defaultError : uploadLabel;
   const defaultCropping = withCropping !== undefined ? withCropping : true;
 
+  const generateName = (mime: string, filename?: string) => {
+    const moments = moment();
+    const ext = mime.substring(mime.lastIndexOf("/") + 1);
+    return useOriginalName === true && filename !== undefined && filename !== null
+      ? filename
+      : `KIB IMG ${moments.format(CALENDAR_FORMAT)} at ${moments.format(TIME_SECONDS_FORMAT)}.${ext}`;
+  };
+
   const handleDocumentResult = async (results: DocumentPickerResponse) => {
     if (!Array.isArray(results)) {
-      const { uri, name, size, type } = results;
+      const { fileCopyUri, uri, name, size, type } = results;
       if (size === null || type === null) {
         return setError(UPLOAD.LABEL_ERROR);
       }
 
-      const realURI = Platform.select({
-        android: uri,
-        ios: decodeURI(uri),
-      });
+      const realURI = Platform.select({ android: uri, ios: decodeURI(uri) });
+      const path = fileCopyUri ? decodeURI(fileCopyUri) : realURI;
       let base64 = "";
       let newName = "";
       if (realURI !== undefined) {
         base64 = await ReactFileSystem.readFile(realURI);
-        newName = name === null ? realURI.substring(realURI.lastIndexOf("/") + 1) : name;
+        newName = generateName(type, name);
       }
 
-      const selectedFile: FileBase64 = { base64: base64 || "", name: newName, size, type, date: `${moment().valueOf()}`, path: realURI };
+      const selectedFile: FileBase64 = { base64: base64 || "", name: newName, size, type, date: `${moment().valueOf()}`, path: path };
       if (size > MAX_SIZE_BYTE) {
         if (onError) {
           return onError(selectedFile);
@@ -124,8 +137,15 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   const handleImageResult = (results: Image | Image[]) => {
     if (!Array.isArray(results)) {
       const { data, filename, size, mime, path } = results;
-      const newName = filename === null || filename === undefined ? path.substring(path.lastIndexOf("/") + 1) : filename;
-      const selectedImage: FileBase64 = { base64: data || "", name: newName, size, type: mime, date: `${moment().valueOf()}`, path };
+
+      const selectedImage: FileBase64 = {
+        base64: data || "",
+        name: generateName(mime, filename),
+        size,
+        type: mime,
+        date: `${moment().valueOf()}`,
+        path,
+      };
       if (size > MAX_SIZE_BYTE) {
         if (onError) {
           return onError(selectedImage);
@@ -169,23 +189,26 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   useImperativeHandle(ref, () => ({ handleOpenCamera, handleOpenPicker, handleOpenDocument }));
 
   const container: ViewStyle = {
-    ...centerVertical,
     ...flexRow,
     ...px(sw40),
+    ...py(sh16),
     ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
-    height: sh72,
+    minHeight: sh72,
     ...containerStyle,
   };
   const errorStyle: TextStyle = defaultError !== "" ? { color: colorRed._2 } : {};
-  const iconBadgeOffset = value === undefined || defaultError !== "" ? {} : { bottom: 0.5, right: 2, ...badgeOffset };
+  const iconBadgeOffset =
+    value === undefined || defaultError !== "" || (value !== undefined && progress !== undefined)
+      ? {}
+      : { bottom: 0.5, right: 2, ...badgeOffset };
   const iconContainer = { ...centerHV, height: sh40, width: sw40, ...iconBadgeOffset };
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={container}>
-        {value === undefined || defaultError !== "" ? (
+        {value === undefined || defaultError !== "" || (value !== undefined && progress !== undefined) ? (
           <View style={iconContainer}>
             <IcoMoon color={colorBlue._1} name={icon?.inactive || "file-upload"} size={sh32} />
           </View>
@@ -209,7 +232,26 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
               </Fragment>
             ) : null}
             <Text style={{ ...fs12RegGray5, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
+            {progress !== undefined ? (
+              <Fragment>
+                <CustomFlexSpacer />
+                <Text style={fs12RegBlack2}>{`${Math.round((progress.loaded / progress.total) * 100)}%`}</Text>
+              </Fragment>
+            ) : null}
           </View>
+          {progress !== undefined ? (
+            <View>
+              <CustomSpacer space={sh8} />
+              <Bar
+                borderWidth={0}
+                color={colorGreen._1}
+                height={sh8}
+                progress={progress.loaded / progress.total}
+                unfilledColor={colorBlue._2}
+                width={sw520}
+              />
+            </View>
+          ) : null}
         </View>
         <CustomFlexSpacer />
         {value !== undefined && customFeature === undefined ? (

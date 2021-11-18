@@ -1,3 +1,5 @@
+import "react-native-get-random-values";
+
 import Amplify from "aws-amplify";
 import React from "react";
 import { AppRegistry } from "react-native";

@@ -12,6 +12,7 @@ import {
   centerHV,
   centerVertical,
   circle,
+  colorBlack,
   colorBlue,
   colorGreen,
   colorRed,
@@ -78,6 +79,9 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   const MAX_SIZE_BYTE = maxFileSizeMB || DEFAULT_MAX_SIZE_MB;
 
   let uploadLabel = UPLOAD.LABEL_NO_FILE;
+  const descriptionStyle: TextStyle = { ...fs12RegGray5 };
+
+  let fileSizeLabel: string | undefined;
 
   if (value !== undefined) {
     const fileNameArray = value.name.split(".");
@@ -88,9 +92,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     const valueSize = value.size !== undefined ? value.size : -1;
     const fileSizeUnit = valueSize >= 100000 ? "MB" : "KB";
     const fileSize = valueSize >= 100000 ? valueSize / BYTE_TO_MEGABYTE : valueSize / BYTE_TO_KILOBYTE;
-    const fileSizeLabel = valueSize !== -1 ? `- ${fileSize.toFixed(2)}${fileSizeUnit}` : "";
+    fileSizeLabel = valueSize !== -1 ? `- ${fileSize.toFixed(2)}${fileSizeUnit}` : "";
 
-    uploadLabel = `${shortFileName}.${selectedExtension} ${fileSizeLabel}`;
+    uploadLabel = `${shortFileName}.${selectedExtension} `;
+    descriptionStyle.color = colorBlack._2;
   }
 
   const defaultError = errorMessage !== undefined ? errorMessage : error;
@@ -100,9 +105,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   const generateName = (mime: string, filename?: string) => {
     const moments = moment();
     const ext = mime.substring(mime.lastIndexOf("/") + 1);
+    const type = mime === "application/pdf" ? "DOC" : "IMG";
     return useOriginalName === true && filename !== undefined && filename !== null
       ? filename
-      : `KIB IMG ${moments.format(CALENDAR_FORMAT)} at ${moments.format(TIME_SECONDS_FORMAT)}.${ext}`;
+      : `KIB ${type} ${moments.format(CALENDAR_FORMAT)} at ${moments.format(TIME_SECONDS_FORMAT)}.${ext}`;
   };
 
   const handleDocumentResult = async (results: DocumentPickerResponse) => {
@@ -231,7 +237,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
                 <CustomSpacer isHorizontal={true} space={sw4} />
               </Fragment>
             ) : null}
-            <Text style={{ ...fs12RegGray5, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
+            <View style={{ ...centerVertical, ...flexRow }}>
+              <Text style={{ ...descriptionStyle, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
+              {value !== undefined && fileSizeLabel ? <Text style={fs12RegGray5}>{fileSizeLabel}</Text> : null}
+            </View>
             {progress !== undefined ? (
               <Fragment>
                 <CustomFlexSpacer />

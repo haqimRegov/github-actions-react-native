@@ -1,3 +1,9 @@
+import lodashCamelCase from "camelcase";
+
+export const camelCaseString = (value: string) => {
+  return lodashCamelCase(value);
+};
+
 export const parseAmount = (input: string) => {
   return parseFloat(input.replace(/[,]/g, ""));
 };

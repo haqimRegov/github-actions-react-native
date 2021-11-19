@@ -19,11 +19,10 @@ import {
   fs16BoldGray6,
   px,
   py,
-  sh12,
   sh16,
   sh4,
   sw1,
-  sw12,
+  sw10,
   sw14,
   sw16,
   sw24,
@@ -33,6 +32,7 @@ import {
   sw62,
   sw8,
 } from "../../../styles";
+import { shortenString } from "../../../utils";
 
 const { DASHBOARD_EDD_CASE } = Language.PAGE;
 
@@ -160,6 +160,12 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                                     <Fragment>
                                       {content.length > 0
                                         ? (content as FileBase64[]).map((eachData: FileBase64, eachDataIndex: number) => {
+                                            const { name } = eachData;
+                                            const fileNameArray = name.split(".");
+                                            const selectedName = fileNameArray.splice(fileNameArray.length - 2, 1).join("");
+                                            const [selectedExtension] = fileNameArray.slice(-1);
+                                            const shortFileName = shortenString(selectedName, 20, 28);
+                                            const uploadLabel = `${shortFileName}.${selectedExtension}`;
                                             return (
                                               <TouchableWithoutFeedback
                                                 key={eachDataIndex}
@@ -168,10 +174,10 @@ export const PreviousData: FunctionComponent<IPreviousDataProps> = ({ data, setF
                                                 }>
                                                 <View key={eachDataIndex}>
                                                   <View style={flexRow}>
-                                                    <Text style={fs16BoldGray6}>{eachData.name}</Text>
+                                                    <Text style={{ ...fs16BoldGray6, maxWidth: sw280 }}>{uploadLabel}</Text>
                                                     <View style={{ ...flexRow, ...centerVertical }}>
-                                                      <CustomSpacer isHorizontal={true} space={sw12} />
-                                                      <IcoMoon color={colorBlue._8} name="file" size={sh12} />
+                                                      <CustomSpacer isHorizontal={true} space={sw10} />
+                                                      <IcoMoon color={colorBlue._8} name="file" size={sw16} />
                                                     </View>
                                                   </View>
                                                 </View>

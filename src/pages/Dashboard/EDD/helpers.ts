@@ -19,7 +19,8 @@ const handleS3Upload = async (
     const promises = answers.map(async (answer: IQuestionData) => {
       const { hasDoc, document } = answer;
       if (hasDoc === true && document !== undefined) {
-        const path = `edd/${caseId}/${reRouteCount}/document/${document.name}`;
+        const questionId = id !== null ? id : "aq";
+        const path = `edd/${caseId}/${reRouteCount}/${questionId}/${document.name}`;
         // Cannot upload the base64. So, using the path to get file and convert it to blob.
         const documentObject = document.type !== "application/pdf" ? await fetch(document.path!) : undefined;
         let pdfObject: Response | undefined;
@@ -65,7 +66,9 @@ const handleS3Upload = async (
 
       const updatedTempAnswer: IQuestionData = deleteKey(actualAnswers, ["checkboxToggle"]);
       const formattedTempAnswer: IQuestionDataRequest =
-        updatedTempAnswer.answer !== undefined ? updatedTempAnswer : deleteKey(updatedTempAnswer, ["answer"]);
+        updatedTempAnswer.answer !== undefined && Object.keys(answer!).length !== 0 && updatedTempAnswer.answer !== null
+          ? updatedTempAnswer
+          : deleteKey(updatedTempAnswer, ["answer"]);
       const { document } = updatedTempAnswer;
       let subSectionObject: ISubSection = {};
       if ("subSection" in tempAnswer && tempAnswer.subSection !== undefined) {
@@ -124,7 +127,7 @@ export const handleDataToSubmit = async (
       const { question, answers } = additional;
       formattedAdditionalData.push({
         question: question,
-        answers: JSON.stringify([{ ...answers[0], answer: null }]),
+        answers: JSON.stringify([answers[0]]),
       });
     });
   }

@@ -18,7 +18,10 @@ export const EDDFilter: FunctionComponent<EDDFilterProps> = ({ activeTab, filter
   const { dateSorting, startDate, endDate, caseStatus } = filter;
 
   const handleStartDate = (value?: Date) => {
-    setFilter({ ...filter, startDate: value });
+    if (value !== undefined && endDate !== undefined) {
+      const updatedDate = value < endDate ? value : endDate;
+      setFilter({ ...filter, startDate: updatedDate });
+    }
   };
 
   const handleEndDate = (value?: Date) => {

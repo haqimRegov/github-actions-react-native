@@ -26,6 +26,7 @@ import {
   sw18,
   sw296,
   sw36,
+  sw360,
   sw54,
   sw66,
   sw7,
@@ -152,29 +153,35 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
 
                 const handleBlur = () => {
                   const tempAnswers: IQuestionData[] = [...data.answers];
-                  const value = tempAnswers[0].subSection![defaultKey].answer! as string;
-                  let updatedAnswer = "";
-                  let checkInput: IInputValidation = { error: false, errorMessage: "" };
-                  if (format !== null && format !== undefined && format.type === "amount") {
-                    const cleanValue = value.replace(/[,]/g, "");
-                    updatedAnswer =
-                      isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === false
-                        ? (tempAnswers[0].subSection![defaultKey].answer! as string)
-                        : formatAmount(cleanValue);
-                    checkInput =
-                      isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === true
-                        ? { ...checkInput }
-                        : { error: true, errorMessage: ERROR.INVESTMENT_INVALID_AMOUNT };
-                  } else if (format !== null && format !== undefined && format.type !== undefined) {
-                    updatedAnswer = value;
-                    checkInput = validateInput(value, format.type);
+                  if (
+                    "subSection" in tempAnswers[0] &&
+                    tempAnswers[0].subSection !== undefined &&
+                    defaultKey in tempAnswers[0].subSection
+                  ) {
+                    const value = tempAnswers[0].subSection![defaultKey].answer! as string;
+                    let updatedAnswer = "";
+                    let checkInput: IInputValidation = { error: false, errorMessage: "" };
+                    if (format !== null && format !== undefined && format.type === "amount") {
+                      const cleanValue = value.replace(/[,]/g, "");
+                      updatedAnswer =
+                        isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === false
+                          ? (tempAnswers[0].subSection![defaultKey].answer! as string)
+                          : formatAmount(cleanValue);
+                      checkInput =
+                        isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === true
+                          ? { ...checkInput }
+                          : { error: true, errorMessage: ERROR.INVESTMENT_INVALID_AMOUNT };
+                    } else if (format !== null && format !== undefined && format.type !== undefined) {
+                      updatedAnswer = value;
+                      checkInput = validateInput(value, format.type);
+                    }
+                    const error = checkInput.errorMessage !== "" ? { error: checkInput.errorMessage } : {};
+                    tempAnswers[0] = {
+                      ...tempAnswers[0],
+                      subSection: { ...tempAnswers[0].subSection, [defaultKey]: { answer: updatedAnswer, ...error } },
+                    };
+                    setData({ ...data, answers: tempAnswers });
                   }
-                  const error = checkInput.errorMessage !== "" ? { error: checkInput.errorMessage } : {};
-                  tempAnswers[0] = {
-                    ...tempAnswers[0],
-                    subSection: { ...tempAnswers[0].subSection, [defaultKey]: { answer: updatedAnswer, ...error } },
-                  };
-                  setData({ ...data, answers: tempAnswers });
                 };
 
                 const handleRemark = (text: string) => {
@@ -247,16 +254,20 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                     content = (
                       <View style={{ ...px(sw36) }}>
                         <CustomSpacer space={sh16} />
-                        <NewDropdown
-                          handleChange={(text: string) => handleDropdown(defaultKey, text)}
-                          items={questionDropdownValues}
-                          label={insideOption.title}
-                          value={
-                            subSection !== undefined && subSection[defaultKey] !== undefined && subSection[defaultKey].answer !== undefined
-                              ? (subSection[defaultKey].answer as string)
-                              : ""
-                          }
-                        />
+                        <View style={{ width: sw360 }}>
+                          <NewDropdown
+                            handleChange={(text: string) => handleDropdown(defaultKey, text)}
+                            items={questionDropdownValues}
+                            label={insideOption.title}
+                            value={
+                              subSection !== undefined &&
+                              subSection[defaultKey] !== undefined &&
+                              subSection[defaultKey].answer !== undefined
+                                ? (subSection[defaultKey].answer as string)
+                                : ""
+                            }
+                          />
+                        </View>
                       </View>
                     );
                     break;

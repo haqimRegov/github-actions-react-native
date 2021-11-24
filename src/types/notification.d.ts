@@ -3,6 +3,7 @@ declare interface INotificationItem {
   id: string;
   isRead: boolean;
   isSeen: boolean;
+  localIsRead: boolean;
   message: string;
   sender?: string;
   source?: string;

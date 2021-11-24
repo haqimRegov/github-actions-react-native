@@ -51,14 +51,14 @@ export const NotificationList: FunctionComponent<NotificationListProps> = ({
         ) : null}
       </View>
       {items.map((item: INotificationItem, index: number) => {
-        const { createdAt, id, isRead, isSeen, title, message } = item;
+        const { createdAt, id, isRead, isSeen, localIsRead, title, message } = item;
         const subtitle = moment(createdAt, "x").format(DEFAULT_TIME_FORMAT);
         const handlePress = () => {
           if (onPress !== undefined) {
             onPress(item);
           }
         };
-        const unreadStyle: ViewStyle = isRead === true ? { backgroundColor: colorBlue._2 } : shadow12Blue104;
+        const unreadStyle: ViewStyle = isRead === true || localIsRead ? { backgroundColor: colorBlue._2 } : shadow12Blue104;
 
         const avatar = avatarProps !== undefined ? avatarProps(item) : undefined;
 

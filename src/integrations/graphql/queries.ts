@@ -430,11 +430,11 @@ const listPaymentRequired = gql`
       data {
         result {
           orderNumber
-          allowedRecurringType
-          epfAccountNumber
           paymentType
           status
           createdOn
+          allowedRecurringType
+          epfAccountNumber
           totalInvestment {
             currency
             amount
@@ -443,30 +443,60 @@ const listPaymentRequired = gql`
             currency
             amount
           }
-          surplusBalance
           paymentCount
           funds {
             distributionInstruction
-            fundClass
-            fundCurrency
             fundingOption
-            fundIssuer
-            fundName
             fundType
+            fundClass
+            fundName
+            fundIssuer
+            fundCurrency
             investmentAmount
-            isEpf
-            isFea
-            isScheduled
-            isSyariah
             salesCharge
             scheduledInvestmentAmount
             scheduledSalesCharge
+            isFea
+            isScheduled
+            isEpf
+            isSyariah
           }
-          payment {
-            id
-            title
-            url
-            name
+          surplusBalance {
+            parent
+            orderNumber
+            excess {
+              currency
+              amount
+            }
+            currency
+            amount
+            paymentMethod
+            transactionDate
+            referenceNumber
+            kibBankName
+            kibBankAccountNumber
+            bankName
+            checkNumber
+            clientName
+            clientTrustAccountNumber
+            epfReferenceNo
+            epfAccountNumber
+            bankAccountName
+            bankAccountNumber
+            recurringType
+            recurringBank
+            frequency
+            remark
+            proof {
+              id
+              name
+              url
+              type
+            }
+          }
+          ctaDetails {
+            clientName
+            clientTrustAccountNumber
           }
         }
       }

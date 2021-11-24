@@ -29,7 +29,10 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
   const { dateSorting, startDate, endDate, transactionsType, accountType, orderStatus } = filter;
 
   const handleStartDate = (value?: Date) => {
-    setFilter({ ...filter, startDate: value });
+    if (value !== undefined && endDate !== undefined) {
+      const updatedDate = value < endDate ? value : endDate;
+      setFilter({ ...filter, startDate: updatedDate });
+    }
   };
 
   const handleEndDate = (value?: Date) => {

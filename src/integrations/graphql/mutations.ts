@@ -423,6 +423,7 @@ const submitProofOfPayments = gql`
           }
           withFloating
           message
+          txRef
         }
       }
       error {

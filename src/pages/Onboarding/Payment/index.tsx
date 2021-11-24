@@ -104,7 +104,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } catch (error: any) {
                 // eslint-disable-next-line no-console
-                console.log("Error in Uploading", error);
+                // console.log("Error in Uploading", error);
                 return ERRORS.storage;
               }
             }),

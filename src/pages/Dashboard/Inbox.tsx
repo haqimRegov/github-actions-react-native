@@ -78,6 +78,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
             id: message.notificationId,
             isRead: message.isRead,
             isSeen: message.isSeen,
+            localIsRead: message.isRead,
             message: message.message,
             title: message.title,
             sender: message.senderName,
@@ -140,12 +141,19 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
     }
   };
 
-  const handleRead = async (request: IUpdateSeenRequest) => {
+  const handleRead = async (request: IUpdateSeenRequest, id: string) => {
     const response: IUpdateInboxResponse = await updateSeen(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
-        await handleFetch(inboxList.page);
+        const updatedInboxList = [...inboxList.notifications].map((eachNotification: INotificationList) => {
+          const updatedNotifications = eachNotification.messages.map((eachMessage: INotificationItem) => {
+            const updateLocalIsRead = eachMessage.id === id ? true : eachMessage.localIsRead;
+            return { ...eachMessage, localIsRead: updateLocalIsRead };
+          });
+          return { date: eachNotification.date, messages: updatedNotifications };
+        });
+        setInboxList({ ...inboxList, notifications: updatedInboxList });
       }
       if (error !== null) {
         setTimeout(() => {
@@ -171,7 +179,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
   const handleMessage = async (notification: INotificationItem) => {
     if (notification.isRead === false) {
       const request: IUpdateSeenRequest = { dashboard: "getinbox", tab: ["notification"], referenceKey: notification.id };
-      await handleRead(request);
+      await handleRead(request, notification.id);
     }
   };
 

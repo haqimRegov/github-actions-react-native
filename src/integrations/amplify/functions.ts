@@ -14,7 +14,7 @@ const put = async (path: string, url: string, type: string) => {
       },
     });
     // eslint-disable-next-line no-console
-    console.log("Response from Storage.Put", response);
+    // console.log("Response from Storage.Put", response);
     return res;
   } catch (error) {
     console.warn("Error in Storage.Put integrations/amplify/functions.ts", error);

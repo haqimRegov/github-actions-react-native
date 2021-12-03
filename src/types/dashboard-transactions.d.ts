@@ -64,7 +64,15 @@ declare type TransactionsSortColumnType =
   | "orderNumber"
   | "principal"
   | "totalInvestment"
-  | "transactionType";
+  | "transactionType"
+  | "status";
+
+declare type TDateType = "Created On" | "Last Updated";
+
+declare interface IShowDateBy {
+  key: TSortType;
+  type: TDateType;
+}
 
 declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";

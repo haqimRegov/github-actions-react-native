@@ -6,6 +6,14 @@ declare type IEDDStatusKey = "pending" | "completed" | "overdue1" | "overdue2" |
 declare type IEDDStatusType = "Pending" | "Completed" | "Overdue-1" | "Overdue-2" | "Submitted" | "Cancelled";
 declare type IEDDStatus = Record<IEDDStatusKey, IEDDStatusType>;
 
+declare type TEDDDateType = "Created On" | "Last Updated";
+declare type TSortType = "ascending" | "descending";
+
+declare interface IEDDShowDateBy {
+  key: TSortType;
+  type: TEDDDateType;
+}
+
 declare interface IEDDStatusLabelValue {
   label: IEDDStatusType;
   value: IEDDStatusType;
@@ -24,6 +32,7 @@ declare interface IEDDDashboardCase {
   clientName: string;
   closeDate?: string;
   createdOn: string;
+  lastUpdated: string;
   daysRemaining?: string;
   isSeen: boolean;
   remark?: IDashboardRemark[];

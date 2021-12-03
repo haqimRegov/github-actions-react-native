@@ -52,6 +52,7 @@ const DEFAULT_MAX_SIZE_MB = BYTE_TO_MEGABYTE * 5;
 export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadProps>((props, ref) => {
   const {
     badgeOffset,
+    completed,
     containerStyle,
     customFeature,
     errorMessage,
@@ -214,7 +215,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={container}>
-        {value === undefined || defaultError !== "" || (value !== undefined && progress !== undefined) ? (
+        {value === undefined ||
+        defaultError !== "" ||
+        (value !== undefined && progress !== undefined) ||
+        (completed !== undefined && completed === false) ? (
           <View style={iconContainer}>
             <IcoMoon color={colorBlue._1} name={icon?.inactive || "file-upload"} size={sh32} />
           </View>

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../../assets/images/LocalAssets";
 import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
+import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { getEDDDashboard } from "../../../../../network-actions/edd/Dashboard";
@@ -19,6 +20,7 @@ import {
   fsTransformNone,
   justifyContentStart,
   px,
+  sh13,
   sh32,
   sw103,
   sw112,
@@ -30,9 +32,9 @@ import {
   sw64,
   sw8,
 } from "../../../../../styles";
+import { AnimationUtils } from "../../../../../utils";
 import { OrderRemarks } from "../../../Transactions/ApplicationHistory/OrderRemarks";
 import { EDDCustomTableItem } from "../CustomItems";
-import { IShowDateBy, TDateType, TSortType } from "../NewCaseTab";
 
 const { EMPTY_STATE, DASHBOARD_EDD, DASHBOARD_HOME } = Language.PAGE;
 
@@ -58,14 +60,15 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   updateHistorySort,
 }: HistoryProps) => {
   const { filter, page, cases, sort } = history;
-  const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
+  const [showDateBy, setShowDateBy] = useState<IEDDShowDateBy>({ type: "Last Updated", key: "descending" });
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
 
-  const handleShowDateBy = (text: TDateType, key: TSortType) => {
-    setShowDateBy({ type: text, key: key });
+  const handleShowDateBy = (text: TEDDDateType, key: TSortType) => {
+    const newKey = key === "ascending" ? "descending" : "ascending";
+    setShowDateBy({ type: text, key: newKey });
     const sortColumns = sort.map((eachSortType) => eachSortType.column);
-    const sortType = text === "Case Created On" ? "caseCreated" : "lastUpdated";
-    const newSort: IEDDDashboardSort = sortColumns.includes(sortType) ? { ...sort[0], value: key } : { column: sortType, value: key };
+    const sortType = text === "Created On" ? "caseCreated" : "lastUpdated";
+    const newSort: IEDDDashboardSort = sortColumns.includes(sortType) ? { ...sort[0], value: newKey } : { column: sortType, value: newKey };
     updateHistorySort([newSort]);
   };
 
@@ -153,15 +156,11 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   };
 
   const showDatePopupContent: IHeaderPopupContent[] = [
-    { icon: { name: "arrow-up" }, key: "descending", text: DASHBOARD_EDD.LABEL_CASE_CREATED_ON },
-    { icon: { name: "arrow-down" }, key: "ascending", text: DASHBOARD_EDD.LABEL_CASE_CREATED_ON },
-    { icon: { name: "arrow-up" }, key: "descending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
-    { icon: { name: "arrow-down" }, key: "ascending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
+    { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_CREATED_ON },
+    { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
   ];
 
-  const popupContentIndex = showDatePopupContent.findIndex(
-    (content: IHeaderPopupContent) => content.text === showDateBy.type && content.key === showDateBy.key,
-  );
+  const popupContentIndex = showDatePopupContent.findIndex((content: IHeaderPopupContent) => content.text === showDateBy.type);
 
   const renderAccordion = cases.length !== 0 ? tableAccordion : undefined;
 
@@ -175,59 +174,77 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   const sortAccountNo = findAccountNo.length > 0 ? findAccountNo[0].value : "ascending";
   const sortClosedOn = findClosedOn.length > 0 ? findClosedOn[0].value : "ascending";
   const sortStatus = findStatus.length > 0 ? findStatus[0].value : "ascending";
+  const sortedColumns = sort.map((currentSortType) => currentSortType.column);
+
+  const checkLoading = (functionToBeCalled: () => void) => {
+    if (isFetching === false) {
+      functionToBeCalled();
+    }
+  };
 
   const columns: ITableColumn[] = [
     {
-      icon: { name: sortCaseId === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "caseNo", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
-      onPressHeader: handleSortCaseId,
+      icon: { name: sortCaseId === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        {
+          key: "caseNo",
+          textStyle: { ...fs12RegBlue1, ...fsTransformNone, fontFamily: sortedColumns.includes("caseNo") ? NunitoBold : NunitoRegular },
+        },
+      ],
+      onPressHeader: () => checkLoading(handleSortCaseId),
       viewStyle: { width: sw112 },
       title: DASHBOARD_EDD.LABEL_EDD_CASE_ID,
+      titleStyle: sortedColumns.includes("caseNo") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
     {
       customItem: true,
-      icon: { name: sortName === "descending" ? "arrow-up" : "arrow-down" },
+      icon: { name: sortName === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "clientName", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
-      onPressHeader: handleSortName,
+      onPressHeader: () => checkLoading(handleSortName),
       viewStyle: { width: sw159 },
       title: DASHBOARD_EDD.LABEL_INVESTOR_NAME,
+      titleStyle: sortedColumns.includes("clientName") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
     {
-      icon: { name: sortAccountNo === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "accountNo", textStyle: fs12RegBlue1 }],
-      onPressHeader: handleSortAccountNo,
+      icon: { name: sortAccountNo === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        { key: "accountNo", textStyle: { ...fs12RegBlue1, fontFamily: sortedColumns.includes("accountNo") ? NunitoBold : NunitoRegular } },
+      ],
+      onPressHeader: () => checkLoading(handleSortAccountNo),
       viewStyle: { width: sw103 },
       textStyle: fsTransformNone,
       title: DASHBOARD_EDD.LABEL_ACCOUNT_NO,
-      titleStyle: fsTransformNone,
+      titleStyle: sortedColumns.includes("accountNo") ? { ...fsTransformNone, ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
     {
       customItem: true,
       customHeader: true,
       icon: { name: "caret-down" },
-      key: [{ key: "createdOn", textStyle: fs12RegBlue1 }],
-      onPressHeader: handleSortCreatedOn,
+      key: [{ key: showDateBy.type === DASHBOARD_EDD.LABEL_CASE_CREATED_ON ? "createdOn" : "lastUpdated", textStyle: fs12RegBlue1 }],
+      onPressHeader: () => checkLoading(handleSortCreatedOn),
       itemStyle: { ...justifyContentStart, ...px(sw8) },
       viewStyle: { width: sw119, ...px(0), ...centerHorizontal },
       title: showDateBy.type,
     },
     {
       customItem: true,
-      icon: { name: sortClosedOn === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "lastUpdated", textStyle: fs12RegBlue1 }],
-      onPressHeader: handleSortClosedOn,
+      icon: { name: sortClosedOn === "descending" ? "arrow-down" : "arrow-up" },
+      key: [{ key: "lastUpdated", textStyle: fs12RegBlue1, name: "closeDate" }],
+      onPressHeader: () => checkLoading(handleSortClosedOn),
       viewStyle: { width: sw119 },
       title: DASHBOARD_EDD.LABEL_CASE_CLOSED_ON,
+      titleStyle: sortedColumns.includes("closeDate") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
     {
       customItem: true,
       withAccordion: true,
-      icon: { name: sortStatus === "descending" ? "arrow-up" : "arrow-down" },
+      icon: { name: sortStatus === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "status" }],
-      onPressHeader: handleSortStatus,
+      onPressHeader: () => checkLoading(handleSortStatus),
       viewStyle: { width: sw119 },
       onPressItem: handleShowRemarks,
       title: DASHBOARD_EDD.LABEL_STATUS,
+      titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
     {
       itemIcon: { name: "eye-show", size: sw20 },
@@ -246,7 +263,9 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
     // The closeDate and lastUpdated are same in backend.Due to limitation of backend.
     const checkSort: IEDDDashboardSort[] =
       sort.length > 0 && sort[0].column === "closeDate" ? [{ ...sort[0], column: "lastUpdated" }] : sort;
-    const defaultSort: IEDDDashboardSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkSort;
+    const checkStatusSort: IEDDDashboardSort[] =
+      findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : checkSort;
+    const defaultSort: IEDDDashboardSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
     const request: IEDDDashboardRequest = {
       tab: "history",
       page: page,
@@ -330,18 +349,32 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
         data={isFetching === true ? [] : cases}
         handleRowNavigation={handlePressCase}
         headerPopup={{
-          content: showDatePopupContent,
+          content: showDatePopupContent.map((_content, contentIndex) =>
+            contentIndex === popupContentIndex
+              ? {
+                  ..._content,
+                  icon: { ..._content.icon, name: showDateBy.key === "ascending" ? "arrow-up" : "arrow-down" },
+                  key: showDateBy.key,
+                }
+              : _content,
+          ),
           onPressContent: ({ hide, text, key }) => {
-            handleShowDateBy(text as TDateType, key as TSortType);
-            hide();
+            handleShowDateBy(text as TEDDDateType, key as TSortType);
+            AnimationUtils.layout({ duration: 400 });
+            setTimeout(() => {
+              hide();
+            }, 1000);
           },
           selectedIndex: [popupContentIndex],
           title: showDateBy.type,
-          titleStyle: fs10BoldBlue1,
+          titleStyle:
+            sortedColumns.includes("lastUpdated") || sortedColumns.includes("caseCreated")
+              ? { ...fs10BoldBlue1, lineHeight: sh13 }
+              : { fontFamily: NunitoRegular },
           viewStyle: { width: sw119 },
         }}
         RenderAccordion={renderAccordion}
-        RenderCustomItem={(data: ITableCustomItem) => <EDDCustomTableItem {...data} />}
+        RenderCustomItem={(data: ITableCustomItem) => <EDDCustomTableItem {...data} sortedColumns={sortedColumns} />}
         RenderEmptyState={() => (
           <EmptyTable hintText={hintText} illustration={illustration} loading={isFetching} title={title} subtitle={subtitle} />
         )}

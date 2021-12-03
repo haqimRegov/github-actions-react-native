@@ -17,7 +17,7 @@ export const eddInitialState: IEDDState = {
     page: 1,
     pages: 1,
     pill: "pending",
-    sort: [],
+    sort: [{ value: "descending", column: "lastUpdated" }],
   },
   history: {
     filter: {
@@ -30,7 +30,7 @@ export const eddInitialState: IEDDState = {
     page: 1,
     pages: 1,
     pill: "history",
-    sort: [],
+    sort: [{ value: "descending", column: "lastUpdated" }],
   },
   newCount: 0,
   historyCount: 0,

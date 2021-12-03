@@ -9,9 +9,12 @@ import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, colorBlue, flexRow, fs10RegBlue6, sh16, sh4, sw12 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
-export type PendingStatusProps = ITableCustomItem;
 
-export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
+export interface PendingStatusProps extends ITableCustomItem {
+  sortedColumns: TransactionsSortColumnType[];
+}
+
+export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item, sortedColumns }: PendingStatusProps) => {
   const { dueDate, remark, status, withHardcopy } = item.rawData as IDashboardOrder;
   let statusColor: TagColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {

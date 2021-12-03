@@ -2,6 +2,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { Badge, CustomSpacer } from "../../../../../components";
+import { NunitoBold } from "../../../../../constants";
 import { IcoMoon } from "../../../../../icons";
 import {
   centerHV,
@@ -20,13 +21,16 @@ import {
   sw8,
 } from "../../../../../styles";
 
-export type InvestorNameProps = ITableCustomItem;
+export interface InvestorNameProps extends ITableCustomItem {
+  sortedColumns: TransactionsSortColumnType[];
+}
 
-export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
+export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item, sortedColumns }: InvestorNameProps) => {
   const { accountType, investorName, isSeen } = item.rawData as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
-  const titleStyle: TextStyle = { ...fs12RegBlue1, maxWidth: sw100 };
-  const subtitleStyle: TextStyle = { ...fs10RegBlue6, maxWidth: sw100 };
+  const updatedTextStyle: TextStyle = sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {};
+  const titleStyle: TextStyle = { ...fs12RegBlue1, ...updatedTextStyle, maxWidth: sw100 };
+  const subtitleStyle: TextStyle = { ...fs10RegBlue6, ...updatedTextStyle, maxWidth: sw100 };
   const badgeStyle: ViewStyle = {
     ...circle(sw8, colorRed._1),
     top: 0,

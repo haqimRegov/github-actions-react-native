@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { NunitoBold, NunitoSemiBold } from "../../constants";
+import { NunitoSemiBold } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
   centerHV,
@@ -17,6 +17,7 @@ import {
   px,
   py,
   sh12,
+  sh16,
   sh24,
   sh4,
   sw24,
@@ -93,7 +94,8 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "prim
   const tagTextStyle: TextStyle = {
     ...fs12BoldWhite1,
     color: tagTextColor,
-    fontFamily: color === "secondary" ? NunitoSemiBold : NunitoBold,
+    fontFamily: NunitoSemiBold,
+    lineHeight: sh16,
     ...textStyle,
   };
 

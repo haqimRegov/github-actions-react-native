@@ -5,6 +5,7 @@ declare type TypeUploadTaskProgressEvent = import("@aws-amplify/storage/lib-esm/
 
 declare interface UploadProps {
   badgeOffset?: { bottom?: number; left?: number; right?: number; top?: number };
+  completed?: boolean;
   containerStyle?: import("react-native").ViewStyle;
   customFeature?: import("react").ReactNode;
   errorMessage?: string;

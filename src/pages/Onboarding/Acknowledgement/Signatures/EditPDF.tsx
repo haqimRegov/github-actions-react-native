@@ -44,7 +44,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   const [jointSignature, setJointSignature] = useState<string>(
     editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
   );
-
+  const [modalLoading, setModalLoading] = useState<boolean>(false);
+  const [continueLoading, setContinueLoading] = useState<boolean>(false);
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
@@ -178,6 +179,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const handleConfirm = () => {
+    setModalLoading(true);
     if (showSignPdf === true) {
       setTimeout(() => {
         if (signer === "adviser") {
@@ -246,39 +248,43 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const handleSave = () => {
-    const updatedReceipts = [...receipts!];
-    const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
-    const adviser = {
-      base64: adviserSignature,
-      date: `${moment().valueOf()}`,
-      name: "AdviserSignature.png",
-      type: "image/png",
-    };
-    const principal = {
-      base64: principalSignature,
-      date: `${moment().valueOf()}`,
-      name: "PrincipalSignature.png",
-      type: "image/png",
-    };
-    const joint =
-      accountType === "Individual"
-        ? undefined
-        : {
-            base64: jointSignature,
-            date: `${moment().valueOf()}`,
-            name: "JointSignature.png",
-            type: "image/png",
-          };
-    updatedReceipts[receiptIndex] = {
-      ...updatedReceipts[receiptIndex],
-      signedPdf: editReceipt!.signedPdf,
-      adviserSignature: adviser,
-      principalSignature: principal,
-      jointSignature: joint,
-      completed: true,
-    };
-    updateReceipts(updatedReceipts);
-    setEditReceipt(undefined);
+    setContinueLoading(true);
+    setTimeout(() => {
+      const updatedReceipts = [...receipts!];
+      const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
+      const adviser = {
+        base64: adviserSignature,
+        date: `${moment().valueOf()}`,
+        name: "AdviserSignature.png",
+        type: "image/png",
+      };
+      const principal = {
+        base64: principalSignature,
+        date: `${moment().valueOf()}`,
+        name: "PrincipalSignature.png",
+        type: "image/png",
+      };
+      const joint =
+        accountType === "Individual"
+          ? undefined
+          : {
+              base64: jointSignature,
+              date: `${moment().valueOf()}`,
+              name: "JointSignature.png",
+              type: "image/png",
+            };
+      updatedReceipts[receiptIndex] = {
+        ...updatedReceipts[receiptIndex],
+        signedPdf: editReceipt!.signedPdf,
+        adviserSignature: adviser,
+        principalSignature: principal,
+        jointSignature: joint,
+        completed: true,
+      };
+      updateReceipts(updatedReceipts);
+      setEditReceipt(undefined);
+      setContinueLoading(false);
+    }, 500);
   };
 
   const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
@@ -290,6 +296,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
 
   useEffect(() => {
+    if (showSignPdf === false) {
+      setModalLoading(false);
+    }
+  }, [showSignPdf]);
+
+  useEffect(() => {
+    setModalLoading(false);
     if (signer !== undefined) {
       setTimeout(() => {
         calculatePosition();
@@ -312,9 +325,11 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     <PdfView
       adviserSignature={adviserSignature}
       completed={completed}
+      continueLoading={continueLoading}
       editReceipt={editReceipt}
       principalSignature={principalSignature}
       jointSignature={jointSignature}
+      modalLoading={modalLoading}
       showSignPdf={showSignPdf}
       signer={signer}
       handleScroll={handleScroll}

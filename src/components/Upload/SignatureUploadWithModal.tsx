@@ -125,11 +125,11 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
         customFeature={
           <Fragment>
             {uploadProps.completed === true ? (
-              <Fragment>
+              <View style={{ ...centerVertical, ...flexRow }}>
                 <Tag color="complete" text={uploadProps.completedText!} />
                 <CustomSpacer isHorizontal={true} space={sw16} />
                 <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
-              </Fragment>
+              </View>
             ) : (
               <View style={{ width: sw84 }}>
                 {uploadProps.tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}

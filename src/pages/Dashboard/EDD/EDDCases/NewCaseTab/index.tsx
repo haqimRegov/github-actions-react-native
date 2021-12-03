@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../../assets/images/LocalAssets";
 import { AdvanceTable, CustomSpacer, EmptyTable, Tag } from "../../../../../components";
+import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { getEDDDashboard } from "../../../../../network-actions/edd";
@@ -23,6 +24,7 @@ import {
   fsTransformNone,
   justifyContentStart,
   px,
+  sh13,
   sh18,
   sh32,
   sw103,
@@ -37,6 +39,7 @@ import {
   sw8,
   sw95,
 } from "../../../../../styles";
+import { AnimationUtils } from "../../../../../utils";
 import { OrderRemarks } from "../../../Transactions/ApplicationHistory/OrderRemarks";
 import { EDDCustomTableItem } from "../CustomItems";
 
@@ -54,14 +57,6 @@ export interface NewCasesProps extends EDDStoreProps {
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: EDDPageType) => void;
-}
-
-export type TDateType = "Case Created On" | "Last Updated";
-export type TSortType = "ascending" | "descending";
-
-export interface IShowDateBy {
-  key: TSortType;
-  type: TDateType;
 }
 
 const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
@@ -82,13 +77,14 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   const { filter, page, cases, sort, pill } = edd.new;
   // const fetching = useRef<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
-  const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
+  const [showDateBy, setShowDateBy] = useState<IEDDShowDateBy>({ type: "Last Updated", key: "descending" });
 
-  const handleShowDateBy = (text: TDateType, key: TSortType) => {
-    setShowDateBy({ type: text, key: key });
+  const handleShowDateBy = (text: TEDDDateType, key: TSortType) => {
+    const newKey = key === "ascending" ? "descending" : "ascending";
+    setShowDateBy({ type: text, key: newKey });
     const sortColumns = sort.map((eachSortType) => eachSortType.column);
-    const sortType = text === "Case Created On" ? "caseCreated" : "lastUpdated";
-    const newSort: IEDDDashboardSort = sortColumns.includes(sortType) ? { ...sort[0], value: key } : { column: sortType, value: key };
+    const sortType = text === "Created On" ? "caseCreated" : "lastUpdated";
+    const newSort: IEDDDashboardSort = sortColumns.includes(sortType) ? { ...sort[0], value: newKey } : { column: sortType, value: newKey };
     updateNewCasesSort([newSort]);
   };
 
@@ -230,15 +226,11 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   ];
 
   const showDatePopupContent: IHeaderPopupContent[] = [
-    { icon: { name: "arrow-up" }, key: "descending", text: DASHBOARD_EDD.LABEL_CASE_CREATED_ON },
-    { icon: { name: "arrow-down" }, key: "ascending", text: DASHBOARD_EDD.LABEL_CASE_CREATED_ON },
-    { icon: { name: "arrow-up" }, key: "descending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
-    { icon: { name: "arrow-down" }, key: "ascending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
+    { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_CREATED_ON },
+    { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
   ];
 
-  const popupContentIndex = showDatePopupContent.findIndex(
-    (content: IHeaderPopupContent) => content.text === showDateBy.type && content.key === showDateBy.key,
-  );
+  const popupContentIndex = showDatePopupContent.findIndex((content: IHeaderPopupContent) => content.text === showDateBy.type);
 
   const findCaseId = sort.filter((sortType) => sortType.column === "caseNo");
   const findName = sort.filter((sortType) => sortType.column === "clientName");
@@ -250,30 +242,46 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   const sortAccountNo = findAccountNo.length > 0 ? findAccountNo[0].value : "ascending";
   const sortDueDate = findDueDate.length > 0 ? findDueDate[0].value : "ascending";
   const sortStatus = findStatus.length > 0 ? findStatus[0].value : "ascending";
+  const sortedColumns = sort.map((currentSortType) => currentSortType.column);
+
+  const checkLoading = (functionToBeCalled: () => void) => {
+    if (isFetching === false) {
+      functionToBeCalled();
+    }
+  };
 
   const columns: ITableColumn[] = [
     {
-      icon: { name: sortCaseId === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "caseNo", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
-      onPressHeader: handleSortCaseId,
+      icon: { name: sortCaseId === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        {
+          key: "caseNo",
+          textStyle: { ...fs12RegBlue1, ...fsTransformNone, fontFamily: sortedColumns.includes("caseNo") ? NunitoBold : NunitoRegular },
+        },
+      ],
+      onPressHeader: () => checkLoading(handleSortCaseId),
       title: DASHBOARD_EDD.LABEL_EDD_CASE_ID,
+      titleStyle: sortedColumns.includes("caseNo") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw112 },
     },
     {
       customItem: true,
-      icon: { name: sortName === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "clientName" }],
-      onPressHeader: handleSortName,
+      icon: { name: sortName === "descending" ? "arrow-down" : "arrow-up" },
+      key: [{ key: "clientName", textStyle: { fontFamily: sortedColumns.includes("clientName") ? NunitoBold : NunitoRegular } }],
+      onPressHeader: () => checkLoading(handleSortName),
       title: DASHBOARD_EDD.LABEL_INVESTOR_NAME,
+      titleStyle: sortedColumns.includes("clientName") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw159 },
     },
     {
-      icon: { name: sortAccountNo === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "accountNo", textStyle: fs12RegBlue1 }],
-      onPressHeader: handleSortAccountNo,
+      icon: { name: sortAccountNo === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        { key: "accountNo", textStyle: { ...fs12RegBlue1, fontFamily: sortedColumns.includes("accountNo") ? NunitoBold : NunitoRegular } },
+      ],
+      onPressHeader: () => checkLoading(handleSortAccountNo),
       textStyle: fsTransformNone,
       title: DASHBOARD_EDD.LABEL_ACCOUNT_NO,
-      titleStyle: fsTransformNone,
+      titleStyle: sortedColumns.includes("accountNo") ? { ...fsTransformNone, ...fs10BoldBlue1, lineHeight: sh13 } : fsTransformNone,
       viewStyle: { width: sw103 },
     },
     {
@@ -281,30 +289,37 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       customItem: true,
       icon: { name: "caret-down" },
       itemStyle: { ...justifyContentStart, ...px(sw8) },
-      key: [{ key: showDateBy.type === DASHBOARD_EDD.LABEL_CASE_CREATED_ON ? "createdOn" : "lastUpdated" }],
-      onPressHeader: handleSortCreatedOn,
+      key: [
+        {
+          key: showDateBy.type === DASHBOARD_EDD.LABEL_CASE_CREATED_ON ? "createdOn" : "lastUpdated",
+        },
+      ],
+      onPressHeader: () => checkLoading(handleSortCreatedOn),
       title: showDateBy.type,
-      titleStyle: fs10BoldBlue1,
       viewStyle: { width: sw119, ...px(0), ...centerHorizontal },
     },
     {
       customItem: true,
-      icon: { name: sortDueDate === "descending" ? "arrow-up" : "arrow-down" },
+      icon: { name: sortDueDate === "descending" ? "arrow-down" : "arrow-up" },
       key: [
-        { key: "targetDate", textStyle: fs12RegBlue1 },
+        {
+          key: "targetDate",
+        },
         { key: "daysRemaining", textStyle: fs10RegBlue6 },
       ],
-      onPressHeader: handleSortDueDate,
+      onPressHeader: () => checkLoading(handleSortDueDate),
       title: DASHBOARD_EDD.LABEL_DUE_DATE,
+      titleStyle: sortedColumns.includes("targetDate") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw95 },
     },
     {
       customItem: true,
-      icon: { name: sortStatus === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "status" }],
-      onPressHeader: handleSortStatus,
+      icon: { name: sortStatus === "descending" ? "arrow-down" : "arrow-up" },
+      key: [{ key: "status", textStyle: { fontFamily: sortedColumns.includes("status") ? NunitoBold : NunitoRegular } }],
+      onPressHeader: () => checkLoading(handleSortStatus),
       onPressItem: handleShowRemarks,
       title: DASHBOARD_EDD.LABEL_STATUS,
+      titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw143 },
       withAccordion: true,
     },
@@ -324,7 +339,9 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
     const filterStatus = filter.caseStatus!.map((value) => ({ column: "status", value: value }));
     const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
     const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
-    const defaultSort: IEDDDashboardSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
+    const checkStatusSort: IEDDDashboardSort[] =
+      findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
+    const defaultSort: IEDDDashboardSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
 
     const request: IEDDDashboardRequest = {
       tab: pill,
@@ -421,18 +438,32 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
         data={isFetching === true ? [] : cases}
         handleRowNavigation={handlePressCase}
         headerPopup={{
-          content: showDatePopupContent,
+          content: showDatePopupContent.map((_content, contentIndex) =>
+            contentIndex === popupContentIndex
+              ? {
+                  ..._content,
+                  icon: { ..._content.icon, name: showDateBy.key === "ascending" ? "arrow-up" : "arrow-down" },
+                  key: showDateBy.key,
+                }
+              : _content,
+          ),
           onPressContent: ({ hide, text, key }) => {
-            handleShowDateBy(text as TDateType, key as TSortType);
-            hide();
+            handleShowDateBy(text as TEDDDateType, key as TSortType);
+            AnimationUtils.layout({ duration: 400 });
+            setTimeout(() => {
+              hide();
+            }, 1000);
           },
           selectedIndex: [popupContentIndex],
           title: showDateBy.type,
-          titleStyle: fs10BoldBlue1,
+          titleStyle:
+            sortedColumns.includes("lastUpdated") || sortedColumns.includes("caseCreated")
+              ? { ...fs10BoldBlue1, lineHeight: sh13 }
+              : { fontFamily: NunitoRegular },
           viewStyle: { width: sw119 },
         }}
         RenderAccordion={renderAccordion}
-        RenderCustomItem={(data: ITableCustomItem) => <EDDCustomTableItem {...data} />}
+        RenderCustomItem={(data: ITableCustomItem) => <EDDCustomTableItem {...data} sortedColumns={sortedColumns} />}
         RenderEmptyState={() => (
           <EmptyTable hintText={hintText} illustration={illustration} loading={isFetching} title={title} subtitle={subtitle} />
         )}

@@ -329,6 +329,20 @@ export const fs16SemiBoldBlack1: TextStyle = {
   lineHeight: scaleHeight(16 * 1.48),
 };
 
+export const fs16SemiBoldBlue1: TextStyle = {
+  color: colorBlue._1,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+  lineHeight: scaleHeight(16 * 1.48),
+};
+
+export const fs16SemiBoldBlue5: TextStyle = {
+  color: colorBlue._5,
+  fontFamily: NunitoSemiBold,
+  fontSize: sh16,
+  lineHeight: scaleHeight(16 * 1.48),
+};
+
 export const fs16SemiBoldBlue8: TextStyle = {
   color: colorBlue._8,
   fontFamily: NunitoSemiBold,

@@ -38,9 +38,11 @@ export type Signer = "adviser" | "principal" | "joint" | undefined;
 declare interface PDFViewProps {
   adviserSignature: string;
   completed: boolean;
+  continueLoading: boolean;
   editReceipt: IOnboardingReceiptState | undefined;
   principalSignature: string;
   jointSignature: string;
+  modalLoading: boolean;
   showSignPdf: boolean;
   signer: Signer;
   handleScroll: () => void;
@@ -57,8 +59,10 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   adviserSignature,
   editReceipt,
   completed,
+  continueLoading,
   principalSignature,
   jointSignature,
+  modalLoading,
   showSignPdf,
   signer,
   handleScroll,
@@ -151,7 +155,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
             {completed === true ? (
               <View style={px(sw20)}>
                 <CustomSpacer space={sh24} />
-                <RoundedButton onPress={handleContinue} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
+                <RoundedButton loading={continueLoading} onPress={handleContinue} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
                 <CustomSpacer space={sh56} />
               </View>
             ) : null}
@@ -178,6 +182,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         handleClose={handleClose}
         handleConfirm={handleConfirm}
         handleSignature={handleSignature}
+        continueLoading={modalLoading}
         signature={signatureToDisplay}
         title={signerLabel}
         visible={showSignPdf}

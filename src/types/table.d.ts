@@ -20,6 +20,7 @@ declare interface ITableItemPrefix {
 declare interface ITableItemKey {
   key: string;
   textStyle?: import("react-native").TextStyle;
+  name?: string;
 }
 
 declare interface IColumnItem {
@@ -40,7 +41,7 @@ declare interface ITableColumn {
   onPressHeader?: () => void;
   onPressItem?: (item: ITableRowData) => void;
   prefix?: ITableItemPrefix[];
-  textStyle?: import("react-native").ViewStyle;
+  textStyle?: import("react-native").TextStyle;
   title: string;
   titleStyle?: import("react-native").TextStyle;
   type?: "checkbox" | "radio";

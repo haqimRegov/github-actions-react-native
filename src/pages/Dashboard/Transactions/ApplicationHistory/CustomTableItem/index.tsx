@@ -7,19 +7,21 @@ import { LastUpdated } from "./LastUpdated";
 import { PendingStatus } from "./Status";
 import { TotalInvestments } from "./TotalInvestments";
 
-export type CustomTableItemProps = ITableCustomItem;
-export const CustomTableItem: FunctionComponent<CustomTableItemProps> = (data: CustomTableItemProps) => {
-  switch (data.keyName.key) {
+declare interface CustomTableItemProps extends ITableCustomItem {
+  sortedColumns: TransactionsSortColumnType[];
+}
+export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sortedColumns, ...rest }: CustomTableItemProps) => {
+  switch (rest.keyName.key) {
     case "investorName":
-      return <InvestorName {...data} />;
+      return <InvestorName sortedColumns={sortedColumns as TransactionsSortColumnType[]} {...rest} />;
     case "status":
-      return <PendingStatus {...data} />;
+      return <PendingStatus sortedColumns={sortedColumns as TransactionsSortColumnType[]} {...rest} />;
     case "totalInvestment":
-      return <TotalInvestments {...data} />;
+      return <TotalInvestments sortedColumns={sortedColumns as TransactionsSortColumnType[]} {...rest} />;
     case "createdOn":
-      return <CreatedOn {...data} />;
+      return <CreatedOn sortedColumns={sortedColumns} {...rest} />;
     case "lastUpdated":
-      return <LastUpdated {...data} />;
+      return <LastUpdated sortedColumns={sortedColumns} {...rest} />;
     default:
       return <View />;
   }

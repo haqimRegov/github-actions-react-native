@@ -5,7 +5,6 @@ import { IcoMoon } from "../../icons";
 import {
   centerVertical,
   colorBlue,
-  colorGreen,
   flexRow,
   fs10RegBlue6,
   fs12BoldBlue1,
@@ -17,7 +16,6 @@ import {
   sw144,
   sw16,
   sw184,
-  sw24,
   sw4,
   sw8,
   sw96,
@@ -78,7 +76,9 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
               return (
                 <TouchableWithoutFeedback key={index} onPress={handlePress}>
                   <View style={{ ...flexRow, ...centerVertical, ...px(sw16), ...py(sh4), ...backgroundColor }}>
-                    {item.icon === undefined ? null : (
+                    <Text style={{ ...fs12BoldBlue1, ...item.textStyle }}>{item.text}</Text>
+                    <CustomFlexSpacer />
+                    {item.icon !== undefined && selected === true ? (
                       <Fragment>
                         <IcoMoon
                           color={item.icon.color || colorBlue._1}
@@ -89,16 +89,15 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
                         />
                         <CustomSpacer isHorizontal={true} space={sw8} />
                       </Fragment>
-                    )}
-                    <Text style={{ ...fs12BoldBlue1, ...item.textStyle }}>{item.text}</Text>
-                    {selected === false ? null : (
+                    ) : null}
+                    {/* {selected === false ? null : (
                       <Fragment>
                         <CustomFlexSpacer />
                         <CustomSpacer isHorizontal={true} space={sw12} />
                         <IcoMoon color={colorGreen._1} name="success-filled" size={sw24} />
                         <CustomSpacer isHorizontal={true} space={sw4} />
                       </Fragment>
-                    )}
+                    )} */}
                   </View>
                 </TouchableWithoutFeedback>
               );

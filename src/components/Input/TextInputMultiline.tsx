@@ -88,6 +88,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         </Fragment>
       )}
       <CustomTextInput
+        clearAll={false}
         containerStyle={{ ...fullWidth, ...viewStyle }}
         multiline={true}
         onFocus={handleMultilineFocus}

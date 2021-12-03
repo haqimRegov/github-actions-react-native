@@ -4,11 +4,28 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
+import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { getDashboard } from "../../../../../network-actions";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
-import { flexChild, fs12RegBlue1, fsTransformNone, px, sh32, sw104, sw123, sw136, sw152, sw16, sw176, sw32 } from "../../../../../styles";
+import {
+  flexChild,
+  fs10BoldBlue1,
+  fs12RegBlue1,
+  fsTransformNone,
+  px,
+  sh13,
+  sh32,
+  sw104,
+  sw123,
+  sw136,
+  sw152,
+  sw16,
+  sw176,
+  sw32,
+} from "../../../../../styles";
+import { AnimationUtils } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
 
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
@@ -37,10 +54,15 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   updateTransactions,
 }: ApprovedOrdersProps) => {
   const { filter, orders, page, sort } = approved;
-  const [showDateBy, setShowDateBy] = useState<"createdOn" | "lastUpdated">("lastUpdated");
+  const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
 
-  const handleShowDateBy = (text: string) => {
-    setShowDateBy(text === DASHBOARD_HOME.LABEL_LAST_UPDATED ? "lastUpdated" : "createdOn");
+  const handleShowDateBy = (text: TDateType, key: TSortType) => {
+    const newKey = key === "ascending" ? "descending" : "ascending";
+    setShowDateBy({ type: text, key: newKey });
+    const sortColumns = sort.map((eachSortType) => eachSortType.column);
+    const sortType: TransactionsSortColumnType = text === "Created On" ? "createdOn" : "lastUpdated";
+    const newSort: ITransactionsSort = sortColumns.includes(sortType) ? { ...sort[0], value: newKey } : { column: sortType, value: newKey };
+    updateApprovedSort([newSort]);
   };
 
   const handleSortOrderNumber = async () => {
@@ -75,73 +97,107 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     updateApprovedSort([newSort]);
   };
 
-  const handleSortDueDate = async () => {
+  const handleSortStatus = async () => {
     const sortColumns = sort.map((sortType) => sortType.column);
-    const newSort: ITransactionsSort = sortColumns.includes("dueDate")
+    const newSort: ITransactionsSort = sortColumns.includes("status")
       ? { ...sort[0], value: sort[0].value === "descending" ? "ascending" : "descending" }
-      : { column: "dueDate", value: "descending" };
+      : { column: "status", value: "descending" };
     updateApprovedSort([newSort]);
   };
+
+  const checkLoading = (functionToBeCalled: () => void) => {
+    if (isFetching === false) {
+      functionToBeCalled();
+    }
+  };
+
+  const showDatePopupContent: IHeaderPopupContent[] = [
+    { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_CREATED_ON },
+    { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
+  ];
+
+  const popupContentIndex = showDatePopupContent.findIndex((content: IHeaderPopupContent) => content.text === showDateBy.type);
 
   const findOrderNumber = sort.filter((sortType) => sortType.column === "orderNumber");
   const findAmount = sort.filter((sortType) => sortType.column === "totalInvestment");
   const findPrincipal = sort.filter((sortType) => sortType.column === "principal");
   const findTransactionType = sort.filter((sortType) => sortType.column === "transactionType");
-  const findDueDate = sort.filter((sortType) => sortType.column === "dueDate");
+  const findStatus = sort.filter((sortType) => sortType.column === "status");
   const sortOrderNumber = findOrderNumber.length > 0 ? findOrderNumber[0].value : "ascending";
   const sortAmount = findAmount.length > 0 ? findAmount[0].value : "ascending";
   const sortPrincipal = findPrincipal.length > 0 ? findPrincipal[0].value : "ascending";
   const sortTransactionType = findTransactionType.length > 0 ? findTransactionType[0].value : "ascending";
-  const sortDueDate = findDueDate.length > 0 ? findDueDate[0].value : "ascending";
+  const sortStatus = findStatus.length > 0 ? findStatus[0].value : "ascending";
+  const sortedColumns = sort.map((currentSortType) => currentSortType.column);
 
   const columns: ITableColumn[] = [
     {
-      icon: { name: sortOrderNumber === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "orderNumber", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
-      onPressHeader: handleSortOrderNumber,
+      icon: { name: sortOrderNumber === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        {
+          key: "orderNumber",
+          textStyle: {
+            ...fs12RegBlue1,
+            ...fsTransformNone,
+            fontFamily: sortedColumns.includes("orderNumber") ? NunitoBold : NunitoRegular,
+          },
+        },
+      ],
+      onPressHeader: () => checkLoading(handleSortOrderNumber),
+      textStyle: sortedColumns.includes("orderNumber") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
+      titleStyle: sortedColumns.includes("orderNumber") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw104 },
     },
     {
       customItem: true,
-      icon: { name: sortPrincipal === "descending" ? "arrow-up" : "arrow-down" },
+      icon: { name: sortPrincipal === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "investorName" }],
-      onPressHeader: handleSortInvestor,
+      onPressHeader: () => checkLoading(handleSortInvestor),
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
-      titleStyle: { paddingLeft: sw32 },
+      titleStyle: sortedColumns.includes("principal") ? { ...fs10BoldBlue1, paddingLeft: sw32, lineHeight: sh13 } : { paddingLeft: sw32 },
       viewStyle: { width: sw176 },
     },
     {
-      icon: { name: sortTransactionType === "descending" ? "arrow-up" : "arrow-down" },
-      key: [{ key: "transactionType", textStyle: fs12RegBlue1 }],
-      onPressHeader: handleSortTransactionType,
+      icon: { name: sortTransactionType === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        {
+          key: "transactionType",
+          textStyle: { ...fs12RegBlue1, fontFamily: sortedColumns.includes("transactionType") ? NunitoBold : NunitoRegular },
+        },
+      ],
+      onPressHeader: () => checkLoading(handleSortTransactionType),
       textStyle: fsTransformNone,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_TYPE,
-      titleStyle: fsTransformNone,
+      titleStyle: sortedColumns.includes("transactionType") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : fsTransformNone,
       viewStyle: { width: sw104 },
     },
     {
       customItem: true,
-      icon: { name: sortAmount === "descending" ? "arrow-up" : "arrow-down" },
+      icon: { name: sortAmount === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "totalInvestment" }],
-      onPressHeader: handleSortAmount,
+      onPressHeader: () => checkLoading(handleSortAmount),
       title: DASHBOARD_HOME.LABEL_TOTAL_INVESTMENTS,
+      titleStyle: sortedColumns.includes("totalInvestment") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw152 },
     },
     {
       customHeader: true,
       customItem: true,
       icon: { name: "caret-down", size: sw16 },
-      key: [{ key: showDateBy }],
-      title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
+      key: [{ key: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? "createdOn" : "lastUpdated" }],
+      title: showDateBy.type,
+      titleStyle:
+        sortedColumns.includes("lastUpdated") || sortedColumns.includes("createdOn") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw136 },
     },
     {
       customItem: true,
-      icon: { name: sortDueDate === "descending" ? "arrow-up" : "arrow-down" },
+      icon: { name: sortStatus === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "status" }],
-      onPressHeader: handleSortDueDate,
+      onPressHeader: () => checkLoading(handleSortStatus),
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
+      titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw123 },
     },
   ];
@@ -150,7 +206,9 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     setIsFetching(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
-    const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : sort;
+    const checkStatusSort: ITransactionsSort[] =
+      findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
+    const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
     const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
     const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
     const request: IDashboardRequest = {
@@ -242,19 +300,31 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
         data={isFetching === true ? [] : orders}
         handleRowNavigation={handleOrderDetails}
         headerPopup={{
-          content: [
-            { icon: { name: "arrow-down" }, text: DASHBOARD_HOME.LABEL_CREATED_ON },
-            { icon: { name: "arrow-down" }, text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
-          ],
-          onPressContent: ({ hide, text }) => {
-            handleShowDateBy(text);
-            hide();
+          content: showDatePopupContent.map((_content, contentIndex) =>
+            contentIndex === popupContentIndex
+              ? {
+                  ..._content,
+                  icon: { ..._content.icon, name: showDateBy.key === "ascending" ? "arrow-up" : "arrow-down" },
+                  key: showDateBy.key,
+                }
+              : _content,
+          ),
+          onPressContent: ({ hide, text, key }) => {
+            handleShowDateBy(text as TDateType, key as TSortType);
+            AnimationUtils.layout({ duration: 400 });
+            setTimeout(() => {
+              hide();
+            }, 1000);
           },
-          selectedIndex: showDateBy === "createdOn" ? [0] : [1],
-          title: showDateBy === "createdOn" ? DASHBOARD_HOME.LABEL_CREATED_ON : DASHBOARD_HOME.LABEL_LAST_UPDATED,
+          selectedIndex: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? [0] : [1],
+          title: showDateBy.type,
+          titleStyle:
+            sortedColumns.includes("lastUpdated") || sortedColumns.includes("createdOn")
+              ? { ...fs10BoldBlue1, lineHeight: sh13 }
+              : { fontFamily: NunitoRegular },
           viewStyle: { width: sw136 },
         }}
-        RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} />}
+        RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
         RenderEmptyState={() => <EmptyTable loading={isFetching} hintText={hintText} title={title} subtitle={subtitle} />}
       />
       <CustomSpacer space={sh32} />

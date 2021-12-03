@@ -194,7 +194,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                 };
                 updateReceipts(updatedReceipts);
               };
-
               const baseSignatureValid =
                 "adviserSignature" in receipt &&
                 receipt.adviserSignature !== undefined &&

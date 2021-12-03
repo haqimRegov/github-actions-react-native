@@ -146,7 +146,6 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                       : {};
 
                   const itemData: IColumnItem = { label: rowData.rawData[labelKey.key], textStyle: labelKey.textStyle, ...prefixData };
-
                   const isBoolean = typeof itemData.label === "boolean";
 
                   if (isBoolean) {

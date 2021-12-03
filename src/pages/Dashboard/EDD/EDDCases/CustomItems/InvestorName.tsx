@@ -2,13 +2,20 @@ import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { Badge, CustomSpacer } from "../../../../../components";
+import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { centerHV, circle, colorRed, flexRow, fs12RegBlue1, sw100, sw12, sw8 } from "../../../../../styles";
 
-export type InvestorNameProps = ITableCustomItem;
+export interface InvestorNameProps extends ITableCustomItem {
+  sortedColumns: IEDDDashboardSortType[];
+}
 
-export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
+export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item, sortedColumns }: InvestorNameProps) => {
   const { clientName, isSeen } = item.rawData as IEDDDashboardCase;
-  const titleStyle: TextStyle = { ...fs12RegBlue1, maxWidth: sw100 };
+  const titleStyle: TextStyle = {
+    ...fs12RegBlue1,
+    maxWidth: sw100,
+    fontFamily: sortedColumns.includes("clientName") ? NunitoBold : NunitoRegular,
+  };
   const badgeStyle: ViewStyle = {
     ...circle(sw8, colorRed._1),
     top: 0,

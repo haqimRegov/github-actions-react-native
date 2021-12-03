@@ -6,7 +6,9 @@ import { DICTIONARY_EDD_STATUS } from "../../../../../data/dictionary/edd";
 import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, flexRow, sw12 } from "../../../../../styles";
 
-export type EDDStatusProps = ITableCustomItem;
+export interface EDDStatusProps extends ITableCustomItem {
+  sortedColumns: IEDDDashboardSortType[];
+}
 
 export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, item }: EDDStatusProps) => {
   const { remark, status } = item.rawData as IEDDDashboardCase;

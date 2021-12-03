@@ -1,7 +1,8 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomSpacer, CustomTooltip, TouchableWrapper } from "../../../../../components";
+import { NunitoBold } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import {
   alignFlexStart,
@@ -23,9 +24,11 @@ import {
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-export type TotalInvestmentsProps = ITableCustomItem;
+export interface TotalInvestmentsProps extends ITableCustomItem {
+  sortedColumns: TransactionsSortColumnType[];
+}
 
-export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ item, lastIndex }: TotalInvestmentsProps) => {
+export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ item, lastIndex, sortedColumns }: TotalInvestmentsProps) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(false);
   const { totalInvestment } = item.rawData as IDashboardOrder;
   const handleShowMore = () => {
@@ -54,6 +57,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
   );
   const tooltipPlacement = lastIndex ? "top" : "bottom";
   const topAdjustment = lastIndex ? -sh56 : undefined;
+  const updatedTextStyle: TextStyle = sortedColumns.includes("totalInvestment") ? { fontFamily: NunitoBold } : {};
   const style: ViewStyle = totalInvestment.length <= 3 ? centerHorizontal : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
 
   return (
@@ -64,9 +68,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
             <Fragment key={index}>
               {index < 3 ? (
                 <View style={flexRow}>
-                  <Text style={fs12RegGray4}>{investment.currency}</Text>
+                  <Text style={{ ...fs12RegGray4, ...updatedTextStyle }}>{investment.currency}</Text>
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text numberOfLines={1} style={{ ...fs12RegBlue1, width: sw84 }}>
+                  <Text numberOfLines={1} style={{ ...fs12RegBlue1, ...updatedTextStyle, width: sw84 }}>
                     {investment.amount}
                   </Text>
                 </View>

@@ -1,11 +1,12 @@
 import React, { Fragment, FunctionComponent, RefObject, useState } from "react";
 import { NativeSyntheticEvent, Text, TextInput, TextInputFocusEventData, TextInputProps, TextStyle, View, ViewStyle } from "react-native";
 
-import { NunitoBold, NunitoRegular } from "../../constants";
+import { NunitoRegular } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
   border,
   centerVertical,
+  colorBlack,
   colorBlue,
   colorGray,
   colorRed,
@@ -37,6 +38,7 @@ import { CustomSpacer } from "../Views/Spacer";
 
 export interface CustomTextInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
+  clearAll?: boolean;
   disabled?: boolean;
   error?: string;
   inputPrefix?: string;
@@ -58,6 +60,7 @@ export interface CustomTextInputProps extends TextInputProps {
 
 export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   containerStyle,
+  clearAll,
   disabled,
   error,
   inputPrefix,
@@ -112,8 +115,8 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
 
   const inputStyle: TextStyle = {
     ...flexChild,
-    color: isFocused ? colorBlue._1 : colorGray._6,
-    fontFamily: placeholder !== undefined && !value ? NunitoRegular : NunitoBold,
+    color: colorBlack._2,
+    fontFamily: NunitoRegular,
     fontSize: sh16,
     height: isFocused ? sh50 : sh48, // height is more than the input view size to adjust the keyboard avoiding view
     ...style,
@@ -124,6 +127,12 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
       onBlur(event);
     }
     setIsFocused(false);
+  };
+
+  const handleClear = () => {
+    if (textInputProps.onChangeText !== undefined) {
+      textInputProps.onChangeText("");
+    }
   };
 
   const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -178,6 +187,11 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           value={value}
           {...textInputProps}
         />
+        {clearAll !== false && value !== "" && rightIcon === undefined && isFocused === true ? (
+          <Fragment>
+            <IcoMoon color={colorBlue._4} name="error-filled" onPress={handleClear} size={sw24} suppressHighlighting={true} />
+          </Fragment>
+        ) : null}
         {rightIcon === undefined ? null : (
           <Fragment>
             <CustomSpacer isHorizontal={true} space={sw16} />

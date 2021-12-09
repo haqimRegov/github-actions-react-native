@@ -82,7 +82,7 @@
     "amazon-cognito-identity-js": "5.2.2",
     "aws-amplify": "4.3.4",
     "buffer": "6.0.3",
-    "camelcase": "6.2.1",
+    "camel-case": "4.1.2",
     "graphql-tag": "2.12.6",
     "lodash.debounce": "4.0.8",
     "moment": "2.29.1",

@@ -64,7 +64,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             payments.map(async (paymentInfo: IPaymentState, index: number) => {
               try {
                 let proofWithUrl: FileBase64 | undefined;
-                if (paymentType === "Cash") {
+                if (paymentType === "Cash" && paymentInfo.saved === true) {
                   const url = S3UrlGenerator.payment(
                     details!.principalHolder!.clientId!,
                     orderNumber,

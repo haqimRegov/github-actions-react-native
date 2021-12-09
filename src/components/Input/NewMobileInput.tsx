@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { Language, NunitoBold, NunitoRegular } from "../../constants";
+import { Language, NunitoRegular } from "../../constants";
 import { DICTIONARY_MOBILE_CODE, ERROR } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import {
@@ -32,6 +32,7 @@ import {
   fs12BoldGray6,
   fs12RegRed2,
   fs16BoldBlue1,
+  fs16BoldGray6,
   fs16RegGray5,
   fullHeight,
   fullHW,
@@ -207,7 +208,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
 
   const inputStyle = {
     ...flexChild,
-    fontFamily: textInputProps.placeholder !== undefined && !data.value ? NunitoRegular : NunitoBold,
+    fontFamily: NunitoRegular,
     fontSize: sh16,
     ...style,
   };
@@ -264,6 +265,7 @@ export const NewMobileInput: FunctionComponent<NewMobileInputProps> = ({
         onChangeText={handleChangeMobile}
         placeholder={placeholderLabel}
         inputPrefix={`(${data.code})`}
+        prefixStyle={fs16BoldGray6}
         style={inputStyle}
         value={data.value}
         viewStyle={numberInputStyle}

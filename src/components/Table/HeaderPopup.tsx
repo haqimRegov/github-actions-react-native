@@ -10,12 +10,12 @@ import {
   fs12BoldBlue1,
   px,
   py,
+  sh32,
   sh4,
   sh8,
   sw12,
   sw144,
   sw16,
-  sw184,
   sw4,
   sw8,
   sw96,
@@ -66,7 +66,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
       }}
       RenderContent={({ hide }) => {
         return (
-          <View style={{ minWidth: sw144, maxWidth: sw184, ...py(sh8) }}>
+          <View style={{ width: sw144, ...py(sh8) }}>
             {content.map((item, index) => {
               const handlePress = () => {
                 onPressContent({ hide: hide, text: item.text, key: item.key });
@@ -75,7 +75,7 @@ export const TableHeaderPopup: FunctionComponent<TableHeaderPopupProps> = ({
               const backgroundColor = selected === true ? { backgroundColor: colorBlue._2 } : {};
               return (
                 <TouchableWithoutFeedback key={index} onPress={handlePress}>
-                  <View style={{ ...flexRow, ...centerVertical, ...px(sw16), ...py(sh4), ...backgroundColor }}>
+                  <View style={{ ...flexRow, ...centerVertical, ...px(sw16), ...py(sh4), height: sh32, ...backgroundColor }}>
                     <Text style={{ ...fs12BoldBlue1, ...item.textStyle }}>{item.text}</Text>
                     <CustomFlexSpacer />
                     {item.icon !== undefined && selected === true ? (

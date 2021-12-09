@@ -1,7 +1,7 @@
-import lodashCamelCase from "camelcase";
+import { camelCase } from "camel-case";
 
 export const camelCaseString = (value: string) => {
-  return lodashCamelCase(value);
+  return camelCase(value);
 };
 
 export const parseAmount = (input: string) => {

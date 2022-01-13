@@ -41,6 +41,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const [multiUtmc] = useState<boolean>(true);
 
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
@@ -94,7 +95,24 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
       return initialStateArray.push(newState);
     });
-    addInvestmentDetails(initialStateArray);
+    const kenangaArray = initialStateArray.filter(
+      (eachElement: IProductSales) => eachElement.fundDetails.issuingHouse === "KENANGA INVESTORS BERHAD",
+    );
+    const sortedWithoutKenanga: IProductSales[] = initialStateArray
+      .filter((eachInitialElement: IProductSales) => eachInitialElement.fundDetails.issuingHouse !== "KENANGA INVESTORS BERHAD")
+      .sort((firstElement: IProductSales, secondElement: IProductSales) => {
+        const { fundDetails: firstFundDetails } = firstElement;
+        const { fundDetails: secondFundDetails } = secondElement;
+        if (firstFundDetails.issuingHouse < secondFundDetails.issuingHouse) {
+          return -1;
+        }
+        if (firstFundDetails.issuingHouse > secondFundDetails.issuingHouse) {
+          return 1;
+        }
+        return 0;
+      });
+    const sortedInvestmentArray = [...kenangaArray, ...sortedWithoutKenanga];
+    addInvestmentDetails(sortedInvestmentArray);
     setPage(1);
   };
 
@@ -214,6 +232,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         <ProductConfirmation
           accountType={accountType}
           investmentDetails={investmentDetails!}
+          multiUtmc={multiUtmc}
           selectedFunds={selectedFunds}
           setFixedBottomShow={setFixedBottomShow}
           setInvestmentDetails={addInvestmentDetails}

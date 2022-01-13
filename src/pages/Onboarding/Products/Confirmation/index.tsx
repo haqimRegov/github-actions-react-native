@@ -1,35 +1,45 @@
-import React, { Fragment, FunctionComponent, useEffect } from "react";
-import { Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
+import { FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage } from "../../../../components";
+import { ConfirmationModal, CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage } from "../../../../components";
+import { CustomToast } from "../../../../components/Toast/Toast";
 import { Language } from "../../../../constants";
+import { useDelete } from "../../../../hooks";
 import { IcoMoon } from "../../../../icons";
 import {
+  borderBottomBlue4,
   centerVertical,
   colorBlue,
   colorWhite,
   flexChild,
-  flexGrow,
   flexRow,
   fs10BoldGray6,
-  fs16SemiBoldGray6,
+  fs16BoldBlack2,
+  fs16RegGray5,
+  fs16RegGray6,
+  fs18BoldGray6,
   fs24BoldGray6,
+  fsCapitalize,
   px,
+  sh16,
   sh176,
   sh24,
   sh32,
-  sh8,
-  shadow16Blue112,
+  sh4,
+  sh40,
+  shadow4Blue116,
+  sw16,
   sw24,
   sw8,
 } from "../../../../styles";
 import { Investment } from "./Investment";
 
-const { INVESTMENT } = Language.PAGE;
+const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
 
 export interface ProductConfirmationProps {
   accountType: TypeAccountChoices;
   investmentDetails: IProductSales[];
+  multiUtmc: boolean;
   selectedFunds: IProduct[];
   setFixedBottomShow: (toggle: boolean) => void;
   setInvestmentDetails: (fundSales: IProductSales[]) => void;
@@ -41,13 +51,41 @@ export interface ProductConfirmationProps {
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
   accountType,
   investmentDetails,
-  selectedFunds,
+  multiUtmc,
   setFixedBottomShow,
   setInvestmentDetails,
   setPage,
   setSelectedFund,
   withEpf,
 }: ProductConfirmationProps) => {
+  const flatListRef = useRef<FlatList | null>(null);
+  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales>(investmentDetails, setInvestmentDetails);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const handleScrollToFund = () => {
+    const findIndex = investmentDetails.findIndex(
+      (eachInvestment: IProductSales) => eachInvestment.allowEpf === true && eachInvestment.investment.fundPaymentMethod === "EPF",
+    );
+    if (flatListRef.current !== null && findIndex !== -1) {
+      flatListRef.current?.scrollToIndex({ animated: true, index: findIndex, viewPosition: 0 });
+    }
+  };
+
+  const handleUndoDelete = () => {
+    const updatedProducts = investmentDetails.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
+    setSelectedFund(updatedProducts);
+    setTempData(investmentDetails);
+  };
+
+  const handleCancelDelete = () => {
+    setShowModal(false);
+  };
+
+  const handleDeleteLastFund = () => {
+    setSelectedFund([]);
+    setInvestmentDetails([]);
+    setPage(0);
+  };
+
   useEffect(() => {
     const handleKeyboardShow = () => {
       setFixedBottomShow(false);
@@ -65,80 +103,162 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
     };
   }, [setFixedBottomShow]);
 
+  useEffect(() => {
+    const updatedProducts = investmentDetails.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
+    setSelectedFund(updatedProducts);
+    setTempData(investmentDetails);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [investmentDetails]);
+
+  useEffect(() => {
+    const findEpfIndex = investmentDetails.findIndex(
+      (eachNewInvestment: IProductSales) => eachNewInvestment.investment.fundPaymentMethod === "EPF",
+    );
+    const updatedInvestmentDetails = investmentDetails.map((eachDetails: IProductSales, eachDetailIndex: number) => {
+      const checkData = findEpfIndex === -1 || eachDetailIndex === findEpfIndex;
+      const checkMultipleUtmc = multiUtmc === true && eachDetails.fundDetails.isEpf ? true : checkData;
+      return { ...eachDetails, allowEpf: checkMultipleUtmc };
+    });
+    setInvestmentDetails(updatedInvestmentDetails);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const lastFundName = tempData.length > 0 && tempData !== undefined ? tempData[0].fundDetails.fundName : "";
+
   return (
     <SafeAreaPage>
-      <ScrollView contentContainerStyle={flexGrow}>
-        <View style={px(sw24)}>
-          <CustomSpacer space={sh32} />
-          <LabeledTitle
-            label={INVESTMENT.HEADING}
-            labelStyle={fs24BoldGray6}
-            spaceToLabel={sh8}
-            title={INVESTMENT.SUBHEADING}
-            titleStyle={fs16SemiBoldGray6}
-          />
-          <CustomSpacer space={sh24} />
-          {investmentDetails.map((product: IProductSales, index: number) => {
-            const { fundType, fundName, issuingHouse, prsType } = product.fundDetails;
+      <View style={px(sw16)}>
+        <FlatList
+          data={tempData}
+          keyboardShouldPersistTaps="handled"
+          keyExtractor={(item: IProductSales) => item.fundDetails.fundCode}
+          ListHeaderComponent={
+            <Fragment>
+              <View style={px(sw8)}>
+                <CustomSpacer space={sh32} />
+                <LabeledTitle
+                  label={INVESTMENT.HEADING}
+                  labelStyle={fs18BoldGray6}
+                  spaceToLabel={sh4}
+                  title={INVESTMENT.SUBHEADING}
+                  titleStyle={fs16RegGray5}
+                />
+                {multiUtmc === false ? (
+                  <Text style={fs16RegGray5}>Note: For EPF funding option, you can only select ONE fund house per application.</Text>
+                ) : null}
+                <CustomSpacer space={sh24} />
+              </View>
+            </Fragment>
+          }
+          ListFooterComponent={<CustomSpacer space={sh176} />}
+          ref={flatListRef}
+          renderItem={({ item, index }) => {
+            const { fundType, fundName, issuingHouse, prsType } = item.fundDetails;
             const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
-            const newData = [...investmentDetails];
+            const newData = [...tempData];
 
             const handleDelete = () => {
-              const updatedProducts = [...selectedFunds];
-              updatedProducts.splice(index, 1);
-              if (updatedProducts.length === 0) {
-                setPage(0);
+              if (tempData.length > 1) {
+                const updatedDetails = [...tempData];
+                updatedDetails.splice(index, 1);
+                setTempData(updatedDetails);
+                const updatedProducts = updatedDetails.map((eachTempInvestment: IProductSales) => eachTempInvestment.fundDetails);
+                setSelectedFund(updatedProducts);
+                setDeleteCount(deleteCount + 1);
+              } else {
+                setShowModal(true);
               }
-              const updatedDetails = [...investmentDetails];
-              updatedDetails.splice(index, 1);
-              if (updatedDetails.length === 0) {
-                setPage(0);
-              }
-
-              setInvestmentDetails(updatedDetails);
-              setSelectedFund(updatedProducts);
             };
 
             const updateData = (updatedData: IProductSales) => {
               newData[index] = updatedData;
-              setInvestmentDetails(newData);
+              let data: IProductSales[] = [...newData];
+              if (multiUtmc === false) {
+                const findEpfIndex = newData.findIndex((eachNewData: IProductSales) => eachNewData.investment.fundPaymentMethod === "EPF");
+                data = newData.map((eachData, eachIndex) => {
+                  return {
+                    ...eachData,
+                    allowEpf:
+                      eachIndex === findEpfIndex ||
+                      eachData.fundDetails.issuingHouse === newData[index].fundDetails.issuingHouse ||
+                      findEpfIndex === -1,
+                  };
+                });
+              }
+              setInvestmentDetails(data);
             };
+
+            const checkIndex = investmentDetails.findIndex(
+              (eachInvestment: IProductSales) => eachInvestment.fundDetails.issuingHouse === issuingHouse,
+            );
 
             const container: ViewStyle = {
               ...flexChild,
-              ...shadow16Blue112,
+              ...shadow4Blue116,
               backgroundColor: colorWhite._1,
               borderRadius: sw8,
+              marginHorizontal: sw8,
             };
 
             return (
               <Fragment key={index}>
                 {index === 0 ? null : <CustomSpacer space={sh24} />}
+                {index <= checkIndex ? (
+                  <Fragment>
+                    {index !== 0 ? <CustomSpacer space={sh40} /> : null}
+                    <View style={{ ...flexRow, ...centerVertical, ...px(sw8) }}>
+                      <Text style={{ ...fs16BoldBlack2, ...fsCapitalize }}>{item.fundDetails.issuingHouse}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw16} />
+                      <View style={flexChild}>
+                        <View style={borderBottomBlue4} />
+                      </View>
+                    </View>
+                    <CustomSpacer space={sh16} />
+                  </Fragment>
+                ) : null}
                 <View style={container}>
-                  <CustomSpacer space={sh24} />
-                  <View style={px(sw24)}>
+                  <View style={{ ...px(sw24), backgroundColor: colorBlue._3, borderTopLeftRadius: sw8, borderTopRightRadius: sw8 }}>
+                    <CustomSpacer space={sh16} />
                     <View style={{ ...centerVertical, ...flexRow }}>
-                      <Text style={fs10BoldGray6}>{type}</Text>
+                      <View>
+                        <Text style={fs10BoldGray6}>{type}</Text>
+                        <CustomSpacer space={sh4} />
+                        <Text style={{ ...fs24BoldGray6, ...fsCapitalize }}>{fundName}</Text>
+                      </View>
                       <CustomFlexSpacer />
                       <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sh32} suppressHighlighting={true} />
                     </View>
-                    <LabeledTitle
-                      label={fundName}
-                      labelStyle={fs24BoldGray6}
-                      spaceToLabel={sh8}
-                      title={issuingHouse}
-                      titleStyle={fs16SemiBoldGray6}
-                    />
+                    <CustomSpacer space={sh16} />
                   </View>
                   <CustomSpacer space={sh24} />
-                  <Investment accountType={accountType} data={product} setData={updateData} withEpf={withEpf} />
+                  <Investment
+                    accountType={accountType}
+                    data={item}
+                    handleScrollToFund={handleScrollToFund}
+                    setData={updateData}
+                    withEpf={withEpf}
+                  />
                 </View>
               </Fragment>
             );
-          })}
-          <CustomSpacer space={sh176} />
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+      <CustomToast count={deleteCount} onPress={handleUndoDelete} setCount={setDeleteCount} />
+      <ConfirmationModal
+        handleCancel={handleCancelDelete}
+        handleContinue={handleDeleteLastFund}
+        labelCancel={ACTION_BUTTONS.BUTTON_CANCEL}
+        labelContinue={ACTION_BUTTONS.BUTTON_DELETE}
+        title={`${ACTION_BUTTONS.BUTTON_DELETE} ${lastFundName}`}
+        visible={showModal}>
+        <View>
+          <Text style={fs16RegGray6}>{INVESTMENT.DELETE_MODAL_LINE_1}</Text>
+          <CustomSpacer space={sh16} />
+          <Text style={fs16RegGray6}>{INVESTMENT.DELETE_MODAL_LINE_2}</Text>
         </View>
-      </ScrollView>
+      </ConfirmationModal>
     </SafeAreaPage>
   );
 };

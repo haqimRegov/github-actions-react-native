@@ -1,5 +1,6 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, Text, View } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import {
   CheckBox,
@@ -13,20 +14,24 @@ import {
 import { Language } from "../../../../constants/language";
 import { DICTIONARY_RECURRING_CURRENCY, DICTIONARY_RECURRING_MINIMUM_FPX, ERROR } from "../../../../data/dictionary";
 import {
+  borderBottomBlue5,
   borderBottomGray2,
   centerVertical,
   colorBlack,
+  colorBlue,
   flexRow,
+  fs12BoldBlue8,
   fs12BoldGray6,
   fs12RegGray5,
   fs12RegGray6,
+  fs12RegWhite1,
   px,
   sh12,
-  sh16,
   sh24,
   sh4,
   sh8,
   sw12,
+  sw152,
   sw16,
   sw20,
   sw24,
@@ -40,12 +45,19 @@ const { INVESTMENT } = Language.PAGE;
 interface InvestmentProps {
   accountType: TypeAccountChoices;
   data: IProductSales;
+  handleScrollToFund?: () => void;
   setData: (data: IProductSales) => void;
   withEpf: boolean;
 }
 
-export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, data, setData, withEpf }: InvestmentProps) => {
-  const { investment, fundDetails, masterClassList } = data;
+export const Investment: FunctionComponent<InvestmentProps> = ({
+  accountType,
+  data,
+  handleScrollToFund,
+  setData,
+  withEpf,
+}: InvestmentProps) => {
+  const { allowEpf, investment, fundDetails, masterClassList } = data;
 
   const {
     amountError,
@@ -62,6 +74,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
 
   const { isEpf, isScheduled } = fundDetails;
 
+  const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
+
   const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
@@ -69,7 +83,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   if (isEpf === "Yes" && withEpf === true && accountType === "Individual" && fundDetails.isEpfOnly !== "Yes") {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
-
   const classCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === fundCurrency);
   const { newSalesAmount, salesCharge, topUpAmount } = masterClassList[fundClass!][classCurrencyIndex];
 
@@ -173,11 +186,14 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
       ...data,
       investment: {
         ...investment,
+        amountError: undefined,
         fundCurrency: value,
         fundId: newFundId,
+        investmentAmount: "",
         scheduledInvestment: false,
         scheduledSalesCharge: "",
         scheduledInvestmentAmount: "",
+        scheduledAmountError: undefined,
       },
     });
   };
@@ -185,7 +201,17 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
   const handleClass = (value: string) => {
     const newCurrency = masterClassList[value][0].currency;
     const newFundId = masterClassList[value][0].fundId;
-    setData({ ...data, investment: { ...investment, fundClass: value, fundCurrency: newCurrency, fundId: newFundId } });
+    setData({
+      ...data,
+      investment: {
+        ...investment,
+        amountError: undefined,
+        fundClass: value,
+        fundCurrency: newCurrency,
+        fundId: newFundId,
+        investmentAmount: "",
+      },
+    });
   };
 
   const handleSalesCharge = (value: string) => {
@@ -213,8 +239,22 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
   };
 
-  const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
+  const handleTooltip = () => {
+    setTooltipVisible(!tooltipVisible);
+  };
+
+  const handleScroll = () => {
+    setTooltipVisible(false);
+    if (handleScrollToFund !== undefined) {
+      handleScrollToFund();
+    }
+  };
+
+  const multiClass = classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
+  const epfIndex = fundingOption.findIndex((eachFundingOption) => eachFundingOption === INVESTMENT.QUESTION_1_OPTION_2);
+  const disableEpf = allowEpf !== undefined && allowEpf === false ? [epfIndex] : [];
   let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
+
   switch (fundDetails.fundType) {
     case "PRS":
       minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.prs;
@@ -225,37 +265,53 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
     default:
       break;
   }
+
   return (
     <Fragment>
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
           <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh8} text={INVESTMENT.LABEL_FUNDING_OPTION} />
           <RadioButtonGroup
+            direction="row"
+            disabledIndex={disableEpf}
+            disabledTooltip={true}
+            labelStyle={{ width: "auto" }}
             options={fundingOption}
-            space={sh16}
+            optionStyle={{ width: 116 }}
+            space={sw64}
             selected={fundPaymentMethod}
             selectedColor={radioColor}
             setSelected={handleFundingMethod}
+            tooltipContent={
+              <View>
+                <Text style={fs12RegWhite1}>{INVESTMENT.EPF_DISABLED}</Text>
+                <CustomSpacer space={sh12} />
+                <TouchableWithoutFeedback onPress={handleScroll}>
+                  <View style={{ ...borderBottomBlue5, borderBottomColor: colorBlue._8, width: sw152 }}>
+                    <Text style={fs12BoldBlue8}>{INVESTMENT.EPF_DISABLED_SUB}</Text>
+                    <CustomSpacer space={sh4} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            }
+            showTooltip={tooltipVisible}
+            setShowTooltip={handleTooltip}
           />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
-        {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length > 1 ? (
+        {multiClass === false && currencies.length > 1 ? (
           <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
         ) : null}
-        {masterClassList !== undefined && "" in masterClassList === true && masterClassList[""].length === 1 ? (
-          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} titleStyle={px(sw16)} style={{ width: sw360 }} />
+        {multiClass === false && currencies.length === 1 ? (
+          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} spaceToLabel={sh8} style={{ width: sw360 }} />
         ) : null}
       </View>
       <CustomSpacer space={sh24} />
-      {showMulti === true ? (
+      {multiClass === true ? (
         <Fragment>
           <View style={{ ...flexRow, ...px(sw24) }}>
-            {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
-              <Fragment>
-                <NewDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
-                <CustomSpacer isHorizontal={true} space={sw64} />
-              </Fragment>
-            ) : null}
+            <NewDropdown handleChange={handleClass} items={classes} label={INVESTMENT.LABEL_CLASS} value={fundClass!} />
+            <CustomSpacer isHorizontal={true} space={sw64} />
             <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
           </View>
           <CustomSpacer space={sh24} />
@@ -276,6 +332,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
               keyboardType="numeric"
               onBlur={checkInvestmentAmount}
               onChangeText={handleInvestmentAmount}
+              placeholder="0.00"
               spaceToBottom={isRecurring === true ? sh12 : undefined}
               spaceToTop={sh4}
               value={investmentAmount}
@@ -316,6 +373,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({ accountType, da
                   keyboardType="numeric"
                   onBlur={checkScheduledInvestmentAmount}
                   onChangeText={handleScheduledAmount}
+                  placeholder="0.00"
                   spaceToTop={sh4}
                   value={scheduledInvestmentAmount}
                 />

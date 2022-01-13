@@ -1,36 +1,31 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Alert, ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
 import { BlurView, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
-import { Language } from "../../../constants";
-import { ERRORS } from "../../../data/dictionary";
-import { S3UrlGenerator, StorageUtil } from "../../../integrations";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   borderBottomGray2,
-  centerVertical,
   flexChild,
   flexGrow,
-  flexRow,
-  fs12RegGray6,
-  fs16BoldGray6,
-  fs16RegGray6,
   fs16SemiBoldGray6,
   fs24BoldGray6,
   px,
+  py,
   sh112,
   sh24,
   sh32,
   sh8,
   shadow50Black115,
   sw24,
-  sw4,
 } from "../../../styles";
-import { PaymentOrder, PaymentPopup } from "../../../templates";
-import { AlertDialog, formatAmount, parseAmountToString } from "../../../utils";
+import { OrderPayment, PaymentPopup } from "../../../templates";
+import { calculateBalances, generatePaymentWithKeys } from "../../../templates/Payment/helpers";
+import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
+import { parseAmount } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {
@@ -43,142 +38,88 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   handleResetOnboarding,
   navigation,
   orders,
-  paymentSummary,
   personalInfo,
-  updatePaymentSummary,
 }: PaymentProps) => {
-  const fetching = useRef<boolean>(false);
-  const [activeOrder, setActiveOrder] = useState<string>("");
-  const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
-  const [viewFund, setViewFund] = useState<string>("");
+  const [proofOfPayments, setProofOfPayments] = useState<IPaymentRequired[] | undefined>(undefined);
+  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
+  const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
+  const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
+  const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
+
+  const handleFetch = async () => {
+    if (orders !== undefined) {
+      // console.log("orders", JSON.stringify(orders));
+      const result: IPaymentRequired[] = orders.orders.map((order: IOrder) => {
+        const state: IPaymentRequired = {
+          allowedRecurringType: order.allowedRecurringType || [],
+          createdOn: moment(order.orderDate, DEFAULT_DATE_FORMAT).format("x"),
+          ctaDetails: [],
+          epfAccountNumber: order.paymentType === "EPF" ? personalInfo.principal!.epfDetails!.epfMemberNumber! : null,
+          funds: order.investments,
+          orderNumber: order.orderNumber,
+          paymentCount: 0,
+          payments: [],
+          paymentType: order.paymentType,
+          recurringDetails: undefined,
+          status: "Pending Payment",
+          surplusBalance: [],
+          totalInvestment: order.orderTotalAmount,
+          totalPaidAmount: [],
+        };
+
+        return state;
+      });
+      setProofOfPayments(result);
+      setGrandTotal({ grandTotal: orders.grandTotal, grandTotalRecurring: orders.grandTotalRecurring! });
+    }
+  };
+
+  // console.log("proof", proofOfPayments);
   const handleSubmit = async () => {
-    if (fetching.current === false) {
-      fetching.current = true;
+    try {
       setLoading(true);
-
       const paymentOrders = await Promise.all(
-        paymentSummary!.orders.map(async ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
-          const paymentWithKeys = await Promise.all(
-            payments.map(async (paymentInfo: IPaymentState, index: number) => {
-              try {
-                let proofWithUrl: FileBase64 | undefined;
-                if (paymentType === "Cash" && paymentInfo.saved === true) {
-                  const url = S3UrlGenerator.payment(
-                    details!.principalHolder!.clientId!,
-                    orderNumber,
-                    paymentType,
-                    paymentInfo.paymentMethod!,
-                    paymentInfo.proof!.type,
-                  );
-
-                  const uploadedFile = await StorageUtil.put(paymentInfo.proof!.path!, url, paymentInfo.proof!.type);
-                  if (uploadedFile === undefined) {
-                    throw new Error();
-                  }
-                  proofWithUrl = { ...paymentInfo.proof!, url: uploadedFile.key ? uploadedFile.key : undefined, base64: undefined };
-                }
-
-                const updatedPaymentInfo = { ...paymentInfo };
-                delete updatedPaymentInfo.combinedBankAccountName;
-                const temporaryReference =
-                  updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
-                  updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
-                    ? `${orderNumber}${index}${moment().format("x")}`
-                    : undefined;
-
-                return {
-                  ...updatedPaymentInfo,
-                  referenceNumber: temporaryReference, // TODO temporary
-                  amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
-                  bankAccountName:
-                    paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
-                      ? paymentInfo.combinedBankAccountName
-                      : paymentInfo.bankAccountName,
-                  currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
-                  transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
-                  transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
-                  proof: proofWithUrl,
-                };
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              } catch (error: any) {
-                // eslint-disable-next-line no-console
-                // console.log("Error in Uploading", error);
-                return ERRORS.storage;
-              }
-            }),
+        proofOfPayments!.map(async ({ orderNumber, paymentType, payments }: IPaymentRequired) => {
+          const payment = await generatePaymentWithKeys(
+            payments,
+            paymentType,
+            orderNumber,
+            details!.principalHolder!.clientId!,
+            "Onboarding",
           );
-
-          if (paymentWithKeys === undefined || paymentWithKeys.some((pay) => "errorCode" in pay)) {
-            AlertDialog(ERRORS.storage.message, () => setLoading(false));
-            fetching.current = false;
-            return undefined;
-          }
-
-          // this should cause an issue since we are already returning undefined to cancel the function when there is an error in paymentWithKeys
-          const payment: ISubmitProofOfPayment[] =
-            paymentWithKeys.some((pay) => "errorCode" in pay) === false
-              ? (paymentWithKeys.filter((value) => value.saved === true) as ISubmitProofOfPayment[])
-              : [];
 
           return { orderNumber: orderNumber, paymentType: paymentType, payments: payment };
         }),
       );
 
-      if (paymentOrders.includes(undefined) === false) {
-        const request = { orders: paymentOrders } as ISubmitProofOfPaymentsRequest;
-        fetching.current = false;
-
-        const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, undefined, setLoading);
-        if (paymentResponse !== undefined) {
-          const { data, error } = paymentResponse;
-          if (error === null && data !== null) {
-            setPaymentResult(data.result);
-          }
-          if (error !== null) {
-            const errorList = error.errorList?.join("\n");
-            AlertDialog(error.message, () => setLoading(false), errorList);
-          }
+      const request = { orders: paymentOrders };
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
+      if (paymentResponse !== undefined) {
+        const { data, error } = paymentResponse;
+        if (error === null && data !== null) {
+          setPaymentResult(data.result);
         }
+        if (error !== null) {
+          throw error;
+        }
+      }
+    } catch (error: any) {
+      // console.log("Error in handleSubmit", error);
+      setLoading(false);
+      if ("errorCode" in error) {
+        Alert.alert(error.message);
+      }
+    } finally {
+      // console.log("finally");
+      if (paymentResult === undefined) {
+        // console.log("paymentResult undefined", paymentResult);
       }
     }
     return undefined;
   };
-
-  const completedOrders: IPaymentOrderState[] =
-    paymentSummary !== undefined ? paymentSummary.orders.filter((order) => order.completed === true) : [];
-
-  const completedText = `${completedOrders.length} ${PAYMENT.LABEL_COMPLETED}`;
-  const pendingCount = paymentSummary !== undefined ? paymentSummary.orders.length - completedOrders.length : 0;
-  const pendingText = `${pendingCount} ${PAYMENT.LABEL_PENDING_PAYMENT}`;
-  const completedBannerText = pendingCount === 0 ? `${completedText}` : `${pendingText}, ${completedText}`;
-  const bannerText = completedOrders.length === 0 ? `${pendingText}` : completedBannerText;
-
-  const withFloatingAmount =
-    paymentSummary !== undefined
-      ? paymentSummary.orders.filter(
-          (order) => order.floatingAmount !== undefined && order.floatingAmount.length > 0 && order.paymentType === "Cash",
-        )
-      : [];
-
-  const floatingTotalAmount = withFloatingAmount.map(({ floatingAmount }) => floatingAmount!).flat(1);
-  const floatingLabel =
-    floatingTotalAmount.length > 0
-      ? floatingTotalAmount
-          .reduce((accumulator: IFloatingAmount[], current: IFloatingAmount) => {
-            const currencyIndex = accumulator.findIndex((value: IFloatingAmount) => value.currency === current.currency);
-            if (currencyIndex === -1) {
-              accumulator.push(current);
-            } else {
-              accumulator[currencyIndex].amount += current.amount;
-            }
-            return accumulator;
-          }, [])
-          .filter(({ amount }) => amount > 0)
-          .map(({ amount, currency }) => `${currency} ${formatAmount(amount)}`)
-          .join(", ")
-      : "";
 
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
@@ -190,23 +131,50 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   }
 
   useEffect(() => {
-    if (paymentSummary === undefined && orders !== undefined) {
-      const newOrders: IPaymentOrderState[] = orders.orders.map((order: IOrder) => {
-        return {
-          ...order,
-          payments: [],
-
-          completed: false,
-          floatingAmount: [],
-        };
-      });
-      updatePaymentSummary({ grandTotal: orders.grandTotal, orders: newOrders });
-    }
+    handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const findSavedPayment = paymentSummary !== undefined ? paymentSummary.orders.map((order) => order.payments).flat() : [];
-  const continueDisabled = findSavedPayment.findIndex((payment) => payment.saved === true) === -1;
+  const pendingLength =
+    proofOfPayments !== undefined && proofOfPayments.length > 0
+      ? [...proofOfPayments!].filter((eachPayment: IPaymentRequired) => eachPayment.status !== "Completed").length
+      : 0;
+  const completedLength =
+    proofOfPayments !== undefined && proofOfPayments.length > 0
+      ? proofOfPayments.filter((eachPayment: IPaymentRequired) => eachPayment.status === "Completed").length
+      : 0;
+  const pendingText =
+    proofOfPayments !== undefined && pendingLength === proofOfPayments.length
+      ? `All (${proofOfPayments.length}) pending`
+      : `${pendingLength} pending, `;
+  const completedText =
+    proofOfPayments !== undefined && completedLength === proofOfPayments.length
+      ? `All (${proofOfPayments.length}) completed`
+      : `${completedLength} completed`;
+  const bannerText = `${PAYMENT.LABEL_PENDING_SUMMARY}: ${pendingLength > 0 ? pendingText : ""}${completedLength > 0 ? completedText : ""}`;
+  // To show the available balance and also the excess
+  const balancePayments: IOrderAmount[] = proofOfPayments !== undefined ? calculateBalances(proofOfPayments) : [];
+  const checkAllCompleted =
+    proofOfPayments !== undefined ? proofOfPayments.filter((eachPOPCheck: IPaymentRequired) => eachPOPCheck.status === "Completed") : [];
+  const updatedBalancePayments =
+    proofOfPayments !== undefined
+      ? balancePayments.filter(
+          (eachBalance: IOrderAmount) =>
+            eachBalance.currency === "MYR" && checkAllCompleted.length !== proofOfPayments?.length && parseAmount(eachBalance.amount) !== 0,
+        )
+      : [];
+  const completedCurrencies =
+    proofOfPayments !== undefined
+      ? balancePayments.filter(
+          (eachSurplus: IOrderAmount) =>
+            (eachSurplus.currency !== "MYR" || checkAllCompleted.length === proofOfPayments.length) &&
+            parseAmount(eachSurplus.amount) !== 0,
+        )
+      : [];
+
+  const continueDisabled =
+    proofOfPayments !== undefined &&
+    proofOfPayments!.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
 
   return (
     <SafeAreaPage>
@@ -223,13 +191,30 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 titleStyle={fs16SemiBoldGray6}
               />
             </View>
-            {paymentSummary !== undefined &&
-              paymentSummary.orders.map((order: IPaymentOrderState, index: number) => {
-                const setPaymentOrder = (paymentOrder: IPaymentOrderState) => {
-                  const updatedPaymentOrders = [...paymentSummary.orders];
-                  updatedPaymentOrders[index] = paymentOrder;
-                  updatePaymentSummary({ ...paymentSummary, orders: updatedPaymentOrders });
+            {proofOfPayments !== undefined &&
+              proofOfPayments.map((proofOfPayment: IPaymentRequired, index: number) => {
+                const setProofOfPayment = (value: IPaymentRequired, paymentId?: string) => {
+                  let updatedProofOfPayments: IPaymentRequired[] = [...proofOfPayments];
+                  updatedProofOfPayments[index] = { ...updatedProofOfPayments[index], ...value };
+
+                  if (paymentId !== undefined) {
+                    const updatedPOP = updatedProofOfPayments.map((eachOrder) => {
+                      const filteredPayments = eachOrder.payments.filter(
+                        (eachPOP) =>
+                          (eachPOP.tag === undefined && eachPOP.parent !== paymentId) ||
+                          (eachPOP.tag !== undefined && eachPOP.tag.uuid !== paymentId),
+                      );
+                      return {
+                        ...eachOrder,
+                        status: filteredPayments.length === 0 ? "Pending Payment" : eachOrder.status,
+                        payments: filteredPayments,
+                      };
+                    });
+                    updatedProofOfPayments = [...updatedPOP];
+                  }
+                  setProofOfPayments(updatedProofOfPayments);
                 };
+
                 return (
                   <Fragment key={index}>
                     {index === 0 ? null : (
@@ -237,18 +222,19 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                         <View style={borderBottomGray2} />
                       </Fragment>
                     )}
-                    <BlurView visible={activeOrder === "" || activeOrder === order.orderNumber}>
+                    <BlurView visible={activeOrder.order === "" || activeOrder.order === proofOfPayment.orderNumber}>
                       <CustomSpacer space={sh24} />
                       <View style={{ ...px(sw24), ...shadow50Black115 }}>
-                        <PaymentOrder
+                        <OrderPayment
                           accountNames={accountNames}
                           activeOrder={activeOrder}
-                          epfAccountNumber={personalInfo.principal!.epfDetails!.epfMemberNumber}
-                          paymentOrder={order}
+                          deletedPayment={tempDeletedPayment}
+                          proofOfPayment={proofOfPayment}
                           setActiveOrder={setActiveOrder}
-                          setPaymentOrder={setPaymentOrder}
-                          setViewFund={setViewFund}
-                          viewFund={viewFund}
+                          setDeletedPayment={setTempDeletedPayment}
+                          setProofOfPayment={setProofOfPayment}
+                          applicationBalance={applicationBalance}
+                          setApplicationBalance={setApplicationBalance}
                         />
                       </View>
                       <CustomSpacer space={sh24} />
@@ -256,33 +242,22 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                   </Fragment>
                 );
               })}
-            {activeOrder !== "" ? null : <CustomSpacer space={sh112} />}
+            {activeOrder.order !== "" ? null : <CustomSpacer space={sh112} />}
           </View>
         </ScrollView>
-        {activeOrder !== "" ? null : (
+        {activeOrder.order !== "" ? null : (
           <SelectionBanner
             bottomContent={
-              <View>
-                <View style={{ ...centerVertical, ...flexRow }}>
-                  {paymentSummary !== undefined &&
-                    paymentSummary.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                      return (
-                        <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                          {index !== 0 ? (
-                            <Text style={{ ...fs16RegGray6, ...px(sw4) }}>+</Text>
-                          ) : (
-                            <Text style={fs16RegGray6}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
-                          )}
-                          <Text style={fs16RegGray6}>{totalAmount.currency}</Text>
-                          <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs16BoldGray6}>{formatAmount(totalAmount.amount)}</Text>
-                        </View>
-                      );
-                    })}
-                </View>
-                {floatingLabel !== "" ? <Text style={fs12RegGray6}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
-              </View>
+              proofOfPayments !== undefined ? (
+                <PaymentBannerContent
+                  grandTotal={grandTotal!.grandTotal}
+                  grandTotalRecurring={grandTotal?.grandTotalRecurring}
+                  balancePayments={updatedBalancePayments}
+                  excessPayments={completedCurrencies}
+                />
+              ) : null
             }
+            containerStyle={py(sh24)}
             continueDisabled={continueDisabled}
             labelSubmit={PAYMENT.BUTTON_SUBMIT}
             submitOnPress={handleSubmit}

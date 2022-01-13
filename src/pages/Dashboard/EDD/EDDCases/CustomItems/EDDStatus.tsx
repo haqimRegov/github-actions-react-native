@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, Tag, TagColorType } from "../../../../../components";
+import { CustomSpacer, StatusBadge, StatusBadgeColorType } from "../../../../../components";
 import { DICTIONARY_EDD_STATUS } from "../../../../../data/dictionary/edd";
 import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, flexRow, sw12 } from "../../../../../styles";
@@ -12,7 +12,7 @@ export interface EDDStatusProps extends ITableCustomItem {
 
 export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, item }: EDDStatusProps) => {
   const { remark, status } = item.rawData as IEDDDashboardCase;
-  let statusColor: TagColorType;
+  let statusColor: StatusBadgeColorType;
   if (
     status === DICTIONARY_EDD_STATUS.overdue1 ||
     status === DICTIONARY_EDD_STATUS.overdue2 ||
@@ -30,7 +30,7 @@ export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, it
   return (
     <View style={centerHorizontal}>
       <View style={{ ...flexRow, ...centerVertical }}>
-        <Tag color={statusColor} text={status} />
+        <StatusBadge color={statusColor} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
         {accordionIcon !== undefined && remark ? (
           <Fragment>

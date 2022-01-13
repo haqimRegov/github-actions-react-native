@@ -212,7 +212,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
           .join("")
       : "-";
     const initials = sender && sender in DICTIONARY_KIB_BRANCHES ? DICTIONARY_KIB_BRANCHES[sender].code : customSender;
-    const defaultInitials = sender === "system" ? "KIB" : initials;
+    const defaultInitials = sender === "system" ? "HQ" : initials;
     const avatar: AvatarProps = { text: defaultInitials, type: source as AvatarType };
     return avatar;
   };

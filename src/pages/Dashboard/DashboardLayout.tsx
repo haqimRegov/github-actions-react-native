@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IQuickAction, NewQuickActions, Tag, TagColorType } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, IQuickAction, NewQuickActions, StatusBadge, StatusBadgeColorType } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
 import { DICTIONARY_EDD_STATUS } from "../../data/dictionary/edd";
@@ -88,7 +88,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
     // },
   ];
 
-  let statusColor: TagColorType;
+  let statusColor: StatusBadgeColorType;
   if (
     status === DICTIONARY_ORDER_STATUS.void ||
     status === DICTIONARY_ORDER_STATUS.rejected ||
@@ -142,7 +142,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
               {status !== undefined ? (
                 <View style={{ ...px(sw16), ...centerVertical }}>
                   <CustomSpacer space={sh16} />
-                  <Tag color={statusColor} text={status} />
+                  <StatusBadge color={statusColor} text={status} />
                 </View>
               ) : null}
               <CustomFlexSpacer />

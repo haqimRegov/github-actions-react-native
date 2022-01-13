@@ -4,7 +4,7 @@ import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../../assets/images/LocalAssets";
-import { AdvanceTable, CustomSpacer, EmptyTable, Tag } from "../../../../../components";
+import { AdvanceTable, CustomSpacer, EmptyTable, StatusBadge } from "../../../../../components";
 import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
@@ -420,7 +420,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
 
           return (
             <View key={index} style={flexRow}>
-              <Tag
+              <StatusBadge
                 color={text.toLowerCase() === pill ? "primary" : "secondary"}
                 onPress={handlePress}
                 style={{ ...px(sw16) }}

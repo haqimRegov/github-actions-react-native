@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
-import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, ReactNode, useRef, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";
@@ -12,11 +12,11 @@ import { ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { changePassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { centerHV, colorBlack, colorWhite, fullHeight, fullHW } from "../../styles";
+import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
 import { AlertDialog, Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails, PasswordDetails } from "./Details";
 
-const { LOGIN } = Language.PAGE;
+const { ACTION_BUTTONS, LOGIN } = Language.PAGE;
 
 interface LoginProps extends GlobalStoreProps {
   navigation: IStackNavigationProp;
@@ -37,6 +37,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
   const [lockPrompt, setLockPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(OTP_CONFIG.EXPIRY);
 
   const handleForgotPassword = () => {
@@ -49,14 +50,19 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     setLockPrompt(false);
   };
 
+  const handleDone = () => {
+    setShowModal(false);
+    setRootPage("LOGIN");
+  };
+
   const handleLogin = async () => {
     try {
       const checkEmulator = await isEmulator();
       const token = await RNFirebase.getToken();
       const deviceToken = checkEmulator === true ? {} : { deviceToken: token };
       Keyboard.dismiss();
-      setLockPrompt(false);
       setLoading(true);
+      setLockPrompt(false);
       setInput1Error(undefined);
       const credentials = await Auth.Credentials.get();
       if ("sessionToken" in credentials === false) {
@@ -184,7 +190,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     }
   };
 
-  const handelNewPassword = async () => {
+  const handleNewPassword = async () => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
@@ -200,6 +206,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           : await resetPassword({ ...baseParams, username: inputNRIC }, header, setLoading);
       fetching.current = false;
       setLoading(false);
+      setShowModal(true);
       if (response === undefined) {
         // TODO temporary
         return;
@@ -211,7 +218,9 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setInputPassword("");
           setInputNewPassword("");
           setInputRetypePassword("");
-          setRootPage("LOGIN");
+          if (page !== "EXPIRED_PASSWORD") {
+            setRootPage("LOGIN");
+          }
         }
       } else {
         setInput2Error(error.message);
@@ -243,7 +252,8 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
         <PasswordDetails
           error1={input1Error}
           error2={input2Error}
-          handleSubmit={handelNewPassword}
+          handleSubmit={handleNewPassword}
+          heading={LOGIN.LABEL_PASSWORD_EXPIRED}
           inputNewPassword={inputNewPassword}
           inputRetypePassword={inputRetypePassword}
           setError1={setInput1Error}
@@ -273,27 +283,40 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       break;
   }
 
-  const modalStyle = lockPrompt ? undefined : { backgroundColor: colorBlack._1_4 };
+  let modalContent: JSX.Element = <View />;
+  if (loading === true) {
+    modalContent = <Loading color={colorWhite._1} style={fullHeight} />;
+  } else if (lockPrompt) {
+    modalContent = (
+      <View style={{ ...centerHV, ...fullHW }}>
+        <Prompt
+          labelContinue={LOGIN.BUTTON_ENTER}
+          handleContinue={handleEnterOTP}
+          illustration={LocalAssets.illustration.loginError}
+          label={LOGIN.LABEL_LOCKED_ACCOUNT}
+          title={LOGIN.TITLE_LOCKED_ACCOUNT}
+        />
+      </View>
+    );
+  } else if (page === "EXPIRED_PASSWORD" && showModal === true) {
+    modalContent = (
+      <View style={{ ...centerHV, ...fullHW }}>
+        <Prompt
+          labelContinue={ACTION_BUTTONS.BUTTON_DONE}
+          handleContinue={handleDone}
+          illustration={LocalAssets.illustration.passwordUpdated}
+          label={LOGIN.LABEL_PASSWORD_UPDATED}
+          title={LOGIN.LABEL_PASSWORD_UPDATED_SUBHEADING}
+        />
+      </View>
+    );
+  }
 
   return (
     <Fragment>
       {content}
-      <RNModal animationType="fade" style={modalStyle} visible={loading}>
-        <Fragment>
-          {lockPrompt ? (
-            <View style={{ ...centerHV, ...fullHW }}>
-              <Prompt
-                labelContinue={LOGIN.BUTTON_ENTER}
-                handleContinue={handleEnterOTP}
-                illustration={LocalAssets.illustration.loginError}
-                label={LOGIN.LABEL_LOCKED_ACCOUNT}
-                title={LOGIN.TITLE_LOCKED_ACCOUNT}
-              />
-            </View>
-          ) : (
-            <Loading color={colorWhite._1} style={fullHeight} />
-          )}
-        </Fragment>
+      <RNModal animationType="fade" visible={loading || showModal || lockPrompt}>
+        <Fragment>{modalContent}</Fragment>
       </RNModal>
     </Fragment>
   );

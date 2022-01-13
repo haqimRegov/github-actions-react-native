@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, Tag, TagColorType } from "../../../../../components";
+import { CustomSpacer, StatusBadge, StatusBadgeColorType } from "../../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
@@ -16,7 +16,7 @@ export interface PendingStatusProps extends ITableCustomItem {
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item, sortedColumns }: PendingStatusProps) => {
   const { dueDate, remark, status, withHardcopy } = item.rawData as IDashboardOrder;
-  let statusColor: TagColorType;
+  let statusColor: StatusBadgeColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
     statusColor = "error";
   } else if (status === DICTIONARY_ORDER_STATUS.submitted) {
@@ -39,7 +39,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
   return (
     <View style={centerHorizontal}>
       <View style={{ ...flexRow, ...centerVertical }}>
-        <Tag color={statusColor} text={status} />
+        <StatusBadge color={statusColor} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
         {rerouted === true && accordionIcon !== undefined && remark ? (
           <Fragment>

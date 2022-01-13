@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -35,8 +35,8 @@ import {
   sw7,
   sw8,
 } from "../../../../styles";
+import { OrderOverview } from "../../../../templates/Onboarding/OrderOverview";
 import { formatAmount } from "../../../../utils";
-import { OrderDetails } from "./OrderDetails";
 
 interface OrderSummaryProps extends AcknowledgementStoreProps {
   handleNextStep: (route: TypeOnboardingRoute) => void;
@@ -50,8 +50,6 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
   onboarding,
   updateOnboarding,
 }: OrderSummaryProps) => {
-  const [expandOrder, setExpandOrder] = useState<number | undefined>(0);
-
   const handleConfirm = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findTermsAndConditions = updatedDisabledSteps.indexOf("TermsAndConditions");
@@ -123,7 +121,14 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
             <Fragment key={index}>
               {index !== 0 ? <CustomSpacer space={sh24} /> : null}
               <View style={{ ...px(sw24), ...shadow50Black115 }}>
-                <OrderDetails expandOrder={expandOrder} index={index} orderSummary={orderSummary} setExpandOrder={setExpandOrder} />
+                <OrderOverview
+                  funds={orderSummary.investments}
+                  createdOn={orderSummary.orderDate}
+                  noBadge={true}
+                  orderNumber={orderSummary.orderNumber}
+                  totalInvestment={orderSummary.orderTotalAmount}
+                  paymentType={orderSummary.paymentType}
+                />
               </View>
             </Fragment>
           );

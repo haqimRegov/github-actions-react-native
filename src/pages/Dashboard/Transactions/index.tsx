@@ -5,7 +5,7 @@ import { flexChild } from "../../../styles";
 import { ApplicationHistory } from "./ApplicationHistory";
 import { UploadDocuments, UploadHardCopy } from "./Documents";
 import { DashboardOrderSummary } from "./OrderSummary";
-import { DashboardPayment } from "./Payment";
+import { DashboardPayment } from "./Payment/Payment";
 
 interface TransactionsProps {
   handleRoute: (route: DashboardPageType) => void;

@@ -3,7 +3,7 @@ import { Image, ImageStyle, TextInput, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, Tag } from "../../../../components";
+import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, StatusBadge } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   absolutePosition,
@@ -204,7 +204,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                   return (
                     <Fragment key={index}>
                       {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
-                      <Tag
+                      <StatusBadge
                         color="secondary"
                         icon="close"
                         onPress={handlePress}

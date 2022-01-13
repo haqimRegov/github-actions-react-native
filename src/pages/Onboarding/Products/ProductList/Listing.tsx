@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, Tag } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   borderBottomGray2,
@@ -213,10 +213,10 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
         }}>
         <View style={{ ...flexRow, ...centerVertical }}>
           <CustomSpacer isHorizontal={true} space={sw20} />
-          <Tag color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
+          <StatusBadge color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
           <CustomSpacer isHorizontal={true} space={sw8} />
           {productType === "prsDefault" ? null : (
-            <Tag color={showBy === "all" ? "primary" : "secondary"} onPress={handleAllFunds} text={allFundsLabel} />
+            <StatusBadge color={showBy === "all" ? "primary" : "secondary"} onPress={handleAllFunds} text={allFundsLabel} />
           )}
           <CustomFlexSpacer />
           <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />

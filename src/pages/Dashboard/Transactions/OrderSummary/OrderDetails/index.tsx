@@ -2,31 +2,36 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, Dash, LabeledTitleProps, TextCard } from "../../../../../components";
+import { CustomSpacer, LabeledTitleProps, TextCard } from "../../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
 import {
-  borderBottomGray2,
+  borderBottomBlue3,
+  borderBottomBlue5,
   centerVertical,
   colorBlue,
-  colorRed,
+  flexChild,
   flexRow,
-  fs12BoldBlue1,
-  fs12BoldGray6,
-  fs18BoldGray6,
+  fs12RegGray5,
+  fs14RegGray6,
+  fs18BoldBlack2,
   fsTransformNone,
   px,
+  rowCenterVertical,
   sh16,
   sh24,
   sh32,
   sh8,
   sw16,
-  sw2,
   sw24,
+  sw32,
+  sw40,
+  sw56,
   sw64,
   sw8,
 } from "../../../../../styles";
+import { titleCaseString } from "../../../../../utils";
 
 const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
 
@@ -70,11 +75,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
-      <View style={px(sw24)}>
+      <View style={px(sw56)}>
         <TextCard data={transactionSummaryDetails} spaceBetweenItem={sw64} />
       </View>
       <CustomSpacer space={sh16} />
-      <Dash />
+      <View style={borderBottomBlue3} />
       <Fragment>
         <CustomSpacer space={sh32} />
         <View style={px(sw24)}>
@@ -119,15 +124,25 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
             return (
               <Fragment key={index}>
                 {index === 0 ? null : <CustomSpacer space={sh16} />}
-                <View style={{ ...flexRow, borderLeftColor: colorRed._2, borderLeftWidth: sw2 }}>
+                <View style={flexRow}>
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <IcoMoon color={colorBlue._1} name="clipboard" size={sw24} />
+                  <IcoMoon color={colorBlue._1} name="fund" size={sw24} />
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <Text style={fs18BoldGray6}>{investment.fundName}</Text>
+                  <View style={flexChild}>
+                    <View style={rowCenterVertical}>
+                      <Text style={fs18BoldBlack2}>{titleCaseString(investment.fundName)}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw16} />
+                      <View style={flexChild}>
+                        <View style={borderBottomBlue5} />
+                      </View>
+                    </View>
+                    <Text style={fs12RegGray5}>{titleCaseString(investment.fundIssuer)}</Text>
+                  </View>
                 </View>
-                <Text style={fs12BoldGray6}>{investment.fundIssuer}</Text>
                 <CustomSpacer space={sh24} />
-                <TextCard data={fundDetails} spaceBetweenItem={sw64} />
+                <View style={px(sw40)}>
+                  <TextCard data={fundDetails} spaceBetweenItem={sw64} />
+                </View>
               </Fragment>
             );
           })}
@@ -136,10 +151,14 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
       {paymentSummary !== undefined && paymentSummary !== null && paymentSummary.length > 0 ? (
         <Fragment>
           <CustomSpacer space={sh16} />
-          <Dash />
+          <View style={borderBottomBlue3} />
           <View style={px(sw24)}>
             {paymentSummary.map((payment: IOrderSummaryPayment, index: number) => {
-              const label = `${DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT} ${index + 1}`;
+              const surplusLabel = payment.surplusNote !== null ? payment.surplusNote : "";
+              const paymentLabel =
+                payment.paymentMethod !== "Recurring"
+                  ? `${DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT} ${index + 1}`
+                  : DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_DETAILS;
 
               const handleFile = () => {
                 setFile(payment.proofOfPayment);
@@ -162,16 +181,24 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
 
               if (payment.paymentMethod === "Recurring") {
                 paymentDetails.push(
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_RECURRING, title: `${totalInvestmentAmount}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_TYPE, title: `${payment.recurringType}`, titleStyle: fsTransformNone },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NAME,
                     title: `${payment.bankAccountName}`,
                     titleStyle: fsTransformNone,
+                    subtitle: payment.isCombined === true ? "Combined" : undefined,
+                    subtitleStyle: fs14RegGray6,
                   },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_BANK, title: `${payment.recurringBank}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_ACCOUNT_NUMBER, title: `${payment.bankAccountNumber}` },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_BANK, title: `${payment.recurringBank}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_FREQUENCY, title: `${payment.frequency}`, titleStyle: fsTransformNone },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+                    title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                    titleStyle: fsTransformNone,
+                  },
                 );
               }
 
@@ -281,14 +308,16 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                 <Fragment key={index}>
                   <CustomSpacer space={sh32} />
                   <View style={{ ...flexRow, ...centerVertical }}>
-                    <IcoMoon color={colorBlue._1} name="file" size={sw24} />
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <Text style={fs12BoldBlue1}>{label}</Text>
+                    <IcoMoon color={colorBlue._1} name="payment" size={sw24} />
+                    <CustomSpacer isHorizontal={true} space={sw8} />
+                    <Text style={fs18BoldBlack2}>{paymentLabel}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw8} />
+                    <Text style={fs12RegGray5}>{surplusLabel}</Text>
                   </View>
                   <CustomSpacer space={sh16} />
-                  <View style={borderBottomGray2} />
-                  <CustomSpacer space={sh16} />
-                  <TextCard data={paymentDetails} spaceBetweenItem={sw64} />
+                  <View style={px(sw32)}>
+                    <TextCard data={paymentDetails} spaceBetweenItem={sw64} />
+                  </View>
                 </Fragment>
               );
             })}

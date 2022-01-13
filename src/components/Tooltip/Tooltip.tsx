@@ -8,7 +8,7 @@ import { colorGray, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208
 export interface CustomTooltipProps {
   arrowSize?: TooltipSize;
   arrowStyle?: ViewStyle;
-  children?: ReactNode;
+  children?: ReactElement;
   color?: string;
   content: ReactElement;
   contentStyle?: ViewStyle;
@@ -87,12 +87,14 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
 
   return (
     <Tooltip
+      allowChildInteraction={true}
       arrowSize={defaultArrowSize}
       arrowStyle={defaultArrowStyle}
       backgroundColor={defaultOverlayColor}
       childContentSpacing={defaultSpacing}
       content={content}
       contentStyle={defaultContentStyle}
+      closeOnContentInteraction={false}
       disableShadow={defaultShadow}
       displayInsets={defaultInsets}
       isVisible={visible}

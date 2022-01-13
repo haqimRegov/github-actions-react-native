@@ -21,6 +21,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 interface SelectionBannerProps {
   bottomContent?: ReactNode;
   cancelOnPress?: () => void;
+  containerStyle?: ViewStyle;
   continueDebounce?: boolean;
   continueDisabled?: boolean;
   continueLoading?: boolean;
@@ -34,6 +35,7 @@ interface SelectionBannerProps {
 export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
   bottomContent,
   cancelOnPress,
+  containerStyle,
   continueDebounce,
   continueDisabled,
   continueLoading,
@@ -51,8 +53,9 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
     bottom: 0,
-    height: sh112,
+    minHeight: sh112,
     position: "absolute",
+    ...containerStyle,
   };
 
   const submitLabel = labelSubmit || "Done";

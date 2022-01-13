@@ -26,74 +26,82 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views";
 
-export type TagColorType = "success" | "error" | "primary" | "secondary" | "warning" | "danger" | "review" | "complete";
+export type StatusBadgeColorType = "success" | "error" | "primary" | "secondary" | "warning" | "danger" | "review" | "complete";
 
-interface TagProps {
+interface StatusBadgeProps {
   icon?: string;
   iconSize?: number;
-  color?: TagColorType;
+  color?: StatusBadgeColorType;
   onPress?: () => void;
   style?: ViewStyle;
   text: string;
   textStyle?: TextStyle;
 }
 
-export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "primary", onPress, style, text, textStyle }: TagProps) => {
-  let tagColor = colorBlue._1;
-  let tagTextColor = colorWhite._1;
+export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
+  icon,
+  iconSize,
+  color = "primary",
+  onPress,
+  style,
+  text,
+  textStyle,
+}: StatusBadgeProps) => {
+  let badgeColor = colorBlue._1;
+  let badgeTextColor = colorWhite._1;
 
   switch (color) {
     case "complete":
-      tagTextColor = colorBlue._9;
-      tagColor = colorGray._7;
+      badgeTextColor = colorBlue._9;
+      badgeColor = colorGray._7;
       break;
     case "danger":
-      tagTextColor = colorRed._3;
-      tagColor = colorRed._5;
+      badgeTextColor = colorRed._3;
+      badgeColor = colorRed._5;
       break;
     case "error":
-      tagTextColor = colorRed._2;
-      tagColor = colorRed._4;
+      badgeTextColor = colorRed._2;
+      badgeColor = colorRed._4;
       break;
     case "primary":
-      tagTextColor = colorWhite._1;
-      tagColor = colorBlue._1;
+      badgeTextColor = colorWhite._1;
+      badgeColor = colorBlue._1;
       break;
     case "review":
-      tagTextColor = colorPurple._1;
-      tagColor = colorPurple._2;
+      badgeTextColor = colorPurple._1;
+      badgeColor = colorPurple._2;
       break;
     case "secondary":
-      tagTextColor = colorBlue._1;
-      tagColor = colorBlue._2;
+      badgeTextColor = colorBlue._1;
+      badgeColor = colorBlue._2;
       break;
     case "success":
-      tagTextColor = colorGreen._1;
-      tagColor = colorGreen._2;
+      badgeTextColor = colorGreen._1;
+      badgeColor = colorGreen._2;
       break;
     case "warning":
-      tagTextColor = colorYellow._2;
-      tagColor = colorYellow._3;
+      badgeTextColor = colorYellow._2;
+      badgeColor = colorYellow._3;
       break;
 
     default:
       break;
   }
 
-  const tagStyle: ViewStyle = {
+  const badgeStyle: ViewStyle = {
     ...centerHV,
     ...flexRow,
     ...px(sw8),
     ...py(sh4),
     borderRadius: sw24,
-    backgroundColor: tagColor,
+    backgroundColor: badgeColor,
     height: sh24,
     ...style,
   };
 
-  const tagTextStyle: TextStyle = {
+  const badgeTextStyle: TextStyle = {
     ...fs12BoldWhite1,
-    color: tagTextColor,
+    color: badgeTextColor,
     fontFamily: NunitoSemiBold,
     lineHeight: sh16,
     ...textStyle,
@@ -102,12 +110,12 @@ export const Tag: FunctionComponent<TagProps> = ({ icon, iconSize, color = "prim
   return (
     <View style={flexRow}>
       <TouchableWithoutFeedback onPress={onPress}>
-        <View style={tagStyle}>
-          <Text style={tagTextStyle}>{text}</Text>
+        <View style={badgeStyle}>
+          <Text style={badgeTextStyle}>{text}</Text>
           {icon !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw4} />
-              <IcoMoon color={tagTextColor} name={icon} size={iconSize || sh12} />
+              <IcoMoon color={badgeTextColor} name={icon} size={iconSize || sh12} />
             </Fragment>
           ) : null}
         </View>

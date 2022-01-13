@@ -10,7 +10,6 @@ import {
   colorPink,
   colorPurple,
   colorWhite,
-  colorYellow,
   fs16BoldWhite1,
   fsUppercase,
   shadow16Blue112,
@@ -47,17 +46,13 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
       case "branch":
         defaultColor = colorPurple._2;
         break;
-
+      case "system":
       case "hq":
         defaultColor = colorBlue._7;
         break;
 
       case "client":
         defaultColor = colorOrange._1;
-        break;
-
-      case "system":
-        defaultColor = colorYellow._2;
         break;
 
       default:

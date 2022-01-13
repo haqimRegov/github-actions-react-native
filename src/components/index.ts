@@ -21,7 +21,6 @@ export * from "./Steps";
 export * from "./Switch";
 export * from "./Table";
 export * from "./Tabs";
-export * from "./Tags";
 export * from "./Toggle";
 export * from "./ToggleButton";
 export * from "./Tooltip";

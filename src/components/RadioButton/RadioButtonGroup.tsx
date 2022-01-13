@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, ReactElement, ReactNode } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
 import { flexCol, flexRow, fs16RegGray6, sh16, sh8, sw16 } from "../../styles";
@@ -9,8 +9,10 @@ import { RadioButton } from "./RadioButton";
 export interface RadioButtonGroupProps {
   direction?: "row" | "column";
   disabledIndex?: number[];
+  disabledTooltip?: boolean;
   label?: string;
   labelStyle?: TextStyle;
+  onCloseTooltip?: () => void;
   options: string[];
   optionStyle?: TextStyle;
   radioStyle?: ViewStyle;
@@ -20,6 +22,9 @@ export interface RadioButtonGroupProps {
   space?: number;
   spaceToLabel?: number;
   spaceToTop?: number;
+  tooltipContent?: ReactElement;
+  showTooltip?: boolean;
+  setShowTooltip?: () => void;
 }
 
 export const RadioButtonGroup: FunctionComponent<RadioButtonGroupProps> = ({
@@ -36,6 +41,7 @@ export const RadioButtonGroup: FunctionComponent<RadioButtonGroupProps> = ({
   space,
   spaceToLabel,
   spaceToTop,
+  ...radioButtonProps
 }: RadioButtonGroupProps) => {
   const defaultSpace = direction === "row" ? sw16 : sh16;
   const radioSpace = space !== undefined ? space : defaultSpace;
@@ -62,6 +68,7 @@ export const RadioButtonGroup: FunctionComponent<RadioButtonGroupProps> = ({
                 selected={option === selected}
                 selectedColor={selectedColor}
                 setSelected={handleSelect}
+                {...radioButtonProps}
               />
             </Fragment>
           );

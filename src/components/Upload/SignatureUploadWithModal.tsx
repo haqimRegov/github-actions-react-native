@@ -33,8 +33,8 @@ import {
   sw750,
   sw84,
 } from "../../styles";
+import { StatusBadge } from "../Badge/Status";
 import { BasicModal } from "../Modals";
-import { Tag } from "../Tags/Basic";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
 import { UploadButton } from "./UploadButton";
 import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
@@ -126,7 +126,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
           <Fragment>
             {uploadProps.completed === true ? (
               <View style={{ ...centerVertical, ...flexRow }}>
-                <Tag color="complete" text={uploadProps.completedText!} />
+                <StatusBadge color="complete" text={uploadProps.completedText!} />
                 <CustomSpacer isHorizontal={true} space={sw16} />
                 <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </View>

@@ -1,4 +1,5 @@
 import { COUNTRY_FLAG } from "./country_flag";
+import iconWarning from "./icon_warning_filled/icon_warning_filled.png";
 import illustrationClientError from "./illustration_client_error/illustration_client_error.png";
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
 import illustrationEDDEmpty from "./illustration_edd_empty/illustration_edd_empty.png";
@@ -10,6 +11,7 @@ import illustrationLoginError from "./illustration_login_error/illustration_logi
 import illustrationNoResults from "./illustration_no_results/illustration_no_results.png";
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
 import illustrationOrderSaved from "./illustration_order_saved/illustration_order_saved.png";
+import illustrationPasswordUpdated from "./illustration_password_updated/illustration_password_updated.png";
 import illustrationProfileSuccess from "./illustration_profile_success/illustration_profile_success.png";
 import illustrationReceiptSuccess from "./illustration_receipt_success/illustration_receipt_success.png";
 import illustrationSessionExpired from "./illustration_session_expired/illustration_session_expired.png";
@@ -31,6 +33,9 @@ export const LocalAssets = {
     risk_assessment_graph_1: riskAssessmentGraph1,
     risk_assessment_graph_2: riskAssessmentGraph2,
   },
+  icon: {
+    iconWarning: iconWarning,
+  },
   illustration: {
     clientError: illustrationClientError,
     clientWarning: illustrationClientWarning,
@@ -43,6 +48,7 @@ export const LocalAssets = {
     noResults: illustrationNoResults,
     orderReceived: illustrationOrderReceived,
     orderSaved: illustrationOrderSaved,
+    passwordUpdated: illustrationPasswordUpdated,
     profileSuccess: illustrationProfileSuccess,
     receiptSuccess: illustrationReceiptSuccess,
     sessionExpired: illustrationSessionExpired,

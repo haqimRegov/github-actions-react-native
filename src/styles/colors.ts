@@ -9,6 +9,7 @@ export const colorBlack = {
 
 export const colorBlue = {
   _1: "#002043",
+  _1_8: "rgba(0, 32, 67, 0.8)",
   _2: "#F2F4F6",
   _3: "#E7EBF1",
   _4: "#C6CBD4",

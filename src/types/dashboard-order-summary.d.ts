@@ -38,6 +38,7 @@ declare interface IOrderSummaryPayment {
   frequency?: string;
   fundCurrency?: TypeCurrency | "";
   investmentAmount?: string;
+  isCombined?: boolean;
   kibBankAccountName?: string;
   kibBankAccountNumber?: string;
   kibBankName?: string;
@@ -46,6 +47,7 @@ declare interface IOrderSummaryPayment {
   recurringBank?: string;
   recurringType?: string;
   remark?: string;
+  surplusNote?: string;
   transactionDate?: number;
   transactionTime?: number;
 }

@@ -13,3 +13,175 @@ declare interface IAmountValueError {
   value: string;
   error?: string;
 }
+
+declare type TypePaymentType = "Cash" | "EPF" | "Recurring";
+
+declare interface IFloatingAmount {
+  amount: number;
+  currency: TypeCurrency;
+}
+
+declare interface IPaymentOrderState {
+  investments: IOrderInvestment[];
+  paymentType: TypePaymentType;
+  orderDate: string;
+  orderNumber: string;
+  epfAccountNumber?: string;
+  orderTotalAmount: IOrderAmount[];
+  payments: IPaymentState[];
+
+  allowedRecurringType?: string[];
+  completed?: boolean;
+  floatingAmount?: IFloatingAmount[];
+  totalPaidAmount?: IOrderAmount[];
+  paymentCount?: number;
+
+  surplusBalance?: IPaymentInfo[];
+}
+
+declare interface IPurchaseSummary {
+  grandTotal: IOrderAmount[];
+  orders: IPaymentOrderState[];
+}
+
+declare interface IPurchaseSummaryState {
+  grandTotal: IOrderAmount[];
+  orders: IPaymentOrderState[];
+}
+
+declare interface IGrandTotal {
+  grandTotal: IOrderAmount[];
+  grandTotalRecurring: IOrderAmount;
+}
+
+declare interface IPayment {
+  amount?: string;
+  bankAccountName?: string;
+  bankAccountNumber?: string;
+  bankName?: string;
+  checkNumber?: string;
+  clientName?: string;
+  clientTrustAccountNumber?: string;
+  combinedBankAccountName?: string;
+  currency?: TypeCurrency | "";
+  epfAccountNumber?: string;
+  epfReferenceNumber?: string;
+  frequency?: string;
+  kibBankAccountName?: string;
+  kibBankAccountNumber?: string;
+  kibBankName?: string;
+  paymentMethod?: TypePaymentMethod;
+  proof?: FileBase64;
+  recurringBank?: string;
+  recurringType?: string;
+  referenceNumber?: string;
+  remark?: string;
+  transactionDate?: Date;
+  transactionTime?: Date;
+}
+
+declare interface IPaymentState extends IPayment {
+  saved?: boolean;
+}
+
+declare interface IPaymentInfoAction {
+  id: string | number;
+  option: "update" | "delete";
+}
+
+declare interface IEpfReferenceNo {
+  utmc: string;
+  referenceNo: string;
+}
+
+declare interface IUtilisedAmount {
+  amount: string;
+  orderNumber: string;
+  paymentId: string;
+}
+
+declare interface IPaymentInfo {
+  amount: string;
+  bankAccountName: string;
+  bankAccountNumber: string;
+  bankName: string;
+  checkNumber: string;
+  clientName: string;
+  clientTrustAccountNumber: string;
+  currency: string;
+  epfAccountNumber: string;
+  epfReferenceNumber: string;
+  frequency: string;
+  kibBankAccountNumber: string;
+  kibBankName: string;
+  orderNumber: string;
+  paymentMethod: TypePaymentMethod;
+  paymentType: TypePaymentType; // not in list surplus
+  proof: FileBase64 | undefined;
+  recurringBank: string;
+  recurringType: string;
+  referenceNumber: string;
+  remark: string | undefined;
+  transactionDate: Date | undefined;
+
+  // for surplus, recurring, etc
+  action?: IPaymentInfoAction; // action for saved payment
+  belongsTo?: string;
+  combinedBankAccountName?: string; // not in list surplus
+  excess?: IOrderAmount; // excess amount of a payment info
+  isEditable: boolean | undefined; // saved payment from BE
+  isCombined?: boolean; // for Recurring payment to check if the account name is combined
+  new: boolean | undefined;
+  parent: number | string | undefined; // id given to payment info with surplus
+  paymentId: string | undefined; // unique id of a payment info
+  saved: boolean;
+  sharedTo?: string[];
+  tag?: { uuid: string; orderNumber?: string }; // if use of surplus, uuid is the parent of the surplus payment info
+  usePreviousDda?: boolean;
+  utilised?: IUtilisedAmount[]; // utilised amount of an available balance
+}
+
+declare type TPaymentInfoKey = keyof IPaymentInfo;
+
+declare interface ICTADetails {
+  clientName: string;
+  clientTrustAccountNumber: string;
+}
+
+declare interface IRecurringInfo {
+  bankAccountName: string;
+  bankAccountNumber: string;
+  frequency: string;
+  recurringBank: string;
+}
+
+declare interface IRecurringDetails {
+  dda: IRecurringInfo[];
+  fpx: IRecurringInfo[];
+}
+
+declare interface IPaymentBalance {
+  amount: string;
+  currency: TypeCurrency;
+  id: string;
+}
+
+declare interface IPaymentRequired {
+  allowedRecurringType: string[];
+  // balance: IPaymentBalance[];
+  completedSurplusCurrencies?: string[];
+  createdOn: string;
+  ctaDetails: ICTADetails[];
+  epfAccountNumber: string | null;
+  funds: IOrderInvestment[];
+  isLastOrder?: boolean;
+  orderNumber: string;
+  paymentCount: number;
+  paymentType: TypePaymentType;
+  recurringDetails?: IRecurringDetails;
+  status: string;
+  surplusBalance: IPaymentInfo[];
+  totalInvestment: IOrderAmount[];
+  totalPaidAmount: IOrderAmount[];
+  payments: IPaymentInfo[];
+}

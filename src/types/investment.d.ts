@@ -1,4 +1,5 @@
 declare interface IProductSales {
+  allowEpf?: boolean;
   fundDetails: IProduct;
   investment: IProductInvestment;
   masterClassList: IProductClasses;

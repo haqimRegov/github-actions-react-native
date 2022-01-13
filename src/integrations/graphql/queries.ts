@@ -193,6 +193,8 @@ const getOrderSummary = gql`
             scheduledSalesCharge
           }
           paymentSummary {
+            isCombined
+            surplusNote
             fundCurrency
             investmentAmount
             paymentMethod
@@ -429,12 +431,32 @@ const listPaymentRequired = gql`
     listPaymentRequired(input: $input) {
       data {
         result {
-          orderNumber
-          paymentType
           status
+          orderNumber
           createdOn
+          paymentType
           allowedRecurringType
           epfAccountNumber
+          ctaDetails {
+            clientName
+            clientTrustAccountNumber
+          }
+          completedSurplusCurrencies
+          isLastOrder
+          recurringDetails {
+            dda {
+              bankAccountName
+              bankAccountNumber
+              recurringBank
+              frequency
+            }
+            fpx {
+              bankAccountName
+              bankAccountNumber
+              recurringBank
+              frequency
+            }
+          }
           totalInvestment {
             currency
             amount
@@ -443,7 +465,6 @@ const listPaymentRequired = gql`
             currency
             amount
           }
-          paymentCount
           funds {
             distributionInstruction
             fundingOption
@@ -461,12 +482,54 @@ const listPaymentRequired = gql`
             isEpf
             isSyariah
           }
+          paymentCount
           surplusBalance {
-            parent
-            orderNumber
+            parent # payment info id NOT payment id
+            belongsTo
+            sharedTo
             excess {
               currency
               amount
+            }
+            orderNumber
+            currency
+            amount
+            paymentMethod
+            transactionDate
+            referenceNumber
+            kibBankName
+            kibBankAccountNumber
+            bankName
+            checkNumber
+            clientName
+            clientTrustAccountNumber
+            epfReferenceNo
+            epfAccountNumber
+            bankAccountName
+            bankAccountNumber
+            recurringType
+            recurringBank
+            frequency
+            remark
+            proof {
+              name
+              url
+              type
+            }
+          }
+          payment {
+            paymentId
+            isEditable
+            belongsTo
+            sharedTo
+            parent
+            excess {
+              currency
+              amount
+            }
+            tag {
+              uuid
+              orderNumber
             }
             currency
             amount
@@ -488,15 +551,10 @@ const listPaymentRequired = gql`
             frequency
             remark
             proof {
-              id
               name
               url
               type
             }
-          }
-          ctaDetails {
-            clientName
-            clientTrustAccountNumber
           }
         }
       }

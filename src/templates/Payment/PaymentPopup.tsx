@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { Image, LayoutChangeEvent, Text, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
-import { ActionButtons, CheckBox, CustomSpacer, Loading, RNModal, Tag, TextSpaceArea } from "../../components";
+import { ActionButtons, CheckBox, CustomSpacer, Loading, RNModal, StatusBadge, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
 import {
   alignSelfStart,
@@ -146,7 +146,7 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                             <View style={flexRow}>
                               <Text style={fs16BoldBlack2}>{order.orderNumber}</Text>
                               <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Tag
+                              <StatusBadge
                                 color={order.status === "Completed" || order.status === "Submitted" ? "complete" : "warning"}
                                 text={order.status === "Completed" || order.status === "Submitted" ? "Completed" : order.status}
                               />
@@ -170,7 +170,10 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                         <View style={flexRow}>
                           <Text style={fs16BoldBlack2}>{PAYMENT.LABEL_ACCOUNT}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Tag color={result.account.status === "Completed" ? "complete" : "warning"} text={result.account.status} />
+                          <StatusBadge
+                            color={result.account.status === "Completed" ? "complete" : "warning"}
+                            text={result.account.status}
+                          />
                         </View>
                         <View>
                           {result.account.remarks.map((remark, remarkIndex) => {

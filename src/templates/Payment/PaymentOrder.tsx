@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, Tag } from "../../components";
+import { CustomSpacer } from "../../components";
 import { Language } from "../../constants";
 import {
   DICTIONARY_DDA_BANK,
@@ -9,28 +9,9 @@ import {
   DICTIONARY_RECURRING_CURRENCY,
   DICTIONARY_RECURRING_FREQUENCY,
 } from "../../data/dictionary";
-import {
-  alignItemsEnd,
-  centerVertical,
-  colorWhite,
-  flexRow,
-  fs12BoldGray6,
-  fs12RegGray6,
-  fs16BoldGray6,
-  fs16RegGray6,
-  fs24BoldGray6,
-  px,
-  py,
-  sh24,
-  sh8,
-  sh96,
-  shadow16Blue112,
-  sw24,
-  sw4,
-  sw8,
-} from "../../styles";
+import { centerVertical, colorWhite, flexRow, px, py, sh24, sh8, sh96, shadow16Blue112, sw24, sw8 } from "../../styles";
 import { AnimationUtils, formatAmount, parseAmount } from "../../utils";
-import { FundOverview } from "./FundOverview";
+import { OrderOverview } from "../Onboarding/OrderOverview";
 import { PaymentCard } from "./PaymentCard";
 
 const { PAYMENT } = Language.PAGE;
@@ -208,7 +189,17 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
 
   return (
     <View>
-      <View style={cardHeaderStyle}>
+      <OrderOverview
+        completed={completed}
+        funds={investments}
+        createdOn={orderDate}
+        orderNumber={orderNumber}
+        totalInvestment={orderTotalAmount}
+        paymentType={paymentType}
+        // setViewFund={setViewFund}
+        // viewFund={viewFund}
+      />
+      {/* <View style={cardHeaderStyle}>
         <View>
           <Text style={fs24BoldGray6}>{orderNumber}</Text>
           <Text style={fs12BoldGray6}>{orderDate}</Text>
@@ -216,7 +207,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
         <CustomFlexSpacer />
         <View style={alignItemsEnd}>
           <View style={{ ...centerVertical, ...flexRow }}>
-            <Tag color={tagColor} text={tagLabel} />
+            <StatusBadge color={tagColor} text={tagLabel} />
             <CustomSpacer isHorizontal={true} space={sw8} />
             <Text style={fs12RegGray6}>{totalAmountLabel}</Text>
           </View>
@@ -240,7 +231,7 @@ export const PaymentOrder: FunctionComponent<PaymentOrderProps> = ({
           <CustomSpacer space={sh8} />
           <FundOverview orderNumber={orderNumber} viewFund={viewFund} setViewFund={setViewFund} fund={fund} />
         </View>
-      ))}
+      ))} */}
       <CustomSpacer space={sh8} />
       <PaymentCard
         allowedRecurringType={allowedRecurringType}

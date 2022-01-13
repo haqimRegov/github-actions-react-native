@@ -486,7 +486,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           </CustomTooltip>
         )}
       </View>
-      {draftPayment.paymentType === "Cash" ? (
+      {draftPayment.paymentType === "Cash" && draftPayment.paymentMethod !== "Client Trust Account (CTA)" ? (
         <PaymentSurplus
           accountNames={accountNames}
           availableBalance={draftAvailableBalance}

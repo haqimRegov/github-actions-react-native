@@ -250,10 +250,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             bottomContent={
               proofOfPayments !== undefined ? (
                 <PaymentBannerContent
-                  grandTotal={grandTotal!.grandTotal}
-                  grandTotalRecurring={grandTotal?.grandTotalRecurring}
                   balancePayments={updatedBalancePayments}
                   excessPayments={completedCurrencies}
+                  grandTotal={grandTotal!.grandTotal}
+                  grandTotalRecurring={grandTotal?.grandTotalRecurring}
+                  paymentType={"Cash"}
                 />
               ) : null
             }

@@ -266,7 +266,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           />
         )}
       </View>
-      <PaymentPopup handleDone={handleResetOnboarding} loading={loading} result={paymentResult} />
+      <PaymentPopup
+        handleDone={handleResetOnboarding}
+        loading={loading}
+        result={paymentResult}
+        withExcess={completedCurrencies.length > 0}
+      />
     </SafeAreaPage>
   );
 };

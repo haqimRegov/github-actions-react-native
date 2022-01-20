@@ -991,11 +991,12 @@ export const english = {
         "Click ‘Continue editing’ to continue to update payment info.\n\nIf you close without saving, everything you changed will reset to its previous state.",
       PROMPT_SUBTITLE_PENDING:
         "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.",
-      PROMPT_SUBTITLE_PENDING_FLOATING:
-        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.\n\n4. Your investor has a floating amount in their account. This amount will be refunded.",
-      PROMPT_SUBTITLE_SUBMITTED_FLOATING: "Your investor has a floating amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_PENDING_EXCESS:
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.\n\n4. Your investor has an excess amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_SUBMITTED_EXCESS: "Your investor has an excess amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE_UNSAVED: "All unsaved progress will be discarded.\nClick ‘Edit’ to update previously added payment info.",
       PROMPT_SUBTITLE: "All unsaved progress will be discarded.",
+      PROMPT_SUBTITLE_EXCESS: "Your investor has a excess amount in their account. This amount will be refunded.",
       PROMPT_TITLE_CANCEL: "Are you sure you want to cancel?",
       PROMPT_TITLE_CONFIRM: "Are you sure you want to delete?",
       PROMPT_TITLE_DELETE: "Delete this payment info?",

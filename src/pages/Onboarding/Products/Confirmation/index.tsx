@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
 
 import { ConfirmationModal, CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage } from "../../../../components";
-import { CustomToast } from "../../../../components/Toast/Toast";
+import { CustomToast } from "../../../../components/Toast/CustomToast";
 import { Language } from "../../../../constants";
 import { useDelete } from "../../../../hooks";
 import { IcoMoon } from "../../../../icons";

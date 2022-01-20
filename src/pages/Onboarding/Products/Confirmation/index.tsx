@@ -19,7 +19,6 @@ import {
   fs16RegGray6,
   fs18BoldGray6,
   fs24BoldGray6,
-  fsCapitalize,
   px,
   sh16,
   sh176,
@@ -207,7 +206,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                   <Fragment>
                     {index !== 0 ? <CustomSpacer space={sh40} /> : null}
                     <View style={{ ...flexRow, ...centerVertical, ...px(sw8) }}>
-                      <Text style={{ ...fs16BoldBlack2, ...fsCapitalize }}>{item.fundDetails.issuingHouse}</Text>
+                      <Text style={fs16BoldBlack2}>{item.fundDetails.issuingHouse}</Text>
                       <CustomSpacer isHorizontal={true} space={sw16} />
                       <View style={flexChild}>
                         <View style={borderBottomBlue4} />
@@ -223,7 +222,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                       <View>
                         <Text style={fs10BoldGray6}>{type}</Text>
                         <CustomSpacer space={sh4} />
-                        <Text style={{ ...fs24BoldGray6, ...fsCapitalize }}>{fundName}</Text>
+                        <Text style={fs24BoldGray6}>{fundName}</Text>
                       </View>
                       <CustomFlexSpacer />
                       <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sh32} suppressHighlighting={true} />

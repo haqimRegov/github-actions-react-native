@@ -1336,6 +1336,7 @@ export const english = {
       LABEL_FUND_DELETED: "fund deleted",
       LABEL_FUNDS_DELETED: "funds deleted",
       LABEL_UNDO: "Undo",
+      LABEL_ALL_CHANGES_SAVED: "All changes saved.",
     },
     TOGGLE: {
       LABEL_NO: "No",

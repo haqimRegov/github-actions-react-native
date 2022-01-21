@@ -248,7 +248,12 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           label={bannerText}
         />
       )}
-      <PaymentPopup handleDone={handleBack} loading={loading} result={paymentResult} />
+      <PaymentPopup
+        handleDone={handleBack}
+        loading={loading}
+        result={paymentResult}
+        withExcess={proofOfPayment !== undefined && proofOfPayment.isLastOrder === true && completedCurrencies.length > 0}
+      />
     </Fragment>
   );
 };

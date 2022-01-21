@@ -14,8 +14,10 @@ import {
   flexRow,
   flexRowCC,
   flexWrap,
+  fs10RegGray6,
   fs12RegGray6,
   fs16BoldBlack2,
+  fs16RegGray6,
   fs24BoldBlue1,
   fsAlignCenter,
   fullHW,
@@ -49,9 +51,10 @@ interface PaymentPopupProps {
   handleDone: () => void;
   loading: boolean;
   result?: ISubmitProofOfPaymentsResult;
+  withExcess?: boolean;
 }
 
-export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone, loading, result }: PaymentPopupProps) => {
+export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone, loading, result, withExcess }: PaymentPopupProps) => {
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
   const [multipleColumn, setMultipleColumn] = useState<boolean>(false);
@@ -90,10 +93,10 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
   const submittedMessage = allOrdersSubmitted === true ? PAYMENT.PROMPT_TITLE_SUBMITTED : PAYMENT.PROMPT_TITLE_ORDER;
   const message = checkNonPendingOrder === true ? submittedMessage : PAYMENT.PROMPT_TITLE_SAVED;
 
-  const subtitles = result?.withFloating === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_FLOATING : PAYMENT.PROMPT_SUBTITLE_PENDING;
-  const floatingSubtitle =
-    result?.withFloating === true ? (
-      <TextSpaceArea spaceToTop={sh16} style={fs12RegGray6} text={PAYMENT.PROMPT_SUBTITLE_SUBMITTED_FLOATING} />
+  const subtitles = withExcess === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_EXCESS : PAYMENT.PROMPT_SUBTITLE_PENDING;
+  const excessSubtitle =
+    withExcess === true ? (
+      <TextSpaceArea spaceToTop={sh16} style={{ ...fs16RegGray6, ...fsAlignCenter }} text={PAYMENT.PROMPT_SUBTITLE_SUBMITTED_EXCESS} />
     ) : null;
 
   const modalContainer: ViewStyle = {
@@ -128,9 +131,9 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
                   <Image source={illustration} style={{ ...imageContain, height: sw136, width: sw136 }} />
                   <TextSpaceArea spaceToTop={sh8} style={{ ...fs24BoldBlue1, ...fsAlignCenter }} text={message} />
                   {checkNonPendingOrder === true && allOrdersSubmitted === true ? (
-                    floatingSubtitle
+                    excessSubtitle
                   ) : (
-                    <TextSpaceArea spaceToTop={sh16} style={fs12RegGray6} text={subtitles} />
+                    <TextSpaceArea spaceToTop={sh16} style={fs10RegGray6} text={subtitles} />
                   )}
                 </View>
               ) : (

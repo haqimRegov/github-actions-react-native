@@ -45,6 +45,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
   const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
+  const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
 
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
@@ -78,7 +79,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   };
 
   // console.log("proof", proofOfPayments);
-  const handleSubmit = async () => {
+  const handleSubmit = async (confirmed?: boolean) => {
     try {
       setLoading(true);
       const paymentOrders = await Promise.all(
@@ -95,7 +96,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         }),
       );
 
-      const request = { orders: paymentOrders };
+      const request = { orders: paymentOrders, isConfirmed: confirmed === true };
       const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;
@@ -121,6 +122,25 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     return undefined;
   };
 
+  const handleCancelPopup = () => {
+    setPaymentResult(undefined);
+    setLoading(false);
+  };
+
+  const handleConfirmPopup = async () => {
+    if (confirmPayment === true) {
+      return handleResetOnboarding();
+    }
+
+    const response = await handleSubmit(true);
+    if (response === undefined) {
+      setConfirmPayment(true);
+      return true;
+    }
+
+    return undefined;
+  };
+
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
   if (accountType === "Joint") {
@@ -129,11 +149,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
       { label: PAYMENT.OPTION_COMBINED, value: PAYMENT.OPTION_COMBINED },
     );
   }
-
-  useEffect(() => {
-    handleFetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const pendingLength =
     proofOfPayments !== undefined && proofOfPayments.length > 0
@@ -175,6 +190,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const continueDisabled =
     proofOfPayments !== undefined &&
     proofOfPayments!.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
+
+  useEffect(() => {
+    handleFetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SafeAreaPage>
@@ -267,7 +287,8 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         )}
       </View>
       <PaymentPopup
-        handleDone={handleResetOnboarding}
+        handleCancel={handleCancelPopup}
+        handleConfirm={handleConfirmPopup}
         loading={loading}
         result={paymentResult}
         withExcess={completedCurrencies.length > 0}

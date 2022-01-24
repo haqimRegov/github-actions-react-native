@@ -373,9 +373,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 updatedPayments.splice(index, 1);
                 setPayments(updatedPayments, getPaymentId);
                 setActiveInfo(updatedPayments.length - 1);
-                if (updatedPayments.length === 0) {
-                  handleExpandPayment(updatedPayments, true);
-                }
+                handleExpandPayment(updatedPayments, true);
               };
 
               const handleSave = (value: IPaymentInfo, additional?: boolean) => {

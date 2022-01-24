@@ -97,10 +97,10 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 }: PaymentInfoProps) => {
   const [draftPayment, setDraftPayment] = useState<IPaymentInfo>(payment);
   const [draftAvailableBalance, setDraftAvailableBalance] = useState<IPaymentInfo[]>(availableBalance);
-  const [prompt, setPrompt] = useState<boolean>(false);
+  const [deletePrompt, setDeletePrompt] = useState<boolean>(false);
   const [error, setError] = useState<IPaymentError>({ amount: undefined, checkNumber: undefined });
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
-  const hasNoChange = isObjectEqual(draftPayment, payment) && draftPayment.saved === false;
+  const isPaymentEqual = isObjectEqual(draftPayment, payment);
   const useOfSurplus = draftPayment.tag !== undefined;
 
   let paymentField: JSX.Element;
@@ -301,14 +301,14 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   };
 
   const handleRemoveInfo = () => {
-    if (hasNoChange === true) {
+    if (isPaymentEqual === true && draftPayment.saved === false) {
       return handleContinuePrompt();
     }
-    return setPrompt(true);
+    return setDeletePrompt(true);
   };
 
   const handleCancelPrompt = () => {
-    setPrompt(false);
+    setDeletePrompt(false);
   };
 
   const paymentToBeSaved = (latestPayment: IPaymentInfo) => {
@@ -454,12 +454,16 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       : `${PAYMENT.PROMPT_TITLE_REMOVE}\n\n${PAYMENT.PROMPT_TITLE_CONFIRM}`;
 
   useEffect(() => {
-    // if (isObjectEqual(draftPayment, payment) === false && draftPayment.saved === true) {
-    if (isObjectEqual(draftPayment, payment) === false) {
-      // setDraftPayment({ ...draftPayment, saved: false });
-      handleEditSaved();
+    if (isPaymentEqual === false) {
       if (draftPayment.saved === true) {
         setDraftPayment({ ...draftPayment, saved: false });
+        if (deletePrompt === true) {
+          setDraftPayment({ ...payment });
+          setDeletePrompt(false);
+        }
+      }
+      if (draftPayment.new !== true) {
+        handleEditSaved();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -522,14 +526,14 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       />
       <CustomSpacer space={sh40} />
       <PromptModal
-        visible={prompt}
         handleCancel={handleCancelPrompt}
         handleContinue={handleContinuePrompt}
         label={PAYMENT.PROMPT_TITLE_DELETE}
-        labelStyle={{ ...fsAlignLeft, ...fullWidth }}
         labelContinue={PAYMENT.BUTTON_DELETE}
+        labelStyle={{ ...fsAlignLeft, ...fullWidth }}
         title={removePromptTitle}
         titleStyle={{ ...fsAlignLeft, ...fullWidth }}
+        visible={deletePrompt}
       />
       {viewFile !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="url" value={viewFile} visible={viewFile !== undefined} />

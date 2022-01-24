@@ -888,6 +888,7 @@ export const english = {
     },
     PAYMENT: {
       BUTTON_ADDITIONAL: "Add Additional Payment",
+      BUTTON_CONFIRM: "Confirm",
       BUTTON_CONFIRM_DATE: "Confirm Date",
       BUTTON_CONFIRM_TIME: "Confirm Time",
       BUTTON_CLOSE: "Close Without Saving",

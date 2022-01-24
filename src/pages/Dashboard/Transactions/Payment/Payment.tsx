@@ -49,13 +49,15 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         const savedPayments = data.result.payment.map((pay) => ({
           ...pay,
           amount: formatAmount(pay.amount),
-          transactionDate: pay.transactionDate !== null ? moment(pay.transactionDate, "x").toDate() : moment().toDate(),
-          saved: true,
-          remark: pay.remark || undefined,
-          new: undefined,
           epfAccountNumber: pay.epfAccountNumber,
+          new: undefined,
+          orderNumber: data.result.orderNumber,
+          paymentType: data.result.paymentType,
           proof: pay.proof,
+          remark: pay.remark || undefined,
+          saved: true,
           tag: pay.tag || undefined,
+          transactionDate: pay.transactionDate !== null ? moment(pay.transactionDate, "x").toDate() : moment().toDate(),
         }));
         const state: IPaymentRequired = {
           ...data.result,

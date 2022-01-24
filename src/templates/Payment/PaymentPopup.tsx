@@ -228,7 +228,7 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({
               continueLoading={buttonLoading}
               handleCancel={prompt === "message" ? undefined : handleCancelPrompt}
               handleContinue={handleContinue}
-              labelContinue={prompt === "message" ? PAYMENT.BUTTON_DASHBOARD : undefined}
+              labelContinue={prompt === "message" ? PAYMENT.BUTTON_DASHBOARD : PAYMENT.BUTTON_CONFIRM}
             />
           </View>
         ) : (

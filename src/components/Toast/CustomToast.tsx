@@ -111,6 +111,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
       }
     }
     return () => clearInterval(countdownTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, timer]);
 
   useEffect(() => {
@@ -121,6 +122,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
         setTimer(timer + defaultDuration / 2);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
   useEffect(() => {
@@ -135,6 +137,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
       setTimer(duration);
     }
     setFadeOut(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tempVisible]);
 
   const containerStyle: ViewStyle = {

@@ -33,7 +33,6 @@ import {
   sh96,
   sw10,
   sw136,
-  sw218,
   sw320,
   sw400,
   sw452,
@@ -48,15 +47,23 @@ import {
 const { PAYMENT } = Language.PAGE;
 
 interface PaymentPopupProps {
-  handleDone: () => void;
+  handleCancel: () => void;
+  handleConfirm: () => Promise<void | true>;
   loading: boolean;
   result?: ISubmitProofOfPaymentsResult;
   withExcess?: boolean;
 }
 
-export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone, loading, result, withExcess }: PaymentPopupProps) => {
+export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({
+  handleCancel,
+  handleConfirm,
+  loading,
+  result,
+  withExcess,
+}: PaymentPopupProps) => {
   const [prompt, setPrompt] = useState<"status" | "message" | undefined>("status");
   const [toggle, setToggle] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [multipleColumn, setMultipleColumn] = useState<boolean>(false);
   const checkNonPendingOrder =
     result !== undefined && result.orders.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
@@ -67,14 +74,22 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
     setToggle(!toggle);
   };
 
-  const handleContinue = () => {
-    if (prompt === "status") {
+  const handleCancelPrompt = () => {
+    setButtonLoading(false);
+    handleCancel();
+  };
+
+  const handleContinue = async () => {
+    setButtonLoading(true);
+    const response = await handleConfirm();
+    if (prompt === "status" && response === true) {
+      setButtonLoading(false);
       return setPrompt("message");
     }
     if (prompt === "message") {
-      handleDone();
-      setPrompt("status");
+      return setPrompt("status");
     }
+
     return null;
   };
 
@@ -209,8 +224,9 @@ export const PaymentPopup: FunctionComponent<PaymentPopupProps> = ({ handleDone,
             </View>
             <ActionButtons
               buttonContainerStyle={buttonContainer}
-              continueButtonStyle={{ width: sw218 }}
               continueDisabled={checkNonPendingOrder === true ? !toggle : false}
+              continueLoading={buttonLoading}
+              handleCancel={prompt === "message" ? undefined : handleCancelPrompt}
               handleContinue={handleContinue}
               labelContinue={prompt === "message" ? PAYMENT.BUTTON_DASHBOARD : undefined}
             />

@@ -26,6 +26,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [proofOfPayment, setProofOfPayment] = useState<IPaymentRequired | undefined>(undefined);
   const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [grandTotal, setGrandTotal] = useState<IOrderAmount[]>([]);
+  const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -75,7 +76,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (confirmed?: boolean) => {
     try {
       setLoading(true);
       const paymentWithDeleted = [...proofOfPayment!.payments];
@@ -98,7 +99,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         { orderNumber: proofOfPayment!.orderNumber, paymentType: proofOfPayment!.paymentType, payments: payment },
       ];
 
-      const request = { orders: paymentOrders };
+      const request = { orders: paymentOrders, isConfirmed: confirmed === true };
       // console.log("req", request);
       const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
       // console.log("res", paymentResponse);
@@ -124,6 +125,25 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         // console.log("paymentResult undefined", paymentResult);
       }
     }
+    return undefined;
+  };
+
+  const handleCancelPopup = () => {
+    setPaymentResult(undefined);
+    setLoading(false);
+  };
+
+  const handleConfirmPopup = async () => {
+    if (confirmPayment === true) {
+      return handleBack();
+    }
+
+    const response = await handleSubmit(true);
+    if (response === undefined) {
+      setConfirmPayment(true);
+      return true;
+    }
+
     return undefined;
   };
 
@@ -249,7 +269,8 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         />
       )}
       <PaymentPopup
-        handleDone={handleBack}
+        handleCancel={handleCancelPopup}
+        handleConfirm={handleConfirmPopup}
         loading={loading}
         result={paymentResult}
         withExcess={proofOfPayment !== undefined && proofOfPayment.isLastOrder === true && completedCurrencies.length > 0}

@@ -8,6 +8,7 @@ import {
   centerHorizontal,
   centerVertical,
   colorBlack,
+  colorBlue,
   colorWhite,
   flexChild,
   flexRow,
@@ -15,6 +16,7 @@ import {
   fs12RegWhite1,
   fullWidth,
   justifyContentEnd,
+  px,
   sh24,
   sh48,
   sw16,
@@ -23,9 +25,14 @@ import {
   sw62,
   sw8,
 } from "../../styles";
+import { IconButton } from "../Touchables";
 import { CustomSpacer } from "../Views";
 
 const { TOAST } = Language.PAGE;
+
+declare interface IRenderContentProps {
+  handlePress: () => void;
+}
 
 declare interface CustomToastProps {
   animationIn?: Animatable.Animation;
@@ -33,25 +40,32 @@ declare interface CustomToastProps {
   children?: ReactNode;
   count?: number;
   duration?: number;
+  isDeleteToast?: boolean;
   onPress?: () => void;
-  setCount?: (count: number) => void;
+  parentVisible?: boolean;
+  RenderContent?: (props: IRenderContentProps) => JSX.Element;
+  setCount?: (currentCount: number) => void;
+  setParentVisible?: (currentVisibility: boolean) => void;
   style?: ViewStyle;
 }
 
 export const CustomToast: FunctionComponent<CustomToastProps> = ({
   animationIn,
   animationOut,
-  children,
   count,
   duration,
+  isDeleteToast,
   onPress,
+  parentVisible,
+  RenderContent,
+  setParentVisible,
   setCount,
   style,
 }: CustomToastProps) => {
   const [fadeOut, setFadeOut] = useState<boolean>(false);
   const [tempVisible, setTempVisible] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(3);
-  const [visible, setVisible] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(parentVisible !== undefined ? parentVisible : false);
   const defaultDuration = duration !== undefined ? duration : 3;
 
   const handlePress = () => {
@@ -75,6 +89,9 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
   const handleVisible = () => {
     if (visible === false) {
       setTempVisible(false);
+      if (setParentVisible !== undefined) {
+        setParentVisible(false);
+      }
     }
   };
 
@@ -88,31 +105,39 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
       } else {
         setVisible(false);
         setTimer(defaultDuration);
-        setTimeout(() => {
-          if (setCount !== undefined) {
-            setCount(0);
-          }
-        }, 400);
+        if (setCount !== undefined) {
+          setCount(0);
+        }
       }
     }
     return () => clearInterval(countdownTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, timer]);
 
   useEffect(() => {
-    if (count !== undefined && count !== 0) {
+    if (count !== 0) {
       setVisible(true);
       setTempVisible(true);
-      if (count > 1) {
+      if (count !== undefined && count > 1) {
         setTimer(timer + defaultDuration / 2);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
+
+  useEffect(() => {
+    if (parentVisible !== undefined && parentVisible === true) {
+      setVisible(true);
+      setTempVisible(true);
+    }
+  }, [parentVisible]);
 
   useEffect(() => {
     if (duration !== undefined) {
       setTimer(duration);
     }
     setFadeOut(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tempVisible]);
 
   const containerStyle: ViewStyle = {
@@ -125,10 +150,10 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
     ...style,
   };
   const contentContainerStyle: ViewStyle = {
-    ...flexRow,
-    backgroundColor: colorWhite._1,
+    backgroundColor: colorBlack._2,
     marginRight: sw24,
     width: sw240,
+    borderRadius: sw8,
     ...style,
   };
 
@@ -136,35 +161,58 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
     ...flexChild,
     ...flexRow,
     ...centerVertical,
-    backgroundColor: colorBlack._2,
     borderTopLeftRadius: sw8,
     borderBottomLeftRadius: sw8,
   };
 
-  const undoContainerStyle: ViewStyle = {
+  const sideContainerStyle: ViewStyle = {
     ...flexRow,
     ...centerVertical,
     ...centerHorizontal,
+    height: sh48,
+  };
+
+  const undoContainerStyle: ViewStyle = {
+    width: sw62,
     backgroundColor: colorBlack._2,
     borderTopRightRadius: sw8,
     borderBottomRightRadius: sw8,
-    height: sh48,
-    width: sw62,
+    ...sideContainerStyle,
   };
 
-  // const numberContainerStyle: ViewStyle = {
-  //   ...centerVertical,
-  //   borderRadius: sw100,
-  //   borderColor: colorWhite._1,
-  //   borderWidth: sw1,
-  //   height: sw24,
-  //   width: sw24,
-  // };
+  const defaultDeletedText = count !== undefined && count > 1 ? TOAST.LABEL_FUNDS_DELETED : TOAST.LABEL_FUND_DELETED;
+
+  const toastContent =
+    isDeleteToast !== undefined && isDeleteToast === true ? (
+      <View style={flexRow}>
+        <CustomSpacer isHorizontal={true} space={sw16} />
+        <View style={textContainerStyle}>
+          <Text style={fs12RegWhite1}>{`${count} ${defaultDeletedText}`}</Text>
+        </View>
+        <CustomSpacer isHorizontal={true} space={sw16} />
+        <View style={{ backgroundColor: colorWhite._1 }}>
+          <TouchableOpacity activeOpacity={0.8} onPress={handlePress}>
+            <View style={undoContainerStyle}>
+              <Text style={fs12BoldBlue8}>{TOAST.LABEL_UNDO}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    ) : (
+      <View style={{ ...flexRow, ...px(sw16) }}>
+        <View style={textContainerStyle}>
+          <Text style={fs12RegWhite1}>{TOAST.LABEL_ALL_CHANGES_SAVED}</Text>
+        </View>
+        <CustomSpacer isHorizontal={true} space={sw16} />
+        <View style={sideContainerStyle}>
+          <IconButton color={colorBlue._8} name="close" onPress={handlePress} />
+        </View>
+      </View>
+    );
 
   const defaultAnimationIn: Animatable.Animation = animationIn !== undefined ? animationIn : "slideInRight";
   const defaultPropAnimationOut: Animatable.Animation = animationOut !== undefined ? animationOut : "fadeOut";
   const defaultAnimationOut: Animatable.Animation = fadeOut === false ? "slideOutRight" : defaultPropAnimationOut;
-  const defaultDeletedText = count !== undefined && count > 1 ? TOAST.LABEL_FUNDS_DELETED : TOAST.LABEL_FUND_DELETED;
   return (
     <Fragment>
       {tempVisible === true ? (
@@ -175,23 +223,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
               duration={visible === true ? 1000 : 1000}
               style={contentContainerStyle}
               onAnimationEnd={handleVisible}>
-              {children !== undefined ? (
-                children
-              ) : (
-                <Fragment>
-                  <View style={textContainerStyle}>
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <Text style={fs12RegWhite1}>{count}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <Text style={fs12RegWhite1}>{defaultDeletedText}</Text>
-                  </View>
-                  <TouchableOpacity activeOpacity={0.85} onPress={handlePress}>
-                    <View style={undoContainerStyle}>
-                      <Text style={fs12BoldBlue8}>{TOAST.LABEL_UNDO}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </Fragment>
-              )}
+              {RenderContent !== undefined ? <RenderContent handlePress={handlePress} /> : toastContent}
             </Animatable.View>
           </View>
         </Fragment>

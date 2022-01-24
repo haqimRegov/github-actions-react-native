@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
-import React, { Fragment, FunctionComponent, ReactNode, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { connect } from "react-redux";

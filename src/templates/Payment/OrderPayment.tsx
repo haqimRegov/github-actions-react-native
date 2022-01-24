@@ -94,7 +94,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     // balance,
   } = proofOfPayment;
 
-  const [prompt, setPrompt] = useState<boolean>(false);
+  const [unsavedPrompt, setUnsavedPrompt] = useState<boolean>(false);
   const [balance, setBalance] = useState<IOrderAmount[]>([]);
   const [pendingBalance, setPendingBalance] = useState<IOrderAmount[]>([]);
   const [activeInfo, setActiveInfo] = useState<number>(payments.length);
@@ -107,16 +107,19 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   const currencies = balanceCurrencies.map((value) => ({ label: value.currency, value: value.currency }));
 
   const setPayments = (value: IPaymentInfo[], paymentId?: string) => {
+    // check if there is unsaved changes but overrode the prompt with noPrompt (this is possible if the user edits a saved info but decided to remove it)
+    if (unsavedChanges !== -1) {
+      setUnsavedChanges(-1);
+    }
     setProofOfPayment({ ...proofOfPayment, payments: value }, paymentId);
   };
 
-  const handleExpandPayment = (noPrompt?: boolean) => {
+  const handleExpandPayment = (latestPayment: IPaymentInfo[], noPrompt?: boolean) => {
     AnimationUtils.layout({ duration: activeOrder.order === orderNumber ? 200 : 300 });
-    const updatedInfo = [...payments];
-
+    const updatedInfo = [...latestPayment];
     // collapse
     if (unsavedChanges !== -1 && noPrompt === undefined) {
-      return setPrompt(true);
+      return setUnsavedPrompt(true);
     }
 
     // add new payment info
@@ -146,7 +149,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   };
 
   const handleCollapse = () => {
-    handleExpandPayment(true);
+    handleExpandPayment(payments, true);
     setActiveInfo(-1);
     setUnsavedChanges(-1);
   };
@@ -174,18 +177,21 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     const updatedPayments = [...payments];
     const findUnsaved = updatedPayments.findIndex((findPayment) => findPayment.saved === false);
 
-    // TODO smart check for unsaved info when user typed something
     if (findUnsaved !== -1) {
       updatedPayments.splice(findUnsaved, 1);
       setPayments(updatedPayments);
     }
 
-    setPrompt(false);
-    handleExpandPayment(true);
+    setUnsavedPrompt(false);
+    handleExpandPayment(updatedPayments, true);
+  };
+
+  const handlePressIcon = () => {
+    handleExpandPayment(payments);
   };
 
   const handleContinuePrompt = () => {
-    setPrompt(false);
+    setUnsavedPrompt(false);
   };
 
   const handleCancelEdit = () => {
@@ -312,7 +318,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
           <IconButton
             color={colorBlue._1}
             name={headerIcon}
-            onPress={handleExpandPayment}
+            onPress={handlePressIcon}
             size={sw24}
             style={circleBorder(sw40, sw1, colorBlue._4)}
           />
@@ -368,7 +374,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 setPayments(updatedPayments, getPaymentId);
                 setActiveInfo(updatedPayments.length - 1);
                 if (updatedPayments.length === 0) {
-                  handleExpandPayment();
+                  handleExpandPayment(updatedPayments, true);
                 }
               };
 
@@ -479,15 +485,15 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <PromptModal
-        visible={prompt}
         handleCancel={handleCancelPrompt}
         handleContinue={handleContinuePrompt}
         label={PAYMENT.PROMPT_TITLE_UNSAVED}
         labelCancel={PAYMENT.BUTTON_CLOSE}
         labelContinue={PAYMENT.BUTTON_CONTINUE}
-        title={PAYMENT.PROMPT_SUBTITLE_CONTINUE}
         labelStyle={promptStyle}
+        title={PAYMENT.PROMPT_SUBTITLE_CONTINUE}
         titleStyle={promptStyle}
+        visible={unsavedPrompt}
       />
     </View>
   );

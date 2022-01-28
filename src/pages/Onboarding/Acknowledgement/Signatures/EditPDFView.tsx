@@ -155,7 +155,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
             {completed === true ? (
               <View style={px(sw20)}>
                 <CustomSpacer space={sh24} />
-                <RoundedButton loading={continueLoading} onPress={handleContinue} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
+                <RoundedButton onPress={handleContinue} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
                 <CustomSpacer space={sh56} />
               </View>
             ) : null}

@@ -30,6 +30,7 @@ import {
   sw20,
   sw24,
   sw64,
+  sw752,
   sw8,
 } from "../../../../../styles";
 import { AnimationUtils } from "../../../../../utils";
@@ -149,7 +150,13 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
     return (
       <Fragment>
         {remark ? (
-          <OrderRemarks showIcon={false} remarks={remark} remarkTitle={DASHBOARD_EDD.LABEL_CANCELLED_REMARKS} status={status} />
+          <OrderRemarks
+            cardStyle={{ width: sw752 }}
+            showIcon={false}
+            remarks={remark}
+            remarkTitle={DASHBOARD_EDD.LABEL_CANCELLED_REMARKS}
+            status={status}
+          />
         ) : null}
       </Fragment>
     );

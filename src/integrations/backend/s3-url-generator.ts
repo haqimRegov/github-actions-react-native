@@ -28,7 +28,7 @@ export const hardcopy = (clientId: string, orderNumber: string, labelName: strin
 export const document = (clientId: string, type: string, mime: string) => {
   const ext = mime.substring(mime.lastIndexOf("/") + 1);
 
-  return `clients/${clientId}/IDENTIFICATION/${camelCaseString(type)}-${moment().format(HARDCOPY_DATE_TIME_FORMAT)}.${ext}`;
+  return `clients/${clientId}/IDENTIFICATION/${type}-${moment().format(HARDCOPY_DATE_TIME_FORMAT)}.${ext}`;
 };
 
 export const S3UrlGenerator = { document, hardcopy, payment };

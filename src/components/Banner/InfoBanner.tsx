@@ -19,6 +19,7 @@ import {
   sh8,
   sw1,
   sw24,
+  sw696,
   sw8,
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
@@ -59,7 +60,7 @@ export const InfoBanner: FunctionComponent<IInfoBannerProps> = ({ icon, reason, 
           <IcoMoon color={icon.color} name={icon.name} size={icon.size} />
         </View>
         <CustomSpacer isHorizontal={true} space={sw8} />
-        <View>
+        <View style={{ maxWidth: sw696 }}>
           <Text style={fs14BoldBlack2}>{reason}</Text>
           <CustomSpacer space={sh8} />
           <View style={{ ...flexRow, ...centerVertical }}>

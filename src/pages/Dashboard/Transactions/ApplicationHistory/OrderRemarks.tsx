@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 
 import { CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants/language";
@@ -30,13 +30,20 @@ import {
 const { DASHBOARD_HOME } = Language.PAGE;
 
 declare interface OrderRemarksProps {
+  cardStyle?: ViewStyle;
   remarks: IDashboardRemark[];
   remarkTitle?: string;
   showIcon?: boolean;
   status: OrderStatusType | IEDDStatusType;
 }
 
-export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({ remarks, remarkTitle, showIcon, status }: OrderRemarksProps) => {
+export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
+  cardStyle,
+  remarks,
+  remarkTitle,
+  showIcon,
+  status,
+}: OrderRemarksProps) => {
   const title =
     status === "BR - Rerouted" || status === "HQ - Rerouted"
       ? DASHBOARD_HOME.LABEL_REASONS_REROUTED
@@ -64,11 +71,11 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({ remarks, re
                         <CustomSpacer isHorizontal={true} space={sw12} />
                       </Fragment>
                     ) : null}
-                    <View style={{ ...centerHorizontal, width: sw296 }}>
+                    <View style={{ ...centerHorizontal, width: sw296, ...cardStyle }}>
                       <Text style={{ ...fs10BoldGray5, lineHeight: sh13 }}>{label}</Text>
                       {remark.length > 0
                         ? remark.map((text: string, remarkIndex: number) => {
-                            const updatedText = remarkIndex !== 0 ? `• ${text}` : text;
+                            const updatedText = remark.length > 1 ? `• ${text}` : text;
                             return (
                               <Text key={remarkIndex} style={{ ...fs10RegGray5, lineHeight: sh12 }}>
                                 {updatedText}

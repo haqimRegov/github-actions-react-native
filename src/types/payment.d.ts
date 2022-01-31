@@ -185,3 +185,8 @@ declare interface IPaymentRequired {
   totalPaidAmount: IOrderAmount[];
   payments: IPaymentInfo[];
 }
+
+declare interface ISetProofOfPaymentAction {
+  paymentId: string;
+  option: "update" | "delete";
+}

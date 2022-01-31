@@ -213,17 +213,23 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             </View>
             {proofOfPayments !== undefined &&
               proofOfPayments.map((proofOfPayment: IPaymentRequired, index: number) => {
-                const setProofOfPayment = (value: IPaymentRequired, paymentId?: string) => {
+                const setProofOfPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction) => {
                   let updatedProofOfPayments: IPaymentRequired[] = [...proofOfPayments];
                   updatedProofOfPayments[index] = { ...updatedProofOfPayments[index], ...value };
-
-                  if (paymentId !== undefined) {
+                  if (action !== undefined && action.paymentId !== undefined) {
                     const updatedPOP = updatedProofOfPayments.map((eachOrder) => {
-                      const filteredPayments = eachOrder.payments.filter(
-                        (eachPOP) =>
-                          (eachPOP.tag === undefined && eachPOP.parent !== paymentId) ||
-                          (eachPOP.tag !== undefined && eachPOP.tag.uuid !== paymentId),
-                      );
+                      const filteredPayments = eachOrder.payments.filter((eachPOP) => {
+                        const deleteCondition =
+                          (eachPOP.tag === undefined && eachPOP.parent !== action.paymentId) ||
+                          (eachPOP.tag !== undefined && eachPOP.tag.uuid !== action.paymentId);
+                        const updateCondition =
+                          (eachPOP.tag === undefined && eachPOP.parent === action.paymentId) ||
+                          (eachPOP.tag === undefined && eachPOP.paymentId !== action.paymentId) ||
+                          (eachPOP.tag !== undefined && eachPOP.tag.uuid !== action.paymentId);
+
+                        return action.option === "delete" ? deleteCondition : updateCondition;
+                      });
+
                       return {
                         ...eachOrder,
                         status: filteredPayments.length === 0 ? "Pending Payment" : eachOrder.status,

@@ -52,7 +52,7 @@ export interface OrderPaymentProps {
   deletedPayment: IPaymentInfo[];
   proofOfPayment: IPaymentRequired;
   setActiveOrder: (value: { order: string; fund: string }) => void;
-  setProofOfPayment: (value: IPaymentRequired, payment?: string) => void;
+  setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction) => void;
   setDeletedPayment: (value: IPaymentInfo[]) => void;
   setApplicationBalance: (value: IPaymentInfo[]) => void;
 }
@@ -106,12 +106,12 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   const balanceCurrencies = pendingBalance.length > 0 ? [...pendingBalance] : [...totalInvestment];
   const currencies = balanceCurrencies.map((value) => ({ label: value.currency, value: value.currency }));
 
-  const setPayments = (value: IPaymentInfo[], paymentId?: string) => {
+  const setPayments = (value: IPaymentInfo[], action?: ISetProofOfPaymentAction) => {
     // check if there is unsaved changes but overrode the prompt with noPrompt (this is possible if the user edits a saved info but decided to remove it)
     if (unsavedChanges !== -1) {
       setUnsavedChanges(-1);
     }
-    setProofOfPayment({ ...proofOfPayment, payments: value }, paymentId);
+    setProofOfPayment({ ...proofOfPayment, payments: value }, action);
   };
 
   const handleExpandPayment = (latestPayment: IPaymentInfo[], noPrompt?: boolean) => {
@@ -371,7 +371,9 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 }
                 const getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
                 updatedPayments.splice(index, 1);
-                setPayments(updatedPayments, getPaymentId);
+                const action: ISetProofOfPaymentAction | undefined =
+                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete" } : undefined;
+                setPayments(updatedPayments, action);
                 setActiveInfo(updatedPayments.length - 1);
                 handleExpandPayment(updatedPayments, true);
               };
@@ -403,8 +405,18 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   updatedPayments.push(additionalInfo);
                   setActiveInfo(updatedPayments.length - 1);
                 }
+                // check if existing surplus parent and delete all child if parent got updated
+                const findExistingSurplusParent =
+                  value.excess !== undefined && value.parent !== undefined
+                    ? applicationBalance.findIndex((bal) => bal.parent === value.parent)
+                    : -1;
+                const checkIfUtilised =
+                  findExistingSurplusParent !== -1 ? applicationBalance[findExistingSurplusParent].utilised!.length > 0 : false;
+                const getPaymentId = checkIfUtilised === true ? payments[index].paymentId : undefined;
+                const action: ISetProofOfPaymentAction | undefined =
+                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update" } : undefined;
 
-                setPayments(updatedPayments);
+                setPayments(updatedPayments, action);
 
                 if (additional !== true) {
                   handleCollapse();

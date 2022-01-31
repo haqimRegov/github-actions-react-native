@@ -74,7 +74,8 @@ export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
                 const surplusSelected = payment.tag !== undefined && payment.tag.uuid === surplus.parent;
 
                 const availableExcessAmount = getAvailableExcessAmount(surplus);
-                const amountLabel = surplusSelected === true ? payment.amount : availableExcessAmount;
+                const currentAmountLabel = availableExcessAmount > parseInt(payment.amount, 10) ? availableExcessAmount : payment.amount;
+                const amountLabel = surplusSelected === true ? currentAmountLabel : availableExcessAmount;
 
                 const title = `${surplus.excess!.currency} ${formatAmount(amountLabel)}`;
 
@@ -99,6 +100,7 @@ export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
                       amount: formatAmount(utilisedAmount.toString()),
                       belongsTo: surplus.orderNumber,
                       new: undefined,
+                      parent: undefined,
                       paymentId: uniqueId.current,
                       remark: undefined,
                       saved: false,

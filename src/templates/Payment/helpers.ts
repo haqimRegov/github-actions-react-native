@@ -363,3 +363,15 @@ export const calculateBalances = (proofOfPayments: IPaymentRequired[]): IOrderAm
   }
   return balancePayments;
 };
+
+export const checkCurrencyCompleted = (proofOfPayment: IPaymentRequired, currency: TypeCurrency) => {
+  const totalCurrency =
+    proofOfPayment.payments.length > 0
+      ? proofOfPayment.payments
+          .filter((eachCheckPOP: IPaymentInfo) => eachCheckPOP.currency === currency)
+          .map((payment: IPaymentInfo) => parseAmount(payment.amount))
+          .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
+      : 0;
+  const findIndex = proofOfPayment.totalInvestment.findIndex((eachTotal: IOrderAmount) => eachTotal.currency === currency);
+  return totalCurrency >= parseAmount(proofOfPayment.totalInvestment[findIndex].amount);
+};

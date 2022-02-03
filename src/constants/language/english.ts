@@ -1347,6 +1347,7 @@ export const english = {
     TOAST: {
       LABEL_FUND_DELETED: "fund deleted",
       LABEL_FUNDS_DELETED: "funds deleted",
+      LABEL_PAYMENT_INFO_DELETED: "payment info deleted",
       LABEL_UNDO: "Undo",
       LABEL_ALL_CHANGES_SAVED: "All changes saved.",
     },

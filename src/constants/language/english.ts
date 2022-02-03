@@ -1025,7 +1025,7 @@ export const english = {
       SUBHEADING: "Summary of your purchase",
       TITLE_RECURRING: "Add Recurring Info",
       TITLE: "Add Proof of Payment",
-      TOOLTIP_REMOVE: "This payment info can not be deleted as its surplus has been used on another submitted order.",
+      TOOLTIP_REMOVE: "This payment info cannot be deleted as its surplus has been used on another submitted order.",
     },
     PRODUCT_DETAILS: {
       LABEL_AMP_FEE: "AMP Fee",
@@ -1347,6 +1347,7 @@ export const english = {
     TOAST: {
       LABEL_FUND_DELETED: "fund deleted",
       LABEL_FUNDS_DELETED: "funds deleted",
+      LABEL_PAYMENT_INFO_DELETED: "payment info deleted",
       LABEL_UNDO: "Undo",
       LABEL_ALL_CHANGES_SAVED: "All changes saved.",
     },

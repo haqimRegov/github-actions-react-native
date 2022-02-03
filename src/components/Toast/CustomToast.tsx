@@ -39,6 +39,7 @@ declare interface CustomToastProps {
   animationOut?: Animatable.Animation;
   children?: ReactNode;
   count?: number;
+  deleteText?: string;
   duration?: number;
   isDeleteToast?: boolean;
   onPress?: () => void;
@@ -53,6 +54,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
   animationIn,
   animationOut,
   count,
+  deleteText,
   duration,
   isDeleteToast,
   onPress,
@@ -64,9 +66,9 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
 }: CustomToastProps) => {
   const [fadeOut, setFadeOut] = useState<boolean>(false);
   const [tempVisible, setTempVisible] = useState<boolean>(false);
-  const [timer, setTimer] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(parentVisible !== undefined ? parentVisible : false);
   const defaultDuration = duration !== undefined ? duration : 3;
+  const [timer, setTimer] = useState<number>(defaultDuration);
 
   const handlePress = () => {
     if (onPress !== undefined) {
@@ -180,7 +182,8 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
     ...sideContainerStyle,
   };
 
-  const defaultDeletedText = count !== undefined && count > 1 ? TOAST.LABEL_FUNDS_DELETED : TOAST.LABEL_FUND_DELETED;
+  const checkCountText = count !== undefined && count > 1 ? TOAST.LABEL_FUNDS_DELETED : TOAST.LABEL_FUND_DELETED;
+  const defaultDeletedText = deleteText !== undefined ? deleteText : checkCountText;
 
   const toastContent =
     isDeleteToast !== undefined && isDeleteToast === true ? (

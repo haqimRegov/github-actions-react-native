@@ -3,8 +3,9 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer, Loading, SafeAreaPage, SelectionBanner } from "../../../../components";
+import { CustomSpacer, CustomToast, Loading, SafeAreaPage, SelectionBanner } from "../../../../components";
 import { Language } from "../../../../constants";
+import { useDelete } from "../../../../hooks";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
@@ -14,7 +15,7 @@ import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanne
 import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 
-const { DASHBOARD_PAYMENT, PAYMENT } = Language.PAGE;
+const { DASHBOARD_PAYMENT, PAYMENT, TOAST } = Language.PAGE;
 
 interface DashPaymentProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
@@ -33,6 +34,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
+  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IPaymentRequired | undefined>(proofOfPayment, setProofOfPayment);
 
   const handleBack = () => {
     updateCurrentOrder(undefined);
@@ -63,7 +65,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           ...data.result,
           payments: savedPayments,
         };
-        setProofOfPayment(state);
+        setTempData(state);
         setGrandTotal(data.result.totalInvestment);
         if (data.result.surplusBalance) {
           const newApplicationBalance = data.result.surplusBalance.map((surplus) => ({ ...surplus, utilised: [] }));
@@ -81,7 +83,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const handleSubmit = async (confirmed?: boolean) => {
     try {
       setLoading(true);
-      const paymentWithDeleted = [...proofOfPayment!.payments];
+      const paymentWithDeleted = [...tempData!.payments];
       // console.log("payment with deleted before", paymentWithDeleted);
 
       // TODO for deleted saved info
@@ -91,14 +93,14 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
       const payment = await generatePaymentWithKeys(
         paymentWithDeleted,
-        proofOfPayment!.paymentType,
+        tempData!.paymentType,
         currentOrder!.orderNumber,
         currentOrder!.clientId,
         "Dashboard",
       );
 
       const paymentOrders: ISubmitProofOfPaymentOrder[] = [
-        { orderNumber: proofOfPayment!.orderNumber, paymentType: proofOfPayment!.paymentType, payments: payment },
+        { orderNumber: tempData!.orderNumber, paymentType: tempData!.paymentType, payments: payment },
       ];
 
       const request = { orders: paymentOrders, isConfirmed: confirmed === true };
@@ -149,6 +151,19 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     return undefined;
   };
 
+  const handleUndoDelete = () => {
+    if (tempData !== undefined) {
+      setTempData(proofOfPayment);
+    }
+  };
+
+  const handleSetPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
+    setTempData(value);
+    if (deleted === false) {
+      setProofOfPayment(value);
+    }
+  };
+
   const accountNames = [{ label: currentOrder!.investorName.principal, value: currentOrder!.investorName.principal }];
 
   if (currentOrder!.accountType === "Joint") {
@@ -159,24 +174,22 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   }
 
   const continueDisabled =
-    proofOfPayment !== undefined
-      ? proofOfPayment.payments.some((findPayment) => findPayment.saved === true) === false && tempDeletedPayment.length === 0
+    tempData !== undefined
+      ? tempData.payments.some((findPayment) => findPayment.saved === true) === false && tempDeletedPayment.length === 0
       : false;
 
   const bannerText =
-    proofOfPayment !== undefined
-      ? `${PAYMENT.LABEL_PENDING_SUMMARY}: 1 ${proofOfPayment?.status.toLowerCase()}`
-      : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
+    tempData !== undefined ? `${PAYMENT.LABEL_PENDING_SUMMARY}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
   const balancePayments: IOrderAmount[] =
-    proofOfPayment !== undefined
+    tempData !== undefined
       ? calculateEachOrderBalance(
-          proofOfPayment,
+          tempData,
           [],
           applicationBalance.filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0),
         )
       : [];
-  if (proofOfPayment !== undefined) {
+  if (tempData !== undefined) {
     applicationBalance
       .filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0)
       .forEach((eachSurplusBalance: IPaymentInfo) => {
@@ -196,20 +209,22 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   }
   const updatedBalancePayments = balancePayments.filter(
     (eachBalance: IOrderAmount) =>
-      eachBalance.currency === "MYR" && parseAmount(eachBalance.amount) !== 0 && proofOfPayment?.status !== "Completed",
+      eachBalance.currency === "MYR" &&
+      parseAmount(eachBalance.amount) !== 0 &&
+      (tempData?.status !== "Completed" || tempData?.isLastOrder !== true),
   );
 
   const completedCurrencies =
-    proofOfPayment !== undefined
+    tempData !== undefined
       ? balancePayments.filter(
           (eachSurplus: IOrderAmount) =>
-            proofOfPayment.isLastOrder === true &&
+            tempData.isLastOrder === true &&
             parseAmount(eachSurplus.amount) !== 0 &&
-            checkCurrencyCompleted(proofOfPayment, eachSurplus.currency),
+            checkCurrencyCompleted(tempData, eachSurplus.currency),
         )
       : [];
-  const checkGrandTotal = proofOfPayment !== undefined && proofOfPayment.paymentType !== "Recurring" ? grandTotal : [];
-  const checkGrandTotalRecurring = proofOfPayment !== undefined && proofOfPayment.paymentType === "Recurring" ? grandTotal[0] : undefined;
+  const checkGrandTotal = tempData !== undefined && tempData.paymentType !== "Recurring" ? grandTotal : [];
+  const checkGrandTotalRecurring = tempData !== undefined && tempData.paymentType === "Recurring" ? grandTotal[0] : undefined;
 
   useEffect(() => {
     handleFetch();
@@ -226,7 +241,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         titleIconOnPress={handleBack}>
         <SafeAreaPage>
           <View style={flexChild}>
-            {proofOfPayment !== undefined ? (
+            {tempData !== undefined ? (
               <View>
                 <CustomSpacer space={sh24} />
                 <View style={px(sw24)}>
@@ -234,12 +249,14 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     accountNames={accountNames}
                     activeOrder={activeOrder}
                     applicationBalance={applicationBalance}
+                    deleteCount={deleteCount}
                     deletedPayment={tempDeletedPayment}
-                    proofOfPayment={proofOfPayment}
+                    proofOfPayment={tempData}
                     setActiveOrder={setActiveOrder}
                     setApplicationBalance={setApplicationBalance}
+                    setDeleteCount={setDeleteCount}
                     setDeletedPayment={setTempDeletedPayment}
-                    setProofOfPayment={setProofOfPayment}
+                    setProofOfPayment={handleSetPayment}
                   />
                 </View>
                 <CustomSpacer space={sh24} />
@@ -251,16 +268,16 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           </View>
         </SafeAreaPage>
       </DashboardLayout>
-      {activeOrder.order !== "" || proofOfPayment === undefined ? null : (
+      {activeOrder.order !== "" || tempData === undefined ? null : (
         <SelectionBanner
           bottomContent={
-            proofOfPayment !== undefined ? (
+            tempData !== undefined ? (
               <PaymentBannerContent
                 balancePayments={updatedBalancePayments}
                 excessPayments={completedCurrencies}
                 grandTotal={checkGrandTotal}
                 grandTotalRecurring={checkGrandTotalRecurring}
-                paymentType={proofOfPayment.paymentType}
+                paymentType={tempData.paymentType}
               />
             ) : null
           }
@@ -272,12 +289,20 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           label={bannerText}
         />
       )}
+      <CustomToast
+        count={deleteCount}
+        deleteText={TOAST.LABEL_PAYMENT_INFO_DELETED}
+        duration={5}
+        isDeleteToast={true}
+        onPress={handleUndoDelete}
+        setCount={setDeleteCount}
+      />
       <PaymentPopup
         handleCancel={handleCancelPopup}
         handleConfirm={handleConfirmPopup}
         loading={loading}
         result={paymentResult}
-        withExcess={proofOfPayment !== undefined && proofOfPayment.isLastOrder === true && completedCurrencies.length > 0}
+        withExcess={tempData !== undefined && tempData.isLastOrder === true && completedCurrencies.length > 0}
       />
     </Fragment>
   );

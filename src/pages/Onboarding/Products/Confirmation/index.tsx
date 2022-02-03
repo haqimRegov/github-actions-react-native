@@ -57,7 +57,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
   withEpf,
 }: ProductConfirmationProps) => {
   const flatListRef = useRef<FlatList | null>(null);
-  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales>(investmentDetails, setInvestmentDetails);
+  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
   const handleScrollToFund = () => {
     const findIndex = investmentDetails.findIndex(
@@ -121,7 +121,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const lastFundName = tempData.length > 0 && tempData !== undefined ? tempData[0].fundDetails.fundName : "";
+  const lastFundName = tempData !== undefined && tempData.length > 0 && tempData !== undefined ? tempData[0].fundDetails.fundName : "";
 
   return (
     <SafeAreaPage>
@@ -153,10 +153,10 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
           renderItem={({ item, index }) => {
             const { fundType, fundName, issuingHouse, prsType } = item.fundDetails;
             const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
-            const newData = [...tempData];
+            const newData = tempData !== undefined ? [...tempData] : [];
 
             const handleDelete = () => {
-              if (tempData.length > 1) {
+              if (tempData !== undefined && tempData.length > 1) {
                 const updatedDetails = [...tempData];
                 updatedDetails.splice(index, 1);
                 setTempData(updatedDetails);

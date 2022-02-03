@@ -23,7 +23,7 @@ import {
   sw24,
 } from "../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../templates";
-import { calculateBalances, generatePaymentWithKeys } from "../../../templates/Payment/helpers";
+import { calculateBalances, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
 import { parseAmount } from "../../../utils";
 
@@ -170,7 +170,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   // To show the available balance and also the excess
   const balancePayments: IOrderAmount[] = proofOfPayments !== undefined ? calculateBalances(proofOfPayments) : [];
   const checkAllCompleted =
-    proofOfPayments !== undefined ? proofOfPayments.filter((eachPOPCheck: IPaymentRequired) => eachPOPCheck.status === "Completed") : [];
+    proofOfPayments !== undefined
+      ? proofOfPayments.filter(
+          (eachPOPCheck: IPaymentRequired) =>
+            eachPOPCheck.status === "Completed" || eachPOPCheck.paymentType !== "Cash" || checkCurrencyCompleted(eachPOPCheck, "MYR"),
+        )
+      : [];
   const updatedBalancePayments =
     proofOfPayments !== undefined
       ? balancePayments.filter(

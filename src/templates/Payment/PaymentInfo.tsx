@@ -98,6 +98,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const [draftPayment, setDraftPayment] = useState<IPaymentInfo>(payment);
   const [draftAvailableBalance, setDraftAvailableBalance] = useState<IPaymentInfo[]>(availableBalance);
   const [deletePrompt, setDeletePrompt] = useState<boolean>(false);
+  const [updatePrompt, setUpdatePrompt] = useState<"add" | "save" | undefined>(undefined);
   const [error, setError] = useState<IPaymentError>({ amount: undefined, checkNumber: undefined });
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
   const isPaymentEqual = isObjectEqual(draftPayment, payment);
@@ -240,6 +241,23 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     noMorePending = true;
   }
 
+  const findSurplusParent = draftAvailableBalance.findIndex((bal) => bal.parent === draftPayment.parent);
+  const balanceSharedTo =
+    findSurplusParent !== -1 ? draftAvailableBalance[findSurplusParent].utilised!.map((util) => util.orderNumber) : [];
+  const savedSharedTo = draftPayment.sharedTo !== undefined ? draftPayment.sharedTo : [];
+  const surplusSharedTo = savedSharedTo.length > 0 ? savedSharedTo : balanceSharedTo;
+  const sharedToTitle = surplusSharedTo.join(", ");
+
+  const removePromptTitle =
+    draftPayment.parent !== undefined && surplusSharedTo.length > 0
+      ? `${PAYMENT.PROMPT_SUBTITLE_REMOVE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}\n${sharedToTitle}.\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`
+      : `${PAYMENT.PROMPT_SUBTITLE_REMOVE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+
+  const updatePromptTitle =
+    draftPayment.parent !== undefined && surplusSharedTo.length > 0
+      ? `${PAYMENT.PROMPT_SUBTITLE_UPDATE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}\n${sharedToTitle}.\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`
+      : `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+
   const setAmount = (value: string) => {
     setDraftPayment({ ...draftPayment, amount: value });
   };
@@ -300,17 +318,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     handleRemove();
   };
 
-  const handleRemoveInfo = () => {
-    if (isPaymentEqual === true && draftPayment.saved === false) {
-      return handleContinuePrompt();
-    }
-    return setDeletePrompt(true);
-  };
-
-  const handleCancelPrompt = () => {
-    setDeletePrompt(false);
-  };
-
   const paymentToBeSaved = (latestPayment: IPaymentInfo) => {
     const excessAmount = totalAmount > currencyInvestedAmount ? totalAmount - currencyInvestedAmount : 0;
     let id = latestPayment.paymentId;
@@ -338,24 +345,25 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     const updatedPayment: IPaymentInfo = { ...latestPayment, utilised: hasExcess ? [] : undefined };
     const newAvailableBalance = [...draftAvailableBalance];
 
-    // check if payment info has surplus
-    if (updatedPayment.parent !== undefined) {
-      const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.parent === updatedPayment.parent);
+    // // check if payment info has surplus
+    // if (updatedPayment.parent !== undefined) {
+    const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.paymentId === updatedPayment.paymentId);
 
-      // payment is an existing surplus
-      if (findExistingSurplusParent !== -1) {
-        if (hasExcess === true) {
-          // update existing surplus
-          newAvailableBalance.splice(findExistingSurplusParent, 1, updatedPayment);
-        } else {
-          // delete existing surplus
-          newAvailableBalance.splice(findExistingSurplusParent, 1);
-        }
-        // new payment with surplus
-      } else if (hasExcess === true) {
-        newAvailableBalance.push(updatedPayment);
+    // payment is an existing surplus
+    if (findExistingSurplusParent !== -1) {
+      if (hasExcess === true) {
+        // update existing surplus
+        // TODO do not update available balance if user didn't update anything
+        newAvailableBalance.splice(findExistingSurplusParent, 1, updatedPayment);
+      } else {
+        // delete existing surplus
+        newAvailableBalance.splice(findExistingSurplusParent, 1);
       }
+      // new payment with surplus
+    } else if (hasExcess === true) {
+      newAvailableBalance.push(updatedPayment);
     }
+    // }
 
     const newAvailableBalanceWithId = newAvailableBalance.map((bal) => {
       const updatedUtilised: IUtilisedAmount[] = bal.utilised!.map((util) => ({
@@ -370,16 +378,52 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     setAvailableBalance(newAvailableBalanceWithId);
   };
 
+  const saveUpdatedInfo = (add?: boolean) => {
+    const cleanPayment = paymentToBeSaved(draftPayment);
+    updateAvailableBalance(cleanPayment);
+    handleSave(cleanPayment, add);
+  };
+
   const handleSaveInfo = () => {
-    const newPayment = paymentToBeSaved(draftPayment);
-    updateAvailableBalance(newPayment);
-    handleSave(newPayment);
+    // TODO do not show prompt and do not update available balance if no changes are made
+    // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
+    if (balanceSharedTo.length > 0) {
+      return setUpdatePrompt("save");
+    }
+    return saveUpdatedInfo();
   };
 
   const handleAddInfo = () => {
-    const newPayment = paymentToBeSaved(draftPayment);
-    updateAvailableBalance(newPayment);
-    handleSave(newPayment, true);
+    // TODO do not show prompt and do not update available balance if no changes are made
+    // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
+    if (balanceSharedTo.length > 0) {
+      return setUpdatePrompt("add");
+    }
+    return saveUpdatedInfo(true);
+  };
+
+  const handleContinueRemove = () => {
+    handleRemove();
+  };
+
+  const handleContinueUpdate = () => {
+    saveUpdatedInfo(updatePrompt === "add" ? true : undefined);
+  };
+
+  const handleRemoveInfo = () => {
+    if (isPaymentEqual === true && draftPayment.saved === false) {
+      return handleContinuePrompt();
+    }
+    return setDeletePrompt(true);
+  };
+
+  const handleCancelPrompt = () => {
+    if (updatePrompt !== undefined) {
+      setUpdatePrompt(undefined);
+    }
+    if (deletePrompt === true) {
+      setDeletePrompt(false);
+    }
   };
 
   const handleCloseViewer = () => {
@@ -443,15 +487,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   ];
   const checkRecurringItems = draftPayment.paymentType === "Recurring" ? [] : baseItems;
   const checkBaseItems = draftPayment.paymentType === "EPF" ? epfBaseItems : checkRecurringItems;
-  const findSurplusParent = draftAvailableBalance.findIndex((bal) => bal.parent === draftPayment.parent);
-  const surplusSharedTo =
-    findSurplusParent !== 0 - 1 ? draftAvailableBalance[findSurplusParent].utilised!.map((util) => util.orderNumber) : [];
-  const sharedToTitle = surplusSharedTo.join(", ");
-
-  const removePromptTitle =
-    draftPayment.parent !== undefined && surplusSharedTo.length > 0
-      ? `${PAYMENT.PROMPT_TITLE_REMOVE} ${PAYMENT.PROMPT_TITLE_SURPLUS}\n${sharedToTitle}.\n\n${PAYMENT.PROMPT_TITLE_CONFIRM}`
-      : `${PAYMENT.PROMPT_TITLE_REMOVE}\n\n${PAYMENT.PROMPT_TITLE_CONFIRM}`;
 
   useEffect(() => {
     if (isPaymentEqual === false) {
@@ -470,6 +505,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   }, [draftPayment, payment]);
 
   const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
+  const promptStyle = { ...fsAlignLeft, ...fullWidth };
 
   return (
     <View>
@@ -527,13 +563,23 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       <CustomSpacer space={sh40} />
       <PromptModal
         handleCancel={handleCancelPrompt}
-        handleContinue={handleContinuePrompt}
+        handleContinue={handleContinueRemove}
         label={PAYMENT.PROMPT_TITLE_DELETE}
         labelContinue={PAYMENT.BUTTON_DELETE}
-        labelStyle={{ ...fsAlignLeft, ...fullWidth }}
+        labelStyle={promptStyle}
         title={removePromptTitle}
-        titleStyle={{ ...fsAlignLeft, ...fullWidth }}
+        titleStyle={promptStyle}
         visible={deletePrompt}
+      />
+      <PromptModal
+        handleCancel={handleCancelPrompt}
+        handleContinue={handleContinueUpdate}
+        label={PAYMENT.PROMPT_TITLE_UPDATE}
+        labelContinue={PAYMENT.BUTTON_UPDATE}
+        labelStyle={promptStyle}
+        title={updatePromptTitle}
+        titleStyle={promptStyle}
+        visible={updatePrompt !== undefined}
       />
       {viewFile !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="url" value={viewFile} visible={viewFile !== undefined} />

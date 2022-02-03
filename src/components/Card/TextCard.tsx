@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
 import { fs12BoldGray6, fsCapitalize, sh16, sh24, sw144, sw16, sw240, sw32 } from "../../styles";
-import { LabeledTitle, LabeledTitleProps } from "../Views/LabeledTitle";
+import { LabeledTitle } from "../Views/LabeledTitle";
 import { CustomCard } from "./Custom";
 
 export interface TextCardProps {

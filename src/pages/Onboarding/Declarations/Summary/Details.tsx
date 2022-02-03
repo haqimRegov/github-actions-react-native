@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CustomSpacer, FileViewer, LabeledTitleProps, TextCard } from "../../../../components";
+import { AccountHeader, CustomSpacer, FileViewer, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";

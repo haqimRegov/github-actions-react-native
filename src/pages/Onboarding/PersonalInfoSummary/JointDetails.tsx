@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {

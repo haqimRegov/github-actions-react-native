@@ -2,10 +2,10 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, LabeledTitleProps, TextCard } from "../../../../../components";
-import { Language, PAYMENT_DATE_FORMAT } from "../../../../../constants";
-import { DICTIONARY_RECURRING_CURRENCY } from "../../../../../data/dictionary";
-import { IcoMoon } from "../../../../../icons";
+import { CustomSpacer, TextCard } from "../../../../components";
+import { Language, PAYMENT_DATE_FORMAT } from "../../../../constants";
+import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
+import { IcoMoon } from "../../../../icons";
 import {
   borderBottomBlue3,
   borderBottomBlue5,
@@ -30,8 +30,8 @@ import {
   sw56,
   sw64,
   sw8,
-} from "../../../../../styles";
-import { titleCaseString } from "../../../../../utils";
+} from "../../../../styles";
+import { titleCaseString } from "../../../../utils";
 
 const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
 
@@ -216,6 +216,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                     titleStyle: fsTransformNone,
                   },
                   {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_REFERENCE_NUMBER,
+                    title: `${payment.referenceNumber}`,
+                    titleStyle: fsTransformNone,
+                  },
+                  {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
                     title: `${moment(payment.transactionDate, "x").format(PAYMENT_DATE_FORMAT)}`,
                   },
@@ -224,6 +229,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                     title: `${payment.kibBankName || "-"}`,
                     titleStyle: fsTransformNone,
                     subtitle: `${payment.kibBankAccountNumber || "-"}`,
+                  },
+                  {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_CURRENCY,
+                    title: `${payment.fundCurrency || "-"}`,
+                    titleStyle: fsTransformNone,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,

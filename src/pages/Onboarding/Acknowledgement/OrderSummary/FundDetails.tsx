@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Dimensions, Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
 import {

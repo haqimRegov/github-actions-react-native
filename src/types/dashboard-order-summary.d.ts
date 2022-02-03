@@ -46,6 +46,7 @@ declare interface IOrderSummaryPayment {
   proofOfPayment?: FileBase64;
   recurringBank?: string;
   recurringType?: string;
+  referenceNumber?: string;
   remark?: string;
   surplusNote?: string;
   transactionDate?: number;
@@ -177,4 +178,23 @@ declare interface IDashboardOrderSummary {
   status: string;
   totalInvestment: IOrderAmount[];
   transactionDetails: IOrderSummaryTransaction;
+}
+
+declare interface IStructuredData {
+  accountDocuments: LabeledTitleProps[];
+  accountSummaryDetails: LabeledTitleProps[];
+  contactDetails: LabeledTitleProps[];
+  employmentDetails: LabeledTitleProps[];
+  epfDetails: LabeledTitleProps[];
+  declarations: {
+    crs: LabeledTitleProps[];
+    fatca: LabeledTitleProps[];
+    fea: LabeledTitleProps[];
+  };
+  foreignBankDetails: LabeledTitleProps[][];
+  localBankDetails: LabeledTitleProps[][];
+  mailingAddress: IAddressState;
+  permanentAddress: IAddressState;
+  profilePic?: FileBase64;
+  showJointToggle?: boolean;
 }

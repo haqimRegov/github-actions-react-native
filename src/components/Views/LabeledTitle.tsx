@@ -1,29 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Text, View } from "react-native";
 
 import { IcoMoon } from "../../icons";
 import { centerVertical, colorBlue, flexRow, fs12BoldGray6, fs14RegBlack1, fs16BoldBlack1, fs16RegGray6, sw12, sw4 } from "../../styles";
 import { TouchableWrapper } from "../Touchables/TouchableWrapper";
 import { CustomSpacer } from "./Spacer";
-
-export interface LabeledTitleProps {
-  iconSize?: number;
-  label: string;
-  labelStyle?: TextStyle;
-  onPress?: () => void;
-  spaceToBottom?: number;
-  spaceToIcon?: number;
-  spaceToLabel?: number;
-  style?: ViewStyle;
-  subtitle?: string;
-  subtitleStyle?: TextStyle;
-  title: string;
-  titleIcon?: string;
-  titleIconStyle?: ViewStyle;
-  titlePrefix?: string;
-  titlePrefixStyle?: TextStyle;
-  titleStyle?: TextStyle;
-}
 
 export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   iconSize,

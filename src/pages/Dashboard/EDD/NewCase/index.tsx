@@ -45,11 +45,11 @@ import {
   sw66,
   sw8,
 } from "../../../../styles";
+import { AccountSummary } from "../../../../templates";
 import { QuestionCard } from "../../../../templates/EDD/QuestionCard";
 import { AnimationUtils } from "../../../../utils";
 import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
-import { AccountDetailsContent } from "../../Transactions/OrderSummary/Account/Details";
 import { handleDataToSubmit } from "../helpers";
 import { validateSubmitCase } from "../validation";
 
@@ -447,7 +447,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
                   <View style={borderBottomGray2} />
                   <View style={{ ...flexChild }}>
                     {profile !== undefined ? (
-                      <AccountDetailsContent
+                      <AccountSummary
                         accountHolder="Principal"
                         accountType={profile.accountType!}
                         data={structureProfile("Principal", profile, setFile, false)}

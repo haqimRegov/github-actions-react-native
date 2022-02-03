@@ -7,7 +7,6 @@ import {
   CustomFlexSpacer,
   CustomSpacer,
   LabeledTitle,
-  LabeledTitleProps,
   Loading,
   RoundedButton,
   Tab,

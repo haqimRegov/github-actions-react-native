@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CustomSpacer, Dash, IconText, LabeledTitleProps, TextCard } from "../../../components";
+import { AccountHeader, CustomSpacer, Dash, IconText, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {

@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Dimensions, Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitleProps, TextCard } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../components";
 import { Language } from "../../constants";
 import {
   borderBottomGray4,

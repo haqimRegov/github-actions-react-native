@@ -6,7 +6,6 @@ import {
   CustomSpacer,
   Dash,
   LabeledTitle,
-  LabeledTitleProps,
   NewDropdown,
   SafeAreaPage,
   TextCard,

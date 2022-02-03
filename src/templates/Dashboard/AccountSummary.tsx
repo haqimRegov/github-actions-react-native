@@ -1,7 +1,6 @@
-import React, { Fragment } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { IStructuredData } from ".";
 import {
   AddressInfo,
   Avatar,
@@ -12,8 +11,8 @@ import {
   RoundedButton,
   TextCard,
   TextSpaceArea,
-} from "../../../../../components";
-import { Language } from "../../../../../constants";
+} from "../../components";
+import { Language } from "../../constants";
 import {
   borderBottomGray2,
   flexRow,
@@ -38,11 +37,11 @@ import {
   sw240,
   sw40,
   sw64,
-} from "../../../../../styles";
+} from "../../styles";
 
 const { DASHBOARD_PROFILE, DECLARATION_SUMMARY } = Language.PAGE;
 
-declare interface AccountDetailsContentProps {
+interface AccountSummaryProps {
   accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
   data: IStructuredData;
@@ -53,7 +52,7 @@ declare interface AccountDetailsContentProps {
   setAccountHolder?: (holder: TypeAccountHolder) => void;
 }
 
-export const AccountDetailsContent = ({
+export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
   accountHolder,
   accountType,
   data,
@@ -62,7 +61,7 @@ export const AccountDetailsContent = ({
   idType,
   name,
   setAccountHolder,
-}: AccountDetailsContentProps) => {
+}: AccountSummaryProps) => {
   const {
     accountDocuments,
     accountSummaryDetails,

@@ -3,8 +3,9 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
-import { BlurView, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
+import { BlurView, CustomSpacer, CustomToast, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { useDelete } from "../../../hooks";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
@@ -27,7 +28,7 @@ import { calculateBalances, checkCurrencyCompleted, generatePaymentWithKeys } fr
 import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
 import { parseAmount } from "../../../utils";
 
-const { PAYMENT } = Language.PAGE;
+const { PAYMENT, TOAST } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {
   navigation: IStackNavigationProp;
 }
@@ -49,6 +50,8 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
+  const checkProofOfPayments = proofOfPayments !== undefined ? [...proofOfPayments] : [];
+  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IPaymentRequired[]>(checkProofOfPayments, setProofOfPayments);
 
   const handleFetch = async () => {
     if (orders !== undefined) {
@@ -78,12 +81,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     }
   };
 
-  // console.log("proof", proofOfPayments);
   const handleSubmit = async (confirmed?: boolean) => {
     try {
       setLoading(true);
       const paymentOrders = await Promise.all(
-        proofOfPayments!.map(async ({ orderNumber, paymentType, payments }: IPaymentRequired) => {
+        tempData!.map(async ({ orderNumber, paymentType, payments }: IPaymentRequired) => {
           const payment = await generatePaymentWithKeys(
             payments,
             paymentType,
@@ -141,6 +143,14 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     return undefined;
   };
 
+  const handleUndoDelete = () => {
+    if (proofOfPayments !== undefined) {
+      setTempData(proofOfPayments);
+      setApplicationBalance(applicationBalance);
+      setTempDeletedPayment(tempDeletedPayment);
+    }
+  };
+
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
   if (accountType === "Joint") {
@@ -151,50 +161,45 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   }
 
   const pendingLength =
-    proofOfPayments !== undefined && proofOfPayments.length > 0
-      ? [...proofOfPayments!].filter((eachPayment: IPaymentRequired) => eachPayment.status !== "Completed").length
+    tempData !== undefined && tempData.length > 0
+      ? [...tempData!].filter((eachPayment: IPaymentRequired) => eachPayment.status !== "Completed").length
       : 0;
   const completedLength =
-    proofOfPayments !== undefined && proofOfPayments.length > 0
-      ? proofOfPayments.filter((eachPayment: IPaymentRequired) => eachPayment.status === "Completed").length
+    tempData !== undefined && tempData.length > 0
+      ? tempData.filter((eachPayment: IPaymentRequired) => eachPayment.status === "Completed").length
       : 0;
   const pendingText =
-    proofOfPayments !== undefined && pendingLength === proofOfPayments.length
-      ? `All (${proofOfPayments.length}) pending`
-      : `${pendingLength} pending, `;
+    tempData !== undefined && pendingLength === tempData.length ? `All (${tempData.length}) pending` : `${pendingLength} pending, `;
   const completedText =
-    proofOfPayments !== undefined && completedLength === proofOfPayments.length
-      ? `All (${proofOfPayments.length}) completed`
-      : `${completedLength} completed`;
+    tempData !== undefined && completedLength === tempData.length ? `All (${tempData.length}) completed` : `${completedLength} completed`;
   const bannerText = `${PAYMENT.LABEL_PENDING_SUMMARY}: ${pendingLength > 0 ? pendingText : ""}${completedLength > 0 ? completedText : ""}`;
   // To show the available balance and also the excess
-  const balancePayments: IOrderAmount[] = proofOfPayments !== undefined ? calculateBalances(proofOfPayments) : [];
+  const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateBalances(tempData) : [];
   const checkAllCompleted =
-    proofOfPayments !== undefined
-      ? proofOfPayments.filter(
+    tempData !== undefined
+      ? tempData.filter(
           (eachPOPCheck: IPaymentRequired) =>
             eachPOPCheck.status === "Completed" || eachPOPCheck.paymentType !== "Cash" || checkCurrencyCompleted(eachPOPCheck, "MYR"),
         )
       : [];
   const updatedBalancePayments =
-    proofOfPayments !== undefined
+    tempData !== undefined
       ? balancePayments.filter(
           (eachBalance: IOrderAmount) =>
-            eachBalance.currency === "MYR" && checkAllCompleted.length !== proofOfPayments?.length && parseAmount(eachBalance.amount) !== 0,
+            eachBalance.currency === "MYR" && checkAllCompleted.length !== tempData?.length && parseAmount(eachBalance.amount) !== 0,
         )
       : [];
   const completedCurrencies =
-    proofOfPayments !== undefined
+    tempData !== undefined
       ? balancePayments.filter(
           (eachSurplus: IOrderAmount) =>
-            (eachSurplus.currency !== "MYR" || checkAllCompleted.length === proofOfPayments.length) &&
-            parseAmount(eachSurplus.amount) !== 0,
+            (eachSurplus.currency !== "MYR" || checkAllCompleted.length === tempData.length) && parseAmount(eachSurplus.amount) !== 0,
         )
       : [];
 
   const continueDisabled =
-    proofOfPayments !== undefined &&
-    proofOfPayments!.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
+    tempData !== undefined &&
+    tempData!.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
 
   useEffect(() => {
     handleFetch();
@@ -216,10 +221,10 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 titleStyle={fs16SemiBoldGray6}
               />
             </View>
-            {proofOfPayments !== undefined &&
-              proofOfPayments.map((proofOfPayment: IPaymentRequired, index: number) => {
-                const setProofOfPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction) => {
-                  let updatedProofOfPayments: IPaymentRequired[] = [...proofOfPayments];
+            {tempData !== undefined &&
+              tempData.map((proofOfPayment: IPaymentRequired, index: number) => {
+                const setProofOfPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
+                  let updatedProofOfPayments: IPaymentRequired[] = [...tempData];
                   updatedProofOfPayments[index] = { ...updatedProofOfPayments[index], ...value };
                   if (action !== undefined && action.paymentId !== undefined) {
                     const updatedPOP = updatedProofOfPayments.map((eachOrder) => {
@@ -243,7 +248,10 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                     });
                     updatedProofOfPayments = [...updatedPOP];
                   }
-                  setProofOfPayments(updatedProofOfPayments);
+                  setTempData(updatedProofOfPayments);
+                  if (deleted === false) {
+                    setProofOfPayments(updatedProofOfPayments);
+                  }
                 };
 
                 return (
@@ -259,13 +267,15 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                         <OrderPayment
                           accountNames={accountNames}
                           activeOrder={activeOrder}
+                          applicationBalance={applicationBalance}
+                          deleteCount={deleteCount}
                           deletedPayment={tempDeletedPayment}
                           proofOfPayment={proofOfPayment}
                           setActiveOrder={setActiveOrder}
+                          setApplicationBalance={setApplicationBalance}
+                          setDeleteCount={setDeleteCount}
                           setDeletedPayment={setTempDeletedPayment}
                           setProofOfPayment={setProofOfPayment}
-                          applicationBalance={applicationBalance}
-                          setApplicationBalance={setApplicationBalance}
                         />
                       </View>
                       <CustomSpacer space={sh24} />
@@ -279,7 +289,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         {activeOrder.order !== "" ? null : (
           <SelectionBanner
             bottomContent={
-              proofOfPayments !== undefined ? (
+              tempData !== undefined && grandTotal !== undefined ? (
                 <PaymentBannerContent
                   balancePayments={updatedBalancePayments}
                   excessPayments={completedCurrencies}
@@ -303,6 +313,14 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         loading={loading}
         result={paymentResult}
         withExcess={completedCurrencies.length > 0}
+      />
+      <CustomToast
+        count={deleteCount}
+        deleteText={TOAST.LABEL_PAYMENT_INFO_DELETED}
+        duration={5}
+        isDeleteToast={true}
+        onPress={handleUndoDelete}
+        setCount={setDeleteCount}
       />
     </SafeAreaPage>
   );

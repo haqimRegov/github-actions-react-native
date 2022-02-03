@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { v1 as uuidv1 } from "uuid";
 
@@ -47,7 +47,7 @@ import {
 import { formatAmount, isAmount, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
 import { getAmount } from "./helpers";
 import { NewCheque, NewCTA, NewEPF, NewOnlineBanking, NewRecurring } from "./Method";
-import { PaymentSurplus } from "./Surplus";
+import { IPaymentSurplusRef, PaymentSurplus } from "./Surplus";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -95,8 +95,10 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   setAvailableBalance,
   totalInvestment,
 }: PaymentInfoProps) => {
+  const surplusRef = useRef<IPaymentSurplusRef>();
   const [draftPayment, setDraftPayment] = useState<IPaymentInfo>(payment);
   const [draftAvailableBalance, setDraftAvailableBalance] = useState<IPaymentInfo[]>(availableBalance);
+  const [duplicatePrompt, setDuplicatePrompt] = useState<"with-excess" | "no-excess" | undefined>(undefined);
   const [deletePrompt, setDeletePrompt] = useState<boolean>(false);
   const [updatePrompt, setUpdatePrompt] = useState<"add" | "save" | undefined>(undefined);
   const [error, setError] = useState<IPaymentError>({ amount: undefined, checkNumber: undefined });
@@ -257,6 +259,41 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     draftPayment.parent !== undefined && surplusSharedTo.length > 0
       ? `${PAYMENT.PROMPT_SUBTITLE_UPDATE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}\n${sharedToTitle}.\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`
       : `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+
+  // check for existing surplus from reference or cheque number
+  const findSameSurplus = draftAvailableBalance.findIndex((bal) => {
+    return (
+      ((draftPayment.paymentMethod === "Cheque" && draftPayment.checkNumber === bal.checkNumber && bal.checkNumber !== "") ||
+        (draftPayment.paymentMethod === "Online Banking / TT / ATM" &&
+          draftPayment.referenceNumber === bal.referenceNumber &&
+          bal.referenceNumber !== "")) &&
+      draftPayment.currency === bal.currency
+    );
+  });
+
+  const matchedSurplus: IPaymentInfo | undefined = findSameSurplus !== -1 ? draftAvailableBalance[findSameSurplus] : undefined;
+
+  let availableExcess = 0;
+
+  if (matchedSurplus !== undefined) {
+    const totalUtilisedAmount =
+      matchedSurplus.utilised !== undefined && matchedSurplus.utilised.length > 0
+        ? matchedSurplus.utilised.map((util) => parseInt(util.amount, 10)).reduce((total: number, current: number) => total + current)
+        : 0;
+
+    availableExcess = parseAmount(matchedSurplus.excess!.amount) - totalUtilisedAmount;
+  }
+
+  const labelAmount =
+    availableExcess > 0 && matchedSurplus !== undefined ? `${matchedSurplus.excess!.currency} ${formatAmount(availableExcess)}.` : "";
+
+  const noExcessPromptSubtitle = `${PAYMENT.PROMPT_SUBTITLE_MATCHES} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
+    PAYMENT.PROMPT_SUBTITLE_NO_SURPLUS
+  }\n\n${PAYMENT.PROMPT_SUBTITLE_INSERT}`;
+
+  const withExcessPromptSubtitle = `${PAYMENT.PROMPT_SUBTITLE_MATCHES} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
+    PAYMENT.PROMPT_SUBTITLE_WITH_SURPLUS
+  } ${labelAmount}\n\n${PAYMENT.PROMPT_SUBTITLE_USE_SURPLUS}`;
 
   const setAmount = (value: string) => {
     setDraftPayment({ ...draftPayment, amount: value });
@@ -430,6 +467,18 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     setViewFile(undefined);
   };
 
+  const handleCancelDuplicate = async () => {
+    setDuplicatePrompt(undefined);
+    setDraftPayment({ ...draftPayment, referenceNumber: "", checkNumber: "" });
+  };
+
+  const handleUseSurplus = () => {
+    if (surplusRef.current !== undefined && matchedSurplus !== undefined) {
+      surplusRef.current.handleUseSurplus(matchedSurplus);
+    }
+    setDuplicatePrompt(undefined);
+  };
+
   const secondaryButton: ActionButtonProps | undefined =
     draftPayment.paymentMethod! === "EPF" || draftPayment.paymentMethod! === "Recurring"
       ? undefined
@@ -507,6 +556,16 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
   const promptStyle = { ...fsAlignLeft, ...fullWidth };
 
+  useEffect(() => {
+    if (
+      matchedSurplus !== undefined &&
+      (draftPayment.tag === undefined || (draftPayment.tag !== undefined && draftPayment.tag.uuid !== matchedSurplus.parent))
+    ) {
+      setDuplicatePrompt(availableExcess > 0 ? "with-excess" : "no-excess");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchedSurplus]);
+
   return (
     <View>
       <View style={{ ...rowCenterVertical, ...px(sw24), backgroundColor: colorGray._1, height: sh56 }}>
@@ -534,6 +593,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           existingPaidAmount={existingPaidAmount}
           payment={draftPayment}
           pendingCurrencies={pendingCurrencies}
+          ref={surplusRef}
           setAvailableBalance={setDraftAvailableBalance}
           setPayment={setDraftPayment}
           totalInvestment={totalInvestment}
@@ -580,6 +640,25 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         title={updatePromptTitle}
         titleStyle={promptStyle}
         visible={updatePrompt !== undefined}
+      />
+      <PromptModal
+        handleCancel={handleCancelDuplicate}
+        handleContinue={handleUseSurplus}
+        label={PAYMENT.PROMPT_TITLE_DUPLICATE}
+        labelContinue={PAYMENT.BUTTON_YES}
+        labelStyle={promptStyle}
+        title={withExcessPromptSubtitle}
+        titleStyle={promptStyle}
+        visible={duplicatePrompt === "with-excess"}
+      />
+      <PromptModal
+        handleContinue={handleCancelDuplicate}
+        label={PAYMENT.PROMPT_TITLE_DUPLICATE}
+        labelContinue={PAYMENT.BUTTON_BACK_TO_PAYMENT}
+        labelStyle={promptStyle}
+        title={noExcessPromptSubtitle}
+        titleStyle={promptStyle}
+        visible={duplicatePrompt === "no-excess"}
       />
       {viewFile !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="url" value={viewFile} visible={viewFile !== undefined} />

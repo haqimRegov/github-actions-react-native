@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useRef } from "react";
+import React, { forwardRef, Fragment, MutableRefObject, useImperativeHandle, useRef } from "react";
 import { View } from "react-native";
 import { v1 as uuidv1 } from "uuid";
 
@@ -9,6 +9,10 @@ import { deleteKey, formatAmount, parseAmount } from "../../utils";
 import { calculateAvailableBalance, generateNewInfo, getAmount } from "./helpers";
 import { ToggleCard } from "./ToggleCard";
 
+export interface IPaymentSurplusRef {
+  handleUseSurplus: (value: IPaymentInfo) => void;
+}
+
 interface PaymentSurplusProps {
   accountNames: TypeLabelValue[];
   availableBalance: IPaymentInfo[];
@@ -16,22 +20,25 @@ interface PaymentSurplusProps {
   existingPaidAmount: IOrderAmount[];
   payment: IPaymentInfo;
   pendingCurrencies: string[];
+  ref?: MutableRefObject<IPaymentSurplusRef | undefined>;
   setAvailableBalance: (value: IPaymentInfo[]) => void;
   setPayment: (value: IPaymentInfo) => void;
   totalInvestment: IOrderAmount[];
 }
 
-export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
-  accountNames,
-  availableBalance,
-  completedSurplusCurrencies,
-  existingPaidAmount,
-  payment,
-  pendingCurrencies,
-  setAvailableBalance,
-  setPayment,
-  totalInvestment,
-}: PaymentSurplusProps) => {
+export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, PaymentSurplusProps>((props, ref) => {
+  const {
+    accountNames,
+    availableBalance,
+    completedSurplusCurrencies,
+    existingPaidAmount,
+    payment,
+    pendingCurrencies,
+    setAvailableBalance,
+    setPayment,
+    totalInvestment,
+  } = props;
+
   const updatedCompletedSurplusCurrencies = completedSurplusCurrencies !== undefined ? completedSurplusCurrencies : [];
   const filteredAvailableBalance = availableBalance.filter(
     (eachAvailableBalance: IPaymentInfo) =>
@@ -61,7 +68,68 @@ export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
 
     return bal.parent !== payment.paymentId && bal.excess !== undefined && (availableExcessAmount > 0 || isCurrentSurplus === true);
   });
+
   const uniqueId = useRef(payment.paymentId || uuidv1());
+
+  const handleUseSurplus = (surplus: IPaymentInfo) => {
+    let newPaymentInfo: IPaymentInfo;
+    let newAvailableBalance: IPaymentInfo[];
+    const currencyInvestedAmount = getAmount(totalInvestment, surplus.excess!.currency as TypeCurrency);
+    const currencyPaidAmount = getAmount(existingPaidAmount, surplus.excess!.currency as TypeCurrency);
+    const pendingCurrencyAmount = currencyInvestedAmount - parseAmount(currencyPaidAmount.toString());
+    // toggle use of surplus
+    if (payment.tag === undefined || (payment.tag !== undefined && payment.tag.uuid !== surplus.parent)) {
+      const paymentInfo = deleteKey(surplus, ["orderNumber", "excess", "paymentId"]);
+      const cleanPaymentInfo = Object.fromEntries(Object.entries(paymentInfo).filter(([_, field]) => field != null));
+      const currentPaymentAmount = parseInt(payment.amount, 10);
+
+      const surplusSelected = payment.tag !== undefined && payment.tag.uuid === surplus.parent;
+      const availableExcessAmount = getAvailableExcessAmount(surplus);
+
+      const availableAmount = surplusSelected ? availableExcessAmount + currentPaymentAmount : availableExcessAmount;
+
+      const utilisedAmount = availableAmount <= pendingCurrencyAmount ? availableAmount : pendingCurrencyAmount;
+
+      newPaymentInfo = {
+        ...payment,
+        ...cleanPaymentInfo,
+        amount: formatAmount(utilisedAmount.toString()),
+        belongsTo: surplus.orderNumber,
+        new: undefined,
+        parent: undefined,
+        paymentId: uniqueId.current,
+        remark: undefined,
+        saved: false,
+        tag: { orderNumber: surplus.orderNumber, uuid: surplus.parent as string },
+        transactionDate:
+          typeof surplus.transactionDate === "string" ? moment(surplus.transactionDate, "x").toDate() : surplus.transactionDate,
+      };
+
+      // filter previously utilised surplus within same payment info session
+      const cleanAvailableBalance = availableBalance.map((bal) => {
+        const updatedUtilised: IUtilisedAmount[] = bal.utilised!.filter((util) => util.paymentId !== uniqueId.current);
+        return { ...bal, utilised: updatedUtilised };
+      });
+
+      newAvailableBalance = calculateAvailableBalance(cleanAvailableBalance, newPaymentInfo, false);
+    } else {
+      newAvailableBalance = calculateAvailableBalance(availableBalance, payment, true);
+      // cancel use of surplus
+      newPaymentInfo = generateNewInfo(
+        "Cash",
+        [],
+        { label: payment.currency, value: payment.currency as TypeCurrency },
+        payment.orderNumber,
+        undefined,
+        accountNames,
+      );
+    }
+
+    setAvailableBalance(newAvailableBalance);
+    setPayment({ ...newPaymentInfo });
+  };
+
+  useImperativeHandle(ref, () => ({ handleUseSurplus }));
 
   return (
     <View>
@@ -70,69 +138,17 @@ export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>
             <View style={flexRow}>
-              {filteredSurplus.map((surplus: IPaymentInfo, index: number) => {
-                const surplusSelected = payment.tag !== undefined && payment.tag.uuid === surplus.parent;
+              {filteredSurplus.map((currentSurplus: IPaymentInfo, index: number) => {
+                const surplusSelected = payment.tag !== undefined && payment.tag.uuid === currentSurplus.parent;
 
-                const availableExcessAmount = getAvailableExcessAmount(surplus);
+                const availableExcessAmount = getAvailableExcessAmount(currentSurplus);
                 const currentAmountLabel = availableExcessAmount > parseInt(payment.amount, 10) ? availableExcessAmount : payment.amount;
                 const amountLabel = surplusSelected === true ? currentAmountLabel : availableExcessAmount;
 
-                const title = `${surplus.excess!.currency} ${formatAmount(amountLabel)}`;
+                const title = `${currentSurplus.excess!.currency} ${formatAmount(amountLabel)}`;
 
-                const handleUseSurplus = () => {
-                  let newPaymentInfo: IPaymentInfo;
-                  let newAvailableBalance: IPaymentInfo[];
-                  const currencyInvestedAmount = getAmount(totalInvestment, surplus.excess!.currency as TypeCurrency);
-                  const currencyPaidAmount = getAmount(existingPaidAmount, surplus.excess!.currency as TypeCurrency);
-                  const pendingCurrencyAmount = currencyInvestedAmount - parseAmount(currencyPaidAmount.toString());
-                  // toggle use of surplus
-                  if (payment.tag === undefined || (payment.tag !== undefined && payment.tag.uuid !== surplus.parent)) {
-                    const paymentInfo = deleteKey(surplus, ["orderNumber", "excess", "paymentId"]);
-                    const cleanPaymentInfo = Object.fromEntries(Object.entries(paymentInfo).filter(([_, field]) => field != null));
-                    const currentPaymentAmount = parseInt(payment.amount, 10);
-                    const availableAmount = surplusSelected ? availableExcessAmount + currentPaymentAmount : availableExcessAmount;
-
-                    const utilisedAmount = availableAmount <= pendingCurrencyAmount ? availableAmount : pendingCurrencyAmount;
-
-                    newPaymentInfo = {
-                      ...payment,
-                      ...cleanPaymentInfo,
-                      amount: formatAmount(utilisedAmount.toString()),
-                      belongsTo: surplus.orderNumber,
-                      new: undefined,
-                      parent: undefined,
-                      paymentId: uniqueId.current,
-                      remark: undefined,
-                      saved: false,
-                      tag: { orderNumber: surplus.orderNumber, uuid: surplus.parent as string },
-                      transactionDate:
-                        typeof surplus.transactionDate === "string"
-                          ? moment(surplus.transactionDate, "x").toDate()
-                          : surplus.transactionDate,
-                    };
-
-                    // filter previously utilised surplus within same payment info session
-                    const cleanAvailableBalance = availableBalance.map((bal) => {
-                      const updatedUtilised: IUtilisedAmount[] = bal.utilised!.filter((util) => util.paymentId !== uniqueId.current);
-                      return { ...bal, utilised: updatedUtilised };
-                    });
-
-                    newAvailableBalance = calculateAvailableBalance(cleanAvailableBalance, newPaymentInfo, false);
-                  } else {
-                    newAvailableBalance = calculateAvailableBalance(availableBalance, payment, true);
-                    // cancel use of surplus
-                    newPaymentInfo = generateNewInfo(
-                      "Cash",
-                      [],
-                      { label: payment.currency, value: payment.currency as TypeCurrency },
-                      payment.orderNumber,
-                      undefined,
-                      accountNames,
-                    );
-                  }
-
-                  setAvailableBalance(newAvailableBalance);
-                  setPayment({ ...newPaymentInfo });
+                const handlePress = () => {
+                  handleUseSurplus(currentSurplus);
                 };
 
                 return (
@@ -140,9 +156,9 @@ export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
                     <ToggleCard
                       type="Use of Surplus"
                       title={title}
-                      description1={surplus.orderNumber}
-                      description2={surplus.paymentMethod}
-                      onPress={handleUseSurplus}
+                      description1={currentSurplus.orderNumber}
+                      description2={currentSurplus.paymentMethod}
+                      onPress={handlePress}
                       selected={surplusSelected}
                     />
                     {index === filteredSurplus.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
@@ -155,4 +171,4 @@ export const PaymentSurplus: FunctionComponent<PaymentSurplusProps> = ({
       ) : null}
     </View>
   );
-};
+});

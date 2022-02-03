@@ -153,12 +153,11 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
   const handleUndoDelete = () => {
     if (tempData !== undefined) {
-      console.log("entered undo", proofOfPayment);
       setTempData(proofOfPayment);
     }
   };
 
-  const handleSetPayment = (value: IPaymentRequired, paymentId?: string, deleted?: boolean) => {
+  const handleSetPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
     setTempData(value);
     if (deleted === false) {
       setProofOfPayment(value);
@@ -210,7 +209,9 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   }
   const updatedBalancePayments = balancePayments.filter(
     (eachBalance: IOrderAmount) =>
-      eachBalance.currency === "MYR" && parseAmount(eachBalance.amount) !== 0 && tempData?.status !== "Completed",
+      eachBalance.currency === "MYR" &&
+      parseAmount(eachBalance.amount) !== 0 &&
+      (tempData?.status !== "Completed" || tempData?.isLastOrder !== true),
   );
 
   const completedCurrencies =

@@ -77,6 +77,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         return state;
       });
       setProofOfPayments(result);
+      setTempData(result);
       setGrandTotal({ grandTotal: orders.grandTotal, grandTotalRecurring: orders.grandTotalRecurring! });
     }
   };
@@ -97,7 +98,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           return { orderNumber: orderNumber, paymentType: paymentType, payments: payment };
         }),
       );
-
       const request = { orders: paymentOrders, isConfirmed: confirmed === true };
       const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
       if (paymentResponse !== undefined) {

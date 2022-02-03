@@ -49,10 +49,12 @@ export interface OrderPaymentProps {
   accountNames: TypeLabelValue[];
   applicationBalance: IPaymentInfo[];
   activeOrder: { order: string; fund: string };
+  deleteCount: number;
   deletedPayment: IPaymentInfo[];
   proofOfPayment: IPaymentRequired;
   setActiveOrder: (value: { order: string; fund: string }) => void;
-  setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction) => void;
+  setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
+  setDeleteCount: (count: number) => void;
   setDeletedPayment: (value: IPaymentInfo[]) => void;
   setApplicationBalance: (value: IPaymentInfo[]) => void;
 }
@@ -68,12 +70,13 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   accountNames,
   applicationBalance,
   activeOrder,
+  deleteCount,
   deletedPayment,
-  setActiveOrder,
   proofOfPayment,
-  setDeletedPayment,
-  setProofOfPayment,
+  setActiveOrder,
   setApplicationBalance,
+  setDeleteCount,
+  setProofOfPayment,
 }: OrderPaymentProps) => {
   const {
     allowedRecurringType,
@@ -100,18 +103,20 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   const [activeInfo, setActiveInfo] = useState<number>(payments.length);
   const [editPrompt, setEditPrompt] = useState<number>(-1);
   const [unsavedChanges, setUnsavedChanges] = useState<number>(-1);
+  const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
+  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>(deletedPayment);
 
   const completed = balance.some((findPending) => findPending.amount.startsWith("-")) === false;
 
   const balanceCurrencies = pendingBalance.length > 0 ? [...pendingBalance] : [...totalInvestment];
   const currencies = balanceCurrencies.map((value) => ({ label: value.currency, value: value.currency }));
 
-  const setPayments = (value: IPaymentInfo[], action?: ISetProofOfPaymentAction) => {
+  const setPayments = (value: IPaymentInfo[], action?: ISetProofOfPaymentAction, deleted?: boolean) => {
     // check if there is unsaved changes but overrode the prompt with noPrompt (this is possible if the user edits a saved info but decided to remove it)
     if (unsavedChanges !== -1) {
       setUnsavedChanges(-1);
     }
-    setProofOfPayment({ ...proofOfPayment, payments: value }, action);
+    setProofOfPayment({ ...proofOfPayment, payments: value }, action, deleted);
   };
 
   const handleExpandPayment = (latestPayment: IPaymentInfo[], noPrompt?: boolean) => {
@@ -139,7 +144,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
         recurringAmount,
       );
       updatedInfo.push(newInfo);
-      setPayments(updatedInfo);
+      setPayments(updatedInfo, undefined, false);
     }
 
     // show last payment info
@@ -179,7 +184,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
     if (findUnsaved !== -1) {
       updatedPayments.splice(findUnsaved, 1);
-      setPayments(updatedPayments);
+      setPayments(updatedPayments, undefined, false);
     }
 
     setUnsavedPrompt(false);
@@ -358,7 +363,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     };
                   }
                 }
-                setApplicationBalance(newAvailableBalance);
+                setTempApplicationBalance(newAvailableBalance);
 
                 // delete saved payment
                 if (updatedPayments[index].isEditable === true) {
@@ -367,13 +372,14 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     ...updatedPayments[index],
                     action: { id: updatedPayments[index].paymentId!, option: "delete" },
                   });
-                  setDeletedPayment(updateDeleted);
+                  setTempDeletedPayment(updateDeleted);
                 }
                 const getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
                 updatedPayments.splice(index, 1);
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete" } : undefined;
-                setPayments(updatedPayments, action);
+                setPayments(updatedPayments, action, true);
+                setDeleteCount(deleteCount + 1);
                 setActiveInfo(updatedPayments.length - 1);
                 handleExpandPayment(updatedPayments, true);
               };
@@ -416,7 +422,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update" } : undefined;
 
-                setPayments(updatedPayments, action);
+                setPayments(updatedPayments, action, false);
 
                 if (additional !== true) {
                   handleCollapse();
@@ -433,7 +439,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 if (payments.some((pay) => pay.new === true)) {
                   const updatedPayments = payments.filter((pay) => pay.new === undefined);
-                  setPayments(updatedPayments);
+                  setPayments(updatedPayments, undefined, false);
                 }
 
                 return setActiveInfo(index);
@@ -441,7 +447,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
               const handleContinueEdit = () => {
                 const updatedPayments = payments.map((info) => info).filter((unsavedInfo) => unsavedInfo.saved === true);
-                setPayments(updatedPayments);
+                setPayments(updatedPayments, undefined, false);
                 setActiveInfo(editPrompt);
                 setEditPrompt(-1);
                 setUnsavedChanges(-1);

@@ -1,10 +1,8 @@
 import moment from "moment";
 
-import { LabeledTitleProps } from "../components";
 import { PAYMENT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
-import { IStructuredData } from "../pages/Dashboard/Transactions/OrderSummary/Account";
 import { fsTransformNone, fsUppercase, sh4, sw200 } from "../styles";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;

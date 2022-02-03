@@ -9,7 +9,7 @@ import { getPaymentRequired, submitProofOfPayments } from "../../../../network-a
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../../templates";
-import { calculateEachOrderBalance, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
+import { calculateEachOrderBalance, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanner";
 import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -196,14 +196,16 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   }
   const updatedBalancePayments = balancePayments.filter(
     (eachBalance: IOrderAmount) =>
-      eachBalance.currency === "MYR" && proofOfPayment?.isLastOrder === false && parseAmount(eachBalance.amount) !== 0,
+      eachBalance.currency === "MYR" && parseAmount(eachBalance.amount) !== 0 && proofOfPayment?.status !== "Completed",
   );
 
   const completedCurrencies =
     proofOfPayment !== undefined
       ? balancePayments.filter(
           (eachSurplus: IOrderAmount) =>
-            (eachSurplus.currency !== "MYR" || proofOfPayment.isLastOrder === true) && parseAmount(eachSurplus.amount) !== 0,
+            proofOfPayment.isLastOrder === true &&
+            parseAmount(eachSurplus.amount) !== 0 &&
+            checkCurrencyCompleted(proofOfPayment, eachSurplus.currency),
         )
       : [];
   const checkGrandTotal = proofOfPayment !== undefined && proofOfPayment.paymentType !== "Recurring" ? grandTotal : [];

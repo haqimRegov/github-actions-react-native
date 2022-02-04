@@ -275,6 +275,11 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                     subtitle: `${payment.kibBankAccountNumber || "-"}`,
                   },
                   {
+                    label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_CURRENCY,
+                    title: `${payment.fundCurrency || "-"}`,
+                    titleStyle: fsTransformNone,
+                  },
+                  {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_PROOF,
                     title: `${payment.proofOfPayment?.name}`,
                     titleStyle: fsTransformNone,

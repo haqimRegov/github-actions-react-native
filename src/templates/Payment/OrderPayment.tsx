@@ -56,7 +56,7 @@ export interface OrderPaymentProps {
   setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
   setDeleteCount: (count: number) => void;
   setDeletedPayment: (value: IPaymentInfo[]) => void;
-  setApplicationBalance: (value: IPaymentInfo[]) => void;
+  setApplicationBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
 }
 
 export interface ISetPaymentOptions {
@@ -76,6 +76,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   setActiveOrder,
   setApplicationBalance,
   setDeleteCount,
+  setDeletedPayment,
   setProofOfPayment,
 }: OrderPaymentProps) => {
   const {
@@ -103,8 +104,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   const [activeInfo, setActiveInfo] = useState<number>(payments.length);
   const [editPrompt, setEditPrompt] = useState<number>(-1);
   const [unsavedChanges, setUnsavedChanges] = useState<number>(-1);
-  const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
-  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>(deletedPayment);
 
   const completed = balance.some((findPending) => findPending.amount.startsWith("-")) === false;
 
@@ -363,7 +362,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     };
                   }
                 }
-                setTempApplicationBalance(newAvailableBalance);
+                setApplicationBalance(newAvailableBalance, true);
 
                 // delete saved payment
                 if (updatedPayments[index].isEditable === true) {
@@ -372,7 +371,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     ...updatedPayments[index],
                     action: { id: updatedPayments[index].paymentId!, option: "delete" },
                   });
-                  setTempDeletedPayment(updateDeleted);
+                  setDeletedPayment(updateDeleted);
                 }
                 const getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
                 updatedPayments.splice(index, 1);

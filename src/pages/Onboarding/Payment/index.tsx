@@ -42,8 +42,9 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   personalInfo,
 }: PaymentProps) => {
   const [proofOfPayments, setProofOfPayments] = useState<IPaymentRequired[] | undefined>(undefined);
-  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
+  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
+  const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
   const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
@@ -143,11 +144,17 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     return undefined;
   };
 
+  const handleApplicationBalance = (currentData: IPaymentInfo[], deleted?: boolean) => {
+    if (deleted !== true) {
+      setApplicationBalance(currentData);
+    }
+    setTempApplicationBalance(currentData);
+  };
+
   const handleUndoDelete = () => {
     if (proofOfPayments !== undefined) {
       setTempData(proofOfPayments);
       setApplicationBalance(applicationBalance);
-      setTempDeletedPayment(tempDeletedPayment);
     }
   };
 
@@ -200,6 +207,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const continueDisabled =
     tempData !== undefined &&
     tempData!.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
+
+  useEffect(() => {
+    if (deleteCount === 0) {
+      setApplicationBalance(tempApplicationBalance);
+    }
+  }, [deleteCount]);
 
   useEffect(() => {
     handleFetch();
@@ -267,12 +280,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                         <OrderPayment
                           accountNames={accountNames}
                           activeOrder={activeOrder}
-                          applicationBalance={applicationBalance}
+                          applicationBalance={tempApplicationBalance}
                           deleteCount={deleteCount}
                           deletedPayment={tempDeletedPayment}
                           proofOfPayment={proofOfPayment}
                           setActiveOrder={setActiveOrder}
-                          setApplicationBalance={setApplicationBalance}
+                          setApplicationBalance={handleApplicationBalance}
                           setDeleteCount={setDeleteCount}
                           setDeletedPayment={setTempDeletedPayment}
                           setProofOfPayment={setProofOfPayment}

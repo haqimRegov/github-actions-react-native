@@ -34,6 +34,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
+  const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IPaymentRequired | undefined>(proofOfPayment, setProofOfPayment);
 
   const handleBack = () => {
@@ -69,6 +70,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         setGrandTotal(data.result.totalInvestment);
         if (data.result.surplusBalance) {
           const newApplicationBalance = data.result.surplusBalance.map((surplus) => ({ ...surplus, utilised: [] }));
+          setTempApplicationBalance(newApplicationBalance);
           setApplicationBalance(newApplicationBalance);
         }
       }
@@ -164,6 +166,13 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     }
   };
 
+  const handleApplicationBalance = (currentData: IPaymentInfo[], deleted?: boolean) => {
+    if (deleted !== true) {
+      setApplicationBalance(currentData);
+    }
+    setTempApplicationBalance(currentData);
+  };
+
   const accountNames = [{ label: currentOrder!.investorName.principal, value: currentOrder!.investorName.principal }];
 
   if (currentOrder!.accountType === "Joint") {
@@ -186,11 +195,11 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       ? calculateEachOrderBalance(
           tempData,
           [],
-          applicationBalance.filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0),
+          tempApplicationBalance.filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0),
         )
       : [];
   if (tempData !== undefined) {
-    applicationBalance
+    tempApplicationBalance
       .filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0)
       .forEach((eachSurplusBalance: IPaymentInfo) => {
         const cleanValue = eachSurplusBalance.excess!.amount.replace(/[,]/g, "");
@@ -227,6 +236,12 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const checkGrandTotalRecurring = tempData !== undefined && tempData.paymentType === "Recurring" ? grandTotal[0] : undefined;
 
   useEffect(() => {
+    if (deleteCount === 0) {
+      setApplicationBalance(tempApplicationBalance);
+    }
+  }, [deleteCount]);
+
+  useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -248,12 +263,12 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                   <OrderPayment
                     accountNames={accountNames}
                     activeOrder={activeOrder}
-                    applicationBalance={applicationBalance}
+                    applicationBalance={tempApplicationBalance}
                     deleteCount={deleteCount}
                     deletedPayment={tempDeletedPayment}
                     proofOfPayment={tempData}
                     setActiveOrder={setActiveOrder}
-                    setApplicationBalance={setApplicationBalance}
+                    setApplicationBalance={handleApplicationBalance}
                     setDeleteCount={setDeleteCount}
                     setDeletedPayment={setTempDeletedPayment}
                     setProofOfPayment={handleSetPayment}

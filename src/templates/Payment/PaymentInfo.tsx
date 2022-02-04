@@ -475,6 +475,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const handleUseSurplus = () => {
     if (surplusRef.current !== undefined && matchedSurplus !== undefined) {
       surplusRef.current.handleUseSurplus(matchedSurplus);
+      setError({ amount: undefined, checkNumber: undefined });
     }
     setDuplicatePrompt(undefined);
   };
@@ -537,6 +538,10 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const checkRecurringItems = draftPayment.paymentType === "Recurring" ? [] : baseItems;
   const checkBaseItems = draftPayment.paymentType === "EPF" ? epfBaseItems : checkRecurringItems;
 
+  const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
+  const promptStyle = { ...fsAlignLeft, ...fullWidth };
+
+  // effect to check when a saved info was edited or deleted
   useEffect(() => {
     if (isPaymentEqual === false) {
       if (draftPayment.saved === true) {
@@ -553,13 +558,12 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftPayment, payment]);
 
-  const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
-  const promptStyle = { ...fsAlignLeft, ...fullWidth };
-
+  // effect to check for existing surplus using reference or cheque number
   useEffect(() => {
     if (
       matchedSurplus !== undefined &&
-      (draftPayment.tag === undefined || (draftPayment.tag !== undefined && draftPayment.tag.uuid !== matchedSurplus.parent))
+      (draftPayment.tag === undefined || (draftPayment.tag !== undefined && draftPayment.tag.uuid !== matchedSurplus.parent)) &&
+      matchedSurplus.paymentId !== draftPayment.paymentId
     ) {
       setDuplicatePrompt(availableExcess > 0 ? "with-excess" : "no-excess");
     }

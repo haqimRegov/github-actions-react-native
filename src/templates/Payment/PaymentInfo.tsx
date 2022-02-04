@@ -67,7 +67,7 @@ interface PaymentInfoProps {
   payment: IPaymentInfo;
   pendingBalance: IOrderAmount[];
   recurringDetails?: IRecurringDetails;
-  setAvailableBalance: (value: IPaymentInfo[]) => void;
+  setAvailableBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
   totalInvestment: IOrderAmount[];
 }
 
@@ -412,7 +412,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     });
 
     // update application balance for new or updated surplus, and for use of surplus
-    setAvailableBalance(newAvailableBalanceWithId);
+    setAvailableBalance(newAvailableBalanceWithId, undefined);
   };
 
   const saveUpdatedInfo = (add?: boolean) => {

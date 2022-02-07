@@ -263,9 +263,13 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   // check for existing surplus from reference or cheque number
   const findSameSurplus = draftAvailableBalance.findIndex((bal) => {
     return (
-      ((draftPayment.paymentMethod === "Cheque" && draftPayment.checkNumber === bal.checkNumber && bal.checkNumber !== "") ||
+      ((draftPayment.paymentMethod === "Cheque" &&
+        draftPayment.checkNumber === bal.checkNumber &&
+        draftPayment.parent !== bal.parent &&
+        bal.checkNumber !== "") ||
         (draftPayment.paymentMethod === "Online Banking / TT / ATM" &&
           draftPayment.referenceNumber === bal.referenceNumber &&
+          draftPayment.parent !== bal.parent &&
           bal.referenceNumber !== "")) &&
       draftPayment.currency === bal.currency
     );
@@ -563,7 +567,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     if (
       matchedSurplus !== undefined &&
       (draftPayment.tag === undefined || (draftPayment.tag !== undefined && draftPayment.tag.uuid !== matchedSurplus.parent)) &&
-      matchedSurplus.paymentId !== draftPayment.paymentId
+      (matchedSurplus.paymentId !== draftPayment.paymentId || matchedSurplus.paymentId === undefined)
     ) {
       setDuplicatePrompt(availableExcess > 0 ? "with-excess" : "no-excess");
     }

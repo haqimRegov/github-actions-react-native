@@ -228,16 +228,18 @@ export const generatePaymentWithKeys = async (
             }
 
             const dynamicKeys: TPaymentInfoKey[] = [];
-            if (paymentInfo.tag !== undefined) {
-              dynamicKeys.push("tag");
-            } else {
-              dynamicKeys.push("proof");
-            }
             if (paymentInfo.parent !== undefined) {
               dynamicKeys.push("parent");
             }
             if (paymentInfo.action !== undefined) {
               dynamicKeys.push("action");
+            }
+            if (paymentInfo.tag !== undefined) {
+              if (paymentInfo.action === undefined) {
+                dynamicKeys.push("tag");
+              }
+            } else {
+              dynamicKeys.push("proof");
             }
             const modifiedPaymentInfo: IPaymentInfo = {
               ...paymentInfo,
@@ -254,7 +256,9 @@ export const generatePaymentWithKeys = async (
                 : {};
 
             const optimizedTag =
-              paymentInfo.tag !== undefined && channel === "Dashboard" ? { tag: deleteKey(paymentInfo.tag, ["orderNumber"]) } : {};
+              paymentInfo.tag !== undefined && channel === "Dashboard" && paymentInfo.action === undefined
+                ? { tag: deleteKey(paymentInfo.tag, ["orderNumber"]) }
+                : {};
 
             const updatedPaymentInfo = {
               ...cleanPaymentInfo,

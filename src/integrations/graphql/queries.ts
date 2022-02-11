@@ -491,6 +491,16 @@ const listPaymentRequired = gql`
               currency
               amount
             }
+            initialExcess {
+              currency
+              amount
+            }
+            utilised {
+              orderNumber
+              paymentId
+              currency
+              amount
+            }
             orderNumber
             currency
             amount

@@ -339,8 +339,8 @@ export const calculateEachOrderBalance = (
     tempPayments.forEach((eachPOP: IPaymentInfo) => {
       const negationValue = (parseAmount(eachPOP.amount) * -1).toString();
       const currencyIndex = balancePerOrder.findIndex((eachDeviation: IOrderAmount) => eachDeviation.currency === eachPOP.currency);
-      if ((eachPOP.tag === undefined && eachPOP.excess !== undefined) || eachPOP.tag !== undefined) {
-        const updatedAmount = eachPOP.excess !== undefined ? eachPOP.excess?.amount : negationValue;
+      if ((eachPOP.tag === undefined && eachPOP.excess !== undefined && eachPOP.excess !== null) || eachPOP.tag !== undefined) {
+        const updatedAmount = eachPOP.excess !== undefined && eachPOP.excess !== null ? eachPOP.excess?.amount : negationValue;
         if (currencyIndex !== -1) {
           balancePerOrder[currencyIndex] = {
             amount: (parseAmount(balancePerOrder[currencyIndex].amount) + parseAmount(updatedAmount)).toString(),

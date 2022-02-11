@@ -58,7 +58,7 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
             .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
         : 0;
 
-    return parseInt(surplus.excess!.amount, 10) - totalUtilisedAmount;
+    return parseInt(surplus.initialExcess!.amount, 10) - totalUtilisedAmount;
   };
 
   const filteredSurplus = filteredAvailableBalance.filter((bal) => {

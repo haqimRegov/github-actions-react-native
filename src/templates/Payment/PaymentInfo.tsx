@@ -285,7 +285,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         ? matchedSurplus.utilised.map((util) => parseInt(util.amount, 10)).reduce((total: number, current: number) => total + current)
         : 0;
 
-    availableExcess = parseAmount(matchedSurplus.excess!.amount) - totalUtilisedAmount;
+    availableExcess = parseAmount(matchedSurplus.initialExcess!.amount) - totalUtilisedAmount;
   }
 
   const labelAmount =

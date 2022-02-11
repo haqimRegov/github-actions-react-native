@@ -69,9 +69,8 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         setTempData(state);
         setGrandTotal(data.result.totalInvestment);
         if (data.result.surplusBalance) {
-          const newApplicationBalance = data.result.surplusBalance.map((surplus) => ({ ...surplus, utilised: [] }));
-          setTempApplicationBalance(newApplicationBalance);
-          setApplicationBalance(newApplicationBalance);
+          setTempApplicationBalance(data.result.surplusBalance);
+          setApplicationBalance(data.result.surplusBalance);
         }
       }
       if (error !== null) {
@@ -199,22 +198,27 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         )
       : [];
   if (tempData !== undefined) {
-    tempApplicationBalance
-      .filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0)
-      .forEach((eachSurplusBalance: IPaymentInfo) => {
-        const cleanValue = eachSurplusBalance.excess!.amount.replace(/[,]/g, "");
-        const findSurplusIndex = balancePayments.findIndex(
-          (eachPaymentDeviation: IOrderAmount) => eachPaymentDeviation.currency === eachSurplusBalance.excess!.currency,
-        );
-        if (findSurplusIndex !== -1) {
-          balancePayments[findSurplusIndex] = {
-            ...balancePayments[findSurplusIndex],
-            amount: (parseInt(balancePayments[findSurplusIndex].amount, 10) + parseInt(cleanValue, 10)).toString(),
-          };
-        } else {
-          balancePayments.push({ amount: cleanValue, currency: eachSurplusBalance.excess!.currency });
-        }
-      });
+    tempApplicationBalance.forEach((eachSurplusBalance: IPaymentInfo) => {
+      const utilisedAmount = [...eachSurplusBalance.utilised!];
+      const totalUtilisedAmount =
+        utilisedAmount.length > 0
+          ? utilisedAmount
+              .map((util) => parseInt(util.amount, 10))
+              .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
+          : 0;
+      const updatedExcessAmount = parseInt(eachSurplusBalance.initialExcess!.amount, 10) - totalUtilisedAmount;
+      const findSurplusIndex = balancePayments.findIndex(
+        (eachPaymentDeviation: IOrderAmount) => eachPaymentDeviation.currency === eachSurplusBalance.excess!.currency,
+      );
+      if (findSurplusIndex !== -1) {
+        balancePayments[findSurplusIndex] = {
+          ...balancePayments[findSurplusIndex],
+          amount: (parseInt(balancePayments[findSurplusIndex].amount, 10) + updatedExcessAmount).toString(),
+        };
+      } else {
+        balancePayments.push({ amount: updatedExcessAmount.toString(), currency: eachSurplusBalance.excess!.currency });
+      }
+    });
   }
   const updatedBalancePayments = balancePayments.filter(
     (eachBalance: IOrderAmount) =>

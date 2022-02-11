@@ -129,6 +129,7 @@ declare interface IPaymentInfo {
   belongsTo?: string;
   combinedBankAccountName?: string; // not in list surplus
   excess?: IOrderAmount; // excess amount of a payment info
+  initialExcess?: IOrderAmount;
   isEditable: boolean | undefined; // saved payment from BE
   isCombined?: boolean; // for Recurring payment to check if the account name is combined
   new: boolean | undefined;

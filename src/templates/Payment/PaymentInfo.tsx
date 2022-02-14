@@ -1,3 +1,4 @@
+import cloneDeep from "lodash.clonedeep";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { v1 as uuidv1 } from "uuid";
@@ -97,7 +98,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 }: PaymentInfoProps) => {
   const surplusRef = useRef<IPaymentSurplusRef>();
   const [draftPayment, setDraftPayment] = useState<IPaymentInfo>(payment);
-  const [draftAvailableBalance, setDraftAvailableBalance] = useState<IPaymentInfo[]>(availableBalance);
+  const [draftAvailableBalance, setDraftAvailableBalance] = useState<IPaymentInfo[]>(cloneDeep(availableBalance));
   const [duplicatePrompt, setDuplicatePrompt] = useState<"with-excess" | "no-excess" | undefined>(undefined);
   const [deletePrompt, setDeletePrompt] = useState<boolean>(false);
   const [updatePrompt, setUpdatePrompt] = useState<"add" | "save" | undefined>(undefined);
@@ -366,7 +367,8 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     if (!id) {
       id = uuidv1();
     }
-
+    const addInitialExcess =
+      excessAmount > 0 ? { initialExcess: { amount: excessAmount.toString(), currency: latestPayment.currency as TypeCurrency } } : {};
     const updatedPayment: IPaymentInfo = {
       ...latestPayment,
       // check if saved payment info from backend
@@ -377,6 +379,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       parent: excessAmount > 0 ? id : undefined,
       paymentId: id,
       saved: true,
+      ...addInitialExcess,
     };
     return updatedPayment;
   };
@@ -561,6 +564,11 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftPayment, payment]);
+
+  useEffect(() => {
+    setDraftAvailableBalance(cloneDeep(availableBalance));
+    setDraftPayment(payment);
+  }, [availableBalance]);
 
   // effect to check for existing surplus using reference or cheque number
   useEffect(() => {

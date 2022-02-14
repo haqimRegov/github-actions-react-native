@@ -235,9 +235,7 @@ export const generatePaymentWithKeys = async (
               dynamicKeys.push("action");
             }
             if (paymentInfo.tag !== undefined) {
-              if (paymentInfo.action === undefined) {
-                dynamicKeys.push("tag");
-              }
+              dynamicKeys.push("tag");
             } else {
               dynamicKeys.push("proof");
             }
@@ -339,7 +337,7 @@ export const calculateEachOrderBalance = (
     tempPayments.forEach((eachPOP: IPaymentInfo) => {
       const negationValue = (parseAmount(eachPOP.amount) * -1).toString();
       const currencyIndex = balancePerOrder.findIndex((eachDeviation: IOrderAmount) => eachDeviation.currency === eachPOP.currency);
-      if ((eachPOP.tag === undefined && eachPOP.excess !== undefined && eachPOP.excess !== null) || eachPOP.tag !== undefined) {
+      if (eachPOP.tag === undefined && eachPOP.excess !== undefined && eachPOP.excess !== null) {
         const updatedAmount = eachPOP.excess !== undefined && eachPOP.excess !== null ? eachPOP.excess?.amount : negationValue;
         if (currencyIndex !== -1) {
           balancePerOrder[currencyIndex] = {

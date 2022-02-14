@@ -21,7 +21,7 @@ interface PaymentSurplusProps {
   payment: IPaymentInfo;
   pendingCurrencies: string[];
   ref?: MutableRefObject<IPaymentSurplusRef | undefined>;
-  setAvailableBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
+  setAvailableBalance: (value: IPaymentInfo[]) => void;
   setPayment: (value: IPaymentInfo) => void;
   totalInvestment: IOrderAmount[];
 }
@@ -125,7 +125,7 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
       );
     }
 
-    setAvailableBalance(newAvailableBalance, undefined);
+    setAvailableBalance(newAvailableBalance);
     setPayment({ ...newPaymentInfo });
   };
 

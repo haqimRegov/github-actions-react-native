@@ -10,7 +10,7 @@ import { getPaymentRequired, submitProofOfPayments } from "../../../../network-a
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../../templates";
-import { calculateEachOrderBalance, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
+import { checkCurrencyCompleted, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanner";
 import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -155,6 +155,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const handleUndoDelete = () => {
     if (tempData !== undefined) {
       setTempData(proofOfPayment);
+      setTempApplicationBalance(applicationBalance);
     }
   };
 
@@ -189,14 +190,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const bannerText =
     tempData !== undefined ? `${PAYMENT.LABEL_PENDING_SUMMARY}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
-  const balancePayments: IOrderAmount[] =
-    tempData !== undefined
-      ? calculateEachOrderBalance(
-          tempData,
-          [],
-          tempApplicationBalance.filter((eachBalance: IPaymentInfo) => parseAmount(eachBalance.excess?.amount!) !== 0),
-        )
-      : [];
+  const balancePayments: IOrderAmount[] = [];
   if (tempData !== undefined) {
     tempApplicationBalance.forEach((eachSurplusBalance: IPaymentInfo) => {
       const utilisedAmount = [...eachSurplusBalance.utilised!];

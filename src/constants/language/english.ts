@@ -998,6 +998,8 @@ export const english = {
         "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.",
       PROMPT_SUBTITLE_PENDING_EXCESS:
         "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.\n\n4. Your investor has an excess amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_DUPLICATE_SURPLUS:
+        "This use of surplus matches the other proof of payment info in this order. Continuing will merge the proof of payments.\n\nDo you want to continue?",
       PROMPT_SUBTITLE_CONFIRM: "Are you sure you want to delete?",
       PROMPT_SUBTITLE_EXCESS: "Your investor has a excess amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE_INSERT: "Insert another payment reference number.",
@@ -1015,6 +1017,7 @@ export const english = {
       PROMPT_TITLE_CANCEL: "Are you sure you want to cancel?",
       PROMPT_TITLE_DELETE: "Delete this payment info?",
       PROMPT_TITLE_DUPLICATE: "Duplicate payment info detected",
+      PROMPT_TITLE_DUPLICATE_SURPLUS: "Duplicate use of surplus detected",
       PROMPT_TITLE_EDIT: "Edit payment info?",
       PROMPT_TITLE_ORDER: "Your completed order(s) have been\nsubmitted successfully",
       PROMPT_TITLE_SAVED: "Your order(s) have been\nsaved successfully",

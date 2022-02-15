@@ -1,6 +1,7 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
+import { v1 as uuidv1 } from "uuid";
 
 import { CustomFlexSpacer, CustomSpacer, IconButton, PromptModal, TableBadge } from "../../components";
 import { Language } from "../../constants";
@@ -37,7 +38,7 @@ import {
   sw40,
   sw8,
 } from "../../styles";
-import { AnimationUtils, formatAmount } from "../../utils";
+import { AnimationUtils, formatAmount, isObjectEqual, parseAmount } from "../../utils";
 import { OrderOverview } from "../Onboarding/OrderOverview";
 import { AddedInfo } from "./AddedInfo";
 import { generateNewInfo, handleAvailableBalance, handleReduceAmount } from "./helpers";
@@ -104,6 +105,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   const [activeInfo, setActiveInfo] = useState<number>(payments.length);
   const [editPrompt, setEditPrompt] = useState<number>(-1);
   const [unsavedChanges, setUnsavedChanges] = useState<number>(-1);
+  const [mergeSurplusPrompt, setMergeSurplusPrompt] = useState<boolean>(false);
 
   const completed = balance.some((findPending) => findPending.amount.startsWith("-")) === false;
 
@@ -384,9 +386,29 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
               };
 
               const handleSave = (value: IPaymentInfo, additional?: boolean) => {
+                let checkEditNewPayment = {};
+                let checkIsEditable = {};
                 const updatedPayments = [...payments];
-
-                updatedPayments[index] = { ...updatedPayments[index], ...value };
+                const updatedDeletedPayments = [...deletedPayment];
+                // Check if the edit has caused an update in the use of surplus in both scenarios where it turns from surplus to normal payment and surplus to another surplus
+                // Check the tag equal to check if the surplus has changed
+                // Check both tags to confirm that there is no update from or to surplus
+                const checkTagEqual = isObjectEqual(updatedPayments[index], value);
+                if (
+                  checkTagEqual === false &&
+                  value.action !== undefined &&
+                  value.action.option === "update" &&
+                  (value.tag !== undefined || updatedPayments[index].tag !== undefined)
+                ) {
+                  updatedDeletedPayments.push({
+                    ...updatedPayments[index],
+                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
+                  });
+                  checkEditNewPayment = { action: undefined, paymentId: uuidv1() };
+                  // Update the isEditable back to undefined if the update caused a new payment
+                  checkIsEditable = { isEditable: undefined };
+                }
+                updatedPayments[index] = { ...updatedPayments[index], ...value, ...checkEditNewPayment, ...checkIsEditable };
 
                 if (additional === true) {
                   // update currency list when adding additional info for multi currency
@@ -420,10 +442,18 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const getPaymentId = checkIfUtilised === true ? payments[index].paymentId : undefined;
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update" } : undefined;
-
                 setPayments(updatedPayments, action, false);
-
-                if (additional !== true) {
+                setDeletedPayment(updatedDeletedPayments);
+                const surplusUuid =
+                  updatedPayments !== undefined && updatedPayments[index].tag !== undefined ? updatedPayments[index].tag!.uuid : undefined;
+                const checkDuplicateSurplus = updatedPayments.filter(
+                  (eachPayment: IPaymentInfo) => eachPayment.tag !== undefined && eachPayment.tag.uuid === surplusUuid,
+                );
+                if (checkDuplicateSurplus.length > 1) {
+                  if (checkDuplicateSurplus.length > 1) {
+                    setMergeSurplusPrompt(true);
+                  }
+                } else if (additional !== true) {
                   handleCollapse();
                 }
               };
@@ -456,6 +486,77 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 setUnsavedChanges(index);
               };
 
+              const handleMergeSurplus = () => {
+                const updatedPayments = [...payments];
+                const sumOfDuplicateSurplus = updatedPayments
+                  .filter((eachPayment: IPaymentInfo) => eachPayment.tag !== undefined && eachPayment.tag.uuid === payment.tag?.uuid)
+                  .map((eachFiltered: IPaymentInfo) => parseAmount(eachFiltered.amount))
+                  .reduce((acc, current) => acc + current);
+                const updatedApplicationBalance: IPaymentInfo[] = [...applicationBalance].map((eachBalance: IPaymentInfo) => {
+                  if (eachBalance.parent === payment.tag?.uuid) {
+                    const filteredUtilised =
+                      eachBalance.utilised !== undefined
+                        ? eachBalance.utilised.filter((eachUtilised: IUtilisedAmount) => eachUtilised.orderNumber !== payment.orderNumber)
+                        : undefined;
+                    if (filteredUtilised !== undefined) {
+                      filteredUtilised.push({
+                        amount: sumOfDuplicateSurplus.toString(),
+                        orderNumber: payment.orderNumber,
+                        paymentId: payment.paymentId!,
+                      });
+                    }
+                    return {
+                      ...eachBalance,
+                      utilised: filteredUtilised,
+                      amount: sumOfDuplicateSurplus.toString(),
+                      paymentId: uuidv1(),
+                    };
+                  }
+                  return eachBalance;
+                });
+                const filteredPayments = updatedPayments.filter(
+                  (eachPayment: IPaymentInfo) =>
+                    eachPayment.tag === undefined || (eachPayment.tag !== undefined && eachPayment.tag.orderNumber === payment.orderNumber),
+                );
+                const updatedPayment: IPaymentInfo = {
+                  ...payment,
+                  amount: sumOfDuplicateSurplus.toString(),
+                  isEditable: undefined,
+                };
+                filteredPayments.push(updatedPayment);
+                setPayments(filteredPayments);
+                setApplicationBalance(updatedApplicationBalance);
+                setMergeSurplusPrompt(false);
+                handleCollapse();
+              };
+
+              const handleCancelMergeSurplus = () => {
+                const updatedPayments = [...payments];
+                const updatedApplicationBalance: IPaymentInfo[] = [...applicationBalance].map((eachBalance: IPaymentInfo) => {
+                  if (eachBalance.parent === payment.tag?.uuid) {
+                    const filteredUtilised =
+                      eachBalance.utilised !== undefined
+                        ? eachBalance.utilised.filter((eachUtilised: IUtilisedAmount) => eachUtilised.paymentId !== payment.paymentId)
+                        : undefined;
+                    return { ...eachBalance, utilised: filteredUtilised };
+                  }
+                  return eachBalance;
+                });
+                const newInfo = generateNewInfo(
+                  paymentType,
+                  allowedRecurringType,
+                  { label: payment.currency, value: payment.currency as TypeCurrency },
+                  orderNumber,
+                  undefined,
+                  accountNames,
+                  "",
+                );
+                updatedPayments[index] = newInfo;
+                setPayments(updatedPayments);
+                setApplicationBalance(updatedApplicationBalance);
+                setMergeSurplusPrompt(false);
+              };
+
               return (
                 <Fragment key={index}>
                   {index === 0 ? null : <View style={borderBottomBlue5} />}
@@ -467,6 +568,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       completedSurplusCurrencies={completedSurplusCurrencies}
                       createdOn={moment(createdOn, "x").toDate()}
                       currencies={currencies}
+                      deletedPayment={deletedPayment}
                       existingPaidAmount={existingPaidAmount}
                       epfAccountNumber={epfAccountNumber || "-"}
                       funds={funds}
@@ -478,6 +580,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       totalInvestment={totalInvestment}
                       recurringDetails={recurringDetails}
                       setAvailableBalance={setApplicationBalance}
+                      setDeletedPayment={setDeletedPayment}
                     />
                   ) : (
                     <AddedInfo payment={payment} handleEdit={handleEdit} />
@@ -491,6 +594,16 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     title={PAYMENT.PROMPT_SUBTITLE_UNSAVED}
                     labelStyle={promptStyle}
                     titleStyle={promptStyle}
+                  />
+                  <PromptModal
+                    handleCancel={handleCancelMergeSurplus}
+                    handleContinue={handleMergeSurplus}
+                    label={PAYMENT.PROMPT_TITLE_DUPLICATE}
+                    labelContinue={PAYMENT.BUTTON_YES}
+                    labelStyle={promptStyle}
+                    title={PAYMENT.PROMPT_SUBTITLE_DUPLICATE_SURPLUS}
+                    titleStyle={promptStyle}
+                    visible={mergeSurplusPrompt}
                   />
                 </Fragment>
               );

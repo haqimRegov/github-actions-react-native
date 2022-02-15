@@ -235,7 +235,9 @@ export const generatePaymentWithKeys = async (
               dynamicKeys.push("action");
             }
             if (paymentInfo.tag !== undefined) {
-              dynamicKeys.push("tag");
+              if (paymentInfo.action === undefined) {
+                dynamicKeys.push("tag");
+              }
             } else {
               dynamicKeys.push("proof");
             }
@@ -337,8 +339,9 @@ export const calculateEachOrderBalance = (
     tempPayments.forEach((eachPOP: IPaymentInfo) => {
       const negationValue = (parseAmount(eachPOP.amount) * -1).toString();
       const currencyIndex = balancePerOrder.findIndex((eachDeviation: IOrderAmount) => eachDeviation.currency === eachPOP.currency);
-      if (eachPOP.tag === undefined && eachPOP.excess !== undefined && eachPOP.excess !== null) {
-        const updatedAmount = eachPOP.excess !== undefined && eachPOP.excess !== null ? eachPOP.excess?.amount : negationValue;
+      if (eachPOP.tag === undefined && eachPOP.initialExcess !== undefined && eachPOP.initialExcess !== null) {
+        const updatedAmount =
+          eachPOP.initialExcess !== undefined && eachPOP.initialExcess !== null ? eachPOP.initialExcess?.amount : negationValue;
         if (currencyIndex !== -1) {
           balancePerOrder[currencyIndex] = {
             amount: (parseAmount(balancePerOrder[currencyIndex].amount) + parseAmount(updatedAmount)).toString(),
@@ -364,6 +367,35 @@ export const calculateBalances = (proofOfPayments: IPaymentRequired[]): IOrderAm
     });
   }
   return balancePayments;
+};
+
+export const calculateExcess = (availableBalance: IPaymentInfo[]) => {
+  if (availableBalance.length > 0) {
+    const balancePayments: IOrderAmount[] = [];
+    availableBalance.forEach((eachSurplusBalance: IPaymentInfo) => {
+      const utilisedAmount = [...eachSurplusBalance.utilised!];
+      const totalUtilisedAmount =
+        utilisedAmount.length > 0
+          ? utilisedAmount
+              .map((util) => parseInt(util.amount, 10))
+              .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
+          : 0;
+      const updatedExcessAmount = parseInt(eachSurplusBalance.initialExcess!.amount, 10) - totalUtilisedAmount;
+      const findSurplusIndex = balancePayments.findIndex(
+        (eachPaymentDeviation: IOrderAmount) => eachPaymentDeviation.currency === eachSurplusBalance.excess!.currency,
+      );
+      if (findSurplusIndex !== -1) {
+        balancePayments[findSurplusIndex] = {
+          ...balancePayments[findSurplusIndex],
+          amount: (parseInt(balancePayments[findSurplusIndex].amount, 10) + updatedExcessAmount).toString(),
+        };
+      } else {
+        balancePayments.push({ amount: updatedExcessAmount.toString(), currency: eachSurplusBalance.excess!.currency });
+      }
+    });
+    return balancePayments;
+  }
+  return [];
 };
 
 export const checkCurrencyCompleted = (proofOfPayment: IPaymentRequired, currency: TypeCurrency) => {

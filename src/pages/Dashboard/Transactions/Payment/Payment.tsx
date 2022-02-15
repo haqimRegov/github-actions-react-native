@@ -10,7 +10,7 @@ import { getPaymentRequired, submitProofOfPayments } from "../../../../network-a
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../../templates";
-import { checkCurrencyCompleted, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
+import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanner";
 import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -45,7 +45,6 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const handleFetch = async () => {
     const request: IGetPaymentRequiredRequest = { orderNumber: currentOrder!.orderNumber };
     const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation, setLoading);
-    // console.log("resp", response);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -84,13 +83,12 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const handleSubmit = async (confirmed?: boolean) => {
     try {
       setLoading(true);
-      const paymentWithDeleted = [...tempData!.payments];
-      // console.log("payment with deleted before", paymentWithDeleted);
-
+      const paymentWithDeleted: IPaymentInfo[] = [];
       // TODO for deleted saved info
       if (tempDeletedPayment.length > 0) {
         paymentWithDeleted.push(...tempDeletedPayment);
       }
+      paymentWithDeleted.push(...tempData!.payments);
 
       const payment = await generatePaymentWithKeys(
         paymentWithDeleted,
@@ -190,30 +188,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const bannerText =
     tempData !== undefined ? `${PAYMENT.LABEL_PENDING_SUMMARY}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
-  const balancePayments: IOrderAmount[] = [];
-  if (tempData !== undefined) {
-    tempApplicationBalance.forEach((eachSurplusBalance: IPaymentInfo) => {
-      const utilisedAmount = [...eachSurplusBalance.utilised!];
-      const totalUtilisedAmount =
-        utilisedAmount.length > 0
-          ? utilisedAmount
-              .map((util) => parseInt(util.amount, 10))
-              .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
-          : 0;
-      const updatedExcessAmount = parseInt(eachSurplusBalance.initialExcess!.amount, 10) - totalUtilisedAmount;
-      const findSurplusIndex = balancePayments.findIndex(
-        (eachPaymentDeviation: IOrderAmount) => eachPaymentDeviation.currency === eachSurplusBalance.excess!.currency,
-      );
-      if (findSurplusIndex !== -1) {
-        balancePayments[findSurplusIndex] = {
-          ...balancePayments[findSurplusIndex],
-          amount: (parseInt(balancePayments[findSurplusIndex].amount, 10) + updatedExcessAmount).toString(),
-        };
-      } else {
-        balancePayments.push({ amount: updatedExcessAmount.toString(), currency: eachSurplusBalance.excess!.currency });
-      }
-    });
-  }
+  const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
   const updatedBalancePayments = balancePayments.filter(
     (eachBalance: IOrderAmount) =>
       eachBalance.currency === "MYR" &&

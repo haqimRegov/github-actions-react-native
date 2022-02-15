@@ -126,7 +126,8 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
     }
 
     setAvailableBalance(newAvailableBalance);
-    setPayment({ ...newPaymentInfo });
+    const checkIsEditable = payment.isEditable !== undefined ? { isEditable: payment.isEditable } : {};
+    setPayment({ ...newPaymentInfo, ...checkIsEditable });
   };
 
   useImperativeHandle(ref, () => ({ handleUseSurplus }));

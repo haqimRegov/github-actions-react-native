@@ -24,7 +24,7 @@ import {
   sw24,
 } from "../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../templates";
-import { calculateBalances, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../templates/Payment/helpers";
+import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
 import { parseAmount } from "../../../utils";
 
@@ -181,7 +181,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     tempData !== undefined && completedLength === tempData.length ? `All (${tempData.length}) completed` : `${completedLength} completed`;
   const bannerText = `${PAYMENT.LABEL_PENDING_SUMMARY}: ${pendingLength > 0 ? pendingText : ""}${completedLength > 0 ? completedText : ""}`;
   // To show the available balance and also the excess
-  const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateBalances(tempData) : [];
+  const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
   const checkAllCompleted =
     tempData !== undefined
       ? tempData.filter(

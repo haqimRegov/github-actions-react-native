@@ -1,5 +1,5 @@
 import cloneDeep from "lodash.clonedeep";
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { v1 as uuidv1 } from "uuid";
 
@@ -28,6 +28,7 @@ import {
   fs12RegWhite1,
   fs16BoldBlue1,
   fs16BoldGray6,
+  fs16RegGray6,
   fsAlignLeft,
   fullWidth,
   px,
@@ -253,12 +254,12 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const removePromptTitle =
     draftPayment.parent !== undefined && surplusSharedTo.length > 0
-      ? `${PAYMENT.PROMPT_SUBTITLE_REMOVE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}\n${sharedToTitle}.\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`
+      ? `${PAYMENT.PROMPT_SUBTITLE_REMOVE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}`
       : `${PAYMENT.PROMPT_SUBTITLE_REMOVE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
 
   const updatePromptTitle =
     draftPayment.parent !== undefined && surplusSharedTo.length > 0
-      ? `${PAYMENT.PROMPT_SUBTITLE_UPDATE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}\n${sharedToTitle}.\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`
+      ? `${PAYMENT.PROMPT_SUBTITLE_UPDATE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}`
       : `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
 
   // check for existing surplus from reference or cheque number
@@ -292,13 +293,13 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const labelAmount =
     availableExcess > 0 && matchedSurplus !== undefined ? `${matchedSurplus.excess!.currency} ${formatAmount(availableExcess)}.` : "";
 
-  const noExcessPromptSubtitle = `${PAYMENT.PROMPT_SUBTITLE_MATCHES} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
+  const noExcessPromptTitle = `${PAYMENT.PROMPT_SUBTITLE_ORDER} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
     PAYMENT.PROMPT_SUBTITLE_NO_SURPLUS
-  }\n\n${PAYMENT.PROMPT_SUBTITLE_INSERT}`;
+  }`;
 
-  const withExcessPromptSubtitle = `${PAYMENT.PROMPT_SUBTITLE_MATCHES} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
+  const withExcessPromptTitle = `${PAYMENT.PROMPT_SUBTITLE_ORDER} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
     PAYMENT.PROMPT_SUBTITLE_WITH_SURPLUS
-  } ${labelAmount}\n\n${PAYMENT.PROMPT_SUBTITLE_USE_SURPLUS}`;
+  } ${labelAmount}`;
 
   const setAmount = (value: string) => {
     setDraftPayment({ ...draftPayment, amount: value });
@@ -568,6 +569,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   useEffect(() => {
     setDraftAvailableBalance(cloneDeep(availableBalance));
     setDraftPayment(payment);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availableBalance]);
 
   // effect to check for existing surplus using reference or cheque number
@@ -645,37 +647,58 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         labelStyle={promptStyle}
         title={removePromptTitle}
         titleStyle={promptStyle}
-        visible={deletePrompt}
-      />
+        visible={deletePrompt}>
+        <Fragment>
+          {draftPayment.parent !== undefined && surplusSharedTo.length > 0 ? (
+            <View style={promptStyle}>
+              <Text style={fs16BoldGray6}>{`${sharedToTitle}.`}</Text>
+              <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`}</Text>
+            </View>
+          ) : null}
+        </Fragment>
+      </PromptModal>
       <PromptModal
         handleCancel={handleCancelPrompt}
         handleContinue={handleContinueUpdate}
         label={PAYMENT.PROMPT_TITLE_UPDATE}
         labelContinue={PAYMENT.BUTTON_UPDATE}
         labelStyle={promptStyle}
-        title={updatePromptTitle}
-        titleStyle={promptStyle}
-        visible={updatePrompt !== undefined}
-      />
+        visible={updatePrompt !== undefined}>
+        <Fragment>
+          {draftPayment.parent !== undefined && surplusSharedTo.length > 0 ? (
+            <View style={promptStyle}>
+              <Text style={fs16RegGray6}>{updatePromptTitle}</Text>
+              <Text style={fs16BoldGray6}>{`\n${sharedToTitle}.`}</Text>
+              <Text style={fs16RegGray6}>{`\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`}</Text>
+            </View>
+          ) : null}
+        </Fragment>
+      </PromptModal>
       <PromptModal
         handleCancel={handleCancelDuplicate}
         handleContinue={handleUseSurplus}
         label={PAYMENT.PROMPT_TITLE_DUPLICATE}
         labelContinue={PAYMENT.BUTTON_YES}
         labelStyle={promptStyle}
-        title={withExcessPromptSubtitle}
-        titleStyle={promptStyle}
-        visible={duplicatePrompt === "with-excess"}
-      />
+        visible={duplicatePrompt === "with-excess"}>
+        <View style={promptStyle}>
+          <Text style={fs16RegGray6}>{PAYMENT.PROMPT_SUBTITLE_MATCHES}</Text>
+          <Text style={fs16BoldGray6}>{withExcessPromptTitle}</Text>
+          <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_USE_SURPLUS}`}</Text>
+        </View>
+      </PromptModal>
       <PromptModal
         handleContinue={handleCancelDuplicate}
         label={PAYMENT.PROMPT_TITLE_DUPLICATE}
         labelContinue={PAYMENT.BUTTON_BACK_TO_PAYMENT}
         labelStyle={promptStyle}
-        title={noExcessPromptSubtitle}
-        titleStyle={promptStyle}
-        visible={duplicatePrompt === "no-excess"}
-      />
+        visible={duplicatePrompt === "no-excess"}>
+        <View style={promptStyle}>
+          <Text style={fs16RegGray6}>{PAYMENT.PROMPT_SUBTITLE_MATCHES}</Text>
+          <Text style={fs16BoldGray6}>{noExcessPromptTitle}</Text>
+          <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_INSERT}`}</Text>
+        </View>
+      </PromptModal>
       {viewFile !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="url" value={viewFile} visible={viewFile !== undefined} />
       ) : null}

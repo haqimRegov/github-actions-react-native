@@ -60,6 +60,7 @@ interface PaymentInfoProps {
   completedSurplusCurrencies?: string[];
   createdOn: Date;
   currencies: TypeCurrencyLabelValue[];
+  deletedPayment: IPaymentInfo[];
   epfAccountNumber?: string;
   existingPaidAmount: IOrderAmount[];
   funds: IOrderInvestment[];
@@ -70,6 +71,7 @@ interface PaymentInfoProps {
   pendingBalance: IOrderAmount[];
   recurringDetails?: IRecurringDetails;
   setAvailableBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
+  setDeletedPayment: (deleted: IPaymentInfo[]) => void;
   totalInvestment: IOrderAmount[];
 }
 
@@ -603,7 +605,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           </CustomTooltip>
         )}
       </View>
-      {draftPayment.paymentType === "Cash" && draftPayment.paymentMethod !== "Client Trust Account (CTA)" ? (
+      {draftPayment.paymentType === "Cash" &&
+      draftPayment.paymentMethod !== "Client Trust Account (CTA)" &&
+      payment.isEditable !== false ? (
         <PaymentSurplus
           accountNames={accountNames}
           availableBalance={draftAvailableBalance}

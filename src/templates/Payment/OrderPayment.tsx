@@ -89,7 +89,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     createdOn,
     funds,
     orderNumber,
-    paymentCount,
     payments,
     paymentType,
     totalInvestment,
@@ -132,7 +131,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     if (
       completed === false &&
       activeOrder.order === "" &&
-      (payments.length === 0 || (paymentCount > 0 && payments[payments.length - 1].saved === true))
+      (payments.length === 0 || (payments.length > 0 && payments[payments.length - 1].saved === true))
     ) {
       const recurringAmount = paymentType === "Recurring" ? totalInvestment[0].amount : "";
       const newInfo = generateNewInfo(

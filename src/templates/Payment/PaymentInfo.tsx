@@ -67,6 +67,7 @@ interface PaymentInfoProps {
   handleEditSaved: () => void;
   handleRemove: () => void;
   handleSave: (value: IPaymentInfo, additional?: boolean) => void;
+  handleUnsaved: (state: number) => void;
   payment: IPaymentInfo;
   pendingBalance: IOrderAmount[];
   recurringDetails?: IRecurringDetails;
@@ -93,6 +94,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   handleEditSaved,
   handleRemove,
   handleSave,
+  handleUnsaved,
   payment,
   pendingBalance,
   recurringDetails,
@@ -564,7 +566,10 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           setDeletePrompt(false);
         }
       }
-      if (draftPayment.new !== true) {
+      // To check if we have edited the POP but went back to using the same surplus. No need to show modal.
+      const checkSurplusSame =
+        payment.tag !== undefined && draftPayment.tag !== undefined && isObjectEqual(draftPayment.tag!, payment.tag!);
+      if (draftPayment.new !== true && checkSurplusSame === false) {
         handleEditSaved();
       }
     }
@@ -616,6 +621,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           availableBalance={draftAvailableBalance}
           completedSurplusCurrencies={completedSurplusCurrencies}
           existingPaidAmount={existingPaidAmount}
+          handleUnsaved={handleUnsaved}
+          handleEditSaved={handleEditSaved}
+          oldPayment={payment}
           payment={draftPayment}
           pendingCurrencies={pendingCurrencies}
           ref={surplusRef}

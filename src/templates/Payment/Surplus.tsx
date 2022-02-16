@@ -5,7 +5,7 @@ import { v1 as uuidv1 } from "uuid";
 
 import { CustomSpacer } from "../../components";
 import { flexRow, px, sh24, sw16, sw24 } from "../../styles";
-import { deleteKey, formatAmount, parseAmount } from "../../utils";
+import { deleteKey, formatAmount, isObjectEqual, parseAmount } from "../../utils";
 import { calculateAvailableBalance, generateNewInfo, getAmount } from "./helpers";
 import { ToggleCard } from "./ToggleCard";
 
@@ -18,6 +18,8 @@ interface PaymentSurplusProps {
   availableBalance: IPaymentInfo[];
   completedSurplusCurrencies?: string[];
   existingPaidAmount: IOrderAmount[];
+  handleUnsaved: (state: number) => void;
+  oldPayment: IPaymentInfo;
   payment: IPaymentInfo;
   pendingCurrencies: string[];
   ref?: MutableRefObject<IPaymentSurplusRef | undefined>;
@@ -124,7 +126,11 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
         accountNames,
       );
     }
-
+    const checkSurplusSame =
+      props.oldPayment.tag !== undefined && newPaymentInfo.tag !== undefined && isObjectEqual(props.oldPayment.tag!, newPaymentInfo.tag!);
+    if (checkSurplusSame === true) {
+      props.handleUnsaved(-1);
+    }
     setAvailableBalance(newAvailableBalance);
     const checkIsEditable = payment.isEditable !== undefined ? { isEditable: payment.isEditable } : {};
     setPayment({ ...newPaymentInfo, ...checkIsEditable });

@@ -580,6 +580,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       recurringDetails={recurringDetails}
                       setAvailableBalance={setApplicationBalance}
                       setDeletedPayment={setDeletedPayment}
+                      handleUnsaved={setUnsavedChanges}
                     />
                   ) : (
                     <AddedInfo payment={payment} handleEdit={handleEdit} />

@@ -427,14 +427,16 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const saveUpdatedInfo = (add?: boolean) => {
     const cleanPayment = paymentToBeSaved(draftPayment);
-    updateAvailableBalance(cleanPayment);
+    if (cleanPayment.isEditable !== false) {
+      updateAvailableBalance(cleanPayment);
+    }
     handleSave(cleanPayment, add);
   };
 
   const handleSaveInfo = () => {
     // TODO do not show prompt and do not update available balance if no changes are made
     // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
-    if (balanceSharedTo.length > 0) {
+    if (balanceSharedTo.length > 0 && draftPayment.isEditable !== false) {
       return setUpdatePrompt("save");
     }
     return saveUpdatedInfo();
@@ -550,6 +552,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
   const promptStyle = { ...fsAlignLeft, ...fullWidth };
+  const disabled = saveDisabled && isPaymentEqual;
 
   // effect to check when a saved info was edited or deleted
   useEffect(() => {
@@ -638,7 +641,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       </View>
       <CustomSpacer space={sh40} />
       <NewActionButtons
-        primary={{ onPress: handleSaveInfo, text: PAYMENT.BUTTON_SAVE, disabled: saveDisabled }}
+        primary={{ onPress: handleSaveInfo, text: PAYMENT.BUTTON_SAVE, disabled: disabled }}
         secondary={secondaryButton}
         buttonContainerStyle={centerHorizontal}
       />

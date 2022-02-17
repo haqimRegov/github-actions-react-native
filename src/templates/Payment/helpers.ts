@@ -52,7 +52,7 @@ export const generateNewInfo = (
     saved: false,
     sharedTo: undefined,
     tag: undefined,
-    usePreviousDda: undefined,
+    usePreviousRecurring: undefined,
     utilised: undefined,
   };
 

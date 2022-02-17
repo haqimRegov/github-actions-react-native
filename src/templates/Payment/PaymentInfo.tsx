@@ -47,7 +47,7 @@ import {
   sw7,
 } from "../../styles";
 import { formatAmount, isAmount, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
-import { getAmount } from "./helpers";
+import { generateNewInfo, getAmount } from "./helpers";
 import { NewCheque, NewCTA, NewEPF, NewOnlineBanking, NewRecurring } from "./Method";
 import { IPaymentSurplusRef, PaymentSurplus } from "./Surplus";
 
@@ -568,7 +568,20 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       // To check if we have edited the POP but went back to using the same surplus. No need to show modal.
       const checkSurplusSame =
         payment.tag !== undefined && draftPayment.tag !== undefined && isObjectEqual(draftPayment.tag!, payment.tag!);
-      if (draftPayment.new !== true && checkSurplusSame === false) {
+      const recurringAmount = payment.paymentType === "Recurring" ? totalInvestment[0].amount : "";
+      const dummyDefaultInfo = generateNewInfo(
+        payment.paymentType,
+        allowedRecurringType!,
+        currencies[0],
+        payment.orderNumber,
+        epfAccountNumber,
+        accountNames,
+        recurringAmount,
+      );
+      if (
+        (draftPayment.new !== true && checkSurplusSame === false) ||
+        (draftPayment.saved === false && isObjectEqual(draftPayment, dummyDefaultInfo) === false && draftPayment.tag === undefined)
+      ) {
         handleEditSaved();
       }
     }

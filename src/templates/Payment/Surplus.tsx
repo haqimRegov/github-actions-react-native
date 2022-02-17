@@ -18,6 +18,7 @@ interface PaymentSurplusProps {
   availableBalance: IPaymentInfo[];
   completedSurplusCurrencies?: string[];
   existingPaidAmount: IOrderAmount[];
+  handleEditSaved: () => void;
   handleUnsaved: (state: number) => void;
   oldPayment: IPaymentInfo;
   payment: IPaymentInfo;
@@ -130,6 +131,8 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
       props.oldPayment.tag !== undefined && newPaymentInfo.tag !== undefined && isObjectEqual(props.oldPayment.tag!, newPaymentInfo.tag!);
     if (checkSurplusSame === true) {
       props.handleUnsaved(-1);
+    } else {
+      props.handleEditSaved();
     }
     setAvailableBalance(newAvailableBalance);
     const checkIsEditable = payment.isEditable !== undefined ? { isEditable: payment.isEditable } : {};

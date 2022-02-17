@@ -138,7 +138,7 @@ declare interface IPaymentInfo {
   saved: boolean;
   sharedTo?: string[];
   tag?: { uuid: string; orderNumber?: string }; // if use of surplus, uuid is the parent of the surplus payment info
-  usePreviousDda?: boolean;
+  usePreviousRecurring?: boolean;
   utilised?: IUtilisedAmount[]; // utilised amount of an available balance
 }
 
@@ -153,6 +153,7 @@ declare interface IRecurringInfo {
   bankAccountName: string;
   bankAccountNumber: string;
   frequency: string;
+  orderNumber: string;
   recurringBank: string;
 }
 

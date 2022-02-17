@@ -554,7 +554,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
   const promptStyle = { ...fsAlignLeft, ...fullWidth };
-  const disabled = saveDisabled && isPaymentEqual;
 
   // effect to check when a saved info was edited or deleted
   useEffect(() => {
@@ -649,7 +648,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       </View>
       <CustomSpacer space={sh40} />
       <NewActionButtons
-        primary={{ onPress: handleSaveInfo, text: PAYMENT.BUTTON_SAVE, disabled: disabled }}
+        primary={{ onPress: handleSaveInfo, text: PAYMENT.BUTTON_SAVE, disabled: saveDisabled }}
         secondary={secondaryButton}
         buttonContainerStyle={centerHorizontal}
       />
@@ -715,7 +714,12 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         </View>
       </PromptModal>
       {viewFile !== undefined ? (
-        <FileViewer handleClose={handleCloseViewer} resourceType="url" value={viewFile} visible={viewFile !== undefined} />
+        <FileViewer
+          handleClose={handleCloseViewer}
+          resourceType={viewFile.url !== undefined && "url" in viewFile ? "url" : "file"}
+          value={viewFile}
+          visible={viewFile !== undefined}
+        />
       ) : null}
     </View>
   );

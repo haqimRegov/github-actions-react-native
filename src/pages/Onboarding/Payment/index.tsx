@@ -46,6 +46,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
   const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
+  const [localRecurringDetails, setLocalRecurringDetails] = useState<IRecurringDetails | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
 
@@ -283,11 +284,13 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           applicationBalance={tempApplicationBalance}
                           deleteCount={deleteCount}
                           deletedPayment={tempDeletedPayment}
+                          localRecurringDetails={localRecurringDetails}
                           proofOfPayment={proofOfPayment}
                           setActiveOrder={setActiveOrder}
                           setApplicationBalance={handleApplicationBalance}
                           setDeleteCount={setDeleteCount}
                           setDeletedPayment={setTempDeletedPayment}
+                          setLocalRecurringDetails={setLocalRecurringDetails}
                           setProofOfPayment={setProofOfPayment}
                         />
                       </View>

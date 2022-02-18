@@ -131,6 +131,9 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
     if (parentVisible !== undefined && parentVisible === true) {
       setVisible(true);
       setTempVisible(true);
+    } else {
+      setVisible(false);
+      setTempVisible(false);
     }
   }, [parentVisible]);
 

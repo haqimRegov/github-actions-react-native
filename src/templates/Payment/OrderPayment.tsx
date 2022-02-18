@@ -60,6 +60,7 @@ export interface OrderPaymentProps {
   setDeletedPayment: (value: IPaymentInfo[]) => void;
   setLocalRecurringDetails?: (value: IRecurringDetails | undefined) => void;
   setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
+  setSavedChangesToast: (toggle: boolean) => void;
 }
 
 export interface ISetPaymentOptions {
@@ -83,6 +84,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   setDeletedPayment,
   setLocalRecurringDetails,
   setProofOfPayment,
+  setSavedChangesToast,
 }: OrderPaymentProps) => {
   const {
     allowedRecurringType,
@@ -474,11 +476,10 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   (eachPayment: IPaymentInfo) => eachPayment.tag !== undefined && eachPayment.tag.uuid === surplusUuid,
                 );
                 if (checkDuplicateSurplus.length > 1) {
-                  if (checkDuplicateSurplus.length > 1) {
-                    setMergeSurplusPrompt(true);
-                  }
+                  setMergeSurplusPrompt(true);
                 } else if (additional !== true) {
                   handleCollapse();
+                  setSavedChangesToast(true);
                 }
               };
 
@@ -552,6 +553,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 setApplicationBalance(updatedApplicationBalance);
                 setMergeSurplusPrompt(false);
                 handleCollapse();
+                setSavedChangesToast(true);
               };
 
               const handleCancelMergeSurplus = () => {

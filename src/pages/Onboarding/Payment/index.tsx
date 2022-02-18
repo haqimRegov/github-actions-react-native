@@ -49,6 +49,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const [localRecurringDetails, setLocalRecurringDetails] = useState<IRecurringDetails | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
+  const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
 
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
@@ -292,6 +293,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           setDeletedPayment={setTempDeletedPayment}
                           setLocalRecurringDetails={setLocalRecurringDetails}
                           setProofOfPayment={setProofOfPayment}
+                          setSavedChangesToast={setSavedChangesToast}
                         />
                       </View>
                       <CustomSpacer space={sh24} />
@@ -338,6 +340,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         onPress={handleUndoDelete}
         setCount={setDeleteCount}
       />
+      <CustomToast parentVisible={savedChangesToast} setParentVisible={setSavedChangesToast} />
     </SafeAreaPage>
   );
 };

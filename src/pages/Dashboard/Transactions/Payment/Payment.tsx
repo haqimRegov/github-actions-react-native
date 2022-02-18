@@ -28,6 +28,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [grandTotal, setGrandTotal] = useState<IOrderAmount[]>([]);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
+  const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -245,6 +246,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     setDeleteCount={setDeleteCount}
                     setDeletedPayment={setTempDeletedPayment}
                     setProofOfPayment={handleSetPayment}
+                    setSavedChangesToast={setSavedChangesToast}
                   />
                 </View>
                 <CustomSpacer space={sh24} />
@@ -285,6 +287,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         onPress={handleUndoDelete}
         setCount={setDeleteCount}
       />
+      <CustomToast parentVisible={savedChangesToast} setParentVisible={setSavedChangesToast} />
       <PaymentPopup
         handleCancel={handleCancelPopup}
         handleConfirm={handleConfirmPopup}

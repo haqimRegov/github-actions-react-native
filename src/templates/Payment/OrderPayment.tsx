@@ -48,16 +48,18 @@ const { PAYMENT } = Language.PAGE;
 
 export interface OrderPaymentProps {
   accountNames: TypeLabelValue[];
-  applicationBalance: IPaymentInfo[];
   activeOrder: { order: string; fund: string };
+  applicationBalance: IPaymentInfo[];
   deleteCount: number;
   deletedPayment: IPaymentInfo[];
+  localRecurringDetails?: IRecurringDetails;
   proofOfPayment: IPaymentRequired;
   setActiveOrder: (value: { order: string; fund: string }) => void;
-  setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
+  setApplicationBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
   setDeleteCount: (count: number) => void;
   setDeletedPayment: (value: IPaymentInfo[]) => void;
-  setApplicationBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
+  setLocalRecurringDetails?: (value: IRecurringDetails | undefined) => void;
+  setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
 }
 
 export interface ISetPaymentOptions {
@@ -69,15 +71,17 @@ export interface ISetPaymentOptions {
 
 export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   accountNames,
-  applicationBalance,
   activeOrder,
+  applicationBalance,
   deleteCount,
   deletedPayment,
+  localRecurringDetails,
   proofOfPayment,
   setActiveOrder,
   setApplicationBalance,
   setDeleteCount,
   setDeletedPayment,
+  setLocalRecurringDetails,
   setProofOfPayment,
 }: OrderPaymentProps) => {
   const {
@@ -431,6 +435,27 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   updatedPayments.push(additionalInfo);
                   setActiveInfo(updatedPayments.length - 1);
                 }
+
+                // use last recurring info
+                if (setLocalRecurringDetails !== undefined && value.paymentMethod === "Recurring" && value.recurringType !== undefined) {
+                  const newRecurringInfo: IRecurringInfo = {
+                    bankAccountName: value.bankAccountName,
+                    bankAccountNumber: value.bankAccountNumber,
+                    frequency: value.frequency,
+                    orderNumber: orderNumber,
+                    recurringBank: value.recurringBank,
+                  };
+
+                  // only update saved recurring info if it's not using last info
+                  if (value.usePreviousRecurring !== true) {
+                    const updatedRecurringDetails: IRecurringDetails =
+                      localRecurringDetails !== undefined ? localRecurringDetails : { dda: [], fpx: [] };
+
+                    updatedRecurringDetails[value.recurringType.toLowerCase()] = [newRecurringInfo];
+                    setLocalRecurringDetails(updatedRecurringDetails);
+                  }
+                }
+
                 // check if existing surplus parent and delete all child if parent got updated
                 const findExistingSurplusParent =
                   value.excess !== undefined && value.parent !== undefined
@@ -577,7 +602,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       payment={payment}
                       pendingBalance={pendingBalance}
                       totalInvestment={totalInvestment}
-                      recurringDetails={recurringDetails}
+                      recurringDetails={localRecurringDetails !== undefined ? localRecurringDetails : recurringDetails}
                       setAvailableBalance={setApplicationBalance}
                       setDeletedPayment={setDeletedPayment}
                       handleUnsaved={setUnsavedChanges}

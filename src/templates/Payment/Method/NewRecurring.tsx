@@ -5,7 +5,7 @@ import { CustomCard, CustomSpacer, CustomTextInput, Dash, NewDropdown, RadioButt
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
 import { fs12BoldGray5, fs16RegBlack2, px, sh16, sh24, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
-import { isObjectEqual } from "../../../utils";
+import { deleteKey, isObjectEqual } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -24,7 +24,16 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
   recurringDetails,
   setPayment,
 }: NewRecurringProps) => {
-  const { bankAccountName, bankAccountNumber, recurringBank, frequency, combinedBankAccountName, recurringType, usePreviousDda } = payment;
+  const {
+    bankAccountName,
+    bankAccountNumber,
+    recurringBank,
+    frequency,
+    orderNumber,
+    combinedBankAccountName,
+    recurringType,
+    usePreviousRecurring,
+  } = payment;
   const recurringOptions: string[] = [];
   const ddaBank = recurringType === "FPX" ? DICTIONARY_FPX_BANK : DICTIONARY_DDA_BANK;
   // const sameRecurringInfoLabel = recurringType === "FPX" ? PAYMENT.LABEL_SAME_FPX : PAYMENT.LABEL_SAME_DDA;
@@ -68,7 +77,7 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
       combinedBankAccountName: undefined,
       frequency: "15th of the month",
       recurringBank: updatedRecurringType === "DDA" ? "Public Bank" : "",
-      usePreviousDda: false,
+      usePreviousRecurring: false,
     };
   };
 
@@ -80,9 +89,9 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
     recurringDetails !== undefined ? recurringDetails[recurringType.toLowerCase()][0] : undefined;
 
   const handleUsePreviousInfo = () => {
-    const updatedPayment = { ...payment, usePreviousDda: !payment.usePreviousDda };
+    const updatedPayment = { ...payment, usePreviousRecurring: !payment.usePreviousRecurring };
     const lastAppliedInfo =
-      lastRecurringInfo !== undefined && updatedPayment.usePreviousDda === true
+      lastRecurringInfo !== undefined && updatedPayment.usePreviousRecurring === true
         ? {
             bankAccountName: lastRecurringInfo.bankAccountName,
             bankAccountNumber: lastRecurringInfo.bankAccountNumber,
@@ -110,14 +119,24 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
   ];
 
   const lastAppliedInfo = (
-    <Switch label={useRecurringLabel} labelStyle={fs16RegBlack2} onPress={handleUsePreviousInfo} toggle={usePreviousDda!} />
+    <Switch label={useRecurringLabel} labelStyle={fs16RegBlack2} onPress={handleUsePreviousInfo} toggle={usePreviousRecurring!} />
   );
 
   if (recurringDetails !== undefined) {
-    if (recurringDetails.dda && recurringDetails.dda.length > 0 && recurringType === "DDA") {
+    if (
+      recurringDetails.dda &&
+      recurringDetails.dda.length > 0 &&
+      recurringType === "DDA" &&
+      recurringDetails.dda[0].orderNumber !== orderNumber
+    ) {
       optionItems.push(lastAppliedInfo);
     }
-    if (recurringDetails.fpx && recurringDetails.fpx.length > 0 && recurringType === "FPX") {
+    if (
+      recurringDetails.fpx &&
+      recurringDetails.fpx.length > 0 &&
+      recurringType === "FPX" &&
+      recurringDetails.fpx[0].orderNumber !== orderNumber
+    ) {
       optionItems.push(lastAppliedInfo);
     }
   }
@@ -177,11 +196,11 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
       recurringBank: payment.recurringBank,
     };
     if (
-      payment.usePreviousDda === true &&
+      payment.usePreviousRecurring === true &&
       lastRecurringInfo !== undefined &&
-      isObjectEqual(currentRecurringInfo, lastRecurringInfo) === false
+      isObjectEqual(currentRecurringInfo, deleteKey(lastRecurringInfo, ["orderNumber"])) === false
     ) {
-      setPayment({ ...payment, usePreviousDda: false });
+      setPayment({ ...payment, usePreviousRecurring: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment]);

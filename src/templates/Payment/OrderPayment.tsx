@@ -395,6 +395,9 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 let checkIsEditable = {};
                 const updatedPayments = [...payments];
                 const updatedDeletedPayments = [...deletedPayment];
+                if (isObjectEqual(value, updatedPayments[index]) === false && updatedPayments[index].amount !== "") {
+                  setSavedChangesToast(true);
+                }
                 // Check if the edit has caused an update in the use of surplus in both scenarios where it turns from surplus to normal payment and surplus to another surplus
                 // Check the tag equal to check if the surplus has changed
                 // Check both tags to confirm that there is no update from or to surplus
@@ -479,7 +482,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   setMergeSurplusPrompt(true);
                 } else if (additional !== true) {
                   handleCollapse();
-                  setSavedChangesToast(true);
                 }
               };
 

@@ -695,8 +695,8 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           {draftPayment.parent !== undefined && surplusSharedTo.length > 0 ? (
             <View style={promptStyle}>
               <Text style={fs16RegGray6}>{updatePromptTitle}</Text>
-              <Text style={fs16BoldGray6}>{`\n${sharedToTitle}.`}</Text>
-              <Text style={fs16RegGray6}>{`\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`}</Text>
+              <Text style={fs16BoldGray6}>{`${sharedToTitle}.`}</Text>
+              <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM_UPDATE}`}</Text>
             </View>
           ) : null}
         </Fragment>

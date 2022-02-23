@@ -729,7 +729,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       {viewFile !== undefined ? (
         <FileViewer
           handleClose={handleCloseViewer}
-          resourceType={viewFile.url !== undefined && "url" in viewFile ? "url" : "file"}
+          resourceType={viewFile.url !== undefined && "url" in viewFile ? "url" : "base64"}
           value={viewFile}
           visible={viewFile !== undefined}
         />

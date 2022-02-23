@@ -62,7 +62,8 @@ export const FileViewer: FunctionComponent<FileViewerModalProps> = ({
 
   const modalAnimationInTiming = value.type === "application/pdf" ? 0 : 450;
 
-  const imageLink: ImageSourcePropType = value.url !== undefined ? { uri: value.url } : { uri: "" };
+  const checkBase64 = resourceType === "base64" ? { uri: `data:${value.type};base64,${value.base64}` } : { uri: "" };
+  const imageLink: ImageSourcePropType = value.url !== undefined ? { uri: value.url } : checkBase64;
   const imagePath: ImageSourcePropType | undefined =
     resourceType !== undefined && resourceType === "file" && value.path !== undefined ? { uri: value.path } : undefined;
 

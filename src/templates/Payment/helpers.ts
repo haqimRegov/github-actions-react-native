@@ -399,10 +399,13 @@ export const calculateExcess = (availableBalance: IPaymentInfo[]) => {
 };
 
 export const checkCurrencyCompleted = (proofOfPayment: IPaymentRequired, currency: TypeCurrency) => {
-  const totalCurrency =
+  const filteredProofs =
     proofOfPayment.payments.length > 0
-      ? proofOfPayment.payments
-          .filter((eachCheckPOP: IPaymentInfo) => eachCheckPOP.currency === currency)
+      ? proofOfPayment.payments.filter((eachCheckPOP: IPaymentInfo) => eachCheckPOP.currency === currency)
+      : [];
+  const totalCurrency =
+    filteredProofs.length > 0
+      ? filteredProofs
           .map((payment: IPaymentInfo) => parseAmount(payment.amount))
           .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
       : 0;

@@ -352,12 +352,20 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   };
 
   const setPaymentMethod = (value: string) => {
+    const kibCurrencyIndex = DICTIONARY_KIB_BANK_ACCOUNTS.findIndex((bank) => bank.currency === draftPayment.currency);
+    const kibBank = kibCurrencyIndex !== -1 ? DICTIONARY_KIB_BANK_ACCOUNTS[kibCurrencyIndex] : DICTIONARY_KIB_BANK_ACCOUNTS[0];
     setDraftPayment({
       ...draftPayment,
       paymentMethod: value as TypePaymentMethod,
       checkNumber:
         draftPayment.paymentMethod !== value && draftPayment.paymentMethod === "Online Banking / TT / ATM" ? "" : draftPayment.checkNumber,
-      referenceNumber: draftPayment.paymentMethod !== value && draftPayment.paymentMethod === "Cheque" ? "" : draftPayment.referenceNumber,
+      referenceNumber:
+        draftPayment.paymentMethod !== value &&
+        (draftPayment.paymentMethod === "Cheque" || draftPayment.paymentMethod === "Client Trust Account (CTA)")
+          ? ""
+          : draftPayment.referenceNumber,
+      kibBankAccountNumber: kibBank.bankAccountNumber,
+      kibBankName: kibBank.bankName,
     });
   };
 

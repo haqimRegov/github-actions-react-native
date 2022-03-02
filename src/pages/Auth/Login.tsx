@@ -9,7 +9,7 @@ import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Loading, Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
 import { ERROR_CODE, ERRORS } from "../../data/dictionary";
-import { RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
+import { getStorageData, removeStorageData, RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { changePassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
@@ -73,15 +73,16 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       }
 
       const encryptedPassword = await Encrypt(inputPassword, credentials.sessionToken);
+      const hideEvent: string = await getStorageData("hideEvent");
       setLoading(true);
-      const request = { username: inputNRIC, password: encryptedPassword };
+      const request = { username: inputNRIC, password: encryptedPassword, hideEvents: hideEvent };
       const header = { encryptionKey: credentials.sessionToken, ...deviceToken };
       const response: ILoginResponse = await login(request, header, setLoading);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null) {
           if (data !== null) {
-            const { agentId, branch, email, inboxCount, isExpired, licenseCode, licenseType, name, rank } = data.result;
+            const { agentId, branch, email, events, inboxCount, isExpired, licenseCode, licenseType, name, rank } = data.result;
             await Auth.signIn(inputNRIC, inputPassword);
             if (isExpired === false) {
               props.addGlobal({
@@ -100,6 +101,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                   sessionToken: data.result.sessionToken,
                   accessKeyId: data.result.accessKeyId,
                 },
+                events: events && events.length > 0 ? events : undefined,
                 unreadMessages: inboxCount,
               });
               setLoading(false);
@@ -109,6 +111,11 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                 RNPushNotification.requestPermission();
               }
               props.resetTransactions();
+
+              if (hideEvent) {
+                await removeStorageData("hideEvent");
+              }
+
               navigation.dispatch(
                 CommonActions.reset({
                   index: 0,

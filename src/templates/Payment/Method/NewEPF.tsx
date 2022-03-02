@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomCard, CustomSpacer, CustomTextInput, Dash, LabeledTitle } from "../../../components";
@@ -14,7 +14,7 @@ export interface NewEPFProps {
   totalAmount: IOrderAmount;
 }
 
-export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPayment, totalAmount }: NewEPFProps) => {
+export const NewEPF: FunctionComponent<NewEPFProps> = ({ payment, setPayment, totalAmount }: NewEPFProps) => {
   const { epfReferenceNumber } = payment;
 
   const handleReferenceNo = (value: string) => {

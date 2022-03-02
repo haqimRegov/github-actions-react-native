@@ -59,7 +59,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   adviserSignature,
   editReceipt,
   completed,
-  continueLoading,
+  // continueLoading,
   principalSignature,
   jointSignature,
   modalLoading,

@@ -34,12 +34,12 @@ export const responseHandler = async <
       // // eslint-disable-next-line no-console
       // console.log("CurrentSession:", currentSession);
     }
-    // eslint-disable-next-line no-console
+    // // eslint-disable-next-line no-console
     // console.log("Request Variables:", variables);
     // // eslint-disable-next-line no-console
     // console.log("Request Headers:", headers);
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
-    // eslint-disable-next-line no-console
+    // // eslint-disable-next-line no-console
     // console.log("Response:", data);
 
     if ("errors" in data) {

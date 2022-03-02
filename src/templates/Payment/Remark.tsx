@@ -13,7 +13,7 @@ interface PaymentRemarkProps {
 }
 
 export const PaymentRemark: FunctionComponent<PaymentRemarkProps> = ({ payment, setPayment }: PaymentRemarkProps) => {
-  const { paymentMethod, remark } = payment;
+  const { remark } = payment;
 
   const toggleRemark = () => {
     setPayment({ ...payment, remark: payment.remark === undefined ? "" : undefined });

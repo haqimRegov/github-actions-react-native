@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, ReactElement, ReactNode, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, ReactElement, ReactNode, useState } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular } from "../../constants";

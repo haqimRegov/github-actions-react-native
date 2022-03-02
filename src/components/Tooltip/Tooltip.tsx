@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement, ReactNode, useState } from "react";
+import React, { FunctionComponent, ReactElement, useState } from "react";
 import { TouchableWithoutFeedback, ViewStyle } from "react-native";
 import Tooltip, { TooltipSize } from "react-native-walkthrough-tooltip";
 

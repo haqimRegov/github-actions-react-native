@@ -492,6 +492,17 @@ const userLogin = gql`
           rank
           secretAccessKey
           sessionToken
+          isMultiUtmc
+          events {
+            checkbox
+            description
+            eventName
+            header
+            headerDescription
+            primaryButton
+            s3Path
+            secondaryButton
+          }
         }
       }
       error {

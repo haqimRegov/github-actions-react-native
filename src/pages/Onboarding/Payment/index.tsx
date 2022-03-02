@@ -112,6 +112,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           throw error;
         }
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // console.log("Error in handleSubmit", error);
       setLoading(false);
@@ -214,6 +215,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     if (deleteCount === 0) {
       setApplicationBalance(tempApplicationBalance);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteCount]);
 
   useEffect(() => {

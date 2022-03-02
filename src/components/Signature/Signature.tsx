@@ -24,7 +24,7 @@ interface CustomSignatureProps {
 }
 
 export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
-  continueLoading,
+  // continueLoading,
   handleCancel,
   handleConfirm,
   height,

@@ -14,6 +14,7 @@ import {
 import { Language } from "../../../../constants/language";
 import { DICTIONARY_RECURRING_CURRENCY, DICTIONARY_RECURRING_MINIMUM_FPX, ERROR } from "../../../../data/dictionary";
 import {
+  autoWidth,
   borderBottomBlue5,
   borderBottomGray2,
   centerVertical,
@@ -30,6 +31,7 @@ import {
   sh24,
   sh4,
   sh8,
+  sw116,
   sw12,
   sw152,
   sw16,
@@ -275,9 +277,9 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
             direction="row"
             disabledIndex={disableEpf}
             disabledTooltip={true}
-            labelStyle={{ width: "auto" }}
+            labelStyle={autoWidth}
             options={fundingOption}
-            optionStyle={{ width: 116 }}
+            optionStyle={{ width: sw116 }}
             space={sw64}
             selected={fundPaymentMethod}
             selectedColor={radioColor}

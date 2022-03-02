@@ -14,7 +14,7 @@ export interface PendingStatusProps extends ITableCustomItem {
   sortedColumns: TransactionsSortColumnType[];
 }
 
-export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item, sortedColumns }: PendingStatusProps) => {
+export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
   const { dueDate, remark, status, withHardcopy } = item.rawData as IDashboardOrder;
   let statusColor: StatusBadgeColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {

@@ -95,7 +95,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } catch (error: any) {
-                // eslint-disable-next-line no-console
+                // // eslint-disable-next-line no-console
                 // console.log("Error in Uploading", error);
                 AlertDialog(error, () => setLoading(false));
                 fetching.current = true;

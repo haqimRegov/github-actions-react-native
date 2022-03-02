@@ -17,10 +17,12 @@ export const useDelete = <T>(
         additionalFunctions();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteCount]);
 
   useEffect(() => {
     setTempData(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return [deleteCount, setDeleteCount, tempData, setTempData];

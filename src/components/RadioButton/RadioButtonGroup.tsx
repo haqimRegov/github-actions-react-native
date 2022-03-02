@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, ReactElement, ReactNode } from "react";
+import React, { Fragment, FunctionComponent, ReactElement } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
 import { flexCol, flexRow, fs16RegGray6, sh16, sh8, sw16 } from "../../styles";

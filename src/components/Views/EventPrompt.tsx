@@ -87,7 +87,7 @@ export const EventPrompt: FunctionComponent<EventPromptProps> = ({
 }: EventPromptProps) => {
   const { buttonContainerStyle, primary, secondary } = actionButtonProps;
 
-  const copywriting = useRef<IPropsCache>({
+  const propsCache = useRef<IPropsCache>({
     checkboxLabel: checkboxLabel,
     description: description,
     header: header,
@@ -140,34 +140,34 @@ export const EventPrompt: FunctionComponent<EventPromptProps> = ({
         </Fragment>
       ) : null}
       <View>
-        {illustration !== undefined && copywriting.current !== null && copywriting.current.illustration !== undefined ? (
+        {illustration !== undefined && propsCache.current !== null && propsCache.current.illustration !== undefined ? (
           <Fragment>
-            <Image source={copywriting.current.illustration} style={defaultIllustrationStyle} />
+            <Image source={propsCache.current.illustration} style={defaultIllustrationStyle} />
             <CustomSpacer space={sh24} />
           </Fragment>
         ) : null}
       </View>
       <View style={{ ...centerVertical, ...px(sw48), ...contentStyle }}>
-        {copywriting.current !== null && copywriting.current.headerDescription !== undefined ? (
+        {propsCache.current !== null && propsCache.current.headerDescription !== undefined ? (
           <Fragment>
-            <Text style={{ ...fs12RegBlue5, ...fsAlignCenter, ...headerDescriptionStyle }}>{copywriting.current.headerDescription}</Text>
+            <Text style={{ ...fs12RegBlue5, ...fsAlignCenter, ...headerDescriptionStyle }}>{propsCache.current.headerDescription}</Text>
             <CustomSpacer space={defaultSpaceToHeader} />
           </Fragment>
         ) : null}
-        {copywriting.current !== null && copywriting.current.header !== undefined ? (
+        {propsCache.current !== null && propsCache.current.header !== undefined ? (
           <Fragment>
-            <Text style={{ ...fs24BoldBlue1, ...fsAlignCenter, ...headerStyle }}>{copywriting.current.header}</Text>
+            <Text style={{ ...fs24BoldBlue1, ...fsAlignCenter, ...headerStyle }}>{propsCache.current.header}</Text>
             <CustomSpacer space={defaultSpaceToDescription} />
           </Fragment>
         ) : null}
-        {copywriting.current !== null && copywriting.current.description !== undefined ? (
-          <Text style={{ ...fs16RegGray6, ...fsAlignCenter, ...descriptionStyle }}>{copywriting.current.description}</Text>
+        {propsCache.current !== null && propsCache.current.description !== undefined ? (
+          <Text style={{ ...fs16RegGray6, ...fsAlignCenter, ...descriptionStyle }}>{propsCache.current.description}</Text>
         ) : null}
-        {copywriting.current !== null && checkboxLabel !== undefined && handleCheckbox !== undefined && checkboxToggled !== undefined ? (
+        {propsCache.current !== null && checkboxLabel !== undefined && handleCheckbox !== undefined && checkboxToggled !== undefined ? (
           <Fragment>
             <CustomSpacer space={defaultSpaceToCheckbox} />
             <CheckBox
-              label={copywriting.current.checkboxLabel}
+              label={propsCache.current.checkboxLabel}
               onPress={handleCheckbox}
               toggle={checkboxToggled}
               labelStyle={fs16RegBlack2}
@@ -181,11 +181,11 @@ export const EventPrompt: FunctionComponent<EventPromptProps> = ({
         <NewActionButtons
           buttonContainerStyle={buttonContainer}
           primary={
-            primary !== undefined && copywriting.current.primaryButton ? { ...primary, text: copywriting.current.primaryButton } : undefined
+            primary !== undefined && propsCache.current.primaryButton ? { ...primary, text: propsCache.current.primaryButton } : undefined
           }
           secondary={
-            secondary !== undefined && copywriting.current.secondaryButton
-              ? { ...secondary, text: copywriting.current.secondaryButton }
+            secondary !== undefined && propsCache.current.secondaryButton
+              ? { ...secondary, text: propsCache.current.secondaryButton }
               : undefined
           }
         />

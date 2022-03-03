@@ -36,6 +36,7 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 export type Signer = "adviser" | "principal" | "joint" | undefined;
 
 declare interface PDFViewProps {
+  accountType: TypeAccountChoices;
   adviserSignature: string;
   completed: boolean;
   editReceipt: IOnboardingReceiptState | undefined;
@@ -56,6 +57,7 @@ declare interface PDFViewProps {
 }
 
 export const PdfView: FunctionComponent<PDFViewProps> = ({
+  accountType,
   adviserSignature,
   editReceipt,
   completed,
@@ -85,7 +87,8 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         signatureToDisplay = adviserSignature;
         break;
       case "principal":
-        signerLabel = TERMS_AND_CONDITIONS.LABEL_PRINCIPAL_SIGNATURE;
+        signerLabel =
+          accountType === "Joint" ? TERMS_AND_CONDITIONS.LABEL_PRINCIPAL_SIGNATURE : TERMS_AND_CONDITIONS.LABEL_INVESTORS_SIGNATURE;
         signatureToDisplay = principalSignature;
         break;
       case "joint":

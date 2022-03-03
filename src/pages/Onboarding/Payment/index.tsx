@@ -58,7 +58,6 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const handleFetch = async () => {
     if (orders !== undefined) {
-      // console.log("orders", JSON.stringify(orders));
       const result: IPaymentRequired[] = orders.orders.map((order: IOrder) => {
         const state: IPaymentRequired = {
           allowedRecurringType: order.allowedRecurringType || [],
@@ -114,15 +113,9 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // console.log("Error in handleSubmit", error);
       setLoading(false);
       if ("errorCode" in error) {
         Alert.alert(error.message);
-      }
-    } finally {
-      // console.log("finally");
-      if (paymentResult === undefined) {
-        // console.log("paymentResult undefined", paymentResult);
       }
     }
     return undefined;

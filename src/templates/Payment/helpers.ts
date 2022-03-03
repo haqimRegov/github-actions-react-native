@@ -231,6 +231,9 @@ export const generatePaymentWithKeys = async (
             if (paymentInfo.parent !== undefined) {
               dynamicKeys.push("parent");
             }
+            if (paymentInfo.lastAmountUpdate !== undefined) {
+              dynamicKeys.push("lastAmountUpdate");
+            }
             if (paymentInfo.action !== undefined) {
               dynamicKeys.push("action");
             }
@@ -286,14 +289,12 @@ export const generatePaymentWithKeys = async (
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           // eslint-disable-next-line no-console
-          console.log("Error in paymentWithKeys", error);
           return ERRORS.storage;
         }
       }),
   );
 
   if (paymentWithKeys === undefined || paymentWithKeys.some((pay) => pay !== undefined && "errorCode" in pay)) {
-    // console.log("AlertDialog paymentWithKeys");
     // AlertDialog(ERRORS.storage.message, () => setLoading(false));
     throw ERRORS.storage;
   }

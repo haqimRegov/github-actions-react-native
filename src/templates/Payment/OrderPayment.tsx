@@ -1,3 +1,4 @@
+import cloneDeep from "lodash.clonedeep";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
@@ -33,6 +34,7 @@ import {
   shadow16Blue112,
   sw1,
   sw16,
+  sw18,
   sw24,
   sw4,
   sw40,
@@ -261,62 +263,119 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
         <View style={headerStyle}>
           {withPayment ? (
             <Fragment>
-              <IconButton
-                color={colorWhite._1}
-                name={completed ? "success" : "info-bare"}
-                size={sw16}
-                style={circle(sw24, completed ? colorGreen._1 : colorYellow._2)}
-              />
-              <CustomSpacer isHorizontal={true} space={sw24} />
-              <View>
-                <View style={rowCenterVertical}>
-                  <Text style={fs12RegGray4}>{PAYMENT.LABEL_PROOF}</Text>
-                  {withSurplus ? (
-                    <Fragment>
-                      <CustomSpacer isHorizontal={true} space={sw8} />
-                      <TableBadge text="Use of Surplus" />
-                    </Fragment>
-                  ) : null}
-                </View>
-                <CustomSpacer space={sh6} />
-                <View style={rowCenterVertical}>
-                  {completePaymentCount.filter((pay) => pay.count > 0).length > 0
-                    ? completePaymentCount
-                        .filter((pay) => pay.count > 0)
-                        .map(({ count, method }, index) => {
-                          return (
-                            <View key={index} style={rowCenterVertical}>
-                              {index === 0 ? null : <View style={{ ...borderLeftGray3, height: sh24, marginHorizontal: sw16 }} />}
-                              <Text style={fs16BoldBlue1}>{count}</Text>
-                              <CustomSpacer isHorizontal={true} space={sw4} />
-                              <Text style={fs16RegBlue1}>{method}</Text>
-                            </View>
-                          );
-                        })
-                    : checkDisplayText}
-                </View>
-              </View>
+              {activeOrder.order === "" ? (
+                <Fragment>
+                  <IconButton
+                    color={colorWhite._1}
+                    name={completed ? "success" : "info-bare"}
+                    size={sw16}
+                    style={circle(sw24, completed ? colorGreen._1 : colorYellow._2)}
+                  />
+                  <CustomSpacer isHorizontal={true} space={sw24} />
+                  <View>
+                    <View style={rowCenterVertical}>
+                      <Text style={fs12RegGray4}>{PAYMENT.LABEL_PROOF}</Text>
+                      {withSurplus ? (
+                        <Fragment>
+                          <CustomSpacer isHorizontal={true} space={sw8} />
+                          <TableBadge text="Use of Surplus" />
+                        </Fragment>
+                      ) : null}
+                    </View>
+                    <CustomSpacer space={sh6} />
+                    <View style={rowCenterVertical}>
+                      {completePaymentCount.filter((pay) => pay.count > 0).length > 0
+                        ? completePaymentCount
+                            .filter((pay) => pay.count > 0)
+                            .map(({ count, method }, index) => {
+                              return (
+                                <View key={index} style={rowCenterVertical}>
+                                  {index === 0 ? null : <View style={{ ...borderLeftGray3, height: sh24, marginHorizontal: sw16 }} />}
+                                  <Text style={fs16BoldBlue1}>{count}</Text>
+                                  <CustomSpacer isHorizontal={true} space={sw4} />
+                                  <Text style={fs16RegBlue1}>{method}</Text>
+                                </View>
+                              );
+                            })
+                        : checkDisplayText}
+                    </View>
+                  </View>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <IcoMoon color={colorBlue._1} name="payment" size={sw24} />
+                  <CustomSpacer isHorizontal={true} space={sw18} />
+                  <View>
+                    <View style={rowCenterVertical}>
+                      <Text style={fs16RegBlue1}>{`${PAYMENT.LABEL_PROOF}:`}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw4} />
+                      {completePaymentCount.filter((pay) => pay.count > 0).length > 0 ? (
+                        <Text style={fs16RegBlue1}>{completePaymentCount.filter((pay) => pay.count > 0).length}</Text>
+                      ) : null}
+                    </View>
+                  </View>
+                  <View style={rowCenterVertical}>
+                    {balance.filter((eachBalance: IOrderAmount) => eachBalance.amount !== "0").length > 0 ? (
+                      <Fragment>
+                        <Text style={fs16BoldBlue1}>(</Text>
+                        {balance
+                          .filter((bal) => bal.amount.startsWith("-") && bal.amount !== "0")
+                          .map(({ amount, currency }, index) => {
+                            const balanceCurrencyText =
+                              index === balance.filter((bal) => bal.amount.startsWith("-") && bal.amount !== "0").length - 1
+                                ? `- ${currency} ${formatAmount(amount) ? formatAmount(amount.substring(1)) : "-"} `
+                                : `- ${currency} ${formatAmount(amount) ? formatAmount(amount.substring(1)) : "-"}, `;
+                            return (
+                              <Text key={index} style={fs16BoldBlue1}>
+                                {balanceCurrencyText}
+                              </Text>
+                            );
+                          })}
+                        {balance
+                          .filter((bal) => bal.amount.startsWith("-") === false && bal.amount !== "0")
+                          .map(({ amount, currency }, index) => {
+                            const currencyText =
+                              index === balance.filter((bal) => bal.amount.startsWith("-") === false && bal.amount !== "0").length - 1
+                                ? `+ ${currency} ${formatAmount(amount)}`
+                                : `+ ${currency} ${formatAmount(amount)},`;
+                            return (
+                              <Text key={index} style={fs16BoldBlue1}>
+                                {currencyText}
+                              </Text>
+                            );
+                          })}
+                        <Text style={fs16BoldBlue1}>)</Text>
+                      </Fragment>
+                    ) : null}
+                  </View>
+                  <CustomSpacer isHorizontal={true} space={sw24} />
+                </Fragment>
+              )}
               <CustomFlexSpacer />
-              <View>
-                {balance
-                  .filter((bal) => bal.amount.startsWith("-") === false && bal.amount !== "0")
-                  .map(({ amount, currency }, index) => {
-                    return <Text key={index} style={fs12BoldBlue1}>{`+ ${currency} ${formatAmount(amount)}`}</Text>;
-                  })}
-              </View>
-              <CustomSpacer isHorizontal={true} space={sw24} />
-              <View>
-                {balance
-                  .filter((bal) => bal.amount.startsWith("-") && bal.amount !== "0")
-                  .map(({ amount, currency }, index) => {
-                    return (
-                      <Text key={index} style={fs12BoldYellow2}>{`- ${currency} ${
-                        formatAmount(amount) ? formatAmount(amount.substring(1)) : "-"
-                      }`}</Text>
-                    );
-                  })}
-              </View>
-              <CustomSpacer isHorizontal={true} space={sw24} />
+              {activeOrder.order === "" ? (
+                <Fragment>
+                  <View>
+                    {balance
+                      .filter((bal) => bal.amount.startsWith("-") === false && bal.amount !== "0")
+                      .map(({ amount, currency }, index) => {
+                        return <Text key={index} style={fs12BoldBlue1}>{`+ ${currency} ${formatAmount(amount)}`}</Text>;
+                      })}
+                  </View>
+                  <CustomSpacer isHorizontal={true} space={sw24} />
+                  <View>
+                    {balance
+                      .filter((bal) => bal.amount.startsWith("-") && bal.amount !== "0")
+                      .map(({ amount, currency }, index) => {
+                        return (
+                          <Text key={index} style={fs12BoldYellow2}>{`- ${currency} ${
+                            formatAmount(amount) ? formatAmount(amount.substring(1)) : "-"
+                          }`}</Text>
+                        );
+                      })}
+                  </View>
+                  <CustomSpacer isHorizontal={true} space={sw24} />
+                </Fragment>
+              ) : null}
             </Fragment>
           ) : (
             <Fragment>
@@ -347,8 +406,8 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
               const handleRemove = () => {
                 const updatedPayments = [...payments];
-                // delete in surplus balance
                 const newAvailableBalance = [...applicationBalance];
+                // delete in surplus balance
                 if (updatedPayments[index].parent !== undefined) {
                   const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.parent === updatedPayments[index].parent);
                   if (findExistingSurplusParent !== -1) {
@@ -390,10 +449,18 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 handleExpandPayment(updatedPayments, true);
               };
 
-              const handleSave = (value: IPaymentInfo, additional?: boolean) => {
+              const handleSave = (
+                value: IPaymentInfo,
+                updatedAvailableBalance: IPaymentInfo[],
+                isAvailableUpdated: boolean,
+                additional?: boolean,
+              ) => {
                 let checkEditNewPayment = {};
                 let checkIsEditable = {};
-                const updatedPayments = [...payments];
+                const updatedPayments = cloneDeep(payments);
+                const duplicatePayments = cloneDeep(payments);
+                const newAvailableBalance = isAvailableUpdated ? cloneDeep(updatedAvailableBalance) : cloneDeep(applicationBalance);
+
                 const updatedDeletedPayments = [...deletedPayment];
                 if (
                   (isObjectEqual(value, updatedPayments[index]) === false &&
@@ -426,7 +493,12 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   // Update the isEditable back to undefined if the update caused a new payment
                   checkIsEditable = { isEditable: undefined };
                 }
-                updatedPayments[index] = { ...updatedPayments[index], ...value, ...checkEditNewPayment, ...checkIsEditable };
+                updatedPayments[index] = {
+                  ...updatedPayments[index],
+                  ...value,
+                  ...checkEditNewPayment,
+                  ...checkIsEditable,
+                };
 
                 if (additional === true) {
                   // update currency list when adding additional info for multi currency
@@ -481,13 +553,27 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const getPaymentId = checkIfUtilised === true ? payments[index].paymentId : undefined;
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update" } : undefined;
-                setPayments(updatedPayments, action, false);
-                setDeletedPayment(updatedDeletedPayments);
                 const surplusUuid =
                   updatedPayments !== undefined && updatedPayments[index].tag !== undefined ? updatedPayments[index].tag!.uuid : undefined;
                 const checkDuplicateSurplus = updatedPayments.filter(
                   (eachPayment: IPaymentInfo) => eachPayment.tag !== undefined && eachPayment.tag.uuid === surplusUuid,
                 );
+                const checkSurplusAmountChanged =
+                  duplicatePayments[index].amount !== updatedPayments[index].amount &&
+                  updatedPayments[index].excess !== undefined &&
+                  updatedPayments[index].excess?.amount !== "";
+                const newPayment = updatedPayments[index];
+                if (checkSurplusAmountChanged === true && checkDuplicateSurplus.length <= 1) {
+                  updatedPayments.splice(index, 1);
+                  if (additional !== true) {
+                    updatedPayments.push(newPayment);
+                  } else {
+                    updatedPayments.splice(updatedPayments.length - 1, 0, newPayment);
+                  }
+                }
+                setPayments(updatedPayments, action, false);
+                setDeletedPayment(updatedDeletedPayments);
+                setApplicationBalance(newAvailableBalance);
                 if (checkDuplicateSurplus.length > 1) {
                   setMergeSurplusPrompt(true);
                 } else if (additional !== true) {
@@ -525,10 +611,15 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
               const handleMergeSurplus = () => {
                 const updatedPayments = [...payments];
-                const sumOfDuplicateSurplus = updatedPayments
-                  .filter((eachPayment: IPaymentInfo) => eachPayment.tag !== undefined && eachPayment.tag.uuid === payment.tag?.uuid)
-                  .map((eachFiltered: IPaymentInfo) => parseAmount(eachFiltered.amount))
-                  .reduce((acc, current) => acc + current);
+                const checkDuplicateSurplus = updatedPayments.filter(
+                  (eachPayment: IPaymentInfo) => eachPayment.tag !== undefined && eachPayment.tag.uuid === payment.tag?.uuid,
+                );
+                const sumOfDuplicateSurplus =
+                  checkDuplicateSurplus.length > 0
+                    ? checkDuplicateSurplus
+                        .map((eachFiltered: IPaymentInfo) => parseAmount(eachFiltered.amount))
+                        .reduce((acc, current) => acc + current)
+                    : 0;
                 const updatedApplicationBalance: IPaymentInfo[] = [...applicationBalance].map((eachBalance: IPaymentInfo) => {
                   if (eachBalance.parent === payment.tag?.uuid) {
                     const filteredUtilised =
@@ -606,23 +697,24 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       completedSurplusCurrencies={completedSurplusCurrencies}
                       createdOn={moment(createdOn, "x").toDate()}
                       currencies={currencies}
+                      currentPayments={payments}
                       deletedPayment={deletedPayment}
-                      existingPaidAmount={existingPaidAmount}
                       epfAccountNumber={epfAccountNumber || "-"}
+                      existingPaidAmount={existingPaidAmount}
                       funds={funds}
                       handleEditSaved={handleEditSaved}
                       handleRemove={handleRemove}
                       handleSave={handleSave}
+                      handleUnsaved={setUnsavedChanges}
                       payment={payment}
                       pendingBalance={pendingBalance}
-                      totalInvestment={totalInvestment}
                       recurringDetails={localRecurringDetails !== undefined ? localRecurringDetails : recurringDetails}
                       setAvailableBalance={setApplicationBalance}
                       setDeletedPayment={setDeletedPayment}
-                      handleUnsaved={setUnsavedChanges}
+                      totalInvestment={totalInvestment}
                     />
                   ) : (
-                    <AddedInfo payment={payment} handleEdit={handleEdit} />
+                    <AddedInfo availableBalance={applicationBalance} handleEdit={handleEdit} payment={payment} tempPayments={payments} />
                   )}
                   <PromptModal
                     visible={editPrompt !== -1}

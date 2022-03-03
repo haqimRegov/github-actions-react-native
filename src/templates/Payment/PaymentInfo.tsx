@@ -1,6 +1,7 @@
 import cloneDeep from "lodash.clonedeep";
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 import { v1 as uuidv1 } from "uuid";
 
 import { PaymentProof, PaymentRemark } from ".";
@@ -16,15 +17,17 @@ import {
   NewDropdown,
   PromptModal,
 } from "../../components";
-import { ActionButtonProps, NewActionButtons } from "../../components/Views/NewActionButtons";
+import { NewActionButtonProps, NewActionButtons } from "../../components/Views/NewActionButtons";
 import { Language } from "../../constants";
 import { DICTIONARY_KIB_BANK_ACCOUNTS, ERROR } from "../../data/dictionary";
 import {
+  border,
   centerHorizontal,
   circle,
   colorBlue,
   colorGray,
   disabledOpacity6,
+  fs10RegBlue9,
   fs12RegWhite1,
   fs16BoldBlue1,
   fs16BoldGray6,
@@ -32,19 +35,24 @@ import {
   fsAlignLeft,
   fullWidth,
   px,
+  py,
   rowCenterVertical,
+  sh2,
   sh24,
   sh4,
   sh40,
   sh56,
   sh80,
+  sw05,
   sw12,
   sw24,
   sw240,
   sw360,
+  sw4,
   sw40,
   sw64,
   sw7,
+  sw8,
 } from "../../styles";
 import { formatAmount, isAmount, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
 import { generateNewInfo, getAmount } from "./helpers";
@@ -60,13 +68,14 @@ interface PaymentInfoProps {
   completedSurplusCurrencies?: string[];
   createdOn: Date;
   currencies: TypeCurrencyLabelValue[];
+  currentPayments: IPaymentInfo[];
   deletedPayment: IPaymentInfo[];
   epfAccountNumber?: string;
   existingPaidAmount: IOrderAmount[];
   funds: IOrderInvestment[];
   handleEditSaved: () => void;
   handleRemove: () => void;
-  handleSave: (value: IPaymentInfo, additional?: boolean) => void;
+  handleSave: (value: IPaymentInfo, updatedBalance: IPaymentInfo[], isUpdated: boolean, additional?: boolean) => void;
   handleUnsaved: (state: number) => void;
   payment: IPaymentInfo;
   pendingBalance: IOrderAmount[];
@@ -88,6 +97,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   completedSurplusCurrencies,
   createdOn,
   currencies,
+  currentPayments,
   epfAccountNumber,
   existingPaidAmount,
   funds,
@@ -124,6 +134,15 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   if (currencies.some((currency) => currency.value === "MYR" && draftPayment.currency === "MYR")) {
     paymentMethods.splice(1, 0, { label: "Cheque", value: "Cheque" });
   }
+  const updatedCurrencies = currencies.filter((eachCurrency: TypeCurrencyLabelValue) => {
+    const filteredPOPs = currentPayments.filter((eachPayments: IPaymentInfo) => eachPayments.currency === eachCurrency.value);
+    const totalCurrencyPaid =
+      filteredPOPs.length > 0
+        ? filteredPOPs.map((eachMapped: IPaymentInfo) => parseAmount(eachMapped.amount)).reduce((current, total) => current + total)
+        : 0;
+    const totalInvestmentIndex = totalInvestment.findIndex((eachTotal: IOrderAmount) => eachTotal.currency === eachCurrency.value);
+    return totalCurrencyPaid - parseAmount(totalInvestment[totalInvestmentIndex].amount) < 0 || eachCurrency.value === payment.currency;
+  });
 
   const paymentFieldProps = { payment: draftPayment, setPayment: setDraftPayment, setViewFile: setViewFile, useOfSurplus: useOfSurplus };
   switch (draftPayment.paymentMethod) {
@@ -374,33 +393,48 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   };
 
   const paymentToBeSaved = (latestPayment: IPaymentInfo) => {
+    const tempPayments = cloneDeep(currentPayments);
+    const findIndexLatestPayment = tempPayments.findIndex(
+      (eachPayment: IPaymentInfo) => eachPayment.paymentId === latestPayment.paymentId && latestPayment.paymentId !== undefined,
+    );
+    // Check if it's a new payment
+    const checkNewPayment =
+      findIndexLatestPayment === -1 || (findIndexLatestPayment !== -1 && tempPayments[findIndexLatestPayment].amount === "");
+    // Total investment - the total amount of POPs for that currency
     const excessAmount = totalAmount > currencyInvestedAmount ? totalAmount - currencyInvestedAmount : 0;
+    // Check if amount updated
+    const checkAmountUpdated = findIndexLatestPayment !== -1 ? tempPayments[findIndexLatestPayment].amount !== latestPayment.amount : true;
     let id = latestPayment.paymentId;
 
     if (!id) {
       id = uuidv1();
     }
-    const addInitialExcess =
-      excessAmount > 0 ? { initialExcess: { amount: excessAmount.toString(), currency: latestPayment.currency as TypeCurrency } } : {};
     const updatedPayment: IPaymentInfo = {
       ...latestPayment,
       // check if saved payment info from backend
       action: latestPayment.isEditable !== undefined ? { id: id, option: "update" } : undefined,
       amount: latestPayment.amount === "" && latestPayment.paymentType === "EPF" ? totalInvestment[0].amount : latestPayment.amount,
-      excess: excessAmount > 0 ? { currency: latestPayment.currency as TypeCurrency, amount: excessAmount.toString() } : undefined,
+      lastAmountUpdate: excessAmount > 0 && findIndexLatestPayment !== -1 ? moment().format("x") : undefined,
+      excess:
+        excessAmount > 0 && (checkNewPayment === true || checkAmountUpdated === true)
+          ? { currency: latestPayment.currency as TypeCurrency, amount: excessAmount.toString() }
+          : undefined,
+      initialExcess:
+        excessAmount > 0 && (checkNewPayment === true || checkAmountUpdated === true)
+          ? { amount: excessAmount.toString(), currency: latestPayment.currency as TypeCurrency }
+          : undefined,
       new: undefined,
       parent: excessAmount > 0 ? id : undefined,
       paymentId: id,
       saved: true,
-      ...addInitialExcess,
     };
     return updatedPayment;
   };
 
-  const updateAvailableBalance = (latestPayment: IPaymentInfo) => {
+  const updateAvailableBalance = (latestPayment: IPaymentInfo): IPaymentInfo[] => {
     const hasExcess = latestPayment.excess !== undefined;
     const updatedPayment: IPaymentInfo = { ...latestPayment, utilised: hasExcess ? [] : undefined };
-    const newAvailableBalance = [...draftAvailableBalance];
+    const newAvailableBalance = cloneDeep(draftAvailableBalance);
 
     // // check if payment info has surplus
     // if (updatedPayment.parent !== undefined) {
@@ -422,7 +456,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     }
     // }
 
-    const newAvailableBalanceWithId = newAvailableBalance.map((bal) => {
+    const newAvailableBalanceWithId: IPaymentInfo[] = newAvailableBalance.map((bal) => {
       const updatedUtilised: IUtilisedAmount[] = bal.utilised!.map((util) => ({
         ...util,
         paymentId: util.paymentId !== undefined ? util.paymentId : updatedPayment.paymentId!,
@@ -431,16 +465,17 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       return { ...bal, utilised: updatedUtilised };
     });
 
-    // update application balance for new or updated surplus, and for use of surplus
-    setAvailableBalance(newAvailableBalanceWithId, undefined);
+    return newAvailableBalanceWithId;
   };
 
   const saveUpdatedInfo = (add?: boolean) => {
     const cleanPayment = paymentToBeSaved(draftPayment);
+    const updatedAvailableBalance: IPaymentInfo[] = updateAvailableBalance(cleanPayment);
     if (cleanPayment.isEditable !== false) {
-      updateAvailableBalance(cleanPayment);
+      // update application balance for new or updated surplus, and for use of surplus
+      setAvailableBalance(updatedAvailableBalance, undefined);
     }
-    handleSave(cleanPayment, add);
+    handleSave(cleanPayment, updatedAvailableBalance, cleanPayment.isEditable !== false, add);
   };
 
   const handleSaveInfo = () => {
@@ -502,7 +537,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     setDuplicatePrompt(undefined);
   };
 
-  const secondaryButton: ActionButtonProps | undefined =
+  const secondaryButton: NewActionButtonProps | undefined =
     draftPayment.paymentMethod! === "EPF" || draftPayment.paymentMethod! === "Recurring"
       ? undefined
       : {
@@ -539,12 +574,12 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     <LabeledTitle label={PAYMENT.LABEL_EPF_ACCOUNT} spaceToLabel={sh4} title={epfAccountNumber!} style={{ width: sw360 }} />,
   ];
 
-  if (currencies.length > 1 && draftPayment.paymentMethod !== "Cheque") {
+  if (updatedCurrencies.length > 1 && draftPayment.paymentMethod !== "Cheque") {
     baseItems.splice(
       1,
       0,
       <View />,
-      <NewDropdown items={currencies} handleChange={setCurrency} label={PAYMENT.LABEL_CURRENCY} value={draftPayment.currency} />,
+      <NewDropdown items={updatedCurrencies} handleChange={setCurrency} label={PAYMENT.LABEL_CURRENCY} value={draftPayment.currency} />,
     );
   }
 
@@ -580,7 +615,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       const dummyDefaultInfo = generateNewInfo(
         payment.paymentType,
         allowedRecurringType!,
-        currencies[0],
+        updatedCurrencies[0],
         payment.orderNumber,
         epfAccountNumber,
         accountNames,
@@ -614,10 +649,20 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchedSurplus]);
 
+  const textContainerStyle: ViewStyle = { ...px(sw4), ...py(sh2), ...border(colorBlue._9, sw05, sw4) };
+
   return (
     <View>
       <View style={{ ...rowCenterVertical, ...px(sw24), backgroundColor: colorGray._1, height: sh56 }}>
         <Text style={fs16BoldGray6}>{PAYMENT.LABEL_ADD_PAYMENT}</Text>
+        {payment.excess !== undefined && payment.excess.currency === "MYR" ? (
+          <Fragment>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <View style={textContainerStyle}>
+              <Text style={fs10RegBlue9}>{PAYMENT.LABEL_SURPLUS}</Text>
+            </View>
+          </Fragment>
+        ) : null}
         <CustomFlexSpacer />
         {draftPayment.isEditable !== false ? (
           <IconButton color={colorBlue._1} name="trash" onPress={handleRemoveInfo} size={sw24} style={circle(sw40)} />

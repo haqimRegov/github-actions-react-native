@@ -17,7 +17,6 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
     }
   };
   // eslint-disable-next-line no-console
-  console.log("ErrorHandler", error);
   if (err.errorCode === ERROR_CODE.unauthenticated && navigation !== undefined) {
     AlertDialog(err.message, handleNavigate, "Session Expired");
   }

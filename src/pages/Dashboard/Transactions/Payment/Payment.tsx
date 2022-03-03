@@ -104,9 +104,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       ];
 
       const request = { orders: paymentOrders, isConfirmed: confirmed === true };
-      // console.log("req", request);
       const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
-      // console.log("res", paymentResponse);
 
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;
@@ -123,11 +121,6 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       setLoading(false);
       if ("errorCode" in error) {
         Alert.alert(error.message);
-      }
-    } finally {
-      // console.log("finally");
-      if (paymentResult === undefined) {
-        // console.log("paymentResult undefined", paymentResult);
       }
     }
     return undefined;

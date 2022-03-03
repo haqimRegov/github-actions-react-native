@@ -77,6 +77,13 @@ export const fs10RegBlue6: TextStyle = {
   lineHeight: scaleHeight(10 * 1.6),
 };
 
+export const fs10RegBlue9: TextStyle = {
+  color: colorBlue._9,
+  fontFamily: NunitoRegular,
+  fontSize: sh10,
+  lineHeight: scaleHeight(10 * 1.6),
+};
+
 export const fs10RegGray4: TextStyle = {
   color: colorGray._4,
   fontFamily: NunitoRegular,

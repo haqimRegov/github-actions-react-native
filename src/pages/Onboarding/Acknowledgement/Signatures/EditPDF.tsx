@@ -323,6 +323,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
 
   return (
     <PdfView
+      accountType={accountType}
       adviserSignature={adviserSignature}
       completed={completed}
       editReceipt={editReceipt}

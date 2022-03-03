@@ -28,7 +28,6 @@ export const validateObject = <T extends object, U extends keyof T>(object: T, k
     }
     return false;
   });
-  // console.log("validation", validation);
   return validation.includes(false) === false;
 };
 
@@ -60,6 +59,5 @@ export const validateObject = <T extends object, U extends keyof T>(object: T, k
 //     }
 //     return false;
 //   });
-//   console.log("validation", validation);
 //   return validation.includes(false) === false;
 // };

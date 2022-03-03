@@ -86,9 +86,7 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   const [layout, setLayout] = useState<IBasicLayout>({ x: 0, y: 0, width: 0, height: 0 });
   const [ref, setRef] = useState<View | null>(null);
   const pillRef = useRef<View | null>(null);
-  // console.log("pillRef", pillRef);
   // const parentRef = useRef<View | null>(null);
-  // console.log("parentRef", parentRef);
   // const [pillTotalWidth, setPillTotalWidth] = useState<number>(0);
   const [collapse, setCollapse] = useState<boolean>(true);
   const [collapsibleModal, setCollapsibleModal] = useState<boolean>(false);
@@ -97,7 +95,6 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   // const [overflow, setOverflow] = useState<boolean>(false);
   const [overflowValue, setOverflowValue] = useState<IOverflow[]>([]);
   // const [measuredLayout, setMeasuredLayout] = useState(0);
-  // console.log("measuredLayout", measuredLayout);
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER;
 
@@ -217,10 +214,8 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   //   maxWidth: sw256,
   // };
 
-  // console.log("value", value);
   // const handleWidth = async (event: LayoutChangeEvent) => {
   //   const { height, width } = event.nativeEvent.layout;
-  //   console.log(height, width);
   //   // if (showMore.active === false) {
   //   //   if (width >= sw256) {
   //   //     setShowMore({ ...showMore, active: true });
@@ -253,18 +248,13 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
         });
         // .reduce((totalWidth: number, currentWidth: number) => totalWidth + currentWidth);
       }
-      // console.log("widthSum", widthSum);
-      // console.log("newOverflowValue", newOverflowValue);
       setOverflowValue(newOverflowValue);
     } else {
       newValue.push(searchValue);
     }
     handleChange(newValue);
-    // console.log("after handleChange");
     // handleReset(index, reset);
   };
-
-  // console.log("pillTotalWidth", pillTotalWidth);
 
   // useEffect(() => {
   //   setPillTotalWidth(0);
@@ -273,17 +263,12 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   const handleParentLayout = (e: LayoutChangeEvent) => {
     const { height } = e.nativeEvent.layout;
     // setPillTotalWidth(pillTotalWidth + width);
-    // console.log("handleParentLayout height", height);
     // setOverflow(height > 24);
     if (height === 0) {
-      // console.log("height zero", height);
       // setOverflow(false);
       setOverflowValue([]);
     }
   };
-
-  // console.log("overflow", overflow);
-  // console.log("overflowValue", overflowValue);
 
   // useEffect(() => {
   //   const pillTotalWidth =
@@ -300,7 +285,6 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   //           })
   //           .reduce((totalWidth: number, currentWidth: number) => totalWidth + currentWidth)
   //       : 288;
-  //   console.log("pillTotalWidth", pillTotalWidth);
   //   if (pillTotalWidth < 288) {
   //     setOverflowValue([]);
   //   }
@@ -320,7 +304,6 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
   //       return newOfv;
   //     });
   //     // .reduce((totalWidth: number, currentWidth: number) => totalWidth + currentWidth);
-  //     console.log("updatedOverflowValue", updatedOverflowValue);
   //     setOverflowValue(updatedOverflowValue);
   //   }
   //   // console.log("pillTotalWidth", pillTotalWidth);
@@ -339,18 +322,13 @@ export const POCCheckboxDropdown: FunctionComponent<POCCheckboxDropdownProps> = 
               const handlePillLayout = (e: LayoutChangeEvent) => {
                 const { y, width } = e.nativeEvent.layout;
                 // setPillTotalWidth(pillTotalWidth + width);
-                // console.log("pillLayout", selectedValue, e.nativeEvent.layout);
                 const newOverflowValue = [...overflowValue];
                 const findExisting = newOverflowValue.findIndex((ofv) => ofv.value === selectedValue);
-                // console.log("findExisting", findExisting);
                 if (findExisting === -1) {
                   newOverflowValue.push({ value: selectedValue, width: width, overflow: y > 0 });
                 }
                 // const uniqueOverflow = [...new Set(newOverflowValue)];
 
-                // console.log("uniqueOverflow", uniqueOverflow);
-                // console.log("y", y);
-                // console.log("newOverflowValue", newOverflowValue);
                 setOverflowValue(newOverflowValue);
               };
               return overflowValue.findIndex((ofv) => ofv.value === selectedValue && ofv.overflow === true) !== -1 ? null : (

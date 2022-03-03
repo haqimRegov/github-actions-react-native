@@ -7,13 +7,11 @@ const configure = () => {
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: () => {
       // // eslint-disable-next-line no-console
-      // console.log("Notification Token:", token);
     },
 
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification: (notification) => {
       // // eslint-disable-next-line no-console
-      // console.log("Notification:", notification);
 
       // process the notification
       // (required) Called when a remote is received or opened, or local notification is opened

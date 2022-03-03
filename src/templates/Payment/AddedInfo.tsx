@@ -38,13 +38,9 @@ export const AddedInfo: FunctionComponent<AddedInfoProps> = ({ availableBalance,
     const findSurplusPayment = tempPayments.filter(
       (eachPayment: IPaymentInfo) => eachPayment.paymentId === eachAvailableBalance.parent && eachPayment.paymentId !== undefined,
     );
-    // console.log("find in added", findSurplusPayment);
     return findSurplusPayment.length > 0;
   });
   const filteredSurplus = findSurplus.filter((eachSurplus: IPaymentInfo) => eachSurplus.currency === payment.currency);
-  // console.log("find surplus", findSurplus);
-  // console.log("pay", tempPayments);
-  // console.log("avail", availableBalance);
 
   return (
     <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8 }}>

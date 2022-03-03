@@ -29,7 +29,6 @@ export const imageOpenPicker = async (handleSuccess: SuccessCallback, options?: 
   } catch (error) {
     if (JSON.stringify(error).includes("cancelled")) {
       // // eslint-disable-next-line no-console
-      // console.log("User Cancelled", error);
       return "";
     }
     // eslint-disable-next-line no-console
@@ -50,7 +49,6 @@ export const imageOpenCamera = async (handleSuccess: SuccessCallback, options?: 
   } catch (error) {
     if (JSON.stringify(error).includes("cancelled")) {
       // // eslint-disable-next-line no-console
-      // console.log("User Cancelled", error);
       return "";
     }
     // eslint-disable-next-line no-console

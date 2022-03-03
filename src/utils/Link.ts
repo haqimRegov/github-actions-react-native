@@ -7,7 +7,6 @@ const openLink = async (URL: string) => {
       Linking.openURL(URL);
     } else {
       // eslint-disable-next-line no-console
-      console.log("Can't handle url: ", URL);
     }
   } catch (error) {
     // eslint-disable-next-line no-console

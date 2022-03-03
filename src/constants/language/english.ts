@@ -1031,6 +1031,7 @@ export const english = {
       TITLE_RECURRING: "Add Recurring Info",
       TITLE: "Add Proof of Payment",
       TOOLTIP_REMOVE: "This payment info cannot be deleted as its surplus has been used on another submitted order.",
+      TOOLTIP_EDIT_NORMAL_POP: "Edit button will be available after you update / delete for the surplus payment info.",
     },
     PRODUCT_DETAILS: {
       LABEL_AMP_FEE: "AMP Fee",

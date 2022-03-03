@@ -100,7 +100,7 @@ export const PaymentBannerContent = ({
                 return (
                   <View key={index} style={{ ...centerVertical, ...flexRow }}>
                     {index !== 0 ? (
-                      <Text style={{ ...fs16RegGray6, ...px(sw4) }}>+</Text>
+                      <Text style={{ ...fs16RegGray6, ...px(sw4), color: colorYellow._2 }}>+</Text>
                     ) : (
                       <View style={flexRow}>
                         <View style={centerHV}>

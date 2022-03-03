@@ -655,7 +655,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     <View>
       <View style={{ ...rowCenterVertical, ...px(sw24), backgroundColor: colorGray._1, height: sh56 }}>
         <Text style={fs16BoldGray6}>{PAYMENT.LABEL_ADD_PAYMENT}</Text>
-        {payment.excess !== undefined && payment.excess.currency === "MYR" ? (
+        {payment.excess !== undefined && payment.excess !== null && payment.excess.currency === "MYR" ? (
           <Fragment>
             <CustomSpacer isHorizontal={true} space={sw8} />
             <View style={textContainerStyle}>

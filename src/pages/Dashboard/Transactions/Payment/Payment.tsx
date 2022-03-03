@@ -191,12 +191,16 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     tempData !== undefined ? `${PAYMENT.LABEL_PENDING_SUMMARY}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
   const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
-  const updatedBalancePayments = balancePayments.filter(
-    (eachBalance: IOrderAmount) =>
-      eachBalance.currency === "MYR" &&
-      parseAmount(eachBalance.amount) !== 0 &&
-      (tempData?.status !== "Completed" || tempData?.isLastOrder !== true),
-  );
+  const updatedBalancePayments =
+    tempData !== undefined
+      ? balancePayments.filter(
+          (eachBalance: IOrderAmount) =>
+            eachBalance.currency === "MYR" &&
+            parseAmount(eachBalance.amount) !== 0 &&
+            (tempData?.status !== "Completed" || tempData?.isLastOrder !== true) &&
+            !checkCurrencyCompleted(tempData, eachBalance.currency),
+        )
+      : [];
 
   const completedCurrencies =
     tempData !== undefined

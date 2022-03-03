@@ -45,7 +45,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
   );
   const [modalLoading, setModalLoading] = useState<boolean>(false);
-  const [continueLoading, setContinueLoading] = useState<boolean>(false);
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
@@ -248,7 +248,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const handleSave = () => {
-    setContinueLoading(true);
+    setPageLoading(true);
     setTimeout(() => {
       const updatedReceipts = [...receipts!];
       const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
@@ -283,7 +283,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       };
       updateReceipts(updatedReceipts);
       setEditReceipt(undefined);
-      setContinueLoading(false);
+      setPageLoading(false);
     }, 500);
   };
 
@@ -325,7 +325,6 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     <PdfView
       adviserSignature={adviserSignature}
       completed={completed}
-      continueLoading={continueLoading}
       editReceipt={editReceipt}
       principalSignature={principalSignature}
       jointSignature={jointSignature}
@@ -339,6 +338,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       handleClose={handleClose}
       handleConfirm={handleConfirm}
       handlePosition={handlePosition}
+      pageLoading={pageLoading}
       setScrollRef={setScrollRef}
     />
   );

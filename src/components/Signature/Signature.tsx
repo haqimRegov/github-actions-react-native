@@ -24,7 +24,7 @@ interface CustomSignatureProps {
 }
 
 export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
-  // continueLoading,
+  continueLoading,
   handleCancel,
   handleConfirm,
   height,
@@ -119,7 +119,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
         <RoundedButton
           buttonStyle={{ width: sw205 }}
           disabled={disabled}
-          // loading={continueLoading}
+          loading={continueLoading}
           onPress={handlePressConfirm}
           text={confirmText}
         />

@@ -231,6 +231,9 @@ export const generatePaymentWithKeys = async (
             if (paymentInfo.parent !== undefined) {
               dynamicKeys.push("parent");
             }
+            if (paymentInfo.lastAmountUpdate !== undefined) {
+              dynamicKeys.push("lastAmountUpdate");
+            }
             if (paymentInfo.action !== undefined) {
               dynamicKeys.push("action");
             }

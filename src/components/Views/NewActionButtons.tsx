@@ -8,14 +8,14 @@ import { CustomSpacer } from "./Spacer";
 
 const { ACTION_BUTTONS } = Language.PAGE;
 
-export interface ActionButtonProps extends Omit<RoundedButtonProps, "text"> {
+export interface NewActionButtonProps extends Omit<RoundedButtonProps, "text"> {
   text?: string;
 }
 
 export interface NewActionButtonsProps {
   buttonContainerStyle?: ViewStyle;
-  primary?: ActionButtonProps;
-  secondary?: ActionButtonProps;
+  primary?: NewActionButtonProps;
+  secondary?: NewActionButtonProps;
 }
 
 export const NewActionButtons: FunctionComponent<NewActionButtonsProps> = ({

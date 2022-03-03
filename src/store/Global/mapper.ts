@@ -15,6 +15,7 @@ import { GlobalActionProps } from "./actions";
 export const GlobalMapStateToProps = (state: RootState) => ({
   agent: state.global.agent,
   config: state.global.config,
+  events: state.global.events,
   isLoading: state.global.loading,
   unreadMessages: state.global.unreadMessages,
 });

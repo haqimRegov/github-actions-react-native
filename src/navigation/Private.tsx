@@ -6,24 +6,30 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { AppState, AppStateStatus } from "react-native";
 import UserInactivity from "react-native-user-inactivity";
+import { connect } from "react-redux";
 
 import { LocalAssets } from "../assets/images/LocalAssets";
-import { PromptModal } from "../components";
+import { EventModal, PromptModal } from "../components";
 import { Language } from "../constants";
 import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";
+import { updateStorageData } from "../integrations";
 import { logout } from "../network-actions";
 import { DashboardPage, LogoutPage, OnboardingPage } from "../pages";
+import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../store";
+import { sw212 } from "../styles";
 
 const { INACTIVITY } = Language.PAGE;
 
 const { Navigator, Screen } = createStackNavigator();
 
-export const PrivateRoute: FunctionComponent = () => {
+const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: GlobalStoreProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const expired = useRef<boolean>(false);
   const lastActive = useRef<number | undefined>(undefined);
   const [inactivityStatus, setInactivityStatus] = useState<boolean>(true);
   const [isLogout, setIsLogout] = useState<boolean>(false);
+  const [dontShowEpf, setDontShowEpf] = useState<boolean>(false);
+  const [eventPrompt, setEventPrompt] = useState<boolean>(false);
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const handleExtend = () => {
@@ -37,6 +43,18 @@ export const PrivateRoute: FunctionComponent = () => {
     setIsLogout(true);
     setInactivityStatus(true);
     logout(navigation);
+  };
+
+  const handleEvents = async () => {
+    setEventPrompt(false);
+    if (dontShowEpf === true) {
+      await updateStorageData("hideEvent", "isMultiUtmc");
+    }
+    props.resetEvents();
+  };
+
+  const handleEpfCheckbox = () => {
+    setDontShowEpf(!dontShowEpf);
   };
 
   const handleInactivity = (isActive: boolean) => {
@@ -83,11 +101,34 @@ export const PrivateRoute: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inactivityStatus]);
 
+  useEffect(() => {
+    if (props.events !== undefined && props.events.findIndex((event) => event.eventName === "isMultiUtmc") !== -1) {
+      setEventPrompt(true);
+    }
+  }, [props.events]);
+
   const defaultOptions = { animationEnabled: false };
   const subtitle =
     expired.current === true
       ? INACTIVITY.LABEL_SIGN_IN
       : `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
+
+  const isMultiUtmcEvent = props.events !== undefined ? props.events.findIndex((event) => event.eventName === "isMultiUtmc") : -1;
+
+  let event = {
+    checkbox: "",
+    description: "",
+    eventName: "",
+    header: "",
+    headerDescription: "",
+    primaryButton: "",
+    s3Path: "",
+    secondaryButton: "",
+  };
+
+  if (isMultiUtmcEvent !== -1) {
+    event = props.events![isMultiUtmcEvent];
+  }
 
   return (
     <Fragment>
@@ -113,6 +154,19 @@ export const PrivateRoute: FunctionComponent = () => {
         title={subtitle}
         visible={inactivityStatus === false}
       />
+      <EventModal
+        checkboxLabel={event.checkbox}
+        checkboxToggled={dontShowEpf}
+        description={event.description}
+        handleCheckbox={handleEpfCheckbox}
+        header={event.header}
+        headerDescription={event.headerDescription}
+        illustration={{ uri: event.s3Path }}
+        primary={{ onPress: handleEvents, text: event.primaryButton, buttonStyle: { width: sw212 } }}
+        visible={eventPrompt}
+      />
     </Fragment>
   );
 };
+
+export const PrivateRoute = connect(GlobalMapStateToProps, GlobalMapDispatchToProps)(PrivateRouteComponent);

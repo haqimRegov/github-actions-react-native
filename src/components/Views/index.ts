@@ -3,6 +3,7 @@ export * from "./ActionButtons";
 export * from "./AddressField";
 export * from "./AddressInfo";
 export * from "./EmptyTable";
+export * from "./EventPrompt";
 export * from "./LabeledTitle";
 export * from "./Loading";
 export * from "./Pagination";

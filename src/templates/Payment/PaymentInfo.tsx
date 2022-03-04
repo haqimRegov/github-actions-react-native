@@ -75,7 +75,7 @@ interface PaymentInfoProps {
   funds: IOrderInvestment[];
   handleEditSaved: () => void;
   handleRemove: () => void;
-  handleSave: (value: IPaymentInfo, updatedBalance: IPaymentInfo[], isUpdated: boolean, additional?: boolean) => void;
+  handleSave: (value: IPaymentInfo, additional?: boolean) => void;
   handleUnsaved: (state: number) => void;
   payment: IPaymentInfo;
   pendingBalance: IOrderAmount[];
@@ -431,7 +431,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     return updatedPayment;
   };
 
-  const updateAvailableBalance = (latestPayment: IPaymentInfo): IPaymentInfo[] => {
+  const updateAvailableBalance = (latestPayment: IPaymentInfo) => {
     const hasExcess = latestPayment.excess !== undefined;
     const updatedPayment: IPaymentInfo = { ...latestPayment, utilised: hasExcess ? [] : undefined };
     const newAvailableBalance = cloneDeep(draftAvailableBalance);
@@ -465,17 +465,14 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       return { ...bal, utilised: updatedUtilised };
     });
 
-    return newAvailableBalanceWithId;
+    // update application balance for new or updated surplus, and for use of surplus
+    setAvailableBalance(newAvailableBalanceWithId, undefined);
   };
 
   const saveUpdatedInfo = (add?: boolean) => {
     const cleanPayment = paymentToBeSaved(draftPayment);
-    const updatedAvailableBalance: IPaymentInfo[] = updateAvailableBalance(cleanPayment);
-    if (cleanPayment.isEditable !== false) {
-      // update application balance for new or updated surplus, and for use of surplus
-      setAvailableBalance(updatedAvailableBalance, undefined);
-    }
-    handleSave(cleanPayment, updatedAvailableBalance, cleanPayment.isEditable !== false, add);
+    updateAvailableBalance(cleanPayment);
+    handleSave(cleanPayment, add);
   };
 
   const handleSaveInfo = () => {
@@ -655,7 +652,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     <View>
       <View style={{ ...rowCenterVertical, ...px(sw24), backgroundColor: colorGray._1, height: sh56 }}>
         <Text style={fs16BoldGray6}>{PAYMENT.LABEL_ADD_PAYMENT}</Text>
-        {payment.excess !== undefined && payment.excess.currency === "MYR" ? (
+        {payment.initialExcess !== undefined && payment.initialExcess !== null && payment.initialExcess.currency === "MYR" ? (
           <Fragment>
             <CustomSpacer isHorizontal={true} space={sw8} />
             <View style={textContainerStyle}>

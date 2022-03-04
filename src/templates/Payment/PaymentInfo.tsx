@@ -397,13 +397,8 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     const findIndexLatestPayment = tempPayments.findIndex(
       (eachPayment: IPaymentInfo) => eachPayment.paymentId === latestPayment.paymentId && latestPayment.paymentId !== undefined,
     );
-    // Check if it's a new payment
-    const checkNewPayment =
-      findIndexLatestPayment === -1 || (findIndexLatestPayment !== -1 && tempPayments[findIndexLatestPayment].amount === "");
     // Total investment - the total amount of POPs for that currency
     const excessAmount = totalAmount > currencyInvestedAmount ? totalAmount - currencyInvestedAmount : 0;
-    // Check if amount updated
-    const checkAmountUpdated = findIndexLatestPayment !== -1 ? tempPayments[findIndexLatestPayment].amount !== latestPayment.amount : true;
     let id = latestPayment.paymentId;
 
     if (!id) {
@@ -414,15 +409,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       // check if saved payment info from backend
       action: latestPayment.isEditable !== undefined ? { id: id, option: "update" } : undefined,
       amount: latestPayment.amount === "" && latestPayment.paymentType === "EPF" ? totalInvestment[0].amount : latestPayment.amount,
-      lastAmountUpdate: excessAmount > 0 && findIndexLatestPayment !== -1 ? moment().format("x") : undefined,
-      excess:
-        excessAmount > 0 && (checkNewPayment === true || checkAmountUpdated === true)
-          ? { currency: latestPayment.currency as TypeCurrency, amount: excessAmount.toString() }
-          : undefined,
-      initialExcess:
-        excessAmount > 0 && (checkNewPayment === true || checkAmountUpdated === true)
-          ? { amount: excessAmount.toString(), currency: latestPayment.currency as TypeCurrency }
-          : undefined,
+      lastAmountUpdate: excessAmount > 0 ? moment().format("x") : undefined,
+      excess: excessAmount > 0 ? { currency: latestPayment.currency as TypeCurrency, amount: excessAmount.toString() } : undefined,
+      initialExcess: excessAmount > 0 ? { amount: excessAmount.toString(), currency: latestPayment.currency as TypeCurrency } : undefined,
       new: undefined,
       parent: excessAmount > 0 ? id : undefined,
       paymentId: id,

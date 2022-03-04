@@ -243,7 +243,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
           showsVerticalScrollIndicator={false}
         />
       </View>
-      <CustomToast count={deleteCount} onPress={handleUndoDelete} setCount={setDeleteCount} />
+      <CustomToast count={deleteCount} isDeleteToast={true} onPress={handleUndoDelete} setCount={setDeleteCount} />
       <ConfirmationModal
         handleCancel={handleCancelDelete}
         handleContinue={handleDeleteLastFund}

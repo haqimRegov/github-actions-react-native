@@ -190,16 +190,16 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           (eachBalance: IOrderAmount) =>
             eachBalance.currency === "MYR" &&
             parseAmount(eachBalance.amount) !== 0 &&
-            (tempData?.status !== "Completed" || tempData?.isLastOrder !== true) &&
-            !checkCurrencyCompleted(tempData, eachBalance.currency),
+            ((tempData?.status !== "Completed" && checkCurrencyCompleted(tempData, eachBalance.currency) === false) ||
+              tempData?.isLastOrder !== true ||
+              (tempData.isLastOrder === true && checkCurrencyCompleted(tempData, eachBalance.currency) === false)),
         )
       : [];
-
   const completedCurrencies =
     tempData !== undefined
       ? balancePayments.filter(
           (eachSurplus: IOrderAmount) =>
-            tempData.isLastOrder === true &&
+            (tempData.isLastOrder === true || eachSurplus.currency !== "MYR") &&
             parseAmount(eachSurplus.amount) !== 0 &&
             checkCurrencyCompleted(tempData, eachSurplus.currency),
         )

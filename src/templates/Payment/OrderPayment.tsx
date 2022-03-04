@@ -449,17 +449,11 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 handleExpandPayment(updatedPayments, true);
               };
 
-              const handleSave = (
-                value: IPaymentInfo,
-                updatedAvailableBalance: IPaymentInfo[],
-                isAvailableUpdated: boolean,
-                additional?: boolean,
-              ) => {
+              const handleSave = (value: IPaymentInfo, additional?: boolean) => {
                 let checkEditNewPayment = {};
                 let checkIsEditable = {};
                 const updatedPayments = cloneDeep(payments);
                 const duplicatePayments = cloneDeep(payments);
-                const newAvailableBalance = isAvailableUpdated ? cloneDeep(updatedAvailableBalance) : cloneDeep(applicationBalance);
 
                 const updatedDeletedPayments = [...deletedPayment];
                 if (
@@ -573,7 +567,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 }
                 setPayments(updatedPayments, action, false);
                 setDeletedPayment(updatedDeletedPayments);
-                setApplicationBalance(newAvailableBalance);
                 if (checkDuplicateSurplus.length > 1) {
                   setMergeSurplusPrompt(true);
                 } else if (additional !== true) {

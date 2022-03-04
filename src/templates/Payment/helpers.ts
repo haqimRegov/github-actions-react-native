@@ -411,5 +411,7 @@ export const checkCurrencyCompleted = (proofOfPayment: IPaymentRequired, currenc
           .reduce((totalAmount: number, currentAmount: number) => totalAmount + currentAmount)
       : 0;
   const findIndex = proofOfPayment.totalInvestment.findIndex((eachTotal: IOrderAmount) => eachTotal.currency === currency);
-  return totalCurrency >= parseAmount(proofOfPayment.totalInvestment[findIndex].amount);
+  return proofOfPayment !== undefined && findIndex !== -1 && proofOfPayment.totalInvestment[findIndex] !== undefined
+    ? totalCurrency >= parseAmount(proofOfPayment.totalInvestment[findIndex].amount)
+    : false;
 };

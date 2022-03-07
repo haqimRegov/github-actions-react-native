@@ -141,9 +141,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                   title={INVESTMENT.SUBHEADING}
                   titleStyle={fs16RegGray5}
                 />
-                {multiUtmc === false ? (
-                  <Text style={fs16RegGray5}>Note: For EPF funding option, you can only select ONE fund house per application.</Text>
-                ) : null}
+                {multiUtmc === false ? <Text style={fs16RegGray5}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text> : null}
                 <CustomSpacer space={sh24} />
               </View>
             </Fragment>
@@ -173,13 +171,11 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
               let data: IProductSales[] = [...newData];
               if (multiUtmc === false) {
                 const findEpfIndex = newData.findIndex((eachNewData: IProductSales) => eachNewData.investment.fundPaymentMethod === "EPF");
-                data = newData.map((eachData, eachIndex) => {
+                data = newData.map((eachData) => {
                   return {
                     ...eachData,
                     allowEpf:
-                      eachIndex === findEpfIndex ||
-                      eachData.fundDetails.issuingHouse === newData[index].fundDetails.issuingHouse ||
-                      findEpfIndex === -1,
+                      findEpfIndex !== -1 ? eachData.fundDetails.issuingHouse === newData[findEpfIndex].fundDetails.issuingHouse : true,
                   };
                 });
               }

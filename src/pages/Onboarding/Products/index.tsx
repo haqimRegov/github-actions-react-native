@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
-import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
+import { GlobalStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild, flexCol, fs16RegGray6, sh56 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
@@ -14,7 +14,7 @@ import { ProductList } from "./ProductList";
 
 const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
 
-interface ProductsProps extends ProductsStoreProps, OnboardingContentProps {}
+interface ProductsProps extends ProductsStoreProps, OnboardingContentProps, GlobalStoreProps {}
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
   accountType,
@@ -25,6 +25,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   details,
   handleNextStep,
   investmentDetails,
+  global,
   onboarding,
   resetProducts,
   resetSelectedFund,
@@ -35,13 +36,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   viewFund,
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
+  const { isMultiUtmc } = global;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
-  const [multiUtmc] = useState<boolean>(true);
 
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
@@ -232,7 +233,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         <ProductConfirmation
           accountType={accountType}
           investmentDetails={investmentDetails!}
-          multiUtmc={multiUtmc}
+          multiUtmc={isMultiUtmc}
           selectedFunds={selectedFunds}
           setFixedBottomShow={setFixedBottomShow}
           setInvestmentDetails={addInvestmentDetails}

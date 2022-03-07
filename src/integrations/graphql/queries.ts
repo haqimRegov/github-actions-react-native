@@ -219,6 +219,7 @@ const getOrderSummary = gql`
             recurringType
             recurringBank
             frequency
+            utmc
           }
           profile {
             name

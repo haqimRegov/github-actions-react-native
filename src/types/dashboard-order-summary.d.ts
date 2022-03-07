@@ -51,6 +51,7 @@ declare interface IOrderSummaryPayment {
   surplusNote?: string;
   transactionDate?: number;
   transactionTime?: number;
+  utmc?: string;
 }
 
 declare interface IOrderSummaryEmploymentDetails {

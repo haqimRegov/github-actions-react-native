@@ -90,6 +90,7 @@ declare interface IPaymentInfoAction {
 }
 
 declare interface IEpfReferenceNo {
+  amount: string;
   utmc: string;
   referenceNo: string;
 }
@@ -110,7 +111,8 @@ declare interface IPaymentInfo {
   clientTrustAccountNumber: string;
   currency: string;
   epfAccountNumber: string;
-  epfReferenceNumber: string;
+  epfReferenceNo: IEpfReferenceNo[]; // for FE
+  epfReferenceNumber: string; // to submit to BE
   frequency: string;
   kibBankAccountNumber: string;
   kibBankName: string;
@@ -141,6 +143,7 @@ declare interface IPaymentInfo {
   tag?: { uuid: string; orderNumber?: string }; // if use of surplus, uuid is the parent of the surplus payment info
   usePreviousRecurring?: boolean;
   utilised?: IUtilisedAmount[]; // utilised amount of an available balance
+  utmc: string; // for multiple EPF
 }
 
 declare type TPaymentInfoKey = keyof IPaymentInfo;

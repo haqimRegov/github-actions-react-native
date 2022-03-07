@@ -334,6 +334,7 @@ export const english = {
       LABEL_TRANSACTION_DATE: "Transaction Date",
       LABEL_TRANSACTION_TIME: "Transaction Time",
       LABEL_TYPE: "Type",
+      LABEL_UTMC: "UTMC",
     },
     DASHBOARD_ORDER_SUMMARY: {
       TAB_ORDER_DETAILS: "Order Details",
@@ -911,6 +912,8 @@ export const english = {
       LABEL_ACCOUNT_TYPE: "Account Type",
       LABEL_ACCOUNT: "Account",
       LABEL_ADD_PAYMENT: "Add Payment Info",
+      LABEL_ADD_EPF_DETAILS: "Add EPF Details",
+      LABEL_ADD_RECURRING_INFO: "Add Recurring Info",
       LABEL_ADDED_INFO: "Added Payment Info:",
       LABEL_ADDED_PAYMENT: "Added Payment Info",
       LABEL_AMOUNT: "Amount",

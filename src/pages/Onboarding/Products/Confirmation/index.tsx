@@ -37,7 +37,7 @@ const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
 export interface ProductConfirmationProps {
   accountType: TypeAccountChoices;
   investmentDetails: IProductSales[];
-  multiUtmc: boolean;
+  multiUtmc?: boolean;
   selectedFunds: IProduct[];
   setFixedBottomShow: (toggle: boolean) => void;
   setInvestmentDetails: (fundSales: IProductSales[]) => void;

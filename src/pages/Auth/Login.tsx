@@ -82,7 +82,8 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
         const { data, error } = response;
         if (error === null) {
           if (data !== null) {
-            const { agentId, branch, email, events, inboxCount, isExpired, licenseCode, licenseType, name, rank } = data.result;
+            const { agentId, branch, email, events, inboxCount, isExpired, isMultiUtmc, licenseCode, licenseType, name, rank } =
+              data.result;
             await Auth.signIn(inputNRIC, inputPassword);
             if (isExpired === false) {
               props.addGlobal({
@@ -102,6 +103,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                   accessKeyId: data.result.accessKeyId,
                 },
                 events: events && events.length > 0 ? events : undefined,
+                isMultiUtmc: isMultiUtmc,
                 unreadMessages: inboxCount,
               });
               setLoading(false);

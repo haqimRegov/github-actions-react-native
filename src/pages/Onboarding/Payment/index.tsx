@@ -24,7 +24,7 @@ import {
   sw24,
 } from "../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../templates";
-import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../templates/Payment/helpers";
+import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys, handleEPFStructuring } from "../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
 import { parseAmount } from "../../../utils";
 
@@ -87,8 +87,15 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const handleSubmit = async (confirmed?: boolean) => {
     try {
       setLoading(true);
+      const updatedPayments: IPaymentRequired[] = [];
+      if (tempData !== undefined) {
+        tempData.forEach((eachOrder) => {
+          const structuredPayments: IPaymentInfo[] = handleEPFStructuring(eachOrder.payments);
+          updatedPayments.push({ ...eachOrder, payments: structuredPayments });
+        });
+      }
       const paymentOrders = await Promise.all(
-        tempData!.map(async ({ orderNumber, paymentType, payments }: IPaymentRequired) => {
+        updatedPayments.map(async ({ orderNumber, paymentType, payments }: IPaymentRequired) => {
           const payment = await generatePaymentWithKeys(
             payments,
             paymentType,

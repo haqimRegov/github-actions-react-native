@@ -10,7 +10,12 @@ import { getPaymentRequired, submitProofOfPayments } from "../../../../network-a
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
 import { OrderPayment, PaymentPopup } from "../../../../templates";
-import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys } from "../../../../templates/Payment/helpers";
+import {
+  calculateExcess,
+  checkCurrencyCompleted,
+  generatePaymentWithKeys,
+  handleEPFStructuring,
+} from "../../../../templates/Payment/helpers";
 import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanner";
 import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -91,14 +96,14 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       }
       paymentWithDeleted.push(...tempData!.payments);
 
+      const updatedPayments: IPaymentInfo[] = handleEPFStructuring(paymentWithDeleted);
       const payment = await generatePaymentWithKeys(
-        paymentWithDeleted,
+        updatedPayments,
         tempData!.paymentType,
         currentOrder!.orderNumber,
         currentOrder!.clientId,
         "Dashboard",
       );
-
       const paymentOrders: ISubmitProofOfPaymentOrder[] = [
         { orderNumber: tempData!.orderNumber, paymentType: tempData!.paymentType, payments: payment },
       ];

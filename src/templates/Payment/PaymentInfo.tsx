@@ -144,6 +144,8 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     return totalCurrencyPaid - parseAmount(totalInvestment[totalInvestmentIndex].amount) < 0 || eachCurrency.value === payment.currency;
   });
 
+  const fundsPerUtmc = [...new Set(funds.map((eachFund: IOrderInvestment) => eachFund.fundIssuer))];
+
   const paymentFieldProps = { payment: draftPayment, setPayment: setDraftPayment, setViewFile: setViewFile, useOfSurplus: useOfSurplus };
   switch (draftPayment.paymentMethod) {
     case "Cheque":
@@ -178,10 +180,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           // "epfAccountNumber",
           // "transactionDate",
           // "proof",
-        ]) && draftPayment.remark !== "") ===
-        // Array.isArray(draftPayment.epfReferenceNumber) &&
-        // draftPayment.epfReferenceNumber.filter((eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo === "").length === 0
-        false;
+        ]) && draftPayment.remark !== "") === false &&
+        Array.isArray(draftPayment.epfReferenceNo) &&
+        draftPayment.epfReferenceNo.filter((eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo !== "").length !== fundsPerUtmc.length;
       break;
 
     case "Recurring":
@@ -636,11 +637,13 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   }, [matchedSurplus]);
 
   const textContainerStyle: ViewStyle = { ...px(sw4), ...py(sh2), ...border(colorBlue._9, sw05, sw4) };
+  const checkPaymentLabel = payment.paymentType === "Recurring" ? PAYMENT.LABEL_ADD_RECURRING_INFO : PAYMENT.LABEL_ADD_PAYMENT;
+  const checkPaymentLabelEPF = payment.paymentType === "EPF" ? PAYMENT.LABEL_ADD_EPF_DETAILS : checkPaymentLabel;
 
   return (
     <View>
       <View style={{ ...rowCenterVertical, ...px(sw24), backgroundColor: colorGray._1, height: sh56 }}>
-        <Text style={fs16BoldGray6}>{PAYMENT.LABEL_ADD_PAYMENT}</Text>
+        <Text style={fs16BoldGray6}>{checkPaymentLabelEPF}</Text>
         {payment.initialExcess !== undefined && payment.initialExcess !== null && payment.initialExcess.currency === "MYR" ? (
           <Fragment>
             <CustomSpacer isHorizontal={true} space={sw8} />

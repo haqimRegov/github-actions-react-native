@@ -27,6 +27,7 @@ export const generateNewInfo = (
     currency: currencies.value,
     // deleted: false,
     epfReferenceNumber: "",
+    epfReferenceNo: [],
     epfAccountNumber: epfAccountNumber !== null && epfAccountNumber !== undefined ? epfAccountNumber : "",
     frequency: "15th of the month",
     kibBankAccountNumber: kibBank.bankAccountNumber,
@@ -115,6 +116,7 @@ export const generatePaymentRequest = (paymentInfo: IPaymentInfo, customKeys?: T
         "epfAccountNumber",
         "epfReferenceNumber",
         "remark",
+        "utmc",
         ...additionalKeys,
       ]);
       break;
@@ -414,4 +416,34 @@ export const checkCurrencyCompleted = (proofOfPayment: IPaymentRequired, currenc
   return proofOfPayment !== undefined && findIndex !== -1 && proofOfPayment.totalInvestment[findIndex] !== undefined
     ? totalCurrency >= parseAmount(proofOfPayment.totalInvestment[findIndex].amount)
     : false;
+};
+
+export const handleEPFStructuring = (proofOfPayments: IPaymentInfo[]) => {
+  const structuredPayments: IPaymentInfo[] = [];
+  proofOfPayments.forEach((eachPayment: IPaymentInfo) => {
+    if (eachPayment.paymentType === "EPF") {
+      if (eachPayment.epfReferenceNo.length > 1) {
+        eachPayment.epfReferenceNo.forEach((eachEpf: IEpfReferenceNo) => {
+          structuredPayments.push({
+            ...eachPayment,
+            epfReferenceNumber: eachEpf.referenceNo,
+            utmc: eachEpf.utmc,
+            amount: eachEpf.amount.toString(),
+            epfReferenceNo: [],
+          });
+        });
+      } else {
+        structuredPayments.push({
+          ...eachPayment,
+          epfReferenceNumber: eachPayment.epfReferenceNo[0].referenceNo,
+          utmc: eachPayment.epfReferenceNo[0].utmc,
+          amount: eachPayment.epfReferenceNo[0].amount.toString(),
+          epfReferenceNo: [],
+        });
+      }
+    } else {
+      structuredPayments.push({ ...eachPayment, epfReferenceNo: [] });
+    }
+  });
+  return structuredPayments;
 };

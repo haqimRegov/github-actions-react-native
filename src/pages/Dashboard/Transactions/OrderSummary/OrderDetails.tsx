@@ -176,6 +176,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_ACCOUNT, title: payment.epfAccountNumber! },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_REFERENCE, title: payment.epfReferenceNo! },
+                  { label: DASHBOARD_ORDER_DETAILS.LABEL_UTMC, title: payment.utmc! },
                 );
               }
 

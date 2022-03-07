@@ -206,7 +206,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           (eachSurplus: IOrderAmount) =>
             (tempData.isLastOrder === true || eachSurplus.currency !== "MYR") &&
             parseAmount(eachSurplus.amount) !== 0 &&
-            checkCurrencyCompleted(tempData, eachSurplus.currency),
+            (eachSurplus.currency !== "MYR" || checkCurrencyCompleted(tempData, eachSurplus.currency)),
         )
       : [];
   const checkGrandTotal = tempData !== undefined && tempData.paymentType !== "Recurring" ? grandTotal : [];

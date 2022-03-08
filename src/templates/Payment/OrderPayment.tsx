@@ -470,7 +470,10 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   setDeletedPayment(updateDeleted);
                 }
                 // let getPaymentId;
-                let getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
+                let getPaymentId =
+                  updatedPayments[index].excess !== undefined && updatedPayments[index].excess !== null
+                    ? updatedPayments[index].paymentId
+                    : undefined;
                 let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
                 const checkIfCta = updatedPayments[index].ctaParent !== undefined ? updatedPayments[index].paymentId : undefined;
                 if (checkIfCta !== undefined) {
@@ -491,6 +494,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 let checkIsEditable = {};
                 const updatedPayments = cloneDeep(payments);
                 const duplicatePayments = cloneDeep(payments);
+                const currentAvailableBalance = cloneDeep(applicationBalance);
 
                 const updatedDeletedPayments = [...deletedPayment];
                 if (
@@ -672,8 +676,13 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 // check if existing surplus parent and delete all child if parent got updated
                 const findExistingSurplusParent =
-                  value.excess !== undefined && value.parent !== undefined
-                    ? applicationBalance.findIndex((bal) => bal.parent === value.parent)
+                  (value.excess !== undefined && value.excess !== null && value.parent !== undefined) ||
+                  (duplicatePayments[index].parent !== undefined &&
+                    duplicatePayments[index].excess !== undefined &&
+                    duplicatePayments[index].excess !== null)
+                    ? currentAvailableBalance.findIndex(
+                        (bal) => bal.parent === value.parent || bal.parent === duplicatePayments[index].parent,
+                      )
                     : -1;
                 const checkIfUtilised =
                   findExistingSurplusParent !== -1 ? applicationBalance[findExistingSurplusParent].utilised!.length > 0 : false;
@@ -689,7 +698,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   getPaymentId = checkIfCta;
                   mode = "cta";
                 }
-
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update", mode: mode } : undefined;
                 const surplusUuid =
@@ -700,6 +708,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const checkSurplusAmountChanged =
                   duplicatePayments[index].amount !== updatedPayments[index].amount &&
                   updatedPayments[index].excess !== undefined &&
+                  updatedPayments[index].excess !== null &&
                   updatedPayments[index].excess?.amount !== "";
                 const newPayment = updatedPayments[index];
 

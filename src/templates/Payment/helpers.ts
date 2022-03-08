@@ -1,8 +1,8 @@
 import moment from "moment";
 
-import { DICTIONARY_KIB_BANK_ACCOUNTS, ERRORS } from "../../data/dictionary";
+import { DICTIONARY_KIB_BANK_ACCOUNTS, ERROR, ERRORS } from "../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../integrations";
-import { deleteKey, extractKey, parseAmount, parseAmountToString } from "../../utils";
+import { deleteKey, extractKey, isAlphaNumeric, isAmount, isNumber, parseAmount, parseAmountToString } from "../../utils";
 
 export const generateNewInfo = (
   paymentType: TypePaymentType,
@@ -55,6 +55,10 @@ export const generateNewInfo = (
     tag: undefined,
     usePreviousRecurring: undefined,
     utilised: undefined,
+
+    ctaTag: undefined,
+    ctaParent: undefined,
+    ctaUsedBy: undefined,
   };
 
   return info;
@@ -233,19 +237,34 @@ export const generatePaymentWithKeys = async (
             if (paymentInfo.parent !== undefined) {
               dynamicKeys.push("parent");
             }
+            if (paymentInfo.ctaParent !== undefined) {
+              dynamicKeys.push("ctaParent");
+            }
             if (paymentInfo.lastAmountUpdate !== undefined) {
               dynamicKeys.push("lastAmountUpdate");
             }
             if (paymentInfo.action !== undefined) {
               dynamicKeys.push("action");
             }
+            if (
+              paymentInfo.tag === undefined &&
+              paymentInfo.ctaTag === undefined &&
+              paymentInfo.paymentMethod !== "EPF" &&
+              paymentInfo.paymentMethod !== "Recurring"
+            ) {
+              dynamicKeys.push("proof");
+            }
             if (paymentInfo.tag !== undefined) {
               if (paymentInfo.action === undefined) {
                 dynamicKeys.push("tag");
               }
-            } else {
-              dynamicKeys.push("proof");
             }
+            if (paymentInfo.ctaTag !== undefined) {
+              if (paymentInfo.action === undefined) {
+                dynamicKeys.push("ctaTag");
+              }
+            }
+
             const modifiedPaymentInfo: IPaymentInfo = {
               ...paymentInfo,
               bankAccountName:
@@ -253,6 +272,7 @@ export const generatePaymentWithKeys = async (
                   ? paymentInfo.combinedBankAccountName
                   : paymentInfo.bankAccountName,
             };
+
             const cleanPaymentInfo = generatePaymentRequest(modifiedPaymentInfo, dynamicKeys.length > 0 ? dynamicKeys : undefined);
 
             const temporaryReference =
@@ -265,6 +285,14 @@ export const generatePaymentWithKeys = async (
                 ? { tag: deleteKey(paymentInfo.tag, ["orderNumber"]) }
                 : {};
 
+            const optimizedCtaTag =
+              paymentInfo.ctaTag !== undefined &&
+              channel === "Dashboard" &&
+              paymentInfo.action === undefined &&
+              orderNumber !== paymentInfo.orderNumber
+                ? { ctaTag: deleteKey(paymentInfo.ctaTag, ["orderNumber"]) }
+                : {};
+
             const updatedPaymentInfo = {
               ...cleanPaymentInfo,
               amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
@@ -272,6 +300,7 @@ export const generatePaymentWithKeys = async (
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               proof: paymentInfo.tag !== undefined ? undefined : proofWithUrl, // proof not needed for use of surplus
               ...optimizedTag,
+              ...optimizedCtaTag,
               ...temporaryReference, // TODO temporary
             };
 
@@ -290,7 +319,6 @@ export const generatePaymentWithKeys = async (
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-          // eslint-disable-next-line no-console
           return ERRORS.storage;
         }
       }),
@@ -446,4 +474,52 @@ export const handleEPFStructuring = (proofOfPayments: IPaymentInfo[]) => {
     }
   });
   return structuredPayments;
+};
+
+export const validateAmount = (payment: IPaymentInfo) => {
+  const cleanValue = payment.amount.replace(/[,]/g, "");
+
+  if (isAmount(cleanValue) === false) {
+    return ERROR.INVESTMENT_INVALID_AMOUNT;
+  }
+  if (parseAmount(cleanValue) === 0) {
+    return ERROR.INVESTMENT_MIN_AMOUNT;
+  }
+
+  return undefined;
+};
+
+export const validateCtaNumber = (payment: IPaymentInfo) => {
+  return isAlphaNumeric(payment.clientTrustAccountNumber!) === false || payment.clientTrustAccountNumber.length !== 9
+    ? ERROR.INVALID_CTA_NUMBER
+    : undefined;
+};
+
+export const validateChequeNumber = (payment: IPaymentInfo) => {
+  return isNumber(payment.checkNumber!) === false ? ERROR.INVALID_CHEQUE_NUMBER : undefined;
+};
+
+export const updateCtaUsedBy = (latestCtaDetails: TypeCTADetails[], latestPayment: IPaymentInfo) => {
+  // check if current CTA POP is already an existing Use of CTA and if it's in the parent ctaUsedBy
+  const findOldParentCta = latestCtaDetails.findIndex((findCta: TypeCTADetails) => {
+    const checkInUsedBy =
+      findCta.ctaUsedBy !== undefined ? findCta.ctaUsedBy.findIndex((findOldUsedBy) => findOldUsedBy.uuid === latestPayment.paymentId) : -1;
+    return checkInUsedBy !== -1;
+  });
+
+  // existing parent CTA has been found
+  if (findOldParentCta !== -1) {
+    const copyCtaUsedBy =
+      "ctaUsedBy" in latestCtaDetails[findOldParentCta] && latestCtaDetails[findOldParentCta].ctaUsedBy !== undefined
+        ? [...latestCtaDetails[findOldParentCta].ctaUsedBy!]
+        : [];
+
+    // remove CTA child from ctaUsedBy
+    // TODO Scenario: Edit CTA Child to CTA Parent (remove child in ctaUsedBy of the old parent)
+    const updatedCtaUsedBy = copyCtaUsedBy.filter((oldUsedBy) => oldUsedBy.uuid !== latestPayment.paymentId);
+
+    return { index: findOldParentCta, ctaUsedBy: updatedCtaUsedBy };
+  }
+
+  return undefined;
 };

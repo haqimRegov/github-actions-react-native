@@ -144,14 +144,15 @@ declare interface IPaymentInfo {
   usePreviousRecurring?: boolean;
   utilised?: IUtilisedAmount[]; // utilised amount of an available balance
   utmc: string; // for multiple EPF
+
+  ctaParent: number | string | undefined; // id given to payment info with cta
+  ctaTag?: { uuid: string; orderNumber?: string }; // if use of CTA, uuid is the parent of the surplus payment info
+  ctaUsedBy?: { uuid: string; orderNumber?: string }[]; // ctaTag of CTA Child
 }
 
 declare type TPaymentInfoKey = keyof IPaymentInfo;
 
-declare interface ICTADetails {
-  clientName: string;
-  clientTrustAccountNumber: string;
-}
+declare type TypeCTADetails = Partial<IPaymentInfo>;
 
 declare interface IRecurringInfo {
   bankAccountName: string;
@@ -177,7 +178,7 @@ declare interface IPaymentRequired {
   // balance: IPaymentBalance[];
   completedSurplusCurrencies?: string[];
   createdOn: string;
-  ctaDetails: ICTADetails[];
+  ctaDetails: TypeCTADetails[];
   epfAccountNumber: string | null;
   funds: IOrderInvestment[];
   isLastOrder?: boolean;
@@ -192,7 +193,10 @@ declare interface IPaymentRequired {
   payments: IPaymentInfo[];
 }
 
+declare type TypeSetProofOfPaymentMode = "cta" | "surplus" | undefined;
+
 declare interface ISetProofOfPaymentAction {
   paymentId: string;
   option: "update" | "delete";
+  mode: TypeSetProofOfPaymentMode;
 }

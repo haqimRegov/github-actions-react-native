@@ -14,10 +14,12 @@ import {
   FileViewer,
   IconButton,
   LabeledTitle,
+  NewActionButtonProps,
+  NewActionButtons,
   NewDropdown,
   PromptModal,
+  TextSpaceArea,
 } from "../../components";
-import { NewActionButtonProps, NewActionButtons } from "../../components/Views/NewActionButtons";
 import { Language } from "../../constants";
 import { DICTIONARY_KIB_BANK_ACCOUNTS, ERROR } from "../../data/dictionary";
 import {
@@ -28,6 +30,7 @@ import {
   colorGray,
   disabledOpacity6,
   fs10RegBlue9,
+  fs12RegGray5,
   fs12RegWhite1,
   fs16BoldBlue1,
   fs16BoldGray6,
@@ -45,6 +48,7 @@ import {
   sh80,
   sw05,
   sw12,
+  sw16,
   sw24,
   sw240,
   sw360,
@@ -55,9 +59,9 @@ import {
   sw8,
 } from "../../styles";
 import { formatAmount, isAmount, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
-import { generateNewInfo, getAmount } from "./helpers";
+import { generateNewInfo, getAmount, validateCtaNumber } from "./helpers";
 import { NewCheque, NewCTA, NewEPF, NewOnlineBanking, NewRecurring } from "./Method";
-import { IPaymentSurplusRef, PaymentSurplus } from "./Surplus";
+import { IPaymentCardStackRef, PaymentCardStack } from "./Surplus";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -67,6 +71,7 @@ interface PaymentInfoProps {
   availableBalance: IPaymentInfo[];
   completedSurplusCurrencies?: string[];
   createdOn: Date;
+  ctaDetails?: TypeCTADetails[];
   currencies: TypeCurrencyLabelValue[];
   currentPayments: IPaymentInfo[];
   deletedPayment: IPaymentInfo[];
@@ -77,6 +82,7 @@ interface PaymentInfoProps {
   handleRemove: () => void;
   handleSave: (value: IPaymentInfo, additional?: boolean) => void;
   handleUnsaved: (state: number) => void;
+  localCtaDetails: TypeCTADetails[] | undefined;
   payment: IPaymentInfo;
   pendingBalance: IOrderAmount[];
   recurringDetails?: IRecurringDetails;
@@ -86,8 +92,9 @@ interface PaymentInfoProps {
 }
 
 export interface IPaymentError {
-  amount?: string;
-  checkNumber?: string;
+  amount: string | undefined;
+  checkNumber: string | undefined;
+  ctaNumber: string | undefined;
 }
 
 export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
@@ -96,6 +103,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   availableBalance,
   completedSurplusCurrencies,
   createdOn,
+  ctaDetails,
   currencies,
   currentPayments,
   epfAccountNumber,
@@ -105,22 +113,24 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   handleRemove,
   handleSave,
   handleUnsaved,
+  localCtaDetails,
   payment,
   pendingBalance,
   recurringDetails,
   setAvailableBalance,
   totalInvestment,
 }: PaymentInfoProps) => {
-  const surplusRef = useRef<IPaymentSurplusRef>();
+  const surplusRef = useRef<IPaymentCardStackRef>();
   const [draftPayment, setDraftPayment] = useState<IPaymentInfo>(payment);
   const [draftAvailableBalance, setDraftAvailableBalance] = useState<IPaymentInfo[]>(cloneDeep(availableBalance));
-  const [duplicatePrompt, setDuplicatePrompt] = useState<"with-excess" | "no-excess" | undefined>(undefined);
+  const [duplicatePrompt, setDuplicatePrompt] = useState<"with-excess" | "no-excess" | "same-cta" | undefined>(undefined);
   const [deletePrompt, setDeletePrompt] = useState<boolean>(false);
   const [updatePrompt, setUpdatePrompt] = useState<"add" | "save" | undefined>(undefined);
-  const [error, setError] = useState<IPaymentError>({ amount: undefined, checkNumber: undefined });
+  const [error, setError] = useState<IPaymentError>({ amount: undefined, checkNumber: undefined, ctaNumber: undefined });
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
   const isPaymentEqual = isObjectEqual(draftPayment, payment);
   const useOfSurplus = draftPayment.tag !== undefined;
+  const useOfCta = draftPayment.ctaTag !== undefined;
 
   let paymentField: JSX.Element;
   let saveDisabled = true;
@@ -149,7 +159,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const paymentFieldProps = { payment: draftPayment, setPayment: setDraftPayment, setViewFile: setViewFile, useOfSurplus: useOfSurplus };
   switch (draftPayment.paymentMethod) {
     case "Cheque":
-      paymentField = <NewCheque {...paymentFieldProps} createdOn={createdOn} error={error} setError={setError} />;
+      paymentField = (
+        <NewCheque {...paymentFieldProps} createdOn={createdOn} error={error} setError={setError} useOfSurplus={useOfSurplus} />
+      );
       saveDisabled =
         (validateObject(draftPayment, [
           // "paymentMethod",
@@ -215,7 +227,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       break;
 
     case "Client Trust Account (CTA)":
-      paymentField = <NewCTA accountNames={accountNames} payment={draftPayment} setPayment={setDraftPayment} />;
+      paymentField = <NewCTA {...paymentFieldProps} accountNames={accountNames} error={error} setError={setError} />;
       saveDisabled =
         (validateObject(draftPayment, [
           // "paymentMethod",
@@ -234,7 +246,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       break;
 
     default:
-      paymentField = <NewOnlineBanking {...paymentFieldProps} createdOn={createdOn} />;
+      paymentField = <NewOnlineBanking {...paymentFieldProps} createdOn={createdOn} useOfSurplus={useOfSurplus} />;
       saveDisabled =
         (validateObject(draftPayment, [
           // "paymentMethod",
@@ -250,7 +262,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       break;
   }
 
-  const withInputError = error.amount !== undefined || error.checkNumber !== undefined;
+  const withInputError = error.amount !== undefined || error.checkNumber !== undefined || error.ctaNumber !== undefined;
 
   // input error on blur
   if (withInputError === true) {
@@ -263,6 +275,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const currencyInvestedAmount = getAmount(totalInvestment, draftPayment.currency as TypeCurrency);
   const totalAmount = currencyTotalPaid + currentAmount;
 
+  // for CTA payment
+  const pendingAmount = currencyInvestedAmount - currencyTotalPaid;
+
   const otherCurrencyPendingBalance = pendingBalance.filter((amount) => amount.currency !== draftPayment.currency);
 
   if (totalAmount >= currencyInvestedAmount && otherCurrencyPendingBalance.length === 0) {
@@ -272,19 +287,38 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const findSurplusParent = draftAvailableBalance.findIndex((bal) => bal.parent === draftPayment.parent);
   const balanceSharedTo =
     findSurplusParent !== -1 ? draftAvailableBalance[findSurplusParent].utilised!.map((util) => util.orderNumber) : [];
-  const savedSharedTo = draftPayment.sharedTo !== undefined ? draftPayment.sharedTo : [];
+  const savedSharedTo = draftPayment.sharedTo !== undefined && draftPayment.sharedTo !== null ? draftPayment.sharedTo : [];
   const surplusSharedTo = savedSharedTo.length > 0 ? savedSharedTo : balanceSharedTo;
   const sharedToTitle = surplusSharedTo.join(", ");
 
-  const removePromptTitle =
-    draftPayment.parent !== undefined && surplusSharedTo.length > 0
-      ? `${PAYMENT.PROMPT_SUBTITLE_REMOVE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}`
-      : `${PAYMENT.PROMPT_SUBTITLE_REMOVE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+  const findCtaParent = localCtaDetails !== undefined ? localCtaDetails.findIndex((cta) => cta.ctaParent === draftPayment.ctaParent) : -1;
+  const findOldCtaParent =
+    findCtaParent === -1 && payment.ctaParent !== undefined && localCtaDetails !== undefined
+      ? localCtaDetails.findIndex((cta) => cta.ctaParent === payment.ctaParent)
+      : -1;
 
-  const updatePromptTitle =
-    draftPayment.parent !== undefined && surplusSharedTo.length > 0
-      ? `${PAYMENT.PROMPT_SUBTITLE_UPDATE} ${PAYMENT.PROMPT_SUBTITLE_SURPLUS}`
-      : `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+  const ctaParentIndex = findCtaParent !== -1 ? findCtaParent : findOldCtaParent;
+  const ctaBalanceSharedTo = ctaParentIndex !== -1 ? localCtaDetails![ctaParentIndex].ctaUsedBy!.map((usedBy) => usedBy.orderNumber!) : [];
+  const ctaSavedSharedTo = draftPayment.sharedTo !== undefined && draftPayment.sharedTo !== null ? draftPayment.sharedTo : [];
+  const combineCtaSharedTo = ctaSavedSharedTo.concat(ctaBalanceSharedTo);
+  const uniqueCtaSharedTo = combineCtaSharedTo.filter((orderNum, index) => combineCtaSharedTo.indexOf(orderNum) === index);
+
+  const ctaSharedToTitle = uniqueCtaSharedTo.join(", ");
+
+  let removePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_REMOVE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+  let updatePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`;
+
+  if (surplusSharedTo.length > 0) {
+    removePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_REMOVE}\n${PAYMENT.PROMPT_SUBTITLE_SURPLUS}`;
+    updatePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n${PAYMENT.PROMPT_SUBTITLE_SURPLUS}`;
+  }
+
+  if (uniqueCtaSharedTo.length > 0) {
+    removePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_REMOVE}\n${PAYMENT.PROMPT_SUBTITLE_DELETE_CTA}`;
+    updatePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n${PAYMENT.PROMPT_SUBTITLE_DELETE_CTA}`;
+  }
+
+  const ctaUseSubtitle = `\n${PAYMENT.PROMPT_SUBTITLE_USE_CTA}`;
 
   // check for existing surplus from reference or cheque number
   const findSameSurplus = draftAvailableBalance.findIndex((bal) => {
@@ -301,7 +335,21 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     );
   });
 
+  // check for existing cta from cta number and client name
+  const findSameCta =
+    ctaDetails !== undefined
+      ? ctaDetails.findIndex((cta) => {
+          const sameCtaNumber =
+            draftPayment.clientTrustAccountNumber !== "" && draftPayment.clientTrustAccountNumber === cta.clientTrustAccountNumber;
+          const sameClientName = draftPayment.clientName !== "" && draftPayment.clientName === cta.clientName;
+          const checkClientName = accountNames.length > 1 ? sameClientName : true;
+
+          return draftPayment.paymentMethod === "Client Trust Account (CTA)" && sameCtaNumber === true && checkClientName === true;
+        })
+      : -1;
+
   const matchedSurplus: IPaymentInfo | undefined = findSameSurplus !== -1 ? draftAvailableBalance[findSameSurplus] : undefined;
+  const matchedCta: TypeCTADetails | undefined = findSameCta !== -1 ? ctaDetails![findSameCta] : undefined;
 
   let availableExcess = 0;
 
@@ -353,22 +401,28 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     setDraftPayment(updatedPayments);
   };
 
-  const validateAmount = (value: string) => {
+  const validateAmount = (value: string, paymentMethod: TypePaymentMethod) => {
     const cleanValue = value.replace(/[,]/g, "");
     const amount: IAmountValueError = { value: cleanValue, error: undefined };
     if (isAmount(cleanValue) === false) {
       return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
     }
     if (parseAmount(cleanValue) === 0) {
-      return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT };
+      return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT, value: formatAmount(cleanValue) };
+    }
+    if (paymentMethod === "Client Trust Account (CTA)" && parseAmount(cleanValue) > pendingAmount) {
+      return { ...amount, error: ERROR.INVESTMENT_MAX_AMOUNT };
     }
     return { ...amount, value: formatAmount(cleanValue) };
   };
 
   const checkAmount = () => {
-    const amount = validateAmount(draftPayment.amount);
+    const amount = validateAmount(draftPayment.amount, draftPayment.paymentMethod);
     setError({ ...error, amount: amount.error });
+    // set formatted amount on blur
     setAmount(amount.value);
+
+    return amount;
   };
 
   const setPaymentMethod = (value: string) => {
@@ -394,10 +448,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   };
 
   const paymentToBeSaved = (latestPayment: IPaymentInfo) => {
-    const tempPayments = cloneDeep(currentPayments);
-    const findIndexLatestPayment = tempPayments.findIndex(
-      (eachPayment: IPaymentInfo) => eachPayment.paymentId === latestPayment.paymentId && latestPayment.paymentId !== undefined,
-    );
     // Total investment - the total amount of POPs for that currency
     const excessAmount = totalAmount > currencyInvestedAmount ? totalAmount - currencyInvestedAmount : 0;
     let id = latestPayment.paymentId;
@@ -416,6 +466,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       new: undefined,
       parent: excessAmount > 0 ? id : undefined,
       paymentId: id,
+      ctaParent: latestPayment.paymentMethod === "Client Trust Account (CTA)" && latestPayment.ctaTag === undefined ? id : undefined,
+      // always setting to empty array if it's a CTA Parent and removing the ctaUsedBy if it's Non-CTA or a CTA Child
+      ctaUsedBy: latestPayment.paymentMethod === "Client Trust Account (CTA)" && latestPayment.ctaTag === undefined ? [] : undefined,
       saved: true,
     };
     return updatedPayment;
@@ -461,14 +514,24 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const saveUpdatedInfo = (add?: boolean) => {
     const cleanPayment = paymentToBeSaved(draftPayment);
-    updateAvailableBalance(cleanPayment);
-    handleSave(cleanPayment, add);
+    const amount = checkAmount();
+    const ctaNumberError = cleanPayment.paymentMethod === "Client Trust Account (CTA)" ? validateCtaNumber(cleanPayment) : undefined;
+    if (ctaNumberError !== undefined) {
+      setError({ ...error, ctaNumber: ctaNumberError });
+    }
+    if (amount.error === undefined && ctaNumberError === undefined) {
+      updateAvailableBalance(cleanPayment);
+      handleSave({ ...cleanPayment, amount: amount.value }, add);
+    }
   };
 
   const handleSaveInfo = () => {
     // TODO do not show prompt and do not update available balance if no changes are made
     // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
     if (balanceSharedTo.length > 0 && draftPayment.isEditable !== false) {
+      return setUpdatePrompt("save");
+    }
+    if (uniqueCtaSharedTo.length > 0 && draftPayment.isEditable !== false) {
       return setUpdatePrompt("save");
     }
     return saveUpdatedInfo();
@@ -478,6 +541,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     // TODO do not show prompt and do not update available balance if no changes are made
     // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
     if (balanceSharedTo.length > 0) {
+      return setUpdatePrompt("add");
+    }
+    if (uniqueCtaSharedTo.length > 0 && draftPayment.isEditable !== false) {
       return setUpdatePrompt("add");
     }
     return saveUpdatedInfo(true);
@@ -513,13 +579,21 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const handleCancelDuplicate = async () => {
     setDuplicatePrompt(undefined);
-    setDraftPayment({ ...draftPayment, referenceNumber: "", checkNumber: "" });
+    setDraftPayment({ ...draftPayment, referenceNumber: "", checkNumber: "", clientTrustAccountNumber: "" });
   };
 
   const handleUseSurplus = () => {
     if (surplusRef.current !== undefined && matchedSurplus !== undefined) {
       surplusRef.current.handleUseSurplus(matchedSurplus);
-      setError({ amount: undefined, checkNumber: undefined });
+      setError({ amount: undefined, checkNumber: undefined, ctaNumber: undefined });
+    }
+    setDuplicatePrompt(undefined);
+  };
+
+  const handleUseCta = () => {
+    if (surplusRef.current !== undefined && matchedCta !== undefined) {
+      surplusRef.current.handleUseCta(matchedCta as IPaymentInfo);
+      setError({ amount: undefined, checkNumber: undefined, ctaNumber: undefined });
     }
     setDuplicatePrompt(undefined);
   };
@@ -544,17 +618,26 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       label={PAYMENT.LABEL_PAYMENT_METHOD}
       value={draftPayment.paymentMethod}
     />,
-    <CustomTextInput
-      disabled={draftPayment.paymentMethod! === "EPF"}
-      error={error.amount}
-      inputPrefix={draftPayment.currency}
-      keyboardType="numeric"
-      label={PAYMENT.LABEL_AMOUNT}
-      onBlur={checkAmount}
-      onChangeText={setAmount}
-      placeholder="0.00"
-      value={draftPayment.amount}
-    />,
+    <View>
+      <CustomTextInput
+        disabled={draftPayment.paymentMethod! === "EPF"}
+        error={error.amount}
+        inputPrefix={draftPayment.currency}
+        keyboardType="numeric"
+        label={PAYMENT.LABEL_AMOUNT}
+        onBlur={checkAmount}
+        onChangeText={setAmount}
+        placeholder="0.00"
+        value={draftPayment.amount}
+      />
+      {draftPayment.paymentMethod === "Client Trust Account (CTA)" && error.amount === undefined ? (
+        <TextSpaceArea
+          spaceToTop={sh4}
+          style={{ ...fs12RegGray5, ...px(sw16) }}
+          text={`Max amount ${draftPayment.currency} ${formatAmount(pendingAmount.toString())}`}
+        />
+      ) : null}
+    </View>,
   ];
 
   const epfBaseItems = [
@@ -579,6 +662,15 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       style={{ width: sw360 }}
     />,
   ];
+
+  if (useOfCta === true) {
+    baseItems.splice(
+      0,
+      1,
+      <LabeledTitle label={PAYMENT.LABEL_PAYMENT_METHOD} spaceToLabel={sh4} title={draftPayment.paymentMethod} style={{ width: sw360 }} />,
+    );
+  }
+
   const checkRecurringItems = draftPayment.paymentType === "Recurring" ? [] : baseItems;
   const checkBaseItems = draftPayment.paymentType === "EPF" ? epfBaseItems : checkRecurringItems;
 
@@ -636,6 +728,18 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchedSurplus]);
 
+  // effect to check for existing cta using cta number
+  useEffect(() => {
+    if (
+      matchedCta !== undefined &&
+      (draftPayment.ctaTag === undefined || (draftPayment.ctaTag !== undefined && draftPayment.ctaTag.uuid !== matchedCta.ctaParent)) &&
+      (matchedCta.paymentId !== draftPayment.paymentId || matchedCta.paymentId === undefined)
+    ) {
+      setDuplicatePrompt("same-cta");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchedCta]);
+
   const textContainerStyle: ViewStyle = { ...px(sw4), ...py(sh2), ...border(colorBlue._9, sw05, sw4) };
   const checkPaymentLabel = payment.paymentType === "Recurring" ? PAYMENT.LABEL_ADD_RECURRING_INFO : PAYMENT.LABEL_ADD_PAYMENT;
   const checkPaymentLabelEPF = payment.paymentType === "EPF" ? PAYMENT.LABEL_ADD_EPF_DETAILS : checkPaymentLabel;
@@ -667,16 +771,15 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           </CustomTooltip>
         )}
       </View>
-      {draftPayment.paymentType === "Cash" &&
-      draftPayment.paymentMethod !== "Client Trust Account (CTA)" &&
-      payment.isEditable !== false ? (
-        <PaymentSurplus
+      {draftPayment.paymentType === "Cash" && payment.isEditable !== false ? (
+        <PaymentCardStack
           accountNames={accountNames}
           availableBalance={draftAvailableBalance}
           completedSurplusCurrencies={completedSurplusCurrencies}
+          ctaDetails={ctaDetails}
           existingPaidAmount={existingPaidAmount}
-          handleUnsaved={handleUnsaved}
           handleEditSaved={handleEditSaved}
+          handleUnsaved={handleUnsaved}
           oldPayment={payment}
           payment={draftPayment}
           pendingCurrencies={pendingCurrencies}
@@ -718,9 +821,15 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         titleStyle={promptStyle}
         visible={deletePrompt}>
         <Fragment>
-          {draftPayment.parent !== undefined && surplusSharedTo.length > 0 ? (
+          {surplusSharedTo.length > 0 ? (
             <View style={promptStyle}>
               <Text style={fs16BoldGray6}>{`${sharedToTitle}.`}</Text>
+              <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`}</Text>
+            </View>
+          ) : null}
+          {uniqueCtaSharedTo.length > 0 ? (
+            <View style={promptStyle}>
+              <Text style={fs16BoldGray6}>{`${ctaSharedToTitle}.`}</Text>
               <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM}`}</Text>
             </View>
           ) : null}
@@ -734,10 +843,17 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         labelStyle={promptStyle}
         visible={updatePrompt !== undefined}>
         <Fragment>
-          {draftPayment.parent !== undefined && surplusSharedTo.length > 0 ? (
+          {surplusSharedTo.length > 0 ? (
             <View style={promptStyle}>
               <Text style={fs16RegGray6}>{updatePromptTitle}</Text>
               <Text style={fs16BoldGray6}>{`${sharedToTitle}.`}</Text>
+              <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM_UPDATE}`}</Text>
+            </View>
+          ) : null}
+          {uniqueCtaSharedTo.length > 0 ? (
+            <View style={promptStyle}>
+              <Text style={fs16RegGray6}>{updatePromptTitle}</Text>
+              <Text style={fs16BoldGray6}>{`${ctaSharedToTitle}.`}</Text>
               <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_CONFIRM_UPDATE}`}</Text>
             </View>
           ) : null}
@@ -766,6 +882,25 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
           <Text style={fs16RegGray6}>{PAYMENT.PROMPT_SUBTITLE_MATCHES}</Text>
           <Text style={fs16BoldGray6}>{noExcessPromptTitle}</Text>
           <Text style={fs16RegGray6}>{`\n${PAYMENT.PROMPT_SUBTITLE_INSERT}`}</Text>
+        </View>
+      </PromptModal>
+      <PromptModal
+        handleCancel={handleCancelDuplicate}
+        handleContinue={handleUseCta}
+        label={PAYMENT.PROMPT_TITLE_DUPLICATE_CTA}
+        labelContinue={PAYMENT.BUTTON_YES}
+        labelStyle={promptStyle}
+        visible={duplicatePrompt === "same-cta"}>
+        <View style={promptStyle}>
+          <Text style={fs16RegGray6}>
+            {PAYMENT.PROMPT_SUBTITLE_CTA}
+            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta!.clientTrustAccountNumber : ""} `}</Text>
+            {PAYMENT.PROMPT_SUBTITLE_MATCHES_CTA}
+            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta!.orderNumber : ""} `}</Text>
+            {PAYMENT.PROMPT_SUBTITLE_CLIENT_NAME}
+            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta!.clientName : ""}.`}</Text>
+            {ctaUseSubtitle}
+          </Text>
         </View>
       </PromptModal>
       {viewFile !== undefined ? (

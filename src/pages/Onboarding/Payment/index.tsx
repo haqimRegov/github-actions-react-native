@@ -47,6 +47,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
   const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
   const [localRecurringDetails, setLocalRecurringDetails] = useState<IRecurringDetails | undefined>(undefined);
+  const [localCtaDetails, setLocalCtaDetails] = useState<TypeCTADetails[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
   const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
@@ -243,20 +244,25 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 const setProofOfPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
                   let updatedProofOfPayments: IPaymentRequired[] = [...tempData];
                   updatedProofOfPayments[index] = { ...updatedProofOfPayments[index], ...value };
-                  if (action !== undefined && action.paymentId !== undefined) {
+                  if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined) {
+                    const tagKey = action.mode === "surplus" ? "tag" : "ctaTag";
+                    const parentKey = action.mode === "surplus" ? "parent" : "ctaParent";
                     const updatedPOP = updatedProofOfPayments.map((eachOrder) => {
                       const filteredPayments = eachOrder.payments.filter((eachPOP) => {
                         const deleteCondition =
-                          (eachPOP.tag === undefined && eachPOP.parent !== action.paymentId) ||
-                          (eachPOP.tag !== undefined && eachPOP.tag.uuid !== action.paymentId);
+                          (eachPOP[tagKey] === undefined && eachPOP[parentKey] !== action.paymentId) ||
+                          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
                         const updateCondition =
-                          (eachPOP.tag === undefined && eachPOP.parent === action.paymentId) ||
-                          (eachPOP.tag === undefined && eachPOP.paymentId !== action.paymentId) ||
-                          (eachPOP.tag !== undefined && eachPOP.tag.uuid !== action.paymentId);
+                          (eachPOP[tagKey] === undefined && eachPOP[parentKey] === action.paymentId) ||
+                          (eachPOP[tagKey] === undefined && eachPOP.paymentId !== action.paymentId) ||
+                          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId) ||
+                          (action.mode === "cta" &&
+                            eachPOP[tagKey] === undefined &&
+                            eachPOP[parentKey] === undefined &&
+                            eachPOP.paymentId === action.paymentId);
 
                         return action.option === "delete" ? deleteCondition : updateCondition;
                       });
-
                       return {
                         ...eachOrder,
                         status: filteredPayments.length === 0 ? "Pending Payment" : eachOrder.status,
@@ -287,12 +293,14 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           applicationBalance={tempApplicationBalance}
                           deleteCount={deleteCount}
                           deletedPayment={tempDeletedPayment}
+                          localCtaDetails={localCtaDetails}
                           localRecurringDetails={localRecurringDetails}
                           proofOfPayment={proofOfPayment}
                           setActiveOrder={setActiveOrder}
                           setApplicationBalance={handleApplicationBalance}
                           setDeleteCount={setDeleteCount}
                           setDeletedPayment={setTempDeletedPayment}
+                          setLocalCtaDetails={setLocalCtaDetails}
                           setLocalRecurringDetails={setLocalRecurringDetails}
                           setProofOfPayment={setProofOfPayment}
                           setSavedChangesToast={setSavedChangesToast}

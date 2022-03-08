@@ -5,7 +5,7 @@ declare interface IGetPaymentRequiredRequest {
 declare interface IGetPaymentRequiredResult {
   allowedRecurringType: string[];
   createdOn: string;
-  ctaDetails: ICTADetails[];
+  ctaDetails: TypeCTADetails[];
   epfAccountNumber: string;
   funds: IOrderInvestment[];
   isLastOrder: boolean;

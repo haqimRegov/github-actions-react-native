@@ -26,7 +26,7 @@ import {
   sh8,
   sw16,
   sw24,
-  sw328,
+  sw360,
 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
@@ -235,11 +235,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}
               />
-              <TextSpaceArea
-                spaceToTop={sh8}
-                style={{ ...fs12RegGray5, ...px(sw16), maxWidth: sw328 }}
-                text={PERSONAL_DETAILS.HINT_SWIFT_CODE}
-              />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
               {item.currency!.length === currencyExtractor.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />

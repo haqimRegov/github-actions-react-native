@@ -12,7 +12,7 @@ interface PaymentProofProps {
 }
 
 export const PaymentProof: FunctionComponent<PaymentProofProps> = ({ payment, setPayment }: PaymentProofProps) => {
-  const { isEditable, paymentMethod, proof, tag } = payment;
+  const { isEditable, paymentMethod, proof, tag, ctaTag } = payment;
 
   const setProof = (value?: FileBase64) => {
     setPayment({ ...payment, proof: value });
@@ -26,7 +26,12 @@ export const PaymentProof: FunctionComponent<PaymentProofProps> = ({ payment, se
 
   return (
     <View style={container}>
-      {paymentMethod! === "EPF" || paymentMethod! === "Recurring" || tag !== undefined || proof === null || isEditable === false ? null : (
+      {paymentMethod! === "EPF" ||
+      paymentMethod! === "Recurring" ||
+      tag !== undefined ||
+      proof === null ||
+      isEditable === false ||
+      ctaTag !== undefined ? null : (
         <Fragment>
           <UploadWithModal
             features={["camera", "gallery", "file"]}

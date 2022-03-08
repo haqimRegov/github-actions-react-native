@@ -43,7 +43,7 @@ import {
 import { AnimationUtils, formatAmount, isObjectEqual, parseAmount } from "../../utils";
 import { OrderOverview } from "../Onboarding/OrderOverview";
 import { AddedInfo } from "./AddedInfo";
-import { generateNewInfo, handleAvailableBalance, handleReduceAmount } from "./helpers";
+import { generateNewInfo, handleAvailableBalance, handleReduceAmount, updateCtaUsedBy } from "./helpers";
 import { PaymentInfo } from "./PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;
@@ -54,12 +54,14 @@ export interface OrderPaymentProps {
   applicationBalance: IPaymentInfo[];
   deleteCount: number;
   deletedPayment: IPaymentInfo[];
+  localCtaDetails: TypeCTADetails[];
   localRecurringDetails?: IRecurringDetails;
   proofOfPayment: IPaymentRequired;
   setActiveOrder: (value: { order: string; fund: string }) => void;
   setApplicationBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
   setDeleteCount: (count: number) => void;
   setDeletedPayment: (value: IPaymentInfo[]) => void;
+  setLocalCtaDetails: (value: TypeCTADetails[]) => void;
   setLocalRecurringDetails?: (value: IRecurringDetails | undefined) => void;
   setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
   setSavedChangesToast: (toggle: boolean) => void;
@@ -78,12 +80,14 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   applicationBalance,
   deleteCount,
   deletedPayment,
+  localCtaDetails,
   localRecurringDetails,
   proofOfPayment,
   setActiveOrder,
   setApplicationBalance,
   setDeleteCount,
   setDeletedPayment,
+  setLocalCtaDetails,
   setLocalRecurringDetails,
   setProofOfPayment,
   setSavedChangesToast,
@@ -428,25 +432,57 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     };
                   }
                 }
-                setApplicationBalance(newAvailableBalance, true);
+                const cloneLocalCtaDetails = cloneDeep(localCtaDetails);
 
-                // delete saved payment
-                if (updatedPayments[index].isEditable === true) {
-                  const updateDeleted = [...deletedPayment];
-                  updateDeleted.push({
-                    ...updatedPayments[index],
-                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
-                  });
-                  setDeletedPayment(updateDeleted);
+                // delete CTA Parent in localCtaDetails
+                if (updatedPayments[index].ctaParent !== undefined) {
+                  const findExistingCtaParent = cloneLocalCtaDetails.findIndex(
+                    (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].paymentId,
+                  );
+                  if (findExistingCtaParent !== -1) {
+                    // TODO Scenario: Remove CTA Parent
+                    cloneLocalCtaDetails.splice(findExistingCtaParent, 1);
+                  }
+
+                  // update CTA Parent ctaUsedBy when removing a CTA Child
+                  // TODO Scenario: Remove CTA Child
+                  if ("ctaTag" in updatedPayments[index] && updatedPayments[index].ctaTag !== undefined) {
+                    const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+
+                    if (latestCtaUsedBy !== undefined) {
+                      cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                    }
+                  }
+
+                  setLocalCtaDetails(cloneLocalCtaDetails);
+
+                  setApplicationBalance(newAvailableBalance, true);
+
+                  // delete saved payment
+                  if (updatedPayments[index].isEditable === true) {
+                    const updateDeleted = [...deletedPayment];
+                    updateDeleted.push({
+                      ...updatedPayments[index],
+                      action: { id: updatedPayments[index].paymentId!, option: "delete" },
+                    });
+                    setDeletedPayment(updateDeleted);
+                  }
+                  // let getPaymentId;
+                  let getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
+                  let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
+                  const checkIfCta = updatedPayments[index].ctaParent !== undefined ? updatedPayments[index].paymentId : undefined;
+                  if (checkIfCta !== undefined) {
+                    getPaymentId = checkIfCta;
+                    mode = "cta";
+                  }
+                  updatedPayments.splice(index, 1);
+                  const action: ISetProofOfPaymentAction | undefined =
+                    getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete", mode: mode } : undefined;
+                  setPayments(updatedPayments, action, true);
+                  setDeleteCount(deleteCount + 1);
+                  setActiveInfo(updatedPayments.length - 1);
+                  handleExpandPayment(updatedPayments, true);
                 }
-                const getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
-                updatedPayments.splice(index, 1);
-                const action: ISetProofOfPaymentAction | undefined =
-                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete" } : undefined;
-                setPayments(updatedPayments, action, true);
-                setDeleteCount(deleteCount + 1);
-                setActiveInfo(updatedPayments.length - 1);
-                handleExpandPayment(updatedPayments, true);
               };
 
               const handleSave = (value: IPaymentInfo, additional?: boolean) => {
@@ -537,6 +573,102 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   }
                 }
 
+                const cloneLocalCtaDetails = cloneDeep(localCtaDetails);
+                let removeAllChildren = false;
+
+                // find existing cta info using paymentId since ctaParent might already be undefined
+                const findExistingCtaParent = cloneLocalCtaDetails.findIndex(
+                  (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].paymentId,
+                );
+
+                // current POP is an existing CTA
+                if (findExistingCtaParent !== -1) {
+                  console.log("Existing CTA");
+                  // current POP is an existing CTA and it is an updated CTA Parent
+                  if (updatedPayments[index].ctaParent !== undefined) {
+                    console.log("Update CTA Parent");
+                    // TODO Scenario: Edit CTA Parent
+                    // TODO update CTA parent prompt
+                    cloneLocalCtaDetails[findExistingCtaParent] = {
+                      ...cloneLocalCtaDetails[findExistingCtaParent],
+                      ...updatedPayments[index],
+                    };
+                  } else {
+                    console.log("Existing CTA but not a CTA Parent");
+                    // current POP is an existing CTA but is not a CTA Parent anymore
+                    // current POP may be a CTA Child but it will be handled separately
+                    // TODO Scenario: Edit CTA Parent to Non-CTA (delete old CTA Parent)
+                    // TODO Scenario: Edit CTA Parent to CTA Child (delete old CTA Parent)
+                    cloneLocalCtaDetails.splice(findExistingCtaParent, 1);
+                    // TODO Scenario: Edit CTA Parent to Non-CTA (delete children of old CTA Parent)
+                    removeAllChildren = true;
+                  }
+                } else if (updatedPayments[index].ctaParent !== undefined && updatedPayments[index].ctaTag === undefined) {
+                  console.log("Non-existing CTA, new CTA Parent");
+                  // current POP is not an existing CTA and it is a new CTA Parent
+                  const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+
+                  if (latestCtaUsedBy !== undefined) {
+                    cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                  }
+                  // current POP may be a CTA Child but it will be handled separately
+                  // TODO Scenario: New POP CTA Parent
+                  // TODO Scenario: Edit Non-CTA to CTA Parent
+                  // TODO Scenario: Edit CTA Child to CTA Parent (add new parent)
+                  cloneLocalCtaDetails.push(updatedPayments[index]);
+                }
+
+                // current POP is a CTA Child (Use of CTA)
+                if ("ctaTag" in updatedPayments[index] && updatedPayments[index].ctaTag !== undefined) {
+                  console.log("CTA Child");
+                  // check if current CTA Child POP is an existing CTA Child
+                  const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+                  // update ctaUsedBy of the old parent of the CTA Child
+                  if (latestCtaUsedBy !== undefined) {
+                    // TODO Scenario: Edit CTA Child to another CTA Child
+                    cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                  }
+
+                  // look for the CTA Parent of the current CTA Child
+                  // TODO Scenario: Edit CTA Child (nothing will change, just save normally)
+                  const findParentCta = cloneLocalCtaDetails.findIndex(
+                    (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].ctaTag!.uuid,
+                  );
+
+                  if (findParentCta !== -1) {
+                    // current CTA Child has a valid CTA Parent
+                    console.log("CTA Child, Existing CTA Parent");
+                    const updatedCtaUsedBy =
+                      "ctaUsedBy" in cloneLocalCtaDetails[findParentCta] && cloneLocalCtaDetails[findParentCta].ctaUsedBy !== undefined
+                        ? [...cloneLocalCtaDetails[findParentCta].ctaUsedBy!]
+                        : [];
+
+                    // check if current POP is already in ctaUsedBy of the CTA Parent
+                    const findInUsedBy = updatedCtaUsedBy.findIndex((findCtaTag) => findCtaTag.uuid === updatedPayments[index].paymentId);
+
+                    // current POP is not yet in ctaUsedBy of CTA Parent (new Use of CTA)
+                    if (findInUsedBy === -1) {
+                      // TODO Scenario: New POP CTA Child
+                      // TODO Scenario: Edit Non-CTA to CTA Child
+                      updatedCtaUsedBy.push({ orderNumber: orderNumber, uuid: updatedPayments[index].paymentId! });
+                      // TODO Scenario: Edit CTA Parent to CTA Child (update the ctaUsedBy of the parent)
+                      cloneLocalCtaDetails[findParentCta].ctaUsedBy = updatedCtaUsedBy;
+                    }
+                  }
+                }
+
+                // TODO Scenario: Edit CTA Child to Non-CTA
+                if (updatedPayments[index].ctaParent === undefined && updatedPayments[index].ctaTag === undefined) {
+                  console.log("Edit to Non-CTA");
+                  const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+
+                  if (latestCtaUsedBy !== undefined) {
+                    cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                  }
+                }
+
+                setLocalCtaDetails(cloneLocalCtaDetails);
+
                 // check if existing surplus parent and delete all child if parent got updated
                 const findExistingSurplusParent =
                   value.excess !== undefined && value.parent !== undefined
@@ -544,9 +676,21 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     : -1;
                 const checkIfUtilised =
                   findExistingSurplusParent !== -1 ? applicationBalance[findExistingSurplusParent].utilised!.length > 0 : false;
-                const getPaymentId = checkIfUtilised === true ? payments[index].paymentId : undefined;
+
+                let getPaymentId = checkIfUtilised === true ? payments[index].paymentId : undefined;
+                let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
+
+                const checkIfCta =
+                  updatedPayments[index].ctaParent !== undefined || removeAllChildren === true
+                    ? updatedPayments[index].paymentId
+                    : undefined;
+                if (checkIfCta !== undefined) {
+                  getPaymentId = checkIfCta;
+                  mode = "cta";
+                }
+
                 const action: ISetProofOfPaymentAction | undefined =
-                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update" } : undefined;
+                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update", mode: mode } : undefined;
                 const surplusUuid =
                   updatedPayments !== undefined && updatedPayments[index].tag !== undefined ? updatedPayments[index].tag!.uuid : undefined;
                 const checkDuplicateSurplus = updatedPayments.filter(
@@ -557,6 +701,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   updatedPayments[index].excess !== undefined &&
                   updatedPayments[index].excess?.amount !== "";
                 const newPayment = updatedPayments[index];
+
                 if (checkSurplusAmountChanged === true && checkDuplicateSurplus.length <= 1) {
                   updatedPayments.splice(index, 1);
                   if (additional !== true) {
@@ -689,6 +834,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       availableBalance={applicationBalance}
                       completedSurplusCurrencies={completedSurplusCurrencies}
                       createdOn={moment(createdOn, "x").toDate()}
+                      ctaDetails={localCtaDetails}
                       currencies={currencies}
                       currentPayments={payments}
                       deletedPayment={deletedPayment}
@@ -699,6 +845,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       handleRemove={handleRemove}
                       handleSave={handleSave}
                       handleUnsaved={setUnsavedChanges}
+                      localCtaDetails={localCtaDetails}
                       payment={payment}
                       pendingBalance={pendingBalance}
                       recurringDetails={localRecurringDetails !== undefined ? localRecurringDetails : recurringDetails}

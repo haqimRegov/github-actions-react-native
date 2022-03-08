@@ -9,19 +9,18 @@ import {
   centerHV,
   centerVertical,
   colorBlue,
-  colorWhite,
   colorYellow,
   flexRow,
+  fs10BoldWhite1,
   fs16BoldGray6,
   fs16RegGray6,
+  fsAlignCenter,
   imageContain,
   px,
   rowCenterVertical,
-  sh11,
-  sh20,
+  sh16,
   sw100,
-  sw14,
-  sw20,
+  sw16,
   sw4,
   sw8,
 } from "../../styles";
@@ -44,7 +43,7 @@ export const PaymentBannerContent = ({
   grandTotalRecurring,
   paymentType,
 }: IPaymentBannerContentProps) => {
-  const iconWarningStyle: ImageStyle = { ...imageContain, width: sw20, height: sh20 };
+  const iconWarningStyle: ImageStyle = { ...imageContain, width: sw16, height: sh16 };
   return (
     <View>
       <View style={rowCenterVertical}>
@@ -80,8 +79,8 @@ export const PaymentBannerContent = ({
                     ) : (
                       <View style={flexRow}>
                         <View style={centerHV}>
-                          <View style={{ width: sw14, height: sw14, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._1 }}>
-                            <Text style={{ fontSize: sh11, color: colorWhite._1 }}>i</Text>
+                          <View style={{ width: sw16, height: sw16, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._1 }}>
+                            <Text style={{ ...fs10BoldWhite1, ...fsAlignCenter }}>i</Text>
                           </View>
                         </View>
                         <CustomSpacer isHorizontal={true} space={sw8} />

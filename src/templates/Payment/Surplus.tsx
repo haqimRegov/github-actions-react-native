@@ -9,38 +9,46 @@ import { deleteKey, formatAmount, isObjectEqual, parseAmount } from "../../utils
 import { calculateAvailableBalance, generateNewInfo, getAmount } from "./helpers";
 import { ToggleCard } from "./ToggleCard";
 
-export interface IPaymentSurplusRef {
+export interface IPaymentCardStackRef {
   handleUseSurplus: (value: IPaymentInfo) => void;
+  handleUseCta: (value: IPaymentInfo) => void;
 }
 
-interface PaymentSurplusProps {
+interface PaymentCardStackProps {
   accountNames: TypeLabelValue[];
   availableBalance: IPaymentInfo[];
   completedSurplusCurrencies?: string[];
+  ctaDetails?: TypeCTADetails[];
   existingPaidAmount: IOrderAmount[];
   handleEditSaved: () => void;
   handleUnsaved: (state: number) => void;
   oldPayment: IPaymentInfo;
   payment: IPaymentInfo;
   pendingCurrencies: string[];
-  ref?: MutableRefObject<IPaymentSurplusRef | undefined>;
+  ref?: MutableRefObject<IPaymentCardStackRef | undefined>;
   setAvailableBalance: (value: IPaymentInfo[]) => void;
   setPayment: (value: IPaymentInfo) => void;
   totalInvestment: IOrderAmount[];
 }
 
-export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, PaymentSurplusProps>((props, ref) => {
+export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, PaymentCardStackProps>((props, ref) => {
   const {
     accountNames,
     availableBalance,
     completedSurplusCurrencies,
+    ctaDetails,
     existingPaidAmount,
+    handleEditSaved,
+    handleUnsaved,
+    oldPayment,
     payment,
     pendingCurrencies,
     setAvailableBalance,
     setPayment,
     totalInvestment,
   } = props;
+
+  const uniqueId = useRef(payment.paymentId || uuidv1());
 
   const updatedCompletedSurplusCurrencies = completedSurplusCurrencies !== undefined ? completedSurplusCurrencies : [];
   const filteredAvailableBalance = availableBalance.filter(
@@ -66,22 +74,28 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
 
   const filteredSurplus = filteredAvailableBalance.filter((bal) => {
     const isCurrentSurplus = payment.tag !== undefined && payment.tag.uuid === bal.parent;
-
     const availableExcessAmount = getAvailableExcessAmount(bal);
 
     return bal.parent !== payment.paymentId && bal.excess !== undefined && (availableExcessAmount > 0 || isCurrentSurplus === true);
   });
 
-  const uniqueId = useRef(payment.paymentId || uuidv1());
+  const filteredCta =
+    ctaDetails !== undefined
+      ? ctaDetails.filter((cta) => {
+          const isCurrentCta = payment.ctaParent === undefined && payment.ctaTag !== undefined && payment.ctaTag.uuid === cta.ctaParent;
 
-  const handleUseSurplus = (surplus: IPaymentInfo) => {
+          return cta.ctaParent !== payment.paymentId || isCurrentCta;
+        })
+      : [];
+
+  const handleUseSurplus = async (surplus: IPaymentInfo) => {
     let newPaymentInfo: IPaymentInfo;
     let newAvailableBalance: IPaymentInfo[];
-    const currencyInvestedAmount = getAmount(totalInvestment, surplus.excess!.currency as TypeCurrency);
-    const currencyPaidAmount = getAmount(existingPaidAmount, surplus.excess!.currency as TypeCurrency);
-    const pendingCurrencyAmount = currencyInvestedAmount - parseAmount(currencyPaidAmount.toString());
     // toggle use of surplus
     if (payment.tag === undefined || (payment.tag !== undefined && payment.tag.uuid !== surplus.parent)) {
+      const currencyInvestedAmount = getAmount(totalInvestment, surplus.excess!.currency as TypeCurrency);
+      const currencyPaidAmount = getAmount(existingPaidAmount, surplus.excess!.currency as TypeCurrency);
+      const pendingCurrencyAmount = currencyInvestedAmount - parseAmount(currencyPaidAmount.toString());
       const paymentInfo = deleteKey(surplus, ["orderNumber", "excess", "paymentId"]);
       const cleanPaymentInfo = Object.fromEntries(Object.entries(paymentInfo).filter(([_, field]) => field != null));
       const currentPaymentAmount = parseInt(payment.amount, 10);
@@ -98,6 +112,10 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
         ...cleanPaymentInfo,
         amount: formatAmount(utilisedAmount.toString()),
         belongsTo: surplus.orderNumber,
+        clientName: "",
+        clientTrustAccountNumber: "",
+        ctaParent: undefined,
+        ctaTag: undefined,
         new: undefined,
         parent: undefined,
         paymentId: uniqueId.current,
@@ -128,52 +146,123 @@ export const PaymentSurplus = forwardRef<IPaymentSurplusRef | undefined, Payment
       );
     }
     const checkSurplusSame =
-      props.oldPayment.tag !== undefined && newPaymentInfo.tag !== undefined && isObjectEqual(props.oldPayment.tag!, newPaymentInfo.tag!);
+      oldPayment.tag !== undefined && newPaymentInfo.tag !== undefined && isObjectEqual(oldPayment.tag!, newPaymentInfo.tag!);
     if (checkSurplusSame === true) {
-      props.handleUnsaved(-1);
+      handleUnsaved(-1);
     } else {
-      props.handleEditSaved();
+      handleEditSaved();
     }
     setAvailableBalance(newAvailableBalance);
-    setPayment({ ...newPaymentInfo });
+    const finalPaymentInfo = { ...newPaymentInfo };
+    setPayment(finalPaymentInfo);
+    return finalPaymentInfo;
   };
 
-  useImperativeHandle(ref, () => ({ handleUseSurplus }));
+  const handleUseCta = async (cta: TypeCTADetails) => {
+    const ctaSelected = payment.ctaTag !== undefined && payment.ctaTag.uuid === cta.ctaParent;
+    const cleanInfo = generateNewInfo(
+      "Cash",
+      [],
+      { label: payment.currency, value: payment.currency as TypeCurrency },
+      payment.orderNumber,
+      undefined,
+      accountNames,
+    );
+    const ctaInfo = ctaSelected
+      ? {
+          paymentId: uniqueId.current,
+        }
+      : {
+          ...cta,
+          currency: payment.currency,
+          new: undefined,
+          ctaParent: undefined,
+          paymentId: uniqueId.current,
+          remark: undefined,
+          saved: false,
+          amount: "",
+          ctaTag: { orderNumber: cta.orderNumber, uuid: cta.ctaParent as string },
+        };
+
+    // surplus was selected before using CTA, oldPayment is when it was previously saved as a use of surplus
+    if (oldPayment.tag !== undefined || payment.tag !== undefined) {
+      // recalculate balance after removing use of surplus
+      const newAvailableBalance = calculateAvailableBalance(availableBalance, payment, true);
+      setAvailableBalance(newAvailableBalance);
+    }
+
+    const newPaymentInfo = { ...cleanInfo, ...ctaInfo };
+    const checkCtaSame =
+      oldPayment.ctaTag !== undefined && newPaymentInfo.ctaTag !== undefined && isObjectEqual(oldPayment.ctaTag!, newPaymentInfo.ctaTag!);
+    if (checkCtaSame === true) {
+      handleUnsaved(-1);
+    } else {
+      handleEditSaved();
+    }
+
+    setPayment(newPaymentInfo);
+  };
+
+  useImperativeHandle(ref, () => ({ handleUseCta, handleUseSurplus }));
 
   return (
     <View>
-      {filteredSurplus.length > 0 ? (
+      {filteredSurplus.length > 0 || (ctaDetails !== undefined && ctaDetails.length > 0) ? (
         <Fragment>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>
             <View style={flexRow}>
-              {filteredSurplus.map((currentSurplus: IPaymentInfo, index: number) => {
-                const surplusSelected = payment.tag !== undefined && payment.tag.uuid === currentSurplus.parent;
+              {filteredSurplus.length > 0 &&
+                filteredSurplus.map((currentSurplus: IPaymentInfo, index: number) => {
+                  const currentSurplusSelected = payment.tag !== undefined && payment.tag.uuid === currentSurplus.parent;
 
-                const availableExcessAmount = getAvailableExcessAmount(currentSurplus);
-                const currentAmountLabel = availableExcessAmount > parseInt(payment.amount, 10) ? availableExcessAmount : payment.amount;
-                const amountLabel = surplusSelected === true ? currentAmountLabel : availableExcessAmount;
+                  const availableExcessAmount = getAvailableExcessAmount(currentSurplus);
+                  const currentAmountLabel = availableExcessAmount > parseInt(payment.amount, 10) ? availableExcessAmount : payment.amount;
+                  const amountLabel = currentSurplusSelected === true ? currentAmountLabel : availableExcessAmount;
 
-                const title = `${currentSurplus.excess!.currency} ${formatAmount(amountLabel)}`;
+                  const title = `${currentSurplus.excess!.currency} ${formatAmount(amountLabel)}`;
 
-                const handlePress = () => {
-                  handleUseSurplus(currentSurplus);
-                };
+                  const handlePress = () => {
+                    handleUseSurplus(currentSurplus);
+                  };
 
-                return (
-                  <Fragment key={index}>
-                    <ToggleCard
-                      type="Use of Surplus"
-                      title={title}
-                      description1={currentSurplus.orderNumber}
-                      description2={currentSurplus.paymentMethod}
-                      onPress={handlePress}
-                      selected={surplusSelected}
-                    />
-                    {index === filteredSurplus.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
-                  </Fragment>
-                );
-              })}
+                  return (
+                    <Fragment key={index}>
+                      <ToggleCard
+                        type="Use of Surplus"
+                        title={title}
+                        description1={currentSurplus.orderNumber}
+                        description2={currentSurplus.paymentMethod}
+                        onPress={handlePress}
+                        selected={currentSurplusSelected}
+                      />
+                      {index === filteredSurplus.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
+                    </Fragment>
+                  );
+                })}
+              {filteredCta &&
+                filteredCta.length > 0 &&
+                filteredCta.map((cta: TypeCTADetails, index: number) => {
+                  const currentCtaSelected = payment.ctaTag !== undefined && payment.ctaTag.uuid === cta.ctaParent;
+
+                  const handlePress = () => {
+                    handleUseCta(cta);
+                  };
+
+                  return (
+                    <Fragment key={index}>
+                      {filteredSurplus.length > 0 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
+                      <ToggleCard
+                        type="CTA"
+                        title={cta.clientTrustAccountNumber || "-"}
+                        description1={cta.clientName}
+                        onPress={handlePress}
+                        selected={currentCtaSelected}
+                      />
+                      {index === filteredCta.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
+                    </Fragment>
+                  );
+                })}
             </View>
           </View>
         </Fragment>

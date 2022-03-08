@@ -441,6 +441,16 @@ const listPaymentRequired = gql`
           ctaDetails {
             clientName
             clientTrustAccountNumber
+            ctaParent
+            orderNumber
+            paymentMethod
+            paymentId
+            proof {
+              name
+              url
+              type
+            }
+            sharedTo
           }
           completedSurplusCurrencies
           isLastOrder
@@ -514,6 +524,7 @@ const listPaymentRequired = gql`
             checkNumber
             clientName
             clientTrustAccountNumber
+            ctaParent
             epfReferenceNo
             epfAccountNumber
             bankAccountName

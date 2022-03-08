@@ -6,6 +6,8 @@ export * from "./EmptyTable";
 export * from "./EventPrompt";
 export * from "./LabeledTitle";
 export * from "./Loading";
+export * from "./NewActionButtons";
+export * from "./NewPrompt";
 export * from "./Pagination";
 export * from "./PasswordValidation";
 export * from "./Prompt";

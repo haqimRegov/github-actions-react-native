@@ -2,6 +2,7 @@ const INVALID_ALPHANUMERIC = "Kindly input a valid alphanumeric.";
 const INVALID_BANK_NAME = "Kindly input a bank account name.";
 const INVALID_BANK_NUMBER = "Kindly input a bank account number.";
 const INVALID_CHEQUE_NUMBER = "Kindly input a cheque number.";
+const INVALID_CTA_NUMBER = "Kindly input a CTA number.";
 const INVALID_NAME = "Kindly input a valid name.";
 const INVALID_NUMBER = "Kindly input a valid number.";
 const INVALID_POST_CODE = "Kindly input a valid post code.";
@@ -21,6 +22,7 @@ export const ERROR = {
   INVALID_BANK_NAME,
   INVALID_BANK_NUMBER,
   INVALID_CHEQUE_NUMBER,
+  INVALID_CTA_NUMBER,
   INVALID_NAME,
   INVALID_NUMBER,
   INVALID_POST_CODE,

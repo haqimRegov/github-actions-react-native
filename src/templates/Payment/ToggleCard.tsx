@@ -22,6 +22,7 @@ import {
   sh80,
   sw1,
   sw12,
+  sw184,
   sw24,
   sw8,
 } from "../../styles";
@@ -44,7 +45,15 @@ export const ToggleCard: FunctionComponent<ToggleCardProps> = ({
   type,
 }: ToggleCardProps) => {
   const borderColor = selected === true ? colorBlue._1 : colorGray._2;
-  const cardStyle: ViewStyle = { ...border(borderColor, sw1, sw8), ...centerVertical, ...flexRow, ...px(sw24), ...py(sh13), height: sh80 };
+  const cardStyle: ViewStyle = {
+    ...border(borderColor, sw1, sw8),
+    ...centerVertical,
+    ...flexRow,
+    ...px(sw24),
+    ...py(sh13),
+    height: sh80,
+    minWidth: sw184,
+  };
 
   const iconColor = selected === true ? colorWhite._1 : colorBlue._1;
   const circleStyle: ViewStyle =

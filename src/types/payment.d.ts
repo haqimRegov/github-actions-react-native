@@ -143,7 +143,7 @@ declare interface IPaymentInfo {
   tag?: { uuid: string; orderNumber?: string }; // if use of surplus, uuid is the parent of the surplus payment info
   usePreviousRecurring?: boolean;
   utilised?: IUtilisedAmount[]; // utilised amount of an available balance
-  utmc: string; // for multiple EPF
+  utmc?: string; // for multiple EPF
 
   ctaParent: number | string | undefined; // id given to payment info with cta
   ctaTag?: { uuid: string; orderNumber?: string }; // if use of CTA, uuid is the parent of the surplus payment info

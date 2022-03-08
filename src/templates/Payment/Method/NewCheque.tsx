@@ -13,9 +13,9 @@ import {
   TextSpaceArea,
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
-import { DICTIONARY_MALAYSIA_BANK_BASE, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
 import { fsTransformNone, px, sh143, sh24, sh4, sw24, sw360, sw64 } from "../../../styles";
-import { isNumber } from "../../../utils";
+import { validateChequeNumber } from "../helpers";
 import { IPaymentError } from "../PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;
@@ -50,7 +50,7 @@ export const NewCheque: FunctionComponent<NewChequeProps> = ({
   };
 
   const checkChequeNumber = () => {
-    setError({ ...error, checkNumber: isNumber(payment.checkNumber!) === false ? ERROR.INVALID_CHEQUE_NUMBER : undefined });
+    setError({ ...error, checkNumber: validateChequeNumber(payment) });
   };
 
   const setTransactionDate = (value?: Date) => {

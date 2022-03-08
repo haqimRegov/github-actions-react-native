@@ -409,6 +409,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
               );
 
               const handleRemove = () => {
+                console.log("handleRemove");
                 const updatedPayments = [...payments];
                 const newAvailableBalance = [...applicationBalance];
                 // delete in surplus balance
@@ -455,34 +456,34 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   }
 
                   setLocalCtaDetails(cloneLocalCtaDetails);
-
-                  setApplicationBalance(newAvailableBalance, true);
-
-                  // delete saved payment
-                  if (updatedPayments[index].isEditable === true) {
-                    const updateDeleted = [...deletedPayment];
-                    updateDeleted.push({
-                      ...updatedPayments[index],
-                      action: { id: updatedPayments[index].paymentId!, option: "delete" },
-                    });
-                    setDeletedPayment(updateDeleted);
-                  }
-                  // let getPaymentId;
-                  let getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
-                  let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
-                  const checkIfCta = updatedPayments[index].ctaParent !== undefined ? updatedPayments[index].paymentId : undefined;
-                  if (checkIfCta !== undefined) {
-                    getPaymentId = checkIfCta;
-                    mode = "cta";
-                  }
-                  updatedPayments.splice(index, 1);
-                  const action: ISetProofOfPaymentAction | undefined =
-                    getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete", mode: mode } : undefined;
-                  setPayments(updatedPayments, action, true);
-                  setDeleteCount(deleteCount + 1);
-                  setActiveInfo(updatedPayments.length - 1);
-                  handleExpandPayment(updatedPayments, true);
                 }
+
+                setApplicationBalance(newAvailableBalance, true);
+
+                // delete saved payment
+                if (updatedPayments[index].isEditable === true) {
+                  const updateDeleted = [...deletedPayment];
+                  updateDeleted.push({
+                    ...updatedPayments[index],
+                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
+                  });
+                  setDeletedPayment(updateDeleted);
+                }
+                // let getPaymentId;
+                let getPaymentId = updatedPayments[index].excess !== undefined ? updatedPayments[index].paymentId : undefined;
+                let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
+                const checkIfCta = updatedPayments[index].ctaParent !== undefined ? updatedPayments[index].paymentId : undefined;
+                if (checkIfCta !== undefined) {
+                  getPaymentId = checkIfCta;
+                  mode = "cta";
+                }
+                updatedPayments.splice(index, 1);
+                const action: ISetProofOfPaymentAction | undefined =
+                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete", mode: mode } : undefined;
+                setPayments(updatedPayments, action, true);
+                setDeleteCount(deleteCount + 1);
+                setActiveInfo(updatedPayments.length - 1);
+                handleExpandPayment(updatedPayments, true);
               };
 
               const handleSave = (value: IPaymentInfo, additional?: boolean) => {

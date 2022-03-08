@@ -1,3 +1,4 @@
+import cloneDeep from "lodash.clonedeep";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, View } from "react-native";
@@ -34,6 +35,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [grandTotal, setGrandTotal] = useState<IOrderAmount[]>([]);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
   const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
+  const [localCtaDetails, setLocalCtaDetails] = useState<TypeCTADetails[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -76,6 +78,9 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         if (data.result.surplusBalance) {
           setTempApplicationBalance(data.result.surplusBalance);
           setApplicationBalance(data.result.surplusBalance);
+        }
+        if (data.result.ctaDetails) {
+          setLocalCtaDetails(data.result.ctaDetails);
         }
       }
       if (error !== null) {
@@ -158,9 +163,34 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   };
 
   const handleSetPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
-    setTempData(value);
+    const updatedProofOfPayments: IPaymentRequired = { ...tempData, ...value };
+    if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined && action.mode === "cta") {
+      // const tagKey = action.mode === "surplus" ? "tag" : "ctaTag";
+      // const parentKey = action.mode === "surplus" ? "parent" : "ctaParent";
+      const tagKey = "ctaTag";
+      const parentKey = "ctaParent";
+      const filteredPayments = updatedProofOfPayments.payments.filter((eachPOP) => {
+        const deleteCondition =
+          (eachPOP[tagKey] === undefined && eachPOP[parentKey] !== action.paymentId) ||
+          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
+        const updateCondition =
+          (eachPOP[tagKey] === undefined && eachPOP[parentKey] === action.paymentId) ||
+          (eachPOP[tagKey] === undefined && eachPOP.paymentId !== action.paymentId) ||
+          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId) ||
+          (action.mode === "cta" &&
+            eachPOP[tagKey] === undefined &&
+            eachPOP[parentKey] === undefined &&
+            eachPOP.paymentId === action.paymentId);
+
+        return action.option === "delete" ? deleteCondition : updateCondition;
+      });
+      updatedProofOfPayments.payments = cloneDeep(filteredPayments);
+      updatedProofOfPayments.status = filteredPayments.length === 0 ? "Pending Payment" : updatedProofOfPayments.status;
+    }
+
+    setTempData(updatedProofOfPayments);
     if (deleted === false) {
-      setProofOfPayment(value);
+      setProofOfPayment(updatedProofOfPayments);
     }
   };
 
@@ -244,11 +274,13 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     applicationBalance={tempApplicationBalance}
                     deleteCount={deleteCount}
                     deletedPayment={tempDeletedPayment}
+                    localCtaDetails={localCtaDetails}
                     proofOfPayment={tempData}
                     setActiveOrder={setActiveOrder}
                     setApplicationBalance={handleApplicationBalance}
                     setDeleteCount={setDeleteCount}
                     setDeletedPayment={setTempDeletedPayment}
+                    setLocalCtaDetails={setLocalCtaDetails}
                     setProofOfPayment={handleSetPayment}
                     setSavedChangesToast={setSavedChangesToast}
                   />

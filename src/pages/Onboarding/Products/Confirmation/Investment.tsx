@@ -35,7 +35,6 @@ import {
   sw12,
   sw152,
   sw16,
-  sw20,
   sw24,
   sw360,
   sw64,
@@ -357,7 +356,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
               label={INVESTMENT.LABEL_SALES_CHARGE}
               value={investmentSalesCharge}
             />
-            <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, ...px(sw16) }} text={maxSalesChargeLabel} />
+            <TextSpaceArea spaceToTop={sh8} style={fs12RegGray5} text={maxSalesChargeLabel} />
           </View>
         </View>
         {scheduledInvestment === true ? (
@@ -380,7 +379,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   value={scheduledInvestmentAmount}
                 />
                 <CustomSpacer space={sh8} />
-                <View style={{ ...px(sw20) }}>
+                <View style={{ ...px(sw16) }}>
                   <Text style={fs12RegGray5}>{`${INVESTMENT.HINT_FPX} ${minimumFpx}`}</Text>
                   <Text style={fs12RegGray5}>{INVESTMENT.HINT_DDA}</Text>
                 </View>
@@ -393,7 +392,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
                   value={`${scheduledSalesCharge}`}
                 />
-                <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, ...px(sw16) }} text={maxSalesChargeLabel} />
+                <TextSpaceArea spaceToTop={sh8} style={fs12RegGray5} text={maxSalesChargeLabel} />
               </View>
             </View>
           </Fragment>

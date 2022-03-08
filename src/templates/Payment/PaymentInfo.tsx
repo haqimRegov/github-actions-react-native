@@ -481,7 +481,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
     // // check if payment info has surplus
     // if (updatedPayment.parent !== undefined) {
-    const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.paymentId === updatedPayment.paymentId);
+    const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.parent === updatedPayment.paymentId);
 
     // payment is an existing surplus
     if (findExistingSurplusParent !== -1) {
@@ -507,7 +507,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
       return { ...bal, utilised: updatedUtilised };
     });
-
     // update application balance for new or updated surplus, and for use of surplus
     setAvailableBalance(newAvailableBalanceWithId, undefined);
   };
@@ -748,7 +747,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     <View>
       <View style={{ ...rowCenterVertical, ...px(sw24), backgroundColor: colorGray._1, height: sh56 }}>
         <Text style={fs16BoldGray6}>{checkPaymentLabelEPF}</Text>
-        {payment.initialExcess !== undefined && payment.initialExcess !== null && payment.initialExcess.currency === "MYR" ? (
+        {payment.excess !== undefined && payment.excess !== null && payment.excess.currency === "MYR" ? (
           <Fragment>
             <CustomSpacer isHorizontal={true} space={sw8} />
             <View style={textContainerStyle}>

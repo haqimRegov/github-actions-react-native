@@ -524,7 +524,6 @@ const listPaymentRequired = gql`
             checkNumber
             clientName
             clientTrustAccountNumber
-            ctaParent
             epfReferenceNo
             epfAccountNumber
             bankAccountName

@@ -253,13 +253,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           (eachPOP[tagKey] === undefined && eachPOP[parentKey] !== action.paymentId) ||
                           (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
                         const updateCondition =
-                          (eachPOP[tagKey] === undefined && eachPOP[parentKey] === action.paymentId) ||
-                          (eachPOP[tagKey] === undefined && eachPOP.paymentId !== action.paymentId) ||
-                          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId) ||
-                          (action.mode === "cta" &&
-                            eachPOP[tagKey] === undefined &&
-                            eachPOP[parentKey] === undefined &&
-                            eachPOP.paymentId === action.paymentId);
+                          eachPOP[tagKey] === undefined || (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
 
                         return action.option === "delete" ? deleteCondition : updateCondition;
                       });

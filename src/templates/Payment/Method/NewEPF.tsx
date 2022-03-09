@@ -28,7 +28,7 @@ export interface NewEPFProps {
   totalAmount: IOrderAmount;
 }
 
-export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPayment, totalAmount }: NewEPFProps) => {
+export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPayment }: NewEPFProps) => {
   const { epfReferenceNo } = payment;
 
   // Function for multiple UTMC

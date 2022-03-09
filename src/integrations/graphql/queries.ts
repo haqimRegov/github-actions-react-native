@@ -563,6 +563,11 @@ const listPaymentRequired = gql`
             checkNumber
             clientName
             clientTrustAccountNumber
+            ctaParent
+            ctaTag {
+              uuid
+              orderNumber
+            }
             epfReferenceNo
             epfAccountNumber
             bankAccountName

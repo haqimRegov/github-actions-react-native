@@ -280,16 +280,18 @@ export const generatePaymentWithKeys = async (
                 ? { referenceNumber: `${orderNumber}${index}${moment().format("x")}` }
                 : {};
 
+            // we don't send orderNumber if the POP being used is from BE
             const optimizedTag =
               paymentInfo.tag !== undefined && channel === "Dashboard" && paymentInfo.action === undefined
                 ? { tag: deleteKey(paymentInfo.tag, ["orderNumber"]) }
                 : {};
 
+            // using the length of ctaTag.uuid from BE to know if the CTA Parent is already an existing saved CTA
+            // we don't send orderNumber if the POP being used is from BE
             const optimizedCtaTag =
               paymentInfo.ctaTag !== undefined &&
               channel === "Dashboard" &&
-              paymentInfo.action === undefined &&
-              orderNumber !== paymentInfo.orderNumber
+              (orderNumber !== paymentInfo.orderNumber || (orderNumber === paymentInfo.orderNumber && paymentInfo.ctaTag.uuid.length < 16))
                 ? { ctaTag: deleteKey(paymentInfo.ctaTag, ["orderNumber"]) }
                 : {};
 
@@ -522,4 +524,16 @@ export const updateCtaUsedBy = (latestCtaDetails: TypeCTADetails[], latestPaymen
   }
 
   return undefined;
+};
+
+export const filterDeletedSavedChild = (latestPayments: IPaymentInfo[], currentIndex: number, oldPaymentId?: string | number) => {
+  const paymentId = oldPaymentId !== undefined ? oldPaymentId : latestPayments[currentIndex].paymentId;
+  const filtered = latestPayments
+    .filter((eachPOP) => eachPOP.isEditable === true && eachPOP.ctaTag !== undefined && eachPOP.ctaTag!.uuid === paymentId)
+    .map((eachFilteredPOP: IPaymentInfo) => ({
+      ...eachFilteredPOP,
+      action: { id: eachFilteredPOP.paymentId!, option: "delete" as TypePaymentInfoActionOption },
+    }));
+
+  return filtered;
 };

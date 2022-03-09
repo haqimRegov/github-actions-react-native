@@ -58,7 +58,7 @@ import {
   sw7,
   sw8,
 } from "../../styles";
-import { formatAmount, isAmount, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
+import { formatAmount, isAmount, isNotEmpty, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
 import { generateNewInfo, getAmount, validateCtaNumber } from "./helpers";
 import { NewCheque, NewCTA, NewEPF, NewOnlineBanking, NewRecurring } from "./Method";
 import { IPaymentCardStackRef, PaymentCardStack } from "./Surplus";
@@ -87,7 +87,6 @@ interface PaymentInfoProps {
   pendingBalance: IOrderAmount[];
   recurringDetails?: IRecurringDetails;
   setAvailableBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
-  setDeletedPayment: (deleted: IPaymentInfo[]) => void;
   totalInvestment: IOrderAmount[];
 }
 
@@ -287,7 +286,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const findSurplusParent = draftAvailableBalance.findIndex((bal) => bal.parent === draftPayment.parent);
   const balanceSharedTo =
     findSurplusParent !== -1 ? draftAvailableBalance[findSurplusParent].utilised!.map((util) => util.orderNumber) : [];
-  const savedSharedTo = draftPayment.sharedTo !== undefined && draftPayment.sharedTo !== null ? draftPayment.sharedTo : [];
+  const savedSharedTo = isNotEmpty(draftPayment.parent) && isNotEmpty(draftPayment.sharedTo) ? draftPayment.sharedTo! : [];
   const surplusSharedTo = savedSharedTo.length > 0 ? savedSharedTo : balanceSharedTo;
   const sharedToTitle = surplusSharedTo.join(", ");
 
@@ -299,7 +298,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const ctaParentIndex = findCtaParent !== -1 ? findCtaParent : findOldCtaParent;
   const ctaBalanceSharedTo = ctaParentIndex !== -1 ? localCtaDetails![ctaParentIndex].ctaUsedBy!.map((usedBy) => usedBy.orderNumber!) : [];
-  const ctaSavedSharedTo = draftPayment.sharedTo !== undefined && draftPayment.sharedTo !== null ? draftPayment.sharedTo : [];
+  const ctaSavedSharedTo = isNotEmpty(payment.sharedTo) ? payment.sharedTo! : [];
   const combineCtaSharedTo = ctaSavedSharedTo.concat(ctaBalanceSharedTo);
   const uniqueCtaSharedTo = combineCtaSharedTo.filter((orderNum, index) => combineCtaSharedTo.indexOf(orderNum) === index);
 
@@ -428,8 +427,45 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const setPaymentMethod = (value: string) => {
     const kibCurrencyIndex = DICTIONARY_KIB_BANK_ACCOUNTS.findIndex((bank) => bank.currency === draftPayment.currency);
     const kibBank = kibCurrencyIndex !== -1 ? DICTIONARY_KIB_BANK_ACCOUNTS[kibCurrencyIndex] : DICTIONARY_KIB_BANK_ACCOUNTS[0];
+    const cleanCtaInfo: Partial<IPaymentInfo> =
+      draftPayment.paymentMethod === "Client Trust Account (CTA)"
+        ? {
+            amount: "",
+            clientName: "",
+            clientTrustAccountNumber: "",
+            proof: undefined,
+            remark: undefined,
+            transactionDate: undefined,
+          }
+        : {};
+    const cleanChequeInfo: Partial<IPaymentInfo> =
+      draftPayment.paymentMethod === "Cheque"
+        ? {
+            amount: "",
+            bankName: "",
+            checkNumber: "",
+            proof: undefined,
+            remark: undefined,
+            transactionDate: undefined,
+          }
+        : {};
+    const cleanOnlineInfo: Partial<IPaymentInfo> =
+      draftPayment.paymentMethod === "Online Banking / TT / ATM"
+        ? {
+            amount: "",
+            bankName: "",
+            referenceNumber: "",
+            proof: undefined,
+            remark: undefined,
+            transactionDate: undefined,
+          }
+        : {};
+    // clean payment info when changing payment method of a saved proof of payment
     setDraftPayment({
       ...draftPayment,
+      ...cleanCtaInfo,
+      ...cleanChequeInfo,
+      ...cleanOnlineInfo,
       paymentMethod: value as TypePaymentMethod,
       checkNumber:
         draftPayment.paymentMethod !== value && draftPayment.paymentMethod === "Online Banking / TT / ATM" ? "" : draftPayment.checkNumber,

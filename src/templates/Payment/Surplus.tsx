@@ -171,17 +171,22 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
     const ctaInfo = ctaSelected
       ? {
           paymentId: uniqueId.current,
+          // TODO check if this is still needed
+          isEditable: oldPayment.isEditable !== undefined ? oldPayment.isEditable : undefined,
         }
       : {
           ...cta,
-          currency: payment.currency,
-          new: undefined,
+          action: undefined,
+          amount: "",
           ctaParent: undefined,
+          ctaTag: { orderNumber: cta.orderNumber, uuid: cta.ctaParent as string },
+          ctaUsedBy: undefined,
+          currency: payment.currency,
+          isEditable: oldPayment.isEditable !== undefined ? oldPayment.isEditable : undefined,
+          new: undefined,
           paymentId: uniqueId.current,
           remark: undefined,
           saved: false,
-          amount: "",
-          ctaTag: { orderNumber: cta.orderNumber, uuid: cta.ctaParent as string },
         };
 
     // surplus was selected before using CTA, oldPayment is when it was previously saved as a use of surplus

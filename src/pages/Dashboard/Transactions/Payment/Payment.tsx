@@ -67,6 +67,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           remark: pay.remark || undefined,
           saved: true,
           tag: pay.tag || undefined,
+          ctaTag: pay.ctaTag || undefined,
           transactionDate: pay.transactionDate !== null ? moment(pay.transactionDate, "x").toDate() : moment().toDate(),
         }));
         const state: IPaymentRequired = {
@@ -80,7 +81,8 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           setApplicationBalance(data.result.surplusBalance);
         }
         if (data.result.ctaDetails) {
-          setLocalCtaDetails(data.result.ctaDetails);
+          const updatedCtaDetails = data.result.ctaDetails.map((cta) => ({ ...cta, ctaUsedBy: [] }));
+          setLocalCtaDetails(updatedCtaDetails);
         }
       }
       if (error !== null) {
@@ -95,7 +97,6 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     try {
       setLoading(true);
       const paymentWithDeleted: IPaymentInfo[] = [];
-      // TODO for deleted saved info
       if (tempDeletedPayment.length > 0) {
         paymentWithDeleted.push(...tempDeletedPayment);
       }
@@ -165,24 +166,22 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const handleSetPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
     const updatedProofOfPayments: IPaymentRequired = { ...tempData, ...value };
     if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined && action.mode === "cta") {
-      // const tagKey = action.mode === "surplus" ? "tag" : "ctaTag";
-      // const parentKey = action.mode === "surplus" ? "parent" : "ctaParent";
-      const tagKey = "ctaTag";
-      const parentKey = "ctaParent";
       const filteredPayments = updatedProofOfPayments.payments.filter((eachPOP) => {
         const deleteCondition =
-          (eachPOP[tagKey] === undefined && eachPOP[parentKey] !== action.paymentId) ||
-          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
+          (eachPOP.ctaTag === undefined && eachPOP.ctaParent !== action.paymentId) ||
+          (eachPOP.ctaTag !== undefined && eachPOP.ctaTag!.uuid !== action.paymentId);
         const updateCondition =
-          (eachPOP[tagKey] === undefined && eachPOP[parentKey] === action.paymentId) ||
-          (eachPOP[tagKey] === undefined && eachPOP.paymentId !== action.paymentId) ||
-          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId) ||
+          (eachPOP.ctaTag === undefined && eachPOP.ctaParent === action.paymentId) ||
+          (eachPOP.ctaTag === undefined && eachPOP.paymentId !== action.paymentId) ||
+          (eachPOP.ctaTag !== undefined && eachPOP.ctaTag!.uuid !== action.paymentId) ||
           (action.mode === "cta" &&
-            eachPOP[tagKey] === undefined &&
-            eachPOP[parentKey] === undefined &&
+            eachPOP.ctaTag === undefined &&
+            eachPOP.ctaParent === undefined &&
             eachPOP.paymentId === action.paymentId);
 
-        return action.option === "delete" ? deleteCondition : updateCondition;
+        const filterCondition = action.option === "delete" ? deleteCondition : updateCondition;
+
+        return filterCondition;
       });
       updatedProofOfPayments.payments = cloneDeep(filteredPayments);
       updatedProofOfPayments.status = filteredPayments.length === 0 ? "Pending Payment" : updatedProofOfPayments.status;

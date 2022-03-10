@@ -415,10 +415,12 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     return { ...amount, value: formatAmount(cleanValue) };
   };
 
-  const checkAmount = () => {
-    const amount = validateAmount(draftPayment.amount, draftPayment.paymentMethod);
+  const checkAmount = (latestPayment?: IPaymentInfo) => {
+    const paymentToBeUsed = latestPayment !== undefined ? latestPayment : draftPayment;
+    const amount = validateAmount(paymentToBeUsed.amount, paymentToBeUsed.paymentMethod);
     setError({ ...error, amount: amount.error });
     // set formatted amount on blur
+    // TODO check for unnecessary re-render
     setAmount(amount.value);
 
     return amount;
@@ -549,7 +551,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const saveUpdatedInfo = (add?: boolean) => {
     const cleanPayment = paymentToBeSaved(draftPayment);
-    const amount = checkAmount();
+    const amount = checkAmount(cleanPayment);
     const ctaNumberError = cleanPayment.paymentMethod === "Client Trust Account (CTA)" ? validateCtaNumber(cleanPayment) : undefined;
     if (ctaNumberError !== undefined) {
       setError({ ...error, ctaNumber: ctaNumberError });

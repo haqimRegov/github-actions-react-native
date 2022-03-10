@@ -297,7 +297,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                                   {index === 0 ? null : <View style={{ ...borderLeftGray3, height: sh24, marginHorizontal: sw16 }} />}
                                   <Text style={fs16BoldBlue1}>{count}</Text>
                                   <CustomSpacer isHorizontal={true} space={sw4} />
-                                  <Text style={fs16RegBlue1}>{method}</Text>
+                                  <Text style={fs16RegBlue1}>{method === "Client Trust Account (CTA)" ? "CTA" : method}</Text>
                                 </View>
                               );
                             })

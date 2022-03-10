@@ -426,6 +426,10 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     return amount;
   };
 
+  const handleAmountBlur = () => {
+    checkAmount();
+  };
+
   const setPaymentMethod = (value: string) => {
     const kibCurrencyIndex = DICTIONARY_KIB_BANK_ACCOUNTS.findIndex((bank) => bank.currency === draftPayment.currency);
     const kibBank = kibCurrencyIndex !== -1 ? DICTIONARY_KIB_BANK_ACCOUNTS[kibCurrencyIndex] : DICTIONARY_KIB_BANK_ACCOUNTS[0];
@@ -662,7 +666,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         inputPrefix={draftPayment.currency}
         keyboardType="numeric"
         label={PAYMENT.LABEL_AMOUNT}
-        onBlur={checkAmount}
+        onBlur={handleAmountBlur}
         onChangeText={setAmount}
         placeholder="0.00"
         value={draftPayment.amount}

@@ -17,7 +17,7 @@ import {
   sw360,
   sw64,
 } from "../../../styles";
-import { parseAmount } from "../../../utils";
+import { formatAmount, parseAmount } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -44,7 +44,7 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
             .reduce((total, currentValue) => total + currentValue)
         : parseAmount(filteredFunds[0].investmentAmount);
     if (!Object.keys(fundsPerUtmc).includes(fundIssuer)) {
-      fundsPerUtmc = { ...fundsPerUtmc, [fundIssuer]: investmentPerUtmc };
+      fundsPerUtmc = { ...fundsPerUtmc, [fundIssuer]: formatAmount(investmentPerUtmc) };
     }
   });
 
@@ -55,7 +55,7 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
         const findIndex = tempReferenceNo.findIndex((eachReference: IEpfReferenceNo) => eachReference.utmc === eachKey);
         const referenceNo = findIndex !== -1 ? tempReferenceNo[findIndex].referenceNo : "";
         const setReferenceNumber = (value: string) => {
-          const currentReferenceNumber = { utmc: eachKey, referenceNo: value, amount: fundsPerUtmc[eachKey].toString() };
+          const currentReferenceNumber = { utmc: eachKey, referenceNo: value, amount: fundsPerUtmc[eachKey] };
           if (findIndex !== -1) {
             tempReferenceNo[findIndex] = { ...currentReferenceNumber };
           } else {

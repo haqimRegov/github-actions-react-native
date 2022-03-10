@@ -84,9 +84,11 @@ declare interface IPaymentState extends IPayment {
   saved?: boolean;
 }
 
+declare type TypePaymentInfoActionOption = "update" | "delete";
+
 declare interface IPaymentInfoAction {
   id: string | number;
-  option: "update" | "delete";
+  option: TypePaymentInfoActionOption;
 }
 
 declare interface IEpfReferenceNo {

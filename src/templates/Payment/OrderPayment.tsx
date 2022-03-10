@@ -40,10 +40,10 @@ import {
   sw40,
   sw8,
 } from "../../styles";
-import { AnimationUtils, formatAmount, isObjectEqual, parseAmount } from "../../utils";
+import { AnimationUtils, formatAmount, isEmpty, isNotEmpty, isObjectEqual, parseAmount } from "../../utils";
 import { OrderOverview } from "../Onboarding/OrderOverview";
 import { AddedInfo } from "./AddedInfo";
-import { generateNewInfo, handleAvailableBalance, handleReduceAmount, updateCtaUsedBy } from "./helpers";
+import { filterDeletedSavedChild, generateNewInfo, handleAvailableBalance, handleReduceAmount, updateCtaUsedBy } from "./helpers";
 import { PaymentInfo } from "./PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;
@@ -409,7 +409,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
               );
 
               const handleRemove = () => {
-                console.log("handleRemove");
                 const updatedPayments = [...payments];
                 const newAvailableBalance = [...applicationBalance];
                 // delete in surplus balance
@@ -460,6 +459,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 setApplicationBalance(newAvailableBalance, true);
 
+                // TODO check if current POP is being used as a parent by another CTA Child POP in the same order
                 // delete saved payment
                 if (updatedPayments[index].isEditable === true) {
                   const updateDeleted = [...deletedPayment];
@@ -467,6 +467,12 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     ...updatedPayments[index],
                     action: { id: updatedPayments[index].paymentId!, option: "delete" },
                   });
+
+                  const savedChildToBeDeleted = filterDeletedSavedChild(updatedPayments, index);
+                  if (savedChildToBeDeleted.length > 0) {
+                    updateDeleted.push(...savedChildToBeDeleted);
+                  }
+
                   setDeletedPayment(updateDeleted);
                 }
                 // let getPaymentId;
@@ -475,9 +481,9 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     ? updatedPayments[index].paymentId
                     : undefined;
                 let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
-                const checkIfCta = updatedPayments[index].ctaParent !== undefined ? updatedPayments[index].paymentId : undefined;
-                if (checkIfCta !== undefined) {
-                  getPaymentId = checkIfCta;
+                const checkIfCtaParent = updatedPayments[index].ctaParent !== undefined ? updatedPayments[index].paymentId : undefined;
+                if (checkIfCtaParent !== undefined) {
+                  getPaymentId = checkIfCtaParent;
                   mode = "cta";
                 }
                 updatedPayments.splice(index, 1);
@@ -495,8 +501,14 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const updatedPayments = cloneDeep(payments);
                 const duplicatePayments = cloneDeep(payments);
                 const currentAvailableBalance = cloneDeep(applicationBalance);
-
+                const oldCtaParent =
+                  updatedPayments[index].ctaParent !== undefined && updatedPayments[index].ctaParent === updatedPayments[index].paymentId
+                    ? updatedPayments[index].paymentId
+                    : undefined;
+                // current payment before updating to draftPayment
+                const oldSavedPayment = cloneDeep(updatedPayments[index]);
                 const updatedDeletedPayments = [...deletedPayment];
+
                 if (
                   (isObjectEqual(value, updatedPayments[index]) === false &&
                     updatedPayments[index].amount !== "" &&
@@ -507,33 +519,9 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 ) {
                   setSavedChangesToast(true);
                 }
-                // Check if the edit has caused an update in the use of surplus in both scenarios where it turns from surplus to normal payment and surplus to another surplus
-                // Check the tag equal to check if the surplus has changed
-                // Check both tags to confirm that there is no update from or to surplus
-                const checkTagEqual =
-                  updatedPayments[index].tag !== undefined &&
-                  value.tag !== undefined &&
-                  isObjectEqual(updatedPayments[index].tag!, value.tag);
-                if (
-                  checkTagEqual === false &&
-                  value.action !== undefined &&
-                  value.action.option === "update" &&
-                  (value.tag !== undefined || updatedPayments[index].tag !== undefined)
-                ) {
-                  updatedDeletedPayments.push({
-                    ...updatedPayments[index],
-                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
-                  });
-                  checkEditNewPayment = { action: undefined, paymentId: uuidv1() };
-                  // Update the isEditable back to undefined if the update caused a new payment
-                  checkIsEditable = { isEditable: undefined };
-                }
-                updatedPayments[index] = {
-                  ...updatedPayments[index],
-                  ...value,
-                  ...checkEditNewPayment,
-                  ...checkIsEditable,
-                };
+
+                // overwrite old payment
+                updatedPayments[index] = { ...updatedPayments[index], ...value };
 
                 if (additional === true) {
                   // update currency list when adding additional info for multi currency
@@ -585,12 +573,13 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const findExistingCtaParent = cloneLocalCtaDetails.findIndex(
                   (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].paymentId,
                 );
-
                 // current POP is an existing CTA
                 if (findExistingCtaParent !== -1) {
+                  // eslint-disable-next-line no-console
                   console.log("Existing CTA");
                   // current POP is an existing CTA and it is an updated CTA Parent
                   if (updatedPayments[index].ctaParent !== undefined) {
+                    // eslint-disable-next-line no-console
                     console.log("Update CTA Parent");
                     // TODO Scenario: Edit CTA Parent
                     // TODO update CTA parent prompt
@@ -599,6 +588,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       ...updatedPayments[index],
                     };
                   } else {
+                    // eslint-disable-next-line no-console
                     console.log("Existing CTA but not a CTA Parent");
                     // current POP is an existing CTA but is not a CTA Parent anymore
                     // current POP may be a CTA Child but it will be handled separately
@@ -606,9 +596,11 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     // TODO Scenario: Edit CTA Parent to CTA Child (delete old CTA Parent)
                     cloneLocalCtaDetails.splice(findExistingCtaParent, 1);
                     // TODO Scenario: Edit CTA Parent to Non-CTA (delete children of old CTA Parent)
+                    // TODO this will be triggered by Saved POP because the paymentId is already new
                     removeAllChildren = true;
                   }
                 } else if (updatedPayments[index].ctaParent !== undefined && updatedPayments[index].ctaTag === undefined) {
+                  // eslint-disable-next-line no-console
                   console.log("Non-existing CTA, new CTA Parent");
                   // current POP is not an existing CTA and it is a new CTA Parent
                   const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
@@ -625,6 +617,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 // current POP is a CTA Child (Use of CTA)
                 if ("ctaTag" in updatedPayments[index] && updatedPayments[index].ctaTag !== undefined) {
+                  // eslint-disable-next-line no-console
                   console.log("CTA Child");
                   // check if current CTA Child POP is an existing CTA Child
                   const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
@@ -642,6 +635,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                   if (findParentCta !== -1) {
                     // current CTA Child has a valid CTA Parent
+                    // eslint-disable-next-line no-console
                     console.log("CTA Child, Existing CTA Parent");
                     const updatedCtaUsedBy =
                       "ctaUsedBy" in cloneLocalCtaDetails[findParentCta] && cloneLocalCtaDetails[findParentCta].ctaUsedBy !== undefined
@@ -664,15 +658,81 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 // TODO Scenario: Edit CTA Child to Non-CTA
                 if (updatedPayments[index].ctaParent === undefined && updatedPayments[index].ctaTag === undefined) {
+                  // eslint-disable-next-line no-console
                   console.log("Edit to Non-CTA");
                   const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
-
+                  // eslint-disable-next-line no-console
+                  console.log("latestCtaUsedBy", latestCtaUsedBy);
                   if (latestCtaUsedBy !== undefined) {
                     cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
                   }
                 }
 
                 setLocalCtaDetails(cloneLocalCtaDetails);
+
+                // Check if the edit has caused an update in the use of surplus in both scenarios where it turns from surplus to normal payment and surplus to another surplus
+                // Check the tag equal to check if the surplus has changed
+                // Check both tags to confirm that there is no update from or to surplus
+                const checkTagEqual =
+                  updatedPayments[index].tag !== undefined &&
+                  value.tag !== undefined &&
+                  isObjectEqual(updatedPayments[index].tag!, value.tag);
+
+                const checkTagCondition = checkTagEqual === false && (value.tag !== undefined || updatedPayments[index].tag !== undefined);
+
+                let checkCondition;
+
+                if (updatedPayments[index].tag !== undefined) {
+                  checkCondition = checkTagCondition;
+                }
+
+                const ctaParentToCtaChild =
+                  isNotEmpty(oldSavedPayment) &&
+                  isNotEmpty(oldSavedPayment.ctaParent) &&
+                  isEmpty(updatedPayments[index].ctaParent) &&
+                  isNotEmpty(updatedPayments[index].ctaTag);
+
+                const ctaChildToCtaParent =
+                  isNotEmpty(oldSavedPayment) &&
+                  isNotEmpty(oldSavedPayment.ctaTag) &&
+                  isEmpty(updatedPayments[index].ctaTag) &&
+                  isNotEmpty(updatedPayments[index].ctaParent);
+
+                const ctaChildToCtaChild =
+                  isNotEmpty(oldSavedPayment) &&
+                  isNotEmpty(oldSavedPayment.ctaTag) &&
+                  isNotEmpty(updatedPayments[index].ctaTag) &&
+                  updatedPayments[index].ctaTag!.uuid !== oldSavedPayment.ctaTag!.uuid;
+
+                const ctaAndNonCta =
+                  oldSavedPayment.isEditable !== undefined && oldSavedPayment.paymentMethod !== updatedPayments[index].paymentMethod;
+
+                if (ctaAndNonCta || ctaParentToCtaChild || ctaChildToCtaParent || ctaChildToCtaChild) {
+                  checkCondition = true;
+                }
+
+                if (value.action !== undefined && value.action.option === "update" && checkCondition) {
+                  updatedDeletedPayments.push({
+                    ...updatedPayments[index],
+                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
+                  });
+                  const newPaymentId = uuidv1();
+                  checkEditNewPayment = {
+                    action: undefined,
+                    paymentId: newPaymentId,
+                    parent: value.parent !== undefined ? newPaymentId : undefined,
+                    ctaParent: value.ctaParent !== undefined ? newPaymentId : undefined,
+                  };
+                  // Update the isEditable back to undefined if the update caused a new payment
+                  checkIsEditable = { isEditable: undefined };
+                }
+
+                updatedPayments[index] = {
+                  ...updatedPayments[index], // value is already added here above
+                  // ...value,
+                  ...checkEditNewPayment,
+                  ...checkIsEditable,
+                };
 
                 // check if existing surplus parent and delete all child if parent got updated
                 const findExistingSurplusParent =
@@ -689,14 +749,18 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 let getPaymentId = checkIfUtilised === true ? payments[index].paymentId : undefined;
                 let mode: TypeSetProofOfPaymentMode = getPaymentId !== undefined ? "surplus" : undefined;
+                const ctaPaymentIdToUse =
+                  oldCtaParent !== undefined && oldCtaParent !== getPaymentId ? oldCtaParent : updatedPayments[index].paymentId;
+                const checkIfCtaParent =
+                  updatedPayments[index].ctaParent !== undefined || removeAllChildren === true ? ctaPaymentIdToUse : undefined;
 
-                const checkIfCta =
-                  updatedPayments[index].ctaParent !== undefined || removeAllChildren === true
-                    ? updatedPayments[index].paymentId
-                    : undefined;
-                if (checkIfCta !== undefined) {
-                  getPaymentId = checkIfCta;
+                if (checkIfCtaParent !== undefined) {
+                  getPaymentId = checkIfCtaParent;
                   mode = "cta";
+                  const savedChildToBeDeleted = filterDeletedSavedChild(updatedPayments, index);
+                  if (savedChildToBeDeleted.length > 0) {
+                    updatedDeletedPayments.push(...savedChildToBeDeleted);
+                  }
                 }
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update", mode: mode } : undefined;
@@ -860,7 +924,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       pendingBalance={pendingBalance}
                       recurringDetails={localRecurringDetails !== undefined ? localRecurringDetails : recurringDetails}
                       setAvailableBalance={setApplicationBalance}
-                      setDeletedPayment={setDeletedPayment}
                       totalInvestment={totalInvestment}
                     />
                   ) : (

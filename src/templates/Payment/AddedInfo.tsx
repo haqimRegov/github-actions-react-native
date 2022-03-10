@@ -7,6 +7,7 @@ import {
   borderLeftGray3,
   colorBlue,
   colorWhite,
+  disabledOpacity6,
   fs12RegWhite1,
   fs14BoldGray6,
   fs14RegGray5,
@@ -63,7 +64,7 @@ export const AddedInfo: FunctionComponent<AddedInfoProps> = ({ availableBalance,
             contentStyle={{ height: sh80, width: sw240 }}
             arrowSize={{ width: sw12, height: sw7 }}>
             <View onStartShouldSetResponderCapture={() => true}>
-              <IconButton color={colorBlue._1} name="pencil" onPress={handleEdit} size={sw16} style={{ opacity: 0.6 }} />
+              <IconButton color={colorBlue._1} name="pencil" onPress={handleEdit} size={sw16} style={disabledOpacity6} />
             </View>
           </CustomTooltip>
         )}

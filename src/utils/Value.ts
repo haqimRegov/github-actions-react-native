@@ -83,3 +83,11 @@ export const splitString = (str: string, max: number) => {
   });
   return newString;
 };
+
+export const isNotEmpty = (value: string | number | boolean | object | undefined) => {
+  return value !== null && value !== undefined;
+};
+
+export const isEmpty = (value: string | number | boolean | object | undefined) => {
+  return value === null || value === undefined;
+};

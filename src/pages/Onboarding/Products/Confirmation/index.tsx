@@ -112,10 +112,19 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
     const findEpfIndex = investmentDetails.findIndex(
       (eachNewInvestment: IProductSales) => eachNewInvestment.investment.fundPaymentMethod === "EPF",
     );
-    const updatedInvestmentDetails = investmentDetails.map((eachDetails: IProductSales, eachDetailIndex: number) => {
-      const checkData = findEpfIndex === -1 || eachDetailIndex === findEpfIndex;
+    const updatedInvestmentDetails: IProductSales[] = investmentDetails.map((eachDetails: IProductSales) => {
+      const checkData =
+        findEpfIndex !== -1 ? eachDetails.fundDetails.issuingHouse === investmentDetails[findEpfIndex].fundDetails.issuingHouse : true;
       const checkMultipleUtmc = multiUtmc === true && eachDetails.fundDetails.isEpf ? true : checkData;
-      return { ...eachDetails, allowEpf: checkMultipleUtmc };
+      const checkFundPaymentMethod = checkMultipleUtmc === false ? "Cash" : eachDetails.investment.fundPaymentMethod;
+      return {
+        ...eachDetails,
+        allowEpf: checkMultipleUtmc,
+        investment: {
+          ...eachDetails.investment,
+          fundPaymentMethod: checkFundPaymentMethod,
+        },
+      };
     });
     setInvestmentDetails(updatedInvestmentDetails);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -155,8 +164,20 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
 
             const handleDelete = () => {
               if (tempData !== undefined && tempData.length > 1) {
-                const updatedDetails = [...tempData];
+                let updatedDetails = [...tempData];
                 updatedDetails.splice(index, 1);
+                if (multiUtmc === false) {
+                  const findEpfIndex = updatedDetails.findIndex(
+                    (eachNewData: IProductSales) => eachNewData.investment.fundPaymentMethod === "EPF",
+                  );
+                  updatedDetails = updatedDetails.map((eachData) => {
+                    return {
+                      ...eachData,
+                      allowEpf:
+                        findEpfIndex !== -1 ? eachData.fundDetails.issuingHouse === newData[findEpfIndex].fundDetails.issuingHouse : true,
+                    };
+                  });
+                }
                 setTempData(updatedDetails);
                 const updatedProducts = updatedDetails.map((eachTempInvestment: IProductSales) => eachTempInvestment.fundDetails);
                 setSelectedFund(updatedProducts);

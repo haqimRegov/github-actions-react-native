@@ -50,6 +50,7 @@ export const ERROR_CODE = {
   unauthenticated: "OMNI401",
   network: "OMNI402",
   storage: "OMNI403",
+  submittedPdf: "EM448",
 };
 
 type TypeOmniErrors = Record<string, IResponseError>;
@@ -58,5 +59,10 @@ export const ERRORS: TypeOmniErrors = {
   internal: { errorCode: ERROR_CODE.internal, message: "Something went wrong", statusCode: "400" },
   network: { errorCode: ERROR_CODE.network, message: "No Internet Connection", statusCode: "402" },
   storage: { errorCode: ERROR_CODE.storage, message: "Something went wrong. Please try again.", statusCode: "403" },
+  submittedPdf: {
+    errorCode: ERROR_CODE.submittedPdf,
+    message: "Onboarding Receipt for the Order has already been submitted.",
+    statusCode: "403",
+  },
   unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Please log in again.", statusCode: "401" },
 };

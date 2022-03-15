@@ -42,7 +42,6 @@ declare interface PDFViewProps {
   editReceipt: IOnboardingReceiptState | undefined;
   principalSignature: string;
   jointSignature: string;
-  modalLoading: boolean;
   showSignPdf: boolean;
   signer: Signer;
   handleScroll: () => void;
@@ -63,7 +62,6 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   completed,
   principalSignature,
   jointSignature,
-  modalLoading,
   showSignPdf,
   signer,
   handleScroll,
@@ -185,7 +183,6 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         handleClose={handleClose}
         handleConfirm={handleConfirm}
         handleSignature={handleSignature}
-        continueLoading={modalLoading}
         signature={signatureToDisplay}
         title={signerLabel}
         visible={showSignPdf}

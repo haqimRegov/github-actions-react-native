@@ -24,7 +24,6 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
 
 interface SignatureModalProps {
-  continueLoading: boolean;
   handleClose: () => void;
   handleConfirm: () => void;
   handleSignature: (value: string) => void;
@@ -35,7 +34,6 @@ interface SignatureModalProps {
 }
 
 export const SignatureModal: FunctionComponent<SignatureModalProps> = ({
-  continueLoading,
   handleClose,
   handleConfirm,
   handleSignature,
@@ -62,12 +60,7 @@ export const SignatureModal: FunctionComponent<SignatureModalProps> = ({
             />
           </View>
           <CustomSpacer space={sh24} />
-          <CustomSignature
-            continueLoading={continueLoading}
-            handleConfirm={handleConfirm}
-            setSignature={handleSignature}
-            signature={signature}
-          />
+          <CustomSignature handleConfirm={handleConfirm} setSignature={handleSignature} signature={signature} />
         </View>
       </View>
     </BasicModal>

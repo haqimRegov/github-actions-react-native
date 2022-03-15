@@ -8,6 +8,7 @@ import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ContentPage, CustomSpacer, PromptModal, SignatureUploadWithModal } from "../../../../components";
 import { ONBOARDING_ROUTES } from "../../../../constants";
 import { Language } from "../../../../constants/language";
+import { ERRORS } from "../../../../data/dictionary";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import { centerVertical, fs12RegGray6, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
@@ -60,15 +61,20 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
+      const submittedPdfKey = "submittedPdf";
       if (submitPdfResponse !== undefined) {
         const { data, error } = submitPdfResponse;
         if (error === null && data !== null) {
           setShowPrompt(true);
         }
         if (error !== null) {
-          setTimeout(() => {
-            Alert.alert(error.message);
-          }, 100);
+          if (error.message === ERRORS[submittedPdfKey].message) {
+            setShowPrompt(true);
+          } else {
+            setTimeout(() => {
+              Alert.alert(error.message);
+            }, 100);
+          }
         }
       }
     }

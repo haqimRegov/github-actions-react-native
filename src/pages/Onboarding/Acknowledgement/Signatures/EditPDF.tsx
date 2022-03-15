@@ -44,7 +44,6 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   const [jointSignature, setJointSignature] = useState<string>(
     editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
   );
-  const [modalLoading, setModalLoading] = useState<boolean>(false);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
@@ -179,7 +178,6 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const handleConfirm = () => {
-    setModalLoading(true);
     if (showSignPdf === true) {
       setTimeout(() => {
         if (signer === "adviser") {
@@ -296,13 +294,6 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
 
   useEffect(() => {
-    if (showSignPdf === false) {
-      setModalLoading(false);
-    }
-  }, [showSignPdf]);
-
-  useEffect(() => {
-    setModalLoading(false);
     if (signer !== undefined) {
       setTimeout(() => {
         calculatePosition();
@@ -329,7 +320,6 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       editReceipt={editReceipt}
       principalSignature={principalSignature}
       jointSignature={jointSignature}
-      modalLoading={modalLoading}
       showSignPdf={showSignPdf}
       signer={signer}
       handleScroll={handleScroll}

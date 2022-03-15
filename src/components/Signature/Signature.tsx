@@ -10,7 +10,6 @@ import { CustomSpacer } from "../Views/Spacer";
 const { SIGNATURE } = Language.PAGE;
 
 interface CustomSignatureProps {
-  continueLoading: boolean;
   handleCancel?: () => void;
   handleConfirm?: () => void;
   height?: number;
@@ -24,7 +23,6 @@ interface CustomSignatureProps {
 }
 
 export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
-  continueLoading,
   handleCancel,
   handleConfirm,
   height,
@@ -116,13 +114,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
       <View style={flexRowCC}>
         <RoundedButton buttonStyle={{ width: sw205 }} onPress={handlePressCancel} secondary={true} text={cancelText} />
         <CustomSpacer isHorizontal={true} space={sw16} />
-        <RoundedButton
-          buttonStyle={{ width: sw205 }}
-          disabled={disabled}
-          loading={continueLoading}
-          onPress={handlePressConfirm}
-          text={confirmText}
-        />
+        <RoundedButton buttonStyle={{ width: sw205 }} disabled={disabled} onPress={handlePressConfirm} text={confirmText} />
       </View>
       <CustomSpacer space={defaultSpaceToBottom} />
     </View>

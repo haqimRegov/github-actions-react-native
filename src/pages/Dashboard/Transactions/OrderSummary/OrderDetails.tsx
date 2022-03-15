@@ -31,9 +31,9 @@ import {
   sw64,
   sw8,
 } from "../../../../styles";
-import { titleCaseString } from "../../../../utils";
+import { isNotEmpty, titleCaseString } from "../../../../utils";
 
-const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
+const { DASHBOARD_ORDER_DETAILS, DASHBOARD_PROFILE } = Language.PAGE;
 
 declare interface OrderDetailsProps {
   data: IDashboardOrderSummary;
@@ -71,6 +71,22 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
     { label: DASHBOARD_ORDER_DETAILS.LABEL_PROCESSING, title: transactionDetails.kibProcessingBranch, titleStyle: fsTransformNone },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
+
+  const epfHeader: LabeledTitleProps[] = [];
+  if (isNotEmpty(paymentSummary) && paymentSummary.length > 0 && paymentSummary[0].paymentMethod === "EPF") {
+    epfHeader.push(
+      {
+        label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_ACCOUNT,
+        title: paymentSummary[0].epfAccountNumber!,
+        titleStyle: fsTransformNone,
+      },
+      {
+        label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+        title: paymentSummary[0].remark !== null && paymentSummary[0].remark !== undefined ? paymentSummary[0].remark : "-",
+        titleStyle: fsTransformNone,
+      },
+    );
+  }
 
   return (
     <Fragment>
@@ -152,13 +168,25 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
         <Fragment>
           <CustomSpacer space={sh16} />
           <View style={borderBottomBlue3} />
+          {paymentSummary[0].paymentMethod === "EPF" ? (
+            <View style={px(sw24)}>
+              <CustomSpacer space={sh32} />
+              <Text style={fs18BoldBlack2}>{DASHBOARD_PROFILE.TITLE_EPF_DETAILS}</Text>
+              <CustomSpacer space={sh16} />
+              <View style={px(sw32)}>
+                <TextCard data={epfHeader} spaceBetweenItem={sw64} />
+              </View>
+              <CustomSpacer space={sh16} />
+            </View>
+          ) : null}
           <View style={px(sw24)}>
             {paymentSummary.map((payment: IOrderSummaryPayment, index: number) => {
               const surplusLabel = payment.surplusNote !== null ? payment.surplusNote : "";
-              const paymentLabel =
+              const paymentNormalLabel =
                 payment.paymentMethod !== "Recurring"
                   ? `${DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT} ${index + 1}`
                   : DASHBOARD_ORDER_DETAILS.LABEL_RECURRING_DETAILS;
+              const paymentLabel = payment.paymentMethod === "EPF" ? payment.utmc : paymentNormalLabel;
 
               const handleFile = () => {
                 setFile(payment.proofOfPayment);
@@ -173,10 +201,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                     title: `${payment.fundCurrency} ${payment.investmentAmount}`,
                     titleStyle: fsTransformNone,
                   },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_ACCOUNT, title: payment.epfAccountNumber! },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_REFERENCE, title: payment.epfReferenceNo! },
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_UTMC, title: payment.utmc! },
                 );
               }
 
@@ -319,14 +344,25 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   },
                 );
               }
+              const topSpace = paymentSummary[0].paymentMethod === "EPF" && index === 0 ? sh16 : sh32;
 
               return (
                 <Fragment key={index}>
-                  <CustomSpacer space={sh32} />
+                  <CustomSpacer space={topSpace} />
                   <View style={{ ...flexRow, ...centerVertical }}>
                     <IcoMoon color={colorBlue._1} name="payment" size={sw24} />
                     <CustomSpacer isHorizontal={true} space={sw8} />
-                    <Text style={fs18BoldBlack2}>{paymentLabel}</Text>
+                    {payment.paymentMethod === "EPF" ? (
+                      <Fragment>
+                        <Text style={fs18BoldBlack2}>{titleCaseString(paymentLabel!)}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                        <View style={flexChild}>
+                          <View style={borderBottomBlue5} />
+                        </View>
+                      </Fragment>
+                    ) : (
+                      <Text style={fs18BoldBlack2}>{titleCaseString(paymentLabel!)}</Text>
+                    )}
                     <CustomSpacer isHorizontal={true} space={sw8} />
                     <Text style={fs12RegGray5}>{surplusLabel}</Text>
                   </View>

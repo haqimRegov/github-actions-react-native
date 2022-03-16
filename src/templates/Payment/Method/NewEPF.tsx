@@ -54,6 +54,7 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
         const tempReferenceNo = [...epfReferenceNo];
         const findIndex = tempReferenceNo.findIndex((eachReference: IEpfReferenceNo) => eachReference.utmc === eachKey);
         const referenceNo = findIndex !== -1 ? tempReferenceNo[findIndex].referenceNo : "";
+        const error = findIndex !== -1 ? tempReferenceNo[findIndex].error : undefined;
         const setReferenceNumber = (value: string) => {
           const currentReferenceNumber = { utmc: eachKey, referenceNo: value, amount: fundsPerUtmc[eachKey] };
           if (findIndex !== -1) {
@@ -61,12 +62,44 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
           } else {
             tempReferenceNo.push(currentReferenceNumber);
           }
+          const checkDuplicate = tempReferenceNo.filter(
+            (eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo === currentReferenceNumber.referenceNo,
+          );
+          const checkIndex = findIndex !== -1 ? findIndex : 0;
+          const checkError = checkDuplicate.length > 1 ? { error: PAYMENT.LABEL_SAME_EPF_REFERENCE_NO } : {};
+          tempReferenceNo[checkIndex] = { ...tempReferenceNo[checkIndex], ...checkError };
           setPayment({ ...payment, epfReferenceNo: tempReferenceNo });
+        };
+
+        const validateReferenceNumber = () => {
+          const currentReferenceNumber = tempReferenceNo[keyIndex];
+          const checkDuplicate = tempReferenceNo.filter(
+            (eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo === currentReferenceNumber.referenceNo,
+          );
+          let updatedRefNo = [...tempReferenceNo];
+          const checkDuplicateNumberExist = [...new Set(tempReferenceNo.map((eachRef: IEpfReferenceNo) => eachRef.referenceNo))];
+          if (checkDuplicateNumberExist.length === tempReferenceNo.length) {
+            updatedRefNo = tempReferenceNo.map((eachRef: IEpfReferenceNo) => {
+              return { ...eachRef, error: undefined };
+            });
+          }
+          if (checkDuplicate.length > 1) {
+            updatedRefNo[keyIndex] = { ...updatedRefNo[keyIndex], error: PAYMENT.LABEL_SAME_EPF_REFERENCE_NO };
+          } else {
+            updatedRefNo[keyIndex] = { ...updatedRefNo[keyIndex], error: undefined };
+          }
+          setPayment({ ...payment, epfReferenceNo: updatedRefNo });
         };
 
         const epfItems = [
           <LabeledTitle label={PAYMENT.LABEL_AMOUNT} title={`MYR ${fundsPerUtmc[eachKey]}`} style={{ width: sw360 }} />,
-          <CustomTextInput label={PAYMENT.LABEL_EPF_REFERENCE} onChangeText={setReferenceNumber} value={referenceNo} />,
+          <CustomTextInput
+            error={error}
+            label={PAYMENT.LABEL_EPF_REFERENCE}
+            onChangeText={setReferenceNumber}
+            onBlur={validateReferenceNumber}
+            value={referenceNo}
+          />,
         ];
         return (
           <Fragment key={keyIndex}>

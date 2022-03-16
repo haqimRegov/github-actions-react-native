@@ -967,6 +967,7 @@ export const english = {
       LABEL_SALES_CHARGE: "Sales Charge",
       LABEL_SAME_DDA: "Use same DDA Recurring Info as above",
       LABEL_SAME_FPX: "Use same FPX Recurring Info as above",
+      LABEL_SAME_EPF_REFERENCE_NO: "Same reference number already exists. Insert another EPF 9N Form Reference Number.",
       LABEL_SELECT_ACCOUNT: "Select bank account",
       LABEL_SELECT_BANK: "Select bank",
       LABEL_SELECT_BRANCH: "Select bank branch",

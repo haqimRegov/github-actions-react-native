@@ -93,6 +93,7 @@ declare interface IPaymentInfoAction {
 
 declare interface IEpfReferenceNo {
   amount: string;
+  error?: string;
   utmc: string;
   referenceNo: string;
 }

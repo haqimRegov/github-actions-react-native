@@ -154,7 +154,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   });
 
   const fundsPerUtmc = [...new Set(funds.map((eachFund: IOrderInvestment) => eachFund.fundIssuer))];
-
   const paymentFieldProps = { payment: draftPayment, setPayment: setDraftPayment, setViewFile: setViewFile, useOfSurplus: useOfSurplus };
   switch (draftPayment.paymentMethod) {
     case "Cheque":
@@ -178,22 +177,11 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     case "EPF":
       paymentField = <NewEPF funds={funds} payment={draftPayment} setPayment={setDraftPayment} totalAmount={totalInvestment[0]} />;
       saveDisabled =
-        (validateObject(draftPayment, [
-          // "paymentMethod",
-          // "amount",
-          // "currency",
-          // "kibBankAccountNumber",
-          // "kibBankName",
-          // "bankName",
-          // "checkNumber",
-          // "referenceNumber",
-          "epfReferenceNumber",
-          // "epfAccountNumber",
-          // "transactionDate",
-          // "proof",
-        ]) && draftPayment.remark !== "") === false &&
-        Array.isArray(draftPayment.epfReferenceNo) &&
-        draftPayment.epfReferenceNo.filter((eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo !== "").length !== fundsPerUtmc.length;
+        (draftPayment.remark !== undefined && draftPayment.remark !== "") ||
+        (Array.isArray(draftPayment.epfReferenceNo) &&
+          (draftPayment.epfReferenceNo.filter((eachReferenceNo: IEpfReferenceNo) => eachReferenceNo.error !== undefined).length > 0 ||
+            draftPayment.epfReferenceNo.filter((eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo !== "").length !==
+              fundsPerUtmc.length));
       break;
 
     case "Recurring":

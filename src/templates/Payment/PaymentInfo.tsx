@@ -305,7 +305,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     updatePromptTitle = `${PAYMENT.PROMPT_SUBTITLE_UPDATE}\n${PAYMENT.PROMPT_SUBTITLE_DELETE_CTA}`;
   }
 
-  const ctaUseSubtitle = `\n${PAYMENT.PROMPT_SUBTITLE_USE_CTA}`;
+  const ctaUseSubtitle = `\n\n${PAYMENT.PROMPT_SUBTITLE_USE_CTA}`;
 
   // check for existing surplus from reference or cheque number
   const findSameSurplus = draftAvailableBalance.findIndex((bal) => {

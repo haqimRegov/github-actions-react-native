@@ -89,7 +89,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           setPasswordRecovery(true);
         }
       } else {
-        setInput2Error(error.message);
+        setInput1Error(error.message);
       }
     }
   };

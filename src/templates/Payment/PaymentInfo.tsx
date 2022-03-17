@@ -819,7 +819,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         />
       ) : null}
       <View>
-        <CustomSpacer space={sh24} />
+        {(ctaDetails?.length === 0 && draftAvailableBalance.length === 0) || payment.paymentType !== "Cash" ? (
+          <CustomSpacer space={sh24} />
+        ) : null}
         <View style={px(sw24)}>
           <CustomCard
             spaceBetweenGroup={sh24}

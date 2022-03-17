@@ -41,6 +41,7 @@ declare interface PDFViewProps {
   completed: boolean;
   editReceipt: IOnboardingReceiptState | undefined;
   principalSignature: string;
+  jointAge?: number;
   jointSignature: string;
   showSignPdf: boolean;
   signer: Signer;
@@ -61,6 +62,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   editReceipt,
   completed,
   principalSignature,
+  jointAge,
   jointSignature,
   showSignPdf,
   signer,
@@ -90,7 +92,10 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         signatureToDisplay = principalSignature;
         break;
       case "joint":
-        signerLabel = TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE;
+        signerLabel =
+          jointAge !== undefined && jointAge > 18
+            ? TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE
+            : TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE_OPTIONAL;
         signatureToDisplay = jointSignature;
         break;
       default:

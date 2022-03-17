@@ -26,6 +26,7 @@ import {
   fs12RegGray5,
   fs12RegGray6,
   fs12RegWhite1,
+  fs16BoldBlack2,
   px,
   sh12,
   sh24,
@@ -267,44 +268,50 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
       break;
   }
 
+  const checkSpaceToLabel = fundingOption.length > 1 ? sh8 : 0;
+
   return (
     <Fragment>
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh8} text={INVESTMENT.LABEL_FUNDING_OPTION} />
-          <RadioButtonGroup
-            direction="row"
-            disabledIndex={disableEpf}
-            disabledTooltip={true}
-            labelStyle={autoWidth}
-            options={fundingOption}
-            optionStyle={{ width: sw116 }}
-            space={sw64}
-            selected={fundPaymentMethod}
-            selectedColor={radioColor}
-            setSelected={handleFundingMethod}
-            tooltipContent={
-              <View>
-                <Text style={fs12RegWhite1}>{INVESTMENT.EPF_DISABLED}</Text>
-                <CustomSpacer space={sh12} />
-                <TouchableWithoutFeedback onPress={handleScroll}>
-                  <View style={{ ...borderBottomBlue5, borderBottomColor: colorBlue._8, width: sw152 }}>
-                    <Text style={fs12BoldBlue8}>{INVESTMENT.EPF_DISABLED_SUB}</Text>
-                    <CustomSpacer space={sh4} />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            }
-            showTooltip={tooltipVisible}
-            setShowTooltip={handleTooltip}
-          />
+          <TextSpaceArea style={{ width: sw360 }} spaceToBottom={checkSpaceToLabel} text={INVESTMENT.LABEL_FUNDING_OPTION} />
+          {fundingOption.length > 1 ? (
+            <RadioButtonGroup
+              direction="row"
+              disabledIndex={disableEpf}
+              disabledTooltip={true}
+              labelStyle={autoWidth}
+              options={fundingOption}
+              optionStyle={{ width: sw116 }}
+              space={sw64}
+              selected={fundPaymentMethod}
+              selectedColor={radioColor}
+              setSelected={handleFundingMethod}
+              tooltipContent={
+                <View>
+                  <Text style={fs12RegWhite1}>{INVESTMENT.EPF_DISABLED}</Text>
+                  <CustomSpacer space={sh12} />
+                  <TouchableWithoutFeedback onPress={handleScroll}>
+                    <View style={{ ...borderBottomBlue5, borderBottomColor: colorBlue._8, width: sw152 }}>
+                      <Text style={fs12BoldBlue8}>{INVESTMENT.EPF_DISABLED_SUB}</Text>
+                      <CustomSpacer space={sh4} />
+                    </View>
+                  </TouchableWithoutFeedback>
+                </View>
+              }
+              showTooltip={tooltipVisible}
+              setShowTooltip={handleTooltip}
+            />
+          ) : (
+            <Text style={fs16BoldBlack2}>{fundingOption[0]}</Text>
+          )}
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         {multiClass === false && currencies.length > 1 ? (
           <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
         ) : null}
         {multiClass === false && currencies.length === 1 ? (
-          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} spaceToLabel={sh8} style={{ width: sw360 }} />
+          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} spaceToLabel={checkSpaceToLabel} style={{ width: sw360 }} />
         ) : null}
       </View>
       <CustomSpacer space={sh24} />

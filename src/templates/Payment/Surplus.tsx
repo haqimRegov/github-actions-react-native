@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { v1 as uuidv1 } from "uuid";
 
 import { CustomSpacer } from "../../components";
-import { flexRow, px, sh24, sw16, sw24 } from "../../styles";
+import { flexRow, flexWrap, px, sh24, sw16, sw24 } from "../../styles";
 import { deleteKey, formatAmount, isObjectEqual, parseAmount } from "../../utils";
 import { calculateAvailableBalance, generateNewInfo, getAmount } from "./helpers";
 import { ToggleCard } from "./ToggleCard";
@@ -184,11 +184,11 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
           currency: payment.currency,
           isEditable: oldPayment.isEditable !== undefined ? oldPayment.isEditable : undefined,
           new: undefined,
+          orderNumber: payment.orderNumber,
           paymentId: uniqueId.current,
           remark: undefined,
           saved: false,
         };
-
     // surplus was selected before using CTA, oldPayment is when it was previously saved as a use of surplus
     if (oldPayment.tag !== undefined || payment.tag !== undefined) {
       // recalculate balance after removing use of surplus
@@ -216,7 +216,7 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
         <Fragment>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>
-            <View style={flexRow}>
+            <View style={{ ...flexRow, ...flexWrap }}>
               {filteredSurplus.length > 0 &&
                 filteredSurplus.map((currentSurplus: IPaymentInfo, index: number) => {
                   const currentSurplusSelected = payment.tag !== undefined && payment.tag.uuid === currentSurplus.parent;
@@ -233,21 +233,23 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
 
                   return (
                     <Fragment key={index}>
-                      <ToggleCard
-                        type="Use of Surplus"
-                        title={title}
-                        description1={currentSurplus.orderNumber}
-                        description2={currentSurplus.paymentMethod}
-                        onPress={handlePress}
-                        selected={currentSurplusSelected}
-                      />
+                      <View style={{ marginBottom: sh24 }}>
+                        <ToggleCard
+                          type="Use of Surplus"
+                          title={title}
+                          description1={currentSurplus.orderNumber}
+                          description2={currentSurplus.paymentMethod}
+                          onPress={handlePress}
+                          selected={currentSurplusSelected}
+                        />
+                      </View>
                       {index === filteredSurplus.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
                     </Fragment>
                   );
                 })}
               {filteredCta &&
                 filteredCta.length > 0 &&
-                filteredCta.map((cta: TypeCTADetails, index: number) => {
+                filteredCta.map((cta: TypeCTADetails, ctaIndex: number) => {
                   const currentCtaSelected = payment.ctaTag !== undefined && payment.ctaTag.uuid === cta.ctaParent;
 
                   const handlePress = () => {
@@ -255,16 +257,18 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
                   };
 
                   return (
-                    <Fragment key={index}>
-                      {filteredSurplus.length > 0 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
-                      <ToggleCard
-                        type="CTA"
-                        title={cta.clientTrustAccountNumber || "-"}
-                        description1={cta.clientName}
-                        onPress={handlePress}
-                        selected={currentCtaSelected}
-                      />
-                      {index === filteredCta.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
+                    <Fragment key={ctaIndex}>
+                      {filteredSurplus.length > 0 && ctaIndex === 0 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
+                      <View style={{ marginBottom: sh24 }}>
+                        <ToggleCard
+                          type="CTA"
+                          title={cta.clientTrustAccountNumber || "-"}
+                          description1={cta.clientName}
+                          onPress={handlePress}
+                          selected={currentCtaSelected}
+                        />
+                      </View>
+                      {ctaIndex === filteredCta.length - 1 ? null : <CustomSpacer isHorizontal={true} space={sw16} />}
                     </Fragment>
                   );
                 })}

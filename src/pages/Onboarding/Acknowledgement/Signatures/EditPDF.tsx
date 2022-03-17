@@ -319,6 +319,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       completed={completed}
       editReceipt={editReceipt}
       principalSignature={principalSignature}
+      jointAge={jointAge}
       jointSignature={jointSignature}
       showSignPdf={showSignPdf}
       signer={signer}

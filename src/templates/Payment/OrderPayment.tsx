@@ -5,7 +5,7 @@ import { Text, View, ViewStyle } from "react-native";
 import { v1 as uuidv1 } from "uuid";
 
 import { CustomFlexSpacer, CustomSpacer, IconButton, PromptModal, TableBadge } from "../../components";
-import { Language } from "../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_PAYMENT_METHOD } from "../../data/dictionary/payment-method";
 import { IcoMoon } from "../../icons";
 import {
@@ -256,7 +256,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     <View>
       <OrderOverview
         completed={completed}
-        createdOn={createdOn}
+        createdOn={moment(createdOn, "x").format(DEFAULT_DATE_FORMAT)}
         funds={funds}
         orderNumber={orderNumber}
         totalInvestment={totalInvestment}

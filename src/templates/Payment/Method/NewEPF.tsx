@@ -66,7 +66,10 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
             (eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo === currentReferenceNumber.referenceNo,
           );
           const checkIndex = findIndex !== -1 ? findIndex : 0;
-          const checkError = checkDuplicate.length > 1 ? { error: PAYMENT.LABEL_SAME_EPF_REFERENCE_NO } : {};
+          const checkError =
+            checkDuplicate.length > 1 && tempReferenceNo[checkIndex].referenceNo !== ""
+              ? { error: PAYMENT.LABEL_SAME_EPF_REFERENCE_NO }
+              : {};
           tempReferenceNo[checkIndex] = { ...tempReferenceNo[checkIndex], ...checkError };
           setPayment({ ...payment, epfReferenceNo: tempReferenceNo });
         };
@@ -74,7 +77,8 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
         const validateReferenceNumber = () => {
           const currentReferenceNumber = tempReferenceNo[keyIndex];
           const checkDuplicate = tempReferenceNo.filter(
-            (eachRefNo: IEpfReferenceNo) => eachRefNo.referenceNo === currentReferenceNumber.referenceNo,
+            (eachRefNo: IEpfReferenceNo) =>
+              currentReferenceNumber !== undefined && eachRefNo.referenceNo === currentReferenceNumber.referenceNo,
           );
           let updatedRefNo = [...tempReferenceNo];
           const checkDuplicateNumberExist = [...new Set(tempReferenceNo.map((eachRef: IEpfReferenceNo) => eachRef.referenceNo))];
@@ -88,7 +92,9 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
           } else {
             updatedRefNo[keyIndex] = { ...updatedRefNo[keyIndex], error: undefined };
           }
-          setPayment({ ...payment, epfReferenceNo: updatedRefNo });
+          if (updatedRefNo[keyIndex].referenceNo !== "" && updatedRefNo[keyIndex].referenceNo !== undefined) {
+            setPayment({ ...payment, epfReferenceNo: updatedRefNo });
+          }
         };
 
         const epfItems = [

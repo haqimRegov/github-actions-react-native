@@ -1,9 +1,8 @@
-import moment from "moment";
 import React, { FunctionComponent, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, StatusBadge } from "../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
+import { Language } from "../../constants";
 import {
   alignItemsEnd,
   borderBottomGray2,
@@ -71,7 +70,7 @@ export const OrderOverview: FunctionComponent<OrderOverviewProps> = ({
       <View style={cardHeaderStyle}>
         <View>
           <Text style={fs24BoldBlack2}>{orderNumber}</Text>
-          <Text style={fs12BoldGray5}>{moment(createdOn, "x").format(DEFAULT_DATE_FORMAT)}</Text>
+          <Text style={fs12BoldGray5}>{createdOn}</Text>
         </View>
         <CustomFlexSpacer />
         <View style={alignItemsEnd}>

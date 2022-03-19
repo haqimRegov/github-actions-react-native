@@ -35,7 +35,8 @@ import {
   sw56,
   sw8,
   sw80,
-  sw84,
+  sw86,
+  sw90,
   sw92,
 } from "../../../../../styles";
 import { AnimationUtils } from "../../../../../utils";
@@ -203,7 +204,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       textStyle: sortedColumns.includes("orderNumber") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
       titleStyle: sortedColumns.includes("orderNumber") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw84 },
+      viewStyle: { width: sw86 },
     },
     {
       customItem: true,
@@ -247,7 +248,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       itemStyle: { ...justifyContentStart, ...px(sw8) },
       key: [{ key: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? "createdOn" : "lastUpdated" }],
       title: showDateBy.type,
-      viewStyle: { width: sw92, ...px(0), ...centerHorizontal },
+      viewStyle: { width: sw90, ...px(0), ...centerHorizontal },
     },
     {
       customItem: true,

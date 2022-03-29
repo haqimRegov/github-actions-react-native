@@ -63,7 +63,12 @@ export interface OrderPaymentProps {
   setDeletedPayment: (value: IPaymentInfo[]) => void;
   setLocalCtaDetails: (value: TypeCTADetails[]) => void;
   setLocalRecurringDetails?: (value: IRecurringDetails | undefined) => void;
-  setProofOfPayment: (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => void;
+  setProofOfPayment: (
+    value: IPaymentRequired,
+    action?: ISetProofOfPaymentAction,
+    deleted?: boolean,
+    setActiveInfo?: (index: number) => void,
+  ) => void;
   setSavedChangesToast: (toggle: boolean) => void;
 }
 
@@ -128,7 +133,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     if (unsavedChanges !== -1) {
       setUnsavedChanges(-1);
     }
-    setProofOfPayment({ ...proofOfPayment, payments: value }, action, deleted);
+    setProofOfPayment({ ...proofOfPayment, payments: value }, action, deleted, setActiveInfo);
   };
 
   const handleExpandPayment = (latestPayment: IPaymentInfo[], noPrompt?: boolean) => {
@@ -495,7 +500,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 handleExpandPayment(updatedPayments, true);
               };
 
-              const handleSave = (value: IPaymentInfo, additional?: boolean) => {
+              const handleSave = (value: IPaymentInfo, additional?: boolean, isPaymentEqual?: boolean) => {
                 let checkEditNewPayment = {};
                 let checkIsEditable = {};
                 const updatedPayments = cloneDeep(payments);
@@ -573,98 +578,99 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const findExistingCtaParent = cloneLocalCtaDetails.findIndex(
                   (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].paymentId,
                 );
-                // current POP is an existing CTA
-                if (findExistingCtaParent !== -1) {
-                  // eslint-disable-next-line no-console
-                  console.log("Existing CTA");
-                  // current POP is an existing CTA and it is an updated CTA Parent
-                  if (updatedPayments[index].ctaParent !== undefined) {
+                if (isPaymentEqual === false) {
+                  // current POP is an existing CTA
+                  if (findExistingCtaParent !== -1 && isPaymentEqual === false) {
                     // eslint-disable-next-line no-console
-                    console.log("Update CTA Parent");
-                    // TODO Scenario: Edit CTA Parent
-                    // TODO update CTA parent prompt
-                    cloneLocalCtaDetails[findExistingCtaParent] = {
-                      ...cloneLocalCtaDetails[findExistingCtaParent],
-                      ...updatedPayments[index],
-                    };
-                  } else {
+                    console.log("Existing CTA");
+                    // current POP is an existing CTA and it is an updated CTA Parent
+                    if (updatedPayments[index].ctaParent !== undefined) {
+                      // eslint-disable-next-line no-console
+                      console.log("Update CTA Parent");
+                      // TODO Scenario: Edit CTA Parent
+                      // TODO update CTA parent prompt
+                      cloneLocalCtaDetails[findExistingCtaParent] = {
+                        ...cloneLocalCtaDetails[findExistingCtaParent],
+                        ...updatedPayments[index],
+                      };
+                    } else {
+                      // eslint-disable-next-line no-console
+                      console.log("Existing CTA but not a CTA Parent");
+                      // current POP is an existing CTA but is not a CTA Parent anymore
+                      // current POP may be a CTA Child but it will be handled separately
+                      // TODO Scenario: Edit CTA Parent to Non-CTA (delete old CTA Parent)
+                      // TODO Scenario: Edit CTA Parent to CTA Child (delete old CTA Parent)
+                      cloneLocalCtaDetails.splice(findExistingCtaParent, 1);
+                      // TODO Scenario: Edit CTA Parent to Non-CTA (delete children of old CTA Parent)
+                      // TODO this will be triggered by Saved POP because the paymentId is already new
+                      removeAllChildren = true;
+                    }
+                  } else if (updatedPayments[index].ctaParent !== undefined && updatedPayments[index].ctaTag === undefined) {
                     // eslint-disable-next-line no-console
-                    console.log("Existing CTA but not a CTA Parent");
-                    // current POP is an existing CTA but is not a CTA Parent anymore
+                    console.log("Non-existing CTA, new CTA Parent");
+                    // current POP is not an existing CTA and it is a new CTA Parent
+                    const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+
+                    if (latestCtaUsedBy !== undefined) {
+                      cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                    }
                     // current POP may be a CTA Child but it will be handled separately
-                    // TODO Scenario: Edit CTA Parent to Non-CTA (delete old CTA Parent)
-                    // TODO Scenario: Edit CTA Parent to CTA Child (delete old CTA Parent)
-                    cloneLocalCtaDetails.splice(findExistingCtaParent, 1);
-                    // TODO Scenario: Edit CTA Parent to Non-CTA (delete children of old CTA Parent)
-                    // TODO this will be triggered by Saved POP because the paymentId is already new
-                    removeAllChildren = true;
-                  }
-                } else if (updatedPayments[index].ctaParent !== undefined && updatedPayments[index].ctaTag === undefined) {
-                  // eslint-disable-next-line no-console
-                  console.log("Non-existing CTA, new CTA Parent");
-                  // current POP is not an existing CTA and it is a new CTA Parent
-                  const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
-
-                  if (latestCtaUsedBy !== undefined) {
-                    cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
-                  }
-                  // current POP may be a CTA Child but it will be handled separately
-                  // TODO Scenario: New POP CTA Parent
-                  // TODO Scenario: Edit Non-CTA to CTA Parent
-                  // TODO Scenario: Edit CTA Child to CTA Parent (add new parent)
-                  cloneLocalCtaDetails.push(updatedPayments[index]);
-                }
-
-                // current POP is a CTA Child (Use of CTA)
-                if ("ctaTag" in updatedPayments[index] && updatedPayments[index].ctaTag !== undefined) {
-                  // eslint-disable-next-line no-console
-                  console.log("CTA Child");
-                  // check if current CTA Child POP is an existing CTA Child
-                  const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
-                  // update ctaUsedBy of the old parent of the CTA Child
-                  if (latestCtaUsedBy !== undefined) {
-                    // TODO Scenario: Edit CTA Child to another CTA Child
-                    cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                    // TODO Scenario: New POP CTA Parent
+                    // TODO Scenario: Edit Non-CTA to CTA Parent
+                    // TODO Scenario: Edit CTA Child to CTA Parent (add new parent)
+                    cloneLocalCtaDetails.push(updatedPayments[index]);
                   }
 
-                  // look for the CTA Parent of the current CTA Child
-                  // TODO Scenario: Edit CTA Child (nothing will change, just save normally)
-                  const findParentCta = cloneLocalCtaDetails.findIndex(
-                    (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].ctaTag!.uuid,
-                  );
-
-                  if (findParentCta !== -1) {
-                    // current CTA Child has a valid CTA Parent
+                  // current POP is a CTA Child (Use of CTA)
+                  if ("ctaTag" in updatedPayments[index] && updatedPayments[index].ctaTag !== undefined) {
                     // eslint-disable-next-line no-console
-                    console.log("CTA Child, Existing CTA Parent");
-                    const updatedCtaUsedBy =
-                      "ctaUsedBy" in cloneLocalCtaDetails[findParentCta] && cloneLocalCtaDetails[findParentCta].ctaUsedBy !== undefined
-                        ? [...cloneLocalCtaDetails[findParentCta].ctaUsedBy!]
-                        : [];
+                    console.log("CTA Child");
+                    // check if current CTA Child POP is an existing CTA Child
+                    const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+                    // update ctaUsedBy of the old parent of the CTA Child
+                    if (latestCtaUsedBy !== undefined) {
+                      // TODO Scenario: Edit CTA Child to another CTA Child
+                      cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                    }
 
-                    // check if current POP is already in ctaUsedBy of the CTA Parent
-                    const findInUsedBy = updatedCtaUsedBy.findIndex((findCtaTag) => findCtaTag.uuid === updatedPayments[index].paymentId);
+                    // look for the CTA Parent of the current CTA Child
+                    // TODO Scenario: Edit CTA Child (nothing will change, just save normally)
+                    const findParentCta = cloneLocalCtaDetails.findIndex(
+                      (findCta: TypeCTADetails) => findCta.ctaParent === updatedPayments[index].ctaTag!.uuid,
+                    );
 
-                    // current POP is not yet in ctaUsedBy of CTA Parent (new Use of CTA)
-                    if (findInUsedBy === -1) {
-                      // TODO Scenario: New POP CTA Child
-                      // TODO Scenario: Edit Non-CTA to CTA Child
-                      updatedCtaUsedBy.push({ orderNumber: orderNumber, uuid: updatedPayments[index].paymentId! });
-                      // TODO Scenario: Edit CTA Parent to CTA Child (update the ctaUsedBy of the parent)
-                      cloneLocalCtaDetails[findParentCta].ctaUsedBy = updatedCtaUsedBy;
+                    if (findParentCta !== -1) {
+                      // current CTA Child has a valid CTA Parent
+                      // eslint-disable-next-line no-console
+                      console.log("CTA Child, Existing CTA Parent");
+                      const updatedCtaUsedBy =
+                        "ctaUsedBy" in cloneLocalCtaDetails[findParentCta] && cloneLocalCtaDetails[findParentCta].ctaUsedBy !== undefined
+                          ? [...cloneLocalCtaDetails[findParentCta].ctaUsedBy!]
+                          : [];
+
+                      // check if current POP is already in ctaUsedBy of the CTA Parent
+                      const findInUsedBy = updatedCtaUsedBy.findIndex((findCtaTag) => findCtaTag.uuid === updatedPayments[index].paymentId);
+
+                      // current POP is not yet in ctaUsedBy of CTA Parent (new Use of CTA)
+                      if (findInUsedBy === -1) {
+                        // TODO Scenario: New POP CTA Child
+                        // TODO Scenario: Edit Non-CTA to CTA Child
+                        updatedCtaUsedBy.push({ orderNumber: orderNumber, uuid: updatedPayments[index].paymentId! });
+                        // TODO Scenario: Edit CTA Parent to CTA Child (update the ctaUsedBy of the parent)
+                        cloneLocalCtaDetails[findParentCta].ctaUsedBy = updatedCtaUsedBy;
+                      }
                     }
                   }
-                }
 
-                // TODO Scenario: Edit CTA Child to Non-CTA
-                if (updatedPayments[index].ctaParent === undefined && updatedPayments[index].ctaTag === undefined) {
-                  // eslint-disable-next-line no-console
-                  console.log("Edit to Non-CTA");
-                  const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
-                  // eslint-disable-next-line no-console
-                  console.log("latestCtaUsedBy", latestCtaUsedBy);
-                  if (latestCtaUsedBy !== undefined) {
-                    cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                  // TODO Scenario: Edit CTA Child to Non-CTA
+                  if (updatedPayments[index].ctaParent === undefined && updatedPayments[index].ctaTag === undefined) {
+                    // eslint-disable-next-line no-console
+                    console.log("Edit to Non-CTA");
+                    const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
+                    // eslint-disable-next-line no-console
+                    if (latestCtaUsedBy !== undefined) {
+                      cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
+                    }
                   }
                 }
 
@@ -763,7 +769,9 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                   }
                 }
                 const action: ISetProofOfPaymentAction | undefined =
-                  getPaymentId !== undefined ? { paymentId: getPaymentId, option: "update", mode: mode } : undefined;
+                  getPaymentId !== undefined && isPaymentEqual === false
+                    ? { paymentId: getPaymentId, option: "update", mode: mode }
+                    : undefined;
                 const surplusUuid =
                   updatedPayments !== undefined && updatedPayments[index].tag !== undefined ? updatedPayments[index].tag!.uuid : undefined;
                 const checkDuplicateSurplus = updatedPayments.filter(

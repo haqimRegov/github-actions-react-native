@@ -58,7 +58,16 @@ import {
   sw7,
   sw8,
 } from "../../styles";
-import { formatAmount, isAmount, isNotEmpty, isObjectEqual, parseAmount, parseAmountToString, validateObject } from "../../utils";
+import {
+  deleteKey,
+  formatAmount,
+  isAmount,
+  isNotEmpty,
+  isObjectEqual,
+  parseAmount,
+  parseAmountToString,
+  validateObject,
+} from "../../utils";
 import { generateNewInfo, getAmount, validateCtaNumber } from "./helpers";
 import { NewCheque, NewCTA, NewEPF, NewOnlineBanking, NewRecurring } from "./Method";
 import { IPaymentCardStackRef, PaymentCardStack } from "./Surplus";
@@ -80,7 +89,7 @@ interface PaymentInfoProps {
   funds: IOrderInvestment[];
   handleEditSaved: () => void;
   handleRemove: () => void;
-  handleSave: (value: IPaymentInfo, additional?: boolean) => void;
+  handleSave: (value: IPaymentInfo, additional?: boolean, isPaymentEqual?: boolean) => void;
   handleUnsaved: (state: number) => void;
   localCtaDetails: TypeCTADetails[] | undefined;
   payment: IPaymentInfo;
@@ -127,7 +136,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const [updatePrompt, setUpdatePrompt] = useState<"add" | "save" | undefined>(undefined);
   const [error, setError] = useState<IPaymentError>({ amount: undefined, checkNumber: undefined, ctaNumber: undefined });
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
-  const isPaymentEqual = isObjectEqual(draftPayment, payment);
+  const draftPaymentWithoutRemark = deleteKey(draftPayment, ["remark", "saved"]);
+  const paymentWithoutRemark = deleteKey(payment, ["remark", "saved"]);
+  const isPaymentEqual = isObjectEqual(draftPaymentWithoutRemark, paymentWithoutRemark);
   const useOfSurplus = draftPayment.tag !== undefined;
   const useOfCta = draftPayment.ctaTag !== undefined;
 
@@ -286,7 +297,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
 
   const ctaParentIndex = findCtaParent !== -1 ? findCtaParent : findOldCtaParent;
   const ctaBalanceSharedTo = ctaParentIndex !== -1 ? localCtaDetails![ctaParentIndex].ctaUsedBy!.map((usedBy) => usedBy.orderNumber!) : [];
-  const ctaSavedSharedTo = isNotEmpty(payment.sharedTo) ? payment.sharedTo! : [];
+  const ctaSavedSharedTo = isNotEmpty(payment.sharedTo) && payment.paymentMethod === "Client Trust Account (CTA)" ? payment.sharedTo! : [];
   const combineCtaSharedTo = ctaSavedSharedTo.concat(ctaBalanceSharedTo);
   const uniqueCtaSharedTo = combineCtaSharedTo.filter((orderNum, index) => combineCtaSharedTo.indexOf(orderNum) === index);
 
@@ -500,6 +511,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       // always setting to empty array if it's a CTA Parent and removing the ctaUsedBy if it's Non-CTA or a CTA Child
       ctaUsedBy: latestPayment.paymentMethod === "Client Trust Account (CTA)" && latestPayment.ctaTag === undefined ? [] : undefined,
       saved: true,
+      sharedTo: latestPayment.isEditable !== undefined && isPaymentEqual === false ? [] : latestPayment.sharedTo,
     };
     return updatedPayment;
   };
@@ -550,17 +562,17 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     }
     if (amount.error === undefined && ctaNumberError === undefined) {
       updateAvailableBalance(cleanPayment);
-      handleSave({ ...cleanPayment, amount: amount.value }, add);
+      handleSave({ ...cleanPayment, amount: amount.value }, add, isPaymentEqual);
     }
   };
 
   const handleSaveInfo = () => {
     // TODO do not show prompt and do not update available balance if no changes are made
     // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
-    if (balanceSharedTo.length > 0 && draftPayment.isEditable !== false) {
+    if (balanceSharedTo.length > 0 && draftPayment.isEditable !== false && isPaymentEqual === false) {
       return setUpdatePrompt("save");
     }
-    if (uniqueCtaSharedTo.length > 0 && draftPayment.isEditable !== false) {
+    if (uniqueCtaSharedTo.length > 0 && draftPayment.isEditable !== false && isPaymentEqual === false) {
       return setUpdatePrompt("save");
     }
     return saveUpdatedInfo();
@@ -569,10 +581,10 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const handleAddInfo = () => {
     // TODO do not show prompt and do not update available balance if no changes are made
     // if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
-    if (balanceSharedTo.length > 0) {
+    if (balanceSharedTo.length > 0 && isPaymentEqual === false) {
       return setUpdatePrompt("add");
     }
-    if (uniqueCtaSharedTo.length > 0 && draftPayment.isEditable !== false) {
+    if (uniqueCtaSharedTo.length > 0 && draftPayment.isEditable !== false && isPaymentEqual === false) {
       return setUpdatePrompt("add");
     }
     return saveUpdatedInfo(true);
@@ -704,6 +716,9 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const checkBaseItems = draftPayment.paymentType === "EPF" ? epfBaseItems : checkRecurringItems;
 
   const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
+  const surplusCardCount = availableBalance.filter(
+    (eachSurplus: IPaymentInfo) => eachSurplus.excess?.amount !== "0" && eachSurplus.orderNumber !== payment.orderNumber,
+  );
   const promptStyle = { ...fsAlignLeft, ...fullWidth };
 
   // effect to check when a saved info was edited or deleted
@@ -819,7 +834,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         />
       ) : null}
       <View>
-        {(ctaDetails?.length === 0 && draftAvailableBalance.length === 0) || payment.paymentType !== "Cash" ? (
+        {(ctaDetails?.length === 0 && surplusCardCount.length === 0) || payment.paymentType !== "Cash" ? (
           <CustomSpacer space={sh24} />
         ) : null}
         <View style={px(sw24)}>

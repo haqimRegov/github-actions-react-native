@@ -515,12 +515,12 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 const updatedDeletedPayments = [...deletedPayment];
 
                 if (
-                  (isObjectEqual(value, updatedPayments[index]) === false &&
+                  (isPaymentEqual === false &&
                     updatedPayments[index].amount !== "" &&
                     updatedPayments[index].paymentType !== "Recurring") ||
                   (updatedPayments[index].paymentType === "Recurring" &&
                     updatedPayments[index].paymentId !== undefined &&
-                    isObjectEqual(value, updatedPayments[index]) === false)
+                    isPaymentEqual === false)
                 ) {
                   setSavedChangesToast(true);
                 }

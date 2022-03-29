@@ -241,7 +241,12 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
             </View>
             {tempData !== undefined &&
               tempData.map((proofOfPayment: IPaymentRequired, index: number) => {
-                const setProofOfPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
+                const setProofOfPayment = (
+                  value: IPaymentRequired,
+                  action?: ISetProofOfPaymentAction,
+                  deleted?: boolean,
+                  setActiveInfo?: (activeIndex: number) => void,
+                ) => {
                   let updatedProofOfPayments: IPaymentRequired[] = [...tempData];
                   updatedProofOfPayments[index] = { ...updatedProofOfPayments[index], ...value };
                   if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined) {
@@ -264,6 +269,14 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                       };
                     });
                     updatedProofOfPayments = [...updatedPOP];
+                  }
+                  if (
+                    updatedProofOfPayments[index].payments.length !== 0 &&
+                    "saved" in updatedProofOfPayments[index].payments[updatedProofOfPayments[index].payments.length - 1] &&
+                    updatedProofOfPayments[index].payments[updatedProofOfPayments[index].payments.length - 1].saved === false &&
+                    setActiveInfo !== undefined
+                  ) {
+                    setActiveInfo(updatedProofOfPayments[index].payments.length - 1);
                   }
                   setTempData(updatedProofOfPayments);
                   if (deleted === false) {

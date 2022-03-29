@@ -163,7 +163,12 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     }
   };
 
-  const handleSetPayment = (value: IPaymentRequired, action?: ISetProofOfPaymentAction, deleted?: boolean) => {
+  const handleSetPayment = (
+    value: IPaymentRequired,
+    action?: ISetProofOfPaymentAction,
+    deleted?: boolean,
+    setActiveInfo?: (index: number) => void,
+  ) => {
     const updatedProofOfPayments: IPaymentRequired = { ...tempData, ...value };
     if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined && action.mode === "cta") {
       const filteredPayments = updatedProofOfPayments.payments.filter((eachPOP) => {
@@ -186,7 +191,14 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       updatedProofOfPayments.payments = cloneDeep(filteredPayments);
       updatedProofOfPayments.status = filteredPayments.length === 0 ? "Pending Payment" : updatedProofOfPayments.status;
     }
-
+    if (
+      updatedProofOfPayments.payments.length !== 0 &&
+      "saved" in updatedProofOfPayments.payments[updatedProofOfPayments.payments.length - 1] &&
+      updatedProofOfPayments.payments[updatedProofOfPayments.payments.length - 1].saved === false &&
+      setActiveInfo !== undefined
+    ) {
+      setActiveInfo(updatedProofOfPayments.payments.length - 1);
+    }
     setTempData(updatedProofOfPayments);
     if (deleted === false) {
       setProofOfPayment(updatedProofOfPayments);

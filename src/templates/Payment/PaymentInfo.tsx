@@ -520,37 +520,40 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     const hasExcess = latestPayment.excess !== undefined;
     const updatedPayment: IPaymentInfo = { ...latestPayment, utilised: hasExcess ? [] : undefined };
     const newAvailableBalance = cloneDeep(draftAvailableBalance);
+    // Update available balance only if the any of the content is updated
+    if (isPaymentEqual === false) {
+      // if (updatedPayment.parent !== undefined) {
+      const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.parent === updatedPayment.paymentId);
+
+      // payment is an existing surplus
+      if (findExistingSurplusParent !== -1) {
+        if (hasExcess === true) {
+          // update existing surplus
+          // TODO do not update available balance if user didn't update anything
+          newAvailableBalance.splice(findExistingSurplusParent, 1, updatedPayment);
+        } else {
+          // delete existing surplus
+          newAvailableBalance.splice(findExistingSurplusParent, 1);
+        }
+        // new payment with surplus
+      } else if (hasExcess === true) {
+        newAvailableBalance.push(updatedPayment);
+      }
+      // }
+
+      const newAvailableBalanceWithId: IPaymentInfo[] = newAvailableBalance.map((bal) => {
+        const updatedUtilised: IUtilisedAmount[] = bal.utilised!.map((util) => ({
+          ...util,
+          paymentId: util.paymentId !== undefined ? util.paymentId : updatedPayment.paymentId!,
+        }));
+
+        return { ...bal, utilised: updatedUtilised };
+      });
+      // update application balance for new or updated surplus, and for use of surplus
+      setAvailableBalance(newAvailableBalanceWithId, undefined);
+    }
 
     // // check if payment info has surplus
-    // if (updatedPayment.parent !== undefined) {
-    const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.parent === updatedPayment.paymentId);
-
-    // payment is an existing surplus
-    if (findExistingSurplusParent !== -1) {
-      if (hasExcess === true) {
-        // update existing surplus
-        // TODO do not update available balance if user didn't update anything
-        newAvailableBalance.splice(findExistingSurplusParent, 1, updatedPayment);
-      } else {
-        // delete existing surplus
-        newAvailableBalance.splice(findExistingSurplusParent, 1);
-      }
-      // new payment with surplus
-    } else if (hasExcess === true) {
-      newAvailableBalance.push(updatedPayment);
-    }
-    // }
-
-    const newAvailableBalanceWithId: IPaymentInfo[] = newAvailableBalance.map((bal) => {
-      const updatedUtilised: IUtilisedAmount[] = bal.utilised!.map((util) => ({
-        ...util,
-        paymentId: util.paymentId !== undefined ? util.paymentId : updatedPayment.paymentId!,
-      }));
-
-      return { ...bal, utilised: updatedUtilised };
-    });
-    // update application balance for new or updated surplus, and for use of surplus
-    setAvailableBalance(newAvailableBalanceWithId, undefined);
   };
 
   const saveUpdatedInfo = (add?: boolean) => {

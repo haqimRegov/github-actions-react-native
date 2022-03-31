@@ -5,13 +5,17 @@ declare interface IGetPaymentRequiredRequest {
 declare interface IGetPaymentRequiredResult {
   allowedRecurringType: string[];
   createdOn: string;
-  funds: IOrderInvestment[];
+  ctaDetails: TypeCTADetails[];
   epfAccountNumber: string;
+  funds: IOrderInvestment[];
+  isLastOrder: boolean;
   orderNumber: string;
-  paymentType: string;
+  payment: IPaymentInfo[];
   paymentCount: number;
+  paymentType: TypePaymentType;
+  recurringDetails: IRecurringDetails;
   status: string;
-  surplusBalance: string;
+  surplusBalance: IPaymentInfo[];
   totalInvestment: IOrderTotalAmount[];
   totalPaidAmount: IOrderAmount[];
 }

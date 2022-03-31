@@ -1,10 +1,9 @@
 import { CommonActions } from "@react-navigation/native";
-import { Alert } from "react-native";
 
 import { ERROR_CODE, ERRORS } from "../data/dictionary";
 import { AlertDialog } from "./Alert";
 
-export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp) => {
+export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp, handleLoading?: (loading: boolean) => void) => {
   const err = error !== undefined ? error : ERRORS.internal;
 
   const handleNavigate = () => {
@@ -17,14 +16,17 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
       );
     }
   };
-  // eslint-disable-next-line no-console
-  console.log("ErrorHandler", error);
   if (err.errorCode === ERROR_CODE.unauthenticated && navigation !== undefined) {
-    return AlertDialog(err.message, handleNavigate, "Session Expired");
+    AlertDialog(err.message, handleNavigate, "Session Expired");
   }
+
+  const handleDialog = () => {
+    if (handleLoading !== undefined) {
+      handleLoading(false);
+    }
+  };
+
   setTimeout(() => {
-    Alert.alert(err.message);
+    AlertDialog(err.message, handleDialog);
   }, 100);
-  // TODO proper return type
-  return undefined as any;
 };

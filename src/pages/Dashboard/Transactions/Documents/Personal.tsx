@@ -1,27 +1,15 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomSpacer, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
+import { ERRORS } from "../../../../data/dictionary";
+import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import {
-  borderBottomGray4,
-  centerHV,
-  colorGray,
-  flexChild,
-  fs12BoldBlack2,
-  fs16RegBlack2,
-  px,
-  sh176,
-  sh24,
-  sh32,
-  sh8,
-  sw24,
-  sw64,
-} from "../../../../styles";
+import { borderBottomGray2, fs12BoldGray6, fs16SemiBoldGray6, px, sh176, sh24, sh32, sh8, sw24, sw68 } from "../../../../styles";
 import { AlertDialog } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
@@ -101,7 +89,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
 
   const handleFetch = async () => {
     const request: IGetSoftCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
-    const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(request, navigation);
+    const response: IGetSoftCopyDocumentsResponse = await getSoftCopyDocuments(request, navigation, setLoading);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -115,47 +103,87 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     }
   };
 
+  const handleUpload = async (personalDocs: ISoftCopyDocument[], clientId: string) => {
+    const personalDocsWithKeys = await Promise.all(
+      personalDocs.map(async ({ docs, name }: ISoftCopyDocument) => {
+        return {
+          docs: await Promise.all(
+            docs.map(async (documents) => {
+              try {
+                let title = "";
+                if (documents!.title === "Passport") {
+                  title = "passport";
+                } else if (documents!.title === "Certificate of Loss of Nationality") {
+                  title = "certificate";
+                } else {
+                  title = `${documents!.title!.toLowerCase().replace(" - ", "_")}`;
+                }
+
+                const url = S3UrlGenerator.document(clientId, title, documents!.type!);
+                const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
+
+                if (uploadedFile === undefined) {
+                  throw new Error();
+                }
+                return {
+                  title: documents!.title!,
+                  file: {
+                    // base64: documents!.base64!,
+                    name: documents!.name!,
+                    size: documents!.size!,
+                    type: documents!.type!,
+                    date: documents!.date!,
+                    path: documents!.path!,
+                    url: uploadedFile.key,
+                  },
+                };
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } catch (error: any) {
+                // // eslint-disable-next-line no-console
+                AlertDialog(ERRORS.storage.message, () => setLoading(false));
+                fetching.current = true;
+                return error;
+              }
+            }),
+          ),
+          name: name,
+        };
+      }),
+    );
+    return personalDocsWithKeys;
+  };
+
   const handleSubmit = async () => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
       setPrompt(true);
+      let pendingDocumentsPrincipalWithKeys: ISubmitSoftCopyDocuments[] = [];
+      let pendingDocumentsJointWithKeys: ISubmitSoftCopyDocuments[] = [];
+
+      if (pendingDocumentsPrincipal.length !== 0) {
+        pendingDocumentsPrincipalWithKeys = await handleUpload(pendingDocumentsPrincipal, currentOrder!.clientId!);
+        if (pendingDocumentsPrincipalWithKeys === undefined) {
+          AlertDialog(ERRORS.storage.message, () => setLoading(false));
+          return undefined;
+        }
+      }
+
+      if (pendingDocumentsJoint.length !== 0) {
+        pendingDocumentsJointWithKeys = await handleUpload(pendingDocumentsJoint, currentOrder!.jointId!);
+        if (pendingDocumentsJointWithKeys === undefined) {
+          AlertDialog(ERRORS.storage.message, () => setLoading(false));
+          return undefined;
+        }
+      }
+
       const request: ISubmitSoftCopyDocumentsRequest = {
         orderNumber: currentOrder!.orderNumber,
-        principal: pendingDocumentsPrincipal.map(({ docs, name }) => {
-          return {
-            docs: docs.map((documents) => ({
-              title: documents!.title!,
-              file: {
-                base64: documents!.base64!,
-                name: documents!.name!,
-                size: documents!.size!,
-                type: documents!.type!,
-                date: documents!.date!,
-                path: documents!.path!,
-              },
-            })),
-            name: name,
-          };
-        }),
-        joint: pendingDocumentsJoint.map(({ docs, name }) => {
-          return {
-            docs: docs.map((documents) => ({
-              title: documents!.title!,
-              file: {
-                base64: documents!.base64!,
-                name: documents!.name!,
-                size: documents!.size!,
-                type: documents!.type!,
-                date: documents!.date!,
-                path: documents!.path!,
-              },
-            })),
-            name: name,
-          };
-        }),
+        principal: pendingDocumentsPrincipalWithKeys,
+        joint: pendingDocumentsJointWithKeys,
       };
-      const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation);
+      const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation, setLoading);
       fetching.current = false;
       if (response !== undefined) {
         const { data, error } = response;
@@ -173,6 +201,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         }
       }
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -188,15 +217,19 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         titleIconOnPress={handleBackToTransactions}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
         titleIcon="arrow-left">
-        <View style={px(sw64)}>
-          <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16RegBlack2} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
+        <View style={px(sw68)}>
+          <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>
         {documentList !== undefined ? (
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
                 {documentList.joint && documentsPrincipal.length > 0 ? (
-                  <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL} />
+                  <TextSpaceArea
+                    spaceToBottom={sh8}
+                    style={{ ...fs12BoldGray6, lineHeight: sh24 }}
+                    text={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
+                  />
                 ) : null}
                 <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
               </View>
@@ -206,13 +239,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 {documentsPrincipal.length > 0 && documentsJoint.length > 0 ? (
                   <Fragment>
                     <CustomSpacer space={sh32} />
-                    <View style={borderBottomGray4} />
+                    <View style={borderBottomGray2} />
                     <CustomSpacer space={sh32} />
                   </Fragment>
                 ) : null}
                 <View style={px(sw24)}>
                   {documentList.joint && documentsJoint.length > 0 ? (
-                    <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={UPLOAD_DOCUMENTS.LABEL_JOINT} />
+                    <TextSpaceArea spaceToBottom={sh8} style={{ ...fs12BoldGray6, lineHeight: sh24 }} text={UPLOAD_DOCUMENTS.LABEL_JOINT} />
                   ) : null}
                   <DocumentList data={documentsJoint} setData={handleJointData} />
                 </View>
@@ -220,9 +253,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
             )}
           </Fragment>
         ) : (
-          <View style={{ ...centerHV, ...flexChild }}>
-            <ActivityIndicator color={colorGray._7} size="small" />
-          </View>
+          <Loading />
         )}
         <CustomSpacer space={sh176} />
       </DashboardLayout>
@@ -235,6 +266,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         />
       ) : null}
       <PromptModal
+        backdropOpacity={loading ? 0.4 : undefined}
         handleContinue={handleBackToTransactions}
         illustration={LocalAssets.illustration.orderReceived}
         isLoading={loading}

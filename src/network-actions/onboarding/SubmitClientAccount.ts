@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const submitClientAccount = async (
   variables: ISubmitClientAccountRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const submitClientAccount = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "submitClientAccount" in data === false) {

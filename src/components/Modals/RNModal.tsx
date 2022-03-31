@@ -19,7 +19,7 @@ export const RNModal: FunctionComponent<RNModalProps> = ({
 }: RNModalProps) => {
   return (
     <Modal animationType={animationType} transparent={true} visible={visible}>
-      <View style={{ backgroundColor: colorBlack._1_04, ...fullHW, ...style }}>{children}</View>
+      <View style={{ backgroundColor: colorBlack._1_7, ...fullHW, ...style }}>{children}</View>
     </Modal>
   );
 };

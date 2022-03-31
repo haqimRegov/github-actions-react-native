@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer, TextSpaceArea, UploadWithModal } from "../../../../components";
-import { fs12BoldBlack2, sh32, sh8 } from "../../../../styles";
+import { fs12BoldGray6, sh32, sh8 } from "../../../../styles";
 
 interface DocumentListProps {
   data: ISoftCopyDocument[];
@@ -36,12 +36,12 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, setDa
                 return (
                   <Fragment key={documentIndex}>
                     {documentIndex === 0 ? (
-                      <TextSpaceArea spaceToBottom={sh8} style={fs12BoldBlack2} text={relatedDocuments.name} />
+                      <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={relatedDocuments.name} />
                     ) : (
                       <CustomSpacer space={sh8} />
                     )}
                     <UploadWithModal
-                      features={["camera", "file", "gallery"]}
+                      features={["camera", "gallery", "file"]}
                       label={label}
                       onSuccess={handleProof}
                       setValue={handleProof}

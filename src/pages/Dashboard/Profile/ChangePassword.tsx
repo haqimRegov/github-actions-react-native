@@ -18,7 +18,7 @@ import { DICTIONARY_PASSWORD_MAX_LENGTH, ERROR } from "../../../data/dictionary"
 import { IcoMoon } from "../../../icons";
 import { changePassword } from "../../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../../store";
-import { centerVertical, colorWhite, flexGrow, flexRow, fs24BoldBlack2, px, sh16, sh24, sh56, sw16, sw20, sw24 } from "../../../styles";
+import { centerVertical, colorBlue, flexGrow, flexRow, fs24BoldGray6, px, sh16, sh24, sh56, sw16, sw20, sw24 } from "../../../styles";
 import { Encrypt, isPassword } from "../../../utils";
 
 const { PROFILE } = Language.PAGE;
@@ -51,7 +51,12 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
       const encryptedNewPassword = await Encrypt(inputNewPassword, config!.sessionToken);
       const encryptedRetypePassword = await Encrypt(inputRetypePassword, config!.sessionToken);
       const request = { password: encryptedNewPassword, confirmPassword: encryptedRetypePassword };
-      const response: IChangePasswordResponse = await changePassword(request, { encryptionKey: config!.sessionToken }, navigation);
+      const response: IChangePasswordResponse = await changePassword(
+        request,
+        { encryptionKey: config!.sessionToken },
+        navigation,
+        setIsLoading,
+      );
       fetching.current = false;
       if (response !== undefined) {
         const { data, error } = response;
@@ -87,12 +92,12 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         contentContainerStyle={flexGrow}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        style={{ ...px(sw24), backgroundColor: colorWhite._4 }}>
+        style={{ ...px(sw24), backgroundColor: colorBlue._2 }}>
         <CustomSpacer space={sh16} />
         <View style={{ ...flexRow, ...centerVertical }}>
-          <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} />
+          <IcoMoon name="arrow-left" onPress={handleBack} size={sw20} suppressHighlighting={true} />
           <CustomSpacer isHorizontal={true} space={sw16} />
-          <Text style={fs24BoldBlack2}>{PROFILE.HEADING_CHANGE}</Text>
+          <Text style={fs24BoldGray6}>{PROFILE.HEADING_CHANGE}</Text>
         </View>
         <CustomSpacer space={sh24} />
         <View>
@@ -103,9 +108,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
             maxLength={DICTIONARY_PASSWORD_MAX_LENGTH}
             onBlur={handleValidatePassword}
             onChangeText={setInputNewPassword}
-            rightIcon={showPassword ? "eye-show" : "eye-hide"}
-            rightIconPress={handleShowPassword}
-            rightIconSize={sh24}
+            rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
             secureTextEntry={showPassword}
             value={inputNewPassword}
           />
@@ -116,9 +119,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
             label={PROFILE.LABEL_RETYPE_PASSWORD}
             onBlur={handleValidatePassword}
             onChangeText={setInputRetypePassword}
-            rightIcon={showPassword ? "eye-show" : "eye-hide"}
-            rightIconPress={handleShowPassword}
-            rightIconSize={sh24}
+            rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
             secureTextEntry={showPassword}
             spaceToTop={sh24}
             value={inputRetypePassword}

@@ -2,6 +2,7 @@ import ImagePicker, { Image, Options } from "react-native-image-crop-picker";
 
 const defaultOptions: Options = {
   cropping: false,
+  forceJpg: true,
   includeBase64: true,
   mediaType: "photo",
   multiple: false,
@@ -28,7 +29,6 @@ export const imageOpenPicker = async (handleSuccess: SuccessCallback, options?: 
   } catch (error) {
     if (JSON.stringify(error).includes("cancelled")) {
       // // eslint-disable-next-line no-console
-      // console.log("User Cancelled", error);
       return "";
     }
     // eslint-disable-next-line no-console
@@ -49,7 +49,6 @@ export const imageOpenCamera = async (handleSuccess: SuccessCallback, options?: 
   } catch (error) {
     if (JSON.stringify(error).includes("cancelled")) {
       // // eslint-disable-next-line no-console
-      // console.log("User Cancelled", error);
       return "";
     }
     // eslint-disable-next-line no-console

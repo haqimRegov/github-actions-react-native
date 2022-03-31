@@ -2,7 +2,7 @@ import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerHV, circleBorder, colorGreen, colorRed, colorWhite, fs12BoldWhite1, fs12RegBlack2, sh16, sw1, sw24 } from "../../styles";
+import { centerHV, circleBorder, colorGreen, colorRed, colorWhite, fs12BoldWhite1, fs12RegGray6, sh16, sw1, sw24 } from "../../styles";
 
 interface StepProps {
   active: boolean;
@@ -20,9 +20,9 @@ export const Step = ({ active, step, visited }: StepProps) => {
   return (
     <View style={{ ...stepColor, ...centerHV, ...visitedStepStyle }}>
       {visited && !active ? (
-        <IcoMoon name="check" color={colorWhite._1} size={sh16} />
+        <IcoMoon name="success" color={colorWhite._1} size={sh16} />
       ) : (
-        <Text style={{ ...fs12RegBlack2, ...activeLabelStyle }}>{step}</Text>
+        <Text style={{ ...fs12RegGray6, ...activeLabelStyle }}>{step}</Text>
       )}
     </View>
   );

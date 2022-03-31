@@ -5,18 +5,22 @@ import { ERRORS } from "../data/dictionary";
 import { gqlOperation } from "../integrations";
 import { ErrorHandler } from "./ErrorHandler";
 
-export const responseHandler = async <ResultType extends {}, VariablesType extends {}, HeadersType extends {} = {}>(
+export const responseHandler = async <
+  ResultType extends Record<string, unknown>,
+  VariablesType extends Record<string, unknown>,
+  HeadersType extends Record<string, unknown> = Record<string, never>,
+>(
   query: string,
   variables?: VariablesType,
   headers?: HeadersType,
   navigation?: IStackNavigationProp,
   handleError?: ResponseErrorType,
+  handleLoading?: (loading: boolean) => void,
   tokenCheck?: boolean,
 ) => {
   try {
     const netInfo = await NetInfo.fetch().then((state) => {
       // // eslint-disable-next-line no-console
-      // console.log("NetInfo:", state);
       return { isInternetReachable: state.isInternetReachable, isConnected: state.isConnected };
     });
     // TODO check for scenarios where it is connected but internet is not reachable
@@ -27,15 +31,11 @@ export const responseHandler = async <ResultType extends {}, VariablesType exten
     if (tokenCheck !== false) {
       await Auth.currentSession();
       // // eslint-disable-next-line no-console
-      // console.log("CurrentSession:", currentSession);
     }
     // // eslint-disable-next-line no-console
-    // console.log("Request Variables:", variables);
     // // eslint-disable-next-line no-console
-    // console.log("Request Headers:", headers);
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
     // // eslint-disable-next-line no-console
-    // console.log("Response:", data);
 
     if ("errors" in data) {
       throw data;
@@ -56,6 +56,6 @@ export const responseHandler = async <ResultType extends {}, VariablesType exten
       return handleError(err);
     }
 
-    return ErrorHandler(err, navigation);
+    return ErrorHandler(err, navigation, handleLoading);
   }
 };

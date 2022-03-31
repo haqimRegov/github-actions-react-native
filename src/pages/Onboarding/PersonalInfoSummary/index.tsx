@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { connect } from "react-redux";
 
-import { ContentPage, LabeledTitleProps } from "../../../components";
+import { ContentPage } from "../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { Joint } from "./Joint";

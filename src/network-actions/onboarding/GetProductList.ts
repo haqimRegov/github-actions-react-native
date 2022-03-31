@@ -1,7 +1,12 @@
 import { GQL_QUERIES } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const getProductList = async (variables: IProductListRequest, navigation: IStackNavigationProp, handleError?: ResponseErrorType) => {
+export const getProductList = async (
+  variables: IProductListRequest,
+  navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
+  handleError?: ResponseErrorType,
+) => {
   try {
     const data: IProductListQuery = await responseHandler<IProductListQuery, IProductListRequest>(
       GQL_QUERIES.productList,
@@ -9,6 +14,7 @@ export const getProductList = async (variables: IProductListRequest, navigation:
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "productList" in data === false) {

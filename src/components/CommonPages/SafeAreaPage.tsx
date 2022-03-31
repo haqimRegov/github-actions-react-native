@@ -2,7 +2,7 @@ import React, { Fragment, ReactNode } from "react";
 import { View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colorWhite, flexChild } from "../../styles";
+import { colorBlue, flexChild } from "../../styles";
 
 interface SafeArePageProps {
   bottomBackgroundColor?: string;
@@ -15,12 +15,12 @@ export const SafeAreaPage = ({ bottomBackgroundColor, bottomSpace, children, top
   const { top } = useSafeAreaInsets();
 
   const topStyle: ViewStyle = {
-    backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorWhite._4,
+    backgroundColor: topBackgroundColor !== undefined ? topBackgroundColor : colorBlue._2,
     height: top,
   };
 
   const bottomStyle: ViewStyle = {
-    backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorWhite._4,
+    backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorBlue._2,
     height: bottomSpace !== undefined ? bottomSpace : 0,
   };
 
@@ -28,7 +28,7 @@ export const SafeAreaPage = ({ bottomBackgroundColor, bottomSpace, children, top
     <Fragment>
       <View style={flexChild}>
         <View style={topStyle} />
-        <View style={{ ...flexChild, backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorWhite._4 }}>
+        <View style={{ ...flexChild, backgroundColor: bottomBackgroundColor !== undefined ? bottomBackgroundColor : colorBlue._2 }}>
           {children}
         </View>
         <View style={bottomStyle} />

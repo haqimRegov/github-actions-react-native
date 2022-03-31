@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getAgentProfile = async (
   variables: IGetAgentProfileRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getAgentProfile = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "agentProfile" in data === false) {

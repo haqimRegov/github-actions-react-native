@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
+import { CheckBoxGroup, CustomSpacer, NewCheckBoxDropdown, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import { FILTER_EPF_LABEL, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
-import { centerVertical, flexRow, fs16BoldBlack1, px, sh24, sh8, sw24, sw240 } from "../../../../../styles";
+import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sw24, sw240 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface AMPFilterProps {
@@ -44,11 +44,12 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
 
   return (
     <View>
-      <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs16BoldBlack1} text={PRODUCT_FILTER.LABEL_FILTER_AMP} />
-        </View>
-      </View>
+      <TextSpaceArea
+        spaceToBottom={sh16}
+        spaceToTop={sh32}
+        style={{ ...fs16BoldGray6, ...px(sw24) }}
+        text={PRODUCT_FILTER.LABEL_FILTER_AMP}
+      />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View style={{ width: sw240 }}>
           <CheckBoxGroup
@@ -71,8 +72,12 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ filter, setFilter
       </View>
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
-        <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
-        <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
+        <NewCheckBoxDropdown
+          handleChange={handleRiskCategory}
+          items={FILTER_RISK_CATEGORY}
+          label={PRODUCT_FILTER.LABEL_RISK}
+          value={riskCategory!}
+        />
       </View>
     </View>
   );

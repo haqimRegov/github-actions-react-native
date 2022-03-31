@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const emailVerification = async (
   variables: IEmailVerificationRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const emailVerification = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "emailVerification" in data === false) {

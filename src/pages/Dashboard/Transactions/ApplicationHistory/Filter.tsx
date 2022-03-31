@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CheckBoxDropdown, CustomDatePicker, CustomSpacer, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, NewCheckBoxDropdown, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   DICTIONARY_APPROVED_STATUS_FILTER,
@@ -12,20 +12,7 @@ import {
   DICTIONARY_TRANSACTIONS_DATE,
   DICTIONARY_TRANSACTIONS_TYPE,
 } from "../../../../data/dictionary";
-import {
-  centerVertical,
-  colorTransparent,
-  flexRow,
-  fs16BoldBlack1,
-  px,
-  sh143,
-  sh24,
-  sh32,
-  sh8,
-  sw24,
-  sw48,
-  sw64,
-} from "../../../../styles";
+import { flexRow, fs16BoldGray6, px, sh143, sh16, sh24, sh32, sh4, sw24, sw64 } from "../../../../styles";
 
 const { DASHBOARD_FILTER } = Language.PAGE;
 interface TransactionsFilterProps {
@@ -42,7 +29,10 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
   const { dateSorting, startDate, endDate, transactionsType, accountType, orderStatus } = filter;
 
   const handleStartDate = (value?: Date) => {
-    setFilter({ ...filter, startDate: value });
+    if (value !== undefined && endDate !== undefined) {
+      const updatedDate = value < endDate ? value : endDate;
+      setFilter({ ...filter, startDate: updatedDate });
+    }
   };
 
   const handleEndDate = (value?: Date) => {
@@ -81,13 +71,9 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
 
   return (
     <View>
-      <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} style={fs16BoldBlack1} text={DASHBOARD_FILTER.TITLE} />
-        </View>
-      </View>
+      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={{ ...fs16BoldGray6, ...px(sw24) }} text={DASHBOARD_FILTER.TITLE} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={handleDateSorting}
           items={DICTIONARY_TRANSACTIONS_DATE}
           label={DASHBOARD_FILTER.LABEL_DATE_SORTING}
@@ -97,10 +83,9 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_START_DATE} />
-          <CustomDatePicker
+          <TextSpaceArea spaceToBottom={sh4} text={DASHBOARD_FILTER.LABEL_START_DATE} />
+          <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
             maximumDate={endDate || moment().toDate()}
             setValue={handleStartDate}
@@ -113,11 +98,10 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={DASHBOARD_FILTER.LABEL_END_DATE} />
+          <TextSpaceArea spaceToBottom={sh4} text={DASHBOARD_FILTER.LABEL_END_DATE} />
           {/* <CustomCalendar handleSetStartDate={handleEndDate} startDate={endDate!} /> */}
-          <CustomDatePicker
+          <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
             minimumDate={startDate}
             maximumDate={moment().toDate()}
@@ -128,14 +112,14 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={handleTransactionsType}
           items={DICTIONARY_TRANSACTIONS_TYPE}
           label={DASHBOARD_FILTER.LABEL_TRANSACTIONS_TYPE}
           value={transactionsType!}
         />
         <CustomSpacer isHorizontal={true} space={sw64} />
-        <CheckBoxDropdown
+        <NewCheckBoxDropdown
           handleChange={handleOrderStatus}
           items={orderStatusList}
           label={DASHBOARD_FILTER.LABEL_ORDER_STATUS}
@@ -144,7 +128,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={handleAccountType}
           items={DICTIONARY_TRANSACTIONS_ACCOUNT_TYPE}
           label={DASHBOARD_FILTER.LABEL_ACCOUNT_TYPE}

@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language, OTP_CONFIG } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
-import { flexRow, fs12SemiBoldBlue2, fs16SemiBoldBlack2, fs40BoldBlack2, sh32, sh40, sh56, sh8, sw360, sw4 } from "../../../styles";
+import { flexRow, fs12SemiBoldBlue1, fs16SemiBoldGray6, fs40BoldGray6, sh32, sh40, sh56, sh8, sw360, sw4 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -69,9 +69,9 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
   return (
     <View>
       <CustomSpacer space={sh56} />
-      <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_OTP}</Text>
+      <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_OTP}</Text>
       <CustomSpacer space={sh8} />
-      <Text style={{ ...fs16SemiBoldBlack2, width: sw360 }}>{subheading || `${LOGIN.SUBHEADING_OTP} ${email}`}</Text>
+      <Text style={{ ...fs16SemiBoldGray6, width: sw360 }}>{subheading || `${LOGIN.SUBHEADING_OTP} ${email}`}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error}
@@ -93,12 +93,12 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
       />
       <CustomSpacer space={sh32} />
       <View style={flexRow}>
-        <Text style={fs12SemiBoldBlue2}>{LOGIN.LABEL_DID_NOT_GET}</Text>
+        <Text style={fs12SemiBoldBlue1}>{LOGIN.LABEL_DID_NOT_GET}</Text>
         <CustomSpacer isHorizontal={true} space={sw4} />
         {resendTimer <= 0 ? (
           <LinkText onPress={handleResendOTP} text={LOGIN.LABEL_RESEND_OTP} />
         ) : (
-          <Text style={fs12SemiBoldBlue2}>{`${LOGIN.LABEL_RESEND} ${resendMinutes}:${formattedResendSeconds}`}</Text>
+          <Text style={fs12SemiBoldBlue1}>{`${LOGIN.LABEL_RESEND} ${resendMinutes}:${formattedResendSeconds}`}</Text>
         )}
       </View>
     </View>

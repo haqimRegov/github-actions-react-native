@@ -3,7 +3,7 @@ import { View, ViewStyle } from "react-native";
 
 import { IconText } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
-import { borderBottomGray4, colorBlue, fs12BoldBlue2, px, sh48, sw16, sw232, sw8 } from "../../../../../styles";
+import { borderBottomGray2, fs12BoldBlue1, px, sh48, sw16, sw200, sw8 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -63,59 +63,51 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   };
 
   const itemStyle: ViewStyle = {
-    ...borderBottomGray4,
-    ...fs12BoldBlue2,
+    ...borderBottomGray2,
+    ...fs12BoldBlue1,
     ...px(sw16),
     height: sh48,
-    width: sw232,
+    width: sw200,
   };
 
   const labelUploadPayment = isScheduled ? DASHBOARD_HOME.LABEL_UPLOAD_RECURRING : DASHBOARD_HOME.LABEL_UPLOAD_PROOF;
 
   return (
     <View style={{ borderRadius: sw8 }}>
-      <IconText color={colorBlue._2} name="eye-show" onPress={handleViewOrder} text="View Details" style={itemStyle} />
+      <IconText name="eye-show" onPress={handleViewOrder} style={itemStyle} text="View Details" />
       {status === "Pending Payment" ||
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
         remark &&
         remark.findIndex((reason) => reason.label === "Payment" || reason.label === "Others") !== -1) ? (
-        <IconText color={colorBlue._2} name="upload" onPress={handleUploadPayment} text={labelUploadPayment} style={itemStyle} />
+        <IconText name="upload" onPress={handleUploadPayment} style={itemStyle} text={labelUploadPayment} />
       ) : null}
       {status === "Pending Doc" ||
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
         remark &&
         remark.findIndex((reason) => reason.label === "Document" || reason.label === "Others") !== -1) ? (
-        <IconText color={colorBlue._2} name="upload" onPress={handleUploadDocs} text={DASHBOARD_HOME.LABEL_UPLOAD} style={itemStyle} />
+        <IconText name="upload" onPress={handleUploadDocs} style={itemStyle} text={DASHBOARD_HOME.LABEL_UPLOAD} />
       ) : null}
       {status === "Pending Physical Doc" && canSubmitHardcopy === true ? (
-        <IconText
-          color={colorBlue._2}
-          name="file"
-          onPress={handleSubmitHardCopy}
-          text={DASHBOARD_HOME.LABEL_SUBMIT_PHYSICAL}
-          style={itemStyle}
-        />
+        <IconText name="file" onPress={handleSubmitHardCopy} style={itemStyle} text={DASHBOARD_HOME.LABEL_SUBMIT_PHYSICAL} />
       ) : null}
       {/* <IconText
-        color={colorBlue._2}
         name="print"
         onPress={handlePrintAccountOpening}
-        text={DASHBOARD_HOME.LABEL_PRINT_ACCOUNT_OPENING}
         style={itemStyle}
+        text={DASHBOARD_HOME.LABEL_PRINT_ACCOUNT_OPENING}
       /> */}
       {status === "Submitted" && withHardcopy === true ? (
         <IconText
-          color={colorBlue._2}
           name="print"
           onPress={handlePrintSubmissionSummary}
-          text={DASHBOARD_HOME.LABEL_PRINT_SUBMISSION_SUMMARY}
           style={itemStyle}
+          text={DASHBOARD_HOME.LABEL_PRINT_SUBMISSION_SUMMARY}
         />
       ) : null}
       {status === "BR - Rerouted" || status === "HQ - Rerouted" ? (
-        <IconText color={colorBlue._2} name="print" onPress={handleResubmit} text={DASHBOARD_HOME.LABEL_RESUBMIT_ORDER} style={itemStyle} />
+        <IconText name="print" onPress={handleResubmit} style={itemStyle} text={DASHBOARD_HOME.LABEL_RESUBMIT_ORDER} />
       ) : null}
     </View>
   );

@@ -2,16 +2,16 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import {
-  borderBottomRed4,
+  borderBottomRed1,
   centerVertical,
   colorWhite,
   flexRow,
-  fs12RegBlack2,
-  fs24BoldBlack2,
+  fs12RegGray6,
+  fs24BoldGray6,
   px,
   sh24,
   sh56,
-  shadowBlue204,
+  shadow12Blue104,
   sw24,
   sw8,
 } from "../../styles";
@@ -36,9 +36,9 @@ export const AccountHeader: FunctionComponent<AccountHeaderProps> = ({
 }: AccountHeaderProps) => {
   const container: ViewStyle = {
     ...centerVertical,
-    ...borderBottomRed4,
+    ...borderBottomRed1,
     ...flexRow,
-    ...shadowBlue204,
+    ...shadow12Blue104,
     ...px(sw24),
     height: sh56,
     backgroundColor: colorWhite._1,
@@ -54,9 +54,9 @@ export const AccountHeader: FunctionComponent<AccountHeaderProps> = ({
   return (
     <Fragment>
       <View style={container}>
-        <Text style={{ ...fs24BoldBlack2, ...titleStyle }}>{title}</Text>
+        <Text style={{ ...fs24BoldGray6, ...titleStyle }}>{title}</Text>
         <CustomFlexSpacer />
-        <Text style={{ ...fs12RegBlack2, ...subtitleStyle }}>{subtitle}</Text>
+        <Text style={{ ...fs12RegGray6, ...subtitleStyle }}>{subtitle}</Text>
       </View>
       <CustomSpacer space={defaultBottomSpace} />
     </Fragment>

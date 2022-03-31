@@ -15,8 +15,22 @@ export const getStorageData = async (key: string) => {
     if (value !== null) {
       return JSON.parse(value);
     }
+
+    return null;
   } catch (error) {
     Alert.alert("Error", error);
+
+    return null;
+  }
+};
+
+export const removeStorageData = async (key: string) => {
+  try {
+    await AsyncStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    Alert.alert("Error", error);
+    return false;
   }
 
   return false;

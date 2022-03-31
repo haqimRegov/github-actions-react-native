@@ -1,18 +1,18 @@
-import React, { FunctionComponent, ReactElement, ReactNode, useState } from "react";
+import React, { FunctionComponent, ReactElement, useState } from "react";
 import { TouchableWithoutFeedback, ViewStyle } from "react-native";
 import Tooltip, { TooltipSize } from "react-native-walkthrough-tooltip";
 
 import { IcoMoon } from "../../icons";
-import { colorBlack, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208, sw7, sw8 } from "../../styles";
+import { colorGray, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208, sw7, sw8 } from "../../styles";
 
 export interface CustomTooltipProps {
   arrowSize?: TooltipSize;
   arrowStyle?: ViewStyle;
-  children?: ReactNode;
+  children?: ReactElement;
   color?: string;
   content: ReactElement;
   contentStyle?: ViewStyle;
-  insets?: Object;
+  insets?: Record<string, unknown>;
   isVisible?: boolean;
   onClose?: () => void;
   onPress?: () => void;
@@ -66,7 +66,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   };
 
   const visible = isVisible !== undefined ? isVisible : popup;
-  const defaultColor = color !== undefined ? color : colorBlack._2;
+  const defaultColor = color !== undefined ? color : colorGray._6;
   const defaultContentStyle: ViewStyle = {
     ...px(sw16),
     ...py(sh16),
@@ -87,12 +87,14 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
 
   return (
     <Tooltip
+      allowChildInteraction={true}
       arrowSize={defaultArrowSize}
       arrowStyle={defaultArrowStyle}
       backgroundColor={defaultOverlayColor}
       childContentSpacing={defaultSpacing}
       content={content}
       contentStyle={defaultContentStyle}
+      closeOnContentInteraction={false}
       disableShadow={defaultShadow}
       displayInsets={defaultInsets}
       isVisible={visible}

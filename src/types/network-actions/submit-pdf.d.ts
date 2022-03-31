@@ -18,5 +18,5 @@ declare interface ISubmitPdfResult {
 declare type ISubmitPdfResponse = IMutationResponse<ISubmitPdfResult> | undefined;
 
 declare interface ISubmitPdfMutation {
-  SubmitPdf: ISubmitPdfResponse;
+  submitPdf: ISubmitPdfResponse;
 }

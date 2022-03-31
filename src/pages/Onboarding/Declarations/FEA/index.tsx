@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
 import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { borderBottomBlack21, fs12SemiBoldBlue1, px, sh24, sh8, sw24 } from "../../../../styles";
+import { borderBottomGray2, fs12SemiBoldBlue1, px, sh24, sh8, sw24 } from "../../../../styles";
 import { FeaDeclarationDetails } from "./Details";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -96,7 +96,7 @@ export const FeaDeclarationComponent: FunctionComponent<FeaDeclarationProps> = (
       {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <FeaDeclarationDetails
             accountHolder="Joint"
             accountType="Joint"

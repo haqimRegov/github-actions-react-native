@@ -1,6 +1,12 @@
-export const FILTER_EPF_LABEL = ["Yes", "No"];
+export const FILTER_EPF_LABEL: ICheckBoxWithSubLabel[] = [
+  { label: "Yes", value: "Yes" },
+  { label: "No", value: "No" },
+];
 export const FILTER_PRODUCT_TYPE = ["Unit Trust (UT)", "Private Retirement Scheme (PRS)"];
-export const FILTER_TYPE = ["Conventional", "Shariah"];
+export const FILTER_TYPE: ICheckBoxWithSubLabel[] = [
+  { label: "Conventional", value: "Conventional" },
+  { label: "Shariah", value: "Shariah" },
+];
 export const FILTER_RISK = ["Low", "Medium", "High"];
 
 export const FILTER_FUND_CURRENCY = [

@@ -1,7 +1,6 @@
 import moment from "moment";
 import React, { FunctionComponent } from "react";
 
-import { LabeledTitleProps } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ALL_ID_TYPE } from "../../../data/dictionary";
 import { fsTransformNone, fsUppercase } from "../../../styles";

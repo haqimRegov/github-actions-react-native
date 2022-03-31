@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_NRIC_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegBlack2, fs40BoldBlack2, sh16, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs12BoldBlue1, fs24RegGray6, fs40BoldGray6, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -46,9 +46,9 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
   return (
     <View>
       <CustomSpacer space={sh56} />
-      <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_WELCOME}</Text>
+      <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_WELCOME}</Text>
       <CustomSpacer space={sh8} />
-      <Text style={{ width: sw360, ...fs24RegBlack2 }}>{subheading || LOGIN.SUBHEADING_FIRST_TIME}</Text>
+      <Text style={{ width: sw360, ...fs24RegGray6 }}>{subheading || LOGIN.SUBHEADING_FIRST_TIME}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error}
@@ -71,7 +71,7 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
       />
       <CustomSpacer space={sh32} />
       {handleExistingLogin !== undefined ? (
-        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ height: sh16 }} />
+        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={fs12BoldBlue1} withUnderline={true} />
       ) : null}
     </View>
   );

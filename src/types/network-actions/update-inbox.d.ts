@@ -1,10 +1,8 @@
-declare interface IUpdateInboxRequest {
-  notificationIds: string[];
-}
+declare type IUpdateInboxRequest = Record<string, unknown>;
 
 declare interface IUpdateInboxResult {
-  status: string;
   message: string;
+  status: string;
 }
 
 declare type IUpdateInboxResponse = IQueryResponse<IUpdateInboxResult> | undefined;

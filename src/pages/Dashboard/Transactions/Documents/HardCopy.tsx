@@ -1,13 +1,14 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, AdvancedDropdown, CheckBox, CustomFlexSpacer, CustomSpacer, PromptModal } from "../../../../components";
+import { ActionButtons, CheckBox, CustomFlexSpacer, CustomSpacer, Loading, NewDropdown, PromptModal } from "../../../../components";
 import { Language } from "../../../../constants";
+import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import { borderBottomBlack21, centerHV, colorGray, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
+import { borderBottomGray2, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
 import { AlertDialog } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
@@ -47,7 +48,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
 
   const handleFetch = async () => {
     const request: IGetHardCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
-    const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request, navigation);
+    const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request, navigation, setLoading);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -61,6 +62,53 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     }
   };
 
+  const handleUpload = async () => {
+    const personalDocsWithKeys = await Promise.all(
+      documentList!.documents.map(async ({ docs, name }: ISoftCopyDocument) => {
+        return {
+          docs: await Promise.all(
+            docs.map(async (documents) => {
+              try {
+                const url = S3UrlGenerator.hardcopy(
+                  currentOrder!.clientId,
+                  currentOrder!.orderNumber,
+                  name,
+                  documents!.title!,
+                  documents!.type!,
+                );
+                const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
+                if (uploadedFile === undefined) {
+                  throw new Error();
+                }
+                return {
+                  title: documents!.title!,
+                  file: {
+                    // base64: documents!.base64!,
+                    name: documents!.name!,
+                    size: documents!.size!,
+                    type: documents!.type!,
+                    date: documents!.date!,
+                    path: documents!.path!,
+                    url: uploadedFile.key,
+                  },
+                };
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } catch (error: any) {
+                // // eslint-disable-next-line no-console
+                AlertDialog(error, () => setLoading(false));
+                fetching.current = true;
+                return error;
+              }
+            }),
+          ),
+          name: name,
+        };
+      }),
+    );
+    return personalDocsWithKeys;
+  };
+
   const handleSubmit = async () => {
     if (fetching.current === false) {
       fetching.current = true;
@@ -68,27 +116,14 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       setPrompt(true);
       const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
       const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
+      const documentWithKeys = await handleUpload();
+
       const request: ISubmitHardCopyDocumentsRequest = {
         orderNumber: currentOrder!.orderNumber,
         branchId: branchId,
-        hardcopy: documentList!.documents.map(({ docs, name }) => {
-          return {
-            docs: docs.map((documents) => ({
-              title: documents!.title!,
-              file: {
-                base64: documents!.base64!,
-                name: documents!.name!,
-                size: documents!.size!,
-                type: documents!.type!,
-                date: documents!.date!,
-                path: documents!.path!,
-              },
-            })),
-            name: name,
-          };
-        }),
+        hardcopy: documentWithKeys,
       };
-      const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation);
+      const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {
@@ -148,10 +183,10 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
               <DocumentList data={physicalDocuments} setData={handleSetDocument} />
             </View>
             <CustomSpacer space={sh32} />
-            <View style={borderBottomBlack21} />
+            <View style={borderBottomGray2} />
             <View style={{ ...flexChild, ...px(sw24) }}>
               <CustomSpacer space={sh24} />
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={setBranch}
                 items={branchList}
                 label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_SUBMISSION_BRANCH}
@@ -170,9 +205,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
             </View>
           </Fragment>
         ) : (
-          <View style={{ ...centerHV, ...flexChild }}>
-            <ActivityIndicator color={colorGray._7} size="small" />
-          </View>
+          <Loading />
         )}
         <CustomSpacer space={sh56} />
       </DashboardLayout>

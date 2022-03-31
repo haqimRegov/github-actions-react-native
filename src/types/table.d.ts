@@ -1,5 +1,5 @@
 declare interface ITableData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 declare interface ITableIcon {
@@ -12,14 +12,15 @@ declare interface ITableIcon {
 
 declare interface ITableItemPrefix {
   key: string;
-  value?: string;
   targetKey: string;
   textStyle?: import("react-native").TextStyle;
+  value?: string;
 }
 
 declare interface ITableItemKey {
   key: string;
   textStyle?: import("react-native").TextStyle;
+  name?: string;
 }
 
 declare interface IColumnItem {
@@ -40,12 +41,13 @@ declare interface ITableColumn {
   onPressHeader?: () => void;
   onPressItem?: (item: ITableRowData) => void;
   prefix?: ITableItemPrefix[];
-  textStyle?: import("react-native").ViewStyle;
+  textStyle?: import("react-native").TextStyle;
   title: string;
   titleStyle?: import("react-native").TextStyle;
   type?: "checkbox" | "radio";
   viewStyle?: import("react-native").ViewStyle;
   withAccordion?: boolean;
+  withHeaderPopup?: boolean;
 }
 
 declare interface ITableOptions {
@@ -79,6 +81,7 @@ declare interface BaseTableProps {
 }
 
 declare interface BaseTableHeaderProps {
+  headerPopup?: TableHeaderPopupProps;
   RenderCustomHeader?: RenderCustomHeaderType;
   RowSelectionItem?: () => JSX.Element;
 }
@@ -106,4 +109,22 @@ declare interface AdvanceTableRowProps extends BaseTableProps {
 declare interface TableHeaderProps extends BaseTableHeaderProps {
   columns: ITableColumn[];
   withActions?: boolean;
+}
+
+declare interface IHeaderPopupContent {
+  icon?: IIcon;
+  key?: string;
+  text: string;
+  textStyle?: import("react-native").TextStyle;
+}
+
+declare interface TableHeaderPopupProps {
+  content: IHeaderPopupContent[];
+  onPressContent: (props: { hide: () => void; text: string; key?: string }) => void;
+  onPressTitle?: (props: { show: () => void }) => void;
+  selectedIndex?: number[];
+  title?: string;
+  titleIcon?: IIcon;
+  titleStyle?: import("react-native").TextStyle;
+  viewStyle?: import("react-native").ViewStyle;
 }

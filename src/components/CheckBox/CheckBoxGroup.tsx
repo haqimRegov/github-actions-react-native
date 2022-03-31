@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { flexCol, flexRow, flexWrap, fs12BoldBlack2, fs14RegBlack2, sh16, sh8, sw12, sw16 } from "../../styles";
+import { disabledOpacity5, flexCol, flexRow, flexWrap, fs12BoldGray6, sh16, sh4, sw12, sw16 } from "../../styles";
 import { CustomSpacer, TextSpaceArea } from "../Views";
 import { CheckBox } from "./CheckBox";
 
@@ -13,7 +13,7 @@ export interface CheckBoxGroupProps {
   disabled?: boolean;
   disabledIndex?: number[];
   label?: string;
-  labels: string[];
+  labels: ICheckBoxWithSubLabel[];
   labelStyle?: TextStyle;
   selected: string[];
   setSelected: (selected: string) => void;
@@ -41,20 +41,21 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
   const radioSpace = space !== undefined ? space : defaultSpace;
   const flexDirection = direction === "row" ? flexRow : flexCol;
 
-  const labelDisabled = disabled === true ? { opacity: 0.5 } : {};
+  const labelDisabled = disabled === true ? disabledOpacity5 : {};
+
   return (
     <View>
       {label !== undefined ? (
-        <TextSpaceArea spaceToBottom={spaceToLabel || sh8} style={{ ...fs12BoldBlack2, ...labelDisabled, ...labelStyle }} text={label} />
+        <TextSpaceArea spaceToBottom={spaceToLabel || sh4} style={{ ...fs12BoldGray6, ...labelDisabled, ...labelStyle }} text={label} />
       ) : null}
-
       <View style={{ ...flexDirection, ...flexWrap, ...style }}>
-        {labels.map((option: string, index: number) => {
+        {labels.map((option: ICheckBoxWithSubLabel, index: number) => {
           const handleSelect = () => {
-            setSelected(option);
+            setSelected(option.value!);
           };
 
           const disabledOption = disabledIndex !== undefined ? disabledIndex.includes(index) : false;
+          const { label: optionLabel, value } = option;
 
           return (
             <Fragment key={index}>
@@ -62,12 +63,12 @@ export const CheckBoxGroup: FunctionComponent<CheckBoxGroupProps> = ({
               <CheckBox
                 disabled={disabled === true ? true : disabledOption}
                 key={index}
-                label={option}
-                labelStyle={{ ...fs14RegBlack2, ...checkboxLabelStyle }}
+                label={optionLabel}
+                labelStyle={checkboxLabelStyle}
                 onPress={handleSelect}
                 spaceToLabel={sw12}
                 style={checkBoxStyle}
-                toggle={selected.includes(option)}
+                toggle={selected.includes(value!)}
               />
             </Fragment>
           );

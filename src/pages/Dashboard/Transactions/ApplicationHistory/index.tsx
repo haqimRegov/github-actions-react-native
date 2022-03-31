@@ -9,17 +9,17 @@ import { RNShareApi } from "../../../../integrations";
 import { getSummaryReceipt } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   colorWhite,
   flexChild,
   flexRow,
-  fs16SemiBoldBlack2,
+  fs16RegGray6,
   fullHW,
   sh112,
   sh153,
   sh16,
   sh24,
-  shadowBlack5,
+  shadow12Black112,
   sw24,
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -32,6 +32,7 @@ const { DASHBOARD_HOME } = Language.PAGE;
 
 interface ApplicationHistoryProps extends TransactionsStoreProps {
   activeTab: TransactionsTabType;
+  isLogout: boolean;
   navigation: IStackNavigationProp;
   setActiveTab: (route: TransactionsTabType) => void;
   setScreen: (route: TransactionsPageType) => void;
@@ -62,6 +63,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const { filter, page, pages } = props[activeTab];
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
@@ -109,12 +111,12 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleSummaryReceipt = async (request: ISummaryReceiptRequest) => {
-    // setLoading(true);
+    setButtonLoading(true);
     if (fetching.current === false) {
       fetching.current = true;
-      const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation);
+      const response: ISummaryReceiptResponse = await getSummaryReceipt(request, navigation, setLoading);
       fetching.current = false;
-      // setLoading(false);
+      setButtonLoading(false);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
@@ -195,7 +197,13 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setFilterTemp(filter);
   };
 
-  const tabProps = { setScreen: setScreen, navigation: navigation, isFetching: loading, setIsFetching: setLoading };
+  const tabProps = {
+    setScreen: setScreen,
+    navigation: navigation,
+    isFetching: loading,
+    isLogout: props.isLogout,
+    setIsFetching: setLoading,
+  };
   let content: JSX.Element;
 
   if (activeTab === "pending") {
@@ -214,7 +222,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const tableContainer: ViewStyle = {
     ...flexChild,
-    backgroundColor: colorWhite._1,
+    backgroundColor: colorWhite._2,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
@@ -240,9 +248,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           <View
             style={{
               ...flexChild,
-              ...shadowBlack5,
+              ...shadow12Black112,
               marginHorizontal: sw24,
-              backgroundColor: colorWhite._1,
+              backgroundColor: colorWhite._2,
               borderRadius: sw24,
             }}>
             <CustomSpacer space={sh153} />
@@ -258,7 +266,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
                   { badgeCount: rejectedCount, text: DASHBOARD_HOME.LABEL_REJECTED },
                 ]}
               />
-              <View style={{ ...flexRow, ...flexChild, ...borderBottomGray4 }}>
+              <View style={{ ...flexRow, ...flexChild, ...borderBottomGray2 }}>
                 <CustomFlexSpacer />
                 <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
                 <CustomSpacer isHorizontal={true} space={sw24} />
@@ -273,8 +281,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       </DashboardLayout>
       {selectedOrders.length !== 0 && activeTab === "pending" ? (
         <SelectionBanner
-          bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
+          bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
           cancelOnPress={handlePrintAll}
+          continueLoading={buttonLoading}
           label={DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY}
           labelCancel={DASHBOARD_HOME.LABEL_PRINT_ALL}
           labelSubmit={DASHBOARD_HOME.LABEL_PRINT_SELECTED}

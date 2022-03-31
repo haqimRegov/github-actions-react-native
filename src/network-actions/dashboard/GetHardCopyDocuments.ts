@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getHardCopyDocuments = async (
   variables: IGetHardCopyDocumentsRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getHardCopyDocuments = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "listHardcopyDocuments" in data === false) {

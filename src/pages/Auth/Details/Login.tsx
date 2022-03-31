@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
-import { fs24RegBlack2, fs40BoldBlack2, sh24, sh28, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs12BoldBlue1, fs24RegGray6, fs40BoldGray6, sh24, sh28, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -47,9 +47,9 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
     <Fragment>
       <View>
         <CustomSpacer space={sh56} />
-        <Text style={fs40BoldBlack2}>{HEADING}</Text>
+        <Text style={fs40BoldGray6}>{HEADING}</Text>
         <CustomSpacer space={sh8} />
-        <Text style={{ width: sw360, ...fs24RegBlack2 }}>{LOGIN.SUBHEADING_LOGIN}</Text>
+        <Text style={{ width: sw360, ...fs24RegGray6 }}>{LOGIN.SUBHEADING_LOGIN}</Text>
         <CustomSpacer space={sh40} />
         <CustomTextInput
           keyboardType="numeric"
@@ -64,9 +64,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           keyboardType="default"
           label={LOGIN.LABEL_PASSWORD}
           onChangeText={setInputPassword}
-          rightIcon={showPassword ? "eye-show" : "eye-hide"}
-          rightIconPress={handleShowPassword}
-          rightIconSize={sh24}
+          rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
           secureTextEntry={showPassword}
           spaceToTop={sh24}
           value={inputPassword}
@@ -80,7 +78,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           withDebounce={true}
         />
         <CustomSpacer space={sh28} />
-        <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} />
+        <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} style={fs12BoldBlue1} withUnderline={true} />
       </View>
     </Fragment>
   );

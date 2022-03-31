@@ -1,24 +1,20 @@
 import React, { Fragment, FunctionComponent, ReactNode } from "react";
-import { Keyboard, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { Language } from "../../constants";
-import { IcoMoon } from "../../icons";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import {
+  absolutePosition,
   centerHV,
   centerVertical,
   circleBorder,
-  colorBlack,
   colorBlue,
-  colorGray,
-  colorRed,
   colorTransparent,
   colorWhite,
+  flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlue2,
-  fs16SemiBoldBlack2,
-  fs24BoldBlue2,
+  fs24BoldBlue1,
   fullHeight,
   fullWidth,
   px,
@@ -26,24 +22,25 @@ import {
   sh24,
   sh32,
   sh34,
-  sh48,
-  shadowBlack5,
+  sh36,
+  shadow12Black112,
   sw1,
-  sw100,
   sw24,
-  sw40,
-  sw85,
+  sw48,
+  sw784,
+  sw80,
+  sw84,
 } from "../../styles";
-import { IconInput } from "../Input/IconInput";
+import { CustomTextInput } from "../Input";
 import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "../Views/Spacer";
 
-const { PRODUCT_FILTER } = Language.PAGE;
 interface CollapsibleHeaderProps {
   collapsibleContent?: ReactNode;
   filterVisible?: boolean;
   handleFilter?: () => void;
   inputSearch: string;
+  inputViewStyle?: ViewStyle;
   label?: string;
   noFilter?: boolean;
   onSubmitEditing?: () => void;
@@ -56,6 +53,7 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
   filterVisible,
   handleFilter,
   inputSearch,
+  inputViewStyle,
   label,
   noFilter,
   onSubmitEditing,
@@ -82,19 +80,19 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
   };
 
   const container: ViewStyle = {
-    ...shadowBlack5,
+    ...shadow12Black112,
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
   };
 
-  const filterBGColor = filterVisible ? colorRed._1 : colorWhite._1;
-  const filterBorderColor = filterVisible ? colorRed._1 : colorGray._3;
-  const filterColor = filterVisible ? colorWhite._1 : colorBlack._1;
+  const filterBGColor = filterVisible ? colorBlue._1 : colorWhite._1;
+  const filterBorderColor = filterVisible ? colorBlue._1 : colorBlue._4;
+  const filterColor = filterVisible ? colorWhite._1 : colorBlue._1;
+  const filterIcon = filterVisible ? "close" : "filter";
+  const filterIconSize = filterVisible ? sh32 : sh24;
 
-  const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw40, sw1, filterBorderColor), backgroundColor: filterBGColor };
-  const inputStyle: TextStyle = { ...fs16SemiBoldBlack2, letterSpacing: -0.39 };
-  const filterToolTip: TextStyle = { top: -30, zIndex: 1, position: "absolute" };
-  const toolTipLabel: TextStyle = { position: "absolute", top: 0, left: 0, right: 0, bottom: 8, ...centerHV };
+  const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
+  const tooltipStyle: ImageStyle = { ...absolutePosition, height: sh34, width: sw84, zIndex: 1, bottom: sh36 };
 
   return (
     <View style={pageContainer}>
@@ -107,32 +105,32 @@ export const CollapsibleHeader: FunctionComponent<CollapsibleHeaderProps> = ({
           <View>
             <View style={px(sw24)}>
               <CustomSpacer space={sh32} />
-              {label !== undefined ? <Text style={fs24BoldBlue2}>{label}</Text> : null}
+              {label !== undefined ? <Text style={fs24BoldBlue1}>{label}</Text> : null}
               <CustomSpacer space={sh16} />
               <View style={{ ...centerVertical, ...flexRow }}>
-                <IconInput
-                  icon="search"
-                  iconColor={colorBlue._2}
+                <CustomTextInput
+                  autoCorrect={false}
+                  containerStyle={flexChild}
+                  leftIcon={{ name: "search" }}
                   onChangeText={setInputSearch}
                   onSubmitEditing={onSubmitEditing}
                   placeholder={placeholder}
-                  placeholderTextColor={colorBlack._2_5}
-                  style={inputStyle}
+                  returnKeyType="search"
                   value={inputSearch}
-                  viewStyle={{ borderRadius: sw100, height: sh48 }}
+                  viewStyle={{ width: sw784, ...inputViewStyle }}
                 />
                 {noFilter === true ? null : (
                   <Fragment>
-                    <CustomSpacer isHorizontal={true} space={sw40} />
-                    <View style={{ width: sw85 }}>
-                      <View style={filterToolTip}>
-                        <IcoMoon color={colorGray._1} name="filter-tooltip" size={sh34} />
-                        <View style={toolTipLabel}>
-                          <Text style={{ ...fs12RegBlue2 }}>{PRODUCT_FILTER.LABEL_FILTER}</Text>
-                        </View>
-                      </View>
+                    <View style={{ width: sw80 }}>
+                      {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}
                       <View style={centerVertical}>
-                        <IconButton color={filterColor} name="filter" onPress={handlePressFilter} size={sh24} style={filterContainer} />
+                        <IconButton
+                          color={filterColor}
+                          onPress={handlePressFilter}
+                          name={filterIcon}
+                          size={filterIconSize}
+                          style={filterContainer}
+                        />
                       </View>
                     </View>
                   </Fragment>

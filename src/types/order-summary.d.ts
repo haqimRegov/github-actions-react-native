@@ -25,7 +25,7 @@ declare interface IOrderSummary {
 declare interface IOrderInvestment {
   distributionInstruction: string;
   fundClass: string | null;
-  fundCode: string;
+  fundCode?: string;
   fundCurrency: string;
   fundId?: string;
   fundingOption: string;
@@ -34,7 +34,7 @@ declare interface IOrderInvestment {
   fundType: string;
   investmentAmount: string;
   isEpf: boolean;
-  isFea: boolean;
+  isFea: boolean | null;
   isScheduled: boolean;
   isSyariah: boolean;
   salesCharge: string;

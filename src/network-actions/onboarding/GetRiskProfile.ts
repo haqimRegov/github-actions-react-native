@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getRiskProfile = async (
   variables: IGetRiskProfileRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getRiskProfile = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "riskAssessment" in data === false) {

@@ -28,7 +28,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
         pending: {
           filter: {
@@ -42,7 +42,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
         rejected: {
           filter: {
@@ -56,7 +56,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
         selectedOrders: [],
         approvedCount: 0,
@@ -80,7 +80,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
       };
     case "transactions/RESET_REJECTED_FILTER":

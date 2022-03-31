@@ -6,7 +6,7 @@ import {
   centerVertical,
   colorYellow,
   flexRowCC,
-  fs24BoldBlue2,
+  fs24BoldBlack2,
   fullWidth,
   px,
   sh112,
@@ -21,8 +21,10 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 interface SelectionBannerProps {
   bottomContent?: ReactNode;
   cancelOnPress?: () => void;
+  containerStyle?: ViewStyle;
   continueDebounce?: boolean;
   continueDisabled?: boolean;
+  continueLoading?: boolean;
   label: string;
   labelCancel?: string;
   labelStyle?: TextStyle;
@@ -33,8 +35,10 @@ interface SelectionBannerProps {
 export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
   bottomContent,
   cancelOnPress,
+  containerStyle,
   continueDebounce,
   continueDisabled,
+  continueLoading,
   label,
   labelCancel,
   labelStyle,
@@ -49,8 +53,9 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
     bottom: 0,
-    height: sh112,
+    minHeight: sh112,
     position: "absolute",
+    ...containerStyle,
   };
 
   const submitLabel = labelSubmit || "Done";
@@ -60,7 +65,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     <View style={{ ...centerVertical, ...px(sw24) }}>
       <View style={bottomContainer}>
         <View style={centerHorizontal}>
-          <Text style={{ ...fs24BoldBlue2, ...labelStyle }}>{label}</Text>
+          <Text style={{ ...fs24BoldBlack2, ...labelStyle }}>{label}</Text>
           {bottomContent}
         </View>
         <CustomFlexSpacer />
@@ -73,6 +78,7 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
         <RoundedButton
           disabled={continueDisabled}
           buttonStyle={{ width: sw200 }}
+          loading={continueLoading}
           onPress={submitOnPress}
           radius={sw24}
           text={submitLabel}

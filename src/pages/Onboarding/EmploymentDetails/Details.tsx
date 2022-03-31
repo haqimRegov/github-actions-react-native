@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AddressField, AdvancedDropdown, CustomSpacer, CustomTextInput } from "../../../components";
+import { AddressField, CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import {
   DICTIONARY_BUSINESS_NATURE,
@@ -79,14 +79,14 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_OCCUPATION}
         handleChange={setInputOccupation}
         label={EMPLOYMENT_DETAILS.LABEL_OCCUPATION}
         value={inputOccupation}
       />
       <CustomSpacer space={sh32} />
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_BUSINESS_NATURE}
         handleChange={setInputBusinessNature}
         label={EMPLOYMENT_DETAILS.LABEL_NATURE_BUSINESS}
@@ -95,7 +95,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       {accountType === "Joint" && accountHolder === "Joint" ? (
         <Fragment>
           <CustomSpacer space={sh32} />
-          <AdvancedDropdown
+          <NewDropdown
             items={DICTIONARY_GROSS_INCOME}
             handleChange={setInputGross}
             label={EMPLOYMENT_DETAILS.LABEL_GROSS}

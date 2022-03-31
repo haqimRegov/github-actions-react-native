@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
+import { borderBottomGray2, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { JointVerification } from "./Joint";
 import { PrincipalVerification } from "./Principal";
 
@@ -135,7 +135,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       {accountType === "Individual" ? null : (
         <Fragment>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <CustomSpacer space={sh48} />
           <JointVerification
             accountHolder="Joint"

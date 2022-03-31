@@ -17,14 +17,14 @@ import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
 import {
   centerHV,
+  colorBlue,
   colorWhite,
   flexGrow,
   flexRowCC,
-  fs24BoldBlack1,
-  fs40BoldBlack2,
+  fs24BoldBlue1,
+  fs36BoldBlack2,
   fullHW,
   px,
-  sh40,
   sh48,
   sh56,
   sh96,
@@ -62,6 +62,7 @@ const NewSalesComponent = ({
   visible,
 }: NewSalesProps) => {
   const fetching = useRef<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
@@ -77,13 +78,13 @@ const NewSalesComponent = ({
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
-  const titleStyle: TextStyle = registered === true ? {} : { ...fs40BoldBlack2, lineHeight: sh40 };
+  const titleStyle: TextStyle = registered === true ? {} : fs36BoldBlack2;
 
   const setClientInfo = (info: IClientBasicInfo) =>
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
   const setAccountType = (type: string) => addAccountType(type as TypeAccountChoices);
 
-  let continueDisabled: boolean = true;
+  let continueDisabled = true;
 
   switch (idType) {
     case "NRIC":
@@ -180,6 +181,7 @@ const NewSalesComponent = ({
   const handleCheckClient = async () => {
     if (fetching.current === false) {
       fetching.current = true;
+      setLoading(true);
       const request = {
         agentId: agent?.id!,
         principalHolder: {
@@ -192,7 +194,8 @@ const NewSalesComponent = ({
           name: principalHolder?.name,
         },
       };
-      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation, setLoading);
+      setLoading(false);
       fetching.current = false;
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
@@ -226,6 +229,7 @@ const NewSalesComponent = ({
   const handleClientRegister = async () => {
     if (fetching.current === false) {
       fetching.current = true;
+      setLoading(true);
       const jointInfo =
         accountType === "Individual"
           ? undefined
@@ -250,7 +254,8 @@ const NewSalesComponent = ({
         },
         jointHolder: jointInfo,
       };
-      const client: IClientRegisterResponse = await clientRegister(request, navigation);
+      const client: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
+      setLoading(false);
       fetching.current = false;
       if (client !== undefined) {
         const { data, error } = client;
@@ -313,7 +318,7 @@ const NewSalesComponent = ({
   };
 
   const modalContainer: ViewStyle = {
-    backgroundColor: colorWhite._4,
+    backgroundColor: colorBlue._2,
     borderRadius: sw5,
     width: sw565,
   };
@@ -321,7 +326,7 @@ const NewSalesComponent = ({
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
@@ -339,7 +344,7 @@ const NewSalesComponent = ({
                 <CustomSpacer space={registered === true ? sh56 : sh48} />
                 {registered === false ? (
                   <Fragment>
-                    <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
+                    <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
                     <NewSalesDetails
                       accountType={accountType}
                       clientInfo={details![holderToFill]!}
@@ -363,6 +368,7 @@ const NewSalesComponent = ({
               buttonContainerStyle={buttonContainer}
               cancelButtonStyle={{ width: sw218 }}
               continueButtonStyle={{ width: sw218 }}
+              continueLoading={loading}
               continueDisabled={continueDisabled}
               handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}

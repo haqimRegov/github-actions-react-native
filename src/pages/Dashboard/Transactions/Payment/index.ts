@@ -1,1 +1,1 @@
-export * from "./DashboardPayment";
+export * from "./Payment";

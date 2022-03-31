@@ -1,19 +1,19 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CustomSpacer, FileViewer, LabeledTitleProps, TextCard } from "../../../../components";
+import { AccountHeader, CustomSpacer, FileViewer, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
 import {
-  borderBottomBlack21,
-  borderBottomRed4,
+  borderBottomGray2,
+  borderBottomRed1,
   centerVertical,
   colorBlue,
   colorWhite,
   flexRow,
-  fs16BoldBlack2,
-  fs24BoldBlack2,
+  fs16BoldGray6,
+  fs24BoldGray6,
   fsTransformNone,
   px,
   py,
@@ -21,8 +21,8 @@ import {
   sh24,
   sh4,
   sh64,
-  shadowBlack116,
-  shadowBlue204,
+  shadow12Black116,
+  shadow12Blue104,
   sw16,
   sw200,
   sw24,
@@ -49,9 +49,9 @@ interface TitleIconProps {
 const TitleIcon = ({ onPress, title, titleStyle }: TitleIconProps) => {
   return (
     <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-      <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{title}</Text>
+      <Text style={{ ...fs16BoldGray6, ...titleStyle }}>{title}</Text>
       <CustomSpacer isHorizontal={true} space={sw16} />
-      <IcoMoon color={colorBlue._1} name="edit" onPress={onPress} size={sh24} />
+      <IcoMoon color={colorBlue._8} name="edit" onPress={onPress} size={sh24} suppressHighlighting={true} />
     </View>
   );
 };
@@ -143,9 +143,9 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   const crsSummary: LabeledTitleProps[] = [
     {
       label: DECLARATION_SUMMARY.LABEL_JURISDICTION,
-      labelStyle: { width: sw200, lineHeight: sh16 },
+      labelStyle: { width: sw200 },
       spaceToLabel: sh4,
-      title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!],
+      title: OPTIONS_CRS_TAX_RESIDENCY[crs?.taxResident!].label,
     },
   ];
 
@@ -158,7 +158,8 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
       );
 
       if (multiTin.noTin === true) {
-        const tinLabel = multiTin.reason === 1 ? DECLARATION_SUMMARY.OPTION_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
+        const tinLabel =
+          multiTin.reason === 1 ? DECLARATION_SUMMARY.OPTION_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label;
         crsSummary.push({
           label: `${DECLARATION_SUMMARY.LABEL_TIN_REMARKS}${countLabel}`,
           title: multiTin.reason === 2 ? multiTin.explanation! : tinLabel,
@@ -172,8 +173,8 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
     ...centerVertical,
     ...flexRow,
     ...px(sw24),
-    ...borderBottomRed4,
-    ...shadowBlue204,
+    ...borderBottomRed1,
+    ...shadow12Blue104,
     backgroundColor: colorWhite._1,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
@@ -188,15 +189,15 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   return (
     <Fragment>
       <View style={px(sw24)}>
-        <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
+        <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadow12Black116 }}>
           {accountType === "Individual" ? (
             <View style={headerStyle}>
-              <Text style={fs24BoldBlack2}>{name}</Text>
+              <Text style={fs24BoldGray6}>{name}</Text>
             </View>
           ) : (
             <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />
           )}
-          <View style={borderBottomBlack21}>
+          <View style={borderBottomGray2}>
             <TitleIcon onPress={handleEditFatca} title={DECLARATION_SUMMARY.TITLE_FATCA} />
             <View style={px(sw24)}>
               <TextCard data={fatcaSummary} itemsPerGroup={3} spaceBetweenItem={scaledSpaceBetweenItem} />

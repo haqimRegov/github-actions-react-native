@@ -21,7 +21,7 @@ export const transactionsInitialState: transactionsState = {
     orders: [],
     page: 1,
     pages: 1,
-    sort: [],
+    sort: [{ value: "descending", column: "lastUpdated" }],
   },
   pending: {
     filter: {
@@ -35,7 +35,7 @@ export const transactionsInitialState: transactionsState = {
     orders: [],
     page: 1,
     pages: 1,
-    sort: [],
+    sort: [{ value: "descending", column: "lastUpdated" }],
   },
   rejected: {
     filter: {
@@ -49,7 +49,7 @@ export const transactionsInitialState: transactionsState = {
     orders: [],
     page: 1,
     pages: 1,
-    sort: [],
+    sort: [{ value: "descending", column: "lastUpdated" }],
   },
   selectedOrders: [],
   approvedCount: 0,

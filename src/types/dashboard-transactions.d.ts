@@ -4,22 +4,25 @@ declare interface IDashboardRemark {
 }
 
 declare interface IDashboardOrder {
-  orderNumber: string;
   accountType: TypeAccountChoices;
+  canProceed: boolean;
+  clientId: string;
+  jointId: string | null;
+  createdOn: string;
+  dueDate: string;
   investorName: {
     principal: string;
     joint: string | null;
   };
-  transactionType: string;
   isScheduled: boolean;
-  canProceed: boolean;
-  withHardcopy: boolean;
-  totalInvestment: IOrderAmount[];
-  createdOn: string;
-  status: OrderStatusType;
-  dueDate: string;
+  isSeen: boolean;
   lastUpdated: string;
+  orderNumber: string;
   remark: IDashboardRemark[];
+  status: OrderStatusType;
+  totalInvestment: IOrderAmount[];
+  transactionType: string;
+  withHardcopy: boolean;
 }
 
 declare interface ITransactionsTab {
@@ -31,12 +34,12 @@ declare interface ITransactionsTab {
 }
 
 declare interface ITransactionsDashboard {
-  pending: ITransactionsTab;
   approved: ITransactionsTab;
-  rejected: ITransactionsTab;
   approvedCount: number;
-  rejectedCount: number;
+  pending: ITransactionsTab;
   pendingCount: number;
+  rejected: ITransactionsTab;
+  rejectedCount: number;
 }
 
 declare interface ITransactionsSort {
@@ -45,25 +48,33 @@ declare interface ITransactionsSort {
 }
 
 declare interface ITransactionsFilter {
-  dateSorting?: string;
-  startDate?: Date;
-  endDate?: Date;
-  transactionsType?: string;
   accountType?: string;
+  dateSorting?: string;
+  endDate?: Date;
   orderStatus?: string[];
+  startDate?: Date;
+  transactionsType?: string;
 }
 
 declare type TransactionsSortColumnType =
+  | ""
+  | "createdOn"
+  | "dueDate"
+  | "lastUpdated"
   | "orderNumber"
   | "principal"
-  | "transactionType"
   | "totalInvestment"
-  | "createdOn"
-  | "lastUpdated"
-  | "dueDate"
-  | "";
+  | "transactionType"
+  | "status";
+
+declare type TDateType = "Created On" | "Last Updated";
+
+declare interface IShowDateBy {
+  key: TSortType;
+  type: TDateType;
+}
 
 declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";
 declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
-declare type DashboardPageType = "Inbox" | "Transactions" | "Profile";
+declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD";

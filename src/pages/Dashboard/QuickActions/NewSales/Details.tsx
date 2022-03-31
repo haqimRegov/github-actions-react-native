@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_ACCOUNT_TYPE,
@@ -11,7 +11,7 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
-import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh136, sh140, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
+import { disabledOpacity5, fs20BoldGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -82,13 +82,13 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   };
 
   const hideInput = clientType !== "" && holderToFill === "principalHolder";
-  const disabledStyle: ViewStyle = hideInput ? { opacity: 0.5 } : {};
+  const disabledStyle: ViewStyle = hideInput ? disabledOpacity5 : {};
   const dateValue = dateOfBirth !== "" ? moment(dateOfBirth, DEFAULT_DATE_FORMAT).toDate() : undefined;
 
   return (
     <View>
       <Fragment>
-        <TextSpaceArea style={fs24BoldBlack2} text={subheading} />
+        <TextSpaceArea style={fs20BoldGray5} text={subheading} />
         {hideInput ? null : (
           <Fragment>
             <TextSpaceArea spaceToTop={sh24} spaceToBottom={sh8} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
@@ -98,11 +98,12 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
         {idType !== "Other" || hideInput ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <AdvancedDropdown
+            <NewDropdown
               handleChange={handleOtherIdType}
               items={DICTIONARY_ID_OTHER_TYPE}
               label={ADD_CLIENT.LABEL_ID_TYPE}
               value={otherIdType!}
+              viewStyle={{ width: sw440 }}
             />
           </Fragment>
         )}
@@ -116,6 +117,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           spaceToBottom={sh24}
           spaceToTop={sh24}
           value={name}
+          viewStyle={{ width: sw440 }}
         />
         <CustomTextInput
           autoCapitalize="characters"
@@ -126,23 +128,24 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           maxLength={idMaxLength}
           onChangeText={setInputIdNumber}
           value={id}
+          viewStyle={{ width: sw440 }}
         />
         {idType === "NRIC" ? null : (
           <Fragment>
-            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
-            <CustomDatePicker
+            <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
+            <NewDatePicker
+              buttonStyle={{ width: sw440 }}
               disabled={clientType !== "" && holderToFill === "principalHolder"}
-              placeholder={ADD_CLIENT.PLACEHOLDER_DATE}
-              datePickerStyle={{ height: sh140 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
+              datePickerStyle={{ height: sh120 }}
               mode="date"
               setValue={setInputDateOfBirth}
               value={dateValue}
+              viewStyle={{ width: sw440 }}
             />
           </Fragment>
         )}
         {idType === "Passport" ? (
-          <AdvancedDropdown
+          <NewDropdown
             disabled={clientType !== "" && holderToFill === "principalHolder"}
             items={DICTIONARY_COUNTRIES}
             handleChange={setInputCountry}
@@ -150,16 +153,12 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             spaceToTop={sh24}
             style={{ height: sh136 }}
             value={country || ""}
+            viewStyle={{ width: sw440 }}
           />
         ) : null}
         {clientType === "NTB" && holderToFill === "principalHolder" ? (
           <Fragment>
-            <TextSpaceArea
-              spaceToBottom={sh8}
-              spaceToTop={sh24}
-              style={{ ...fs16RegBlack2, lineHeight: sh24 }}
-              text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE}
-            />
+            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE} />
             <RadioButtonGroup
               direction="row"
               options={DICTIONARY_ACCOUNT_TYPE}

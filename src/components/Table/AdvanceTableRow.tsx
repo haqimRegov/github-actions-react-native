@@ -5,21 +5,21 @@ import Collapsible from "react-native-collapsible";
 import { IcoMoon } from "../../icons";
 import {
   border,
-  borderBottomGray4,
-  borderLeftGray4,
+  borderBottomGray2,
+  borderLeftBlue3,
+  centerHorizontal,
   centerHV,
   centerVertical,
-  colorBlack,
+  colorBlue,
   colorGray,
   colorWhite,
-  disabledOpacity,
+  disabledOpacity5,
   flexRow,
   flexRowCC,
-  fs12BoldBlack2,
+  fs12BoldBlue1,
   fsCapitalize,
   px,
   py,
-  sh16,
   sh24,
   sh4,
   sh8,
@@ -27,7 +27,7 @@ import {
   sw1,
   sw12,
   sw16,
-  sw20,
+  sw19,
   sw4,
   sw56,
   sw8,
@@ -52,7 +52,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   rowSelection,
   rowSelectionKey,
 }: AdvanceTableRowProps) => {
-  const disabledCheckbox = disabled === true ? disabledOpacity : {};
+  const disabledCheckbox = disabled === true ? disabledOpacity5 : {};
   const itemSelected =
     rowSelection !== undefined && rowSelectionKey !== undefined
       ? rowSelection.findIndex((row) => row[rowSelectionKey] === item[rowSelectionKey]) > -1
@@ -96,18 +96,18 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 <CheckBox
                   disabled={disabled}
                   onPress={handleSelectRow}
-                  style={{ ...px(sw20), ...flexRowCC, ...disabledCheckbox }}
+                  style={{ ...px(sw19), ...flexRowCC, ...disabledCheckbox }}
                   toggle={itemSelected}
                 />
               </View>
             </TouchableWithoutFeedback>
           )}
-          <View style={border(colorGray._4, sw1, sw12)}>
+          <View style={border(colorBlue._3, sw1, sw12)}>
             <View style={itemContainer}>
               {columns.map((column: ITableColumn, columnIndex: number) => {
                 const dataKey = column.key.map((key: ITableItemKey) => key);
                 const customStyle = column.itemTextStyle !== undefined ? column.itemTextStyle(rowData) : {};
-                const textStyle = { ...fs12BoldBlack2, ...fsCapitalize, ...column.textStyle, ...customStyle };
+                const textStyle = { ...fs12BoldBlue1, ...fsCapitalize, ...column.textStyle, ...customStyle };
                 const handlePressColumnItem = () => {
                   if (column.onPressItem === undefined) {
                     return handleRowSelection();
@@ -115,10 +115,10 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                   return column.onPressItem(rowData);
                 };
 
-                const itemBorderLeft = columnIndex === 0 ? {} : borderLeftGray4;
+                const itemBorderLeft = columnIndex === 0 ? {} : borderLeftBlue3;
 
                 const itemAccordionIcon: ITableIcon = {
-                  color: colorBlack._2,
+                  color: colorGray._6,
                   name: itemAccordionOpen ? "collapse" : "expand",
                   size: sh24,
                 };
@@ -146,7 +146,6 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                       : {};
 
                   const itemData: IColumnItem = { label: rowData.rawData[labelKey.key], textStyle: labelKey.textStyle, ...prefixData };
-
                   const isBoolean = typeof itemData.label === "boolean";
 
                   if (isBoolean) {
@@ -177,19 +176,22 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                           <Fragment>
                             <View>
                               {itemLabel.map((label: IColumnItem, labelIndex: number) => {
+                                const defaultLabel = label.label !== null ? label.label : "-";
+                                const defaultContentStyle: ViewStyle =
+                                  label.label === null ? { ...flexRow, ...centerHorizontal } : { ...flexRow };
                                 return (
                                   <Fragment key={labelIndex}>
                                     {label.label !== undefined ? (
                                       <Fragment>
-                                        <View key={labelIndex} style={flexRow}>
+                                        <View key={labelIndex} style={defaultContentStyle}>
                                           {label.prefix !== undefined ? (
                                             <Fragment>
-                                              <Text style={{ ...textStyle, ...label.prefixStyle, lineHeight: sh16 }}>{label.prefix}</Text>
+                                              <Text style={{ ...textStyle, ...label.prefixStyle }}>{label.prefix}</Text>
                                               <CustomSpacer isHorizontal={true} space={sw4} />
                                             </Fragment>
                                           ) : null}
-                                          <Text numberOfLines={2} style={{ ...textStyle, ...label.textStyle, lineHeight: sh16 }}>
-                                            {label.label}
+                                          <Text numberOfLines={2} style={{ ...textStyle, ...label.textStyle }}>
+                                            {defaultLabel}
                                           </Text>
                                         </View>
                                       </Fragment>
@@ -201,7 +203,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                             {column.itemIcon !== undefined || column.withAccordion === true ? (
                               <Fragment>
                                 {itemLabel.length > 0 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
-                                <IcoMoon {...itemIcon} />
+                                <IcoMoon {...itemIcon} suppressHighlighting={true} />
                               </Fragment>
                             ) : null}
                           </Fragment>
@@ -215,7 +217,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
               })}
               {RenderOptions !== undefined ? (
                 <TouchableWithoutFeedback>
-                  <View style={{ ...flexRowCC, ...borderLeftGray4, width: sw56 }}>
+                  <View style={{ ...flexRowCC, ...borderLeftBlue3, width: sw56 }}>
                     <MenuPopup
                       RenderButton={({ show }) => {
                         return (
@@ -238,7 +240,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
               <Collapsible collapsed={!activeAccordion.includes(index)} duration={50}>
                 {activeAccordion.includes(index) ? (
                   <Fragment>
-                    <View style={borderBottomGray4} />
+                    <View style={borderBottomGray2} />
                     <View>
                       <RenderAccordion {...item} index={index} />
                     </View>

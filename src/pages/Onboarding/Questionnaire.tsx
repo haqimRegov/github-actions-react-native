@@ -13,7 +13,7 @@ import {
   LabeledTitle,
   Question,
 } from "../../components";
-import { Language, ONBOARDING_ROUTES } from "../../constants";
+import { Language, NunitoBold, NunitoRegular, ONBOARDING_ROUTES } from "../../constants";
 import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { getRiskProfile } from "../../network-actions";
@@ -26,14 +26,14 @@ import {
   colorBlue,
   colorRed,
   colorWhite,
-  disabledOpacity,
+  disabledOpacity5,
   flexRow,
-  fs10BoldBlack2,
-  fs12BoldBlack2,
+  fs10BoldGray6,
+  fs12BoldGray6,
   fs12BoldWhite1,
-  fs12SemiBoldBlack2,
-  fs16BoldBlack1,
+  fs12RegGray5,
   fs16BoldBlack2,
+  fs16RegGray6,
   imageContain,
   sh143,
   sh155,
@@ -52,6 +52,7 @@ import {
   sw24,
   sw256,
   sw326,
+  sw328,
   sw432,
   sw7,
   sw8,
@@ -96,7 +97,8 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const setQ5 = (index: number) => addAssessmentQuestions({ questionFive: index });
   const setQ6 = (index: number) => addAssessmentQuestions({ questionSix: index });
   const setQ7 = (index: number) => addAssessmentQuestions({ questionSeven: index });
-  const setQ8 = (index: number) => addAssessmentQuestions({ questionEight: index });
+  const setQ8 = (index: number) =>
+    addAssessmentQuestions({ questionEight: index, questionNine: index === 0 || index === -1 ? -1 : questionNine });
   const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
   const handleConfirmAssessment = () => {
@@ -138,7 +140,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
           questionNine: questionNine,
         },
       };
-      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation);
+      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {
@@ -226,17 +228,16 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <View onStartShouldSetResponderCapture={() => true}>
               <LabeledTitle
                 label={RISK_ASSESSMENT.LABEL_QUESTION_1}
-                labelStyle={{ ...fs10BoldBlack2, ...disabledOpacity }}
+                labelStyle={{ ...fs10BoldGray6, ...disabledOpacity5 }}
                 spaceToLabel={sh8}
                 title={RISK_ASSESSMENT.QUESTION_1}
-                titleStyle={{ ...fs16BoldBlack2, ...disabledOpacity }}
+                titleStyle={disabledOpacity5}
               />
               <CustomSpacer space={sh16} />
               <CustomTextInput
                 disabled={true}
                 label={RISK_ASSESSMENT.LABEL_DATE_OF_BIRTH}
-                rightIcon="calendar"
-                rightIconColor={colorBlue._2}
+                rightIcon={{ name: "calendar" }}
                 value={dateOfBirth}
               />
             </View>
@@ -251,10 +252,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <CustomSpacer space={sh32} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_3}
-              labelStyle={fs10BoldBlack2}
+              labelStyle={fs10BoldGray6}
               spaceToLabel={sh8}
               title={RISK_ASSESSMENT.QUESTION_3}
-              titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
             <CustomSlider disabled={true} options={Q3_OPTIONS} selected={questionThree} setSelected={setQ3} />
@@ -287,10 +287,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
             <CustomSpacer space={sh32} />
             <LabeledTitle
               label={RISK_ASSESSMENT.LABEL_QUESTION_7}
-              labelStyle={fs10BoldBlack2}
+              labelStyle={fs10BoldGray6}
               spaceToLabel={sh8}
               title={RISK_ASSESSMENT.QUESTION_7}
-              titleStyle={fs16BoldBlack2}
             />
             <CustomSpacer space={sh16} />
             <CustomSlider disabled={true} options={Q7_OPTIONS} selected={questionSeven} setSelected={setQ7} />
@@ -312,7 +311,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                     const { options, selected, setSelected } = renderContentProps;
                     return (
                       <Fragment>
-                        {options!.map((option: string, index: number) => {
+                        {options!.map((option: ICheckBoxWithSubLabel, index: number) => {
                           const infoContent =
                             index === 1 ? (
                               <View>
@@ -321,33 +320,34 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                               </View>
                             ) : (
                               <View>
-                                <Text style={{ ...fs12BoldWhite1, lineHeight: sh24 }}>{RISK_ASSESSMENT.POPUP_INCOME}</Text>
+                                <Text style={fs12BoldWhite1}>{RISK_ASSESSMENT.POPUP_INCOME}</Text>
                               </View>
                             );
                           const defaultCondition: ReactElement | null = index <= 1 ? infoContent : <View />;
 
                           const handleSelect = () => {
-                            const newIndex = options!.indexOf(option);
+                            const newIndex = options!.findIndex((search: ICheckBoxWithSubLabel) => search.label === option.label);
                             setSelected(newIndex !== questionNine ? newIndex : -1);
                           };
 
-                          const iconColor = index === selected ? colorWhite._1 : colorBlue._2;
+                          const iconColor = index === selected ? colorWhite._1 : colorBlue._1;
                           const circleStyle: ViewStyle =
-                            index === selected ? circleBorder(sw24, sw1, colorRed._1, colorRed._1) : circleBorder(sw24, sw1, colorBlue._2);
+                            index === selected ? circleBorder(sw24, sw1, colorRed._1, colorRed._1) : circleBorder(sw24, sw1, colorBlue._1);
+                          const fontFamily = index === selected ? NunitoBold : NunitoRegular;
 
                           return (
                             <Fragment key={index}>
                               {index !== 0 ? <CustomSpacer isHorizontal={false} space={sh16} /> : null}
                               <View style={flexRow}>
                                 <TouchableWithoutFeedback onPress={handleSelect}>
-                                  <View style={{ ...centerVertical, ...flexRow }}>
+                                  <View style={{ ...centerVertical, ...flexRow, width: sw328 }}>
                                     <View style={alignSelfStart}>
                                       <View style={{ ...centerHV, ...circleStyle }}>
-                                        <IcoMoon name="check" size={sw16} color={iconColor} />
+                                        <IcoMoon name="success" size={sw16} color={iconColor} />
                                       </View>
                                     </View>
                                     <CustomSpacer space={sw8} isHorizontal />
-                                    <Text style={{ ...fs12BoldBlack2, maxWidth: sw326 }}>{option}</Text>
+                                    <Text style={{ ...fs12BoldGray6, fontFamily: fontFamily, maxWidth: sw326 }}>{option.label}</Text>
                                   </View>
                                 </TouchableWithoutFeedback>
                                 {index < 2 ? (
@@ -391,16 +391,16 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
                 <LabeledTitle
                   key={index}
                   label={item.label}
-                  labelStyle={fs12SemiBoldBlack2}
+                  labelStyle={fs12RegGray5}
                   spaceToBottom={sh24}
                   spaceToLabel={sh8}
                   title={item.title}
-                  titleStyle={fs16BoldBlack1}
+                  titleStyle={fs16BoldBlack2}
                 />
               ))}
             </Fragment>
           ) : (
-            <Text style={fs16BoldBlack2}>{RISK_ASSESSMENT.EDIT_LABEL}</Text>
+            <Text style={fs16RegGray6}>{RISK_ASSESSMENT.EDIT_LABEL}</Text>
           )}
         </ConfirmationModal>
       ) : null}

@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getOrderSummary = async (
   variables: IGetOrderSummaryRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getOrderSummary = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "getOrderSummary" in data === false) {

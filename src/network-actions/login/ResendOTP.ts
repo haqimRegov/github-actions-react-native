@@ -1,7 +1,7 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const resendLockOtp = async (variables: IResendLockOTPRequest) => {
+export const resendLockOtp = async (variables: IResendLockOTPRequest, handleLoading?: (loading: boolean) => void) => {
   try {
     const data = await responseHandler<IResendLockOTPMutation, IResendLockOTPRequest>(
       GQL_MUTATIONS.resendLockOtp,
@@ -9,6 +9,7 @@ export const resendLockOtp = async (variables: IResendLockOTPRequest) => {
       undefined,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

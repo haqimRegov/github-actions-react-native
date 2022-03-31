@@ -3,18 +3,7 @@ import { Text, View } from "react-native";
 
 import { CheckBox, CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants";
-import {
-  borderBottomGray4,
-  fs11RegBlack2,
-  fs12BoldBlack2,
-  fs16SemiBoldBlack2,
-  px,
-  sh16,
-  sh20,
-  sh32,
-  sw24,
-  sw648,
-} from "../../../../styles";
+import { borderBottomGray2, fs10RegGray6, fs12BoldGray6, fs16SemiBoldGray6, px, sh16, sh32, sw24, sw648 } from "../../../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -31,28 +20,28 @@ export const FeaTerms: FunctionComponent<FeaTermsProps> = ({ accepted, setAccept
   return (
     <View>
       <CustomSpacer space={sh32} />
-      <View style={borderBottomGray4} />
+      <View style={borderBottomGray2} />
       <View style={{ ...px(sw24), width: sw648 }}>
         <CustomSpacer space={sh32} />
-        <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.DECLARATION}</Text>
+        <Text style={fs16SemiBoldGray6}>{DECLARATIONS.DECLARATION}</Text>
         <CustomSpacer space={sh16} />
-        <Text style={fs12BoldBlack2}>{DECLARATIONS.DECLARATION_UNDERTAKING}</Text>
+        <Text style={fs12BoldGray6}>{DECLARATIONS.DECLARATION_UNDERTAKING}</Text>
         {DECLARATIONS.DECLARATION_UNDERTAKING_CONTENT.map((content, index) => (
           <Fragment key={index}>
             <CustomSpacer space={sh16} />
-            <Text style={fs11RegBlack2}>{content}</Text>
+            <Text style={fs10RegGray6}>{content}</Text>
           </Fragment>
         ))}
         <CustomSpacer space={sh16} />
-        <Text style={{ ...fs12BoldBlack2, lineHeight: sh20 }}>{DECLARATIONS.DECLARATION_FOREIGN}</Text>
+        <Text style={fs12BoldGray6}>{DECLARATIONS.DECLARATION_FOREIGN}</Text>
         {DECLARATIONS.DECLARATION_FOREIGN_CONTENT.map((content, index) => (
           <Fragment key={index}>
             <CustomSpacer space={sh16} />
-            <Text style={fs11RegBlack2}>{content}</Text>
+            <Text style={fs10RegGray6}>{content}</Text>
           </Fragment>
         ))}
         <CustomSpacer space={sh32} />
-        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_FEA} labelStyle={fs12BoldBlack2} />
+        <CheckBox toggle={accepted} onPress={handleAccept} label={DECLARATIONS.LABEL_ACCEPT_FEA} />
       </View>
     </View>
   );

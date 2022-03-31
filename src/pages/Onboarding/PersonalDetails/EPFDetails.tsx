@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput, TextSpaceArea } from "../../../components";
+import { CustomSpacer, CustomTextInput, NewDropdown, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_EPF_TYPE_CONVENTIONAL, DICTIONARY_EPF_TYPE_SHARIAH } from "../../../data/dictionary";
-import { borderBottomBlack21, fs24BoldBlack2, px, sh32, sw24 } from "../../../styles";
+import { borderBottomGray2, fs24BoldGray6, px, sh32, sw24 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -36,10 +36,10 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray2} />
       <View style={px(sw24)}>
         <CustomSpacer space={sh32} />
-        <TextSpaceArea spaceToBottom={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.LABEL_EPF_DETAILS} />
+        <TextSpaceArea spaceToBottom={sh32} style={fs24BoldGray6} text={PERSONAL_DETAILS.LABEL_EPF_DETAILS} />
         <CustomTextInput
           error={epfNumberError}
           keyboardType="numeric"
@@ -48,7 +48,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
           onChangeText={setInputEpfNumber}
           value={inputEpfNumber}
         />
-        <AdvancedDropdown
+        <NewDropdown
           handleChange={setInputEpfType}
           items={epfTypeOptions}
           label={PERSONAL_DETAILS.LABEL_EPF_TYPE}

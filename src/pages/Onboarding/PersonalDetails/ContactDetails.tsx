@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, IconButton, MobileInput, OutlineButton } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, IconButton, NewMobileInput, OutlineButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MOBILE_CODE, ERROR } from "../../../data/dictionary";
-import { centerVertical, colorBlack, colorBlue, flexRow, fs12BoldBlue2, px, py, sh16, sh24, sh8, sw16, sw24 } from "../../../styles";
+import { centerVertical, colorBlack, flexRow, px, py, sh16, sh24, sh8, sw16, sw24 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -72,18 +72,16 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({
 
           return (
             <View key={index} style={{ ...centerVertical, ...flexRow }}>
-              <View>
-                <MobileInput
-                  data={item}
-                  handleContactNumber={handleContactNumber}
-                  keyboardType="numeric"
-                  label={optional === true ? `${item.label} ${PERSONAL_DETAILS.LABEL_OPTIONAL}` : undefined}
-                  maxLength={15}
-                  onBlur={onBlur}
-                  placeholder="12 3456 7890"
-                  spaceToTop={sh24}
-                />
-              </View>
+              <NewMobileInput
+                data={item}
+                handleContactNumber={handleContactNumber}
+                keyboardType="numeric"
+                label={optional === true ? `${item.label} ${PERSONAL_DETAILS.LABEL_OPTIONAL}` : undefined}
+                maxLength={15}
+                onBlur={onBlur}
+                placeholder="12 3456 7890"
+                spaceToTop={sh24}
+              />
               <CustomSpacer isHorizontal={true} space={sw16} />
               {index === 0 ? null : (
                 <View>
@@ -102,21 +100,17 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({
             const checkName = (element: IContactNumber) => element.label === item.label;
 
             const handleAddNumber = () => {
-              const contactNumberClone = [...contactNumber, { ...item, value: "", code: DICTIONARY_MOBILE_CODE[0].value }];
+              const contactNumberClone = [
+                ...contactNumber,
+                { ...item, value: "", code: DICTIONARY_MOBILE_CODE[0].value, id: DICTIONARY_MOBILE_CODE[0].id },
+              ];
               setContactNumber(contactNumberClone);
             };
 
             return contactNumber.some(checkName) ? null : (
               <Fragment key={index}>
                 <CustomSpacer space={sh16} />
-                <OutlineButton
-                  buttonType="dashed"
-                  color={colorBlue._2}
-                  icon="plus"
-                  onPress={handleAddNumber}
-                  text={buttonText}
-                  textStyle={fs12BoldBlue2}
-                />
+                <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddNumber} text={buttonText} />
               </Fragment>
             );
           })}

@@ -148,7 +148,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
       {label === undefined ? null : (
         <Text
           onPress={onPressLabel}
-          style={{ ...fs12BoldGray6, ...disabledOpacity, paddingBottom: spaceToLabel || sh4, ...labelStyle }}
+          style={{ ...fs12BoldGray6, paddingBottom: spaceToLabel || sh4, ...labelStyle }}
           suppressHighlighting={true}>
           {label}
         </Text>

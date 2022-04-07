@@ -1161,6 +1161,7 @@ export const english = {
       LABEL_POSTCODE: "Postcode",
       LABEL_PROCESSING_BRANCH: "Processing Branch",
       LABEL_RETYPE_PASSWORD: "Re-enter Password",
+      LABEL_CURRENT_PASSWORD: "Current Password",
       LABEL_STATE: "State",
       LABEL_STATUS: "Status",
       LABEL_SUFFIX_NUMBER: "Number",

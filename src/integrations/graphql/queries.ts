@@ -236,6 +236,25 @@ const getInbox = gql`
   }
 `;
 
+const checkPassword = gql`
+  query checkPassword($input: CheckPasswordInput) {
+    checkPassword(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const getOrderSummary = gql`
   query getOrderSummaryV2($input: OrderSummaryInputV2) {
     getOrderSummaryV2(input: $input) {
@@ -1214,11 +1233,12 @@ const previousResponse = gql`
 
 export const GQL_QUERIES = {
   caseResponse,
+  checkPassword,
   clientProfile,
   dashboard,
-  etbCheck,
-  eddDashboard,
   eddCaseQuestions,
+  eddDashboard,
+  etbCheck,
   getAgentProfile,
   getInbox,
   getOrderSummary,

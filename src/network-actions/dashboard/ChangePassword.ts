@@ -18,11 +18,11 @@ export const changePassword = async (
       handleLoading,
     );
 
-    if (data === undefined || "changePassword" in data === false) {
+    if (data === undefined || "changePasswordV2" in data === false) {
       throw data;
     }
 
-    return data.changePassword;
+    return data.changePasswordV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in changePassword at ChangePassword.ts", error);

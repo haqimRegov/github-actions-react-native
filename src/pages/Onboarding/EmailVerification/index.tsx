@@ -60,6 +60,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       setJointEmailError(undefined);
       const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
       const request = {
+        initId: details?.initId,
         clientId: principalClientId,
         principalHolder: { email: inputPrincipalEmail },
         jointHolder: jointRequest,
@@ -133,6 +134,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       ) : (
         <EmailOTP
           accountType={accountType}
+          details={details}
           handleCancel={handleCancel}
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}

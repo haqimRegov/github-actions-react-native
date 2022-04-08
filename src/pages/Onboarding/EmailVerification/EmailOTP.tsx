@@ -31,6 +31,7 @@ import { isNumber } from "../../../utils";
 const { EMAIL_VERIFICATION } = Language.PAGE;
 declare interface EmailOTPProps {
   accountType: TypeAccountChoices;
+  details?: IClientDetailsState;
   handleCancel?: () => void;
   handleNavigate: () => void;
   handleResend: () => void;
@@ -46,6 +47,7 @@ declare interface EmailOTPProps {
 }
 
 export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
+  details,
   handleCancel,
   handleNavigate,
   handleResend,
@@ -91,6 +93,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       setPrincipalError(undefined);
       const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
       const request = {
+        initId: details?.initId,
         clientId: principalClientId,
         principalHolder: { email: principalEmail, code: principalOtp },
         jointHolder: jointRequest,

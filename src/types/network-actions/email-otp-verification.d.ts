@@ -1,4 +1,5 @@
 declare interface IEmailOtpVerificationRequest {
+  initId?: number;
   principalHolder: {
     email: string;
     code: string;
@@ -16,7 +17,7 @@ declare interface IEmailOtpVerificationResult {
 }
 
 declare interface IEmailOtpVerificationMutation {
-  emailVerification: IEmailOtpVerificationResponse;
+  emailOtpVerificationV2: IEmailOtpVerificationResponse;
 }
 
 declare type IEmailOtpVerificationResponse = IMutationResponse<IEmailOtpVerificationResult> | undefined;

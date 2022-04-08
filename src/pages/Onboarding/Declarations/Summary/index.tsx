@@ -247,6 +247,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     delete jointEmploymentDetails.isEnabled;
   }
   const request = {
+    initId: details?.initId,
     incomeDistribution: personalInfo.incomeDistribution!,
     signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
     principal: {

@@ -158,7 +158,7 @@ declare interface ISubmitClientAccountRequest {
 type ISubmitClientAccountResult = IInvestmentSummary;
 
 declare interface ISubmitClientAccountMutation {
-  submitClientAccount: ISubmitClientAccountResponse;
+  submitClientAccountV2: ISubmitClientAccountResponse;
 }
 
 declare type ISubmitClientAccountResponse = IMutationResponse<ISubmitClientAccountResult> | undefined;

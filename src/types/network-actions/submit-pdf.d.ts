@@ -9,6 +9,7 @@ declare interface ISubmitPdfDocument {
 declare interface ISubmitPdfRequest {
   clientId: string;
   documents: ISubmitPdfDocument[];
+  initId: number;
 }
 
 declare interface ISubmitPdfResult {
@@ -18,5 +19,5 @@ declare interface ISubmitPdfResult {
 declare type ISubmitPdfResponse = IMutationResponse<ISubmitPdfResult> | undefined;
 
 declare interface ISubmitPdfMutation {
-  submitPdf: ISubmitPdfResponse;
+  submitPdfV2: ISubmitPdfResponse;
 }

@@ -20,5 +20,5 @@ declare interface IGetReceiptSummaryListResult {
 declare type IGetReceiptSummaryListResponse = IMutationResponse<IGetReceiptSummaryListResult> | undefined;
 
 declare interface IGetReceiptSummaryListMutation {
-  getReceiptSummaryList: IGetReceiptSummaryListResponse;
+  receiptSummary: IGetReceiptSummaryListResponse;
 }

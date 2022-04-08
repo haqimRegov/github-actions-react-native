@@ -17,14 +17,14 @@ export const generatePdf = async (
       handleLoading,
     );
 
-    if (data === undefined || "generatePdf" in data === false) {
+    if (data === undefined || "generatePdfV2" in data === false) {
       throw data;
     }
 
-    return data.generatePdf;
+    return data.generatePdfV2;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn("Error in generatePdf at GeneratePdf.ts", error);
+    console.warn("Error in generatePdfV2 at GeneratePdf.ts", error);
     return error;
   }
 };

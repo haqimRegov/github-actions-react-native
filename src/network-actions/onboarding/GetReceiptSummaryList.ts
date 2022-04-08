@@ -17,14 +17,14 @@ export const getReceiptSummaryList = async (
       handleLoading,
     );
 
-    if (data === undefined || "getReceiptSummaryList" in data === false) {
+    if (data === undefined || "receiptSummary" in data === false) {
       throw data;
     }
 
-    return data.getReceiptSummaryList;
+    return data.receiptSummary;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn("Error in getReceiptSummaryList at GetReceiptSummaryList.ts", error);
+    console.warn("Error in receiptSummary at GetReceiptSummaryList.ts", error);
     return error;
   }
 };

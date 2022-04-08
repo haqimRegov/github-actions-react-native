@@ -18,5 +18,5 @@ declare interface IGeneratePdfResult {
 declare type IGeneratePdfResponse = IMutationResponse<IGeneratePdfResult> | undefined;
 
 declare interface IGeneratePdfMutation {
-  GeneratePdf: IGeneratePdfResponse;
+  generatePdfV2: IGeneratePdfResponse;
 }

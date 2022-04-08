@@ -19,10 +19,11 @@ const changePassword = gql`
 `;
 
 const clientRegister = gql`
-  mutation ClientRegister($input: register) {
-    clientRegister(input: $input) {
+  mutation clientRegisterV2($input: ClientRegisterInput) {
+    clientRegisterV2(input: $input) {
       data {
         result {
+          initId
           message
           principalHolder {
             clientId
@@ -49,8 +50,8 @@ const clientRegister = gql`
 `;
 
 const emailVerification = gql`
-  mutation emailVerification($input: email) {
-    emailVerification(input: $input) {
+  mutation emailVerification($input: EmailVerificationInput) {
+    emailVerificationV2(input: $input) {
       data {
         result {
           message
@@ -68,8 +69,8 @@ const emailVerification = gql`
 `;
 
 const emailOtpVerification = gql`
-  mutation emailOtpVerification($input: verifyOtp) {
-    emailOtpVerification(input: $input) {
+  mutation emailOtpVerification($input: EmailOtpVerificationInput) {
+    emailOtpVerificationV2(input: $input) {
       data {
         result {
           message
@@ -128,7 +129,7 @@ const forgotPassword = gql`
 
 const generatePdf = gql`
   mutation generatePdf($input: PdfInput) {
-    generatePdf(input: $input) {
+    generatePdfV2(input: $input) {
       data {
         result {
           message
@@ -154,8 +155,8 @@ const generatePdf = gql`
 `;
 
 const submitPdf = gql`
-  mutation submitPdf($input: submitPdfInput) {
-    submitPdf(input: $input) {
+  mutation submitPdf($input: SubmitPdfInputV2) {
+    submitPdfV2(input: $input) {
       data {
         result {
           message
@@ -249,13 +250,15 @@ const resubmitOrder = gql`
 `;
 
 const riskAssessment = gql`
-  mutation RiskAssessment($input: risk) {
-    riskAssessment(input: $input) {
+  mutation riskAssessmentV2($input: RiskAssessmentInput) {
+    riskAssessmentV2(input: $input) {
       data {
         result {
           appetite
+          status
           rangeOfReturn
           type
+          message
           fundSuggestion
           netWorth
           profile
@@ -354,8 +357,8 @@ const verifyLockOtp = gql`
 `;
 
 const submitClientAccount = gql`
-  mutation SubmitClientAccount($input: SubmitClientAccountInput) {
-    submitClientAccount(input: $input) {
+  mutation submitClientAccount($input: SubmitClientAccountInput) {
+    submitClientAccountV2(input: $input) {
       data {
         result {
           grandTotal {

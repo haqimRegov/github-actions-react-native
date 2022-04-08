@@ -25,5 +25,6 @@ export const clientInitialState: ClientState = {
       otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
     },
     verified: false,
+    initId: undefined,
   },
 };

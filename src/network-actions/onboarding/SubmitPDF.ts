@@ -17,14 +17,14 @@ export const submitPdf = async (
       handleLoading,
     );
 
-    if (data === undefined || "submitPdf" in data === false) {
+    if (data === undefined || "submitPdfV2" in data === false) {
       throw data;
     }
 
-    return data.submitPdf;
+    return data.submitPdfV2;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn("Error in submitPdf at SubmitPDF.ts", error);
+    console.warn("Error in submitPdfV2 at SubmitPDF.ts", error);
     return error;
   }
 };

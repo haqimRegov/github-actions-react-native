@@ -1,12 +1,32 @@
 import gql from "graphql-tag";
 
 const dashboard = gql`
-  query dashboard($input: DashboardInput) {
-    dashboard(input: $input) {
+  query agentDashboard($input: DashboardInput) {
+    agentDashboardV2(input: $input) {
       data {
         result {
+          approvedCount
+          rejectedCount
+          pendingCount
+          rerouteCount
+          incompleteCount
+          page
+          pages
           orders {
             orderNumber
+            reason {
+              title
+              content
+              documents {
+                document
+                count
+              }
+            }
+            label
+            documents {
+              document
+              count
+            }
             clientId
             jointId
             accountType
@@ -24,19 +44,15 @@ const dashboard = gql`
             status
             dueDate
             lastUpdated
-            isScheduled
-            canProceed
-            withHardcopy
+            dueDate
             remark {
               label
               remark
             }
+            canProceed
+            isScheduled
+            withHardcopy
           }
-          approvedCount
-          rejectedCount
-          pendingCount
-          page
-          pages
         }
       }
       error {
@@ -148,8 +164,8 @@ const getInbox = gql`
 `;
 
 const getOrderSummary = gql`
-  query getOrderSummary($input: OrderSummaryInput) {
-    getOrderSummary(input: $input) {
+  query getOrderSummaryV2($input: OrderSummaryInputV2) {
+    getOrderSummaryV2(input: $input) {
       data {
         result {
           status
@@ -201,8 +217,12 @@ const getOrderSummary = gql`
             transactionDate
             remark
             proofOfPayment {
+              base64
+              date
               name
               url
+              path
+              size
               type
             }
             referenceNumber
@@ -354,6 +374,57 @@ const getOrderSummary = gql`
               type
             }
           }
+          documentSummary {
+            accountType
+            softcopy {
+              required
+              documents {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+            hardcopy {
+              required
+              utmcDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+              accDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+          }
+          trackingSummary {
+            createdOn
+            status
+            level
+            remark {
+              label
+              remark
+            }
+          }
         }
       }
       error {
@@ -367,8 +438,8 @@ const getOrderSummary = gql`
 `;
 
 const getReceiptSummaryList = gql`
-  query getReceiptSummaryList($input: getReceiptSummaryListInput) {
-    getReceiptSummaryList(input: $input) {
+  query getReceiptSummaryList($input: ReceiptSummaryInput) {
+    receiptSummary(input: $input) {
       data {
         result {
           message

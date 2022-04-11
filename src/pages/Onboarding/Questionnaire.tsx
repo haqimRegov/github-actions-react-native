@@ -69,6 +69,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   addAssessmentQuestions,
   addRiskScore,
   agent,
+  details,
   handleCancelOnboarding,
   handleNextStep,
   navigation,
@@ -129,6 +130,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       setLoading(true);
       const request = {
         clientId: clientId!,
+        initId: details?.initId,
         riskAssessment: {
           questionTwo: questionTwo,
           questionThree: questionThree,

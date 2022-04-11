@@ -23,5 +23,5 @@ declare interface IDashboardResult {
 declare type IDashboardResponse = IQueryResponse<IDashboardResult> | undefined;
 
 declare interface IDashboardQuery {
-  dashboard: IDashboardResponse;
+  agentDashboardV2: IDashboardResponse;
 }

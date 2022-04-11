@@ -16,14 +16,14 @@ export const getDashboard = async (
       handleError,
       handleLoading,
     );
-    if (data === undefined || "dashboard" in data === false) {
+    if (data === undefined || "agentDashboardV2" in data === false) {
       throw data;
     }
 
-    return data.dashboard;
+    return data.agentDashboardV2;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn("Error in getDashboard at Dashboard.ts", error);
+    console.warn("Error in agentDashboardV2 at Dashboard.ts", error);
     return error;
   }
 };

@@ -8,18 +8,18 @@ declare interface IClientRegisterInfo {
 
 declare interface IClientRegisterRequest {
   accountType: TypeAccountChoices;
-  agentId: string;
   principalHolder: IClientRegisterInfo;
   jointHolder?: IClientRegisterInfo;
 }
 
 declare interface IClientRegisterResult {
+  initId: number;
   principalHolder: IClientBasicInfo;
   jointHolder?: IClientBasicInfo;
 }
 
 declare interface IClientRegisterMutation {
-  clientRegister: IClientRegisterResponse;
+  clientRegisterV2: IClientRegisterResponse;
 }
 
 declare type IClientRegisterResponse = IMutationResponse<IClientRegisterResult> | undefined;

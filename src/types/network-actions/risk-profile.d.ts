@@ -17,5 +17,5 @@ declare type IGetRiskProfileResult = IRiskScore;
 declare type IGetRiskProfileResponse = IMutationResponse<IGetRiskProfileResult> | undefined;
 
 declare interface IGetRiskProfileMutation {
-  riskAssessment: IGetRiskProfileResponse;
+  riskAssessmentV2: IGetRiskProfileResponse;
 }

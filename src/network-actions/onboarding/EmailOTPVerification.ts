@@ -17,14 +17,14 @@ export const emailOtpVerification = async (
       handleLoading,
     );
 
-    if (data === undefined || "emailOtpVerification" in data === false) {
+    if (data === undefined || "emailOtpVerificationV2" in data === false) {
       throw data;
     }
 
-    return data.emailOtpVerification;
+    return data.emailOtpVerificationV2;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn("Error in emailOtpVerification at EmailOTPVerification.ts", error);
+    console.warn("Error in emailOtpVerificationV2 at EmailOTPVerification.ts", error);
     return error;
   }
 };

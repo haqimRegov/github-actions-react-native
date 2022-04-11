@@ -242,7 +242,6 @@ const NewSalesComponent = ({
               name: jointHolder?.name!,
             };
       const request: IClientRegisterRequest = {
-        agentId: agent?.id!,
         accountType: accountType,
         principalHolder: {
           dateOfBirth: principalHolder?.dateOfBirth
@@ -288,6 +287,7 @@ const NewSalesComponent = ({
               clientId: data.result.principalHolder.clientId,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+            initId: data.result.initId,
           });
           return setRegistered(true);
         }

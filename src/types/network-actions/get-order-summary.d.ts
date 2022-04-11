@@ -7,5 +7,5 @@ type IGetOrderSummaryResult = IDashboardOrderSummary;
 declare type IGetOrderSummaryResponse = IQueryResponse<IGetOrderSummaryResult> | undefined;
 
 declare interface IGetOrderSummaryQuery {
-  getOrderSummary: IGetOrderSummaryResponse;
+  getOrderSummaryV2: IGetOrderSummaryResponse;
 }

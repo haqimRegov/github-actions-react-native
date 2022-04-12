@@ -6,16 +6,16 @@ import { CustomSpacer, StatusBadge, StatusBadgeColorType } from "../../../../../
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
-import { centerHorizontal, centerVertical, colorBlue, flexRow, fs10RegBlue6, sh16, sh4, sw12 } from "../../../../../styles";
+import { centerHorizontal, centerVertical, flexRow, fs10RegBlue6, sh4, sw12, sw16 } from "../../../../../styles";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-export interface PendingStatusProps extends ITableCustomItem {
+interface PendingStatusProps extends ITableCustomItem {
   sortedColumns: TransactionsSortColumnType[];
 }
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
-  const { dueDate, remark, status, withHardcopy } = item.rawData as IDashboardOrder;
+  const { dueDate, status, withHardcopy } = item.rawData as unknown as IDashboardOrder;
   let statusColor: StatusBadgeColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
     statusColor = "error";
@@ -29,24 +29,19 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
     statusColor = "warning";
   }
 
-  const rerouted =
-    status === DICTIONARY_ORDER_STATUS.reroutedBr ||
-    status === DICTIONARY_ORDER_STATUS.reroutedHq ||
-    status === DICTIONARY_ORDER_STATUS.rejected;
+  const iconName = status === "Submitted" && withHardcopy === true ? "receipt-new" : undefined;
 
   const dueDateLabel = `${DASHBOARD_HOME.LABEL_DUE}: ${moment(dueDate, "x").format(DEFAULT_DATE_FORMAT)}`;
-
   return (
     <View style={centerHorizontal}>
       <View style={{ ...flexRow, ...centerVertical }}>
-        <StatusBadge color={statusColor} text={status} />
+        <StatusBadge color={statusColor} icon={iconName} iconSize={sw16} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
-        {rerouted === true && accordionIcon !== undefined && remark ? (
+        {accordionIcon !== undefined ? (
           <Fragment>
             <IcoMoon {...accordionIcon} suppressHighlighting={true} />
           </Fragment>
         ) : null}
-        {status === "Submitted" && withHardcopy === true ? <IcoMoon color={colorBlue._1} name="receipt" size={sh16} /> : null}
       </View>
       {dueDate !== null ? (
         <Fragment>

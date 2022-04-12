@@ -7,6 +7,7 @@ import illustrationEDDSubmitted from "./illustration_edd_submitted/illustration_
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
 import illustrationHardcopySuccess from "./illustration_hardcopy_success/illustration_hardcopy_success.png";
 import illustrationInboxEmpty from "./illustration_inbox_empty/illustration_inbox_empty.png";
+import illustrationInvestorsEmpty from "./illustration_investors_empty/illustration_investors_empty.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
 import illustrationNoResults from "./illustration_no_results/illustration_no_results.png";
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
@@ -44,6 +45,7 @@ export const LocalAssets = {
     eddSubmitted: illustrationEDDSubmitted,
     hardcopySuccess: illustrationHardcopySuccess,
     inboxEmpty: illustrationInboxEmpty,
+    investorsEmpty: illustrationInvestorsEmpty,
     loginError: illustrationLoginError,
     noResults: illustrationNoResults,
     orderReceived: illustrationOrderReceived,

@@ -91,6 +91,65 @@ const etbCheck = gql`
   }
 `;
 
+const investorDashboard = gql`
+  query investorDashboard($input: DashboardInput) {
+    investorDashboard(input: $input) {
+      data {
+        result {
+          totalCount
+          pages
+          page
+          investors {
+            name
+            mobileNo
+            riskTolerance
+            email
+            idNumber
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const investorDetailsDashboard = gql`
+  query investorDetailsDashboard($input: InvestorInput) {
+    investorDetailsDashboard(input: $input) {
+      data {
+        result {
+          totalCount
+          pages
+          page
+          name
+          email
+          mobileNo
+          emailLastUpdated
+          mobileNoLastUpdated
+          investorDetails {
+            name
+            riskTolerance
+            accountNo
+            jointName
+            accountOpeningDate
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const getAgentProfile = gql`
   query getAgentProfile {
     agentProfile {
@@ -1150,6 +1209,8 @@ export const GQL_QUERIES = {
   getInbox,
   getOrderSummary,
   getReceiptSummaryList,
+  investorDashboard,
+  investorDetailsDashboard,
   listHardCopyDocuments,
   listPaymentRequired,
   listSoftCopyDocuments,

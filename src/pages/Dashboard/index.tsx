@@ -39,6 +39,7 @@ import {
 } from "../../styles";
 import { EDD } from "./EDD";
 import { InboxPage } from "./Inbox";
+import { Investors } from "./Investors";
 import { Profile } from "./Profile";
 import { Transactions } from "./Transactions";
 
@@ -73,13 +74,13 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleInbox = () => {
-    setActiveMenu(1);
+    setActiveMenu(2);
     setPage("Inbox");
   };
 
   const handleProfile = () => {
     setPage("Profile");
-    setActiveMenu(3);
+    setActiveMenu(4);
   };
 
   const handleDashboard = () => {
@@ -87,9 +88,14 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     setActiveMenu(0);
   };
 
+  const handleInvestors = () => {
+    setPage("Investors");
+    setActiveMenu(1);
+  };
+
   const handleEDD = () => {
     setPage("EDD");
-    setActiveMenu(2);
+    setActiveMenu(3);
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
@@ -100,6 +106,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   }
   if (page === "Transactions") {
     content = <Transactions {...props} />;
+  }
+  if (page === "Investors") {
+    content = <Investors {...props} />;
   }
   if (page === "EDD") {
     content = <EDD {...props} />;
@@ -112,10 +121,11 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
 
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
+    { name: "investors", onPress: handleInvestors, title: DASHBOARD.MENU_INVESTORS },
     { badgeCount: inboxCount, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
     { name: "edd", onPress: handleEDD, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
     { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
-    { name: "logout", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
+    { name: "logout-new", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];
 
   const initials =

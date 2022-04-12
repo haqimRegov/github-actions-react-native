@@ -4,6 +4,7 @@ import { acknowledgementReducer } from "./Acknowledgement";
 import { clientReducer } from "./Client";
 import { eddReducer } from "./EDD";
 import { globalReducer } from "./Global";
+import { investorsReducer } from "./Investors";
 import { onboardingReducer } from "./Onboarding";
 import { personalInfoReducer } from "./PersonalInfo";
 import { productsReducer } from "./Products";
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
   client: clientReducer,
   edd: eddReducer,
   global: globalReducer,
+  investors: investorsReducer,
   onboarding: onboardingReducer,
   personalInfo: personalInfoReducer,
   products: productsReducer,

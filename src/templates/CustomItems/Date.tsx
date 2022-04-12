@@ -5,14 +5,12 @@ import { Text, TextStyle, View } from "react-native";
 import { DEFAULT_TIME_FORMAT, NunitoBold, PAYMENT_DATE_FORMAT } from "../../constants";
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../styles";
 
-declare type TInvestorKeyNames = "createdOn" | "accountOpeningDate";
+type TInvestorKeyNames = "createdOn" | "accountOpeningDate";
 
-export interface DateProps extends ITableCustomItem {
+interface DateProps extends ITableCustomItem {
   sortedColumns: TransactionsSortColumnType[] | InvestorAccountsSortColumnType[];
   time?: boolean;
 }
-
-declare interface IDashboardAll extends IDashboardOrder, IInvestorAccountsData {}
 
 export const DateTime: FunctionComponent<DateProps> = ({ item, keyName, sortedColumns, time }: DateProps) => {
   const addKeyType: TInvestorKeyNames = keyName.key as TInvestorKeyNames;

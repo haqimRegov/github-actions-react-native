@@ -1,21 +1,21 @@
 declare type InvestorAccountsTabType = "all";
 
 declare interface IInvestor {
-  investorDetails: IInvestorAccountsData[];
-  name: string;
-  mobileNo: string;
-  mobileNoLastUpdated: string;
   email: string;
   emailLastUpdated: string;
+  investorDetails: IInvestorAccountsData[];
+  mobileNo: string;
+  mobileNoLastUpdated: string;
+  name: string;
   totalCount: number;
 }
 
 declare interface IInvestorAccountsData {
+  accountNo: string;
+  accountOpeningDate: string;
+  jointName: string;
   name: string;
   riskTolerance: string;
-  accountNo: string;
-  jointName: string;
-  accountOpeningDate: string;
 }
 
 declare interface IInvestorAccountsSort {

@@ -6,13 +6,13 @@ declare interface IInvestorDetailsDashboardRequest {
 }
 
 declare interface IInvestorDetailsDashboardResult {
+  email: string;
   investorDetails: IInvestorAccountsData[];
-  totalCount: number;
+  mobileNo: string;
+  name: string;
   page: number;
   pages: number;
-  name: string;
-  email: string;
-  mobileNo: string;
+  totalCount: number;
 }
 
 declare type IInvestorDetailsDashboardResponse = IQueryResponse<IInvestorDetailsDashboardResult> | undefined;

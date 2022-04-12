@@ -77,3 +77,4 @@ declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";
 declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
 declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD" | "Investors";
+declare interface IDashboardAll extends IDashboardOrder, IInvestorAccountsData {}

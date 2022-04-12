@@ -4,18 +4,18 @@ declare interface IInvestorDashboardFilter {
 }
 
 declare interface IInvestorDashboardRequest {
-  tab: "all";
+  filter: IInvestorDashboardFilter[];
   page: number;
   search: string;
-  filter: IInvestorDashboardFilter[];
   sort: IInvestorsSort[];
+  tab: "all";
 }
 
 declare interface IInvestorDashboardResult {
   investors: IInvestorData[];
-  totalCount: number;
   page: number;
   pages: number;
+  totalCount: number;
 }
 
 declare type IInvestorDashboardResponse = IQueryResponse<IInvestorDashboardResult> | undefined;

@@ -32,7 +32,7 @@ import {
 
 const { EMPTY_STATE, DASHBOARD_HOME, DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 
-export interface AllInvestorsProps extends InvestorsStoreProps {
+interface AllInvestorsProps extends InvestorsStoreProps {
   activeTab: boolean;
   isFetching: boolean;
   isLogout: boolean;
@@ -42,16 +42,16 @@ export interface AllInvestorsProps extends InvestorsStoreProps {
 }
 
 const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
-  isFetching,
-  setIsFetching,
   all,
-  search,
-  navigation,
   investors,
-  updateInvestors,
-  updateCurrentInvestor,
-  updateAllSort,
+  isFetching,
+  navigation,
+  search,
+  setIsFetching,
   setScreen,
+  updateAllSort,
+  updateCurrentInvestor,
+  updateInvestors,
 }: AllInvestorsProps) => {
   const { filter, page, sort } = all;
 

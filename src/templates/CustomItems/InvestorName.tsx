@@ -21,13 +21,11 @@ import {
   sw8,
 } from "../../styles";
 
-export interface InvestorNameProps extends ITableCustomItem {
+interface InvestorNameProps extends ITableCustomItem {
   sortedColumns: InvestorAccountsSortColumnType[];
 }
 
-declare type TInvestorKeyNames = "name" | "investorName";
-
-declare interface IDashboardAll extends IDashboardOrder, IInvestorAccountsData {}
+type TInvestorKeyNames = "name" | "investorName";
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item, sortedColumns, keyName }: InvestorNameProps) => {
   const addKeyType: TInvestorKeyNames = keyName.key as TInvestorKeyNames;

@@ -8,18 +8,15 @@ declare interface IInvestorData {
   name: string;
   riskTolerance: string;
 }
-
-declare interface IInvestorsTab {
-  filter: IInvestorsFilter;
-  investors: IInvestorData[];
-  page: number;
-  pages: number;
-  sort: IInvestorsSort[];
-}
-
 declare interface IInvestorsDashboard {
   all: IInvestorsTab;
   allCount: number;
+}
+
+declare interface IInvestorsFilter {
+  endDate?: Date;
+  riskProfile?: string;
+  startDate?: Date;
 }
 
 declare interface IInvestorsSort {
@@ -27,10 +24,12 @@ declare interface IInvestorsSort {
   value: TransactionsSortValueType;
 }
 
-declare interface IInvestorsFilter {
-  endDate?: Date;
-  riskProfile?: string;
-  startDate?: Date;
+declare interface IInvestorsTab {
+  filter: IInvestorsFilter;
+  investors: IInvestorData[];
+  page: number;
+  pages: number;
+  sort: IInvestorsSort[];
 }
 
 declare interface IInvestorsFilterRequest {

@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { DateTime } from "../../../../templates/CustomItems/Date";
 import { InvestorName } from "../../../../templates/CustomItems/InvestorName";
 
-declare interface CustomTableItemProps extends ITableCustomItem {
+interface CustomTableItemProps extends ITableCustomItem {
   sortedColumns: InvestorAccountsSortColumnType[];
 }
 export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemProps> = ({

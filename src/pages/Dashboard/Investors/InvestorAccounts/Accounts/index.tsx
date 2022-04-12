@@ -24,7 +24,7 @@ import { InvestorDetailsCustomTableItem } from "../CustomItems";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
-export interface InvestorAccountsProps {
+interface InvestorAccountsProps {
   currentInvestor?: IInvestorData;
   investorData: IInvestor;
   isFetching: boolean;

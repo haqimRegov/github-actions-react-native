@@ -1,19 +1,17 @@
-import { ViewStyle } from "react-native";
-
 declare type TypeToggleButtonValue = -1 | 0 | 1;
 declare type TypeAdvanceToggleButtonValue = number;
 
 declare interface IToggleButtonCustomContent {
-  disabledStyle?: ViewStyle;
-  buttonStyle?: ViewStyle;
-  circleStyle?: ViewStyle;
-  disabledBackground?: ViewStyle;
+  buttonStyle?: import("react-native").ViewStyle;
+  circleStyle?: import("react-native").ViewStyle;
+  disabledBackground?: import("react-native").ViewStyle;
+  disabledStyle?: import("react-native").ViewStyle;
   fontFamily?: "NunitoSans-Bold" | "NunitoSans-Regular";
-  iconSize?: number;
   iconColor?: string;
-  textContainer?: ViewStyle;
-  mainLabelStyle?: ViewStyle;
-  labelStyle?: ViewStyle;
+  iconSize?: number;
   label: string;
+  labelStyle?: import("react-native").ViewStyle;
+  mainLabelStyle?: import("react-native").ViewStyle;
   selected: boolean;
+  textContainer?: import("react-native").ViewStyle;
 }

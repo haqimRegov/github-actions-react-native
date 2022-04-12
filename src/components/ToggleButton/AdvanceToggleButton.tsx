@@ -24,7 +24,6 @@ import {
   sw40,
   sw8,
 } from "../../styles";
-import { IToggleButtonCustomContent, TypeAdvanceToggleButtonValue } from "../../types/toggle-button";
 import { CustomSpacer } from "../Views/Spacer";
 
 interface AdvanceToggleButtonProps {

@@ -30,7 +30,6 @@ import {
   sw64,
   sw8,
 } from "../../../../styles";
-import { IToggleButtonCustomContent } from "../../../../types/toggle-button";
 
 const { DASHBOARD_FILTER, DASHBOARD_EDD } = Language.PAGE;
 interface AllInvestorsFilterProps {

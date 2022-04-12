@@ -36,7 +36,7 @@ import {
 import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
-declare interface IInvestorAccountHeaderProps {
+interface IInvestorAccountHeaderProps {
   email: string;
   emailLastUpdated: string;
   mobileNo: string;

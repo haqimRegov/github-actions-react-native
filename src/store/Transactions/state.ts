@@ -23,7 +23,7 @@ export const transactionsInitialState: transactionsState = {
     pages: 1,
     sort: [{ value: "descending", column: "lastUpdated" }],
   },
-  pending: {
+  incomplete: {
     filter: {
       dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
       startDate: undefined,
@@ -35,6 +35,7 @@ export const transactionsInitialState: transactionsState = {
     orders: [],
     page: 1,
     pages: 1,
+    pill: "pending",
     sort: [{ value: "descending", column: "lastUpdated" }],
   },
   rejected: {
@@ -54,6 +55,9 @@ export const transactionsInitialState: transactionsState = {
   selectedOrders: [],
   approvedCount: 0,
   rejectedCount: 0,
+  incompleteCount: 0,
+  reroutedCount: 0,
+  submittedCount: 0,
   pendingCount: 0,
   search: "",
   currentOrder: undefined,

@@ -30,7 +30,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           pages: 1,
           sort: [{ value: "descending", column: "lastUpdated" }],
         },
-        pending: {
+        incomplete: {
           filter: {
             dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
             startDate: undefined,
@@ -42,6 +42,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
+          pill: "pending",
           sort: [{ value: "descending", column: "lastUpdated" }],
         },
         rejected: {
@@ -58,12 +59,15 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           pages: 1,
           sort: [{ value: "descending", column: "lastUpdated" }],
         },
-        selectedOrders: [],
         approvedCount: 0,
-        rejectedCount: 0,
-        pendingCount: 0,
-        search: "",
         currentOrder: undefined,
+        incompleteCount: 0,
+        pendingCount: 0,
+        rejectedCount: 0,
+        reroutedCount: 0,
+        search: "",
+        selectedOrders: [],
+        submittedCount: 0,
       };
     case "transactions/RESET_APPROVED_FILTER":
       return {
@@ -104,7 +108,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
     case "transactions/RESET_PENDING_FILTER":
       return {
         ...state,
-        pending: {
+        incomplete: {
           filter: {
             dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
             startDate: undefined,
@@ -137,8 +141,8 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
     case "transactions/UPDATE_PENDING_SORT":
       return {
         ...state,
-        pending: {
-          ...state.pending,
+        incomplete: {
+          ...state.incomplete,
           page: 1,
           sort: action.payload,
         },
@@ -164,10 +168,10 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
     case "transactions/UPDATE_PENDING_FILTER":
       return {
         ...state,
-        pending: {
-          ...state.pending,
+        incomplete: {
+          ...state.incomplete,
           filter: {
-            ...state.pending.filter,
+            ...state.incomplete.filter,
             ...action.payload,
           },
         },
@@ -192,6 +196,14 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
             ...state.rejected.filter,
             ...action.payload,
           },
+        },
+      };
+    case "transactions/UPDATE_PILL":
+      return {
+        ...state,
+        incomplete: {
+          ...state.incomplete,
+          pill: action.payload,
         },
       };
 

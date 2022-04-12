@@ -57,7 +57,6 @@ declare interface ITransactionsFilter {
 }
 
 declare type TransactionsSortColumnType =
-  | ""
   | "createdOn"
   | "dueDate"
   | "lastUpdated"
@@ -77,4 +76,4 @@ declare interface IShowDateBy {
 declare type TransactionsSortValueType = "ascending" | "descending";
 declare type TransactionsTabType = "pending" | "approved" | "rejected";
 declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
-declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD";
+declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD" | "Investors";

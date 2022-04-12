@@ -12,6 +12,7 @@ import {
   colorGray,
   colorTransparent,
   colorWhite,
+  disabledOpacity6,
   flexChild,
   flexRow,
   fs12BoldWhite1,
@@ -115,7 +116,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
 
   const iconData = uploadProps.completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
   const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh32 };
-  const container: ViewStyle = uploadProps.completed === true ? { opacity: 0.6 } : { paddingRight: sw18 };
+  const container: ViewStyle = uploadProps.completed === true ? { ...disabledOpacity6 } : { paddingRight: sw18 };
 
   return (
     <Fragment>

@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Image, ImageSourcePropType, Text, TextStyle, View } from "react-native";
+import { Image, ImageSourcePropType, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
@@ -9,6 +9,7 @@ import { CustomSpacer } from "./Spacer";
 
 const { EMPTY_STATE } = Language.PAGE;
 interface EmptyTableProps {
+  hintContainerStyle?: ViewStyle;
   hintText?: string;
   hintTextStyle?: TextStyle;
   illustration?: ImageSourcePropType;
@@ -20,6 +21,7 @@ interface EmptyTableProps {
 }
 
 export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
+  hintContainerStyle,
   hintText,
   hintTextStyle,
   illustration,
@@ -46,7 +48,9 @@ export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
           {hintText !== undefined ? (
             <Fragment>
               <CustomSpacer space={sh32} />
-              <Text style={{ ...fs12RegBlue1, ...hintTextStyle }}>{hintText}</Text>
+              <View style={{ ...centerVertical, ...hintContainerStyle }}>
+                <Text style={{ ...fs12RegBlue1, ...hintTextStyle }}>{hintText}</Text>
+              </View>
             </Fragment>
           ) : null}
         </Fragment>

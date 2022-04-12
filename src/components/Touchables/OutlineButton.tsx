@@ -20,11 +20,13 @@ import {
   sw16,
   sw8,
 } from "../../styles";
+import { BadgeCount } from "../Badge/Count";
 import { CustomSpacer } from "../Views/Spacer";
 
 type ButtonType = "solid" | "dashed";
 
 export interface OutlineButtonProps {
+  badgeCount?: number;
   buttonStyle?: ViewStyle;
   buttonType?: ButtonType;
   disabled?: boolean;
@@ -37,6 +39,7 @@ export interface OutlineButtonProps {
 }
 
 export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
+  badgeCount,
   buttonStyle,
   buttonType,
   disabled,
@@ -75,6 +78,12 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
             </Fragment>
           )}
           <Text style={{ ...fs12BoldBlue1, color: color, ...disabledOpacity, ...textStyle }}>{text}</Text>
+          {badgeCount !== undefined ? (
+            <Fragment>
+              <CustomSpacer isHorizontal={true} space={sw16} />
+              <BadgeCount count={badgeCount} style={{ backgroundColor: colorBlue._6 }} />
+            </Fragment>
+          ) : null}
         </View>
       </TouchableWithoutFeedback>
     </View>

@@ -27,10 +27,11 @@ import {
 } from "../../../../../styles";
 import { AnimationUtils } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
+import { DashboardAccordion } from "../DashboardAccordion";
 
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 
-export interface ApprovedOrdersProps extends TransactionsStoreProps {
+interface ApprovedOrdersProps extends TransactionsStoreProps {
   activeTab: boolean;
   isFetching: boolean;
   isLogout: boolean;
@@ -55,6 +56,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
 }: ApprovedOrdersProps) => {
   const { filter, orders, page, sort } = approved;
   const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
+  const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
 
   const handleShowDateBy = (text: TDateType, key: TSortType) => {
     const newKey = key === "ascending" ? "descending" : "ascending";
@@ -109,6 +111,21 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     if (isFetching === false) {
       functionToBeCalled();
     }
+  };
+
+  const handleShowRemarks = (item: ITableRowData) => {
+    const newSections: number[] = [...activeAccordion];
+    const sectionIndex = newSections.indexOf(item.index);
+    if (sectionIndex > -1) {
+      newSections.splice(sectionIndex, 1);
+    } else {
+      newSections.splice(0, 1, item.index);
+    }
+    setActiveAccordion(newSections);
+  };
+
+  const tableAccordion = (item: ITableData) => {
+    return <DashboardAccordion item={item as unknown as IDashboardOrder} setScreen={setScreen} setCurrentOrder={updateCurrentOrder} />;
   };
 
   const showDatePopupContent: IHeaderPopupContent[] = [
@@ -196,6 +213,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       icon: { name: sortStatus === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "status" }],
       onPressHeader: () => checkLoading(handleSortStatus),
+      onPressItem: handleShowRemarks,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw123 },
@@ -255,6 +273,8 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     }
   };
 
+  const renderAccordion = orders.length !== 0 ? tableAccordion : undefined;
+
   const handleOrderDetails = (item: ITableData) => {
     updateCurrentOrder(item as IDashboardOrder);
     setScreen("OrderSummary");
@@ -296,6 +316,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   return (
     <View style={{ ...flexChild, ...px(sw16) }}>
       <AdvanceTable
+        activeAccordion={activeAccordion}
         columns={columns}
         data={isFetching === true ? [] : orders}
         handleRowNavigation={handleOrderDetails}
@@ -324,6 +345,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
               : { fontFamily: NunitoRegular },
           viewStyle: { width: sw136 },
         }}
+        RenderAccordion={renderAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
         RenderEmptyState={() => <EmptyTable loading={isFetching} hintText={hintText} title={title} subtitle={subtitle} />}
       />

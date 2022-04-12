@@ -36,6 +36,7 @@ import {
   sw24,
   sw278,
   sw340,
+  sw370,
   sw4,
   sw8,
 } from "../../../../styles";
@@ -77,7 +78,7 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
     ...py(sh8),
     ...border(colorWhite._1, sw1, sw8),
     backgroundColor: colorWhite._1,
-    width: 370,
+    width: sw370,
     marginBottom: sh14,
     ...cardStyle,
   };

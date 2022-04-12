@@ -54,6 +54,7 @@ const dashboard = gql`
               amount
             }
             createdOn
+            isSeen
             status
             dueDate
             lastUpdated

@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
@@ -27,7 +27,7 @@ import {
 } from "../../../../../styles";
 import { AnimationUtils } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
-import { OrderRemarks } from "../OrderRemarks";
+import { DashboardAccordion } from "../DashboardAccordion";
 
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 
@@ -68,17 +68,14 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const handleShowRemarks = (item: ITableRowData) => {
-    const { remark } = item.rawData as IDashboardOrder;
-    if (remark) {
-      const newSections: number[] = [...activeAccordion];
-      const sectionIndex = newSections.indexOf(item.index);
-      if (sectionIndex > -1) {
-        newSections.splice(sectionIndex, 1);
-      } else {
-        newSections.splice(0, 1, item.index);
-      }
-      setActiveAccordion(newSections);
+    const newSections: number[] = [...activeAccordion];
+    const sectionIndex = newSections.indexOf(item.index);
+    if (sectionIndex > -1) {
+      newSections.splice(sectionIndex, 1);
+    } else {
+      newSections.splice(0, 1, item.index);
     }
+    setActiveAccordion(newSections);
   };
 
   const handleSortOrderNumber = async () => {
@@ -125,6 +122,10 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     if (isFetching === false) {
       functionToBeCalled();
     }
+  };
+
+  const tableAccordion = (item: ITableData) => {
+    return <DashboardAccordion item={item as unknown as IDashboardOrder} setScreen={setScreen} setCurrentOrder={updateCurrentOrder} />;
   };
 
   const showDatePopupContent: IHeaderPopupContent[] = [
@@ -216,14 +217,11 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: sw123 },
-      withAccordion: true,
+      // withAccordion: true,
     },
   ];
 
-  const tableAccordion = (item: ITableData) => {
-    const { remark, status } = item as IDashboardOrder;
-    return <Fragment>{item.remark ? <OrderRemarks remarks={remark} status={status} /> : null}</Fragment>;
-  };
+  const renderAccordion = orders.length !== 0 ? tableAccordion : undefined;
 
   const handleFetch = async () => {
     setIsFetching(true);
@@ -279,7 +277,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const handleOrderDetails = (item: ITableData) => {
-    updateCurrentOrder(item as IDashboardOrder);
+    updateCurrentOrder(item as unknown as IDashboardOrder);
     setScreen("OrderSummary");
   };
 
@@ -344,7 +342,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
           title: showDateBy.type,
           viewStyle: { width: sw136 },
         }}
-        RenderAccordion={tableAccordion}
+        RenderAccordion={renderAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
         RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
       />

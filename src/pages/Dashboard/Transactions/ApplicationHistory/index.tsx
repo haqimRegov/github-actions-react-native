@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useRef, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
@@ -10,16 +11,21 @@ import { getSummaryReceipt } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
   borderBottomGray2,
+  centerVertical,
+  colorBlue,
   colorWhite,
   flexChild,
   flexRow,
+  fs12BoldBlue8,
   fs16RegGray6,
   fullHW,
+  sh1,
   sh112,
   sh153,
   sh16,
   sh24,
   shadow12Black112,
+  sw16,
   sw24,
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -41,16 +47,16 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
     activeTab,
+    incomplete,
     navigation,
-    pending,
+    resetApprovedFilter,
+    resetPendingFilter,
+    resetRejectedFilter,
     search,
     selectedOrders,
     setActiveTab,
     setScreen,
     transactions,
-    resetApprovedFilter,
-    resetPendingFilter,
-    resetRejectedFilter,
     updateApprovedFilter,
     updatedSelectedOrder,
     updatePendingFilter,
@@ -58,9 +64,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     updateSearch,
     updateTransactions,
   } = props;
-  const { approvedCount, pendingCount, rejectedCount } = transactions;
+  const { approvedCount, incompleteCount, rejectedCount } = transactions;
 
-  const { filter, page, pages } = props[activeTab];
+  const { filter, orders, page, pages } = props[activeTab];
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
@@ -68,8 +74,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
+  const [downloadInitiated, setDownloadInitiated] = useState<boolean>(false);
 
-  const tabs: TransactionsTabType[] = ["pending", "approved", "rejected"];
+  const tabs: TransactionsTabType[] = ["incomplete", "approved", "rejected"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
@@ -78,6 +85,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const handleDone = () => {
     setPrompt(false);
     updatedSelectedOrder([]);
+    setDownloadInitiated(false);
   };
 
   const handleNext = () => {
@@ -143,17 +151,18 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     }
   };
 
-  const handlePrintAll = () => {
-    handleSummaryReceipt({ all: true, orders: [] });
+  const handleClear = () => {
+    updatedSelectedOrder([]);
+  };
+
+  const handleCancel = () => {
+    updatedSelectedOrder([]);
+    setDownloadInitiated(false);
   };
 
   const handlePrintSelected = () => {
-    const orders = selectedOrders.map(({ orderNumber }) => orderNumber);
-    handleSummaryReceipt({ all: false, orders: orders });
-  };
-
-  const handlePrintSummary = (orderNumber: string) => {
-    handleSummaryReceipt({ all: false, orders: [orderNumber] });
+    const downloadOrders = selectedOrders.map(({ orderNumber }) => orderNumber);
+    handleSummaryReceipt({ all: false, orders: downloadOrders });
   };
 
   const handleShowFilter = () => {
@@ -206,8 +215,15 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
   let content: JSX.Element;
 
-  if (activeTab === "pending") {
-    content = <PendingOrders activeTab={activeTab === "pending"} handlePrintSummary={handlePrintSummary} {...tabProps} />;
+  if (activeTab === "incomplete") {
+    content = (
+      <PendingOrders
+        activeTab={activeTab === "incomplete"}
+        downloadInitiated={downloadInitiated}
+        setDownloadInitiated={setDownloadInitiated}
+        {...tabProps}
+      />
+    );
   } else if (activeTab === "approved") {
     content = <ApprovedOrders activeTab={activeTab === "approved"} {...tabProps} />;
   } else {
@@ -215,9 +231,18 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   }
 
   const selectionText =
-    pending?.orders !== undefined && selectedOrders.length > 1 ? DASHBOARD_HOME.LABEL_ORDERS_SELECTED : DASHBOARD_HOME.LABEL_ORDER_SELECTED;
+    incomplete?.orders !== undefined && selectedOrders.length > 1
+      ? DASHBOARD_HOME.LABEL_ORDERS_SELECTED
+      : DASHBOARD_HOME.LABEL_ORDER_SELECTED;
 
-  const bannerText = `${selectedOrders.length} ${selectionText}`;
+  const submittedWithHardCopyCount = orders.filter(
+    (eachOrder: IDashboardOrder) => eachOrder.status === "Submitted" && eachOrder.withHardcopy === true,
+  );
+
+  const bannerText =
+    selectedOrders.length === orders.length && submittedWithHardCopyCount.length > 1
+      ? `${DASHBOARD_HOME.LABEL_ALL}(${selectedOrders.length}) ${selectionText}`
+      : `${selectedOrders.length} ${selectionText}`;
   const submissionSummary = `${DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY_DOWNLOADED}`;
 
   const tableContainer: ViewStyle = {
@@ -261,7 +286,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
                 activeTab={activeTabIndex}
                 setActiveTab={handleTabs}
                 tabs={[
-                  { badgeCount: pendingCount, text: DASHBOARD_HOME.LABEL_PENDING },
+                  { badgeCount: incompleteCount, text: DASHBOARD_HOME.LABEL_PENDING },
                   { badgeCount: approvedCount, text: DASHBOARD_HOME.LABEL_APPROVED },
                   { badgeCount: rejectedCount, text: DASHBOARD_HOME.LABEL_REJECTED },
                 ]}
@@ -277,16 +302,26 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           </View>
         </View>
         <CustomSpacer space={sh24} />
-        {selectedOrders.length !== 0 && activeTab === "pending" ? <CustomSpacer space={sh112} /> : null}
+        {selectedOrders.length !== 0 && activeTab === "incomplete" ? <CustomSpacer space={sh112} /> : null}
       </DashboardLayout>
-      {selectedOrders.length !== 0 && activeTab === "pending" ? (
+      {(selectedOrders.length !== 0 || downloadInitiated === true) && activeTab === "incomplete" ? (
         <SelectionBanner
-          bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
-          cancelOnPress={handlePrintAll}
+          bottomContent={
+            <View style={{ ...flexRow, ...centerVertical }}>
+              <Text style={fs16RegGray6}>{bannerText}</Text>
+              <CustomSpacer isHorizontal={true} space={sw16} />
+              <TouchableWithoutFeedback onPress={handleClear}>
+                <View style={{ borderBottomColor: colorBlue._8, borderBottomWidth: sh1 }}>
+                  <Text style={fs12BoldBlue8}>{DASHBOARD_HOME.LABEL_CLEAR_ALL}</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          }
+          cancelOnPress={handleCancel}
           continueLoading={buttonLoading}
           label={DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY}
-          labelCancel={DASHBOARD_HOME.LABEL_PRINT_ALL}
-          labelSubmit={DASHBOARD_HOME.LABEL_PRINT_SELECTED}
+          labelCancel={DASHBOARD_HOME.BUTTON_CANCEL}
+          labelSubmit={DASHBOARD_HOME.BUTTON_DOWNLOAD}
           submitOnPress={handlePrintSelected}
         />
       ) : null}

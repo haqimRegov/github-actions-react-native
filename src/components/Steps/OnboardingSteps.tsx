@@ -6,6 +6,7 @@ import {
   borderBottomGray2,
   colorTransparent,
   colorWhite,
+  disabledOpacity6,
   flexRow,
   fs12BoldGray6,
   fs12RegGray4,
@@ -60,7 +61,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
     const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.key) : false;
     const currentStep = (stepIndex + 1).toString();
     const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegGray6 : fs14BoldGray6;
-    const textStyle: TextStyle = isActive ? activeTextStyle : { ...fs14RegGray4, opacity: 0.6 };
+    const textStyle: TextStyle = isActive ? activeTextStyle : { ...fs14RegGray4, ...disabledOpacity6 };
 
     const handleChange = () => {
       if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {

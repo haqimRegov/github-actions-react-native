@@ -77,6 +77,10 @@ export const updateRejectedFilter = (filter: ITransactionsFilter) => {
   return typedAction("transactions/UPDATE_REJECTED_FILTER", filter);
 };
 
+export const updatePill = (pill: ITransactionPills) => {
+  return typedAction("transactions/UPDATE_PILL", pill);
+};
+
 export type TransactionsAction = ReturnType<
   | typeof addApprovedOrders
   | typeof addPendingOrders
@@ -97,6 +101,7 @@ export type TransactionsAction = ReturnType<
   | typeof updateRejectedSort
   | typeof updateSearch
   | typeof updateTransactions
+  | typeof updatePill
 >;
 
 export const TransactionsActionProps = {
@@ -115,6 +120,7 @@ export const TransactionsActionProps = {
   updatedSelectedOrder,
   updatePendingFilter,
   updatePendingSort,
+  updatePill,
   updateRejectedFilter,
   updateRejectedSort,
   updateSearch,

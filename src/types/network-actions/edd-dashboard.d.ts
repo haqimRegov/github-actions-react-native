@@ -22,3 +22,8 @@ declare type IEDDDashboardResponse = IQueryResponse<IEDDDashboardResult> | undef
 declare interface IEDDDashboardQuery {
   eddDashboard: IEDDDashboardResponse;
 }
+
+declare interface ITagData {
+  pillCount: number;
+  text: EDDNewCaseTagValue;
+}

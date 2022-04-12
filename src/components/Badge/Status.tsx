@@ -49,6 +49,7 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
 }: StatusBadgeProps) => {
   let badgeColor = colorBlue._1;
   let badgeTextColor = colorWhite._1;
+  const iconColor = colorBlue._9;
 
   switch (color) {
     case "complete":
@@ -115,7 +116,7 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
           {icon !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw4} />
-              <IcoMoon color={badgeTextColor} name={icon} size={iconSize || sh12} />
+              <IcoMoon color={iconColor} name={icon} size={iconSize || sh12} />
             </Fragment>
           ) : null}
         </View>

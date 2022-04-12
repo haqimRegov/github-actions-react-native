@@ -12,6 +12,7 @@ import {
   colorGray,
   colorRed,
   colorWhite,
+  disabledOpacity6,
   flexRow,
   fs12RegBlack2,
   fs12RegGray5,
@@ -61,7 +62,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
   const defaultColor = toggleColor !== undefined ? toggleColor : colorRed._1;
   const selectedStyle: ViewStyle = toggle ? { backgroundColor: defaultColor, borderColor: defaultColor } : {};
   const disabledBackground: TextStyle = disabled === true ? { backgroundColor: colorGray._4 } : {};
-  const disabledStyle: TextStyle = disabled === true ? { opacity: 0.6 } : {};
+  const disabledStyle: TextStyle = disabled === true ? { ...disabledOpacity6 } : {};
   const defaultIconSize: number = iconSize !== undefined ? iconSize : sw14;
 
   const toggleStyle: ViewStyle = {

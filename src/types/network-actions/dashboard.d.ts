@@ -4,20 +4,23 @@ declare interface IDashboardFilter {
 }
 
 declare interface IDashboardRequest {
-  tab: "pending" | "approved" | "rejected";
+  filter: IDashboardFilter[];
   page: number;
   search: string;
-  filter: IDashboardFilter[];
   sort: ITransactionsSort[];
+  tab: "pending" | "approved" | "rejected" | "rerouted" | "submitted";
 }
 
 declare interface IDashboardResult {
-  orders: IDashboardOrder[];
   approvedCount: number;
-  rejectedCount: number;
-  pendingCount: number;
+  incompleteCount: number;
+  orders: IDashboardOrder[];
   page: number;
   pages: number;
+  pendingCount: number;
+  rejectedCount: number;
+  rerouteCount: number;
+  submittedCount: number;
 }
 
 declare type IDashboardResponse = IQueryResponse<IDashboardResult> | undefined;

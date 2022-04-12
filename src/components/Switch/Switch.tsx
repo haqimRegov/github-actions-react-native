@@ -8,6 +8,7 @@ import {
   colorGray,
   colorRed,
   colorWhite,
+  disabledOpacity6,
   flexRow,
   flexRowReverse,
   fs12BoldGray6,
@@ -54,7 +55,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
   const activeThumbColor = thumbColor !== undefined ? thumbColor.true : colorWhite._1;
   const inactiveThumbColor = thumbColor !== undefined ? thumbColor.false : colorWhite._1;
   const baseThumbColor = toggle === true ? activeThumbColor : inactiveThumbColor;
-  const disabledStyle: TextStyle = disabled === true ? { opacity: 0.6 } : {};
+  const disabledStyle: TextStyle = disabled === true ? { ...disabledOpacity6 } : {};
   const switchStyle: ViewStyle = {
     borderRadius: sw16,
     height: sh16,

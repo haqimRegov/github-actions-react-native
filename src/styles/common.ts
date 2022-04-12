@@ -7,6 +7,7 @@ export const alignItemsEnd = { alignItems: "flex-end" } as const;
 export const alignItemsStart = { alignItems: "flex-start" } as const;
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
 export const alignSelfCenter = { alignSelf: "center" } as const;
+export const alignSelfEnd = { alignSelf: "flex-end" } as const;
 export const centerHorizontal = { justifyContent: "center" } as const;
 export const centerVertical = { alignItems: "center" } as const;
 export const centerHV = { ...centerHorizontal, ...centerVertical } as const;
@@ -91,6 +92,7 @@ export const customShadow = (color: string, offsetY: number, offsetX: number, op
   shadowRadius: radius,
 });
 
+export const disabledOpacity4 = { opacity: 0.4 } as const;
 export const disabledOpacity5 = { opacity: 0.5 } as const;
 export const disabledOpacity6 = { opacity: 0.6 } as const;
 

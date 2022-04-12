@@ -13,6 +13,7 @@ import {
   colorTransparent,
   colorWhite,
   customShadow,
+  disabledOpacity6,
   flexChild,
   flexRow,
   fs12BoldGray6,
@@ -88,7 +89,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const borderWidth = noBorder === true ? { borderWidth: 0 } : {};
-  const disabledOpacity = disabled === true ? { opacity: 0.6 } : {};
+  const disabledOpacity = disabled === true ? { ...disabledOpacity6 } : {};
   const disabledStyle = disabled === true ? { ...disabledOpacity, backgroundColor: colorGray._1 } : {};
   const errorStyle: ViewStyle = error !== undefined ? { backgroundColor: colorRed._5, borderWidth: sw2, borderColor: colorRed._2 } : {};
   const focusedShadow = isFocused ? customShadow(colorBlue._1, 0, 0, 0.02, sw4) : {};

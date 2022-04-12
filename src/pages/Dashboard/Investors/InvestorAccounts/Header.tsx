@@ -12,6 +12,7 @@ import {
   colorBlue,
   colorTransparent,
   colorWhite,
+  disabledOpacity4,
   flexRow,
   fs10RegGray4,
   fs16BoldBlue1,
@@ -124,7 +125,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
             <CustomFlexSpacer />
             <OutlineButton buttonType="solid" disabled={true} onPress={() => {}} text={DASHBOARD_HOME.LABEL_VIEW} />
             <CustomSpacer isHorizontal={true} space={sw16} />
-            <View style={{ ...flexRow, opacity: 0.4 }} pointerEvents="none">
+            <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
               <IconButton color={colorBlue._1} name="pencil" onPress={() => {}} size={sw16} style={iconContainer} />
               <CustomSpacer isHorizontal={true} space={sw16} />
               <IconButton color={colorBlue._1} name="plus" onPress={() => {}} size={sw20} style={iconContainer} />

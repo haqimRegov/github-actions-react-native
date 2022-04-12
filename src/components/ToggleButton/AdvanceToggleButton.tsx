@@ -12,6 +12,7 @@ import {
   colorGray,
   colorRed,
   colorWhite,
+  disabledOpacity6,
   flexCol,
   flexRow,
   fs12BoldGray6,
@@ -78,7 +79,7 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
             value === index ? circleBorder(sw16, sw1, colorRed._1, colorRed._1) : circleBorder(sw16, sw1, colorBlue._1);
 
           const disabledBackground: ViewStyle = disabled === true && selected === false ? { backgroundColor: colorGray._4 } : {};
-          const disabledStyle: ViewStyle = disabled ? { opacity: 0.6 } : {};
+          const disabledStyle: ViewStyle = disabled ? { ...disabledOpacity6 } : {};
           const fontFamily = selected === true ? NunitoBold : NunitoRegular;
           const customContentProps: IToggleButtonCustomContent = {
             disabledStyle,

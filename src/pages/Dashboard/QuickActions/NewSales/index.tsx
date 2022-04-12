@@ -230,13 +230,19 @@ const NewSalesComponent = ({
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
+      const principalDob =
+        principalHolder?.dateOfBirth && principalHolder.idType !== "NRIC"
+          ? { dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
+      const jointDob =
+        jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+          ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
       const jointInfo =
         accountType === "Individual"
           ? undefined
           : {
-              dateOfBirth: jointHolder?.dateOfBirth
-                ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-                : "",
+              ...jointDob,
               id: jointHolder?.id!,
               idType: jointIdType,
               name: jointHolder?.name!,
@@ -244,9 +250,7 @@ const NewSalesComponent = ({
       const request: IClientRegisterRequest = {
         accountType: accountType,
         principalHolder: {
-          dateOfBirth: principalHolder?.dateOfBirth
-            ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-            : "",
+          ...principalDob,
           id: principalHolder?.id!,
           idType: principalIdType,
           name: principalHolder?.name!,

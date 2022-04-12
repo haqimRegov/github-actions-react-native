@@ -10,7 +10,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
   config: state.global.config,
   currentOrder: state.transactions.currentOrder,
   loading: state.global.loading,
-  pending: state.transactions.pending,
+  incomplete: state.transactions.incomplete,
   rejected: state.transactions.rejected,
   search: state.transactions.search,
   selectedOrders: state.transactions.selectedOrders,

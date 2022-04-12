@@ -5,6 +5,7 @@ import {
   centerVertical,
   circleBorder,
   colorBlue,
+  disabledOpacity4,
   flexRow,
   fs12BoldBlack2,
   fs12RegGray4,
@@ -33,8 +34,8 @@ export const Pagination: FunctionComponent<PaginationProps> = ({ onPressNext, on
 
   const prevEnabled = page > 1;
   const nextEnabled = page < totalPages;
-  const prevStyle = prevEnabled ? {} : { opacity: 0.4 };
-  const nextStyle = nextEnabled ? {} : { opacity: 0.4 };
+  const prevStyle = prevEnabled ? {} : { ...disabledOpacity4 };
+  const nextStyle = nextEnabled ? {} : { ...disabledOpacity4 };
 
   const handlePrev = () => {
     if (prevEnabled) {

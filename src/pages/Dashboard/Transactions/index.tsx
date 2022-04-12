@@ -16,7 +16,7 @@ interface TransactionsProps {
 export const Transactions: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
   const { navigation, isLogout } = props;
   const [route, setRoute] = useState<TransactionsPageType>("Transactions");
-  const [activeTab, setActiveTab] = useState<TransactionsTabType>("pending");
+  const [activeTab, setActiveTab] = useState<TransactionsTabType>("incomplete");
   const setScreen = (nextPage: TransactionsPageType) => {
     setRoute(nextPage);
   };

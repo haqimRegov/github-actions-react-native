@@ -21,12 +21,12 @@ import {
   sw8,
 } from "../../../../../styles";
 
-export interface InvestorNameProps extends ITableCustomItem {
+interface InvestorNameProps extends ITableCustomItem {
   sortedColumns: TransactionsSortColumnType[];
 }
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item, sortedColumns }: InvestorNameProps) => {
-  const { accountType, investorName, isSeen } = item.rawData as IDashboardOrder;
+  const { accountType, investorName, isSeen } = item.rawData as unknown as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
   const updatedTextStyle: TextStyle = sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {};
   const titleStyle: TextStyle = { ...fs12RegBlue1, ...updatedTextStyle, maxWidth: sw100 };

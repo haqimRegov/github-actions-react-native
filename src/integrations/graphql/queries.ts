@@ -9,10 +9,24 @@ const dashboard = gql`
           rejectedCount
           pendingCount
           rerouteCount
+          submittedCount
           incompleteCount
           page
           pages
           orders {
+            reason {
+              title
+              content
+              documents {
+                document
+                count
+              }
+            }
+            label
+            documents {
+              document
+              count
+            }
             orderNumber
             reason {
               title

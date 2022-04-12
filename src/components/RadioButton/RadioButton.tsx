@@ -10,6 +10,7 @@ import {
   colorGray,
   colorRed,
   colorWhite,
+  disabledOpacity6,
   flexRow,
   fs16BoldBlack2,
   sh7,
@@ -62,7 +63,7 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   const borderWidth = selected ? sw4 : sw1;
   const circleSize = selected ? sw10 : sw16;
   const disabledColor: TextStyle = disabled === true && selected === false ? { backgroundColor: colorGray._4 } : {};
-  const disabledStyle: ViewStyle = disabled === true ? { opacity: 0.6 } : {};
+  const disabledStyle: ViewStyle = disabled === true ? { ...disabledOpacity6 } : {};
   const fontFamily = selected ? NunitoBold : NunitoRegular;
   const checkTooltip: TextStyle = disabled === true && disabledTooltip === true ? { width: "auto", minWidth: 0 } : {};
 

@@ -7,8 +7,8 @@ import { borderBottomGray2, fs12BoldBlue1, px, sh48, sw16, sw200, sw8 } from "..
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-export interface PendingOrderActionsProps extends ITableOptions {
-  handlePrintSummary: (orderNumber: string) => void;
+interface PendingOrderActionsProps extends ITableOptions {
+  handleSelectOrder: (order: IDashboardOrder) => void;
   handleResubmitOrder: (orderNumber: string) => void;
   setScreen: (route: TransactionsPageType) => void;
   setCurrentOrder: (order: IDashboardOrder) => void;
@@ -16,20 +16,20 @@ export interface PendingOrderActionsProps extends ITableOptions {
 
 export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = ({
   data,
-  handlePrintSummary,
+  handleSelectOrder,
   handleResubmitOrder,
   onClose,
   setCurrentOrder,
   setScreen,
 }: PendingOrderActionsProps) => {
-  const { canProceed, isScheduled, orderNumber, remark, status, withHardcopy } = data.rawData as IDashboardOrder;
+  const { canProceed, isScheduled, orderNumber, remark, status, withHardcopy } = data.rawData as unknown as IDashboardOrder;
 
   const canSubmitHardcopy = isScheduled === true ? canProceed === true : true;
 
   const handlePrintSubmissionSummary = () => {
     onClose();
     setTimeout(() => {
-      handlePrintSummary(orderNumber);
+      handleSelectOrder(data.rawData as unknown as IDashboardOrder);
     }, 300);
   };
 
@@ -39,25 +39,25 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   };
 
   const handleViewOrder = () => {
-    setCurrentOrder(data.rawData as IDashboardOrder);
+    setCurrentOrder(data.rawData as unknown as IDashboardOrder);
     setScreen("OrderSummary");
     onClose();
   };
 
   const handleUploadDocs = () => {
-    setCurrentOrder(data.rawData as IDashboardOrder);
+    setCurrentOrder(data.rawData as unknown as IDashboardOrder);
     setScreen("UploadDocuments");
     onClose();
   };
 
   const handleSubmitHardCopy = () => {
-    setCurrentOrder(data.rawData as IDashboardOrder);
+    setCurrentOrder(data.rawData as unknown as IDashboardOrder);
     setScreen("UploadHardCopy");
     onClose();
   };
 
   const handleUploadPayment = () => {
-    setCurrentOrder(data.rawData as IDashboardOrder);
+    setCurrentOrder(data.rawData as unknown as IDashboardOrder);
     setScreen("DashboardPayment");
     onClose();
   };

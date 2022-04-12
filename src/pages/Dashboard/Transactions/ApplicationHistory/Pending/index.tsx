@@ -1,9 +1,9 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { Alert, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Text, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
+import { AdvanceTable, CustomSpacer, EmptyTable, StatusBadge } from "../../../../../components";
 import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { getDashboard, resubmitOrder } from "../../../../../network-actions";
@@ -12,60 +12,69 @@ import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, Transactio
 import {
   centerHorizontal,
   centerHV,
+  centerVertical,
   colorRed,
   colorWhite,
   flexChild,
+  flexRow,
   fs10BoldBlue1,
   fs12RegBlue1,
+  fs12RegGray4,
   fsTransformNone,
   justifyContentStart,
   px,
   sh13,
   sh2,
+  sh28,
   sh32,
   sw1,
   sw10,
   sw128,
-  sw148,
+  sw144,
   sw16,
-  sw170,
+  sw160,
   sw18,
+  sw192,
+  sw20,
+  sw24,
   sw32,
   sw4,
   sw56,
   sw8,
   sw80,
-  sw86,
-  sw90,
+  sw88,
   sw92,
+  sw96,
 } from "../../../../../styles";
 import { AnimationUtils } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
-import { OrderRemarks } from "../OrderRemarks";
+import { DashboardAccordion } from "../DashboardAccordion";
 import { PendingOrderActions } from "./Actions";
 
-const { EMPTY_STATE, DASHBOARD_HOME } = Language.PAGE;
+const { EMPTY_STATE, DASHBOARD_HOME, DASHBOARD_EDD } = Language.PAGE;
 
-export interface PendingOrdersProps extends TransactionsStoreProps {
+interface PendingOrdersProps extends TransactionsStoreProps {
   activeTab: boolean;
-  handlePrintSummary: (orderNumber: string) => void;
+  downloadInitiated: boolean;
   isFetching: boolean;
   isLogout: boolean;
   navigation: IStackNavigationProp;
+  setDownloadInitiated: (toggle: boolean) => void;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 
 const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   activeTab,
-  handlePrintSummary,
+  downloadInitiated,
+  incomplete,
   isFetching,
   isLogout,
   navigation,
-  pending,
   resetSelectedOrder,
   search,
   selectedOrders,
+  setDownloadInitiated,
   setIsFetching,
   setScreen,
   transactions,
@@ -74,7 +83,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   updatePendingSort,
   updateTransactions,
 }: PendingOrdersProps) => {
-  const { filter, orders, page, sort } = pending;
+  const { filter, orders, page, pill, sort } = incomplete;
+  const { incompleteCount, reroutedCount, submittedCount } = transactions;
   const fetching = useRef<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
@@ -89,21 +99,18 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleShowRemarks = (item: ITableRowData) => {
-    const { remark, status } = item.rawData as IDashboardOrder;
-    if ((status === "BR - Rerouted" || status === "HQ - Rerouted") && remark) {
-      const newSections: number[] = [...activeAccordion];
-      const sectionIndex = newSections.indexOf(item.index);
-      if (sectionIndex > -1) {
-        newSections.splice(sectionIndex, 1);
-      } else {
-        newSections.splice(0, 1, item.index);
-      }
-      setActiveAccordion(newSections);
+    const newSections: number[] = [...activeAccordion];
+    const sectionIndex = newSections.indexOf(item.index);
+    if (sectionIndex > -1) {
+      newSections.splice(sectionIndex, 1);
+    } else {
+      newSections.splice(0, 1, item.index);
     }
+    setActiveAccordion(newSections);
   };
 
   const handleOrderDetails = (item: ITableData) => {
-    updateCurrentOrder(item as IDashboardOrder);
+    updateCurrentOrder(item as unknown as IDashboardOrder);
     setScreen("OrderSummary");
   };
 
@@ -116,11 +123,19 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       newSelectedOrders.splice(sectionIndex, 1);
     }
     updatedSelectedOrder(newSelectedOrders);
+    setDownloadInitiated(true);
+    setActiveAccordion([]);
   };
 
   const tableAccordion = (item: ITableData) => {
-    const { remark, status } = item as IDashboardOrder;
-    return <Fragment>{remark ? <OrderRemarks remarks={remark} status={status} /> : null}</Fragment>;
+    return (
+      <DashboardAccordion
+        handleSelectOrder={handleSelectOrder}
+        item={item as unknown as IDashboardOrder}
+        setScreen={setScreen}
+        setCurrentOrder={updateCurrentOrder}
+      />
+    );
   };
 
   const handleSortOrderNumber = async () => {
@@ -163,6 +178,10 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     updatePendingSort([newSort]);
   };
 
+  const handleView = (item: ITableRowData) => {
+    handleOrderDetails(item.rawData);
+  };
+
   const checkLoading = (functionToBeCalled: () => void) => {
     if (isFetching === false) {
       functionToBeCalled();
@@ -173,6 +192,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_CREATED_ON },
     { icon: { name: "arrow-down" }, key: "descending", text: DASHBOARD_HOME.LABEL_LAST_UPDATED },
   ];
+
+  const showCheckbox = selectedOrders.length > 0 || downloadInitiated === true;
 
   const popupContentIndex = showDatePopupContent.findIndex((content: IHeaderPopupContent) => content.text === showDateBy.type);
 
@@ -187,6 +208,13 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const sortTransactionType = findTransactionType.length > 0 ? findTransactionType[0].value : "ascending";
   const sortStatus = findStatus.length > 0 ? findStatus[0].value : "ascending";
   const sortedColumns = sort.map((currentSortType) => currentSortType.column);
+  const viewColumn: ITableColumn = {
+    itemIcon: { name: "eye-show", size: sw20 },
+    key: [],
+    onPressItem: handleView,
+    viewStyle: { ...centerHV, width: sw56 },
+    title: DASHBOARD_EDD.LABEL_VIEW,
+  };
   const columns: ITableColumn[] = [
     {
       icon: { name: sortOrderNumber === "descending" ? "arrow-down" : "arrow-up" },
@@ -204,7 +232,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       textStyle: sortedColumns.includes("orderNumber") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
       titleStyle: sortedColumns.includes("orderNumber") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw86 },
+      viewStyle: { width: showCheckbox === true ? sw80 : sw88 },
     },
     {
       customItem: true,
@@ -214,7 +242,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       textStyle: sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
       titleStyle: sortedColumns.includes("principal") ? { ...fs10BoldBlue1, lineHeight: sh13, paddingLeft: sw32 } : { paddingLeft: sw32 },
-      viewStyle: { width: sw148 },
+      viewStyle: { width: sw160 },
     },
     {
       icon: { name: sortTransactionType === "descending" ? "arrow-down" : "arrow-up" },
@@ -248,7 +276,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       itemStyle: { ...justifyContentStart, ...px(sw8) },
       key: [{ key: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? "createdOn" : "lastUpdated" }],
       title: showDateBy.type,
-      viewStyle: { width: sw90, ...px(0), ...centerHorizontal },
+      viewStyle: { width: sw96, ...px(0), ...centerHorizontal },
     },
     {
       customItem: true,
@@ -258,13 +286,17 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       onPressItem: handleShowRemarks,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw170 },
-      withAccordion: true,
+      viewStyle: { width: showCheckbox === true ? sw144 : sw192 },
+      // withAccordion: true,
     },
   ];
 
+  if (downloadInitiated === true) {
+    columns.push(viewColumn);
+  }
+
   const onRowSelect = (data: ITableData) => {
-    handleSelectOrder(data as IDashboardOrder);
+    handleSelectOrder(data as unknown as IDashboardOrder);
   };
 
   const renderAccordion = orders.length !== 0 ? tableAccordion : undefined;
@@ -280,7 +312,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
 
     const request: IDashboardRequest = {
-      tab: "pending",
+      tab: pill!,
       page: page,
       search: search,
       sort: defaultSort,
@@ -303,15 +335,18 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       if (error === null && data !== null) {
         updateTransactions({
           ...transactions,
-          pending: {
-            ...transactions.pending,
+          incomplete: {
+            ...transactions.incomplete,
             orders: data.result.orders,
             page: data.result.page,
             pages: data.result.pages,
           },
-          pendingCount: data.result.pendingCount,
+          incompleteCount: data.result.pendingCount,
           approvedCount: data.result.approvedCount,
           rejectedCount: data.result.rejectedCount,
+          submittedCount: data.result.submittedCount,
+          reroutedCount: data.result.rerouteCount,
+          pendingCount: data.result.pendingCount,
         });
         setIsFetching(false);
       }
@@ -360,6 +395,22 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     }
   };
 
+  const handlePill = async (index: number) => {
+    let updatedPill: EDDNewCaseTagKey;
+    switch (index) {
+      case 1:
+        updatedPill = "rerouted";
+        break;
+      case 2:
+        updatedPill = "submitted";
+        break;
+      default:
+        updatedPill = "pending";
+    }
+    handleSeen();
+    updateTransactions({ ...transactions, incomplete: { ...transactions.incomplete, page: 1, pages: 1, pill: updatedPill } });
+  };
+
   useEffect(() => {
     return () => {
       if (isLogout !== true) {
@@ -372,80 +423,124 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, activeTab, sort, page, filter]);
+  }, [search, activeTab, sort, page, filter, pill]);
+
+  const pills: ITagData[] = [
+    { text: "Pending", pillCount: incompleteCount },
+    { text: "Rerouted", pillCount: reroutedCount },
+    { text: "Submitted", pillCount: submittedCount },
+  ];
 
   const noResults = search !== undefined && search !== "";
   const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : DASHBOARD_HOME.EMPTY_TITLE_TRANSACTIONS;
   const subtitle = noResults === true ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : DASHBOARD_HOME.EMPTY_TRANSACTIONS_SUBTITLE;
   const hintText = noResults === true ? EMPTY_STATE.SUBTITLE : undefined;
+  const selectableOrders = showCheckbox === true ? selectedOrders : undefined;
 
   const disabledOrders = orders.map((order, index) => (order.withHardcopy === true && order.status === "Submitted" ? -1 : index));
 
   return (
     <View style={{ ...flexChild }}>
-      <AdvanceTable
-        activeAccordion={activeAccordion}
-        columns={columns}
-        data={isFetching === true ? [] : orders}
-        disabledIndex={disabledOrders}
-        handleRowNavigation={handleOrderDetails}
-        headerPopup={{
-          content: showDatePopupContent.map((_content, contentIndex) =>
-            contentIndex === popupContentIndex
-              ? {
-                  ..._content,
-                  icon: { ..._content.icon, name: showDateBy.key === "ascending" ? "arrow-up" : "arrow-down" },
-                  key: showDateBy.key,
+      {downloadInitiated !== true && selectedOrders.length === 0 ? (
+        <Fragment>
+          <View style={{ ...flexRow, ...centerVertical, ...px(sw24) }}>
+            <Text style={fs12RegGray4}>{DASHBOARD_EDD.LABEL_TYPES}</Text>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            {pills.map((currentPill: ITagData, index: number) => {
+              const { text, pillCount } = currentPill;
+              const handlePress = () => {
+                if (isFetching === false) {
+                  handlePill(index);
                 }
-              : _content,
-          ),
-          onPressContent: ({ hide, text, key }) => {
-            handleShowDateBy(text as TDateType, key as TSortType);
-            AnimationUtils.layout({ duration: 400 });
-            setTimeout(() => {
-              hide();
-            }, 1000);
-          },
-          selectedIndex: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? [0] : [1],
-          title: showDateBy.type,
-          titleStyle:
-            sortedColumns.includes("lastUpdated") || sortedColumns.includes("createdOn") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-          viewStyle: { width: sw92 },
-        }}
-        onRowSelect={onRowSelect}
-        rowSelection={selectedOrders}
-        rowSelectionKey="orderNumber"
-        RenderAccordion={renderAccordion}
-        RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
-        RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
-        RenderOptions={(props: ITableOptions) => (
-          <PendingOrderActions
-            {...props}
-            handleResubmitOrder={handleResubmitOrder}
-            handlePrintSummary={handlePrintSummary}
-            setScreen={setScreen}
-            setCurrentOrder={updateCurrentOrder}
-          />
-        )}
-        RowSelectionItem={() => (
-          <TouchableWithoutFeedback onPress={resetSelectedOrder}>
-            <View style={{ width: sw56, ...centerHV }}>
-              {selectedOrders.length > 0 ? (
-                <View
-                  style={{
-                    ...centerHV,
-                    backgroundColor: colorRed._1,
-                    borderRadius: sw4,
-                    height: sw18,
-                    width: sw18,
-                  }}>
-                  <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw10, borderRadius: sw1 }} />
+              };
+
+              return (
+                <View key={index} style={flexRow}>
+                  <StatusBadge
+                    color={text.toLowerCase() === pill ? "primary" : "secondary"}
+                    onPress={handlePress}
+                    style={{ ...px(sw16) }}
+                    text={`${text} (${pillCount})`}
+                  />
+                  <CustomSpacer isHorizontal={true} space={sw8} />
                 </View>
+              );
+            })}
+          </View>
+          <CustomSpacer space={sh28} />
+        </Fragment>
+      ) : null}
+      <View style={{ ...px(sw16), ...flexChild }}>
+        <AdvanceTable
+          activeAccordion={activeAccordion}
+          columns={columns}
+          data={isFetching === true ? [] : (orders as unknown as ITableData[])}
+          disabledIndex={disabledOrders}
+          handleRowNavigation={handleOrderDetails}
+          headerPopup={{
+            content: showDatePopupContent.map((_content, contentIndex) =>
+              contentIndex === popupContentIndex
+                ? {
+                    ..._content,
+                    icon: { ..._content.icon, name: showDateBy.key === "ascending" ? "arrow-up" : "arrow-down" },
+                    key: showDateBy.key,
+                  }
+                : _content,
+            ),
+            onPressContent: ({ hide, text, key }) => {
+              handleShowDateBy(text as TDateType, key as TSortType);
+              AnimationUtils.layout({ duration: 400 });
+              setTimeout(() => {
+                hide();
+              }, 1000);
+            },
+            selectedIndex: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? [0] : [1],
+            title: showDateBy.type,
+            titleStyle:
+              sortedColumns.includes("lastUpdated") || sortedColumns.includes("createdOn") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
+            viewStyle: { width: sw92 },
+          }}
+          onRowSelect={onRowSelect}
+          rowSelection={selectableOrders as unknown as ITableData[]}
+          rowSelectionKey="orderNumber"
+          RenderAccordion={renderAccordion}
+          RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
+          RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
+          RenderOptions={
+            downloadInitiated === false
+              ? (props: ITableOptions) => (
+                  <PendingOrderActions
+                    {...props}
+                    handleResubmitOrder={handleResubmitOrder}
+                    handleSelectOrder={handleSelectOrder}
+                    setScreen={setScreen}
+                    setCurrentOrder={updateCurrentOrder}
+                  />
+                )
+              : undefined
+          }
+          RowSelectionItem={() => (
+            <Fragment>
+              {showCheckbox === true ? (
+                <TouchableWithoutFeedback onPress={resetSelectedOrder}>
+                  <View style={{ width: sw56, ...centerHV }}>
+                    <View
+                      style={{
+                        ...centerHV,
+                        backgroundColor: colorRed._1,
+                        borderRadius: sw4,
+                        height: sw18,
+                        width: sw18,
+                      }}>
+                      <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw10, borderRadius: sw1 }} />
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
               ) : null}
-            </View>
-          </TouchableWithoutFeedback>
-        )}
-      />
+            </Fragment>
+          )}
+        />
+      </View>
       <CustomSpacer space={sh32} />
     </View>
   );

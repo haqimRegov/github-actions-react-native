@@ -16,6 +16,7 @@ const LOGIN_INVALID_OTP = "Invalid OTP. Please try again.";
 const OCR_INVALID_NRIC = "Kindly upload a valid NRIC.";
 const OCR_INVALID_NRIC_DATA = "We’re unable to capture the data from the image you uploaded.";
 const PASSWORD_NOT_MATCH = "Those passwords didn't match. Try again.";
+const CHECK_WRONG_PASSWORD = "Invalid password entered. Please try again.";
 
 export const ERROR = {
   INVALID_ALPHANUMERIC,
@@ -36,6 +37,7 @@ export const ERROR = {
   OCR_INVALID_NRIC_DATA,
   OCR_INVALID_NRIC,
   PASSWORD_NOT_MATCH,
+  CHECK_WRONG_PASSWORD,
 };
 
 export const ERROR_CODE = {
@@ -51,6 +53,7 @@ export const ERROR_CODE = {
   network: "OMNI402",
   storage: "OMNI403",
   submittedPdf: "EM448",
+  currentPassword: "EM403",
 };
 
 type TypeOmniErrors = Record<string, IResponseError>;
@@ -65,4 +68,5 @@ export const ERRORS: TypeOmniErrors = {
     statusCode: "403",
   },
   unauthenticated: { errorCode: ERROR_CODE.unauthenticated, message: "Please log in again.", statusCode: "401" },
+  currentPassword: { errorCode: ERROR_CODE.currentPassword, message: "Invalid password entered. Please try again.", statusCode: "403" },
 };

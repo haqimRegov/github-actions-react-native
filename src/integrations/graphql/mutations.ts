@@ -1,11 +1,12 @@
 import gql from "graphql-tag";
 
 const changePassword = gql`
-  mutation ChangePassword($input: ChangePasswordInput) {
-    changePassword(input: $input) {
+  mutation changePasswordV2($input: ChangePasswordInputV2) {
+    changePasswordV2(input: $input) {
       data {
         result {
           status
+          message
         }
       }
       error {

@@ -1,16 +1,16 @@
-import { GQL_MUTATIONS } from "../../integrations";
+import { GQL_QUERIES } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const changePassword = async (
-  variables: IChangePasswordRequest,
-  headers: IChangePasswordHeader,
+export const checkPassword = async (
+  variables: ICheckPasswordRequest,
+  headers: ICheckPasswordHeader,
   navigation?: IStackNavigationProp,
   handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
-    const data: IChangePasswordQuery = await responseHandler<IChangePasswordQuery, IChangePasswordRequest>(
-      GQL_MUTATIONS.changePassword,
+    const data: ICheckPasswordQuery = await responseHandler<ICheckPasswordQuery, ICheckPasswordRequest>(
+      GQL_QUERIES.checkPassword,
       variables,
       headers,
       navigation,
@@ -18,11 +18,11 @@ export const changePassword = async (
       handleLoading,
     );
 
-    if (data === undefined || "changePasswordV2" in data === false) {
+    if (data === undefined || "checkPassword" in data === false) {
       throw data;
     }
 
-    return data.changePasswordV2;
+    return data.checkPassword;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in changePassword at ChangePassword.ts", error);

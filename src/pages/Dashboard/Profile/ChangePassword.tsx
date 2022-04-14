@@ -168,7 +168,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
           <Text style={fs24BoldGray6}>{PROFILE.HEADING_CHANGE}</Text>
         </View>
         <CustomSpacer space={sh32} />
-        <View style={{ ...px(sw24) }}>
+        <View style={px(sw24)}>
           <CustomTextInput
             keyboardType="default"
             error={inputCurrentError}
@@ -184,7 +184,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         <View style={borderBottomBlue4} />
         <CustomSpacer space={sh32} />
 
-        <View style={{ ...px(sw24) }}>
+        <View style={px(sw24)}>
           <CustomTextInput
             disabled={validateCurrentPassword}
             error={input1Error}
@@ -218,7 +218,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
           labelContinue={PROFILE.BUTTON_UPDATE}
           handleCancel={handleBack}
           handleContinue={handleChangePassword}
-          buttonContainerStyle={{ ...px(sw24) }}
+          buttonContainerStyle={px(sw24)}
         />
         <CustomSpacer space={sh56} />
       </ScrollView>

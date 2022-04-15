@@ -17,5 +17,5 @@ declare interface IGetSoftCopyDocumentsResult {
 declare type IGetSoftCopyDocumentsResponse = IQueryResponse<IGetSoftCopyDocumentsResult> | undefined;
 
 declare interface IGetSoftCopyDocumentsQuery {
-  listSoftcopyDocuments: IGetSoftCopyDocumentsResponse;
+  listSoftcopyDocumentsV2: IGetSoftCopyDocumentsResponse;
 }

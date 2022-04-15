@@ -23,5 +23,5 @@ declare interface ISubmitSoftCopyDocumentsResult {
 declare type ISubmitSoftCopyDocumentsResponse = IQueryResponse<ISubmitSoftCopyDocumentsResult> | undefined;
 
 declare interface ISubmitSoftCopyDocumentsQuery {
-  submitSoftcopyDocuments: ISubmitSoftCopyDocumentsResponse;
+  submitSoftcopyDocumentsV2: ISubmitSoftCopyDocumentsResponse;
 }

@@ -561,10 +561,34 @@ const getReceiptSummaryList = gql`
 `;
 
 const listHardCopyDocuments = gql`
-  query listHardcopyDocuments($input: OrderDetailsInput) {
-    listHardcopyDocuments(input: $input) {
+  query listHardcopyDocumentsV2($input: OrderDetailsInput) {
+    listHardcopyDocumentsV2(input: $input) {
       data {
         result {
+          account {
+            principal {
+              name
+              docs {
+                id
+                title
+                url
+                name
+                type
+                isEditable
+              }
+            }
+            joint {
+              name
+              docs {
+                id
+                title
+                url
+                name
+                type
+                isEditable
+              }
+            }
+          }
           documents {
             name
             docs {
@@ -572,6 +596,8 @@ const listHardCopyDocuments = gql`
               title
               url
               name
+              type
+              isEditable
             }
           }
           branchList {
@@ -758,19 +784,10 @@ const listPaymentRequired = gql`
 `;
 
 const listSoftCopyDocuments = gql`
-  query listSoftcopyDocuments($input: OrderDetailsInput) {
-    listSoftcopyDocuments(input: $input) {
+  query listSoftcopyDocumentsV2($input: OrderDetailsInput) {
+    listSoftcopyDocumentsV2(input: $input) {
       data {
         result {
-          joint {
-            name
-            docs {
-              id
-              title
-              url
-              name
-            }
-          }
           principal {
             name
             docs {
@@ -778,6 +795,19 @@ const listSoftCopyDocuments = gql`
               title
               url
               name
+              type
+              isEditable
+            }
+          }
+          joint {
+            name
+            docs {
+              id
+              title
+              url
+              name
+              type
+              isEditable
             }
           }
         }

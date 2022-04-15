@@ -21,10 +21,20 @@ const hardcopy = (clientId: string, orderNumber: string, labelName: string, docu
   )}.${ext}`;
 };
 
+const hardcopyAccount = (clientId: string, orderNumber: string, accountHolder: TypeAccountHolder, documentName: string, mime: string) => {
+  const ext = mime.substring(mime.lastIndexOf("/") + 1);
+  const cleanDocumentName = camelCaseString(documentName).replace("_", "");
+  const checkAccountHolder = accountHolder === "Principal" ? "_principal" : "_joint";
+
+  return `clients/${clientId}/${orderNumber}/HARDCOPY/account_${cleanDocumentName}${checkAccountHolder}-${moment().format(
+    HARDCOPY_DATE_TIME_FORMAT,
+  )}.${ext}`;
+};
+
 const document = (clientId: string, type: string, mime: string) => {
   const ext = mime.substring(mime.lastIndexOf("/") + 1);
 
   return `clients/${clientId}/IDENTIFICATION/${type}-${moment().format(HARDCOPY_DATE_TIME_FORMAT)}.${ext}`;
 };
 
-export const S3UrlGenerator = { document, hardcopy, payment };
+export const S3UrlGenerator = { document, hardcopy, hardcopyAccount, payment };

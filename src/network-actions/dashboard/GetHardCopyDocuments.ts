@@ -17,11 +17,11 @@ export const getHardCopyDocuments = async (
       handleLoading,
     );
 
-    if (data === undefined || "listHardcopyDocuments" in data === false) {
+    if (data === undefined || "listHardcopyDocumentsV2" in data === false) {
       throw data;
     }
 
-    return data.listHardcopyDocuments;
+    return data.listHardcopyDocumentsV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in getHardCopyDocuments at GetHardCopyDocuments.ts", error);

@@ -3,14 +3,27 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
+import { AccountHeader, CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { ERRORS } from "../../../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import { borderBottomGray2, fs12BoldGray6, fs16SemiBoldGray6, px, sh176, sh24, sh32, sh8, sw24, sw68 } from "../../../../styles";
-import { AlertDialog } from "../../../../utils";
+import {
+  borderBottomGray2,
+  colorBlue,
+  fs10RegGray6,
+  fs12BoldBlack2,
+  fs16SemiBoldGray6,
+  px,
+  sh176,
+  sh24,
+  sh32,
+  sh8,
+  sw24,
+  sw68,
+} from "../../../../styles";
+import { AlertDialog, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
@@ -33,51 +46,36 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     updateCurrentOrder(undefined);
   };
 
-  const pendingDocumentsPrincipal =
-    documentList && documentList.principal
-      ? documentList.principal
-          .map(({ docs, name }) => {
-            return {
-              docs: docs.filter((documents) => documents?.url === null || documents?.url === undefined || "url" in documents === false),
-              name: name,
-            };
-          })
-          .filter(({ docs }) => docs.length > 0)
-      : [];
+  const pendingDocumentsPrincipal = documentList && documentList.principal ? documentList.principal : [];
 
   const documentsPrincipal =
     documentList && documentList.principal && (currentOrder!.status === "BR - Rerouted" || currentOrder!.status === "HQ - Rerouted")
       ? documentList.principal
       : pendingDocumentsPrincipal;
 
-  const pendingDocumentsJoint =
-    documentList && documentList.joint
-      ? documentList.joint
-          .map(({ docs, name }) => {
-            return {
-              docs: docs.filter((documents) => documents?.url === null || documents?.url === undefined || "url" in documents === false),
-              name: name,
-            };
-          })
-          .filter(({ docs }) => docs.length > 0)
-      : [];
+  const pendingDocumentsJoint = documentList && documentList.joint ? documentList.joint : [];
 
   const documentsJoint =
     documentList && documentList.joint && (currentOrder!.status === "BR - Rerouted" || currentOrder!.status === "HQ - Rerouted")
       ? documentList.joint
       : pendingDocumentsJoint;
 
-  const principalDocsCount = pendingDocumentsPrincipal
-    .map(({ docs }) => docs)
-    .flat()
-    .filter((docs) => docs !== undefined && "base64" in docs === false).length;
-  const jointDocsCount = pendingDocumentsJoint
-    .map(({ docs }) => docs)
-    .flat()
-    .filter((docs) => docs !== undefined && "base64" in docs === false).length;
+  const principalDocsCount = pendingDocumentsPrincipal.map(({ docs }) => docs).flat();
+  const principalDocsRemaining = principalDocsCount.filter(
+    (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
+  ).length;
+  const jointDocsCount = pendingDocumentsJoint.map(({ docs }) => docs).flat();
+  const jointDocsRemaining = jointDocsCount.filter(
+    (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
+  ).length;
 
-  const pendingDocCount = principalDocsCount + jointDocsCount;
-  const footer = pendingDocCount === 0 ? UPLOAD_DOCUMENTS.LABEL_DOCUMENT_COMPLETED : UPLOAD_DOCUMENTS.LABEL_DOCUMENT_PENDING;
+  const totalCount = principalDocsCount.length + jointDocsCount.length;
+  const pendingDocCount = principalDocsRemaining + jointDocsRemaining;
+  const completedCount = totalCount - pendingDocCount;
+  const checkAllCompleted = pendingDocCount !== 0 ? `${pendingDocCount} pending, ` : "";
+  const completedLabel = pendingDocCount === 0 ? `All(${totalCount}) completed` : `${completedCount} completed`;
+  const pendingLabel = pendingDocCount === totalCount ? `All(${pendingDocCount}) pending` : checkAllCompleted;
+  const footer = `${UPLOAD_DOCUMENTS.LABEL_DOCUMENT_SUMMARY} ${pendingLabel}${completedLabel}`;
 
   const handlePrincipalData = (value: ISoftCopyDocument[]) => {
     setDocumentList({ ...documentList!, principal: value });
@@ -108,44 +106,46 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       personalDocs.map(async ({ docs, name }: ISoftCopyDocument) => {
         return {
           docs: await Promise.all(
-            docs.map(async (documents) => {
-              try {
-                let title = "";
-                if (documents!.title === "Passport") {
-                  title = "passport";
-                } else if (documents!.title === "Certificate of Loss of Nationality") {
-                  title = "certificate";
-                } else {
-                  title = `${documents!.title!.toLowerCase().replace(" - ", "_")}`;
+            docs
+              .filter((eachDoc: ISoftCopyFile) => !isNotEmpty(eachDoc?.url))
+              .map(async (documents) => {
+                try {
+                  let title = "";
+                  if (documents!.title === "Passport") {
+                    title = "passport";
+                  } else if (documents!.title === "Certificate of Loss of Nationality") {
+                    title = "certificate";
+                  } else {
+                    title = `${documents!.title!.toLowerCase().replace(" - ", "_")}`;
+                  }
+
+                  const url = S3UrlGenerator.document(clientId, title, documents!.type!);
+                  const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
+
+                  if (uploadedFile === undefined) {
+                    throw new Error();
+                  }
+                  return {
+                    title: documents!.title!,
+                    file: {
+                      // base64: documents!.base64!,
+                      name: documents!.name!,
+                      size: documents!.size!,
+                      type: documents!.type!,
+                      date: documents!.date!,
+                      path: documents!.path!,
+                      url: uploadedFile.key,
+                    },
+                  };
+
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                  // // eslint-disable-next-line no-console
+                  AlertDialog(ERRORS.storage.message, () => setLoading(false));
+                  fetching.current = true;
+                  return error;
                 }
-
-                const url = S3UrlGenerator.document(clientId, title, documents!.type!);
-                const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
-
-                if (uploadedFile === undefined) {
-                  throw new Error();
-                }
-                return {
-                  title: documents!.title!,
-                  file: {
-                    // base64: documents!.base64!,
-                    name: documents!.name!,
-                    size: documents!.size!,
-                    type: documents!.type!,
-                    date: documents!.date!,
-                    path: documents!.path!,
-                    url: uploadedFile.key,
-                  },
-                };
-
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              } catch (error: any) {
-                // // eslint-disable-next-line no-console
-                AlertDialog(ERRORS.storage.message, () => setLoading(false));
-                fetching.current = true;
-                return error;
-              }
-            }),
+              }),
           ),
           name: name,
         };
@@ -158,7 +158,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      setPrompt(true);
       let pendingDocumentsPrincipalWithKeys: ISubmitSoftCopyDocuments[] = [];
       let pendingDocumentsJointWithKeys: ISubmitSoftCopyDocuments[] = [];
 
@@ -177,11 +176,17 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           return undefined;
         }
       }
+      const filteredPrincipalWithKeys = pendingDocumentsPrincipalWithKeys.filter(
+        (eachDocumentToSubmit: ISubmitSoftCopyDocuments) => eachDocumentToSubmit.docs.length > 0,
+      );
+      const filteredJointWithKeys = pendingDocumentsJointWithKeys.filter(
+        (eachDocumentToSubmit: ISubmitSoftCopyDocuments) => eachDocumentToSubmit.docs.length > 0,
+      );
 
       const request: ISubmitSoftCopyDocumentsRequest = {
         orderNumber: currentOrder!.orderNumber,
-        principal: pendingDocumentsPrincipalWithKeys,
-        joint: pendingDocumentsJointWithKeys,
+        principal: filteredPrincipalWithKeys,
+        joint: filteredJointWithKeys,
       };
       const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation, setLoading);
       fetching.current = false;
@@ -190,6 +195,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         if (error === null && data !== null) {
           if (data.result.status === true) {
             setLoading(false);
+            setPrompt(true);
           }
         }
         if (error !== null) {
@@ -220,15 +226,17 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         <View style={px(sw68)}>
           <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>
-        {documentList !== undefined ? (
+        {documentList !== undefined && fetching.current === false ? (
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
                 {documentList.joint && documentsPrincipal.length > 0 ? (
-                  <TextSpaceArea
-                    spaceToBottom={sh8}
-                    style={{ ...fs12BoldGray6, lineHeight: sh24 }}
-                    text={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
+                  <AccountHeader
+                    headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
+                    titleStyle={fs12BoldBlack2}
+                    subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
+                    title={currentOrder?.investorName.principal!}
+                    subtitleStyle={fs10RegGray6}
                   />
                 ) : null}
                 <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
@@ -245,7 +253,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 ) : null}
                 <View style={px(sw24)}>
                   {documentList.joint && documentsJoint.length > 0 ? (
-                    <TextSpaceArea spaceToBottom={sh8} style={{ ...fs12BoldGray6, lineHeight: sh24 }} text={UPLOAD_DOCUMENTS.LABEL_JOINT} />
+                    <AccountHeader
+                      headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
+                      titleStyle={fs12BoldBlack2}
+                      subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
+                      title={currentOrder?.investorName.joint!}
+                      subtitleStyle={fs10RegGray6}
+                    />
                   ) : null}
                   <DocumentList data={documentsJoint} setData={handleJointData} />
                 </View>

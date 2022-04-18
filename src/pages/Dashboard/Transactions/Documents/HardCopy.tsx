@@ -3,17 +3,41 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CheckBox, CustomFlexSpacer, CustomSpacer, Loading, NewDropdown, PromptModal } from "../../../../components";
+import {
+  AccountHeader,
+  ActionButtons,
+  CheckBox,
+  CustomFlexSpacer,
+  CustomSpacer,
+  Loading,
+  NewDropdown,
+  PromptModal,
+  TextSpaceArea,
+} from "../../../../components";
 import { Language } from "../../../../constants";
+import { ERRORS } from "../../../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import { borderBottomGray2, flexChild, px, sh24, sh32, sh56, sw24 } from "../../../../styles";
-import { AlertDialog } from "../../../../utils";
+import {
+  borderBottomGray2,
+  colorBlue,
+  flexChild,
+  fs10RegGray6,
+  fs12BoldBlack2,
+  fs12BoldGray6,
+  px,
+  sh24,
+  sh32,
+  sh56,
+  sh8,
+  sw24,
+} from "../../../../styles";
+import { AlertDialog, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
-const { UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
+const { UPLOAD_DOCUMENTS, UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
 
 interface UploadHardCopyProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
@@ -39,8 +63,9 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   };
 
   const buttonDisabled =
-    (documentList !== undefined &&
-      documentList.documents
+    (isNotEmpty(documentList) &&
+      isNotEmpty(documentList?.documents) &&
+      documentList!.documents
         .map(({ docs }) => docs.some((doc) => doc === undefined || doc.base64 === undefined || doc.base64 === null))
         .includes(true)) ||
     toggle === false ||
@@ -62,20 +87,23 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     }
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (docs: IHardCopyDocument[], accountHolder?: TypeAccountHolder) => {
     const personalDocsWithKeys = await Promise.all(
-      documentList!.documents.map(async ({ docs, name }: ISoftCopyDocument) => {
+      docs.map(async ({ docs: documentArray, name }: IHardCopyDocument) => {
         return {
           docs: await Promise.all(
-            docs.map(async (documents) => {
+            documentArray.map(async (documents) => {
               try {
-                const url = S3UrlGenerator.hardcopy(
-                  currentOrder!.clientId,
-                  currentOrder!.orderNumber,
-                  name,
-                  documents!.title!,
-                  documents!.type!,
-                );
+                const url =
+                  accountHolder === undefined
+                    ? S3UrlGenerator.hardcopy(currentOrder!.clientId, currentOrder!.orderNumber, name, documents!.title!, documents!.type!)
+                    : S3UrlGenerator.hardcopyAccount(
+                        currentOrder!.clientId,
+                        currentOrder!.orderNumber,
+                        accountHolder,
+                        documents!.title!,
+                        documents!.type!,
+                      );
                 const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
                 if (uploadedFile === undefined) {
                   throw new Error();
@@ -96,9 +124,8 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } catch (error: any) {
                 // // eslint-disable-next-line no-console
-                AlertDialog(error, () => setLoading(false));
                 fetching.current = true;
-                return error;
+                return undefined;
               }
             }),
           ),
@@ -110,54 +137,83 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   };
 
   const handleSubmit = async () => {
+    if (fetching.current === true) {
+      fetching.current = false;
+    }
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      setPrompt(true);
       const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
       const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
-      const documentWithKeys = await handleUpload();
-
-      const request: ISubmitHardCopyDocumentsRequest = {
-        orderNumber: currentOrder!.orderNumber,
-        branchId: branchId,
-        hardcopy: documentWithKeys,
-      };
-      const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setLoading);
-      fetching.current = false;
-      setLoading(false);
-      if (response !== undefined) {
-        const { data, error } = response;
-        if (error === null && data !== null) {
-          if (data.result.status === true) {
-            setLoading(false);
+      const principalDocs = isNotEmpty(documentList?.account.principal)
+        ? await handleUpload(documentList?.account.principal!, "Principal")
+        : [];
+      const jointDocs = isNotEmpty(documentList?.account.joint) ? await handleUpload(documentList?.account.joint!, "Joint") : [];
+      const fundDocs: ISubmitHardCopyDocuments[] =
+        isNotEmpty(documentList?.documents) && documentList!.documents.length > 0
+          ? ((await handleUpload(documentList?.documents!)) as ISubmitHardCopyDocuments[])
+          : [];
+      const checkJoint = jointDocs.length > 0 ? { joint: jointDocs } : {};
+      const checkAccount = isNotEmpty(documentList?.account)
+        ? {
+            account: {
+              principal: principalDocs,
+              ...checkJoint,
+            },
           }
-        }
-        if (error !== null) {
-          setPrompt(false);
-          setLoading(false);
-          setTimeout(() => {
-            Alert.alert(error.message);
-          }, 100);
+        : {};
+
+      const checkPrincipalDocsWithKeys = principalDocs.length > 0 ? principalDocs.findIndex(({ docs }) => docs.includes(undefined)) : -1;
+      const checkJointDocsWithKeys = jointDocs.length > 0 ? jointDocs.findIndex(({ docs }) => docs.includes(undefined)) : -1;
+      const checkFundDocsWithKeys =
+        fundDocs.length > 0 ? fundDocs.findIndex(({ docs }) => docs === undefined || docs.includes(undefined)) : -1;
+      if (checkPrincipalDocsWithKeys !== -1 || checkJointDocsWithKeys !== -1 || checkFundDocsWithKeys !== -1) {
+        setPrompt(false);
+        setLoading(false);
+        setTimeout(() => {
+          Alert.alert(ERRORS.storage.message);
+        }, 100);
+      } else {
+        const request: ISubmitHardCopyDocumentsRequest = {
+          orderNumber: currentOrder!.orderNumber,
+          branchId: branchId,
+          hardcopy: fundDocs.length > 0 ? fundDocs : [],
+          ...checkAccount,
+        };
+        const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setLoading);
+        fetching.current = false;
+        setLoading(false);
+        if (response !== undefined) {
+          const { data, error } = response;
+          if (error === null && data !== null) {
+            if (data.result.status === true) {
+              setLoading(false);
+              setPrompt(true);
+            }
+          }
         }
       }
     }
   };
 
-  const physicalDocuments =
-    documentList && documentList.documents
-      ? documentList.documents
-          .map(({ docs, name }) => {
-            return {
-              docs: docs.filter((documents) => documents?.url === null || documents?.url === undefined || "url" in documents === false),
-              name: name,
-            };
-          })
-          .filter(({ docs }) => docs.length > 0)
-      : [];
-
   const branchList: TypeLabelValue[] =
     documentList && documentList.branchList ? documentList.branchList.map(({ name }) => ({ label: name, value: name })) : [];
+
+  const handleSetPrincipalDocument = (value: IHardCopyDocument[]) => {
+    setDocumentList({
+      ...documentList!,
+      account: { ...documentList?.account, principal: value },
+    });
+  };
+
+  const handleSetJointDocument = (value: IHardCopyDocument[]) => {
+    if (documentList?.account.joint !== undefined) {
+      setDocumentList({
+        ...documentList!,
+        account: { ...documentList?.account, joint: value },
+      });
+    }
+  };
 
   const handleSetDocument = (value: IHardCopyDocument[]) => {
     setDocumentList({ ...documentList!, documents: value });
@@ -177,10 +233,52 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMISSION}
         titleIcon="arrow-left">
         <CustomSpacer space={sh24} />
-        {documentList !== undefined ? (
+        {documentList !== undefined && fetching.current === false ? (
           <Fragment>
             <View style={px(sw24)}>
-              <DocumentList data={physicalDocuments} setData={handleSetDocument} />
+              <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_ACCOUNT} />
+              <DocumentList
+                data={documentList.account.principal}
+                header={
+                  isNotEmpty(documentList.account.joint) ? (
+                    <AccountHeader
+                      headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
+                      titleStyle={fs12BoldBlack2}
+                      subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
+                      title={currentOrder?.investorName.principal!}
+                      subtitleStyle={fs10RegGray6}
+                    />
+                  ) : (
+                    <View />
+                  )
+                }
+                headerSpace={false}
+                setData={handleSetPrincipalDocument}
+              />
+              {isNotEmpty(documentList.account.joint) ? (
+                <Fragment>
+                  <CustomSpacer space={sh24} />
+                  <DocumentList
+                    data={documentList.account.joint!}
+                    setData={handleSetJointDocument}
+                    header={
+                      <AccountHeader
+                        headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
+                        titleStyle={fs12BoldBlack2}
+                        subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
+                        title={currentOrder?.investorName.joint!}
+                        subtitleStyle={fs10RegGray6}
+                      />
+                    }
+                  />
+                </Fragment>
+              ) : null}
+              {isNotEmpty(documentList.documents) && documentList.documents.length > 0 ? (
+                <Fragment>
+                  <CustomSpacer space={sh32} />
+                  <DocumentList data={documentList.documents} setData={handleSetDocument} />
+                </Fragment>
+              ) : null}
             </View>
             <CustomSpacer space={sh32} />
             <View style={borderBottomGray2} />

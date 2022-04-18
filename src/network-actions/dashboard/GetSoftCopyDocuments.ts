@@ -17,11 +17,11 @@ export const getSoftCopyDocuments = async (
       handleLoading,
     );
 
-    if (data === undefined || "listSoftcopyDocuments" in data === false) {
+    if (data === undefined || "listSoftcopyDocumentsV2" in data === false) {
       throw data;
     }
 
-    return data.listSoftcopyDocuments;
+    return data.listSoftcopyDocumentsV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in getSoftCopyDocuments at GetSoftCopyDocuments.ts", error);

@@ -17,11 +17,11 @@ export const submitHardCopyDocuments = async (
       handleLoading,
     );
 
-    if (data === undefined || "submitHardcopyDocuments" in data === false) {
+    if (data === undefined || "submitHardcopyDocumentsV2" in data === false) {
       throw data;
     }
 
-    return data.submitHardcopyDocuments;
+    return data.submitHardcopyDocumentsV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in submitHardCopyDocuments at SubmitHardCopyDocuments.ts", error);

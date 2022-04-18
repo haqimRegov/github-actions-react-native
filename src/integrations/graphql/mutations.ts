@@ -276,8 +276,8 @@ const riskAssessment = gql`
 `;
 
 const submitHardCopyDocuments = gql`
-  mutation submitHardcopyDocuments($input: HardcopyDocumentsInput) {
-    submitHardcopyDocuments(input: $input) {
+  mutation submitHardcopyDocumentsV2($input: HardcopyDocumentsInput) {
+    submitHardcopyDocumentsV2(input: $input) {
       data {
         result {
           status
@@ -295,12 +295,13 @@ const submitHardCopyDocuments = gql`
 `;
 
 const submitSoftCopyDocuments = gql`
-  mutation submitSoftcopyDocuments($input: SoftcopyDocumentsInput) {
-    submitSoftcopyDocuments(input: $input) {
+  mutation submitSoftcopyDocumentsV2($input: SoftcopyDocumentsInput) {
+    submitSoftcopyDocumentsV2(input: $input) {
       data {
         result {
           status
           message
+          txRef
         }
       }
       error {

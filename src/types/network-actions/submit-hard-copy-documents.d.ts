@@ -9,6 +9,7 @@ declare interface ISubmitHardCopyDocuments {
 }
 
 declare interface ISubmitHardCopyDocumentsRequest {
+  account?: IHardCopyAccount;
   branchId: string;
   orderNumber: string;
   hardcopy: ISubmitHardCopyDocuments[];
@@ -23,5 +24,5 @@ declare interface ISubmitHardCopyDocumentsResult {
 declare type ISubmitHardCopyDocumentsResponse = IQueryResponse<ISubmitHardCopyDocumentsResult> | undefined;
 
 declare interface ISubmitHardCopyDocumentsQuery {
-  submitHardcopyDocuments: ISubmitHardCopyDocumentsResponse;
+  submitHardcopyDocumentsV2: ISubmitHardCopyDocumentsResponse;
 }

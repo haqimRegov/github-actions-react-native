@@ -1413,6 +1413,8 @@ export const english = {
       BUTTON_DONE: "Done",
       LABEL_DOCUMENT_COMPLETED: "Document(s) uploaded",
       LABEL_DOCUMENT_PENDING: "Document pending",
+      LABEL_DOCUMENT_SUMMARY: "Document Summary:",
+      LABEL_INVESTORS_ID: "Investor’s ID",
       LABEL_JOINT: "Joint Holder",
       LABEL_PRINCIPAL: "Principal Holder",
       LABEL_SUBTITLE: "All related documents within the same application will be updated.",
@@ -1422,6 +1424,7 @@ export const english = {
     UPLOAD_HARD_COPY_DOCUMENTS: {
       BUTTON_DONE: "Done",
       BUTTON_SUBMIT: "Submit",
+      LABEL_ACCOUNT: "Account",
       LABEL_CHECKBOX: "I hereby confirm that the proof of payment and supporting documents are in order.",
       LABEL_HARD_COPY_RECEIVED:
         "Thank you for your application. We have received a digital copy of the account opening form. Please ensure that you submit the remaining physical documents to the designated branch by end of business day for verification. Your investment will be processed according to the corresponding Fund's cut-off time. This is under the assumption that the proof of payment and supporting documents are in order.",

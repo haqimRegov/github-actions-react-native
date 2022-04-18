@@ -64,6 +64,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
         setScreen("DashboardPayment");
         break;
       case "Certificate of Lost of Nationality":
+      case "Certificate of Loss of Nationality":
       case "NRIC":
         setScreen("UploadDocuments");
         break;

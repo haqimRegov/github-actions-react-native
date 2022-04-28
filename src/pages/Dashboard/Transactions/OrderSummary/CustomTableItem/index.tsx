@@ -1,0 +1,26 @@
+import React, { FunctionComponent } from "react";
+import { View } from "react-native";
+
+import { CreatedOn } from "../../ApplicationHistory/CustomTableItem/CreatedOn";
+import { PendingStatus } from "../../ApplicationHistory/CustomTableItem/Status";
+import { Remark } from "./Remark";
+
+declare interface CustomTableItemProps extends ITableCustomItem {
+  sortedColumns: TransactionsSortColumnType[];
+}
+export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sortedColumns, ...rest }: CustomTableItemProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { accordionIcon, ...withoutAccordion } = rest;
+  switch (rest.keyName.key) {
+    case "status":
+      return (
+        <PendingStatus accordionIcon={undefined} sortedColumns={sortedColumns as TransactionsSortColumnType[]} {...withoutAccordion} />
+      );
+    case "createdOn":
+      return <CreatedOn sortedColumns={sortedColumns} {...rest} />;
+    case "remark":
+      return <Remark sortedColumns={sortedColumns} {...rest} />;
+    default:
+      return <View />;
+  }
+};

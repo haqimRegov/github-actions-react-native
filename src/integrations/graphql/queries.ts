@@ -29,6 +29,7 @@ const dashboard = gql`
             }
             orderNumber
             reason {
+              isSubmitted
               title
               content
               documents {
@@ -908,11 +909,17 @@ const productList = gql`
 `;
 
 const eddDashboard = gql`
-  query eddDashboard($input: DashboardInput) {
-    eddDashboard(input: $input) {
+  query eddDashboardV2($input: DashboardInput) {
+    eddDashboardV2(input: $input) {
       data {
         result {
           cases {
+            label
+            rerouteReason {
+              title
+              remark
+            }
+            isSeen
             caseId
             clientId
             caseNo
@@ -921,7 +928,6 @@ const eddDashboard = gql`
             targetDate
             closeDate
             status
-            isSeen
             accountNo
             lastUpdated
             daysRemaining

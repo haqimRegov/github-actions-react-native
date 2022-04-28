@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { centerHV, colorBlue, colorRed, flexRow, fs16SemiBoldBlue1, fs16SemiBoldBlue5, sh48, sw164, sw2, sw8 } from "../../styles";
+import { centerHV, colorBlue, colorRed, flexRow, fs16SemiBoldBlue1, fs16SemiBoldBlue5, sh48, sw2, sw24, sw8 } from "../../styles";
 import { BadgeCount } from "../Badge";
 import { CustomSpacer } from "../Views";
 
@@ -20,7 +20,14 @@ export const Tab: FunctionComponent<TabProps> = ({ badgeCount, onPress, selected
   const selectedStyle: ViewStyle = selected === true ? { borderBottomWidth: sw2, borderBottomColor: colorRed._1 } : {};
   const defaultTextStyle: TextStyle = selected === true ? { ...fs16SemiBoldBlue1, ...textStyle } : { ...fs16SemiBoldBlue5, ...textStyle };
   const defaultSpaceToRight = spaceToRight !== undefined ? spaceToRight : sw8;
-  const container: ViewStyle = { ...centerHV, ...flexRow, height: sh48, width: sw164, ...selectedStyle, ...style };
+  const container: ViewStyle = {
+    ...centerHV,
+    ...flexRow,
+    height: sh48,
+    paddingHorizontal: sw24,
+    ...selectedStyle,
+    ...style,
+  };
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>

@@ -39,6 +39,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
 
   const handleBack = () => {
     updateCurrentOrder(undefined);
+    setActiveTab("order");
     setScreen("Transactions");
   };
 
@@ -64,7 +65,6 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
         setOrderSummary(data.result);
-        setActiveTab("order");
       }
       if (error !== null) {
         setTimeout(() => {

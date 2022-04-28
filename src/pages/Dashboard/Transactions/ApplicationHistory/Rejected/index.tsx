@@ -37,6 +37,7 @@ interface RejectedOrdersProps extends TransactionsStoreProps {
   isLogout: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 
@@ -48,6 +49,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   rejected,
   search,
   setIsFetching,
+  setOrderSummaryActiveTab,
   setScreen,
   transactions,
   updateCurrentOrder,
@@ -125,7 +127,14 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const tableAccordion = (item: ITableData) => {
-    return <DashboardAccordion item={item as unknown as IDashboardOrder} setScreen={setScreen} setCurrentOrder={updateCurrentOrder} />;
+    return (
+      <DashboardAccordion
+        item={item as unknown as IDashboardOrder}
+        setScreen={setScreen}
+        setCurrentOrder={updateCurrentOrder}
+        setOrderSummaryActiveTab={setOrderSummaryActiveTab}
+      />
+    );
   };
 
   const showDatePopupContent: IHeaderPopupContent[] = [

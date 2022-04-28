@@ -37,6 +37,7 @@ interface ApprovedOrdersProps extends TransactionsStoreProps {
   isLogout: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 
@@ -48,6 +49,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   navigation,
   search,
   setIsFetching,
+  setOrderSummaryActiveTab,
   setScreen,
   transactions,
   updateApprovedSort,
@@ -125,7 +127,14 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   };
 
   const tableAccordion = (item: ITableData) => {
-    return <DashboardAccordion item={item as unknown as IDashboardOrder} setScreen={setScreen} setCurrentOrder={updateCurrentOrder} />;
+    return (
+      <DashboardAccordion
+        item={item as unknown as IDashboardOrder}
+        setScreen={setScreen}
+        setCurrentOrder={updateCurrentOrder}
+        setOrderSummaryActiveTab={setOrderSummaryActiveTab}
+      />
+    );
   };
 
   const showDatePopupContent: IHeaderPopupContent[] = [

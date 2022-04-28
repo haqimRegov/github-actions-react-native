@@ -23,7 +23,13 @@ export const Transactions: FunctionComponent<TransactionsProps> = (props: Transa
   };
   const pageProps = { setScreen: setScreen, navigation: navigation };
   let transactionsPage: JSX.Element = (
-    <ApplicationHistory {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />
+    <ApplicationHistory
+      {...pageProps}
+      activeTab={activeTab}
+      isLogout={isLogout}
+      setActiveTab={setActiveTab}
+      setOrderSummaryActiveTab={setOrderSummaryActiveTab}
+    />
   );
   if (route === "UploadDocuments") {
     transactionsPage = <UploadDocuments {...pageProps} />;

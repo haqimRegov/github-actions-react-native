@@ -42,6 +42,7 @@ const { DASHBOARD_HOME } = Language.PAGE;
 interface IDashboardAccordionProps {
   handleSelectOrder?: (item: IDashboardOrder) => void;
   item: IDashboardOrder;
+  remarkTitle?: string;
   setScreen: (route: TransactionsPageType) => void;
   setCurrentOrder: (order: IDashboardOrder) => void;
 }
@@ -49,6 +50,7 @@ interface IDashboardAccordionProps {
 export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProps> = ({
   handleSelectOrder,
   item,
+  remarkTitle,
   setCurrentOrder,
   setScreen,
 }: IDashboardAccordionProps) => {
@@ -66,9 +68,12 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
       case "Certificate of Lost of Nationality":
       case "Certificate of Loss of Nationality":
       case "NRIC":
+      case "NRIC - Front":
+      case "NRIC - Back":
         setScreen("UploadDocuments");
         break;
       case "EPF 9N form + IC Copies":
+      case "EPF 9N Form":
       case "UT Account Opening/Transaction":
       case "W8-Ben":
       case "W9":
@@ -165,6 +170,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
                   const handlePress = () => {
                     handleNavigation(eachContent.document);
                   };
+                  const checkIcon = eachContent.document === "Recurring Info" ? "plus" : "upload";
                   return (
                     <View key={eachContent.document} style={flexRow}>
                       {itemIndex === -1 || eachContentIndex < itemIndex || showAll === true ? (
@@ -181,7 +187,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
                               badgeCount={eachContent.count > 1 ? eachContent.count : undefined}
                               buttonStyle={buttonStyle}
                               color={colorBlue._1}
-                              icon="upload"
+                              icon={checkIcon}
                               onPress={handlePress}
                               text={eachContent.document}
                             />
@@ -205,8 +211,8 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
             </View>
           </View>
         ) : null}
-        {reason !== null && reason.length > 0 ? (
-          <OrderRemarks handleNavigation={handleNavigation} remarks={reason} status={status} />
+        {isNotEmpty(reason) && reason.length > 0 ? (
+          <OrderRemarks handleNavigation={handleNavigation} remarkTitle={remarkTitle} remarks={reason} status={status} />
         ) : null}
       </View>
     </Pressable>

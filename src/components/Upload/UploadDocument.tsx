@@ -17,6 +17,7 @@ import {
   colorGreen,
   colorRed,
   colorWhite,
+  disabledOpacity4,
   flexRow,
   fs12RegBlack2,
   fs12RegGray5,
@@ -55,6 +56,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     completed,
     containerStyle,
     customFeature,
+    disabled,
     errorMessage,
     features,
     icon,
@@ -102,6 +104,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   const defaultError = errorMessage !== undefined ? errorMessage : error;
   const defaultLabel = defaultError !== "" ? defaultError : uploadLabel;
   const defaultCropping = withCropping !== undefined ? withCropping : true;
+  const disabledStyle = disabled === true ? { ...disabledOpacity4 } : {};
 
   const generateName = (mime: string, filename?: string) => {
     const moments = moment();
@@ -214,7 +217,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={container}>
+      <View style={{ ...container, ...disabledStyle }} pointerEvents={disabled === true ? "none" : "auto"}>
         {value === undefined ||
         defaultError !== "" ||
         (value !== undefined && progress !== undefined) ||

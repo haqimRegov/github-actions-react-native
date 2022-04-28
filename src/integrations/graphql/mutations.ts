@@ -174,6 +174,33 @@ const submitPdf = gql`
   }
 `;
 
+const orderTrackingSummary = gql`
+  mutation getOrderTrackingSummary($input: PdfInput) {
+    generateOrderTrackingSummary(input: $input) {
+      data {
+        result {
+          message
+          status
+          pdf {
+            url
+            type
+            date
+            name
+            base64
+            urlPageCount
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const registerPassword = gql`
   mutation signUp($input: SetPasswordInput) {
     signUp(input: $input) {
@@ -593,6 +620,7 @@ export const GQL_MUTATIONS = {
   firstTimeSignUp,
   forgotPassword,
   generatePdf,
+  orderTrackingSummary,
   registerPassword,
   resendLockOtp,
   resetPassword,
@@ -600,9 +628,9 @@ export const GQL_MUTATIONS = {
   riskAssessment,
   submitClientAccount,
   submitEDDCase,
+  submitHardCopyDocuments,
   submitPdf,
   submitProofOfPayments,
-  submitHardCopyDocuments,
   submitSoftCopyDocuments,
   summaryReceipt,
   updateInbox,

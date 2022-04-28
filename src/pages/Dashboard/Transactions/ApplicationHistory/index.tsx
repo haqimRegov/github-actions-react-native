@@ -40,6 +40,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
   isLogout: boolean;
   navigation: IStackNavigationProp;
   setActiveTab: (route: TransactionsTabType) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 
@@ -54,6 +55,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     search,
     selectedOrders,
     setActiveTab,
+    setOrderSummaryActiveTab,
     setScreen,
     transactions,
     updateApprovedFilter,
@@ -213,6 +215,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     isFetching: loading,
     isLogout: props.isLogout,
     setIsFetching: setLoading,
+    setOrderSummaryActiveTab,
   };
   let content: JSX.Element;
 

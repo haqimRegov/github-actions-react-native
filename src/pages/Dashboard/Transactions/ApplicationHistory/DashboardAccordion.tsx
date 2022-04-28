@@ -45,6 +45,7 @@ interface IDashboardAccordionProps {
   remarkTitle?: string;
   setScreen: (route: TransactionsPageType) => void;
   setCurrentOrder: (order: IDashboardOrder) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
 }
 
 export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProps> = ({
@@ -52,6 +53,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
   item,
   remarkTitle,
   setCurrentOrder,
+  setOrderSummaryActiveTab,
   setScreen,
 }: IDashboardAccordionProps) => {
   const { documents, reason, status, label } = item;
@@ -91,6 +93,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
 
   const handleTrackStatus = () => {
     setCurrentOrder(item);
+    setOrderSummaryActiveTab("tracking");
     setScreen("OrderSummary");
   };
 

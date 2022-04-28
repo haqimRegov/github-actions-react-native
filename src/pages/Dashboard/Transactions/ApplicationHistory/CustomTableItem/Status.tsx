@@ -12,7 +12,7 @@ import { isNotEmpty } from "../../../../../utils";
 const { DASHBOARD_HOME } = Language.PAGE;
 
 interface PendingStatusProps extends ITableCustomItem {
-  downloadInitiated: boolean;
+  downloadInitiated?: boolean;
   sortedColumns: TransactionsSortColumnType[];
 }
 

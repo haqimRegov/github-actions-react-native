@@ -61,6 +61,7 @@ interface PendingOrdersProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
   setDownloadInitiated: (toggle: boolean) => void;
   setIsFetching: (value: boolean) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 
@@ -76,6 +77,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   selectedOrders,
   setDownloadInitiated,
   setIsFetching,
+  setOrderSummaryActiveTab,
   setScreen,
   transactions,
   updateCurrentOrder,
@@ -136,6 +138,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         item={item as unknown as IDashboardOrder}
         setScreen={setScreen}
         setCurrentOrder={updateCurrentOrder}
+        setOrderSummaryActiveTab={setOrderSummaryActiveTab}
       />
     );
   };

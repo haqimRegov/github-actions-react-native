@@ -7,6 +7,7 @@ import { DEFAULT_DATE_FORMAT, Language } from "../../../../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, flexRow, fs10RegBlue6, sh4, sw12, sw16 } from "../../../../../styles";
+import { isNotEmpty } from "../../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -44,7 +45,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
           </Fragment>
         ) : null}
       </View>
-      {dueDate !== null ? (
+      {isNotEmpty(dueDate) ? (
         <Fragment>
           <CustomSpacer space={sh4} />
           <Text style={fs10RegBlue6}>{dueDateLabel}</Text>

@@ -17,6 +17,7 @@ export const Transactions: FunctionComponent<TransactionsProps> = (props: Transa
   const { navigation, isLogout } = props;
   const [route, setRoute] = useState<TransactionsPageType>("Transactions");
   const [activeTab, setActiveTab] = useState<TransactionsTabType>("incomplete");
+  const [orderSummaryActiveTab, setOrderSummaryActiveTab] = useState<OrderSummaryTabType>("order");
   const setScreen = (nextPage: TransactionsPageType) => {
     setRoute(nextPage);
   };
@@ -31,7 +32,7 @@ export const Transactions: FunctionComponent<TransactionsProps> = (props: Transa
     transactionsPage = <UploadHardCopy {...pageProps} />;
   }
   if (route === "OrderSummary") {
-    transactionsPage = <DashboardOrderSummary {...pageProps} />;
+    transactionsPage = <DashboardOrderSummary activeTab={orderSummaryActiveTab} setActiveTab={setOrderSummaryActiveTab} {...pageProps} />;
   }
   if (route === "DashboardPayment") {
     transactionsPage = <DashboardPayment {...pageProps} />;

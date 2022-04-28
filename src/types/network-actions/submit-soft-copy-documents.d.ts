@@ -9,15 +9,15 @@ declare interface ISubmitSoftCopyDocuments {
 }
 
 declare interface ISubmitSoftCopyDocumentsRequest {
+  isConfirmed: boolean;
+  joint?: ISubmitSoftCopyDocuments[];
   orderNumber: string;
   principal: ISubmitSoftCopyDocuments[];
-  joint?: ISubmitSoftCopyDocuments[];
 }
 
 declare interface ISubmitSoftCopyDocumentsResult {
-  status: boolean;
+  orders: ISubmitHardCopyResult[];
   message: string;
-  txRef: string;
 }
 
 declare type ISubmitSoftCopyDocumentsResponse = IQueryResponse<ISubmitSoftCopyDocumentsResult> | undefined;

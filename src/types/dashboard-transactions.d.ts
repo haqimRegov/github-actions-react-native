@@ -12,8 +12,8 @@ declare interface IItemWithCount {
 
 declare interface IDashboardReason {
   content: string[];
-  documents: IItemWithCount[];
-  isCompleted?: boolean;
+  documents?: IItemWithCount[];
+  isSubmitted?: boolean;
   isDisabled?: boolean;
   title: string;
 }

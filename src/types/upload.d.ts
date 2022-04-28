@@ -8,6 +8,7 @@ declare interface UploadProps {
   completed?: boolean;
   containerStyle?: import("react-native").ViewStyle;
   customFeature?: import("react").ReactNode;
+  disabled?: boolean;
   errorMessage?: string;
   features: TypeUploadFeature[];
   icon?: { active?: string; inactive?: string };

@@ -9,6 +9,11 @@ declare type IEDDStatus = Record<IEDDStatusKey, IEDDStatusType>;
 declare type TEDDDateType = "Created On" | "Last Updated";
 declare type TSortType = "ascending" | "descending";
 
+declare interface IEDDReason {
+  remark: string;
+  title: string;
+}
+
 declare interface IEDDShowDateBy {
   key: TSortType;
   type: TEDDDateType;
@@ -32,10 +37,11 @@ declare interface IEDDDashboardCase {
   clientName: string;
   closeDate?: string;
   createdOn: string;
+  label?: string;
   lastUpdated: string;
   daysRemaining?: string;
   isSeen: boolean;
-  remark?: IDashboardRemark[];
+  rerouteReason?: IEDDReason[];
   status: IEDDStatusType;
   targetDate?: string;
 }

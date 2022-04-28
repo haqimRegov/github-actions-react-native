@@ -1,16 +1,24 @@
 import React, { FunctionComponent } from "react";
-import { View, ViewStyle } from "react-native";
+import { TextStyle, View, ViewStyle } from "react-native";
 
 import { borderBottomGray2, flexRow } from "../../styles";
 import { Tab, TabProps } from "./Tab";
 
 interface TabGroupProps {
   activeTab: number;
+  selectedTextStyle?: TextStyle;
+  selectedViewStyle?: ViewStyle;
   setActiveTab: (tabIndex: number) => void;
   tabs: TabProps[];
 }
 
-export const TabGroup: FunctionComponent<TabGroupProps> = ({ activeTab, setActiveTab, tabs }: TabGroupProps) => {
+export const TabGroup: FunctionComponent<TabGroupProps> = ({
+  activeTab,
+  selectedTextStyle,
+  selectedViewStyle,
+  setActiveTab,
+  tabs,
+}: TabGroupProps) => {
   return (
     <View style={flexRow}>
       {tabs.map((tab: TabProps, index: number) => {
@@ -22,9 +30,20 @@ export const TabGroup: FunctionComponent<TabGroupProps> = ({ activeTab, setActiv
         };
 
         const borderStyle: ViewStyle = activeTab !== index ? borderBottomGray2 : {};
-        const tabStyle: ViewStyle = { ...borderStyle, ...tab.style };
+        const checkSelectedView: ViewStyle = activeTab === index && selectedViewStyle !== undefined ? selectedViewStyle : {};
+        const checkSelectedText: TextStyle = activeTab === index && selectedTextStyle !== undefined ? selectedTextStyle : {};
+        const tabStyle: ViewStyle = { ...borderStyle, ...tab.style, ...checkSelectedView };
 
-        return <Tab {...tab} key={index} selected={activeTab === index} style={tabStyle} onPress={handleTabPress} />;
+        return (
+          <Tab
+            key={index}
+            onPress={handleTabPress}
+            selected={activeTab === index}
+            style={tabStyle}
+            textStyle={checkSelectedText}
+            {...tab}
+          />
+        );
       })}
     </View>
   );

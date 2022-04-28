@@ -16,11 +16,11 @@ export const getEDDDashboard = async (
       handleError,
       handleLoading,
     );
-    if (data === undefined || "eddDashboard" in data === false) {
+    if (data === undefined || "eddDashboardV2" in data === false) {
       throw data;
     }
 
-    return data.eddDashboard;
+    return data.eddDashboardV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in getEDDDashboard at Dashboard.ts", error);

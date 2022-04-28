@@ -170,6 +170,7 @@ declare interface IOrderSummaryProfile {
 }
 
 declare interface IDashboardOrderSummary {
+  documentSummary: IDocumentSummary;
   extensionRemark: string;
   investmentSummary: IOrderSummaryInvestment[];
   orderNumber: string;
@@ -178,6 +179,7 @@ declare interface IDashboardOrderSummary {
   remark: string;
   status: string;
   totalInvestment: IOrderAmount[];
+  trackingSummary: ITrackingSummary[];
   transactionDetails: IOrderSummaryTransaction;
 }
 
@@ -199,3 +201,5 @@ declare interface IStructuredData {
   profilePic?: FileBase64;
   showJointToggle?: boolean;
 }
+
+declare type OrderSummaryTabType = "order" | "document" | "profile" | "tracking";

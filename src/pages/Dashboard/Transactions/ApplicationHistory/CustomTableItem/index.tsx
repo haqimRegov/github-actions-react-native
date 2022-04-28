@@ -8,6 +8,7 @@ import { PendingStatus } from "./Status";
 import { TotalInvestments } from "./TotalInvestments";
 
 declare interface CustomTableItemProps extends ITableCustomItem {
+  downloadInitiated: boolean;
   sortedColumns: TransactionsSortColumnType[];
 }
 export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sortedColumns, ...rest }: CustomTableItemProps) => {

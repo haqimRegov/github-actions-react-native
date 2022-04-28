@@ -1,8 +1,9 @@
 declare interface IFundOrderSummary {
-  fundingOption: string;
   accountType: string;
   distributionChannel: string;
+  fundCode?: string;
   fundCurrency: string;
+  fundingOption: string;
   fundIssuer: string;
   fundName: string;
   fundType: string;
@@ -10,8 +11,6 @@ declare interface IFundOrderSummary {
   isEpf: boolean;
   isShariah: boolean;
   salesCharge: string;
-
-  fundCode?: string;
   scheduledPayment?: boolean;
 }
 
@@ -43,10 +42,10 @@ declare interface IOrderInvestment {
 }
 
 declare interface IOrder {
+  allowedRecurringType?: string[];
   investments: IOrderInvestment[];
   orderDate: string;
   orderNumber: string;
-  allowedRecurringType?: string[];
   orderTotalAmount: IOrderAmount[];
   paymentType: TypePaymentType;
 }
@@ -65,4 +64,47 @@ declare interface IOrderTotalAmount {
 declare interface IOrderAmount {
   amount: string;
   currency: TypeCurrency;
+}
+
+declare interface IInnerDocument {
+  label: string;
+  name: string;
+  title: string;
+  type: string;
+  url: string;
+}
+
+declare interface IOuterDocument {
+  documents: IInnerDocument[];
+  mainHeader: string;
+  subHeader: string;
+}
+
+declare interface ISoftcopy {
+  documents: IOuterDocument[];
+  required: boolean;
+}
+
+declare interface IHardcopy {
+  accDocs: IOuterDocument[];
+  required: boolean;
+  utmcDocs: IOuterDocument[];
+}
+
+declare interface IDocumentSummary {
+  accountType: string;
+  hardcopy: IHardcopy;
+  softcopy: ISoftcopy;
+}
+
+declare interface ITrackingSummary {
+  createdOn: Date;
+  level: string;
+  remark: IOuterRemark[];
+  status: string;
+}
+
+declare interface IOuterRemark {
+  label: string;
+  remark: string[];
 }

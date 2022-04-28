@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { View, ViewStyle } from "react-native";
 
 import {
   AddressInfo,
@@ -27,7 +27,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh8,
   shadow16Blue112,
   sw1,
   sw120,
@@ -63,7 +62,6 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
   setAccountHolder,
 }: AccountSummaryProps) => {
   const {
-    accountDocuments,
     accountSummaryDetails,
     contactDetails,
     declarations,
@@ -218,19 +216,6 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
       </View>
       <CustomSpacer space={sh16} />
       <View style={borderBottomGray2} />
-      {/* <View style={px(sw24)}>
-        <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldGray6} text={DECLARATION_SUMMARY.TITLE_FEA} />
-        <TextCard data={declarations.fea} spaceBetweenItem={sw64} />
-      </View>
-      <CustomSpacer space={sh16} />
-      <View style={borderBottomGray2} /> */}
-      <CustomSpacer space={sh32} />
-      <View style={px(sw24)}>
-        <Text style={fs18BoldGray6}>{DASHBOARD_PROFILE.TITLE_UPLOAD_DOCUMENTS}</Text>
-        <CustomSpacer space={sh16} />
-        <TextCard data={accountDocuments} spaceBetweenItem={sw64} />
-        <CustomSpacer space={sh8} />
-      </View>
     </Fragment>
   );
 };

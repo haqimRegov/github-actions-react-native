@@ -20,7 +20,7 @@ declare interface IEDDDashboardResult {
 declare type IEDDDashboardResponse = IQueryResponse<IEDDDashboardResult> | undefined;
 
 declare interface IEDDDashboardQuery {
-  eddDashboard: IEDDDashboardResponse;
+  eddDashboardV2: IEDDDashboardResponse;
 }
 
 declare interface ITagData {

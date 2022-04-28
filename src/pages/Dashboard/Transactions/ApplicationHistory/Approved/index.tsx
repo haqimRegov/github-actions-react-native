@@ -276,13 +276,13 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   const renderAccordion = orders.length !== 0 ? tableAccordion : undefined;
 
   const handleOrderDetails = (item: ITableData) => {
-    updateCurrentOrder(item as IDashboardOrder);
+    updateCurrentOrder(item as unknown as IDashboardOrder);
     setScreen("OrderSummary");
   };
 
   const handleSeen = async () => {
     setIsFetching(true);
-    const request: IUpdateSeenRequest = { dashboard: "dashboard", tab: ["approved"] };
+    const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: ["approved"] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;

@@ -283,7 +283,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
 
   const handleSeen = async () => {
     setIsFetching(true);
-    const request: IUpdateSeenRequest = { dashboard: "dashboard", tab: ["rejected"] };
+    const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: ["rejected"] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;

@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CustomSpacer, TextSpaceArea, UploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { fs12BoldGray6, sh32, sh8 } from "../../../../styles";
-import { titleCaseString } from "../../../../utils";
+import { isEmpty, titleCaseString } from "../../../../utils";
 
 const { UPLOAD_DOCUMENTS } = Language.PAGE;
 
@@ -25,16 +25,17 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
           return (
             <View key={index}>
               {index === 0 ? null : <CustomSpacer space={sh32} />}
-              {relatedDocuments.docs.map((document: DocumentFileBase64 | undefined, documentIndex: number) => {
+              {relatedDocuments.docs.map((document: ISoftCopyFile | undefined, documentIndex: number) => {
                 const handleProof = (file: DocumentFileBase64 | undefined) => {
                   const updatedData = [...data];
                   const newValue = document !== undefined && document.title ? { title: document.title } : undefined;
-                  const actualNewValue = file === undefined ? newValue : { ...file, title: document?.title };
+                  const actualNewValue =
+                    file === undefined ? newValue : { ...file, title: document?.title, isEditable: document?.isEditable };
                   updatedData[index].docs[documentIndex] = actualNewValue;
                   setData(updatedData);
                 };
                 const label = document !== undefined ? document.title : "Upload File";
-                const actualValue: DocumentFileBase64 | undefined =
+                const actualValue: ISoftCopyFile | undefined =
                   document !== undefined && ((document.url !== undefined && document.url !== null) || document.path !== undefined)
                     ? document
                     : undefined;
@@ -43,11 +44,12 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
                 const checkHeader =
                   header !== undefined ? header : <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={checkName} />;
                 const checkHeaderSpace = headerSpace === false ? null : <CustomSpacer space={sh8} />;
-
+                const checkDisabled = !(isEmpty(document?.isEditable) || document?.isEditable === true);
                 return (
                   <Fragment key={documentIndex}>
                     {documentIndex === 0 ? checkHeader : checkHeaderSpace}
                     <UploadWithModal
+                      disabled={checkDisabled}
                       features={["camera", "gallery", "file"]}
                       label={label}
                       onSuccess={handleProof}

@@ -2,7 +2,9 @@ declare interface IGetHardCopyDocumentsRequest {
   orderNumber: string;
 }
 
-declare type IHardCopyFile = DocumentFileBase64 | undefined;
+declare interface IHardCopyFile extends DocumentFileBase64 {
+  isEditable: boolean;
+}
 
 declare interface IHardCopyAccount {
   joint?: IHardCopyDocument[];

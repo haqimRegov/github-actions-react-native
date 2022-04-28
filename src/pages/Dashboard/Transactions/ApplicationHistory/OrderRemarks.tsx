@@ -40,6 +40,7 @@ import {
   sw4,
   sw8,
 } from "../../../../styles";
+import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -95,7 +96,7 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
         <Text style={fs12RegBlack2}>{defaultTitle}</Text>
         <CustomSpacer space={sh4} />
         <View style={{ ...flexWrap, ...flexRow }}>
-          {remarks.map(({ isCompleted, isDisabled, title, content, documents }: IDashboardReason, index) => {
+          {remarks.map(({ isSubmitted, isDisabled, title, content, documents }: IDashboardReason, index) => {
             let count = 0;
             let itemIndex = -1;
             if (heights[index] > sh40) {
@@ -117,21 +118,21 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
               }
             }
             const disabledStyle: ViewStyle =
-              isDisabled === true || isCompleted === true
+              isDisabled === true || isSubmitted === true
                 ? {
                     ...disabledOpacity6,
                   }
                 : {};
 
-            const iconName = isCompleted === true ? "success" : "warning";
+            const iconName = isSubmitted === false ? "success" : "warning";
 
             return (
               <Fragment key={index}>
                 <View style={containerStyle}>
                   <View style={flexRow}>
-                    {title !== "Invalid Information" && title !== "Others" ? (
+                    {title === "Invalid Proof of Payment:" || title === "Invalid Documents:" || title === "Invalid Physical Documents:" ? (
                       <Fragment>
-                        {isCompleted === true ? (
+                        {isSubmitted === true ? (
                           <View>
                             <Badge icon={{ name: iconName, size: sh8 }} style={circle(sw16, colorGreen._1)}>
                               <IcoMoon color={colorWhite._1} name={iconName} size={sw16} />
@@ -161,12 +162,12 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                           })}
                         </Fragment>
                       ) : (
-                        <Text style={fs10RegGray6}>{content[0]}</Text>
+                        <Fragment>{content.length > 0 ? <Text style={fs10RegGray6}>{content[0]}</Text> : null}</Fragment>
                       )}
                     </View>
                   </View>
                   <CustomSpacer space={sh8} />
-                  {documents !== null && documents.length > 0 ? (
+                  {isNotEmpty(documents) && documents!.length > 0 ? (
                     <View
                       onLayout={(event: LayoutChangeEvent) => {
                         const { height } = event.nativeEvent.layout;
@@ -175,14 +176,14 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                         setHeights(updatedHeights);
                       }}
                       style={{ ...rowCenterVertical, ...flexWrap, ...disabledStyle }}
-                      pointerEvents={isDisabled === true || isCompleted === true ? "none" : "auto"}>
-                      {documents.map((eachProcess: IItemWithCount, eachProcessIndex: number) => {
+                      pointerEvents={isDisabled === true || isSubmitted === true ? "none" : "auto"}>
+                      {documents!.map((eachProcess: IItemWithCount, eachProcessIndex: number) => {
                         const handlePress = () => {
                           if (handleNavigation !== undefined) {
                             handleNavigation(eachProcess.document);
                           }
                         };
-                        const checkIcon = isCompleted === false || isCompleted === undefined ? "upload" : undefined;
+                        const checkIcon = isSubmitted === false || isSubmitted === undefined ? "upload" : undefined;
 
                         return (
                           <Fragment key={eachProcessIndex}>
@@ -216,7 +217,7 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                         <View style={rowCenterVertical}>
                           <Pressable onPress={handleShowAll}>
                             <View>
-                              <Text style={fs12BoldBlue1}>{`+${documents.length - itemIndex} more`}</Text>
+                              <Text style={fs12BoldBlue1}>{`+${documents!.length - itemIndex} more`}</Text>
                             </View>
                           </Pressable>
                         </View>

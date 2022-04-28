@@ -99,14 +99,16 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleShowRemarks = (item: ITableRowData) => {
-    const newSections: number[] = [...activeAccordion];
-    const sectionIndex = newSections.indexOf(item.index);
-    if (sectionIndex > -1) {
-      newSections.splice(sectionIndex, 1);
-    } else {
-      newSections.splice(0, 1, item.index);
+    if (downloadInitiated === false) {
+      const newSections: number[] = [...activeAccordion];
+      const sectionIndex = newSections.indexOf(item.index);
+      if (sectionIndex > -1) {
+        newSections.splice(sectionIndex, 1);
+      } else {
+        newSections.splice(0, 1, item.index);
+      }
+      setActiveAccordion(newSections);
     }
-    setActiveAccordion(newSections);
   };
 
   const handleOrderDetails = (item: ITableData) => {
@@ -383,7 +385,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
 
   const handleSeen = async () => {
     fetching.current = true;
-    const request: IUpdateSeenRequest = { dashboard: "dashboard", tab: ["pending"] };
+    const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: [incomplete.pill!] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
@@ -504,7 +506,9 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           rowSelection={selectableOrders as unknown as ITableData[]}
           rowSelectionKey="orderNumber"
           RenderAccordion={renderAccordion}
-          RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
+          RenderCustomItem={(data: ITableCustomItem) => (
+            <CustomTableItem {...data} downloadInitiated={downloadInitiated} sortedColumns={sortedColumns} />
+          )}
           RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
           RenderOptions={
             downloadInitiated === false

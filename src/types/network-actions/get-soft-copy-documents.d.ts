@@ -2,7 +2,9 @@ declare interface IGetSoftCopyDocumentsRequest {
   orderNumber: string;
 }
 
-declare type ISoftCopyFile = DocumentFileBase64 | undefined;
+declare interface ISoftCopyFile extends DocumentFileBase64 {
+  isEditable: boolean;
+}
 
 declare interface ISoftCopyDocument {
   docs: ISoftCopyFile[];

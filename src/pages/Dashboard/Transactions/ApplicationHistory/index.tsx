@@ -1,10 +1,9 @@
-import React, { FunctionComponent, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomFlexSpacer, CustomSpacer, Pagination, PromptModal, SelectionBanner, TabGroup } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, CustomToast, Pagination, SelectionBanner, TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
 import { RNShareApi } from "../../../../integrations";
 import { getSummaryReceipt } from "../../../../network-actions";
@@ -70,22 +69,17 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState<boolean>(false);
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
   const [downloadInitiated, setDownloadInitiated] = useState<boolean>(false);
+  const [downloadToast, setDownloadToast] = useState<boolean>(false);
 
   const tabs: TransactionsTabType[] = ["incomplete", "approved", "rejected"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
     setActiveTab(tabs[index]);
-  };
-  const handleDone = () => {
-    setPrompt(false);
-    updatedSelectedOrder([]);
-    setDownloadInitiated(false);
   };
 
   const handleNext = () => {
@@ -132,7 +126,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           if (data.result.pdf.length > 0) {
             const share = await RNShareApi.filesBase64(documents);
             if (share !== undefined) {
-              setPrompt(true);
+              setDownloadToast(true);
+              setDownloadInitiated(false);
             }
           } else {
             // setLoading(false);
@@ -206,6 +201,12 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setFilterTemp(filter);
   };
 
+  useEffect(() => {
+    if (downloadToast === false) {
+      updatedSelectedOrder([]);
+    }
+  }, [downloadToast]);
+
   const tabProps = {
     setScreen: setScreen,
     navigation: navigation,
@@ -243,7 +244,10 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     selectedOrders.length === orders.length && submittedWithHardCopyCount.length > 1
       ? `${DASHBOARD_HOME.LABEL_ALL}(${selectedOrders.length}) ${selectionText}`
       : `${selectedOrders.length} ${selectionText}`;
-  const submissionSummary = `${DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY_DOWNLOADED}`;
+  const toastText =
+    selectedOrders.length > 1
+      ? `${selectedOrders.length} ${DASHBOARD_HOME.LABEL_RECEIPTS_DOWNLOADED}`
+      : `${selectedOrders.length} ${DASHBOARD_HOME.LABEL_RECEIPT_DOWNLOADED}`;
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -325,14 +329,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           submitOnPress={handlePrintSelected}
         />
       ) : null}
-      <PromptModal
-        labelContinue={DASHBOARD_HOME.BUTTON_DONE}
-        handleContinue={handleDone}
-        illustration={LocalAssets.illustration.receiptSuccess}
-        label={submissionSummary}
-        title={DASHBOARD_HOME.LABEL_SUBMISSION_REPORT_DOWNLOADED}
-        visible={prompt}
-      />
+      <CustomToast parentVisible={downloadToast} deleteText={toastText} setParentVisible={setDownloadToast} />
     </View>
   );
 };

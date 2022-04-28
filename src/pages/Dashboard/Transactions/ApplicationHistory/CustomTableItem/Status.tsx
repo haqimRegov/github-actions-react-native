@@ -11,10 +11,11 @@ import { centerHorizontal, centerVertical, flexRow, fs10RegBlue6, sh4, sw12, sw1
 const { DASHBOARD_HOME } = Language.PAGE;
 
 interface PendingStatusProps extends ITableCustomItem {
+  downloadInitiated: boolean;
   sortedColumns: TransactionsSortColumnType[];
 }
 
-export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, item }: PendingStatusProps) => {
+export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, downloadInitiated, item }: PendingStatusProps) => {
   const { dueDate, status, withHardcopy } = item.rawData as unknown as IDashboardOrder;
   let statusColor: StatusBadgeColorType;
   if (status === DICTIONARY_ORDER_STATUS.void || status === DICTIONARY_ORDER_STATUS.rejected) {
@@ -37,7 +38,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
       <View style={{ ...flexRow, ...centerVertical }}>
         <StatusBadge color={statusColor} icon={iconName} iconSize={sw16} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
-        {accordionIcon !== undefined ? (
+        {accordionIcon !== undefined && downloadInitiated !== true ? (
           <Fragment>
             <IcoMoon {...accordionIcon} suppressHighlighting={true} />
           </Fragment>

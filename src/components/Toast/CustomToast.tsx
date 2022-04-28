@@ -187,6 +187,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
 
   const checkCountText = count !== undefined && count > 1 ? TOAST.LABEL_FUNDS_DELETED : TOAST.LABEL_FUND_DELETED;
   const defaultDeletedText = deleteText !== undefined ? deleteText : checkCountText;
+  const defaultText = deleteText !== undefined ? deleteText : TOAST.LABEL_ALL_CHANGES_SAVED;
 
   const toastContent =
     isDeleteToast !== undefined && isDeleteToast === true ? (
@@ -207,7 +208,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
     ) : (
       <View style={{ ...flexRow, ...px(sw16) }}>
         <View style={textContainerStyle}>
-          <Text style={fs12RegWhite1}>{TOAST.LABEL_ALL_CHANGES_SAVED}</Text>
+          <Text style={fs12RegWhite1}>{defaultText}</Text>
         </View>
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View style={sideContainerStyle}>

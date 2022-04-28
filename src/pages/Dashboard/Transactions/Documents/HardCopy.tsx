@@ -20,12 +20,14 @@ import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
+  alignFlexStart,
   borderBottomGray2,
   colorBlue,
   flexChild,
   fs10RegGray6,
   fs12BoldBlack2,
   fs12BoldGray6,
+  fsAlignLeft,
   px,
   sh24,
   sh32,
@@ -33,11 +35,12 @@ import {
   sh8,
   sw24,
 } from "../../../../styles";
+import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
-const { UPLOAD_DOCUMENTS, UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
+const { PAYMENT, UPLOAD_DOCUMENTS, UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
 
 interface UploadHardCopyProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
@@ -52,10 +55,43 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   const [branch, setBranch] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
   const [documentList, setDocumentList] = useState<IGetHardCopyDocumentsResult | undefined>(undefined);
+  const [backPrompt, setBackPrompt] = useState<boolean>(false);
+  const [submissionResult, setSubmissionResult] = useState<ISubmitHardCopyDocumentsResult | undefined>(undefined);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
   const handleBackToTransactions = () => {
     setScreen("Transactions");
     updateCurrentOrder(undefined);
+  };
+
+  const handleBack = () => {
+    const checkDocuments = isNotEmpty(documentList?.documents)
+      ? documentList?.documents.every((eachSection: IHardCopyDocument) =>
+          eachSection.docs.every((eachDoc: IHardCopyFile) => eachDoc?.base64 === undefined),
+        ) === false
+      : false;
+    const checkPrincipal =
+      isNotEmpty(documentList?.account) && isNotEmpty(documentList?.account.principal)
+        ? documentList?.account.principal.every((eachPrincipal: IHardCopyDocument) =>
+            eachPrincipal.docs.every((eachDoc: IHardCopyFile) => eachDoc?.base64 === undefined),
+          ) === false
+        : false;
+    const checkJoint =
+      isNotEmpty(documentList?.account) && isNotEmpty(documentList?.account.joint)
+        ? documentList?.account.joint!.every((eachPrincipal: IHardCopyDocument) =>
+            eachPrincipal.docs.every((eachDoc: IHardCopyFile) => eachDoc?.base64 === undefined),
+          ) === false
+        : false;
+    const checkEdited = checkDocuments || checkPrincipal || checkJoint;
+    if (checkEdited === true) {
+      setBackPrompt(true);
+    } else {
+      handleBackToTransactions();
+    }
+  };
+
+  const handleCancel = () => {
+    setBackPrompt(false);
   };
 
   const handleToggle = () => {
@@ -136,7 +172,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     return personalDocsWithKeys;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (confirmed?: boolean) => {
     if (fetching.current === true) {
       fetching.current = false;
     }
@@ -145,10 +181,14 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       setLoading(true);
       const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
       const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
-      const principalDocs = isNotEmpty(documentList?.account.principal)
-        ? await handleUpload(documentList?.account.principal!, "Principal")
-        : [];
-      const jointDocs = isNotEmpty(documentList?.account.joint) ? await handleUpload(documentList?.account.joint!, "Joint") : [];
+      const principalDocs =
+        isNotEmpty(documentList?.account) && isNotEmpty(documentList?.account.principal)
+          ? await handleUpload(documentList?.account.principal!, "Principal")
+          : [];
+      const jointDocs =
+        isNotEmpty(documentList?.account) && isNotEmpty(documentList?.account.joint)
+          ? await handleUpload(documentList?.account.joint!, "Joint")
+          : [];
       const fundDocs: ISubmitHardCopyDocuments[] =
         isNotEmpty(documentList?.documents) && documentList!.documents.length > 0
           ? ((await handleUpload(documentList?.documents!)) as ISubmitHardCopyDocuments[])
@@ -175,25 +215,47 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         }, 100);
       } else {
         const request: ISubmitHardCopyDocumentsRequest = {
-          orderNumber: currentOrder!.orderNumber,
           branchId: branchId,
           hardcopy: fundDocs.length > 0 ? fundDocs : [],
+          isConfirmed: confirmed === true,
+          orderNumber: currentOrder!.orderNumber,
           ...checkAccount,
         };
         const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setLoading);
-        fetching.current = false;
-        setLoading(false);
         if (response !== undefined) {
           const { data, error } = response;
           if (error === null && data !== null) {
-            if (data.result.status === true) {
-              setLoading(false);
-              setPrompt(true);
-            }
+            setSubmissionResult(data.result);
+          } else {
+            setPrompt(false);
+            setLoading(false);
+            setTimeout(() => {
+              Alert.alert(error!.message);
+            }, 100);
           }
         }
       }
     }
+    return undefined;
+  };
+
+  const handleCancelPopup = () => {
+    setSubmissionResult(undefined);
+    setLoading(false);
+  };
+
+  const handleConfirmPopup = async () => {
+    if (isConfirmed === true) {
+      return handleBack();
+    }
+
+    const response = await handleSubmit(true);
+    if (response === undefined) {
+      setIsConfirmed(true);
+      return true;
+    }
+
+    return undefined;
   };
 
   const branchList: TypeLabelValue[] =
@@ -229,48 +291,56 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       <DashboardLayout
         {...props}
         hideQuickActions={true}
-        titleIconOnPress={handleBackToTransactions}
+        titleIconOnPress={handleBack}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMISSION}
         titleIcon="arrow-left">
         <CustomSpacer space={sh24} />
-        {documentList !== undefined && fetching.current === false ? (
+        {documentList !== undefined ? (
           <Fragment>
             <View style={px(sw24)}>
-              <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_ACCOUNT} />
-              <DocumentList
-                data={documentList.account.principal}
-                header={
-                  isNotEmpty(documentList.account.joint) ? (
-                    <AccountHeader
-                      headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                      titleStyle={fs12BoldBlack2}
-                      subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
-                      title={currentOrder?.investorName.principal!}
-                      subtitleStyle={fs10RegGray6}
-                    />
-                  ) : (
-                    <View />
-                  )
-                }
-                headerSpace={false}
-                setData={handleSetPrincipalDocument}
-              />
-              {isNotEmpty(documentList.account.joint) ? (
+              {isNotEmpty(documentList.account) ? (
                 <Fragment>
-                  <CustomSpacer space={sh24} />
-                  <DocumentList
-                    data={documentList.account.joint!}
-                    setData={handleSetJointDocument}
-                    header={
-                      <AccountHeader
-                        headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                        titleStyle={fs12BoldBlack2}
-                        subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
-                        title={currentOrder?.investorName.joint!}
-                        subtitleStyle={fs10RegGray6}
+                  {isNotEmpty(documentList.account.principal) ? (
+                    <Fragment>
+                      <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_ACCOUNT} />
+                      <DocumentList
+                        data={documentList.account.principal}
+                        header={
+                          isNotEmpty(documentList.account.joint) ? (
+                            <AccountHeader
+                              headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
+                              titleStyle={fs12BoldBlack2}
+                              subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
+                              title={currentOrder?.investorName.principal!}
+                              subtitleStyle={fs10RegGray6}
+                            />
+                          ) : (
+                            <View />
+                          )
+                        }
+                        headerSpace={false}
+                        setData={handleSetPrincipalDocument}
                       />
-                    }
-                  />
+                    </Fragment>
+                  ) : null}
+                  {isNotEmpty(documentList.account.joint) ? (
+                    <Fragment>
+                      <CustomSpacer space={sh24} />
+                      <DocumentList
+                        data={documentList.account.joint!}
+                        setData={handleSetJointDocument}
+                        header={
+                          <AccountHeader
+                            headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
+                            titleStyle={fs12BoldBlack2}
+                            subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
+                            title={currentOrder?.investorName.joint!}
+                            subtitleStyle={fs10RegGray6}
+                          />
+                        }
+                      />
+                    </Fragment>
+                  ) : null}
                 </Fragment>
               ) : null}
               {isNotEmpty(documentList.documents) && documentList.documents.length > 0 ? (
@@ -316,6 +386,27 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         labelContinue={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_DONE}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}
         visible={prompt}
+      />
+      <DocumentsPopup
+        handleBack={handleBackToTransactions}
+        handleCancel={handleCancelPopup}
+        handleConfirm={handleConfirmPopup}
+        loading={loading}
+        result={submissionResult}
+        subtitle={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD}
+      />
+      <PromptModal
+        backdropOpacity={loading ? 0.4 : undefined}
+        contentStyle={alignFlexStart}
+        handleCancel={handleBackToTransactions}
+        handleContinue={handleCancel}
+        label={PAYMENT.PROMPT_TITLE_UNSAVED}
+        labelCancel={PAYMENT.BUTTON_CLOSE}
+        labelContinue={UPLOAD_DOCUMENTS.LABEL_BACK_PROMPT_CONTINUE}
+        labelStyle={fsAlignLeft}
+        title={UPLOAD_DOCUMENTS.LABEL_BACK_PROMPT_SUBTITLE}
+        titleStyle={fsAlignLeft}
+        visible={backPrompt}
       />
     </Fragment>
   );

@@ -100,7 +100,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
               <View>
                 <Text
                   numberOfLines={numberOfLines}
-                  style={{ ...fs12RegBlack2, fontFamily, lineHeight: sh24, ...disabledStyle, ...labelStyle }}>
+                  style={{ ...fs12RegBlack2, lineHeight: sh24, ...disabledStyle, ...labelStyle, fontFamily: fontFamily }}>
                   {label}
                 </Text>
                 {subLabel !== undefined ? (

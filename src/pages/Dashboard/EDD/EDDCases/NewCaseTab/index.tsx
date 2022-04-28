@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../../assets/images/LocalAssets";
@@ -14,17 +14,23 @@ import {
   centerHorizontal,
   centerHV,
   centerVertical,
+  colorBlue,
   colorWhite,
   flexChild,
   flexRow,
   fs10BoldBlue1,
   fs10RegBlue6,
+  fs12BoldGray6,
   fs12RegBlue1,
   fs12RegGray4,
+  fs12RegGray5,
   fsTransformNone,
   justifyContentStart,
   px,
+  py,
+  sh12,
   sh13,
+  sh16,
   sh18,
   sh32,
   sw103,
@@ -39,7 +45,7 @@ import {
   sw8,
   sw95,
 } from "../../../../../styles";
-import { AnimationUtils } from "../../../../../utils";
+import { AnimationUtils, isNotEmpty } from "../../../../../utils";
 import { OrderRemarks } from "../../../Transactions/ApplicationHistory/OrderRemarks";
 import { EDDCustomTableItem } from "../CustomItems";
 
@@ -89,24 +95,46 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   };
 
   const handleShowRemarks = (item: ITableRowData) => {
-    const { remark } = item.rawData as IEDDDashboardCase;
-    if (pill === "rerouted" && remark) {
-      const newSections: number[] = [...activeAccordion];
-      const sectionIndex = newSections.indexOf(item.index);
-      if (sectionIndex > -1) {
-        newSections.splice(sectionIndex, 1);
-      } else {
-        newSections.splice(0, 1, item.index);
-      }
-      setActiveAccordion(newSections);
+    const newSections: number[] = [...activeAccordion];
+    const sectionIndex = newSections.indexOf(item.index);
+    if (sectionIndex > -1) {
+      newSections.splice(sectionIndex, 1);
+    } else {
+      newSections.splice(0, 1, item.index);
     }
+    setActiveAccordion(newSections);
   };
 
   const tableAccordion = (item: ITableData) => {
-    const { remark, status } = item as IEDDDashboardCase;
+    const { label, rerouteReason, status } = item as unknown as IEDDDashboardCase;
+    const containerStyle: ViewStyle = {
+      ...px(sw16),
+      ...py(sh12),
+      backgroundColor: colorBlue._2,
+      borderBottomLeftRadius: sw8,
+      borderBottomRightRadius: sw8,
+    };
+    let rerouteData: IDashboardReason[] = [];
+    if (isNotEmpty(rerouteReason)) {
+      rerouteData = rerouteReason!.map((eachReason: IEDDReason) => {
+        return {
+          title: eachReason.title,
+          content: isNotEmpty(eachReason.remark) ? [eachReason.remark] : [],
+        };
+      });
+    }
     return (
       <Fragment>
-        {remark ? <OrderRemarks remarks={remark} remarkTitle={DASHBOARD_EDD.LABEL_REROUTE_REASON} status={status} /> : null}
+        <View style={containerStyle}>
+          <Text style={fs12BoldGray6}>{status}</Text>
+          <Text style={fs12RegGray5}>{label}</Text>
+          {isNotEmpty(rerouteReason) && rerouteReason!.length > 0 ? (
+            <Fragment>
+              <CustomSpacer space={sh16} />
+              <OrderRemarks remarkTitle={DASHBOARD_EDD.LABEL_REROUTE_REASON} remarks={rerouteData} status={status} />
+            </Fragment>
+          ) : null}
+        </View>
       </Fragment>
     );
   };
@@ -206,7 +234,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   };
 
   const handlePressCase = (item: ITableData) => {
-    updateCurrentCase(item as IEDDDashboardCase);
+    updateCurrentCase(item as unknown as IEDDDashboardCase);
     switch (pill) {
       case "submitted":
         setScreen("ViewCase");

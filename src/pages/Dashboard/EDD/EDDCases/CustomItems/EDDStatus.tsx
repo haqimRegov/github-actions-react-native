@@ -11,7 +11,7 @@ export interface EDDStatusProps extends ITableCustomItem {
 }
 
 export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, item }: EDDStatusProps) => {
-  const { remark, status } = item.rawData as IEDDDashboardCase;
+  const { status } = item.rawData as unknown as IEDDDashboardCase;
   let statusColor: StatusBadgeColorType;
   if (
     status === DICTIONARY_EDD_STATUS.overdue1 ||
@@ -32,7 +32,7 @@ export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, it
       <View style={{ ...flexRow, ...centerVertical }}>
         <StatusBadge color={statusColor} text={status} />
         <CustomSpacer isHorizontal={true} space={sw12} />
-        {accordionIcon !== undefined && remark ? (
+        {accordionIcon !== undefined ? (
           <Fragment>
             <IcoMoon {...accordionIcon} suppressHighlighting={true} />
           </Fragment>

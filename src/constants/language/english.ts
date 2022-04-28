@@ -365,10 +365,33 @@ export const english = {
     DASHBOARD_ORDER_SUMMARY: {
       TAB_ORDER_DETAILS: "Order Details",
       TAB_PROFILE: "Profile",
+      TAB_DOCUMENT: "Document",
+      TAB_TRACKING: "Tracking",
       HEADING: "Order Summary",
+    },
+    DASHBOARD_TRACKING: {
+      HEADING: "Status History Tracking",
+      LABEL_DATE: "Date",
+      LABEL_STATUS: "Status",
+      LABEL_LEVEL: "Level",
+      LABEL_REMARKS: "Remarks",
+      LABEL_SHOW_ALL: "Show All",
     },
     DASHBOARD_PAYMENT: {
       HEADING: "Upload Proof of Payment",
+    },
+    DASHBOARD_DOCUMENT: {
+      LABEL_SOFT_COPY_HEADER: "Softcopy Documents",
+      LABEL_PHYSICAL_DOCUMENTS_HEADER: "Physical Documents",
+      LABEL_FRONT_IC: "Front of NRIC",
+      LABEL_BACK_IC: "Back of NRIC",
+      LABEL_LOST_NATIONALITY: "Certificate of Lost of Nationality",
+      LABEL_SUBHEADER_ACCOUNT: "Account",
+      LABEL_W9_FORM: "W9 Form",
+      LABEL_W8_BEN_FORM: "W8 Ben Form",
+      LABEL_NRIC: "NRIC",
+      LABEL_EPF_9N_FORM: "EPF 9N Form",
+      LABEL_ACCOUNT_HOLDER: " Account Holder",
     },
     DASHBOARD_PROFILE: {
       LABEL_ACCOUNT_TYPE: "Account Type",

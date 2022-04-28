@@ -35,6 +35,13 @@ export const fs10BoldBlue1: TextStyle = {
   lineHeight: scaleHeight(10 * 1.6),
 };
 
+export const fs10BoldBlue8: TextStyle = {
+  color: colorBlue._8,
+  fontFamily: NunitoBold,
+  fontSize: sh10,
+  lineHeight: scaleHeight(10 * 1.6),
+};
+
 export const fs10BoldGray5: TextStyle = {
   color: colorGray._5,
   fontFamily: NunitoBold,

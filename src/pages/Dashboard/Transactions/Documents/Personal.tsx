@@ -10,11 +10,13 @@ import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
+  alignFlexStart,
   borderBottomGray2,
   colorBlue,
   fs10RegGray6,
   fs12BoldBlack2,
   fs16SemiBoldGray6,
+  fsAlignLeft,
   px,
   sh176,
   sh24,
@@ -23,11 +25,12 @@ import {
   sw24,
   sw68,
 } from "../../../../styles";
+import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
-const { UPLOAD_DOCUMENTS } = Language.PAGE;
+const { PAYMENT, UPLOAD_DOCUMENTS } = Language.PAGE;
 
 interface UploadDocumentsProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
@@ -40,10 +43,33 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   const [documentList, setDocumentList] = useState<IGetSoftCopyDocumentsResult | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
+  const [backPrompt, setBackPrompt] = useState<boolean>(false);
+  const [submissionResult, setSubmissionResult] = useState<ISubmitHardCopyDocumentsResult | undefined>(undefined);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
   const handleBackToTransactions = () => {
     setScreen("Transactions");
     updateCurrentOrder(undefined);
+  };
+
+  const handleBack = () => {
+    const checkEdited =
+      documentList?.principal.every((eachPrincipal: ISoftCopyDocument) =>
+        eachPrincipal.docs.every((eachDoc: ISoftCopyFile) => eachDoc?.base64 === undefined),
+      ) === false ||
+      (documentList?.joint !== undefined &&
+        documentList?.principal.every((eachPrincipal: ISoftCopyDocument) =>
+          eachPrincipal.docs.every((eachDoc: ISoftCopyFile) => eachDoc?.base64 === undefined),
+        )) === false;
+    if (checkEdited === true) {
+      setBackPrompt(true);
+    } else {
+      handleBackToTransactions();
+    }
+  };
+
+  const handleCancel = () => {
+    setBackPrompt(false);
   };
 
   const pendingDocumentsPrincipal = documentList && documentList.principal ? documentList.principal : [];
@@ -154,7 +180,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     return personalDocsWithKeys;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (confirmed?: boolean) => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
@@ -184,19 +210,17 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       );
 
       const request: ISubmitSoftCopyDocumentsRequest = {
+        joint: filteredJointWithKeys,
+        isConfirmed: confirmed === true,
         orderNumber: currentOrder!.orderNumber,
         principal: filteredPrincipalWithKeys,
-        joint: filteredJointWithKeys,
       };
       const response: ISubmitSoftCopyDocumentsResponse = await submitSoftCopyDocuments(request, navigation, setLoading);
       fetching.current = false;
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
-          if (data.result.status === true) {
-            setLoading(false);
-            setPrompt(true);
-          }
+          setSubmissionResult(data.result);
         }
         if (error !== null) {
           setPrompt(false);
@@ -210,6 +234,25 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     return undefined;
   };
 
+  const handleCancelPopup = () => {
+    setSubmissionResult(undefined);
+    setLoading(false);
+  };
+
+  const handleConfirmPopup = async () => {
+    if (isConfirmed === true) {
+      return handleBack();
+    }
+
+    const response = await handleSubmit(true);
+    if (response === undefined) {
+      setIsConfirmed(true);
+      return true;
+    }
+
+    return undefined;
+  };
+
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -220,13 +263,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       <DashboardLayout
         {...props}
         hideQuickActions={true}
-        titleIconOnPress={handleBackToTransactions}
+        titleIconOnPress={handleBack}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
         titleIcon="arrow-left">
         <View style={px(sw68)}>
           <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>
-        {documentList !== undefined && fetching.current === false ? (
+        {documentList !== undefined ? (
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
@@ -279,6 +322,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           labelSubmit={UPLOAD_DOCUMENTS.BUTTON_DONE}
         />
       ) : null}
+      <DocumentsPopup
+        handleBack={handleBackToTransactions}
+        handleCancel={handleCancelPopup}
+        handleConfirm={handleConfirmPopup}
+        loading={loading}
+        result={submissionResult}
+      />
       <PromptModal
         backdropOpacity={loading ? 0.4 : undefined}
         handleContinue={handleBackToTransactions}
@@ -287,6 +337,19 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         label={UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}
         labelContinue={UPLOAD_DOCUMENTS.BUTTON_DONE}
         visible={prompt}
+      />
+      <PromptModal
+        backdropOpacity={loading ? 0.4 : undefined}
+        contentStyle={alignFlexStart}
+        handleCancel={handleBackToTransactions}
+        handleContinue={handleCancel}
+        label={PAYMENT.PROMPT_TITLE_UNSAVED}
+        labelCancel={PAYMENT.BUTTON_CLOSE}
+        labelContinue={UPLOAD_DOCUMENTS.LABEL_BACK_PROMPT_CONTINUE}
+        labelStyle={fsAlignLeft}
+        title={UPLOAD_DOCUMENTS.LABEL_BACK_PROMPT_SUBTITLE}
+        titleStyle={fsAlignLeft}
+        visible={backPrompt}
       />
     </Fragment>
   );

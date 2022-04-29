@@ -227,7 +227,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
           <View style={containerStyle}>
             <Animatable.View
               animation={visible === true ? defaultAnimationIn : defaultAnimationOut}
-              duration={visible === true ? 1000 : 1000}
+              duration={1000}
               style={contentContainerStyle}
               onAnimationEnd={handleVisible}>
               {RenderContent !== undefined ? <RenderContent handlePress={handlePress} /> : toastContent}

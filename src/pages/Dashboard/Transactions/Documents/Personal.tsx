@@ -188,7 +188,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       let pendingDocumentsJointWithKeys: ISubmitSoftCopyDocuments[] = [];
 
       if (pendingDocumentsPrincipal.length !== 0) {
-        pendingDocumentsPrincipalWithKeys = await handleUpload(pendingDocumentsPrincipal, currentOrder!.clientId!);
+        pendingDocumentsPrincipalWithKeys = await handleUpload(pendingDocumentsPrincipal, currentOrder!.clientId);
         if (pendingDocumentsPrincipalWithKeys === undefined) {
           AlertDialog(ERRORS.storage.message, () => setLoading(false));
           return undefined;

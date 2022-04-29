@@ -90,7 +90,7 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
 
   const handleUsePreviousInfo = () => {
     const updatedPayment = { ...payment, usePreviousRecurring: !payment.usePreviousRecurring };
-    const lastAppliedInfo =
+    const updatedLastAppliedInfo =
       lastRecurringInfo !== undefined && updatedPayment.usePreviousRecurring === true
         ? {
             bankAccountName: lastRecurringInfo.bankAccountName,
@@ -99,7 +99,7 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
             recurringBank: lastRecurringInfo.recurringBank,
           }
         : generateNewInfo(updatedPayment.recurringType);
-    setPayment({ ...updatedPayment, ...lastAppliedInfo });
+    setPayment({ ...updatedPayment, ...updatedLastAppliedInfo });
   };
 
   const useRecurringLabel = recurringType === "DDA" ? PAYMENT.LABEL_USE_PREVIOUS_DDA : PAYMENT.LABEL_USE_PREVIOUS_FPX;

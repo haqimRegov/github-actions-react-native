@@ -158,14 +158,14 @@ export const QuestionWithRadioOnly: FunctionComponent<IQuestionWithRadioOnly> = 
                     tempAnswers[0].subSection !== undefined &&
                     defaultKey in tempAnswers[0].subSection
                   ) {
-                    const value = tempAnswers[0].subSection![defaultKey].answer! as string;
+                    const value = tempAnswers[0].subSection[defaultKey].answer! as string;
                     let updatedAnswer = "";
                     let checkInput: IInputValidation = { error: false, errorMessage: "" };
                     if (format !== null && format !== undefined && format.type === "amount") {
                       const cleanValue = value.replace(/[,]/g, "");
                       updatedAnswer =
                         isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === false
-                          ? (tempAnswers[0].subSection![defaultKey].answer! as string)
+                          ? (tempAnswers[0].subSection[defaultKey].answer! as string)
                           : formatAmount(cleanValue);
                       checkInput =
                         isAmount(parseFloat(cleanValue.replace(/[,]/g, "")).toString()) === true

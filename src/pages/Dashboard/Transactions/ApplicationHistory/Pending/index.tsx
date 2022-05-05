@@ -315,6 +315,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const checkStatusSort: ITransactionsSort[] =
       findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
+    const hardCopyFilter = downloadInitiated === true ? { hardcopyFilter: true } : {};
 
     const request: IDashboardRequest = {
       tab: pill!,
@@ -333,6 +334,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         ...filterAccountType,
         ...filterStatus,
       ],
+      ...hardCopyFilter,
     };
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
     if (dashboardResponse !== undefined) {
@@ -413,6 +415,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         updatedPill = "pending";
     }
     handleSeen();
+    setActiveAccordion([]);
     updateTransactions({ ...transactions, incomplete: { ...transactions.incomplete, page: 1, pages: 1, pill: updatedPill } });
   };
 
@@ -428,7 +431,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   useEffect(() => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, activeTab, sort, page, filter, pill]);
+  }, [search, activeTab, sort, page, filter, pill, downloadInitiated]);
 
   const pills: ITagData[] = [
     { text: "Pending", pillCount: incompleteCount },

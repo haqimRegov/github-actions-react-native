@@ -316,7 +316,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
 
   const handleSeen = async () => {
     setIsFetching(true);
-    const request: IUpdateSeenRequest = { dashboard: "edddashboard", tab: ["history"] };
+    const request: IUpdateSeenRequest = { dashboard: "eddDashboardV2", tab: ["history"] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;

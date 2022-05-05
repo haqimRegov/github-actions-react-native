@@ -5,6 +5,7 @@ declare interface IDashboardFilter {
 
 declare interface IDashboardRequest {
   filter: IDashboardFilter[];
+  hardcopyFilter?: boolean;
   page: number;
   search: string;
   sort: ITransactionsSort[];

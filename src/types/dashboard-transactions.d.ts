@@ -25,6 +25,7 @@ declare interface IDashboardOrder {
   createdOn: string;
   documents: IItemWithCount[];
   dueDate: string;
+  highlightedText?: string;
   investorName: {
     principal: string;
     joint: string | null;

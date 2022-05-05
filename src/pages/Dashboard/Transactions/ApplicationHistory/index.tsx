@@ -77,7 +77,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const [downloadInitiated, setDownloadInitiated] = useState<boolean>(false);
   const [downloadToast, setDownloadToast] = useState<boolean>(false);
 
-  const tabs: TransactionsTabType[] = ["incomplete", "approved", "rejected"];
+  const tabs: TransactionsTabType[] = ["incomplete", "rejected", "approved"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
@@ -294,8 +294,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
                 setActiveTab={handleTabs}
                 tabs={[
                   { badgeCount: incompleteCount, text: DASHBOARD_HOME.LABEL_PENDING },
-                  { badgeCount: approvedCount, text: DASHBOARD_HOME.LABEL_APPROVED },
                   { badgeCount: rejectedCount, text: DASHBOARD_HOME.LABEL_REJECTED },
+                  { badgeCount: approvedCount, text: DASHBOARD_HOME.LABEL_APPROVED },
                 ]}
               />
               <View style={{ ...flexRow, ...flexChild, ...borderBottomGray2 }}>

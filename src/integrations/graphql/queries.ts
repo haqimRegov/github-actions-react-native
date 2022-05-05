@@ -23,6 +23,7 @@ const dashboard = gql`
               }
             }
             label
+            highlightedText
             documents {
               document
               count

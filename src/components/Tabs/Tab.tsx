@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { centerHV, colorBlue, colorRed, flexRow, fs16SemiBoldBlue1, fs16SemiBoldBlue5, sh48, sw2, sw24, sw8 } from "../../styles";
@@ -8,7 +8,6 @@ import { CustomSpacer } from "../Views";
 export interface TabProps {
   badgeCount?: number;
   onPress?: () => void;
-  right?: ReactNode;
   selected?: boolean;
   spaceToRight?: number;
   style?: ViewStyle;

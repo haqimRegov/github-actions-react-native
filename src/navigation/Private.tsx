@@ -102,7 +102,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   }, [inactivityStatus]);
 
   useEffect(() => {
-    if (props.events !== undefined && props.events.findIndex((event) => event.eventName === "isMultiUtmc") !== -1) {
+    if (props.events !== undefined && props.events.findIndex(({ eventName }) => eventName === "isMultiUtmc") !== -1) {
       setEventPrompt(true);
     }
   }, [props.events]);
@@ -113,7 +113,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
       ? INACTIVITY.LABEL_SIGN_IN
       : `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
 
-  const isMultiUtmcEvent = props.events !== undefined ? props.events.findIndex((event) => event.eventName === "isMultiUtmc") : -1;
+  const isMultiUtmcEvent = props.events !== undefined ? props.events.findIndex(({ eventName }) => eventName === "isMultiUtmc") : -1;
 
   let event = {
     checkbox: "",

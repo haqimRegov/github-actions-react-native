@@ -174,11 +174,11 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       const filteredPayments = updatedProofOfPayments.payments.filter((eachPOP) => {
         const deleteCondition =
           (eachPOP.ctaTag === undefined && eachPOP.ctaParent !== action.paymentId) ||
-          (eachPOP.ctaTag !== undefined && eachPOP.ctaTag!.uuid !== action.paymentId);
+          (eachPOP.ctaTag !== undefined && eachPOP.ctaTag.uuid !== action.paymentId);
         const updateCondition =
           (eachPOP.ctaTag === undefined && eachPOP.ctaParent === action.paymentId) ||
           (eachPOP.ctaTag === undefined && eachPOP.paymentId !== action.paymentId) ||
-          (eachPOP.ctaTag !== undefined && eachPOP.ctaTag!.uuid !== action.paymentId) ||
+          (eachPOP.ctaTag !== undefined && eachPOP.ctaTag.uuid !== action.paymentId) ||
           (action.mode === "cta" &&
             eachPOP.ctaTag === undefined &&
             eachPOP.ctaParent === undefined &&

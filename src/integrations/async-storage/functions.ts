@@ -32,8 +32,6 @@ export const removeStorageData = async (key: string) => {
     Alert.alert("Error", error);
     return false;
   }
-
-  return false;
 };
 
 export const clearStorage = async () => {

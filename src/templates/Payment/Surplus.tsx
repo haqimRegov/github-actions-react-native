@@ -93,8 +93,8 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
     let newAvailableBalance: IPaymentInfo[];
     // toggle use of surplus
     if (payment.tag === undefined || (payment.tag !== undefined && payment.tag.uuid !== surplus.parent)) {
-      const currencyInvestedAmount = getAmount(totalInvestment, surplus.excess!.currency as TypeCurrency);
-      const currencyPaidAmount = getAmount(existingPaidAmount, surplus.excess!.currency as TypeCurrency);
+      const currencyInvestedAmount = getAmount(totalInvestment, surplus.excess!.currency);
+      const currencyPaidAmount = getAmount(existingPaidAmount, surplus.excess!.currency);
       const pendingCurrencyAmount = currencyInvestedAmount - parseAmount(currencyPaidAmount.toString());
       const paymentInfo = deleteKey(surplus, ["orderNumber", "excess", "paymentId"]);
       const cleanPaymentInfo = Object.fromEntries(Object.entries(paymentInfo).filter(([_, field]) => field != null));
@@ -146,7 +146,7 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
       );
     }
     const checkSurplusSame =
-      oldPayment.tag !== undefined && newPaymentInfo.tag !== undefined && isObjectEqual(oldPayment.tag!, newPaymentInfo.tag!);
+      oldPayment.tag !== undefined && newPaymentInfo.tag !== undefined && isObjectEqual(oldPayment.tag, newPaymentInfo.tag);
     if (checkSurplusSame === true) {
       handleUnsaved(-1);
     } else {
@@ -198,7 +198,7 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
 
     const newPaymentInfo = { ...cleanInfo, ...ctaInfo };
     const checkCtaSame =
-      oldPayment.ctaTag !== undefined && newPaymentInfo.ctaTag !== undefined && isObjectEqual(oldPayment.ctaTag!, newPaymentInfo.ctaTag!);
+      oldPayment.ctaTag !== undefined && newPaymentInfo.ctaTag !== undefined && isObjectEqual(oldPayment.ctaTag, newPaymentInfo.ctaTag);
     if (checkCtaSame === true) {
       handleUnsaved(-1);
     } else {

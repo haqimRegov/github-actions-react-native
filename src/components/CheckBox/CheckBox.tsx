@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { ColorValue, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { NunitoBold, NunitoRegular } from "../../constants";
 import { IcoMoon } from "../../icons";
@@ -40,7 +40,7 @@ export interface CheckBoxProps {
   subLabelStyle?: TextStyle;
   style?: ViewStyle;
   toggle: boolean;
-  toggleColor?: string;
+  toggleColor?: ColorValue;
 }
 export const CheckBox: FunctionComponent<CheckBoxProps> = ({
   boxStyle,

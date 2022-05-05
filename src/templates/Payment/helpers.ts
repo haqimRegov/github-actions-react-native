@@ -225,12 +225,12 @@ export const generatePaymentWithKeys = async (
           ) {
             let proofWithUrl: FileBase64 | undefined;
             if (paymentType === "Cash" && paymentInfo.proof?.base64 !== undefined && paymentInfo.tag === undefined) {
-              const url = S3UrlGenerator.payment(clientId!, orderNumber, paymentType, paymentInfo.paymentMethod!, paymentInfo.proof!.type);
-              const uploadedFile = await StorageUtil.put(paymentInfo.proof!.path!, url, paymentInfo.proof!.type);
+              const url = S3UrlGenerator.payment(clientId, orderNumber, paymentType, paymentInfo.paymentMethod, paymentInfo.proof.type);
+              const uploadedFile = await StorageUtil.put(paymentInfo.proof.path!, url, paymentInfo.proof.type);
               if (uploadedFile === undefined) {
                 throw ERRORS.storage;
               }
-              proofWithUrl = { ...paymentInfo.proof!, url: uploadedFile.key ? uploadedFile.key : undefined, base64: undefined };
+              proofWithUrl = { ...paymentInfo.proof, url: uploadedFile.key ? uploadedFile.key : undefined, base64: undefined };
             }
 
             const dynamicKeys: TPaymentInfoKey[] = [];
@@ -297,8 +297,8 @@ export const generatePaymentWithKeys = async (
 
             const updatedPaymentInfo = {
               ...cleanPaymentInfo,
-              amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
-              currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
+              amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount),
+              currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency,
               transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
               proof: paymentInfo.tag !== undefined ? undefined : proofWithUrl, // proof not needed for use of surplus
               ...optimizedTag,
@@ -492,13 +492,13 @@ export const validateAmount = (payment: IPaymentInfo) => {
 };
 
 export const validateCtaNumber = (payment: IPaymentInfo) => {
-  return isAlphaNumeric(payment.clientTrustAccountNumber!) === false || payment.clientTrustAccountNumber.length !== 9
+  return isAlphaNumeric(payment.clientTrustAccountNumber) === false || payment.clientTrustAccountNumber.length !== 9
     ? ERROR.INVALID_CTA_NUMBER
     : undefined;
 };
 
 export const validateChequeNumber = (payment: IPaymentInfo) => {
-  return isNumber(payment.checkNumber!) === false ? ERROR.INVALID_CHEQUE_NUMBER : undefined;
+  return isNumber(payment.checkNumber) === false ? ERROR.INVALID_CHEQUE_NUMBER : undefined;
 };
 
 export const updateCtaUsedBy = (latestCtaDetails: TypeCTADetails[], latestPayment: IPaymentInfo) => {
@@ -529,7 +529,7 @@ export const updateCtaUsedBy = (latestCtaDetails: TypeCTADetails[], latestPaymen
 export const filterDeletedSavedChild = (latestPayments: IPaymentInfo[], currentIndex: number, oldPaymentId?: string | number) => {
   const paymentId = oldPaymentId !== undefined ? oldPaymentId : latestPayments[currentIndex].paymentId;
   const filtered = latestPayments
-    .filter((eachPOP) => eachPOP.isEditable === true && eachPOP.ctaTag !== undefined && eachPOP.ctaTag!.uuid === paymentId)
+    .filter((eachPOP) => eachPOP.isEditable === true && eachPOP.ctaTag !== undefined && eachPOP.ctaTag.uuid === paymentId)
     .map((eachFilteredPOP: IPaymentInfo) => ({
       ...eachFilteredPOP,
       action: { id: eachFilteredPOP.paymentId!, option: "delete" as TypePaymentInfoActionOption },

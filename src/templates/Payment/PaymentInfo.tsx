@@ -363,11 +363,11 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const labelAmount =
     availableExcess > 0 && matchedSurplus !== undefined ? `${matchedSurplus.excess!.currency} ${formatAmount(availableExcess)}.` : "";
 
-  const noExcessPromptTitle = `${PAYMENT.PROMPT_SUBTITLE_ORDER} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
+  const noExcessPromptTitle = `${PAYMENT.PROMPT_SUBTITLE_ORDER} ${matchedSurplus !== undefined ? matchedSurplus.orderNumber : ""} ${
     PAYMENT.PROMPT_SUBTITLE_NO_SURPLUS
   }`;
 
-  const withExcessPromptTitle = `${PAYMENT.PROMPT_SUBTITLE_ORDER} ${matchedSurplus !== undefined ? matchedSurplus!.orderNumber : ""} ${
+  const withExcessPromptTitle = `${PAYMENT.PROMPT_SUBTITLE_ORDER} ${matchedSurplus !== undefined ? matchedSurplus.orderNumber : ""} ${
     PAYMENT.PROMPT_SUBTITLE_WITH_SURPLUS
   } ${labelAmount}`;
 
@@ -392,8 +392,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
       kibBankName: filteredKibAccount[0].bankName,
       kibBankAccountNumber: filteredKibAccount[0].bankAccountNumber,
       ...blankCheque,
-      paymentMethod:
-        value !== "MYR" && draftPayment.paymentMethod! === "Cheque" ? "Online Banking / TT / ATM" : draftPayment.paymentMethod!,
+      paymentMethod: value !== "MYR" && draftPayment.paymentMethod === "Cheque" ? "Online Banking / TT / ATM" : draftPayment.paymentMethod,
     };
 
     setDraftPayment(updatedPayments);
@@ -643,7 +642,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   };
 
   const secondaryButton: NewActionButtonProps | undefined =
-    draftPayment.paymentMethod! === "EPF" || draftPayment.paymentMethod! === "Recurring"
+    draftPayment.paymentMethod === "EPF" || draftPayment.paymentMethod === "Recurring"
       ? undefined
       : {
           buttonStyle: { backgroundColor: colorBlue._2, borderStyle: "dashed", borderColor: colorBlue._1_8 },
@@ -664,7 +663,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     />,
     <View>
       <CustomTextInput
-        disabled={draftPayment.paymentMethod! === "EPF"}
+        disabled={draftPayment.paymentMethod === "EPF"}
         error={error.amount}
         inputPrefix={draftPayment.currency}
         keyboardType="numeric"
@@ -735,8 +734,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         }
       }
       // To check if we have edited the POP but went back to using the same surplus. No need to show modal.
-      const checkSurplusSame =
-        payment.tag !== undefined && draftPayment.tag !== undefined && isObjectEqual(draftPayment.tag!, payment.tag!);
+      const checkSurplusSame = payment.tag !== undefined && draftPayment.tag !== undefined && isObjectEqual(draftPayment.tag, payment.tag);
       const recurringAmount = payment.paymentType === "Recurring" ? totalInvestment[0].amount : "";
       const dummyDefaultInfo = generateNewInfo(
         payment.paymentType,
@@ -943,11 +941,11 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         <View style={promptStyle}>
           <Text style={fs16RegGray6}>
             {PAYMENT.PROMPT_SUBTITLE_CTA}
-            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta!.clientTrustAccountNumber : ""} `}</Text>
+            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta.clientTrustAccountNumber : ""} `}</Text>
             {PAYMENT.PROMPT_SUBTITLE_MATCHES_CTA}
-            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta!.orderNumber : ""} `}</Text>
+            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta.orderNumber : ""} `}</Text>
             {PAYMENT.PROMPT_SUBTITLE_CLIENT_NAME}
-            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta!.clientName : ""}.`}</Text>
+            <Text style={fs16BoldGray6}>{` ${matchedCta !== undefined ? matchedCta.clientName : ""}.`}</Text>
             {ctaUseSubtitle}
           </Text>
         </View>

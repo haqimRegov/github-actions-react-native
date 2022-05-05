@@ -26,8 +26,8 @@ export const PaymentProof: FunctionComponent<PaymentProofProps> = ({ payment, se
 
   return (
     <View style={container}>
-      {paymentMethod! === "EPF" ||
-      paymentMethod! === "Recurring" ||
+      {paymentMethod === "EPF" ||
+      paymentMethod === "Recurring" ||
       tag !== undefined ||
       proof === null ||
       isEditable === false ||

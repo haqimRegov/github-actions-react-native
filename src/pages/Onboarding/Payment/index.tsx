@@ -173,7 +173,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const pendingLength =
     tempData !== undefined && tempData.length > 0
-      ? [...tempData!].filter((eachPayment: IPaymentRequired) => eachPayment.status !== "Completed").length
+      ? [...tempData].filter((eachPayment: IPaymentRequired) => eachPayment.status !== "Completed").length
       : 0;
   const completedLength =
     tempData !== undefined && tempData.length > 0
@@ -210,7 +210,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const continueDisabled =
     tempData !== undefined &&
-    tempData!.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
+    tempData.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
 
   useEffect(() => {
     if (deleteCount === 0) {
@@ -328,7 +328,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 <PaymentBannerContent
                   balancePayments={updatedBalancePayments}
                   excessPayments={completedCurrencies}
-                  grandTotal={grandTotal!.grandTotal}
+                  grandTotal={grandTotal.grandTotal}
                   grandTotalRecurring={grandTotal?.grandTotalRecurring}
                   paymentType={"Cash"}
                 />

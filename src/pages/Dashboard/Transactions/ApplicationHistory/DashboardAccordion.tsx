@@ -3,7 +3,7 @@ import { LayoutChangeEvent, Pressable, Text, View, ViewStyle } from "react-nativ
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { CustomFlexSpacer, CustomSpacer, OutlineButton } from "../../../../components";
-import { Language } from "../../../../constants";
+import { Language, NunitoBold } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
   alignSelfEnd,
@@ -56,7 +56,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
   setOrderSummaryActiveTab,
   setScreen,
 }: IDashboardAccordionProps) => {
-  const { documents, reason, status, label } = item;
+  const { documents, highlightedText, reason, status, label, withHardcopy } = item;
   const [itemWidths, setItemWidths] = useState<number[]>([]);
   const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -95,6 +95,58 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
     setCurrentOrder(item);
     setOrderSummaryActiveTab("tracking");
     setScreen("OrderSummary");
+  };
+
+  const formattedLabel = () => {
+    switch (status) {
+      case "Submitted":
+        if (withHardcopy === true) {
+          return (
+            <View>
+              <View style={flexRow}>
+                <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_SUBMITTED_SUBTITLE_1}</Text>
+                <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{highlightedText}</Text>
+                <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_REROUTED_SUBTITLE_2}</Text>
+              </View>
+              <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_SUBMITTED_SUBTITLE_2}</Text>
+            </View>
+          );
+        }
+        return null;
+      case "BR - Rerouted":
+      case "HQ - Rerouted":
+        if (reason.filter((eachReason: IDashboardReason) => eachReason.title === "Invalid Physical Documents:").length > 0) {
+          return (
+            <View>
+              <View style={flexRow}>
+                <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_REROUTED_SUBTITLE_1}</Text>
+                <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{highlightedText}</Text>
+              </View>
+              <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_REROUTED_SUBTITLE_2}</Text>
+            </View>
+          );
+        }
+        return null;
+      case "Completed":
+        return (
+          <View style={flexRow}>
+            <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_COMPLETED_SUBTITLE}</Text>
+            <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{highlightedText}</Text>
+          </View>
+        );
+      case "Void":
+        return (
+          <View>
+            <View style={flexRow}>
+              <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{DASHBOARD_HOME.LABEL_VOID_SUBTITLE_1}</Text>
+              <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_VOID_SUBTITLE_2}</Text>
+            </View>
+            <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_VOID_SUBTITLE_3}</Text>
+          </View>
+        );
+      default:
+        return <View />;
+    }
   };
 
   const handleShowAll = () => {
@@ -140,7 +192,11 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
         <View style={flexRow}>
           <View style={{ maxWidth: sw648 }}>
             <Text style={fs12BoldGray6}>{status}</Text>
-            <Text style={fs12RegGray5}>{label}</Text>
+            {(isNotEmpty(highlightedText) && highlightedText !== "") || status === "Void" ? (
+              formattedLabel()
+            ) : (
+              <Text style={fs12RegGray5}>{label}</Text>
+            )}
           </View>
           {status !== "Pending Payment" &&
           status !== "Pending Doc & Payment" &&

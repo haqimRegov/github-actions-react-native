@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, TextCard } from "../../../../components";
+import { CustomSpacer, TextCard, TextSpaceArea } from "../../../../components";
 import { Language, PAYMENT_DATE_FORMAT } from "../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
@@ -16,6 +16,7 @@ import {
   fs12RegGray5,
   fs14RegGray6,
   fs18BoldBlack2,
+  fs18BoldBlue1,
   fsTransformNone,
   px,
   rowCenterVertical,
@@ -26,8 +27,7 @@ import {
   sw16,
   sw24,
   sw32,
-  sw40,
-  sw56,
+  sw328,
   sw64,
   sw8,
 } from "../../../../styles";
@@ -90,15 +90,22 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
 
   return (
     <Fragment>
-      <CustomSpacer space={sh32} />
-      <View style={px(sw56)}>
-        <TextCard data={transactionSummaryDetails} spaceBetweenItem={sw64} />
+      <View style={px(sw24)}>
+        <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlue1} text={DASHBOARD_ORDER_DETAILS.TITLE_SALES} />
+        <View style={px(sw32)}>
+          <TextCard data={transactionSummaryDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+        </View>
       </View>
       <CustomSpacer space={sh16} />
       <View style={borderBottomBlue3} />
       <Fragment>
-        <CustomSpacer space={sh32} />
         <View style={px(sw24)}>
+          <TextSpaceArea
+            spaceToBottom={sh16}
+            spaceToTop={sh32}
+            style={fs18BoldBlue1}
+            text={DASHBOARD_ORDER_DETAILS.TITLE_INVESTMENT_SUMMARY}
+          />
           {investmentSummary.map((investment: IOrderSummaryInvestment, index: number) => {
             const amountLabel = DASHBOARD_ORDER_DETAILS.LABEL_INVESTMENT_AMOUNT;
             const fundDetails: LabeledTitleProps[] = [
@@ -141,7 +148,6 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
               <Fragment key={index}>
                 {index === 0 ? null : <CustomSpacer space={sh16} />}
                 <View style={flexRow}>
-                  <CustomSpacer isHorizontal={true} space={sw8} />
                   <IcoMoon color={colorBlue._1} name="fund" size={sw24} />
                   <CustomSpacer isHorizontal={true} space={sw8} />
                   <View style={flexChild}>
@@ -156,8 +162,8 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   </View>
                 </View>
                 <CustomSpacer space={sh24} />
-                <View style={px(sw40)}>
-                  <TextCard data={fundDetails} spaceBetweenItem={sw64} />
+                <View style={px(sw32)}>
+                  <TextCard data={fundDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
                 </View>
               </Fragment>
             );
@@ -168,18 +174,18 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
         <Fragment>
           <CustomSpacer space={sh16} />
           <View style={borderBottomBlue3} />
-          {paymentSummary[0].paymentMethod === "EPF" ? (
-            <View style={px(sw24)}>
-              <CustomSpacer space={sh32} />
-              <Text style={fs18BoldBlack2}>{DASHBOARD_PROFILE.TITLE_EPF_DETAILS}</Text>
-              <CustomSpacer space={sh16} />
-              <View style={px(sw32)}>
-                <TextCard data={epfHeader} spaceBetweenItem={sw64} />
-              </View>
-              <CustomSpacer space={sh16} />
-            </View>
-          ) : null}
           <View style={px(sw24)}>
+            <TextSpaceArea spaceToTop={sh32} style={fs18BoldBlue1} text={DASHBOARD_ORDER_DETAILS.TITLE_PAYMENT_SUMMARY} />
+            {paymentSummary[0].paymentMethod === "EPF" ? (
+              <Fragment>
+                <CustomSpacer space={sh16} />
+                <Text style={fs18BoldBlack2}>{DASHBOARD_PROFILE.TITLE_EPF_DETAILS}</Text>
+                <CustomSpacer space={sh16} />
+                <View style={px(sw32)}>
+                  <TextCard data={epfHeader} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                </View>
+              </Fragment>
+            ) : null}
             {paymentSummary.map((payment: IOrderSummaryPayment, index: number) => {
               const surplusLabel = payment.surplusNote !== null ? payment.surplusNote : "";
               const paymentNormalLabel =
@@ -344,11 +350,10 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   },
                 );
               }
-              const topSpace = paymentSummary[0].paymentMethod === "EPF" && index === 0 ? sh16 : sh32;
 
               return (
                 <Fragment key={index}>
-                  <CustomSpacer space={topSpace} />
+                  <CustomSpacer space={sh16} />
                   <View style={{ ...flexRow, ...centerVertical }}>
                     <IcoMoon color={colorBlue._1} name="payment" size={sw24} />
                     <CustomSpacer isHorizontal={true} space={sw8} />
@@ -368,7 +373,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   </View>
                   <CustomSpacer space={sh16} />
                   <View style={px(sw32)}>
-                    <TextCard data={paymentDetails} spaceBetweenItem={sw64} />
+                    <TextCard data={paymentDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
                   </View>
                 </Fragment>
               );

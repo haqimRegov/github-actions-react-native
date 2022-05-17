@@ -15,5 +15,5 @@ declare interface IExpiredPasswordHeader {
 declare type IExpiredPasswordResponse = IQueryResponse<IExpiredPasswordResult> | undefined;
 
 declare interface IExpiredPasswordQuery {
-  ChangePassword: IExpiredPasswordResponse;
+  expiredChangePassword: IExpiredPasswordResponse;
 }

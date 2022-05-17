@@ -152,7 +152,6 @@ export const InvestorListFilter: FunctionComponent<AllInvestorsFilterProps> = ({
           />
         </View>
       </View>
-      <CustomSpacer space={sh24} />
     </View>
   );
 };

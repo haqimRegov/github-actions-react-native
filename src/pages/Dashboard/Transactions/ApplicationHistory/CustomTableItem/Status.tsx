@@ -6,7 +6,7 @@ import { CustomSpacer, StatusBadge, StatusBadgeColorType } from "../../../../../
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
-import { centerHorizontal, centerVertical, flexRow, fs10RegBlue6, sh4, sw12, sw16 } from "../../../../../styles";
+import { centerHorizontal, centerVertical, flexRow, fs10RegBlue6, sh4, sw16, sw8 } from "../../../../../styles";
 import { isNotEmpty } from "../../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
@@ -38,7 +38,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
     <View style={centerHorizontal}>
       <View style={{ ...flexRow, ...centerVertical }}>
         <StatusBadge color={statusColor} icon={iconName} iconSize={sw16} text={status} />
-        <CustomSpacer isHorizontal={true} space={sw12} />
+        <CustomSpacer isHorizontal={true} space={sw8} />
         {accordionIcon !== undefined && downloadInitiated !== true ? (
           <Fragment>
             <IcoMoon {...accordionIcon} suppressHighlighting={true} />

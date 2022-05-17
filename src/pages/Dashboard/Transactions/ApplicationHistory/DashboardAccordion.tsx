@@ -8,7 +8,7 @@ import { IcoMoon } from "../../../../icons";
 import {
   alignSelfEnd,
   border,
-  borderBottomGray2,
+  borderBottomGray3,
   centerHV,
   colorBlue,
   colorRed,
@@ -219,7 +219,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
         <CustomSpacer space={sh16} />
         {isNotEmpty(documents) && documents!.length > 0 ? (
           <View>
-            <View style={borderBottomGray2} />
+            <View style={borderBottomGray3} />
             <CustomSpacer space={sh16} />
             <Text style={fs12RegGray6}>{itemsLabel}</Text>
             <CustomSpacer space={sh8} />

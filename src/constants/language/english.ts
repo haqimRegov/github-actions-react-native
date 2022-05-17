@@ -370,6 +370,9 @@ export const english = {
       LABEL_TRANSACTION_TIME: "Transaction Time",
       LABEL_TYPE: "Type",
       LABEL_UTMC: "UTMC",
+      TITLE_INVESTMENT_SUMMARY: "Investment Summary",
+      TITLE_PAYMENT_SUMMARY: "Payment Summary",
+      TITLE_SALES: "Sales - Account Opening",
     },
     DASHBOARD_ORDER_SUMMARY: {
       TAB_ORDER_DETAILS: "Order Details",

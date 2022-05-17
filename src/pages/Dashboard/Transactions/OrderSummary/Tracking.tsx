@@ -7,20 +7,24 @@ import { Language } from "../../../../constants";
 import { RNInAppBrowser } from "../../../../integrations/react-native-inapp-browser-reborn";
 import { orderTrackingSummary } from "../../../../network-actions";
 import {
-  colorBlack,
+  colorBlue,
   flexRow,
-  fs12BoldGray5,
+  fs10BoldGray6,
+  fs12RegBlue1,
   fs24BoldBlue1,
   fsTransformNone,
   px,
   sh24,
+  sh64,
   sw1,
   sw104,
+  sw11,
   sw120,
   sw16,
   sw186,
   sw24,
   sw376,
+  sw96,
 } from "../../../../styles";
 import { CustomTableItem } from "./CustomTableItem";
 
@@ -34,7 +38,7 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
   const fetching = useRef<boolean>(false);
   const { trackingSummary, orderNumber } = data;
   // button styling
-  const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sw24, width: "auto" };
+  const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: sw96 };
 
   // handle Export pdf
   const handleExportPDF = async () => {
@@ -61,19 +65,23 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
 
   // table columns
   const columns: ITableColumn[] = [
-    { customItem: true, key: [{ key: "createdOn" }], title: DASHBOARD_TRACKING.LABEL_DATE, viewStyle: { width: sw120 } },
+    {
+      customItem: true,
+      key: [{ key: "createdOn" }],
+      title: DASHBOARD_TRACKING.LABEL_DATE,
+      viewStyle: { width: sw120, ...px(sw16) },
+    },
     {
       customItem: true,
       key: [{ key: "status" }],
       title: DASHBOARD_TRACKING.LABEL_STATUS,
       viewStyle: { width: sw186 },
-      textStyle: { fontWeight: "normal" },
     },
     {
       key: [{ key: "level" }],
       title: DASHBOARD_TRACKING.LABEL_LEVEL,
       viewStyle: { width: sw104 },
-      textStyle: { fontWeight: "normal", ...fsTransformNone },
+      textStyle: { ...fsTransformNone, ...fs12RegBlue1 },
     },
     { customItem: true, key: [{ key: "remark" }], title: DASHBOARD_TRACKING.LABEL_REMARKS, viewStyle: { width: sw376 } },
   ];
@@ -90,21 +98,24 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
           <CustomFlexSpacer />
           <View>
             <RoundedButton
-              text="Export PDF"
-              onPress={handleExportPDF}
-              textStyle={fs12BoldGray5}
-              secondary={true}
               buttonStyle={buttonStyle}
               icon="export"
-              iconColor={colorBlack._2}
+              iconColor={colorBlue._1}
+              iconSize={sw11}
+              onPress={handleExportPDF}
+              secondary={true}
+              text="Export PDF"
+              textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
             />
           </View>
         </View>
+        <CustomSpacer space={sh24} />
         {/* table */}
         <AdvanceTable
           data={trackingSummary}
           columns={columns}
           RenderCustomItem={(tableData: ITableCustomItem) => <CustomTableItem {...tableData} sortedColumns={[]} />}
+          rowContainerStyle={{ minHeight: sh64 }}
         />
       </View>
     </Fragment>

@@ -4,6 +4,7 @@ import { PAYMENT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
 import { fsTransformNone, fsUppercase, sh4, sw200 } from "../styles";
+import { isNotEmpty } from "./Value";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;
 
@@ -268,6 +269,66 @@ export const structureProfile = (
     });
   }
 
+  const permanentAddressLabel =
+    addressInformation!.permanentAddress!.address!.line2 !== undefined || addressInformation!.permanentAddress!.address!.line3 !== undefined
+      ? `${DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} 1`
+      : DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS;
+
+  const permanentAddressSummary: LabeledTitleProps[] = [
+    { label: permanentAddressLabel, title: addressInformation!.permanentAddress!.address!.line1!, titleStyle: fsTransformNone },
+    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: addressInformation!.permanentAddress!.postCode! },
+    { label: DASHBOARD_PROFILE.LABEL_CITY, title: addressInformation!.permanentAddress!.city! },
+    { label: DASHBOARD_PROFILE.LABEL_STATE, title: addressInformation!.permanentAddress!.state! },
+    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: addressInformation!.permanentAddress!.country! },
+  ];
+
+  if (isNotEmpty(addressInformation!.permanentAddress!.address!.line2)) {
+    permanentAddressSummary.splice(1, 0, {
+      label: `${DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} 2`,
+      title: addressInformation!.permanentAddress!.address!.line2!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  if (isNotEmpty(addressInformation!.permanentAddress!.address!.line3)) {
+    const index = addressInformation!.permanentAddress!.address!.line2 !== undefined ? 2 : 1;
+    permanentAddressSummary.splice(index, 0, {
+      label: `${DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} 3`,
+      title: addressInformation!.permanentAddress!.address!.line3!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  const mailingAddressLabel =
+    addressInformation!.mailingAddress!.address!.line2 !== undefined || addressInformation!.mailingAddress!.address!.line3 !== undefined
+      ? `${DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 1`
+      : DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS;
+
+  const mailingAddressSummary: LabeledTitleProps[] = [
+    { label: mailingAddressLabel, title: addressInformation!.mailingAddress!.address!.line1!, titleStyle: fsTransformNone },
+    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
+    { label: DASHBOARD_PROFILE.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
+    { label: DASHBOARD_PROFILE.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
+    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
+  ];
+
+  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
+    mailingAddressSummary.splice(1, 0, {
+      label: `${DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 2`,
+      title: addressInformation!.mailingAddress!.address!.line2!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
+  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
+    const index = addressInformation!.mailingAddress!.address!.line2 !== undefined ? 2 : 1;
+    mailingAddressSummary.splice(index, 0, {
+      label: `${DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 3`,
+      title: addressInformation!.mailingAddress!.address!.line3!,
+      titleStyle: fsTransformNone,
+    });
+  }
+
   const structuredData: IStructuredData = {
     accountSummaryDetails: accountSummaryDetails,
     contactDetails: contactSummary,
@@ -280,8 +341,8 @@ export const structureProfile = (
     epfDetails: epfSummary,
     foreignBankDetails: foreignBankDetails,
     localBankDetails: localBankDetails,
-    mailingAddress: addressInformation.mailingAddress,
-    permanentAddress: addressInformation.permanentAddress,
+    mailingAddress: mailingAddressSummary,
+    permanentAddress: permanentAddressSummary,
     accountDocuments: uploadedDocuments,
     showJointToggle: showJointToggle !== undefined ? showJointToggle : true,
   };

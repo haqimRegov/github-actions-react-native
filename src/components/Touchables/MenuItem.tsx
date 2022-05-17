@@ -9,7 +9,7 @@ import {
   colorWhite,
   flexRow,
   fs10RegBlue6,
-  fs16BoldBlue1,
+  fs14BoldGray6,
   px,
   sh32,
   sh56,
@@ -62,7 +62,7 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
   };
   const textColor = color ? { color: color } : {};
   const defaultTitleStyle: TextStyle = {
-    ...fs16BoldBlue1,
+    ...fs14BoldGray6,
     color: selectedColor,
     ...textColor,
     ...titleStyle,

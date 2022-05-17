@@ -5,7 +5,6 @@ import { CustomFlexSpacer, CustomSpacer, TextCard } from "../../../../components
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
-  autoWidth,
   borderBottomBlue3,
   borderBottomBlue5,
   borderBottomRed1,
@@ -24,8 +23,7 @@ import {
   sw16,
   sw24,
   sw32,
-  sw36,
-  sw40,
+  sw328,
   sw56,
   sw64,
   sw8,
@@ -112,7 +110,7 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
 
                   {/* displaying the text card */}
                   <View style={px(sw32)}>
-                    <TextCard data={updatedData} spaceBetweenItem={sw64} />
+                    <TextCard data={updatedData} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
                   </View>
                 </Fragment>
               );
@@ -166,8 +164,8 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
                             </View>
                           </View>
                           <CustomSpacer space={sh24} />
-                          <View style={px(sw40)}>
-                            <TextCard data={updatedData} spaceBetweenItem={sw64} />
+                          <View style={px(sw32)}>
+                            <TextCard data={updatedData} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
                           </View>
                         </Fragment>
                       ) : null}
@@ -224,9 +222,9 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
                           ) : null}
 
                           {/* displaying the text card  */}
-                          <View style={px(sw36)}>
+                          <View style={px(sw32)}>
                             {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
-                            <TextCard data={updatedData} spaceBetweenItem={sw32} itemStyle={autoWidth} />
+                            <TextCard data={updatedData} spaceBetweenItem={sw32} itemStyle={{ width: sw328 }} />
                           </View>
                         </View>
                       );

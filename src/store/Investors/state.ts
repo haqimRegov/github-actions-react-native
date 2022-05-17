@@ -15,7 +15,7 @@ export const transactionsInitialState: investorsState = {
     investors: [],
     page: 1,
     pages: 1,
-    sort: [{ value: "descending", column: "name" }],
+    sort: [{ value: "ascending", column: "name" }],
   },
   allCount: 0,
   search: "",

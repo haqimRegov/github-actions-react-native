@@ -21,11 +21,11 @@ import {
   sh13,
   sh32,
   sw120,
-  sw146,
+  sw144,
   sw16,
   sw2,
-  sw20,
   sw216,
+  sw24,
   sw264,
   sw56,
 } from "../../../../../styles";
@@ -161,7 +161,7 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
       textStyle: fsTransformNone,
       title: DASHBOARD_INVESTORS_LIST.LABEL_MOBILE_NO,
       titleStyle: sortedColumns.includes("mobileNo") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : { ...fsTransformNone },
-      viewStyle: { width: sw146 },
+      viewStyle: { width: sw144 },
     },
     {
       icon: { name: sortEmail === "descending" ? "arrow-down" : "arrow-up" },
@@ -178,7 +178,7 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
       viewStyle: { width: sw264 },
     },
     {
-      itemIcon: { name: "eye-show", size: sw20 },
+      itemIcon: { color: colorBlue._1, name: "eye-show", size: sw24 },
       key: [],
       onPressItem: handleView,
       title: DASHBOARD_HOME.LABEL_ACTIONS,

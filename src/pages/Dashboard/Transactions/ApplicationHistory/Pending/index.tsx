@@ -10,6 +10,7 @@ import { getDashboard, resubmitOrder } from "../../../../../network-actions";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
+  borderBottomGray2,
   centerHorizontal,
   centerHV,
   centerVertical,
@@ -23,9 +24,10 @@ import {
   fsTransformNone,
   justifyContentStart,
   px,
+  sh12,
   sh13,
+  sh16,
   sh2,
-  sh28,
   sh32,
   sw1,
   sw10,
@@ -469,13 +471,16 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
                     onPress={handlePress}
                     style={{ ...px(sw16) }}
                     text={`${text} (${pillCount})`}
+                    textStyle={{ fontFamily: NunitoBold }}
                   />
                   <CustomSpacer isHorizontal={true} space={sw8} />
                 </View>
               );
             })}
           </View>
-          <CustomSpacer space={sh28} />
+          <CustomSpacer space={sh12} />
+          <View style={borderBottomGray2} />
+          <CustomSpacer space={sh16} />
         </Fragment>
       ) : null}
       <View style={{ ...px(sw16), ...flexChild }}>

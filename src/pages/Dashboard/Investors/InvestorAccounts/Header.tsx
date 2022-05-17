@@ -27,7 +27,6 @@ import {
   shadow12Black112,
   sw1,
   sw16,
-  sw20,
   sw24,
   sw4,
   sw40,
@@ -101,7 +100,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
               <View style={rowCenterVertical}>
                 <View style={flexRow}>
                   <View style={prefixIconContainer}>
-                    <IcoMoon name="phone" size={sw16} />
+                    <IcoMoon color={colorBlue._1} name="phone" size={sw16} />
                   </View>
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <View>
@@ -112,7 +111,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
                 <CustomSpacer isHorizontal={true} space={sw40} />
                 <View style={flexRow}>
                   <View style={prefixIconContainer}>
-                    <IcoMoon name="mail" size={sw16} />
+                    <IcoMoon color={colorBlue._1} name="mail" size={sw16} />
                   </View>
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <View>
@@ -123,12 +122,12 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
               </View>
             </View>
             <CustomFlexSpacer />
-            <OutlineButton buttonType="solid" disabled={true} onPress={() => {}} text={DASHBOARD_HOME.LABEL_VIEW} />
+            <OutlineButton buttonType="solid" disabled={true} disabledOpacity={0.4} onPress={() => {}} text={DASHBOARD_HOME.LABEL_VIEW} />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
               <IconButton color={colorBlue._1} name="pencil" onPress={() => {}} size={sw16} style={iconContainer} />
               <CustomSpacer isHorizontal={true} space={sw16} />
-              <IconButton color={colorBlue._1} name="plus" onPress={() => {}} size={sw20} style={iconContainer} />
+              <IconButton color={colorBlue._1} name="plus" onPress={() => {}} size={sw16} style={iconContainer} />
             </View>
           </View>
         </View>

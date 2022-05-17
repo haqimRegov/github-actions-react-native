@@ -122,8 +122,8 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
     { name: "investors", onPress: handleInvestors, title: DASHBOARD.MENU_INVESTORS },
-    { badgeCount: inboxCount, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
     { name: "edd", onPress: handleEDD, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
+    { badgeCount: inboxCount, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
     { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
     { name: "logout-new", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];

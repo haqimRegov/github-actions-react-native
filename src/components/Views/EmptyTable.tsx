@@ -3,7 +3,7 @@ import { Image, ImageSourcePropType, Text, TextStyle, View, ViewStyle } from "re
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
-import { centerVertical, flexChild, fs12RegBlue1, fs12RegBlue6, fs16BoldBlue1, imageContain, sh16, sh32, sh56, sw136 } from "../../styles";
+import { centerVertical, flexChild, fs12RegBlue1, fs12RegBlue6, fs16BoldBlue1, imageContain, sh16, sh20, sh56, sw136 } from "../../styles";
 import { Loading } from "./Loading";
 import { CustomSpacer } from "./Spacer";
 
@@ -47,7 +47,7 @@ export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
           {subtitle !== undefined ? <Text style={{ ...fs12RegBlue6, ...subtitleStyle }}>{subtitle}</Text> : null}
           {hintText !== undefined ? (
             <Fragment>
-              <CustomSpacer space={sh32} />
+              <CustomSpacer space={sh20} />
               <View style={{ ...centerVertical, ...hintContainerStyle }}>
                 <Text style={{ ...fs12RegBlue1, ...hintTextStyle }}>{hintText}</Text>
               </View>

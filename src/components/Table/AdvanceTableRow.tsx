@@ -20,7 +20,7 @@ import {
   fsCapitalize,
   px,
   py,
-  sh24,
+  sh32,
   sh4,
   sh8,
   sh80,
@@ -28,6 +28,7 @@ import {
   sw12,
   sw16,
   sw19,
+  sw26,
   sw4,
   sw56,
   sw8,
@@ -49,6 +50,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
   RenderAccordion,
   RenderCustomItem,
   RenderOptions,
+  rowContainerStyle,
   rowSelection,
   rowSelectionKey,
 }: AdvanceTableRowProps) => {
@@ -66,6 +68,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
     ...itemBorder,
     backgroundColor: colorWhite._1,
     minHeight: sh80,
+    ...rowContainerStyle,
   };
 
   const handleSelectRow = () => {
@@ -120,7 +123,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                 const itemAccordionIcon: ITableIcon = {
                   color: colorGray._6,
                   name: itemAccordionOpen ? "collapse" : "expand",
-                  size: sh24,
+                  size: sw26,
                 };
 
                 const itemIcon: ITableIcon = {
@@ -223,7 +226,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                         return (
                           <TouchableWithoutFeedback onPress={show}>
                             <View style={{ ...px(sw4), ...py(sh4) }}>
-                              <IcoMoon name="action-menu" size={sh24} />
+                              <IcoMoon color={colorGray._6} name="action-menu" size={sh32} />
                             </View>
                           </TouchableWithoutFeedback>
                         );

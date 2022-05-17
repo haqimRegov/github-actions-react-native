@@ -96,6 +96,7 @@ export const sw22 = scaleWidth(22);
 export const sw23 = scaleWidth(23);
 export const sw24 = scaleWidth(24);
 export const sw25 = scaleWidth(25);
+export const sw26 = scaleWidth(26);
 export const sw28 = scaleWidth(28);
 export const sw30 = scaleWidth(30);
 export const sw32 = scaleWidth(32);

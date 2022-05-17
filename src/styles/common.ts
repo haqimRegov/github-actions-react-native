@@ -50,6 +50,7 @@ export const borderBottomBlue3 = { borderBottomWidth: 1, borderBottomColor: colo
 export const borderBottomBlue4 = { borderBottomWidth: 1, borderBottomColor: colorBlue._4 } as const;
 export const borderBottomBlue5 = { borderBottomWidth: 1, borderBottomColor: colorBlue._5 } as const;
 export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
+export const borderBottomGray3 = { borderBottomWidth: 1, borderBottomColor: colorGray._3 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderBottomRed1 = { borderBottomWidth: 1, borderBottomColor: colorRed._1 } as const;
 export const borderLeftBlue3 = { borderLeftWidth: 1, borderLeftColor: colorBlue._3 } as const;

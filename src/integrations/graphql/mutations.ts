@@ -88,6 +88,25 @@ const emailOtpVerification = gql`
   }
 `;
 
+const expiredPassword = gql`
+  mutation expiredChangePassword($input: ExpiredChangePasswordInput) {
+    expiredChangePassword(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const firstTimeSignUp = gql`
   mutation firstTimeSignUp($input: NricInput) {
     firstTimeSignUp(input: $input) {
@@ -613,10 +632,10 @@ const updateSeen = gql`
 `;
 
 export const GQL_MUTATIONS = {
-  changePassword,
   clientRegister,
   emailOtpVerification,
   emailVerification,
+  expiredPassword,
   firstTimeSignUp,
   forgotPassword,
   generatePdf,

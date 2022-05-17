@@ -1,28 +1,22 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 
-import {
-  AddressInfo,
-  Avatar,
-  CustomFlexSpacer,
-  CustomSpacer,
-  IconText,
-  LabeledTitle,
-  RoundedButton,
-  TextCard,
-  TextSpaceArea,
-} from "../../components";
+import { Avatar, CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, TextCard, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
+import { IcoMoon } from "../../icons";
 import {
+  borderBottomBlue5,
   borderBottomGray2,
+  colorBlue,
+  flexChild,
   flexRow,
   fs12BoldBlue1,
   fs16BoldBlack1,
-  fs16BoldBlue1,
+  fs18BoldBlack2,
   fs18BoldGray6,
   fs36BoldWhite1,
   px,
-  sh12,
+  rowCenterVertical,
   sh120,
   sh16,
   sh24,
@@ -34,8 +28,11 @@ import {
   sw20,
   sw24,
   sw240,
+  sw32,
+  sw328,
   sw40,
   sw64,
+  sw8,
 } from "../../styles";
 
 const { DASHBOARD_PROFILE, DECLARATION_SUMMARY } = Language.PAGE;
@@ -121,7 +118,9 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_ACCOUNT_SUMMARY} />
-        <TextCard data={accountSummaryDetails} spaceBetweenItem={sw64} />
+        <View style={px(sw32)}>
+          <TextCard data={accountSummaryDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+        </View>
       </View>
       {contactDetails.length !== 0 ? (
         <Fragment>
@@ -130,7 +129,9 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_CONTACT_DETAILS} />
-            <TextCard data={contactDetails} spaceBetweenItem={sw64} />
+            <View style={px(sw32)}>
+              <TextCard data={contactDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+            </View>
           </View>
         </Fragment>
       ) : null}
@@ -139,10 +140,38 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
       <CustomSpacer space={sh32} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_ADDRESS_INFO} />
-        <View style={flexRow}>
-          <AddressInfo data={permanentAddress} labelAddress={DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} />
-          <CustomSpacer isHorizontal={true} space={sw64} />
-          <AddressInfo data={mailingAddress} labelAddress={DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} />
+        <View style={px(sw32)}>
+          <View style={flexRow}>
+            <IcoMoon color={colorBlue._1} name="location" size={sw24} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <View style={flexChild}>
+              <View style={rowCenterVertical}>
+                <Text style={fs18BoldBlack2}>{DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS}</Text>
+                <CustomSpacer isHorizontal={true} space={sw16} />
+                <View style={flexChild}>
+                  <View style={borderBottomBlue5} />
+                </View>
+              </View>
+            </View>
+          </View>
+          <CustomSpacer space={sh16} />
+          <TextCard data={permanentAddress} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+          <CustomSpacer space={sh16} />
+          <View style={flexRow}>
+            <IcoMoon color={colorBlue._1} name="location" size={sw24} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <View style={flexChild}>
+              <View style={rowCenterVertical}>
+                <Text style={fs18BoldBlack2}>{DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS}</Text>
+                <CustomSpacer isHorizontal={true} space={sw16} />
+                <View style={flexChild}>
+                  <View style={borderBottomBlue5} />
+                </View>
+              </View>
+            </View>
+          </View>
+          <CustomSpacer space={sh16} />
+          <TextCard data={mailingAddress} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
         </View>
       </View>
       {epfDetails.length !== 0 && accountHolder === "Principal" ? (
@@ -152,7 +181,9 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_EPF_DETAILS} />
-            <TextCard data={epfDetails} spaceBetweenItem={sw64} />
+            <View style={px(sw32)}>
+              <TextCard data={epfDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+            </View>
           </View>
         </Fragment>
       ) : null}
@@ -163,7 +194,9 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_EMPLOYMENT_INFO} />
-            <TextCard data={employmentDetails} spaceBetweenItem={sw64} />
+            <View style={px(sw32)}>
+              <TextCard data={employmentDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+            </View>
           </View>
         </Fragment>
       ) : null}
@@ -174,31 +207,53 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
             <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_BANK_SUMMARY} />
-            {localBankDetails.map((bank, numberIndex) => {
-              const label = `${DASHBOARD_PROFILE.SUBTITLE_LOCAL_BANK} ${numberIndex + 1}`;
-              return (
-                <Fragment key={numberIndex}>
-                  <IconText iconSize={sh24} name="bank" spaceBetween={sw16} text={label} textStyle={fs16BoldBlue1} />
-                  <CustomSpacer space={sh16} />
-                  <View style={borderBottomGray2} />
-                  <CustomSpacer space={sh12} />
-                  <TextCard data={bank} spaceBetweenItem={sw64} />
-                </Fragment>
-              );
-            })}
-            <CustomSpacer space={sh16} />
-            {foreignBankDetails.map((bank, numberIndex) => {
-              const label = `${DASHBOARD_PROFILE.SUBTITLE_FOREIGN_BANK} ${numberIndex + 1}`;
-              return (
-                <Fragment key={numberIndex}>
-                  <IconText iconSize={sh24} name="bank" spaceBetween={sw16} text={label} textStyle={fs16BoldBlue1} />
-                  <CustomSpacer space={sh16} />
-                  <View style={borderBottomGray2} />
-                  <CustomSpacer space={sh12} />
-                  <TextCard data={bank} spaceBetweenItem={sw64} />
-                </Fragment>
-              );
-            })}
+            <View style={px(sw32)}>
+              {localBankDetails.map((bank, numberIndex) => {
+                const label = `${DASHBOARD_PROFILE.SUBTITLE_LOCAL_BANK} ${numberIndex + 1}`;
+                return (
+                  <Fragment key={numberIndex}>
+                    <View style={flexRow}>
+                      <IcoMoon color={colorBlue._1} name="bank" size={sw24} />
+                      <CustomSpacer isHorizontal={true} space={sw8} />
+                      <View style={flexChild}>
+                        <View style={rowCenterVertical}>
+                          <Text style={fs18BoldBlack2}>{label}</Text>
+                          <CustomSpacer isHorizontal={true} space={sw16} />
+                          <View style={flexChild}>
+                            <View style={borderBottomBlue5} />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <CustomSpacer space={sh16} />
+                    <TextCard data={bank} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                  </Fragment>
+                );
+              })}
+              {foreignBankDetails.map((bank, numberIndex) => {
+                const label = `${DASHBOARD_PROFILE.SUBTITLE_FOREIGN_BANK} ${numberIndex + 1}`;
+                return (
+                  <Fragment key={numberIndex}>
+                    {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}
+                    <View style={flexRow}>
+                      <IcoMoon color={colorBlue._1} name="bank" size={sw24} />
+                      <CustomSpacer isHorizontal={true} space={sw8} />
+                      <View style={flexChild}>
+                        <View style={rowCenterVertical}>
+                          <Text style={fs18BoldBlack2}>{label}</Text>
+                          <CustomSpacer isHorizontal={true} space={sw16} />
+                          <View style={flexChild}>
+                            <View style={borderBottomBlue5} />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <CustomSpacer space={sh16} />
+                    <TextCard data={bank} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                  </Fragment>
+                );
+              })}
+            </View>
           </View>
         </Fragment>
       ) : null}
@@ -206,13 +261,17 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
       <View style={borderBottomGray2} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldGray6} text={DECLARATION_SUMMARY.TITLE_FATCA} />
-        <TextCard data={declarations.fatca} spaceBetweenItem={sw64} />
+        <View style={px(sw32)}>
+          <TextCard data={declarations.fatca} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+        </View>
       </View>
       <CustomSpacer space={sh16} />
       <View style={borderBottomGray2} />
       <View style={px(sw24)}>
         <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldGray6} text={DECLARATION_SUMMARY.TITLE_CRS} />
-        <TextCard data={declarations.crs} spaceBetweenItem={sw64} />
+        <View style={px(sw32)}>
+          <TextCard data={declarations.crs} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+        </View>
       </View>
       <CustomSpacer space={sh16} />
       <View style={borderBottomGray2} />

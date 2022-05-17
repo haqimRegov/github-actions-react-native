@@ -10,7 +10,7 @@ import { Loading, Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
 import { ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { getStorageData, removeStorageData, RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
-import { changePassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
+import { expiredPassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
 import { AlertDialog, Encrypt, maskedString } from "../../utils";
@@ -131,6 +131,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           }
         } else if (error.errorCode === ERROR_CODE.lockedAccount) {
           if (data?.result.email !== undefined) {
+            setLoading(false);
             setLockPrompt(true);
             setRecoveryEmail(maskedString(data?.result.email, 0, 4));
           }
@@ -211,11 +212,10 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       const header = { encryptionKey: credentials.sessionToken };
       const response: ISignUpResponse | IChangePasswordResponse =
         page === "EXPIRED_PASSWORD"
-          ? await changePassword(baseParams, header, undefined, setLoading)
+          ? await expiredPassword(baseParams, header, undefined, setLoading)
           : await resetPassword({ ...baseParams, username: inputNRIC }, header, setLoading);
       fetching.current = false;
       setLoading(false);
-      setShowModal(true);
       if (response === undefined) {
         // TODO temporary
         return;
@@ -229,6 +229,8 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setInputRetypePassword("");
           if (page !== "EXPIRED_PASSWORD") {
             setRootPage("LOGIN");
+          } else {
+            setShowModal(true);
           }
         }
       } else {
@@ -238,6 +240,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   };
 
   let content: JSX.Element = <View />;
+  const checkHeading = page === "EXPIRED_PASSWORD" ? LOGIN.LABEL_PASSWORD_EXPIRED : undefined;
 
   switch (page) {
     case "LOCKED_ACCOUNT":
@@ -262,7 +265,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           error1={input1Error}
           error2={input2Error}
           handleSubmit={handleNewPassword}
-          heading={LOGIN.LABEL_PASSWORD_EXPIRED}
+          heading={checkHeading}
           inputNewPassword={inputNewPassword}
           inputRetypePassword={inputRetypePassword}
           setError1={setInput1Error}
@@ -324,7 +327,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   return (
     <Fragment>
       {content}
-      <RNModal animationType="fade" visible={loading || showModal || lockPrompt}>
+      <RNModal animationType="fade" visible={loading || lockPrompt || showModal}>
         <Fragment>{modalContent}</Fragment>
       </RNModal>
     </Fragment>

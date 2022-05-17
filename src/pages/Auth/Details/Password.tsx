@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, PasswordValidation, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_PASSWORD_MAX_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegGray6, fs40BoldGray6, sh24, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs24RegGray6, fs40BoldGray6, px, sh24, sh32, sh40, sh56, sh8, sw24, sw360 } from "../../../styles";
 import { isPassword } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -68,7 +68,9 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
         secureTextEntry={showPassword}
         value={inputNewPassword}
       />
-      <PasswordValidation password={inputNewPassword} />
+      <View style={px(sw24)}>
+        <PasswordValidation password={inputNewPassword} />
+      </View>
       <CustomTextInput
         error={error2}
         keyboardType="default"

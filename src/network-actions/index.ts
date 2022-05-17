@@ -1,6 +1,7 @@
 export * from "./client-profile";
 export * from "./dashboard";
 export * from "./edd";
+export * from "./expired-password";
 export * from "./forgot-password";
 export * from "./login";
 export * from "./logout";

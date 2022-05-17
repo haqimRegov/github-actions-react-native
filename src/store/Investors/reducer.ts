@@ -19,7 +19,7 @@ export function investorsReducer(state = transactionsInitialState, action: Inves
           investors: [],
           page: 1,
           pages: 1,
-          sort: [{ value: "descending", column: "name" }],
+          sort: [{ value: "ascending", column: "name" }],
         },
 
         allCount: 0,
@@ -38,7 +38,7 @@ export function investorsReducer(state = transactionsInitialState, action: Inves
           investors: [],
           page: 1,
           pages: 1,
-          sort: [{ value: "descending", column: "name" }],
+          sort: [{ value: "ascending", column: "name" }],
         },
       };
     case "investors/UPDATE_SEARCH":

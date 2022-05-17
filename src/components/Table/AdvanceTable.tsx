@@ -19,6 +19,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   RenderCustomItem,
   RenderEmptyState,
   RenderOptions,
+  rowContainerStyle,
   rowSelection,
   RowSelectionItem,
   rowSelectionKey,
@@ -53,6 +54,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
                 RenderAccordion={RenderAccordion}
                 RenderCustomItem={RenderCustomItem}
                 RenderOptions={RenderOptions}
+                rowContainerStyle={rowContainerStyle}
                 rowSelection={rowSelection}
                 rowSelectionKey={rowSelectionKey}
               />

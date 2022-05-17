@@ -30,6 +30,7 @@ export interface OutlineButtonProps {
   buttonStyle?: ViewStyle;
   buttonType?: ButtonType;
   disabled?: boolean;
+  disabledOpacity?: number;
   color?: string;
   icon?: string;
   onPress: () => void;
@@ -43,6 +44,7 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
   buttonStyle,
   buttonType,
   disabled,
+  disabledOpacity,
   color,
   icon,
   onPress,
@@ -51,7 +53,8 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
   textStyle,
 }: OutlineButtonProps) => {
   const borderStyle: ViewStyle = buttonType === "dashed" ? { borderStyle: "dashed" } : {};
-  const disabledOpacity = disabled === true ? disabledOpacity5 : undefined;
+  const defaultDisabledOpacity = disabledOpacity !== undefined ? { opacity: disabledOpacity } : disabledOpacity5;
+  const opacity = disabled === true ? defaultDisabledOpacity : {};
   const borderColor: ViewStyle = color !== undefined ? { borderColor: color } : { borderColor: colorBlue._1 };
   const roundedButtonStyle: ViewStyle = {
     ...border(colorRed._1, sw1),
@@ -63,7 +66,7 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
     height: sh32,
     ...borderStyle,
     ...borderColor,
-    ...disabledOpacity,
+    ...opacity,
     ...buttonStyle,
   };
 
@@ -73,11 +76,11 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
         <View style={roundedButtonStyle}>
           {icon === undefined ? null : (
             <Fragment>
-              <IcoMoon color={color || colorBlack._1} name={icon} size={sh16} style={disabledOpacity} />
+              <IcoMoon color={color || colorBlack._1} name={icon} size={sh16} />
               <CustomSpacer isHorizontal={true} space={spaceToIcon || sw8} />
             </Fragment>
           )}
-          <Text style={{ ...fs12BoldBlue1, color: color, ...disabledOpacity, ...textStyle }}>{text}</Text>
+          <Text style={{ ...fs12BoldBlue1, color: color, ...textStyle }}>{text}</Text>
           {badgeCount !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw16} />

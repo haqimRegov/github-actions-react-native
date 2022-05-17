@@ -27,6 +27,7 @@ export interface CustomButtonProps {
   disabled?: boolean;
   icon?: string;
   iconColor?: string;
+  iconSize?: number;
   loading?: boolean;
   onPress: () => void;
   secondary?: boolean;
@@ -40,6 +41,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   disabled,
   icon,
   iconColor,
+  iconSize,
   loading,
   onPress,
   secondary,
@@ -92,7 +94,7 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
         ) : null}
         {icon === undefined ? null : (
           <Fragment>
-            <IcoMoon color={defaultIconColor} name={icon} size={sh16} />
+            <IcoMoon color={defaultIconColor} name={icon} size={iconSize || sh16} />
             <CustomSpacer isHorizontal={true} space={sw8} />
           </Fragment>
         )}

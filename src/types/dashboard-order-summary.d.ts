@@ -196,8 +196,8 @@ declare interface IStructuredData {
   };
   foreignBankDetails: LabeledTitleProps[][];
   localBankDetails: LabeledTitleProps[][];
-  mailingAddress: IAddressState;
-  permanentAddress: IAddressState;
+  mailingAddress: LabeledTitleProps[];
+  permanentAddress: LabeledTitleProps[];
   profilePic?: FileBase64;
   showJointToggle?: boolean;
 }

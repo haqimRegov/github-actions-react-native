@@ -76,6 +76,7 @@ declare interface BaseTableProps {
   RenderCustomItem?: (customItem: ITableCustomItem) => JSX.Element;
   RenderEmptyState?: () => JSX.Element;
   RenderOptions?: (props: ITableOptions) => JSX.Element;
+  rowContainerStyle?: import("react-native").ViewStyle;
   rowSelection?: ITableData[];
   rowSelectionKey?: string;
 }
@@ -103,6 +104,7 @@ declare interface AdvanceTableRowProps extends BaseTableProps {
   index: number;
   item: ITableData;
   lastIndex: boolean;
+  rowContainerStyle?: import("react-native").ViewStyle;
   // itemSelected?: boolean;
 }
 

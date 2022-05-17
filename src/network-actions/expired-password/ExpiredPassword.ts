@@ -10,7 +10,7 @@ export const expiredPassword = async (
 ) => {
   try {
     const data: IExpiredPasswordQuery = await responseHandler<IExpiredPasswordQuery, IExpiredPasswordRequest>(
-      GQL_MUTATIONS.changePassword,
+      GQL_MUTATIONS.expiredPassword,
       variables,
       headers,
       navigation,
@@ -18,14 +18,14 @@ export const expiredPassword = async (
       handleLoading,
     );
 
-    if (data === undefined || "changePasswordV2" in data === false) {
+    if (data === undefined || "expiredChangePassword" in data === false) {
       throw data;
     }
 
-    return data.changePassword;
+    return data.expiredChangePassword;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn("Error in changePassword at ChangePassword.ts", error);
+    console.warn("Error in expiredPassword at ExpiredPassword.ts", error);
     return error;
   }
 };

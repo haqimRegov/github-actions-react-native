@@ -131,6 +131,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           }
         } else if (error.errorCode === ERROR_CODE.lockedAccount) {
           if (data?.result.email !== undefined) {
+            setLoading(false);
             setLockPrompt(true);
             setRecoveryEmail(maskedString(data?.result.email, 0, 4));
           }
@@ -215,7 +216,6 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           : await resetPassword({ ...baseParams, username: inputNRIC }, header, setLoading);
       fetching.current = false;
       setLoading(false);
-      setShowModal(true);
       if (response === undefined) {
         // TODO temporary
         return;
@@ -229,6 +229,8 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setInputRetypePassword("");
           if (page !== "EXPIRED_PASSWORD") {
             setRootPage("LOGIN");
+          } else {
+            setShowModal(true);
           }
         }
       } else {
@@ -324,7 +326,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   return (
     <Fragment>
       {content}
-      <RNModal animationType="fade" visible={loading || showModal || lockPrompt}>
+      <RNModal animationType="fade" visible={loading || lockPrompt || showModal}>
         <Fragment>{modalContent}</Fragment>
       </RNModal>
     </Fragment>

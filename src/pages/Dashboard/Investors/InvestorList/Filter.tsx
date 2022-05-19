@@ -31,7 +31,7 @@ import {
   sw8,
 } from "../../../../styles";
 
-const { DASHBOARD_FILTER, DASHBOARD_EDD } = Language.PAGE;
+const { DASHBOARD_FILTER, DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 interface AllInvestorsFilterProps {
   filter: IInvestorsFilter;
   setFilter: (value: IInvestorsFilter) => void;
@@ -63,7 +63,12 @@ export const InvestorListFilter: FunctionComponent<AllInvestorsFilterProps> = ({
 
   return (
     <View>
-      <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={{ ...fs16BoldGray6, ...px(sw24) }} text={DASHBOARD_EDD.TITLE} />
+      <TextSpaceArea
+        spaceToBottom={sh16}
+        spaceToTop={sh32}
+        style={{ ...fs16BoldGray6, ...px(sw24) }}
+        text={DASHBOARD_INVESTORS_LIST.LABEL_FILTER_INVESTOR_BY}
+      />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <AdvanceToggleButton
           buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}

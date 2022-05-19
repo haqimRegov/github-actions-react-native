@@ -293,7 +293,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
                 activeTab={activeTabIndex}
                 setActiveTab={handleTabs}
                 tabs={[
-                  { badgeCount: incompleteCount, text: DASHBOARD_HOME.LABEL_PENDING },
+                  { badgeCount: incompleteCount, text: DASHBOARD_HOME.LABEL_INCOMPLETE },
                   { badgeCount: rejectedCount, text: DASHBOARD_HOME.LABEL_REJECTED },
                   { badgeCount: approvedCount, text: DASHBOARD_HOME.LABEL_APPROVED },
                 ]}

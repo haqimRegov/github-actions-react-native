@@ -317,7 +317,7 @@ export const english = {
       LABEL_INVESTOR_LIST: "Investor List",
       LABEL_INVESTOR_NAME: "Investor Name",
       LABEL_INVESTOR_OVERVIEW: "Investor Overview",
-      LABEL_INVESTOR_SEARCH: "Search by Investor Name, Account Number, Email and Mobile",
+      LABEL_INVESTOR_SEARCH: "Search by Investor Name, Email and Mobile",
       LABEL_MOBILE_NO: "Mobile No.",
       LABEL_EMPTY_TITLE: "No investor yet",
       LABEL_EMPTY_SUBTITLE: "Get started by onboarding your new investor to KIB App.",

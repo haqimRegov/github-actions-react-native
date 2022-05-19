@@ -74,7 +74,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleInbox = () => {
-    setActiveMenu(2);
+    setActiveMenu(3);
     setPage("Inbox");
   };
 
@@ -95,7 +95,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
 
   const handleEDD = () => {
     setPage("EDD");
-    setActiveMenu(3);
+    setActiveMenu(2);
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation, isLogout };

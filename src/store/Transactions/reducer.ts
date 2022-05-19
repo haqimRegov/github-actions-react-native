@@ -120,6 +120,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
+          pill: "pending",
           sort: [],
         },
       };

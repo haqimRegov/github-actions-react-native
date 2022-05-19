@@ -188,6 +188,7 @@ export const english = {
       LABEL_DUE: "Due",
       LABEL_FILTER_PENDING: "Search by Order number, Investor name, Account type, Transaction type",
       LABEL_HEADER: "Application History",
+      LABEL_INCOMPLETE: "Incomplete",
       LABEL_INVESTOR_NAME_ID_NO: "Investor Name",
       LABEL_LAST_UPDATED: "Last Updated",
       LABEL_ORDER_NO: "Order No.",

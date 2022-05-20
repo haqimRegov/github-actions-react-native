@@ -3,6 +3,7 @@ import { bindActionCreators, Dispatch } from "redux";
 import { AcknowledgementActionProps } from "../Acknowledgement";
 import { ClientActionProps } from "../Client";
 import { EDDActionProps } from "../EDD";
+import { InvestorsActionProps } from "../Investors";
 import { OnboardingActionProps } from "../Onboarding";
 import { PersonalInfoActionProps } from "../PersonalInfo";
 import { ProductsActionProps } from "../Products";
@@ -27,6 +28,7 @@ export const GlobalMapDispatchToProps = (dispatch: Dispatch) => {
       ...ClientActionProps,
       ...EDDActionProps,
       ...GlobalActionProps,
+      ...InvestorsActionProps,
       ...OnboardingActionProps,
       ...PersonalInfoActionProps,
       ...ProductsActionProps,

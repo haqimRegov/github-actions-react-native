@@ -51,7 +51,6 @@ import {
 import { AnimationUtils } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
 import { DashboardAccordion } from "../DashboardAccordion";
-import { PendingOrderActions } from "./Actions";
 
 const { EMPTY_STATE, DASHBOARD_HOME, DASHBOARD_EDD } = Language.PAGE;
 
@@ -88,7 +87,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   updateTransactions,
 }: PendingOrdersProps) => {
   const { filter, orders, page, pill, sort } = incomplete;
-  const { incompleteCount, reroutedCount, submittedCount } = transactions;
+  const { pendingCount, reroutedCount, submittedCount } = transactions;
   const fetching = useRef<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
@@ -294,13 +293,14 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
       viewStyle: { width: showCheckbox === true ? sw144 : sw192 },
-      // withAccordion: true,
+    },
+    {
+      customItem: true,
+      key: [{ key: "" }],
+      title: DASHBOARD_HOME.LABEL_ACTIONS,
+      viewStyle: { width: sw56, ...centerHV },
     },
   ];
-
-  if (downloadInitiated === true) {
-    columns.push(viewColumn);
-  }
 
   const onRowSelect = (data: ITableData) => {
     handleSelectOrder(data as unknown as IDashboardOrder);
@@ -350,7 +350,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
             page: data.result.page,
             pages: data.result.pages,
           },
-          incompleteCount: data.result.pendingCount,
+          incompleteCount: data.result.incompleteCount,
           approvedCount: data.result.approvedCount,
           rejectedCount: data.result.rejectedCount,
           submittedCount: data.result.submittedCount,
@@ -436,10 +436,16 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   }, [search, activeTab, sort, page, filter, pill, downloadInitiated]);
 
   const pills: ITagData[] = [
-    { text: "Pending", pillCount: incompleteCount },
+    { text: "Pending", pillCount: pendingCount },
     { text: "Rerouted", pillCount: reroutedCount },
     { text: "Submitted", pillCount: submittedCount },
   ];
+  const actionProps = {
+    handleResubmitOrder: handleResubmitOrder,
+    handleSelectOrder: handleSelectOrder,
+    setScreen: setScreen,
+    setCurrentOrder: updateCurrentOrder,
+  };
 
   const noResults = search !== undefined && search !== "";
   const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : DASHBOARD_HOME.EMPTY_TITLE_TRANSACTIONS;
@@ -518,22 +524,9 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           rowSelectionKey="orderNumber"
           RenderAccordion={renderAccordion}
           RenderCustomItem={(data: ITableCustomItem) => (
-            <CustomTableItem {...data} downloadInitiated={downloadInitiated} sortedColumns={sortedColumns} />
+            <CustomTableItem {...data} downloadInitiated={downloadInitiated} sortedColumns={sortedColumns} {...actionProps} />
           )}
           RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
-          RenderOptions={
-            downloadInitiated === false
-              ? (props: ITableOptions) => (
-                  <PendingOrderActions
-                    {...props}
-                    handleResubmitOrder={handleResubmitOrder}
-                    handleSelectOrder={handleSelectOrder}
-                    setScreen={setScreen}
-                    setCurrentOrder={updateCurrentOrder}
-                  />
-                )
-              : undefined
-          }
           RowSelectionItem={() => (
             <Fragment>
               {showCheckbox === true ? (

@@ -10,6 +10,8 @@ import { getDashboard } from "../../../../../network-actions";
 import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../../store";
 import {
+  centerHV,
+  colorBlue,
   flexChild,
   fs10BoldBlue1,
   fs12RegBlue1,
@@ -17,13 +19,17 @@ import {
   px,
   sh13,
   sh32,
-  sw104,
-  sw123,
-  sw136,
-  sw152,
+  sw128,
   sw16,
-  sw176,
+  sw160,
+  sw192,
+  sw24,
   sw32,
+  sw56,
+  sw80,
+  sw88,
+  sw94,
+  sw96,
 } from "../../../../../styles";
 import { AnimationUtils } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
@@ -126,6 +132,11 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     setActiveAccordion(newSections);
   };
 
+  const handleView = (item: ITableRowData) => {
+    updateCurrentOrder(item.rawData as unknown as IDashboardOrder);
+    setScreen("OrderSummary");
+  };
+
   const tableAccordion = (item: ITableData) => {
     return (
       <DashboardAccordion
@@ -173,7 +184,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       textStyle: sortedColumns.includes("orderNumber") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
       titleStyle: sortedColumns.includes("orderNumber") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw104 },
+      viewStyle: { width: sw88 },
     },
     {
       customItem: true,
@@ -182,7 +193,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       onPressHeader: () => checkLoading(handleSortInvestor),
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
       titleStyle: sortedColumns.includes("principal") ? { ...fs10BoldBlue1, paddingLeft: sw32, lineHeight: sh13 } : { paddingLeft: sw32 },
-      viewStyle: { width: sw176 },
+      viewStyle: { width: sw160 },
     },
     {
       icon: { name: sortTransactionType === "descending" ? "arrow-down" : "arrow-up" },
@@ -196,7 +207,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       textStyle: fsTransformNone,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_TYPE,
       titleStyle: sortedColumns.includes("transactionType") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : fsTransformNone,
-      viewStyle: { width: sw104 },
+      viewStyle: { width: sw80 },
     },
     {
       customItem: true,
@@ -205,7 +216,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       onPressHeader: () => checkLoading(handleSortAmount),
       title: DASHBOARD_HOME.LABEL_TOTAL_INVESTMENTS,
       titleStyle: sortedColumns.includes("totalInvestment") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw152 },
+      viewStyle: { width: sw128 },
     },
     {
       customHeader: true,
@@ -215,7 +226,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       title: showDateBy.type,
       titleStyle:
         sortedColumns.includes("lastUpdated") || sortedColumns.includes("createdOn") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw136 },
+      viewStyle: { width: sw96 },
     },
     {
       customItem: true,
@@ -225,7 +236,14 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       onPressItem: handleShowRemarks,
       title: DASHBOARD_HOME.LABEL_TRANSACTION_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw123 },
+      viewStyle: { width: sw192 },
+    },
+    {
+      itemIcon: { color: colorBlue._1, name: "eye-show", size: sw24 },
+      key: [],
+      onPressItem: handleView,
+      title: DASHBOARD_HOME.LABEL_VIEW,
+      viewStyle: { ...centerHV, width: sw56 },
     },
   ];
 
@@ -352,7 +370,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
             sortedColumns.includes("lastUpdated") || sortedColumns.includes("createdOn")
               ? { ...fs10BoldBlue1, lineHeight: sh13 }
               : { fontFamily: NunitoRegular },
-          viewStyle: { width: sw136 },
+          viewStyle: { width: sw94 },
         }}
         RenderAccordion={renderAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}

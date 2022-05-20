@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { View } from "react-native";
 
+import { PendingActions } from "./Actions";
 import { CreatedOn } from "./CreatedOn";
 import { InvestorName } from "./InvestorName";
 import { LastUpdated } from "./LastUpdated";
@@ -9,6 +9,11 @@ import { TotalInvestments } from "./TotalInvestments";
 
 declare interface CustomTableItemProps extends ITableCustomItem {
   downloadInitiated?: boolean;
+  handleResubmitOrder?: (orderNumber: string) => void;
+  handleSelectOrder?: (order: IDashboardOrder) => void;
+  onClose?: () => void;
+  setCurrentOrder?: (order: IDashboardOrder) => void;
+  setScreen?: (route: TransactionsPageType) => void;
   sortedColumns: TransactionsSortColumnType[];
 }
 export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sortedColumns, ...rest }: CustomTableItemProps) => {
@@ -24,6 +29,6 @@ export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sorte
     case "lastUpdated":
       return <LastUpdated sortedColumns={sortedColumns} {...rest} />;
     default:
-      return <View />;
+      return <PendingActions sortedColumns={sortedColumns} {...rest} />;
   }
 };

@@ -16,6 +16,7 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
     props.resetTransactions();
     props.resetAcknowledgement();
     props.resetClientDetails();
+    props.resetInvestors();
     props.resetPersonalInfo();
     props.resetRiskAssessment();
     props.resetViewFund();

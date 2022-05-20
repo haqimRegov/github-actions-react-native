@@ -69,6 +69,7 @@ export const InvestorListFilter: FunctionComponent<AllInvestorsFilterProps> = ({
         style={{ ...fs16BoldGray6, ...px(sw24) }}
         text={DASHBOARD_INVESTORS_LIST.LABEL_FILTER_INVESTOR_BY}
       />
+      <TextSpaceArea spaceToBottom={sh4} style={px(sw24)} text={DASHBOARD_INVESTORS_LIST.LABEL_FILTER_INVESTOR_RISK_PROFILE} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <AdvanceToggleButton
           buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}

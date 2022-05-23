@@ -1,8 +1,9 @@
+import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
 import { Avatar, CustomFlexSpacer, CustomSpacer, IconButton, OutlineButton } from "../../../../components";
-import { Language } from "../../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
   absolutePosition,
@@ -105,7 +106,9 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <View>
                     <Text style={fs16BoldBlue1}>{mobileNo}</Text>
-                    <Text style={fs10RegGray4}>{mobileNoLastUpdated}</Text>
+                    <Text style={fs10RegGray4}>{`${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(mobileNoLastUpdated, "x").format(
+                      DEFAULT_DATE_FORMAT,
+                    )}`}</Text>
                   </View>
                 </View>
                 <CustomSpacer isHorizontal={true} space={sw40} />
@@ -116,7 +119,9 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <View>
                     <Text style={fs16BoldBlue1}>{email}</Text>
-                    <Text style={fs10RegGray4}>{emailLastUpdated}</Text>
+                    <Text style={fs10RegGray4}>{`${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(emailLastUpdated, "x").format(
+                      DEFAULT_DATE_FORMAT,
+                    )}`}</Text>
                   </View>
                 </View>
               </View>

@@ -207,13 +207,25 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
-        const { investorDetails, page: currentPage, pages, name, email, mobileNo, totalCount } = data.result;
+        const {
+          investorDetails,
+          page: currentPage,
+          pages,
+          name,
+          email,
+          emailLastUpdated,
+          mobileNo,
+          mobileNoLastUpdated,
+          totalCount,
+        } = data.result;
         setInvestorData({
           ...investorData,
           investorDetails: investorDetails,
           name: name,
           email: email,
+          emailLastUpdated: emailLastUpdated,
           mobileNo: mobileNo,
+          mobileNoLastUpdated: mobileNoLastUpdated,
           totalCount: totalCount,
         });
         setPage(currentPage);

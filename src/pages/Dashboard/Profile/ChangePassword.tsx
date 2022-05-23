@@ -58,6 +58,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(true);
   const [validateCurrentPassword, setValidateCurrentPassword] = useState<boolean>(true);
+  const [validateNewPassword, setValidateNewPassword] = useState<boolean>(true);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -95,6 +96,13 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
 
   const handleOnChange = (text: string) => {
     setCurrentPassword(text);
+  };
+
+  const handleNewPassword = (text: string) => {
+    setInputNewPassword(text);
+    if (validateCurrentPassword === false && isPassword(text)) {
+      setValidateNewPassword(false);
+    } else setValidateNewPassword(true);
   };
 
   const handleChangePassword = async () => {
@@ -142,7 +150,12 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
   const debouncedCurrentPassword: string = useDebounce<string>(inputCurrentPassword, 1000);
 
   const buttonDisabled =
-    inputNewPassword === "" || !isPassword(inputNewPassword) || inputRetypePassword === "" || !isPassword(inputRetypePassword);
+    inputNewPassword === "" ||
+    !isPassword(inputNewPassword) ||
+    inputRetypePassword === "" ||
+    !isPassword(inputRetypePassword) ||
+    input2Error !== undefined ||
+    inputNewPassword !== inputRetypePassword;
 
   const handleBack = () => {
     setPage("profile");
@@ -192,14 +205,14 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
             label={PROFILE.LABEL_NEW_PASSWORD}
             maxLength={DICTIONARY_PASSWORD_MAX_LENGTH}
             onBlur={handleValidatePassword}
-            onChangeText={setInputNewPassword}
+            onChangeText={handleNewPassword}
             rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
             secureTextEntry={showPassword}
             value={inputNewPassword}
           />
           {validateCurrentPassword === false ? <PasswordValidation password={inputNewPassword} /> : null}
           <CustomTextInput
-            disabled={validateCurrentPassword}
+            disabled={validateNewPassword}
             error={input2Error}
             keyboardType="default"
             label={PROFILE.LABEL_RETYPE_PASSWORD}

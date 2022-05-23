@@ -32,7 +32,7 @@ export const PendingActions: FunctionComponent<IPendingActions> = ({
   };
   return (
     <Fragment>
-      {(item.rawData.status === "Submitted" && item.rawData.withHardCopy === false) ||
+      {(item.rawData.status === "Submitted" && item.rawData.withHardcopy === false) ||
       item.rawData.status === "Pending Initial Order" ||
       downloadInitiated === true ? (
         <TouchableWithoutFeedback onPress={handleView}>

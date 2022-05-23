@@ -17,7 +17,6 @@ export const changePassword = async (
       handleError,
       handleLoading,
     );
-
     if (data === undefined || "changePasswordV2" in data === false) {
       throw data;
     }

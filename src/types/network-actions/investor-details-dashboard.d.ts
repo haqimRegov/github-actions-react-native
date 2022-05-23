@@ -7,8 +7,10 @@ declare interface IInvestorDetailsDashboardRequest {
 
 declare interface IInvestorDetailsDashboardResult {
   email: string;
+  emailLastUpdated: string;
   investorDetails: IInvestorAccountsData[];
   mobileNo: string;
+  mobileNoLastUpdated: string;
   name: string;
   page: number;
   pages: number;

@@ -151,7 +151,7 @@ const NewSalesComponent = ({
               expirationDate: undefined,
               idNumber: jointHolder?.id,
               idType: jointClientIdType,
-              name: jointHolder?.name,
+              name: jointHolder?.name.trim(),
               nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
               placeOfBirth: jointPlaceOfBirth,
             },
@@ -191,7 +191,7 @@ const NewSalesComponent = ({
             : "",
           id: principalHolder?.id,
           idType: principalIdType,
-          name: principalHolder?.name,
+          name: principalHolder?.name?.trim(),
         },
       };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation, setLoading);

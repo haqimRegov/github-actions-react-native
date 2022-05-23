@@ -632,6 +632,7 @@ const updateSeen = gql`
 `;
 
 export const GQL_MUTATIONS = {
+  changePassword,
   clientRegister,
   emailOtpVerification,
   emailVerification,

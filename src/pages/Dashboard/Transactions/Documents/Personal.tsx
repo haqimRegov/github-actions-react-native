@@ -2,7 +2,6 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { AccountHeader, CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { ERRORS } from "../../../../data/dictionary";
@@ -42,7 +41,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   const fetching = useRef<boolean>(false);
   const [documentList, setDocumentList] = useState<IGetSoftCopyDocumentsResult | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState<boolean>(false);
   const [backPrompt, setBackPrompt] = useState<boolean>(false);
   const [submissionResult, setSubmissionResult] = useState<ISubmitHardCopyDocumentsResult | undefined>(undefined);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
@@ -99,7 +97,8 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   const pendingDocCount = principalDocsRemaining + jointDocsRemaining;
   const completedCount = totalCount - pendingDocCount;
   const checkAllCompleted = pendingDocCount !== 0 ? `${pendingDocCount} pending, ` : "";
-  const completedLabel = pendingDocCount === 0 ? `All(${totalCount}) completed` : `${completedCount} completed`;
+  const checkCompleted = completedCount !== 0 ? `${completedCount} completed` : "";
+  const completedLabel = pendingDocCount === 0 ? `All(${totalCount}) completed` : checkCompleted;
   const pendingLabel = pendingDocCount === totalCount ? `All(${pendingDocCount}) pending` : checkAllCompleted;
   const footer = `${UPLOAD_DOCUMENTS.LABEL_DOCUMENT_SUMMARY} ${pendingLabel}${completedLabel}`;
 
@@ -223,7 +222,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           setSubmissionResult(data.result);
         }
         if (error !== null) {
-          setPrompt(false);
           setLoading(false);
           setTimeout(() => {
             Alert.alert(error.message);
@@ -265,7 +263,8 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         hideQuickActions={true}
         titleIconOnPress={handleBack}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
-        titleIcon="arrow-left">
+        titleIcon="arrow-left"
+        topSpace={false}>
         <View style={px(sw68)}>
           <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>
@@ -319,7 +318,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           continueDisabled={pendingDocCount > 0}
           label={footer}
           submitOnPress={handleSubmit}
-          labelSubmit={UPLOAD_DOCUMENTS.BUTTON_DONE}
+          labelSubmit={UPLOAD_DOCUMENTS.BUTTON_CONTINUE}
         />
       ) : null}
       <DocumentsPopup
@@ -328,15 +327,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         handleConfirm={handleConfirmPopup}
         loading={loading}
         result={submissionResult}
-      />
-      <PromptModal
-        backdropOpacity={loading ? 0.4 : undefined}
-        handleContinue={handleBackToTransactions}
-        illustration={LocalAssets.illustration.orderReceived}
-        isLoading={loading}
-        label={UPLOAD_DOCUMENTS.LABEL_UPLOAD_SUCCESSFUL}
-        labelContinue={UPLOAD_DOCUMENTS.BUTTON_DONE}
-        visible={prompt}
       />
       <PromptModal
         backdropOpacity={loading ? 0.4 : undefined}

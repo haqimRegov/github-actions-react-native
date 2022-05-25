@@ -36,6 +36,7 @@ interface DashboardLayoutProps {
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
+  topSpace?: boolean;
 }
 
 export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
@@ -49,6 +50,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   title,
   titleIcon,
   titleIconOnPress,
+  topSpace,
 }: DashboardLayoutProps) => {
   const [addClient, setAddClient] = useState<boolean>(false);
 
@@ -119,7 +121,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
         showsVerticalScrollIndicator={false}>
         <View style={{ ...fullHeight, backgroundColor: colorBlue._2 }}>
           <View style={px(sw24)}>
-            <CustomSpacer space={sh16} />
+            {topSpace !== false ? <CustomSpacer space={sh16} /> : null}
             <View style={{ ...centerVertical, ...flexRow }}>
               <View>
                 <CustomSpacer space={sh16} />

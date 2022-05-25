@@ -21,6 +21,7 @@ import {
   sw4,
   sw84,
 } from "../../../../../styles";
+import { isNotEmpty } from "../../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -40,45 +41,52 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
 
   const content = (
     <Fragment>
-      {totalInvestment.map((investment: IOrderAmount, index: number) => {
-        return (
-          <View key={index}>
-            <View style={flexRow}>
-              <Text style={fs12BoldWhite1}>{investment.currency}</Text>
-              <CustomSpacer isHorizontal={true} space={sw4} />
-              <Text numberOfLines={1} style={fs12BoldWhite1}>
-                {investment.amount}
-              </Text>
-            </View>
-          </View>
-        );
-      })}
+      {isNotEmpty(totalInvestment) && totalInvestment.length > 0
+        ? totalInvestment.map((investment: IOrderAmount, index: number) => {
+            return (
+              <View key={index}>
+                <View style={flexRow}>
+                  <Text style={fs12BoldWhite1}>{investment.currency}</Text>
+                  <CustomSpacer isHorizontal={true} space={sw4} />
+                  <Text numberOfLines={1} style={fs12BoldWhite1}>
+                    {investment.amount}
+                  </Text>
+                </View>
+              </View>
+            );
+          })
+        : null}
     </Fragment>
   );
   const tooltipPlacement = lastIndex ? "top" : "bottom";
   const topAdjustment = lastIndex ? -sh56 : undefined;
   const updatedTextStyle: TextStyle = sortedColumns.includes("totalInvestment") ? { fontFamily: NunitoBold } : {};
-  const style: ViewStyle = totalInvestment.length <= 3 ? centerHorizontal : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
+  const style: ViewStyle =
+    isNotEmpty(totalInvestment) && totalInvestment.length <= 3
+      ? centerHorizontal
+      : { ...alignFlexStart, ...flexChild, marginVertical: sh8 };
 
   return (
-    <TouchableWrapper isTouchable={totalInvestment.length > 3} onPress={handleShowMore}>
+    <TouchableWrapper isTouchable={isNotEmpty(totalInvestment) && totalInvestment.length > 3} onPress={handleShowMore}>
       <View style={{ ...style, ...flexChild }} onResponderStart={() => true}>
-        {totalInvestment.map((investment: IOrderAmount, index: number) => {
-          return (
-            <Fragment key={index}>
-              {index < 3 ? (
-                <View style={flexRow}>
-                  <Text style={{ ...fs12RegGray4, ...updatedTextStyle }}>{investment.currency}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text numberOfLines={1} style={{ ...fs12RegBlue1, ...updatedTextStyle, width: sw84 }}>
-                    {investment.amount}
-                  </Text>
-                </View>
-              ) : null}
-            </Fragment>
-          );
-        })}
-        {totalInvestment.length > 3 ? (
+        {isNotEmpty(totalInvestment) && totalInvestment.length > 0
+          ? totalInvestment.map((investment: IOrderAmount, index: number) => {
+              return (
+                <Fragment key={index}>
+                  {index < 3 ? (
+                    <View style={flexRow}>
+                      <Text style={{ ...fs12RegGray4, ...updatedTextStyle }}>{investment.currency}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw4} />
+                      <Text numberOfLines={1} style={{ ...fs12RegBlue1, ...updatedTextStyle, width: sw84 }}>
+                        {investment.amount}
+                      </Text>
+                    </View>
+                  ) : null}
+                </Fragment>
+              );
+            })
+          : null}
+        {isNotEmpty(totalInvestment) && totalInvestment.length > 3 ? (
           <Fragment>
             <CustomTooltip
               arrowSize={{ height: sh7, width: sw12 }}

@@ -12,6 +12,7 @@ import {
   Loading,
   NewDropdown,
   PromptModal,
+  SelectionBanner,
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -27,6 +28,7 @@ import {
   fs10RegGray6,
   fs12BoldBlack2,
   fs12BoldGray6,
+  fs16RegGray5,
   fsAlignLeft,
   px,
   sh24,
@@ -34,6 +36,7 @@ import {
   sh56,
   sh8,
   sw24,
+  sw68,
 } from "../../../../styles";
 import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
@@ -286,14 +289,43 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const pendingDocumentsPrincipal = documentList && isNotEmpty(documentList.account) ? documentList.account.principal : [];
+  const pendingDocumentsJoint =
+    documentList && isNotEmpty(documentList.account) && isNotEmpty(documentList.account.joint) ? documentList.account.joint : [];
+  const principalDocsCount = pendingDocumentsPrincipal.map(({ docs }) => docs).flat();
+  const principalDocsRemaining = principalDocsCount.filter(
+    (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
+  ).length;
+  const jointDocsCount = pendingDocumentsJoint!.map(({ docs }) => docs).flat();
+  const jointDocsRemaining = jointDocsCount.filter(
+    (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
+  ).length;
+  const accountDocsCount =
+    isNotEmpty(documentList?.documents) && documentList!.documents.length > 0 ? documentList!.documents.map(({ docs }) => docs).flat() : [];
+  const accountDocsRemaining = accountDocsCount.filter(
+    (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
+  ).length;
+  const totalCount = principalDocsCount.length + jointDocsCount.length + accountDocsCount.length;
+  const pendingDocCount = principalDocsRemaining + jointDocsRemaining + accountDocsRemaining;
+  const completedCount = totalCount - pendingDocCount;
+  const checkAllCompleted = pendingDocCount !== 0 ? `${pendingDocCount} pending, ` : "";
+  const checkCompleted = completedCount !== 0 ? `${completedCount} completed` : "";
+  const completedLabel = pendingDocCount === 0 ? `All(${totalCount}) completed` : checkCompleted;
+  const pendingLabel = pendingDocCount === totalCount ? `All(${pendingDocCount}) pending` : checkAllCompleted;
+  const footer = `${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PHYSICAL_DOC_SUMMARY}: ${pendingLabel}${completedLabel}`;
+
   return (
     <Fragment>
       <DashboardLayout
         {...props}
         hideQuickActions={true}
         titleIconOnPress={handleBack}
-        title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMISSION}
-        titleIcon="arrow-left">
+        title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_SUBMIT_PHYSICAL_DOCUMENTS}
+        titleIcon="arrow-left"
+        topSpace={false}>
+        <View style={px(sw68)}>
+          <TextSpaceArea style={fs16RegGray5} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_UPLOAD_HARDCOPY_SUBTITLE} />
+        </View>
         <CustomSpacer space={sh24} />
         {documentList !== undefined ? (
           <Fragment>
@@ -345,7 +377,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
               ) : null}
               {isNotEmpty(documentList.documents) && documentList.documents.length > 0 ? (
                 <Fragment>
-                  <CustomSpacer space={sh32} />
+                  {isNotEmpty(documentList.account) ? <CustomSpacer space={sh32} /> : null}
                   <DocumentList data={documentList.documents} setData={handleSetDocument} />
                 </Fragment>
               ) : null}
@@ -377,6 +409,14 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         )}
         <CustomSpacer space={sh56} />
       </DashboardLayout>
+      {documentList !== undefined ? (
+        <SelectionBanner
+          continueDisabled={pendingDocCount > 0 || branch === "" || toggle === false}
+          label={footer}
+          submitOnPress={handleSubmit}
+          labelSubmit={UPLOAD_DOCUMENTS.BUTTON_CONTINUE}
+        />
+      ) : null}
       <PromptModal
         backdropOpacity={loading ? 0.4 : undefined}
         handleContinue={handleBackToTransactions}

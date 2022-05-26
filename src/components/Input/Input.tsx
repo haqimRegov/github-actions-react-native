@@ -32,6 +32,7 @@ import {
   sw32,
   sw336,
   sw360,
+  sw362,
   sw4,
   sw8,
 } from "../../styles";
@@ -43,6 +44,7 @@ export interface CustomTextInputProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   inputPrefix?: string;
+  increaseErrorWidth?: boolean;
   label?: string;
   labelStyle?: TextStyle;
   leftIcon?: IIcon;
@@ -63,6 +65,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
   containerStyle,
   clearAll,
   disabled,
+  increaseErrorWidth,
   error,
   inputPrefix,
   label,
@@ -121,6 +124,12 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
     fontSize: sh16,
     height: isFocused ? sh50 : sh48, // height is more than the input view size to adjust the keyboard avoiding view
     ...style,
+  };
+
+  const errorWidthStyle: TextStyle = {
+    width: increaseErrorWidth ? sw362 : sw336,
+    lineHeight: sh16,
+    ...fs12RegRed2,
   };
 
   const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -212,7 +221,7 @@ export const CustomTextInput: FunctionComponent<CustomTextInputProps> = ({
           <View style={flexRow}>
             <IcoMoon color={colorRed._2} name="error-filled" size={sw16} />
             <CustomSpacer isHorizontal={true} space={sw8} />
-            <Text style={{ ...fs12RegRed2, lineHeight: sh16, width: sw336 }}>{error}</Text>
+            <Text style={errorWidthStyle}>{error}</Text>
           </View>
         </View>
       )}

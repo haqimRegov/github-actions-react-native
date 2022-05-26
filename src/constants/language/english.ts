@@ -419,7 +419,7 @@ export const english = {
       LABEL_CERTIFICATE_REASON: "Reason for Certificate Not Available",
       LABEL_CERTIFICATE: "Certificate of Loss of Nationality",
       LABEL_CITIZENSHIP: "U.S. Citizenship",
-      LABEL_CITY: "City",
+      LABEL_CITY: "City/ Town",
       LABEL_CORRESPONDENCE_ADDRESS: "Correspondence Address",
       LABEL_CORRESPONDENCE_DECLARATION: "Correspondence Declaration",
       LABEL_CORRESPONDENCE: "Correspondence Declaration",

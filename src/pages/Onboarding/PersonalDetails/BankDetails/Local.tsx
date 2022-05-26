@@ -120,7 +120,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
-        const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} ${index + 1}`;
+        const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} `;
         const currencyExtractor = DICTIONARY_CURRENCY.filter(
           (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
         );

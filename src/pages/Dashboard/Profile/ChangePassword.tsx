@@ -59,6 +59,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
   const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(true);
   const [validateCurrentPassword, setValidateCurrentPassword] = useState<boolean>(true);
   const [validateNewPassword, setValidateNewPassword] = useState<boolean>(true);
+  const [switchValidation, setSwitchValidation] = useState<boolean>(true);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -82,9 +83,11 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         if (error === null && data !== null) {
           if (data.result.status === true) {
             setValidateCurrentPassword(false);
+            setSwitchValidation(false);
           } else {
             setInputCurrentError(ERROR.CHECK_WRONG_PASSWORD);
             setValidateCurrentPassword(true);
+            setSwitchValidation(true);
           }
         }
         if (error !== null) {
@@ -100,6 +103,8 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
 
   const handleNewPassword = (text: string) => {
     setInputNewPassword(text);
+    setSwitchValidation(false);
+    setInput1Error(undefined);
     if (validateCurrentPassword === false && isPassword(text)) {
       setValidateNewPassword(false);
     } else setValidateNewPassword(true);
@@ -135,12 +140,23 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         }
         if (error !== null) {
           setPrompt(false);
+          setSwitchValidation(true);
           setInput1Error(error.message);
         }
       }
     }
   };
+
   const handleValidatePassword = () => {
+    if (inputNewPassword === inputCurrentPassword) {
+      setValidateNewPassword(true);
+      setSwitchValidation(true);
+      return setInput1Error(ERROR.SIMILAR_PASSWORD);
+    }
+    return setInput1Error(undefined);
+  };
+
+  const handleValidateRetypePassword = () => {
     if (inputRetypePassword !== "" && inputNewPassword !== inputRetypePassword) {
       return setInput2Error(ERROR.PASSWORD_NOT_MATCH);
     }
@@ -148,6 +164,13 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
   };
 
   const debouncedCurrentPassword: string = useDebounce<string>(inputCurrentPassword, 1000);
+
+  const handleClearAll = () => {
+    if (input1Error !== undefined) {
+      setSwitchValidation(true);
+      setInputRetypePassword("");
+    }
+  };
 
   const buttonDisabled =
     inputNewPassword === "" ||
@@ -200,23 +223,25 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
         <View style={px(sw24)}>
           <CustomTextInput
             disabled={validateCurrentPassword}
+            increaseErrorWidth={true}
             error={input1Error}
             keyboardType="default"
             label={PROFILE.LABEL_NEW_PASSWORD}
             maxLength={DICTIONARY_PASSWORD_MAX_LENGTH}
             onBlur={handleValidatePassword}
             onChangeText={handleNewPassword}
+            onFocus={handleClearAll}
             rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
             secureTextEntry={showPassword}
             value={inputNewPassword}
           />
-          {validateCurrentPassword === false ? <PasswordValidation password={inputNewPassword} /> : null}
+          {switchValidation === false ? <PasswordValidation password={inputNewPassword} /> : null}
           <CustomTextInput
             disabled={validateNewPassword}
             error={input2Error}
             keyboardType="default"
             label={PROFILE.LABEL_RETYPE_PASSWORD}
-            onBlur={handleValidatePassword}
+            onBlur={handleValidateRetypePassword}
             onChangeText={setInputRetypePassword}
             rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
             secureTextEntry={showPassword}

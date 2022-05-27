@@ -9,6 +9,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
   approved: state.transactions.approved,
   config: state.global.config,
   currentOrder: state.transactions.currentOrder,
+  downloadInitiated: state.transactions.downloadInitiated,
   loading: state.global.loading,
   incomplete: state.transactions.incomplete,
   rejected: state.transactions.rejected,

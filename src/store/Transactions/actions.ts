@@ -81,6 +81,10 @@ export const updatePill = (pill: ITransactionPills) => {
   return typedAction("transactions/UPDATE_PILL", pill);
 };
 
+export const updateDownloadInitiated = (toggle: boolean) => {
+  return typedAction("transactions/UPDATE_DOWNLOAD_INITIATED", toggle);
+};
+
 export type TransactionsAction = ReturnType<
   | typeof addApprovedOrders
   | typeof addPendingOrders
@@ -94,6 +98,7 @@ export type TransactionsAction = ReturnType<
   | typeof updateApprovedFilter
   | typeof updateApprovedSort
   | typeof updateCurrentOrder
+  | typeof updateDownloadInitiated
   | typeof updatedSelectedOrder
   | typeof updatePendingFilter
   | typeof updatePendingSort
@@ -117,6 +122,7 @@ export const TransactionsActionProps = {
   updateApprovedFilter,
   updateApprovedSort,
   updateCurrentOrder,
+  updateDownloadInitiated,
   updatedSelectedOrder,
   updatePendingFilter,
   updatePendingSort,

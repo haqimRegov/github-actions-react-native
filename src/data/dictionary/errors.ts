@@ -17,6 +17,7 @@ const OCR_INVALID_NRIC = "Kindly upload a valid NRIC.";
 const OCR_INVALID_NRIC_DATA = "We’re unable to capture the data from the image you uploaded.";
 const PASSWORD_NOT_MATCH = "Those passwords didn't match. Try again.";
 const CHECK_WRONG_PASSWORD = "Invalid password entered. Please try again.";
+const SIMILAR_PASSWORD = "New password entered is the same as current password.";
 
 export const ERROR = {
   INVALID_ALPHANUMERIC,
@@ -38,6 +39,7 @@ export const ERROR = {
   OCR_INVALID_NRIC,
   PASSWORD_NOT_MATCH,
   CHECK_WRONG_PASSWORD,
+  SIMILAR_PASSWORD,
 };
 
 export const ERROR_CODE = {

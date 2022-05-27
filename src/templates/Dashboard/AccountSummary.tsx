@@ -25,7 +25,6 @@ import {
   sw1,
   sw120,
   sw16,
-  sw20,
   sw24,
   sw240,
   sw32,
@@ -41,7 +40,7 @@ interface AccountSummaryProps {
   accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
   data: IStructuredData;
-  handleViewId: () => void;
+  // handleViewId: () => void;
   idNumber: string;
   idType: TypeClientID;
   name: string;
@@ -52,7 +51,7 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
   accountHolder,
   accountType,
   data,
-  handleViewId,
+  // handleViewId,
   idNumber,
   idType,
   name,
@@ -99,12 +98,12 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
           <LabeledTitle label={DASHBOARD_PROFILE.LABEL_FULL_NAME} title={name} titleStyle={fs16BoldBlack1} />
           <CustomSpacer space={sh16} />
           <LabeledTitle
-            iconSize={sw20}
+            // iconSize={sw20}
             label={labelId}
-            onPress={handleViewId}
-            spaceToIcon={sw20}
+            // onPress={handleViewId}
+            // spaceToIcon={sw20}
             title={idNumber}
-            titleIcon="profile-card"
+            // titleIcon="profile-card"
             titleStyle={fs16BoldBlack1}
           />
         </View>
@@ -209,7 +208,7 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
             <TextSpaceArea spaceToBottom={sh16} style={fs18BoldGray6} text={DASHBOARD_PROFILE.TITLE_BANK_SUMMARY} />
             <View style={px(sw32)}>
               {localBankDetails.map((bank, numberIndex) => {
-                const label = `${DASHBOARD_PROFILE.SUBTITLE_LOCAL_BANK} ${numberIndex + 1}`;
+                const label = `${DASHBOARD_PROFILE.SUBTITLE_LOCAL_BANK}`;
                 return (
                   <Fragment key={numberIndex}>
                     <View style={flexRow}>
@@ -231,7 +230,7 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
                 );
               })}
               {foreignBankDetails.map((bank, numberIndex) => {
-                const label = `${DASHBOARD_PROFILE.SUBTITLE_FOREIGN_BANK} ${numberIndex + 1}`;
+                const label = `${DASHBOARD_PROFILE.SUBTITLE_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;
                 return (
                   <Fragment key={numberIndex}>
                     {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}

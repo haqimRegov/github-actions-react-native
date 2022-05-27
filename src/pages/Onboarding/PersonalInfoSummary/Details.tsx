@@ -166,7 +166,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           <View style={borderBottomGray2}>
             <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldGray6} />
             {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
-              const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
+              const label = `${SUMMARY.SUBTITLE_LOCAL_BANK}`;
               return (
                 <Fragment key={index}>
                   {index === 0 ? null : <CustomSpacer space={sh8} />}

@@ -236,11 +236,6 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
 
               if (payment.paymentMethod === "Online Banking / TT / ATM") {
                 paymentDetails.push(
-                  {
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_AMOUNT,
-                    title: `${payment.fundCurrency} ${payment.investmentAmount}`,
-                    titleStyle: fsTransformNone,
-                  },
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_PAYMENT_METHOD, title: `${payment.paymentMethod}`, titleStyle: fsTransformNone },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_BANK_NAME,
@@ -366,7 +361,21 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                         </View>
                       </Fragment>
                     ) : (
-                      <Text style={fs18BoldBlack2}>{titleCaseString(paymentLabel!)}</Text>
+                      <View style={flexChild}>
+                        <View style={rowCenterVertical}>
+                          <Text style={fs18BoldBlack2}>{titleCaseString(paymentLabel!)}</Text>
+                          <CustomSpacer isHorizontal={true} space={sw16} />
+                          <View style={flexChild}>
+                            <View style={borderBottomBlue5} />
+                          </View>
+                          <CustomSpacer isHorizontal={true} space={sw16} />
+                          {isNotEmpty(payment.fundCurrency && payment.investmentAmount) ? (
+                            <View>
+                              <Text style={fs18BoldBlack2}>{`${payment.fundCurrency} ${payment.investmentAmount}`}</Text>
+                            </View>
+                          ) : null}
+                        </View>
+                      </View>
                     )}
                     <CustomSpacer isHorizontal={true} space={sw8} />
                     <Text style={fs12RegGray5}>{surplusLabel}</Text>

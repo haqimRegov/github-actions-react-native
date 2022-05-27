@@ -3,7 +3,7 @@ import moment from "moment";
 import { PAYMENT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
-import { fsTransformNone, fsUppercase, sh4, sw200 } from "../styles";
+import { fsTransformNone, fsUppercase, sh4, sw328 } from "../styles";
 import { isNotEmpty } from "./Value";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;
@@ -49,7 +49,7 @@ export const structureProfile = (
 
   if (personalDetails.race !== null && personalDetails.bumiputera !== null) {
     accountSummaryDetails.splice(
-      3,
+      4,
       0,
       {
         label: DASHBOARD_PROFILE.LABEL_BUMIPUTERA,
@@ -191,9 +191,9 @@ export const structureProfile = (
         fatcaSummary.push({
           label: DASHBOARD_PROFILE.LABEL_CERTIFICATE,
           title: fatca.certificate.name!,
-          titleIcon: fatca.certificate.name === "-" ? undefined : "file",
+          // titleIcon: fatca.certificate.name === "-" ? undefined : "file",
           titleStyle: fsTransformNone,
-          onPress: () => setFile(fatca.certificate! as FileBase64),
+          // onPress: () => setFile(fatca.certificate! as FileBase64),
         });
       } else {
         fatcaSummary.push(
@@ -205,8 +205,8 @@ export const structureProfile = (
           },
         );
       }
-      if (fatca.confirmAddress === "Yes") {
-        fatcaSummary.push({
+      if (fatca.correspondenceDeclaration === "Yes") {
+        fatcaSummary.splice(2, 0, {
           label: DASHBOARD_PROFILE.LABEL_CORRESPONDENCE,
           title: fatca.correspondenceDeclaration || "-",
           titleStyle: fsTransformNone,
@@ -226,7 +226,7 @@ export const structureProfile = (
   const crsSummary: LabeledTitleProps[] = [
     {
       label: DASHBOARD_PROFILE.LABEL_JURISDICTION,
-      labelStyle: { width: sw200 },
+      labelStyle: { width: sw328 },
       spaceToLabel: sh4,
       title: crs.taxResident || "-",
     },

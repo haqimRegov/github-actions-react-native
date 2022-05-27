@@ -3,12 +3,13 @@ import { Alert, Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
-import { CustomFlexSpacer, CustomSpacer, CustomToast, Pagination, SelectionBanner, TabGroup } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, CustomToast, Pagination, PromptModal, SelectionBanner, TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
 import { RNShareApi } from "../../../../integrations";
 import { getSummaryReceipt } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
+  alignFlexStart,
   borderBottomGray2,
   centerVertical,
   colorBlue,
@@ -17,6 +18,7 @@ import {
   flexRow,
   fs12BoldBlue8,
   fs16RegGray6,
+  fsAlignLeft,
   fullHW,
   sh1,
   sh112,
@@ -47,6 +49,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
     activeTab,
+    downloadInitiated,
     incomplete,
     navigation,
     resetApprovedFilter,
@@ -59,6 +62,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setScreen,
     transactions,
     updateApprovedFilter,
+    updateDownloadInitiated,
     updatedSelectedOrder,
     updatePendingFilter,
     updateRejectedFilter,
@@ -74,14 +78,21 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const [filterTemp, setFilterTemp] = useState<ITransactionsFilter>(filter);
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
   const [inputSearch, setInputSearch] = useState<string>(search);
-  const [downloadInitiated, setDownloadInitiated] = useState<boolean>(false);
+  const [cancelPrompt, setCancelPrompt] = useState<boolean>(false);
+  const [tempTab, setTempTab] = useState<TransactionsTabType | undefined>(undefined);
+  const [downloadToastCount, setDownloadToastCount] = useState<number>(selectedOrders.length);
   const [downloadToast, setDownloadToast] = useState<boolean>(false);
 
   const tabs: TransactionsTabType[] = ["incomplete", "rejected", "approved"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
-    setActiveTab(tabs[index]);
+    if (downloadInitiated === true && activeTab === "incomplete") {
+      setTempTab(tabs[index]);
+      setCancelPrompt(true);
+    } else {
+      setActiveTab(tabs[index]);
+    }
   };
 
   const handleNext = () => {
@@ -128,8 +139,10 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           if (data.result.pdf.length > 0) {
             const share = await RNShareApi.filesBase64(documents);
             if (share !== undefined) {
+              setDownloadToastCount(selectedOrders.length);
+              updatedSelectedOrder([]);
+              updateDownloadInitiated(false);
               setDownloadToast(true);
-              setDownloadInitiated(false);
             }
           } else {
             // setLoading(false);
@@ -153,8 +166,20 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleCancel = () => {
+    setCancelPrompt(true);
+  };
+
+  const handleBack = () => {
+    setCancelPrompt(false);
+  };
+
+  const handleProceed = () => {
+    setCancelPrompt(false);
+    updateDownloadInitiated(false);
     updatedSelectedOrder([]);
-    setDownloadInitiated(false);
+    if (tempTab !== undefined) {
+      setActiveTab(tempTab);
+    }
   };
 
   const handlePrintSelected = () => {
@@ -205,7 +230,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   useEffect(() => {
     if (downloadToast === false) {
-      updatedSelectedOrder([]);
+      setDownloadToastCount(0);
     }
   }, [downloadToast]);
 
@@ -224,7 +249,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       <PendingOrders
         activeTab={activeTab === "incomplete"}
         downloadInitiated={downloadInitiated}
-        setDownloadInitiated={setDownloadInitiated}
+        setDownloadInitiated={updateDownloadInitiated}
         {...tabProps}
       />
     );
@@ -249,8 +274,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       : `${selectedOrders.length} ${selectionText}`;
   const toastText =
     selectedOrders.length > 1
-      ? `${selectedOrders.length} ${DASHBOARD_HOME.LABEL_RECEIPTS_DOWNLOADED}`
-      : `${selectedOrders.length} ${DASHBOARD_HOME.LABEL_RECEIPT_DOWNLOADED}`;
+      ? `${downloadToastCount} ${DASHBOARD_HOME.LABEL_RECEIPTS_DOWNLOADED}`
+      : `${downloadToastCount} ${DASHBOARD_HOME.LABEL_RECEIPT_DOWNLOADED}`;
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -311,7 +336,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         <CustomSpacer space={sh24} />
         {selectedOrders.length !== 0 && activeTab === "incomplete" ? <CustomSpacer space={sh112} /> : null}
       </DashboardLayout>
-      {(selectedOrders.length !== 0 || downloadInitiated === true) && activeTab === "incomplete" ? (
+      {downloadInitiated === true && activeTab === "incomplete" ? (
         <SelectionBanner
           bottomContent={
             <View style={{ ...flexRow, ...centerVertical }}>
@@ -333,6 +358,19 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         />
       ) : null}
       <CustomToast parentVisible={downloadToast} deleteText={toastText} setParentVisible={setDownloadToast} />
+      <PromptModal
+        backdropOpacity={loading ? 0.4 : undefined}
+        contentStyle={alignFlexStart}
+        handleCancel={handleBack}
+        handleContinue={handleProceed}
+        label={DASHBOARD_HOME.LABEL_CANCEL_PROMPT_TITLE}
+        labelCancel={DASHBOARD_HOME.BUTTON_GO_BACK}
+        labelContinue={DASHBOARD_HOME.BUTTON_YES}
+        labelStyle={fsAlignLeft}
+        title={DASHBOARD_HOME.LABEL_CANCEL_PROMPT_SUBTITLE}
+        titleStyle={fsAlignLeft}
+        visible={cancelPrompt}
+      />
     </View>
   );
 };

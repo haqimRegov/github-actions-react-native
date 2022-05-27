@@ -62,32 +62,23 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
 
   const handleNavigation = (route: string) => {
     setCurrentOrder(item);
-    switch (route) {
-      case "Proof of Payment":
-      case "Recurring Info":
-        setScreen("DashboardPayment");
-        break;
-      case "Certificate of Lost of Nationality":
-      case "Certificate of Loss of Nationality":
-      case "NRIC":
-      case "NRIC - Front":
-      case "NRIC - Back":
-        setScreen("UploadDocuments");
-        break;
-      case "EPF 9N form + IC Copies":
-      case "EPF 9N Form":
-      case "UT Account Opening/Transaction":
-      case "W8-Ben":
-      case "W9":
-        setScreen("UploadHardCopy");
-        break;
-      case "Submission Summary Receipt":
-        if (handleSelectOrder !== undefined) {
-          handleSelectOrder(item);
-        }
-        break;
-      default:
-        setScreen("DashboardPayment");
+    if (route !== "Submission Summary Receipt") {
+      switch (item.status) {
+        case "Pending Payment":
+        case "Pending Doc & Payment":
+          setScreen("DashboardPayment");
+          break;
+        case "Pending Doc":
+          setScreen("UploadDocuments");
+          break;
+        case "Pending Physical Doc":
+          setScreen("UploadHardCopy");
+          break;
+        default:
+          setScreen("DashboardPayment");
+      }
+    } else if (handleSelectOrder !== undefined) {
+      handleSelectOrder(item);
     }
   };
 

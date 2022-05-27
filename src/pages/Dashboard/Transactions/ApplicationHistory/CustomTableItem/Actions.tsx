@@ -26,7 +26,7 @@ export const PendingActions: FunctionComponent<IPendingActions> = ({
 }: IPendingActions) => {
   const handleView = () => {
     if (setCurrentOrder !== undefined && setScreen !== undefined) {
-      setCurrentOrder(item.rawData.orderNo as unknown as IDashboardOrder);
+      setCurrentOrder(item.rawData as unknown as IDashboardOrder);
       setScreen("OrderSummary");
     }
   };

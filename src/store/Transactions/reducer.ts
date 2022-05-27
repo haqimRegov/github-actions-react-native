@@ -61,6 +61,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         },
         approvedCount: 0,
         currentOrder: undefined,
+        downloadInitiated: false,
         incompleteCount: 0,
         pendingCount: 0,
         rejectedCount: 0,
@@ -206,6 +207,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           ...state.incomplete,
           pill: action.payload,
         },
+      };
+    case "transactions/UPDATE_DOWNLOAD_INITIATED":
+      return {
+        ...state,
+        downloadInitiated: action.payload,
       };
 
     default:

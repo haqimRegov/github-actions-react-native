@@ -1,6 +1,7 @@
 import { DICTIONARY_TRANSACTIONS_DATE, DICTIONARY_TRANSACTIONS_TYPE } from "../../data/dictionary";
 
 interface ITransactionState extends ITransactionsDashboard {
+  downloadInitiated: boolean;
   selectedOrders: IDashboardOrder[];
   search: string;
   currentOrder: IDashboardOrder | undefined;
@@ -52,6 +53,7 @@ export const transactionsInitialState: transactionsState = {
     pages: 1,
     sort: [{ value: "descending", column: "lastUpdated" }],
   },
+  downloadInitiated: false,
   selectedOrders: [],
   approvedCount: 0,
   rejectedCount: 0,

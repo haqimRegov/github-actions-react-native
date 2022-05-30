@@ -66,7 +66,11 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
       switch (item.status) {
         case "Pending Payment":
         case "Pending Doc & Payment":
-          setScreen("DashboardPayment");
+          if (route === "Certificate of Loss of Nationality" || route.includes("NRIC")) {
+            setScreen("UploadDocuments");
+          } else {
+            setScreen("DashboardPayment");
+          }
           break;
         case "Pending Doc":
           setScreen("UploadDocuments");

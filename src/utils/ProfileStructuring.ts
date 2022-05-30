@@ -143,9 +143,6 @@ export const structureProfile = (
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
       ];
 
-      if (bank.bankLocation !== null) {
-        newData.push({ label: DASHBOARD_PROFILE.LABEL_BANK_LOCATION, title: bank.bankLocation });
-      }
       if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
         newData.push({ label: DASHBOARD_PROFILE.LABEL_BANK_SWIFT, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
       }

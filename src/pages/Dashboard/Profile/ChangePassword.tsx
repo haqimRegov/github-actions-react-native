@@ -178,7 +178,8 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
     inputRetypePassword === "" ||
     !isPassword(inputRetypePassword) ||
     input2Error !== undefined ||
-    inputNewPassword !== inputRetypePassword;
+    inputNewPassword !== inputRetypePassword ||
+    input1Error !== undefined;
 
   const handleBack = () => {
     setPage("profile");

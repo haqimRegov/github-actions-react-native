@@ -36,6 +36,7 @@ const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
 
 export interface ProductConfirmationProps {
   accountType: TypeAccountChoices;
+  agentCategory: TypeAgentCategory;
   investmentDetails: IProductSales[];
   multiUtmc?: boolean;
   selectedFunds: IProduct[];
@@ -48,6 +49,7 @@ export interface ProductConfirmationProps {
 
 export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = ({
   accountType,
+  agentCategory,
   investmentDetails,
   multiUtmc,
   setFixedBottomShow,
@@ -248,6 +250,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
                   <CustomSpacer space={sh24} />
                   <Investment
                     accountType={accountType}
+                    agentCategory={agentCategory}
                     data={item}
                     handleScrollToFund={handleScrollToFund}
                     setData={updateData}

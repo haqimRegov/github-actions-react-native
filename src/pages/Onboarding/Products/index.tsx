@@ -36,7 +36,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   viewFund,
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
-  const { isMultiUtmc } = global;
+  const { agent, isMultiUtmc } = global;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
@@ -232,6 +232,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       content: (
         <ProductConfirmation
           accountType={accountType}
+          agentCategory={agent!.category!}
           investmentDetails={investmentDetails!}
           multiUtmc={isMultiUtmc}
           selectedFunds={selectedFunds}
@@ -292,7 +293,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
       (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
       investment.amountError !== undefined ||
-      investment.scheduledAmountError !== undefined
+      investment.scheduledAmountError !== undefined ||
+      investment.investmentSalesChargeError !== undefined ||
+      investment.scheduledSalesChargeError !== undefined
     );
   });
 

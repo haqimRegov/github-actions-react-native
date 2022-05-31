@@ -13,9 +13,11 @@ declare interface IProductInvestment {
   fundPaymentMethod: "Cash" | "EPF";
   investmentAmount: string;
   investmentSalesCharge: string;
+  investmentSalesChargeError?: string;
   scheduledAmountError?: string;
   scheduledInvestment: boolean;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;
+  scheduledSalesChargeError?: string;
   prsType?: TypePrs;
 }

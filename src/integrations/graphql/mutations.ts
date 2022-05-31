@@ -539,6 +539,7 @@ const userLogin = gql`
       data {
         result {
           accessKeyId
+          agentCategory
           agentId
           branch
           email

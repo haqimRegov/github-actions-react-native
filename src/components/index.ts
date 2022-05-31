@@ -13,6 +13,7 @@ export * from "./Input";
 export * from "./Items";
 export * from "./List";
 export * from "./Modals";
+export * from "./MultiSelect";
 export * from "./Nav";
 export * from "./RadioButton";
 export * from "./Signature";

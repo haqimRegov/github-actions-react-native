@@ -339,7 +339,7 @@ export const english = {
       LABEL_CHEQUE_NO: "Cheque Number",
       LABEL_CLIENT_NAME: "Client Name",
       LABEL_CLIENT_TRUST: "Client Trust Account Number",
-      LABEL_DISTRIBUTION: "Distribution Instructions",
+      LABEL_DISTRIBUTION: "Mode of Income Distribution",
       LABEL_EPF_ACCOUNT: "EPF Account Number",
       LABEL_EPF_REFERENCE: "EPF 9N Form Reference Number",
       LABEL_FEA: "FEA Tag",

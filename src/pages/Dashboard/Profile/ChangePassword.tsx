@@ -147,20 +147,27 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
     }
   };
 
+  const handleValidateRetypePassword = () => {
+    if (inputRetypePassword !== "" && inputNewPassword !== inputRetypePassword) {
+      return setInput2Error(ERROR.PASSWORD_NOT_MATCH);
+    }
+    return setInput2Error(undefined);
+  };
+
   const handleValidatePassword = () => {
+    if (input1Error !== undefined) {
+      setValidateNewPassword(true);
+      return input1Error;
+    }
+    if (input2Error !== undefined) {
+      handleValidateRetypePassword();
+    }
     if (inputNewPassword === inputCurrentPassword) {
       setValidateNewPassword(true);
       setSwitchValidation(true);
       return setInput1Error(ERROR.SIMILAR_PASSWORD);
     }
     return setInput1Error(undefined);
-  };
-
-  const handleValidateRetypePassword = () => {
-    if (inputRetypePassword !== "" && inputNewPassword !== inputRetypePassword) {
-      return setInput2Error(ERROR.PASSWORD_NOT_MATCH);
-    }
-    return setInput2Error(undefined);
   };
 
   const debouncedCurrentPassword: string = useDebounce<string>(inputCurrentPassword, 1000);

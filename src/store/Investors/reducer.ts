@@ -12,9 +12,7 @@ export function investorsReducer(state = transactionsInitialState, action: Inves
       return {
         all: {
           filter: {
-            riskProfile: "",
-            startDate: undefined,
-            endDate: new Date(),
+            riskProfile: [],
           },
           investors: [],
           page: 1,
@@ -31,9 +29,7 @@ export function investorsReducer(state = transactionsInitialState, action: Inves
         ...state,
         all: {
           filter: {
-            riskProfile: "",
-            startDate: undefined,
-            endDate: new Date(),
+            riskProfile: [],
           },
           investors: [],
           page: 1,

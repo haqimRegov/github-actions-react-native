@@ -51,6 +51,7 @@ export const colorPurple = {
 
 export const colorRed = {
   _1: "#C61230",
+  _1_2: "rgba(198, 18, 48, 0.2)",
   _2: "#E84C3D",
   _3: "#AB001D",
   _4: "#FDF1EF",

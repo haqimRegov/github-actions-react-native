@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { FunctionComponent, useEffect } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -188,10 +187,10 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
 
   const handleFetch = async () => {
     setIsFetching(true);
-    const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
-    const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
     const filterRisk: IInvestorDashboardFilter[] =
-      filter.riskProfile !== "" ? [{ column: "riskTolerance", value: filter.riskProfile! }] : [];
+      filter.riskProfile.length > 0
+        ? filter.riskProfile!.map((eachProfile: string) => ({ column: "riskTolerance", value: eachProfile }))
+        : [];
     const defaultSort: IInvestorsSort[] = sort.length === 0 ? [{ column: "name", value: "descending" }] : sort;
 
     const request: IInvestorDashboardRequest = {
@@ -199,13 +198,7 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
       page: page,
       search: search,
       sort: defaultSort,
-      filter: [
-        {
-          column: "timestamp",
-          value: `${minimumDate}~${maximumDate}`,
-        },
-        ...filterRisk,
-      ],
+      filter: [...filterRisk],
     };
     const dashboardResponse: IInvestorDashboardResponse = await getInvestorDashboard(request, navigation, setIsFetching);
     if (dashboardResponse !== undefined) {

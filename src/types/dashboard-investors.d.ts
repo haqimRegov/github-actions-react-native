@@ -14,9 +14,7 @@ declare interface IInvestorsDashboard {
 }
 
 declare interface IInvestorsFilter {
-  endDate?: Date;
-  riskProfile?: string;
-  startDate?: Date;
+  riskProfile: string[];
 }
 
 declare interface IInvestorsSort {

@@ -33,17 +33,15 @@ import {
   sh16,
   sh18,
   sh32,
-  sw103,
-  sw112,
-  sw119,
-  sw143,
-  sw159,
+  sw104,
   sw16,
+  sw160,
+  sw168,
   sw20,
   sw24,
-  sw64,
+  sw56,
   sw8,
-  sw95,
+  sw96,
 } from "../../../../../styles";
 import { AnimationUtils, isNotEmpty } from "../../../../../utils";
 import { OrderRemarks } from "../../../Transactions/ApplicationHistory/OrderRemarks";
@@ -218,8 +216,8 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
     updatePill(updatedPill);
   };
 
-  const handleView = async (item: ITableData) => {
-    updateCurrentCase(item.rawData as IEDDDashboardCase);
+  const handleView = async (item: ITableRowData) => {
+    updateCurrentCase(item.rawData as unknown as IEDDDashboardCase);
     handleSeen();
     switch (pill) {
       case "submitted":
@@ -290,7 +288,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       onPressHeader: () => checkLoading(handleSortCaseId),
       title: DASHBOARD_EDD.LABEL_EDD_CASE_ID,
       titleStyle: sortedColumns.includes("caseNo") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw112 },
+      viewStyle: { width: sw96 },
     },
     {
       customItem: true,
@@ -299,7 +297,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       onPressHeader: () => checkLoading(handleSortName),
       title: DASHBOARD_EDD.LABEL_INVESTOR_NAME,
       titleStyle: sortedColumns.includes("clientName") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw159 },
+      viewStyle: { width: sw168 },
     },
     {
       icon: { name: sortAccountNo === "descending" ? "arrow-down" : "arrow-up" },
@@ -310,7 +308,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       textStyle: fsTransformNone,
       title: DASHBOARD_EDD.LABEL_ACCOUNT_NO,
       titleStyle: sortedColumns.includes("accountNo") ? { ...fsTransformNone, ...fs10BoldBlue1, lineHeight: sh13 } : fsTransformNone,
-      viewStyle: { width: sw103 },
+      viewStyle: { width: sw104 },
     },
     {
       customHeader: true,
@@ -324,7 +322,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       ],
       onPressHeader: () => checkLoading(handleSortCreatedOn),
       title: showDateBy.type,
-      viewStyle: { width: sw119, ...px(0), ...centerHorizontal },
+      viewStyle: { width: sw104, ...px(0), ...centerHorizontal },
     },
     {
       customItem: true,
@@ -338,7 +336,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       onPressHeader: () => checkLoading(handleSortDueDate),
       title: DASHBOARD_EDD.LABEL_DUE_DATE,
       titleStyle: sortedColumns.includes("targetDate") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw95 },
+      viewStyle: { width: sw104 },
     },
     {
       customItem: true,
@@ -348,7 +346,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       onPressItem: handleShowRemarks,
       title: DASHBOARD_EDD.LABEL_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw143 },
+      viewStyle: { width: sw160 },
       withAccordion: true,
     },
     {
@@ -356,7 +354,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       key: [],
       onPressItem: handleView,
       title: DASHBOARD_EDD.LABEL_VIEW,
-      viewStyle: { ...centerHV, width: sw64 },
+      viewStyle: { ...centerHV, width: sw56 },
     },
   ];
 
@@ -463,7 +461,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}
-        data={isFetching === true ? [] : cases}
+        data={isFetching === true ? [] : (cases as unknown as ITableData[])}
         handleRowNavigation={handlePressCase}
         headerPopup={{
           content: showDatePopupContent.map((_content, contentIndex) =>
@@ -488,7 +486,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
             sortedColumns.includes("lastUpdated") || sortedColumns.includes("caseCreated")
               ? { ...fs10BoldBlue1, lineHeight: sh13 }
               : { fontFamily: NunitoRegular },
-          viewStyle: { width: sw119 },
+          viewStyle: { width: sw104 },
         }}
         RenderAccordion={renderAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <EDDCustomTableItem {...data} sortedColumns={sortedColumns} />}

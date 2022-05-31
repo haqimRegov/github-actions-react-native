@@ -10,7 +10,7 @@ export interface CaseCreatedProps extends ITableCustomItem {
 }
 
 export const CaseCreated: FunctionComponent<CaseCreatedProps> = ({ item, sortedColumns }: CaseCreatedProps) => {
-  const { createdOn } = item.rawData as IDashboardOrder;
+  const { createdOn } = item.rawData as unknown as IDashboardOrder;
   const updatedTextStyle: TextStyle = sortedColumns.includes("caseCreated") ? { fontFamily: NunitoBold } : {};
   return (
     <View style={centerHorizontal}>

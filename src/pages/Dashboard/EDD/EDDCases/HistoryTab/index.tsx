@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../../assets/images/LocalAssets";
@@ -13,27 +13,32 @@ import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../
 import {
   centerHorizontal,
   centerHV,
+  colorBlue,
   colorWhite,
   flexChild,
   fs10BoldBlue1,
+  fs12BoldGray6,
   fs12RegBlue1,
+  fs12RegGray5,
   fsTransformNone,
   justifyContentStart,
   px,
+  py,
+  sh12,
   sh13,
+  sh16,
   sh32,
-  sw103,
-  sw112,
-  sw119,
-  sw159,
+  sw104,
   sw16,
+  sw160,
+  sw168,
   sw20,
   sw24,
-  sw64,
-  sw752,
+  sw56,
   sw8,
+  sw96,
 } from "../../../../../styles";
-import { AnimationUtils } from "../../../../../utils";
+import { AnimationUtils, isNotEmpty } from "../../../../../utils";
 import { OrderRemarks } from "../../../Transactions/ApplicationHistory/OrderRemarks";
 import { EDDCustomTableItem } from "../CustomItems";
 
@@ -74,17 +79,14 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
   };
 
   const handleShowRemarks = (item: ITableRowData) => {
-    const { remark } = item.rawData as IEDDDashboardCase;
-    if (remark) {
-      const newSections: number[] = [...activeAccordion];
-      const sectionIndex = newSections.indexOf(item.index);
-      if (sectionIndex > -1) {
-        newSections.splice(sectionIndex, 1);
-      } else {
-        newSections.splice(0, 1, item.index);
-      }
-      setActiveAccordion(newSections);
+    const newSections: number[] = [...activeAccordion];
+    const sectionIndex = newSections.indexOf(item.index);
+    if (sectionIndex > -1) {
+      newSections.splice(sectionIndex, 1);
+    } else {
+      newSections.splice(0, 1, item.index);
     }
+    setActiveAccordion(newSections);
   };
 
   const handleSortCaseId = async () => {
@@ -135,29 +137,46 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
     updateHistorySort([newSort]);
   };
 
-  const handleView = (item: ITableData) => {
-    updateCurrentCase(item.rawData as IEDDDashboardCase);
+  const handleView = (item: ITableRowData) => {
+    updateCurrentCase(item.rawData as unknown as IEDDDashboardCase);
     setScreen("ViewCase");
   };
 
   const handlePressCase = (item: ITableData) => {
-    updateCurrentCase(item as IEDDDashboardCase);
+    updateCurrentCase(item as unknown as IEDDDashboardCase);
     setScreen("ViewCase");
   };
 
   const tableAccordion = (item: ITableData) => {
-    const { remark, status } = item as IEDDDashboardCase;
+    const { label, rerouteReason, status } = item as unknown as IEDDDashboardCase;
+    const containerStyle: ViewStyle = {
+      ...px(sw16),
+      ...py(sh12),
+      backgroundColor: colorBlue._2,
+      borderBottomLeftRadius: sw8,
+      borderBottomRightRadius: sw8,
+    };
+    let rerouteData: IDashboardReason[] = [];
+    if (isNotEmpty(rerouteReason)) {
+      rerouteData = rerouteReason!.map((eachReason: IEDDReason) => {
+        return {
+          title: eachReason.title,
+          content: isNotEmpty(eachReason.remark) ? [eachReason.remark] : [],
+        };
+      });
+    }
     return (
       <Fragment>
-        {remark ? (
-          <OrderRemarks
-            cardStyle={{ width: sw752 }}
-            showIcon={false}
-            remarks={remark}
-            remarkTitle={DASHBOARD_EDD.LABEL_CANCELLED_REMARKS}
-            status={status}
-          />
-        ) : null}
+        <View style={containerStyle}>
+          <Text style={fs12BoldGray6}>{status}</Text>
+          <Text style={fs12RegGray5}>{label}</Text>
+          {isNotEmpty(rerouteReason) && rerouteReason!.length > 0 ? (
+            <Fragment>
+              <CustomSpacer space={sh16} />
+              <OrderRemarks remarkTitle={DASHBOARD_EDD.LABEL_REROUTE_REASON} remarks={rerouteData} status={status} />
+            </Fragment>
+          ) : null}
+        </View>
       </Fragment>
     );
   };
@@ -199,7 +218,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
         },
       ],
       onPressHeader: () => checkLoading(handleSortCaseId),
-      viewStyle: { width: sw112 },
+      viewStyle: { width: sw96 },
       title: DASHBOARD_EDD.LABEL_EDD_CASE_ID,
       titleStyle: sortedColumns.includes("caseNo") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
@@ -208,7 +227,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       icon: { name: sortName === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "clientName", textStyle: { ...fs12RegBlue1, ...fsTransformNone } }],
       onPressHeader: () => checkLoading(handleSortName),
-      viewStyle: { width: sw159 },
+      viewStyle: { width: sw168 },
       title: DASHBOARD_EDD.LABEL_INVESTOR_NAME,
       titleStyle: sortedColumns.includes("clientName") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
@@ -218,7 +237,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
         { key: "accountNo", textStyle: { ...fs12RegBlue1, fontFamily: sortedColumns.includes("accountNo") ? NunitoBold : NunitoRegular } },
       ],
       onPressHeader: () => checkLoading(handleSortAccountNo),
-      viewStyle: { width: sw103 },
+      viewStyle: { width: sw104 },
       textStyle: fsTransformNone,
       title: DASHBOARD_EDD.LABEL_ACCOUNT_NO,
       titleStyle: sortedColumns.includes("accountNo") ? { ...fsTransformNone, ...fs10BoldBlue1, lineHeight: sh13 } : {},
@@ -230,7 +249,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       key: [{ key: showDateBy.type === DASHBOARD_EDD.LABEL_CASE_CREATED_ON ? "createdOn" : "lastUpdated", textStyle: fs12RegBlue1 }],
       onPressHeader: () => checkLoading(handleSortCreatedOn),
       itemStyle: { ...justifyContentStart, ...px(sw8) },
-      viewStyle: { width: sw119, ...px(0), ...centerHorizontal },
+      viewStyle: { width: 104, ...px(0), ...centerHorizontal },
       title: showDateBy.type,
     },
     {
@@ -238,7 +257,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       icon: { name: sortClosedOn === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "lastUpdated", textStyle: fs12RegBlue1, name: "closeDate" }],
       onPressHeader: () => checkLoading(handleSortClosedOn),
-      viewStyle: { width: sw119 },
+      viewStyle: { width: sw104 },
       title: DASHBOARD_EDD.LABEL_CASE_CLOSED_ON,
       titleStyle: sortedColumns.includes("closeDate") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
     },
@@ -248,7 +267,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       icon: { name: sortStatus === "descending" ? "arrow-down" : "arrow-up" },
       key: [{ key: "status" }],
       onPressHeader: () => checkLoading(handleSortStatus),
-      viewStyle: { width: sw119 },
+      viewStyle: { width: sw160 },
       onPressItem: handleShowRemarks,
       title: DASHBOARD_EDD.LABEL_STATUS,
       titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
@@ -257,7 +276,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       itemIcon: { name: "eye-show", size: sw20 },
       key: [],
       onPressItem: handleView,
-      viewStyle: { ...centerHV, width: sw64 },
+      viewStyle: { ...centerHV, width: sw56 },
       title: DASHBOARD_EDD.LABEL_VIEW,
     },
   ];
@@ -353,7 +372,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       <AdvanceTable
         activeAccordion={activeAccordion}
         columns={columns}
-        data={isFetching === true ? [] : cases}
+        data={isFetching === true ? [] : (cases as unknown as ITableData[])}
         handleRowNavigation={handlePressCase}
         headerPopup={{
           content: showDatePopupContent.map((_content, contentIndex) =>
@@ -378,7 +397,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
             sortedColumns.includes("lastUpdated") || sortedColumns.includes("caseCreated")
               ? { ...fs10BoldBlue1, lineHeight: sh13 }
               : { fontFamily: NunitoRegular },
-          viewStyle: { width: sw119 },
+          viewStyle: { width: sw104 },
         }}
         RenderAccordion={renderAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <EDDCustomTableItem {...data} sortedColumns={sortedColumns} />}

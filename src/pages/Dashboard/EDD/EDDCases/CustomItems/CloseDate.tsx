@@ -10,7 +10,7 @@ export interface CloseDateProps extends ITableCustomItem {
 }
 
 export const CloseDate: FunctionComponent<CloseDateProps> = ({ item, sortedColumns }: CloseDateProps) => {
-  const { lastUpdated } = item.rawData as IEDDDashboardCase;
+  const { lastUpdated } = item.rawData as unknown as IEDDDashboardCase;
   const checkBold: TextStyle = sortedColumns.includes("closeDate") ? { fontFamily: NunitoBold } : {};
   return (
     <View style={centerHorizontal}>

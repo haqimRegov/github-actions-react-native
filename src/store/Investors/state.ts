@@ -8,9 +8,7 @@ export type investorsState = IInvestorState;
 export const transactionsInitialState: investorsState = {
   all: {
     filter: {
-      riskProfile: "",
-      startDate: undefined,
-      endDate: new Date(),
+      riskProfile: [],
     },
     investors: [],
     page: 1,

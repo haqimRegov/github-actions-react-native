@@ -1,6 +1,6 @@
 {
   "name": "kenangamobile",
-  "version": "16.0.7-sit",
+  "version": "16.1.0-sit",
   "private": true,
   "environment": "sit",
   "scripts": {

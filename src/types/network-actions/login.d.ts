@@ -11,6 +11,7 @@ declare interface ILoginHeader {
 
 declare interface ILoginResult {
   accessKeyId: string;
+  agentCategory: string;
   agentId: string;
   branch: string;
   email: string;

@@ -5,8 +5,11 @@ declare interface IConfig {
   sessionToken: string;
 }
 
+declare type TypeAgentCategory = "external" | "internal";
+
 declare interface IAgentProfile {
   agentCode?: string;
+  category?: TypeAgentCategory;
   branch?: string;
   email: string;
   id: string;

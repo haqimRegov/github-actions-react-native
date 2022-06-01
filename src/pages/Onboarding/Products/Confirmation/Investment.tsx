@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import {
@@ -8,6 +8,7 @@ import {
   CustomTextInput,
   LabeledTitle,
   NewDropdown,
+  NumberPicker,
   RadioButtonGroup,
   TextSpaceArea,
 } from "../../../../components";
@@ -46,6 +47,7 @@ const { INVESTMENT } = Language.PAGE;
 
 interface InvestmentProps {
   accountType: TypeAccountChoices;
+  agentCategory: TypeAgentCategory;
   data: IProductSales;
   handleScrollToFund?: () => void;
   setData: (data: IProductSales) => void;
@@ -54,6 +56,7 @@ interface InvestmentProps {
 
 export const Investment: FunctionComponent<InvestmentProps> = ({
   accountType,
+  agentCategory,
   data,
   handleScrollToFund,
   setData,
@@ -68,10 +71,12 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     fundPaymentMethod,
     investmentAmount,
     investmentSalesCharge,
+    investmentSalesChargeError,
     scheduledAmountError,
     scheduledInvestment,
     scheduledInvestmentAmount,
     scheduledSalesCharge,
+    scheduledSalesChargeError,
   } = investment;
 
   const { isEpf, isScheduled } = fundDetails;
@@ -90,19 +95,9 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
 
   const minSalesCharge = classCurrencyIndex !== -1 ? parseFloat(salesCharge[fundPaymentMethod.toLowerCase()].min) : parseFloat("NaN");
   const maxSalesCharge = classCurrencyIndex !== -1 ? parseFloat(salesCharge[fundPaymentMethod.toLowerCase()].max) : parseFloat("NaN");
+  const salesChargeDifference = maxSalesCharge - minSalesCharge;
+  const salesChargeInterval = agentCategory === "external" && fundPaymentMethod === "EPF" ? salesChargeDifference : undefined;
 
-  const salesChargeRange: TypeLabelValue[] = [];
-
-  if (minSalesCharge % 0.5 !== 0 || maxSalesCharge % 0.5 !== 0 || minSalesCharge > maxSalesCharge) {
-    Alert.alert(
-      `There seems to be an issue with ${fundDetails.fundName} (ID: ${fundDetails.fundId}) \n\n If you wish to proceed, please use another fund. Otherwise, please contact support.`,
-    );
-  } else {
-    for (let index = minSalesCharge; index <= maxSalesCharge; index += 0.5) {
-      const element: TypeLabelValue = { label: `${index}`, value: `${index}` };
-      salesChargeRange.push(element);
-    }
-  }
   const maxSalesChargeLabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
 
   const minNewSalesAmount = formatAmount(newSalesAmount[fundingMethod].min);
@@ -130,16 +125,24 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
       option === "Cash"
         ? {
             ...data,
-            investment: { ...investment, investmentSalesCharge: currentSalesCharge, fundPaymentMethod: "Cash" },
+            investment: {
+              ...investment,
+              fundPaymentMethod: "Cash",
+              investmentSalesCharge: currentSalesCharge,
+              investmentSalesChargeError: undefined,
+              scheduledSalesChargeError: undefined,
+            },
           }
         : {
             ...data,
             investment: {
               ...investment,
-              investmentSalesCharge: currentSalesCharge,
-              scheduledInvestment: false,
               fundPaymentMethod: "EPF",
+              investmentSalesCharge: currentSalesCharge,
+              investmentSalesChargeError: undefined,
+              scheduledInvestment: false,
               scheduledSalesCharge: undefined,
+              scheduledSalesChargeError: undefined,
               scheduledInvestmentAmount: undefined,
             },
           };
@@ -220,6 +223,55 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     setData({ ...data, investment: { ...investment, investmentSalesCharge: value } });
   };
 
+  const handleScheduledSalesCharge = (value: string) => {
+    setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
+  };
+
+  const validateSalesCharge = (value: string) => {
+    let errorMessage: string | undefined;
+    const salesChargeInvalid = isAmount(value) === false;
+    if (agentCategory === "internal") {
+      if (parseAmount(value) < minSalesCharge || parseAmount(value) > maxSalesCharge || salesChargeInvalid === true) {
+        errorMessage = INVESTMENT.ERROR_RANGE;
+      }
+    } else if (agentCategory === "external" && fundPaymentMethod === "Cash") {
+      if (parseAmount(value) % 0.5 !== 0) {
+        errorMessage = INVESTMENT.ERROR_INCREMENT;
+      } else if (parseAmount(value) < minSalesCharge || parseAmount(value) > maxSalesCharge || salesChargeInvalid === true) {
+        errorMessage = INVESTMENT.ERROR_RANGE;
+      }
+    } else if (agentCategory === "external" && fundPaymentMethod === "EPF") {
+      if (parseAmount(value) % 0.5 !== 0) {
+        errorMessage = INVESTMENT.ERROR_INCREMENT;
+      } else if ((parseAmount(value) > minSalesCharge && parseAmount(value) < maxSalesCharge) || salesChargeInvalid === true) {
+        errorMessage = INVESTMENT.ERROR_ALLOWED;
+      } else if (parseAmount(value) < minSalesCharge || parseAmount(value) > maxSalesCharge) {
+        errorMessage = `${INVESTMENT.ERROR_PLEASE} ${formatAmount(minSalesCharge)}% or ${formatAmount(maxSalesCharge)}%`;
+      }
+    }
+    return errorMessage;
+  };
+
+  const onBlurSalesCharge = () => {
+    const errorMessage = validateSalesCharge(investmentSalesCharge);
+    const formattedSalesCharge = errorMessage !== undefined ? investmentSalesCharge : formatAmount(investmentSalesCharge);
+    setData({
+      ...data,
+      investment: { ...investment, investmentSalesCharge: formattedSalesCharge, investmentSalesChargeError: errorMessage },
+    });
+  };
+
+  const onBlurScheduledSalesCharge = () => {
+    if (scheduledSalesCharge !== undefined) {
+      const errorMessage = validateSalesCharge(scheduledSalesCharge);
+      const formattedSalesCharge = errorMessage !== undefined ? scheduledSalesCharge : formatAmount(scheduledSalesCharge);
+      setData({
+        ...data,
+        investment: { ...investment, scheduledSalesCharge: formattedSalesCharge, scheduledSalesChargeError: errorMessage },
+      });
+    }
+  };
+
   const handleScheduled = () => {
     const newData: IProductSales = {
       ...data,
@@ -237,10 +289,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     setData({ ...data, investment: { ...investment, scheduledInvestmentAmount: value } });
   };
 
-  const handleScheduledSalesCharge = (value: string) => {
-    setData({ ...data, investment: { ...investment, scheduledSalesCharge: value } });
-  };
-
   const handleTooltip = () => {
     setTooltipVisible(!tooltipVisible);
   };
@@ -255,6 +303,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const multiClass = classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
   const epfIndex = fundingOption.findIndex((eachFundingOption) => eachFundingOption === INVESTMENT.QUESTION_1_OPTION_2);
   const disableEpf = allowEpf !== undefined && allowEpf === false ? [epfIndex] : [];
+
   let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
 
   switch (fundDetails.fundType) {
@@ -357,13 +406,19 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
           </View>
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
-            <NewDropdown
-              items={salesChargeRange}
-              handleChange={handleSalesCharge}
+            <NumberPicker
+              error={investmentSalesChargeError}
+              interval={salesChargeInterval}
               label={INVESTMENT.LABEL_SALES_CHARGE}
+              onBlur={onBlurSalesCharge}
+              maxValue={maxSalesCharge}
+              minValue={minSalesCharge}
+              setValue={handleSalesCharge}
               value={investmentSalesCharge}
             />
-            <TextSpaceArea spaceToTop={sh8} style={fs12RegGray5} text={maxSalesChargeLabel} />
+            {investmentSalesChargeError !== undefined ? null : (
+              <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={maxSalesChargeLabel} />
+            )}
           </View>
         </View>
         {scheduledInvestment === true ? (
@@ -393,13 +448,19 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
               </View>
               <CustomSpacer isHorizontal={true} space={sw64} />
               <View>
-                <NewDropdown
-                  handleChange={handleScheduledSalesCharge}
-                  items={salesChargeRange}
+                <NumberPicker
+                  error={scheduledSalesChargeError}
+                  interval={salesChargeInterval}
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
+                  onBlur={onBlurScheduledSalesCharge}
+                  maxValue={maxSalesCharge}
+                  minValue={minSalesCharge}
+                  setValue={handleScheduledSalesCharge}
                   value={`${scheduledSalesCharge}`}
                 />
-                <TextSpaceArea spaceToTop={sh8} style={fs12RegGray5} text={maxSalesChargeLabel} />
+                {investmentSalesChargeError !== undefined ? null : (
+                  <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={maxSalesChargeLabel} />
+                )}
               </View>
             </View>
           </Fragment>

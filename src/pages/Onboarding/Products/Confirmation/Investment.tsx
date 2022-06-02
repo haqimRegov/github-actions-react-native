@@ -1,5 +1,5 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
-import { Text, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import {
@@ -21,6 +21,7 @@ import {
   centerVertical,
   colorBlack,
   colorBlue,
+  colorWhite,
   flexRow,
   fs12BoldBlue8,
   fs12BoldGray6,
@@ -98,7 +99,12 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const salesChargeDifference = maxSalesCharge - minSalesCharge;
   const salesChargeInterval = agentCategory === "external" && fundPaymentMethod === "EPF" ? salesChargeDifference : undefined;
 
-  const maxSalesChargeLabel = `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${maxSalesCharge}%`;
+  const salesChargeHintText =
+    salesChargeDifference === 0
+      ? `${INVESTMENT.LABEL_FIXED_SALES_CHARGE} ${formatAmount(maxSalesCharge)}%`
+      : `${INVESTMENT.LABEL_MAX_SALES_CHARGE} ${formatAmount(maxSalesCharge)}%`;
+
+  const innerContainer: ViewStyle = salesChargeDifference === 0 ? { backgroundColor: colorWhite._1 } : {};
 
   const minNewSalesAmount = formatAmount(newSalesAmount[fundingMethod].min);
   const minTopUpAmount = formatAmount(topUpAmount[fundingMethod].min);
@@ -275,7 +281,12 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const handleScheduled = () => {
     const newData: IProductSales = {
       ...data,
-      investment: { ...investment, scheduledSalesCharge: "", scheduledInvestmentAmount: "", scheduledInvestment: !scheduledInvestment },
+      investment: {
+        ...investment,
+        scheduledSalesCharge: salesChargeDifference === 0 ? formatAmount(maxSalesCharge) : "",
+        scheduledInvestmentAmount: "",
+        scheduledInvestment: !scheduledInvestment,
+      },
     };
     if (newData.investment.scheduledInvestment === false) {
       newData.investment.scheduledSalesCharge = "";
@@ -318,6 +329,13 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   }
 
   const checkSpaceToLabel = fundingOption.length > 1 ? sh8 : 0;
+
+  useEffect(() => {
+    if (salesChargeDifference === 0) {
+      handleSalesCharge(formatAmount(maxSalesCharge));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [salesChargeDifference]);
 
   return (
     <Fragment>
@@ -407,7 +425,9 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
           <CustomSpacer isHorizontal={true} space={sw64} />
           <View>
             <NumberPicker
+              disabled={salesChargeDifference === 0}
               error={investmentSalesChargeError}
+              innerContainerStyle={innerContainer}
               interval={salesChargeInterval}
               label={INVESTMENT.LABEL_SALES_CHARGE}
               onBlur={onBlurSalesCharge}
@@ -417,7 +437,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
               value={investmentSalesCharge}
             />
             {investmentSalesChargeError !== undefined ? null : (
-              <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={maxSalesChargeLabel} />
+              <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />
             )}
           </View>
         </View>
@@ -449,7 +469,9 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
               <CustomSpacer isHorizontal={true} space={sw64} />
               <View>
                 <NumberPicker
+                  disabled={salesChargeDifference === 0}
                   error={scheduledSalesChargeError}
+                  innerContainerStyle={innerContainer}
                   interval={salesChargeInterval}
                   label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
                   onBlur={onBlurScheduledSalesCharge}
@@ -459,7 +481,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   value={`${scheduledSalesCharge}`}
                 />
                 {investmentSalesChargeError !== undefined ? null : (
-                  <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={maxSalesChargeLabel} />
+                  <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />
                 )}
               </View>
             </View>

@@ -829,6 +829,7 @@ export const english = {
       LABEL_FUND_SUMMARY: "Summary",
       LABEL_FUNDING_OPTION: "Funding Option",
       LABEL_INVESTMENT_AMOUNT: "Investment Amount",
+      LABEL_FIXED_SALES_CHARGE: "Sales charge for this fund is fixed at",
       LABEL_MAX_SALES_CHARGE: "Up to",
       LABEL_MINIMUM: "Minimum",
       LABEL_MULTIPLE_UTMC: "Note: For EPF funding option, you can only select ONE fund house per application.",

@@ -51,6 +51,7 @@ export interface NumberPickerProps {
   disableLeftIcon?: boolean;
   disableRightIcon?: boolean;
   error: string | undefined;
+  innerContainerStyle?: ViewStyle;
   interval?: number;
   label?: string;
   labelStyle?: TextStyle;
@@ -76,6 +77,7 @@ export const NumberPicker: FunctionComponent<NumberPickerProps> = ({
   disableLeftIcon,
   disableRightIcon,
   error,
+  innerContainerStyle,
   interval,
   label,
   labelStyle,
@@ -153,6 +155,7 @@ export const NumberPicker: FunctionComponent<NumberPickerProps> = ({
     width: sw136,
     ...errorBorderColor,
     ...errorBGColor,
+    ...innerContainerStyle,
   };
 
   const defaultContainerStyle: ViewStyle = {

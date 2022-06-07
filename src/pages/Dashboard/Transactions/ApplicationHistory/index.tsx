@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { Alert, Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, CustomToast, Pagination, PromptModal, SelectionBanner, TabGroup } from "../../../../components";

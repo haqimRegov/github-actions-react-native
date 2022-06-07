@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { LayoutChangeEvent, Pressable, Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { LayoutChangeEvent, Pressable, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, OutlineButton } from "../../../../components";
 import { Language, NunitoBold } from "../../../../constants";

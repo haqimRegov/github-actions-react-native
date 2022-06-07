@@ -1,7 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, ImageStyle, LayoutChangeEvent, Text, TextInput, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Image, ImageStyle, LayoutChangeEvent, Text, TextInput, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, StatusBadge } from "../../../../components";

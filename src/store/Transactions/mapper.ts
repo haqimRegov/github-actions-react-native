@@ -7,6 +7,7 @@ import { TransactionsActionProps } from "./actions";
 export const TransactionsMapStateToProps = (state: RootState) => ({
   agent: state.global.agent,
   approved: state.transactions.approved,
+  availableFilters: state.transactions.availableFilters,
   config: state.global.config,
   currentOrder: state.transactions.currentOrder,
   downloadInitiated: state.transactions.downloadInitiated,

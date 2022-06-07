@@ -1,4 +1,3 @@
-import { DICTIONARY_TRANSACTIONS_DATE, DICTIONARY_TRANSACTIONS_TYPE } from "../../data/dictionary";
 import { TransactionsAction } from "./actions";
 import { transactionsInitialState, transactionsState } from "./state";
 
@@ -18,11 +17,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
       return {
         approved: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
@@ -32,11 +31,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         },
         incomplete: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
@@ -47,17 +46,22 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         },
         rejected: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
           page: 1,
           pages: 1,
           sort: [{ value: "descending", column: "lastUpdated" }],
+        },
+        availableFilters: {
+          transactionType: [],
+          accountType: [],
+          orderStatus: [],
         },
         approvedCount: 0,
         currentOrder: undefined,
@@ -75,11 +79,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         ...state,
         approved: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
@@ -93,11 +97,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         ...state,
         rejected: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
@@ -111,11 +115,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         ...state,
         incomplete: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
@@ -207,6 +211,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           ...state.incomplete,
           pill: action.payload,
         },
+      };
+    case "transactions/UPDATE_AVAILABLE_FILTER":
+      return {
+        ...state,
+        availableFilters: action.payload,
       };
     case "transactions/UPDATE_DOWNLOAD_INITIATED":
       return {

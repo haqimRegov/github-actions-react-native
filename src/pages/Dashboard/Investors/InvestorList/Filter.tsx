@@ -1,11 +1,11 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { TextSpaceArea } from "../../../../components";
 import { MultiSelectChips } from "../../../../components/MultiSelect/MultiSelectChips";
 import { Language } from "../../../../constants";
 import { FILTER_RISK_CATEGORY } from "../../../../data/dictionary";
-import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw12, sw24, sw8 } from "../../../../styles";
+import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw8 } from "../../../../styles";
 
 const { DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 interface AllInvestorsFilterProps {
@@ -35,7 +35,6 @@ export const InvestorListFilter: FunctionComponent<AllInvestorsFilterProps> = ({
       <TextSpaceArea spaceToBottom={sh4} style={px(sw24)} text={DASHBOARD_INVESTORS_LIST.LABEL_FILTER_INVESTOR_RISK_PROFILE} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <MultiSelectChips
-          buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}
           direction="row"
           labels={riskCategoryList}
           labelStyle={{ lineHeight: sh24 }}

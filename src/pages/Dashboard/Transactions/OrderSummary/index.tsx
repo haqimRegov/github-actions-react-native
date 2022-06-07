@@ -59,7 +59,6 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
     // setLoading(true);
     const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
     const dashboardResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
-    // console.log(dashboardResponse);
     // setLoading(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;

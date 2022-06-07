@@ -3,6 +3,12 @@ declare interface IDashboardFilter {
   value: string;
 }
 
+declare interface ITransactionsAvailableFilterResponse {
+  transactionType: string[];
+  accountType: string[];
+  agentStatus: string[];
+}
+
 declare interface IDashboardRequest {
   filter: IDashboardFilter[];
   hardcopyFilter?: boolean;
@@ -14,6 +20,7 @@ declare interface IDashboardRequest {
 
 declare interface IDashboardResult {
   approvedCount: number;
+  filters: ITransactionsAvailableFilterResponse;
   incompleteCount: number;
   orders: IDashboardOrder[];
   page: number;

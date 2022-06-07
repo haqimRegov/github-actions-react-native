@@ -1,6 +1,5 @@
-import { DICTIONARY_TRANSACTIONS_DATE, DICTIONARY_TRANSACTIONS_TYPE } from "../../data/dictionary";
-
 interface ITransactionState extends ITransactionsDashboard {
+  availableFilters: ITransactionsAvailableFilter;
   downloadInitiated: boolean;
   selectedOrders: IDashboardOrder[];
   search: string;
@@ -12,11 +11,11 @@ export type transactionsState = ITransactionState;
 export const transactionsInitialState: transactionsState = {
   approved: {
     filter: {
-      dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+      dateSorting: "",
       startDate: undefined,
       endDate: new Date(),
-      transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-      accountType: "",
+      transactionsType: [],
+      accountType: [],
       orderStatus: [],
     },
     orders: [],
@@ -26,11 +25,11 @@ export const transactionsInitialState: transactionsState = {
   },
   incomplete: {
     filter: {
-      dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+      dateSorting: "",
       startDate: undefined,
       endDate: new Date(),
-      transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-      accountType: "",
+      transactionsType: [],
+      accountType: [],
       orderStatus: [],
     },
     orders: [],
@@ -41,17 +40,22 @@ export const transactionsInitialState: transactionsState = {
   },
   rejected: {
     filter: {
-      dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+      dateSorting: "",
       startDate: undefined,
       endDate: new Date(),
-      transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-      accountType: "",
+      transactionsType: [],
+      accountType: [],
       orderStatus: [],
     },
     orders: [],
     page: 1,
     pages: 1,
     sort: [{ value: "descending", column: "lastUpdated" }],
+  },
+  availableFilters: {
+    transactionType: [],
+    agentStatus: [],
+    accountType: [],
   },
   downloadInitiated: false,
   selectedOrders: [],

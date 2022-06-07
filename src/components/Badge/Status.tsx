@@ -33,6 +33,8 @@ interface StatusBadgeProps {
   iconSize?: number;
   color?: StatusBadgeColorType;
   onPress?: () => void;
+  prefix?: string;
+  prefixStyle?: TextStyle;
   style?: ViewStyle;
   text: string;
   textStyle?: TextStyle;
@@ -43,6 +45,8 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
   iconSize,
   color = "primary",
   onPress,
+  prefix,
+  prefixStyle,
   style,
   text,
   textStyle,
@@ -112,6 +116,12 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
     <View style={flexRow}>
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={badgeStyle}>
+          {prefix !== undefined ? (
+            <Fragment>
+              <Text style={prefixStyle}>{prefix}</Text>
+              <CustomSpacer isHorizontal={true} space={sw4} />
+            </Fragment>
+          ) : null}
           <Text style={badgeTextStyle}>{text}</Text>
           {icon !== undefined ? (
             <Fragment>

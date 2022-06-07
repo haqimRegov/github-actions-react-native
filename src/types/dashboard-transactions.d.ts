@@ -44,6 +44,12 @@ declare interface IDashboardOrder {
   withHardcopy: boolean;
 }
 
+declare interface ITransactionsAvailableFilter {
+  transactionType: string[];
+  accountType: string[];
+  orderStatus: string[];
+}
+
 declare interface ITransactionsTab {
   filter: ITransactionsFilter;
   orders: IDashboardOrder[];
@@ -71,12 +77,12 @@ declare interface ITransactionsSort {
 }
 
 declare interface ITransactionsFilter {
-  accountType?: string;
+  accountType?: string[];
   dateSorting?: string;
   endDate?: Date;
   orderStatus?: string[];
   startDate?: Date;
-  transactionsType?: string;
+  transactionsType?: string[];
 }
 
 declare type TransactionsSortColumnType =
@@ -88,6 +94,8 @@ declare type TransactionsSortColumnType =
   | "totalInvestment"
   | "transactionType"
   | "status";
+
+declare type TransactionsFilterType = "dateSorting" | "transactionsType" | "accountType" | "orderStatus" | "startDate" | "endDate";
 
 declare type TDateType = "Created On" | "Last Updated";
 

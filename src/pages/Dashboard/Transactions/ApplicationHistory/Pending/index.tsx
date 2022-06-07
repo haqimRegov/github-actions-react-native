@@ -37,7 +37,6 @@ import {
   sw160,
   sw18,
   sw192,
-  sw20,
   sw24,
   sw32,
   sw4,
@@ -81,6 +80,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   setOrderSummaryActiveTab,
   setScreen,
   transactions,
+  updateAvailableFilter,
   updateCurrentOrder,
   updatedSelectedOrder,
   updatePendingSort,
@@ -214,13 +214,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const sortTransactionType = findTransactionType.length > 0 ? findTransactionType[0].value : "ascending";
   const sortStatus = findStatus.length > 0 ? findStatus[0].value : "ascending";
   const sortedColumns = sort.map((currentSortType) => currentSortType.column);
-  const viewColumn: ITableColumn = {
-    itemIcon: { name: "eye-show", size: sw20 },
-    key: [],
-    onPressItem: handleView,
-    viewStyle: { ...centerHV, width: sw56 },
-    title: DASHBOARD_EDD.LABEL_VIEW,
-  };
   const columns: ITableColumn[] = [
     {
       icon: { name: sortOrderNumber === "descending" ? "arrow-down" : "arrow-up" },
@@ -311,9 +304,21 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const handleFetch = async () => {
     setIsFetching(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
-    const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
+    const filterAccountType = filter.accountType!.map((value) => ({ column: "accountType", value: value }));
+    const filterTransactionsType = filter.transactionsType!.map((value) => ({ column: "transactionType", value: value }));
     const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
     const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
+    const checkDateSorting =
+      filter.dateSorting !== "Created"
+        ? {
+            column: filter.dateSorting === "Created" ? "createdOn" : "lastUpdated",
+            value: `${minimumDate}~${maximumDate}`,
+          }
+        : undefined;
+    const updatedFilter = [...filterTransactionsType, ...filterAccountType, ...filterStatus];
+    if (checkDateSorting !== undefined) {
+      updatedFilter.push(checkDateSorting);
+    }
     const checkStatusSort: ITransactionsSort[] =
       findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
@@ -324,18 +329,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       page: page,
       search: search,
       sort: defaultSort,
-      filter: [
-        {
-          column: "transactionType",
-          value: "Sales-AO",
-        },
-        {
-          column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
-          value: `${minimumDate}~${maximumDate}`,
-        },
-        ...filterAccountType,
-        ...filterStatus,
-      ],
+      filter: updatedFilter,
       ...hardCopyFilter,
     };
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
@@ -349,6 +343,11 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
             orders: data.result.orders,
             page: data.result.page,
             pages: data.result.pages,
+          },
+          availableFilters: {
+            accountType: data.result.filters.accountType,
+            orderStatus: data.result.filters.agentStatus,
+            transactionType: data.result.filters.transactionType,
           },
           incompleteCount: data.result.incompleteCount,
           approvedCount: data.result.approvedCount,

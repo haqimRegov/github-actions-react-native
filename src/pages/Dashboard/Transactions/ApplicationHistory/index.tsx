@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { Alert, Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, CustomToast, Pagination, PromptModal, SelectionBanner, TabGroup } from "../../../../components";
@@ -25,10 +24,12 @@ import {
   sh153,
   sh16,
   sh24,
+  sh32,
   shadow12Black112,
   sw16,
   sw24,
 } from "../../../../styles";
+import { deleteKey } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { ApprovedOrders } from "./Approved";
 import { ApplicationHistoryHeader } from "./Header";
@@ -49,6 +50,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
     activeTab,
+    availableFilters,
     downloadInitiated,
     incomplete,
     navigation,
@@ -70,8 +72,16 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     updateTransactions,
   } = props;
   const { approvedCount, incompleteCount, rejectedCount } = transactions;
+  const initialFilter = {
+    dateSorting: "",
+    startDate: undefined,
+    transactionsType: [],
+    accountType: [],
+    orderStatus: [],
+  };
 
   const { filter, orders, page, pages } = props[activeTab];
+  const filterSpecs = deleteKey({ ...filter }, ["endDate"]);
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
@@ -209,16 +219,17 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     updateSearch(inputSearch);
   };
 
-  const handleConfirmFilter = () => {
+  const handleConfirmFilter = (filterProp?: ITransactionsFilter) => {
+    const updatedFilter = filterProp !== undefined ? filterProp : filterTemp;
     switch (activeTab) {
       case "approved":
-        updateApprovedFilter(filterTemp);
+        updateApprovedFilter(updatedFilter);
         break;
       case "rejected":
-        updateRejectedFilter(filterTemp);
+        updateRejectedFilter(updatedFilter);
         break;
       default:
-        updatePendingFilter(filterTemp);
+        updatePendingFilter(updatedFilter);
         break;
     }
     updateSearch(inputSearch);
@@ -242,6 +253,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setIsFetching: setLoading,
     setOrderSummaryActiveTab,
   };
+
   let content: JSX.Element;
 
   if (activeTab === "incomplete") {
@@ -258,7 +270,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   } else {
     content = <RejectedOrders activeTab={activeTab === "rejected"} {...tabProps} />;
   }
-
   const selectionText =
     incomplete?.orders !== undefined && selectedOrders.length > 1
       ? DASHBOARD_HOME.LABEL_ORDERS_SELECTED
@@ -290,7 +301,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         <View style={flexChild}>
           <ApplicationHistoryHeader
             activeTab={activeTab}
-            filter={filterTemp}
+            availableFilters={availableFilters}
+            tempFilter={filterTemp}
+            currentFilter={filter}
             filterVisible={filterVisible}
             handleCancel={handleCancelFilter}
             handleConfirm={handleConfirmFilter}
@@ -312,6 +325,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
             }}>
             <CustomSpacer space={sh153} />
             <CustomSpacer space={sh16} />
+            {(JSON.stringify(filterSpecs) === JSON.stringify(initialFilter)) === false ? <CustomSpacer space={sh32} /> : null}
 
             <View style={flexRow}>
               <TabGroup

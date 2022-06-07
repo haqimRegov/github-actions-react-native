@@ -253,29 +253,30 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   const handleFetch = async () => {
     setIsFetching(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
-    const filterAccountType = filter.accountType !== "" ? [{ column: "accountType", value: filter.accountType!.split(" ")[0] }] : [];
+    const filterAccountType = filter.accountType!.map((value) => ({ column: "accountType", value: value }));
+    const filterTransactionsType = filter.transactionsType!.map((value) => ({ column: "transactionType", value: value }));
+    const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
+    const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
+    const checkDateSorting =
+      filter.dateSorting !== "Created"
+        ? {
+            column: filter.dateSorting === "Created" ? "createdOn" : "lastUpdated",
+            value: `${minimumDate}~${maximumDate}`,
+          }
+        : undefined;
+    const updatedFilter = [...filterTransactionsType, ...filterAccountType, ...filterStatus];
+    if (checkDateSorting !== undefined) {
+      updatedFilter.push(checkDateSorting);
+    }
     const checkStatusSort: ITransactionsSort[] =
       findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
-    const minimumDate = filter.startDate !== undefined ? moment(filter.startDate).startOf("day").format("x") : "0";
-    const maximumDate = filter.endDate !== undefined ? moment(filter.endDate).endOf("day").format("x") : moment().endOf("day").format("x");
     const request: IDashboardRequest = {
       tab: "rejected",
       page: page,
       search: search,
       sort: defaultSort,
-      filter: [
-        {
-          column: "transactionType",
-          value: "Sales-AO",
-        },
-        {
-          column: filter.dateSorting === "Order Creation Date" ? "createdOn" : "lastUpdated",
-          value: `${minimumDate}~${maximumDate}`,
-        },
-        ...filterAccountType,
-        ...filterStatus,
-      ],
+      filter: updatedFilter,
     };
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
     setIsFetching(false);
@@ -289,6 +290,11 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
             orders: data.result.orders,
             page: data.result.page,
             pages: data.result.pages,
+          },
+          availableFilters: {
+            accountType: data.result.filters.accountType,
+            orderStatus: data.result.filters.agentStatus,
+            transactionType: data.result.filters.transactionType,
           },
           pendingCount: data.result.pendingCount,
           approvedCount: data.result.approvedCount,

@@ -13,6 +13,11 @@ const dashboard = gql`
           incompleteCount
           page
           pages
+          filters {
+            transactionType
+            agentStatus
+            accountType
+          }
           orders {
             reason {
               title

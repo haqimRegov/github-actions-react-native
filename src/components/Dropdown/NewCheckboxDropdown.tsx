@@ -59,6 +59,7 @@ const { DROPDOWN } = Language.PAGE;
 export interface NewCheckBoxDropdownProps {
   checkBoxStyle?: TextStyle;
   disabled?: boolean;
+  disabledValues?: string[];
   error?: string;
   handleChange: (text: string[]) => void;
   items: TypeLabelValue[];
@@ -77,6 +78,7 @@ export interface NewCheckBoxDropdownProps {
 export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = ({
   // checkBoxStyle,
   disabled,
+  disabledValues,
   error,
   handleChange,
   items,
@@ -332,6 +334,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
                         const selected = value.includes(itemValue);
                         const itemContainer: ViewStyle = { ...px(sw16) };
                         const itemStyle: ViewStyle = originalItem.subLabel === undefined ? py(sh4) : {};
+                        const checkDisabled = disabledValues !== undefined && disabledValues?.includes(items[index].value);
 
                         const handleSelect = () => {
                           let reset = false;
@@ -351,6 +354,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
                           <TouchableWithoutFeedback key={index} onPress={handleSelect}>
                             <View style={itemContainer}>
                               <CheckBox
+                                disabled={checkDisabled}
                                 label={itemExtractor.label}
                                 labelStyle={{ fontSize: sh16, lineHeight: scaleHeight(16 * 1.48), width: sw296 }}
                                 numberOfLines={1}

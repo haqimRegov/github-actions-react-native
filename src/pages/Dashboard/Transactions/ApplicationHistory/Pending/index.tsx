@@ -492,7 +492,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         <AdvanceTable
           activeAccordion={activeAccordion}
           columns={columns}
-          data={isFetching === false ? [] : (orders as unknown as ITableData[])}
+          data={isFetching === true ? [] : (orders as unknown as ITableData[])}
           disabledIndex={disabledOrders}
           handleRowNavigation={handleOrderDetails}
           headerPopup={{

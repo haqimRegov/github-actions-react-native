@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { LayoutChangeEvent, Pressable, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import ParsedText from "react-native-parsed-text";
 
 import { CustomFlexSpacer, CustomSpacer, OutlineButton } from "../../../../components";
 import { Language, NunitoBold } from "../../../../constants";
@@ -130,13 +131,11 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
         );
       case "Void":
         return (
-          <View>
-            <View style={flexRow}>
-              <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{DASHBOARD_HOME.LABEL_VOID_SUBTITLE_1}</Text>
-              <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_VOID_SUBTITLE_2}</Text>
-            </View>
-            <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_VOID_SUBTITLE_3}</Text>
-          </View>
+          <ParsedText
+            style={fs12RegGray5}
+            parse={[{ pattern: /Order has exceeded due date:/, style: { ...fs12RegGray5, fontFamily: NunitoBold } }]}>
+            {label}
+          </ParsedText>
         );
       default:
         return <View />;

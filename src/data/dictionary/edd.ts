@@ -17,10 +17,11 @@ export const DICTIONARY_HISTORY_TAB_STATUS: IEDDStatusLabelValue[] = [
 ];
 
 export const DICTIONARY_EDD_STATUS: IEDDStatus = {
-  pending: "Pending",
-  submitted: "Submitted",
-  completed: "Completed",
   cancelled: "Cancelled",
+  completed: "Completed",
   overdue1: "Overdue-1",
   overdue2: "Overdue-2",
+  pending: "Pending",
+  rerouted: "Rerouted",
+  submitted: "Submitted",
 };

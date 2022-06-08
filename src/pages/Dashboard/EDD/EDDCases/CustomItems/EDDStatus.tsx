@@ -16,7 +16,8 @@ export const EDDStatus: FunctionComponent<EDDStatusProps> = ({ accordionIcon, it
   if (
     status === DICTIONARY_EDD_STATUS.overdue1 ||
     status === DICTIONARY_EDD_STATUS.overdue2 ||
-    status === DICTIONARY_EDD_STATUS.cancelled
+    status === DICTIONARY_EDD_STATUS.cancelled ||
+    status === DICTIONARY_EDD_STATUS.rerouted
   ) {
     statusColor = "error";
   } else if (status === DICTIONARY_EDD_STATUS.submitted) {

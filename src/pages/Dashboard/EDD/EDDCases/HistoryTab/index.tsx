@@ -11,6 +11,7 @@ import { updateSeen } from "../../../../../network-actions/dashboard/UpdateSeen"
 import { getEDDDashboard } from "../../../../../network-actions/edd/Dashboard";
 import { EDDMapDispatchToProps, EDDMapStateToProps, EDDStoreProps } from "../../../../../store/EDD";
 import {
+  borderBottomGray2,
   centerHorizontal,
   centerHV,
   colorBlue,
@@ -20,6 +21,7 @@ import {
   fs12BoldGray6,
   fs12RegBlue1,
   fs12RegGray5,
+  fs12RegGray6,
   fsTransformNone,
   justifyContentStart,
   px,
@@ -28,6 +30,7 @@ import {
   sh13,
   sh16,
   sh32,
+  sh8,
   sw104,
   sw16,
   sw160,
@@ -39,7 +42,6 @@ import {
   sw96,
 } from "../../../../../styles";
 import { AnimationUtils, isNotEmpty } from "../../../../../utils";
-import { OrderRemarks } from "../../../Transactions/ApplicationHistory/OrderRemarks";
 import { EDDCustomTableItem } from "../CustomItems";
 
 const { EMPTY_STATE, DASHBOARD_EDD, DASHBOARD_HOME } = Language.PAGE;
@@ -156,15 +158,6 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       borderBottomLeftRadius: sw8,
       borderBottomRightRadius: sw8,
     };
-    let rerouteData: IDashboardReason[] = [];
-    if (isNotEmpty(rerouteReason)) {
-      rerouteData = rerouteReason!.map((eachReason: IEDDReason) => {
-        return {
-          title: eachReason.title,
-          content: isNotEmpty(eachReason.remark) ? [eachReason.remark] : [],
-        };
-      });
-    }
     return (
       <Fragment>
         <View style={containerStyle}>
@@ -173,7 +166,11 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
           {isNotEmpty(rerouteReason) && rerouteReason!.length > 0 ? (
             <Fragment>
               <CustomSpacer space={sh16} />
-              <OrderRemarks remarkTitle={DASHBOARD_EDD.LABEL_REROUTE_REASON} remarks={rerouteData} status={status} />
+              <View style={borderBottomGray2} />
+              <CustomSpacer space={sh16} />
+              <Text style={fs12RegGray6}>{DASHBOARD_HOME.LABEL_REMARK}</Text>
+              <CustomSpacer space={sh8} />
+              <Text style={fs12RegGray5}>{rerouteReason![0].title}</Text>
             </Fragment>
           ) : null}
         </View>
@@ -306,6 +303,7 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       ],
     };
     const dashboardResponse: IEDDDashboardResponse = await getEDDDashboard(request, navigation);
+    console.log("das", dashboardResponse);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {

@@ -277,7 +277,7 @@ const NewSalesComponent = ({
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
-                  dateOfBirth: moment(data.result.jointHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
+                  dateOfBirth: data.result.jointHolder.dateOfBirth,
                   clientId: data.result.jointHolder.clientId,
                 }
               : {};
@@ -287,7 +287,7 @@ const NewSalesComponent = ({
             ...details,
             principalHolder: {
               ...principalHolder,
-              dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
+              dateOfBirth: data.result.principalHolder.dateOfBirth,
               clientId: data.result.principalHolder.clientId,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },

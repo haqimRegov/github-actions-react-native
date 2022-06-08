@@ -2,8 +2,8 @@ declare type EDDNewCaseTagKey = "pending" | "rerouted" | "submitted" | "history"
 declare type EDDNewCaseTagValue = "Pending" | "Rerouted" | "Submitted";
 declare type EDDPageType = "Cases" | "NewCase" | "ViewCase" | "RerouteCase";
 declare type EDDTabType = "new" | "history";
-declare type IEDDStatusKey = "pending" | "completed" | "overdue1" | "overdue2" | "cancelled" | "submitted";
-declare type IEDDStatusType = "Pending" | "Completed" | "Overdue-1" | "Overdue-2" | "Submitted" | "Cancelled";
+declare type IEDDStatusKey = "pending" | "completed" | "overdue1" | "overdue2" | "cancelled" | "submitted" | "rerouted";
+declare type IEDDStatusType = "Pending" | "Completed" | "Overdue-1" | "Overdue-2" | "Submitted" | "Cancelled" | "Rerouted";
 declare type IEDDStatus = Record<IEDDStatusKey, IEDDStatusType>;
 
 declare type TEDDDateType = "Created On" | "Last Updated";

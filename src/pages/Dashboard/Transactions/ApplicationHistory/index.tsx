@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
@@ -80,7 +81,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     orderStatus: [],
   };
 
-  const { filter, orders, page, pages } = props[activeTab];
+  const { filter, orders, page, pages, pill } = props[activeTab];
   const filterSpecs = deleteKey({ ...filter }, ["endDate"]);
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -96,11 +97,40 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const tabs: TransactionsTabType[] = ["incomplete", "rejected", "approved"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
+  const resetFilter = (tab: TransactionsTabType) => {
+    const { dateSorting, startDate, transactionsType, accountType, orderStatus, endDate } = props[tab].filter;
+    const isNotFiltered =
+      dateSorting === "" &&
+      startDate === undefined &&
+      transactionsType!.length === 0 &&
+      accountType!.length === 0 &&
+      orderStatus!.length === 0 &&
+      moment().diff(moment(endDate), "days") === 0;
+
+    if (isNotFiltered === false) {
+      switch (tab) {
+        case "incomplete":
+          resetPendingFilter();
+          break;
+        case "rejected":
+          resetRejectedFilter();
+          break;
+        case "approved":
+          resetApprovedFilter();
+          break;
+
+        default:
+          break;
+      }
+    }
+  };
+
   const handleTabs = (index: number) => {
     if (downloadInitiated === true && activeTab === "incomplete") {
       setTempTab(tabs[index]);
       setCancelPrompt(true);
     } else {
+      resetFilter(tabs[index]);
       setActiveTab(tabs[index]);
     }
   };
@@ -213,7 +243,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         resetRejectedFilter();
         break;
       default:
-        resetPendingFilter();
+        resetPendingFilter(pill);
         break;
     }
     updateSearch(inputSearch);

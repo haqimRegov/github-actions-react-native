@@ -125,7 +125,7 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           orders: [],
           page: 1,
           pages: 1,
-          pill: "pending",
+          pill: action.payload !== undefined ? action.payload : "pending",
           sort: [],
         },
       };

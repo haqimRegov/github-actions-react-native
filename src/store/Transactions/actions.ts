@@ -29,8 +29,8 @@ export const resetRejectedFilter = () => {
   return typedAction("transactions/RESET_REJECTED_FILTER");
 };
 
-export const resetPendingFilter = () => {
-  return typedAction("transactions/RESET_PENDING_FILTER");
+export const resetPendingFilter = (pill?: ITransactionPills) => {
+  return typedAction("transactions/RESET_PENDING_FILTER", pill);
 };
 
 export const resetSelectedOrder = () => {

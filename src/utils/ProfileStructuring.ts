@@ -31,7 +31,7 @@ export const structureProfile = (
   const { fatca, crs } = declaration;
   const accountSummaryDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_PROFILE.LABEL_DATE_OF_BIRTH, title: personalDetails.dateOfBirth },
-    { label: DASHBOARD_PROFILE.LABEL_SALUTATION, title: personalDetails.salutation },
+    { label: DASHBOARD_PROFILE.LABEL_SALUTATION, title: personalDetails.salutation, titleStyle: fsTransformNone },
     { label: DASHBOARD_PROFILE.LABEL_GENDER, title: personalDetails.gender },
     { label: DASHBOARD_PROFILE.LABEL_NATIONALITY, title: personalDetails.nationality },
     { label: DASHBOARD_PROFILE.LABEL_RISK_PROFILE, title: personalDetails.riskProfile || "-" },

@@ -1,8 +1,8 @@
-import React, { Fragment, FunctionComponent, useRef } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, ViewStyle } from "react-native";
 import { Text, View } from "react-native-animatable";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, RoundedButton } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, Loader, RoundedButton } from "../../../../components";
 import { Language } from "../../../../constants";
 import { RNInAppBrowser } from "../../../../integrations/react-native-inapp-browser-reborn";
 import { orderTrackingSummary } from "../../../../network-actions";
@@ -36,6 +36,7 @@ declare interface ITrackingProps {
 
 export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingProps) => {
   const fetching = useRef<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { trackingSummary, orderNumber } = data;
   // button styling
   const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: sw96 };
@@ -44,9 +45,11 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
   const handleExportPDF = async () => {
     if (fetching.current === false) {
       fetching.current = true;
+      setLoading(true);
       const request = { orderNo: orderNumber };
       const response: IOrderTrackingSummaryResponse = await orderTrackingSummary(request);
       fetching.current = false;
+      setLoading(false);
       if (response !== undefined) {
         const { data: responseData, error } = response;
         if (error === null && responseData !== null) {
@@ -118,6 +121,7 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
           rowContainerStyle={{ minHeight: sh64 }}
         />
       </View>
+      <Loader visible={loading} />
     </Fragment>
   );
 };

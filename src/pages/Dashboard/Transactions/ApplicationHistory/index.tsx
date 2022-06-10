@@ -34,7 +34,7 @@ import { deleteKey } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { ApprovedOrders } from "./Approved";
 import { ApplicationHistoryHeader } from "./Header";
-import { PendingOrders } from "./Pending";
+import { PendingOrders } from "./Incomplete";
 import { RejectedOrders } from "./Rejected";
 
 const { DASHBOARD_HOME } = Language.PAGE;

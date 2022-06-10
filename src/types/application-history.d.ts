@@ -57,7 +57,6 @@ declare interface ITransactionPageProps {
   isLogout: boolean;
   isNotFiltered: boolean;
   navigation: IStackNavigationProp;
-  noTransactionsYet: boolean;
   setIsFetching: (value: boolean) => void;
   setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
   setScreen: (route: TransactionsPageType) => void;

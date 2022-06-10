@@ -709,8 +709,10 @@ export const english = {
       SUBHEADING: "What do you do for a living?",
     },
     EMPTY_STATE: {
+      LABEL_CLEAR_ALL: "Clear All Filters",
       LABEL_NO_RESULTS: "No results found",
       SUBTITLE: "Try adjusting your search or filter to find what you’re looking for.",
+      TITLE_FILTER: "Sorry, we couldn’t find any content matched your criteria.",
       TITLE_SEARCH: "Sorry, we couldn’t find any content for",
     },
     INVESTOR_ACCOUNTS: {

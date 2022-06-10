@@ -1,14 +1,15 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, ReactNode } from "react";
 import { Image, ImageSourcePropType, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
-import { centerVertical, flexChild, fs12RegBlue1, fs12RegBlue6, fs16BoldBlue1, imageContain, sh16, sh20, sh56, sw136 } from "../../styles";
+import { centerVertical, flexChild, fs12RegBlue6, fs16BoldBlue1, imageContain, sh16, sh20, sh56, sw136 } from "../../styles";
 import { Loading } from "./Loading";
 import { CustomSpacer } from "./Spacer";
 
 const { EMPTY_STATE } = Language.PAGE;
 interface EmptyTableProps {
+  children?: ReactNode;
   hintContainerStyle?: ViewStyle;
   hintText?: string;
   hintTextStyle?: TextStyle;
@@ -21,6 +22,7 @@ interface EmptyTableProps {
 }
 
 export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
+  children,
   hintContainerStyle,
   hintText,
   hintTextStyle,
@@ -49,10 +51,11 @@ export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
             <Fragment>
               <CustomSpacer space={sh20} />
               <View style={{ ...centerVertical, ...hintContainerStyle }}>
-                <Text style={{ ...fs12RegBlue1, ...hintTextStyle }}>{hintText}</Text>
+                <Text style={{ ...fs12RegBlue6, ...hintTextStyle }}>{hintText}</Text>
               </View>
             </Fragment>
           ) : null}
+          {children}
         </Fragment>
       )}
     </View>

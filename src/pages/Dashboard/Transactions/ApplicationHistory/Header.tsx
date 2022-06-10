@@ -5,6 +5,7 @@ import { Image, ImageStyle, LayoutChangeEvent, Text, TextInput, TouchableWithout
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, StatusBadge } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { transactionsInitialState } from "../../../../store";
 import {
   absolutePosition,
   centerHorizontal,
@@ -55,7 +56,6 @@ interface ApplicationHistoryHeaderProps {
   activeTab: TransactionsTabType;
   availableFilters: ITransactionsAvailableFilter;
   currentFilter: ITransactionsFilter;
-  tempFilter: ITransactionsFilter;
   filterVisible: boolean;
   handleCancel: () => void;
   handleConfirm: (tempFilter?: ITransactionsFilter) => void;
@@ -63,8 +63,11 @@ interface ApplicationHistoryHeaderProps {
   handleSearch: () => void;
   handleShowFilter: () => void;
   inputSearch: string;
+  isNotFiltered: boolean;
+  prevSearch: string;
   setFilter: (value: ITransactionsFilter) => void;
   setInputSearch: (value: string) => void;
+  tempFilter: ITransactionsFilter;
 }
 
 export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeaderProps> = ({
@@ -73,14 +76,16 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   currentFilter,
   filterVisible,
   handleCancel,
-  handleShowFilter,
   handleConfirm,
   handleResetFilter,
   handleSearch,
+  handleShowFilter,
   inputSearch,
-  tempFilter,
-  setInputSearch,
+  isNotFiltered,
+  prevSearch,
   setFilter,
+  setInputSearch,
+  tempFilter,
 }: ApplicationHistoryHeaderProps) => {
   // TODO hide show all pills is only 1 line
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
@@ -124,7 +129,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   };
 
   const handleSearchFunction = () => {
-    if (inputSearch !== "") {
+    if (prevSearch !== "" && inputSearch !== "" && prevSearch !== inputSearch && isNotFiltered === false) {
       handleResetFilter();
     }
     handleSearch();
@@ -154,11 +159,12 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
       case "orderStatus":
         return { label: DASHBOARD_HOME.LABEL_STATUS, value, key: "orderStatus" };
       case "transactionsType":
-        return { label: DASHBOARD_HOME.LABEL_TRANSACTION, value, key: "transactionType" };
+        return { label: DASHBOARD_HOME.LABEL_TRANSACTION, value, key: "transactionsType" };
       default:
         return {};
     }
   };
+
   const newPills = updatedKeys
     .filter((eachKey: TransactionsFilterType) => currentFilter[eachKey] !== undefined && currentFilter[eachKey] !== "")
     .map((key) => {
@@ -258,8 +264,12 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
                           dateSorting: "",
                         };
                       } else {
-                        const updatedArray = currentFilter[pill.key!].filter((eachFilter) => eachFilter !== pill.value);
-                        updatedFilter = { ...updatedFilter, [pill.key!]: updatedArray };
+                        const filterPillKey = pill.key as TransactionsFilterType;
+                        const isKeyArray = filterPillKey !== "dateSorting" && filterPillKey !== "endDate" && filterPillKey !== "startDate";
+                        const updatedPill = isKeyArray
+                          ? currentFilter[filterPillKey]!.filter((eachFilter) => eachFilter !== pill.value)
+                          : transactionsInitialState[activeTab].filter[filterPillKey];
+                        updatedFilter = { ...updatedFilter, [filterPillKey]: updatedPill };
                       }
                       handleConfirm(updatedFilter);
                     };

@@ -3,7 +3,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
+import { AdvanceTable, CustomSpacer } from "../../../../../components";
 import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { getDashboard } from "../../../../../network-actions";
@@ -31,28 +31,23 @@ import {
   sw94,
   sw96,
 } from "../../../../../styles";
-import { AnimationUtils } from "../../../../../utils";
+import { EmptyStateTable } from "../../../../../templates";
+import { AnimationUtils, isEmpty } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
 import { DashboardAccordion } from "../DashboardAccordion";
 
-const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
+const { DASHBOARD_HOME } = Language.PAGE;
 
-interface RejectedOrdersProps extends TransactionsStoreProps {
-  activeTab: boolean;
-  isFetching: boolean;
-  isLogout: boolean;
-  navigation: IStackNavigationProp;
-  setIsFetching: (value: boolean) => void;
-  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
-  setScreen: (route: TransactionsPageType) => void;
-}
+interface RejectedOrdersProps extends ITransactionPageProps, TransactionsStoreProps {}
 
 const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   activeTab,
   isFetching,
   isLogout,
+  isNotFiltered,
   navigation,
   rejected,
+  resetRejectedFilter,
   search,
   setIsFetching,
   setOrderSummaryActiveTab,
@@ -342,10 +337,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter]);
 
-  const noResults = search !== undefined && search !== "";
-  const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : DASHBOARD_HOME.EMPTY_TITLE_TRANSACTIONS;
-  const subtitle = noResults === true ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : DASHBOARD_HOME.EMPTY_TRANSACTIONS_SUBTITLE;
-  const hintText = noResults === true ? EMPTY_STATE.SUBTITLE : undefined;
+  const noTransactionsYet = orders.length === 0 && (isEmpty(search) || search === "") && isNotFiltered === true;
 
   return (
     <View style={{ ...flexChild, ...px(sw16) }}>
@@ -377,7 +369,15 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
         }}
         RenderAccordion={renderAccordion}
         RenderCustomItem={(data: ITableCustomItem) => <CustomTableItem {...data} sortedColumns={sortedColumns} />}
-        RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
+        RenderEmptyState={() => (
+          <EmptyStateTable
+            handleClearFilter={resetRejectedFilter}
+            isFetching={isFetching}
+            isNotFiltered={isNotFiltered}
+            noTransactionsYet={noTransactionsYet}
+            search={search}
+          />
+        )}
       />
       <CustomSpacer space={sh32} />
     </View>

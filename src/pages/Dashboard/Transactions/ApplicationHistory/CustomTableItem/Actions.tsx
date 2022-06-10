@@ -4,7 +4,7 @@ import { TouchableWithoutFeedback, View } from "react-native";
 import { MenuPopup } from "../../../../../components";
 import { IcoMoon } from "../../../../../icons";
 import { colorGray, px, py, sh20, sh24, sh4, sw4 } from "../../../../../styles";
-import { PendingOrderActions } from "../Pending/Actions";
+import { PendingOrderActions } from "../Incomplete/Actions";
 
 declare interface IPendingActions {
   downloadInitiated?: boolean;

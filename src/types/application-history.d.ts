@@ -50,3 +50,14 @@ declare interface ITransactionTab {
   orders: IApplicationHistoryTable[];
   totalPages: number;
 }
+
+declare interface ITransactionPageProps {
+  activeTab: boolean;
+  isFetching: boolean;
+  isLogout: boolean;
+  isNotFiltered: boolean;
+  navigation: IStackNavigationProp;
+  setIsFetching: (value: boolean) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
+  setScreen: (route: TransactionsPageType) => void;
+}

@@ -34,7 +34,7 @@ import { deleteKey } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { ApprovedOrders } from "./Approved";
 import { ApplicationHistoryHeader } from "./Header";
-import { PendingOrders } from "./Pending";
+import { PendingOrders } from "./Incomplete";
 import { RejectedOrders } from "./Rejected";
 
 const { DASHBOARD_HOME } = Language.PAGE;
@@ -54,6 +54,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     availableFilters,
     downloadInitiated,
     incomplete,
+    isLogout,
     navigation,
     resetApprovedFilter,
     resetPendingFilter,
@@ -82,6 +83,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const { filter, orders, page, pages, pill } = props[activeTab];
+
   const filterSpecs = deleteKey({ ...filter }, ["endDate"]);
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -97,18 +99,17 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const tabs: TransactionsTabType[] = ["incomplete", "rejected", "approved"];
   const activeTabIndex = tabs.indexOf(activeTab);
 
-  const resetFilter = (tab: TransactionsTabType) => {
-    const { dateSorting, startDate, transactionsType, accountType, orderStatus, endDate } = props[tab].filter;
-    const isNotFiltered =
-      dateSorting === "" &&
-      startDate === undefined &&
-      transactionsType!.length === 0 &&
-      accountType!.length === 0 &&
-      orderStatus!.length === 0 &&
-      moment().diff(moment(endDate), "days") === 0;
+  const isNotFiltered =
+    filter.dateSorting === "" &&
+    filter.startDate === undefined &&
+    filter.transactionsType!.length === 0 &&
+    filter.accountType!.length === 0 &&
+    filter.orderStatus!.length === 0 &&
+    moment().diff(moment(filter.endDate), "days") === 0;
 
+  const resetFilter = () => {
     if (isNotFiltered === false) {
-      switch (tab) {
+      switch (activeTab) {
         case "incomplete":
           resetPendingFilter();
           break;
@@ -130,7 +131,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       setTempTab(tabs[index]);
       setCancelPrompt(true);
     } else {
-      resetFilter(tabs[index]);
+      // reset current tab filter before moving to another tab
+      resetFilter();
       setActiveTab(tabs[index]);
     }
   };
@@ -275,30 +277,24 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     }
   }, [downloadToast]);
 
-  const tabProps = {
-    setScreen: setScreen,
-    navigation: navigation,
+  const tabProps: Omit<ITransactionPageProps, "activeTab"> = {
     isFetching: loading,
-    isLogout: props.isLogout,
+    isNotFiltered: isNotFiltered,
+    isLogout: isLogout,
+    navigation: navigation,
     setIsFetching: setLoading,
     setOrderSummaryActiveTab,
+    setScreen: setScreen,
   };
 
   let content: JSX.Element;
 
   if (activeTab === "incomplete") {
-    content = (
-      <PendingOrders
-        activeTab={activeTab === "incomplete"}
-        downloadInitiated={downloadInitiated}
-        setDownloadInitiated={updateDownloadInitiated}
-        {...tabProps}
-      />
-    );
+    content = <PendingOrders {...tabProps} setDownloadInitiated={updateDownloadInitiated} activeTab={activeTab === "incomplete"} />;
   } else if (activeTab === "approved") {
-    content = <ApprovedOrders activeTab={activeTab === "approved"} {...tabProps} />;
+    content = <ApprovedOrders {...tabProps} activeTab={activeTab === "approved"} />;
   } else {
-    content = <RejectedOrders activeTab={activeTab === "rejected"} {...tabProps} />;
+    content = <RejectedOrders {...tabProps} activeTab={activeTab === "rejected"} />;
   }
   const selectionText =
     incomplete?.orders !== undefined && selectedOrders.length > 1
@@ -341,6 +337,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
             handleSearch={handleSearch}
             handleShowFilter={handleShowFilter}
             inputSearch={inputSearch}
+            isNotFiltered={isNotFiltered}
+            prevSearch={search}
             setFilter={setFilterTemp}
             setInputSearch={setInputSearch}
           />

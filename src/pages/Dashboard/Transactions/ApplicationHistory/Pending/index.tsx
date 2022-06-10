@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { Alert, Text, TouchableWithoutFeedback, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AdvanceTable, CustomSpacer, EmptyTable, StatusBadge } from "../../../../../components";
+import { AdvanceTable, CustomSpacer, StatusBadge } from "../../../../../components";
 import { NunitoBold, NunitoRegular } from "../../../../../constants";
 import { Language } from "../../../../../constants/language";
 import { getDashboard, resubmitOrder } from "../../../../../network-actions";
@@ -47,22 +47,16 @@ import {
   sw92,
   sw96,
 } from "../../../../../styles";
-import { AnimationUtils } from "../../../../../utils";
+import { EmptyStateTable } from "../../../../../templates";
+import { AnimationUtils, isEmpty } from "../../../../../utils";
 import { CustomTableItem } from "../CustomTableItem";
 import { DashboardAccordion } from "../DashboardAccordion";
 
-const { EMPTY_STATE, DASHBOARD_HOME, DASHBOARD_EDD } = Language.PAGE;
+const { DASHBOARD_HOME, DASHBOARD_EDD } = Language.PAGE;
 
-interface PendingOrdersProps extends TransactionsStoreProps {
-  activeTab: boolean;
+interface PendingOrdersProps extends ITransactionPageProps, TransactionsStoreProps {
   downloadInitiated: boolean;
-  isFetching: boolean;
-  isLogout: boolean;
-  navigation: IStackNavigationProp;
   setDownloadInitiated: (toggle: boolean) => void;
-  setIsFetching: (value: boolean) => void;
-  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
-  setScreen: (route: TransactionsPageType) => void;
 }
 
 const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
@@ -71,7 +65,9 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   incomplete,
   isFetching,
   isLogout,
+  isNotFiltered,
   navigation,
+  resetPendingFilter,
   resetSelectedOrder,
   search,
   selectedOrders,
@@ -80,7 +76,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   setOrderSummaryActiveTab,
   setScreen,
   transactions,
-  updateAvailableFilter,
   updateCurrentOrder,
   updatedSelectedOrder,
   updatePendingSort,
@@ -182,10 +177,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       ? { ...sort[0], value: sort[0].value === "descending" ? "ascending" : "descending" }
       : { column: "status", value: "descending" };
     updatePendingSort([newSort]);
-  };
-
-  const handleView = (item: ITableRowData) => {
-    handleOrderDetails(item.rawData);
   };
 
   const checkLoading = (functionToBeCalled: () => void) => {
@@ -420,6 +411,10 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     updateTransactions({ ...transactions, incomplete: { ...transactions.incomplete, page: 1, pages: 1, pill: updatedPill } });
   };
 
+  const handleClearFilter = () => {
+    resetPendingFilter(pill);
+  };
+
   useEffect(() => {
     return () => {
       if (isLogout !== true) {
@@ -446,13 +441,9 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     setCurrentOrder: updateCurrentOrder,
   };
 
-  const noResults = search !== undefined && search !== "";
-  const title = noResults === true ? EMPTY_STATE.LABEL_NO_RESULTS : DASHBOARD_HOME.EMPTY_TITLE_TRANSACTIONS;
-  const subtitle = noResults === true ? `${EMPTY_STATE.TITLE_SEARCH} '${search}'` : DASHBOARD_HOME.EMPTY_TRANSACTIONS_SUBTITLE;
-  const hintText = noResults === true ? EMPTY_STATE.SUBTITLE : undefined;
   const selectableOrders = showCheckbox === true ? selectedOrders : undefined;
-
   const disabledOrders = orders.map((order, index) => (order.withHardcopy === true && order.status === "Submitted" ? -1 : index));
+  const noTransactionsYet = orders.length === 0 && (isEmpty(search) || search === "") && isNotFiltered === true;
 
   return (
     <View style={{ ...flexChild }}>
@@ -525,7 +516,15 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           RenderCustomItem={(data: ITableCustomItem) => (
             <CustomTableItem {...data} downloadInitiated={downloadInitiated} sortedColumns={sortedColumns} {...actionProps} />
           )}
-          RenderEmptyState={() => <EmptyTable hintText={hintText} loading={isFetching} title={title} subtitle={subtitle} />}
+          RenderEmptyState={() => (
+            <EmptyStateTable
+              handleClearFilter={handleClearFilter}
+              isFetching={isFetching}
+              isNotFiltered={isNotFiltered}
+              noTransactionsYet={noTransactionsYet}
+              search={search}
+            />
+          )}
           RowSelectionItem={() => (
             <Fragment>
               {showCheckbox === true ? (

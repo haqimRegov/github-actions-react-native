@@ -5,7 +5,7 @@ interface IInvestorState extends IInvestorsDashboard {
 
 export type investorsState = IInvestorState;
 
-export const transactionsInitialState: investorsState = {
+export const investorsInitialState: investorsState = {
   all: {
     filter: {
       riskProfile: [],

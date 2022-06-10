@@ -1,7 +1,7 @@
 import { InvestorsAction } from "./actions";
-import { investorsState, transactionsInitialState } from "./state";
+import { investorsInitialState, investorsState } from "./state";
 
-export function investorsReducer(state = transactionsInitialState, action: InvestorsAction): investorsState {
+export function investorsReducer(state = investorsInitialState, action: InvestorsAction): investorsState {
   switch (action.type) {
     case "investors/UPDATE_INVESTORS":
       return {

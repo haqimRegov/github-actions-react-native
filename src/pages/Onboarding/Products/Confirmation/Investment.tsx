@@ -330,12 +330,17 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
 
   const checkSpaceToLabel = fundingOption.length > 1 ? sh8 : 0;
 
+  // same sales charge are not being saved on initial render due to redux state issue for multiple funds hence we are only saving it when any data in the investment details has been updated
   useEffect(() => {
-    if (salesChargeDifference === 0) {
+    if (salesChargeDifference === 0 && investmentSalesCharge === "") {
       handleSalesCharge(formatAmount(maxSalesCharge));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [salesChargeDifference]);
+  }, [data]);
+
+  const initialSalesCharge = salesChargeDifference === 0 && investmentSalesCharge === "" ? `${maxSalesCharge}` : investmentSalesCharge;
+  const initialRecurringSalesCharge =
+    salesChargeDifference === 0 && scheduledInvestment === true && scheduledSalesCharge === "" ? `${maxSalesCharge}` : scheduledSalesCharge;
 
   return (
     <Fragment>
@@ -434,7 +439,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
               maxValue={maxSalesCharge}
               minValue={minSalesCharge}
               setValue={handleSalesCharge}
-              value={investmentSalesCharge}
+              value={initialSalesCharge}
             />
             {investmentSalesChargeError !== undefined ? null : (
               <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />
@@ -478,7 +483,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   maxValue={maxSalesCharge}
                   minValue={minSalesCharge}
                   setValue={handleScheduledSalesCharge}
-                  value={`${scheduledSalesCharge}`}
+                  value={`${initialRecurringSalesCharge}`}
                 />
                 {investmentSalesChargeError !== undefined ? null : (
                   <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />

@@ -292,11 +292,11 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   const pendingDocumentsPrincipal = documentList && isNotEmpty(documentList.account) ? documentList.account.principal : [];
   const pendingDocumentsJoint =
     documentList && isNotEmpty(documentList.account) && isNotEmpty(documentList.account.joint) ? documentList.account.joint : [];
-  const principalDocsCount = pendingDocumentsPrincipal.map(({ docs }) => docs).flat();
+  const principalDocsCount = isNotEmpty(pendingDocumentsPrincipal) ? pendingDocumentsPrincipal.map(({ docs }) => docs).flat() : [];
   const principalDocsRemaining = principalDocsCount.filter(
     (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
   ).length;
-  const jointDocsCount = pendingDocumentsJoint!.map(({ docs }) => docs).flat();
+  const jointDocsCount = isNotEmpty(pendingDocumentsJoint) ? pendingDocumentsJoint!.map(({ docs }) => docs).flat() : [];
   const jointDocsRemaining = jointDocsCount.filter(
     (docs) => docs !== undefined && "base64" in docs === false && !isNotEmpty(docs.url),
   ).length;

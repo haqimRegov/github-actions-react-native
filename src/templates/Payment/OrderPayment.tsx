@@ -133,7 +133,20 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     if (unsavedChanges !== -1) {
       setUnsavedChanges(-1);
     }
-    setProofOfPayment({ ...proofOfPayment, payments: value }, action, deleted, setActiveInfo);
+    const savedPayments = payments.length > 0 ? value.filter((pay) => pay.saved || pay.isEditable !== undefined) : [];
+    const checkBalance = handleAvailableBalance(savedPayments, totalInvestment);
+    const checkPendingBalance = checkBalance.filter((bal) => parseInt(bal.amount, 10) < 0);
+
+    // transferred the status check and update here from the useEffect since there is an issue with CTA payment in Onboarding,
+    // the status of the current order is updated correctly. however, the useEffect of the other (and collapsed) order is being triggered so the status is changing back to Pending Payment
+    // the saving of balance and pendingBalance are kept in the useEffect
+
+    setProofOfPayment(
+      { ...proofOfPayment, payments: value, status: checkPendingBalance.length === 0 ? "Completed" : "Pending Payment" },
+      action,
+      deleted,
+      setActiveInfo,
+    );
   };
 
   const handleExpandPayment = (latestPayment: IPaymentInfo[], noPrompt?: boolean) => {
@@ -226,11 +239,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     const checkPendingBalance = checkBalance.filter((bal) => parseInt(bal.amount, 10) < 0);
     setBalance(checkBalance);
     setPendingBalance(checkPendingBalance);
-    setProofOfPayment({
-      ...proofOfPayment,
-      payments: payments,
-      status: checkPendingBalance.length === 0 ? "Completed" : "Pending Payment",
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payments]);
 
@@ -667,7 +675,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     // eslint-disable-next-line no-console
                     console.log("Edit to Non-CTA");
                     const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
-                    // eslint-disable-next-line no-console
                     if (latestCtaUsedBy !== undefined) {
                       cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;
                     }

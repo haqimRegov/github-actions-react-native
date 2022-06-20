@@ -131,41 +131,46 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       docs.map(async ({ docs: documentArray, name }: IHardCopyDocument) => {
         return {
           docs: await Promise.all(
-            documentArray.map(async (documents) => {
-              try {
-                const url =
-                  accountHolder === undefined
-                    ? S3UrlGenerator.hardcopy(currentOrder!.clientId, currentOrder!.orderNumber, name, documents!.title!, documents!.type!)
-                    : S3UrlGenerator.hardcopyAccount(
-                        currentOrder!.clientId,
-                        currentOrder!.orderNumber,
-                        accountHolder,
-                        documents!.title!,
-                        documents!.type!,
-                      );
-                const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
-                if (uploadedFile === undefined) {
-                  throw new Error();
-                }
-                return {
-                  title: documents!.title!,
-                  file: {
-                    // base64: documents!.base64!,
-                    name: documents!.name!,
-                    size: documents!.size!,
-                    type: documents!.type!,
-                    date: documents!.date!,
-                    path: documents!.path!,
-                    url: uploadedFile.key,
-                  },
-                };
+            documentArray.map(async (document) => {
+              // check if file is updated
+              if ("path" in document && document.path !== undefined) {
+                try {
+                  const url =
+                    accountHolder === undefined
+                      ? S3UrlGenerator.hardcopy(currentOrder!.clientId, currentOrder!.orderNumber, name, document!.title!, document!.type!)
+                      : S3UrlGenerator.hardcopyAccount(
+                          currentOrder!.clientId,
+                          currentOrder!.orderNumber,
+                          accountHolder,
+                          document!.title!,
+                          document!.type!,
+                        );
+                  const uploadedFile = await StorageUtil.put(document!.path!, url, document!.type!);
+                  if (uploadedFile === undefined) {
+                    throw new Error();
+                  }
+                  return {
+                    title: document!.title!,
+                    file: {
+                      // base64: documents!.base64!,
+                      name: document!.name!,
+                      size: document!.size!,
+                      type: document!.type!,
+                      date: document!.date!,
+                      path: document!.path!,
+                      url: uploadedFile.key,
+                    },
+                  };
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              } catch (error: any) {
-                // // eslint-disable-next-line no-console
-                fetching.current = true;
-                return undefined;
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                  // // eslint-disable-next-line no-console
+                  fetching.current = true;
+                  return undefined;
+                }
               }
+              // return undefined if file is already uploaded in S3 by other orders
+              return undefined;
             }),
           ),
           name: name,
@@ -196,21 +201,26 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         isNotEmpty(documentList?.documents) && documentList!.documents.length > 0
           ? ((await handleUpload(documentList?.documents!)) as ISubmitHardCopyDocuments[])
           : [];
-      const checkJoint = jointDocs.length > 0 ? { joint: jointDocs } : {};
+
+      const filterUploadedPrincipalDocs =
+        principalDocs.length > 0 ? principalDocs.filter((doc) => doc.docs.includes(undefined) === false) : [];
+      const filterUploadedJointDocs = jointDocs.length > 0 ? jointDocs.filter((doc) => doc.docs.includes(undefined) === false) : [];
+
+      const checkPrincipal = filterUploadedPrincipalDocs.length > 0 ? { principal: filterUploadedPrincipalDocs } : {};
+      const checkJoint = filterUploadedJointDocs.length > 0 ? { joint: filterUploadedJointDocs } : {};
+
       const checkAccount = isNotEmpty(documentList?.account)
         ? {
             account: {
-              principal: principalDocs,
+              ...checkPrincipal,
               ...checkJoint,
             },
           }
         : {};
-
-      const checkPrincipalDocsWithKeys = principalDocs.length > 0 ? principalDocs.findIndex(({ docs }) => docs.includes(undefined)) : -1;
-      const checkJointDocsWithKeys = jointDocs.length > 0 ? jointDocs.findIndex(({ docs }) => docs.includes(undefined)) : -1;
       const checkFundDocsWithKeys =
         fundDocs.length > 0 ? fundDocs.findIndex(({ docs }) => docs === undefined || docs.includes(undefined)) : -1;
-      if (checkPrincipalDocsWithKeys !== -1 || checkJointDocsWithKeys !== -1 || checkFundDocsWithKeys !== -1) {
+      // no need to check for principal and joint docs without keys since it can happen if the docs are already uploaded in S3 by other others
+      if (checkFundDocsWithKeys !== -1) {
         setPrompt(false);
         setLoading(false);
         setTimeout(() => {

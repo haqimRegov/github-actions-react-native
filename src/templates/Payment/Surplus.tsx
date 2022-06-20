@@ -275,7 +275,9 @@ export const PaymentCardStack = forwardRef<IPaymentCardStackRef | undefined, Pay
             </View>
           </View>
         </Fragment>
-      ) : null}
+      ) : (
+        <CustomSpacer space={sh24} />
+      )}
     </View>
   );
 });

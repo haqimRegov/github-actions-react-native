@@ -718,9 +718,6 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   const checkBaseItems = draftPayment.paymentType === "EPF" ? epfBaseItems : checkRecurringItems;
 
   const pendingCurrencies = availableBalance.map((eachBalance) => eachBalance.currency);
-  const surplusCardCount = availableBalance.filter(
-    (eachSurplus: IPaymentInfo) => eachSurplus.excess?.amount !== "0" && eachSurplus.orderNumber !== payment.orderNumber,
-  );
   const promptStyle = { ...fsAlignLeft, ...fullWidth };
 
   // effect to check when a saved info was edited or deleted
@@ -835,9 +832,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         />
       ) : null}
       <View>
-        {(ctaDetails?.length === 0 && surplusCardCount.length === 0) || payment.paymentType !== "Cash" ? (
-          <CustomSpacer space={sh24} />
-        ) : null}
+        {payment.paymentType !== "Cash" ? <CustomSpacer space={sh24} /> : null}
         <View style={px(sw24)}>
           <CustomCard
             spaceBetweenGroup={sh24}

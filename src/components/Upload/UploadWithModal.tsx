@@ -34,8 +34,10 @@ import { BasicModal } from "../Modals";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
 import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
 
+type ResourceType = "url" | "file" | "base64";
+
 interface UploadWithModalProps extends UploadProps {
-  resourceType?: "url" | "file" | "base64";
+  resourceType?: ResourceType;
   withPreview?: boolean;
 }
 
@@ -79,11 +81,13 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
   let pdfValue = "";
   let isFileValid = false;
   let imageValue: ImageSourcePropType = [];
+  let pdfResourceType: ResourceType = "base64";
 
   if (resourceType === "file" && value !== undefined && value.path !== undefined) {
     pdfValue = value.path;
     isFileValid = true;
     imageValue = { uri: value.path };
+    pdfResourceType = "file";
   }
 
   if (resourceType === "base64" && value !== undefined && value.base64 !== undefined) {
@@ -91,18 +95,21 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
     isFileValid = true;
     const base64String = `data:${value.type};base64,${value.base64}`;
     imageValue = { uri: base64String };
+    pdfResourceType = "base64";
   }
 
   if (resourceType === undefined && value !== undefined && value.path !== undefined) {
     pdfValue = value.base64 !== undefined ? value.base64 : "";
     isFileValid = true;
     imageValue = { uri: value.path };
+    pdfResourceType = "base64";
   }
 
   if (resourceType === undefined && value !== undefined && value.url !== undefined) {
     pdfValue = value.url;
     isFileValid = true;
     imageValue = { uri: value.url };
+    pdfResourceType = "url";
   }
 
   return (
@@ -145,7 +152,7 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
                         fadeInDuration={350}
                         style={{ ...fullHW, ...flexChild }}
                         resource={pdfValue}
-                        resourceType={resourceType || "base64"}
+                        resourceType={pdfResourceType}
                       />
                     </View>
                   ) : (

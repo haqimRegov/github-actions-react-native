@@ -9,7 +9,7 @@ declare interface LabeledTitleProps {
   style?: import("react-native").ViewStyle;
   subtitle?: string;
   subtitleStyle?: import("react-native").TextStyle;
-  title: string;
+  title?: string;
   titleIcon?: string;
   titleIconStyle?: import("react-native").ViewStyle;
   titlePrefix?: string;

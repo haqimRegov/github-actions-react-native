@@ -42,7 +42,7 @@ export const ColorCard: FunctionComponent<ColorCardProps> = ({
   };
 
   const defaultHeader =
-    header !== "custom" ? <LabeledTitle {...header} labelStyle={fs16BoldBlack2} titleStyle={{ ...fs12RegGray5 }} /> : null;
+    header !== "custom" ? <LabeledTitle labelStyle={fs16BoldBlack2} titleStyle={{ ...fs12RegGray5 }} {...header} /> : null;
 
   return (
     <View style={{ ...defaultContainerStyle, ...containerStyle }}>

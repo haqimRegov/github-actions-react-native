@@ -1,10 +1,26 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { border, colorBlue, colorGray, fs12RegGray5, fs16BoldBlack2, px, py, sh12, sh16, sh32, sw1, sw16, sw32, sw8 } from "../../styles";
+import {
+  border,
+  colorBlue,
+  colorGray,
+  colorWhite,
+  fs12RegGray5,
+  fs16BoldBlack2,
+  px,
+  py,
+  sh12,
+  sh16,
+  sh32,
+  sw1,
+  sw16,
+  sw32,
+  sw8,
+} from "../../styles";
 import { LabeledTitle } from "../Views";
 
-export interface ColorCardProps {
+interface ColorCardProps {
   containerStyle?: ViewStyle;
   content?: ReactNode;
   contentStyle?: ViewStyle;
@@ -36,6 +52,9 @@ export const ColorCard: FunctionComponent<ColorCardProps> = ({
 
   const defaultContentStyle: ViewStyle = {
     ...px(sw32),
+    backgroundColor: colorWhite._1,
+    borderBottomLeftRadius: sw8,
+    borderBottomRightRadius: sw8,
     paddingBottom: sh32,
     paddingTop: sh16,
     ...contentStyle,

@@ -37,7 +37,7 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
               <CustomSpacer isHorizontal={true} space={sw4} />
             </Fragment>
           ) : null}
-          <Text style={{ ...fs16BoldBlack1, ...titleStyle }}>{title}</Text>
+          {title !== undefined ? <Text style={{ ...fs16BoldBlack1, ...titleStyle }}>{title}</Text> : null}
           {titleIcon !== undefined ? (
             <View style={{ ...flexRow, ...centerVertical, ...titleIconStyle }}>
               <CustomSpacer isHorizontal={true} space={defaultIconSpace} />

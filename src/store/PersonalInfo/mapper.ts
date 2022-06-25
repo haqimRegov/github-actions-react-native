@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { AcknowledgementActionProps } from "../Acknowledgement/actions";
 import { ClientActionProps } from "../Client/actions";
+import { ForceUpdateActionProps } from "../ForceUpdate";
 import { GlobalActionProps } from "../Global/actions";
 import { OnboardingActionProps } from "../Onboarding/actions";
 import { RootState } from "../rootReducer";
@@ -9,8 +10,10 @@ import { PersonalInfoActionProps } from "./actions";
 
 export const PersonalInfoMapStateToProps = (state: RootState) => ({
   accountType: state.client.accountType,
+  accountHolder: state.client.details?.accountHolder,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
+  forceUpdate: state.forceUpdate,
   investmentDetails: state.selectedFund.investmentDetails,
   onboarding: state.onboarding,
   personalInfo: state.personalInfo,
@@ -20,7 +23,14 @@ export const PersonalInfoMapStateToProps = (state: RootState) => ({
 
 export const PersonalInfoMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
-    { ...PersonalInfoActionProps, ...OnboardingActionProps, ...ClientActionProps, ...GlobalActionProps, ...AcknowledgementActionProps },
+    {
+      ...PersonalInfoActionProps,
+      ...ForceUpdateActionProps,
+      ...OnboardingActionProps,
+      ...ClientActionProps,
+      ...GlobalActionProps,
+      ...AcknowledgementActionProps,
+    },
     dispatch,
   );
 };

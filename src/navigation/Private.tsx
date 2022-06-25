@@ -14,7 +14,7 @@ import { Language } from "../constants";
 import { DICTIONARY_INACTIVITY_COUNTDOWN, DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER } from "../data/dictionary";
 import { updateStorageData } from "../integrations";
 import { logout } from "../network-actions";
-import { DashboardPage, LogoutPage, OnboardingPage } from "../pages";
+import { DashboardPage, ForceUpdatePage, LogoutPage, OnboardingPage } from "../pages";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../store";
 import { sw212 } from "../styles";
 
@@ -142,6 +142,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
           />
           <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
           <Screen name="Onboarding" component={OnboardingPage} options={defaultOptions} />
+          <Screen name="ForceUpdate" component={ForceUpdatePage} options={defaultOptions} />
         </Navigator>
       </UserInactivity>
       <PromptModal

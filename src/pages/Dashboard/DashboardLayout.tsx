@@ -30,6 +30,7 @@ interface DashboardLayoutProps {
   hideQuickActions?: boolean;
   navigation: IStackNavigationProp;
   scrollEnabled?: boolean;
+  setPage?: (page: DashboardPageType) => void;
   setScrollRef?: (ref: ScrollView) => void;
   sideElement?: ReactNode;
   status?: string;
@@ -44,6 +45,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   hideQuickActions,
   navigation,
   scrollEnabled,
+  setPage,
   setScrollRef,
   sideElement,
   status,
@@ -154,7 +156,7 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
           {children}
         </View>
       </ScrollView>
-      <NewSales navigation={navigation} setVisible={setAddClient} visible={addClient} />
+      <NewSales navigation={navigation} setPage={setPage} setVisible={setAddClient} visible={addClient} />
     </Fragment>
   );
 };

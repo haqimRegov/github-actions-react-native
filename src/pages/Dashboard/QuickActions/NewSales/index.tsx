@@ -42,6 +42,7 @@ const { ADD_CLIENT } = Language.PAGE;
 
 interface NewSalesProps extends ClientStoreProps {
   navigation: IStackNavigationProp;
+  setPage?: (page: DashboardPageType) => void;
   setVisible: (visibility: boolean) => void;
   visible: boolean;
 }
@@ -50,14 +51,15 @@ const NewSalesComponent = ({
   accountType,
   addAccountType,
   addClientDetails,
+  addClientForceUpdate,
   addJointInfo,
   addPersonalInfo,
   addPrincipalInfo,
-  agent,
   details,
   navigation,
   personalInfo,
   resetClientDetails,
+  setPage,
   setVisible,
   visible,
 }: NewSalesProps) => {
@@ -151,7 +153,7 @@ const NewSalesComponent = ({
               expirationDate: undefined,
               idNumber: jointHolder?.id,
               idType: jointClientIdType,
-              name: jointHolder?.name.trim(),
+              name: jointHolder?.name!.trim(),
               nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
               placeOfBirth: jointPlaceOfBirth,
             },
@@ -182,17 +184,14 @@ const NewSalesComponent = ({
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request = {
-        agentId: agent?.id!,
-        principalHolder: {
-          country: principalHolder?.country,
-          dateOfBirth: principalHolder?.dateOfBirth
-            ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-            : "",
-          id: principalHolder?.id,
-          idType: principalIdType,
-          name: principalHolder?.name?.trim(),
-        },
+      const request: IEtbCheckRequest = {
+        country: principalHolder?.country,
+        dateOfBirth: principalHolder?.dateOfBirth
+          ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+          : "",
+        id: principalHolder?.id,
+        idType: principalIdType,
+        name: principalHolder?.name?.trim(),
       };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation, setLoading);
       setLoading(false);
@@ -204,6 +203,10 @@ const NewSalesComponent = ({
           setInputError1(undefined);
           if (data.result.message === "NTB") {
             return setClientType("NTB");
+          }
+          if (data.result.forceUpdate === true && setPage !== undefined) {
+            addClientForceUpdate(true);
+            return setPage("Investors");
           }
           setTimeout(() => {
             return Alert.alert("Client is ETB");

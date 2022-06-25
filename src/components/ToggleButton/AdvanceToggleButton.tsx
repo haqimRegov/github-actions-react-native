@@ -27,8 +27,10 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
-interface AdvanceToggleButtonProps {
+export interface AdvanceToggleButtonProps {
+  buttonContainerStyle?: ViewStyle;
   buttonStyle?: ViewStyle;
+  contentToRadioSpace?: number;
   CustomContent?: (props: IToggleButtonCustomContent) => JSX.Element;
   direction?: "column" | "row";
   disabledIndex?: number[];
@@ -38,12 +40,15 @@ interface AdvanceToggleButtonProps {
   onSelect: (index: TypeAdvanceToggleButtonValue) => void;
   sideElement?: ReactNode;
   space?: number;
+  subLabelStyle?: TextStyle;
   textContainer?: ViewStyle;
   value: TypeAdvanceToggleButtonValue;
 }
 
 export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = ({
+  buttonContainerStyle,
   buttonStyle,
+  contentToRadioSpace,
   CustomContent,
   direction,
   disabledIndex,
@@ -53,11 +58,13 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
   onSelect,
   sideElement,
   space,
+  subLabelStyle: mainSubLabelStyle,
   textContainer,
   value,
 }: AdvanceToggleButtonProps) => {
   const defaultSpace = direction === "column" ? sh16 : sw40;
   const radioSpace = space !== undefined ? space : defaultSpace;
+  const radioToContentSpace = contentToRadioSpace !== undefined ? contentToRadioSpace : sw8;
 
   return (
     <View style={flexRow}>
@@ -101,20 +108,20 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
                   <CustomContent {...customContentProps} />
                 ) : (
                   <View style={{ ...centerVertical, ...flexRow, ...disabledStyle }}>
-                    <View style={alignSelfStart}>
+                    <View style={{ ...alignSelfStart, ...buttonContainerStyle }}>
                       <View style={{ ...centerHV, ...circleStyle, ...disabledBackground, ...buttonStyle }}>
                         <IcoMoon name="success" size={iconSize || sw12} color={iconColor} />
                       </View>
                     </View>
-                    <CustomSpacer space={sw8} isHorizontal />
+                    <CustomSpacer space={radioToContentSpace} isHorizontal />
                     <View style={{ ...alignSelfStart, ...textContainer }}>
                       <View style={flexRow}>
                         <Text
                           style={{
                             ...fs12BoldGray6,
-                            fontFamily: fontFamily,
                             maxWidth: sw326,
                             ...mainLabelStyle,
+                            fontFamily: fontFamily,
                             ...labelStyle,
                           }}>
                           {label}
@@ -127,7 +134,7 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
                         ) : null}
                       </View>
                       {subLabel !== undefined ? (
-                        <Text style={{ ...fs12RegGray5, maxWidth: sw326, ...subLabelStyle }}>{subLabel}</Text>
+                        <Text style={{ ...fs12RegGray5, maxWidth: sw326, ...mainSubLabelStyle, ...subLabelStyle }}>{subLabel}</Text>
                       ) : null}
                     </View>
                   </View>

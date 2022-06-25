@@ -21,6 +21,7 @@ import {
 
 export interface AvatarProps {
   color?: string;
+  containerStyle?: ViewStyle;
   image?: ImageSourcePropType;
   size?: number;
   text?: string;
@@ -28,12 +29,14 @@ export interface AvatarProps {
   type?: AvatarType;
 }
 
-export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, text, textStyle, type }: AvatarProps) => {
+export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, text, textStyle, type, containerStyle }: AvatarProps) => {
   const defaultSize = size !== undefined ? size : sw48;
+
   const container: ViewStyle = {
     ...centerHV,
     ...circleBorder(defaultSize, sw2, colorWhite._1),
     ...shadow16Blue112,
+    ...containerStyle,
   };
 
   let defaultColor = color !== undefined ? color : colorBlue._1;

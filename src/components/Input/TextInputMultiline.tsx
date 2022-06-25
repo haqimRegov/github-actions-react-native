@@ -74,7 +74,7 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
 
   const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
   const defaultCharLength = rest.value !== undefined ? rest.value.length : 0;
-  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${defaultCharLength}/${rest.maxLength}` : "";
+  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${defaultCharLength} / ${rest.maxLength}` : "";
 
   return (
     <View style={flexChild}>

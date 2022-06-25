@@ -17,11 +17,11 @@ export const checkClient = async (
       handleLoading,
     );
 
-    if (data === undefined || "etbCheck" in data === false) {
+    if (data === undefined || "etbCheckV2" in data === false) {
       throw data;
     }
 
-    return data.etbCheck;
+    return data.etbCheckV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in checkClient at ETBCheck.ts", error);

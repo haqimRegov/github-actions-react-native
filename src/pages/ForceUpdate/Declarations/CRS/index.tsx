@@ -1,0 +1,98 @@
+import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
+import { connect } from "react-redux";
+
+import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
+import { Language } from "../../../../constants";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
+import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../../styles";
+import { CRSDefinition } from "../../../Onboarding/Declarations/CRS/CRSDefinition";
+import { CrsDeclarationDetails } from "./Details";
+
+const { DECLARATIONS } = Language.PAGE;
+
+interface CrsDeclarationProps extends PersonalInfoStoreProps, ForceUpdateContentProps {}
+
+export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
+  addPersonalInfo,
+  forceUpdate,
+  handleNextStep,
+  personalInfo,
+  updateForceUpdate,
+}: CrsDeclarationProps) => {
+  const { principal } = personalInfo;
+  const [crsDefinition, setCRSDefinition] = useState<boolean>(false);
+
+  const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: { declaration: { ...personalInfo.principal!.declaration, crs: { ...crsDeclaration } } },
+    });
+  };
+
+  const handleContinue = () => {
+    const route: TypeForceUpdateRoute = "DeclarationSummary";
+    if (personalInfo.editDeclaration === false) {
+      addPersonalInfo({ ...personalInfo, editDeclaration: true });
+    }
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
+    const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+    if (findDeclarationSummary !== -1) {
+      updatedDisabledSteps.splice(findDeclarationSummary, 1);
+    }
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
+    handleNextStep(route);
+  };
+
+  const handleRead = () => {
+    setCRSDefinition(true);
+  };
+
+  const isTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 0;
+  const validateTin = (multipleTin: ITinMultiple[]) =>
+    multipleTin
+      .map(
+        (tin) =>
+          tin.country !== "" &&
+          ((tin.noTin === false && tin.tinNumber !== "") ||
+            (tin.noTin === true && (tin.reason === 0 || tin.reason === 1 || (tin.reason === 2 && tin.explanation !== "")))),
+      )
+      .includes(false) === false;
+
+  const showTermsPrincipal = isTaxResidentPrincipal || validateTin(principal!.declaration!.crs!.tin!);
+
+  const validationsPrincipal = { showTerms: showTermsPrincipal };
+
+  const showButtonContinuePrincipal = showTermsPrincipal ? handleContinue : undefined;
+
+  const continueEnabledPrincipal =
+    showTermsPrincipal &&
+    principal?.declaration!.crs!.acceptCrs &&
+    principal?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false;
+
+  const handleBack = () => {
+    handleNextStep("FATCADeclaration");
+  };
+
+  return (
+    <ContentPage
+      continueDisabled={!continueEnabledPrincipal}
+      handleCancel={handleBack}
+      handleContinue={showButtonContinuePrincipal}
+      labelContinue={DECLARATIONS.BUTTON_ACCEPT_SAVE}
+      subheading={DECLARATIONS.CRS_HEADING}>
+      <CustomSpacer space={sh8} />
+      <View style={px(sw24)}>
+        <LinkText onPress={handleRead} text={DECLARATIONS.READ_DECLARATION} style={fs12SemiBoldBlue1} />
+      </View>
+      <CrsDeclarationDetails
+        crs={principal?.declaration?.crs!}
+        handleCrsDeclaration={handlePrincipalCrs}
+        validations={validationsPrincipal}
+      />
+      {crsDefinition ? <CRSDefinition setVisible={setCRSDefinition} visible={crsDefinition} /> : null}
+    </ContentPage>
+  );
+};
+
+export const CRSContent = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(CRSContentComponent);

@@ -87,19 +87,14 @@ const dashboard = gql`
 `;
 
 const etbCheck = gql`
-  query etbCheck($input: clientStatusInput) {
-    etbCheck(input: $input) {
+  query etbCheckV2($input: etbCheckV2Input) {
+    etbCheckV2(input: $input) {
       data {
         result {
           message
           status
           highRisk
-          accounts {
-            accountNumber
-            date
-            accountType
-            name
-          }
+          forceUpdate
         }
       }
       error {
@@ -152,12 +147,28 @@ const investorDetailsDashboard = gql`
           mobileNo
           emailLastUpdated
           mobileNoLastUpdated
+          isForceUpdate
           investorDetails {
             name
+            accountHolder
+            dateOfBirth
             riskTolerance
             accountNo
+            initId
+            clientId
             jointName
             accountOpeningDate
+            address {
+              address {
+                line1
+                line2
+                line3
+              }
+              city
+              country
+              postCode
+              state
+            }
           }
         }
       }

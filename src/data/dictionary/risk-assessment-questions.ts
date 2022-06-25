@@ -21,6 +21,12 @@ export const Q4_OPTIONS = [
   { label: RISK_ASSESSMENT.Q4_OPTION_3 },
   { label: RISK_ASSESSMENT.Q4_OPTION_4 },
 ];
+export const Q4_OPTIONS_NEW = [
+  { label: RISK_ASSESSMENT.Q4_OPTION_1 },
+  { label: RISK_ASSESSMENT.Q4_OPTION_2_NEW, subLabel: RISK_ASSESSMENT.Q4_SUB_OPTION_2 },
+  { label: RISK_ASSESSMENT.Q4_OPTION_3_NEW, subLabel: RISK_ASSESSMENT.Q4_SUB_OPTION_3 },
+  { label: RISK_ASSESSMENT.Q4_OPTION_4_NEW, subLabel: RISK_ASSESSMENT.Q4_SUB_OPTION_4 },
+];
 
 export const Q5_OPTIONS = [
   { label: RISK_ASSESSMENT.Q5_OPTION_1 },
@@ -53,5 +59,11 @@ export const Q8_OPTIONS = [
 export const Q9_OPTIONS = [
   { label: RISK_ASSESSMENT.Q9_OPTION_1 },
   { label: RISK_ASSESSMENT.Q9_OPTION_2 },
+  { label: RISK_ASSESSMENT.Q9_OPTION_3 },
+];
+
+export const Q9_OPTIONS_NEW = [
+  { label: RISK_ASSESSMENT.Q9_OPTION_1_NEW },
+  { label: RISK_ASSESSMENT.Q9_OPTION_2_NEW },
   { label: RISK_ASSESSMENT.Q9_OPTION_3 },
 ];

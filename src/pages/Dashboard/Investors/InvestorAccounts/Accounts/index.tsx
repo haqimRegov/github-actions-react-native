@@ -31,6 +31,7 @@ interface InvestorAccountsProps {
   navigation: IStackNavigationProp;
   page: number;
   setInvestorData: (data: IInvestor) => void;
+  setForceUpdatePrompt: (value: boolean) => void;
   setIsFetching: (value: boolean) => void;
   setPage: (page: number) => void;
   setPages: (page: number) => void;
@@ -46,6 +47,7 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
   navigation,
   page,
   setInvestorData,
+  setForceUpdatePrompt,
   setIsFetching,
   setPage,
   setPages,
@@ -207,27 +209,14 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
-        const {
-          investorDetails,
-          page: currentPage,
-          pages,
-          name,
-          email,
-          emailLastUpdated,
-          mobileNo,
-          mobileNoLastUpdated,
-          totalCount,
-        } = data.result;
+        const { page: currentPage, pages, ...updatedInvestorData } = data.result;
         setInvestorData({
           ...investorData,
-          investorDetails: investorDetails,
-          name: name,
-          email: email,
-          emailLastUpdated: emailLastUpdated,
-          mobileNo: mobileNo,
-          mobileNoLastUpdated: mobileNoLastUpdated,
-          totalCount: totalCount,
+          ...updatedInvestorData,
         });
+        if (data.result.isForceUpdate === true) {
+          setForceUpdatePrompt(true);
+        }
         setPage(currentPage);
         setPages(pages);
         setIsFetching(false);

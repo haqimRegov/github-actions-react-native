@@ -7,13 +7,14 @@ import { InvestorDashboard } from "./InvestorList";
 
 interface TransactionsProps {
   handleRoute: (route: DashboardPageType) => void;
+  isForceUpdate: boolean;
   isLogout: boolean;
   navigation: IStackNavigationProp;
 }
 
 export const Investors: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { navigation, isLogout } = props;
-  const [route, setRoute] = useState<InvestorsPageType>("InvestorDashboard");
+  const { navigation, isForceUpdate, isLogout } = props;
+  const [route, setRoute] = useState<InvestorsPageType>(isForceUpdate === true ? "AccountsList" : "InvestorDashboard");
   const [activeTab, setActiveTab] = useState<InvestorsTabType>("all");
   const setScreen = (nextPage: InvestorsPageType) => {
     setRoute(nextPage);

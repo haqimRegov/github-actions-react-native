@@ -45,7 +45,16 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           },
           verified: false,
+          initId: undefined,
+          accountHolder: undefined,
         },
+        isForceUpdate: false,
+      };
+
+    case "client/ADD_CLIENT_FORCE_UPDATE":
+      return {
+        ...state,
+        isForceUpdate: action.payload,
       };
 
     default:

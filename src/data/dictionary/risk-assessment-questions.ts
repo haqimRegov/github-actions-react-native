@@ -61,9 +61,3 @@ export const Q9_OPTIONS = [
   { label: RISK_ASSESSMENT.Q9_OPTION_2 },
   { label: RISK_ASSESSMENT.Q9_OPTION_3 },
 ];
-
-export const Q9_OPTIONS_NEW = [
-  { label: RISK_ASSESSMENT.Q9_OPTION_1_NEW },
-  { label: RISK_ASSESSMENT.Q9_OPTION_2_NEW },
-  { label: RISK_ASSESSMENT.Q9_OPTION_3 },
-];

@@ -14,16 +14,7 @@ import {
   LabeledTitle,
 } from "../../components";
 import { FORCE_UPDATE_ROUTES, Language, NunitoBold, NunitoRegular } from "../../constants";
-import {
-  Q2_OPTIONS,
-  Q3_OPTIONS,
-  Q4_OPTIONS_NEW,
-  Q5_OPTIONS,
-  Q6_OPTIONS,
-  Q7_OPTIONS,
-  Q8_OPTIONS,
-  Q9_OPTIONS_NEW,
-} from "../../data/dictionary";
+import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS_NEW, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -347,7 +338,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
                   customHeader={<QuestionHeader avatarText={RISK_ASSESSMENT.LABEL_Q9} label={RISK_ASSESSMENT.QUESTION_9} />}
                   content={
                     <QuestionContent
-                      options={Q9_OPTIONS_NEW}
+                      options={Q9_OPTIONS}
                       RenderContent={(renderContentProps) => {
                         const { options, selected, setSelected } = renderContentProps;
                         return (

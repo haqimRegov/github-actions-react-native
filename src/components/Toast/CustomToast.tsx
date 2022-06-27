@@ -17,7 +17,7 @@ import {
   fullWidth,
   justifyContentEnd,
   px,
-  sh24,
+  sh16,
   sh48,
   sw16,
   sw24,
@@ -48,6 +48,7 @@ declare interface CustomToastProps {
   setCount?: (currentCount: number) => void;
   setParentVisible?: (currentVisibility: boolean) => void;
   style?: ViewStyle;
+  toastStyle?: ViewStyle;
 }
 
 export const CustomToast: FunctionComponent<CustomToastProps> = ({
@@ -63,6 +64,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
   setParentVisible,
   setCount,
   style,
+  toastStyle,
 }: CustomToastProps) => {
   const [fadeOut, setFadeOut] = useState<boolean>(false);
   const [tempVisible, setTempVisible] = useState<boolean>(false);
@@ -151,7 +153,7 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
     ...justifyContentEnd,
     ...absolutePosition,
     height: sh48,
-    top: sh24,
+    top: sh48,
     ...style,
   };
   const contentContainerStyle: ViewStyle = {
@@ -191,10 +193,10 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
 
   const toastContent =
     isDeleteToast !== undefined && isDeleteToast === true ? (
-      <View style={flexRow}>
+      <View style={{ ...flexRow, ...toastStyle }}>
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View style={textContainerStyle}>
-          <Text style={fs12RegWhite1}>{`${count} ${defaultDeletedText}`}</Text>
+          <Text style={{ ...fs12RegWhite1, lineHeight: sh16 }}>{`${count} ${defaultDeletedText}`}</Text>
         </View>
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View style={{ backgroundColor: colorWhite._1 }}>
@@ -206,13 +208,13 @@ export const CustomToast: FunctionComponent<CustomToastProps> = ({
         </View>
       </View>
     ) : (
-      <View style={{ ...flexRow, ...px(sw16) }}>
+      <View style={{ ...flexRow, ...px(sw16), ...toastStyle }}>
         <View style={textContainerStyle}>
-          <Text style={fs12RegWhite1}>{defaultText}</Text>
+          <Text style={{ ...fs12RegWhite1, lineHeight: sh16 }}>{defaultText}</Text>
         </View>
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View style={sideContainerStyle}>
-          <IconButton color={colorBlue._8} name="close" onPress={handlePress} />
+          <IconButton color={colorBlue._8} name="close" onPress={handlePress} size={sw16} />
         </View>
       </View>
     );

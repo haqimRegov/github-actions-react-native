@@ -1,9 +1,29 @@
 import React, { FunctionComponent, ReactElement, useState } from "react";
-import { TouchableWithoutFeedback, ViewStyle } from "react-native";
+import { Pressable, Text, View, ViewStyle } from "react-native";
 import Tooltip, { TooltipSize } from "react-native-walkthrough-tooltip";
 
+import { NunitoBlack } from "../../constants";
 import { IcoMoon } from "../../icons";
-import { colorGray, colorTransparent, px, py, sh12, sh16, sh24, sw16, sw2, sw208, sw7, sw8 } from "../../styles";
+import {
+  centerHV,
+  circle,
+  colorBlue,
+  colorGray,
+  colorTransparent,
+  fs10BoldWhite1,
+  px,
+  py,
+  sh12,
+  sh16,
+  sh24,
+  sw14,
+  sw16,
+  sw2,
+  sw208,
+  sw24,
+  sw7,
+  sw8,
+} from "../../styles";
 
 export interface CustomTooltipProps {
   arrowSize?: TooltipSize;
@@ -20,6 +40,7 @@ export interface CustomTooltipProps {
   placement?: "top" | "bottom" | "left" | "right";
   showChild?: boolean;
   spacing?: number;
+  theme?: "dark" | "light";
   tooltipStyle?: ViewStyle;
   topAdjustment?: number;
   withShadow?: boolean;
@@ -40,6 +61,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   isVisible,
   showChild,
   spacing,
+  theme,
   tooltipStyle,
   topAdjustment,
   withShadow,
@@ -85,6 +107,17 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   const defaultArrowSize = arrowSize !== undefined ? arrowSize : { width: sw7, height: sh12 };
   const defaultSpacing = spacing !== undefined ? spacing : sw2;
 
+  const icon =
+    theme === "dark" ? (
+      <View style={{ ...centerHV, height: sh24, width: sw24 }}>
+        <View style={{ ...centerHV, ...circle(sw14, colorBlue._1) }}>
+          <Text style={{ ...fs10BoldWhite1, fontFamily: NunitoBlack }}>i</Text>
+        </View>
+      </View>
+    ) : (
+      <IcoMoon name="info" size={sh24} />
+    );
+
   return (
     <Tooltip
       allowChildInteraction={true}
@@ -103,9 +136,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
       showChildInTooltip={defaultShowChild}
       topAdjustment={topAdjustment}
       tooltipStyle={tooltipStyle}>
-      <TouchableWithoutFeedback onPress={handleShow}>
-        {children !== undefined ? children : <IcoMoon name="info" size={sh24} />}
-      </TouchableWithoutFeedback>
+      <Pressable onPress={handleShow}>{children !== undefined ? children : icon}</Pressable>
     </Tooltip>
   );
 };

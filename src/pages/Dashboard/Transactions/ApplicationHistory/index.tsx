@@ -45,6 +45,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
   setActiveTab: (route: TransactionsTabType) => void;
   setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
+  setPage: (page: DashboardPageType) => void;
   setScreen: (route: TransactionsPageType) => void;
 }
 

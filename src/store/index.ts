@@ -1,6 +1,7 @@
 export * from "./Acknowledgement";
 export * from "./actionCreator";
 export * from "./Client";
+export * from "./ForceUpdate";
 export * from "./Global";
 export * from "./Onboarding";
 export * from "./PersonalInfo";

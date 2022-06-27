@@ -1,22 +1,14 @@
-declare interface IEtbCheckRequest {
-  agentId: string;
-  principalHolder: IClientRegisterInfo;
-}
+declare type IEtbCheckRequest = IClientRegisterInfo;
 
 declare interface IEtbCheckResult {
   highRisk: boolean;
   message: string;
   status: string;
-  accounts: {
-    accountNumber: string;
-    date: string;
-    accountType: string;
-    name: string;
-  };
+  forceUpdate: boolean;
 }
 
 declare type IEtbCheckResponse = IQueryResponse<IEtbCheckResult> | undefined;
 
 declare interface IEtbCheckQuery {
-  etbCheck: IEtbCheckResponse;
+  etbCheckV2: IEtbCheckResponse;
 }

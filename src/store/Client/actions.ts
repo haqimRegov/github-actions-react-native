@@ -16,17 +16,27 @@ export const addJointInfo = (info: IClientBasicInfo) => {
   return typedAction("client/ADD_JOINT_INFO", info);
 };
 
+export const addClientForceUpdate = (forceUpdate: boolean) => {
+  return typedAction("client/ADD_CLIENT_FORCE_UPDATE", forceUpdate);
+};
+
 export const resetClientDetails = () => {
   return typedAction("client/RESET_DETAILS");
 };
 
 export type ClientAction = ReturnType<
-  typeof addAccountType | typeof addClientDetails | typeof addPrincipalInfo | typeof addJointInfo | typeof resetClientDetails
+  | typeof addAccountType
+  | typeof addClientDetails
+  | typeof addClientForceUpdate
+  | typeof addPrincipalInfo
+  | typeof addJointInfo
+  | typeof resetClientDetails
 >;
 
 export const ClientActionProps = {
   addAccountType,
   addClientDetails,
+  addClientForceUpdate,
   addJointInfo,
   addPrincipalInfo,
   resetClientDetails,

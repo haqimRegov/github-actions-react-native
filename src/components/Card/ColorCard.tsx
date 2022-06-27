@@ -10,15 +10,17 @@ import {
   fs16BoldBlack2,
   px,
   py,
+  rowCenterVertical,
   sh12,
   sh16,
   sh32,
   sw1,
   sw16,
+  sw24,
   sw32,
-  sw8,
 } from "../../styles";
-import { LabeledTitle } from "../Views";
+import { IconButton, IconButtonProps } from "../Touchables";
+import { CustomFlexSpacer, LabeledTitle } from "../Views";
 
 interface ColorCardProps {
   containerStyle?: ViewStyle;
@@ -26,6 +28,7 @@ interface ColorCardProps {
   contentStyle?: ViewStyle;
   customHeader?: ReactNode;
   header: LabeledTitleProps | "custom";
+  headerIcon?: IconButtonProps;
   headerStyle?: ViewStyle;
 }
 
@@ -35,6 +38,7 @@ export const ColorCard: FunctionComponent<ColorCardProps> = ({
   contentStyle,
   customHeader,
   header,
+  headerIcon,
   headerStyle,
 }: ColorCardProps) => {
   const defaultContainerStyle: ViewStyle = {
@@ -45,23 +49,29 @@ export const ColorCard: FunctionComponent<ColorCardProps> = ({
     ...px(sw32),
     ...py(sh12),
     backgroundColor: colorBlue._3,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
+    borderTopLeftRadius: sw16,
+    borderTopRightRadius: sw16,
     ...headerStyle,
   };
 
   const defaultContentStyle: ViewStyle = {
     ...px(sw32),
     backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw8,
-    borderBottomRightRadius: sw8,
+    borderBottomLeftRadius: sw16,
+    borderBottomRightRadius: sw16,
     paddingBottom: sh32,
     paddingTop: sh16,
     ...contentStyle,
   };
 
   const defaultHeader =
-    header !== "custom" ? <LabeledTitle labelStyle={fs16BoldBlack2} titleStyle={{ ...fs12RegGray5 }} {...header} /> : null;
+    header !== "custom" ? (
+      <View style={rowCenterVertical}>
+        <LabeledTitle labelStyle={fs16BoldBlack2} titleStyle={{ ...fs12RegGray5 }} {...header} />
+        <CustomFlexSpacer />
+        {headerIcon !== undefined ? <IconButton color={colorBlue._1} size={sw24} {...headerIcon} /> : null}
+      </View>
+    ) : null;
 
   return (
     <View style={{ ...defaultContainerStyle, ...containerStyle }}>

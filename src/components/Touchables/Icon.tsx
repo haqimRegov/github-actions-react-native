@@ -5,7 +5,7 @@ import { ColorValue, Pressable, View, ViewStyle } from "react-native";
 import { IcoMoon } from "../../icons";
 import { centerHV, colorTransparent, colorWhite, sh20 } from "../../styles";
 
-interface IconButtonProps {
+export interface IconButtonProps {
   color?: string;
   name: string;
   onPress?: () => void;

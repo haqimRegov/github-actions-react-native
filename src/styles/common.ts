@@ -57,6 +57,7 @@ export const borderLeftBlue3 = { borderLeftWidth: 1, borderLeftColor: colorBlue.
 export const borderLeftGray3 = { borderLeftWidth: 1, borderLeftColor: colorGray._3 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const borderDashed = { borderStyle: "dashed" } as const;
+export const noBorder = { borderWidth: 0 } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
 export const noBGColor = { backgroundColor: colorTransparent } as const;
@@ -186,6 +187,16 @@ export const shadow4Blue116 = {
   },
   shadowOpacity: 0.16,
   shadowRadius: 4,
+} as const;
+
+export const noShadow = {
+  shadowColor: colorTransparent,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0,
+  shadowRadius: 0,
 } as const;
 
 export interface DeviceSizeType {

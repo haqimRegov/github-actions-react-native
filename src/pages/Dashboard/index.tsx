@@ -1,6 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import moment from "moment";
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Image, ImageStyle, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
@@ -51,6 +51,7 @@ interface DashboardPageProps extends TransactionsStoreProps {
 
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   agent,
+  client,
   navigation,
   route,
   unreadMessages,
@@ -74,28 +75,28 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleInbox = () => {
-    setActiveMenu(3);
+    // setActiveMenu(3);
     setPage("Inbox");
   };
 
   const handleProfile = () => {
     setPage("Profile");
-    setActiveMenu(4);
+    // setActiveMenu(4);
   };
 
   const handleDashboard = () => {
     setPage("Transactions");
-    setActiveMenu(0);
+    // setActiveMenu(0);
   };
 
   const handleInvestors = () => {
     setPage("Investors");
-    setActiveMenu(1);
+    // setActiveMenu(1);
   };
 
   const handleEDD = () => {
     setPage("EDD");
-    setActiveMenu(2);
+    // setActiveMenu(2);
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
@@ -108,7 +109,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     content = <Transactions {...props} />;
   }
   if (page === "Investors") {
-    content = <Investors {...props} />;
+    content = <Investors {...props} isForceUpdate={client.isForceUpdate === true} />;
   }
   if (page === "EDD") {
     content = <EDD {...props} />;
@@ -138,6 +139,15 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
       : "";
 
   const logoAimsStyle: ImageStyle = { ...imageContain, height: sh32, width: sw66 };
+
+  useEffect(() => {
+    const pages: DashboardPageType[] = ["Transactions", "Investors", "EDD", "Inbox", "Profile"];
+    const pageIndex = pages.indexOf(page);
+    if (activeMenu !== pageIndex) {
+      setActiveMenu(pageIndex);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>

@@ -14,7 +14,7 @@ interface TransactionsProps {
 }
 
 export const Transactions: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { navigation, isLogout } = props;
+  const { handleRoute, navigation, isLogout } = props;
   const [route, setRoute] = useState<TransactionsPageType>("Transactions");
   const [activeTab, setActiveTab] = useState<TransactionsTabType>("incomplete");
   const [orderSummaryActiveTab, setOrderSummaryActiveTab] = useState<OrderSummaryTabType>("order");
@@ -28,6 +28,7 @@ export const Transactions: FunctionComponent<TransactionsProps> = (props: Transa
       activeTab={activeTab}
       isLogout={isLogout}
       setActiveTab={setActiveTab}
+      setPage={handleRoute}
       setOrderSummaryActiveTab={setOrderSummaryActiveTab}
     />
   );

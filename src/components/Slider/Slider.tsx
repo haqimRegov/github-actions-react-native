@@ -1,6 +1,6 @@
 import { Slider } from "@miblanchard/react-native-slider";
 import React from "react";
-import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
   centerHV,
@@ -33,13 +33,16 @@ import {
 import { CustomSpacer } from "../Views";
 
 export interface SliderProps {
+  bottomSpace?: number;
   disabled?: boolean;
+  labelStyle?: TextStyle;
   options: string[];
   selected: number;
+  selectedLabelStyle?: TextStyle;
   setSelected: (result: number) => void;
 }
 
-export const CustomSlider = ({ disabled, options, selected, setSelected }: SliderProps) => {
+export const CustomSlider = ({ bottomSpace, disabled, labelStyle, options, selected, selectedLabelStyle, setSelected }: SliderProps) => {
   const sliderContainer: ViewStyle = {
     ...customShadow(colorBlue._4, 0, 0, 0.8, sw15),
     ...px(sw24),
@@ -91,10 +94,12 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
             setSelected(index);
           };
 
+          const selectedStyle = index === selected ? selectedLabelStyle : {};
+
           return (
             <View key={index}>
               <View style={optionStyle}>
-                <Text style={fs12BoldGray5}>{option}</Text>
+                <Text style={{ ...fs12BoldGray5, ...labelStyle, ...selectedStyle }}>{option}</Text>
               </View>
               <TouchableWithoutFeedback onPress={handleSeek}>
                 <View style={touchAreaStyle} />
@@ -103,7 +108,7 @@ export const CustomSlider = ({ disabled, options, selected, setSelected }: Slide
           );
         })}
       </View>
-      <CustomSpacer space={sh8} />
+      <CustomSpacer space={bottomSpace || sh8} />
     </View>
   );
 };

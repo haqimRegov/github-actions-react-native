@@ -1,5 +1,6 @@
 import { bindActionCreators, Dispatch } from "redux";
 
+import { ClientActionProps } from "../Client";
 import { GlobalActionProps } from "../Global/actions";
 import { RootState } from "../rootReducer";
 import { TransactionsActionProps } from "./actions";
@@ -8,6 +9,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
   agent: state.global.agent,
   approved: state.transactions.approved,
   availableFilters: state.transactions.availableFilters,
+  client: state.client,
   config: state.global.config,
   currentOrder: state.transactions.currentOrder,
   downloadInitiated: state.transactions.downloadInitiated,
@@ -21,7 +23,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
 });
 
 export const TransactionsMapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ ...TransactionsActionProps, ...GlobalActionProps }, dispatch);
+  return bindActionCreators({ ...TransactionsActionProps, ...ClientActionProps, ...GlobalActionProps }, dispatch);
 };
 
 export type TransactionsStoreProps = ReturnType<typeof TransactionsMapStateToProps> & ReturnType<typeof TransactionsMapDispatchToProps>;

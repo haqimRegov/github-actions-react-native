@@ -5,16 +5,9 @@ declare interface IInvestorDetailsDashboardRequest {
   tab: "allAccounts";
 }
 
-declare interface IInvestorDetailsDashboardResult {
-  email: string;
-  emailLastUpdated: string;
-  investorDetails: IInvestorAccountsData[];
-  mobileNo: string;
-  mobileNoLastUpdated: string;
-  name: string;
+declare interface IInvestorDetailsDashboardResult extends IInvestor {
   page: number;
   pages: number;
-  totalCount: number;
 }
 
 declare type IInvestorDetailsDashboardResponse = IQueryResponse<IInvestorDetailsDashboardResult> | undefined;

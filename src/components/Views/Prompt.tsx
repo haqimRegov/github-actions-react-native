@@ -42,6 +42,7 @@ export interface PromptProps extends ActionButtonsProps {
   label?: string;
   labelStyle?: TextStyle;
   spaceToButton?: number;
+  spaceToIllustration?: number;
   spaceToTitle?: number;
   spaceToTop?: number;
   title?: string;
@@ -57,6 +58,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
   label,
   labelStyle,
   spaceToButton,
+  spaceToIllustration,
   spaceToTitle,
   spaceToTop,
   title,
@@ -112,7 +114,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({
         {illustration !== undefined ? (
           <Fragment>
             <Image source={illustration} style={illustrationStyle} />
-            <CustomSpacer space={sh8} />
+            <CustomSpacer space={spaceToIllustration || sh8} />
           </Fragment>
         ) : null}
         {label !== undefined ? (

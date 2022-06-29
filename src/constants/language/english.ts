@@ -1502,6 +1502,8 @@ export const english = {
       LABEL_ADVISER_SIGNATURE: "Adviser's Signature",
       LABEL_INVESTORS_SIGNATURE: "Investor’s Signature",
       LABEL_AGREE: "Agree",
+      LABEL_GENERAL_TERMS_AND_CONDITIONS: "General Terms and Conditions",
+      LABEL_INVESTOR_UPDATE_TERMS_AND_CONDITIONS: "Investor Update Terms and Conditions",
       LABEL_COLLAPSE_ALL: "Collapse all",
       LABEL_PRINCIPAL_SIGNATURE: "Principal Holder's Signature",
       LABEL_CHECKBOX_1: "I/We have read, understood and accepted the Terms and Conditions above.",
@@ -1509,11 +1511,17 @@ export const english = {
         "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
       LABEL_CHECKBOX_3:
         "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
+      LABEL_CHECKBOX_1_NEW: "I have read, understood and accepted the Terms and Conditions above.",
+      LABEL_CHECKBOX_2_NEW:
+        "I/We confirm that the information provided is correct and authorize Kenanga Investors Berhad to act on the changes.",
+      LABEL_CHECKBOX_3_NEW: "I/We agree that I/we have read understood the terms and conditions and agree to be bound by it.",
       LABEL_CHECKBOX_4:
         "I have decided to purchase another unlisted capital market product that is not recommended by the authorized distributor",
       LABEL_COMPLETED: "Signed",
       LABEL_CONSENT:
         "I/We hereby give consent to the Manager to disclose to my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
+      LABEL_CONSENT_NEW:
+        "I hereby give consent to the Manager to disclose to my/our Servicing Adviser to review my/our account information for the purpose of providing ongoing services.",
       LABEL_EXPAND_ALL: "Expand all",
       LABEL_FUND: "Fund",
       LABEL_JOINT_SIGNATURE: "Joint Holder’s Signature",

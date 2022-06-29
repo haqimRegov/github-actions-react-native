@@ -11,7 +11,7 @@
 //     },
 //   ],
 // };
-import { sw16, sw24, sw32 } from "../../styles";
+import { sw16, sw24, sw32, sw8 } from "../../styles";
 
 // export const PDPA_CONSENT: ITermsAndConditions = {
 //   title: "PDPA",
@@ -93,6 +93,55 @@ export const FATCA: ITermsAndConditions = {
     },
   ],
 };
+export const FATCA_NEW: ITermsAndConditions = {
+  title: "Foreign Account Tax Compliance Act (FATCA) Declaration & Definition",
+  subsection: [
+    {
+      heading: "Declaration",
+      termsList: [
+        {
+          content: [
+            {
+              text: "I represent and declare that the information provided above is true, accurate and complete. I understand that the term ”U.S. person(1)” means any citizen or resident of the United States, and shall include the definition below.",
+            },
+            {
+              text: "I hereby consent for Kenanga Group to disclose/report my information to any person, including the Inland Revenue Board of Malaysia and the regulatory authorities in accordance with the requirements of Foreign Account Tax Compliance Act 2010 (“FATCA”) as may be stipulated by applicable laws, regulations, agreement or regulatory guidelines or directives.",
+            },
+            {
+              text: "I hereby consent that Kenanga Group may withhold from my account(s) such amounts in accordance with the requirements of FATCA as may be stipulated by applicable laws, regulations, agreement or regulatory guidelines or directives.",
+            },
+            {
+              text: "If there is any change in the information provided to Kenanga Group that makes me a U.S. person or recalcitrant (person who fails to comply with reasonable requests for information to determine if this account belongs to a U.S. person), Kenanga Group has the right to terminate my account(s) and/or facilities granted to me.",
+            },
+            {
+              text: "I undertake to notify Kenanga Group in writing within 30 calendar days if there is a change in any information which I have provided to Kenanga Group.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "Definition",
+      termsList: [
+        {
+          content: [
+            {
+              text: "The term U.S. person or United States person means a person described in section 7701(a)(30) of the Internal Revenue Code:",
+            },
+            {
+              indentSpace: sw8,
+              text: "1. a citizen or resident of the United States, \n2. a United States partnership, \n3. a United States corporation, \n4. any estate (other than an estate the income of which, from sources without the United States which is not effectively connected with the conduct of a trade or business \n    within the United States, is not includible in gross income under the Internal Revenue Code), and \n5. any trust if—",
+            },
+            {
+              indentSpace: sw16,
+              text: "a. A court within the United States is able to exercise primary supervision over the administration of the trust, and \nb. One or more United States persons have the authority to control all substantial decisions of the trust.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
 export const CRS: ITermsAndConditions = {
   title: "Common Reporting Standard (CRS) Declaration & Definitions",
@@ -135,6 +184,183 @@ export const CRS: ITermsAndConditions = {
           content: [
             {
               text: "For the definition of Malaysian Tax Resident, refer to the link:  http://lampiran.hasil.gov.my/pdf/pdfam/3656.pdf",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+export const CRS_NEW: ITermsAndConditions = {
+  title: "Common Reporting Standard (CRS) Declaration & Definitions",
+  subsection: [
+    {
+      heading: "Declaration",
+      termsList: [
+        {
+          content: [
+            // {
+            //   text: "I represent and declare that I am a Malaysian and Non-Malaysian tax resident.",
+            // },
+            // {
+            //   text: "I declare that I don't have a Tax Identification Number (TIN) due to [user selected remark will be displayed here].  ",
+            // },
+            {
+              text: "I acknowledge that the information contained in this e-Form and information regarding myself and any reportable account(s) may be provided to the tax authorities of the country/jurisdiction in which this account(s) is/are maintained and exchanged with the tax authorities of another country/jurisdictions in which I may be a tax resident of, pursuant to the intergovernmental agreements to exchange financial account information.",
+            },
+            {
+              text: "I certify that I am the beneficial owner of all the account(s) to which this e-Form relates.",
+            },
+            {
+              text: "I undertake to advise Kenanga Group within 30 days of any change in circumstances that affects the status of my tax residency or causes the information contained herein to become incorrect or incomplete and to provide Kenanga Group with a suitably updated self-certification and declaration within 30 days of such change in circumstance.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "Definitions",
+      termsList: [
+        {
+          label: "1. Taxpayer Identification Number(TIN)",
+          content: [
+            {
+              text: "The term TIN means Taxpayer Identification Number or a functional equivalent in the absence of a TIN. A TIN is a unique combination of letters or numbers assigned by a jurisdiction to an individual and is used to identify the individual for the purpose of administering the tax laws of such jurisdiction. E.g. in Malaysia, the TIN will be the identification number issued by the Inland Revenue Board of Malaysia to individuals.",
+            },
+          ],
+        },
+        {
+          label: "2. Malaysian Tax Resident",
+          content: [
+            {
+              text: "For the definition of Malaysian Tax Resident, refer to the link:  http://lampiran.hasil.gov.my/pdf/pdfam/3656.pdf",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+export const INVESTOR_UPDATE: ITermsAndConditions = {
+  title: "Investor Update Terms and Conditions",
+  subsection: [
+    {
+      heading: "Change of details/particulars through the electronic channel (E-Services)",
+      termsList: [
+        {
+          content: [
+            {
+              prefix: "1.",
+              text: "This request for change of my personal or account details/particulars (“Change Request”)  is based solely on my/our instructions . Kenanga Investors Berhad (KIB)  may approve or reject my/our request at its sole discretion. I/We  acknowledge the receipt of and agree to abide by the terms and conditions of KIB’s General Terms and Conditions Governing Fund Investments (“General Terms and Conditions”)  , a copy of which was provided to me/us upon the opening of my/our account with KIB.",
+            },
+            {
+              prefix: "2.",
+              text: "This Change Request will not be processed unless it has been signed by the authorized unitholder(s)/member(s) of the Unit Trust or PRS Account  opened with KIB. For changes involving joint accounts where the joint holder is a minor (Unit Trust account only) , the Change Request e-form must be signed by the principal holder .  Where the instruction for signatories is for 'Both to Sign', the Change Request e-form must be duly signed by both/all parties.",
+            },
+            {
+              prefix: "3.",
+              text: "KIB may require additional documentations to effect the changes requested. This Change Request will not be processed if the required documentations have not been received by KIB.",
+            },
+            {
+              prefix: "4.",
+              text: "KIB will not be liable for any loss incurred due to incorrect information being supplied by the unitholder(s)/member(s).",
+            },
+            {
+              prefix: "5.",
+              text: "KIB reserves the right to withhold processing of any unclear, incomplete or ambiguous requests forwarded by the unitholder(s)/ member(s).",
+            },
+            {
+              prefix: "6.",
+              text: "The responsibility of ensuring that the Change Request has been received and acted upon by KIB will lie with the unitholder(s)/ member(s).",
+            },
+            {
+              prefix: "7.",
+              text: "Unitholder(s)/member(s) can check and confirm that the Change Request has been acted upon by checking the unitholder(s)/ member(s) profile on KenEasy KIB's customer online account portal (accessible through https://www.kenangainvestors.com.my).",
+            },
+            {
+              prefix: "8.",
+              text: "Where this Change Request form is signed on behalf of the unitholder(s)/member(s), the signatory warrants that he/she has authority to do so, that the information contained herein is correct in all respects and he/she indemnifies KIB against any and all damages and/or loss arising from such event.",
+            },
+            {
+              prefix: "9.",
+              text: "KIB shall not be liable or responsible, for any reason, in the event that the signatory to this is not duly authorised and the signatory indemnifies KIB against any and all damages and/or loss arising from such event.",
+            },
+            {
+              prefix: "10.",
+              text: "KIB will not be liable for any damages or losses of whatsoever nature arising out of KIB's failure to action this instruction due to occurrences beyond the control of KIB.",
+            },
+            {
+              prefix: "11.",
+              text: "Copies of all required  documentation must accompany this Change Request Form. KIB will not be obliged to process this form until it has received the required documentation.",
+            },
+            {
+              prefix: "12.",
+              text: "KIB will not be liable for any loss or damage of whatsoever nature arising from the inability of KIB to process his form due to the fact that the requirements of of any applicable law have not been complied with.",
+            },
+            {
+              prefix: "13.",
+              text: "The unitholder(s)/member(s) indemnifies and holds KIB harmless against any loss or damage which the unitholder(s)/member(s) may suffer as a result of any commission or omission by KIB.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "For any issuance and delivery of documents by way of electronic means (e-statement):",
+      termsList: [
+        {
+          content: [
+            {
+              prefix: "1.",
+              text: "I/We consent and authorize Kenanga Group and its authorized officer to issue and deliver documents (including statements and correspondences) and any other notices by way of electronic means or online devices to me/we from time to time through email when the service is made available. I/We hereby confirm that this consent shall be valid for an indefinite period until revoked by me/us in writing or via electronic means and received and acknowledged by me. I/We hereby acknowledge that Kenanga Group may cancel the email delivery service without providing any reasons and/or prior notices to me/us.",
+            },
+            {
+              prefix: "2.",
+              text: "I/We acknowledge, accept and assume the risk associated with the transfer of documents/information by way of electronic means or online devices and/or delivery, including but not limited to delays or failure in the transmission due to breakdown or failure of transmission or traffic congestion of communications or any other cause(s) beyond Kenanga Group’s control or anticipation and/or inherent risks in receiving such documents by way of electronic means or online devices. I/We will not dispute or challenge the validity, enforceability or admissibility of any documents issued and delivered by way of electronic means.",
+            },
+            {
+              prefix: "3.",
+              text: "I understand that if I agree to receive statements, i.e. confirmation advice, statement of accounts, interim/annual report and any other statement by email, I understand that no such statements will be generated and sent to me if there are no transactions in my account during the defined issuance period of these statements.",
+            },
+            {
+              prefix: "4.",
+              text: "Kenanga Group shall not be liable for any direct, indirect, special, incidental or consequential loss or damage that may arise in respect of the disclosure and/or delivery of this e-statement through your email address provided to Kenanga Group.",
+            },
+            {
+              prefix: "5.",
+              text: "The e-statement is free of charge. Kenanga Group reserves the right at its sole discretion to impose charges for e-statements in the future.",
+            },
+            {
+              prefix: "6.",
+              text: "Kenanga Group does not warrant the timelines, security, confidentiality or availability in the transmission of the e-statements to the designated email address.",
+            },
+            {
+              prefix: "7.",
+              text: "You may terminate this e-statement at any time by contacting Kenanga Group at 1-800-88-3737 or email to https://investorservices@kenanga.com.my",
+            },
+            {
+              prefix: "8.",
+              text: "Kenanga Group may advertise its products and services through estatement from time to time.",
+            },
+            {
+              prefix: "9.",
+              text: "Kenanga Group will use its best endeavours to ensure the security of the e-statement services. Kenanga Group shall not be liable in any manner for any disruption, unavailability of this service, communication, electrical or network failure that may result in the e-statements being incomplete, unavailable, for delayed in transmission.",
+            },
+            {
+              prefix: "10.",
+              text: "I acknowledge that the use of and the transmission of information via email and/or the internet may not be secured. I also acknowledge that the information transmitted may be liable to error, viruses, interruption, delay, interception, modification or amendment by unauthorized persons. I further acknowledge that the transmission may be disrupted, interrupted, delayed or incorrect. Therefore, I will not hold Kenanga Group responsible for any errors, viruses, delays, inaccuracies, losses and damages whatsoever arising from or in connection with the use of e-statement service (including but not limited to any interception, modification or amendment, disruption, interruption, delay or inaccuracy of email or internet transmission or other communication equipment or facilities). For the avoidance of doubt, Kenanga Group shall not be responsible for any losses suffered, whether direct, indirect, consequential or special loss, even if Kenanga Group had been advised of the same.",
+            },
+            {
+              prefix: "11.",
+              text: "In the event of systems failure, I/we consent to receive documents via post, fax or such other means as Kenanga Group deems fit and appropriate.",
+            },
+            {
+              prefix: "12.",
+              text: "I/We acknowledge that any documents sent to my/our email address provided to Kenanga Group herein by way of electronic means shall be deemed to be duly served on me/us on the day such communication by email was made.",
+            },
+            {
+              prefix: "13.",
+              text: "I/We shall assume all responsibilities or liabilities whatsoever for any direct or consequential losses arising from or in connection with Kenanga Group acting in accordance with my/our authorisation. I/We further agree to indemnify Kenanga Group against all actions, claims, demands, damages costs, charges and expenses which Kenanga Group may sustain, incur and be liable for as a result of or in consequence of or in connection with Kenanga Group acting in accordance with this authorisation.",
             },
           ],
         },

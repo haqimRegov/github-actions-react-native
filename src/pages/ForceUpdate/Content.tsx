@@ -11,6 +11,7 @@ import { ContactSummaryContent } from "./ContactSummary";
 import { CRSContent, DeclarationSummaryContent, FATCAContent } from "./Declarations";
 import { RiskAssessmentContent } from "./RiskAssessment";
 import { Sample } from "./Sample";
+import { TermsAndConditions } from "./TermsAndConditions";
 
 const { FORCE_UPDATE } = Language.PAGE;
 interface ForceUpdateProps extends ForceUpdateContentProps, ForceUpdateStoreProps {
@@ -52,13 +53,13 @@ const ForceUpdateContentComponent = ({
     case FORCE_UPDATE_ROUTES.DeclarationSummary:
       content = <DeclarationSummaryContent {...newProps} />;
       break;
+    case FORCE_UPDATE_ROUTES.TermsAndConditions:
+      content = <TermsAndConditions {...newProps} />;
+      break;
     case FORCE_UPDATE_ROUTES.Signatures:
       content = <Sample title={FORCE_UPDATE_ROUTES.Signatures} {...newProps} />;
       break;
-    case FORCE_UPDATE_ROUTES.TermsAndConditions:
-      content = <Sample title={FORCE_UPDATE_ROUTES.TermsAndConditions} {...newProps} />;
-      break;
-      break;
+
     default:
       content = <Sample title="sample" {...newProps} />;
       break;

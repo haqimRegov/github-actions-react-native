@@ -13,7 +13,7 @@ declare interface IClientRegisterRequest {
 }
 
 declare interface IClientRegisterResult {
-  initId: number;
+  initId: string;
   principalHolder: IClientBasicInfo;
   jointHolder?: IClientBasicInfo;
 }

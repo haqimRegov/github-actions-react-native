@@ -1,5 +1,5 @@
 declare interface IEmailVerificationRequest {
-  initId?: number;
+  initId?: string;
   principalHolder: {
     email: string;
   };

@@ -321,6 +321,24 @@ const riskAssessment = gql`
   }
 `;
 
+const submitChangeRequest = gql`
+  mutation submitCr($input: submitCrInput) {
+    submitCr(input: $input) {
+      data {
+        result {
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const submitHardCopyDocuments = gql`
   mutation submitHardcopyDocumentsV2($input: HardcopyDocumentsInputV2) {
     submitHardcopyDocumentsV2(input: $input) {
@@ -647,6 +665,7 @@ export const GQL_MUTATIONS = {
   resetPassword,
   resubmitOrder,
   riskAssessment,
+  submitChangeRequest,
   submitClientAccount,
   submitEDDCase,
   submitHardCopyDocuments,

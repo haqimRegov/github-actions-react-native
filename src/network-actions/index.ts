@@ -1,5 +1,6 @@
 export * from "./client-profile";
 export * from "./dashboard";
+export * from "./force-update";
 export * from "./edd";
 export * from "./expired-password";
 export * from "./forgot-password";

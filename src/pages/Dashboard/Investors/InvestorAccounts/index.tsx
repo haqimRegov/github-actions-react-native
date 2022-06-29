@@ -89,6 +89,7 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
         ...client.details!.principalHolder,
         dateOfBirth: investorData.investorDetails[0].dateOfBirth,
         clientId: investorData.investorDetails[0].clientId,
+        id: investorData.investorDetails[0].idNumber,
       },
       initId: investorData.investorDetails[0].initId,
       accountHolder: investorData.investorDetails[0].accountHolder,

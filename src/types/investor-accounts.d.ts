@@ -18,7 +18,8 @@ declare interface IInvestorAccountsData {
   address: IAddressState;
   clientId: string;
   dateOfBirth: string;
-  initId: number;
+  idNumber: string;
+  initId: string;
   jointName: string;
   name: string;
   riskTolerance: string;

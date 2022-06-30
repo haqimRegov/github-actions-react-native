@@ -9,7 +9,7 @@ declare interface ISubmitPdfDocument {
 declare interface ISubmitPdfRequest {
   clientId: string;
   documents: ISubmitPdfDocument[];
-  initId: number;
+  initId: string;
 }
 
 declare interface ISubmitPdfResult {

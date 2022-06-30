@@ -47,7 +47,7 @@ declare interface IClientBasicInfo {
 
 declare type IClientDetailsState = {
   accountHolder?: TypeAccountHolder;
-  initId?: number;
+  initId?: string;
   principalHolder?: IClientBasicInfo;
   jointHolder?: IClientBasicInfo;
   verified?: boolean;

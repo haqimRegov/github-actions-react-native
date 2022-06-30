@@ -150,6 +150,7 @@ const investorDetailsDashboard = gql`
           isForceUpdate
           investorDetails {
             name
+            idNumber
             accountHolder
             dateOfBirth
             riskTolerance

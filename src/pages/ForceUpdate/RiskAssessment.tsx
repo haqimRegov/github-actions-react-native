@@ -82,7 +82,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   setLoading,
   updateForceUpdate,
 }: RiskAssessmentContentProps) => {
-  const { clientId, dateOfBirth } = principalHolder!;
+  const { clientId, dateOfBirth, id } = principalHolder!;
   const { disabledSteps, finishedSteps } = forceUpdate;
 
   const fetching = useRef<boolean>(false);
@@ -105,6 +105,10 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
     updatedFinishedSteps.push("RiskAssessment");
+    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
+    if (findDeclarations === -1) {
+      updatedDisabledSteps.push("Declarations");
+    }
     updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
@@ -117,9 +121,11 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request = {
+      const request: IGetRiskProfileRequest = {
         clientId: clientId!,
-        initId: details?.initId,
+        id: id!,
+        initId: details!.initId!,
+        isForceUpdate: true,
         riskAssessment: {
           questionTwo: questionTwo,
           questionThree: questionThree,
@@ -157,8 +163,8 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     setConfirmModal(undefined);
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
-    const findFatca = updatedDisabledSteps.indexOf("Declarations");
-    if (findFatca === -1) {
+    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
+    if (findDeclarations === -1) {
       updatedDisabledSteps.push("Declarations");
     }
     const findRiskAssessment = updatedFinishedSteps.indexOf("RiskAssessment");

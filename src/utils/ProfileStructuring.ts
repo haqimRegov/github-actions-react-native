@@ -1,6 +1,6 @@
 import moment from "moment";
 
-import { PAYMENT_DATE_FORMAT } from "../constants";
+import { DEFAULT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
 import { fsTransformNone, fsUppercase, sh4, sw328 } from "../styles";
@@ -43,7 +43,7 @@ export const structureProfile = (
     { label: DASHBOARD_PROFILE.LABEL_ACCOUNT_TYPE, title: accountType! },
     {
       label: DASHBOARD_PROFILE.LABEL_REGISTRATION,
-      title: moment(registrationDate, "x").format(PAYMENT_DATE_FORMAT),
+      title: moment(registrationDate, "x").format(DEFAULT_DATE_FORMAT),
     },
   ];
 
@@ -134,7 +134,7 @@ export const structureProfile = (
   }
 
   const localBankDetails: LabeledTitleProps[][] = [];
-  if (accountHolder === "Principal" && bankInformation !== null && bankInformation.localBank !== null) {
+  if (accountHolder === "Principal" && bankInformation !== null && bankInformation !== undefined && bankInformation.localBank !== null) {
     bankInformation.localBank.forEach((bank) => {
       const newData: LabeledTitleProps[] = [
         { label: DASHBOARD_PROFILE.LABEL_CURRENCY, title: bank.currency.join(", "), titleStyle: fsUppercase },
@@ -151,7 +151,7 @@ export const structureProfile = (
   }
 
   const foreignBankDetails: LabeledTitleProps[][] = [];
-  if (accountHolder === "Principal" && bankInformation !== null && bankInformation.foreignBank !== null) {
+  if (accountHolder === "Principal" && bankInformation !== null && bankInformation !== undefined && bankInformation.foreignBank !== null) {
     bankInformation.foreignBank.forEach((bank) => {
       const newData: LabeledTitleProps[] = [
         { label: DASHBOARD_PROFILE.LABEL_CURRENCY, title: bank.currency.join(", "), titleStyle: fsUppercase },
@@ -249,7 +249,7 @@ export const structureProfile = (
 
   const uploadedDocuments: LabeledTitleProps[] = [];
 
-  if (uploadedDocuments !== null) {
+  if (uploadedDocuments !== null && uploadedDocument !== undefined) {
     uploadedDocument.forEach((doc, index) => {
       const handleFile = () => {
         setFile(uploadedDocument[index]);

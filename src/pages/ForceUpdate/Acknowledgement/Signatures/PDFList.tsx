@@ -112,12 +112,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const getReceiptSummary = async () => {
-    setLoading(true);
     const request: IGetReceiptSummaryListRequest = { clientId: clientId!, initId: details!.initId!, isForceUpdate: true };
     // TODO temporary check because useEffect is still running after handleResetForceUpdate
     if (request.clientId === undefined) {
       return undefined;
     }
+    setLoading(true);
     const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation, setLoading);
     setLoading(false);
     if (summary !== undefined) {

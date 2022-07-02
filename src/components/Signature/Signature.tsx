@@ -3,7 +3,7 @@ import { Image, View, ViewStyle } from "react-native";
 import SignatureCapture, { SaveEventParams, SignatureCaptureProps } from "react-native-signature-capture";
 
 import { Language } from "../../constants";
-import { centerHV, colorGray, colorWhite, flexRowCC, fullHW, px, sh16, sh20, sh200, sw1, sw10, sw16, sw205, sw24 } from "../../styles";
+import { centerHV, colorBlue, colorWhite, flexRowCC, fullHW, px, sh200, sh24, sw1, sw10, sw16, sw205, sw24 } from "../../styles";
 import { RoundedButton } from "../Touchables";
 import { CustomSpacer } from "../Views/Spacer";
 
@@ -71,7 +71,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   const signatureStyle: ViewStyle = {
     ...centerHV,
     backgroundColor: colorWhite._1,
-    borderColor: colorGray._1,
+    borderColor: colorBlue._3,
     borderWidth: sw1,
     height: defaultHeight,
   };
@@ -88,8 +88,8 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
     showNativeButtons: false,
     viewMode: "landscape",
   };
-  const defaultSpaceToBottom = spaceToBottom === undefined ? sh20 : spaceToBottom;
-  const defaultSpaceToButtons = spaceToButtons === undefined ? sh16 : spaceToButtons;
+  const defaultSpaceToBottom = spaceToBottom === undefined ? sh24 : spaceToBottom;
+  const defaultSpaceToButtons = spaceToButtons === undefined ? sh24 : spaceToButtons;
   const cancelText = secondaryText !== undefined ? secondaryText : SIGNATURE.BUTTON_CANCEL;
   const confirmText = primaryText !== undefined ? primaryText : SIGNATURE.BUTTON_CONFIRM;
 

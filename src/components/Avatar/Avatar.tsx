@@ -12,6 +12,7 @@ import {
   colorWhite,
   fs16BoldWhite1,
   fsUppercase,
+  scaleWidth,
   shadow16Blue112,
   sw2,
   sw24,
@@ -39,6 +40,8 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
     ...containerStyle,
   };
 
+  const avatarSize = container.borderWidth !== undefined ? scaleWidth(defaultSize - container.borderWidth) : defaultSize;
+
   let defaultColor = color !== undefined ? color : colorBlue._1;
   if (type !== undefined) {
     switch (type) {
@@ -62,7 +65,7 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
         break;
     }
   }
-  const defaultAvatarStyle: ViewStyle = { ...centerHV, ...circle(defaultSize, defaultColor) };
+  const defaultAvatarStyle: ViewStyle = { ...centerHV, ...circle(avatarSize, defaultColor) };
 
   return (
     <View style={container}>

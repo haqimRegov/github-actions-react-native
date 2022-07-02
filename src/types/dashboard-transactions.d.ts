@@ -18,13 +18,15 @@ declare interface IDashboardReason {
   title: string;
 }
 
+declare type TTransactionType = "Sales-AO" | "Change Request";
+
 declare interface IDashboardOrder {
   accountType: TypeAccountChoices;
   canProceed: boolean;
   clientId: string;
   createdOn: string;
   documents: IItemWithCount[];
-  dueDate: string;
+  dueDate: string | null;
   highlightedText?: string;
   investorName: {
     principal: string;
@@ -37,10 +39,10 @@ declare interface IDashboardOrder {
   lastUpdated: string;
   orderNumber: string;
   reason: IDashboardReason[];
-  remark: IDashboardRemark[];
+  remark: IDashboardRemark[] | null;
   status: OrderStatusType;
   totalInvestment: IOrderAmount[];
-  transactionType: string;
+  transactionType: TTransactionType;
   withHardcopy: boolean;
 }
 
@@ -109,3 +111,14 @@ declare type TransactionsTabType = "incomplete" | "approved" | "rejected";
 declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
 declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD" | "Investors";
 declare interface IDashboardAll extends IDashboardOrder, IInvestorAccountsData {}
+
+declare interface ITransactionPageProps {
+  activeTab: boolean;
+  isFetching: boolean;
+  isLogout: boolean;
+  isNotFiltered: boolean;
+  navigation: IStackNavigationProp;
+  setIsFetching: (value: boolean) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
+  setScreen: (route: TransactionsPageType) => void;
+}

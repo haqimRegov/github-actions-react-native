@@ -6,7 +6,7 @@ import { IcoMoon } from "../../icons";
 import {
   border,
   borderBottomGray2,
-  borderLeftBlue3,
+  borderLeftBlue2,
   centerHorizontal,
   centerHV,
   centerVertical,
@@ -105,7 +105,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
               </View>
             </TouchableWithoutFeedback>
           )}
-          <View style={border(colorBlue._3, sw1, sw12)}>
+          <View style={border(colorBlue._2, sw1, sw12)}>
             <View style={itemContainer}>
               {columns.map((column: ITableColumn, columnIndex: number) => {
                 const dataKey = column.key.map((key: ITableItemKey) => key);
@@ -118,7 +118,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
                   return column.onPressItem(rowData);
                 };
 
-                const itemBorderLeft = columnIndex === 0 ? {} : borderLeftBlue3;
+                const itemBorderLeft = columnIndex === 0 ? {} : borderLeftBlue2;
 
                 const itemAccordionIcon: ITableIcon = {
                   color: colorGray._6,
@@ -220,7 +220,7 @@ export const AdvanceTableRow: FunctionComponent<AdvanceTableRowProps> = ({
               })}
               {RenderOptions !== undefined ? (
                 <TouchableWithoutFeedback>
-                  <View style={{ ...flexRowCC, ...borderLeftBlue3, width: sw56 }}>
+                  <View style={{ ...flexRowCC, ...borderLeftBlue2, width: sw56 }}>
                     <MenuPopup
                       RenderButton={({ show }) => {
                         return (

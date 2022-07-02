@@ -3,6 +3,7 @@ export * from "./Animation";
 export * from "./Encryption";
 export * from "./ErrorHandler";
 export * from "./GetEmbeddedBase64";
+export * from "./InvestorProfileStructuring";
 export * from "./Link";
 export * from "./Object";
 export * from "./OCR";

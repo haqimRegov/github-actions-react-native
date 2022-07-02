@@ -2,31 +2,63 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, TextStyle, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer, FileViewer, Loading, TabGroup } from "../../../../components";
+import { CustomSpacer, FileViewer, Loading, RoundedButton, TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
 import { getOrderSummary } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import { borderBottomRed1, colorRed, colorWhite, flexChild, flexRow, sh24, shadow16Blue112, sw24, sw8 } from "../../../../styles";
+import {
+  borderBottomRed1,
+  colorBlue,
+  colorRed,
+  colorWhite,
+  flexChild,
+  flexRow,
+  fs10BoldBlue1,
+  sh24,
+  sw1,
+  sw120,
+  sw24,
+  sw8,
+} from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountDetails } from "./Account";
 import { Document } from "./Document";
 import { OrderDetails } from "./OrderDetails";
+import { OrderDetailsCR } from "./OrderDetailsCR";
 import { Tracking } from "./Tracking";
 
 const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 interface OrderDetailsProps extends TransactionsStoreProps {
-  navigation: IStackNavigationProp;
-  setScreen: (route: TransactionsPageType) => void;
   activeTab: OrderSummaryTabType;
+  navigation: IStackNavigationProp;
   setActiveTab: (route: OrderSummaryTabType) => void;
+  setScreen: (route: TransactionsPageType) => void;
 }
 
 const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: OrderDetailsProps) => {
-  const { currentOrder, setScreen, navigation, updateCurrentOrder, activeTab, setActiveTab } = props;
+  const { activeTab, currentOrder, setScreen, navigation, setActiveTab, updateCurrentOrder } = props;
   const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
-  const tabs: OrderSummaryTabType[] = ["order", "document", "profile", "tracking"];
+
+  const tabs: OrderSummaryTabType[] = ["order", "document", "tracking"];
+
+  const headerTabs = [
+    {
+      text:
+        currentOrder?.transactionType === "Sales-AO"
+          ? DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS
+          : DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS_CR,
+    },
+    { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT },
+    { text: DASHBOARD_ORDER_SUMMARY.TAB_TRACKING },
+  ];
+
+  if (currentOrder?.transactionType === "Sales-AO") {
+    tabs.splice(1, 0, "profile");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
+  }
+
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
@@ -37,31 +69,50 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
     setFile(undefined);
   };
 
-  const handleBack = () => {
+  const handleBackToTransactions = () => {
     updateCurrentOrder(undefined);
     setActiveTab("order");
     setScreen("Transactions");
   };
 
+  const handleViewInvestorProfile = () => {
+    // TODO
+  };
+
+  const handleViewAccountDetails = (accNo: string) => {
+    // eslint-disable-next-line no-console
+    console.log("View Account Number: ", accNo);
+    // TODO
+  };
+
   const contentProps = { data: orderSummary!, setFile: setFile };
 
-  let content: JSX.Element = <OrderDetails {...contentProps} isScheduled={currentOrder!.isScheduled} />;
+  let content: JSX.Element =
+    currentOrder?.transactionType === "Sales-AO" ? (
+      <OrderDetails {...contentProps} isScheduled={currentOrder!.isScheduled} />
+    ) : (
+      <OrderDetailsCR {...contentProps} handleViewAccountDetails={handleViewAccountDetails} />
+    );
+
   if (activeTab === "document") {
     content = <Document {...contentProps} />;
   }
+
   if (activeTab === "profile") {
     content = <AccountDetails {...contentProps} />;
   }
+
   if (activeTab === "tracking") {
     content = <Tracking {...contentProps} />;
   }
+
   const handleFetch = async () => {
     // setLoading(true);
     const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
-    const dashboardResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
+    const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
     // setLoading(false);
-    if (dashboardResponse !== undefined) {
-      const { data, error } = dashboardResponse;
+    if (orderSummaryResponse !== undefined) {
+      const { data, error } = orderSummaryResponse;
       if (error === null && data !== null) {
         setOrderSummary(data.result);
       }
@@ -80,16 +131,23 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
 
   const cardStyle: ViewStyle = {
     ...flexChild,
-    ...shadow16Blue112,
-    backgroundColor: colorWhite._1,
+    backgroundColor: colorWhite._2,
     borderRadius: sw8,
     marginHorizontal: sw24,
     marginVertical: sh24,
   };
+
   const backgroundStyle: ViewStyle = {
     backgroundColor: colorRed._1,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
+  };
+
+  const buttonStyle: ViewStyle = {
+    borderColor: colorBlue._1,
+    borderWidth: sw1,
+    height: sh24,
+    width: sw120,
   };
 
   const backgroundText: TextStyle = {
@@ -101,11 +159,22 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
       <DashboardLayout
         {...props}
         hideQuickActions={true}
+        sideElement={
+          currentOrder?.transactionType !== "Sales-AO" ? (
+            <RoundedButton
+              buttonStyle={buttonStyle}
+              onPress={handleViewInvestorProfile}
+              secondary={true}
+              text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PROFILE}
+              textStyle={fs10BoldBlue1}
+            />
+          ) : undefined
+        }
         status={currentOrder!.status}
         title={DASHBOARD_ORDER_SUMMARY.HEADING}
         titleIcon="arrow-left"
-        titleIconOnPress={handleBack}>
-        <View style={flexChild}>
+        titleIconOnPress={handleBackToTransactions}>
+        <View style={orderSummary !== undefined ? undefined : flexChild}>
           <View style={cardStyle}>
             <View style={flexRow}>
               <TabGroup
@@ -113,17 +182,13 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
                 selectedTextStyle={backgroundText}
                 activeTab={activeTabIndex}
                 setActiveTab={handleTabs}
-                tabs={[
-                  { text: DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS },
-                  { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT },
-                  { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE },
-                  { text: DASHBOARD_ORDER_SUMMARY.TAB_TRACKING },
-                ]}
+                tabs={headerTabs}
               />
               <CustomSpacer isHorizontal={true} space={sw24} />
             </View>
             <View style={borderBottomRed1} />
             {orderSummary !== undefined ? content : <Loading />}
+            <CustomSpacer space={sh24} />
           </View>
         </View>
       </DashboardLayout>

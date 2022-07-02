@@ -116,6 +116,7 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
   const etbCheckInvestor: IInvestorData =
     client.isForceUpdate === true
       ? {
+          clientId: "",
           idNumber: client.details?.principalHolder?.id!,
           name: client.details?.principalHolder?.name!,
           email: "",

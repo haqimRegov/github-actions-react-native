@@ -98,7 +98,7 @@ declare interface IDocumentSummary {
 }
 
 declare interface ITrackingSummary {
-  createdOn: Date;
+  createdOn: string;
   level: string;
   remark: IOuterRemark[];
   status: string;

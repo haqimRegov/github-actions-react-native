@@ -14,7 +14,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
 
   const accountHolderIndex = accountHolder === "Principal" ? 0 : 1;
   const { accountType, accountOperationMode, registrationDate } = transactionDetails;
-  const { idNumber, idType, name, uploadedDocument } = profile[accountHolderIndex];
+  const { idNumber, idType, name } = profile[accountHolderIndex];
   const updatedProfile = {
     ...profile[accountHolderIndex],
     accountType: accountType,
@@ -24,16 +24,11 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({ data, s
 
   const structuredData = structureProfile(accountHolder, updatedProfile, setFile);
 
-  const handleViewId = () => {
-    setFile(uploadedDocument[0]);
-  };
-
   return (
     <AccountSummary
       accountHolder={accountHolder}
       accountType={accountType}
       data={structuredData}
-      // handleViewId={handleViewId}
       idNumber={idNumber}
       idType={idType}
       name={name}

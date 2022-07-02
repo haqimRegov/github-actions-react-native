@@ -53,7 +53,7 @@ export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colo
 export const borderBottomGray3 = { borderBottomWidth: 1, borderBottomColor: colorGray._3 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
 export const borderBottomRed1 = { borderBottomWidth: 1, borderBottomColor: colorRed._1 } as const;
-export const borderLeftBlue3 = { borderLeftWidth: 1, borderLeftColor: colorBlue._3 } as const;
+export const borderLeftBlue2 = { borderLeftWidth: 1, borderLeftColor: colorBlue._2 } as const;
 export const borderLeftGray3 = { borderLeftWidth: 1, borderLeftColor: colorGray._3 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const borderDashed = { borderStyle: "dashed" } as const;
@@ -187,6 +187,19 @@ export const shadow4Blue116 = {
   },
   shadowOpacity: 0.16,
   shadowRadius: 4,
+} as const;
+
+export const shadow12Blue110 = {
+  // shadow for android
+  // elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.1,
+  shadowRadius: 12,
 } as const;
 
 export const noShadow = {

@@ -1,34 +1,11 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, TextCard } from "../../../../components";
+import { ColorCard, CustomFlexSpacer, CustomSpacer, TextCard } from "../../../../components";
 import { Language } from "../../../../constants";
-import { IcoMoon } from "../../../../icons";
-import {
-  borderBottomBlue3,
-  borderBottomBlue5,
-  borderBottomRed1,
-  colorBlue,
-  flexChild,
-  flexRow,
-  fs18BoldBlack2,
-  fs20BoldBlue1,
-  fs24BoldBlue1,
-  fsTransformNone,
-  px,
-  rowCenterVertical,
-  sh16,
-  sh18,
-  sh24,
-  sw16,
-  sw24,
-  sw32,
-  sw328,
-  sw56,
-  sw64,
-  sw8,
-} from "../../../../styles";
-import { isNotEmpty, titleCaseString } from "../../../../utils";
+import { borderBottomRed1, flexRow, fsTransformNone, px, sh16, sh24, sw16, sw24, sw32, sw328, sw56, sw8 } from "../../../../styles";
+import { summaryColorCardStyleProps } from "../../../../templates";
+import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_DOCUMENT } = Language.PAGE;
 
@@ -40,13 +17,13 @@ declare interface IDocumentsProps {
 export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: IDocumentsProps) => {
   const { documentSummary } = data;
 
-  // styling
   const headerStyle: ViewStyle = {
     ...borderBottomRed1,
     ...flexRow,
     marginRight: sw56,
     marginLeft: sw32,
   };
+
   // function to display the looped array data
   const populateData = (dataToModify: IOuterDocument) => {
     const displayedData: LabeledTitleProps[] = [];
@@ -74,169 +51,112 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
   };
 
   return (
-    <Fragment>
-      {/* softcopy section  */}
+    <View style={px(sw24)}>
       {isNotEmpty(documentSummary.softcopy) ? (
-        <View style={px(sw24)}>
+        <View>
           <CustomSpacer space={sh24} />
-
-          {/* soft copy header  */}
-          <Text style={{ ...fs24BoldBlue1 }}>{DASHBOARD_DOCUMENT.LABEL_SOFT_COPY_HEADER}</Text>
-
-          {/* softcopy view  */}
-          <View>
-            {/* softcopy data insert array  */}
-            {documentSummary.softcopy.documents.map((softCopyData, index: number) => {
-              // function that populates the data
-              const updatedData = populateData(softCopyData);
-              return (
-                <Fragment key={index}>
-                  {/* subheader with red underline */}
-                  {documentSummary.accountType !== "Individual" ? (
-                    <Fragment>
-                      <CustomSpacer space={sw16} />
-                      <View style={headerStyle}>
-                        <View style={{ marginBottom: sw8 }}>
-                          <Text>{softCopyData.mainHeader}</Text>
-                        </View>
-                        <CustomFlexSpacer />
-                        <View>
-                          <Text>{softCopyData.subHeader}</Text>
-                        </View>
-                      </View>
-                    </Fragment>
-                  ) : null}
-                  <CustomSpacer space={sh16} />
-
-                  {/* displaying the text card */}
-                  <View style={px(sw32)}>
-                    <TextCard data={updatedData} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
-                  </View>
-                </Fragment>
-              );
-            })}
-          </View>
+          <ColorCard
+            {...summaryColorCardStyleProps}
+            content={
+              <Fragment>
+                <View>
+                  {documentSummary.softcopy.documents.map((softCopyData, index: number) => {
+                    // function that populates the data
+                    const updatedData = populateData(softCopyData);
+                    return (
+                      <Fragment key={index}>
+                        {documentSummary.accountType !== "Individual" ? (
+                          <Fragment>
+                            <CustomSpacer space={sw16} />
+                            <View style={headerStyle}>
+                              <View style={{ marginBottom: sw8 }}>
+                                <Text>{softCopyData.mainHeader}</Text>
+                              </View>
+                              <CustomFlexSpacer />
+                              <View>
+                                <Text>{softCopyData.subHeader}</Text>
+                              </View>
+                            </View>
+                          </Fragment>
+                        ) : null}
+                        <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
+                      </Fragment>
+                    );
+                  })}
+                </View>
+              </Fragment>
+            }
+            header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_DOCUMENT.LABEL_SOFT_COPY_HEADER }}
+          />
         </View>
       ) : null}
-      <CustomSpacer space={sw24} />
-
-      {/* grey border  */}
-      <View style={borderBottomBlue3} />
-
-      {/* Physical document section  */}
       {isNotEmpty(documentSummary.hardcopy) ? (
-        <View style={px(sw24)}>
+        <View>
           <CustomSpacer space={sh24} />
           {(isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0) ||
           (isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0) ? (
-            <Fragment>
-              <Text style={{ ...fs24BoldBlue1 }}>{DASHBOARD_DOCUMENT.LABEL_PHYSICAL_DOCUMENTS_HEADER}</Text>
-            </Fragment>
-          ) : null}
-
-          {/* product info  */}
-          {isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0 ? (
-            <Fragment>
-              <CustomSpacer space={sh18} />
-              <View>
-                {/* loop array of data */}
-                {documentSummary.hardcopy.utmcDocs.map((products, index: number) => {
-                  // function that populates the data
-                  const updatedData = populateData(products);
-                  return (
-                    // display product chosen
-                    <Fragment key={index}>
-                      {isNotEmpty(products.documents.length) && products.documents.length > 0 ? (
+            <ColorCard
+              {...summaryColorCardStyleProps}
+              content={
+                <Fragment>
+                  {isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0 ? (
+                    <Fragment>
+                      <View>
+                        {documentSummary.hardcopy.utmcDocs.map((products, index: number) => {
+                          // function that populates the data
+                          const updatedData = populateData(products);
+                          return (
+                            <Fragment key={index}>
+                              {isNotEmpty(products.documents.length) && products.documents.length > 0 ? (
+                                <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
+                              ) : null}
+                            </Fragment>
+                          );
+                        })}
+                      </View>
+                    </Fragment>
+                  ) : null}
+                  {isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0 ? (
+                    <Fragment>
+                      {isNotEmpty(documentSummary.hardcopy.accDocs[0].documents) &&
+                      documentSummary.hardcopy.accDocs[0].documents.length > 0 ? (
                         <Fragment>
-                          {index === 0 ? null : <CustomSpacer space={sh16} />}
-                          <View style={flexRow}>
-                            <CustomSpacer isHorizontal={true} space={sw8} />
-                            <IcoMoon color={colorBlue._1} name="house" size={sw24} />
-                            <CustomSpacer isHorizontal={true} space={sw8} />
-                            <View style={flexChild}>
-                              <View style={rowCenterVertical}>
-                                <Text style={fs18BoldBlack2}>{titleCaseString(products.mainHeader)}</Text>
-                                <CustomSpacer isHorizontal={true} space={sw16} />
-                                <View style={flexChild}>
-                                  <View style={borderBottomBlue5} />
+                          <View>
+                            {documentSummary.hardcopy.accDocs.map((accPhysicalDoc, index: number) => {
+                              // function that populates the data
+                              const updatedData = populateData(accPhysicalDoc);
+                              return (
+                                <View key={index}>
+                                  {documentSummary.accountType !== "Individual" ? (
+                                    <View style={headerStyle}>
+                                      <View style={{ marginBottom: sw8 }}>
+                                        <Text>{accPhysicalDoc.mainHeader}</Text>
+                                      </View>
+                                      <CustomFlexSpacer />
+                                      <View>
+                                        <Text>{accPhysicalDoc.subHeader}</Text>
+                                      </View>
+                                      <CustomSpacer space={sh16} />
+                                    </View>
+                                  ) : null}
+                                  {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
+                                  <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
                                 </View>
-                              </View>
-                            </View>
-                          </View>
-                          <CustomSpacer space={sh24} />
-                          <View style={px(sw32)}>
-                            <TextCard data={updatedData} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                              );
+                            })}
                           </View>
                         </Fragment>
                       ) : null}
                     </Fragment>
-                  );
-                })}
-              </View>
-            </Fragment>
-          ) : null}
-
-          {/* account details  */}
-          {/* checking if accDocs exist  */}
-          {isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0 ? (
-            <Fragment>
-              {/* checking if there are hardcopy documents  */}
-              {isNotEmpty(documentSummary.hardcopy.accDocs[0].documents) && documentSummary.hardcopy.accDocs[0].documents.length > 0 ? (
-                <Fragment>
-                  <CustomSpacer space={sh16} />
-                  <View style={flexRow}>
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <IcoMoon color={colorBlue._1} name="account" size={sw24} />
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <View style={flexChild}>
-                      <View style={rowCenterVertical}>
-                        <Text style={fs20BoldBlue1}>{DASHBOARD_DOCUMENT.LABEL_SUBHEADER_ACCOUNT}</Text>
-                        <CustomSpacer isHorizontal={true} space={sw16} />
-                        <View style={flexChild}>
-                          <View style={borderBottomBlue5} />
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  <View>
-                    {/* principal account header for when joint account is active  */}
-                    {documentSummary.hardcopy.accDocs.map((accPhysicalDoc, index: number) => {
-                      // function that populates the data
-                      const updatedData = populateData(accPhysicalDoc);
-                      return (
-                        <View key={index}>
-                          <CustomSpacer space={sh24} />
-
-                          {/* subheader with red underline  */}
-                          {documentSummary.accountType !== "Individual" ? (
-                            <View style={headerStyle}>
-                              <View style={{ marginBottom: sw8 }}>
-                                <Text>{accPhysicalDoc.mainHeader}</Text>
-                              </View>
-                              <CustomFlexSpacer />
-                              <View>
-                                <Text>{accPhysicalDoc.subHeader}</Text>
-                              </View>
-                              <CustomSpacer space={sh16} />
-                            </View>
-                          ) : null}
-
-                          {/* displaying the text card  */}
-                          <View style={px(sw32)}>
-                            {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
-                            <TextCard data={updatedData} spaceBetweenItem={sw32} itemStyle={{ width: sw328 }} />
-                          </View>
-                        </View>
-                      );
-                    })}
-                  </View>
+                  ) : null}
                 </Fragment>
-              ) : null}
-            </Fragment>
+              }
+              header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_DOCUMENT.LABEL_PHYSICAL_DOCUMENTS_HEADER }}
+            />
           ) : null}
         </View>
       ) : null}
       {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
-    </Fragment>
+    </View>
   );
 };

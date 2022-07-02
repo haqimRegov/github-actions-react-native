@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, ViewStyle } from "react-native";
 import { Text, View } from "react-native-animatable";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, Loader, RoundedButton } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, Loader, RoundedButton } from "../../../../components";
 import { Language } from "../../../../constants";
 import { RNInAppBrowser } from "../../../../integrations/react-native-inapp-browser-reborn";
 import { orderTrackingSummary } from "../../../../network-actions";
@@ -11,9 +11,10 @@ import {
   flexRow,
   fs10BoldGray6,
   fs12RegBlue1,
-  fs24BoldBlue1,
+  fs18BoldBlue1,
   fsTransformNone,
   px,
+  py,
   sh24,
   sh64,
   sw1,
@@ -38,10 +39,9 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { trackingSummary, orderNumber } = data;
-  // button styling
-  const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: sw96 };
 
-  // handle Export pdf
+  const buttonStyle: ViewStyle = { ...px(sw16), borderColor: colorBlue._1, borderWidth: sw1, height: sh24, width: sw96 };
+
   const handleExportPDF = async () => {
     if (fetching.current === false) {
       fetching.current = true;
@@ -66,7 +66,6 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
     }
   };
 
-  // table columns
   const columns: ITableColumn[] = [
     {
       customItem: true,
@@ -91,31 +90,23 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingP
 
   return (
     <Fragment>
-      {/* upper section */}
       <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
-        <View style={flexRow}>
-          <View>
-            <Text style={fs24BoldBlue1}>{DASHBOARD_TRACKING.HEADING}</Text>
-          </View>
+        <View style={{ ...flexRow, ...py(sh24) }}>
+          <Text style={fs18BoldBlue1}>{DASHBOARD_TRACKING.HEADING}</Text>
           <CustomFlexSpacer />
-          <View>
-            <RoundedButton
-              buttonStyle={buttonStyle}
-              icon="export"
-              iconColor={colorBlue._1}
-              iconSize={sw11}
-              onPress={handleExportPDF}
-              secondary={true}
-              text="Export PDF"
-              textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
-            />
-          </View>
+          <RoundedButton
+            buttonStyle={buttonStyle}
+            icon="export"
+            iconColor={colorBlue._1}
+            iconSize={sw11}
+            onPress={handleExportPDF}
+            secondary={true}
+            text={DASHBOARD_TRACKING.BUTTON_EXPORT}
+            textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
+          />
         </View>
-        <CustomSpacer space={sh24} />
-        {/* table */}
         <AdvanceTable
-          data={trackingSummary}
+          data={trackingSummary as unknown as ITableData[]}
           columns={columns}
           RenderCustomItem={(tableData: ITableCustomItem) => <CustomTableItem {...tableData} sortedColumns={[]} />}
           rowContainerStyle={{ minHeight: sh64 }}

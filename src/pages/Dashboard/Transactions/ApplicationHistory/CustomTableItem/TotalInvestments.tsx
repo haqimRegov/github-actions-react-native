@@ -69,41 +69,47 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
   return (
     <TouchableWrapper isTouchable={isNotEmpty(totalInvestment) && totalInvestment.length > 3} onPress={handleShowMore}>
       <View style={{ ...style, ...flexChild }} onResponderStart={() => true}>
-        {isNotEmpty(totalInvestment) && totalInvestment.length > 0
-          ? totalInvestment.map((investment: IOrderAmount, index: number) => {
-              return (
-                <Fragment key={index}>
-                  {index < 3 ? (
-                    <View style={flexRow}>
-                      <Text style={{ ...fs12RegGray4, ...updatedTextStyle }}>{investment.currency}</Text>
-                      <CustomSpacer isHorizontal={true} space={sw4} />
-                      <Text numberOfLines={1} style={{ ...fs12RegBlue1, ...updatedTextStyle, width: sw84 }}>
-                        {investment.amount}
-                      </Text>
-                    </View>
-                  ) : null}
-                </Fragment>
-              );
-            })
-          : null}
-        {isNotEmpty(totalInvestment) && totalInvestment.length > 3 ? (
+        {totalInvestment === null || totalInvestment.length === 0 ? (
+          <Text style={fs12RegBlue1}>-</Text>
+        ) : (
           <Fragment>
-            <CustomTooltip
-              arrowSize={{ height: sh7, width: sw12 }}
-              content={content}
-              contentStyle={fullWidth}
-              isVisible={showToolTip}
-              onClose={handleClose}
-              onPress={handleShowMore}
-              placement={tooltipPlacement}
-              topAdjustment={topAdjustment}
-              spacing={0}>
-              <View>
-                <Text style={fs12BoldBlue8}>{DASHBOARD_HOME.LABEL_SHOW_ALL}</Text>
-              </View>
-            </CustomTooltip>
+            {isNotEmpty(totalInvestment) && totalInvestment.length > 0
+              ? totalInvestment.map((investment: IOrderAmount, index: number) => {
+                  return (
+                    <Fragment key={index}>
+                      {index < 3 ? (
+                        <View style={flexRow}>
+                          <Text style={{ ...fs12RegGray4, ...updatedTextStyle }}>{investment.currency}</Text>
+                          <CustomSpacer isHorizontal={true} space={sw4} />
+                          <Text numberOfLines={1} style={{ ...fs12RegBlue1, ...updatedTextStyle, width: sw84 }}>
+                            {investment.amount}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </Fragment>
+                  );
+                })
+              : null}
+            {isNotEmpty(totalInvestment) && totalInvestment.length > 3 ? (
+              <Fragment>
+                <CustomTooltip
+                  arrowSize={{ height: sh7, width: sw12 }}
+                  content={content}
+                  contentStyle={fullWidth}
+                  isVisible={showToolTip}
+                  onClose={handleClose}
+                  onPress={handleShowMore}
+                  placement={tooltipPlacement}
+                  topAdjustment={topAdjustment}
+                  spacing={0}>
+                  <View>
+                    <Text style={fs12BoldBlue8}>{DASHBOARD_HOME.LABEL_SHOW_ALL}</Text>
+                  </View>
+                </CustomTooltip>
+              </Fragment>
+            ) : null}
           </Fragment>
-        ) : null}
+        )}
       </View>
     </TouchableWrapper>
   );

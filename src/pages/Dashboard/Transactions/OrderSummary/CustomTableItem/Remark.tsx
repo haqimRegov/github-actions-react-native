@@ -27,7 +27,7 @@ import {
   sw4,
   sw8,
 } from "../../../../../styles";
-import { isEmpty, isNotEmpty } from "../../../../../utils";
+import { isNotEmpty } from "../../../../../utils";
 
 const { DASHBOARD_TRACKING } = Language.PAGE;
 
@@ -63,7 +63,7 @@ export const Remark: FunctionComponent<RemarkProps> = ({ item }: RemarkProps) =>
   return (
     <View style={{ ...flexRow, ...flexChild, ...py(sw12) }}>
       <View style={outerContainerStyle}>
-        {isEmpty(remark) || (isNotEmpty(remark) && remark.length === 0) ? (
+        {remark === null || (isNotEmpty(remark) && remark.length === 0) ? (
           <View style={{ ...rowCenterVertical, ...fullHeight }}>
             <Text style={fs10RegBlue5}>-</Text>
           </View>

@@ -84,7 +84,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   updateOnboarding,
   updateProductType,
 }: QuestionnaireContentProps) => {
-  const { clientId, dateOfBirth, name } = principalHolder!;
+  const { clientId, dateOfBirth, id, name } = principalHolder!;
   const { disabledSteps, finishedSteps } = onboarding;
 
   const fetching = useRef<boolean>(false);
@@ -128,9 +128,11 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request = {
+      const request: IGetRiskProfileRequest = {
         clientId: clientId!,
-        initId: details?.initId,
+        id: id!,
+        initId: details!.initId!,
+        isForceUpdate: false,
         riskAssessment: {
           questionTwo: questionTwo,
           questionThree: questionThree,

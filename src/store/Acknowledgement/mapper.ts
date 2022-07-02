@@ -1,6 +1,7 @@
 import { bindActionCreators, Dispatch } from "redux";
 
 import { ClientActionProps } from "../Client/actions";
+import { ForceUpdateActionProps } from "../ForceUpdate";
 import { GlobalActionProps } from "../Global/actions";
 import { OnboardingActionProps } from "../Onboarding/actions";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
@@ -18,6 +19,7 @@ export const AcknowledgementMapStateToProps = (state: RootState) => ({
   finishedSteps: state.onboarding.finishedSteps,
   investmentDetails: state.selectedFund.investmentDetails,
   onboarding: state.onboarding,
+  forceUpdate: state.forceUpdate,
   orders: state.acknowledgement.orders,
   outsideRisk: state.selectedFund.outsideRisk,
   receipts: state.acknowledgement.receipts,
@@ -29,6 +31,7 @@ export const AcknowledgementMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
       ...AcknowledgementActionProps,
+      ...ForceUpdateActionProps,
       ...GlobalActionProps,
       ...OnboardingActionProps,
       ...PersonalInfoActionProps,

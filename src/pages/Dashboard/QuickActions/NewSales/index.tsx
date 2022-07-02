@@ -294,7 +294,7 @@ const NewSalesComponent = ({
               clientId: data.result.principalHolder.clientId,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
-            initId: data.result.initId,
+            initId: `${data.result.initId}`,
           });
           return setRegistered(true);
         }

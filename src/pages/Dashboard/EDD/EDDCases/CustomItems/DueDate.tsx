@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View } from "react-native";
 
-import { NunitoBold, NunitoRegular, PAYMENT_DATE_FORMAT } from "../../../../../constants";
+import { DEFAULT_DATE_FORMAT, NunitoBold, NunitoRegular } from "../../../../../constants";
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../../../../styles";
 
 export interface DueDateProps extends ITableCustomItem {
@@ -11,7 +11,7 @@ export interface DueDateProps extends ITableCustomItem {
 
 export const DueDate: FunctionComponent<DueDateProps> = ({ item, sortedColumns }: DueDateProps) => {
   const { targetDate, daysRemaining } = item.rawData as IEDDDashboardCase;
-  const defaultTargetDate = targetDate !== null ? moment(targetDate, "x").format(PAYMENT_DATE_FORMAT) : "-";
+  const defaultTargetDate = targetDate !== null ? moment(targetDate, "x").format(DEFAULT_DATE_FORMAT) : "-";
   const familyStyle: TextStyle = {
     fontFamily: sortedColumns.includes("targetDate") ? NunitoBold : NunitoRegular,
   };

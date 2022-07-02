@@ -66,7 +66,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({
     const order = expanded ? undefined : index;
     setExpandOrder(order);
   };
-  // const orderDate = moment(date).format(PAYMENT_DATE_FORMAT);
+  // const orderDate = moment(date).format(DEFAULT_DATE_FORMAT);
 
   const orderLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
 

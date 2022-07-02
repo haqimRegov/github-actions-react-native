@@ -8,7 +8,7 @@ import { fs12BoldBlue8, fsUnderline, sh20 } from "../../styles";
 const { DASHBOARD_HOME, EMPTY_STATE } = Language.PAGE;
 
 interface EmptyStateTableProps {
-  handleClearFilter: () => void;
+  handleClearFilter?: () => void;
   isFetching: boolean;
   isNotFiltered: boolean;
   noTransactionsYet: boolean;
@@ -34,9 +34,11 @@ export const EmptyStateTable: FunctionComponent<EmptyStateTableProps> = ({
       {noSearchResults === false && isNotFiltered === false ? (
         <Fragment>
           <CustomSpacer space={sh20} />
-          <Pressable onPress={handleClearFilter}>
-            <Text style={{ ...fs12BoldBlue8, ...fsUnderline }}>{EMPTY_STATE.LABEL_CLEAR_ALL}</Text>
-          </Pressable>
+          {handleClearFilter !== undefined ? (
+            <Pressable onPress={handleClearFilter}>
+              <Text style={{ ...fs12BoldBlue8, ...fsUnderline }}>{EMPTY_STATE.LABEL_CLEAR_ALL}</Text>
+            </Pressable>
+          ) : null}
         </Fragment>
       ) : null}
     </EmptyTable>

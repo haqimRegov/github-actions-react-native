@@ -273,7 +273,6 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
         </View>
       </View>
       <CustomSpacer space={sh16} />
-      <View style={borderBottomGray2} />
     </Fragment>
   );
 };

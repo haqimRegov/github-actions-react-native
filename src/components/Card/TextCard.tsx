@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { fs12BoldGray6, fsCapitalize, sh16, sh2, sw144, sw16, sw240, sw32 } from "../../styles";
+import { fs12BoldGray5, fsCapitalize, sh16, sh2, sw144, sw16, sw240, sw32 } from "../../styles";
 import { LabeledTitle } from "../Views/LabeledTitle";
 import { CustomCard } from "./Custom";
 
@@ -36,7 +36,7 @@ export const TextCard: FunctionComponent<TextCardProps> = ({
         <LabeledTitle
           {...item}
           iconSize={item.iconSize !== undefined ? item.iconSize : sw16}
-          labelStyle={{ ...fs12BoldGray6, ...labelStyle, ...item.labelStyle }}
+          labelStyle={{ ...fs12BoldGray5, ...labelStyle, ...item.labelStyle }}
           onPress={item.onPress}
           spaceToLabel={itemSpaceToLabel}
           style={{ minWidth: sw144, ...item.style }}

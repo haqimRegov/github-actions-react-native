@@ -285,6 +285,12 @@ const getOrderSummary = gql`
             label
             remark
           }
+          riskInfo {
+            type
+            appetite
+            profile
+            expectedRange
+          }
           extensionRemark {
             date
             remark
@@ -299,7 +305,7 @@ const getOrderSummary = gql`
             servicingAdviserCode
             kibProcessingBranch
             accountType
-            accountNo
+            accountNumber
             accountOperationMode
           }
           investmentSummary {
@@ -356,6 +362,7 @@ const getOrderSummary = gql`
             name
             idNumber
             idType
+            clientId
             personalDetails {
               dateOfBirth
               salutation

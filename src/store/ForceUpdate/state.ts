@@ -16,6 +16,6 @@ export const forceUpdateInitialState: ForceUpdateState = {
     "TermsAndConditions",
     "Signatures",
   ],
-  emailVerified: false,
   finishedSteps: [],
+  emailVerified: false,
 };

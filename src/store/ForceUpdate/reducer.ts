@@ -40,6 +40,23 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
         finishedSteps: [],
       };
 
+    case "forceUpdate/RESET_FORCE_UPDATE":
+      return {
+        disabledSteps: [
+          "ContactSummary",
+          "RiskAssessment",
+          "Declarations",
+          "FATCADeclaration",
+          "CRSDeclaration",
+          "DeclarationSummary",
+          "Acknowledgement",
+          "TermsAndConditions",
+          "Signatures",
+        ],
+        finishedSteps: [],
+        emailVerified: false,
+      };
+
     default:
       return state;
   }

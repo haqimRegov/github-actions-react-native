@@ -21,11 +21,21 @@ export const resetFUSteps = () => {
   return typedAction("forceUpdate/RESET_STEPS");
 };
 
+export const resetForceUpdate = () => {
+  return typedAction("forceUpdate/RESET_FORCE_UPDATE");
+};
+
 export type ForceUpdateAction = ReturnType<
-  typeof resetFUSteps | typeof updateEmailVerified | typeof updateForceUpdate | typeof updateFUDisabledSteps | typeof updateFUFinishedSteps
+  | typeof resetFUSteps
+  | typeof updateEmailVerified
+  | typeof updateForceUpdate
+  | typeof updateFUDisabledSteps
+  | typeof updateFUFinishedSteps
+  | typeof resetForceUpdate
 >;
 
 export const ForceUpdateActionProps = {
+  resetForceUpdate,
   resetFUSteps,
   updateEmailVerified,
   updateForceUpdate,

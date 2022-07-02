@@ -13,10 +13,6 @@ export const addRejectedOrders = (orders: ITransactionsDashboard) => {
   return typedAction("transactions/ADD_REJECTED_ORDERS", orders);
 };
 
-export const addSelectedOrders = (orders: IApplicationHistoryTable[]) => {
-  return typedAction("transactions/ADD_SELECTED_ORDERS", orders);
-};
-
 export const resetTransactions = () => {
   return typedAction("transactions/RESET_TRANSACTIONS");
 };
@@ -93,7 +89,6 @@ export type TransactionsAction = ReturnType<
   | typeof addApprovedOrders
   | typeof addPendingOrders
   | typeof addRejectedOrders
-  | typeof addSelectedOrders
   | typeof resetApprovedFilter
   | typeof resetPendingFilter
   | typeof resetRejectedFilter
@@ -118,7 +113,6 @@ export const TransactionsActionProps = {
   addApprovedOrders,
   addPendingOrders,
   addRejectedOrders,
-  addSelectedOrders,
   resetApprovedFilter,
   resetPendingFilter,
   resetRejectedFilter,

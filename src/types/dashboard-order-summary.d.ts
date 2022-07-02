@@ -1,6 +1,6 @@
 declare interface IOrderSummaryTransaction {
-  accountNo: string;
-  accountOperationMode: string;
+  accountNumber: string[] | string;
+  accountOperationMode: string | null;
   accountType: TypeAccountChoices;
   kibProcessingBranch: string;
   registrationDate: string;
@@ -57,7 +57,7 @@ declare interface IOrderSummaryPayment {
 declare interface IOrderSummaryEmploymentDetails {
   address: IAddressState;
   annualIncome: string | null;
-  monthlyHouseholdIncome: string;
+  monthlyHouseholdIncome: string | null;
   nameOfEmployer: string;
   natureOfBusiness: string;
   occupation: string;
@@ -78,20 +78,17 @@ declare interface IOrderSummaryPersonalDetails {
   educationLevel: string;
   expirationDate?: string | null;
   gender: string;
-  id: FileBase64;
-  idNumber: string;
-  idType: string;
   maritalStatus: string;
   monthlyHouseholdIncome: string;
   mothersMaidenName: string;
-  name: string;
   nationality: string;
   otherEducationLevel?: string | null;
   otherRelationship?: string | null;
   placeOfBirth: string;
   race: string | null;
-  relationship: string;
+  relationship: string | null;
   riskProfile: string;
+  riskProfileLastUpdated?: string | null;
   salutation: string;
 }
 
@@ -128,10 +125,16 @@ declare interface IOrderSummaryEpf {
   epfMemberNumber: string;
 }
 
+declare interface IOrderSummaryTin {
+  country: string | null;
+  tinNumber: string | null;
+  reason: string | null;
+}
+
 declare interface IOrderSummaryDeclaration {
   crs: {
     taxResident: string | null;
-    tin: { country: string | null; tinNumber: string | null; reason: string | null }[];
+    tin: IOrderSummaryTin[];
   };
   fatca: {
     certificate: DocumentFileBase64 | null;
@@ -147,38 +150,35 @@ declare interface IOrderSummaryDeclaration {
     balance: string;
     borrowingFacility: "Yes" | "No" | null;
     resident: "Yes" | "No" | null;
-  };
+  } | null;
 }
 
-declare interface IOrderSummaryProfile {
-  accountOperationMode?: string;
-  accountType?: TypeAccountChoices;
+declare interface IOrderSummaryProfile extends IAccountDetails {
   addressInformation: IOrderSummaryAddressInfo;
-  bankInformation: IOrderSummaryBankInfo;
+  bankInformation?: IOrderSummaryBankInfo;
+  clientId?: string | null;
   contactDetails: IOrderSummaryContactDetails;
   declaration: IOrderSummaryDeclaration;
   employmentInformation: IOrderSummaryEmploymentDetails;
   epfDetails: IOrderSummaryEpf | null;
   idNumber: string;
   idType: TypeClientID;
-  incomeDistribution?: string;
   name: string;
   personalDetails: IOrderSummaryPersonalDetails;
-  registrationDate?: string;
-  signatory?: string;
-  uploadedDocument: FileBase64[];
+  uploadedDocument?: FileBase64[];
 }
 
 declare interface IDashboardOrderSummary {
   documentSummary: IDocumentSummary;
-  extensionRemark: string;
-  investmentSummary: IOrderSummaryInvestment[];
+  extensionRemark: string | null;
+  investmentSummary: IOrderSummaryInvestment[] | null;
   orderNumber: string;
-  paymentSummary: IOrderSummaryPayment[];
+  paymentSummary: IOrderSummaryPayment[] | null;
   profile: IOrderSummaryProfile[];
-  remark: string;
+  remark: string | null;
+  riskInfo: IRiskProfile | null;
   status: string;
-  totalInvestment: IOrderAmount[];
+  totalInvestment: IOrderAmount[] | null;
   trackingSummary: ITrackingSummary[];
   transactionDetails: IOrderSummaryTransaction;
 }

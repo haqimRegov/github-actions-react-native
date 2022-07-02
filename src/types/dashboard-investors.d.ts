@@ -2,11 +2,12 @@ declare type InvestorsPageType = "InvestorDashboard" | "AccountsList";
 declare type InvestorsTabType = "all" | "accounts";
 
 declare interface IInvestorData {
+  clientId: string;
   email: string;
   idNumber: string;
   mobileNo: string;
   name: string;
-  riskTolerance: string;
+  riskTolerance: string | null;
 }
 declare interface IInvestorsDashboard {
   all: IInvestorsTab;

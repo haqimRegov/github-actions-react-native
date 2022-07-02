@@ -1,0 +1,53 @@
+declare interface IAccountDetails {
+  accountNumber?: string[];
+  accountOperationMode?: string | null;
+  accountType?: TypeAccountChoices;
+  incomeDistribution?: string;
+  registrationDate?: string;
+}
+
+declare interface IRiskProfile {
+  appetite: string;
+  expectedRange: string;
+  profile: string;
+  type: string;
+}
+
+declare interface IAccountInvestorOverview {
+  clientId: string;
+  name: string;
+  id?: FileBase64 | null;
+  idNumber: string;
+  idType: TypeClientID;
+  riskProfile: string | null;
+}
+
+declare interface IStructuredInvestorProfile {
+  identificationDetails: LabeledTitleProps[];
+  personalDetails: LabeledTitleProps[];
+  contactDetails: LabeledTitleProps[];
+  permanentAddress: LabeledTitleProps[];
+  correspondenceAddress: LabeledTitleProps[];
+  employmentDetails: LabeledTitleProps[];
+  employmentAddress: LabeledTitleProps[];
+  declarations: {
+    crs: LabeledTitleProps[];
+    crsTin: LabeledTitleProps[][];
+    fatca: LabeledTitleProps[];
+    fea?: LabeledTitleProps[];
+  };
+}
+
+declare interface IInvestorAccount {
+  accountDetails: IAccountDetails | null; // accountInformation
+  addressInformation: IOrderSummaryAddressInfo; // investorProfile and accountInformation
+  bankInformation: IOrderSummaryBankInfo | null; // accountInformation
+  contactDetails: IOrderSummaryContactDetails | null; // investorProfile
+  declaration: IOrderSummaryDeclaration | null; // investorProfile
+  documentSummary: IDocumentSummary | null; // investorProfile
+  employmentInformation: IOrderSummaryEmploymentDetails | null; // investorProfile
+  epfDetails: IOrderSummaryEpf | null; // investorProfile
+  investorOverview: IAccountInvestorOverview[]; // [Principal, Joint] investorProfile will always be [Principal] only
+  personalDetails: IOrderSummaryPersonalDetails | null; // investorProfile
+  withOrderHistory: boolean | null; // accountInformation
+}

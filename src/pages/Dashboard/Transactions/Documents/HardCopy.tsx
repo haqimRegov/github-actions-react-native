@@ -5,9 +5,7 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import {
   AccountHeader,
-  ActionButtons,
   CheckBox,
-  CustomFlexSpacer,
   CustomSpacer,
   Loading,
   NewDropdown,
@@ -331,8 +329,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         hideQuickActions={true}
         titleIconOnPress={handleBack}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_SUBMIT_PHYSICAL_DOCUMENTS}
-        titleIcon="arrow-left"
-        topSpace={false}>
+        titleIcon="arrow-left">
         <View style={px(sw68)}>
           <TextSpaceArea style={fs16RegGray5} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_UPLOAD_HARDCOPY_SUBTITLE} />
         </View>
@@ -404,14 +401,6 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
               />
               <CustomSpacer space={sh32} />
               <CheckBox label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_CHECKBOX} onPress={handleToggle} toggle={toggle} />
-              <CustomFlexSpacer />
-              <CustomSpacer space={sh56} />
-              <ActionButtons
-                continueDisabled={buttonDisabled}
-                labelContinue={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_SUBMIT}
-                handleCancel={handleBackToTransactions}
-                handleContinue={handleSubmit}
-              />
             </View>
           </Fragment>
         ) : (

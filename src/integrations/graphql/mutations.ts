@@ -181,6 +181,11 @@ const submitPdf = gql`
         result {
           message
           status
+          orderNumber
+          remarks {
+            title
+            remarks
+          }
         }
       }
       error {

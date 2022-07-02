@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
 import { CustomSpacer, TextCard, TextSpaceArea } from "../../../../components";
-import { Language, PAYMENT_DATE_FORMAT } from "../../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
 import {
@@ -55,7 +55,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
     { label: DASHBOARD_ORDER_DETAILS.LABEL_ORDER_NUMBER, title: orderNumber, titleStyle: fsTransformNone },
     {
       label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
-      title: moment(transactionDetails.registrationDate, "x").format(PAYMENT_DATE_FORMAT),
+      title: moment(transactionDetails.registrationDate, "x").format(DEFAULT_DATE_FORMAT),
     },
     {
       label: DASHBOARD_ORDER_DETAILS.LABEL_SERVICING,
@@ -249,7 +249,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
-                    title: `${moment(payment.transactionDate, "x").format(PAYMENT_DATE_FORMAT)}`,
+                    title: `${moment(payment.transactionDate, "x").format(DEFAULT_DATE_FORMAT)}`,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,
@@ -293,7 +293,7 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_CHEQUE_NO, title: `${payment.checkNumber}` },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
-                    title: `${moment(payment.transactionDate, "x").format(PAYMENT_DATE_FORMAT)}`,
+                    title: `${moment(payment.transactionDate, "x").format(DEFAULT_DATE_FORMAT)}`,
                   },
                   {
                     label: DASHBOARD_ORDER_DETAILS.LABEL_KIB_ACCOUNT,

@@ -13,6 +13,7 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
   useEffect(() => {
     props.resetGlobal();
     props.resetEDD();
+    props.resetForceUpdate();
     props.resetTransactions();
     props.resetAcknowledgement();
     props.resetClientDetails();

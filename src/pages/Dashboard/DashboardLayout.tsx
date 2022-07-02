@@ -13,13 +13,14 @@ import {
   colorBlue,
   flexGrow,
   flexRow,
-  fs24BoldGray6,
+  fs18BoldGray6,
   fullHeight,
   px,
-  sh16,
+  rowCenterVertical,
+  sh24,
   sw16,
-  sw20,
   sw24,
+  sw8,
 } from "../../styles";
 import { NewSales } from "./QuickActions";
 
@@ -37,7 +38,6 @@ interface DashboardLayoutProps {
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
-  topSpace?: boolean;
 }
 
 export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
@@ -52,7 +52,6 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   title,
   titleIcon,
   titleIconOnPress,
-  topSpace,
 }: DashboardLayoutProps) => {
   const [addClient, setAddClient] = useState<boolean>(false);
 
@@ -123,10 +122,9 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
         showsVerticalScrollIndicator={false}>
         <View style={{ ...fullHeight, backgroundColor: colorBlue._2 }}>
           <View style={px(sw24)}>
-            {topSpace !== false ? <CustomSpacer space={sh16} /> : null}
-            <View style={{ ...centerVertical, ...flexRow }}>
+            <CustomSpacer space={sh24} />
+            <View style={rowCenterVertical}>
               <View>
-                <CustomSpacer space={sh16} />
                 <View style={flexRow}>
                   {titleIcon !== undefined ? (
                     <Fragment>
@@ -137,15 +135,14 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
                         style={alignSelfCenter}
                         suppressHighlighting={true}
                       />
-                      <CustomSpacer isHorizontal={true} space={sw20} />
+                      <CustomSpacer isHorizontal={true} space={sw8} />
                     </Fragment>
                   ) : null}
-                  {title !== undefined ? <Text style={{ ...fs24BoldGray6, ...alignItemsEnd }}>{title}</Text> : null}
+                  {title !== undefined ? <Text style={{ ...fs18BoldGray6, ...alignItemsEnd }}>{title}</Text> : null}
                 </View>
               </View>
               {status !== undefined ? (
                 <View style={{ ...px(sw16), ...centerVertical }}>
-                  <CustomSpacer space={sh16} />
                   <StatusBadge color={statusColor} text={status} />
                 </View>
               ) : null}

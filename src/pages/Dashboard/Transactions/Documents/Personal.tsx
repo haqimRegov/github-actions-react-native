@@ -263,8 +263,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         hideQuickActions={true}
         titleIconOnPress={handleBack}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
-        titleIcon="arrow-left"
-        topSpace={false}>
+        titleIcon="arrow-left">
         <View style={px(sw68)}>
           <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         </View>

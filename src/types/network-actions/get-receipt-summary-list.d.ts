@@ -1,5 +1,7 @@
 declare interface IGetReceiptSummaryListRequest {
   clientId: string;
+  initId: string;
+  isForceUpdate: boolean;
 }
 
 declare interface IGetReceiptSummaryListResult {

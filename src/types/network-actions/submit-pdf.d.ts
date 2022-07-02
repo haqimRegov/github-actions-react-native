@@ -10,10 +10,18 @@ declare interface ISubmitPdfRequest {
   clientId: string;
   documents: ISubmitPdfDocument[];
   initId: string;
+  isConfirmed: boolean;
+  isForceUpdate: boolean;
 }
 
+declare interface ISubmitPdfRemarks {
+  title: string;
+  remarks: string[];
+}
 declare interface ISubmitPdfResult {
   message: string;
+  orderNumber: string;
+  remarks: ISubmitPdfRemarks[];
   status: string;
 }
 declare type ISubmitPdfResponse = IMutationResponse<ISubmitPdfResult> | undefined;

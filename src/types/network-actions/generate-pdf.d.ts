@@ -1,5 +1,7 @@
 declare interface IGeneratePdfRequest {
   clientId: string;
+  initId: string;
+  isForceUpdate: boolean;
   orderNo: string;
 }
 

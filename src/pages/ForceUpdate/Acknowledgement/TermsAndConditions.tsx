@@ -13,7 +13,7 @@ import {
   alignSelfCenter,
   borderBottomBlue4,
   colorBlue,
-  disabledOpacity5,
+  disabledOpacity6,
   flexRow,
   fs12BoldWhite1,
   fs12SemiBoldBlue1,
@@ -22,13 +22,13 @@ import {
   fs18BoldGray6,
   justifyContentEnd,
   px,
+  rowCenterVertical,
   sh16,
   sh18,
   sh24,
   sh32,
   sh4,
   sh456,
-  sh8,
   sw14,
   sw18,
   sw24,
@@ -114,15 +114,17 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
       {TERMS_AND_CONDITION_LIST.length === 0 ? null : (
         <Fragment>
           <View style={px(sw24)}>
-            <CustomSpacer space={sh8} />
+            <CustomSpacer space={sh4} />
             <View style={termsHeader}>
-              <Text style={{ ...fs14RegGray5, marginTop: sh4 }}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
-              <CustomTooltip
-                arrowSize={{ width: sw18, height: sh18 }}
-                content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
-                contentStyle={{ width: sw265 }}
-                theme={"dark"}
-              />
+              <View style={rowCenterVertical}>
+                <Text style={fs14RegGray5}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
+                <CustomTooltip
+                  arrowSize={{ width: sw18, height: sh18 }}
+                  content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
+                  contentStyle={{ width: sw265 }}
+                  theme={"dark"}
+                />
+              </View>
               <CustomFlexSpacer />
               <Pressable onPress={handleExpandAll}>
                 <View style={{ ...justifyContentEnd, ...flexRow }}>
@@ -165,12 +167,12 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
             />
             <CustomSpacer space={sh16} />
             <CheckBox
-              checkboxStyle={disabledOpacity5}
+              checkboxStyle={disabledOpacity6}
               label={TERMS_AND_CONDITIONS.LABEL_CONSENT_NEW}
               style={{ ...alignItemsStart, width: sw800 }}
               onPress={() => {}}
               toggle={true}
-              labelStyle={fs16RegBlack2}
+              labelStyle={{ ...fs16RegBlack2, ...disabledOpacity6 }}
             />
           </View>
         </Fragment>

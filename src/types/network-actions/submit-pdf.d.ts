@@ -18,12 +18,10 @@ declare interface ISubmitPdfRemarks {
   title: string;
   remarks: string[];
 }
-declare interface ISubmitPdfResult {
+declare interface ISubmitPdfResult extends ISubmissionSummaryOrder {
   message: string;
-  orderNumber: string;
-  remarks: ISubmitPdfRemarks[];
-  status: string;
 }
+
 declare type ISubmitPdfResponse = IMutationResponse<ISubmitPdfResult> | undefined;
 
 declare interface ISubmitPdfMutation {

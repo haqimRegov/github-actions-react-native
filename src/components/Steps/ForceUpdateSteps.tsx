@@ -1,9 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
 import {
   borderBottomGray2,
+  circle,
+  colorRed,
   colorTransparent,
   colorWhite,
   disabledOpacity6,
@@ -17,6 +19,7 @@ import {
   fullHW,
   px,
   py,
+  rowCenterVertical,
   sh16,
   sh20,
   sh24,
@@ -25,7 +28,8 @@ import {
   sw120,
   sw200,
   sw24,
-  sw40,
+  sw32,
+  sw4,
   sw8,
 } from "../../styles";
 import { SideMenu } from "../Nav";
@@ -115,7 +119,7 @@ export const ForceUpdateSteps: FunctionComponent<ForceUpdateStepsProps> = ({
 
     return (
       <View style={flexRow}>
-        <CustomSpacer isHorizontal={true} space={sw40} />
+        <CustomSpacer isHorizontal={true} space={sw32} />
         <View style={activeContainer}>
           {step.content.map((item: IForceUpdateContentItem, index: number) => {
             const handleNavigateToContent = () => {
@@ -131,7 +135,17 @@ export const ForceUpdateSteps: FunctionComponent<ForceUpdateStepsProps> = ({
               <TouchableWithoutFeedback key={index} onPress={onPress}>
                 <View style={{ width: sw112 }}>
                   <CustomSpacer space={sh16} />
-                  <Text style={textStyle}>{item.title}</Text>
+                  <View style={rowCenterVertical}>
+                    {item.key === activeKey ? (
+                      <Fragment>
+                        <View style={circle(sw4, colorRed._1)} />
+                        <CustomSpacer isHorizontal={true} space={sw4} />
+                      </Fragment>
+                    ) : (
+                      <CustomSpacer isHorizontal={true} space={sw8} />
+                    )}
+                    <Text style={textStyle}>{item.title}</Text>
+                  </View>
                 </View>
               </TouchableWithoutFeedback>
             );

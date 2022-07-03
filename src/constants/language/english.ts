@@ -782,7 +782,7 @@ export const english = {
       LABEL_ACCOUNTS: "Accounts",
       LABEL_JOINT_ACCOUNT_NAME: "Joint Account Name",
       LABEL_ACCOUNT_OPENING_DATE: "Acc Opening Date",
-      PROMPT_LABEL: "Investor update is required",
+      PROMPT_LABEL: "Investor update is required for",
       PROMPT_TITLE: "Tap on continue to proceed with the update.",
     },
     PRODUCT_FILTER: {
@@ -1481,7 +1481,7 @@ export const english = {
       QUESTION_3: "How long do you plan to invest?",
       QUESTION_4: "How much investment experience do you have?",
       QUESTION_5: "If your portfolio declines inline with the market as shown in the chart below,\nwhat would you do?",
-      QUESTION_6: "If you could choose only one of the three hypothetical portfolios characterized below, which would you choose?",
+      QUESTION_6: "If you could choose only one of the three hypothetical portfolios characterized below,\nwhich would you choose?",
       QUESTION_7: "What percentage of your annual income will you invest?",
       QUESTION_8: "What is your gross annual income in MYR?",
       QUESTION_9: "Do you fall under any of the following categories?",
@@ -1496,6 +1496,11 @@ export const english = {
     },
     SIGNATURE: {
       BUTTON_CANCEL: "Redo",
+      BUTTON_CONFIRM: "Confirm",
+    },
+    SUBMISSION_SUMMARY: {
+      BADGE_SUBMITTING: "Submitting",
+      BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",
     },
     SUMMARY: {
@@ -1574,6 +1579,7 @@ export const english = {
       BUTTON_CONTINUE: "Continue",
       BUTTON_DASHBOARD: "Back to Dashboard",
       BUTTON_PAY: "Pay Now",
+      BUTTON_SUBMIT: "Submit",
       CHECKBOX_CHANGE_REQUEST: "Your change request will be processed once we've received your complete supporting documents (if any)",
       HEADING: "Acknowledgement",
       LABEL_ADD_SIGN: "Add Signature",
@@ -1609,7 +1615,11 @@ export const english = {
       LABEL_SIGN_NOW: "Sign Document Now",
       POPUP_TERMS: "Based on your products selected, we will define the corresponding account orders and will be processed accordingly",
       PROMPT_TITLE: "We've received your application",
+      PROMPT_TITLE_SUBMISSION: "Order & Submission Summary",
       PROMPT_SUBTITLE: "Thank you. You have submitted your account opening application.",
+      PROMPT_SUCCESS_TITLE: "has been submitted successfully",
+      PROMPT_SUCCESS_SUBTITLE:
+        "1. A copy of the change request receipt has been sent to the investor's email.\n2. Please note that the change request will be processed once we have received complete supporting documents (if any).",
       PROMPT_TEXT_1:
         "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).",
       PROMPT_TEXT_2:

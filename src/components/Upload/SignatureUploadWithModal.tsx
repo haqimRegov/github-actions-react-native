@@ -21,7 +21,7 @@ import {
   imageContain,
   px,
   sh24,
-  sh29,
+  sh30,
   sh32,
   sh40,
   sh500,
@@ -32,7 +32,7 @@ import {
   sw24,
   sw40,
   sw750,
-  sw76,
+  sw96,
 } from "../../styles";
 import { StatusBadge } from "../Badge/Status";
 import { BasicModal } from "../Modals";
@@ -41,10 +41,12 @@ import { UploadButton } from "./UploadButton";
 import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
 
 interface SignatureUploadWithModalProps extends PdfEditCardProps {
+  containerStyle?: ViewStyle;
   resourceType?: "url" | "file" | "base64";
 }
 
 export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModalProps> = ({
+  containerStyle,
   onPress,
   resourceType,
   value,
@@ -115,14 +117,14 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
   };
 
   const iconData = uploadProps.completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
-  const tooltipStyle: ImageStyle = { height: sh32, width: sw76, position: "absolute", zIndex: 1, bottom: sh29 };
+  const tooltipStyle: ImageStyle = { height: sh32, width: sw96, position: "absolute", zIndex: 1, bottom: sh30 };
   const container: ViewStyle = uploadProps.completed === true ? { ...disabledOpacity6 } : { paddingRight: sw18 };
 
   return (
     <Fragment>
       <UploadDocument
         badgeOffset={{ right: 0.5 }}
-        containerStyle={container}
+        containerStyle={{ ...container, ...containerStyle }}
         customFeature={
           <Fragment>
             {uploadProps.completed === true ? (
@@ -132,7 +134,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
                 <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </View>
             ) : (
-              <View style={{ width: sw76 }}>
+              <View style={{ width: sw96 }}>
                 {uploadProps.tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}
                 <View style={centerVertical}>
                   <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />

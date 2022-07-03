@@ -14,4 +14,5 @@ export * from "./Prompt";
 export * from "./Question";
 export * from "./Spacer";
 export * from "./Splash";
+export * from "./SubmissionSummaryPrompt";
 export * from "./TextSpaceArea";

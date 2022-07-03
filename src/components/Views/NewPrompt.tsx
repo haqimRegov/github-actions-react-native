@@ -3,12 +3,13 @@ import { Image, ImageSourcePropType, ImageStyle, Text, TextStyle, View, ViewStyl
 
 import { IcoMoon } from "../../icons";
 import {
+  centerHV,
   centerVertical,
   colorBlue,
   colorWhite,
   flexRow,
   flexRowCC,
-  fs12RegBlue5,
+  fs10RegGray6,
   fs24BoldBlue1,
   fsAlignCenter,
   imageContain,
@@ -17,15 +18,14 @@ import {
   sh20,
   sh24,
   sh28,
-  sh48,
-  sh56,
-  sh8,
+  sh40,
   sh96,
-  sw10,
   sw136,
   sw28,
   sw48,
+  sw536,
   sw56,
+  sw8,
 } from "../../styles";
 import { NewActionButtons, NewActionButtonsProps } from "./NewActionButtons";
 import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
@@ -37,21 +37,22 @@ export interface NewPromptProps extends NewActionButtonsProps {
   handleClose?: () => void;
   illustration?: ImageSourcePropType;
   illustrationStyle?: ImageStyle;
-  label?: string;
-  labelStyle?: TextStyle;
   spaceToButton?: number;
+  spaceToIllustration?: number;
   spaceToTitle?: number;
   spaceToTop?: number;
+  subtitle?: string;
+  subtitleStyle?: TextStyle;
   title?: string;
   titleStyle?: TextStyle;
 }
 
 interface IPropsCache {
-  label?: string;
-  title?: string;
   illustration?: ImageSourcePropType;
   primaryButton?: string;
   secondaryButton?: string;
+  subtitle?: string;
+  title?: string;
 }
 
 export const NewPrompt: FunctionComponent<NewPromptProps> = ({
@@ -61,48 +62,46 @@ export const NewPrompt: FunctionComponent<NewPromptProps> = ({
   handleClose,
   illustration,
   illustrationStyle,
-  label,
-  labelStyle,
   spaceToButton,
+  spaceToIllustration,
   spaceToTitle,
   spaceToTop,
+  subtitle,
+  subtitleStyle,
   title,
   titleStyle,
-
   ...actionButtonProps
 }: NewPromptProps) => {
   const { buttonContainerStyle, primary, secondary } = actionButtonProps;
 
   const propsCache = useRef<IPropsCache>({
-    label: label,
-    title: title,
     illustration: illustration,
     primaryButton: primary !== undefined ? primary.text : "",
     secondaryButton: secondary !== undefined ? secondary.text : "",
+    subtitle: subtitle,
+    title: title,
   });
 
   const modalContainer: ViewStyle = {
     backgroundColor: colorBlue._2,
-    borderRadius: sh8,
-    width: 536,
+    borderRadius: sw8,
+    width: sw536,
   };
 
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
     backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw10,
-    borderBottomRightRadius: sw10,
+    borderBottomLeftRadius: sw8,
+    borderBottomRightRadius: sw8,
     height: sh96,
     ...buttonContainerStyle,
   };
 
   const defaultIllustrationStyle: ImageStyle = { ...imageContain, height: sw136, width: sw136, ...illustrationStyle };
 
-  const topSpace = spaceToTop !== undefined ? spaceToTop : sh48;
+  const topSpace = spaceToTop !== undefined ? spaceToTop : sh40;
   const defaultTopSpace = closable === true ? sh20 : topSpace;
-  const defaultSpaceToTitle = spaceToTitle !== undefined ? spaceToTitle : sh16;
-  const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
   return (
     <View style={modalContainer}>
@@ -119,24 +118,24 @@ export const NewPrompt: FunctionComponent<NewPromptProps> = ({
       <View>
         <CustomSpacer space={defaultTopSpace} />
         {illustration !== undefined && propsCache.current !== null && propsCache.current.illustration !== undefined ? (
-          <Fragment>
+          <View style={centerHV}>
             <Image source={propsCache.current.illustration} style={defaultIllustrationStyle} />
-            <CustomSpacer space={sh24} />
-          </Fragment>
+            <CustomSpacer space={spaceToIllustration || sh24} />
+          </View>
         ) : null}
       </View>
       <View style={{ ...centerVertical, ...px(sw48), ...contentStyle }}>
-        {propsCache.current !== null && propsCache.current.label !== undefined ? (
-          <Fragment>
-            <Text style={{ ...fs12RegBlue5, ...fsAlignCenter, ...labelStyle }}>{propsCache.current.label}</Text>
-            <CustomSpacer space={defaultSpaceToTitle} />
-          </Fragment>
-        ) : null}
         {propsCache.current !== null && propsCache.current.title !== undefined ? (
           <Text style={{ ...fs24BoldBlue1, ...fsAlignCenter, ...titleStyle }}>{propsCache.current.title}</Text>
         ) : null}
+        {propsCache.current !== null && propsCache.current.subtitle !== undefined ? (
+          <Fragment>
+            <CustomSpacer space={spaceToTitle || sh16} />
+            <Text style={{ ...fs10RegGray6, ...fsAlignCenter, ...subtitleStyle }}>{propsCache.current.subtitle}</Text>
+          </Fragment>
+        ) : null}
         {children}
-        <CustomSpacer space={defaultSpaceToButton} />
+        <CustomSpacer space={spaceToButton || sh40} />
       </View>
       {primary !== undefined || secondary !== undefined ? (
         <NewActionButtons

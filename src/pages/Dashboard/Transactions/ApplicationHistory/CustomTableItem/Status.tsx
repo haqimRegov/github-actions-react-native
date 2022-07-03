@@ -7,7 +7,6 @@ import { DEFAULT_DATE_FORMAT, Language } from "../../../../../constants";
 import { DICTIONARY_ORDER_STATUS } from "../../../../../data/dictionary";
 import { IcoMoon } from "../../../../../icons";
 import { centerHorizontal, centerVertical, flexRow, fs10RegBlue6, sh4, sw16, sw8 } from "../../../../../styles";
-import { isNotEmpty } from "../../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -34,6 +33,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
   const iconName = status === "Submitted" && withHardcopy === true ? "receipt-new" : undefined;
 
   const dueDateLabel = `${DASHBOARD_HOME.LABEL_DUE}: ${moment(dueDate, "x").format(DEFAULT_DATE_FORMAT)}`;
+
   return (
     <View style={centerHorizontal}>
       <View style={{ ...flexRow, ...centerVertical }}>
@@ -45,7 +45,7 @@ export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordion
           </Fragment>
         ) : null}
       </View>
-      {isNotEmpty(dueDate) ? (
+      {dueDate !== null ? (
         <Fragment>
           <CustomSpacer space={sh4} />
           <Text style={fs10RegBlue6}>{dueDateLabel}</Text>

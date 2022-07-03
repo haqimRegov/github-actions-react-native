@@ -19,9 +19,9 @@ import {
   fs24BoldGray6,
   px,
   sh120,
-  sh24,
   sh32,
   sh4,
+  sh48,
   sh56,
   sw100,
   sw20,
@@ -111,7 +111,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
     bottom: 72,
     height: 34,
     position: "absolute",
-    width: 84,
+    width: 96,
     zIndex: 1,
   };
 
@@ -160,7 +160,7 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
             </View>
             {completed === true ? (
               <View style={px(sw20)}>
-                <CustomSpacer space={sh24} />
+                <CustomSpacer space={sh48} />
                 <RoundedButton onPress={handleContinue} loading={pageLoading} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
                 <CustomSpacer space={sh56} />
               </View>

@@ -1,17 +1,16 @@
 import React, { Fragment } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../components";
 import { FORCE_UPDATE_ROUTES, Language } from "../../constants";
 import { ForceUpdateMapDispatchToProps, ForceUpdateMapStateToProps, ForceUpdateStoreProps } from "../../store";
 import { fs16RegGray6 } from "../../styles";
+import { Signatures, TermsAndConditions } from "./Acknowledgement";
 import { ContactContent } from "./Contact";
 import { ContactSummaryContent } from "./ContactSummary";
 import { CRSContent, DeclarationSummaryContent, FATCAContent } from "./Declarations";
 import { RiskAssessmentContent } from "./RiskAssessment";
-import { Sample } from "./Sample";
-import { TermsAndConditions } from "./TermsAndConditions";
 
 const { FORCE_UPDATE } = Language.PAGE;
 interface ForceUpdateProps extends ForceUpdateContentProps, ForceUpdateStoreProps {
@@ -57,11 +56,11 @@ const ForceUpdateContentComponent = ({
       content = <TermsAndConditions {...newProps} />;
       break;
     case FORCE_UPDATE_ROUTES.Signatures:
-      content = <Sample title={FORCE_UPDATE_ROUTES.Signatures} {...newProps} />;
+      content = <Signatures {...newProps} />;
       break;
 
     default:
-      content = <Sample title="sample" {...newProps} />;
+      content = <View />;
       break;
   }
   return (

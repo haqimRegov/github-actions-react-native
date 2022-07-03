@@ -1,5 +1,8 @@
 declare interface IGetRiskProfileRequest {
   clientId: string;
+  id: string;
+  initId: string;
+  isForceUpdate: boolean;
   riskAssessment: {
     questionTwo: number;
     questionThree: number;

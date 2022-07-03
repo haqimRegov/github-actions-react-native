@@ -21,8 +21,8 @@ import {
   imageContain,
   px,
   sh24,
+  sh29,
   sh32,
-  sh34,
   sh40,
   sh500,
   sh96,
@@ -32,7 +32,7 @@ import {
   sw24,
   sw40,
   sw750,
-  sw84,
+  sw76,
 } from "../../styles";
 import { StatusBadge } from "../Badge/Status";
 import { BasicModal } from "../Modals";
@@ -115,7 +115,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
   };
 
   const iconData = uploadProps.completed === true ? { icon: "trash", function: handleRemove } : { icon: "sign", function: handleEdit };
-  const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh32 };
+  const tooltipStyle: ImageStyle = { height: sh32, width: sw76, position: "absolute", zIndex: 1, bottom: sh29 };
   const container: ViewStyle = uploadProps.completed === true ? { ...disabledOpacity6 } : { paddingRight: sw18 };
 
   return (
@@ -132,7 +132,7 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
                 <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </View>
             ) : (
-              <View style={{ width: sw84 }}>
+              <View style={{ width: sw76 }}>
                 {uploadProps.tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}
                 <View style={centerVertical}>
                   <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />

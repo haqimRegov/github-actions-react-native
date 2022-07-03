@@ -40,8 +40,12 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
     const route: TypeForceUpdateRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
     const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
+    const findFatca = updatedDisabledSteps.indexOf("FATCADeclaration");
     if (findCrs !== -1) {
       updatedDisabledSteps.splice(findCrs, 1);
+    }
+    if (findFatca === -1) {
+      updatedDisabledSteps.push("FATCADeclaration");
     }
     updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);

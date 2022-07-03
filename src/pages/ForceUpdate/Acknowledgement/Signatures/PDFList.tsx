@@ -5,40 +5,49 @@ import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ContentPage, CustomSpacer, PromptModal, SignatureUploadWithModal } from "../../../../components";
-import { ONBOARDING_ROUTES } from "../../../../constants";
+import { CheckBox, ContentPage, CustomSpacer, PromptModal, SignatureUploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { ERRORS } from "../../../../data/dictionary";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { centerVertical, fs12RegGray6, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
-import { formatAmount } from "../../../../utils";
+import {
+  alignSelfStart,
+  centerVertical,
+  fs12RegGray6,
+  fs16RegBlack2,
+  px,
+  sh2,
+  sh24,
+  sh32,
+  sh40,
+  sh8,
+  sw24,
+  sw400,
+  sw452,
+} from "../../../../styles";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
-export interface PDFListProps extends AcknowledgementStoreProps, OnboardingContentProps {
+export interface PDFListProps extends AcknowledgementStoreProps, ForceUpdateContentProps {
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 
 const PDFListComponent: FunctionComponent<PDFListProps> = ({
-  accountType,
   details,
-  finishedSteps,
   handleNextStep,
-  handleResetOnboarding,
-  onboarding,
+  handleResetForceUpdate,
   receipts,
   setEditReceipt,
   setLoading,
-  updateOnboarding,
   updateReceipts,
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { clientId } = details!.principalHolder!;
   const fetching = useRef<boolean>(false);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [toggle, setToggle] = useState<boolean>(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (confirmed?: boolean) => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
@@ -49,17 +58,14 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
           orderNumber: receipt.orderNumber!,
           pdf: receipt.signedPdf!,
         };
-        if (receipt.jointSignature?.base64) {
-          receiptData.jointSignature = receipt.jointSignature;
-        }
         return receiptData;
       });
       const request: ISubmitPdfRequest = {
         clientId: clientId!,
         documents: documents,
         initId: details?.initId!,
-        isConfirmed: true,
-        isForceUpdate: false,
+        isForceUpdate: true,
+        isConfirmed: confirmed === true,
       };
       const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
       fetching.current = false;
@@ -68,7 +74,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       if (submitPdfResponse !== undefined) {
         const { data, error } = submitPdfResponse;
         if (error === null && data !== null) {
-          setShowPrompt(true);
+          if (confirmed === true) {
+            setShowPrompt(false);
+            handleResetForceUpdate();
+          } else {
+            setShowPrompt(true);
+          }
         }
         if (error !== null) {
           if (error.message === ERRORS[submittedPdfKey].message) {
@@ -84,21 +95,29 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     return undefined;
   };
 
+  const handleCancel = () => {
+    setShowPrompt(false);
+  };
+
+  const handleConfirm = () => {
+    handleSubmit(true);
+  };
+
   const handleBack = () => {
     handleNextStep("TermsAndConditions");
   };
 
-  const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.Payment);
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    updatedFinishedSteps.push("Acknowledgement");
-    const newDisabledStep: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];
-    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+  const handleCheckbox = () => {
+    setToggle(!toggle);
   };
 
   const getReceiptSummary = async () => {
+    const request: IGetReceiptSummaryListRequest = { clientId: clientId!, initId: details!.initId!, isForceUpdate: true };
+    // TODO temporary check because useEffect is still running after handleResetForceUpdate
+    if (request.clientId === undefined) {
+      return undefined;
+    }
     setLoading(true);
-    const request: IGetReceiptSummaryListRequest = { clientId: clientId!, initId: details!.initId!, isForceUpdate: false };
     const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation, setLoading);
     setLoading(false);
     if (summary !== undefined) {
@@ -122,14 +141,14 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       const request: IGeneratePdfRequest = {
         clientId: clientId!,
         initId: details!.initId!,
-        isForceUpdate: false,
+        isForceUpdate: true,
         orderNo: receipt.orderNumber!,
       };
-      const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation, setLoading);
+      const changeRequestReceipt: IGeneratePdfResponse = await generatePdf(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
-      if (onboardingReceipt !== undefined) {
-        const { data, error } = onboardingReceipt;
+      if (changeRequestReceipt !== undefined) {
+        const { data, error } = changeRequestReceipt;
         if (error === null && data !== null) {
           // setErrorMessage(undefined);
           const updatedReceipts = [...receipts!];
@@ -167,7 +186,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   useEffect(() => {
-    if (receipts === undefined || receipts.length === 0) {
+    if ((receipts === undefined || receipts.length === 0) && toggle === false) {
       getReceiptSummary();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,7 +201,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleSubmit}
-        labelContinue={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
+        labelContinue={"Submit"}
         subheading={TERMS_AND_CONDITIONS.HEADING}
         subtitle={TERMS_AND_CONDITIONS.SUBTITLE}>
         <CustomSpacer space={sh24} />
@@ -203,7 +222,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                   signedPdf: updatedReceipts[index].pdf,
                   adviserSignature: undefined,
                   principalSignature: undefined,
-                  jointSignature: undefined,
                   completed: false,
                 };
                 updateReceipts(updatedReceipts);
@@ -213,18 +231,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                 receipt.adviserSignature !== undefined &&
                 "principalSignature" in receipt &&
                 receipt.principalSignature !== undefined;
-              const completed =
-                accountType === "Individual"
-                  ? baseSignatureValid
-                  : baseSignatureValid && "jointSignature" in receipt && receipt.jointSignature !== undefined;
+              const completed = baseSignatureValid;
               // const disable = receipt.completed !== true;
               // const disabled = index === 0 ? false : disabledCondition;
-              const amountTitle = receipt
-                .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
-                .join(", ");
-              const epfTitle = receipt.isEpf === "true" ? "- EPF" : "";
-              const recurringTitle = receipt.isScheduled === "true" ? "- Recurring" : "";
-              const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               return (
                 <Fragment key={index}>
                   <SignatureUploadWithModal
@@ -238,8 +247,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                     onSuccess={() => {}}
                     resourceType="base64"
                     setValue={() => {}}
-                    title={title}
                     tooltip={incompleteIndex === index}
+                    title={TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE}
                     onPress={handleEdit}
                     value={receipt.signedPdf}
                   />
@@ -250,21 +259,33 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         </View>
       </ContentPage>
       <PromptModal
-        labelCancel={TERMS_AND_CONDITIONS.BUTTON_DASHBOARD}
-        labelContinue={TERMS_AND_CONDITIONS.BUTTON_PAY}
-        handleCancel={handleResetOnboarding}
-        handleContinue={handleContinue}
+        labelContinue={"Confirm"}
+        handleCancel={handleCancel}
+        handleContinue={handleConfirm}
+        continueDisabled={!toggle}
         illustration={LocalAssets.illustration.orderReceived}
         label={TERMS_AND_CONDITIONS.PROMPT_TITLE}
+        spaceToButton={sh40}
         title={TERMS_AND_CONDITIONS.PROMPT_SUBTITLE}
         visible={showPrompt}>
-        <View style={centerVertical}>
-          <CustomSpacer space={sh8} />
-          <View style={{ width: sw452 }}>
-            <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
+        <View>
+          <View style={centerVertical}>
             <CustomSpacer space={sh8} />
-            <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
+            <View style={{ width: sw452 }}>
+              <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
+              <CustomSpacer space={sh8} />
+              <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
+            </View>
           </View>
+          <CustomSpacer space={sh32} />
+          <CheckBox
+            checkboxStyle={{ ...alignSelfStart, marginTop: sh2 }}
+            onPress={handleCheckbox}
+            label={TERMS_AND_CONDITIONS.CHECKBOX_CHANGE_REQUEST}
+            labelStyle={fs16RegBlack2}
+            toggle={toggle}
+            style={{ width: sw400 }}
+          />
         </View>
       </PromptModal>
     </Fragment>

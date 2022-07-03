@@ -67,6 +67,7 @@ export const CheckBox: FunctionComponent<CheckBoxProps> = ({
 
   const toggleStyle: ViewStyle = {
     ...centerHV,
+    backgroundColor: colorWhite._1,
     borderColor: colorBlue._1,
     borderRadius: sw4,
     borderWidth: sw1,

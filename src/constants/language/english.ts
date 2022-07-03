@@ -1473,7 +1473,7 @@ export const english = {
       Q8_OPTION_3: "100,001 to 200,000",
       Q8_OPTION_4: "50,001 to 100,000",
       Q8_OPTION_5: "Less than 50,000",
-      Q9_OPTION_1: "My annual household income is more than MYR 400,000.00",
+      Q9_OPTION_1: "My annual household income is more than MYR 400,000",
       Q9_OPTION_2: "My current net asset is worth more than MYR 4,000,000",
       Q9_OPTION_3: "No, I do not fit in any of these ",
       QUESTION_1: "What is your date of birth?",
@@ -1495,7 +1495,7 @@ export const english = {
       LABEL_FOOTER: "KIB © All Rights Reserved",
     },
     SIGNATURE: {
-      BUTTON_CANCEL: "Re-Take",
+      BUTTON_CANCEL: "Redo",
       BUTTON_CONFIRM: "Confirm",
     },
     SUMMARY: {
@@ -1574,6 +1574,7 @@ export const english = {
       BUTTON_CONTINUE: "Continue",
       BUTTON_DASHBOARD: "Back to Dashboard",
       BUTTON_PAY: "Pay Now",
+      CHECKBOX_CHANGE_REQUEST: "Your change request will be processed once we've received your complete supporting documents (if any)",
       HEADING: "Acknowledgement",
       LABEL_ADD_SIGN: "Add Signature",
       LABEL_ADVISER_SIGNATURE: "Adviser's Signature",
@@ -1622,6 +1623,7 @@ export const english = {
       TERMS_HEADING_5: "FEA Declaration",
       TERMS_HEADING_6: "UT ",
       TERMS_HEADING_7: "Information Disclosed",
+      UPLOAD_CARD_SUBTITLE: "Change Request - Contact, Risk Assessment, Declarations",
     },
     TEXT_INPUT_AREA: {
       BUTTON_ADD: "Add Reason",

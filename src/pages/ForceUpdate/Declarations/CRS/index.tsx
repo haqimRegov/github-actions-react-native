@@ -37,8 +37,12 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
     }
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
     const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
-    if (findDeclarationSummary !== -1) {
-      updatedDisabledSteps.splice(findDeclarationSummary, 1);
+    const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
+    if (findDeclarationSummary === -1) {
+      updatedDisabledSteps.push("DeclarationSummary");
+    }
+    if (findCrs === -1) {
+      updatedDisabledSteps.push("CRSDeclaration");
     }
     updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);

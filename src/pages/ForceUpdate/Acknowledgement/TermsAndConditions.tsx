@@ -3,11 +3,11 @@ import { Pressable, Text, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
-import { CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, CustomTooltip } from "../../components";
-import { Language } from "../../constants";
-import { CRS_NEW, DICTIONARY_LINK_FULL_TERMS, FATCA_NEW, INVESTOR_UPDATE } from "../../data/dictionary";
-import { IcoMoon } from "../../icons";
-import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../store";
+import { CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, CustomTooltip } from "../../../components";
+import { Language } from "../../../constants";
+import { CRS_NEW, DICTIONARY_LINK_FULL_TERMS, FATCA_NEW, INVESTOR_UPDATE } from "../../../data/dictionary";
+import { IcoMoon } from "../../../icons";
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   alignItemsStart,
   alignSelfCenter,
@@ -35,8 +35,8 @@ import {
   sw265,
   sw4,
   sw800,
-} from "../../styles";
-import { TermsAccordionNew } from "../../templates";
+} from "../../../styles";
+import { TermsAccordionNew } from "../../../templates";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -45,16 +45,12 @@ interface TermsAndConditionsProps extends AcknowledgementStoreProps, ForceUpdate
 }
 
 export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = ({
-  handleNextStep,
   agreeTerms,
+  forceUpdate,
+  handleNextStep,
   updateAgree,
-}: // orders,
-// onboarding,
-// outsideRisk,
-// updateOnboarding,
-// TermsAndConditionsProps
-TermsAndConditionsProps) => {
-  // const { disabledSteps } = onboarding;
+  updateForceUpdate,
+}: TermsAndConditionsProps) => {
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
   const handleAgree1 = () => {
@@ -70,12 +66,12 @@ TermsAndConditionsProps) => {
   };
 
   const handleContinue = () => {
-    // const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    // const findSignatures = updatedDisabledSteps.indexOf("Signatures");
-    // if (findSignatures !== -1) {
-    //   updatedDisabledSteps.splice(findSignatures, 1);
-    // }
-    // updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
+    const findSignatures = updatedDisabledSteps.indexOf("Signatures");
+    if (findSignatures !== -1) {
+      updatedDisabledSteps.splice(findSignatures, 1);
+    }
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
     handleNextStep("Signatures");
   };
 
@@ -102,10 +98,10 @@ TermsAndConditionsProps) => {
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
 
-  // if (!disabledSteps.includes("Signatures") && disabled === true) {
-  //   const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps, "Signatures"];
-  //   updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
-  // }
+  if (!forceUpdate.disabledSteps.includes("Signatures") && disabled === true) {
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps, "Signatures"];
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
+  }
 
   return (
     <ContentPage
@@ -168,7 +164,6 @@ TermsAndConditionsProps) => {
               labelStyle={fs16RegBlack2}
             />
             <CustomSpacer space={sh16} />
-
             <CheckBox
               checkboxStyle={disabledOpacity5}
               label={TERMS_AND_CONDITIONS.LABEL_CONSENT_NEW}

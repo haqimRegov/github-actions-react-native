@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, Pagination, Tab } from "../../../../components";
 import { Language } from "../../../../constants";
-import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store/Investors";
+import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
   borderBottomGray2,
   colorWhite,
@@ -19,21 +19,20 @@ import {
   shadow12Black112,
   sw24,
 } from "../../../../styles";
-import { AllInvestors } from "./All";
 import { InvestorListHeader } from "./Header";
+import { InvestorListing } from "./InvestorListing";
 
 const { DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 
-interface InvestorDashboardProps extends InvestorsStoreProps {
+interface InvestorListProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
   isLogout: boolean;
-  navigation: IStackNavigationProp;
   setActiveTab: (route: InvestorsTabType) => void;
   setScreen: (route: InvestorsPageType) => void;
 }
 
-export const InvestorDashboardComponent: FunctionComponent<InvestorDashboardProps> = (props: InvestorDashboardProps) => {
-  const { activeTab, navigation, investors, search, setScreen, updateSearch, updateAllFilter, resetAllFilter, updateInvestors } = props;
+export const InvestorListComponent: FunctionComponent<InvestorListProps> = (props: InvestorListProps) => {
+  const { activeTab, investors, search, setScreen, updateInvestorSearch, updateAllFilter, resetAllFilter, updateInvestors } = props;
   const { all, allCount } = investors;
 
   const { filter, page, pages } = props[activeTab];
@@ -68,7 +67,7 @@ export const InvestorDashboardComponent: FunctionComponent<InvestorDashboardProp
 
   const handleSearch = () => {
     if (filterVisible === false) {
-      updateSearch(inputSearch);
+      updateInvestorSearch(inputSearch);
     }
   };
 
@@ -81,12 +80,12 @@ export const InvestorDashboardComponent: FunctionComponent<InvestorDashboardProp
 
   const handleResetFilter = () => {
     resetAllFilter();
-    updateSearch(inputSearch);
+    updateInvestorSearch(inputSearch);
   };
 
   const handleConfirmFilter = () => {
     updateAllFilter(filterTemp);
-    updateSearch(inputSearch);
+    updateInvestorSearch(inputSearch);
   };
 
   const handleCancelFilter = () => {
@@ -95,12 +94,11 @@ export const InvestorDashboardComponent: FunctionComponent<InvestorDashboardProp
 
   const tabProps = {
     setScreen: setScreen,
-    navigation: navigation,
     isFetching: loading,
     isLogout: props.isLogout,
     setIsFetching: setLoading,
   };
-  const content: JSX.Element = <AllInvestors activeTab={true} {...tabProps} />;
+  const content: JSX.Element = <InvestorListing activeTab={true} {...tabProps} />;
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -136,7 +134,6 @@ export const InvestorDashboardComponent: FunctionComponent<InvestorDashboardProp
             }}>
             <CustomSpacer space={sh153} />
             <CustomSpacer space={sh16} />
-
             <View style={flexRow}>
               <Tab badgeCount={allCount} selected={true} style={{ height: sh48 }} text={DASHBOARD_INVESTORS_LIST.LABEL_ALL} />
               <View style={{ ...flexRow, ...flexChild, ...borderBottomGray2 }}>
@@ -155,4 +152,4 @@ export const InvestorDashboardComponent: FunctionComponent<InvestorDashboardProp
   );
 };
 
-export const InvestorDashboard = connect(InvestorsMapStateToProps, InvestorsMapDispatchToProps)(InvestorDashboardComponent);
+export const InvestorList = connect(InvestorsMapStateToProps, InvestorsMapDispatchToProps)(InvestorListComponent);

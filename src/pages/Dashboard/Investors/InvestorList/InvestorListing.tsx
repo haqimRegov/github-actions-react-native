@@ -1,13 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../../../assets/images/LocalAssets";
-import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
-import { NunitoBold, NunitoRegular } from "../../../../../constants";
-import { Language } from "../../../../../constants/language";
-import { getInvestorDashboard } from "../../../../../network-actions/dashboard/InvestorDashboard";
-import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../../store/Investors";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
+import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../components";
+import { Language, NunitoBold, NunitoRegular } from "../../../../constants";
+import { getInvestorDashboard } from "../../../../network-actions/dashboard/InvestorDashboard";
+import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
   centerHV,
   colorBlue,
@@ -27,37 +27,34 @@ import {
   sw24,
   sw264,
   sw56,
-} from "../../../../../styles";
+} from "../../../../styles";
 
 const { EMPTY_STATE, DASHBOARD_HOME, DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 
-interface AllInvestorsProps extends InvestorsStoreProps {
+interface InvestorListingProps extends InvestorsStoreProps {
   activeTab: boolean;
   isFetching: boolean;
   isLogout: boolean;
-  navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: InvestorsPageType) => void;
 }
 
-const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
+const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
   all,
   investors,
   isFetching,
-  navigation,
   search,
   setIsFetching,
   setScreen,
   updateAllSort,
   updateCurrentInvestor,
   updateInvestors,
-}: AllInvestorsProps) => {
+}: InvestorListingProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
+
   const { filter, page, sort } = all;
 
-  const handleViewClient = (item: ITableData) => {
-    updateCurrentInvestor(item as unknown as IInvestorData);
-    // setScreen("OrderSummary");
-  };
+  const handleRowPress = (_item: ITableData) => {};
 
   const handleSortInvestorName = async () => {
     const sortColumns = sort.map((sortType) => sortType.column);
@@ -93,7 +90,7 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
 
   const handleView = (item: ITableRowData) => {
     updateCurrentInvestor(item.rawData as unknown as IInvestorData);
-    setScreen("AccountsList");
+    setScreen("InvestorOverview");
   };
 
   const checkLoading = (functionToBeCalled: () => void) => {
@@ -200,17 +197,22 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
       sort: defaultSort,
       filter: [...filterRisk],
     };
-    const dashboardResponse: IInvestorDashboardResponse = await getInvestorDashboard(request, navigation, setIsFetching);
-    if (dashboardResponse !== undefined) {
-      const { data, error } = dashboardResponse;
+    const investorDashboardResponse: IInvestorDashboardResponse = await getInvestorDashboard(request, navigation, setIsFetching);
+    console.log("investorDashboardResponse", investorDashboardResponse);
+    if (investorDashboardResponse !== undefined) {
+      const { data, error } = investorDashboardResponse;
       if (error === null && data !== null) {
         const { pages, investors: investorsResponse, totalCount } = data.result;
 
+        const investorsResponseWithClientId: IInvestorData[] = investorsResponse.map((eachInvestor: IInvestorData) => ({
+          ...eachInvestor,
+          clientId: "1234",
+        }));
         updateInvestors({
           ...investors,
           all: {
             ...investors.all,
-            investors: investorsResponse,
+            investors: investorsResponseWithClientId,
             page: data.result.page,
             pages: pages,
           },
@@ -242,7 +244,7 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
       <AdvanceTable
         columns={columns}
         data={isFetching === true ? [] : (all.investors as unknown as ITableData[])}
-        handleRowNavigation={handleViewClient}
+        handleRowNavigation={handleRowPress}
         RenderEmptyState={() => (
           <EmptyTable
             hintContainerStyle={{ borderBottomWidth: sw2, borderBottomColor: colorBlue._1 }}
@@ -261,4 +263,4 @@ const AllInvestorsComponent: FunctionComponent<AllInvestorsProps> = ({
   );
 };
 
-export const AllInvestors = connect(InvestorsMapStateToProps, InvestorsMapDispatchToProps)(AllInvestorsComponent);
+export const InvestorListing = connect(InvestorsMapStateToProps, InvestorsMapDispatchToProps)(InvestorListingComponent);

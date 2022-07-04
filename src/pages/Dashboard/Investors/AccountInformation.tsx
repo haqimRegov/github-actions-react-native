@@ -77,6 +77,7 @@ const AccountInformationComponent: FunctionComponent<AccountInformationPageProps
     const checkStatusSort: ITransactionsSort[] =
       findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
+    // eslint-disable-next-line no-console
     console.log("defaultSort", defaultSort);
     // const request: IDashboardRequest = {
     //   tab: "rejected",

@@ -82,10 +82,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: 
   const handleFetch = async () => {
     // setLoading(true);
     const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
-    console.log("IGetOrderSummaryRequest", request);
-    console.log("currentOrder", currentOrder);
     const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
-    console.log("orderSummaryResponse", orderSummaryResponse);
     // setLoading(false);
     if (orderSummaryResponse !== undefined) {
       const { data, error } = orderSummaryResponse;

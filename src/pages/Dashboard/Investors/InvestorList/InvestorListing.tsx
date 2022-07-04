@@ -198,7 +198,6 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
       filter: [...filterRisk],
     };
     const investorDashboardResponse: IInvestorDashboardResponse = await getInvestorDashboard(request, navigation, setIsFetching);
-    console.log("investorDashboardResponse", investorDashboardResponse);
     if (investorDashboardResponse !== undefined) {
       const { data, error } = investorDashboardResponse;
       if (error === null && data !== null) {

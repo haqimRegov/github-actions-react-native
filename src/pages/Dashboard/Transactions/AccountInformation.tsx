@@ -76,6 +76,7 @@ const AccountInformationComponent: FunctionComponent<AccountInformationPageProps
     const checkStatusSort: ITransactionsSort[] =
       findStatus.length !== 0 ? [...sort, { column: "lastUpdated", value: "descending" }] : [...sort];
     const defaultSort: ITransactionsSort[] = sort.length === 0 ? [{ column: "lastUpdated", value: "descending" }] : checkStatusSort;
+    // eslint-disable-next-line no-console
     console.log("defaultSort", defaultSort);
     // const request: IDashboardRequest = {
     //   tab: "rejected",
@@ -87,7 +88,6 @@ const AccountInformationComponent: FunctionComponent<AccountInformationPageProps
     // console.log("request", request);
     // const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
     const orderHistoryResponse = { data: { result: { orders: ORDER_HISTORY_DUMMY } }, error: null };
-    console.log("orderHistoryResponse", orderHistoryResponse);
     setIsFetching(false);
     if (orderHistoryResponse !== undefined) {
       const { data, error } = orderHistoryResponse;

@@ -1,4 +1,5 @@
-declare type InvestorsPageType = "InvestorDashboard" | "AccountsList";
+declare type InvestorsPageType = "InvestorOverview" | "InvestorList" | "InvestorProfile" | "AccountInformation" | "OrderSummary";
+
 declare type InvestorsTabType = "all" | "accounts";
 
 declare interface IInvestorData {

@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { ClientActionProps } from "../Client";
 import { GlobalActionProps } from "../Global/actions";
+import { InvestorsActionProps } from "../Investors";
 import { RootState } from "../rootReducer";
 import { TransactionsActionProps } from "./actions";
 
@@ -23,7 +24,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
 });
 
 export const TransactionsMapDispatchToProps = (dispatch: Dispatch) => {
-  return bindActionCreators({ ...TransactionsActionProps, ...ClientActionProps, ...GlobalActionProps }, dispatch);
+  return bindActionCreators({ ...TransactionsActionProps, ...ClientActionProps, ...InvestorsActionProps, ...GlobalActionProps }, dispatch);
 };
 
 export type TransactionsStoreProps = ReturnType<typeof TransactionsMapStateToProps> & ReturnType<typeof TransactionsMapDispatchToProps>;

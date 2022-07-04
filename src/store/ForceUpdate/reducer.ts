@@ -24,22 +24,6 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
         emailVerified: action.payload,
       };
 
-    case "forceUpdate/RESET_STEPS":
-      return {
-        disabledSteps: [
-          "ContactSummary",
-          "RiskAssessment",
-          "Declarations",
-          "FATCADeclaration",
-          "CRSDeclaration",
-          "DeclarationSummary",
-          "Acknowledgement",
-          "TermsAndConditions",
-          "Signatures",
-        ],
-        finishedSteps: [],
-      };
-
     case "forceUpdate/RESET_FORCE_UPDATE":
       return {
         disabledSteps: [
@@ -53,8 +37,8 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
           "TermsAndConditions",
           "Signatures",
         ],
-        finishedSteps: [],
         emailVerified: false,
+        finishedSteps: [],
       };
 
     default:

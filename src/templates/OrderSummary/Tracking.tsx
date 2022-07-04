@@ -1,11 +1,9 @@
-import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { Alert, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent } from "react";
+import { ViewStyle } from "react-native";
 import { Text, View } from "react-native-animatable";
 
-import { AdvanceTable, CustomFlexSpacer, Loader, RoundedButton } from "../../../../components";
-import { Language } from "../../../../constants";
-import { RNInAppBrowser } from "../../../../integrations/react-native-inapp-browser-reborn";
-import { orderTrackingSummary } from "../../../../network-actions";
+import { AdvanceTable, CustomFlexSpacer, Loader, RoundedButton } from "../../components";
+import { Language } from "../../constants";
 import {
   colorBlue,
   flexRow,
@@ -26,45 +24,45 @@ import {
   sw24,
   sw376,
   sw96,
-} from "../../../../styles";
+} from "../../styles";
 import { CustomTableItem } from "./CustomTableItem";
 
 const { DASHBOARD_TRACKING } = Language.PAGE;
 
 declare interface ITrackingProps {
   data: IDashboardOrderSummary;
+  handleExportPDF: () => void;
+  loading: boolean;
 }
 
-export const Tracking: FunctionComponent<ITrackingProps> = ({ data }: ITrackingProps) => {
-  const fetching = useRef<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { trackingSummary, orderNumber } = data;
+export const Tracking: FunctionComponent<ITrackingProps> = ({ data, handleExportPDF, loading }: ITrackingProps) => {
+  const { trackingSummary } = data;
 
   const buttonStyle: ViewStyle = { ...px(sw16), borderColor: colorBlue._1, borderWidth: sw1, height: sh24, width: sw96 };
 
-  const handleExportPDF = async () => {
-    if (fetching.current === false) {
-      fetching.current = true;
-      setLoading(true);
-      const request = { orderNo: orderNumber };
-      const response: IOrderTrackingSummaryResponse = await orderTrackingSummary(request);
-      fetching.current = false;
-      setLoading(false);
-      if (response !== undefined) {
-        const { data: responseData, error } = response;
-        if (error === null && responseData !== null) {
-          if (responseData.result.status === true) {
-            RNInAppBrowser.openLink(responseData.result.pdf.url);
-          }
-        }
-        if (error !== null) {
-          setTimeout(() => {
-            Alert.alert(error.message);
-          }, 100);
-        }
-      }
-    }
-  };
+  // const handleExportPDF = async () => {
+  //   if (fetching.current === false) {
+  //     fetching.current = true;
+  //     setLoading(true);
+  //     const request = { orderNo: orderNumber };
+  //     const response: IOrderTrackingSummaryResponse = await orderTrackingSummary(request);
+  //     fetching.current = false;
+  //     setLoading(false);
+  //     if (response !== undefined) {
+  //       const { data: responseData, error } = response;
+  //       if (error === null && responseData !== null) {
+  //         if (responseData.result.status === true) {
+  //           RNInAppBrowser.openLink(responseData.result.pdf.url);
+  //         }
+  //       }
+  //       if (error !== null) {
+  //         setTimeout(() => {
+  //           Alert.alert(error.message);
+  //         }, 100);
+  //       }
+  //     }
+  //   }
+  // };
 
   const columns: ITableColumn[] = [
     {

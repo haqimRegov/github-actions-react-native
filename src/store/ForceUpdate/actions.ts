@@ -17,16 +17,11 @@ export const updateEmailVerified = (verified: boolean) => {
   return typedAction("forceUpdate/UPDATE_EMAIL_VERIFIED", verified);
 };
 
-export const resetFUSteps = () => {
-  return typedAction("forceUpdate/RESET_STEPS");
-};
-
 export const resetForceUpdate = () => {
   return typedAction("forceUpdate/RESET_FORCE_UPDATE");
 };
 
 export type ForceUpdateAction = ReturnType<
-  | typeof resetFUSteps
   | typeof updateEmailVerified
   | typeof updateForceUpdate
   | typeof updateFUDisabledSteps
@@ -36,7 +31,6 @@ export type ForceUpdateAction = ReturnType<
 
 export const ForceUpdateActionProps = {
   resetForceUpdate,
-  resetFUSteps,
   updateEmailVerified,
   updateForceUpdate,
   updateFUDisabledSteps,

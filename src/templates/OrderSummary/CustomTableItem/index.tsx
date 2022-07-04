@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CreatedOn } from "../../ApplicationHistory/CustomTableItem/CreatedOn";
-import { PendingStatus } from "../../ApplicationHistory/CustomTableItem/Status";
+import { CreatedOn } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/CreatedOn";
+import { PendingStatus } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/Status";
 import { Remark } from "./Remark";
 
 declare interface CustomTableItemProps extends ITableCustomItem {

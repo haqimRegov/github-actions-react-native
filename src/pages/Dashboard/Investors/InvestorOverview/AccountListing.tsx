@@ -1,12 +1,14 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { Alert, View } from "react-native";
 
-import { LocalAssets } from "../../../../../assets/images/LocalAssets";
-import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../../components";
-import { NunitoBold, NunitoRegular } from "../../../../../constants";
-import { Language } from "../../../../../constants/language";
-import { getInvestorDetailsDashboard } from "../../../../../network-actions/dashboard/InvestorDetailsDashboard";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
+import { AdvanceTable, CustomSpacer, EmptyTable } from "../../../../components";
+import { NunitoBold, NunitoRegular } from "../../../../constants";
+import { Language } from "../../../../constants/language";
+import { getInvestorDetailsDashboard } from "../../../../network-actions/dashboard/InvestorDetailsDashboard";
 import {
+  centerHV,
+  colorBlue,
   flexChild,
   fs10BoldBlue1,
   fs12RegBlue1,
@@ -14,24 +16,27 @@ import {
   px,
   sh13,
   sh32,
-  sw112,
+  sw104,
+  sw136,
   sw16,
-  sw208,
-  sw264,
-  sw96,
-} from "../../../../../styles";
-import { InvestorDetailsCustomTableItem } from "../CustomItems";
+  sw176,
+  sw224,
+  sw24,
+  sw56,
+} from "../../../../styles";
+import { InvestorDetailsCustomTableItem } from "./CustomItems";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
-interface InvestorAccountsProps {
+interface AccountListingProps {
   currentInvestor?: IInvestorData;
   investorData: IInvestor;
+  handleViewAccount: (account: IInvestorAccountsData) => void;
   isFetching: boolean;
   navigation: IStackNavigationProp;
   page: number;
-  setInvestorData: (data: IInvestor) => void;
   setForceUpdatePrompt: (value: boolean) => void;
+  setInvestorData: (data: IInvestor) => void;
   setIsFetching: (value: boolean) => void;
   setPage: (page: number) => void;
   setPages: (page: number) => void;
@@ -40,20 +45,21 @@ interface InvestorAccountsProps {
   sort: IInvestorAccountsSort[];
 }
 
-export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
+export const AccountListing: FunctionComponent<AccountListingProps> = ({
   currentInvestor,
+  handleViewAccount,
   investorData,
   isFetching,
   navigation,
   page,
-  setInvestorData,
   setForceUpdatePrompt,
+  setInvestorData,
   setIsFetching,
   setPage,
   setPages,
   setSort,
   sort,
-}: InvestorAccountsProps) => {
+}: AccountListingProps) => {
   const handleSortInvestorName = async () => {
     const sortColumns = sort.map((sortType) => sortType.column);
     const newSort: IInvestorAccountsSort = sortColumns.includes("name")
@@ -100,6 +106,10 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
     }
   };
 
+  const handleView = (item: ITableRowData) => {
+    handleViewAccount(item.rawData as unknown as IInvestorAccountsData);
+  };
+
   const findInvestorName = sort.filter((sortType) => sortType.column === "name");
   const findRisk = sort.filter((sortType) => sortType.column === "riskTolerance");
   const findAccountNo = sort.filter((sortType) => sortType.column === "accountNo");
@@ -129,7 +139,7 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
       textStyle: sortedColumns.includes("name") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_INVESTORS_LIST.LABEL_INVESTOR_NAME,
       titleStyle: sortedColumns.includes("name") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw264 },
+      viewStyle: { width: sw224 },
     },
     {
       icon: { name: sortRisk === "descending" ? "arrow-down" : "arrow-up" },
@@ -147,7 +157,7 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
       titleStyle: sortedColumns.includes("riskTolerance")
         ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 }
         : { ...fsTransformNone },
-      viewStyle: { width: sw112 },
+      viewStyle: { width: sw104 },
     },
     {
       icon: { name: sortAccountNo === "descending" ? "arrow-down" : "arrow-up" },
@@ -161,7 +171,7 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
       textStyle: fsTransformNone,
       title: INVESTOR_ACCOUNTS.LABEL_ACCOUNT_NO,
       titleStyle: sortedColumns.includes("accountNo") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : { ...fsTransformNone },
-      viewStyle: { width: sw96 },
+      viewStyle: { width: sw104 },
     },
     {
       icon: { name: sortJointAccount === "descending" ? "arrow-down" : "arrow-up" },
@@ -175,7 +185,7 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
       textStyle: fsTransformNone,
       title: INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT_NAME,
       titleStyle: sortedColumns.includes("jointName") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : { ...fsTransformNone },
-      viewStyle: { width: sw208 },
+      viewStyle: { width: sw176 },
     },
     {
       customItem: true,
@@ -192,7 +202,14 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
       titleStyle: sortedColumns.includes("accountOpeningDate")
         ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 }
         : { ...fsTransformNone },
-      viewStyle: { width: sw112 },
+      viewStyle: { width: sw136 },
+    },
+    {
+      itemIcon: { color: colorBlue._1, name: "eye-show", size: sw24 },
+      key: [],
+      onPressItem: handleView,
+      title: INVESTOR_ACCOUNTS.LABEL_ACTIONS,
+      viewStyle: { ...centerHV, width: sw56 },
     },
   ];
 
@@ -205,9 +222,13 @@ export const InvestorAccounts: FunctionComponent<InvestorAccountsProps> = ({
       sort: defaultSort,
       tab: "allAccounts",
     };
-    const dashboardResponse: IInvestorDetailsDashboardResponse = await getInvestorDetailsDashboard(request, navigation, setIsFetching);
-    if (dashboardResponse !== undefined) {
-      const { data, error } = dashboardResponse;
+    const investorDetailsResponse: IInvestorDetailsDashboardResponse = await getInvestorDetailsDashboard(
+      request,
+      navigation,
+      setIsFetching,
+    );
+    if (investorDetailsResponse !== undefined) {
+      const { data, error } = investorDetailsResponse;
       if (error === null && data !== null) {
         const { page: currentPage, pages, ...updatedInvestorData } = data.result;
         setInvestorData({

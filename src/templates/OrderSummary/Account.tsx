@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 
-import { AccountSummary } from "../../../../templates";
-import { structureProfile } from "../../../../utils";
+import { structureProfile } from "../../utils";
+import { AccountSummary } from "../Dashboard";
 
 declare interface AccountDetailsProps {
   data: IDashboardOrderSummary;

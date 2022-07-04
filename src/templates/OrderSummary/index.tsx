@@ -1,11 +1,10 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Alert, TextStyle, View, ViewStyle } from "react-native";
-import { connect } from "react-redux";
+import { TextStyle, View, ViewStyle } from "react-native";
 
-import { CustomSpacer, FileViewer, Loading, RoundedButton, TabGroup } from "../../../../components";
-import { Language } from "../../../../constants";
-import { getOrderSummary } from "../../../../network-actions";
-import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
+import { CustomSpacer, FileViewer, Loading, RoundedButton, TabGroup } from "../../components";
+import { Language } from "../../constants";
+import { DashboardLayout } from "../../pages/Dashboard/DashboardLayout";
 import {
   borderBottomRed1,
   colorBlue,
@@ -19,8 +18,7 @@ import {
   sw120,
   sw24,
   sw8,
-} from "../../../../styles";
-import { DashboardLayout } from "../../DashboardLayout";
+} from "../../styles";
 import { AccountDetails } from "./Account";
 import { Document } from "./Document";
 import { OrderDetails } from "./OrderDetails";
@@ -29,17 +27,42 @@ import { Tracking } from "./Tracking";
 
 const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
-interface OrderDetailsProps extends TransactionsStoreProps {
+interface OrderDetailsProps {
+  // navigation: IStackNavigationProp;
+  // setScreen: (route: TransactionsPageType) => void;
   activeTab: OrderSummaryTabType;
-  navigation: IStackNavigationProp;
+  currentOrder: IDashboardOrder | undefined;
+  handleBackToTransactions: () => void;
+  handleExportPDF: () => void;
+  handleFetch: () => void;
+  handleViewAccountDetails: (accNo: string) => void;
+  handleViewInvestorProfile: () => void;
+  loading: boolean;
+  orderSummary: IDashboardOrderSummary | undefined;
   setActiveTab: (route: OrderSummaryTabType) => void;
-  setScreen: (route: TransactionsPageType) => void;
 }
 
-const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: OrderDetailsProps) => {
-  const { activeTab, currentOrder, setScreen, navigation, setActiveTab, updateCurrentOrder } = props;
-  const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
+export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderDetailsProps) => {
+  const {
+    activeTab,
+    currentOrder,
+    handleFetch,
+    // setScreen,
+    orderSummary,
+    // navigation,
+    handleBackToTransactions,
+    setActiveTab,
+    handleViewInvestorProfile,
+    handleViewAccountDetails,
+    handleExportPDF,
+    loading,
+    // updateCurrentOrder,
+    // updateCurrentInvestor,
+    // updateCurrentAccount,
+  } = props;
+  // const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
+  const navigation = useNavigation<IStackNavigationProp>();
 
   const tabs: OrderSummaryTabType[] = ["order", "document", "tracking"];
 
@@ -69,21 +92,42 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
     setFile(undefined);
   };
 
-  const handleBackToTransactions = () => {
-    updateCurrentOrder(undefined);
-    setActiveTab("order");
-    setScreen("Transactions");
-  };
+  // const handleBackToTransactions = () => {
+  //   updateCurrentOrder(undefined);
+  //   setActiveTab("order");
+  //   setScreen("Transactions");
+  // };
 
-  const handleViewInvestorProfile = () => {
-    // TODO
-  };
+  // const handleViewInvestorProfile = () => {
+  //   if (orderSummary?.profile[0].clientId !== undefined && orderSummary?.profile[0].clientId !== null) {
+  //     updateCurrentInvestor({
+  //       clientId: orderSummary?.profile[0].clientId,
+  //       email: orderSummary?.profile[0].contactDetails.email,
+  //       idNumber: orderSummary?.profile[0].idNumber,
+  //       mobileNo: orderSummary?.profile[0].contactDetails.mobileNumber,
+  //       name: orderSummary?.profile[0].name,
+  //       riskTolerance: orderSummary?.profile[0].personalDetails.riskProfile,
+  //     });
+  //     setScreen("InvestorProfile");
+  //   }
+  // };
 
-  const handleViewAccountDetails = (accNo: string) => {
-    // eslint-disable-next-line no-console
-    console.log("View Account Number: ", accNo);
-    // TODO
-  };
+  // const handleVi`ewAccountDetails = (accNo: string) => {
+  //   updateCurrentAccount({
+  //     accountHolder: "Principal",
+  //     accountNo: accNo,
+  //     accountOpeningDate: "",
+  //     address: {},
+  //     clientId: "",
+  //     dateOfBirth: "",
+  //     idNumber: "",
+  //     initId: "",
+  //     jointName: "",
+  //     name: "",
+  //     riskTolerance: "",
+  //   });
+  //   setScreen("AccountInformation");
+  // };`
 
   const contentProps = { data: orderSummary!, setFile: setFile };
 
@@ -103,26 +147,29 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
   }
 
   if (activeTab === "tracking") {
-    content = <Tracking {...contentProps} />;
+    content = <Tracking {...contentProps} handleExportPDF={handleExportPDF} loading={loading} />;
   }
 
-  const handleFetch = async () => {
-    // setLoading(true);
-    const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
-    const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
-    // setLoading(false);
-    if (orderSummaryResponse !== undefined) {
-      const { data, error } = orderSummaryResponse;
-      if (error === null && data !== null) {
-        setOrderSummary(data.result);
-      }
-      if (error !== null) {
-        setTimeout(() => {
-          Alert.alert(error.message);
-        }, 100);
-      }
-    }
-  };
+  // const handleFetch = async () => {
+  //   // setLoading(true);
+  //   const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
+  //   console.log("IGetOrderSummaryRequest", request);
+  //   console.log("currentOrder", currentOrder);
+  //   const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
+  //   console.log("orderSummaryResponse", orderSummaryResponse);
+  //   // setLoading(false);
+  //   if (orderSummaryResponse !== undefined) {
+  //     const { data, error } = orderSummaryResponse;
+  //     if (error === null && data !== null) {
+  //       setOrderSummary(data.result);
+  //     }
+  //     if (error !== null) {
+  //       setTimeout(() => {
+  //         Alert.alert(error.message);
+  //       }, 100);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     handleFetch();
@@ -157,7 +204,7 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
   return (
     <Fragment>
       <DashboardLayout
-        {...props}
+        navigation={navigation}
         hideQuickActions={true}
         sideElement={
           currentOrder?.transactionType !== "Sales-AO" ? (
@@ -198,5 +245,3 @@ const OrderSummaryComponent: FunctionComponent<OrderDetailsProps> = (props: Orde
     </Fragment>
   );
 };
-
-export const DashboardOrderSummary = connect(TransactionsMapStateToProps, TransactionsMapDispatchToProps)(OrderSummaryComponent);

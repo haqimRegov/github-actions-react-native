@@ -2,29 +2,45 @@ import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 
 import { flexChild } from "../../../styles";
-import { InvestorDetailsDashboard } from "./InvestorAccounts";
-import { InvestorDashboard } from "./InvestorList";
+import { AccountInformationPage } from "./AccountInformation";
+import { InvestorList } from "./InvestorList";
+import { InvestorOverview } from "./InvestorOverview";
+import { OrderSummaryPage } from "./OrderSummary";
+import { InvestorProfilePage } from "./Profile";
 
 interface TransactionsProps {
   handleRoute: (route: DashboardPageType) => void;
   isForceUpdate: boolean;
   isLogout: boolean;
-  navigation: IStackNavigationProp;
 }
 
 export const Investors: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { navigation, isForceUpdate, isLogout } = props;
-  const [route, setRoute] = useState<InvestorsPageType>(isForceUpdate === true ? "AccountsList" : "InvestorDashboard");
+  const { isForceUpdate, isLogout } = props;
+  const [route, setRoute] = useState<InvestorsPageType>(isForceUpdate === true ? "InvestorOverview" : "InvestorList");
   const [activeTab, setActiveTab] = useState<InvestorsTabType>("all");
+  const [orderSummaryActiveTab, setOrderSummaryActiveTab] = useState<OrderSummaryTabType>("order");
+
   const setScreen = (nextPage: InvestorsPageType) => {
     setRoute(nextPage);
   };
-  const pageProps = { setScreen: setScreen, navigation: navigation };
-  let investorsPage: JSX.Element = (
-    <InvestorDashboard {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />
-  );
-  if (route === "AccountsList") {
-    investorsPage = <InvestorDetailsDashboard {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
+
+  const pageProps = { setScreen: setScreen };
+
+  let investorsPage: JSX.Element = <InvestorList {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
+
+  if (route === "InvestorOverview") {
+    investorsPage = <InvestorOverview {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
+  }
+
+  if (route === "InvestorProfile") {
+    investorsPage = <InvestorProfilePage {...pageProps} />;
+  }
+
+  if (route === "AccountInformation") {
+    investorsPage = <AccountInformationPage {...pageProps} />;
+  }
+  if (route === "OrderSummary") {
+    investorsPage = <OrderSummaryPage activeTab={orderSummaryActiveTab} setActiveTab={setOrderSummaryActiveTab} {...pageProps} />;
   }
 
   return <View style={flexChild}>{investorsPage}</View>;

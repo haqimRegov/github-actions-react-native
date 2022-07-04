@@ -303,7 +303,6 @@ const HistoryTabComponent: FunctionComponent<HistoryProps> = ({
       ],
     };
     const dashboardResponse: IEDDDashboardResponse = await getEDDDashboard(request, navigation);
-    console.log("das", dashboardResponse);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {

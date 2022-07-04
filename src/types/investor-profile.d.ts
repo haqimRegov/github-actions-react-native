@@ -51,3 +51,13 @@ declare interface IInvestorAccount {
   personalDetails: IOrderSummaryPersonalDetails | null; // investorProfile
   withOrderHistory: boolean | null; // accountInformation
 }
+
+declare type InvestorProfileTabType = "profile" | "declarations" | "document";
+declare type AccountInformationTabType = "account" | "order-history";
+
+declare interface IStructuredAccountInformation {
+  accountDetails: LabeledTitleProps[];
+  correspondenceAddress: LabeledTitleProps[];
+  foreignBank?: ISummaryColorCardSection;
+  localBank: ISummaryColorCardSection;
+}

@@ -1,8 +1,8 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { LayoutChangeEvent, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer } from "../../../../../components";
-import { Language } from "../../../../../constants";
+import { CustomFlexSpacer, CustomSpacer } from "../../../components";
+import { Language } from "../../../constants";
 import {
   circle,
   colorBlue,
@@ -26,8 +26,8 @@ import {
   sw296,
   sw4,
   sw8,
-} from "../../../../../styles";
-import { isNotEmpty } from "../../../../../utils";
+} from "../../../styles";
+import { isNotEmpty } from "../../../utils";
 
 const { DASHBOARD_TRACKING } = Language.PAGE;
 

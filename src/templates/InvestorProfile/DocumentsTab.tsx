@@ -1,22 +1,21 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { ColorCard, CustomFlexSpacer, CustomSpacer, TextCard } from "../../../../components";
-import { Language } from "../../../../constants";
-import { borderBottomRed1, flexRow, fsTransformNone, px, sh16, sh24, sw16, sw24, sw32, sw328, sw56, sw8 } from "../../../../styles";
-import { summaryColorCardStyleProps } from "../../../../templates";
-import { isNotEmpty } from "../../../../utils";
+import { ColorCard, CustomFlexSpacer, CustomSpacer, TextCard } from "../../components";
+import { Language } from "../../constants";
+import { borderBottomRed1, flexRow, fsTransformNone, px, sh16, sh24, sw16, sw24, sw32, sw328, sw56, sw8 } from "../../styles";
+import { isNotEmpty } from "../../utils";
+import { summaryColorCardStyleProps } from "../Dashboard";
 
 const { DASHBOARD_DOCUMENT } = Language.PAGE;
 
-declare interface IDocumentsProps {
-  data: IDashboardOrderSummary;
+interface DocumentsTabProps {
+  data: IInvestorAccount;
   setFile: (value?: FileBase64) => void;
 }
 
-export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: IDocumentsProps) => {
+export const DocumentsTab: FunctionComponent<DocumentsTabProps> = ({ data, setFile }: DocumentsTabProps) => {
   const { documentSummary } = data;
-
   const headerStyle: ViewStyle = {
     ...borderBottomRed1,
     ...flexRow,
@@ -52,7 +51,7 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
 
   return (
     <View style={px(sw24)}>
-      {isNotEmpty(documentSummary.softcopy) ? (
+      {documentSummary !== null && isNotEmpty(documentSummary.softcopy) ? (
         <View>
           <CustomSpacer space={sh24} />
           <ColorCard
@@ -86,11 +85,11 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
                 </View>
               </Fragment>
             }
-            header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_DOCUMENT.LABEL_SOFT_COPY_HEADER }}
+            header={{ label: DASHBOARD_DOCUMENT.LABEL_SOFT_COPY_HEADER }}
           />
         </View>
       ) : null}
-      {isNotEmpty(documentSummary.hardcopy) ? (
+      {documentSummary !== null && isNotEmpty(documentSummary.hardcopy) ? (
         <View>
           <CustomSpacer space={sh24} />
           {(isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0) ||
@@ -151,12 +150,12 @@ export const Document: FunctionComponent<IDocumentsProps> = ({ data, setFile }: 
                   ) : null}
                 </Fragment>
               }
-              header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_DOCUMENT.LABEL_PHYSICAL_DOCUMENTS_HEADER }}
+              header={{ label: DASHBOARD_DOCUMENT.LABEL_PHYSICAL_DOCUMENTS_HEADER }}
             />
           ) : null}
         </View>
       ) : null}
-      {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
+      {documentSummary !== null && documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
     </View>
   );
 };

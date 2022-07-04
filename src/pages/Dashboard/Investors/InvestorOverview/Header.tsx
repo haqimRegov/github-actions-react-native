@@ -17,8 +17,8 @@ import {
   flexRow,
   fs10RegGray4,
   fs16BoldBlue1,
+  fs24BoldWhite1,
   fs32BoldBlue1,
-  fs32BoldWhite1,
   fullWidth,
   px,
   py,
@@ -43,6 +43,7 @@ interface IInvestorAccountHeaderProps {
   mobileNo: string;
   mobileNoLastUpdated: string;
   name: string;
+  setScreen: (route: InvestorsPageType) => void;
 }
 
 export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderProps> = ({
@@ -51,6 +52,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
   mobileNo,
   mobileNoLastUpdated,
   name,
+  setScreen,
 }: IInvestorAccountHeaderProps) => {
   const pageContainer: ViewStyle = {
     ...fullWidth,
@@ -87,13 +89,19 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
     height: sh24,
   };
 
+  const handleViewProfile = () => {
+    setScreen("InvestorProfile");
+  };
+
+  // TODO handle header data that TOMS cannot provide
+
   return (
     <View style={pageContainer}>
       <CustomSpacer space={sh24} />
       <View style={container}>
         <View style={{ ...px(sw24), ...py(sh24) }}>
           <View style={{ ...centerVertical, ...flexRow }}>
-            <Avatar size={sw80} text={initials} textStyle={fs32BoldWhite1} type="client" />
+            <Avatar size={sw80} text={initials} textStyle={fs24BoldWhite1} type="client" />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={centerHorizontal}>
               <Text style={fs32BoldBlue1}>{name}</Text>
@@ -127,7 +135,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
               </View>
             </View>
             <CustomFlexSpacer />
-            <OutlineButton buttonType="solid" disabled={true} disabledOpacity={0.4} onPress={() => {}} text={DASHBOARD_HOME.LABEL_VIEW} />
+            <OutlineButton buttonType="solid" disabledOpacity={0.4} onPress={handleViewProfile} text={DASHBOARD_HOME.LABEL_VIEW} />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
               <IconButton color={colorBlue._1} name="pencil" onPress={() => {}} size={sw16} style={iconContainer} />

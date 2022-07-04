@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { View, ViewStyle } from "react-native";
@@ -6,7 +7,7 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomFlexSpacer, CustomSpacer, Pagination, PromptModal, Tab } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
-import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store/Investors";
+import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
   borderBottomGray2,
   colorWhite,
@@ -21,15 +22,14 @@ import {
   sw24,
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
-import { InvestorAccounts } from "./Accounts";
+import { AccountListing } from "./AccountListing";
 import { InvestorAccountsHeader } from "./Header";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
-interface InvestorDashboardProps extends InvestorsStoreProps {
+interface InvestorOverviewProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
   isLogout: boolean;
-  navigation: IStackNavigationProp;
   setActiveTab: (route: InvestorsTabType) => void;
   setScreen: (route: InvestorsPageType) => void;
 }
@@ -45,8 +45,20 @@ const initialData: IInvestor = {
   totalCount: 0,
 };
 
-export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashboardProps> = (props: InvestorDashboardProps) => {
-  const { addClientDetails, addPersonalInfo, client, currentInvestor, navigation, personalInfo, resetClientDetails, setScreen } = props;
+export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
+  addClientDetails,
+  addPersonalInfo,
+  client,
+  currentInvestor,
+  personalInfo,
+  resetClientDetails,
+  updateCurrentAccount,
+  ...dashboardProps
+}: InvestorOverviewProps) => {
+  // eslint-disable-next-line no-console
+  console.log("InvestorOverview currentInvestor", currentInvestor);
+
+  const navigation = useNavigation<IStackNavigationProp>();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
@@ -54,6 +66,7 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
   const [investorData, setInvestorData] = useState<IInvestor>(initialData);
+
   const { name, email, emailLastUpdated, mobileNo, mobileNoLastUpdated } = investorData;
 
   const handleNext = () => {
@@ -69,7 +82,7 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
   };
 
   const handleBackToInvestorList = () => {
-    setScreen("InvestorDashboard");
+    dashboardProps.setScreen("InvestorList");
   };
 
   const handleCancelForceUpdate = () => {
@@ -113,10 +126,15 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
     navigation.navigate("ForceUpdate");
   };
 
+  const handleViewAccount = (accountToView: IInvestorAccountsData) => {
+    updateCurrentAccount(accountToView);
+    dashboardProps.setScreen("AccountInformation");
+  };
+
   const etbCheckInvestor: IInvestorData =
     client.isForceUpdate === true
       ? {
-          clientId: "",
+          clientId: client.details?.principalHolder?.clientId!,
           idNumber: client.details?.principalHolder?.id!,
           name: client.details?.principalHolder?.name!,
           email: "",
@@ -129,7 +147,7 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
     currentInvestor: etbCheckInvestor,
     investorData,
     isFetching: loading,
-    isLogout: props.isLogout,
+    isLogout: dashboardProps.isLogout,
     navigation: navigation,
     page,
     pages,
@@ -138,11 +156,12 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
     setIsFetching: setLoading,
     setPage,
     setPages,
-    setScreen: setScreen,
+    setScreen: dashboardProps.setScreen,
     setSort,
     sort,
   };
-  const content: JSX.Element = <InvestorAccounts {...tabProps} />;
+
+  const content: JSX.Element = <AccountListing handleViewAccount={handleViewAccount} {...tabProps} />;
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -156,6 +175,7 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
     mobileNo,
     mobileNoLastUpdated,
     name,
+    setScreen: dashboardProps.setScreen,
   };
 
   const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${etbCheckInvestor.name}.`;
@@ -164,7 +184,8 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
     <Fragment>
       <View style={fullHW}>
         <DashboardLayout
-          {...props}
+          {...dashboardProps}
+          navigation={navigation}
           hideQuickActions={true}
           titleIconOnPress={handleBackToInvestorList}
           title={DASHBOARD_INVESTORS_LIST.LABEL_INVESTOR_OVERVIEW}
@@ -215,4 +236,4 @@ export const InvestorDetailsDashboardComponent: FunctionComponent<InvestorDashbo
   );
 };
 
-export const InvestorDetailsDashboard = connect(InvestorsMapStateToProps, InvestorsMapDispatchToProps)(InvestorDetailsDashboardComponent);
+export const InvestorOverview = connect(InvestorsMapStateToProps, InvestorsMapDispatchToProps)(InvestorOverviewComponent);

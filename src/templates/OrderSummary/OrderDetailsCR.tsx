@@ -2,8 +2,8 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { ColorCard, CustomSpacer, IconText, TextCard } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
+import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
 import {
   colorBlue,
   fs12BoldGray5,
@@ -18,9 +18,9 @@ import {
   sw328,
   sw4,
   sw8,
-} from "../../../../styles";
-import { SummaryColorCard, summaryColorCardStyleProps } from "../../../../templates";
-import { getStructuredInvestorProfile } from "../../../../utils";
+} from "../../styles";
+import { getStructuredInvestorProfile } from "../../utils";
+import { SummaryColorCard, summaryColorCardStyleProps } from "../Dashboard";
 
 const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
 

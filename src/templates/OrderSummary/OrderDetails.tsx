@@ -2,10 +2,10 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, TextCard, TextSpaceArea } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
-import { DICTIONARY_RECURRING_CURRENCY } from "../../../../data/dictionary";
-import { IcoMoon } from "../../../../icons";
+import { CustomSpacer, TextCard, TextSpaceArea } from "../../components";
+import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
+import { DICTIONARY_RECURRING_CURRENCY } from "../../data/dictionary";
+import { IcoMoon } from "../../icons";
 import {
   borderBottomBlue3,
   borderBottomBlue5,
@@ -30,8 +30,8 @@ import {
   sw328,
   sw64,
   sw8,
-} from "../../../../styles";
-import { isNotEmpty, titleCaseString } from "../../../../utils";
+} from "../../styles";
+import { isNotEmpty, titleCaseString } from "../../utils";
 
 const { DASHBOARD_ORDER_DETAILS, DASHBOARD_PROFILE } = Language.PAGE;
 

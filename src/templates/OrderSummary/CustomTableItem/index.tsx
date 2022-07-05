@@ -13,9 +13,7 @@ export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sorte
   const { accordionIcon, ...withoutAccordion } = rest;
   switch (rest.keyName.key) {
     case "status":
-      return (
-        <PendingStatus accordionIcon={undefined} sortedColumns={sortedColumns as TransactionsSortColumnType[]} {...withoutAccordion} />
-      );
+      return <PendingStatus accordionIcon={undefined} {...withoutAccordion} />;
     case "createdOn":
       return <CreatedOn sortedColumns={sortedColumns} {...rest} />;
     case "remark":

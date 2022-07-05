@@ -12,7 +12,6 @@ const { DASHBOARD_HOME } = Language.PAGE;
 
 interface PendingStatusProps extends ITableCustomItem {
   downloadInitiated?: boolean;
-  sortedColumns: TransactionsSortColumnType[];
 }
 
 export const PendingStatus: FunctionComponent<PendingStatusProps> = ({ accordionIcon, downloadInitiated, item }: PendingStatusProps) => {

@@ -6,12 +6,13 @@ import { DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT, NunitoBold } from "../../../.
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../../../../styles";
 
 export interface LastUpdatedProps extends ITableCustomItem {
-  sortedColumns: IEDDDashboardSortType[] | TransactionsSortColumnType[];
+  sortedColumns?: IEDDDashboardSortType[] | TransactionsSortColumnType[];
 }
 
 export const LastUpdated: FunctionComponent<LastUpdatedProps> = ({ item, sortedColumns }: LastUpdatedProps) => {
-  const { lastUpdated } = item.rawData as IDashboardOrder;
-  const updatedTextStyle: TextStyle = sortedColumns.includes("lastUpdated") ? { fontFamily: NunitoBold } : {};
+  const { lastUpdated } = item.rawData as unknown as IDashboardOrder;
+  const updatedTextStyle: TextStyle =
+    sortedColumns !== undefined && sortedColumns.includes("lastUpdated") ? { fontFamily: NunitoBold } : {};
 
   useEffect(() => {}, [sortedColumns]);
   return (

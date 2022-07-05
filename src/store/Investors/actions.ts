@@ -32,16 +32,7 @@ export const updateAllFilter = (filter: IInvestorsFilter) => {
   return typedAction("investors/UPDATE_ALL_FILTER", filter);
 };
 
-export const addOrderHistory = (orders: ITransactionsTab) => {
-  return typedAction("investors/ADD_ORDER_HISTORY", orders);
-};
-
-export const updateOrderHistorySort = (sort: ITransactionsSort[]) => {
-  return typedAction("investors/UPDATE_ORDER_HISTORY_SORT", sort);
-};
-
 export type InvestorsAction = ReturnType<
-  | typeof addOrderHistory
   | typeof resetAllFilter
   | typeof resetInvestors
   | typeof updateAllFilter
@@ -49,12 +40,10 @@ export type InvestorsAction = ReturnType<
   | typeof updateCurrentAccount
   | typeof updateCurrentInvestor
   | typeof updateInvestors
-  | typeof updateOrderHistorySort
   | typeof updateInvestorSearch
 >;
 
 export const InvestorsActionProps = {
-  addOrderHistory,
   resetAllFilter,
   resetInvestors,
   updateAllFilter,
@@ -63,7 +52,6 @@ export const InvestorsActionProps = {
   updateCurrentInvestor,
   updateInvestors,
   updateInvestorSearch,
-  updateOrderHistorySort,
 };
 
 export type InvestorsActionsType = typeof InvestorsActionProps;

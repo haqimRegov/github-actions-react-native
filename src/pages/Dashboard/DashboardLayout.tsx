@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, ReactNode, useState } from "react";
+import React, { forwardRef, Fragment, MutableRefObject, ReactNode, useImperativeHandle, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IQuickAction, NewQuickActions, StatusBadge, StatusBadgeColorType } from "../../components";
@@ -26,10 +26,16 @@ import { NewSales } from "./QuickActions";
 
 const { QUICK_ACTIONS } = Language.PAGE;
 
+export interface IDashboardLayoutRef {
+  addClient: boolean;
+  setAddClient: (value: boolean) => void;
+}
+
 interface DashboardLayoutProps {
   children: ReactNode;
   hideQuickActions?: boolean;
   navigation: IStackNavigationProp;
+  ref?: MutableRefObject<IDashboardLayoutRef | undefined>;
   scrollEnabled?: boolean;
   setPage?: (page: DashboardPageType) => void;
   setScrollRef?: (ref: ScrollView) => void;
@@ -40,19 +46,21 @@ interface DashboardLayoutProps {
   titleIconOnPress?: () => void;
 }
 
-export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
-  children,
-  hideQuickActions,
-  navigation,
-  scrollEnabled,
-  setPage,
-  setScrollRef,
-  sideElement,
-  status,
-  title,
-  titleIcon,
-  titleIconOnPress,
-}: DashboardLayoutProps) => {
+export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, DashboardLayoutProps>((props, ref) => {
+  const {
+    children,
+    hideQuickActions,
+    navigation,
+    scrollEnabled,
+    setPage,
+    setScrollRef,
+    sideElement,
+    status,
+    title,
+    titleIcon,
+    titleIconOnPress,
+  } = props;
+
   const [addClient, setAddClient] = useState<boolean>(false);
 
   const handleAddClient = () => {
@@ -111,6 +119,8 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
   }
   const defaultSideElement = sideElement !== undefined ? sideElement : null;
 
+  useImperativeHandle(ref, () => ({ addClient, setAddClient }));
+
   return (
     <Fragment>
       <ScrollView
@@ -156,4 +166,4 @@ export const DashboardLayout: FunctionComponent<DashboardLayoutProps> = ({
       <NewSales navigation={navigation} setPage={setPage} setVisible={setAddClient} visible={addClient} />
     </Fragment>
   );
-};
+});

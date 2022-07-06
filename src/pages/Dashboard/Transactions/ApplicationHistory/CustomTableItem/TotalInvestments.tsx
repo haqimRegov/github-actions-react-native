@@ -71,7 +71,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
     <TouchableWrapper isTouchable={isNotEmpty(totalInvestment) && totalInvestment.length > 3} onPress={handleShowMore}>
       <View style={{ ...style, ...flexChild }} onResponderStart={() => true}>
         {totalInvestment === null || totalInvestment.length === 0 ? (
-          <Text style={fs12RegBlue1}>-</Text>
+          <View style={{ ...centerHorizontal, ...flexChild }}>
+            <Text style={fs12RegBlue1}>-</Text>
+          </View>
         ) : (
           <Fragment>
             {isNotEmpty(totalInvestment) && totalInvestment.length > 0

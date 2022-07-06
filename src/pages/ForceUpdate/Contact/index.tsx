@@ -53,8 +53,10 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       setEmailError(undefined);
-      const request = {
-        initId: details?.initId,
+      const request: IEmailVerificationRequest = {
+        isForceUpdate: true,
+        id: details!.principalHolder!.id,
+        initId: details!.initId!,
         clientId: inputClientId,
         principalHolder: { email: inputEmail },
       };

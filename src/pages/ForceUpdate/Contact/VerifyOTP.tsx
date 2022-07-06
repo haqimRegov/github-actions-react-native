@@ -84,8 +84,10 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       setOtpError(undefined);
-      const request = {
-        initId: details?.initId,
+      const request: IEmailOtpVerificationRequest = {
+        id: details!.principalHolder!.id,
+        initId: details!.initId!,
+        isForceUpdate: true,
         clientId: inputClientId,
         principalHolder: { email: inputEmail, code: inputOtp },
       };

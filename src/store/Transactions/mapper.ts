@@ -19,6 +19,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
   rejected: state.transactions.rejected,
   search: state.transactions.search,
   selectedOrders: state.transactions.selectedOrders,
+  showOpenAccount: state.forceUpdate.showOpenAccount,
   transactions: state.transactions,
   unreadMessages: state.global.unreadMessages,
 });

@@ -16,8 +16,8 @@ export const updateInvestorSearch = (search: string) => {
   return typedAction("investors/UPDATE_SEARCH", search);
 };
 
-export const updateCurrentAccount = (order: IInvestorAccountsData | undefined) => {
-  return typedAction("investors/UPDATE_CURRENT_ACCOUNT", order);
+export const updateCurrentAccount = (account: ICurrentAccount | undefined) => {
+  return typedAction("investors/UPDATE_CURRENT_ACCOUNT", account);
 };
 
 export const updateCurrentInvestor = (order: IInvestorData | undefined) => {

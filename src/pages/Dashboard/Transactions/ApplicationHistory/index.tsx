@@ -31,7 +31,7 @@ import {
   sw24,
 } from "../../../../styles";
 import { deleteKey } from "../../../../utils";
-import { DashboardLayout } from "../../DashboardLayout";
+import { DashboardLayout, IDashboardLayoutRef } from "../../DashboardLayout";
 import { ApprovedOrders } from "./Approved";
 import { ApplicationHistoryHeader } from "./Header";
 import { PendingOrders } from "./Incomplete";
@@ -65,6 +65,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     setActiveTab,
     setOrderSummaryActiveTab,
     setScreen,
+    showOpenAccount,
     transactions,
     updateApprovedFilter,
     updateDownloadInitiated,
@@ -96,6 +97,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const [tempTab, setTempTab] = useState<TransactionsTabType | undefined>(undefined);
   const [downloadToastCount, setDownloadToastCount] = useState<number>(selectedOrders.length);
   const [downloadToast, setDownloadToast] = useState<boolean>(false);
+  const dashboardLayoutRef = useRef<IDashboardLayoutRef>();
 
   const tabs: TransactionsTabType[] = ["incomplete", "rejected", "approved"];
   const activeTabIndex = tabs.indexOf(activeTab);
@@ -278,6 +280,12 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     }
   }, [downloadToast]);
 
+  const handleShowOpenAccount = () => {
+    if (showOpenAccount === true && dashboardLayoutRef.current !== null && dashboardLayoutRef.current !== undefined) {
+      dashboardLayoutRef!.current!.setAddClient(true);
+    }
+  };
+
   const tabProps: Omit<ITransactionPageProps, "activeTab"> = {
     isFetching: loading,
     isNotFiltered: isNotFiltered,
@@ -291,7 +299,14 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   let content: JSX.Element;
 
   if (activeTab === "incomplete") {
-    content = <PendingOrders {...tabProps} setDownloadInitiated={updateDownloadInitiated} activeTab={activeTab === "incomplete"} />;
+    content = (
+      <PendingOrders
+        {...tabProps}
+        activeTab={activeTab === "incomplete"}
+        handleShowOpenAccount={handleShowOpenAccount}
+        setDownloadInitiated={updateDownloadInitiated}
+      />
+    );
   } else if (activeTab === "approved") {
     content = <ApprovedOrders {...tabProps} activeTab={activeTab === "approved"} />;
   } else {
@@ -324,7 +339,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   return (
     <View style={fullHW}>
-      <DashboardLayout scrollEnabled={!filterVisible} {...props}>
+      <DashboardLayout scrollEnabled={!filterVisible} ref={dashboardLayoutRef} {...props}>
         <View style={flexChild}>
           <ApplicationHistoryHeader
             activeTab={activeTab}

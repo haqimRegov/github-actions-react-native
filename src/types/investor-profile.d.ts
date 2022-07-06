@@ -2,7 +2,7 @@ declare interface IAccountDetails {
   accountNumber?: string[];
   accountOperationMode?: string | null;
   accountType?: TypeAccountChoices;
-  incomeDistribution?: string;
+  distributionInstruction?: string;
   registrationDate?: string;
 }
 
@@ -38,6 +38,10 @@ declare interface IStructuredInvestorProfile {
   };
 }
 
+declare interface IInvestorOrderHistory extends IDashboardOrder {
+  orderNo: string;
+}
+
 declare interface IInvestorAccount {
   accountDetails: IAccountDetails | null; // accountInformation
   addressInformation: IOrderSummaryAddressInfo; // investorProfile and accountInformation
@@ -48,8 +52,8 @@ declare interface IInvestorAccount {
   employmentInformation: IOrderSummaryEmploymentDetails | null; // investorProfile
   epfDetails: IOrderSummaryEpf | null; // investorProfile
   investorOverview: IAccountInvestorOverview[]; // [Principal, Joint] investorProfile will always be [Principal] only
+  orderHistory: IInvestorOrderHistory[] | null;
   personalDetails: IOrderSummaryPersonalDetails | null; // investorProfile
-  withOrderHistory: boolean | null; // accountInformation
 }
 
 declare type InvestorProfileTabType = "profile" | "declarations" | "document";

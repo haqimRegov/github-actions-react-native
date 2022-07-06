@@ -13,6 +13,9 @@ declare interface IInvestorData {
 declare interface IInvestorsDashboard {
   all: IInvestorsTab;
   allCount: number;
+  currentAccount: ICurrentAccount | undefined;
+  currentInvestor: IInvestorData | undefined;
+  search: string;
 }
 
 declare interface IInvestorsFilter {

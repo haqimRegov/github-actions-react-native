@@ -203,19 +203,17 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
       if (error === null && data !== null) {
         const { pages, investors: investorsResponse, totalCount } = data.result;
 
-        const investorsResponseWithClientId: IInvestorData[] = investorsResponse.map((eachInvestor: IInvestorData) => ({
-          ...eachInvestor,
-          clientId: "1234",
-        }));
         updateInvestors({
           ...investors,
           all: {
             ...investors.all,
-            investors: investorsResponseWithClientId,
+            investors: investorsResponse,
             page: data.result.page,
             pages: pages,
           },
           allCount: totalCount,
+          currentAccount: undefined,
+          currentInvestor: undefined,
         });
         setIsFetching(false);
       }

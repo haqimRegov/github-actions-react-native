@@ -15,7 +15,7 @@ interface TransactionsProps {
 }
 
 export const Investors: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { isForceUpdate, isLogout } = props;
+  const { handleRoute, isForceUpdate, isLogout } = props;
   const [route, setRoute] = useState<InvestorsPageType>(isForceUpdate === true ? "InvestorOverview" : "InvestorList");
   const [activeTab, setActiveTab] = useState<InvestorsTabType>("all");
   const [orderSummaryActiveTab, setOrderSummaryActiveTab] = useState<OrderSummaryTabType>("order");
@@ -29,7 +29,9 @@ export const Investors: FunctionComponent<TransactionsProps> = (props: Transacti
   let investorsPage: JSX.Element = <InvestorList {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
 
   if (route === "InvestorOverview") {
-    investorsPage = <InvestorOverview {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
+    investorsPage = (
+      <InvestorOverview {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} handleRoute={handleRoute} />
+    );
   }
 
   if (route === "InvestorProfile") {

@@ -29,21 +29,11 @@ const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface InvestorOverviewProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
+  handleRoute: (route: DashboardPageType) => void;
   isLogout: boolean;
   setActiveTab: (route: InvestorsTabType) => void;
   setScreen: (route: InvestorsPageType) => void;
 }
-
-const initialData: IInvestor = {
-  email: "",
-  emailLastUpdated: "",
-  isForceUpdate: false,
-  investorDetails: [],
-  mobileNo: "",
-  mobileNoLastUpdated: "",
-  name: "",
-  totalCount: 0,
-};
 
 export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   addClientDetails,
@@ -53,6 +43,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   personalInfo,
   resetClientDetails,
   updateCurrentAccount,
+  updateShowOpenAccount,
   ...dashboardProps
 }: InvestorOverviewProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -62,9 +53,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
-  const [investorData, setInvestorData] = useState<IInvestor>(initialData);
-
-  const { name, email, emailLastUpdated, mobileNo, mobileNoLastUpdated } = investorData;
+  const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
 
   const handleNext = () => {
     if (loading === false) {
@@ -83,49 +72,59 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const handleCancelForceUpdate = () => {
-    if (forceUpdatePrompt === true) {
+    if (client.isForceUpdate === true) {
+      updateShowOpenAccount(true);
       resetClientDetails();
-      setForceUpdatePrompt(false);
+      dashboardProps.handleRoute("Transactions");
+    } else {
+      resetClientDetails();
+      handleBackToInvestorList();
     }
-
-    handleBackToInvestorList();
   };
 
   const handleForceUpdate = () => {
-    setForceUpdatePrompt(false);
-    addClientDetails({
-      ...client.details,
-      principalHolder: {
-        ...client.details!.principalHolder,
-        dateOfBirth: investorData.investorDetails[0].dateOfBirth,
-        clientId: investorData.investorDetails[0].clientId,
-        id: investorData.investorDetails[0].idNumber,
-      },
-      initId: investorData.investorDetails[0].initId,
-      accountHolder: investorData.investorDetails[0].accountHolder,
-    });
-    addPersonalInfo({
-      ...personalInfo,
-      principal: {
-        ...personalInfo.principal,
-        addressInformation: {
-          ...personalInfo.principal?.addressInformation,
-          mailingAddress: investorData.investorDetails[0].address,
-          permanentAddress: investorData.investorDetails[0].address,
+    if (investorData !== undefined) {
+      setForceUpdatePrompt(false);
+      addClientDetails({
+        ...client.details,
+        principalHolder: {
+          ...client.details!.principalHolder,
+          dateOfBirth: investorData.dateOfBirth,
+          clientId: investorData.clientId,
+          id: investorData.idNumber,
         },
-        personalDetails: {
-          ...personalInfo.principal?.personalDetails,
-          dateOfBirth: moment(investorData.investorDetails[0].dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-          name: investorData.name,
+        initId: investorData.initId,
+        accountHolder: investorData.accountHolder,
+      });
+      addPersonalInfo({
+        ...personalInfo,
+        principal: {
+          ...personalInfo.principal,
+          addressInformation: {
+            ...personalInfo.principal?.addressInformation,
+            mailingAddress: investorData.address,
+          },
+          personalDetails: {
+            ...personalInfo.principal?.personalDetails,
+            dateOfBirth: moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+            name: investorData.name,
+          },
         },
-      },
-    });
-    navigation.navigate("ForceUpdate");
+      });
+      navigation.navigate("ForceUpdate");
+    }
   };
 
-  const handleViewAccount = (accountToView: IInvestorAccountsData) => {
+  const handleViewAccount = (accountToView: ICurrentAccount) => {
     updateCurrentAccount(accountToView);
     dashboardProps.setScreen("AccountInformation");
+  };
+
+  const handleViewProfile = () => {
+    if (investorData !== undefined) {
+      updateCurrentAccount({ accountNumber: undefined, clientId: investorData.clientId });
+      dashboardProps.setScreen("InvestorProfile");
+    }
   };
 
   const etbCheckInvestor: IInvestorData =
@@ -167,12 +166,12 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     borderBottomLeftRadius: sw24,
   };
   const headerData = {
-    email,
-    emailLastUpdated,
-    mobileNo,
-    mobileNoLastUpdated,
-    name,
-    setScreen: dashboardProps.setScreen,
+    email: investorData !== undefined ? investorData.email : undefined,
+    emailLastUpdated: investorData !== undefined ? investorData.emailLastUpdated : undefined,
+    mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
+    mobileNoLastUpdated: investorData !== undefined ? investorData.mobileNoLastUpdated : undefined,
+    name: investorData !== undefined ? investorData.name : undefined,
+    handleViewProfile: handleViewProfile,
   };
 
   const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${investorData !== undefined ? investorData.name : "-"}.`;
@@ -202,7 +201,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
               <CustomSpacer space={sh16} />
               <View style={flexRow}>
                 <Tab
-                  badgeCount={investorData!.totalCount}
+                  badgeCount={investorData !== undefined ? investorData.totalCount : 0}
                   selected={true}
                   style={{ height: sh48 }}
                   text={INVESTOR_ACCOUNTS.LABEL_ACCOUNTS}

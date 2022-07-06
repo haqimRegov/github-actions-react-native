@@ -6,12 +6,12 @@ import { DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT, NunitoBold } from "../../../.
 import { centerHorizontal, fs10RegBlue6, fs12RegBlue1 } from "../../../../../styles";
 
 export interface CreatedOnProps extends ITableCustomItem {
-  sortedColumns: TransactionsSortColumnType[];
+  sortedColumns?: TransactionsSortColumnType[];
 }
 
 export const CreatedOn: FunctionComponent<CreatedOnProps> = ({ item, sortedColumns }: CreatedOnProps) => {
-  const { createdOn } = item.rawData as IDashboardOrder;
-  const updatedTextStyle: TextStyle = sortedColumns.includes("createdOn") ? { fontFamily: NunitoBold } : {};
+  const { createdOn } = item.rawData as unknown as IDashboardOrder;
+  const updatedTextStyle: TextStyle = sortedColumns !== undefined && sortedColumns.includes("createdOn") ? { fontFamily: NunitoBold } : {};
   return (
     <View style={centerHorizontal}>
       <Text style={{ ...fs12RegBlue1, ...updatedTextStyle }}>{moment(createdOn, "x").format(DEFAULT_DATE_FORMAT)}</Text>

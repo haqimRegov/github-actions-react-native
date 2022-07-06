@@ -22,13 +22,13 @@ import {
 } from "../../../../../styles";
 
 interface InvestorNameProps extends ITableCustomItem {
-  sortedColumns: TransactionsSortColumnType[];
+  sortedColumns?: TransactionsSortColumnType[];
 }
 
 export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item, sortedColumns }: InvestorNameProps) => {
   const { accountType, investorName, isSeen } = item.rawData as unknown as IDashboardOrder;
   const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
-  const updatedTextStyle: TextStyle = sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {};
+  const updatedTextStyle: TextStyle = sortedColumns !== undefined && sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {};
   const titleStyle: TextStyle = { ...fs12RegBlue1, ...updatedTextStyle, maxWidth: sw100 };
   const subtitleStyle: TextStyle = { ...fs10RegBlue6, ...updatedTextStyle, maxWidth: sw100 };
   const badgeStyle: ViewStyle = {

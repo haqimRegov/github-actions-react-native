@@ -106,7 +106,13 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data, handleExport
         <AdvanceTable
           data={trackingSummary as unknown as ITableData[]}
           columns={columns}
-          RenderCustomItem={(tableData: ITableCustomItem) => <CustomTableItem {...tableData} sortedColumns={[]} />}
+          RenderCustomItem={(tableData: ITableCustomItem) => (
+            <CustomTableItem
+              {...tableData}
+              item={{ ...tableData.item, rawData: { ...tableData.item.rawData, dueDate: null } }}
+              sortedColumns={[]}
+            />
+          )}
           rowContainerStyle={{ minHeight: sh64 }}
         />
       </View>

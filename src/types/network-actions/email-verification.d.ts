@@ -1,12 +1,14 @@
 declare interface IEmailVerificationRequest {
-  initId?: string;
+  clientId: string;
+  id?: string;
+  initId: string;
+  isForceUpdate: boolean;
   principalHolder: {
     email: string;
   };
   jointHolder?: {
     email: string;
   };
-  clientId: string;
 }
 
 declare interface IEmailVerificationResult {

@@ -55,9 +55,6 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   updateCurrentAccount,
   ...dashboardProps
 }: InvestorOverviewProps) => {
-  // eslint-disable-next-line no-console
-  console.log("InvestorOverview currentInvestor", currentInvestor);
-
   const navigation = useNavigation<IStackNavigationProp>();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -134,9 +131,9 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const etbCheckInvestor: IInvestorData =
     client.isForceUpdate === true
       ? {
-          clientId: client.details?.principalHolder?.clientId!,
+          clientId: "",
           idNumber: client.details?.principalHolder?.id!,
-          name: client.details?.principalHolder?.name!,
+          name: "",
           email: "",
           riskTolerance: "",
           mobileNo: "",
@@ -178,7 +175,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     setScreen: dashboardProps.setScreen,
   };
 
-  const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${etbCheckInvestor.name}.`;
+  const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${investorData !== undefined ? investorData.name : "-"}.`;
 
   return (
     <Fragment>

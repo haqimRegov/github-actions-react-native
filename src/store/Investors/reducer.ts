@@ -24,21 +24,6 @@ export function investorsReducer(state = investorsInitialState, action: Investor
         search: "",
         currentAccount: undefined,
         currentInvestor: undefined,
-        currentOrderHistory: undefined,
-        orderHistory: {
-          filter: {
-            dateSorting: "",
-            startDate: undefined,
-            endDate: new Date(),
-            transactionsType: [],
-            accountType: [],
-            orderStatus: [],
-          },
-          orders: [],
-          page: 1,
-          pages: 1,
-          sort: [{ value: "descending", column: "lastUpdated" }],
-        },
       };
     case "investors/RESET_ALL_FILTER":
       return {
@@ -88,23 +73,7 @@ export function investorsReducer(state = investorsInitialState, action: Investor
           },
         },
       };
-    case "investors/ADD_ORDER_HISTORY":
-      return {
-        ...state,
-        orderHistory: {
-          ...state.orderHistory,
-          ...action.payload,
-        },
-      };
-    case "investors/UPDATE_ORDER_HISTORY_SORT":
-      return {
-        ...state,
-        orderHistory: {
-          ...state.orderHistory,
-          page: 1,
-          sort: action.payload,
-        },
-      };
+
     default:
       return state;
   }

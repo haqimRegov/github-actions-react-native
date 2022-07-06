@@ -26,12 +26,12 @@ import { isNotEmpty } from "../../../../../utils";
 const { DASHBOARD_HOME } = Language.PAGE;
 
 export interface TotalInvestmentsProps extends ITableCustomItem {
-  sortedColumns: TransactionsSortColumnType[];
+  sortedColumns?: TransactionsSortColumnType[];
 }
 
 export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ item, lastIndex, sortedColumns }: TotalInvestmentsProps) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(false);
-  const { totalInvestment } = item.rawData as IDashboardOrder;
+  const { totalInvestment } = item.rawData as unknown as IDashboardOrder;
   const handleShowMore = () => {
     setShowToolTip(!showToolTip);
   };
@@ -60,7 +60,8 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
   );
   const tooltipPlacement = lastIndex ? "top" : "bottom";
   const topAdjustment = lastIndex ? -sh56 : undefined;
-  const updatedTextStyle: TextStyle = sortedColumns.includes("totalInvestment") ? { fontFamily: NunitoBold } : {};
+  const updatedTextStyle: TextStyle =
+    sortedColumns !== undefined && sortedColumns.includes("totalInvestment") ? { fontFamily: NunitoBold } : {};
   const style: ViewStyle =
     isNotEmpty(totalInvestment) && totalInvestment.length <= 3
       ? centerHorizontal
@@ -70,7 +71,9 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
     <TouchableWrapper isTouchable={isNotEmpty(totalInvestment) && totalInvestment.length > 3} onPress={handleShowMore}>
       <View style={{ ...style, ...flexChild }} onResponderStart={() => true}>
         {totalInvestment === null || totalInvestment.length === 0 ? (
-          <Text style={fs12RegBlue1}>-</Text>
+          <View style={{ ...centerHorizontal, ...flexChild }}>
+            <Text style={fs12RegBlue1}>-</Text>
+          </View>
         ) : (
           <Fragment>
             {isNotEmpty(totalInvestment) && totalInvestment.length > 0

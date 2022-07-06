@@ -289,7 +289,7 @@ export const ORDER_HISTORY_DUMMY: IDashboardOrder[] = [
     remark: null,
     status: "Submitted",
     totalInvestment: [],
-    transactionType: "Change Request",
+    transactionType: "CR",
     withHardcopy: true,
   },
 ];

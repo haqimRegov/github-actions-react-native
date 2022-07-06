@@ -14,14 +14,14 @@ declare interface CustomTableItemProps extends ITableCustomItem {
   onClose?: () => void;
   setCurrentOrder?: (order: IDashboardOrder) => void;
   setScreen?: (route: TransactionsPageType) => void;
-  sortedColumns: TransactionsSortColumnType[];
+  sortedColumns?: TransactionsSortColumnType[];
 }
 export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sortedColumns, ...rest }: CustomTableItemProps) => {
   switch (rest.keyName.key) {
     case "investorName":
       return <InvestorName sortedColumns={sortedColumns} {...rest} />;
     case "status":
-      return <PendingStatus sortedColumns={sortedColumns} {...rest} />;
+      return <PendingStatus {...rest} />;
     case "totalInvestment":
       return <TotalInvestments sortedColumns={sortedColumns} {...rest} />;
     case "createdOn":

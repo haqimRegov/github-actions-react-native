@@ -1,5 +1,8 @@
 declare interface IEmailOtpVerificationRequest {
-  initId?: string;
+  clientId: string;
+  id?: string;
+  initId: string;
+  isForceUpdate: boolean;
   principalHolder: {
     email: string;
     code: string;
@@ -8,7 +11,6 @@ declare interface IEmailOtpVerificationRequest {
     email: string;
     code: string;
   };
-  clientId: string;
 }
 
 declare interface IEmailOtpVerificationResult {

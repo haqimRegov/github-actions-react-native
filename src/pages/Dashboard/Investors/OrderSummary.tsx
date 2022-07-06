@@ -20,11 +20,10 @@ interface OrderSummaryPageProps extends InvestorsStoreProps {
 const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = ({
   activeTab,
   currentOrder,
-  setScreen,
   setActiveTab,
-  updateCurrentOrder,
-  updateCurrentInvestor,
+  setScreen,
   updateCurrentAccount,
+  updateCurrentOrder,
 }: OrderSummaryPageProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
@@ -56,33 +55,14 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = ({
   };
 
   const handleViewInvestorProfile = () => {
-    if (orderSummary?.profile[0].clientId !== undefined && orderSummary?.profile[0].clientId !== null) {
-      updateCurrentInvestor({
-        clientId: orderSummary?.profile[0].clientId,
-        email: orderSummary?.profile[0].contactDetails.email,
-        idNumber: orderSummary?.profile[0].idNumber,
-        mobileNo: orderSummary?.profile[0].contactDetails.mobileNumber,
-        name: orderSummary?.profile[0].name,
-        riskTolerance: orderSummary?.profile[0].personalDetails.riskProfile,
-      });
+    if (orderSummary!.profile[0].clientId !== undefined && orderSummary!.profile[0].clientId !== null) {
+      updateCurrentAccount({ accountNumber: undefined, clientId: orderSummary!.profile[0].clientId });
       setScreen("InvestorProfile");
     }
   };
 
-  const handleViewAccountDetails = (accNo: string) => {
-    updateCurrentAccount({
-      accountHolder: "Principal",
-      accountNo: accNo,
-      accountOpeningDate: "",
-      address: {},
-      clientId: "",
-      dateOfBirth: "",
-      idNumber: "",
-      initId: "",
-      jointName: "",
-      name: "",
-      riskTolerance: "",
-    });
+  const handleViewAccountDetails = (account: ICurrentAccount) => {
+    updateCurrentAccount(account);
     setScreen("AccountInformation");
   };
 

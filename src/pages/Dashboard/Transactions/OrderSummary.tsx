@@ -18,8 +18,7 @@ interface OrderSummaryPageProps extends TransactionsStoreProps {
 }
 
 const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: OrderSummaryPageProps) => {
-  const { activeTab, currentOrder, setScreen, navigation, setActiveTab, updateCurrentOrder, updateCurrentInvestor, updateCurrentAccount } =
-    props;
+  const { activeTab, currentOrder, setScreen, navigation, setActiveTab, updateCurrentOrder, updateCurrentAccount } = props;
   const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,41 +48,20 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: 
   };
 
   const handleViewInvestorProfile = () => {
-    if (orderSummary?.profile[0].clientId !== undefined && orderSummary?.profile[0].clientId !== null) {
-      updateCurrentInvestor({
-        clientId: orderSummary?.profile[0].clientId,
-        email: orderSummary?.profile[0].contactDetails.email,
-        idNumber: orderSummary?.profile[0].idNumber,
-        mobileNo: orderSummary?.profile[0].contactDetails.mobileNumber,
-        name: orderSummary?.profile[0].name,
-        riskTolerance: orderSummary?.profile[0].personalDetails.riskProfile,
-      });
+    if (orderSummary!.profile[0].clientId !== undefined && orderSummary!.profile[0].clientId !== null) {
+      updateCurrentAccount({ accountNumber: undefined, clientId: orderSummary!.profile[0].clientId });
       setScreen("InvestorProfile");
     }
   };
 
-  const handleViewAccountDetails = (accNo: string) => {
-    updateCurrentAccount({
-      accountHolder: "Principal",
-      accountNo: accNo,
-      accountOpeningDate: "",
-      address: {},
-      clientId: "",
-      dateOfBirth: "",
-      idNumber: "",
-      initId: "",
-      jointName: "",
-      name: "",
-      riskTolerance: "",
-    });
+  const handleViewAccountDetails = (account: ICurrentAccount) => {
+    updateCurrentAccount(account);
     setScreen("AccountInformation");
   };
 
   const handleFetch = async () => {
-    // setLoading(true);
     const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
     const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
-    // setLoading(false);
     if (orderSummaryResponse !== undefined) {
       const { data, error } = orderSummaryResponse;
       if (error === null && data !== null) {

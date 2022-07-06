@@ -3,7 +3,10 @@ export const DICTIONARY_TRANSACTIONS_DATE = [
   { label: "Last Updated", value: "Last Updated" },
 ];
 
-export const DICTIONARY_TRANSACTIONS_TYPE = [{ label: "Sales-AO", value: "Sales-AO" }];
+export const DICTIONARY_TRANSACTIONS_TYPE = [
+  { label: "Sales-AO", value: "Sales-AO" },
+  { label: "CR", value: "CR" },
+];
 
 export const DICTIONARY_TRANSACTIONS_ACCOUNT_TYPE = [
   { label: "Individual", value: "Individual" },

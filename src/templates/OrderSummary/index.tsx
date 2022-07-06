@@ -19,8 +19,8 @@ import {
   sw24,
   sw8,
 } from "../../styles";
+import { DocumentsTab } from "../Dashboard";
 import { AccountDetails } from "./Account";
-import { Document } from "./Document";
 import { OrderDetails } from "./OrderDetails";
 import { OrderDetailsCR } from "./OrderDetailsCR";
 import { Tracking } from "./Tracking";
@@ -28,14 +28,12 @@ import { Tracking } from "./Tracking";
 const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 interface OrderDetailsProps {
-  // navigation: IStackNavigationProp;
-  // setScreen: (route: TransactionsPageType) => void;
   activeTab: OrderSummaryTabType;
   currentOrder: IDashboardOrder | undefined;
   handleBackToTransactions: () => void;
   handleExportPDF: () => void;
   handleFetch: () => void;
-  handleViewAccountDetails: (accNo: string) => void;
+  handleViewAccountDetails: (account: ICurrentAccount) => void;
   handleViewInvestorProfile: () => void;
   loading: boolean;
   orderSummary: IDashboardOrderSummary | undefined;
@@ -46,21 +44,15 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   const {
     activeTab,
     currentOrder,
-    handleFetch,
-    // setScreen,
-    orderSummary,
-    // navigation,
     handleBackToTransactions,
-    setActiveTab,
-    handleViewInvestorProfile,
-    handleViewAccountDetails,
     handleExportPDF,
+    handleFetch,
+    handleViewAccountDetails,
+    handleViewInvestorProfile,
     loading,
-    // updateCurrentOrder,
-    // updateCurrentInvestor,
-    // updateCurrentAccount,
+    orderSummary,
+    setActiveTab,
   } = props;
-  // const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const navigation = useNavigation<IStackNavigationProp>();
 
@@ -92,43 +84,6 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     setFile(undefined);
   };
 
-  // const handleBackToTransactions = () => {
-  //   updateCurrentOrder(undefined);
-  //   setActiveTab("order");
-  //   setScreen("Transactions");
-  // };
-
-  // const handleViewInvestorProfile = () => {
-  //   if (orderSummary?.profile[0].clientId !== undefined && orderSummary?.profile[0].clientId !== null) {
-  //     updateCurrentInvestor({
-  //       clientId: orderSummary?.profile[0].clientId,
-  //       email: orderSummary?.profile[0].contactDetails.email,
-  //       idNumber: orderSummary?.profile[0].idNumber,
-  //       mobileNo: orderSummary?.profile[0].contactDetails.mobileNumber,
-  //       name: orderSummary?.profile[0].name,
-  //       riskTolerance: orderSummary?.profile[0].personalDetails.riskProfile,
-  //     });
-  //     setScreen("InvestorProfile");
-  //   }
-  // };
-
-  // const handleVi`ewAccountDetails = (accNo: string) => {
-  //   updateCurrentAccount({
-  //     accountHolder: "Principal",
-  //     accountNo: accNo,
-  //     accountOpeningDate: "",
-  //     address: {},
-  //     clientId: "",
-  //     dateOfBirth: "",
-  //     idNumber: "",
-  //     initId: "",
-  //     jointName: "",
-  //     name: "",
-  //     riskTolerance: "",
-  //   });
-  //   setScreen("AccountInformation");
-  // };`
-
   const contentProps = { data: orderSummary!, setFile: setFile };
 
   let content: JSX.Element =
@@ -139,7 +94,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     );
 
   if (activeTab === "document") {
-    content = <Document {...contentProps} />;
+    content = <DocumentsTab documentSummary={orderSummary!.documentSummary} setFile={setFile} />;
   }
 
   if (activeTab === "profile") {
@@ -149,27 +104,6 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   if (activeTab === "tracking") {
     content = <Tracking {...contentProps} handleExportPDF={handleExportPDF} loading={loading} />;
   }
-
-  // const handleFetch = async () => {
-  //   // setLoading(true);
-  //   const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
-  //   console.log("IGetOrderSummaryRequest", request);
-  //   console.log("currentOrder", currentOrder);
-  //   const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
-  //   console.log("orderSummaryResponse", orderSummaryResponse);
-  //   // setLoading(false);
-  //   if (orderSummaryResponse !== undefined) {
-  //     const { data, error } = orderSummaryResponse;
-  //     if (error === null && data !== null) {
-  //       setOrderSummary(data.result);
-  //     }
-  //     if (error !== null) {
-  //       setTimeout(() => {
-  //         Alert.alert(error.message);
-  //       }, 100);
-  //     }
-  //   }
-  // };
 
   useEffect(() => {
     handleFetch();

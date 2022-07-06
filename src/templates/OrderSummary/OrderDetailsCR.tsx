@@ -26,7 +26,7 @@ const { DASHBOARD_ORDER_DETAILS } = Language.PAGE;
 
 declare interface OrderDetailsCRProps {
   data: IDashboardOrderSummary;
-  handleViewAccountDetails: (acctNo: string) => void;
+  handleViewAccountDetails: (account: ICurrentAccount) => void;
 }
 
 export const OrderDetailsCR: FunctionComponent<OrderDetailsCRProps> = ({ data, handleViewAccountDetails }: OrderDetailsCRProps) => {
@@ -42,6 +42,7 @@ export const OrderDetailsCR: FunctionComponent<OrderDetailsCRProps> = ({ data, h
     documentSummary: null,
     employmentInformation: investor.employmentInformation,
     epfDetails: investor.epfDetails,
+    orderHistory: null,
     personalDetails: investor.personalDetails,
     investorOverview: [
       {
@@ -52,7 +53,6 @@ export const OrderDetailsCR: FunctionComponent<OrderDetailsCRProps> = ({ data, h
         riskProfile: investor.personalDetails.riskProfile,
       },
     ],
-    withOrderHistory: null,
   };
 
   const { contactDetails, declarations } = getStructuredInvestorProfile(profileToStructure);
@@ -119,7 +119,7 @@ export const OrderDetailsCR: FunctionComponent<OrderDetailsCRProps> = ({ data, h
               <Fragment>
                 {transactionDetails.accountNumber.map((acctNo: string, index: number) => {
                   const handleViewDetails = () => {
-                    handleViewAccountDetails(acctNo);
+                    handleViewAccountDetails({ accountNumber: acctNo, clientId: investor.clientId! });
                   };
                   return (
                     <View key={index}>

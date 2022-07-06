@@ -121,7 +121,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     const employeeAddress = employmentInformation.address ? Object.values(employmentInformation.address.address!).join(" ") : "";
 
     employmentAddress = [
-      { label: INVESTOR_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employeeAddress },
+      { label: INVESTOR_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employeeAddress, titleStyle: fsTransformNone },
       { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
       { label: INVESTOR_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
       { label: INVESTOR_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
@@ -142,7 +142,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   if (fatca.usCitizen === "No") {
     fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: fatca.usBorn as string });
     if (fatca.usBorn === "Yes") {
-      fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress });
+      fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
       if (fatca.certificate) {
         fatcaSummary.push({
           label: INVESTOR_PROFILE.LABEL_CERTIFICATE,

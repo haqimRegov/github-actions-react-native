@@ -28,11 +28,12 @@ export const getStructuredAccountInformation = (account: IInvestorAccount) => {
         accountDetails.accountNumber?.length > 0
           ? accountDetails.accountNumber[0]
           : "-",
+      titleStyle: fsTransformNone,
     },
     { label: ACCOUNT_INFORMATION.LABEL_ACCOUNT_OPENING, title: accountOpeningDate },
     {
       label: ACCOUNT_INFORMATION.LABEL_DISTRIBUTION,
-      title: accountDetails !== null && accountDetails.incomeDistribution !== null ? accountDetails.incomeDistribution : "-",
+      title: accountDetails !== null && accountDetails.distributionInstruction !== null ? accountDetails.distributionInstruction : "-",
     },
   ];
 

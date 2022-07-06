@@ -17,6 +17,7 @@ import { Language } from "../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../store";
 import {
   border,
+  circle,
   colorBlue,
   colorGray,
   colorWhite,
@@ -107,7 +108,13 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
                 <CustomSpacer isHorizontal={true} space={sw24} />
                 <Text style={fs16BoldBlue1}>{INVESTOR_INFORMATION.CARD_LABEL_CONTACT}</Text>
                 <CustomFlexSpacer />
-                <IconButton color={colorBlue._1} name="pencil" onPress={handleEdit} style={{ height: sw40, width: sw40 }} />
+                <IconButton
+                  color={colorBlue._1}
+                  name="pencil"
+                  onPress={handleEdit}
+                  style={circle(sw40, undefined)}
+                  withHover={{ color: colorBlue._2 }}
+                />
                 <CustomSpacer isHorizontal={true} space={sw16} />
               </View>
             }

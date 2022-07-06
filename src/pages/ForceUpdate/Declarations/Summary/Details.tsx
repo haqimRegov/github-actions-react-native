@@ -16,6 +16,7 @@ import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../
 import {
   border,
   borderBottomBlue4,
+  circle,
   colorBlue,
   colorGray,
   colorWhite,
@@ -143,7 +144,13 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
             <CustomSpacer isHorizontal={true} space={sw24} />
             <Text style={fs16BoldBlue1}>{DECLARATION_SUMMARY.TITLE_FATCA}</Text>
             <CustomFlexSpacer />
-            <IconButton color={colorBlue._1} name="pencil" onPress={handleEditFatca} style={{ height: sw40, width: sw40 }} />
+            <IconButton
+              color={colorBlue._1}
+              name="pencil"
+              onPress={handleEditFatca}
+              style={circle(sw40, undefined)}
+              withHover={{ color: colorBlue._2 }}
+            />
             <CustomSpacer isHorizontal={true} space={sw16} />
           </View>
         }
@@ -160,7 +167,13 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
             <CustomSpacer isHorizontal={true} space={sw24} />
             <Text style={fs16BoldBlue1}>{DECLARATION_SUMMARY.TITLE_CRS}</Text>
             <CustomFlexSpacer />
-            <IconButton color={colorBlue._1} name="pencil" onPress={handleEditCrs} style={{ height: sw40, width: sw40 }} />
+            <IconButton
+              color={colorBlue._1}
+              name="pencil"
+              onPress={handleEditCrs}
+              style={circle(sw40, undefined)}
+              withHover={{ color: colorBlue._2 }}
+            />
             <CustomSpacer isHorizontal={true} space={sw16} />
           </View>
         }

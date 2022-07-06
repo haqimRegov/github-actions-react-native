@@ -24,8 +24,8 @@ import {
   sw8,
   sw96,
 } from "../../styles";
+import { DocumentsTab } from "../Dashboard";
 import { DeclarationsTab } from "./DeclarationsTab";
-import { DocumentsTab } from "./DocumentsTab";
 import { ProfileTab } from "./ProfileTab";
 
 const { INVESTOR_PROFILE } = Language.PAGE;
@@ -61,7 +61,7 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({ data,
   }
 
   if (activeTab === "document" && data !== undefined) {
-    content = <DocumentsTab data={data} {...tabProps} />;
+    content = <DocumentsTab documentSummary={data.documentSummary!} {...tabProps} />;
   }
 
   if (activeTab === "profile" && data !== undefined) {
@@ -87,11 +87,15 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({ data,
     color: colorWhite._1,
   };
 
-  const profileTabs: { text: string }[] = [
-    { text: INVESTOR_PROFILE.TAB_TITLE_PROFILE },
-    { text: INVESTOR_PROFILE.TAB_TITLE_DECLARATIONS },
-    { text: INVESTOR_PROFILE.TAB_TITLE_DOCUMENT },
-  ];
+  const profileTabs: { text: string }[] = [{ text: INVESTOR_PROFILE.TAB_TITLE_PROFILE }];
+
+  if (data !== undefined && data !== null && data.declaration !== null) {
+    profileTabs.push({ text: INVESTOR_PROFILE.TAB_TITLE_DECLARATIONS });
+  }
+
+  if (data !== undefined && data !== null && data.documentSummary !== null) {
+    profileTabs.push({ text: INVESTOR_PROFILE.TAB_TITLE_DOCUMENT });
+  }
 
   const buttonStyle: ViewStyle = {
     borderColor: colorBlue._1,

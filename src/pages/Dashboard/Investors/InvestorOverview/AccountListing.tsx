@@ -30,8 +30,8 @@ const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface AccountListingProps {
   currentInvestor?: IInvestorData;
-  investorData: IInvestor;
-  handleViewAccount: (account: IInvestorAccountsData) => void;
+  handleViewAccount: (account: ICurrentAccount) => void;
+  investorData?: IInvestor;
   isFetching: boolean;
   navigation: IStackNavigationProp;
   page: number;
@@ -107,7 +107,10 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   };
 
   const handleView = (item: ITableRowData) => {
-    handleViewAccount(item.rawData as unknown as IInvestorAccountsData);
+    const data = item.rawData as unknown as IInvestorAccountsData;
+    if (investorData !== undefined && data !== undefined && data.accountNo !== undefined) {
+      handleViewAccount({ accountNumber: data.accountNo, clientId: investorData.clientId });
+    }
   };
 
   const findInvestorName = sort.filter((sortType) => sortType.column === "name");
@@ -227,6 +230,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       navigation,
       setIsFetching,
     );
+
     if (investorDetailsResponse !== undefined) {
       const { data, error } = investorDetailsResponse;
       if (error === null && data !== null) {
@@ -264,7 +268,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
     <View style={{ ...flexChild, ...px(sw16) }}>
       <AdvanceTable
         columns={columns}
-        data={isFetching === true ? [] : (investorData.investorDetails as unknown as ITableData[])}
+        data={isFetching === true || investorData === undefined ? [] : (investorData.investorDetails as unknown as ITableData[])}
         RenderCustomItem={(data: ITableCustomItem) => <InvestorDetailsCustomTableItem {...data} sortedColumns={sortedColumns} />}
         RenderEmptyState={() => (
           <EmptyTable

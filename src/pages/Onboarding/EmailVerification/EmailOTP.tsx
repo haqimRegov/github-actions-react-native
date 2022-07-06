@@ -92,8 +92,9 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       fetching.current = true;
       setPrincipalError(undefined);
       const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
-      const request = {
-        initId: details?.initId,
+      const request: IEmailOtpVerificationRequest = {
+        initId: details!.initId!,
+        isForceUpdate: false,
         clientId: principalClientId,
         principalHolder: { email: principalEmail, code: principalOtp },
         jointHolder: jointRequest,

@@ -1,51 +1,47 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
+import { getInvestorAccountDetails } from "../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
 import { InvestorProfile } from "../../../templates";
-import { INVESTOR_PROFILE_DUMMY_RESPONSE } from "../Transactions/change-request-summary-dummy";
 
 interface InvestorProfilePageProps extends InvestorsStoreProps {
   setScreen: (route: InvestorsPageType) => void;
 }
 
-const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
-  currentInvestor,
-  setScreen,
-}: InvestorProfilePageProps) => {
+const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({ currentAccount, setScreen }: InvestorProfilePageProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const [investorProfile, setInvestorProfile] = useState<IInvestorAccount | undefined>(undefined);
 
   const handleBack = () => {
-    setScreen("InvestorOverview");
+    setScreen(currentAccount?.accountNumber !== undefined ? "AccountInformation" : "InvestorOverview");
   };
 
   const handleFetch = async () => {
-    // TODO integration using currentInvestor.clientId
-    // eslint-disable-next-line no-console
-    console.log("InvestorProfileComponent currentInvestor", currentInvestor);
-    // setLoading(true);
-    // const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
-    // const dashboardResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
-    // console.log(dashboardResponse);
-    // setLoading(false);
-    // if (dashboardResponse !== undefined) {
-    //   const { data, error } = dashboardResponse;
-    //   if (error === null && data !== null) {
-    //     setInvestorProfile(data.result);
-    //   }
-    //   if (error !== null) {
-    //     setTimeout(() => {
-    //       Alert.alert(error.message);
-    //     }, 100);
-    //   }
-    // }
-    setInvestorProfile(INVESTOR_PROFILE_DUMMY_RESPONSE);
+    const request: IInvestorAccountDetailsRequest = { clientId: currentAccount!.clientId };
+    const accountDetailsResponse: IInvestorAccountDetailsResponse = await getInvestorAccountDetails(request, navigation);
+    if (accountDetailsResponse !== undefined) {
+      const { data, error } = accountDetailsResponse;
+      if (error === null && data !== null) {
+        setInvestorProfile(data.result);
+      }
+      if (error !== null) {
+        setTimeout(() => {
+          Alert.alert(error.message);
+        }, 100);
+      }
+    }
+
+    return undefined;
   };
 
   useEffect(() => {
-    handleFetch();
+    if (investorProfile === undefined) {
+      handleFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

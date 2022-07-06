@@ -45,7 +45,7 @@ export const updateSearch = (search: string) => {
   return typedAction("transactions/UPDATE_SEARCH", search);
 };
 
-export const updateCurrentOrder = (order: IDashboardOrder | undefined) => {
+export const updateCurrentOrder = (order: IDashboardOrder | IInvestorOrderHistory | undefined) => {
   return typedAction("transactions/VIEW_ORDER", order);
 };
 

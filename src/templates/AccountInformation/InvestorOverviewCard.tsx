@@ -38,8 +38,8 @@ export const InvestorOverviewCard: FunctionComponent<InvestorOverviewCardProps> 
   accountType,
   handleViewProfile,
   info,
-  setFile,
-}: InvestorOverviewCardProps) => {
+}: // setFile,
+InvestorOverviewCardProps) => {
   const sectionTitle = accountHolder === "Principal" ? ACCOUNT_INFORMATION.SECTION_PRINCIPAL : ACCOUNT_INFORMATION.SECTION_JOINT;
 
   const labeledTitleProps: Partial<LabeledTitleProps> = {
@@ -47,11 +47,14 @@ export const InvestorOverviewCard: FunctionComponent<InvestorOverviewCardProps> 
     style: { width: sw336 },
   };
 
-  const handleViewId = () => {
-    if (info.id !== undefined && info.id !== null) {
-      setFile(info.id);
-    }
-  };
+  // TODO view ID, there's an issue with the response type
+  // const handleViewId = () => {
+  //   if (info.id !== undefined && info.id !== null) {
+  //     setFile(info.id);
+  //   }
+  // };
+
+  // const idNumberIcon = info.id !== undefined && info.id !== null ? "profile-card" : undefined;
 
   return (
     <View>
@@ -84,11 +87,11 @@ export const InvestorOverviewCard: FunctionComponent<InvestorOverviewCardProps> 
         <CustomSpacer isHorizontal={true} space={sw64} />
         <LabeledTitle
           {...labeledTitleProps}
-          label={`${ACCOUNT_INFORMATION.LABEL_INVESTOR} ${info.idType}`}
-          titleIcon="profile-card"
+          label={`${ACCOUNT_INFORMATION.LABEL_INVESTOR} ${info.idType || "-"}`}
+          // titleIcon={idNumberIcon}
           iconSize={sw16}
-          onPress={handleViewId}
-          title={info.idNumber}
+          // onPress={handleViewId}
+          title={info.idNumber || "-"}
         />
       </View>
       <CustomSpacer space={sh16} />

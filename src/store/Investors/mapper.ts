@@ -1,6 +1,7 @@
 import { bindActionCreators, Dispatch } from "redux";
 
 import { ClientActionProps } from "../Client";
+import { ForceUpdateActionProps } from "../ForceUpdate";
 import { GlobalActionProps } from "../Global/actions";
 import { PersonalInfoActionProps } from "../PersonalInfo";
 import { RootState } from "../rootReducer";
@@ -24,7 +25,14 @@ export const InvestorsMapStateToProps = (state: RootState) => ({
 
 export const InvestorsMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
-    { ...InvestorsActionProps, ...TransactionsActionProps, ...PersonalInfoActionProps, ...ClientActionProps, ...GlobalActionProps },
+    {
+      ...InvestorsActionProps,
+      ...ForceUpdateActionProps,
+      ...TransactionsActionProps,
+      ...PersonalInfoActionProps,
+      ...ClientActionProps,
+      ...GlobalActionProps,
+    },
     dispatch,
   );
 };

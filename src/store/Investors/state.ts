@@ -1,8 +1,4 @@
-interface IInvestorState extends IInvestorsDashboard {
-  search: string;
-  currentAccount: IInvestorAccountsData | undefined;
-  currentInvestor: IInvestorData | undefined;
-}
+type IInvestorState = IInvestorsDashboard;
 
 export type investorsState = IInvestorState;
 

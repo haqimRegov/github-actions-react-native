@@ -61,6 +61,8 @@ const NewSalesComponent = ({
   resetClientDetails,
   setPage,
   setVisible,
+  showOpenAccount,
+  updateShowOpenAccount,
   visible,
 }: NewSalesProps) => {
   const fetching = useRef<boolean>(false);
@@ -109,6 +111,9 @@ const NewSalesComponent = ({
     setInputError1(undefined);
     setErrorMessage(undefined);
     resetClientDetails();
+    if (showOpenAccount === true) {
+      updateShowOpenAccount(false);
+    }
     setPrompt(undefined);
   };
 

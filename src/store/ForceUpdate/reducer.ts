@@ -23,6 +23,11 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
         ...state,
         emailVerified: action.payload,
       };
+    case "forceUpdate/UPDATE_SHOW_OPEN_ACCOUNT":
+      return {
+        ...state,
+        showOpenAccount: action.payload,
+      };
 
     case "forceUpdate/RESET_FORCE_UPDATE":
       return {

@@ -56,12 +56,14 @@ const { DASHBOARD_HOME, DASHBOARD_EDD } = Language.PAGE;
 
 interface PendingOrdersProps extends ITransactionPageProps, TransactionsStoreProps {
   downloadInitiated: boolean;
+  handleShowOpenAccount: () => void;
   setDownloadInitiated: (toggle: boolean) => void;
 }
 
 const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   activeTab,
   downloadInitiated,
+  handleShowOpenAccount,
   incomplete,
   isFetching,
   isLogout,
@@ -327,6 +329,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
+        // delay showing of New Sales modal only after response because of Modal Issue
+        handleShowOpenAccount();
         updateTransactions({
           ...transactions,
           incomplete: {

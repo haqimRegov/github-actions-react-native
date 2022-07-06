@@ -38,12 +38,12 @@ import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 interface IInvestorAccountHeaderProps {
-  email: string;
-  emailLastUpdated: string;
-  mobileNo: string;
-  mobileNoLastUpdated: string;
-  name: string;
-  setScreen: (route: InvestorsPageType) => void;
+  email?: string;
+  emailLastUpdated?: string;
+  mobileNo?: string;
+  mobileNoLastUpdated?: string;
+  name?: string;
+  handleViewProfile: () => void;
 }
 
 export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderProps> = ({
@@ -52,7 +52,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
   mobileNo,
   mobileNoLastUpdated,
   name,
-  setScreen,
+  handleViewProfile,
 }: IInvestorAccountHeaderProps) => {
   const pageContainer: ViewStyle = {
     ...fullWidth,
@@ -72,7 +72,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
   };
 
   const initials =
-    name !== "" && isNotEmpty(name)
+    name !== undefined && name !== "" && isNotEmpty(name)
       ? name
           .split(" ")
           .filter((text) => text !== "")
@@ -89,11 +89,15 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
     height: sh24,
   };
 
-  const handleViewProfile = () => {
-    setScreen("InvestorProfile");
-  };
+  const emailDate =
+    emailLastUpdated !== undefined
+      ? `${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(emailLastUpdated, "x").format(DEFAULT_DATE_FORMAT)}`
+      : "";
 
-  // TODO handle header data that TOMS cannot provide
+  const mobileDate =
+    mobileNoLastUpdated !== undefined
+      ? `${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(mobileNoLastUpdated, "x").format(DEFAULT_DATE_FORMAT)}`
+      : "";
 
   return (
     <View style={pageContainer}>
@@ -114,9 +118,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <View>
                     <Text style={fs16BoldBlue1}>{mobileNo}</Text>
-                    <Text style={fs10RegGray4}>{`${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(mobileNoLastUpdated, "x").format(
-                      DEFAULT_DATE_FORMAT,
-                    )}`}</Text>
+                    <Text style={fs10RegGray4}>{mobileDate}</Text>
                   </View>
                 </View>
                 <CustomSpacer isHorizontal={true} space={sw40} />
@@ -127,9 +129,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   <View>
                     <Text style={fs16BoldBlue1}>{email}</Text>
-                    <Text style={fs10RegGray4}>{`${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(emailLastUpdated, "x").format(
-                      DEFAULT_DATE_FORMAT,
-                    )}`}</Text>
+                    <Text style={fs10RegGray4}>{emailDate}</Text>
                   </View>
                 </View>
               </View>

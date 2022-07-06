@@ -1,28 +1,21 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { View } from "react-native";
 
-import { ColorCard, CustomFlexSpacer, CustomSpacer, TextCard } from "../../components";
+import { ColorCard, CustomSpacer, TextCard } from "../../components";
 import { Language } from "../../constants";
-import { borderBottomRed1, flexRow, fsTransformNone, px, sh16, sh24, sw16, sw24, sw32, sw328, sw56, sw8 } from "../../styles";
+import { fsTransformNone, px, sh16, sh24, sw24, sw328 } from "../../styles";
 import { isNotEmpty } from "../../utils";
 import { summaryColorCardStyleProps } from "../Dashboard";
+import { JointDocumentHeader } from "./JointDocumentHeader";
 
 const { DASHBOARD_DOCUMENT } = Language.PAGE;
 
 interface DocumentsTabProps {
-  data: IInvestorAccount;
+  documentSummary: IDocumentSummary;
   setFile: (value?: FileBase64) => void;
 }
 
-export const DocumentsTab: FunctionComponent<DocumentsTabProps> = ({ data, setFile }: DocumentsTabProps) => {
-  const { documentSummary } = data;
-  const headerStyle: ViewStyle = {
-    ...borderBottomRed1,
-    ...flexRow,
-    marginRight: sw56,
-    marginLeft: sw32,
-  };
-
+export const DocumentsTab: FunctionComponent<DocumentsTabProps> = ({ documentSummary, setFile }: DocumentsTabProps) => {
   // function to display the looped array data
   const populateData = (dataToModify: IOuterDocument) => {
     const displayedData: LabeledTitleProps[] = [];
@@ -66,16 +59,8 @@ export const DocumentsTab: FunctionComponent<DocumentsTabProps> = ({ data, setFi
                       <Fragment key={index}>
                         {documentSummary.accountType !== "Individual" ? (
                           <Fragment>
-                            <CustomSpacer space={sw16} />
-                            <View style={headerStyle}>
-                              <View style={{ marginBottom: sw8 }}>
-                                <Text>{softCopyData.mainHeader}</Text>
-                              </View>
-                              <CustomFlexSpacer />
-                              <View>
-                                <Text>{softCopyData.subHeader}</Text>
-                              </View>
-                            </View>
+                            {index === 0 ? null : <CustomSpacer space={sh16} />}
+                            <JointDocumentHeader document={softCopyData} />
                           </Fragment>
                         ) : null}
                         <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
@@ -127,18 +112,11 @@ export const DocumentsTab: FunctionComponent<DocumentsTabProps> = ({ data, setFi
                               return (
                                 <View key={index}>
                                   {documentSummary.accountType !== "Individual" ? (
-                                    <View style={headerStyle}>
-                                      <View style={{ marginBottom: sw8 }}>
-                                        <Text>{accPhysicalDoc.mainHeader}</Text>
-                                      </View>
-                                      <CustomFlexSpacer />
-                                      <View>
-                                        <Text>{accPhysicalDoc.subHeader}</Text>
-                                      </View>
-                                      <CustomSpacer space={sh16} />
-                                    </View>
+                                    <Fragment>
+                                      {index === 0 ? null : <CustomSpacer space={sh16} />}
+                                      <JointDocumentHeader document={accPhysicalDoc} />
+                                    </Fragment>
                                   ) : null}
-                                  {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh16} /> : null}
                                   <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
                                 </View>
                               );

@@ -134,31 +134,104 @@ const investorDashboard = gql`
   }
 `;
 
-const investorDetailsDashboard = gql`
-  query investorDetailsDashboard($input: InvestorInput) {
-    investorDetailsDashboard(input: $input) {
+const investorAccountDetails = gql`
+  query investorAccountDetails($input: investorAccountDetailsInput) {
+    investorAccountDetails(input: $input) {
       data {
         result {
-          totalCount
-          pages
-          page
-          name
-          email
-          mobileNo
-          emailLastUpdated
-          mobileNoLastUpdated
-          isForceUpdate
-          investorDetails {
+          orderHistory {
+            orderNo
+            transactionType
+            totalInvestment
+            status
+            lastUpdated
+          }
+          documentSummary {
+            accountType
+            softcopy {
+              required
+              documents {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+            hardcopy {
+              required
+              utmcDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+              accDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+          }
+          withOrderHistory
+          investorOverview {
             name
             idNumber
-            accountHolder
-            dateOfBirth
-            riskTolerance
-            accountNo
-            initId
+            riskProfile
             clientId
-            jointName
-            accountOpeningDate
+            idType
+            id {
+              url
+              name
+              type
+            }
+          }
+          accountDetails {
+            accountNumber
+            accountType
+            registrationDate
+            distributionInstruction
+          }
+          personalDetails {
+            dateOfBirth
+            salutation
+            gender
+            nationality
+            bumiputera
+            race
+            placeOfBirth
+            countryOfBirth
+            educationLevel
+            mothersMaidenName
+            maritalStatus
+            riskProfile
+            relationship
+            monthlyHouseholdIncome
+          }
+          epfDetails {
+            epfMemberNumber
+            epfAccountType
+          }
+          employmentInformation {
+            occupation
+            natureOfBusiness
+            annualIncome
+            nameOfEmployer
             address {
               address {
                 line1
@@ -170,6 +243,144 @@ const investorDetailsDashboard = gql`
               postCode
               state
             }
+          }
+          addressInformation {
+            mailingAddress {
+              address {
+                line1
+                line2
+                line3
+              }
+              city
+              country
+              postCode
+              state
+            }
+            permanentAddress {
+              address {
+                line1
+                line2
+                line3
+              }
+              city
+              country
+              postCode
+              state
+            }
+          }
+          contactDetails {
+            officeNumber
+            homeNumber
+            mobileNumber
+            faxNumber
+            email
+          }
+          bankInformation {
+            localBank {
+              currency
+              bankName
+              bankAccountName
+              bankAccountNumber
+              bankLocation
+              bankSwiftCode
+            }
+            foreignBank {
+              currency
+              bankName
+              bankAccountName
+              bankAccountNumber
+              bankLocation
+              bankSwiftCode
+            }
+          }
+          declaration {
+            fatca {
+              usCitizen
+              usBorn
+              confirmAddress
+              certificate {
+                name
+                url
+                type
+              }
+              formW9 {
+                name
+                url
+                type
+              }
+              formW8Ben {
+                name
+                url
+                type
+              }
+              reason
+              correspondenceDeclaration
+            }
+            crs {
+              taxResident
+              tin {
+                country
+                tinNumber
+                reason
+              }
+            }
+            fea {
+              resident
+              borrowingFacility
+              balance
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const investorDetailsDashboard = gql`
+  query investorDetailsDashboard($input: InvestorInput) {
+    investorDetailsDashboard(input: $input) {
+      data {
+        result {
+          totalCount
+          pages
+          page
+          name
+          email
+          mobileNo
+          clientId
+          dateOfBirth
+          address {
+            address {
+              line1
+              line2
+              line3
+            }
+            city
+            country
+            postCode
+          }
+          initId
+          idNumber
+          accountHolder
+          emailLastUpdated
+          mobileNoLastUpdated
+          isForceUpdate
+          investorDetails {
+            idNumber
+            jointIdNumber
+            name
+            accountHolder
+            dateOfBirth
+            riskTolerance
+            accountNo
+            jointName
+            accountOpeningDate
           }
         }
       }
@@ -1304,6 +1515,7 @@ export const GQL_QUERIES = {
   getInbox,
   getOrderSummary,
   getReceiptSummaryList,
+  investorAccountDetails,
   investorDashboard,
   investorDetailsDashboard,
   listHardCopyDocuments,

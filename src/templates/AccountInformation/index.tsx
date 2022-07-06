@@ -87,7 +87,7 @@ export const AccountInformation: FunctionComponent<AccountInformationProps> = (p
 
   const accountInformationTabs: { text: string }[] = [{ text: ACCOUNT_INFORMATION.TAB_TITLE_ACCOUNT }];
 
-  if (data !== undefined && data.withOrderHistory === true) {
+  if (data !== undefined && data.orderHistory !== null && data.orderHistory.length > 0) {
     accountInformationTabs.push({ text: ACCOUNT_INFORMATION.TAB_TITLE_ORDER_HISTORY });
   }
 

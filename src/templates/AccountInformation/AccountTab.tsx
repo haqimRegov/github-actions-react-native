@@ -64,7 +64,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data, handleVie
                 <CustomSpacer space={sh8} />
                 <InvestorOverviewCard
                   accountHolder="Joint"
-                  accountType={investorJoint !== undefined ? "Joint" : "Individual"}
+                  accountType="Joint"
                   handleViewProfile={handleViewProfileJoint}
                   info={investorJoint}
                   setFile={setFile}

@@ -45,24 +45,19 @@ const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
 interface DeclarationDetailsProps {
   address: string;
-  handleNextStep: (route: TypeForceUpdateRoute) => void;
+  handleEditCrs: () => void;
+  handleEditFatca: () => void;
   summary: IDeclarationState;
 }
 
 export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   address,
-  handleNextStep,
+  handleEditCrs,
+  handleEditFatca,
   summary,
 }: DeclarationDetailsProps) => {
   const { width } = Dimensions.get("window");
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
-  const handleEditFatca = () => {
-    handleNextStep("FATCADeclaration");
-  };
-
-  const handleEditCrs = () => {
-    handleNextStep("CRSDeclaration");
-  };
 
   const { fatca, crs } = summary;
 

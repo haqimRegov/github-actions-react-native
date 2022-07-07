@@ -21,6 +21,18 @@ interface DeclarationSummaryProps extends PersonalInfoStoreProps, ForceUpdateCon
   navigation: IStackNavigationProp;
 }
 
+const DISABLED_STEPS_WHILE_EDITING: TypeForceUpdateKey[] = [
+  "InvestorInformation",
+  "Contact",
+  "RiskAssessment",
+  "DeclarationSummary",
+  "Acknowledgement",
+  "TermsAndConditions",
+  "Signatures",
+];
+
+const FINISHED_STEPS_WHILE_EDITING: TypeForceUpdateKey[] = ["InvestorInformation", "Contact", "ContactSummary", "RiskAssessment"];
+
 export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSummaryProps> = ({
   details,
   handleNextStep,
@@ -30,7 +42,6 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
   setLoading,
   updateForceUpdate,
 }: DeclarationSummaryProps) => {
-  const { finishedSteps } = forceUpdate;
   const { principal } = personalInfo;
 
   const fetching = useRef<boolean>(false);
@@ -103,8 +114,16 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
-          const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
-          updatedFinishedSteps.push("Declarations");
+          const newFinishedSteps: TypeForceUpdateKey[] = [
+            "Contact",
+            "ContactSummary",
+            "InvestorInformation",
+            "RiskAssessment",
+            "Declarations",
+            "FATCADeclaration",
+            "CRSDeclaration",
+            "DeclarationSummary",
+          ];
           const newDisabledStep: TypeForceUpdateKey[] = [
             "InvestorInformation",
             "RiskAssessment",
@@ -112,7 +131,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
             "TermsAndConditions",
             "Signatures",
           ];
-          updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+          updateForceUpdate({ ...forceUpdate, finishedSteps: newFinishedSteps, disabledSteps: newDisabledStep });
           return handleNextStep("TermsAndConditions");
         }
 
@@ -129,6 +148,26 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
 
   const handleContinue = () => {
     handleSetupClient();
+  };
+
+  const handleEditFatca = () => {
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [...DISABLED_STEPS_WHILE_EDITING];
+    const updatedFinishedSteps: TypeForceUpdateKey[] = [...FINISHED_STEPS_WHILE_EDITING];
+    updatedDisabledSteps.push("CRSDeclaration");
+    updatedFinishedSteps.push("CRSDeclaration");
+
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    handleNextStep("FATCADeclaration");
+  };
+
+  const handleEditCrs = () => {
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [...DISABLED_STEPS_WHILE_EDITING];
+    const updatedFinishedSteps: TypeForceUpdateKey[] = [...FINISHED_STEPS_WHILE_EDITING];
+    updatedDisabledSteps.push("FATCADeclaration");
+    updatedFinishedSteps.push("FATCADeclaration");
+
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    handleNextStep("CRSDeclaration");
   };
 
   return (
@@ -148,7 +187,12 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
               titleStyle={fs16RegGray5}
             />
             <CustomSpacer space={sh24} />
-            <DeclarationDetails address={address} handleNextStep={handleNextStep} summary={personalInfo.principal?.declaration!} />
+            <DeclarationDetails
+              address={address}
+              handleEditCrs={handleEditCrs}
+              handleEditFatca={handleEditFatca}
+              summary={personalInfo.principal?.declaration!}
+            />
             <CustomSpacer space={124} />
           </View>
           <CustomFlexSpacer />

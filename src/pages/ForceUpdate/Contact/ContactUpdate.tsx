@@ -10,33 +10,31 @@ import { isEmail, isNumber } from "../../../utils";
 const { INVESTOR_INFORMATION } = Language.PAGE;
 
 interface ContactUpdate {
-  addPersonalInfo: (state: IPersonalInfoState) => void;
+  contactNumber: IContactNumber[];
   handleCancel?: () => void;
   handleContinue: () => void;
+  inputEmail: string;
   inputEmailError: string | undefined;
-  personalInfo: IPersonalInfoState;
+  isOtpNeeded: boolean;
+  name: string;
+  setContactNumber: (value: IContactNumber[]) => void;
+  setInputEmail: (value: string) => void;
   setInputEmailError: (value: string | undefined) => void;
 }
 
 export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
-  addPersonalInfo,
+  contactNumber,
   handleCancel,
   handleContinue,
+  inputEmail,
   inputEmailError,
-  personalInfo,
+  isOtpNeeded,
+  name,
+  setContactNumber,
+  setInputEmail,
   setInputEmailError,
 }: ContactUpdate) => {
-  const { principal } = personalInfo;
-  const contactNumber = principal!.contactDetails!.contactNumber!;
-  const inputEmail = principal!.contactDetails!.emailAddress!;
   const inputMobile = contactNumber[0];
-
-  const setContactNumber = (value: IContactNumber[]) => {
-    addPersonalInfo({
-      ...personalInfo,
-      principal: { ...principal, contactDetails: { ...principal!.contactDetails, contactNumber: value } },
-    });
-  };
 
   const setInputMobile = (data: IContactNumber) => {
     const updatedNumber: IContactNumberState[] = [...contactNumber];
@@ -44,13 +42,6 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
     updatedNumber[0].error = data.value === "" ? undefined : data.error;
     setContactNumber(updatedNumber);
   };
-
-  const setInputEmail = (value: string) =>
-    addPersonalInfo({
-      ...personalInfo,
-      principal: { ...principal, contactDetails: { ...principal?.contactDetails, emailAddress: value } },
-    });
-
   const validateEmail = (value: string) => {
     if (isEmail(value) === false) {
       return ERROR.INVESTMENT_INVALID_EMAIL;
@@ -59,12 +50,12 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
   };
 
   const validateMobile = () => {
-    const updatedNumber: IContactNumberState[] = [...contactNumber];
-    if (isNumber(updatedNumber[0].value) === true || updatedNumber[0].value === "") {
-      const errorCheck = updatedNumber[0].value === "" ? ERROR.INVALID_NUMBER : undefined;
-      updatedNumber[0].error = errorCheck;
+    const updatedNumber: IContactNumber = { ...inputMobile };
+    if (isNumber(updatedNumber.value) === true || updatedNumber.value === "") {
+      const errorCheck = updatedNumber.value === "" ? ERROR.INVALID_NUMBER : undefined;
+      updatedNumber.error = errorCheck;
     }
-    setContactNumber(updatedNumber);
+    setInputMobile(updatedNumber);
   };
 
   const checkEmail = () => {
@@ -94,8 +85,8 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
       continueTextStyle={fsTransformNone}
       handleCancel={handleCancel}
       handleContinue={handleContinue}
-      heading={`${INVESTOR_INFORMATION.HEADING_HELLO} ${personalInfo.principal!.personalDetails!.name},`}
-      labelContinue={INVESTOR_INFORMATION.BUTTON_GET_OTP}
+      heading={`${INVESTOR_INFORMATION.HEADING_HELLO} ${name},`}
+      labelContinue={isOtpNeeded === true ? INVESTOR_INFORMATION.BUTTON_GET_OTP : INVESTOR_INFORMATION.BUTTON_SAVE}
       noBounce={true}
       subheading={INVESTOR_INFORMATION.SUBHEADING_EMAIL}
       subtitle={INVESTOR_INFORMATION.SUBTITLE_EMAIL_UPDATE}

@@ -40,17 +40,42 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
   };
 
   const handleContinue = () => {
-    const route: TypeForceUpdateRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
+    let route: TypeForceUpdateKey = "CRSDeclaration";
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
+    const updatedFinishedSteps: TypeForceUpdateKey[] = [...forceUpdate.finishedSteps];
     const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
-    const findFatca = updatedDisabledSteps.indexOf("FATCADeclaration");
-    if (findCrs !== -1) {
+    const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
+    if (findFinishedFatca === -1) {
+      updatedFinishedSteps.push("FATCADeclaration");
+    }
+    const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
+    if (findFinishedCrs !== -1) {
+      route = "DeclarationSummary";
+      const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+      if (findDeclarationSummary !== -1) {
+        updatedDisabledSteps.splice(findDeclarationSummary, 1);
+      }
+    }
+
+    if (findCrs !== -1 && findFinishedCrs === -1) {
       updatedDisabledSteps.splice(findCrs, 1);
     }
+    const findFatca = updatedDisabledSteps.indexOf("FATCADeclaration");
     if (findFatca === -1) {
       updatedDisabledSteps.push("FATCADeclaration");
     }
-    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
+
+    const findInvestorInformation = updatedDisabledSteps.indexOf("InvestorInformation");
+    if (findInvestorInformation !== -1) {
+      updatedDisabledSteps.splice(findInvestorInformation, 1);
+    }
+
+    const findRiskAssessment = updatedDisabledSteps.indexOf("RiskAssessment");
+    if (findRiskAssessment !== -1) {
+      updatedDisabledSteps.splice(findRiskAssessment, 1);
+    }
+
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
     handleNextStep(route);
   };
 

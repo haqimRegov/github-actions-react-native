@@ -14,23 +14,25 @@ interface ContactContentProps extends ForceUpdateContentProps, PersonalInfoStore
 
 const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
   addPersonalInfo,
-  handleCancelForceUpdate,
-  personalInfo,
   details,
   forceUpdate,
+  handleCancelForceUpdate,
   handleNextStep,
+  personalInfo,
   setLoading,
   updateForceUpdate,
 }: ContactContentProps) => {
+  const inputClientId = details?.principalHolder?.clientId!;
+  const { emailOtpSent, principal } = personalInfo;
+  const { contactNumber, emailAddress } = principal!.contactDetails!;
+
   const navigation = useNavigation<IStackNavigationProp>();
-  const { emailOtpSent } = personalInfo;
   const fetching = useRef<boolean>(false);
   const [page, setPage] = useState<"contact-update" | "verify-otp">("contact-update");
-
+  const [inputEmail, setInputEmail] = useState(emailAddress!);
   const [emailError, setEmailError] = useState<string | undefined>(undefined);
 
-  const inputEmail = personalInfo.principal!.contactDetails!.emailAddress!;
-  const inputClientId = details?.principalHolder?.clientId!;
+  const isOtpNeeded = inputEmail !== emailAddress || emailAddress === "" || inputEmail === "";
 
   const handleNavigate = () => {
     handleNextStep("ContactSummary");
@@ -54,10 +56,10 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
       fetching.current = true;
       setEmailError(undefined);
       const request: IEmailVerificationRequest = {
-        isForceUpdate: true,
+        clientId: inputClientId,
         id: details!.principalHolder!.id,
         initId: details!.initId!,
-        clientId: inputClientId,
+        isForceUpdate: true,
         principalHolder: { email: inputEmail },
       };
       setLoading(true);
@@ -68,8 +70,11 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
         const { data, error } = response;
         if (error === null && data !== null) {
           if (data.result.status === true) {
-            addPersonalInfo({ ...personalInfo, emailOtpSent: true });
-            setEmailOtpSent(true);
+            addPersonalInfo({
+              ...personalInfo,
+              emailOtpSent: true,
+              principal: { ...principal, contactDetails: { ...principal!.contactDetails, emailAddress: inputEmail } },
+            });
             setPage("verify-otp");
           }
         }
@@ -87,7 +92,18 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
   };
 
   const handleContinue = () => {
-    handleEmailVerification();
+    if (isOtpNeeded === true) {
+      handleEmailVerification();
+    } else {
+      handleNavigate();
+    }
+  };
+
+  const setContactNumber = (value: IContactNumber[]) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: { ...principal, contactDetails: { ...principal!.contactDetails, contactNumber: value } },
+    });
   };
 
   useEffect(() => {
@@ -101,11 +117,15 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
     <Fragment>
       {page === "contact-update" ? (
         <ContactUpdate
-          addPersonalInfo={addPersonalInfo}
+          contactNumber={contactNumber!}
           handleCancel={handleCancelForceUpdate}
           handleContinue={handleContinue}
-          personalInfo={personalInfo}
+          inputEmail={inputEmail}
           inputEmailError={emailError}
+          isOtpNeeded={isOtpNeeded}
+          name={personalInfo.principal!.personalDetails!.name!}
+          setContactNumber={setContactNumber}
+          setInputEmail={setInputEmail}
           setInputEmailError={setEmailError}
         />
       ) : (

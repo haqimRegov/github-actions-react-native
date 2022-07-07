@@ -142,7 +142,10 @@ const investorAccountDetails = gql`
           orderHistory {
             orderNumber
             transactionType
-            totalInvestment
+            totalInvestment {
+              currency
+              amount
+            }
             status
             lastUpdated
           }

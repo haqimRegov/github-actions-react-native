@@ -71,19 +71,44 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
   };
 
   const handleContinue = () => {
-    const nextStep: TypeForceUpdateKey = accountHolder === "Principal" ? "RiskAssessment" : "FATCADeclaration";
-    handleNextStep(nextStep);
+    let nextStep: TypeForceUpdateKey = accountHolder === "Principal" ? "RiskAssessment" : "FATCADeclaration";
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
     const findRiskAssessment = updatedDisabledSteps.indexOf("RiskAssessment");
     if (findRiskAssessment !== -1) {
       updatedDisabledSteps.splice(findRiskAssessment, 1);
     }
-    updatedFinishedSteps.push("InvestorInformation");
+
+    updatedFinishedSteps.push("InvestorInformation", "ContactSummary");
+
+    const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
+    if (findFinishedFatca !== -1 && accountHolder === "Joint") {
+      nextStep = "CRSDeclaration";
+    }
+
+    const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
+    if (findFinishedCrs !== -1 && findFinishedFatca !== -1 && accountHolder === "Joint") {
+      nextStep = "DeclarationSummary";
+    }
+
     updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+    handleNextStep(nextStep);
   };
 
   const handleEdit = () => {
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [
+      "ContactSummary",
+      "RiskAssessment",
+      "Declarations",
+      "FATCADeclaration",
+      "CRSDeclaration",
+      "DeclarationSummary",
+      "Acknowledgement",
+      "TermsAndConditions",
+      "Signatures",
+    ];
+
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps, finishedSteps: [] });
     handleNextStep("Contact");
   };
 

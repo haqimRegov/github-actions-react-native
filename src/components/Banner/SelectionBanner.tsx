@@ -20,6 +20,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 interface SelectionBannerProps {
   bottomContent?: ReactNode;
+  buttonStyle?: ViewStyle;
   cancelOnPress?: () => void;
   containerStyle?: ViewStyle;
   continueDebounce?: boolean;
@@ -34,6 +35,7 @@ interface SelectionBannerProps {
 
 export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
   bottomContent,
+  buttonStyle,
   cancelOnPress,
   containerStyle,
   continueDebounce,
@@ -71,13 +73,19 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
         <CustomFlexSpacer />
         {labelCancel !== undefined && cancelOnPress !== undefined ? (
           <Fragment>
-            <RoundedButton buttonStyle={{ width: sw200 }} onPress={cancelOnPress} radius={sw24} secondary={true} text={cancelLabel} />
+            <RoundedButton
+              buttonStyle={{ width: sw200, ...buttonStyle }}
+              onPress={cancelOnPress}
+              radius={sw24}
+              secondary={true}
+              text={cancelLabel}
+            />
             <CustomSpacer isHorizontal={true} space={sw16} />
           </Fragment>
         ) : null}
         <RoundedButton
           disabled={continueDisabled}
-          buttonStyle={{ width: sw200 }}
+          buttonStyle={{ width: sw200, ...buttonStyle }}
           loading={continueLoading}
           onPress={submitOnPress}
           radius={sw24}

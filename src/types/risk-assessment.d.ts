@@ -32,3 +32,4 @@ declare interface IRiskScore {
 declare type IRiskScoreState = IRiskScore;
 
 declare type TypeRiskAssessmentModal = "promptAssessment" | "assessment" | undefined;
+declare type TRiskPage = "summary" | "assessment";

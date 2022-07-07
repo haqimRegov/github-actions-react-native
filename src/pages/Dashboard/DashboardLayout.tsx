@@ -33,6 +33,7 @@ export interface IDashboardLayoutRef {
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  handleNewSales?: () => void;
   hideQuickActions?: boolean;
   navigation: IStackNavigationProp;
   ref?: MutableRefObject<IDashboardLayoutRef | undefined>;
@@ -49,6 +50,7 @@ interface DashboardLayoutProps {
 export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, DashboardLayoutProps>((props, ref) => {
   const {
     children,
+    handleNewSales,
     hideQuickActions,
     navigation,
     scrollEnabled,
@@ -67,6 +69,13 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     setAddClient(true);
   };
 
+  const newSales = () => {
+    if (handleNewSales !== undefined) {
+      handleNewSales();
+    }
+    navigation.navigate("NewSales");
+  };
+
   // const handleTopUp = () => {
   //   navigation.navigate("Onboarding");
   // };
@@ -77,14 +86,14 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
 
   const actions: IQuickAction[] = [
     {
-      label: QUICK_ACTIONS.LABEL_NEW_SALES,
+      label: QUICK_ACTIONS.LABEL_ACCOUNT_OPENING_NEW_SALES,
       onPress: handleAddClient,
       // style: borderBottomGray2,
     },
-    // {
-    //   label: QUICK_ACTIONS.LABEL_TOP_UP,
-    //   onPress: handleTopUp,
-    // },
+    {
+      label: QUICK_ACTIONS.LABEL_NEW_SALES,
+      onPress: newSales,
+    },
     // {
     //   label: QUICK_ACTIONS.LABEL_SWITCHING,
     //   onPress: handleTopUp,

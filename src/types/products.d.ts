@@ -8,6 +8,15 @@ declare interface IProductFilter {
   conventional?: string[];
 }
 
+declare interface IProductAvailableFilter {
+  epfApproved?: string[];
+  fundCurrency?: string[];
+  fundType?: string[];
+  issuingHouse?: string[];
+  riskCategory?: string[];
+  shariahConventional?: string[];
+}
+
 declare type ProductFilterType =
   | "epfApproved"
   | "fundCurrency"

@@ -49,12 +49,19 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
           accountHolder: undefined,
         },
         isForceUpdate: false,
+        isNewSales: false,
       };
 
     case "client/ADD_CLIENT_FORCE_UPDATE":
       return {
         ...state,
         isForceUpdate: action.payload,
+      };
+
+    case "client/ADD_CLIENT_NEW_SALES":
+      return {
+        ...state,
+        isNewSales: action.payload,
       };
 
     default:

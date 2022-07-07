@@ -215,7 +215,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 value={item.bankAccountNumber}
               />
               <CustomTextInput
-                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
+                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
                 onChangeText={handleSwiftCode}
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}

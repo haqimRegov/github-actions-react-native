@@ -55,24 +55,24 @@ declare type TypeOnboardingRoute =
   | "TermsAndConditions";
 
 declare type TypeOnboardingKey =
-  | "RiskAssessment"
-  | "Products"
-  | "PersonalInformation"
-  | "EmailVerification"
-  | "IdentityVerification"
-  | "PersonalDetails"
-  | "EmploymentDetails"
-  | "PersonalInfoSummary"
+  | "Acknowledgement"
+  | "CRSDeclaration"
   | "Declarations"
+  | "DeclarationSummary"
+  | "EmailVerification"
+  | "EmploymentDetails"
   | "FATCADeclaration"
   | "FEADeclaration"
-  | "CRSDeclaration"
-  | "DeclarationSummary"
-  | "Acknowledgement"
+  | "IdentityVerification"
   | "OrderSummary"
-  | "TermsAndConditions"
+  | "Payment"
+  | "PersonalDetails"
+  | "PersonalInformation"
+  | "PersonalInfoSummary"
+  | "Products"
+  | "RiskAssessment"
   | "Signatures"
-  | "Payment";
+  | "TermsAndConditions";
 
 declare interface IOnboardingRoutes {
   CRSDeclaration: TypeOnboardingRoute;
@@ -92,22 +92,22 @@ declare interface IOnboardingRoutes {
   TermsAndConditions: TypeOnboardingRoute;
 }
 declare interface IOnboardingKeys {
-  RiskAssessment: TypeOnboardingKey;
-  Products: TypeOnboardingKey;
-  PersonalInformation: TypeOnboardingKey;
-  EmailVerification: TypeOnboardingKey;
-  IdentityVerification: TypeOnboardingKey;
-  PersonalDetails: TypeOnboardingKey;
-  EmploymentDetails: TypeOnboardingKey;
-  PersonalInfoSummary: TypeOnboardingKey;
+  Acknowledgement: TypeOnboardingKey;
+  CRSDeclaration: TypeOnboardingKey;
   Declarations: TypeOnboardingKey;
+  DeclarationSummary: TypeOnboardingKey;
+  EmailVerification: TypeOnboardingKey;
+  EmploymentDetails: TypeOnboardingKey;
   FATCADeclaration: TypeOnboardingKey;
   FEADeclaration: TypeOnboardingKey;
-  CRSDeclaration: TypeOnboardingKey;
-  DeclarationSummary: TypeOnboardingKey;
-  Acknowledgement: TypeOnboardingKey;
+  IdentityVerification: TypeOnboardingKey;
   OrderSummary: TypeOnboardingKey;
-  TermsAndConditions: TypeOnboardingKey;
-  Signatures: TypeOnboardingKey;
   Payment: TypeOnboardingKey;
+  PersonalDetails: TypeOnboardingKey;
+  PersonalInformation: TypeOnboardingKey;
+  PersonalInfoSummary: TypeOnboardingKey;
+  Products: TypeOnboardingKey;
+  RiskAssessment: TypeOnboardingKey;
+  Signatures: TypeOnboardingKey;
+  TermsAndConditions: TypeOnboardingKey;
 }

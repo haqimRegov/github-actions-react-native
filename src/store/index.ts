@@ -4,6 +4,7 @@ export * from "./Client";
 export * from "./ForceUpdate";
 export * from "./Global";
 export * from "./Investors";
+export * from "./NewSales";
 export * from "./Onboarding";
 export * from "./PersonalInfo";
 export * from "./Products";

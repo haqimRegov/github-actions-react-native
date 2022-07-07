@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { ForceUpdateActionProps } from "../ForceUpdate";
 import { GlobalActionProps } from "../Global/actions";
+import { NewSalesActionProps } from "../NewSales";
 import { OnboardingActionProps } from "../Onboarding/actions";
 import { ProductsActionProps } from "../Products/actions";
 import { RootState } from "../rootReducer";
@@ -13,6 +14,8 @@ export const RiskMapStateToProps = (state: RootState) => ({
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
   forceUpdate: state.forceUpdate,
+  isRiskUpdated: state.riskAssessment.isRiskUpdated,
+  newSales: state.newSales,
   onboarding: state.onboarding,
   principalHolder: state.client.details?.principalHolder,
   questionnaire: state.riskAssessment.questionnaire,
@@ -24,6 +27,7 @@ export const RiskMapDispatchToProps = (dispatch: Dispatch) => {
     {
       ...RiskAssessmentActionProps,
       ...ForceUpdateActionProps,
+      ...NewSalesActionProps,
       ...ProductsActionProps,
       ...GlobalActionProps,
       ...OnboardingActionProps,

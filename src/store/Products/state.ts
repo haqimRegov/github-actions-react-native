@@ -43,6 +43,7 @@ export type productsState = {
     sort: IProductSort[];
     totalCount: IProductTotalCount;
   };
+  availableFilters: IProductAvailableFilter;
   productType: ProductType;
 };
 
@@ -51,6 +52,25 @@ export const productsInitialFilter = {
   fundCurrency: [],
   fundType: [],
   issuingHouse: [],
+  riskCategory: [],
+  shariahApproved: [],
+  conventional: [],
+};
+
+export const initialAvailableFilters: IProductAvailableFilter = {
+  epfApproved: [],
+  fundCurrency: [],
+  fundType: [],
+  issuingHouse: [],
+  riskCategory: [],
+  shariahConventional: [],
+};
+
+export const ampInitialFilter = {
+  epfApproved: [],
+  fundCurrency: [],
+  fundType: [],
+  issuingHouse: ["KENANGA INVESTORS BERHAD"],
   riskCategory: [],
   shariahApproved: [],
   conventional: [],
@@ -109,7 +129,7 @@ export const productsInitialState: productsState = {
     },
   },
   amp: {
-    filters: productsInitialFilter,
+    filters: ampInitialFilter,
     search: "",
     showBy: "recommended",
     all: [],
@@ -125,5 +145,6 @@ export const productsInitialState: productsState = {
       recommended: "",
     },
   },
+  availableFilters: initialAvailableFilters,
   productType: "ut",
 };

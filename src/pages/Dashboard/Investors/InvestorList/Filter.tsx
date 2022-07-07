@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { TextSpaceArea } from "../../../../components";
-import { MultiSelectChips } from "../../../../components/MultiSelect/MultiSelectChips";
+import { MultiSelectPills, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import { FILTER_RISK_CATEGORY } from "../../../../data/dictionary";
 import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw8 } from "../../../../styles";
@@ -34,7 +33,7 @@ export const InvestorListFilter: FunctionComponent<AllInvestorsFilterProps> = ({
       />
       <TextSpaceArea spaceToBottom={sh4} style={px(sw24)} text={DASHBOARD_INVESTORS_LIST.LABEL_FILTER_INVESTOR_RISK_PROFILE} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <MultiSelectChips
+        <MultiSelectPills
           direction="row"
           labels={riskCategoryList}
           labelStyle={{ lineHeight: sh24 }}

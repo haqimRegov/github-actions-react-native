@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, MultiSelectChips, NewCheckBoxDropdown, NewDatePicker, StatusBadge, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, NewDatePicker, StatusBadge, TextSpaceArea } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
   DICTIONARY_APPROVED_STATUS_FILTER,
@@ -157,7 +157,7 @@ export const TransactionsFilter: FunctionComponent<TransactionsFilterProps> = ({
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
-        <MultiSelectChips
+        <MultiSelectPills
           disabledValues={disabledAccountTypes}
           onSelect={handleAccountType}
           labels={DICTIONARY_TRANSACTIONS_ACCOUNT_TYPE}

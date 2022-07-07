@@ -1,5 +1,5 @@
 import { ProductsAction } from "./actions";
-import { productsInitialState, productsState } from "./state";
+import { ampInitialFilter, initialAvailableFilters, productsInitialFilter, productsInitialState, productsState } from "./state";
 
 export function productsReducer(state = productsInitialState, action: ProductsAction): productsState {
   switch (action.type) {
@@ -201,6 +201,46 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
         ...state,
         productType: action.payload,
       };
+    case "products/RESET_UT_FILTER":
+      return {
+        ...state,
+        ut: {
+          ...state.ut,
+          filters: productsInitialFilter,
+        },
+      };
+    case "products/RESET_PRS_FILTER":
+      return {
+        ...state,
+        prs: {
+          ...state.prs,
+          filters: productsInitialFilter,
+        },
+      };
+    case "products/RESET_PRS_DEFAULT_FILTER":
+      return {
+        ...state,
+        prsDefault: {
+          ...state.prsDefault,
+          filters: productsInitialFilter,
+        },
+      };
+    case "products/RESET_AMP_FILTER":
+      return {
+        ...state,
+        amp: {
+          ...state.amp,
+          filters: ampInitialFilter,
+        },
+      };
+    case "products/UPDATE_AVAILABLE_FILTERS":
+      return {
+        ...state,
+        availableFilters: {
+          ...state.availableFilters,
+          ...action.payload,
+        },
+      };
     case "products/RESET_PRODUCTS":
       return {
         ut: {
@@ -303,6 +343,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             recommended: "",
           },
         },
+        availableFilters: initialAvailableFilters,
         productType: "ut",
       };
 

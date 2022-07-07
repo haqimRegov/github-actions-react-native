@@ -1,31 +1,54 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { View, ViewStyle } from "react-native";
+import { Pressable, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomFlexSpacer, CustomSpacer, Pagination, PromptModal, Tab } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitle, Pagination, PromptModal, Tab } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
+  alignFlexStart,
+  border,
   borderBottomGray2,
+  centerHV,
+  centerVertical,
+  circle,
+  colorBlue,
+  colorRed,
+  colorTransparent,
   colorWhite,
   flexChild,
   flexRow,
+  fs12RegBlue5,
+  fs16BoldBlue1,
   fullHW,
+  fullWidth,
+  px,
+  py,
   sh140,
   sh16,
   sh24,
+  sh4,
+  sh40,
   sh48,
+  sh72,
+  sh8,
   shadow12Black112,
+  sw1,
+  sw100,
+  sw2,
+  sw20,
   sw24,
+  sw26,
+  sw8,
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { InvestorAccountsHeader } from "./Header";
 
-const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
+const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS, DASHBOARD_HOME } = Language.PAGE;
 
 interface InvestorOverviewProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
@@ -49,11 +72,24 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const navigation = useNavigation<IStackNavigationProp>();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [accountType, setAccountType] = useState<number>(-1);
+  const [newSalesModal, setNewSalesModal] = useState<boolean>(false);
   const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
   const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
+
+  const modalData: LabeledTitleProps[] = [
+    {
+      label: INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT,
+      title: INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT_SUB,
+    },
+    {
+      label: INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT,
+      title: INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT_SUB,
+    },
+  ];
 
   const handleNext = () => {
     if (loading === false) {
@@ -80,6 +116,19 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       resetClientDetails();
       handleBackToInvestorList();
     }
+  };
+
+  const handleNewSalesPrompt = () => {
+    setNewSalesModal(true);
+  };
+
+  const handleNewSalesPromptCancel = () => {
+    setNewSalesModal(false);
+  };
+
+  const handleNewSales = () => {
+    setNewSalesModal(false);
+    navigation.navigate("NewSales");
   };
 
   const handleForceUpdate = () => {
@@ -168,10 +217,12 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const headerData = {
     email: investorData !== undefined ? investorData.email : undefined,
     emailLastUpdated: investorData !== undefined ? investorData.emailLastUpdated : undefined,
+    handleNewSales: handleNewSalesPrompt,
+    handleViewProfile: handleViewProfile,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
     mobileNoLastUpdated: investorData !== undefined ? investorData.mobileNoLastUpdated : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
-    handleViewProfile: handleViewProfile,
+    setScreen: dashboardProps.setScreen,
   };
 
   const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${investorData !== undefined ? investorData.name : "-"}.`;
@@ -228,6 +279,62 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
         visible={forceUpdatePrompt}
       />
+      <PromptModal
+        contentStyle={alignFlexStart}
+        handleCancel={handleNewSalesPromptCancel}
+        handleContinue={handleNewSales}
+        label={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_TITLE}
+        labelContinue={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_GET_STARTED}
+        spaceToButton={sh40}
+        spaceToTitle={sh4}
+        title={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_SUBTITLE}
+        visible={newSalesModal}>
+        <View style={fullWidth}>
+          <View>
+            <CustomSpacer space={sh8} />
+            {modalData.map((eachCard: LabeledTitleProps, index: number) => {
+              const { label, title } = eachCard;
+              const handlePress = () => {
+                setAccountType(index);
+              };
+              const containerStyle: ViewStyle = {
+                ...px(sw24),
+                ...py(sh16),
+                ...centerHV,
+                backgroundColor: accountType !== undefined && accountType === index ? colorBlue._3 : colorWhite._1,
+                borderColor: accountType !== undefined && accountType === index ? colorBlue._1 : colorWhite._1,
+                borderWidth: sw2,
+                height: sh72,
+                borderRadius: sw8,
+              };
+              const iconStyle: ViewStyle = {
+                ...circle(sw26, colorTransparent),
+                ...border(colorBlue._1, sw1, sw100),
+                ...centerHV,
+                backgroundColor: accountType !== undefined && accountType === index ? colorRed._1 : colorTransparent,
+                borderColor: accountType !== undefined && accountType === index ? colorRed._1 : colorBlue._1,
+              };
+              const iconColor = accountType !== undefined && accountType === index ? colorWhite._1 : colorBlue._1;
+              return (
+                <Fragment key={index}>
+                  <CustomSpacer space={sh16} />
+                  <Pressable onPress={handlePress}>
+                    <View style={containerStyle}>
+                      <View style={{ ...flexRow, ...centerVertical }}>
+                        <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
+                        <CustomFlexSpacer />
+                        <View style={iconStyle}>
+                          <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
+                        </View>
+                      </View>
+                    </View>
+                  </Pressable>
+                </Fragment>
+              );
+            })}
+          </View>
+        </View>
+      </PromptModal>
     </Fragment>
   );
 };

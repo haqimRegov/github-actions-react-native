@@ -434,6 +434,13 @@ export const fs18BoldGray6: TextStyle = {
   lineHeight: scaleHeight(18 * 1.35),
 };
 
+export const fs20BoldBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoBold,
+  fontSize: sh20,
+  lineHeight: scaleHeight(20 * 1.4),
+};
+
 export const fs20BoldBlue1: TextStyle = {
   color: colorBlue._1,
   fontFamily: NunitoBold,

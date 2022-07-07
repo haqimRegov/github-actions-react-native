@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { ButtonSelectionList, CustomGraph, CustomSpacer, TextSpaceArea } from "../../../../components";
+import { ButtonSelectionList, CustomSpacer, TextSpaceArea } from "../../../../components";
+import { CustomGraph } from "../../../../components/Graph";
 import { Language } from "../../../../constants";
 import { flexChild, flexRow, fs10RegGray6, fs16BoldGray6, px, sh16, sh24, sw24 } from "../../../../styles";
 

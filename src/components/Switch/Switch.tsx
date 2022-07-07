@@ -88,7 +88,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
           {label !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={{ ...fs12BoldGray6, fontFamily: fontFamily, ...labelStyle }}>{label}</Text>
+              <Text style={{ ...fs12BoldGray6, ...labelStyle, fontFamily: fontFamily }}>{label}</Text>
             </Fragment>
           ) : null}
         </View>

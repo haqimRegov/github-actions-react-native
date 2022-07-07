@@ -2,12 +2,10 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { NunitoBold } from "../../constants";
-import { IcoMoon } from "../../icons";
 import {
   centerHV,
   centerVertical,
   circleBorder,
-  colorBlack,
   colorBlue,
   colorGray,
   colorRed,
@@ -15,13 +13,14 @@ import {
   flexCol,
   flexRow,
   fs12BoldBlack2,
+  fs12BoldBlue1,
   fs12BoldGray6,
+  fs12BoldWhite1,
   px,
   sh16,
   sh32,
   sh4,
   sw1,
-  sw14,
   sw16,
   sw24,
   sw326,
@@ -30,7 +29,7 @@ import {
 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
-interface MultiSelectChipsProps {
+interface SingleSelectPillsProps {
   buttonStyle?: ViewStyle;
   CustomContent?: (props: IToggleButtonCustomContent) => JSX.Element;
   direction?: "column" | "row";
@@ -40,15 +39,15 @@ interface MultiSelectChipsProps {
   iconSize?: number;
   labels: ICheckBoxWithSubLabel[];
   labelStyle?: TextStyle;
-  onSelect: (index: string[]) => void;
+  onSelect: (index: string) => void;
   space?: number;
   spaceToHeader?: number;
   spaceToLabel?: number;
   textContainer?: ViewStyle;
-  values: string[];
+  value: string;
 }
 
-export const MultiSelectChips: FunctionComponent<MultiSelectChipsProps> = ({
+export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   buttonStyle,
   CustomContent,
   direction,
@@ -63,8 +62,8 @@ export const MultiSelectChips: FunctionComponent<MultiSelectChipsProps> = ({
   spaceToHeader,
   spaceToLabel,
   textContainer,
-  values,
-}: MultiSelectChipsProps) => {
+  value,
+}: SingleSelectPillsProps) => {
   const defaultSpace = direction === "column" ? sh16 : sw40;
   const defaultSpaceToHeader = spaceToHeader !== undefined ? spaceToHeader : sh4;
   const eachSpace = space !== undefined ? space : defaultSpace;
@@ -81,48 +80,40 @@ export const MultiSelectChips: FunctionComponent<MultiSelectChipsProps> = ({
         <View style={direction === "column" ? flexCol : flexRow}>
           {labels.map((content: ICheckBoxWithSubLabel, index: number) => {
             const { label, labelStyle } = content;
-            const selected = values.findIndex((eachValue: string) => eachValue === label);
             const disabled = disabledValues !== undefined && disabledValues.includes(content.label);
 
             const handlePress = () => {
               if (!disabled) {
-                const updatedValues = [...values];
-                if (selected === -1) {
-                  updatedValues.push(label);
-                } else {
-                  updatedValues.splice(selected, 1);
-                }
-                onSelect(updatedValues);
+                onSelect(label);
               }
             };
 
             const circleStyle: ViewStyle =
-              selected !== -1 ? circleBorder(sw16, sw1, colorRed._1, colorRed._1) : circleBorder(sw16, sw1, colorBlue._1);
+              value === label ? circleBorder(sw16, sw1, colorRed._1, colorRed._1) : circleBorder(sw16, sw1, colorBlue._1);
 
-            const disabledBackground: ViewStyle = disabled === true && selected === -1 ? { backgroundColor: colorGray._4 } : {};
+            const disabledBackground: ViewStyle = disabled === true && value === "" ? { backgroundColor: colorGray._4 } : {};
             const disabledStyle: ViewStyle = disabled ? { ...disabledOpacity6 } : {};
             const customContentProps: IToggleButtonCustomContent = {
-              disabledStyle,
               buttonStyle,
               circleStyle,
               disabledBackground,
-              textContainer,
-              mainLabelStyle,
-              labelStyle,
+              disabledStyle,
               label,
-              selected: selected !== -1,
+              labelStyle,
+              mainLabelStyle,
+              selected: value === label,
+              textContainer,
             };
 
-            const selectedStyle: ViewStyle =
-              selected !== -1 ? { borderColor: colorRed._1, backgroundColor: colorRed._1_2 } : { borderColor: colorBlue._1 };
+            const selectedStyle: ViewStyle = value === label ? { backgroundColor: colorBlue._1 } : { backgroundColor: colorBlue._2 };
             const containerStyle: ViewStyle = {
               ...centerHV,
               ...px(sw16),
               borderRadius: sw24,
-              borderWidth: sw1,
               height: sh32,
               ...selectedStyle,
             };
+            const textStyle: TextStyle = value === label ? fs12BoldWhite1 : fs12BoldBlue1;
             const defaultSpaceToLabel = spaceToLabel !== undefined ? spaceToLabel : sw4;
 
             return (
@@ -134,19 +125,13 @@ export const MultiSelectChips: FunctionComponent<MultiSelectChipsProps> = ({
                   ) : (
                     <View style={{ ...centerVertical, ...disabledStyle }}>
                       <View style={{ ...flexRow, ...containerStyle }}>
-                        {selected !== -1 ? (
-                          <Fragment>
-                            <View style={{ ...centerHV, ...disabledBackground, ...buttonStyle }}>
-                              <IcoMoon name="success" size={iconSize || sw14} color={colorBlack._2} />
-                            </View>
-                          </Fragment>
-                        ) : null}
                         <CustomSpacer isHorizontal={true} space={defaultSpaceToLabel} />
                         <Text
                           style={{
                             ...fs12BoldBlack2,
                             fontFamily: NunitoBold,
                             maxWidth: sw326,
+                            ...textStyle,
                             ...mainLabelStyle,
                             ...labelStyle,
                           }}>

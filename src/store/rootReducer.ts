@@ -6,6 +6,7 @@ import { eddReducer } from "./EDD";
 import { forceUpdateReducer } from "./ForceUpdate";
 import { globalReducer } from "./Global";
 import { investorsReducer } from "./Investors";
+import { newSalesReducer } from "./NewSales";
 import { onboardingReducer } from "./Onboarding";
 import { personalInfoReducer } from "./PersonalInfo";
 import { productsReducer } from "./Products";
@@ -20,6 +21,7 @@ export const rootReducer = combineReducers({
   edd: eddReducer,
   global: globalReducer,
   investors: investorsReducer,
+  newSales: newSalesReducer,
   onboarding: onboardingReducer,
   personalInfo: personalInfoReducer,
   products: productsReducer,

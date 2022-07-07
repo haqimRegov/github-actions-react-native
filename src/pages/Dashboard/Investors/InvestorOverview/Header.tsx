@@ -40,15 +40,18 @@ const { DASHBOARD_HOME } = Language.PAGE;
 interface IInvestorAccountHeaderProps {
   email?: string;
   emailLastUpdated?: string;
+  handleNewSales: () => void;
+  handleViewProfile: () => void;
   mobileNo?: string;
   mobileNoLastUpdated?: string;
   name?: string;
-  handleViewProfile: () => void;
+  setScreen: (route: InvestorsPageType) => void;
 }
 
 export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderProps> = ({
   email,
   emailLastUpdated,
+  handleNewSales,
   mobileNo,
   mobileNoLastUpdated,
   name,
@@ -139,9 +142,9 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
               <IconButton color={colorBlue._1} name="pencil" onPress={() => {}} size={sw16} style={iconContainer} />
-              <CustomSpacer isHorizontal={true} space={sw16} />
-              <IconButton color={colorBlue._1} name="plus" onPress={() => {}} size={sw16} style={iconContainer} />
             </View>
+            <CustomSpacer isHorizontal={true} space={sw16} />
+            <IconButton color={colorBlue._1} name="plus" onPress={handleNewSales} size={sw16} style={iconContainer} />
           </View>
         </View>
       </View>

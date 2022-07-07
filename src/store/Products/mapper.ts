@@ -1,6 +1,7 @@
 import { bindActionCreators, Dispatch } from "redux";
 
 import { GlobalActionProps } from "../Global/actions";
+import { NewSalesActionProps } from "../NewSales";
 import { OnboardingActionProps } from "../Onboarding/actions";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { RootState } from "../rootReducer";
@@ -9,27 +10,35 @@ import { ProductsActionProps } from "./actions";
 
 export const ProductsMapStateToProps = (state: RootState) => ({
   accountType: state.client.accountType,
+  amp: state.products.amp,
   details: state.client.details,
-  licenseType: state.global.agent!.licenseType,
-  onboarding: state.onboarding,
   finishedSteps: state.onboarding.finishedSteps,
   global: state.global,
-  ut: state.products.ut,
-  prs: state.products.prs,
-  prsDefault: state.products.prsDefault,
+  investmentDetails: state.selectedFund.investmentDetails,
+  licenseType: state.global.agent!.licenseType,
   loading: state.global.loading,
-  amp: state.products.amp,
+  newSales: state.newSales,
+  onboarding: state.onboarding,
   products: state.products,
   productType: state.products.productType,
-  investmentDetails: state.selectedFund.investmentDetails,
+  prs: state.products.prs,
+  prsDefault: state.products.prsDefault,
   riskScore: state.riskAssessment.riskScore,
   selectedFunds: state.selectedFund.funds,
+  ut: state.products.ut,
   viewFund: state.selectedFund.viewFund,
 });
 
 export const ProductsMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
-    { ...OnboardingActionProps, ...PersonalInfoActionProps, ...ProductsActionProps, ...SelectedFundActionProps, ...GlobalActionProps },
+    {
+      ...OnboardingActionProps,
+      ...PersonalInfoActionProps,
+      ...ProductsActionProps,
+      ...NewSalesActionProps,
+      ...SelectedFundActionProps,
+      ...GlobalActionProps,
+    },
     dispatch,
   );
 };

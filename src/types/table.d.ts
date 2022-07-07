@@ -67,6 +67,12 @@ declare interface ITableCustomItem {
   lastIndex: boolean;
 }
 
+declare interface ITableGroupBy {
+  row: ITableData;
+  data: ITableData[];
+  index: number;
+}
+
 declare interface BaseTableProps {
   activeAccordion?: number[];
   columns: ITableColumn[];
@@ -96,6 +102,7 @@ declare interface RenderCustomHeaderProps {
 declare interface AdvanceTableProps extends BaseTableProps, BaseTableHeaderProps {
   data: ITableData[];
   disabledIndex?: number[];
+  RenderGroupByLabel: (props: ITableGroupBy) => JSX.Element;
   spaceToHeader?: number;
 }
 

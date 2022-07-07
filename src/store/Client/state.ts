@@ -4,6 +4,7 @@ export type ClientState = {
   accountType: TypeAccountChoices;
   details?: IClientDetailsState;
   isForceUpdate?: boolean;
+  isNewSales: boolean;
 };
 
 export const clientInitialState: ClientState = {
@@ -32,4 +33,5 @@ export const clientInitialState: ClientState = {
     initId: undefined,
   },
   isForceUpdate: false,
+  isNewSales: false,
 };

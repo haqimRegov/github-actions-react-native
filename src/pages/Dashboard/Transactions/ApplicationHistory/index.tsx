@@ -39,7 +39,7 @@ import { RejectedOrders } from "./Rejected";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-interface ApplicationHistoryProps extends TransactionsStoreProps {
+interface ApplicationHistoryProps extends TransactionsStoreProps, NewSalesContentProps {
   activeTab: TransactionsTabType;
   isLogout: boolean;
   navigation: IStackNavigationProp;
@@ -52,6 +52,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
     activeTab,
+    addClientNewSales,
     availableFilters,
     downloadInitiated,
     incomplete,
@@ -127,6 +128,10 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           break;
       }
     }
+  };
+
+  const handleNewSales = () => {
+    addClientNewSales(true);
   };
 
   const handleTabs = (index: number) => {
@@ -339,7 +344,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   return (
     <View style={fullHW}>
-      <DashboardLayout scrollEnabled={!filterVisible} ref={dashboardLayoutRef} {...props}>
+      <DashboardLayout handleNewSales={handleNewSales} scrollEnabled={!filterVisible} ref={dashboardLayoutRef} {...props}>
         <View style={flexChild}>
           <ApplicationHistoryHeader
             activeTab={activeTab}

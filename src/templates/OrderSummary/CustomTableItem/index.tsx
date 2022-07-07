@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CreatedOn } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/CreatedOn";
+import { LastUpdated } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/LastUpdated";
 import { PendingStatus } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/Status";
 import { Remark } from "./Remark";
 
@@ -16,6 +17,8 @@ export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sorte
       return <PendingStatus accordionIcon={undefined} {...withoutAccordion} />;
     case "createdOn":
       return <CreatedOn sortedColumns={sortedColumns} {...rest} />;
+    case "lastUpdated":
+      return <LastUpdated sortedColumns={sortedColumns} {...rest} />;
     case "remark":
       return <Remark sortedColumns={sortedColumns} {...rest} />;
     default:

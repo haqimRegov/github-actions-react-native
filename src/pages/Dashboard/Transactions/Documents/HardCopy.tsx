@@ -20,7 +20,7 @@ import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../netwo
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
   alignFlexStart,
-  borderBottomGray2,
+  borderBottomBlue4,
   colorBlue,
   flexChild,
   fs10RegGray6,
@@ -29,12 +29,13 @@ import {
   fs16RegGray5,
   fsAlignLeft,
   px,
+  sh12,
   sh24,
   sh32,
   sh56,
   sh8,
   sw24,
-  sw68,
+  sw56,
 } from "../../../../styles";
 import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
@@ -98,15 +99,6 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   const handleToggle = () => {
     setToggle(!toggle);
   };
-
-  const buttonDisabled =
-    (isNotEmpty(documentList) &&
-      isNotEmpty(documentList?.documents) &&
-      documentList!.documents
-        .map(({ docs }) => docs.some((doc) => doc === undefined || doc.base64 === undefined || doc.base64 === null))
-        .includes(true)) ||
-    toggle === false ||
-    branch === "";
 
   const handleFetch = async () => {
     const request: IGetHardCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
@@ -330,28 +322,27 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         titleIconOnPress={handleBack}
         title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_SUBMIT_PHYSICAL_DOCUMENTS}
         titleIcon="arrow-left">
-        <View style={px(sw68)}>
-          <TextSpaceArea style={fs16RegGray5} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_UPLOAD_HARDCOPY_SUBTITLE} />
-        </View>
+        <TextSpaceArea style={{ ...fs16RegGray5, ...px(sw56) }} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_UPLOAD_HARDCOPY_SUBTITLE} />
         <CustomSpacer space={sh24} />
         {documentList !== undefined ? (
           <Fragment>
             <View style={px(sw24)}>
               {isNotEmpty(documentList.account) ? (
                 <Fragment>
+                  <TextSpaceArea spaceToBottom={sh12} style={fs12BoldGray6} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_ACCOUNT} />
                   {isNotEmpty(documentList.account.principal) ? (
                     <Fragment>
-                      <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_ACCOUNT} />
                       <DocumentList
                         data={documentList.account.principal}
                         header={
                           isNotEmpty(documentList.account.joint) ? (
                             <AccountHeader
                               headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                              titleStyle={fs12BoldBlack2}
+                              spaceToBottom={sh8}
                               subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
-                              title={currentOrder?.investorName.principal!}
                               subtitleStyle={fs10RegGray6}
+                              title={currentOrder?.investorName.principal!}
+                              titleStyle={fs12BoldBlack2}
                             />
                           ) : (
                             <View />
@@ -364,17 +355,18 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                   ) : null}
                   {isNotEmpty(documentList.account.joint) ? (
                     <Fragment>
-                      <CustomSpacer space={sh24} />
+                      {isNotEmpty(documentList.account.principal) ? <CustomSpacer space={sh24} /> : null}
                       <DocumentList
                         data={documentList.account.joint!}
                         setData={handleSetJointDocument}
                         header={
                           <AccountHeader
                             headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                            titleStyle={fs12BoldBlack2}
+                            spaceToBottom={sh8}
                             subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
-                            title={currentOrder?.investorName.joint!}
                             subtitleStyle={fs10RegGray6}
+                            title={currentOrder?.investorName.joint!}
+                            titleStyle={fs12BoldBlack2}
                           />
                         }
                       />
@@ -389,8 +381,8 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                 </Fragment>
               ) : null}
             </View>
-            <CustomSpacer space={sh32} />
-            <View style={borderBottomGray2} />
+            <CustomSpacer space={sh24} />
+            <View style={borderBottomBlue4} />
             <View style={{ ...flexChild, ...px(sw24) }}>
               <CustomSpacer space={sh24} />
               <NewDropdown

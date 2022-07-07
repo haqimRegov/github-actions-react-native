@@ -10,11 +10,11 @@ import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../netwo
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
   alignFlexStart,
-  borderBottomGray2,
+  borderBottomBlue4,
   colorBlue,
   fs10RegGray6,
   fs12BoldBlack2,
-  fs16SemiBoldGray6,
+  fs16RegGray5,
   fsAlignLeft,
   px,
   sh176,
@@ -22,7 +22,7 @@ import {
   sh32,
   sh8,
   sw24,
-  sw68,
+  sw56,
 } from "../../../../styles";
 import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
@@ -264,9 +264,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         titleIconOnPress={handleBack}
         title={UPLOAD_DOCUMENTS.LABEL_UPLOAD_DOCUMENTS}
         titleIcon="arrow-left">
-        <View style={px(sw68)}>
-          <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh8} style={fs16SemiBoldGray6} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
-        </View>
+        <TextSpaceArea style={{ ...fs16RegGray5, ...px(sw56) }} text={UPLOAD_DOCUMENTS.LABEL_SUBTITLE} />
         {documentList !== undefined ? (
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
@@ -274,10 +272,11 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 {documentList.joint && documentsPrincipal.length > 0 ? (
                   <AccountHeader
                     headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                    titleStyle={fs12BoldBlack2}
+                    spaceToBottom={sh8}
                     subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
-                    title={currentOrder?.investorName.principal!}
                     subtitleStyle={fs10RegGray6}
+                    title={currentOrder?.investorName.principal!}
+                    titleStyle={fs12BoldBlack2}
                   />
                 ) : null}
                 <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
@@ -287,19 +286,20 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
               <Fragment>
                 {documentsPrincipal.length > 0 && documentsJoint.length > 0 ? (
                   <Fragment>
-                    <CustomSpacer space={sh32} />
-                    <View style={borderBottomGray2} />
-                    <CustomSpacer space={sh32} />
+                    <CustomSpacer space={sh24} />
+                    <View style={borderBottomBlue4} />
+                    <CustomSpacer space={sh24} />
                   </Fragment>
                 ) : null}
                 <View style={px(sw24)}>
                   {documentList.joint && documentsJoint.length > 0 ? (
                     <AccountHeader
                       headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                      titleStyle={fs12BoldBlack2}
+                      spaceToBottom={sh8}
                       subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
-                      title={currentOrder?.investorName.joint!}
                       subtitleStyle={fs10RegGray6}
+                      title={currentOrder?.investorName.joint!}
+                      titleStyle={fs12BoldBlack2}
                     />
                   ) : null}
                   <DocumentList data={documentsJoint} setData={handleJointData} />

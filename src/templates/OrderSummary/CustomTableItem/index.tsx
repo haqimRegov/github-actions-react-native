@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { CreatedOn } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/CreatedOn";
 import { LastUpdated } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/LastUpdated";
 import { PendingStatus } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/Status";
+import { TotalInvestments } from "../../../pages/Dashboard/Transactions/ApplicationHistory/CustomTableItem/TotalInvestments";
 import { Remark } from "./Remark";
 
 declare interface CustomTableItemProps extends ITableCustomItem {
@@ -21,6 +22,8 @@ export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sorte
       return <LastUpdated sortedColumns={sortedColumns} {...rest} />;
     case "remark":
       return <Remark sortedColumns={sortedColumns} {...rest} />;
+    case "totalInvestment":
+      return <TotalInvestments sortedColumns={sortedColumns} {...rest} />;
     default:
       return <View />;
   }

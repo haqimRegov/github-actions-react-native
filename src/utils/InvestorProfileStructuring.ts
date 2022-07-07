@@ -18,6 +18,13 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     },
   ];
 
+  if (idType === "Passport" && personalDetails !== null && personalDetails.countryOfBirth !== null) {
+    identificationDetails.push({ label: INVESTOR_PROFILE.LABEL_COUNTRY, title: personalDetails.countryOfBirth });
+  }
+  if (idType === "Passport" && personalDetails !== null && personalDetails.expirationDate !== null) {
+    identificationDetails.push({ label: INVESTOR_PROFILE.LABEL_EXPIRATION, title: personalDetails.expirationDate });
+  }
+
   const personalDetailsSummary: LabeledTitleProps[] = [
     {
       label: INVESTOR_PROFILE.LABEL_SALUTATION,

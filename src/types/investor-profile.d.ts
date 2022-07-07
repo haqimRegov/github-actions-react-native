@@ -38,10 +38,6 @@ declare interface IStructuredInvestorProfile {
   };
 }
 
-declare interface IInvestorOrderHistory extends IDashboardOrder {
-  orderNo: string;
-}
-
 declare interface IInvestorAccount {
   accountDetails: IAccountDetails | null; // accountInformation
   addressInformation: IOrderSummaryAddressInfo; // investorProfile and accountInformation
@@ -52,7 +48,7 @@ declare interface IInvestorAccount {
   employmentInformation: IOrderSummaryEmploymentDetails | null; // investorProfile
   epfDetails: IOrderSummaryEpf | null; // investorProfile
   investorOverview: IAccountInvestorOverview[]; // [Principal, Joint] investorProfile will always be [Principal] only
-  orderHistory: IInvestorOrderHistory[] | null;
+  orderHistory: IDashboardOrder[] | null;
   personalDetails: IOrderSummaryPersonalDetails | null; // investorProfile
 }
 

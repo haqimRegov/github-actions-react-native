@@ -40,30 +40,6 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data, handleExport
 
   const buttonStyle: ViewStyle = { ...px(sw16), borderColor: colorBlue._1, borderWidth: sw1, height: sh24, width: sw96 };
 
-  // const handleExportPDF = async () => {
-  //   if (fetching.current === false) {
-  //     fetching.current = true;
-  //     setLoading(true);
-  //     const request = { orderNo: orderNumber };
-  //     const response: IOrderTrackingSummaryResponse = await orderTrackingSummary(request);
-  //     fetching.current = false;
-  //     setLoading(false);
-  //     if (response !== undefined) {
-  //       const { data: responseData, error } = response;
-  //       if (error === null && responseData !== null) {
-  //         if (responseData.result.status === true) {
-  //           RNInAppBrowser.openLink(responseData.result.pdf.url);
-  //         }
-  //       }
-  //       if (error !== null) {
-  //         setTimeout(() => {
-  //           Alert.alert(error.message);
-  //         }, 100);
-  //       }
-  //     }
-  //   }
-  // };
-
   const columns: ITableColumn[] = [
     {
       customItem: true,
@@ -78,10 +54,9 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data, handleExport
       viewStyle: { width: sw186 },
     },
     {
-      key: [{ key: "level" }],
+      key: [{ key: "level", textStyle: fs12RegBlue1 }],
       title: DASHBOARD_TRACKING.LABEL_LEVEL,
       viewStyle: { width: sw104 },
-      textStyle: { ...fsTransformNone, ...fs12RegBlue1 },
     },
     { customItem: true, key: [{ key: "remark" }], title: DASHBOARD_TRACKING.LABEL_REMARKS, viewStyle: { width: sw376 } },
   ];

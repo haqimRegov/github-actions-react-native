@@ -140,7 +140,7 @@ const investorAccountDetails = gql`
       data {
         result {
           orderHistory {
-            orderNo
+            orderNumber
             transactionType
             totalInvestment
             status

@@ -20,10 +20,18 @@ interface JointDocumentHeaderProps {
 }
 
 export const JointDocumentHeader: FunctionComponent<JointDocumentHeaderProps> = ({ document }: JointDocumentHeaderProps) => {
+  const checkAccountHolder = document.subHeader.toLowerCase().includes("principal") ? "Principal" : "Joint";
+
   return (
     <Fragment>
       <View style={rowCenterVertical}>
-        <IconText color={colorBlue._1} iconSize={sw24} name="account" text={document.subHeader} textStyle={fs16BoldBlack2} />
+        <IconText
+          color={colorBlue._1}
+          iconSize={sw24}
+          name={checkAccountHolder === "Principal" ? "account" : "account-joint"}
+          text={document.subHeader}
+          textStyle={fs16BoldBlack2}
+        />
         <CustomSpacer isHorizontal={true} space={sw8} />
         <Text style={fs12RegGray5}>{document.mainHeader}</Text>
         <CustomSpacer isHorizontal={true} space={sw16} />

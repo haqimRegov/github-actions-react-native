@@ -13,7 +13,7 @@ import {
   CustomTooltip,
   LabeledTitle,
 } from "../../components";
-import { FORCE_UPDATE_ROUTES, Language, NunitoBold, NunitoRegular } from "../../constants";
+import { Language, NunitoBold, NunitoRegular } from "../../constants";
 import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS_NEW, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import { getRiskProfile } from "../../network-actions";
@@ -101,15 +101,34 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
   const handleConfirmAssessment = () => {
-    handleNextStep(FORCE_UPDATE_ROUTES.FATCADeclaration);
-    const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
+    let nextStep: TypeForceUpdateKey = "FATCADeclaration";
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
+
     updatedFinishedSteps.push("RiskAssessment");
+
     const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
-    if (findDeclarations === -1) {
-      updatedDisabledSteps.push("Declarations");
+    if (findDeclarations !== -1) {
+      updatedDisabledSteps.splice(findDeclarations, 1);
     }
+
+    const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
+    if (findFinishedFatca !== -1) {
+      nextStep = "CRSDeclaration";
+    }
+
+    const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
+    if (findFinishedCrs !== -1 && findFinishedFatca !== -1) {
+      nextStep = "DeclarationSummary";
+    }
+
+    const findFatca = updatedDisabledSteps.indexOf("FATCADeclaration");
+    if (findFatca !== -1 && findFinishedFatca === -1) {
+      updatedDisabledSteps.splice(findFatca, 1);
+    }
+
     updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+    handleNextStep(nextStep);
   };
 
   const handleRetakeAssessment = () => {
@@ -161,17 +180,22 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
 
   const handleConfirmEdit = () => {
     setConfirmModal(undefined);
-    const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
-    const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
-    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
-    if (findDeclarations === -1) {
-      updatedDisabledSteps.push("Declarations");
-    }
-    const findRiskAssessment = updatedFinishedSteps.indexOf("RiskAssessment");
-    if (findRiskAssessment !== -1) {
-      updatedFinishedSteps.splice(findRiskAssessment, 1);
-    }
-    return updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+    const updatedDisabledSteps: TypeForceUpdateKey[] = [
+      "Contact",
+      "Declarations",
+      "FATCADeclaration",
+      "CRSDeclaration",
+      "DeclarationSummary",
+      "Acknowledgement",
+      "TermsAndConditions",
+      "Signatures",
+    ];
+
+    return updateForceUpdate({
+      ...forceUpdate,
+      disabledSteps: updatedDisabledSteps,
+      finishedSteps: ["Contact", "InvestorInformation", "ContactSummary"],
+    });
   };
 
   const handleCancelEdit = () => {
@@ -223,11 +247,15 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     subtitleStyle: fs16RegGray5,
   };
 
+  const handleBackToContactSummary = () => {
+    handleNextStep("ContactSummary");
+  };
+
   return (
     <Fragment>
       <ContentPage
         continueDisabled={disabled}
-        handleCancel={handleCancelForceUpdate}
+        handleCancel={handleBackToContactSummary}
         handleContinue={handlePageContinue}
         subheading={RISK_ASSESSMENT.HEADING_RISK}
         subtitle={RISK_ASSESSMENT.SUBHEADING}

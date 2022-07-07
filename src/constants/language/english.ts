@@ -956,6 +956,7 @@ export const english = {
       BANNER_TITLE: "Investor Information Summary",
       BUTTON_CONTINUE: "Continue",
       BUTTON_GET_OTP: "Get OTP",
+      BUTTON_SAVE: "Save",
       CARD_LABEL_CONTACT: "Contact",
       CARD_LABEL_EMAIL: "Add your email address",
       CARD_LABEL_MOBILE: "Add your mobile number",

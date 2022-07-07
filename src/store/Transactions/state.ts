@@ -1,6 +1,6 @@
 interface ITransactionState extends ITransactionsDashboard {
   availableFilters: ITransactionsAvailableFilter;
-  currentOrder: IDashboardOrder | IInvestorOrderHistory | undefined;
+  currentOrder: IDashboardOrder | undefined;
   downloadInitiated: boolean;
   search: string;
   selectedOrders: IDashboardOrder[];

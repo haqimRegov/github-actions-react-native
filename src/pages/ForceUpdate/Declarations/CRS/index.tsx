@@ -36,15 +36,34 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
       addPersonalInfo({ ...personalInfo, editDeclaration: true });
     }
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
-    const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
-    const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
-    if (findDeclarationSummary === -1) {
-      updatedDisabledSteps.push("DeclarationSummary");
+    const updatedFinishedSteps: TypeForceUpdateKey[] = [...forceUpdate.finishedSteps];
+
+    const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
+    if (findFinishedCrs === -1) {
+      updatedFinishedSteps.push("CRSDeclaration");
     }
+
+    const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+    if (findDeclarationSummary !== -1) {
+      updatedDisabledSteps.splice(findDeclarationSummary, 1);
+    }
+
+    const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
     if (findCrs === -1) {
       updatedDisabledSteps.push("CRSDeclaration");
     }
-    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
+
+    const findInvestorInformation = updatedDisabledSteps.indexOf("InvestorInformation");
+    if (findInvestorInformation !== -1) {
+      updatedDisabledSteps.splice(findInvestorInformation, 1);
+    }
+
+    const findRiskAssessment = updatedDisabledSteps.indexOf("RiskAssessment");
+    if (findRiskAssessment !== -1) {
+      updatedDisabledSteps.splice(findRiskAssessment, 1);
+    }
+
+    updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
     handleNextStep(route);
   };
 

@@ -39,9 +39,12 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
     setShowToolTip(false);
   };
 
+  // TODO temporary because OrderHistory response is string
+  const checkIfArray = isNotEmpty(totalInvestment) ? totalInvestment.toString().includes("[object") : false;
+
   const content = (
     <Fragment>
-      {isNotEmpty(totalInvestment) && totalInvestment.length > 0
+      {isNotEmpty(totalInvestment) && totalInvestment.length > 0 && checkIfArray === true
         ? totalInvestment.map((investment: IOrderAmount, index: number) => {
             return (
               <View key={index}>
@@ -76,7 +79,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
           </View>
         ) : (
           <Fragment>
-            {isNotEmpty(totalInvestment) && totalInvestment.length > 0
+            {isNotEmpty(totalInvestment) && totalInvestment.length > 0 && checkIfArray === true
               ? totalInvestment.map((investment: IOrderAmount, index: number) => {
                   return (
                     <Fragment key={index}>
@@ -93,7 +96,7 @@ export const TotalInvestments: FunctionComponent<TotalInvestmentsProps> = ({ ite
                   );
                 })
               : null}
-            {isNotEmpty(totalInvestment) && totalInvestment.length > 3 ? (
+            {isNotEmpty(totalInvestment) && totalInvestment.length > 3 && checkIfArray === true ? (
               <Fragment>
                 <CustomTooltip
                   arrowSize={{ height: sh7, width: sw12 }}

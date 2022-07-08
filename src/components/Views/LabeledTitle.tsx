@@ -20,11 +20,13 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   title,
   titleIcon,
   titleIconStyle,
+  titleNumberOfLines,
   titlePrefix,
   titlePrefixStyle,
   titleStyle,
 }: LabeledTitleProps) => {
   const defaultIconSpace = spaceToIcon !== undefined ? spaceToIcon : sw12;
+  const checkNumberOfLines = titleNumberOfLines !== undefined ? titleNumberOfLines : 0;
   return (
     <TouchableWrapper onPress={onPress}>
       <View style={style}>
@@ -37,7 +39,11 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
               <CustomSpacer isHorizontal={true} space={sw4} />
             </Fragment>
           ) : null}
-          {title !== undefined ? <Text style={{ ...fs16BoldBlack1, ...titleStyle }}>{title}</Text> : null}
+          {title !== undefined ? (
+            <Text style={{ ...fs16BoldBlack1, ...titleStyle }} numberOfLines={checkNumberOfLines}>
+              {title}
+            </Text>
+          ) : null}
           {titleIcon !== undefined ? (
             <View style={{ ...flexRow, ...centerVertical, ...titleIconStyle }}>
               <CustomSpacer isHorizontal={true} space={defaultIconSpace} />

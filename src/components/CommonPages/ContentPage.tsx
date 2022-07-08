@@ -2,7 +2,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 import { ScrollView, Text, TextStyle, View } from "react-native";
 
 import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
-import { colorBlue, flexGrow, fs16SemiBoldGray6, fs24BoldGray6, fs40BoldGray6, px, sh32, sh56, sh8, sw24 } from "../../styles";
+import { colorBlue, flexGrow, flexRow, fs16SemiBoldGray6, fs24BoldGray6, fs40BoldGray6, px, sh32, sh56, sh8, sw24 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
 
 interface ContentPageProps extends ActionButtonsProps {
@@ -10,6 +10,7 @@ interface ContentPageProps extends ActionButtonsProps {
   heading?: string;
   headingStyle?: TextStyle;
   noBounce?: boolean;
+  sideElement?: ReactNode;
   spaceToBottom?: number;
   spaceToHeading?: number;
   spaceToTitle?: number;
@@ -25,6 +26,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
   heading,
   headingStyle,
   noBounce,
+  sideElement,
   spaceToBottom,
   spaceToHeading,
   spaceToTitle,
@@ -51,13 +53,17 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
         contentContainerStyle={{ ...flexGrow, backgroundColor: colorBlue._2 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
-        <View style={px(sw24)}>
-          <CustomSpacer space={topSpace} />
-          {heading === undefined ? null : <Text style={{ ...fs40BoldGray6, ...headingStyle }}>{heading}</Text>}
-          {subheading === undefined ? null : (
-            <TextSpaceArea spaceToTop={subheadingTopSpace} style={{ ...fs24BoldGray6, ...subheadingStyle }} text={subheading} />
-          )}
-          {subtitle !== undefined ? <TextSpaceArea spaceToTop={subtitleTopSpace} style={defaultSubtitleStyle} text={subtitle} /> : null}
+        <View style={{ ...flexRow, ...px(sw24) }}>
+          <View>
+            <CustomSpacer space={topSpace} />
+            {heading === undefined ? null : <Text style={{ ...fs40BoldGray6, ...headingStyle }}>{heading}</Text>}
+            {subheading === undefined ? null : (
+              <TextSpaceArea spaceToTop={subheadingTopSpace} style={{ ...fs24BoldGray6, ...subheadingStyle }} text={subheading} />
+            )}
+            {subtitle !== undefined ? <TextSpaceArea spaceToTop={subtitleTopSpace} style={defaultSubtitleStyle} text={subtitle} /> : null}
+          </View>
+          <CustomFlexSpacer />
+          {sideElement !== undefined ? sideElement : null}
         </View>
         {children}
         <CustomFlexSpacer />

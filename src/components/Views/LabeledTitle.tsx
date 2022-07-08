@@ -26,7 +26,6 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   titleStyle,
 }: LabeledTitleProps) => {
   const defaultIconSpace = spaceToIcon !== undefined ? spaceToIcon : sw12;
-  const checkNumberOfLines = titleNumberOfLines !== undefined ? titleNumberOfLines : 0;
   return (
     <TouchableWrapper onPress={onPress}>
       <View style={style}>
@@ -40,7 +39,7 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
             </Fragment>
           ) : null}
           {title !== undefined ? (
-            <Text style={{ ...fs16BoldBlack1, ...titleStyle }} numberOfLines={checkNumberOfLines}>
+            <Text style={{ ...fs16BoldBlack1, ...titleStyle }} numberOfLines={titleNumberOfLines}>
               {title}
             </Text>
           ) : null}

@@ -1,11 +1,9 @@
-import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, CustomSpacer, SelectionBanner } from "../../../components";
-import { DEFAULT_DATE_FORMAT, Language, NunitoRegular } from "../../../constants";
-import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
+import { Language, NunitoRegular } from "../../../constants";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild, flexCol, flexRow, fs16BoldGray6, fs16RegGray6, sh56, sw4 } from "../../../styles";
 import { ProductDetails } from "./Details";
@@ -39,15 +37,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
-  const { disabledSteps, finishedSteps } = newSales;
   const [page, setPage] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
-
-  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
-  const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
 
   const handleBackToAssessment = () => {
     setPrompt(undefined);

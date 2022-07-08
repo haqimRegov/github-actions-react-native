@@ -7,6 +7,7 @@ import { Language, NEW_SALES_ROUTES } from "../../constants";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
 import { fs16RegGray6 } from "../../styles";
 import { Sample } from "../ForceUpdate/Sample";
+import { AdditionalInfoSummary } from "./AccountInfoSummary";
 import { AccountList } from "./AccountList";
 import { AdditionalInfo } from "./AdditionalDetails";
 import { ProductConfirmation } from "./Confirmation";
@@ -48,6 +49,12 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
       break;
     case NEW_SALES_ROUTES.AdditionalDetails:
       content = <AdditionalInfo {...newProps} />;
+      break;
+    case NEW_SALES_ROUTES.Summary:
+      content = <AdditionalInfoSummary {...newProps} />;
+      break;
+    case NEW_SALES_ROUTES.Acknowledgement:
+      content = <Sample title="sample" {...newProps} />;
       break;
     default:
       content = <Sample title="sample" {...newProps} />;

@@ -20,6 +20,7 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   title,
   titleIcon,
   titleIconStyle,
+  titleNumberOfLines,
   titlePrefix,
   titlePrefixStyle,
   titleStyle,
@@ -37,7 +38,11 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
               <CustomSpacer isHorizontal={true} space={sw4} />
             </Fragment>
           ) : null}
-          {title !== undefined ? <Text style={{ ...fs16BoldBlack1, ...titleStyle }}>{title}</Text> : null}
+          {title !== undefined ? (
+            <Text style={{ ...fs16BoldBlack1, ...titleStyle }} numberOfLines={titleNumberOfLines}>
+              {title}
+            </Text>
+          ) : null}
           {titleIcon !== undefined ? (
             <View style={{ ...flexRow, ...centerVertical, ...titleIconStyle }}>
               <CustomSpacer isHorizontal={true} space={defaultIconSpace} />

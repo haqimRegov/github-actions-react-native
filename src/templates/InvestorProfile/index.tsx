@@ -33,7 +33,7 @@ const { INVESTOR_PROFILE } = Language.PAGE;
 interface InvestorProfileProps {
   data: IInvestorAccount | undefined;
   handleBack: () => void;
-  handleEdit: () => void;
+  handleEdit?: () => void;
 }
 
 export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({ data, handleBack, handleEdit }: InvestorProfileProps) => {
@@ -118,18 +118,22 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({ data,
           </View>
           <CustomSpacer isHorizontal={true} space={sw8} />
           <Text style={fs18BoldGray6}>{INVESTOR_PROFILE.HEADER_TITLE}</Text>
-          <CustomFlexSpacer />
-          <RoundedButton
-            buttonStyle={buttonStyle}
-            disabled={true}
-            icon="pencil"
-            iconColor={colorBlue._1}
-            iconSize={sw11}
-            onPress={handleEdit}
-            secondary={true}
-            text="Edit Profile"
-            textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
-          />
+          {handleEdit !== undefined ? (
+            <Fragment>
+              <CustomFlexSpacer />
+              <RoundedButton
+                buttonStyle={buttonStyle}
+                disabled={true}
+                icon="pencil"
+                iconColor={colorBlue._1}
+                iconSize={sw11}
+                onPress={handleEdit}
+                secondary={true}
+                text="Edit Profile"
+                textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
+              />
+            </Fragment>
+          ) : null}
         </View>
         <CustomSpacer space={sh24} />
         <View style={data !== undefined ? undefined : flexChild}>

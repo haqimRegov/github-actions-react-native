@@ -32,6 +32,7 @@ export interface CustomTooltipProps {
   color?: string;
   content: ReactElement;
   contentStyle?: ViewStyle;
+  infoStyle?: ViewStyle;
   insets?: Record<string, unknown>;
   isVisible?: boolean;
   onClose?: () => void;
@@ -53,12 +54,13 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
   color,
   content,
   contentStyle,
+  infoStyle,
   insets,
+  isVisible,
   onClose,
   onPress,
   overlayColor,
   placement,
-  isVisible,
   showChild,
   spacing,
   theme,
@@ -109,7 +111,7 @@ export const CustomTooltip: FunctionComponent<CustomTooltipProps> = ({
 
   const icon =
     theme === "dark" ? (
-      <View style={{ ...centerHV, height: sh24, width: sw24 }}>
+      <View style={{ ...centerHV, height: sh24, width: sw24, ...infoStyle }}>
         <View style={{ ...centerHV, ...circle(sw14, colorBlue._1) }}>
           <Text style={{ ...fs10BoldWhite1, fontFamily: NunitoBlack }}>i</Text>
         </View>

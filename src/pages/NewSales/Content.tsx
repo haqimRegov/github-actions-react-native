@@ -9,6 +9,7 @@ import { fs16RegGray6 } from "../../styles";
 import { Sample } from "../ForceUpdate/Sample";
 import { AdditionalInfoSummary } from "./AccountInfoSummary";
 import { AccountList } from "./AccountList";
+import { NewSalesAcknowledgment } from "./Acknowledgement";
 import { AdditionalInfo } from "./AdditionalDetails";
 import { ProductConfirmation } from "./Confirmation";
 import { NewSalesIdentityConfirmation } from "./IdentityVerification";
@@ -40,6 +41,9 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
       break;
     case NEW_SALES_ROUTES.ProductsList:
       content = <Products {...newProps} />;
+      break;
+    case NEW_SALES_ROUTES.OrderPreview:
+      content = <NewSalesAcknowledgment {...newProps} />;
       break;
     case NEW_SALES_ROUTES.ProductsConfirmation:
       content = <ProductConfirmation {...newProps} />;

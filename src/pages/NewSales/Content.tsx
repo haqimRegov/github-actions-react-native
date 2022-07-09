@@ -42,7 +42,7 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     case NEW_SALES_ROUTES.ProductsList:
       content = <Products {...newProps} />;
       break;
-    case NEW_SALES_ROUTES.OrderPreview:
+    case NEW_SALES_ROUTES.Acknowledgement:
       content = <NewSalesAcknowledgment {...newProps} />;
       break;
     case NEW_SALES_ROUTES.ProductsConfirmation:
@@ -57,9 +57,7 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     case NEW_SALES_ROUTES.Summary:
       content = <AdditionalInfoSummary {...newProps} />;
       break;
-    case NEW_SALES_ROUTES.Acknowledgement:
-      content = <Sample title="sample" {...newProps} />;
-      break;
+
     default:
       content = <Sample title="sample" {...newProps} />;
       break;

@@ -1771,6 +1771,7 @@ export const english = {
       BUTTON_SUBMIT: "Submit",
       CHECKBOX_CHANGE_REQUEST: "Your change request will be processed once we've received your complete supporting documents (if any)",
       HEADING: "Acknowledgement",
+      HEADING_NEW: "Acknowledgement - Terms & Conditions",
       LABEL_ADD_SIGN: "Add Signature",
       LABEL_ADVISER_SIGNATURE: "Adviser's Signature",
       LABEL_INVESTORS_SIGNATURE: "Investor’s Signature",
@@ -1784,6 +1785,10 @@ export const english = {
         "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
       LABEL_CHECKBOX_3:
         "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
+      LABEL_CHECKBOX_2_NEW_SALES:
+        "The authorized distributor has explained and I have understood the features and the risks of the recommended investment. All information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
+      LABEL_CHECKBOX_3_NEW_SALES:
+        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time. I/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
       LABEL_CHECKBOX_1_NEW: "I have read, understood and accepted the Terms and Conditions above.",
       LABEL_CHECKBOX_2_NEW:
         "I/We confirm that the information provided is correct and authorize Kenanga Investors Berhad to act on the changes.",

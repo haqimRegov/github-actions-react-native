@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { RiskMapDispatchToProps, RiskMapStateToProps } from "../../../store";
 import { flexChild } from "../../../styles";
 import { OrderPreview } from "./OrderPreview";
+import { TermsAndConditions } from "./TermsAndConditions";
 
 interface NewSalesProps extends NewSalesContentProps {
   navigation: IStackNavigationProp;
@@ -15,8 +16,7 @@ export const NewSalesAcknowledgmentComponent = (props: NewSalesProps) => {
   const [page, setPage] = useState<IAcknowledgementPage>("OrderPreview");
   let content = <OrderPreview {...props} setPage={setPage} />;
   if (page === "TermsAndConditions") {
-    // terms and conditions
-    content = <OrderPreview {...props} setPage={setPage} />;
+    content = <TermsAndConditions {...props} />;
   }
   return <View style={flexChild}>{content}</View>;
 };

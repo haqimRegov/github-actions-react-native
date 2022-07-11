@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
-import { borderBottomGray2, flexRow } from "../../styles";
+import { flexRow } from "../../styles";
 import { Tab, TabProps } from "./Tab";
 
 interface TabGroupProps {
@@ -10,6 +10,7 @@ interface TabGroupProps {
   selectedViewStyle?: ViewStyle;
   setActiveTab: (tabIndex: number) => void;
   tabs: TabProps[];
+  unSelectedViewStyle?: ViewStyle;
 }
 
 export const TabGroup: FunctionComponent<TabGroupProps> = ({
@@ -17,6 +18,7 @@ export const TabGroup: FunctionComponent<TabGroupProps> = ({
   selectedTextStyle,
   selectedViewStyle,
   setActiveTab,
+  unSelectedViewStyle,
   tabs,
 }: TabGroupProps) => {
   return (
@@ -29,7 +31,8 @@ export const TabGroup: FunctionComponent<TabGroupProps> = ({
           setActiveTab(index);
         };
 
-        const borderStyle: ViewStyle = activeTab !== index ? borderBottomGray2 : {};
+        const checkStyle = unSelectedViewStyle !== undefined ? unSelectedViewStyle : {};
+        const borderStyle: ViewStyle = activeTab !== index ? checkStyle : {};
         const checkSelectedView: ViewStyle = activeTab === index && selectedViewStyle !== undefined ? selectedViewStyle : {};
         const checkSelectedText: TextStyle = activeTab === index && selectedTextStyle !== undefined ? selectedTextStyle : {};
         const tabStyle: ViewStyle = { ...borderStyle, ...tab.style, ...checkSelectedView };

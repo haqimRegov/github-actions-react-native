@@ -1,14 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer } from "../../../../../components";
+import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../../../components";
 import { DEFAULT_DATE_FORMAT } from "../../../../../constants";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps, updateAvailableFilters } from "../../../../../store";
-import { colorWhite, flexChild, sh232, sh272, shadow12Black116, sw24 } from "../../../../../styles";
+import { borderBottomGray2, colorWhite, flexChild, flexRow, sh142, sh182, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -17,9 +17,11 @@ interface PRSDefaultProps extends ProductsStoreProps {
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
+  tabsContent?: ReactNode;
 }
 
 const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
+  accountDetails,
   addPrsDefaultFilters,
   addPrsDefaultRecommendedFunds,
   addPrsDefaultSearch,
@@ -35,6 +37,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   selectedFunds,
   setScrollEnabled,
   shareSuccess,
+  tabsContent,
 }: PRSDefaultProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { availableFilters } = products;
@@ -50,7 +53,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     .flat(1)
     .filter((value) => value !== "");
 
-  const absoluteHeaderSpace = filterValues.length > 0 ? sh272 : sh232;
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh182 : sh142;
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
@@ -171,6 +174,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   return (
     <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadow12Black116 }}>
       <ProductHeader
+        accountDetails={accountDetails}
         availableFilters={availableFilters}
         currentFilter={filters}
         filter={filterTemp}
@@ -189,7 +193,19 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
         setInputSearch={setInputSearch}
       />
       <CustomSpacer space={absoluteHeaderSpace} />
+      {accountDetails.accountNo === "" ? (
+        <View>
+          <View style={flexRow}>
+            {tabsContent}
+            <CustomFlexSpacer />
+            <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={defaultPage} totalPages={defaultPages} />
+            <CustomSpacer isHorizontal={true} space={sw24} />
+          </View>
+          <View style={borderBottomGray2} />
+        </View>
+      ) : null}
       <ProductListView
+        accountNo={accountDetails.accountNo}
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleNext={handleNext}

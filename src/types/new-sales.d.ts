@@ -1,3 +1,11 @@
+declare interface INewSalesAccountDetails {
+  accountNo: string;
+  fundType: ProductType;
+  isEpf?: boolean;
+  riskScore: string;
+  isRecurring?: boolean;
+}
+
 declare interface INewSalesContentItem {
   route: TypeNewSalesRoute;
   title: string;

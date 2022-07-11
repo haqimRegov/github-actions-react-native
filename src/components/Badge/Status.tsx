@@ -12,6 +12,7 @@ import {
   colorRed,
   colorWhite,
   colorYellow,
+  disabledOpacity5,
   flexRow,
   fs12BoldWhite1,
   px,
@@ -29,6 +30,7 @@ import { CustomSpacer } from "../Views";
 export type StatusBadgeColorType = "success" | "error" | "primary" | "secondary" | "warning" | "danger" | "review" | "complete";
 
 interface StatusBadgeProps {
+  disabled?: boolean;
   icon?: string;
   iconSize?: number;
   color?: StatusBadgeColorType;
@@ -41,6 +43,7 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
+  disabled,
   icon,
   iconSize,
   color = "primary",
@@ -93,6 +96,8 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
       break;
   }
 
+  const disabledStyle: ViewStyle = disabled !== undefined && disabled === true ? disabledOpacity5 : {};
+
   const badgeStyle: ViewStyle = {
     ...centerHV,
     ...flexRow,
@@ -101,6 +106,7 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
     borderRadius: sw24,
     backgroundColor: badgeColor,
     height: sh24,
+    ...disabledStyle,
     ...style,
   };
 
@@ -112,8 +118,10 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
     ...textStyle,
   };
 
+  const checkDisabled = disabled !== undefined && disabled === true ? "none" : "auto";
+
   return (
-    <View style={flexRow}>
+    <View style={flexRow} pointerEvents={checkDisabled}>
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={badgeStyle}>
           {prefix !== undefined ? (
@@ -123,7 +131,7 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
             </Fragment>
           ) : null}
           <Text style={badgeTextStyle}>{text}</Text>
-          {icon !== undefined ? (
+          {icon !== undefined && disabled !== true ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw4} />
               <IcoMoon color={iconColor} name={icon} size={iconSize || sh12} />

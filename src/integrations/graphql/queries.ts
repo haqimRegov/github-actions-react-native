@@ -95,6 +95,12 @@ const etbCheck = gql`
           status
           highRisk
           forceUpdate
+          accounts {
+            name
+            jointName
+            accountNo
+            isJoint
+          }
         }
       }
       error {

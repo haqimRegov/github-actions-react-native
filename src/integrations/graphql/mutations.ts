@@ -20,7 +20,7 @@ const changePassword = gql`
 `;
 
 const clientRegister = gql`
-  mutation clientRegisterV2($input: ClientRegisterInput) {
+  mutation register($input: ClientRegisterInput) {
     clientRegisterV2(input: $input) {
       data {
         result {
@@ -37,6 +37,12 @@ const clientRegister = gql`
             id
             name
             clientId
+          }
+          riskInfo {
+            appetite
+            expectedRange
+            profile
+            type
           }
         }
       }

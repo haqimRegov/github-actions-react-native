@@ -3,10 +3,13 @@ import { newSalesInitialState, NewSalesState } from "./state";
 
 export function newSalesReducer(state = newSalesInitialState, action: NewSalesAction): NewSalesState {
   switch (action.type) {
-    case "newSales/ADD_ACCOUNT_NO":
+    case "newSales/ADD_ACCOUNT_DETAILS":
       return {
         ...state,
-        accountNo: action.payload,
+        accountDetails: {
+          ...state.accountDetails,
+          ...action.payload,
+        },
       };
     case "newSales/ADD_RISK_INFO":
       return {
@@ -31,7 +34,12 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
 
     case "newSales/RESET_STEPS":
       return {
-        accountNo: "",
+        accountDetails: {
+          accountNo: "",
+          fundType: "",
+          isEpf: undefined,
+          riskScore: "",
+        },
         disabledSteps: [
           "Acknowledgement",
           "AdditionalDetails",

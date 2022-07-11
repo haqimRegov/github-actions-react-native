@@ -3,7 +3,7 @@ export interface INewSalesToast {
   toastVisible: boolean;
 }
 export type NewSalesState = {
-  accountNo: string;
+  accountDetails: INewSalesAccountDetails;
   disabledSteps: TypeNewSalesKey[];
   emailVerified?: boolean;
   finishedSteps: TypeNewSalesKey[];
@@ -12,7 +12,13 @@ export type NewSalesState = {
 };
 
 export const newSalesInitialState: NewSalesState = {
-  accountNo: "",
+  accountDetails: {
+    accountNo: "",
+    fundType: "ut",
+    isEpf: undefined,
+    isRecurring: undefined,
+    riskScore: "",
+  },
   disabledSteps: [
     "Acknowledgement",
     "AdditionalDetails",

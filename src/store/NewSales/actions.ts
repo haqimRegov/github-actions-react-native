@@ -1,8 +1,8 @@
 import { typedAction } from "../actionCreator";
 import { INewSalesToast, NewSalesState } from "./state";
 
-export const addAccountNo = (accountNo: string) => {
-  return typedAction("newSales/ADD_ACCOUNT_NO", accountNo);
+export const addAccountDetails = (accountDetails: INewSalesAccountDetails) => {
+  return typedAction("newSales/ADD_ACCOUNT_DETAILS", accountDetails);
 };
 
 export const addRiskInfo = (riskInfo: IRiskProfile) => {
@@ -34,7 +34,7 @@ export const updateToast = (toast: INewSalesToast) => {
 };
 
 export type NewSalesAction = ReturnType<
-  | typeof addAccountNo
+  | typeof addAccountDetails
   | typeof addRiskInfo
   | typeof resetNewSalesSteps
   | typeof updateNewSales
@@ -45,7 +45,7 @@ export type NewSalesAction = ReturnType<
 >;
 
 export const NewSalesActionProps = {
-  addAccountNo,
+  addAccountDetails,
   addRiskInfo,
   resetNewSalesSteps,
   updateNewSales,

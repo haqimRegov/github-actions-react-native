@@ -79,6 +79,8 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   resetRiskAssessment,
   riskScore,
   setLoading,
+  // setPage,
+  addAccountDetails,
   updateIsRiskUpdated,
   updateNewSales,
   updateToast,
@@ -114,7 +116,15 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     if (findRiskAssessment !== -1) {
       newFinishedSteps.splice(findRiskAssessment, 1);
     }
-    updateNewSales({ ...newSales, finishedSteps: newFinishedSteps, disabledSteps: updatedDisabledSteps });
+    updateNewSales({
+      ...newSales,
+      finishedSteps: newFinishedSteps,
+      disabledSteps: updatedDisabledSteps,
+      toast: {
+        toastText: RISK_ASSESSMENT.TOAST_CHANGES,
+        toastVisible: true,
+      },
+    });
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
     handleNextStep("RiskProfile");
   };

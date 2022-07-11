@@ -51,6 +51,18 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleCancel = () => {
+    const temp = [...selectedFunds];
+    const updatedFunds: IProduct[] = [];
+    temp.forEach((eachFund: IProduct) => {
+      if (
+        (riskScore.appetite.toLowerCase() === "medium" &&
+          (eachFund.riskCategory.toLowerCase() === "low" || eachFund.riskCategory.toLowerCase() === "medium")) ||
+        (riskScore.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
+      ) {
+        updatedFunds.push(eachFund);
+      }
+    });
+    addSelectedFund(updatedFunds);
     setPrompt(undefined);
   };
 

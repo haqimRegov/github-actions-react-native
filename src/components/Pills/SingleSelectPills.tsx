@@ -33,6 +33,7 @@ interface SingleSelectPillsProps {
   buttonStyle?: ViewStyle;
   CustomContent?: (props: IToggleButtonCustomContent) => JSX.Element;
   direction?: "column" | "row";
+  disabled?: boolean;
   disabledValues?: string[];
   header?: string;
   headerStyle?: TextStyle;
@@ -51,6 +52,7 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   buttonStyle,
   CustomContent,
   direction,
+  disabled,
   disabledValues,
   header,
   headerStyle,
@@ -67,9 +69,11 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   const defaultSpace = direction === "column" ? sh16 : sw40;
   const defaultSpaceToHeader = spaceToHeader !== undefined ? spaceToHeader : sh4;
   const eachSpace = space !== undefined ? space : defaultSpace;
+  const checkDisabled = disabled === true ? "none" : "auto";
+  const disabledViewStyle: ViewStyle = disabled === true ? { ...disabledOpacity6 } : {};
 
   return (
-    <View>
+    <View pointerEvents={checkDisabled} style={disabledViewStyle}>
       {header !== undefined ? (
         <Fragment>
           <Text style={{ ...fs12BoldGray6, ...headerStyle }}>{header}</Text>

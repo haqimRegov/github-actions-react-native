@@ -5,7 +5,7 @@ import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, Text
 import { colorBlue, flexGrow, flexRow, fs16SemiBoldGray6, fs24BoldGray6, fs40BoldGray6, px, sh32, sh56, sh8, sw24 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
 
-interface ContentPageProps extends ActionButtonsProps {
+export interface ContentPageProps extends ActionButtonsProps {
   children: ReactNode;
   heading?: string;
   headingStyle?: TextStyle;

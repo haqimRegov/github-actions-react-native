@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { CustomSpacer, RoundedButton, SafeAreaPage } from "../../../../components";
 import { Language } from "../../../../constants";
-import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
+import { productsInitialFilter, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
 import { flexChild, flexGrow, px, sh152, sh16, sh56, sh810, sw24 } from "../../../../styles";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 import { ProductTabs } from "./Tabs";
@@ -20,7 +20,9 @@ interface ProductListProps extends ProductsStoreProps {
 }
 
 const ProductListComponent: FunctionComponent<ProductListProps> = ({
+  accountDetails,
   accountType,
+  addUtFilters,
   handleCancelProducts,
   licenseType,
   productType,
@@ -33,6 +35,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   setScrollEnabled,
   updateProductType,
 }: ProductListProps) => {
+  const { accountNo, fundType, isEpf, riskScore } = accountDetails;
   // const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
 
   // const handleShowPerformance = (item: ITableRowData) => {
@@ -60,7 +63,16 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   // };
   // columns.push(performanceColumn);
 
-  const productTypeProps = { scrollEnabled: scrollEnabled, setScrollEnabled: setScrollEnabled };
+  const handleProductType = (type: ProductType) => {
+    setScrollEnabled(true);
+    updateProductType(type);
+  };
+
+  const tabsContent = (
+    <ProductTabs accountType={accountType} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
+  );
+
+  const productTypeProps = { scrollEnabled: scrollEnabled, setScrollEnabled: setScrollEnabled, tabsContent };
   let content: JSX.Element;
   if (productType === "prs") {
     content = <PRS {...productTypeProps} />;
@@ -72,15 +84,15 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
     content = <UnitTrust {...productTypeProps} />;
   }
 
-  const handleProductType = (type: ProductType) => {
-    setScrollEnabled(true);
-    updateProductType(type);
-  };
-
   const handleResetFilter = () => {
     switch (productType) {
       case "ut":
-        resetUTFilter();
+        if (accountNo !== "") {
+          const epfFilterArray: string[] = accountDetails.isEpf === true ? ["Yes"] : ["No"];
+          addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+        } else {
+          resetUTFilter();
+        }
         break;
       case "prs":
         resetPRSFilter();
@@ -100,6 +112,12 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
     handleResetFilter();
   }, [productType]);
 
+  useEffect(() => {
+    if (accountNo !== "") {
+      updateProductType(fundType);
+    }
+  }, []);
+
   return (
     <SafeAreaPage>
       <ScrollView
@@ -108,10 +126,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
         scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}>
         <View style={flexChild}>
-          <View style={{ minHeight: sh810 }}>
-            <ProductTabs accountType={accountType} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
-            {content}
-          </View>
+          <View style={{ minHeight: sh810 }}>{content}</View>
           <Fragment>
             {selectedFunds.length !== 0 ? <CustomSpacer space={sh152} /> : null}
             {selectedFunds.length === 0 ? (

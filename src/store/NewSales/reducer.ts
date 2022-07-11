@@ -8,6 +8,11 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
         ...state,
         accountNo: action.payload,
       };
+    case "newSales/ADD_RISK_INFO":
+      return {
+        ...state,
+        riskInfo: action.payload,
+      };
     case "newSales/UPDATE_STEPS":
       return {
         ...state,
@@ -45,6 +50,7 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           toastText: "All changes saved",
           toastVisible: false,
         },
+        riskInfo: undefined,
       };
     case "newSales/UPDATE_TOAST_TEXT":
       return {

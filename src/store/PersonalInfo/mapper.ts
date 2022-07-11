@@ -12,6 +12,7 @@ import { PersonalInfoActionProps } from "./actions";
 export const PersonalInfoMapStateToProps = (state: RootState) => ({
   accountType: state.client.accountType,
   accountHolder: state.client.details?.accountHolder,
+  client: state.client,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
   forceUpdate: state.forceUpdate,

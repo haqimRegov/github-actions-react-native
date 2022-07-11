@@ -1,10 +1,11 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Pressable, Text, View, ViewStyle } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import {
   CustomSpacer,
   CustomTextInput,
+  CustomTooltip,
   LabeledTitle,
   NewDropdown,
   NumberPicker,
@@ -35,19 +36,25 @@ import {
   sh16,
   sh24,
   sh4,
+  sh64,
   sh8,
   sw116,
+  sw12,
+  sw120,
+  sw148,
   sw152,
   sw16,
   sw24,
   sw360,
   sw64,
+  sw7,
 } from "../../../styles";
 import { formatAmount, isAmount, parseAmount } from "../../../utils";
 
 const { INVESTMENT } = Language.PAGE;
 
 interface InvestmentProps {
+  accountDetails: INewSalesAccountDetails;
   accountType: TypeAccountChoices;
   agentCategory: TypeAgentCategory;
   data: IProductSales;
@@ -57,6 +64,7 @@ interface InvestmentProps {
 }
 
 export const Investment: FunctionComponent<InvestmentProps> = ({
+  accountDetails,
   accountType,
   agentCategory,
   data,
@@ -65,6 +73,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   withEpf,
 }: InvestmentProps) => {
   const { allowEpf, investment, fundDetails, masterClassList } = data;
+  const { isRecurring: isExistingAccountRecurring } = accountDetails;
 
   const {
     amountError,
@@ -84,6 +93,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const { isEpf, isScheduled } = fundDetails;
 
   const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
+  const [recurringTooltipVisible, setRecurringTooltipVisible] = useState<boolean>(false);
 
   const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
@@ -304,6 +314,9 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const handleTooltip = () => {
     setTooltipVisible(!tooltipVisible);
   };
+  const handleRecurringTooltip = () => {
+    setRecurringTooltipVisible(!recurringTooltipVisible);
+  };
 
   const handleScroll = () => {
     setTooltipVisible(false);
@@ -448,7 +461,42 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
             <CustomSpacer space={sh16} />
             <View style={borderBottomGray2} />
             <CustomSpacer space={sh16} />
-            <Switch label={INVESTMENT.LABEL_RECURRING} labelStyle={fs16RegBlack2} onPress={handleScheduled} toggle={scheduledInvestment} />
+            {isExistingAccountRecurring === undefined ? (
+              <View style={{ width: sw120 }}>
+                <CustomTooltip
+                  content={
+                    <View>
+                      <Text style={fs12RegWhite1}>{INVESTMENT.LABEL_RECURRING_DISABLED}</Text>
+                    </View>
+                  }
+                  contentStyle={{ width: sw148, height: sh64 }}
+                  arrowSize={{ width: sw12, height: sw7 }}
+                  onClose={handleRecurringTooltip}
+                  theme="dark"
+                  isVisible={recurringTooltipVisible}>
+                  <View>
+                    <Pressable onStartShouldSetResponderCapture={() => true} onPress={handleRecurringTooltip}>
+                      <View>
+                        <Switch
+                          disabled={true}
+                          label={INVESTMENT.LABEL_RECURRING}
+                          labelStyle={fs16RegBlack2}
+                          onPress={handleScheduled}
+                          toggle={scheduledInvestment}
+                        />
+                      </View>
+                    </Pressable>
+                  </View>
+                </CustomTooltip>
+              </View>
+            ) : (
+              <Switch
+                label={INVESTMENT.LABEL_RECURRING}
+                labelStyle={fs16RegBlack2}
+                onPress={handleScheduled}
+                toggle={scheduledInvestment}
+              />
+            )}
           </Fragment>
         ) : null}
         {scheduledInvestment === true ? (

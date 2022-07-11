@@ -7,15 +7,19 @@ declare interface IClientRegisterInfo {
 }
 
 declare interface IClientRegisterRequest {
+  accountNo?: string;
   accountType: TypeAccountChoices;
-  principalHolder: IClientRegisterInfo;
+  isEtb: boolean;
+  isNewFundPurchased: boolean;
   jointHolder?: IClientRegisterInfo;
+  principalHolder: IClientRegisterInfo;
 }
 
 declare interface IClientRegisterResult {
   initId: string;
-  principalHolder: IClientBasicInfo;
   jointHolder?: IClientBasicInfo;
+  principalHolder: IClientBasicInfo;
+  riskInfo?: IRiskProfile;
 }
 
 declare interface IClientRegisterMutation {

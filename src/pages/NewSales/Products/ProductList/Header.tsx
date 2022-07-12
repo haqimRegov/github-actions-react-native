@@ -239,7 +239,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                   };
                   const checkDisabled = () => {
                     switch (pill) {
-                      case `Fund House: KENANGA INVESTORS BERHAD`:
+                      case "Fund House: KENANGA INVESTORS BERHAD":
                         if (filterProps.productType === "amp") {
                           return true;
                         }

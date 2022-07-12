@@ -461,7 +461,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
             <CustomSpacer space={sh16} />
             <View style={borderBottomGray2} />
             <CustomSpacer space={sh16} />
-            {isExistingAccountRecurring === undefined ? (
+            {isExistingAccountRecurring === true ? (
               <View style={{ width: sw120 }}>
                 <CustomTooltip
                   content={
@@ -474,19 +474,17 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   onClose={handleRecurringTooltip}
                   theme="dark"
                   isVisible={recurringTooltipVisible}>
-                  <View>
-                    <Pressable onStartShouldSetResponderCapture={() => true} onPress={handleRecurringTooltip}>
-                      <View>
-                        <Switch
-                          disabled={true}
-                          label={INVESTMENT.LABEL_RECURRING}
-                          labelStyle={fs16RegBlack2}
-                          onPress={handleScheduled}
-                          toggle={scheduledInvestment}
-                        />
-                      </View>
-                    </Pressable>
-                  </View>
+                  <Pressable onStartShouldSetResponderCapture={() => true} onPress={handleRecurringTooltip}>
+                    <View>
+                      <Switch
+                        disabled={true}
+                        label={INVESTMENT.LABEL_RECURRING}
+                        labelStyle={fs16RegBlack2}
+                        onPress={handleScheduled}
+                        toggle={scheduledInvestment}
+                      />
+                    </View>
+                  </Pressable>
                 </CustomTooltip>
               </View>
             ) : (

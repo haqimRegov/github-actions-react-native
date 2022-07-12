@@ -118,7 +118,7 @@ export const StatusBadge: FunctionComponent<StatusBadgeProps> = ({
     ...textStyle,
   };
 
-  const checkDisabled = disabled !== undefined && disabled === true ? "none" : "auto";
+  const checkDisabled = disabled === true ? "none" : "auto";
 
   return (
     <View style={flexRow} pointerEvents={checkDisabled}>

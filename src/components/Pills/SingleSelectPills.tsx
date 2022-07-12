@@ -70,7 +70,7 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   const defaultSpaceToHeader = spaceToHeader !== undefined ? spaceToHeader : sh4;
   const eachSpace = space !== undefined ? space : defaultSpace;
   const checkDisabled = disabled === true ? "none" : "auto";
-  const disabledViewStyle: ViewStyle = disabled === true ? { ...disabledOpacity6 } : {};
+  const disabledViewStyle: ViewStyle = disabled === true ? disabledOpacity6 : {};
 
   return (
     <View pointerEvents={checkDisabled} style={disabledViewStyle}>
@@ -84,10 +84,10 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
         <View style={direction === "column" ? flexCol : flexRow}>
           {labels.map((content: ICheckBoxWithSubLabel, index: number) => {
             const { label, labelStyle } = content;
-            const disabled = disabledValues !== undefined && disabledValues.includes(content.label);
+            const disabledContent = disabledValues !== undefined && disabledValues.includes(content.label);
 
             const handlePress = () => {
-              if (!disabled) {
+              if (!disabledContent) {
                 onSelect(label);
               }
             };
@@ -95,8 +95,8 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
             const circleStyle: ViewStyle =
               value === label ? circleBorder(sw16, sw1, colorRed._1, colorRed._1) : circleBorder(sw16, sw1, colorBlue._1);
 
-            const disabledBackground: ViewStyle = disabled === true && value === "" ? { backgroundColor: colorGray._4 } : {};
-            const disabledStyle: ViewStyle = disabled ? { ...disabledOpacity6 } : {};
+            const disabledBackground: ViewStyle = disabledContent === true && value === "" ? { backgroundColor: colorGray._4 } : {};
+            const disabledStyle: ViewStyle = disabledContent ? { ...disabledOpacity6 } : {};
             const customContentProps: IToggleButtonCustomContent = {
               buttonStyle,
               circleStyle,

@@ -6,7 +6,9 @@ import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitle, Pagination, PromptModal, Tab } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { DICTIONARY_COUNTRIES } from "../../../../data/dictionary";
+import { clientRegister } from "../../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
   alignFlexStart,
@@ -48,7 +50,7 @@ import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { InvestorAccountsHeader } from "./Header";
 
-const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS, DASHBOARD_HOME } = Language.PAGE;
+const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface InvestorOverviewProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
@@ -59,6 +61,7 @@ interface InvestorOverviewProps extends InvestorsStoreProps {
 }
 
 export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
+  addRiskInfo,
   addClientDetails,
   addPersonalInfo,
   client,
@@ -72,6 +75,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const navigation = useNavigation<IStackNavigationProp>();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingNewSales, setLoadingNewSales] = useState<boolean>(false);
   const [accountType, setAccountType] = useState<number>(-1);
   const [newSalesModal, setNewSalesModal] = useState<boolean>(false);
   const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
@@ -79,6 +83,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
   const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
+  const TEMPORARY_ID_TYPE = "NRIC";
 
   const modalData: LabeledTitleProps[] = [
     {
@@ -124,11 +129,78 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
 
   const handleNewSalesPromptCancel = () => {
     setNewSalesModal(false);
+    if (accountType !== -1) {
+      setAccountType(-1);
+    }
+  };
+
+  const handleClientRegister = async () => {
+    // TODO joint integration
+    if (investorData !== undefined) {
+      setLoadingNewSales(true);
+      const principalDob =
+        investorData.dateOfBirth && TEMPORARY_ID_TYPE !== "NRIC"
+          ? { dateOfBirth: moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
+      const request: IClientRegisterRequest = {
+        accountType: accountType === 0 ? "Individual" : "Joint",
+        isEtb: true,
+        isNewFundPurchased: false,
+        principalHolder: {
+          ...principalDob,
+          id: investorData.idNumber,
+          idType: TEMPORARY_ID_TYPE,
+          name: investorData.name!,
+        },
+      };
+      const clientRegisterResponse: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
+      setLoadingNewSales(false);
+      if (clientRegisterResponse !== undefined) {
+        const { data, error } = clientRegisterResponse;
+        if (error === null && data !== null) {
+          if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
+            addRiskInfo(data.result.riskInfo);
+          }
+          addClientDetails({
+            ...client.details,
+            principalHolder: {
+              ...client.details!.principalHolder,
+              dateOfBirth: investorData.dateOfBirth,
+              clientId: investorData.clientId,
+              id: investorData.idNumber,
+              name: investorData.name,
+            },
+            initId: `${data.result.initId}`,
+            accountHolder: "Principal",
+          });
+          addPersonalInfo({
+            ...personalInfo,
+            principal: {
+              ...personalInfo.principal,
+              personalDetails: {
+                ...personalInfo.principal?.personalDetails,
+                dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+                expirationDate: undefined,
+                idNumber: data.result.principalHolder.id,
+                idType: TEMPORARY_ID_TYPE,
+                name: data.result.principalHolder.name,
+                nationality: data.result.principalHolder.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+              },
+            },
+          });
+          setNewSalesModal(false);
+          navigation.navigate("NewSales");
+        }
+      }
+    }
   };
 
   const handleNewSales = () => {
-    setNewSalesModal(false);
-    navigation.navigate("NewSales");
+    if (accountType === 0) {
+      return handleClientRegister();
+    }
+    setAccountType(-1);
+    return setNewSalesModal(false);
   };
 
   const handleForceUpdate = () => {
@@ -214,6 +286,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
+
   const headerData = {
     email: investorData !== undefined ? investorData.email : undefined,
     emailLastUpdated: investorData !== undefined ? investorData.emailLastUpdated : undefined,
@@ -281,6 +354,8 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       />
       <PromptModal
         contentStyle={alignFlexStart}
+        continueDisabled={accountType === -1}
+        continueLoading={loadingNewSales}
         handleCancel={handleNewSalesPromptCancel}
         handleContinue={handleNewSales}
         label={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_TITLE}

@@ -35,7 +35,7 @@ import {
 } from "../../styles";
 
 interface IAccountCardProps {
-  data: IAccountList;
+  data: INewSalesAccountList;
   style?: ViewStyle;
   handlePress: () => void;
 }

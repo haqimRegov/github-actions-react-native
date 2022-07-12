@@ -288,7 +288,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
               <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective} />
               <CustomSpacer space={sh32} />
               <View style={rowCenterVertical}>
-                <IcoMoon name="facts" size={sw20} color={colorBlack._2} />
+                <IcoMoon name="fund-facts" size={sw20} color={colorBlack._2} />
                 <CustomSpacer isHorizontal={true} space={sw12} />
                 <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_FACTS} </Text>
                 <CustomSpacer isHorizontal={true} space={sw12} />

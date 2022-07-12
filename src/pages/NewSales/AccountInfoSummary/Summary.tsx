@@ -298,7 +298,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               {client.accountType === "Joint" ? (
                 <Fragment>
                   <View style={rowCenterVertical}>
-                    <IcoMoon name="avatar" size={sw20} color={colorBlue._1} />
+                    <IcoMoon name="account" size={sw20} color={colorBlue._1} />
                     <CustomSpacer isHorizontal={true} space={sw8} />
                     <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_PRINCIPAL_HOLDER}</Text>
                     <CustomSpacer isHorizontal={true} space={sw16} />
@@ -310,7 +310,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
                   <TextCard data={idVerificationPrincipal} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
                   <CustomSpacer space={sh24} />
                   <View style={rowCenterVertical}>
-                    <IcoMoon name="avatar-joint" size={sw20} color={colorBlue._1} />
+                    <IcoMoon name="account-joint" size={sw20} color={colorBlue._1} />
                     <CustomSpacer isHorizontal={true} space={sw8} />
                     <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_JOINT_HOLDER}</Text>
                     <CustomSpacer isHorizontal={true} space={sw16} />
@@ -380,7 +380,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
                 return (
                   <Fragment key={numberIndex}>
                     <View style={flexRow}>
-                      <IcoMoon color={colorBlue._1} name="bank" size={sw24} />
+                      <IcoMoon color={colorBlue._1} name="bank-new" size={sw24} />
                       <CustomSpacer isHorizontal={true} space={sw8} />
                       <View style={flexChild}>
                         <View style={rowCenterVertical}>
@@ -403,7 +403,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
                   <Fragment key={numberIndex}>
                     {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}
                     <View style={flexRow}>
-                      <IcoMoon color={colorBlue._1} name="bank" size={sw24} />
+                      <IcoMoon color={colorBlue._1} name="bank-new" size={sw24} />
                       <CustomSpacer isHorizontal={true} space={sw8} />
                       <View style={flexChild}>
                         <View style={rowCenterVertical}>
@@ -422,7 +422,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               })}
               <CustomSpacer space={sh8} />
               <View style={flexRow}>
-                <IcoMoon color={colorBlue._1} name="transaction" size={sw24} />
+                <IcoMoon color={colorBlue._1} name="account-settings" size={sw24} />
                 <CustomSpacer isHorizontal={true} space={sw8} />
                 <View style={flexChild}>
                   <View style={rowCenterVertical}>

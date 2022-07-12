@@ -14,7 +14,8 @@ import { AdditionalInfo } from "./AdditionalDetails";
 import { ProductConfirmation } from "./Confirmation";
 import { NewSalesIdentityConfirmation } from "./IdentityVerification";
 import { Products } from "./Products";
-import { NewSalesRisk } from "./RiskAssessment";
+import { NewSalesRiskAssessment } from "./RiskAssessment";
+import { NewSalesRiskProfile } from "./RiskProfile";
 
 const { NEW_SALES } = Language.PAGE;
 interface NewSalesProps extends NewSalesContentProps, NewSalesStoreProps {
@@ -36,8 +37,11 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     case NEW_SALES_ROUTES.AccountList:
       content = <AccountList {...newProps} />;
       break;
+    case NEW_SALES_ROUTES.RiskProfile:
+      content = <NewSalesRiskProfile {...newProps} />;
+      break;
     case NEW_SALES_ROUTES.RiskAssessment:
-      content = <NewSalesRisk {...newProps} />;
+      content = <NewSalesRiskAssessment {...newProps} />;
       break;
     case NEW_SALES_ROUTES.ProductsList:
       content = <Products {...newProps} />;

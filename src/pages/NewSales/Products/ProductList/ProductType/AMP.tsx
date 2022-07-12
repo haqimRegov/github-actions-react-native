@@ -1,13 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { Alert, Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer } from "../../../../../components";
+import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps, updateAvailableFilters } from "../../../../../store";
-import { colorWhite, flexChild, sh232, sh272, shadow12Black116, sw24 } from "../../../../../styles";
+import { borderBottomGray2, colorWhite, flexChild, flexRow, sh142, sh182, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -16,9 +16,11 @@ interface AMPProps extends ProductsStoreProps {
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
+  tabsContent?: ReactNode;
 }
 
 const AMPComponent: FunctionComponent<AMPProps> = ({
+  accountDetails,
   accountType,
   addAmpAllFunds,
   addAmpFilters,
@@ -37,6 +39,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   selectedFunds,
   setScrollEnabled,
   shareSuccess,
+  tabsContent,
   updateAmpShowBy,
 }: AMPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -54,7 +57,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     .flat(1)
     .filter((value) => value !== "");
 
-  const absoluteHeaderSpace = filterValues.length > 0 ? sh272 : sh232;
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh182 : sh142;
 
   const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
@@ -211,6 +214,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   return (
     <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadow12Black116 }}>
       <ProductHeader
+        accountDetails={accountDetails}
         availableFilters={availableFilters}
         currentFilter={filters}
         filter={filterTemp}
@@ -229,6 +233,15 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         setInputSearch={setInputSearch}
       />
       <CustomSpacer space={absoluteHeaderSpace} />
+      <View>
+        <View style={flexRow}>
+          {tabsContent}
+          <CustomFlexSpacer />
+          <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={defaultPage} totalPages={defaultPages} />
+          <CustomSpacer isHorizontal={true} space={sw24} />
+        </View>
+        <View style={borderBottomGray2} />
+      </View>
       <ProductListView
         addFunds={addSelectedFund}
         filter={filterTemp}

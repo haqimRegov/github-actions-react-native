@@ -88,6 +88,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
@@ -105,6 +106,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
@@ -122,6 +124,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
@@ -139,6 +142,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",

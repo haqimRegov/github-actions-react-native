@@ -262,6 +262,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
@@ -287,6 +288,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
@@ -312,6 +314,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
@@ -337,6 +340,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",

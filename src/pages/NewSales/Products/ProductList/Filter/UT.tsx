@@ -16,13 +16,15 @@ import { isNotEmpty } from "../../../../../utils";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface UTFilterProps {
+  accountDetails: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   productType: ProductType;
   setFilter: (value: IProductFilter) => void;
 }
 
-export const UTFilter: FunctionComponent<UTFilterProps> = ({ availableFilters, filter, setFilter }: UTFilterProps) => {
+export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: UTFilterProps) => {
+  const { accountNo, isEpf } = accountDetails;
   const { fundType, epfApproved, fundCurrency, riskCategory, shariahApproved, issuingHouse, conventional } = filter;
 
   const handleEpf = (value: string) => {
@@ -153,6 +155,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ availableFilters, f
         <View style={{ width: sw360 }}>
           <SingleSelectPills
             direction="row"
+            disabled={accountNo !== ""}
             disabledValues={disabledEpfApproved}
             header={PRODUCT_FILTER.LABEL_EPF}
             labels={FILTER_EPF_LABEL}

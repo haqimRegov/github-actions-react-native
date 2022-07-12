@@ -58,6 +58,7 @@ export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesCo
 }
 
 export const ProductConfirmationComponent: FunctionComponent<ProductConfirmationProps> = ({
+  accountDetails,
   accountType,
   addInvestmentDetails: setInvestmentDetails,
   addPersonalInfo,
@@ -357,6 +358,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                     </View>
                     <CustomSpacer space={sh24} />
                     <Investment
+                      accountDetails={accountDetails}
                       accountType={accountType}
                       agentCategory={agentCategory!.category!}
                       data={item}

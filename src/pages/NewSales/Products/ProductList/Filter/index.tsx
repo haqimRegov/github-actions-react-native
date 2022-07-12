@@ -5,24 +5,25 @@ import { PRSFilter } from "./PRS";
 import { UTFilter } from "./UT";
 
 export interface ProductFilterProps {
+  accountDetails: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   setFilter: (filter: IProductFilter) => void;
   productType: ProductType;
 }
 
-export const ProductFilter: FunctionComponent<ProductFilterProps> = (props: ProductFilterProps) => {
-  switch (props.productType) {
+export const ProductFilter: FunctionComponent<ProductFilterProps> = ({ accountDetails, ...rest }: ProductFilterProps) => {
+  switch (rest.productType) {
     case "ut":
-      return <UTFilter {...props} />;
+      return <UTFilter accountDetails={accountDetails} {...rest} />;
     case "prs":
-      return <PRSFilter {...props} />;
+      return <PRSFilter {...rest} />;
     case "prsDefault":
-      return <PRSFilter {...props} />;
+      return <PRSFilter {...rest} />;
     case "amp":
-      return <AMPFilter {...props} />;
+      return <AMPFilter {...rest} />;
 
     default:
-      return <PRSFilter {...props} />;
+      return <PRSFilter {...rest} />;
   }
 };

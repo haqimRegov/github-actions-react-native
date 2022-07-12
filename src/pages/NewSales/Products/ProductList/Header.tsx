@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, ImageStyle, TextInput, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Text, TextInput, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
@@ -17,17 +17,18 @@ import {
   flexRow,
   flexWrap,
   fs12BoldBlue1,
+  fs24BoldBlue1,
   fullWidth,
   justifyContentEnd,
   px,
   sh118,
-  sh120,
   sh16,
   sh2,
   sh24,
   sh34,
   sh36,
   sh40,
+  sh8,
   shadow12Black112,
   sw1,
   sw218,
@@ -47,6 +48,7 @@ import { ProductFilter, ProductFilterProps } from "./Filter";
 
 const { PRODUCT_LIST, PRODUCT_FILTER } = Language.PAGE;
 interface ProductHeaderProps extends ProductFilterProps {
+  accountDetails: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   currentFilter: IProductFilter;
   filterVisible: boolean;
@@ -63,6 +65,7 @@ interface ProductHeaderProps extends ProductFilterProps {
 }
 
 export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
+  accountDetails,
   currentFilter,
   handleShowFilter,
   filterVisible,
@@ -77,6 +80,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
+  const { accountNo, isEpf } = accountDetails;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   const [showMorePills, setShowMorePills] = useState<boolean>(false);
   const filterKeys = isNotEmpty(currentFilter) ? Object.keys(currentFilter) : [];
@@ -148,6 +152,21 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     handleSearch();
   };
 
+  const handleHeader = () => {
+    switch (filterProps.productType) {
+      case "ut":
+        return PRODUCT_LIST.LABEL_HEADER_UNIT_TRUST;
+      case "prs":
+        return PRODUCT_LIST.LABEL_HEADER_PRS_SELF;
+      case "prsDefault":
+        return PRODUCT_LIST.LABEL_HEADER_PRS_DEFAULT;
+      default:
+        return PRODUCT_LIST.LABEL_HEADER_UNIT_TRUST;
+    }
+  };
+
+  const headerLabel = accountNo !== "" ? handleHeader() : PRODUCT_LIST.HEADING;
+
   const overflow: ViewStyle = showMorePills ? {} : { height: sh40, overflow: "hidden" };
 
   const container: ViewStyle = {
@@ -155,10 +174,8 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     ...shadow12Black112,
     ...fullWidth,
     backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw24,
-    borderBottomRightRadius: sw24,
+    borderRadius: sw24,
     marginBottom: sh24,
-    top: sh120,
     zIndex: 1,
   };
 
@@ -185,7 +202,10 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     <Fragment>
       <View style={shadowFix} />
       <View style={container}>
-        <CustomSpacer space={sh24} />
+        <View style={{ ...px(sw24), marginTop: sh24 }}>
+          <Text style={fs24BoldBlue1}>{headerLabel}</Text>
+        </View>
+        <CustomSpacer space={sh8} />
         <View style={{ ...centerVertical, ...flexRow }}>
           <CustomSpacer isHorizontal={true} space={sw24} />
           <CustomTextInput
@@ -217,10 +237,28 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                   const handlePress = () => {
                     handleRemoveFilter(pill);
                   };
+                  const checkDisabled = () => {
+                    switch (pill) {
+                      case "Fund House: KENANGA INVESTORS BERHAD":
+                        if (filterProps.productType === "amp") {
+                          return true;
+                        }
+                        return false;
+                      case "EPF Approved: Yes":
+                      case "EPF Approved: No":
+                        if (accountNo !== "") {
+                          return true;
+                        }
+                        return false;
+                      default:
+                        return false;
+                    }
+                  };
                   return (
                     <Fragment key={index}>
                       {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
                       <StatusBadge
+                        disabled={checkDisabled()}
                         color="secondary"
                         icon="close"
                         onPress={handlePress}
@@ -239,7 +277,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           </View>
         )}
         <Collapsible collapsed={!filterVisible} duration={300}>
-          <ProductFilter {...filterProps} />
+          <ProductFilter accountDetails={accountDetails} {...filterProps} />
           <CustomSpacer space={sh40} />
           <ActionButtons
             buttonContainerStyle={centerHorizontal}

@@ -1,22 +1,9 @@
 import React, { FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { View, ViewStyle } from "react-native";
 
-import { CustomSpacer, TabGroup } from "../../../../components";
+import { TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
-import {
-  borderBottomGray2,
-  colorWhite,
-  flexChild,
-  flexRow,
-  fs24BoldBlue1,
-  fullWidth,
-  justifyContentEnd,
-  px,
-  sh24,
-  sh32,
-  sh8,
-  sw24,
-} from "../../../../styles";
+import { colorWhite, flexRow, fullWidth, noBorder, px, sh24, sw24 } from "../../../../styles";
 
 const { PRODUCT_LIST } = Language.PAGE;
 export interface ProductTabsProps {
@@ -62,18 +49,8 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({
   const activeTab = tabs.indexOf(productType);
 
   return (
-    <View style={container}>
-      <View style={px(sw24)}>
-        <CustomSpacer space={sh32} />
-        <Text style={fs24BoldBlue1}>{PRODUCT_LIST.HEADING}</Text>
-      </View>
-      <CustomSpacer space={sh8} />
-      <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
-        <TabGroup activeTab={activeTab} setActiveTab={handleTabs} tabs={productTabs} />
-        <View style={{ ...flexChild, ...justifyContentEnd }}>
-          <View style={borderBottomGray2} />
-        </View>
-      </View>
+    <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
+      <TabGroup activeTab={activeTab} setActiveTab={handleTabs} tabs={productTabs} unSelectedViewStyle={noBorder} />
     </View>
   );
 };

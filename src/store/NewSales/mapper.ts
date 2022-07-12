@@ -8,6 +8,7 @@ import { RootState } from "../rootReducer";
 import { NewSalesActionProps } from "./actions";
 
 export const NewSalesMapStateToProps = (state: RootState) => ({
+  accountDetails: state.newSales.accountDetails,
   accountHolder: state.client.details?.accountHolder,
   client: state.client,
   newSales: state.newSales,

@@ -9,6 +9,7 @@ import { SelectedFundActionProps } from "../SelectedFund/actions";
 import { ProductsActionProps } from "./actions";
 
 export const ProductsMapStateToProps = (state: RootState) => ({
+  accountDetails: state.newSales.accountDetails,
   accountType: state.client.accountType,
   amp: state.products.amp,
   details: state.client.details,

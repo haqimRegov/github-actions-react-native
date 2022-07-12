@@ -33,6 +33,7 @@ interface SingleSelectPillsProps {
   buttonStyle?: ViewStyle;
   CustomContent?: (props: IToggleButtonCustomContent) => JSX.Element;
   direction?: "column" | "row";
+  disabled?: boolean;
   disabledValues?: string[];
   header?: string;
   headerStyle?: TextStyle;
@@ -51,6 +52,7 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   buttonStyle,
   CustomContent,
   direction,
+  disabled,
   disabledValues,
   header,
   headerStyle,
@@ -67,9 +69,11 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   const defaultSpace = direction === "column" ? sh16 : sw40;
   const defaultSpaceToHeader = spaceToHeader !== undefined ? spaceToHeader : sh4;
   const eachSpace = space !== undefined ? space : defaultSpace;
+  const checkDisabled = disabled === true ? "none" : "auto";
+  const disabledViewStyle: ViewStyle = disabled === true ? disabledOpacity6 : {};
 
   return (
-    <View>
+    <View pointerEvents={checkDisabled} style={disabledViewStyle}>
       {header !== undefined ? (
         <Fragment>
           <Text style={{ ...fs12BoldGray6, ...headerStyle }}>{header}</Text>
@@ -80,10 +84,10 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
         <View style={direction === "column" ? flexCol : flexRow}>
           {labels.map((content: ICheckBoxWithSubLabel, index: number) => {
             const { label, labelStyle } = content;
-            const disabled = disabledValues !== undefined && disabledValues.includes(content.label);
+            const disabledContent = disabledValues !== undefined && disabledValues.includes(content.label);
 
             const handlePress = () => {
-              if (!disabled) {
+              if (!disabledContent) {
                 onSelect(label);
               }
             };
@@ -91,8 +95,8 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
             const circleStyle: ViewStyle =
               value === label ? circleBorder(sw16, sw1, colorRed._1, colorRed._1) : circleBorder(sw16, sw1, colorBlue._1);
 
-            const disabledBackground: ViewStyle = disabled === true && value === "" ? { backgroundColor: colorGray._4 } : {};
-            const disabledStyle: ViewStyle = disabled ? { ...disabledOpacity6 } : {};
+            const disabledBackground: ViewStyle = disabledContent === true && value === "" ? { backgroundColor: colorGray._4 } : {};
+            const disabledStyle: ViewStyle = disabledContent ? { ...disabledOpacity6 } : {};
             const customContentProps: IToggleButtonCustomContent = {
               buttonStyle,
               circleStyle,

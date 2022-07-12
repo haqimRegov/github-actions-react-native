@@ -109,6 +109,9 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const handleBackToInvestorList = () => {
+    if (client.details?.principalHolder?.name !== "") {
+      resetClientDetails();
+    }
     dashboardProps.setScreen("InvestorList");
   };
 

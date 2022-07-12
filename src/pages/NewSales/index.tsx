@@ -1,5 +1,5 @@
 import { CommonActions } from "@react-navigation/native";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 
 import { CustomToast, PromptModal } from "../../components";
@@ -7,7 +7,7 @@ import { NewSalesSteps } from "../../components/Steps/NewSalesSteps";
 import { Language } from "../../constants";
 import { NEW_SALES_KEYS, NEW_SALES_ROUTES } from "../../constants/routes/new-sales";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
-import { alignFlexStart, fsAlignLeft } from "../../styles";
+import { alignFlexStart, fs14BoldGray6, fsAlignLeft } from "../../styles";
 import { NewSalesContent } from "./Content";
 
 const { NEW_SALES } = Language.PAGE;
@@ -28,8 +28,8 @@ const NEW_SALES_DATA: INewSales[] = [
       },
     ],
     label: NEW_SALES.TITLE_RISK_PROFILE,
-    route: NEW_SALES_ROUTES.RiskAssessment,
-    key: NEW_SALES_KEYS.RiskAssessment,
+    route: NEW_SALES_ROUTES.RiskProfile,
+    key: NEW_SALES_KEYS.RiskProfile,
   },
   {
     content: [
@@ -161,12 +161,6 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     );
   };
 
-  useEffect(() => {
-    if (updatedNewSalesSteps[0].content !== undefined) {
-      setActiveContent(updatedNewSalesSteps[0].content[0]);
-    }
-  }, []);
-
   // TODO scroll position resetting when back to dashboard
 
   return (
@@ -174,6 +168,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       <NewSalesSteps
         activeContent={activeContent}
         activeSection={activeSection}
+        activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskProfile" ? fs14BoldGray6 : {}}
         disabledSteps={disabledSteps}
         finishedSteps={finishedSteps}
         handleCheckRoute={handleCheckRoute}
@@ -187,7 +182,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
               cancelNewSales={cancelNewSales}
               handleNextStep={handleNextStep}
               navigation={navigation}
-              route={activeContent !== undefined ? activeContent.route! : NEW_SALES_ROUTES.RiskAssessment}
+              route={activeContent !== undefined ? activeContent.route! : NEW_SALES_ROUTES.RiskProfile}
             />
           );
         }}

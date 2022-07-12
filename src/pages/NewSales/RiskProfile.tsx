@@ -1,157 +1,172 @@
-import React, { Component, Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
+import { connect } from "react-redux";
 
 import {
   ColorCard,
   ContentPage,
+  ContentPageProps,
   CustomFlexSpacer,
   CustomSpacer,
   IconButton,
-  LabeledTitle,
   SelectionBanner,
   TextCard,
-} from "../../../components";
-import { Language } from "../../../constants";
-import { RiskStoreProps } from "../../../store";
+} from "../../components";
+import { Language } from "../../constants";
+import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   border,
   circle,
   colorBlue,
   colorRed,
   colorWhite,
-  flexRow,
   fs10RegBlue9,
   fs10RegGray6,
   fs12BoldBlack2,
-  fs14RegGray5,
   fs16BoldBlue1,
+  fs16RegGray5,
   fs18BoldGray6,
   fs20BoldBlack2,
+  fs24BoldGray6,
   fsTransformNone,
   noBorder,
   px,
+  py,
   rowCenterVertical,
-  sh100,
   sh24,
   sh4,
-  sh40,
+  sh48,
   sh8,
   sw05,
   sw1,
   sw16,
   sw20,
   sw24,
+  sw240,
   sw32,
   sw4,
   sw40,
   sw8,
-} from "../../../styles";
+} from "../../styles";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
-const principalName = "Edgar";
-const jointName = "Dave";
-const accountType = "Individual Account";
-const accountNumber = "HI0000034";
+declare interface IRiskSummaryProps extends RiskStoreProps, NewSalesContentProps {}
 
-declare interface IRiskSummaryProps extends RiskStoreProps, NewSalesContentProps {
-  handleNextStep: (step: TypeNewSalesRoute) => void;
-  setPage: (page: TRiskPage) => void;
-}
-
-export const RiskSummary: FunctionComponent<IRiskSummaryProps> = ({
-  isRiskUpdated,
+const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
+  client,
+  details,
   handleNextStep,
   handleCancelNewSales,
+  isRiskUpdated,
   newSales,
-  setPage,
+  riskScore,
   updateNewSales,
 }: IRiskSummaryProps) => {
-  const { disabledSteps, finishedSteps } = newSales;
+  const { jointHolder, principalHolder } = details!;
+  const { disabledSteps, finishedSteps, riskInfo } = newSales;
+
+  const riskProfile: IRiskProfile =
+    isRiskUpdated === true
+      ? { expectedRange: riskScore.rangeOfReturn, appetite: riskScore.appetite, profile: riskScore.profile, type: riskScore.type }
+      : riskInfo!;
+
   const accountDetails: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
-      title: "Edgar",
+      title: principalHolder!.name!,
       titleStyle: fsTransformNone,
     },
     {
-      label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NRIC,
-      title: "876543",
+      label: `${RISK_ASSESSMENT.NEW_SALES_INVESTOR} ${principalHolder!.idType}`,
+      title: principalHolder!.id!,
       titleStyle: fsTransformNone,
     },
   ];
-  const riskProfile: LabeledTitleProps[] = [
+
+  const riskProfileData: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.PROFILE_APPETITE,
-      title: "High",
+      title: riskProfile.appetite,
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN,
-      title: "per annum",
+      title: riskProfile.expectedRange,
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE,
-      title: "Income",
+      title: riskProfile.type,
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE,
-      title: "Your risk profile indicates that you can only tolerate downside risks and potential capital loss.",
+      title: riskProfile.profile,
       titleStyle: fsTransformNone,
     },
   ];
+
   const handlePageSkip = () => {
     handleNextStep("ProductsList");
     const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
-    updatedFinishedSteps.push("RiskAssessment");
-    updatedDisabledSteps.splice(disabledSteps.indexOf("RiskAssessment"), 1);
+    updatedFinishedSteps.push("RiskProfile");
+    updatedDisabledSteps.splice(disabledSteps.indexOf("RiskProfile"), 1);
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
   const handleEdit = () => {
-    setPage("assessment");
+    handleNextStep("RiskAssessment");
   };
 
   const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_SKIP;
-  const name = jointName !== undefined ? `${principalName} and ${jointName}` : principalName;
-  const heading = `${RISK_ASSESSMENT.HEADING} ${name}`;
+  const name = client.accountType === "Joint" ? `${principalHolder!.name!} and ${jointHolder!.name!}` : principalHolder!.name!;
+  const heading = `${RISK_ASSESSMENT.NEW_SALES_HEADING} ${name}`;
+  const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
+
+  const defaultContentProps: Partial<ContentPageProps> = {
+    headingStyle: fs24BoldGray6,
+    spaceToBottom: sh48,
+    spaceToHeading: sh24,
+    spaceToTitle: sh4,
+    subheadingStyle: fs18BoldGray6,
+    subtitleStyle: fs16RegGray5,
+  };
+
   return (
-    <Fragment>
-      <ContentPage heading={heading}>
+    <View>
+      <ContentPage
+        heading={heading}
+        subheading={RISK_ASSESSMENT.NEW_SALES_HEADING_2}
+        subtitle={RISK_ASSESSMENT.NEW_SALES_HEADING_3}
+        {...defaultContentProps}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
-          <LabeledTitle
-            label={RISK_ASSESSMENT.NEW_SALES_HEADING_2}
-            labelStyle={fs18BoldGray6}
-            spaceToBottom={sh4}
-            title={RISK_ASSESSMENT.NEW_SALES_HEADING_3}
-            titleStyle={fs14RegGray5}
-          />
-          <CustomSpacer space={sh24} />
           <ColorCard
             containerStyle={noBorder}
             content={<TextCard data={accountDetails} />}
             contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
             customHeader={
-              <View style={rowCenterVertical}>
-                <CustomSpacer isHorizontal={true} space={sw24} />
-                <View style={flexRow}>
-                  <Text style={fs10RegGray6}>{accountType}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw16} />
-                  <Text style={fs12BoldBlack2}>{accountNumber}</Text>
-                </View>
+              <View style={{ ...rowCenterVertical, ...px(sw24) }}>
+                <Text style={fs10RegGray6}>{accountTitle}</Text>
+                <CustomSpacer isHorizontal={true} space={sw16} />
+                <Text style={fs12BoldBlack2}>-</Text>
               </View>
             }
             header="custom"
-            headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(0), borderBottomColor: colorRed._1 }}
+            headerStyle={{
+              ...border(colorBlue._3, sw1),
+              ...px(0),
+              ...py(sh8),
+              backgroundColor: colorBlue._3,
+              borderBottomColor: colorRed._1,
+            }}
           />
           <CustomSpacer space={sh24} />
           <ColorCard
             containerStyle={noBorder}
-            content={<TextCard data={riskProfile} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: 239 }} />}
+            content={<TextCard data={riskProfileData} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw240 }} />}
             contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
             customHeader={
               <View style={{ ...rowCenterVertical, ...px(sw24) }}>
@@ -181,15 +196,15 @@ export const RiskSummary: FunctionComponent<IRiskSummaryProps> = ({
         </View>
       </ContentPage>
       <SelectionBanner
-        buttonStyle={{ height: sh40 }}
         cancelOnPress={handleCancelNewSales}
-        containerStyle={{ minHeight: sh100 }}
         label={RISK_ASSESSMENT.NEW_SALES_RISK_PROFILE_SUMMARY}
         labelStyle={fs20BoldBlack2}
         labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
         labelSubmit={checkContinueLabel}
         submitOnPress={handlePageSkip}
       />
-    </Fragment>
+    </View>
   );
 };
+
+export const NewSalesRiskProfile = connect(RiskMapStateToProps, RiskMapDispatchToProps)(NewSalesRiskProfileComponent);

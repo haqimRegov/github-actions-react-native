@@ -102,7 +102,7 @@ declare interface RenderCustomHeaderProps {
 declare interface AdvanceTableProps extends BaseTableProps, BaseTableHeaderProps {
   data: ITableData[];
   disabledIndex?: number[];
-  RenderGroupByLabel: (props: ITableGroupBy) => JSX.Element;
+  RenderGroupByLabel?: (props: ITableGroupBy) => JSX.Element;
   spaceToHeader?: number;
 }
 

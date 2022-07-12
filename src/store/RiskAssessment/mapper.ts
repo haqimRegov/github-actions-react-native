@@ -11,6 +11,7 @@ import { RiskAssessmentActionProps } from "./actions";
 
 export const RiskMapStateToProps = (state: RootState) => ({
   agent: state.global.agent,
+  client: state.client,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
   forceUpdate: state.forceUpdate,

@@ -36,6 +36,7 @@ import { Step } from "./Step";
 declare interface INewSalesStepsProps {
   activeContent?: INewSalesContentItem | INewSales;
   activeSection: number;
+  activeStepHeaderTextStyle?: TextStyle;
   disabledSteps?: TypeNewSalesKey[];
   disableNextSteps?: boolean;
   finishedSteps?: TypeNewSalesKey[];
@@ -50,18 +51,19 @@ declare interface INewSalesStepsProps {
 }
 
 export const NewSalesSteps: FunctionComponent<INewSalesStepsProps> = ({
+  activeStepHeaderTextStyle,
   activeContent,
   activeSection,
-  disableNextSteps,
   disabledSteps,
+  disableNextSteps,
+  finishedSteps,
+  handleBackToDashboard,
   handleCheckRoute,
   handleContentChange,
-  handleBackToDashboard,
   RenderContent,
   setActiveContent,
   setActiveSection,
   steps,
-  finishedSteps,
 }: INewSalesStepsProps) => {
   const setSections = (sections: number[]) => {
     if (sections.length > 0) {
@@ -81,7 +83,7 @@ export const NewSalesSteps: FunctionComponent<INewSalesStepsProps> = ({
     const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.key) : false;
     const currentStep = (stepIndex + 1).toString();
     const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegGray6 : fs14BoldGray6;
-    const textStyle: TextStyle = isActive ? activeTextStyle : { ...fs14RegGray4, ...disabledOpacity6 };
+    const textStyle: TextStyle = isActive ? { ...activeTextStyle, ...activeStepHeaderTextStyle } : { ...fs14RegGray4, ...disabledOpacity6 };
 
     const handleChange = () => {
       if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {

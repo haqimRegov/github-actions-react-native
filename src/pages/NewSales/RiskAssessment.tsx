@@ -1,7 +1,8 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useRef, useState } from "react";
-import { Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Alert, Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { connect } from "react-redux";
 
-import { LocalAssets } from "../../../assets/images/LocalAssets";
+import { LocalAssets } from "../../assets/images/LocalAssets";
 import {
   ColorCard,
   ConfirmationModal,
@@ -11,20 +12,12 @@ import {
   CustomTextInput,
   CustomTooltip,
   LabeledTitle,
-} from "../../../components";
-import { Language, NunitoBold, NunitoRegular } from "../../../constants";
-import {
-  Q2_OPTIONS,
-  Q3_OPTIONS,
-  Q4_OPTIONS_NEW,
-  Q5_OPTIONS,
-  Q6_OPTIONS,
-  Q7_OPTIONS,
-  Q8_OPTIONS,
-  Q9_OPTIONS,
-} from "../../../data/dictionary";
-import { IcoMoon } from "../../../icons";
-import { RiskStoreProps } from "../../../store";
+} from "../../components";
+import { Language, NunitoBold, NunitoRegular } from "../../constants";
+import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS_NEW, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
+import { IcoMoon } from "../../icons";
+import { getRiskProfile } from "../../network-actions";
+import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   alignSelfStart,
   centerHV,
@@ -64,22 +57,20 @@ import {
   sw7,
   sw72,
   sw8,
-} from "../../../styles";
-import { QuestionContent, QuestionHeader } from "../../../templates";
-import { isObjectEqual } from "../../../utils";
+} from "../../styles";
+import { QuestionContent, QuestionHeader } from "../../templates";
+import { isObjectEqual } from "../../utils";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
 interface RiskAssessmentContentProps extends NewSalesContentProps, RiskStoreProps {
   navigation: IStackNavigationProp;
-  setPage: (page: TRiskPage) => void;
 }
 
-export const NewSalesRiskAssessment: FunctionComponent<RiskAssessmentContentProps> = ({
+const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentProps> = ({
   addAssessmentQuestions,
   addRiskScore,
   details,
-  handleCancelNewSales,
   handleNextStep,
   navigation,
   newSales,
@@ -88,12 +79,11 @@ export const NewSalesRiskAssessment: FunctionComponent<RiskAssessmentContentProp
   resetRiskAssessment,
   riskScore,
   setLoading,
-  setPage,
-  updateNewSales,
   updateIsRiskUpdated,
+  updateNewSales,
   updateToast,
 }: RiskAssessmentContentProps) => {
-  const { clientId, dateOfBirth } = principalHolder!;
+  const { clientId, dateOfBirth, id } = principalHolder!;
   const { disabledSteps, finishedSteps } = newSales;
 
   const fetching = useRef<boolean>(false);
@@ -126,7 +116,7 @@ export const NewSalesRiskAssessment: FunctionComponent<RiskAssessmentContentProp
     }
     updateNewSales({ ...newSales, finishedSteps: newFinishedSteps, disabledSteps: updatedDisabledSteps });
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
-    setPage("summary");
+    handleNextStep("RiskProfile");
   };
 
   const handleRetakeAssessment = () => {
@@ -135,54 +125,45 @@ export const NewSalesRiskAssessment: FunctionComponent<RiskAssessmentContentProp
   };
 
   const handlePageContinue = async () => {
-    addRiskScore({
-      ...riskScore,
-      profile: "Your risk profile indicates that you can tolerate relatively high market volatility and potential capital loss.",
-      type: "Growth",
-      rangeOfReturn: "8% - 10% per annum",
-      appetite: "High",
-    });
-    setTimeout(() => {
-      setConfirmModal("assessment");
-    }, 300);
-    // setPage("summary");
-    // if (fetching.current === false) {
-    //   fetching.current = true;
-    //   setLoading(true);
-    //   const request = {
-    //     clientId: clientId!,
-    //     initId: details?.initId,
-    //     riskAssessment: {
-    //       questionTwo: questionTwo,
-    //       questionThree: questionThree,
-    //       questionFour: questionFour,
-    //       questionFive: questionFive,
-    //       questionSix: questionSix,
-    //       questionSeven: questionSeven,
-    //       questionEight: questionEight,
-    //       questionNine: questionNine,
-    //     },
-    //   };
-    //   const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation, setLoading);
-    //   fetching.current = false;
-    //   setLoading(false);
-    //   if (response !== undefined) {
-    //     const { data, error } = response;
-    //     if (error === null && data !== null) {
-    //       const riskAssessment = { ...data.result };
-    //       addRiskScore(riskAssessment);
-    //       setTimeout(() => {
-    //         setConfirmModal("assessment");
-    //       }, 300);
-    //     }
-    //     if (error !== null) {
-    //       const errorList = error.errorList?.join("\n");
-    //       setTimeout(() => {
-    //         Alert.alert(error.message, errorList);
-    //       }, 300);
-    //     }
-    //   }
-    // }
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const request: IGetRiskProfileRequest = {
+        clientId: clientId!,
+        id: id!,
+        initId: details!.initId!,
+        isForceUpdate: false,
+        riskAssessment: {
+          questionTwo: questionTwo,
+          questionThree: questionThree,
+          questionFour: questionFour,
+          questionFive: questionFive,
+          questionSix: questionSix,
+          questionSeven: questionSeven,
+          questionEight: questionEight,
+          questionNine: questionNine,
+        },
+      };
+      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation, setLoading);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          const riskAssessment = { ...data.result };
+          addRiskScore(riskAssessment);
+          setTimeout(() => {
+            setConfirmModal("assessment");
+          }, 300);
+        }
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 300);
+        }
+      }
+    }
   };
 
   const handleConfirmEdit = () => {
@@ -199,7 +180,7 @@ export const NewSalesRiskAssessment: FunctionComponent<RiskAssessmentContentProp
   };
 
   const handleCancelAssessment = () => {
-    setPage("summary");
+    handleNextStep("RiskProfile");
   };
 
   const isAssessment = confirmModal === "assessment";
@@ -468,3 +449,5 @@ export const NewSalesRiskAssessment: FunctionComponent<RiskAssessmentContentProp
     </Fragment>
   );
 };
+
+export const NewSalesRiskAssessment = connect(RiskMapStateToProps, RiskMapDispatchToProps)(NewSalesRiskAssessmentComponent);

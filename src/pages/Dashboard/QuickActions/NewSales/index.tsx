@@ -257,6 +257,8 @@ const NewSalesComponent = ({
             };
       const request: IClientRegisterRequest = {
         accountType: accountType,
+        isEtb: false,
+        isNewFundPurchased: false,
         principalHolder: {
           ...principalDob,
           id: principalHolder?.id!,

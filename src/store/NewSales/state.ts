@@ -8,6 +8,7 @@ export type NewSalesState = {
   emailVerified?: boolean;
   finishedSteps: TypeNewSalesKey[];
   toast: INewSalesToast;
+  riskInfo?: IRiskProfile;
 };
 
 export const newSalesInitialState: NewSalesState = {
@@ -31,4 +32,5 @@ export const newSalesInitialState: NewSalesState = {
     toastVisible: false,
     toastText: "All changes saved",
   },
+  riskInfo: undefined,
 };

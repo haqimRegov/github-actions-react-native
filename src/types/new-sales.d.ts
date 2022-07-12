@@ -47,6 +47,7 @@ declare interface INewSalesRoutes {
   ProductsList: TypeNewSalesRoute;
   ProductsConfirmation: TypeNewSalesRoute;
   RiskAssessment: TypeNewSalesRoute;
+  RiskProfile: TypeNewSalesRoute;
   Signatures: TypeNewSalesRoute;
   Summary: TypeNewSalesRoute;
   TermsAndConditions: TypeNewSalesRoute;
@@ -62,6 +63,7 @@ declare interface INewSalesKeys {
   ProductsList: TypeNewSalesKey;
   ProductsConfirmation: TypeNewSalesKey;
   RiskAssessment: TypeNewSalesKey;
+  RiskProfile: TypeNewSalesKey;
   Signatures: TypeNewSalesKey;
   Summary: TypeNewSalesKey;
   TermsAndConditions: TypeNewSalesKey;

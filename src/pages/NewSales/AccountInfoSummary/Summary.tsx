@@ -1,4 +1,4 @@
-import React, { Component, Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
 import { ColorCard, ContentPage, CustomButton, CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../../components";
@@ -44,9 +44,9 @@ import {
   sw40,
   sw8,
 } from "../../../styles";
-import { ClientData, PersonalData } from "./dummyData";
+import { PersonalData } from "./dummyData";
 
-const { RISK_ASSESSMENT, NEW_SALES_SUMMARY, DASHBOARD_PROFILE, SUMMARY } = Language.PAGE;
+const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
 
 interface NewSalesSummaryProps extends PersonalInfoStoreProps, NewSalesContentProps {
   setCurrentProfile: (holder: TypeAccountHolder) => void;
@@ -56,42 +56,43 @@ interface NewSalesSummaryProps extends PersonalInfoStoreProps, NewSalesContentPr
 
 export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = ({
   accountType,
-  addPersonalInfo,
+  // addPersonalInfo,
+  client,
   details,
   handleNextStep,
-  investmentDetails,
-  newSales,
+  // investmentDetails,
+  // newSales,
   personalInfo,
-  productSales,
+  // productSales,
   setCurrentProfile,
   setFile,
   setPage,
-  updateOnboarding,
 }: NewSalesSummaryProps) => {
+  const { principalHolder, jointHolder } = details!;
   const { incomeDistribution, principal, signatory } = PersonalData;
   const { bankSummary, epfDetails } = principal!;
   const accountDetails: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
-      title: ClientData.details?.principalHolder?.name,
+      title: principalHolder!.name,
       titleStyle: fsTransformNone,
     },
     {
-      label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NRIC,
-      title: ClientData.details?.principalHolder?.id,
+      label: `${RISK_ASSESSMENT.NEW_SALES_INVESTOR} ${principalHolder!.idType}`,
+      title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
   ];
-  if (ClientData.accountType === "Joint") {
+  if (client.accountType === "Joint") {
     accountDetails.push(
       {
         label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
-        title: ClientData.details?.jointHolder?.name,
+        title: jointHolder!.name,
         titleStyle: fsTransformNone,
       },
       {
-        label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NRIC,
-        title: ClientData.details?.jointHolder?.id,
+        label: `${RISK_ASSESSMENT.NEW_SALES_INVESTOR} ${jointHolder!.idType}`,
+        title: jointHolder!.id,
         titleStyle: fsTransformNone,
       },
     );
@@ -132,7 +133,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
 
   const idVerificationPrincipal: LabeledTitleProps[] = [
     {
-      label: handleIdLabel(ClientData.details?.principalHolder?.idType!, "front", undefined),
+      label: handleIdLabel(principalHolder!.idType!, "front", undefined),
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.frontPage),
       title: personalInfo.principal?.personalDetails?.id?.frontPage?.name,
       titleNumberOfLines: 1,
@@ -140,7 +141,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
       titleStyle: fsTransformNone,
     },
     {
-      label: handleIdLabel(ClientData.details?.principalHolder?.idType!, "back", undefined),
+      label: handleIdLabel(principalHolder!.idType!, "back", undefined),
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.secondPage),
       title: personalInfo.principal?.personalDetails?.id?.secondPage?.name,
       titleIcon: "file",
@@ -150,17 +151,17 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
   ];
   const idVerificationJoint = [
     {
-      label: handleIdLabel(ClientData.details?.jointHolder?.idType!, "front", undefined),
-      onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.frontPage),
-      title: personalInfo.principal?.personalDetails?.id?.frontPage?.name,
+      label: handleIdLabel(jointHolder!.idType!, "front", undefined),
+      onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.frontPage),
+      title: personalInfo.joint?.personalDetails?.id?.frontPage?.name,
       titleIcon: "file",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
     },
     {
-      label: handleIdLabel(ClientData.details?.jointHolder?.idType!, "back", undefined),
-      onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.secondPage),
-      title: personalInfo.principal?.personalDetails?.id?.secondPage?.name,
+      label: handleIdLabel(jointHolder!.idType!, "back", undefined),
+      onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.secondPage),
+      title: personalInfo.joint?.personalDetails?.id?.secondPage?.name,
       titleIcon: "file",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
@@ -217,15 +218,14 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
       title: incomeDistribution,
     },
   ];
-  if (ClientData.accountType === "Joint") {
+  if (client.accountType === "Joint") {
     accountSettings.splice(-1, 0, {
       label: NEW_SALES_SUMMARY.LABEL_SIGNATURE,
       title: signatory!,
     });
   }
 
-  const checkLabel =
-    ClientData.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
+  const checkLabel = client.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
 
   const containerStyle: ViewStyle = {
     ...flexRow,
@@ -235,6 +235,8 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
     height: sh24,
     maxWidth: sw228,
   };
+
+  const buttonStyle: ViewStyle = { ...px(sw24), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 };
 
   return (
     <ContentPage
@@ -248,18 +250,18 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
           <View style={containerStyle}>
             <CustomButton
               secondary={true}
-              buttonStyle={{ ...px(sw24), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 }}
+              buttonStyle={buttonStyle}
               onPress={handlePrincipalProfile}
               text={checkLabel}
               textStyle={fs10BoldBlue1}
             />
 
-            {ClientData.accountType === "Joint" ? (
+            {client.accountType === "Joint" ? (
               <Fragment>
                 <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} />
                 <CustomButton
                   secondary={true}
-                  buttonStyle={{ ...px(sw24), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 }}
+                  buttonStyle={buttonStyle}
                   onPress={handleJointProfile}
                   text={NEW_SALES_SUMMARY.LABEL_JOINT_PROFILE}
                   textStyle={fs10BoldBlue1}
@@ -293,7 +295,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
           containerStyle={noBorder}
           content={
             <Fragment>
-              {ClientData.accountType === "Joint" ? (
+              {client.accountType === "Joint" ? (
                 <Fragment>
                   <View style={rowCenterVertical}>
                     <IcoMoon name="avatar" size={sw20} color={colorBlue._1} />

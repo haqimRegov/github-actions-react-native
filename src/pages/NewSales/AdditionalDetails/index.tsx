@@ -1,4 +1,4 @@
-import React, { Component, Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
@@ -22,10 +22,9 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   details,
   handleNextStep,
   investmentDetails,
-  newSales,
+  // newSales,
   personalInfo,
   productSales,
-  updateOnboarding,
 }: PersonalDetailsProps) => {
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
   const { epfInvestment, epfShariah } = personalInfo;
@@ -100,7 +99,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     (bank) =>
       bank.bankName !== "" &&
       bank.bankAccountNumber !== "" &&
-      bank.bankAccountName === "" &&
+      bank.bankAccountName !== "" &&
       bank.currency?.includes("") === false &&
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,

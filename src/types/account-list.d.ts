@@ -1,4 +1,4 @@
-declare interface IAccountList {
+declare interface INewSalesAccountList {
   accountType: TypeAccountChoices;
   accountNo: string;
   principalHolder: string;

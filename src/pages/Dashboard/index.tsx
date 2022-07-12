@@ -9,6 +9,7 @@ import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
 import { DAY_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
+import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
 import { logout } from "../../network-actions";
@@ -54,12 +55,14 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   client,
   navigation,
   route,
+  resetClientDetails,
   unreadMessages,
 }: DashboardPageProps) => {
   const { isLogout, setIsLogout } = route.params;
   const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
   const [page, setPage] = useState<DashboardPageType>("Transactions");
+  const prevPage = usePrevious(page);
 
   const handleRoute = (nextPage: DashboardPageType) => {
     setPage(nextPage);
@@ -75,28 +78,23 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleInbox = () => {
-    // setActiveMenu(3);
     setPage("Inbox");
   };
 
   const handleProfile = () => {
     setPage("Profile");
-    // setActiveMenu(4);
   };
 
   const handleDashboard = () => {
     setPage("Transactions");
-    // setActiveMenu(0);
   };
 
   const handleInvestors = () => {
     setPage("Investors");
-    // setActiveMenu(1);
   };
 
   const handleEDD = () => {
     setPage("EDD");
-    // setActiveMenu(2);
   };
 
   const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
@@ -145,6 +143,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     const pageIndex = pages.indexOf(page);
     if (activeMenu !== pageIndex) {
       setActiveMenu(pageIndex);
+    }
+    if (prevPage === "Investors" && client.details?.principalHolder?.name !== "") {
+      resetClientDetails();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);

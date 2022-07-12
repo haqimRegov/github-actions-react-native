@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
@@ -12,7 +11,7 @@ import {
   SafeAreaPage,
   SelectionBanner,
 } from "../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
@@ -63,7 +62,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   addInvestmentDetails: setInvestmentDetails,
   addPersonalInfo,
   addSelectedFund: setSelectedFund,
-  details,
+  // details,
   global,
   handleNextStep,
   investmentDetails,
@@ -73,7 +72,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
   const { disabledSteps, finishedSteps } = newSales;
-  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
+  // const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = true;
   const flatListRef = useRef<FlatList | null>(null);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
@@ -121,7 +120,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     handleNextStep("IdentityVerification");
     const updatedFinishedSteps: TypeNewSalesKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
-        ? ["RiskAssessment", "ProductsList", "ProductsConfirmation"]
+        ? ["RiskProfile", "RiskAssessment", "ProductsList", "ProductsConfirmation"]
         : [...finishedSteps, "ProductsList", "ProductsConfirmation"];
     const updatedDisabledSteps: TypeNewSalesKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")

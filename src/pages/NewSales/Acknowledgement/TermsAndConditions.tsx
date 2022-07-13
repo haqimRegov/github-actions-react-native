@@ -23,15 +23,15 @@ import {
   fs18BoldGray6,
   justifyContentEnd,
   px,
+  rowCenterVertical,
   sh16,
-  sh18,
   sh24,
   sh32,
   sh4,
   sh456,
-  sh8,
+  sh6,
+  sw10,
   sw14,
-  sw18,
   sw24,
   sw265,
   sw4,
@@ -46,13 +46,13 @@ interface TermsAndConditionsProps extends NewSalesContentProps, AcknowledgementS
 const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = ({
   agreeTerms,
   handleNextStep,
+  newSales,
   orders,
-  onboarding,
   outsideRisk,
   updateAgree,
-  updateOnboarding,
+  updateNewSales,
 }: TermsAndConditionsProps) => {
-  const { disabledSteps } = onboarding;
+  const { disabledSteps } = newSales;
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
   const handleAgree1 = () => {
@@ -68,12 +68,12 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   };
 
   const handleContinue = () => {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...newSales.disabledSteps];
     const findSignatures = updatedDisabledSteps.indexOf("Signatures");
     if (findSignatures !== -1) {
       updatedDisabledSteps.splice(findSignatures, 1);
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
     handleNextStep("Signatures");
   };
 
@@ -114,8 +114,8 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
 
   if (!disabledSteps.includes("Signatures") && disabled === true) {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps, "Signatures"];
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps, "Signatures"];
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
   }
 
   return (
@@ -129,15 +129,17 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
       {TERMS_AND_CONDITION_LIST.length === 0 ? null : (
         <Fragment>
           <View style={px(sw24)}>
-            <CustomSpacer space={sh8} />
+            <CustomSpacer space={sh4} />
             <View style={termsHeader}>
-              <Text style={{ ...fs14RegGray5, marginTop: sh4 }}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
-              <CustomTooltip
-                infoStyle={{ width: sw18, height: sh18 }}
-                content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
-                contentStyle={{ width: sw265 }}
-                theme={"dark"}
-              />
+              <View style={rowCenterVertical}>
+                <Text style={fs14RegGray5}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
+                <CustomTooltip
+                  arrowSize={{ width: sw10, height: sh6 }}
+                  content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
+                  contentStyle={{ width: sw265 }}
+                  theme="dark"
+                />
+              </View>
               <CustomFlexSpacer />
               <Pressable onPress={handleExpandAll}>
                 <View style={{ ...justifyContentEnd, ...flexRow }}>

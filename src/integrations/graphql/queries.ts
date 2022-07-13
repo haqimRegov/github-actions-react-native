@@ -376,6 +376,7 @@ const investorDetailsDashboard = gql`
           }
           initId
           idNumber
+          idType
           accountHolder
           emailLastUpdated
           mobileNoLastUpdated

@@ -39,7 +39,6 @@ declare interface IOrderInvestment {
   salesCharge: string;
   scheduledInvestmentAmount: string | null;
   scheduledSalesCharge: string | null;
-  paymentTerm?: string;
 }
 
 declare interface IOrder {

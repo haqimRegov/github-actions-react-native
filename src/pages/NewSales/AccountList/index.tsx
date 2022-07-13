@@ -20,7 +20,7 @@ declare interface ITagStyle {
   text?: TextStyle;
 }
 
-const dummyData: IAccountList[] = [
+const dummyData: INewSalesAccountList[] = [
   {
     accountType: "Individual",
     accountNo: "RI0000001",
@@ -84,7 +84,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
         />
         <CustomSpacer space={sh24} />
         <View style={{ ...flexRow, ...flexWrap }}>
-          {dummyData.map((eachAccount: IAccountList, index: number) => {
+          {dummyData.map((eachAccount: INewSalesAccountList, index: number) => {
             const handleSelectAccount = () => {
               let updatedDisabledSteps = [...disabledSteps];
               let updatedFinishedSteps = [...finishedSteps];

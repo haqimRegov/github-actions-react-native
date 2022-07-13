@@ -219,7 +219,9 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       const checkData =
         findEpfIndex !== -1 ? eachDetails.fundDetails.issuingHouse === investmentDetails![findEpfIndex].fundDetails.issuingHouse : true;
       const checkMultipleUtmc = multiUtmc === true && eachDetails.fundDetails.isEpf ? true : checkData;
-      const checkFundPaymentMethod = checkMultipleUtmc === false ? "Cash" : eachDetails.investment.fundPaymentMethod;
+      const checkEpf = accountDetails.isEpf === true ? "EPF" : "Cash";
+      const checkNewFundPurchase = accountDetails.isEpf !== undefined ? checkEpf : eachDetails.investment.fundPaymentMethod;
+      const checkFundPaymentMethod = checkMultipleUtmc === false ? "Cash" : checkNewFundPurchase;
       return {
         ...eachDetails,
         allowEpf: checkMultipleUtmc,

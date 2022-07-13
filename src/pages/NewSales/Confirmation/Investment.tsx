@@ -98,8 +98,17 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
-  const fundingOption = fundDetails.isEpfOnly === "Yes" ? [INVESTMENT.QUESTION_1_OPTION_2] : [INVESTMENT.QUESTION_1_OPTION_1];
-  if (isEpf === "Yes" && withEpf === true && accountType === "Individual" && fundDetails.isEpfOnly !== "Yes") {
+  const fundingOption =
+    fundDetails.isEpfOnly === "Yes" || (accountDetails.isEpf !== undefined && accountDetails.isEpf === true)
+      ? [INVESTMENT.QUESTION_1_OPTION_2]
+      : [INVESTMENT.QUESTION_1_OPTION_1];
+  if (
+    isEpf === "Yes" &&
+    withEpf === true &&
+    accountType === "Individual" &&
+    fundDetails.isEpfOnly !== "Yes" &&
+    accountDetails.accountNo === ""
+  ) {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
   const classCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === fundCurrency);

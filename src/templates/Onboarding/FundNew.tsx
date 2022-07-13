@@ -167,7 +167,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
       <Pressable style={headerStyle} onPress={handleExpand}>
         <Text style={fs18BoldBlue1}>{fundName}</Text>
         <CustomFlexSpacer />
-        <IcoMoon color={colorBlue._1} name="facts" size={sh32} />
+        <IcoMoon color={colorBlue._1} name="fund-facts" size={sh32} />
       </Pressable>
       {expanded === false ? null : (
         <Fragment>

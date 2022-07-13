@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -13,17 +13,26 @@ import {
   TextCard,
 } from "../../components";
 import { Language } from "../../constants";
+import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
+import { IcoMoon } from "../../icons";
+import { RNInAppBrowser } from "../../integrations";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   border,
+  centerHorizontal,
   circle,
   colorBlue,
+  colorGray,
   colorRed,
   colorWhite,
+  flexRow,
   fs10RegBlue9,
+  fs10RegGray5,
   fs10RegGray6,
   fs12BoldBlack2,
+  fs12BoldBlue1,
   fs16BoldBlue1,
+  fs16RegBlack2,
   fs16RegGray5,
   fs18BoldGray6,
   fs20BoldBlack2,
@@ -33,7 +42,10 @@ import {
   px,
   py,
   rowCenterVertical,
+  sh16,
+  sh2,
   sh24,
+  sh32,
   sh4,
   sh48,
   sh8,
@@ -120,6 +132,10 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     handleNextStep("RiskAssessment");
   };
 
+  const handleAims = () => {
+    RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
+  };
+
   const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_SKIP;
   const name = client.accountType === "Joint" ? `${principalHolder!.name!} and ${jointHolder!.name!}` : principalHolder!.name!;
   const heading = `${RISK_ASSESSMENT.NEW_SALES_HEADING} ${name}`;
@@ -134,13 +150,26 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     subtitleStyle: fs16RegGray5,
   };
 
+  const buttonStyle: ViewStyle = {
+    ...centerHorizontal,
+    ...flexRow,
+    width: 120,
+    ...px(sw16),
+    ...py(sh8),
+    ...border(colorBlue._1, sw1, sw24),
+    backgroundColor: colorWhite._1,
+    height: sh32,
+  };
+
+  const tags = newSales.accountDetails.accountNo !== "" ? ["UT", "Cash"] : [];
+  const header =
+    newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : RISK_ASSESSMENT.NEW_SALES_HEADING_2;
+  const subtitle =
+    newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
+
   return (
     <View>
-      <ContentPage
-        heading={heading}
-        subheading={RISK_ASSESSMENT.NEW_SALES_HEADING_2}
-        subtitle={RISK_ASSESSMENT.NEW_SALES_HEADING_3}
-        {...defaultContentProps}>
+      <ContentPage heading={heading} subheading={header} subtitle={subtitle} {...defaultContentProps}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <ColorCard
@@ -152,6 +181,27 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
                 <Text style={fs10RegGray6}>{accountTitle}</Text>
                 <CustomSpacer isHorizontal={true} space={sw16} />
                 <Text style={fs12BoldBlack2}>-</Text>
+                <CustomFlexSpacer />
+                {tags.length > 0
+                  ? tags.map((eachTag: string, tagIndex: number) => {
+                      const tagStyle: ViewStyle = {
+                        ...px(sw4),
+                        ...py(sh2),
+                        backgroundColor: colorGray._1,
+                        borderColor: colorGray._5,
+                        borderWidth: sw05,
+                        borderRadius: sw4,
+                      };
+                      return (
+                        <Fragment key={tagIndex}>
+                          {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
+                          <View key={tagIndex} style={tagStyle}>
+                            <Text style={fs10RegGray5}>{eachTag}</Text>
+                          </View>
+                        </Fragment>
+                      );
+                    })
+                  : null}
               </View>
             }
             header="custom"
@@ -163,6 +213,30 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
               borderBottomColor: colorRed._1,
             }}
           />
+          {newSales.accountDetails.accountNo !== "" ? (
+            <Fragment>
+              <CustomSpacer space={sh24} />
+              <ColorCard
+                containerStyle={noBorder}
+                content={
+                  <View>
+                    <CustomSpacer space={sh8} />
+                    <Text style={fs16RegBlack2}>{RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE_HINT}</Text>
+                    <CustomSpacer space={sh8} />
+                    <Pressable onPress={handleAims} style={buttonStyle}>
+                      <Text style={fs12BoldBlue1}>{RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE_CHECK_AIMS}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw8} />
+                      <IcoMoon color={colorBlue._1} name="external" size={sw16} />
+                    </Pressable>
+                    <CustomSpacer space={sh8} />
+                  </View>
+                }
+                contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
+                header={{ label: RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE, labelStyle: fs16BoldBlue1 }}
+                headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(sw24), ...py(sh16) }}
+              />
+            </Fragment>
+          ) : null}
           <CustomSpacer space={sh24} />
           <ColorCard
             containerStyle={noBorder}

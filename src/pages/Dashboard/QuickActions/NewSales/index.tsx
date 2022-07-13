@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, useRef, useState } from "react";
-import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 
@@ -48,12 +48,10 @@ interface NewSalesProps extends ClientStoreProps {
 }
 
 const NewSalesComponent = ({
-  accountList,
   accountType,
   addAccountType,
   addClientDetails,
   addClientForceUpdate,
-  addClientNewSales,
   addJointInfo,
   addPersonalInfo,
   addPrincipalInfo,
@@ -195,9 +193,10 @@ const NewSalesComponent = ({
       setLoading(true);
       const request: IEtbCheckRequest = {
         country: principalHolder?.country,
-        dateOfBirth: principalHolder?.dateOfBirth
-          ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-          : "",
+        dateOfBirth:
+          principalHolder?.dateOfBirth && principalHolder.idType !== "NRIC"
+            ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+            : "",
         id: principalHolder?.id,
         idType: principalIdType,
         name: principalHolder?.name?.trim(),
@@ -213,11 +212,7 @@ const NewSalesComponent = ({
           if (data.result.message === "NTB") {
             return setClientType("NTB");
           }
-          if (data.result.forceUpdate === true && setPage !== undefined) {
-            addClientForceUpdate(true);
-            return setPage("Investors");
-          }
-          if (data.result.message === "ETB") {
+          if (data.result.message === "ETB" && setPage !== undefined) {
             setClientType("ETB");
             if (client.isNewFundPurchase === true) {
               updateClient({
@@ -227,21 +222,20 @@ const NewSalesComponent = ({
                   ...client.details,
                   principalHolder: {
                     ...client.details?.principalHolder,
-                    name: principalHolder?.name.trim(),
+                    name: principalHolder!.name!.trim(),
                   },
                 },
               });
               setVisible(false);
               return navigation.navigate("NewSales");
             }
-            if (data.result.forceUpdate === false && setPage !== undefined) {
-              addClientNewSales(true);
-              return setPage("Investors");
-            }
+            // if (data.result.forceUpdate === true) {
+            // BE is returning forceUpdate true even if the investor already finished it (supposed to be bug)
+            // TODO handle redirection to InvestorOverview even if forceUpdate is false
+            addClientForceUpdate(true);
+            return setPage("Investors");
+            // }
           }
-          setTimeout(() => {
-            return Alert.alert("Client is ETB");
-          }, 100);
         }
         if (error !== null) {
           if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {

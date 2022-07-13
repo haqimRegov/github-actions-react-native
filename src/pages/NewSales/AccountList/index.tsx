@@ -20,46 +20,6 @@ declare interface ITagStyle {
   text?: TextStyle;
 }
 
-const dummyData: INewSalesAccountList[] = [
-  {
-    accountType: "Individual",
-    accountNo: "RI0000001",
-    principalHolder: "Edgar Constantine Shevchenko",
-    tags: ["UT", "Cash", "Low Risk"],
-  },
-  {
-    accountType: "Individual",
-    accountNo: "RI0000001",
-    principalHolder: "Edgar Constantine Shevchenko",
-    tags: ["PRS", "Cash", "Medium Risk"],
-  },
-  {
-    accountType: "Individual",
-    accountNo: "RI0000001",
-    principalHolder: "Edgar Constantine Shevchenko",
-    tags: ["UT", "Cash", "High Risk"],
-  },
-  {
-    accountType: "Joint",
-    accountNo: "RI0000001",
-    principalHolder: "Edgar Constantine Shevchenko",
-    jointHolder: "MArco Polo",
-    tags: ["UT", "Cash", "Low Risk"],
-  },
-  {
-    accountType: "Individual",
-    accountNo: "RI0000001",
-    principalHolder: "Edgar Constantine Shevchenko",
-    tags: ["PRS", "Cash", "Low Risk"],
-  },
-  {
-    accountType: "Individual",
-    accountNo: "RI0000001",
-    principalHolder: "Edgar Constantine Shevchenko",
-    tags: ["UT", "Cash", "Low Risk"],
-  },
-];
-
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   handleNextStep,
   navigation,
@@ -69,8 +29,9 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   updateNewSales,
 }: IAccountListProps) => {
   const { disabledSteps, finishedSteps } = newSales;
+  const { accountList } = client;
 
-  const header = `${ACCOUNT_LIST.LABEL_WELCOME_BACK} ${client.details?.accountHolder}`;
+  const header = `${ACCOUNT_LIST.LABEL_WELCOME_BACK} ${client.details?.principalHolder?.name}`;
   return (
     <ContentPage subheading={header}>
       <CustomSpacer space={sh24} />
@@ -84,7 +45,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
         />
         <CustomSpacer space={sh24} />
         <View style={{ ...flexRow, ...flexWrap }}>
-          {dummyData.map((eachAccount: INewSalesAccountList, index: number) => {
+          {accountList.map((eachAccount: IAccountList, index: number) => {
             const handleSelectAccount = () => {
               let updatedDisabledSteps = [...disabledSteps];
               let updatedFinishedSteps = [...finishedSteps];

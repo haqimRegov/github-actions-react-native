@@ -1,16 +1,18 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
+import { connect } from "react-redux";
 
 import { ColorCard, ContentPage, CustomButton, CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
-import { PersonalInfoStoreProps } from "../../../store";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
   autoWidth,
   border,
   borderBottomBlue4,
   circle,
   colorBlue,
+  colorGray,
   colorRed,
   colorTransparent,
   colorWhite,
@@ -33,6 +35,7 @@ import {
   sh16,
   sh24,
   sh40,
+  sh72,
   sh8,
   sw1,
   sw16,
@@ -44,32 +47,28 @@ import {
   sw40,
   sw8,
 } from "../../../styles";
-import { PersonalData } from "./dummyData";
 
 const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
 
-interface NewSalesSummaryProps extends PersonalInfoStoreProps, NewSalesContentProps {
+interface NewSalesSummaryProps extends PersonalInfoStoreProps {
+  handleNextStep: (route: TypeNewSalesRoute) => void;
   setCurrentProfile: (holder: TypeAccountHolder) => void;
   setFile: (file: FileBase64 | undefined) => void;
   setPage: (index: number) => void;
 }
 
-export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = ({
+const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> = ({
   accountType,
-  // addPersonalInfo,
   client,
   details,
   handleNextStep,
-  // investmentDetails,
-  // newSales,
   personalInfo,
-  // productSales,
   setCurrentProfile,
   setFile,
   setPage,
 }: NewSalesSummaryProps) => {
   const { principalHolder, jointHolder } = details!;
-  const { incomeDistribution, principal, signatory } = PersonalData;
+  const { incomeDistribution, principal, signatory } = personalInfo;
   const { bankSummary, epfDetails } = principal!;
   const accountDetails: LabeledTitleProps[] = [
     {
@@ -244,6 +243,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
       subheadingStyle={fs18BoldGray6}
       subtitle={NEW_SALES_SUMMARY.LABEL_SUBHEADER}
       subtitleStyle={fs14RegGray5}
+      spaceToBottom={sh72}
       sideElement={
         <View>
           <CustomSpacer space={sh40} />
@@ -283,7 +283,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               <View style={flexRow}>
                 <Text style={fs10RegGray6}>{accountType}</Text>
                 <CustomSpacer isHorizontal={true} space={sw16} />
-                <Text style={fs12BoldBlack2}>{"JI0000034"}</Text>
+                <Text style={fs12BoldBlack2}>-</Text>
               </View>
             </View>
           }
@@ -326,7 +326,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               )}
             </Fragment>
           }
-          contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
+          contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 }}
           customHeader={
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
               <Text style={fs16BoldBlue1}>{NEW_SALES_SUMMARY.LABEL_IDENTIFICATION}</Text>
@@ -341,7 +341,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               />
             </View>
           }
-          headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(0) }}
+          headerStyle={{ ...border(colorGray._2, sw1), backgroundColor: colorWhite._1, ...px(0) }}
           header="custom"
         />
         {epfDetailsSummary.length > 0 ? (
@@ -438,7 +438,7 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               <TextCard data={accountSettings} itemsPerGroup={3} itemStyle={{ width: 239 }} spaceBetweenItem={sw32} />
             </Fragment>
           }
-          contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
+          contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 }}
           customHeader={
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
               <Text style={fs16BoldBlue1}>{NEW_SALES_SUMMARY.LABEL_ACCOUNT_DETAILS}</Text>
@@ -453,10 +453,12 @@ export const NewSalesAccountSummary: FunctionComponent<NewSalesSummaryProps> = (
               />
             </View>
           }
-          headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(0) }}
+          headerStyle={{ ...border(colorGray._2, sw1), backgroundColor: colorWhite._1, ...px(0) }}
           header="custom"
         />
       </View>
     </ContentPage>
   );
 };
+
+export const NewSalesAccountSummary = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(NewSalesAccountSummaryComponent);

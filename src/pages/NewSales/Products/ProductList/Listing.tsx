@@ -13,6 +13,7 @@ import {
   flexChild,
   flexRow,
   fs12RegBlue1,
+  fs12RegGray5,
   fsTransformNone,
   fsUppercase,
   sh12,
@@ -229,7 +230,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
       title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
     },
     {
-      itemIcon: { name: "eye-show", size: sw20 },
+      itemIcon: { color: colorBlue._1, name: "eye-show", size: sw20 },
       key: [],
       onPressItem: handleView,
       viewStyle: { ...centerHV, width: sw56 },
@@ -274,7 +275,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
         }}>
         <CustomSpacer space={sh12} />
         <View style={{ ...flexRow, ...centerVertical }}>
-          <CustomSpacer isHorizontal={true} space={sw20} />
+          <CustomSpacer isHorizontal={true} space={sw24} />
+          <Text style={fs12RegGray5}>{PRODUCT_LIST.LABEL_TYPES}</Text>
+          <CustomSpacer isHorizontal={true} space={sw8} />
           <StatusBadge color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
           <CustomSpacer isHorizontal={true} space={sw8} />
           {productType === "prsDefault" ? null : (

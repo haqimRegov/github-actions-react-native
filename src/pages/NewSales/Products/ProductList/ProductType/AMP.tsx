@@ -7,7 +7,7 @@ import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../../../compo
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps, updateAvailableFilters } from "../../../../../store";
-import { borderBottomGray2, colorWhite, flexChild, flexRow, sh142, sh182, shadow12Black116, sw24 } from "../../../../../styles";
+import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -57,7 +57,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
     .flat(1)
     .filter((value) => value !== "");
 
-  const absoluteHeaderSpace = filterValues.length > 0 ? sh182 : sh142;
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh192 : sh152;
 
   const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);

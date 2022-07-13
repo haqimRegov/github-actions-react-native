@@ -252,7 +252,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const etbCheckInvestor: IInvestorData =
-    client.isForceUpdate === true
+    client.isForceUpdate === true || client.isNewSales === true
       ? {
           clientId: "",
           idNumber: client.details?.principalHolder?.id!,

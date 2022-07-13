@@ -44,6 +44,7 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
         ],
         emailVerified: false,
         finishedSteps: [],
+        showOpenAccount: false,
       };
 
     default:

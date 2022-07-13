@@ -29,12 +29,6 @@ export function selectedFundReducer(state = selectedFundInitialState, action: Se
         viewFund: action.payload,
       };
 
-    case "selectedFund/RESET_VIEW_FUND":
-      return {
-        ...state,
-        viewFund: undefined,
-      };
-
     case "selectedFund/RESET_INVESTMENT_DETAILS":
       return {
         ...state,

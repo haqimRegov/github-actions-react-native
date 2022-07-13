@@ -71,6 +71,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     resetForceUpdate,
     resetPersonalInfo,
     resetRiskAssessment,
+    resetTransactions,
     updateFUFinishedSteps,
   } = props;
 
@@ -96,9 +97,10 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     setCancelForceUpdate(false);
     resetAcknowledgement();
     resetClientDetails();
+    resetForceUpdate();
     resetPersonalInfo();
     resetRiskAssessment();
-    resetForceUpdate();
+    resetTransactions();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

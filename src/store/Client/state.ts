@@ -1,13 +1,16 @@
 import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 
 export type ClientState = {
+  accountList: IAccountList[];
   accountType: TypeAccountChoices;
   details?: IClientDetailsState;
   isForceUpdate?: boolean;
+  isNewFundPurchase: boolean;
   isNewSales: boolean;
 };
 
 export const clientInitialState: ClientState = {
+  accountList: [],
   accountType: DICTIONARY_ACCOUNT_TYPE[0],
   details: {
     accountHolder: undefined,
@@ -33,5 +36,6 @@ export const clientInitialState: ClientState = {
     initId: undefined,
   },
   isForceUpdate: false,
+  isNewFundPurchase: false,
   isNewSales: false,
 };

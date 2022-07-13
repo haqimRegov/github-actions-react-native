@@ -48,13 +48,16 @@ interface NewSalesProps extends ClientStoreProps {
 }
 
 const NewSalesComponent = ({
+  accountList,
   accountType,
   addAccountType,
   addClientDetails,
   addClientForceUpdate,
+  addClientNewSales,
   addJointInfo,
   addPersonalInfo,
   addPrincipalInfo,
+  client,
   details,
   navigation,
   personalInfo,
@@ -62,6 +65,7 @@ const NewSalesComponent = ({
   setPage,
   setVisible,
   showOpenAccount,
+  updateClient,
   updateShowOpenAccount,
   visible,
 }: NewSalesProps) => {
@@ -213,6 +217,28 @@ const NewSalesComponent = ({
             addClientForceUpdate(true);
             return setPage("Investors");
           }
+          if (data.result.message === "ETB") {
+            setClientType("ETB");
+            if (client.isNewFundPurchase === true) {
+              updateClient({
+                ...client,
+                accountList: data.result.accounts!,
+                details: {
+                  ...client.details,
+                  principalHolder: {
+                    ...client.details?.principalHolder,
+                    name: principalHolder?.name.trim(),
+                  },
+                },
+              });
+              setVisible(false);
+              return navigation.navigate("NewSales");
+            }
+            if (data.result.forceUpdate === false && setPage !== undefined) {
+              addClientNewSales(true);
+              return setPage("Investors");
+            }
+          }
           setTimeout(() => {
             return Alert.alert("Client is ETB");
           }, 100);
@@ -267,11 +293,11 @@ const NewSalesComponent = ({
         },
         jointHolder: jointInfo,
       };
-      const client: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
+      const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
       setLoading(false);
       fetching.current = false;
-      if (client !== undefined) {
-        const { data, error } = client;
+      if (clientResponse !== undefined) {
+        const { data, error } = clientResponse;
         if (error === null && data !== null) {
           const resetJointInfo =
             accountType === "Individual" &&

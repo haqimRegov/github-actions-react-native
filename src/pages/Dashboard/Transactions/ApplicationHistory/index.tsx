@@ -379,6 +379,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
             <View style={flexRow}>
               <TabGroup
                 activeTab={activeTabIndex}
+                containerStyle={borderBottomGray2}
                 setActiveTab={handleTabs}
                 tabs={[
                   { badgeCount: incompleteCount, text: DASHBOARD_HOME.LABEL_INCOMPLETE },

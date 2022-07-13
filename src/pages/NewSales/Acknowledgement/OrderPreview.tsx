@@ -11,6 +11,7 @@ import {
   centerVertical,
   colorBlue,
   colorWhite,
+  flexChild,
   flexRow,
   flexWrap,
   fs12BoldGray6,
@@ -83,7 +84,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
   const bannerSubtitle = `${orders!.orders.length} ${orders!.orders.length > 1 ? ORDER_SUMMARY.LABEL_ORDERS : ORDER_SUMMARY.LABEL_ORDER}`;
 
   return (
-    <Fragment>
+    <View style={flexChild}>
       <ContentPage subheading={ORDER_SUMMARY.HEADING_NEW} subheadingStyle={fs18BoldGray6}>
         <View style={orderSummaryHeader}>
           <Text style={fs14RegGray5}>{ORDER_SUMMARY.SUBHEADING_NEW}</Text>
@@ -162,7 +163,6 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
         bottomContent={
           <View style={flexRow}>
             {isNotEmpty(orders?.orders) ? <Text style={fs16BoldGray6}>{bannerSubtitle}</Text> : null}
-
             <CustomSpacer isHorizontal space={sw4} />
             <Text style={fs16RegGray6}>{ORDER_SUMMARY.LABEL_CREATED}</Text>
           </View>
@@ -172,7 +172,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
         labelSubmit={ORDER_SUMMARY.BUTTON_CONFIRM}
         submitOnPress={handleConfirm}
       />
-    </Fragment>
+    </View>
   );
 };
 

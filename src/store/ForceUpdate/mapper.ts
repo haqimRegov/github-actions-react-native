@@ -5,6 +5,7 @@ import { ClientActionProps } from "../Client/actions";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
 import { RootState } from "../rootReducer";
+import { TransactionsActionProps } from "../Transactions";
 import { ForceUpdateActionProps } from "./actions";
 
 export const ForceUpdateMapStateToProps = (state: RootState) => ({
@@ -17,10 +18,11 @@ export const ForceUpdateMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
       ...ForceUpdateActionProps,
-      ...ClientActionProps,
-      ...RiskAssessmentActionProps,
-      ...PersonalInfoActionProps,
       ...AcknowledgementActionProps,
+      ...ClientActionProps,
+      ...PersonalInfoActionProps,
+      ...RiskAssessmentActionProps,
+      ...TransactionsActionProps,
     },
     dispatch,
   );

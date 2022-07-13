@@ -2,9 +2,13 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { AcknowledgementActionProps } from "../Acknowledgement/actions";
 import { ClientActionProps } from "../Client/actions";
+import { OnboardingActionProps } from "../Onboarding";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
+import { ProductsActionProps } from "../Products";
 import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
 import { RootState } from "../rootReducer";
+import { SelectedFundActionProps } from "../SelectedFund";
+import { TransactionsActionProps } from "../Transactions";
 import { NewSalesActionProps } from "./actions";
 
 export const NewSalesMapStateToProps = (state: RootState) => ({
@@ -18,10 +22,14 @@ export const NewSalesMapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
       ...NewSalesActionProps,
-      ...ClientActionProps,
-      ...RiskAssessmentActionProps,
-      ...PersonalInfoActionProps,
       ...AcknowledgementActionProps,
+      ...ClientActionProps,
+      ...OnboardingActionProps,
+      ...PersonalInfoActionProps,
+      ...ProductsActionProps,
+      ...RiskAssessmentActionProps,
+      ...SelectedFundActionProps,
+      ...TransactionsActionProps,
     },
     dispatch,
   );

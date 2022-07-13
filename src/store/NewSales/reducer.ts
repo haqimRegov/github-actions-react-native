@@ -32,12 +32,13 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
         ...action.payload,
       };
 
-    case "newSales/RESET_STEPS":
+    case "newSales/RESET_NEW_SALES":
       return {
         accountDetails: {
           accountNo: "",
-          fundType: "",
+          fundType: "ut",
           isEpf: undefined,
+          isRecurring: undefined,
           riskScore: "",
         },
         disabledSteps: [
@@ -53,12 +54,12 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           "Summary",
           "TermsAndConditions",
         ],
+        emailVerified: false,
         finishedSteps: [],
         toast: {
-          toastText: "All changes saved",
           toastVisible: false,
+          toastText: "All changes saved",
         },
-        riskInfo: undefined,
       };
     case "newSales/UPDATE_TOAST_TEXT":
       return {

@@ -97,7 +97,6 @@ export const NotificationItem: FunctionComponent<NotificationItemProps> = ({
             {title}
           </Text>
         </View>
-        <CustomSpacer isHorizontal={true} space={sw24} />
       </View>
     </TouchableWithoutFeedback>
   );

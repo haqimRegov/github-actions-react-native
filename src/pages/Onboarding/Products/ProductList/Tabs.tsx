@@ -69,7 +69,7 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({
       </View>
       <CustomSpacer space={sh8} />
       <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
-        <TabGroup activeTab={activeTab} setActiveTab={handleTabs} tabs={productTabs} />
+        <TabGroup activeTab={activeTab} containerStyle={borderBottomGray2} setActiveTab={handleTabs} tabs={productTabs} />
         <View style={{ ...flexChild, ...justifyContentEnd }}>
           <View style={borderBottomGray2} />
         </View>

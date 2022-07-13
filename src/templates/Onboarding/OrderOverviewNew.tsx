@@ -6,21 +6,21 @@ import { Language } from "../../constants";
 import {
   alignItemsEnd,
   borderBottomBlue4,
-  centerVertical,
   colorBlue,
-  flexRow,
+  flexWrap,
   fs10RegGray6,
   fs16BoldGray6,
   fs16RegGray6,
   fs24BoldBlack2,
+  justifyContentEnd,
   px,
   py,
   rowCenterVertical,
-  sh24,
+  sh12,
   sh6,
-  sh82,
   sw24,
   sw4,
+  sw600,
   sw8,
 } from "../../styles";
 import { AnimationUtils, formatAmount } from "../../utils";
@@ -49,14 +49,12 @@ export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
   const [viewFund, setViewFund] = useState<string>("");
 
   const cardHeaderStyle: ViewStyle = {
-    ...centerVertical,
-    ...flexRow,
+    ...rowCenterVertical,
     ...px(sw24),
-    ...py(sh24),
+    ...py(sh12),
     backgroundColor: colorBlue._3,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
-    height: sh82,
     zIndex: 1,
   };
 
@@ -80,7 +78,7 @@ export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
             <Text style={fs10RegGray6}>{totalAmountLabel}</Text>
           </View>
           <CustomSpacer space={sh6} />
-          <View style={rowCenterVertical}>
+          <View style={{ ...rowCenterVertical, ...justifyContentEnd, ...flexWrap, maxWidth: sw600 }}>
             {totalInvestment.map((totalAmount: IOrderAmount, amountIndex: number) => {
               return (
                 <View key={amountIndex} style={rowCenterVertical}>

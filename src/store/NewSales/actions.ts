@@ -21,8 +21,8 @@ export const updateNewSales = (newSales: NewSalesState) => {
   return typedAction("newSales/UPDATE_NEW_SALES", newSales);
 };
 
-export const resetNewSalesSteps = () => {
-  return typedAction("newSales/RESET_STEPS");
+export const resetNewSales = () => {
+  return typedAction("newSales/RESET_NEW_SALES");
 };
 
 export const updateToastVisible = (toggle: boolean) => {
@@ -36,7 +36,7 @@ export const updateToast = (toast: INewSalesToast) => {
 export type NewSalesAction = ReturnType<
   | typeof addAccountDetails
   | typeof addRiskInfo
-  | typeof resetNewSalesSteps
+  | typeof resetNewSales
   | typeof updateNewSales
   | typeof updateNewSalesDisabledSteps
   | typeof updateNewSalesFinishedSteps
@@ -47,7 +47,7 @@ export type NewSalesAction = ReturnType<
 export const NewSalesActionProps = {
   addAccountDetails,
   addRiskInfo,
-  resetNewSalesSteps,
+  resetNewSales,
   updateNewSales,
   updateNewSalesDisabledSteps,
   updateNewSalesFinishedSteps,

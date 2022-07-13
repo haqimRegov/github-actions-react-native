@@ -6,6 +6,7 @@ import { Tab, TabProps } from "./Tab";
 
 interface TabGroupProps {
   activeTab: number;
+  containerStyle?: ViewStyle;
   selectedTextStyle?: TextStyle;
   selectedViewStyle?: ViewStyle;
   setActiveTab: (tabIndex: number) => void;
@@ -15,6 +16,7 @@ interface TabGroupProps {
 
 export const TabGroup: FunctionComponent<TabGroupProps> = ({
   activeTab,
+  containerStyle,
   selectedTextStyle,
   selectedViewStyle,
   setActiveTab,
@@ -22,7 +24,7 @@ export const TabGroup: FunctionComponent<TabGroupProps> = ({
   tabs,
 }: TabGroupProps) => {
   return (
-    <View style={flexRow}>
+    <View style={{ ...flexRow, ...containerStyle }}>
       {tabs.map((tab: TabProps, index: number) => {
         const handleTabPress = () => {
           if (tab.onPress !== undefined) {

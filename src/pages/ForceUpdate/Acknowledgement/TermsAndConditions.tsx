@@ -24,13 +24,13 @@ import {
   px,
   rowCenterVertical,
   sh16,
-  sh18,
   sh24,
   sh32,
   sh4,
   sh456,
+  sh6,
+  sw10,
   sw14,
-  sw18,
   sw24,
   sw265,
   sw4,
@@ -119,7 +119,7 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
               <View style={rowCenterVertical}>
                 <Text style={fs14RegGray5}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
                 <CustomTooltip
-                  arrowSize={{ width: sw18, height: sh18 }}
+                  arrowSize={{ width: sw10, height: sh6 }}
                   content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
                   contentStyle={{ width: sw265 }}
                   theme={"dark"}

@@ -10,15 +10,11 @@ import { flexChild, sh32 } from "../../../styles";
 import { InvestorProfile } from "../../../templates";
 
 interface InvestorProfilePageProps extends InvestorsStoreProps {
-  currentProfile: TypeAccountHolder;
+  clientId: string;
   setPage: (index: number) => void;
 }
 
-const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
-  currentAccount,
-  currentProfile,
-  setPage,
-}: InvestorProfilePageProps) => {
+const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({ clientId, setPage }: InvestorProfilePageProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const [investorProfile, setInvestorProfile] = useState<IInvestorAccount | undefined>(undefined);
 
@@ -27,7 +23,7 @@ const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
   };
 
   const handleFetch = async () => {
-    const request: IInvestorAccountDetailsRequest = { clientId: "e5052ef0-dff0-11ec-8eeb-8b8432ef3cf8" };
+    const request: IInvestorAccountDetailsRequest = { clientId: clientId };
     const accountDetailsResponse: IInvestorAccountDetailsResponse = await getInvestorAccountDetails(request, navigation);
     if (accountDetailsResponse !== undefined) {
       const { data, error } = accountDetailsResponse;

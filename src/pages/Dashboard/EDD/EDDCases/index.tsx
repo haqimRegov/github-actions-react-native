@@ -177,6 +177,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
             <View style={flexRow}>
               <TabGroup
                 activeTab={activeTabIndex}
+                containerStyle={borderBottomGray2}
                 setActiveTab={handleTabs}
                 tabs={[
                   { badgeCount: newCount, text: DASHBOARD_EDD.LABEL_NEW },

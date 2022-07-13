@@ -20,10 +20,9 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
     props.resetInvestors();
     props.resetPersonalInfo();
     props.resetRiskAssessment();
-    props.resetViewFund();
     props.resetSelectedFund();
     props.resetProducts();
-    props.resetSteps();
+    props.resetOnboarding();
     setTimeout(() => {
       navigation.dispatch(
         CommonActions.reset({

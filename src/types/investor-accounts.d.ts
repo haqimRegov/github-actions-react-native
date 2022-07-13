@@ -8,6 +8,7 @@ declare interface IInvestor {
   email: string;
   emailLastUpdated: string;
   idNumber: string;
+  idType: TypeClientID;
   initId: string;
   investorDetails: IInvestorAccountsData[];
   isForceUpdate?: boolean;

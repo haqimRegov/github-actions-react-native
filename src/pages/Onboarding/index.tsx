@@ -98,12 +98,11 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     navigation,
     resetAcknowledgement,
     resetClientDetails,
+    resetOnboarding,
     resetPersonalInfo,
-    resetRiskAssessment,
-    resetViewFund,
-    resetSelectedFund,
     resetProducts,
-    resetSteps,
+    resetRiskAssessment,
+    resetSelectedFund,
     resetTransactions,
     updateFinishedSteps,
   } = props;
@@ -126,10 +125,9 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetClientDetails();
     resetPersonalInfo();
     resetRiskAssessment();
-    resetViewFund();
     resetSelectedFund();
     resetProducts();
-    resetSteps();
+    resetOnboarding();
     resetTransactions();
     navigation.dispatch(
       CommonActions.reset({

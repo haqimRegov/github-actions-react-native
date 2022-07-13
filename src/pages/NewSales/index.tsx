@@ -95,9 +95,12 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     navigation,
     resetAcknowledgement,
     resetClientDetails,
-    resetNewSalesSteps,
+    resetNewSales,
     resetPersonalInfo,
+    resetProducts,
     resetRiskAssessment,
+    resetSelectedFund,
+    resetTransactions,
     updateNewSalesFinishedSteps,
     updateToastVisible,
   } = props;
@@ -152,7 +155,10 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     resetClientDetails();
     resetPersonalInfo();
     resetRiskAssessment();
-    resetNewSalesSteps();
+    resetSelectedFund();
+    resetProducts();
+    resetNewSales();
+    resetTransactions();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,

@@ -8,7 +8,7 @@ import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../../../compo
 import { DEFAULT_DATE_FORMAT } from "../../../../../constants";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps, updateAvailableFilters } from "../../../../../store";
-import { borderBottomGray2, colorWhite, flexChild, flexRow, sh142, sh182, shadow12Black116, sw24 } from "../../../../../styles";
+import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -53,7 +53,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     .flat(1)
     .filter((value) => value !== "");
 
-  const absoluteHeaderSpace = filterValues.length > 0 ? sh182 : sh142;
+  const absoluteHeaderSpace = filterValues.length > 0 ? sh192 : sh152;
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);

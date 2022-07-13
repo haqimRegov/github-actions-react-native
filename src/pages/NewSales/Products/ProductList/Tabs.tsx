@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
-import { View, ViewStyle } from "react-native";
+import { View } from "react-native";
 
 import { TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
-import { colorWhite, flexRow, fullWidth, noBorder, px, sh24, sw24 } from "../../../../styles";
+import { borderBottomGray2, colorWhite, flexRow, noBorder } from "../../../../styles";
 
 const { PRODUCT_LIST } = Language.PAGE;
 export interface ProductTabsProps {
@@ -19,16 +19,6 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({
   productType,
   setProductType,
 }: ProductTabsProps) => {
-  const container: ViewStyle = {
-    ...fullWidth,
-    ...px(sw24),
-    borderTopLeftRadius: sw24,
-    borderTopRightRadius: sw24,
-    position: "absolute",
-    top: sh24,
-    zIndex: 2,
-  };
-
   const tabs: ProductType[] = [];
   const handleTabs = (index: number) => {
     setProductType(tabs[index]);
@@ -50,7 +40,13 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({
 
   return (
     <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
-      <TabGroup activeTab={activeTab} setActiveTab={handleTabs} tabs={productTabs} unSelectedViewStyle={noBorder} />
+      <TabGroup
+        activeTab={activeTab}
+        containerStyle={borderBottomGray2}
+        setActiveTab={handleTabs}
+        tabs={productTabs}
+        unSelectedViewStyle={noBorder}
+      />
     </View>
   );
 };

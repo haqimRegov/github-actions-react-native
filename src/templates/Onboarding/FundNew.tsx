@@ -1,12 +1,13 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Dimensions, Pressable, Text, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, TextCard } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../components";
 import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
   border,
   centerHV,
+  circle,
   colorBlue,
   colorWhite,
   flexChild,
@@ -22,16 +23,16 @@ import {
   sh10,
   sh12,
   sh24,
-  sh32,
   sh4,
   sh64,
   sw16,
   sw24,
+  sw40,
   sw8,
 } from "../../styles";
 import { formatAmount } from "../../utils";
 
-const { ORDER_SUMMARY } = Language.PAGE;
+const { FUND_OVERVIEW, ORDER_SUMMARY } = Language.PAGE;
 
 export interface FundProps {
   expanded: boolean;
@@ -52,13 +53,11 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     fundName,
     fundType,
     investmentAmount,
-    // isFea,
     isSyariah,
     salesCharge,
     scheduledInvestmentAmount,
     scheduledSalesCharge,
     fundCode,
-    paymentTerm,
   } = fund;
 
   const isScheduled =
@@ -107,7 +106,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
   const investment: LabeledTitleProps[] = [
     {
       label: ORDER_SUMMARY.LABEL_PAYMENT_TERM,
-      title: `${paymentTerm}`,
+      title: isScheduled === true ? FUND_OVERVIEW.LABEL_TERM_RECURRING : FUND_OVERVIEW.LABEL_TERM_ONE_TIME,
       titleStyle: fsTransformNone,
     },
   ];
@@ -167,14 +166,21 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
       <Pressable style={headerStyle} onPress={handleExpand}>
         <Text style={fs18BoldBlue1}>{fundName}</Text>
         <CustomFlexSpacer />
-        <IcoMoon color={colorBlue._1} name="fund-facts" size={sh32} />
+        <IconButton
+          color={colorBlue._1}
+          name={icon}
+          onPress={handleExpand}
+          size={sw24}
+          style={circle(sw40, undefined)}
+          withHover={{ color: colorBlue._2 }}
+        />
       </Pressable>
       {expanded === false ? null : (
         <Fragment>
           <View />
           <View style={px(sw24)}>
             <View style={flexRow}>
-              <IcoMoon color={colorBlue._1} name="order" size={sh24} />
+              <IcoMoon color={colorBlue._1} name="fund-facts" size={sh24} />
               <CustomSpacer isHorizontal={true} space={sw8} />
               <View style={centerHV}>
                 <Text style={fs16BoldBlack2}>{ORDER_SUMMARY.LABEL_FUND_INFORMATION}</Text>
@@ -184,7 +190,6 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
                 <View style={border(colorBlue._2, sh1)} />
               </View>
             </View>
-
             <CustomSpacer space={sh12} />
             <TextCard
               data={fundInfo}

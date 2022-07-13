@@ -83,7 +83,6 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
   const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
-  const TEMPORARY_ID_TYPE = "NRIC";
 
   const modalData: LabeledTitleProps[] = [
     {
@@ -142,7 +141,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     if (investorData !== undefined) {
       setLoadingNewSales(true);
       const principalDob =
-        investorData.dateOfBirth && TEMPORARY_ID_TYPE !== "NRIC"
+        investorData.dateOfBirth && investorData.idType !== "NRIC"
           ? { dateOfBirth: moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
           : {};
       const request: IClientRegisterRequest = {
@@ -152,7 +151,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         principalHolder: {
           ...principalDob,
           id: investorData.idNumber,
-          idType: TEMPORARY_ID_TYPE,
+          idType: investorData.idType,
           name: investorData.name!,
         },
       };
@@ -169,7 +168,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             principalHolder: {
               ...client.details!.principalHolder,
               dateOfBirth: investorData.dateOfBirth,
-              clientId: investorData.clientId,
+              clientId: data.result.principalHolder.clientId,
               id: investorData.idNumber,
               name: investorData.name,
             },
@@ -185,7 +184,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
                 dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
                 expirationDate: undefined,
                 idNumber: data.result.principalHolder.id,
-                idType: TEMPORARY_ID_TYPE,
+                idType: data.result.principalHolder.idType,
                 name: data.result.principalHolder.name,
                 nationality: data.result.principalHolder.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
               },

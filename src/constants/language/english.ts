@@ -827,6 +827,10 @@ export const english = {
       TITLE_SUMMARY: "Summary",
       TITLE_TERMS_CONDITIONS: "Terms & Conditions",
     },
+    FUND_OVERVIEW: {
+      LABEL_TERM_ONE_TIME: "One-time payment",
+      LABEL_TERM_RECURRING: "Recurring",
+    },
     INVESTOR_ACCOUNTS: {
       LABEL_ACCOUNT_NO: "Account No.",
       LABEL_ACCOUNTS: "Accounts",
@@ -1517,6 +1521,7 @@ export const english = {
       LABEL_HEADER_PRS_DEFAULT: "PRS Default Option Recommendation",
       LABEL_RECOMMENDED: "Recommended",
       LABEL_NEW_SALES_PRODUCT_SERVICE_SUMMARY: "Product and Service Summary",
+      LABEL_TYPES: "Types:",
       PROMPT_LABEL_CANCEL: "All progress in the Product & Service Recommendation will be lost.",
       PROMPT_LABEL_OUTSIDE:
         "Yes, I wish to purchase unlisted capital market product(s) outside the authorised distributor's recommendation",

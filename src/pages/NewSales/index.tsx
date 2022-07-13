@@ -107,7 +107,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const updatedNewSalesSteps = [...NEW_SALES_DATA];
 
-  if (client.isNewSales === true && findAccountList === -1) {
+  if (client.isNewFundPurchase === true && findAccountList === -1) {
     updatedNewSalesSteps.splice(0, 0, ACCOUNT_LIST);
   }
   const [promptModal, setPromptModal] = useState<boolean>(false);

@@ -1,13 +1,15 @@
 declare type IEtbCheckRequest = IClientRegisterInfo;
 
 declare interface IAccountList {
-  name: string;
-  jointName: string | null;
   accountNo: string;
+  accountType?: TypeAccountChoices;
   isJoint: boolean;
+  jointName: string | null;
+  name: string;
+  tags?: string[];
 }
 declare interface IEtbCheckResult {
-  accountList?: IAccountList[] | null;
+  accounts?: IAccountList[] | null;
   forceUpdate: boolean;
   highRisk: boolean;
   message: string;

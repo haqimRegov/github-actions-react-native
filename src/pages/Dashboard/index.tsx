@@ -107,7 +107,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     content = <Transactions {...props} />;
   }
   if (page === "Investors") {
-    content = <Investors {...props} isForceUpdate={client.isForceUpdate === true} />;
+    content = <Investors {...props} showInvestorOverview={client.isForceUpdate === true || client.isNewSales === true} />;
   }
   if (page === "EDD") {
     content = <EDD {...props} />;

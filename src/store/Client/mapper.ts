@@ -7,12 +7,14 @@ import { RootState } from "../rootReducer";
 import { ClientActionProps } from "./actions";
 
 export const ClientMapStateToProps = (state: RootState) => ({
+  accountList: state.client.accountList,
   accountType: state.client.accountType,
   agent: state.global.agent,
+  client: state.client,
   details: state.client.details,
   forceUpdate: state.client.isForceUpdate,
   showOpenAccount: state.forceUpdate.showOpenAccount,
-  isNewSales: state.client.isNewSales,
+  isNewFundPurchase: state.client.isNewFundPurchase,
   personalInfo: state.personalInfo,
 });
 

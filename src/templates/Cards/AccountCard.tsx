@@ -35,7 +35,7 @@ import {
 } from "../../styles";
 
 interface IAccountCardProps {
-  data: INewSalesAccountList;
+  data: IAccountList;
   style?: ViewStyle;
   handlePress: () => void;
 }
@@ -46,7 +46,7 @@ interface ITagStyle {
 }
 
 export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handlePress, style }: IAccountCardProps) => {
-  const { accountType, accountNo, principalHolder, jointHolder, tags } = data;
+  const { accountType, accountNo, name, isJoint, jointName, tags } = data;
 
   const handleTagStyle = (text: string): ITagStyle => {
     switch (text) {
@@ -89,33 +89,35 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
               <Text style={fs12BoldGray6}>{accountNo}</Text>
             </View>
             <CustomSpacer space={sh4} />
-            <Text style={fs18BoldBlue1}>{principalHolder}</Text>
-            {accountType === "Joint" ? <Text style={fs18BoldBlue1}>{jointHolder}</Text> : null}
+            <Text style={fs18BoldBlue1}>{name}</Text>
+            {isJoint === true ? <Text style={fs18BoldBlue1}>{jointName}</Text> : null}
             <CustomSpacer space={sh8} />
             <View style={flexRow}>
-              {tags.map((eachTag: string, tagIndex: number) => {
-                const checkTagStyle: ITagStyle =
-                  eachTag.includes("High") || eachTag.includes("Low") || eachTag.includes("Medium")
-                    ? handleTagStyle(eachTag)
-                    : { container: {}, text: {} };
-                const tagStyle: ViewStyle = {
-                  ...px(sw4),
-                  ...py(sh2),
-                  backgroundColor: colorGray._1,
-                  borderColor: colorGray._5,
-                  borderWidth: sw05,
-                  borderRadius: sw4,
-                  ...checkTagStyle.container,
-                };
-                return (
-                  <Fragment key={tagIndex}>
-                    {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
-                    <View key={tagIndex} style={tagStyle}>
-                      <Text style={{ ...fs10RegGray5, ...checkTagStyle.text }}>{eachTag}</Text>
-                    </View>
-                  </Fragment>
-                );
-              })}
+              {tags !== undefined
+                ? tags.map((eachTag: string, tagIndex: number) => {
+                    const checkTagStyle: ITagStyle =
+                      eachTag.includes("High") || eachTag.includes("Low") || eachTag.includes("Medium")
+                        ? handleTagStyle(eachTag)
+                        : { container: {}, text: {} };
+                    const tagStyle: ViewStyle = {
+                      ...px(sw4),
+                      ...py(sh2),
+                      backgroundColor: colorGray._1,
+                      borderColor: colorGray._5,
+                      borderWidth: sw05,
+                      borderRadius: sw4,
+                      ...checkTagStyle.container,
+                    };
+                    return (
+                      <Fragment key={tagIndex}>
+                        {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
+                        <View key={tagIndex} style={tagStyle}>
+                          <Text style={{ ...fs10RegGray5, ...checkTagStyle.text }}>{eachTag}</Text>
+                        </View>
+                      </Fragment>
+                    );
+                  })
+                : null}
             </View>
           </View>
           <CustomFlexSpacer />

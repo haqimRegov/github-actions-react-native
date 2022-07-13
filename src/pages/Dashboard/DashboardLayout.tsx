@@ -73,7 +73,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     if (handleNewSales !== undefined) {
       handleNewSales();
     }
-    navigation.navigate("NewSales");
+    setAddClient(true);
   };
 
   // const handleTopUp = () => {

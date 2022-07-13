@@ -52,7 +52,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps, NewSalesConten
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
     activeTab,
-    addClientNewSales,
+    addClientNewFund,
     availableFilters,
     downloadInitiated,
     incomplete,
@@ -131,7 +131,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleNewSales = () => {
-    addClientNewSales(true);
+    addClientNewFund(true);
   };
 
   const handleTabs = (index: number) => {

@@ -18,22 +18,15 @@ interface ProductsProps extends ProductsStoreProps, NewSalesContentProps {
 }
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
-  accountType,
   addInvestmentDetails,
-  addPersonalInfo,
   addSelectedFund,
   addViewFund,
-  details,
   handleNextStep,
   investmentDetails,
-  global,
-  newSales,
-  onboarding,
   resetProducts,
   resetSelectedFund,
   riskScore,
   selectedFunds,
-  updateOnboarding,
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
@@ -175,6 +168,19 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     // }
   };
 
+  const continueDisabledInvestment = investmentDetails?.find(({ investment }) => {
+    return (
+      investment.investmentAmount === "" ||
+      investment.investmentSalesCharge === "" ||
+      (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
+      (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
+      investment.amountError !== undefined ||
+      investment.scheduledAmountError !== undefined ||
+      investment.investmentSalesChargeError !== undefined ||
+      investment.scheduledSalesChargeError !== undefined
+    );
+  });
+
   let screen = {
     content: (
       <ProductList
@@ -184,9 +190,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         setScrollEnabled={setScrollEnabled}
       />
     ),
+    continueDisabled: selectedFunds.length === 0,
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
-    labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
+    labelSubmit: PRODUCT_LIST.BUTTON_START_INVESTING,
   };
 
   if (viewFund !== undefined) {
@@ -202,6 +209,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           setViewFund={addViewFund}
         />
       ),
+      continueDisabled: continueDisabledInvestment !== undefined && page === 1,
     };
   }
 
@@ -234,19 +242,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const bannerText =
     selectedFunds.length !== 0 ? `${utLabel}${utSuffix}${prsPrefix}${prsLabel}${prsSuffix}${ampPrefix}${ampLabel}` : INVESTMENT.LABEL_NONE;
 
-  const disableContinue = investmentDetails?.find(({ investment }) => {
-    return (
-      investment.investmentAmount === "" ||
-      investment.investmentSalesCharge === "" ||
-      (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
-      (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
-      investment.amountError !== undefined ||
-      investment.scheduledAmountError !== undefined ||
-      investment.investmentSalesChargeError !== undefined ||
-      investment.scheduledSalesChargeError !== undefined
-    );
-  });
-
   const handleKeyboardShow = () => {
     setKeyboardIsShowing(true);
   };
@@ -262,7 +257,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       keyboardWillHide.remove();
       keyboardWillShow.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
   const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE;
@@ -284,7 +278,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
                 </View>
               }
               cancelOnPress={screen.onPressCancel}
-              continueDisabled={disableContinue !== undefined && page === 1}
+              continueDisabled={screen.continueDisabled}
               labelCancel={INVESTMENT.BUTTON_CANCEL}
               labelSubmit={screen.labelSubmit}
               submitOnPress={screen.onPressSubmit}

@@ -122,6 +122,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       const request: IGeneratePdfRequest = {
         clientId: clientId!,
         initId: details!.initId!,
+        isEtb: false,
         isForceUpdate: false,
         orderNo: receipt.orderNumber!,
       };

@@ -5,8 +5,10 @@ import { CustomFlexSpacer, CustomSpacer, StatusBadge } from "../../components";
 import { Language } from "../../constants";
 import {
   alignItemsEnd,
+  border,
   borderBottomBlue4,
   colorBlue,
+  colorGray,
   flexWrap,
   fs10RegGray6,
   fs16BoldGray6,
@@ -17,7 +19,7 @@ import {
   py,
   rowCenterVertical,
   sh12,
-  sh6,
+  sw1,
   sw24,
   sw4,
   sw600,
@@ -64,7 +66,7 @@ export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
   const totalAmountLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
 
   return (
-    <View>
+    <View style={border(colorGray._2, sw1, sw8)}>
       <View style={cardHeaderStyle}>
         <View>
           <Text style={fs24BoldBlack2}>{orderNumber}</Text>
@@ -77,7 +79,6 @@ export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
             <CustomSpacer isHorizontal={true} space={sw8} />
             <Text style={fs10RegGray6}>{totalAmountLabel}</Text>
           </View>
-          <CustomSpacer space={sh6} />
           <View style={{ ...rowCenterVertical, ...justifyContentEnd, ...flexWrap, maxWidth: sw600 }}>
             {totalInvestment.map((totalAmount: IOrderAmount, amountIndex: number) => {
               return (

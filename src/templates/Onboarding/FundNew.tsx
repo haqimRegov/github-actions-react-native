@@ -23,9 +23,10 @@ import {
   sh10,
   sh12,
   sh24,
-  sh4,
   sh64,
+  sh8,
   sw16,
+  sw239,
   sw24,
   sw40,
   sw8,
@@ -157,9 +158,13 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     height: sh64,
   };
 
-  // const labelStyle = expanded === true ? fs16BoldGray5 : fs18BoldBlue1;
-
-  const scaledSpaceBetweenItem = width < 1080 ? 30 : 32;
+  const textCardProps = {
+    itemsPerGroup: 3,
+    itemStyle: { width: sw239 },
+    labelStyle: fs12BoldGray5,
+    spaceBetweenItem: width < 1080 ? 30 : 32,
+    titleStyle: { ...fs16BoldBlack2, ...fsTransformNone },
+  };
 
   return (
     <View style={{ backgroundColor: colorWhite._1, ...style }}>
@@ -191,15 +196,8 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
               </View>
             </View>
             <CustomSpacer space={sh12} />
-            <TextCard
-              data={fundInfo}
-              itemsPerGroup={3}
-              labelStyle={fs12BoldGray5}
-              spaceBetweenItem={scaledSpaceBetweenItem}
-              spaceToLabel={sh4}
-              titleStyle={{ ...fs16BoldBlack2, ...fsTransformNone }}
-            />
-            <CustomSpacer space={sh24} isHorizontal />
+            <TextCard {...textCardProps} data={fundInfo} />
+            <CustomSpacer space={sh8} />
             <View style={flexRow}>
               <IcoMoon color={colorBlue._1} name="transaction-info" size={sh24} />
               <CustomSpacer isHorizontal={true} space={sw8} />
@@ -212,14 +210,8 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
               </View>
             </View>
             <CustomSpacer space={sh12} />
-            <TextCard
-              data={investment}
-              itemsPerGroup={3}
-              labelStyle={fs12BoldGray5}
-              spaceBetweenItem={scaledSpaceBetweenItem}
-              spaceToLabel={sh4}
-              titleStyle={{ ...fs16BoldBlack2, ...fsTransformNone }}
-            />
+            <TextCard {...textCardProps} data={investment} />
+            <CustomSpacer space={sh8} />
           </View>
         </Fragment>
       )}

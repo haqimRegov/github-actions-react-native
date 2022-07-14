@@ -20,12 +20,10 @@ import {
   fs16BoldGray6,
   fs16RegGray6,
   fs18BoldBlack2,
-  fs18BoldGray6,
   fs20BoldBlack2,
   px,
   py,
   rowCenterVertical,
-  sh100,
   sh128,
   sh16,
   sh18,
@@ -44,6 +42,7 @@ import {
 } from "../../../styles";
 import { OrderOverviewNew } from "../../../templates";
 import { formatAmount, isNotEmpty } from "../../../utils";
+import { defaultContentProps } from "../Content";
 
 const { ORDER_SUMMARY } = Language.PAGE;
 
@@ -85,7 +84,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
 
   return (
     <View style={flexChild}>
-      <ContentPage subheading={ORDER_SUMMARY.HEADING_NEW} subheadingStyle={fs18BoldGray6}>
+      <ContentPage {...defaultContentProps} subheading={ORDER_SUMMARY.HEADING_NEW} spaceToBottom={sh72}>
         <View style={orderSummaryHeader}>
           <Text style={fs14RegGray5}>{ORDER_SUMMARY.SUBHEADING_NEW}</Text>
           <CustomSpacer isHorizontal={true} space={sw4} />
@@ -157,8 +156,6 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
           })}
       </ContentPage>
       <SelectionBanner
-        buttonStyle={{ height: sh40 }}
-        containerStyle={{ minHeight: sh100, borderTopLeftRadius: sh16, borderTopRightRadius: sh16 }}
         label={ORDER_SUMMARY.LABEL_ORDER_CONFIRMATION}
         bottomContent={
           <View style={flexRow}>

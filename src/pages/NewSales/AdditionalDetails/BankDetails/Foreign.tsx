@@ -26,6 +26,7 @@ import {
   sh16,
   sh20,
   sh24,
+  sh4,
   sh8,
   sw16,
   sw360,
@@ -299,7 +300,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       spaceToTop={sh16}
                       value={item.bankSwiftCode}
                     />
-                    <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
+                    <TextSpaceArea spaceToTop={sh4} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
                     {remainingCurrencies.length === 0 ? null : (
                       <View>
                         <CustomSpacer space={sh16} />

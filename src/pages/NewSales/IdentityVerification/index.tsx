@@ -16,9 +16,7 @@ import {
   fs10RegGray6,
   fs12BoldBlack2,
   fs12RegGray5,
-  fs14RegGray5,
   fs16BoldBlack2,
-  fs18BoldGray6,
   px,
   rowCenterVertical,
   sh24,
@@ -29,6 +27,7 @@ import {
 } from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
 import { ImageReview } from "../../Onboarding/IdentityVerification/ImageReview";
+import { defaultContentProps } from "../Content";
 import { UploadID } from "./UploadID";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
@@ -44,7 +43,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   accountType,
   addPersonalInfo,
   details,
-  updateToastVisible,
   handleNextStep,
   newSales,
   personalInfo,
@@ -293,15 +291,14 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   return (
     <Fragment>
       <ContentPage
+        {...defaultContentProps}
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleContinue}
         labelCancel={IDENTITY_CONFIRMATION.BUTTON_CANCEL}
         labelContinue={IDENTITY_CONFIRMATION.BUTTON_SAVE_CONTINUE}
         subheading={IDENTITY_CONFIRMATION.NEW_SALES_HEADING}
-        subheadingStyle={fs18BoldGray6}
-        subtitle={IDENTITY_CONFIRMATION.NEW_SALES_SUBHEADING}
-        subtitleStyle={fs14RegGray5}>
+        subtitle={IDENTITY_CONFIRMATION.NEW_SALES_SUBHEADING}>
         <View style={px(sw24)}>
           <CustomSpacer space={sh24} />
           {accountType === "Joint" ? (

@@ -6,8 +6,9 @@ import { ColorCard, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { fs14RegGray6, fs18BoldGray6, px, sh24, sw24 } from "../../../styles";
+import { px, sh24, sw24 } from "../../../styles";
 import { isNotEmpty, isNumber } from "../../../utils";
+import { defaultContentProps } from "../Content";
 import { AccountDetails } from "./AccountDetails";
 import { BankDetails } from "./BankDetails";
 import { EPFDetails } from "./EPFDetails";
@@ -53,6 +54,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       },
     });
   };
+
   const handleLocalBank = (updatedLocalBank: IBankDetailsState[]) => {
     addPersonalInfo({
       ...personalInfo,
@@ -77,6 +79,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
         },
       },
     });
+
   const handleInputEpfNumber = (value: string) =>
     addPersonalInfo({
       ...personalInfo,
@@ -88,6 +91,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
         },
       },
     });
+
   const handleEpfNumber = () => {
     const checkEpfNumber = isNumber(inputEpfNumber) === false || inputEpfNumber === "" ? ERROR.INVALID_NUMBER : undefined;
     setEpfNumberValidation(checkEpfNumber);
@@ -161,13 +165,12 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
 
   return (
     <ContentPage
+      {...defaultContentProps}
       continueDisabled={continueDisabled}
       handleCancel={handleCancel}
       handleContinue={handleContinue}
-      subheading={PERSONAL_DETAILS.LABEL_ADDITIONAL}
-      subheadingStyle={fs18BoldGray6}
-      subtitle={PERSONAL_DETAILS.LABEL_ADDITIONAL_DETAILS_SUBTITLE}
-      subtitleStyle={fs14RegGray6}>
+      subheading={PERSONAL_DETAILS.HEADING_ADD_ADDITIONAL}
+      subtitle={PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS}>
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         {epfInvestment === true ? (

@@ -20,7 +20,6 @@ import {
   fs12SemiBoldBlue1,
   fs14RegGray5,
   fs16RegBlack2,
-  fs18BoldGray6,
   justifyContentEnd,
   px,
   rowCenterVertical,
@@ -38,6 +37,7 @@ import {
   sw800,
 } from "../../../styles";
 import { TermsAccordionNew } from "../../../templates";
+import { defaultContentProps } from "../Content";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -120,12 +120,11 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
 
   return (
     <ContentPage
+      {...defaultContentProps}
       continueDisabled={disabled}
       handleContinue={handleContinue}
       labelContinue={TERMS_AND_CONDITIONS.BUTTON_AGREE}
-      subheading={TERMS_AND_CONDITIONS.HEADING_NEW}
-      subheadingStyle={fs18BoldGray6}
-      spaceToHeading={0}>
+      subheading={TERMS_AND_CONDITIONS.HEADING_TERMS}>
       {TERMS_AND_CONDITION_LIST.length === 0 ? null : (
         <Fragment>
           <View style={px(sw24)}>

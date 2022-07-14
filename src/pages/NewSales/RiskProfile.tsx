@@ -2,16 +2,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Pressable, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import {
-  ColorCard,
-  ContentPage,
-  ContentPageProps,
-  CustomFlexSpacer,
-  CustomSpacer,
-  IconButton,
-  SelectionBanner,
-  TextCard,
-} from "../../components";
+import { ColorCard, ContentPage, CustomFlexSpacer, CustomSpacer, IconButton, SelectionBanner, TextCard } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
@@ -33,10 +24,7 @@ import {
   fs12BoldBlue1,
   fs16BoldBlue1,
   fs16RegBlack2,
-  fs16RegGray5,
-  fs18BoldGray6,
   fs20BoldBlack2,
-  fs24BoldGray6,
   fsTransformNone,
   noBorder,
   px,
@@ -46,8 +34,6 @@ import {
   sh2,
   sh24,
   sh32,
-  sh4,
-  sh48,
   sh8,
   sw05,
   sw1,
@@ -60,6 +46,7 @@ import {
   sw40,
   sw8,
 } from "../../styles";
+import { defaultContentProps } from "./Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -141,15 +128,6 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   const heading = `${RISK_ASSESSMENT.NEW_SALES_HEADING} ${name}`;
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
 
-  const defaultContentProps: Partial<ContentPageProps> = {
-    headingStyle: fs24BoldGray6,
-    spaceToBottom: sh48,
-    spaceToHeading: sh24,
-    spaceToTitle: sh4,
-    subheadingStyle: fs18BoldGray6,
-    subtitleStyle: fs16RegGray5,
-  };
-
   const buttonStyle: ViewStyle = {
     ...centerHorizontal,
     ...flexRow,
@@ -169,7 +147,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   return (
     <View>
-      <ContentPage heading={heading} subheading={header} subtitle={subtitle} {...defaultContentProps}>
+      <ContentPage {...defaultContentProps} heading={heading} spaceToHeading={sh24} subheading={header} subtitle={subtitle}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <ColorCard

@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Dimensions, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Dimensions, Pressable, ScrollView, Text, View, ViewStyle } from "react-native";
 
 import {
   ButtonSelectionList,
@@ -18,7 +18,7 @@ import { RNInAppBrowser } from "../../../integrations";
 import {
   borderBottomBlue4,
   centerHV,
-  colorBlack,
+  colorBlue,
   colorWhite,
   flexChild,
   flexGrow,
@@ -35,19 +35,18 @@ import {
   py,
   rowCenterVertical,
   sh14,
-  sh16,
   sh24,
   sh32,
   sh4,
   sh56,
   sh8,
+  shadow12Blue108,
   sw12,
   sw16,
   sw168,
   sw20,
   sw24,
   sw240,
-  sw30,
   sw64,
   sw8,
 } from "../../../styles";
@@ -201,10 +200,10 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   const transactionData = transactionInfo.filter((raw) => raw.label !== "");
 
   const textCardProps = {
-    itemsPerGroup: 5,
-    itemStyle: { width: sw240, marginBottom: sh16 },
+    itemsPerGroup: 3,
+    itemStyle: { width: sw240 },
     labelStyle: fs12BoldGray5,
-    spaceBetweenItem: width < 1080 ? 15 : 16,
+    spaceBetweenItem: width < 1080 ? 30 : 32,
     titleStyle: fs16BoldBlack2,
   };
 
@@ -249,11 +248,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
       <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
         <CustomSpacer space={sh32} />
         <View style={{ ...flexRow, ...px(sw24), ...flexChild }}>
-          <TouchableWithoutFeedback onPress={handleBack}>
-            <View style={{ ...centerHV, height: sw30, width: sw30 }}>
-              <IcoMoon name="arrow-left" size={sh24} />
-            </View>
-          </TouchableWithoutFeedback>
+          <Pressable onPress={handleBack} style={{ ...centerHV, height: sh24 }}>
+            <IcoMoon color={colorBlue._1} name="arrow-left" size={sw20} />
+          </Pressable>
           <CustomSpacer isHorizontal={true} space={sw12} />
           <LabeledTitle
             label={fund.fundName}
@@ -273,12 +270,12 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
         </View>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
-          <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8 }}>
+          <View style={{ ...shadow12Blue108, backgroundColor: colorWhite._1, borderRadius: sw8 }}>
             <CustomSpacer space={sh24} />
             <View style={px(sw24)}>
               <View style={rowCenterVertical}>
-                <IcoMoon name="objective" size={sw20} color={colorBlack._2} />
-                <CustomSpacer isHorizontal={true} space={sw12} />
+                <IcoMoon name="objective" size={sw24} color={colorBlue._1} />
+                <CustomSpacer isHorizontal={true} space={sw8} />
                 <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_INVESTMENT_OBJECTIVE}</Text>
                 <CustomSpacer isHorizontal={true} space={sw12} />
                 <View style={flexChild}>
@@ -288,8 +285,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
               <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective} />
               <CustomSpacer space={sh32} />
               <View style={rowCenterVertical}>
-                <IcoMoon name="fund-facts" size={sw20} color={colorBlack._2} />
-                <CustomSpacer isHorizontal={true} space={sw12} />
+                <IcoMoon name="fund-facts" size={sw24} color={colorBlue._1} />
+                <CustomSpacer isHorizontal={true} space={sw8} />
                 <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_FACTS} </Text>
                 <CustomSpacer isHorizontal={true} space={sw12} />
                 <View style={flexChild}>
@@ -297,11 +294,11 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
                 </View>
               </View>
               <CustomSpacer space={sh8} />
-              <TextCard data={fundData} noLastIndexSpace={true} {...textCardProps} />
+              <TextCard data={fundData} {...textCardProps} />
             </View>
           </View>
           <CustomSpacer space={sh24} />
-          <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24), ...px(sw24) }}>
+          <View style={{ ...shadow12Blue108, backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24), ...px(sw24) }}>
             {showMulti === true ? (
               <Fragment>
                 <View style={flexRow}>
@@ -322,8 +319,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
               </Fragment>
             ) : null}
             <View style={rowCenterVertical}>
-              <IcoMoon name="transaction-info" size={sw20} color={colorBlack._2} />
-              <CustomSpacer isHorizontal={true} space={sw12} />
+              <IcoMoon name="transaction-info" size={sw24} color={colorBlue._1} />
+              <CustomSpacer isHorizontal={true} space={sw8} />
               <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_TRANSACTION_INFO} </Text>
               <CustomSpacer isHorizontal={true} space={sw12} />
               <View style={flexChild}>
@@ -335,8 +332,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
             {documentList.length > 0 ? (
               <Fragment>
                 <View style={rowCenterVertical}>
-                  <IcoMoon name="file" size={sw16} color={colorBlack._2} />
-                  <CustomSpacer isHorizontal={true} space={sw12} />
+                  <IcoMoon name="file" size={sw24} color={colorBlue._1} />
+                  <CustomSpacer isHorizontal={true} space={sw8} />
                   <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_DOCUMENTS}</Text>
                   <CustomSpacer isHorizontal={true} space={sw12} />
                   <View style={flexChild}>

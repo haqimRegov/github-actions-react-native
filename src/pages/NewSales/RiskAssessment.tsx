@@ -32,9 +32,7 @@ import {
   fs12RegGray6,
   fs16BoldBlack2,
   fs16RegBlack2,
-  fs16RegGray5,
   fs16RegGray6,
-  fs18BoldGray6,
   imageContain,
   rowCenterVertical,
   sh143,
@@ -42,8 +40,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh4,
-  sh48,
   sh56,
   sw1,
   sw11,
@@ -60,6 +56,7 @@ import {
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
 import { isObjectEqual } from "../../utils";
+import { defaultContentProps } from "./Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -79,8 +76,6 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   resetRiskAssessment,
   riskScore,
   setLoading,
-  // setPage,
-  addAccountDetails,
   updateIsRiskUpdated,
   updateNewSales,
   updateToast,
@@ -216,6 +211,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     if (prevRiskAssessment !== undefined && !isObjectEqual(questionnaire, prevRiskAssessment)) {
       setConfirmModal("promptAssessment");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finishedSteps, prevRiskAssessment, questionnaire]);
 
   const disabled =
@@ -228,23 +224,16 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
 
   const questionnaireStyle: ViewStyle = { marginLeft: sw24, marginRight: sw72 };
 
-  const defaultContentProps = {
-    spaceToBottom: sh48,
-    spaceToTitle: sh4,
-    subheadingStyle: fs18BoldGray6,
-    subtitleStyle: fs16RegGray5,
-  };
-
   return (
     <Fragment>
       <ContentPage
+        {...defaultContentProps}
         continueDisabled={disabled}
         handleCancel={handleCancelAssessment}
         handleContinue={handlePageContinue}
         labelContinue={RISK_ASSESSMENT.BUTTON_APPLY}
         subheading={RISK_ASSESSMENT.HEADING_RISK}
-        subtitle={RISK_ASSESSMENT.SUBHEADING}
-        {...defaultContentProps}>
+        subtitle={RISK_ASSESSMENT.SUBHEADING}>
         <CustomSpacer space={sh24} />
         <View style={questionnaireStyle}>
           <CustomSpacer isHorizontal={true} space={sw24} />

@@ -80,16 +80,17 @@ export const Prompt: FunctionComponent<PromptProps> = ({
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
+    ...rest.buttonContainerStyle,
   };
   const buttonStyle: ViewStyle = { width: sw234 };
 
   const actionButtonProps: ActionButtonsProps = {
-    buttonContainerStyle: buttonContainer,
     cancelButtonStyle: buttonStyle,
     cancelTextStyle: fsTransformNone,
     continueTextStyle: fsTransformNone,
     continueButtonStyle: buttonStyle,
     ...rest,
+    buttonContainerStyle: buttonContainer,
   };
 
   const illustrationStyle: ImageStyle = { ...imageContain, height: sw136, width: sw136 };

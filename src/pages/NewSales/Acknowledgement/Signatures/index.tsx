@@ -5,15 +5,15 @@ import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, Ackn
 import { EditPdf } from "./EditPDF";
 import { PDFList } from "./PDFList";
 
-interface SignaturesProps extends AcknowledgementStoreProps, ForceUpdateContentProps {}
+interface SignaturesProps extends AcknowledgementStoreProps, NewSalesContentProps {}
 
-export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({ handleNextStep, handleResetForceUpdate }: SignaturesProps) => {
+export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({ handleNextStep, handleResetNewSales }: SignaturesProps) => {
   const [editReceipt, setEditReceipt] = useState<IOnboardingReceiptState | undefined>(undefined);
 
   return (
     <Fragment>
       {editReceipt === undefined ? (
-        <PDFList handleNextStep={handleNextStep} handleResetForceUpdate={handleResetForceUpdate} setEditReceipt={setEditReceipt} />
+        <PDFList handleNextStep={handleNextStep} handleResetNewSales={handleResetNewSales} setEditReceipt={setEditReceipt} />
       ) : (
         <EditPdf setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
       )}

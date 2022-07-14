@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Dimensions, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { ColorCard, ContentPage, CustomButton, CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../../components";
@@ -21,11 +21,10 @@ import {
   fs10BoldBlue1,
   fs10RegGray6,
   fs12BoldBlack2,
-  fs14RegGray5,
+  fs12BoldGray5,
   fs16BoldBlack2,
   fs16BoldBlue1,
   fs18BoldBlack2,
-  fs18BoldGray6,
   fsTransformNone,
   fsUppercase,
   noBorder,
@@ -42,11 +41,13 @@ import {
   sw20,
   sw216,
   sw228,
+  sw239,
   sw24,
   sw32,
   sw40,
   sw8,
 } from "../../../styles";
+import { defaultContentProps } from "../Content";
 
 const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
 
@@ -67,6 +68,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   setFile,
   setPage,
 }: NewSalesSummaryProps) => {
+  const { width } = Dimensions.get("window");
   const { principalHolder, jointHolder } = details!;
   const { incomeDistribution, principal, signatory } = personalInfo;
   const { bankSummary, epfDetails } = principal!;
@@ -237,12 +239,17 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   const buttonStyle: ViewStyle = { ...px(sw24), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 };
 
+  const textCardProps = {
+    itemsPerGroup: 3,
+    itemStyle: { width: sw239 },
+    labelStyle: fs12BoldGray5,
+    spaceBetweenItem: width < 1080 ? 30 : 32,
+    titleStyle: fs16BoldBlack2,
+  };
+
   return (
     <ContentPage
-      subheading={NEW_SALES_SUMMARY.LABEL_HEADER}
-      subheadingStyle={fs18BoldGray6}
-      subtitle={NEW_SALES_SUMMARY.LABEL_SUBHEADER}
-      subtitleStyle={fs14RegGray5}
+      {...defaultContentProps}
       spaceToBottom={sh72}
       sideElement={
         <View>
@@ -270,7 +277,9 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
             ) : null}
           </View>
         </View>
-      }>
+      }
+      subheading={NEW_SALES_SUMMARY.LABEL_HEADER}
+      subtitle={NEW_SALES_SUMMARY.LABEL_SUBHEADER}>
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <ColorCard
@@ -393,7 +402,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                       </View>
                     </View>
                     <CustomSpacer space={sh16} />
-                    <TextCard data={bank} itemStyle={{ width: 239 }} itemsPerGroup={3} spaceBetweenItem={sw32} />
+                    <TextCard data={bank} {...textCardProps} />
                   </Fragment>
                 );
               })}
@@ -416,7 +425,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                       </View>
                     </View>
                     <CustomSpacer space={sh16} />
-                    <TextCard data={bank} itemsPerGroup={3} itemStyle={{ width: 239 }} spaceBetweenItem={sw32} />
+                    <TextCard data={bank} {...textCardProps} />
                   </Fragment>
                 );
               })}
@@ -435,7 +444,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                 </View>
               </View>
               <CustomSpacer space={sh16} />
-              <TextCard data={accountSettings} itemsPerGroup={3} itemStyle={{ width: 239 }} spaceBetweenItem={sw32} />
+              <TextCard data={accountSettings} {...textCardProps} />
             </Fragment>
           }
           contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 }}

@@ -32,6 +32,7 @@ import {
   fs16BoldBlack2,
   fs16RegBlack2,
   px,
+  rowCenterVertical,
   sh12,
   sh16,
   sh24,
@@ -44,7 +45,7 @@ import {
   sw148,
   sw152,
   sw16,
-  sw24,
+  sw32,
   sw360,
   sw64,
   sw7,
@@ -351,7 +352,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
       break;
   }
 
-  const checkSpaceToLabel = fundingOption.length > 1 ? sh8 : 0;
+  const checkSpaceToLabel = fundingOption.length > 1 ? sh4 : 0;
 
   // same sales charge are not being saved on initial render due to redux state issue for multiple funds hence we are only saving it when any data in the investment details has been updated
   useEffect(() => {
@@ -367,7 +368,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
 
   return (
     <Fragment>
-      <View style={px(sw24)}>
+      <View style={px(sw32)}>
         <View style={flexRow}>
           <View>
             <TextSpaceArea style={{ width: sw360 }} spaceToBottom={checkSpaceToLabel} text={INVESTMENT.LABEL_FUNDING_OPTION} />
@@ -407,12 +408,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
             <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
           ) : null}
           {multiClass === false && currencies.length === 1 ? (
-            <LabeledTitle
-              label={INVESTMENT.LABEL_CURRENCY}
-              title={fundCurrency!}
-              spaceToLabel={checkSpaceToLabel}
-              style={{ width: sw360 }}
-            />
+            <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} style={{ width: sw360 }} />
           ) : null}
         </View>
         <CustomSpacer space={sh24} />
@@ -427,10 +423,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
           </Fragment>
         ) : null}
         <View style={borderBottomGray2} />
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh16} />
         <View style={flexRow}>
           <View>
-            <View style={{ ...flexRow, ...centerVertical }}>
+            <View style={rowCenterVertical}>
               <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_AMOUNT}</Text>
               <Text style={fs12RegGray6}>{minNewSalesAmountLabel}</Text>
             </View>

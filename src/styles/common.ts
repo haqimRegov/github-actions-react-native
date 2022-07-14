@@ -163,6 +163,19 @@ export const shadow12Blue104 = {
   shadowRadius: 12,
 } as const;
 
+export const shadow12Blue108 = {
+  // shadow for android
+  // elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.08,
+  shadowRadius: 12,
+} as const;
+
 export const shadow16Blue112 = {
   // shadow for android
   // elevation: 1,

@@ -20,6 +20,7 @@ import {
   fullWidth,
   imageContain,
   px,
+  rowCenterVertical,
   sh24,
   sh30,
   sh32,
@@ -41,11 +42,13 @@ import { UploadButton } from "./UploadButton";
 import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
 
 interface SignatureUploadWithModalProps extends PdfEditCardProps {
+  buttonContainerStyle?: ViewStyle;
   containerStyle?: ViewStyle;
   resourceType?: "url" | "file" | "base64";
 }
 
 export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModalProps> = ({
+  buttonContainerStyle,
   containerStyle,
   onPress,
   resourceType,
@@ -128,13 +131,13 @@ export const SignatureUploadWithModal: FunctionComponent<SignatureUploadWithModa
         customFeature={
           <Fragment>
             {uploadProps.completed === true ? (
-              <View style={{ ...centerVertical, ...flexRow }}>
+              <View style={{ ...rowCenterVertical, ...buttonContainerStyle }}>
                 <StatusBadge color="complete" text={uploadProps.completedText!} />
                 <CustomSpacer isHorizontal={true} space={sw16} />
                 <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />
               </View>
             ) : (
-              <View style={{ width: sw96 }}>
+              <View style={{ width: sw96, ...buttonContainerStyle }}>
                 {uploadProps.tooltip === true ? <Image source={LocalAssets.tooltip.proceed} style={tooltipStyle} /> : null}
                 <View style={centerVertical}>
                   <UploadButton color={colorBlue._1} icon={iconData.icon} onPress={iconData.function} size={sw24} />

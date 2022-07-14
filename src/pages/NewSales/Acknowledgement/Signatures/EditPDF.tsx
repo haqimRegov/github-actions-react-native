@@ -18,6 +18,7 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 const signPosition = {
   adviser: { x: 16, y: 158 },
   principal: { x: 271, y: 158 },
+  joint: { x: 16, y: 300 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
@@ -25,12 +26,22 @@ interface EditPdfProps extends AcknowledgementStoreProps {
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 
-const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, receipts, setEditReceipt, updateReceipts }: EditPdfProps) => {
+const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
+  accountType,
+  editReceipt,
+  personalInfo,
+  receipts,
+  setEditReceipt,
+  updateReceipts,
+}: EditPdfProps) => {
   const [adviserSignature, setAdviserSignature] = useState<string>(
     editReceipt!.adviserSignature !== undefined ? editReceipt!.adviserSignature.base64! : "",
   );
   const [principalSignature, setPrincipalSignature] = useState<string>(
     editReceipt!.principalSignature !== undefined ? editReceipt!.principalSignature.base64! : "",
+  );
+  const [jointSignature, setJointSignature] = useState<string>(
+    editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
   );
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
@@ -63,11 +74,25 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
         if (principalSignature === "") {
           textPosition.x = signPosition.principal.x;
           textPosition.y = signPosition.principal.y;
+        } else if (accountType === "Joint" && jointSignature === "") {
+          textPosition.x = signPosition.joint.x;
+          textPosition.y = signPosition.joint.y;
         }
       } else if (signer === "principal") {
         if (adviserSignature === "") {
           textPosition.x = signPosition.adviser.x;
           textPosition.y = signPosition.adviser.y;
+        } else if (accountType === "Joint" && jointSignature === "") {
+          textPosition.x = signPosition.joint.x;
+          textPosition.y = signPosition.joint.y;
+        }
+      } else if (signer === "joint") {
+        if (adviserSignature === "") {
+          textPosition.x = signPosition.adviser.x;
+          textPosition.y = signPosition.adviser.y;
+        } else if (principalSignature === "") {
+          textPosition.x = signPosition.principal.x;
+          textPosition.y = signPosition.principal.y;
         }
       }
 
@@ -136,6 +161,9 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
         setSigner("principal");
       }
       setShowSignPdf(true);
+    } else if (coordinateX < 245 && coordinateY > 220 && coordinateY < 370 && accountType === "Joint") {
+      setSigner("joint");
+      setShowSignPdf(true);
     }
   };
 
@@ -154,12 +182,24 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
         if (signer === "adviser") {
           if (principalSignature === "") {
             setSigner("principal");
+          } else if (principalSignature !== "" && accountType === "Joint" && jointSignature === "") {
+            setSigner("joint");
           } else {
             setShowSignPdf(false);
           }
         } else if (signer === "principal") {
           if (adviserSignature === "") {
             setSigner("adviser");
+          } else if (adviserSignature !== "" && accountType === "Joint" && jointSignature === "") {
+            setSigner("joint");
+          } else {
+            setShowSignPdf(false);
+          }
+        } else if (signer === "joint") {
+          if (adviserSignature === "") {
+            setSigner("adviser");
+          } else if (principalSignature === "") {
+            setSigner("principal");
           } else {
             setShowSignPdf(false);
           }
@@ -179,6 +219,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       setAdviserSignature(value);
     } else if (signer === "principal") {
       setPrincipalSignature(value);
+    } else if (signer === "joint") {
+      setJointSignature(value);
     }
     modifyPdf(value);
   };
@@ -191,6 +233,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
           setSigner("adviser");
         } else if (principalSignature === "") {
           setSigner("principal");
+        } else {
+          setSigner("joint");
         }
       } else {
         setTimeout(() => {
@@ -217,12 +261,21 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
         name: "PrincipalSignature.png",
         type: "image/png",
       };
+      const joint =
+        accountType === "Individual"
+          ? undefined
+          : {
+              base64: jointSignature,
+              date: `${moment().valueOf()}`,
+              name: "JointSignature.png",
+              type: "image/png",
+            };
       updatedReceipts[receiptIndex] = {
         ...updatedReceipts[receiptIndex],
         signedPdf: editReceipt!.signedPdf,
         adviserSignature: adviser,
         principalSignature: principal,
-        jointSignature: undefined,
+        jointSignature: joint,
         completed: true,
       };
       updateReceipts(updatedReceipts);
@@ -231,7 +284,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
     }, 500);
   };
 
-  const completed = adviserSignature !== "" && principalSignature !== "";
+  const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
+
+  const checkJointSignature = jointAge !== undefined && jointAge >= 18 ? jointSignature !== "" : true;
+  const completed =
+    accountType === "Individual"
+      ? adviserSignature !== "" && principalSignature !== ""
+      : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
 
   useEffect(() => {
     if (signer !== undefined) {
@@ -240,6 +299,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
         setShowSignPdf(true);
       }, 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
 
   useEffect(() => {
@@ -253,10 +313,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
 
   return (
     <PdfView
+      accountType={accountType}
       adviserSignature={adviserSignature}
       completed={completed}
       editReceipt={editReceipt}
       principalSignature={principalSignature}
+      jointAge={jointAge}
+      jointSignature={jointSignature}
       showSignPdf={showSignPdf}
       signer={signer}
       handleScroll={handleScroll}

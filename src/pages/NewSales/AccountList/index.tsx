@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { TextStyle, View, ViewStyle } from "react-native";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, LabeledTitle } from "../../../components";
@@ -7,6 +7,7 @@ import { Language } from "../../../constants";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
 import { flexRow, flexWrap, fs16RegGray5, fs18BoldGray6, px, sh24, sh4, sw24 } from "../../../styles";
 import { AccountCard } from "../../../templates/Cards";
+import { defaultContentProps } from "../Content";
 
 const { ACCOUNT_LIST } = Language.PAGE;
 
@@ -15,17 +16,10 @@ declare interface IAccountListProps extends NewSalesContentProps, NewSalesStoreP
   route: string;
 }
 
-declare interface ITagStyle {
-  container?: ViewStyle;
-  text?: TextStyle;
-}
-
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
-  handleNextStep,
-  navigation,
-  newSales,
   client,
-  route,
+  handleNextStep,
+  newSales,
   updateNewSales,
 }: IAccountListProps) => {
   const { disabledSteps, finishedSteps } = newSales;
@@ -33,7 +27,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
 
   const header = `${ACCOUNT_LIST.LABEL_WELCOME_BACK} ${client.details?.principalHolder?.name}`;
   return (
-    <ContentPage subheading={header}>
+    <ContentPage {...defaultContentProps} subheading={header}>
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <LabeledTitle

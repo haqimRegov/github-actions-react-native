@@ -20,11 +20,13 @@ import {
   centerVertical,
   colorBlack,
   colorBlue,
+  colorGray,
   colorWhite,
   flexChild,
   flexCol,
   flexRow,
   fs14BoldBlack2,
+  fs14RegGray5,
   fs16BoldBlack2,
   fs16BoldGray6,
   fs16RegGray5,
@@ -32,14 +34,15 @@ import {
   fs18BoldGray6,
   px,
   py,
+  rowCenterVertical,
   sh12,
+  sh124,
   sh16,
-  sh176,
   sh24,
-  sh32,
   sh4,
   sh40,
-  shadow4Blue116,
+  shadow12Blue108,
+  sw1,
   sw16,
   sw24,
   sw32,
@@ -246,22 +249,20 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             keyboardShouldPersistTaps="handled"
             keyExtractor={(item: IProductSales) => item.fundDetails.fundCode}
             ListHeaderComponent={
-              <Fragment>
-                <View style={px(sw8)}>
-                  <CustomSpacer space={sh32} />
-                  <LabeledTitle
-                    label={INVESTMENT.HEADING}
-                    labelStyle={fs18BoldGray6}
-                    spaceToLabel={sh4}
-                    title={INVESTMENT.SUBHEADING}
-                    titleStyle={fs16RegGray5}
-                  />
-                  {multiUtmc === false ? <Text style={fs16RegGray5}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text> : null}
-                  <CustomSpacer space={sh24} />
-                </View>
-              </Fragment>
+              <View style={px(sw8)}>
+                <CustomSpacer space={sh40} />
+                <LabeledTitle
+                  label={INVESTMENT.HEADING}
+                  labelStyle={fs18BoldGray6}
+                  spaceToLabel={sh4}
+                  title={INVESTMENT.SUBHEADING}
+                  titleStyle={fs14RegGray5}
+                />
+                {multiUtmc === false ? <Text style={fs16RegGray5}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text> : null}
+                <CustomSpacer space={sh24} />
+              </View>
             }
-            ListFooterComponent={<CustomSpacer space={sh176} />}
+            ListFooterComponent={<CustomSpacer space={sh124} />}
             ref={flatListRef}
             renderItem={({ item, index }) => {
               const { fundType, fundName, issuingHouse, prsType } = item.fundDetails;
@@ -317,7 +318,9 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 
               const container: ViewStyle = {
                 ...flexChild,
-                ...shadow4Blue116,
+                ...shadow12Blue108,
+                borderColor: colorGray._2,
+                borderWidth: sw1,
                 backgroundColor: colorWhite._1,
                 borderRadius: sw8,
                 marginHorizontal: sw8,
@@ -350,15 +353,13 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                         borderTopLeftRadius: sw8,
                         borderTopRightRadius: sw8,
                       }}>
-                      <View style={{ ...centerVertical, ...flexRow }}>
-                        <View>
-                          <Text style={fs14BoldBlack2}>{fundName}</Text>
-                        </View>
+                      <View style={rowCenterVertical}>
+                        <Text style={fs14BoldBlack2}>{fundName}</Text>
                         <CustomFlexSpacer />
                         <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sw24} suppressHighlighting={true} />
                       </View>
                     </View>
-                    <CustomSpacer space={sh24} />
+                    <CustomSpacer space={sh16} />
                     <Investment
                       accountDetails={accountDetails}
                       accountType={accountType}

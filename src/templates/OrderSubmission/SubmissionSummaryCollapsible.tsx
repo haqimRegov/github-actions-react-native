@@ -86,7 +86,7 @@ export const SubmissionSummaryCollapsible: FunctionComponent<SubmissionSummaryCo
 
           return (
             <Fragment key={index}>
-              {isNotEmpty(details.remarks) === true ? (
+              {isNotEmpty(details.remarks) === true && details.remarks.length > 0 ? (
                 <View style={{ ...cardStyle, ...borderCheck }}>
                   <Pressable onPress={handleSetSections} style={rowCenterVertical}>
                     <Text style={fs18BoldBlack2}>{details.orderNumber}</Text>

@@ -280,6 +280,13 @@ export const fs14RegBlack1: TextStyle = {
   lineHeight: scaleHeight(14 * 1.3),
 };
 
+export const fs14RegBlack2: TextStyle = {
+  color: colorBlack._2,
+  fontFamily: NunitoRegular,
+  fontSize: sh14,
+  lineHeight: scaleHeight(14 * 1.3),
+};
+
 export const fs14RegGray4: TextStyle = {
   color: colorGray._4,
   fontFamily: NunitoRegular,

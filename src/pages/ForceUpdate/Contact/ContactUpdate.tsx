@@ -4,8 +4,9 @@ import { View } from "react-native";
 import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewMobileInput } from "../../../components";
 import { Language } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
-import { fs16RegGray5, fs18BoldGray6, fs24BoldGray6, fsTransformNone, px, sh24, sh4, sh40, sh48, sw24 } from "../../../styles";
+import { fsTransformNone, px, sh24, sw24 } from "../../../styles";
 import { isEmail, isNumber } from "../../../utils";
+import { defaultContentProps } from "../Content";
 
 const { INVESTOR_INFORMATION } = Language.PAGE;
 
@@ -69,18 +70,9 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
     inputMobile.value === "" ||
     inputMobile.error !== undefined;
 
-  const defaultContentProps = {
-    headingStyle: fs24BoldGray6,
-    spaceToBottom: sh48,
-    spaceToHeading: sh24,
-    spaceToTitle: sh4,
-    subheadingStyle: fs18BoldGray6,
-    subtitleStyle: fs16RegGray5,
-    spaceToTop: sh40,
-  };
-
   return (
     <ContentPage
+      {...defaultContentProps}
       continueDisabled={disabled}
       continueTextStyle={fsTransformNone}
       handleCancel={handleCancel}
@@ -88,9 +80,9 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
       heading={`${INVESTOR_INFORMATION.HEADING_HELLO} ${name},`}
       labelContinue={isOtpNeeded === true ? INVESTOR_INFORMATION.BUTTON_GET_OTP : INVESTOR_INFORMATION.BUTTON_SAVE}
       noBounce={true}
+      spaceToHeading={sh24}
       subheading={INVESTOR_INFORMATION.SUBHEADING_EMAIL}
-      subtitle={INVESTOR_INFORMATION.SUBTITLE_EMAIL_UPDATE}
-      {...defaultContentProps}>
+      subtitle={INVESTOR_INFORMATION.SUBTITLE_EMAIL_UPDATE}>
       <View style={px(sw24)}>
         <CustomSpacer space={sh24} />
         <ColorCard

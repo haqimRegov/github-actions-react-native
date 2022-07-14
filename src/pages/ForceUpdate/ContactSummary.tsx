@@ -31,7 +31,6 @@ import {
   noBorder,
   px,
   rowCenterVertical,
-  sh100,
   sh24,
   sh4,
   sh40,
@@ -157,7 +156,6 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
               <Text style={fs16RegGray6}>{INVESTOR_INFORMATION.BANNER_SUBTITLE_UPDATED}</Text>
             </View>
           }
-          containerStyle={{ height: sh100 }}
           label={INVESTOR_INFORMATION.BANNER_TITLE}
           submitOnPress={handleContinue}
           labelSubmit={INVESTOR_INFORMATION.BUTTON_CONTINUE}

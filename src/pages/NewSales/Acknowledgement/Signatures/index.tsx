@@ -1,0 +1,24 @@
+import React, { Fragment, FunctionComponent, useState } from "react";
+import { connect } from "react-redux";
+
+import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
+import { EditPdf } from "./EditPDF";
+import { PDFList } from "./PDFList";
+
+interface SignaturesProps extends AcknowledgementStoreProps, NewSalesContentProps {}
+
+export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({ handleNextStep, handleResetNewSales }: SignaturesProps) => {
+  const [editReceipt, setEditReceipt] = useState<IOnboardingReceiptState | undefined>(undefined);
+
+  return (
+    <Fragment>
+      {editReceipt === undefined ? (
+        <PDFList handleNextStep={handleNextStep} handleResetNewSales={handleResetNewSales} setEditReceipt={setEditReceipt} />
+      ) : (
+        <EditPdf setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
+      )}
+    </Fragment>
+  );
+};
+
+export const Signatures = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(SignaturesComponent);

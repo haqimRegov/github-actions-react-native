@@ -15,7 +15,7 @@ export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({ handle
       {editReceipt === undefined ? (
         <PDFList handleNextStep={handleNextStep} handleResetForceUpdate={handleResetForceUpdate} setEditReceipt={setEditReceipt} />
       ) : (
-        <EditPdf handleNextStep={handleNextStep} setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
+        <EditPdf setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
       )}
     </Fragment>
   );

@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
 import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { fs12SemiBoldBlue1, fs18BoldGray6, px, sh48, sh8, sw24 } from "../../../../styles";
+import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../../styles";
 import { FatcaDefinition } from "../../../Onboarding/Declarations/FATCA/FatcaDefinition";
+import { defaultContentProps } from "../../Content";
 import { FatcaDeclarationDetails } from "./Details";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -128,19 +129,14 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
     handleNextStep("RiskAssessment");
   };
 
-  const defaultContentProps = {
-    spaceToBottom: sh48,
-    subheadingStyle: fs18BoldGray6,
-  };
-
   return (
     <ContentPage
+      {...defaultContentProps}
       continueDisabled={!continueEnabled}
       handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT_SAVE}
-      subheading={DECLARATIONS.FATCA_HEADING}
-      {...defaultContentProps}>
+      subheading={DECLARATIONS.FATCA_HEADING}>
       <CustomSpacer space={sh8} />
       <View style={px(sw24)}>
         <LinkText onPress={handleRead} text={DECLARATIONS.READ_FATCA} style={fs12SemiBoldBlue1} />

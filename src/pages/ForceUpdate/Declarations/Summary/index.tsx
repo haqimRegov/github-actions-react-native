@@ -12,7 +12,7 @@ import {
 } from "../../../../data/dictionary";
 import { submitChangeRequest } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh100, sh24, sh4, sh40, sw24 } from "../../../../styles";
+import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh124, sh24, sh4, sh40, sw24 } from "../../../../styles";
 import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
@@ -193,12 +193,11 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
               handleEditFatca={handleEditFatca}
               summary={personalInfo.principal?.declaration!}
             />
-            <CustomSpacer space={124} />
+            <CustomSpacer space={sh124} />
           </View>
           <CustomFlexSpacer />
         </ScrollView>
         <SelectionBanner
-          containerStyle={{ height: sh100 }}
           label={DECLARATION_SUMMARY.BANNER_TITLE}
           submitOnPress={handleContinue}
           labelSubmit={DECLARATION_SUMMARY.BUTTON_CONFIRM}

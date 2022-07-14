@@ -32,9 +32,7 @@ import {
   fs12RegGray6,
   fs16BoldBlack2,
   fs16RegBlack2,
-  fs16RegGray5,
   fs16RegGray6,
-  fs18BoldGray6,
   imageContain,
   rowCenterVertical,
   sh143,
@@ -42,8 +40,6 @@ import {
   sh16,
   sh24,
   sh32,
-  sh4,
-  sh48,
   sh56,
   sw1,
   sw11,
@@ -60,6 +56,7 @@ import {
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
 import { isObjectEqual } from "../../utils";
+import { defaultContentProps } from "./Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -71,7 +68,6 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   addAssessmentQuestions,
   addRiskScore,
   details,
-  handleCancelForceUpdate,
   handleNextStep,
   navigation,
   forceUpdate,
@@ -240,13 +236,6 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
 
   const questionnaireStyle: ViewStyle = { marginLeft: sw24, marginRight: sw72 };
 
-  const defaultContentProps = {
-    spaceToBottom: sh48,
-    spaceToTitle: sh4,
-    subheadingStyle: fs18BoldGray6,
-    subtitleStyle: fs16RegGray5,
-  };
-
   const handleBackToContactSummary = () => {
     handleNextStep("ContactSummary");
   };
@@ -254,12 +243,12 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   return (
     <Fragment>
       <ContentPage
+        {...defaultContentProps}
         continueDisabled={disabled}
         handleCancel={handleBackToContactSummary}
         handleContinue={handlePageContinue}
         subheading={RISK_ASSESSMENT.HEADING_RISK}
-        subtitle={RISK_ASSESSMENT.SUBHEADING}
-        {...defaultContentProps}>
+        subtitle={RISK_ASSESSMENT.SUBHEADING}>
         <CustomSpacer space={sh24} />
         <View style={questionnaireStyle}>
           <CustomSpacer isHorizontal={true} space={sw24} />

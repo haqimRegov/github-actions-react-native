@@ -16,8 +16,9 @@ import {
 import { Language } from "../../../../constants/language";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { centerHV, fsAlignLeft, fullHW, px, sh16, sh24, sh4, sh8, sw24 } from "../../../../styles";
+import { centerHV, fsAlignLeft, fullHW, px, sh16, sh24, sh8, sw24 } from "../../../../styles";
 import { SubmissionSummaryCollapsible } from "../../../../templates";
+import { defaultContentProps } from "../../Content";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -154,6 +155,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       const request: IGeneratePdfRequest = {
         clientId: clientId!,
         initId: details!.initId!,
+        isEtb: true,
         isForceUpdate: true,
         orderNo: receipt.orderNumber!,
       };
@@ -212,11 +214,11 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   return (
     <Fragment>
       <ContentPage
+        {...defaultContentProps}
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleSubmit}
         labelContinue={TERMS_AND_CONDITIONS.BUTTON_SUBMIT}
-        spaceToTitle={sh4}
         subheading={TERMS_AND_CONDITIONS.HEADING}
         subtitle={TERMS_AND_CONDITIONS.SUBTITLE}>
         <CustomSpacer space={sh24} />

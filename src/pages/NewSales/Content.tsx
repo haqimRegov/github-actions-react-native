@@ -2,14 +2,14 @@ import React, { Fragment } from "react";
 import { Text } from "react-native";
 import { connect } from "react-redux";
 
-import { ConfirmationModal } from "../../components";
+import { ConfirmationModal, ContentPageProps } from "../../components";
 import { Language, NEW_SALES_ROUTES } from "../../constants";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
-import { fs16RegGray6 } from "../../styles";
+import { fs14RegGray5, fs16RegGray6, fs18BoldGray6, fs24BoldGray6, sh4, sh40, sh48 } from "../../styles";
 import { Sample } from "../ForceUpdate/Sample";
 import { AdditionalInfoSummary } from "./AccountInfoSummary";
 import { AccountList } from "./AccountList";
-import { OrderPreview, TermsAndConditions } from "./Acknowledgement";
+import { OrderPreview, Signatures, TermsAndConditions } from "./Acknowledgement";
 import { AdditionalInfo } from "./AdditionalDetails";
 import { ProductConfirmation } from "./Confirmation";
 import { NewSalesIdentityConfirmation } from "./IdentityVerification";
@@ -22,6 +22,17 @@ interface NewSalesProps extends NewSalesContentProps, NewSalesStoreProps {
   navigation: IStackNavigationProp;
   route: string;
 }
+
+export const defaultContentProps: Partial<ContentPageProps> = {
+  headingStyle: fs24BoldGray6,
+  spaceToBottom: sh48,
+  spaceToButton: sh48,
+  spaceToHeading: 0,
+  spaceToTitle: sh4,
+  spaceToTop: sh40,
+  subheadingStyle: fs18BoldGray6,
+  subtitleStyle: fs14RegGray5,
+};
 
 const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, cancelNewSales, ...props }: NewSalesProps) => {
   const newProps = {
@@ -51,6 +62,9 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
       break;
     case NEW_SALES_ROUTES.TermsAndConditions:
       content = <TermsAndConditions {...newProps} />;
+      break;
+    case NEW_SALES_ROUTES.Signatures:
+      content = <Signatures {...newProps} />;
       break;
     case NEW_SALES_ROUTES.ProductsConfirmation:
       content = <ProductConfirmation {...newProps} />;

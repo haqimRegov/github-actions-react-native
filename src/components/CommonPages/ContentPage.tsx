@@ -12,6 +12,7 @@ export interface ContentPageProps extends ActionButtonsProps {
   noBounce?: boolean;
   sideElement?: ReactNode;
   spaceToBottom?: number;
+  spaceToButton?: number;
   spaceToHeading?: number;
   spaceToTitle?: number;
   spaceToTop?: number;
@@ -28,6 +29,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
   noBounce,
   sideElement,
   spaceToBottom,
+  spaceToButton,
   spaceToHeading,
   spaceToTitle,
   spaceToTop,
@@ -67,7 +69,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
         </View>
         {children}
         <CustomFlexSpacer />
-        <CustomSpacer space={sh56} />
+        <CustomSpacer space={spaceToButton || sh56} />
         <ActionButtons continueDebounce={true} {...actionButtonProps} />
         <CustomSpacer space={spaceToBottom !== undefined ? spaceToBottom : sh56} />
       </ScrollView>

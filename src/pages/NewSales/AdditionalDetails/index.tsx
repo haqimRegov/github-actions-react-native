@@ -148,13 +148,13 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       ]
     : [];
   const checkCurrencyRemaining = nonMyrCurrencies.filter((eachCurrency: string) => !selectedNonMyrCurrencies.includes(eachCurrency));
-
+  const checkEpf = epfInvestment === true ? epfNumberValidation !== undefined || inputEpfNumber === "" : false;
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
   const continueDisabled =
     checkLocalBank.includes(false) === true ||
     checkForeignBank.includes(false) === true ||
     checkCurrencyRemaining.length !== 0 ||
-    epfNumberValidation !== undefined;
+    checkEpf === true;
 
   if (accountType === "Joint") {
     accountNames.push(

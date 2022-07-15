@@ -82,12 +82,13 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
 }: RiskAssessmentContentProps) => {
   const { clientId, dateOfBirth, id } = principalHolder!;
   const { disabledSteps, finishedSteps } = newSales;
+  const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine } = questionnaire;
 
   const fetching = useRef<boolean>(false);
   const [updatedFinishedSteps, setUpdatedFinishedSteps] = useState<TypeNewSalesRoute[]>(finishedSteps);
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevRiskAssessment, setPrevRiskAssessment] = useState<IRiskAssessmentQuestions | undefined>(undefined);
-  const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine } = questionnaire;
+  const [isEditConfirmed, setIsEditConfirmed] = useState<boolean>(false);
 
   const setQ2 = (index: number) => addAssessmentQuestions({ questionTwo: index });
   const setQ3 = (index: number) => addAssessmentQuestions({ questionThree: index });
@@ -103,13 +104,13 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     updateIsRiskUpdated(true);
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
     const newFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-    const findFatca = updatedDisabledSteps.indexOf("ProductsList");
-    if (findFatca === -1) {
-      updatedDisabledSteps.push("ProductsList");
+    const findProducts = updatedDisabledSteps.indexOf("Products");
+    if (findProducts === -1) {
+      updatedDisabledSteps.push("Products");
     }
     const findRiskAssessment = newFinishedSteps.indexOf("RiskAssessment");
-    if (findRiskAssessment !== -1) {
-      newFinishedSteps.splice(findRiskAssessment, 1);
+    if (findRiskAssessment === -1) {
+      newFinishedSteps.push("RiskAssessment");
     }
     updateNewSales({
       ...newSales,
@@ -175,6 +176,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     setConfirmModal(undefined);
     setPrevRiskAssessment(undefined);
     setUpdatedFinishedSteps([]);
+    setIsEditConfirmed(true);
   };
 
   const handleCancelEdit = () => {
@@ -228,6 +230,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     <Fragment>
       <ContentPage
         {...defaultContentProps}
+        cancelDisabled={isEditConfirmed}
         continueDisabled={disabled}
         handleCancel={handleCancelAssessment}
         handleContinue={handlePageContinue}

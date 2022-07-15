@@ -20,6 +20,7 @@ import {
   sh28,
   sh40,
   sh96,
+  shadow12Blue108,
   sw136,
   sw28,
   sw48,
@@ -95,6 +96,7 @@ export const NewPrompt: FunctionComponent<NewPromptProps> = ({
     borderBottomLeftRadius: sw8,
     borderBottomRightRadius: sw8,
     height: sh96,
+    ...shadow12Blue108,
     ...buttonContainerStyle,
   };
 

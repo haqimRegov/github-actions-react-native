@@ -80,7 +80,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
-  const { accountNo, isEpf } = accountDetails;
+  const { accountNo } = accountDetails;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   const [showMorePills, setShowMorePills] = useState<boolean>(false);
   const filterKeys = isNotEmpty(currentFilter) ? Object.keys(currentFilter) : [];
@@ -216,6 +216,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
             onChangeText={setInputSearch}
             onSubmitEditing={handleSearchFunction}
             placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
+            placeholderTextColor={colorBlue._5}
             returnKeyType="search"
             setRef={setSearchInputRef}
             value={inputSearch}

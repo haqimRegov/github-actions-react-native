@@ -16,11 +16,13 @@ import {
   fs12RegGray5,
   fsTransformNone,
   fsUppercase,
+  px,
   sh12,
   sh16,
   sh2,
   sh32,
   sw1,
+  sw12,
   sw18,
   sw20,
   sw224,
@@ -84,7 +86,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   search,
   selectedFunds,
   setViewFund,
-  shareSuccess,
   showBy,
   sort,
   totalCount,
@@ -239,7 +240,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   ];
 
   const onRowSelect = (data: ITableData) => {
-    handleSelectProduct(data as IProduct);
+    handleSelectProduct(data as unknown as IProduct);
   };
 
   const handleRowSelectionHeader = () => {
@@ -278,12 +279,24 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
           <CustomSpacer isHorizontal={true} space={sw24} />
           <Text style={fs12RegGray5}>{PRODUCT_LIST.LABEL_TYPES}</Text>
           <CustomSpacer isHorizontal={true} space={sw8} />
-          <StatusBadge color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
+          <StatusBadge
+            color={showBy === "all" ? "secondary" : "primary"}
+            onPress={handleRecommendedFunds}
+            style={px(sw12)}
+            text={recommendedLabel}
+            textStyle={{ fontFamily: NunitoBold }}
+          />
           <CustomSpacer isHorizontal={true} space={sw8} />
           {productType === "prsDefault" ? null : (
-            <StatusBadge color={showBy === "all" ? "primary" : "secondary"} onPress={handleAllFunds} text={allFundsLabel} />
+            <StatusBadge
+              color={showBy === "all" ? "primary" : "secondary"}
+              onPress={handleAllFunds}
+              style={px(sw12)}
+              text={allFundsLabel}
+              textStyle={{ fontFamily: NunitoBold }}
+            />
           )}
-          {accountNo !== "" ? (
+          {accountNo !== "" && accountNo !== undefined && accountNo !== null ? (
             <Fragment>
               <CustomFlexSpacer />
               <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />

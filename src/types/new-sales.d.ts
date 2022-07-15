@@ -46,12 +46,14 @@ declare interface NewSalesStepsProps {
 }
 
 declare interface INewSalesRoutes {
+  AccountInformation: TypeNewSalesRoute;
   AccountList: TypeNewSalesRoute;
   Acknowledgement: TypeNewSalesRoute;
   AdditionalDetails: TypeNewSalesRoute;
   IdentityVerification: TypeNewSalesRoute;
   OrderPreview: TypeNewSalesRoute;
   Payment: TypeNewSalesRoute;
+  Products: TypeNewSalesRoute;
   ProductsList: TypeNewSalesRoute;
   ProductsConfirmation: TypeNewSalesRoute;
   RiskAssessment: TypeNewSalesRoute;
@@ -62,12 +64,14 @@ declare interface INewSalesRoutes {
 }
 
 declare interface INewSalesKeys {
+  AccountInformation: TypeNewSalesKey;
   AccountList: TypeNewSalesKey;
   Acknowledgement: TypeNewSalesKey;
   AdditionalDetails: TypeNewSalesKey;
   IdentityVerification: TypeNewSalesKey;
   OrderPreview: TypeNewSalesKey;
   Payment: TypeNewSalesKey;
+  Products: TypeNewSalesRoute;
   ProductsList: TypeNewSalesKey;
   ProductsConfirmation: TypeNewSalesKey;
   RiskAssessment: TypeNewSalesKey;

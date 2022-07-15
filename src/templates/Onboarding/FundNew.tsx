@@ -3,6 +3,7 @@ import { Dimensions, Pressable, Text, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../components";
 import { Language } from "../../constants";
+import { getProductType } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import {
   border,
@@ -77,7 +78,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     },
     {
       label: ORDER_SUMMARY.LABEL_PRODUCT_TYPE,
-      title: fundType || "-",
+      title: getProductType(fundType) || "-",
     },
 
     {

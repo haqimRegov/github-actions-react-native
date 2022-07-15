@@ -59,6 +59,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         documents: documents,
         initId: details?.initId!,
         isConfirmed: true,
+        isEtb: false,
         isForceUpdate: false,
       };
       const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);

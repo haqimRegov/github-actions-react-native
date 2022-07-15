@@ -49,6 +49,7 @@ export const sh82 = scaleHeight(82);
 export const sh88 = scaleHeight(88);
 export const sh96 = scaleHeight(96);
 export const sh100 = scaleHeight(100);
+export const sh104 = scaleHeight(104);
 export const sh110 = scaleHeight(110);
 export const sh112 = scaleHeight(112);
 export const sh118 = scaleHeight(118);

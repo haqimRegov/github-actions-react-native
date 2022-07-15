@@ -202,6 +202,16 @@ export const shadow4Blue116 = {
   shadowRadius: 4,
 } as const;
 
+export const shadow4Blue008 = {
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.08,
+  shadowRadius: 4,
+} as const;
+
 export const shadow12Blue110 = {
   // shadow for android
   // elevation: 1,

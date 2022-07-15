@@ -11,6 +11,7 @@ declare interface ISubmitPdfRequest {
   documents: ISubmitPdfDocument[];
   initId: string;
   isConfirmed: boolean;
+  isEtb: boolean;
   isForceUpdate: boolean;
 }
 

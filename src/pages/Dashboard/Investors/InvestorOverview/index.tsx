@@ -5,7 +5,16 @@ import { Pressable, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitle, Pagination, PromptModal, Tab } from "../../../../components";
+import {
+  CustomFlexSpacer,
+  CustomSpacer,
+  IconButton,
+  LabeledTitle,
+  NewPromptModal,
+  Pagination,
+  PromptModal,
+  Tab,
+} from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES } from "../../../../data/dictionary";
 import { clientRegister } from "../../../../network-actions";
@@ -25,6 +34,8 @@ import {
   flexRow,
   fs12RegBlue5,
   fs16BoldBlue1,
+  fs16RegGray5,
+  fs24BoldGray6,
   fullHW,
   fullWidth,
   px,
@@ -33,15 +44,16 @@ import {
   sh16,
   sh24,
   sh4,
-  sh40,
   sh48,
   sh72,
   sh8,
   shadow12Black112,
+  shadow4Blue008,
   sw1,
   sw100,
   sw2,
   sw20,
+  sw212,
   sw24,
   sw26,
   sw8,
@@ -61,15 +73,16 @@ interface InvestorOverviewProps extends InvestorsStoreProps {
 }
 
 export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
-  addRiskInfo,
   addClientDetails,
   addPersonalInfo,
   client,
   currentInvestor,
+  newSales,
   personalInfo,
   resetClientDetails,
   updateCurrentAccount,
   updateShowOpenAccount,
+  updateNewSales,
   ...dashboardProps
 }: InvestorOverviewProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -160,9 +173,9 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       if (clientRegisterResponse !== undefined) {
         const { data, error } = clientRegisterResponse;
         if (error === null && data !== null) {
-          if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
-            addRiskInfo(data.result.riskInfo);
-          }
+          const riskInfo = data.result.riskInfo !== undefined && data.result.riskInfo !== null ? data.result.riskInfo : undefined;
+          // TODO add jointClientId
+          updateNewSales({ ...newSales, investorProfile: { principalClientId: investorData.clientId }, riskInfo: riskInfo });
           addClientDetails({
             ...client.details,
             principalHolder: {
@@ -190,6 +203,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
               },
             },
           });
+
           setNewSalesModal(false);
           navigation.navigate("NewSales");
         }
@@ -354,17 +368,21 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
         visible={forceUpdatePrompt}
       />
-      <PromptModal
+      <NewPromptModal
         contentStyle={alignFlexStart}
-        continueDisabled={accountType === -1}
-        continueLoading={loadingNewSales}
-        handleCancel={handleNewSalesPromptCancel}
-        handleContinue={handleNewSales}
-        label={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_TITLE}
-        labelContinue={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_GET_STARTED}
-        spaceToButton={sh40}
+        primary={{
+          disabled: accountType === -1,
+          loading: loadingNewSales,
+          onPress: handleNewSales,
+          buttonStyle: { width: sw212 },
+          text: INVESTOR_ACCOUNTS.BUTTON_GET_STARTED,
+        }}
+        secondary={{ onPress: handleNewSalesPromptCancel, buttonStyle: { width: sw212 }, text: INVESTOR_ACCOUNTS.BUTTON_CANCEL }}
         spaceToTitle={sh4}
-        title={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_SUBTITLE}
+        subtitle={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_SUBTITLE}
+        subtitleStyle={fs16RegGray5}
+        title={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_TITLE}
+        titleStyle={fs24BoldGray6}
         visible={newSalesModal}>
         <View style={fullWidth}>
           <View>
@@ -375,34 +393,32 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
                 setAccountType(index);
               };
               const containerStyle: ViewStyle = {
+                ...centerHV,
+                ...border(accountType !== undefined && accountType === index ? colorBlue._1 : colorWhite._1, sw2, sw8),
                 ...px(sw24),
                 ...py(sh16),
-                ...centerHV,
                 backgroundColor: accountType !== undefined && accountType === index ? colorBlue._3 : colorWhite._1,
-                borderColor: accountType !== undefined && accountType === index ? colorBlue._1 : colorWhite._1,
-                borderWidth: sw2,
                 height: sh72,
-                borderRadius: sw8,
+                ...shadow4Blue008,
               };
               const iconStyle: ViewStyle = {
                 ...circle(sw26, colorTransparent),
-                ...border(colorBlue._1, sw1, sw100),
+                ...border(accountType !== undefined && accountType === index ? colorRed._1 : colorBlue._1, sw1, sw100),
                 ...centerHV,
                 backgroundColor: accountType !== undefined && accountType === index ? colorRed._1 : colorTransparent,
-                borderColor: accountType !== undefined && accountType === index ? colorRed._1 : colorBlue._1,
               };
+
               const iconColor = accountType !== undefined && accountType === index ? colorWhite._1 : colorBlue._1;
+
               return (
                 <Fragment key={index}>
                   <CustomSpacer space={sh16} />
-                  <Pressable onPress={handlePress}>
-                    <View style={containerStyle}>
-                      <View style={{ ...flexRow, ...centerVertical }}>
-                        <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
-                        <CustomFlexSpacer />
-                        <View style={iconStyle}>
-                          <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
-                        </View>
+                  <Pressable onPress={handlePress} style={containerStyle}>
+                    <View style={{ ...flexRow, ...centerVertical }}>
+                      <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
+                      <CustomFlexSpacer />
+                      <View style={iconStyle}>
+                        <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
                       </View>
                     </View>
                   </Pressable>
@@ -411,7 +427,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             })}
           </View>
         </View>
-      </PromptModal>
+      </NewPromptModal>
     </Fragment>
   );
 };

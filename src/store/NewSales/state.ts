@@ -7,6 +7,10 @@ export type NewSalesState = {
   disabledSteps: TypeNewSalesKey[];
   emailVerified?: boolean;
   finishedSteps: TypeNewSalesKey[];
+  investorProfile: {
+    principalClientId?: string;
+    jointClientId?: string;
+  };
   toast: INewSalesToast;
   riskInfo?: IRiskProfile;
 };
@@ -20,20 +24,26 @@ export const newSalesInitialState: NewSalesState = {
     riskScore: "",
   },
   disabledSteps: [
-    "Acknowledgement",
-    "AdditionalDetails",
-    "IdentityVerification",
-    "OrderPreview",
-    "Payment",
+    "RiskAssessment",
+    "Products",
     "ProductsList",
     "ProductsConfirmation",
-    "RiskAssessment",
-    "Signatures",
+    "AccountInformation",
+    "IdentityVerification",
+    "AdditionalDetails",
     "Summary",
+    "Acknowledgement",
+    "OrderPreview",
     "TermsAndConditions",
+    "Signatures",
+    "Payment",
   ],
   emailVerified: false,
   finishedSteps: [],
+  investorProfile: {
+    principalClientId: undefined,
+    jointClientId: undefined,
+  },
   toast: {
     toastVisible: false,
     toastText: "All changes saved",

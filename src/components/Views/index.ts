@@ -16,4 +16,3 @@ export * from "./Spacer";
 export * from "./Splash";
 export * from "./SubmissionSummaryPrompt";
 export * from "./TextSpaceArea";
-export * from "./SummaryCard";

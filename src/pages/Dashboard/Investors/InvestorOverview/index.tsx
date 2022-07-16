@@ -192,6 +192,10 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             ...personalInfo,
             principal: {
               ...personalInfo.principal,
+              contactDetails: {
+                ...personalInfo.principal?.contactDetails,
+                emailAddress: investorData.email,
+              },
               personalDetails: {
                 ...personalInfo.principal?.personalDetails,
                 dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),

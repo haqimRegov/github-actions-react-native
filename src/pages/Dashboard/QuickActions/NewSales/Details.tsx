@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { View, ViewStyle } from "react-native";
+import { TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
@@ -23,10 +23,12 @@ interface NewSalesDetailsProps {
   errorMessage: string | undefined;
   holderToFill: "jointHolder" | "principalHolder";
   inputError1: string | undefined;
-  setAccountType: (value: string) => void;
+  setAccountType?: (value: string) => void;
   setClientInfo: (value: IClientBasicInfo) => void;
   setErrorMessage: (value: string | undefined) => void;
   setInputError1: (value: string | undefined) => void;
+  subHeading?: string;
+  subHeadingStyle?: TextStyle;
 }
 
 export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
@@ -40,10 +42,13 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   setClientInfo,
   setErrorMessage,
   setInputError1,
+  subHeading,
+  subHeadingStyle,
 }: NewSalesDetailsProps) => {
   const { country, dateOfBirth, id, idType, otherIdType, name } = clientInfo;
   const title = holderToFill === "principalHolder" ? ADD_CLIENT.SUBHEADING : ADD_CLIENT.SUBHEADING_JOINT;
-  const subheading = clientType !== "" ? title : ADD_CLIENT.SUBHEADING;
+  const checkSubheading = clientType !== "" ? title : ADD_CLIENT.SUBHEADING;
+  const subheading = subHeading !== undefined ? subHeading : checkSubheading;
   const keyboardType = idType === "NRIC" ? "numeric" : "default";
   const idMaxLength = idType === "NRIC" ? 12 : undefined;
   const LABEL_ID_DYNAMIC = idType !== "Other" ? idType : `${otherIdType} ${ADD_CLIENT.LABEL_ID}`;
@@ -88,7 +93,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   return (
     <View>
       <Fragment>
-        <TextSpaceArea style={fs20BoldGray5} text={subheading} />
+        <TextSpaceArea style={{ ...fs20BoldGray5, ...subHeadingStyle }} text={subheading} />
         {hideInput ? null : (
           <Fragment>
             <TextSpaceArea spaceToTop={sh24} spaceToBottom={sh8} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
@@ -163,7 +168,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
               direction="row"
               options={DICTIONARY_ACCOUNT_TYPE}
               selected={accountType}
-              setSelected={setAccountType}
+              setSelected={setAccountType!}
               space={sw74}
             />
           </Fragment>

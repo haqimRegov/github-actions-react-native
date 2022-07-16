@@ -23,22 +23,52 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   details,
   handleNextStep,
   investmentDetails,
-  // newSales,
+  newSales,
   personalInfo,
   productSales,
+  updateNewSales,
 }: PersonalDetailsProps) => {
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
   const { epfInvestment, epfShariah } = personalInfo;
+  const { disabledSteps, finishedSteps } = newSales;
   const { bankSummary, epfDetails } = personalInfo.principal!;
   const { localBank, foreignBank } = bankSummary!;
   const inputEpfType = epfDetails!.epfAccountType!;
   const inputEpfNumber = epfDetails!.epfMemberNumber!;
+
   const handlePersonalInfo = (value: IPersonalInfoState) => {
     addPersonalInfo({ ...personalInfo, ...value });
   };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    handleNextStep("IdentityVerification");
+  };
+
   const handleContinue = () => {
+    const updatedDisabledSteps = [...disabledSteps];
+    const updatedFinishedSteps = [...finishedSteps];
+
+    const findFinishedId = updatedFinishedSteps.indexOf("IdentityVerification");
+    if (findFinishedId === -1) {
+      updatedFinishedSteps.push("IdentityVerification");
+    }
+
+    const findDisabledId = updatedDisabledSteps.indexOf("IdentityVerification");
+    if (findDisabledId === -1) {
+      updatedDisabledSteps.push("IdentityVerification");
+    }
+
+    const findDisabledDetails = updatedDisabledSteps.indexOf("AdditionalDetails");
+    if (findDisabledDetails === -1) {
+      updatedDisabledSteps.push("AdditionalDetails");
+    }
+
+    const findFinishedDetails = updatedFinishedSteps.indexOf("AdditionalDetails");
+    if (findFinishedDetails === -1) {
+      updatedFinishedSteps.push("AdditionalDetails");
+    }
+
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
     handleNextStep("Summary");
   };
 
@@ -148,7 +178,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       ]
     : [];
   const checkCurrencyRemaining = nonMyrCurrencies.filter((eachCurrency: string) => !selectedNonMyrCurrencies.includes(eachCurrency));
-  const checkEpf = epfInvestment === true ? epfNumberValidation !== undefined || inputEpfNumber === "" : false;
+  const checkEpf = epfInvestment === true ? epfNumberValidation !== undefined || inputEpfNumber === "" || inputEpfType === "" : false;
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
   const continueDisabled =
     checkLocalBank.includes(false) === true ||

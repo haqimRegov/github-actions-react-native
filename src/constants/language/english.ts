@@ -1509,7 +1509,7 @@ export const english = {
       TEXT_1: "1. A copy of the order summary receipt has been sent to the investor’s email,",
       TEXT_1_SUB: "and",
       TEXT_2_AND_3:
-        "2. Please also ensure that the supporting documents are submitted within 10 working days to \n    prevent your application from lapsing. \n3. Please bank in the money to the corresponding currency bank collection account.",
+        "2. Please also ensure that the supporting documents are submitted within 10 working days to\nprevent your application from lapsing.\n3. Please bank in the money to the corresponding currency bank collection account.",
       BUTTON_PAY_NOW: "Pay Now",
       BUTTON_BACK: "Back to Dashboard",
       LABEL_BANK_NAME: "Bank Name",

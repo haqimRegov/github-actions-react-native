@@ -58,7 +58,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const principalUploadRef = useRef<IUploadDocumentRef>();
   const jointUploadRef = useRef<IUploadDocumentRef>();
   const { principalHolder, jointHolder } = details!;
-  const { disabledSteps } = newSales;
+  const { disabledSteps, finishedSteps } = newSales;
   const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
   const principalBackPage = principal!.personalDetails!.id!.secondPage;
@@ -157,12 +157,25 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       });
     }
     const updatedDisabledSteps = [...disabledSteps];
-    const findIdVerification = disabledSteps.indexOf("IdentityVerification");
-    if (findIdVerification === -1) {
-      updatedDisabledSteps.push("IdentityVerification");
+    const updatedFinishedStep = [...finishedSteps];
+    let route: TypeNewSalesRoute = "AdditionalDetails";
+    const findFinishedId = finishedSteps.indexOf("IdentityVerification");
+    if (findFinishedId !== -1) {
+      route = "Summary";
+    } else {
+      updatedFinishedStep.push("IdentityVerification");
     }
-    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, toast: { ...newSales.toast, toastVisible: true } });
-    handleNextStep("AdditionalDetails");
+    const findIdVerification = disabledSteps.indexOf("IdentityVerification");
+    if (findIdVerification !== -1 && findFinishedId === -1) {
+      updatedDisabledSteps.splice(findIdVerification, 1);
+    }
+    updateNewSales({
+      ...newSales,
+      disabledSteps: updatedDisabledSteps,
+      finishedSteps: updatedFinishedStep,
+      toast: { ...newSales.toast, toastVisible: true },
+    });
+    handleNextStep(route);
   };
 
   const handleClientInfo = (clientInfo: IHolderInfoState, file: FileBase64 | undefined, mykad: IOCRNricData) => {

@@ -64,8 +64,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         clientId: clientId!,
         documents: documents,
         initId: details?.initId!,
-        isForceUpdate: true,
         isConfirmed: confirmed === true,
+        isEtb: true,
+        isForceUpdate: true,
       };
       const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
       fetching.current = false;

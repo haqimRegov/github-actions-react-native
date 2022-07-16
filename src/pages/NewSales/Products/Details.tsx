@@ -13,6 +13,7 @@ import {
   TextSpaceArea,
 } from "../../../components";
 import { Language } from "../../../constants";
+import { getProductType } from "../../../helpers";
 import { IcoMoon } from "../../../icons";
 import { RNInAppBrowser } from "../../../integrations";
 import {
@@ -34,11 +35,11 @@ import {
   px,
   py,
   rowCenterVertical,
-  sh14,
+  sh12,
+  sh16,
   sh24,
   sh32,
   sh4,
-  sh56,
   sh8,
   shadow12Blue108,
   sw12,
@@ -77,6 +78,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
 
   const { salesCharge, newSalesAmount } = filteredCurrency;
   const isAmp = fund.fundType === "AMP";
+  const isEpf = fund.isEpf === "Yes";
+  const isEpfOnly = fund.isEpfOnly === "Yes";
+  const isPrsDefault = fund.fundCode.includes("prsdefault");
 
   const documentList =
     fund.docs !== undefined
@@ -96,8 +100,6 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
           }
         })
       : [];
-  const ampLabel = isAmp ? PRODUCT_DETAILS.LABEL_LANDING_FUND : PRODUCT_DETAILS.LABEL_FUND_CATEGORY;
-  const ampValue = isAmp ? fund.landingFund : fund.fundCategory;
 
   const handleViewDocument = (documentIndex: number) => {
     if (fund.docs !== undefined) {
@@ -134,27 +136,58 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   };
 
   const data: LabeledTitleProps[] = [
-    { label: ampLabel, title: ampValue },
-    { label: PRODUCT_DETAILS.LABEL_FUND_TYPE, title: fund.fundType, titleStyle: fsTransformNone },
+    { label: isAmp ? PRODUCT_DETAILS.LABEL_AMP_CATEGORY : PRODUCT_DETAILS.LABEL_FUND_CATEGORY, title: fund.fundCategory },
+    {
+      label: PRODUCT_DETAILS.LABEL_PRODUCT_TYPE,
+      title: getProductType(isPrsDefault ? "prsdefault" : fund.fundType),
+      titleStyle: fsTransformNone,
+    },
     { label: PRODUCT_DETAILS.LABEL_RISK, title: fund.riskCategory },
-    { label: PRODUCT_DETAILS.LABEL_SHARIAH, title: fund.isSyariah },
-    { label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf },
+    { label: PRODUCT_DETAILS.LABEL_SHARIAH_COMPLAINT, title: fund.isSyariah },
   ];
+
+  if (fund.fundType !== "PRS") {
+    data.push({ label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf });
+  }
+
+  const minAmountCash = `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`;
+  const minAdditionalAmountCash = `${filteredCurrency.currency} ${formatAmount(filteredCurrency.topUpAmount.cash.min)}`;
+  const salesChargeCash = `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.cash.max}%`;
+
+  const minAmountEpf = isEpfOnly
+    ? `${filteredCurrency.currency} ${formatAmount(newSalesAmount.epf.min)}`
+    : `${minAmountCash} / ${filteredCurrency.currency} ${formatAmount(newSalesAmount.epf.min)}`;
+
+  const minAdditionalAmountEpf = isEpfOnly
+    ? `${filteredCurrency.currency} ${formatAmount(filteredCurrency.topUpAmount.epf.min)}`
+    : `${minAdditionalAmountCash} / ${filteredCurrency.currency} ${formatAmount(filteredCurrency.topUpAmount.epf.min)}`;
+
+  const maxSalesChargeEpf = isEpfOnly
+    ? `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`
+    : `${salesChargeCash} / ${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`;
+
+  const minAmount = isEpf ? minAmountEpf : `${minAmountCash}`;
+  const minAdditionalAmount = isEpf ? minAdditionalAmountEpf : `${minAdditionalAmountCash}`;
+  const maxSalesCharge = isEpf ? maxSalesChargeEpf : salesChargeCash;
+
+  const labelMinAmountEpf = isEpfOnly ? PRODUCT_DETAILS.LABEL_MIN_INITIAL_EPF : PRODUCT_DETAILS.LABEL_MIN_INITIAL_CASH_EPF;
+  const labelMinAddEpf = isEpfOnly ? PRODUCT_DETAILS.LABEL_MIN_ADDITIONAL_EPF : PRODUCT_DETAILS.LABEL_MIN_ADDITIONAL_CASH_EPF;
+  const labelSalesChargeEpf = isEpfOnly ? PRODUCT_DETAILS.LABEL_SALES_CHARGE_EPF : PRODUCT_DETAILS.LABEL_SALES_CHARGE_CASH_EPF;
 
   const transactionInfo: LabeledTitleProps[] = [
     {
-      label: PRODUCT_DETAILS.LABEL_MIN_INITIAL_INVESTMENT,
-      title: `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`,
+      label: isEpf ? labelMinAmountEpf : PRODUCT_DETAILS.LABEL_MIN_INITIAL_CASH,
+      title: minAmount,
       titleStyle: fsTransformNone,
     },
     {
-      label: PRODUCT_DETAILS.LABEL_MIN_ADDITIONAL_INVESTMENT,
-      title: `${filteredCurrency.currency} ${parseFloat(filteredCurrency.topUpAmount.cash.min)}`,
+      label: isEpf ? labelMinAddEpf : PRODUCT_DETAILS.LABEL_MIN_ADDITIONAL_CASH,
+      title: minAdditionalAmount,
       titleStyle: fsTransformNone,
     },
     {
-      label: PRODUCT_DETAILS.LABEL_SALES_CHARGE_CASH,
-      title: `${salesCharge.cash.max}%`,
+      label: isEpf ? labelSalesChargeEpf : PRODUCT_DETAILS.LABEL_SALES_CHARGE_CASH,
+      title: maxSalesCharge,
       titleStyle: fsTransformNone,
     },
     {
@@ -165,35 +198,9 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     // TODO 2 other values left. Will add after after BE comes back
   ];
 
-  if (fund.isEpfOnly === "Yes") {
-    data.splice(-1, 1);
-  }
-
-  const ampFeeLabel: LabeledTitleProps = { label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` };
-
   if (isAmp) {
-    data.splice(1, 1);
-    data.splice(4, 0, ampFeeLabel);
-  }
-
-  if (fund.isEpf === "Yes") {
-    data.splice(-1, 0, {
-      label: PRODUCT_DETAILS.LABEL_SALES_EPF,
-      title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`,
-      titleStyle: fsTransformNone,
-    });
-  }
-
-  // if (!isAmp) {
-  //   data.splice(-1, 0, { label: PRODUCT_DETAILS.LABEL_ANNUAL, title: `${fund.annualManagementFee}%` });
-  // }
-
-  if (fund.isEpf === "Yes") {
-    data.push({
-      label: PRODUCT_DETAILS.LABEL_MINIMUM_EPF,
-      titlePrefix: inputCurrency,
-      title: formatAmount(newSalesAmount.epf.min),
-    });
+    data.push({ label: PRODUCT_DETAILS.LABEL_LANDING_FUND, title: `${fund.landingFund}` });
+    transactionInfo.splice(3, 0, { label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` });
   }
 
   const fundData = data.filter((raw) => raw.label !== "");
@@ -246,111 +253,110 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   return (
     <SafeAreaPage>
       <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
-        <CustomSpacer space={sh32} />
-        <View style={{ ...flexRow, ...px(sw24), ...flexChild }}>
-          <Pressable onPress={handleBack} style={{ ...centerHV, height: sh24 }}>
-            <IcoMoon color={colorBlue._1} name="arrow-left" size={sw20} />
-          </Pressable>
-          <CustomSpacer isHorizontal={true} space={sw12} />
-          <LabeledTitle
-            label={fund.fundName}
-            labelStyle={fs18BoldGray6}
-            spaceToLabel={sh4}
-            title={fund.issuingHouse}
-            titleStyle={fs14RegGray5}
-          />
-          <CustomFlexSpacer />
-          <RoundedButton
-            buttonStyle={buttonStyle}
-            icon="check"
-            onPress={handleSelect}
-            text={PRODUCT_DETAILS.LABEL_SELECT_THIS_FUND}
-            textStyle={fs12BoldWhite1}
-          />
-        </View>
-        <CustomSpacer space={sh24} />
-        <View style={px(sw24)}>
-          <View style={{ ...shadow12Blue108, backgroundColor: colorWhite._1, borderRadius: sw8 }}>
-            <CustomSpacer space={sh24} />
-            <View style={px(sw24)}>
-              <View style={rowCenterVertical}>
-                <IcoMoon name="objective" size={sw24} color={colorBlue._1} />
-                <CustomSpacer isHorizontal={true} space={sw8} />
-                <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_INVESTMENT_OBJECTIVE}</Text>
-                <CustomSpacer isHorizontal={true} space={sw12} />
-                <View style={flexChild}>
-                  <View style={borderBottomBlue4} />
-                </View>
-              </View>
-              <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective} />
-              <CustomSpacer space={sh32} />
-              <View style={rowCenterVertical}>
-                <IcoMoon name="fund-facts" size={sw24} color={colorBlue._1} />
-                <CustomSpacer isHorizontal={true} space={sw8} />
-                <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_FACTS} </Text>
-                <CustomSpacer isHorizontal={true} space={sw12} />
-                <View style={flexChild}>
-                  <View style={borderBottomBlue4} />
-                </View>
-              </View>
-              <CustomSpacer space={sh8} />
-              <TextCard data={fundData} {...textCardProps} />
-            </View>
+        <View>
+          <CustomSpacer space={sh32} />
+          <View style={{ ...flexRow, ...px(sw24), ...flexChild }}>
+            <Pressable onPress={handleBack} style={{ ...centerHV, height: sh24 }}>
+              <IcoMoon color={colorBlue._1} name="arrow-left" size={sw20} />
+            </Pressable>
+            <CustomSpacer isHorizontal={true} space={sw12} />
+            <LabeledTitle
+              label={fund.fundName}
+              labelStyle={fs18BoldGray6}
+              spaceToLabel={sh4}
+              title={fund.issuingHouse}
+              titleStyle={fs14RegGray5}
+            />
+            <CustomFlexSpacer />
+            <RoundedButton
+              buttonStyle={buttonStyle}
+              icon="check"
+              onPress={handleSelect}
+              text={PRODUCT_DETAILS.LABEL_SELECT_THIS_FUND}
+              textStyle={fs12BoldWhite1}
+            />
           </View>
           <CustomSpacer space={sh24} />
-          <View style={{ ...shadow12Blue108, backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24), ...px(sw24) }}>
-            {showMulti === true ? (
-              <Fragment>
-                <View style={flexRow}>
-                  {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
-                    <Fragment>
-                      <NewDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
-                      <CustomSpacer isHorizontal={true} space={sw64} />
-                    </Fragment>
-                  ) : null}
-                  <NewDropdown
-                    handleChange={handleCurrency}
-                    items={currencies}
-                    label={PRODUCT_DETAILS.LABEL_CURRENCY}
-                    value={inputCurrency}
-                  />
-                </View>
-                <CustomSpacer space={sh24} />
-              </Fragment>
-            ) : null}
-            <View style={rowCenterVertical}>
-              <IcoMoon name="transaction-info" size={sw24} color={colorBlue._1} />
-              <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_TRANSACTION_INFO} </Text>
-              <CustomSpacer isHorizontal={true} space={sw12} />
-              <View style={flexChild}>
-                <View style={borderBottomBlue4} />
-              </View>
-            </View>
-            <CustomSpacer space={sh8} />
-            <TextCard data={transactionData} {...textCardProps} />
-            {documentList.length > 0 ? (
-              <Fragment>
+          <View style={px(sw24)}>
+            <View style={{ ...shadow12Blue108, backgroundColor: colorWhite._1, borderRadius: sw8 }}>
+              <CustomSpacer space={sh24} />
+              <View style={px(sw24)}>
                 <View style={rowCenterVertical}>
-                  <IcoMoon name="file" size={sw24} color={colorBlue._1} />
+                  <IcoMoon name="objective" size={sw24} color={colorBlue._1} />
                   <CustomSpacer isHorizontal={true} space={sw8} />
-                  <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_DOCUMENTS}</Text>
+                  <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_INVESTMENT_OBJECTIVE}</Text>
                   <CustomSpacer isHorizontal={true} space={sw12} />
                   <View style={flexChild}>
                     <View style={borderBottomBlue4} />
                   </View>
                 </View>
-                <CustomSpacer space={sh14} />
-                <View style={flexRow}>
-                  <ButtonSelectionList data={documentList} icon="file" onPress={handleViewDocument} spaceBetween={sw16} />
-                </View>
+                <TextSpaceArea spaceToTop={sh8} style={fs16RegBlack2} text={fund.fundObjective} />
                 <CustomSpacer space={sh32} />
-              </Fragment>
-            ) : null}
-            <Text style={fs12RegBlack2}>{PRODUCT_DETAILS.LABEL_DISCLAIMER}</Text>
+                <View style={rowCenterVertical}>
+                  <IcoMoon name="fund-facts" size={sw24} color={colorBlue._1} />
+                  <CustomSpacer isHorizontal={true} space={sw8} />
+                  <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_FACTS} </Text>
+                  <CustomSpacer isHorizontal={true} space={sw12} />
+                  <View style={flexChild}>
+                    <View style={borderBottomBlue4} />
+                  </View>
+                </View>
+                <CustomSpacer space={sh8} />
+                <TextCard data={fundData} {...textCardProps} />
+              </View>
+            </View>
+            <CustomSpacer space={sh24} />
+            <View style={{ ...shadow12Blue108, backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24), ...px(sw24) }}>
+              {showMulti === true ? (
+                <Fragment>
+                  <View style={flexRow}>
+                    {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
+                      <Fragment>
+                        <NewDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
+                        <CustomSpacer isHorizontal={true} space={sw64} />
+                      </Fragment>
+                    ) : null}
+                    <NewDropdown
+                      handleChange={handleCurrency}
+                      items={currencies}
+                      label={PRODUCT_DETAILS.LABEL_CURRENCY}
+                      value={inputCurrency}
+                    />
+                  </View>
+                  <CustomSpacer space={sh24} />
+                </Fragment>
+              ) : null}
+              <View style={rowCenterVertical}>
+                <IcoMoon name="transaction-info" size={sw24} color={colorBlue._1} />
+                <CustomSpacer isHorizontal={true} space={sw8} />
+                <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_TRANSACTION_INFO} </Text>
+                <CustomSpacer isHorizontal={true} space={sw12} />
+                <View style={{ ...borderBottomBlue4, ...flexChild }} />
+              </View>
+              <CustomSpacer space={sh8} />
+              <TextCard data={transactionData} {...textCardProps} />
+              {documentList.length > 0 ? (
+                <Fragment>
+                  <CustomSpacer space={sh16} />
+                  <View style={rowCenterVertical}>
+                    <IcoMoon name="file" size={sw24} color={colorBlue._1} />
+                    <CustomSpacer isHorizontal={true} space={sw8} />
+                    <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_DOCUMENTS}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw12} />
+                    <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                  </View>
+                  <CustomSpacer space={sh12} />
+                  <View style={flexRow}>
+                    <ButtonSelectionList data={documentList} icon="file" onPress={handleViewDocument} spaceBetween={sw16} />
+                  </View>
+                  <CustomSpacer space={sh32} />
+                </Fragment>
+              ) : null}
+              <Text style={fs12RegBlack2}>{PRODUCT_DETAILS.LABEL_DISCLAIMER}</Text>
+            </View>
           </View>
+          <CustomSpacer space={sh16} />
         </View>
-        <CustomSpacer space={sh56} />
       </ScrollView>
     </SafeAreaPage>
   );

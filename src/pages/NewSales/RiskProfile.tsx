@@ -106,13 +106,20 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     },
   ];
 
-  const handlePageSkip = () => {
-    handleNextStep("ProductsList");
+  const handlePageContinue = () => {
     const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
     updatedFinishedSteps.push("RiskProfile");
-    updatedDisabledSteps.splice(disabledSteps.indexOf("RiskProfile"), 1);
+    const findRiskProfile = disabledSteps.indexOf("RiskProfile");
+    if (findRiskProfile !== -1) {
+      updatedDisabledSteps.splice(findRiskProfile, 1);
+    }
+    const findProducts = disabledSteps.indexOf("Products");
+    if (findProducts !== -1) {
+      updatedDisabledSteps.splice(findProducts, 1);
+    }
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+    handleNextStep("ProductsList");
   };
 
   const handleEdit = () => {
@@ -253,7 +260,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
         labelStyle={fs20BoldBlack2}
         labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
         labelSubmit={checkContinueLabel}
-        submitOnPress={handlePageSkip}
+        submitOnPress={handlePageContinue}
       />
     </View>
   );

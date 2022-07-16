@@ -22,13 +22,14 @@ import {
   sh56,
   sh8,
   sh96,
+  shadow12Blue108,
   sw10,
   sw136,
   sw234,
   sw28,
-  sw5,
   sw56,
   sw565,
+  sw8,
 } from "../../styles";
 import { ActionButtons, ActionButtonsProps } from "../Views/ActionButtons";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
@@ -36,6 +37,7 @@ import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 export interface PromptProps extends ActionButtonsProps {
   children?: JSX.Element;
   closable?: boolean;
+  containerStyle?: ViewStyle;
   contentStyle?: ViewStyle;
   handleClose?: () => void;
   illustration?: ImageSourcePropType;
@@ -52,6 +54,7 @@ export interface PromptProps extends ActionButtonsProps {
 export const Prompt: FunctionComponent<PromptProps> = ({
   children,
   closable,
+  containerStyle,
   contentStyle,
   handleClose,
   illustration,
@@ -69,8 +72,9 @@ export const Prompt: FunctionComponent<PromptProps> = ({
 
   const modalContainer: ViewStyle = {
     backgroundColor: colorBlue._2,
-    borderRadius: sw5,
+    borderRadius: sw8,
     width: sw565,
+    ...containerStyle,
   };
 
   const buttonContainer: ViewStyle = {
@@ -132,7 +136,9 @@ export const Prompt: FunctionComponent<PromptProps> = ({
       rest.labelContinue === undefined &&
       rest.handleCancel === undefined &&
       rest.handleContinue === undefined ? null : (
-        <ActionButtons {...actionButtonProps} />
+        <View style={shadow12Blue108}>
+          <ActionButtons {...actionButtonProps} />
+        </View>
       )}
     </View>
   );

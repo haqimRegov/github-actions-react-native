@@ -171,19 +171,14 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
         if (error === null && data !== null) {
           addOrders(data.result);
           const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-          updatedFinishedSteps.push("Summary");
+          updatedFinishedSteps.push("Summary", "AccountInformation");
           const newDisabledStep: TypeNewSalesKey[] = [
-            "AccountList",
-            "AdditionalDetails",
-            "IdentityVerification",
-            "Payment",
-            "ProductsList",
-            "ProductsConfirmation",
-            "RiskAssessment",
             "RiskProfile",
+            "Products",
+            "AccountInformation",
             "Signatures",
-            "Summary",
             "TermsAndConditions",
+            "Payment",
           ];
           updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
           return handleNextStep("OrderPreview");
@@ -204,7 +199,8 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     handleSetupClient();
   };
 
-  const clientId = currentProfile === "Principal" ? details!.principalHolder!.clientId! : details!.jointHolder!.clientId!;
+  const clientId =
+    currentProfile === "Principal" ? newSales!.investorProfile!.principalClientId! : newSales!.investorProfile!.jointClientId!;
 
   let content = (
     <NewSalesAccountSummary handleNextStep={handleNextStep} setCurrentProfile={setCurrentProfile} setFile={setFile} setPage={setPage} />
@@ -218,13 +214,9 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     <Fragment>
       <View style={flexChild}>
         {content}
-        <SelectionBanner
-          label={checkAccountType}
-          submitOnPress={handleContinue}
-          cancelOnPress={() => {}}
-          labelSubmit={NEW_SALES_SUMMARY.BUTTON_CONTINUE}
-          labelCancel={NEW_SALES_SUMMARY.BUTTON_CANCEL}
-        />
+        {page === 1 ? null : (
+          <SelectionBanner label={checkAccountType} submitOnPress={handleContinue} labelSubmit={NEW_SALES_SUMMARY.BUTTON_CONTINUE} />
+        )}
       </View>
       {file !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="base64" value={file} visible={file !== undefined} />

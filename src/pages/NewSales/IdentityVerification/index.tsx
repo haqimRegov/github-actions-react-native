@@ -58,7 +58,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const principalUploadRef = useRef<IUploadDocumentRef>();
   const jointUploadRef = useRef<IUploadDocumentRef>();
   const { principalHolder, jointHolder } = details!;
-  const { disabledSteps, finishedSteps } = newSales;
+  const { disabledSteps } = newSales;
   const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
   const principalBackPage = principal!.personalDetails!.id!.secondPage;
@@ -69,12 +69,12 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const principalClientIdType = principalIdType === "Other" ? principalHolder!.otherIdType : principalIdType;
   const jointClientIdType = jointIdType === "Other" ? jointHolder!.otherIdType : jointIdType;
 
-  const principalTitle =
-    principalIdType !== "Passport" && principalIdType !== "NRIC"
-      ? `${principalIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
-      : `${principalIdType}`;
-  const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
-  const defaultSubtitle = accountType === "Joint" ? IDENTITY_CONFIRMATION.JOINT_SUBHEADING : defaultPrincipalTitle;
+  // const principalTitle =
+  //   principalIdType !== "Passport" && principalIdType !== "NRIC"
+  //     ? `${principalIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
+  //     : `${principalIdType}`;
+  // const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
+  // const defaultSubtitle = accountType === "Joint" ? IDENTITY_CONFIRMATION.JOINT_SUBHEADING : defaultPrincipalTitle;
 
   const individualNRIC =
     principalFrontPage?.path !== undefined &&
@@ -157,15 +157,11 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       });
     }
     const updatedDisabledSteps = [...disabledSteps];
-    const updatedFinishedSteps = [...finishedSteps];
-    updatedDisabledSteps.splice(disabledSteps.indexOf("IdentityVerification"), 1);
-    updatedFinishedSteps.push("IdentityVerification");
-    updateNewSales({
-      ...newSales,
-      disabledSteps: updatedDisabledSteps,
-      finishedSteps: updatedFinishedSteps,
-      toast: { ...newSales.toast, toastVisible: true },
-    });
+    const findIdVerification = disabledSteps.indexOf("IdentityVerification");
+    if (findIdVerification === -1) {
+      updatedDisabledSteps.push("IdentityVerification");
+    }
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, toast: { ...newSales.toast, toastVisible: true } });
     handleNextStep("AdditionalDetails");
   };
 

@@ -45,8 +45,8 @@ const NEW_SALES_DATA: INewSales[] = [
       },
     ],
     label: NEW_SALES.TITLE_PRODUCTS_AND_SERVICE,
-    key: NEW_SALES_KEYS.ProductsList,
-    route: NEW_SALES_ROUTES.ProductsList,
+    key: NEW_SALES_KEYS.Products,
+    route: NEW_SALES_ROUTES.Products,
   },
   {
     content: [
@@ -55,8 +55,8 @@ const NEW_SALES_DATA: INewSales[] = [
       { title: NEW_SALES.TITLE_SUMMARY, route: NEW_SALES_ROUTES.Summary, key: NEW_SALES_KEYS.Summary },
     ],
     label: NEW_SALES.TITLE_ACCOUNT_INFORMATION,
-    key: NEW_SALES_KEYS.IdentityVerification,
-    route: NEW_SALES_KEYS.IdentityVerification,
+    key: NEW_SALES_KEYS.AccountInformation,
+    route: NEW_SALES_KEYS.AccountInformation,
   },
   {
     content: [
@@ -72,10 +72,14 @@ const NEW_SALES_DATA: INewSales[] = [
       },
       { title: NEW_SALES.SUBTITLE_SIGNATURES, route: NEW_SALES_ROUTES.Signatures, key: NEW_SALES_KEYS.Signatures },
     ],
-
     label: NEW_SALES.TITLE_ACKNOWLEDGEMENT,
-    key: NEW_SALES_KEYS.OrderPreview,
-    route: NEW_SALES_KEYS.OrderPreview,
+    key: NEW_SALES_KEYS.Acknowledgement,
+    route: NEW_SALES_KEYS.Acknowledgement,
+  },
+  {
+    label: NEW_SALES.TITLE_PROOF_OF_PAYMENT,
+    key: NEW_SALES_KEYS.Payment,
+    route: NEW_SALES_KEYS.Payment,
   },
 ];
 
@@ -138,6 +142,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   };
 
   const handleCheckRoute = (item: INewSales, section: number): boolean => {
+    // TODO improvement
     switch (item.route) {
       case "ProductsList":
         setCurrentItem({ item: item, section: section });

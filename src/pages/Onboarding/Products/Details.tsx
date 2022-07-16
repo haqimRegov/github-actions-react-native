@@ -118,7 +118,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     { label: PRODUCT_DETAILS.LABEL_SHARIAH, title: fund.isSyariah },
     { label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf },
     {
-      label: PRODUCT_DETAILS.LABEL_SALES_CASH,
+      label: PRODUCT_DETAILS.LABEL_SALES_CHARGE_CASH,
       title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.cash.max}%`,
       titleStyle: fsTransformNone,
     },
@@ -142,7 +142,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
 
   if (fund.isEpf === "Yes") {
     data.splice(-1, 0, {
-      label: PRODUCT_DETAILS.LABEL_SALES_EPF,
+      label: PRODUCT_DETAILS.LABEL_SALES_CHARGE_EPF,
       title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`,
       titleStyle: fsTransformNone,
     });

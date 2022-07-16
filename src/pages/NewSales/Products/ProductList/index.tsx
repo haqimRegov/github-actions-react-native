@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { CustomSpacer, SafeAreaPage } from "../../../../components";
 import { productsInitialFilter, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
-import { flexChild, flexGrow, sh152, sh810 } from "../../../../styles";
+import { flexChild, flexGrow, sh104, sh810 } from "../../../../styles";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 import { ProductTabs } from "./Tabs";
 
@@ -20,7 +20,6 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   accountDetails,
   accountType,
   addUtFilters,
-  handleCancelProducts,
   licenseType,
   productType,
   resetAMPFilter,
@@ -28,7 +27,6 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   resetPRSFilter,
   resetUTFilter,
   scrollEnabled,
-  selectedFunds,
   setScrollEnabled,
   updateProductType,
 }: ProductListProps) => {
@@ -81,12 +79,14 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
 
   useEffect(() => {
     handleResetFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productType]);
 
   useEffect(() => {
     if (accountNo !== "") {
       updateProductType(fundType);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -98,7 +98,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
         showsVerticalScrollIndicator={false}>
         <View style={flexChild}>
           <View style={{ minHeight: sh810 }}>{content}</View>
-          <CustomSpacer space={sh152} />
+          <CustomSpacer space={sh104} />
         </View>
       </ScrollView>
     </SafeAreaPage>

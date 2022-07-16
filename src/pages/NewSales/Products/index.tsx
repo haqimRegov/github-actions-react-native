@@ -38,7 +38,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const handleBackToAssessment = () => {
     setPrompt(undefined);
-    handleNextStep("RiskAssessment");
+    handleNextStep("RiskProfile");
     resetProducts();
     resetSelectedFund();
   };

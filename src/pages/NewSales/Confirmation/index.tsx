@@ -41,7 +41,7 @@ import {
   sh24,
   sh4,
   sh40,
-  shadow12Blue108,
+  shadow4Blue008,
   sw1,
   sw16,
   sw24,
@@ -124,8 +124,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     handleNextStep("IdentityVerification");
     const updatedFinishedSteps: TypeNewSalesKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
-        ? ["RiskProfile", "RiskAssessment", "ProductsList", "ProductsConfirmation"]
-        : [...finishedSteps, "ProductsList", "ProductsConfirmation"];
+        ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation"]
+        : [...finishedSteps, "Products", "ProductsList", "ProductsConfirmation"];
     const updatedDisabledSteps: TypeNewSalesKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
         ? [
@@ -265,8 +265,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             ListFooterComponent={<CustomSpacer space={sh124} />}
             ref={flatListRef}
             renderItem={({ item, index }) => {
-              const { fundType, fundName, issuingHouse, prsType } = item.fundDetails;
-              const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
+              const { fundName, issuingHouse } = item.fundDetails;
+              // const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
               const newData = tempData !== undefined ? [...tempData] : [];
 
               const handleDelete = () => {
@@ -318,7 +318,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 
               const container: ViewStyle = {
                 ...flexChild,
-                ...shadow12Blue108,
+                ...shadow4Blue008,
                 borderColor: colorGray._2,
                 borderWidth: sw1,
                 backgroundColor: colorWhite._1,
@@ -331,7 +331,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                   {index === 0 ? null : <CustomSpacer space={sh24} />}
                   {index <= checkIndex ? (
                     <Fragment>
-                      {index !== 0 ? <CustomSpacer space={sh40} /> : null}
                       <View style={{ ...flexRow, ...centerVertical, ...px(sw8) }}>
                         <IcoMoon name="house" size={sw16} color={colorBlack._2} />
                         <CustomSpacer isHorizontal={true} space={sw8} />

@@ -78,6 +78,9 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     case NEW_SALES_ROUTES.Summary:
       content = <AdditionalInfoSummary {...newProps} />;
       break;
+    case NEW_SALES_ROUTES.Payment:
+      content = <Sample title="sample" {...newProps} />;
+      break;
 
     default:
       content = <Sample title="sample" {...newProps} />;

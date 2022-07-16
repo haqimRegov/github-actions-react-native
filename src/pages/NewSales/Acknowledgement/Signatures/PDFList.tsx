@@ -5,8 +5,9 @@ import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ContentPage, CustomSpacer, IconText, PromptModal, SignatureUploadWithModal, SummaryCard } from "../../../../components";
+import { CollectionBankCard, ContentPage, CustomSpacer, IconText, NewPromptModal, SignatureUploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
+import { DICTIONARY_KIB_BANK_ACCOUNTS } from "../../../../data/dictionary";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import {
@@ -18,7 +19,6 @@ import {
   fs10RegGray6,
   fs14BoldBlack2,
   fs14RegBlack2,
-  fs24BoldBlack2,
   px,
   rowCenterVertical,
   sh16,
@@ -26,6 +26,7 @@ import {
   sh8,
   sw10,
   sw16,
+  sw212,
   sw24,
   sw3,
   sw440,
@@ -40,23 +41,14 @@ export interface PDFListProps extends AcknowledgementStoreProps, NewSalesContent
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 
-const dummyData = {
-  principalEmail: "jeremy@gmail.com",
-  jointEmail: "jeremytwo@gmail.com",
-  bankName: "Standard Chartered",
-  accountName: "Kenanga Investors Account",
-  accountNumber: [
-    { currency: "(MYR)", id: "987654321" },
-    { currency: "(USD)", id: "987654322" },
-  ],
-  bankSwiftCode: "FE0F8FE0FF",
-};
-
 const PDFListComponent: FunctionComponent<PDFListProps> = ({
   accountType,
   details,
-  newSales,
   handleNextStep,
+  handleResetNewSales,
+  newSales,
+  orders,
+  personalInfo,
   receipts,
   setEditReceipt,
   setLoading,
@@ -65,12 +57,11 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { clientId } = details!.principalHolder!;
+  const { emailAddress } = personalInfo!.principal!.contactDetails!;
   const fetching = useRef<boolean>(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
   const handleSubmit = async () => {
-    // TODO integration after BE deploys
-    return setShowPrompt(true);
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
@@ -90,8 +81,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         clientId: clientId!,
         documents: documents,
         initId: details?.initId!,
-        isForceUpdate: true,
         isConfirmed: true,
+        isEtb: true,
+        isForceUpdate: false,
       };
       const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
       fetching.current = false;
@@ -116,10 +108,10 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleContinue = () => {
-    handleNextStep("Payment");
     const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
     const newDisabledStep: TypeNewSalesKey[] = ["RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+    handleNextStep("Payment");
   };
 
   const getReceiptSummary = async () => {
@@ -212,6 +204,11 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       ? `${details!.principalHolder!.name} `
       : `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
 
+  const getCollectionBank = orders!.grandTotal.map((eachTotal) => {
+    const collectionBank = DICTIONARY_KIB_BANK_ACCOUNTS.filter((bank) => bank.currency === eachTotal.currency);
+    return collectionBank[0];
+  });
+
   return (
     <Fragment>
       <ContentPage
@@ -266,8 +263,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               const amountTitle = receipt
                 .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
                 .join(", ");
-              const epfTitle = receipt.isEpf === "true" ? "- EPF" : "";
-              const recurringTitle = receipt.isScheduled === "true" ? "- Recurring" : "";
+              const epfTitle = receipt.isEpf === "true" ? " - EPF" : "";
+              const recurringTitle = receipt.isScheduled === "true" ? " - Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               return (
                 <Fragment key={index}>
@@ -294,36 +291,34 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
             })}
         </View>
       </ContentPage>
-      <PromptModal
-        handleCancel={handleBack}
-        handleContinue={handleContinue}
+      <NewPromptModal
         illustration={LocalAssets.illustration.orderReceived}
-        label={NEW_SALES_PROMPT.SUBHEADING}
-        labelCancel={NEW_SALES_PROMPT.BUTTON_BACK}
-        labelContinue={NEW_SALES_PROMPT.BUTTON_PAY_NOW}
-        labelStyle={fs24BoldBlack2}
+        primary={{ onPress: handleContinue, buttonStyle: { width: sw212 }, text: NEW_SALES_PROMPT.BUTTON_PAY_NOW }}
+        secondary={{ onPress: handleResetNewSales, buttonStyle: { width: sw212 }, text: NEW_SALES_PROMPT.BUTTON_BACK }}
+        title={NEW_SALES_PROMPT.SUBHEADING}
         visible={showPrompt}>
         <View style={{ width: sw440 }}>
+          <CustomSpacer space={sh16} />
           <View>
             <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_1}</Text>
             <View style={flexRow}>
-              <CustomSpacer isHorizontal space={sw10} />
-              <Text style={fs10BoldGray6}>{dummyData.principalEmail}</Text>
-              {isNotEmpty(dummyData.jointEmail) ? (
+              <CustomSpacer isHorizontal={true} space={sw10} />
+              <Text style={fs10BoldGray6}>{emailAddress}</Text>
+              {accountType === "Joint" && isNotEmpty(personalInfo!.principal!.contactDetails!.emailAddress) ? (
                 <Fragment>
                   <CustomSpacer isHorizontal space={sw3} />
                   <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_1_SUB}</Text>
                   <CustomSpacer isHorizontal space={sw3} />
-                  <Text style={fs10BoldGray6}>{dummyData.jointEmail}</Text>
+                  <Text style={fs10BoldGray6}>{personalInfo!.principal!.contactDetails!.emailAddress}</Text>
                 </Fragment>
               ) : null}
             </View>
             <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_2_AND_3}</Text>
           </View>
           <CustomSpacer space={sh8} />
-          <SummaryCard data={dummyData} />
+          <CollectionBankCard data={getCollectionBank} />
         </View>
-      </PromptModal>
+      </NewPromptModal>
     </Fragment>
   );
 };

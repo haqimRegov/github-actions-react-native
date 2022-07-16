@@ -1547,6 +1547,8 @@ export const english = {
       PROMPT_LABEL_CANCEL: "All progress in the Product & Service Recommendation will be lost.",
       PROMPT_LABEL_OUTSIDE:
         "Yes, I wish to purchase unlisted capital market product(s) outside the authorised distributor's recommendation",
+      PROMPT_LABEL_OUTSIDE_NEW:
+        "You're about to purchase unlisted capital market product(s) outside the authorised distributor's recommendation.\n\nClick 'Yes' to proceed with the investment. Click 'Cancel' to remove the unrecommended product from your investment selection.",
       PROMPT_OPTION_1: "I wish to purchase product(s) within the authorised distributor’s recommendation",
       PROMPT_OPTION_2: "I wish to purchase unlisted capital market product(s) outside the authorised distributor's recommendation",
       PROMPT_TITLE_CANCEL: "Are you sure you want to cancel?",

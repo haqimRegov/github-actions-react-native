@@ -259,7 +259,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     };
   }, []);
   const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
-  const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE;
+  const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE_NEW;
   const promptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : riskPromptText;
   const checkSelected = selectedFunds.length === 0 ? { fontFamily: NunitoRegular } : {};
 
@@ -290,7 +290,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       <ConfirmationModal
         handleCancel={handleCancel}
         handleContinue={handlePrompt}
-        labelCancel={PRODUCT_LIST.BUTTON_NO}
+        labelCancel={prompt === "risk" ? undefined : PRODUCT_LIST.BUTTON_NO}
         labelContinue={PRODUCT_LIST.BUTTON_YES}
         spaceToTitle={prompt === "cancel" ? undefined : sh56}
         title={promptTitle}

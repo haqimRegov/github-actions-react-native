@@ -63,25 +63,55 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   updateNewSales,
 }: IRiskSummaryProps) => {
   const { jointHolder, principalHolder } = details!;
-  const { disabledSteps, finishedSteps, riskInfo } = newSales;
+  const { accountType } = client;
+  const { disabledSteps, finishedSteps } = newSales;
 
-  const riskProfile: IRiskProfile =
-    isRiskUpdated === true
-      ? { expectedRange: riskScore.rangeOfReturn, appetite: riskScore.appetite, profile: riskScore.profile, type: riskScore.type }
-      : riskInfo!;
+  const riskProfile: IRiskProfile = {
+    expectedRange: riskScore.rangeOfReturn,
+    appetite: riskScore.appetite,
+    profile: riskScore.profile,
+    type: riskScore.type,
+  };
 
+  const checkIdType = (data: IClientBasicInfo) => {
+    return data.idType === "Other" ? `${data.otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : data.idType;
+  };
   const accountDetails: LabeledTitleProps[] = [
     {
-      label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
-      title: principalHolder!.name!,
+      label: accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_PRINCIPAL_NAME : RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
+      title: principalHolder!.name,
       titleStyle: fsTransformNone,
     },
     {
-      label: `${RISK_ASSESSMENT.NEW_SALES_INVESTOR} ${principalHolder!.idType}`,
-      title: principalHolder!.id!,
+      label:
+        accountType === "Joint"
+          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
+          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
+      title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
   ];
+  if (riskScore.appetite !== "") {
+    accountDetails.push({
+      label: RISK_ASSESSMENT.NEW_SALES_RISK_CATEGORY,
+      title: riskScore.appetite,
+      titleStyle: fsTransformNone,
+    });
+  }
+  if (client.accountType === "Joint") {
+    accountDetails.push(
+      {
+        label: RISK_ASSESSMENT.LABEL_JOINT_NAME,
+        title: jointHolder!.name,
+        titleStyle: fsTransformNone,
+      },
+      {
+        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
+        title: jointHolder!.id,
+        titleStyle: fsTransformNone,
+      },
+    );
+  }
 
   const riskProfileData: LabeledTitleProps[] = [
     {
@@ -129,7 +159,6 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   const handleAims = () => {
     RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
   };
-
   const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_SKIP;
   const name = client.accountType === "Joint" ? `${principalHolder!.name!} and ${jointHolder!.name!}` : principalHolder!.name!;
   const heading = `${RISK_ASSESSMENT.NEW_SALES_HEADING} ${name}`;
@@ -147,10 +176,10 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   };
 
   const tags = newSales.accountDetails.accountNo !== "" ? ["UT", "Cash"] : [];
-  const header =
-    newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : RISK_ASSESSMENT.NEW_SALES_HEADING_2;
-  const subtitle =
-    newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
+  const checkJointHeader = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_2;
+  const header = newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : checkJointHeader;
+  const checkJointSubtitle = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
+  const subtitle = newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : checkJointSubtitle;
 
   return (
     <View>
@@ -159,7 +188,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
         <View style={px(sw24)}>
           <ColorCard
             containerStyle={noBorder}
-            content={<TextCard data={accountDetails} />}
+            content={<TextCard data={accountDetails} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw240 }} />}
             contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
             customHeader={
               <View style={{ ...rowCenterVertical, ...px(sw24) }}>

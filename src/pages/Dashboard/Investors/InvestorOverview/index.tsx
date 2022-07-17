@@ -205,7 +205,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           accountHolder: accountType === 0 ? "Principal" : "Joint",
         });
         addAccountType(accountType === 0 ? "Individual" : "Joint");
-        const jointInfo: IHolderInfoState =
+        const updatedJointInfo: IHolderInfoState =
           accountType === 0
             ? { ...personalInfo.joint }
             : {
@@ -236,7 +236,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
               name: data.result.principalHolder.name,
             },
           },
-          joint: jointInfo,
+          joint: updatedJointInfo,
         });
 
         if (accountType === 0) {

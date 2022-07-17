@@ -5,6 +5,7 @@ import { ForceUpdateActionProps } from "../ForceUpdate";
 import { GlobalActionProps } from "../Global/actions";
 import { NewSalesActionProps } from "../NewSales";
 import { PersonalInfoActionProps } from "../PersonalInfo";
+import { RiskAssessmentActionProps } from "../RiskAssessment";
 import { RootState } from "../rootReducer";
 import { TransactionsActionProps } from "../Transactions";
 import { InvestorsActionProps } from "./actions";
@@ -21,6 +22,7 @@ export const InvestorsMapStateToProps = (state: RootState) => ({
   loading: state.global.loading,
   newSales: state.newSales,
   personalInfo: state.personalInfo,
+  riskAssessment: state.riskAssessment,
   search: state.investors.search,
   unreadMessages: state.global.unreadMessages,
 });
@@ -34,6 +36,7 @@ export const InvestorsMapDispatchToProps = (dispatch: Dispatch) => {
       ...GlobalActionProps,
       ...NewSalesActionProps,
       ...PersonalInfoActionProps,
+      ...RiskAssessmentActionProps,
       ...TransactionsActionProps,
     },
     dispatch,

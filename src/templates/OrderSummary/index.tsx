@@ -19,10 +19,9 @@ import {
   sw24,
   sw8,
 } from "../../styles";
-import { DocumentsTab } from "../Dashboard";
-import { AccountDetails } from "./Account";
-import { OrderDetails } from "./OrderDetails";
-import { OrderDetailsCR } from "./OrderDetailsCR";
+import { isNotEmpty } from "../../utils";
+import { AccountTab, DocumentsTabNew } from "../Dashboard";
+import { OrderDetailsNew } from "./OrderDetailsNew";
 import { Tracking } from "./Tracking";
 
 const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
@@ -34,7 +33,8 @@ interface OrderDetailsProps {
   handleExportPDF: () => void;
   handleFetch: () => void;
   handleViewAccountDetails: (account: ICurrentAccount) => void;
-  handleViewInvestorProfile: () => void;
+  handleViewPrincipalInvestorProfile: () => void;
+  handleViewJointInvestorProfile: () => void;
   loading: boolean;
   orderSummary: IDashboardOrderSummary | undefined;
   setActiveTab: (route: OrderSummaryTabType) => void;
@@ -48,7 +48,8 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     handleExportPDF,
     handleFetch,
     handleViewAccountDetails,
-    handleViewInvestorProfile,
+    handleViewPrincipalInvestorProfile,
+    handleViewJointInvestorProfile,
     loading,
     orderSummary,
     setActiveTab,
@@ -56,22 +57,23 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const navigation = useNavigation<IStackNavigationProp>();
 
-  const tabs: OrderSummaryTabType[] = ["order", "document", "tracking"];
+  const tabs: OrderSummaryTabType[] = ["order", "tracking"];
 
   const headerTabs = [
     {
-      text:
-        currentOrder?.transactionType === "Sales-AO"
-          ? DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS
-          : DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS_CR,
+      text: DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS,
     },
-    { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT },
     { text: DASHBOARD_ORDER_SUMMARY.TAB_TRACKING },
   ];
 
-  if (currentOrder?.transactionType === "Sales-AO") {
-    tabs.splice(1, 0, "profile");
-    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
+  if (isNotEmpty(orderSummary?.documentSummary)) {
+    tabs.splice(1, 0, "document");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT });
+  }
+
+  if (currentOrder?.transactionType === "Sales-AO" || currentOrder?.transactionType === "Sales-NS") {
+    tabs.splice(1, 0, "account");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
 
   const activeTabIndex = tabs.indexOf(activeTab);
@@ -86,19 +88,21 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
 
   const contentProps = { data: orderSummary!, setFile: setFile };
 
-  let content: JSX.Element =
-    currentOrder?.transactionType === "Sales-AO" ? (
-      <OrderDetails {...contentProps} isScheduled={currentOrder!.isScheduled} />
-    ) : (
-      <OrderDetailsCR {...contentProps} handleViewAccountDetails={handleViewAccountDetails} />
-    );
+  let content: JSX.Element = (
+    <OrderDetailsNew
+      {...contentProps}
+      isScheduled={currentOrder!.isScheduled}
+      transactionType={currentOrder!.transactionType}
+      handleViewAccountDetails={handleViewAccountDetails}
+    />
+  );
 
-  if (activeTab === "document") {
-    content = <DocumentsTab documentSummary={orderSummary!.documentSummary} setFile={setFile} />;
+  if (activeTab === "document" && orderSummary !== undefined) {
+    content = <DocumentsTabNew documentSummary={orderSummary.documentSummary} setFile={setFile} />;
   }
 
-  if (activeTab === "profile") {
-    content = <AccountDetails {...contentProps} />;
+  if (activeTab === "account") {
+    content = <AccountTab {...contentProps} />;
   }
 
   if (activeTab === "tracking") {
@@ -130,10 +134,28 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     height: sh24,
     width: sw120,
   };
+  const buttonPrincipalStyle: ViewStyle = {
+    borderColor: colorBlue._1,
+    borderWidth: sw1,
+    height: sh24,
+    width: sw120,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  };
+  const buttonJointStyle: ViewStyle = {
+    borderColor: colorBlue._1,
+    borderWidth: sw1,
+    height: sh24,
+    width: sw120,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  };
 
   const backgroundText: TextStyle = {
     color: colorWhite._1,
   };
+
+  const holderType = currentOrder?.accountType === "Joint";
 
   return (
     <Fragment>
@@ -141,15 +163,32 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
         navigation={navigation}
         hideQuickActions={true}
         sideElement={
-          currentOrder?.transactionType !== "Sales-AO" ? (
+          holderType ? (
+            <View style={flexRow}>
+              <RoundedButton
+                buttonStyle={buttonPrincipalStyle}
+                text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PRINCIPAL_PROFILE}
+                onPress={handleViewPrincipalInvestorProfile}
+                secondary={true}
+                textStyle={fs10BoldBlue1}
+              />
+              <RoundedButton
+                buttonStyle={buttonJointStyle}
+                text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_JOINT_PROFILE}
+                onPress={handleViewJointInvestorProfile}
+                secondary={true}
+                textStyle={fs10BoldBlue1}
+              />
+            </View>
+          ) : (
             <RoundedButton
               buttonStyle={buttonStyle}
-              onPress={handleViewInvestorProfile}
+              onPress={handleViewPrincipalInvestorProfile}
               secondary={true}
               text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PROFILE}
               textStyle={fs10BoldBlue1}
             />
-          ) : undefined
+          )
         }
         status={currentOrder!.status}
         title={DASHBOARD_ORDER_SUMMARY.HEADING}

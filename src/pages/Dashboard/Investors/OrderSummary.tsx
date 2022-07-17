@@ -8,6 +8,7 @@ import { RNInAppBrowser } from "../../../integrations";
 import { getOrderSummary, orderTrackingSummary } from "../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../store";
 import { OrderSummary } from "../../../templates";
+import { isNotEmpty } from "../../../utils";
 
 const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
@@ -30,22 +31,23 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = ({
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const tabs: OrderSummaryTabType[] = ["order", "document", "tracking"];
+  const tabs: OrderSummaryTabType[] = ["order", "tracking"];
 
   const headerTabs = [
     {
-      text:
-        currentOrder?.transactionType === "Sales-AO"
-          ? DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS
-          : DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS_CR,
+      text: DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS,
     },
-    { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT },
     { text: DASHBOARD_ORDER_SUMMARY.TAB_TRACKING },
   ];
 
-  if (currentOrder?.transactionType === "Sales-AO") {
-    tabs.splice(1, 0, "profile");
-    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
+  if (isNotEmpty(orderSummary?.documentSummary)) {
+    tabs.splice(1, 0, "document");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT });
+  }
+
+  if (currentOrder?.transactionType === "Sales-AO" || currentOrder?.transactionType === "Sales-NS") {
+    tabs.splice(1, 0, "account");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
 
   const handleBackToTransactions = () => {
@@ -54,9 +56,15 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = ({
     setScreen("AccountInformation");
   };
 
-  const handleViewInvestorProfile = () => {
+  const handleViewPrincipalInvestorProfile = () => {
     if (orderSummary!.profile[0].clientId !== undefined && orderSummary!.profile[0].clientId !== null) {
       updateCurrentAccount({ accountNumber: undefined, clientId: orderSummary!.profile[0].clientId });
+      setScreen("InvestorProfile");
+    }
+  };
+  const handleViewJointInvestorProfile = () => {
+    if (orderSummary!.profile[1].clientId !== undefined && orderSummary!.profile[1].clientId !== null) {
+      updateCurrentAccount({ accountNumber: undefined, clientId: orderSummary!.profile[1].clientId });
       setScreen("InvestorProfile");
     }
   };
@@ -119,7 +127,8 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = ({
       handleExportPDF={handleExportPDF}
       handleFetch={handleFetch}
       handleViewAccountDetails={handleViewAccountDetails}
-      handleViewInvestorProfile={handleViewInvestorProfile}
+      handleViewPrincipalInvestorProfile={handleViewPrincipalInvestorProfile}
+      handleViewJointInvestorProfile={handleViewJointInvestorProfile}
       loading={loading}
       orderSummary={orderSummary}
       setActiveTab={setActiveTab}

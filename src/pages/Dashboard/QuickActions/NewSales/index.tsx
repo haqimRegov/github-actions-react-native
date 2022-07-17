@@ -223,6 +223,7 @@ const NewSalesComponent = ({
                   principalHolder: {
                     ...client.details?.principalHolder,
                     name: principalHolder!.name!.trim(),
+                    id: principalHolder?.id,
                   },
                 },
               });

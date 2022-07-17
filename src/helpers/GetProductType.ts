@@ -7,6 +7,7 @@ export const getProductType = (type: string) => {
       return "Private Retirement Schemes (PRS)";
 
     case "prsdefault":
+    case "prs default":
       return "Private Retirement Schemes (PRS) Default";
 
     case "amp":

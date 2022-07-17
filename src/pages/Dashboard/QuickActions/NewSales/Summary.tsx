@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, FULL_DATE_FORMAT, Language } from "../../../../constants";
-import { flexRow, fs12RegGray5, fs16BoldBlack2, fs24BoldBlue1, sh24, sw208, sw32 } from "../../../../styles";
+import { flexRow, fs12BoldGray5, fs16BoldBlack2, fs24BoldBlue1, sh16, sh24, sw208, sw32 } from "../../../../styles";
 
 const { ADD_CLIENT } = Language.PAGE;
 
@@ -22,7 +22,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
   const subheading = accountType === "Individual" ? ADD_CLIENT.LABEL_VERIFY_INDIVIDUAL : ADD_CLIENT.LABEL_VERIFY_JOINT;
   const principalLabelName = accountType === "Individual" ? ADD_CLIENT.DETAILS_LABEL_NAME : ADD_CLIENT.DETAILS_LABEL_NAME_PRINCIPAL;
 
-  const infoStyles = { labelStyle: fs12RegGray5, spaceToBottom: sh24, titleStyle: fs16BoldBlack2 };
+  const infoStyles = { labelStyle: fs12BoldGray5, spaceToBottom: sh16, titleStyle: fs16BoldBlack2 };
 
   return (
     <View>

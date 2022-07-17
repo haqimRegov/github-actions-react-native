@@ -18,7 +18,7 @@ const { TERMS_AND_CONDITIONS } = Language.PAGE;
 const signPosition = {
   adviser: { x: 16, y: 158 },
   principal: { x: 271, y: 158 },
-  joint: { x: 16, y: 300 },
+  joint: { x: 16, y: 298 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {

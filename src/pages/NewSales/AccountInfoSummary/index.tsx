@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 import { FileViewer, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
+import { handleSignatory } from "../../../helpers";
 import { submitClientAccount } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
@@ -137,7 +138,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     initId: details!.initId!,
     isEtb: true,
     incomeDistribution: personalInfo.incomeDistribution!,
-    signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
+    signatory: accountType === "Joint" ? handleSignatory(personalInfo.signatory!) : undefined,
     principal: {
       clientId: details!.principalHolder!.clientId!,
       bankSummary:

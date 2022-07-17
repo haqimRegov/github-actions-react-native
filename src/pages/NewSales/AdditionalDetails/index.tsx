@@ -145,7 +145,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
           (bank: IBankDetailsState) =>
             bank.bankName !== "" &&
             bank.bankAccountNumber !== "" &&
-            bank.bankAccountName === "" &&
+            bank.bankAccountName !== "" &&
             bank.currency?.includes("") === false &&
             bank.bankLocation !== "" &&
             bank.bankSwiftCode !== "" &&

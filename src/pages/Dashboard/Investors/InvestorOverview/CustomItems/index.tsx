@@ -1,11 +1,12 @@
 import React, { FunctionComponent } from "react";
-import { View } from "react-native";
 
-import { DateTime } from "../../../../templates/CustomItems/Date";
-import { InvestorName } from "../../../../templates/CustomItems/InvestorName";
+import { DateTime, InvestorName } from "../../../../../templates";
+import { InvestorOverviewActions } from "./Actions";
 
 interface CustomTableItemProps extends ITableCustomItem {
   sortedColumns: InvestorAccountsSortColumnType[];
+  handleBuyNewFund?: (item: IInvestorAccountsData) => void;
+  handleViewAccount?: (item: ITableRowData) => void;
 }
 export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemProps> = ({
   sortedColumns,
@@ -17,6 +18,6 @@ export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemPr
     case "accountOpeningDate":
       return <DateTime sortedColumns={sortedColumns} {...data} />;
     default:
-      return <View />;
+      return <InvestorOverviewActions {...data} />;
   }
 };

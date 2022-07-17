@@ -8,7 +8,6 @@ import { Language } from "../../../../constants/language";
 import { getInvestorDetailsDashboard } from "../../../../network-actions/dashboard/InvestorDetailsDashboard";
 import {
   centerHV,
-  colorBlue,
   flexChild,
   fs10BoldBlue1,
   fs12RegBlue1,
@@ -21,7 +20,6 @@ import {
   sw16,
   sw176,
   sw224,
-  sw24,
   sw56,
 } from "../../../../styles";
 import { InvestorDetailsCustomTableItem } from "./CustomItems";
@@ -30,6 +28,7 @@ const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface AccountListingProps {
   currentInvestor?: IInvestorData;
+  handleBuyNewFund: (item: IInvestorAccountsData) => void;
   handleViewAccount: (account: ICurrentAccount) => void;
   investorData?: IInvestor;
   isFetching: boolean;
@@ -47,6 +46,7 @@ interface AccountListingProps {
 
 export const AccountListing: FunctionComponent<AccountListingProps> = ({
   currentInvestor,
+  handleBuyNewFund,
   handleViewAccount,
   investorData,
   isFetching,
@@ -208,9 +208,8 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       viewStyle: { width: sw136 },
     },
     {
-      itemIcon: { color: colorBlue._1, name: "eye-show", size: sw24 },
-      key: [],
-      onPressItem: handleView,
+      customItem: true,
+      key: [{ key: "" }],
       title: INVESTOR_ACCOUNTS.LABEL_ACTIONS,
       viewStyle: { ...centerHV, width: sw56 },
     },
@@ -230,7 +229,6 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       navigation,
       setIsFetching,
     );
-
     if (investorDetailsResponse !== undefined) {
       const { data, error } = investorDetailsResponse;
       if (error === null && data !== null) {
@@ -269,7 +267,14 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       <AdvanceTable
         columns={columns}
         data={isFetching === true || investorData === undefined ? [] : (investorData.investorDetails as unknown as ITableData[])}
-        RenderCustomItem={(data: ITableCustomItem) => <InvestorDetailsCustomTableItem {...data} sortedColumns={sortedColumns} />}
+        RenderCustomItem={(data: ITableCustomItem) => (
+          <InvestorDetailsCustomTableItem
+            {...data}
+            handleBuyNewFund={handleBuyNewFund}
+            handleViewAccount={handleView}
+            sortedColumns={sortedColumns}
+          />
+        )}
         RenderEmptyState={() => (
           <EmptyTable
             hintText={hintText}

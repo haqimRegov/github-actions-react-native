@@ -73,7 +73,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   newSales,
   principalHolder,
   questionnaire,
-  resetRiskAssessment,
+  resetQuestionnaire,
   riskScore,
   setLoading,
   updateIsRiskUpdated,
@@ -89,6 +89,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
   const [prevRiskAssessment, setPrevRiskAssessment] = useState<IRiskAssessmentQuestions | undefined>(undefined);
   const [isEditConfirmed, setIsEditConfirmed] = useState<boolean>(false);
+  const [currentRiskScore, setCurrentRiskScore] = useState<IRiskScore>(riskScore);
 
   const setQ2 = (index: number) => addAssessmentQuestions({ questionTwo: index });
   const setQ3 = (index: number) => addAssessmentQuestions({ questionThree: index });
@@ -121,13 +122,15 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
         toastVisible: true,
       },
     });
+    addRiskScore(currentRiskScore);
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
     handleNextStep("RiskProfile");
   };
 
   const handleRetakeAssessment = () => {
     setConfirmModal(undefined);
-    resetRiskAssessment();
+    resetQuestionnaire();
+    // resetRiskAssessment();
   };
 
   const handlePageContinue = async () => {
@@ -157,7 +160,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
         const { data, error } = response;
         if (error === null && data !== null) {
           const riskAssessment = { ...data.result };
-          addRiskScore(riskAssessment);
+          setCurrentRiskScore(riskAssessment);
           setTimeout(() => {
             setConfirmModal("assessment");
           }, 300);
@@ -187,6 +190,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   };
 
   const handleCancelAssessment = () => {
+    resetQuestionnaire();
     handleNextStep("RiskProfile");
   };
 
@@ -200,10 +204,10 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   const modalTitleStyle: TextStyle = isAssessment ? {} : { width: sw432 };
 
   const riskProfile = [
-    { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: riskScore.appetite },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: riskScore.rangeOfReturn },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: riskScore.type },
-    { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: riskScore.profile },
+    { label: RISK_ASSESSMENT.PROFILE_APPETITE, title: currentRiskScore.appetite },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN, title: currentRiskScore.rangeOfReturn },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE, title: currentRiskScore.type },
+    { label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE, title: currentRiskScore.profile },
   ];
 
   useEffect(() => {

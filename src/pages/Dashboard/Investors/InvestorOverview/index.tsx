@@ -1,70 +1,36 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
-import { Pressable, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import { Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import {
-  CustomFlexSpacer,
-  CustomSpacer,
-  IconButton,
-  LabeledTitle,
-  NewPromptModal,
-  Pagination,
-  PromptModal,
-  Tab,
-} from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, Pagination, PromptModal, Tab } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
-import { DICTIONARY_COUNTRIES } from "../../../../data/dictionary";
-import { clientRegister } from "../../../../network-actions";
-import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
+import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
+import { checkClient, clientRegister } from "../../../../network-actions";
+import { ClientStoreProps, InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
-  alignFlexStart,
-  border,
   borderBottomGray2,
-  centerHV,
-  centerVertical,
-  circle,
-  colorBlue,
-  colorRed,
-  colorTransparent,
   colorWhite,
   flexChild,
   flexRow,
-  fs12RegBlue5,
-  fs16BoldBlue1,
-  fs16RegGray5,
-  fs24BoldGray6,
   fullHW,
-  fullWidth,
-  px,
-  py,
   sh140,
   sh16,
   sh24,
-  sh4,
   sh48,
-  sh72,
-  sh8,
   shadow12Black112,
-  shadow4Blue008,
-  sw1,
-  sw100,
-  sw2,
-  sw20,
-  sw212,
   sw24,
-  sw26,
-  sw8,
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { InvestorAccountsHeader } from "./Header";
+import { NewSalesPrompt } from "./NewSalesPrompt";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
-interface InvestorOverviewProps extends InvestorsStoreProps {
+interface InvestorOverviewProps extends InvestorsStoreProps, ClientStoreProps {
   activeTab: InvestorsTabType;
   handleRoute: (route: DashboardPageType) => void;
   isLogout: boolean;
@@ -72,7 +38,19 @@ interface InvestorOverviewProps extends InvestorsStoreProps {
   setScreen: (route: InvestorsPageType) => void;
 }
 
+const initialJointInfo = {
+  name: "",
+  country: "",
+  dateOfBirth: "",
+  id: "",
+  idType: DICTIONARY_ID_TYPE[0],
+  otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+};
+
 export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
+  addAccountType,
+  addRiskInfo,
+  addRiskScore,
   addClientDetails,
   addPersonalInfo,
   client,
@@ -80,22 +58,30 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   newSales,
   personalInfo,
   resetClientDetails,
+  riskAssessment,
+  updateClient,
   updateCurrentAccount,
   updateShowOpenAccount,
   updateNewSales,
   ...dashboardProps
 }: InvestorOverviewProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-
+  const [newSalesLoading, setNewSalesLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingNewSales, setLoadingNewSales] = useState<boolean>(false);
+  const [prompt, setPrompt] = useState<boolean>(false);
   const [accountType, setAccountType] = useState<number>(-1);
-  const [newSalesModal, setNewSalesModal] = useState<boolean>(false);
   const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
   const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
+  const [registered, setRegistered] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [inputError1, setInputError1] = useState<string | undefined>(undefined);
+  const { principalHolder, jointHolder } = client.details!;
+
+  const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
+  const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
 
   const modalData: LabeledTitleProps[] = [
     {
@@ -139,88 +125,188 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const handleNewSalesPrompt = () => {
-    setNewSalesModal(true);
+    setPrompt(true);
   };
 
-  const handleNewSalesPromptCancel = () => {
-    setNewSalesModal(false);
-    if (accountType !== -1) {
-      setAccountType(-1);
-    }
-  };
-
-  const handleClientRegister = async () => {
-    // TODO joint integration
-    if (investorData !== undefined) {
-      setLoadingNewSales(true);
-      const principalDob =
-        investorData.dateOfBirth && investorData.idType !== "NRIC"
-          ? { dateOfBirth: moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
-          : {};
-      const request: IClientRegisterRequest = {
-        accountType: accountType === 0 ? "Individual" : "Joint",
-        isEtb: true,
-        isNewFundPurchased: false,
-        principalHolder: {
-          ...principalDob,
-          id: investorData.idNumber,
-          idType: investorData.idType,
-          name: investorData.name!,
-        },
-      };
-      const clientRegisterResponse: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
-      setLoadingNewSales(false);
-      if (clientRegisterResponse !== undefined) {
-        const { data, error } = clientRegisterResponse;
-        if (error === null && data !== null) {
-          const riskInfo = data.result.riskInfo !== undefined && data.result.riskInfo !== null ? data.result.riskInfo : undefined;
-          // TODO add jointClientId
-          updateNewSales({ ...newSales, investorProfile: { principalClientId: investorData.clientId }, riskInfo: riskInfo });
-          addClientDetails({
-            ...client.details,
+  const handleClientRegister = async (req?: IClientRegisterRequest) => {
+    setNewSalesLoading(true);
+    const principalDob =
+      investorData?.dateOfBirth && investorData.idType !== "NRIC"
+        ? { dateOfBirth: moment(investorData?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+        : {};
+    const jointDob =
+      jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+        ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+        : {};
+    const jointInfo =
+      accountType === 0
+        ? undefined
+        : {
+            ...jointDob,
+            id: jointHolder?.id!,
+            idType: jointIdType,
+            name: jointHolder?.name!,
+          };
+    const request: IClientRegisterRequest =
+      req !== undefined
+        ? req
+        : {
+            accountType: accountType === 0 ? "Individual" : "Joint",
+            isEtb: true,
+            isNewFundPurchased: false,
             principalHolder: {
-              ...client.details!.principalHolder,
-              dateOfBirth: investorData.dateOfBirth,
-              clientId: data.result.principalHolder.clientId,
-              id: investorData.idNumber,
-              name: investorData.name,
+              ...principalDob,
+              id: investorData?.idNumber!,
+              idType: investorData!.idType,
+              name: investorData?.name!,
             },
-            initId: `${data.result.initId}`,
-            accountHolder: "Principal",
+            jointHolder: jointInfo,
+          };
+    const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
+    setNewSalesLoading(false);
+    if (clientResponse !== undefined) {
+      const { data, error } = clientResponse;
+      if (error === null && data !== null) {
+        let riskInfo: IRiskProfile | undefined;
+        if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
+          riskInfo = data.result.riskInfo;
+          addRiskScore({
+            ...riskAssessment,
+            appetite: data.result.riskInfo.appetite,
+            rangeOfReturn: data.result.riskInfo.expectedRange,
+            profile: data.result.riskInfo.profile,
+            type: data.result.riskInfo.type,
+            fundSuggestion: "",
+            netWorth: "",
           });
-          addPersonalInfo({
-            ...personalInfo,
-            principal: {
-              ...personalInfo.principal,
-              contactDetails: {
-                ...personalInfo.principal?.contactDetails,
-                emailAddress: investorData.email,
-              },
-              personalDetails: {
-                ...personalInfo.principal?.personalDetails,
-                dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-                expirationDate: undefined,
-                idNumber: data.result.principalHolder.id,
-                idType: data.result.principalHolder.idType,
-                name: data.result.principalHolder.name,
-                nationality: data.result.principalHolder.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
-              },
+        }
+        updateNewSales({ ...newSales, investorProfile: { principalClientId: investorData!.clientId }, riskInfo: riskInfo });
+        const resetJointInfo =
+          accountType === 0 &&
+          (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
+        const moreJointInfo =
+          data.result.jointHolder !== undefined && data.result.jointHolder !== null
+            ? {
+                dateOfBirth: data.result.jointHolder.dateOfBirth,
+                clientId: data.result.jointHolder.clientId,
+              }
+            : {};
+        addClientDetails({
+          ...client.details,
+          principalHolder: {
+            ...client.details!.principalHolder,
+            dateOfBirth: investorData!.dateOfBirth,
+            clientId: data.result.principalHolder.clientId,
+            id: investorData!.idNumber,
+            name: investorData!.name,
+          },
+          jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+          initId: data.result.initId.toString(),
+          accountHolder: accountType === 0 ? "Principal" : "Joint",
+        });
+        addAccountType(accountType === 0 ? "Individual" : "Joint");
+        const updatedJointInfo: IHolderInfoState =
+          accountType === 0
+            ? { ...personalInfo.joint }
+            : {
+                ...personalInfo.joint,
+                contactDetails: {
+                  ...personalInfo.joint?.contactDetails,
+                  emailAddress: investorData!.email,
+                },
+                personalDetails: {
+                  ...personalInfo.joint?.personalDetails,
+                  dateOfBirth: moment(data.result.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+                  idNumber: data.result.jointHolder!.id,
+                  name: data.result.jointHolder!.name,
+                },
+              };
+        addPersonalInfo({
+          ...personalInfo,
+          principal: {
+            ...personalInfo.principal,
+            contactDetails: {
+              ...personalInfo.principal?.contactDetails,
+              emailAddress: investorData!.email,
             },
-          });
+            personalDetails: {
+              ...personalInfo.principal?.personalDetails,
+              dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+              idNumber: data.result.principalHolder.id,
+              name: data.result.principalHolder.name,
+            },
+          },
+          joint: updatedJointInfo,
+        });
 
-          setNewSalesModal(false);
+        if (accountType === 0) {
+          setPrompt(false);
           navigation.navigate("NewSales");
+        } else {
+          setRegistered(true);
         }
       }
     }
   };
 
-  const handleNewSales = () => {
-    if (accountType === 0) {
-      return handleClientRegister();
+  const handleCheckClient = async (): Promise<boolean | string> => {
+    if (newSalesLoading === false) {
+      setNewSalesLoading(true);
+      const request: IEtbCheckRequest = {
+        country: jointHolder?.country,
+        dateOfBirth:
+          jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+            ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+            : "",
+        id: jointHolder?.id,
+        idType: jointIdType,
+        name: jointHolder?.name?.trim(),
+      };
+      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      if (clientCheck !== undefined) {
+        const { data, error } = clientCheck;
+        if (error === null && data !== null) {
+          setErrorMessage(undefined);
+          setInputError1(undefined);
+          if (data.result.message === "NTB") {
+            // TODO handle NTB flow
+            // return setClientType("NTB");
+            setNewSalesLoading(false);
+            Alert.alert("NTB Client");
+          }
+          if (data.result.message === "ETB") {
+            if (data.result.forceUpdate === false) {
+              updateClient({
+                ...client,
+                accountList: data.result.accounts!,
+                details: {
+                  ...client.details,
+                  jointHolder: {
+                    ...client.details?.jointHolder,
+                    name: jointHolder!.name!.trim(),
+                  },
+                },
+              });
+              return true;
+            }
+            // if (data.result.forceUpdate === true) {
+            // BE is returning forceUpdate true even if the investor already finished it (supposed to be bug)
+            // TODO handle redirection to InvestorOverview even if forceUpdate is false
+            setPrompt(false);
+            setTimeout(() => {
+              setForceUpdatePrompt(true);
+            }, 400);
+            return false;
+            // }
+          }
+        }
+        if (error !== null) {
+          return error.message;
+        }
+      }
+      return false;
     }
-    setAccountType(-1);
-    return setNewSalesModal(false);
+    return false;
   };
 
   const handleForceUpdate = () => {
@@ -230,11 +316,11 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         ...client.details,
         principalHolder: {
           ...client.details!.principalHolder,
-          dateOfBirth: investorData.dateOfBirth,
-          clientId: investorData.clientId,
-          id: investorData.idNumber,
+          dateOfBirth: accountType === 0 ? investorData.dateOfBirth : jointHolder?.dateOfBirth,
+          clientId: accountType === 0 ? investorData.clientId : jointHolder?.clientId,
+          id: accountType === 0 ? investorData.idNumber : jointHolder?.id,
         },
-        initId: investorData.initId,
+        initId: accountType === 0 ? investorData.initId : undefined,
         accountHolder: investorData.accountHolder,
       });
       addPersonalInfo({
@@ -243,15 +329,19 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           ...personalInfo.principal,
           addressInformation: {
             ...personalInfo.principal?.addressInformation,
-            mailingAddress: investorData.address,
+            mailingAddress: accountType === 0 ? investorData.address : undefined,
           },
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
-            dateOfBirth: moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-            name: investorData.name,
+            dateOfBirth:
+              accountType === 0
+                ? moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
+                : moment(jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+            name: accountType === 0 ? investorData.name : jointHolder?.name,
           },
         },
       });
+      setAccountType(0);
       navigation.navigate("ForceUpdate");
     }
   };
@@ -266,6 +356,32 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       updateCurrentAccount({ accountNumber: undefined, clientId: investorData.clientId });
       dashboardProps.setScreen("InvestorProfile");
     }
+  };
+
+  const handleBuyNewFund = async (item: IInvestorAccountsData) => {
+    const jointInfo =
+      item.jointName !== null
+        ? {
+            dateOfBirth: item.dateOfBirth,
+            clientId: item.clientId,
+            id: item.idNumber,
+            name: item.name,
+            // clientid
+          }
+        : {};
+    const principalInfo: IClientRegisterInfo = {
+      // clientId: item.clientId,
+      id: item.jointIdNumber,
+      name: item.jointName,
+    };
+    const req: IClientRegisterRequest = {
+      accountType: item.jointName === null ? "Individual" : "Joint",
+      isEtb: true,
+      isNewFundPurchased: true,
+      principalHolder: principalInfo,
+      jointHolder: jointInfo,
+    };
+    await handleClientRegister(req);
   };
 
   const etbCheckInvestor: IInvestorData =
@@ -298,7 +414,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     sort,
   };
 
-  const content: JSX.Element = <AccountListing handleViewAccount={handleViewAccount} {...tabProps} />;
+  const content: JSX.Element = <AccountListing handleBuyNewFund={handleBuyNewFund} handleViewAccount={handleViewAccount} {...tabProps} />;
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -372,66 +488,24 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
         visible={forceUpdatePrompt}
       />
-      <NewPromptModal
-        contentStyle={alignFlexStart}
-        primary={{
-          disabled: accountType === -1,
-          loading: loadingNewSales,
-          onPress: handleNewSales,
-          buttonStyle: { width: sw212 },
-          text: INVESTOR_ACCOUNTS.BUTTON_GET_STARTED,
-        }}
-        secondary={{ onPress: handleNewSalesPromptCancel, buttonStyle: { width: sw212 }, text: INVESTOR_ACCOUNTS.BUTTON_CANCEL }}
-        spaceToTitle={sh4}
-        subtitle={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_SUBTITLE}
-        subtitleStyle={fs16RegGray5}
-        title={INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_TITLE}
-        titleStyle={fs24BoldGray6}
-        visible={newSalesModal}>
-        <View style={fullWidth}>
-          <View>
-            <CustomSpacer space={sh8} />
-            {modalData.map((eachCard: LabeledTitleProps, index: number) => {
-              const { label, title } = eachCard;
-              const handlePress = () => {
-                setAccountType(index);
-              };
-              const containerStyle: ViewStyle = {
-                ...centerHV,
-                ...border(accountType !== undefined && accountType === index ? colorBlue._1 : colorWhite._1, sw2, sw8),
-                ...px(sw24),
-                ...py(sh16),
-                backgroundColor: accountType !== undefined && accountType === index ? colorBlue._3 : colorWhite._1,
-                height: sh72,
-                ...shadow4Blue008,
-              };
-              const iconStyle: ViewStyle = {
-                ...circle(sw26, colorTransparent),
-                ...border(accountType !== undefined && accountType === index ? colorRed._1 : colorBlue._1, sw1, sw100),
-                ...centerHV,
-                backgroundColor: accountType !== undefined && accountType === index ? colorRed._1 : colorTransparent,
-              };
-
-              const iconColor = accountType !== undefined && accountType === index ? colorWhite._1 : colorBlue._1;
-
-              return (
-                <Fragment key={index}>
-                  <CustomSpacer space={sh16} />
-                  <Pressable onPress={handlePress} style={containerStyle}>
-                    <View style={{ ...flexRow, ...centerVertical }}>
-                      <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
-                      <CustomFlexSpacer />
-                      <View style={iconStyle}>
-                        <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
-                      </View>
-                    </View>
-                  </Pressable>
-                </Fragment>
-              );
-            })}
-          </View>
-        </View>
-      </NewPromptModal>
+      <NewSalesPrompt
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        inputError1={inputError1}
+        setInputError1={setInputError1}
+        fetching={newSalesLoading}
+        handleClientRegister={handleClientRegister}
+        investorData={investorData!}
+        handleCheckClient={handleCheckClient}
+        modalData={modalData}
+        navigation={navigation}
+        newAccountType={accountType}
+        registered={registered}
+        setAccountType={setAccountType}
+        setRegistered={setRegistered}
+        setVisible={setPrompt}
+        visible={prompt}
+      />
     </Fragment>
   );
 };

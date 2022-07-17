@@ -20,7 +20,7 @@ import {
   px,
   rowCenterVertical,
   sh24,
-  sh56,
+  sh4,
   sw1,
   sw12,
   sw24,
@@ -286,10 +286,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     handleNextStep("ProductsList");
   };
 
-  const checkJointIdType = principalIdType === "Other" ? `${principalClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : principalIdType;
+  const checkJointIdType = principalIdType === "Other" ? `${jointClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : jointIdType;
   const jointCardHeader =
     accountType === "Joint"
-      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER} ${checkJointIdType}`
+      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER} ${checkJointIdType}`
       : `${IDENTITY_CONFIRMATION.LABEL_UPLOAD_YOUR} ${checkJointIdType}`;
   const checkPrincipalIdType = principalIdType === "Other" ? `${principalClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : principalIdType;
   const principalCardHeader =
@@ -312,10 +312,13 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           <CustomSpacer space={sh24} />
           {accountType === "Joint" ? (
             <Fragment>
-              <View style={{ ...flexRow, ...centerVertical, borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
-                <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER}</Text>
-                <CustomSpacer isHorizontal={true} space={sw12} />
-                <Text style={fs12BoldBlack2}>{principalHolder?.name}</Text>
+              <View style={{ borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
+                <View style={{ ...flexRow, ...centerVertical }}>
+                  <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER}</Text>
+                  <CustomSpacer isHorizontal={true} space={sw12} />
+                  <Text style={fs12BoldBlack2}>{principalHolder?.name}</Text>
+                </View>
+                <CustomSpacer space={sh4} />
               </View>
               <CustomSpacer space={sh24} />
             </Fragment>
@@ -355,14 +358,17 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         </View>
         {accountType === "Individual" ? null : (
           <Fragment>
-            <CustomSpacer space={sh56} />
+            <CustomSpacer space={sh24} />
             <View style={px(sw24)}>
               {accountType === "Joint" ? (
                 <Fragment>
-                  <View style={{ ...flexRow, ...centerVertical, borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
-                    <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw12} />
-                    <Text style={fs12BoldBlack2}>{jointHolder?.name}</Text>
+                  <View style={{ borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
+                    <View style={{ ...flexRow, ...centerVertical }}>
+                      <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw12} />
+                      <Text style={fs12BoldBlack2}>{jointHolder?.name}</Text>
+                    </View>
+                    <CustomSpacer space={sh4} />
                   </View>
                   <CustomSpacer space={sh24} />
                 </Fragment>

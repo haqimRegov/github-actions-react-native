@@ -72,14 +72,21 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   const { principalHolder, jointHolder } = details!;
   const { incomeDistribution, principal, signatory } = personalInfo;
   const { bankSummary, epfDetails } = principal!;
+
+  const checkIdType = (data: IClientBasicInfo) => {
+    return data.idType === "Other" ? `${data.otherIdType} ${NEW_SALES_SUMMARY.LABEL_ID}` : data.idType;
+  };
   const accountDetails: LabeledTitleProps[] = [
     {
-      label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
+      label: accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_NAME : NEW_SALES_SUMMARY.LABEL_INVESTOR_NAME,
       title: principalHolder!.name,
       titleStyle: fsTransformNone,
     },
     {
-      label: `${RISK_ASSESSMENT.NEW_SALES_INVESTOR} ${principalHolder!.idType}`,
+      label:
+        accountType === "Joint"
+          ? `${NEW_SALES_SUMMARY.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
+          : `${NEW_SALES_SUMMARY.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
@@ -87,12 +94,12 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   if (client.accountType === "Joint") {
     accountDetails.push(
       {
-        label: RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
+        label: NEW_SALES_SUMMARY.LABEL_JOINT_NAME,
         title: jointHolder!.name,
         titleStyle: fsTransformNone,
       },
       {
-        label: `${RISK_ASSESSMENT.NEW_SALES_INVESTOR} ${jointHolder!.idType}`,
+        label: `${NEW_SALES_SUMMARY.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
         title: jointHolder!.id,
         titleStyle: fsTransformNone,
       },
@@ -159,15 +166,17 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
     },
-    {
+  ];
+  if (personalInfo.joint?.personalDetails?.idType !== "Passport") {
+    idVerificationJoint.push({
       label: handleIdLabel(jointHolder!.idType!, "back", undefined),
       onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.secondPage),
       title: personalInfo.joint?.personalDetails?.id?.secondPage?.name,
       titleIcon: "file",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
-    },
-  ];
+    });
+  }
 
   const localBankDetails: LabeledTitleProps[][] = [];
   if (bankSummary !== null && bankSummary !== undefined && bankSummary.localBank !== null) {

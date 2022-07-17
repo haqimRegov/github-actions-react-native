@@ -47,7 +47,7 @@ export const SummaryColorCard: FunctionComponent<SummaryColorCardProps> = ({
         {...summaryColorCardStyleProps}
         content={
           <View>
-            <TextCard data={data} itemStyle={{ width: sw328 }} />
+            <TextCard data={data} itemStyle={{ width: sw328 }} showEmptyDash={true} />
             {section !== undefined && section.data.length > 0 ? (
               <Fragment>
                 {section.data.map((textCardData: LabeledTitleProps[], index: number) => {
@@ -64,7 +64,7 @@ export const SummaryColorCard: FunctionComponent<SummaryColorCardProps> = ({
                         <CustomSpacer isHorizontal={true} space={sw24} />
                       </View>
                       <CustomSpacer space={sh12} />
-                      <TextCard data={textCardData} itemStyle={{ width: sw328 }} />
+                      <TextCard data={textCardData} itemStyle={{ width: sw328 }} showEmptyDash={true} />
                     </View>
                   );
                 })}

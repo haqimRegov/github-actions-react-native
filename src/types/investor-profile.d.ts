@@ -9,6 +9,7 @@ declare interface IAccountDetails {
 declare interface IRiskProfile {
   appetite: string;
   expectedRange: string;
+  hnwStatus: string;
   profile: string;
   type: string;
 }

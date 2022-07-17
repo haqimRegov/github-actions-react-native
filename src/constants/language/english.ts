@@ -138,6 +138,7 @@ export const english = {
       LABEL_FAX_NUMBER: "Fax Number",
       LABEL_HOME_NUMBER: "Home Number",
       LABEL_JOINT: "Joint Account Holder",
+      LABEL_HEADER_JOINT_RELATIONSHIP: "What is your relationship with the joint account holder?",
       LABEL_MOBILE_NUMBER: "Mobile Number",
       LABEL_MONTHLY_INCOME: "Monthly Household Income (MYR)",
       LABEL_OFFICE_NUMBER: "Office Number",

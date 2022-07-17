@@ -202,4 +202,4 @@ declare interface IStructuredData {
   showJointToggle?: boolean;
 }
 
-declare type OrderSummaryTabType = "order" | "document" | "profile" | "tracking";
+declare type OrderSummaryTabType = "order" | "document" | "account" | "tracking";

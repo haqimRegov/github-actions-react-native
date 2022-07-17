@@ -78,6 +78,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [registered, setRegistered] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
+  const jointClientId = useRef<string>("");
   const { principalHolder, jointHolder } = client.details!;
 
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
@@ -177,10 +178,14 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             profile: data.result.riskInfo.profile,
             type: data.result.riskInfo.type,
             fundSuggestion: "",
-            netWorth: "",
+            netWorth: data.result.riskInfo.hnwStatus,
           });
         }
-        updateNewSales({ ...newSales, investorProfile: { principalClientId: investorData!.clientId }, riskInfo: riskInfo });
+        updateNewSales({
+          ...newSales,
+          investorProfile: { ...newSales.investorProfile, principalClientId: investorData!.clientId, jointClientId: jointClientId.current },
+          riskInfo: riskInfo,
+        });
         const resetJointInfo =
           accountType === 0 &&
           (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
@@ -238,7 +243,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           },
           joint: updatedJointInfo,
         });
-
+        jointClientId.current = "";
         if (accountType === 0) {
           setPrompt(false);
           navigation.navigate("NewSales");
@@ -276,6 +281,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           }
           if (data.result.message === "ETB") {
             if (data.result.forceUpdate === false) {
+              jointClientId.current = data.result.clientId!;
               updateClient({
                 ...client,
                 accountList: data.result.accounts!,
@@ -371,8 +377,8 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         : {};
     const principalInfo: IClientRegisterInfo = {
       // clientId: item.clientId,
-      id: item.jointIdNumber,
-      name: item.jointName,
+      id: item.idNumber,
+      name: item.name,
     };
     const req: IClientRegisterRequest = {
       accountType: item.jointName === null ? "Individual" : "Joint",
@@ -381,7 +387,17 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       principalHolder: principalInfo,
       jointHolder: jointInfo,
     };
-    await handleClientRegister(req);
+    // let forceUpdateRequired = false;
+
+    // TODO Check for force update
+
+    // if (forceUpdateRequired === true) {
+    //   setTimeout(() => {
+    //     setForceUpdatePrompt(true);
+    //   }, 400);
+    // } else {
+    //   await handleClientRegister(req);
+    // }
   };
 
   const etbCheckInvestor: IInvestorData =

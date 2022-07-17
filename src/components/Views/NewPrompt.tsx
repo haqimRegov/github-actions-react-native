@@ -75,13 +75,14 @@ export const NewPrompt: FunctionComponent<NewPromptProps> = ({
 }: NewPromptProps) => {
   const { buttonContainerStyle, primary, secondary } = actionButtonProps;
 
-  const propsCache = useRef<IPropsCache>({
-    illustration: illustration,
-    primaryButton: primary !== undefined ? primary.text : "",
-    secondaryButton: secondary !== undefined ? secondary.text : "",
-    subtitle: subtitle,
-    title: title,
-  });
+  // const propsCache = useRef<IPropsCache>({
+  //   illustration: illustration,
+  //   primaryButton: primary !== undefined ? primary.text : "",
+  //   secondaryButton: secondary !== undefined ? secondary.text : "",
+  //   subtitle: subtitle,
+  //   title: title,
+  // });
+  // console.log("props", propsCache, primary);
 
   const modalContainer: ViewStyle = {
     backgroundColor: colorBlue._2,
@@ -119,21 +120,19 @@ export const NewPrompt: FunctionComponent<NewPromptProps> = ({
       ) : null}
       <View>
         <CustomSpacer space={defaultTopSpace} />
-        {illustration !== undefined && propsCache.current !== null && propsCache.current.illustration !== undefined ? (
+        {illustration !== undefined ? (
           <View style={centerHV}>
-            <Image source={propsCache.current.illustration} style={defaultIllustrationStyle} />
+            <Image source={illustration} style={defaultIllustrationStyle} />
             <CustomSpacer space={spaceToIllustration || sh24} />
           </View>
         ) : null}
       </View>
       <View style={{ ...centerVertical, ...px(sw48), ...contentStyle }}>
-        {propsCache.current !== null && propsCache.current.title !== undefined ? (
-          <Text style={{ ...fs24BoldBlue1, ...fsAlignCenter, ...titleStyle }}>{propsCache.current.title}</Text>
-        ) : null}
-        {propsCache.current !== null && propsCache.current.subtitle !== undefined ? (
+        {title !== undefined ? <Text style={{ ...fs24BoldBlue1, ...fsAlignCenter, ...titleStyle }}>{title}</Text> : null}
+        {subtitle !== undefined ? (
           <Fragment>
             <CustomSpacer space={spaceToTitle || sh16} />
-            <Text style={{ ...fs10RegGray6, ...fsAlignCenter, ...subtitleStyle }}>{propsCache.current.subtitle}</Text>
+            <Text style={{ ...fs10RegGray6, ...fsAlignCenter, ...subtitleStyle }}>{subtitle}</Text>
           </Fragment>
         ) : null}
         {children}
@@ -142,14 +141,8 @@ export const NewPrompt: FunctionComponent<NewPromptProps> = ({
       {primary !== undefined || secondary !== undefined ? (
         <NewActionButtons
           buttonContainerStyle={buttonContainer}
-          primary={
-            primary !== undefined && propsCache.current.primaryButton ? { ...primary, text: propsCache.current.primaryButton } : undefined
-          }
-          secondary={
-            secondary !== undefined && propsCache.current.secondaryButton
-              ? { ...secondary, text: propsCache.current.secondaryButton }
-              : undefined
-          }
+          primary={primary !== undefined ? { ...primary, text: primary.text } : undefined}
+          secondary={secondary !== undefined ? { ...secondary, text: secondary.text } : undefined}
         />
       ) : null}
     </View>

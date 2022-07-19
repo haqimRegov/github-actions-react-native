@@ -37,6 +37,7 @@ import {
   sh8,
   sw05,
   sw1,
+  sw120,
   sw16,
   sw20,
   sw24,
@@ -64,11 +65,13 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
 }: IRiskSummaryProps) => {
   const { jointHolder, principalHolder } = details!;
   const { accountType } = client;
-  const { disabledSteps, finishedSteps } = newSales;
+  const { accountDetails, disabledSteps, finishedSteps } = newSales;
+  const { accountNo, fundType, isEpf } = accountDetails;
 
   const riskProfile: IRiskProfile = {
-    expectedRange: riskScore.rangeOfReturn,
     appetite: riskScore.appetite,
+    expectedRange: riskScore.rangeOfReturn,
+    hnwStatus: riskScore.netWorth,
     profile: riskScore.profile,
     type: riskScore.type,
   };
@@ -76,7 +79,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   const checkIdType = (data: IClientBasicInfo) => {
     return data.idType === "Other" ? `${data.otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : data.idType;
   };
-  const accountDetails: LabeledTitleProps[] = [
+  const accountDetailsArray: LabeledTitleProps[] = [
     {
       label: accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_PRINCIPAL_NAME : RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
       title: principalHolder!.name,
@@ -92,14 +95,14 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     },
   ];
   if (riskScore.appetite !== "") {
-    accountDetails.push({
+    accountDetailsArray.push({
       label: RISK_ASSESSMENT.NEW_SALES_RISK_CATEGORY,
       title: riskScore.appetite,
       titleStyle: fsTransformNone,
     });
   }
   if (client.accountType === "Joint") {
-    accountDetails.push(
+    accountDetailsArray.push(
       {
         label: RISK_ASSESSMENT.LABEL_JOINT_NAME,
         title: jointHolder!.name,
@@ -167,7 +170,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   const buttonStyle: ViewStyle = {
     ...centerHorizontal,
     ...flexRow,
-    width: 120,
+    width: sw120,
     ...px(sw16),
     ...py(sh8),
     ...border(colorBlue._1, sw1, sw24),
@@ -175,11 +178,13 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     height: sh32,
   };
 
-  const tags = newSales.accountDetails.accountNo !== "" ? ["UT", "Cash"] : [];
+  const checkEpf = isEpf === true ? "EPF" : "Cash";
+  const tags = accountNo !== "" ? [fundType.toUpperCase(), checkEpf] : [];
   const checkJointHeader = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_2;
-  const header = newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : checkJointHeader;
+  const header = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : checkJointHeader;
   const checkJointSubtitle = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
-  const subtitle = newSales.accountDetails.accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : checkJointSubtitle;
+  const subtitle = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : checkJointSubtitle;
+  const checkAccountNo = accountNo !== "" ? accountNo : "-";
 
   return (
     <View>
@@ -188,13 +193,13 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
         <View style={px(sw24)}>
           <ColorCard
             containerStyle={noBorder}
-            content={<TextCard data={accountDetails} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw240 }} />}
+            content={<TextCard data={accountDetailsArray} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw240 }} />}
             contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
             customHeader={
               <View style={{ ...rowCenterVertical, ...px(sw24) }}>
                 <Text style={fs10RegGray6}>{accountTitle}</Text>
                 <CustomSpacer isHorizontal={true} space={sw16} />
-                <Text style={fs12BoldBlack2}>-</Text>
+                <Text style={fs12BoldBlack2}>{checkAccountNo}</Text>
                 <CustomFlexSpacer />
                 {tags.length > 0
                   ? tags.map((eachTag: string, tagIndex: number) => {

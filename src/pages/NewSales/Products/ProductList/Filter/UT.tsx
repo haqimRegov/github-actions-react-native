@@ -155,7 +155,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
         <View style={{ width: sw360 }}>
           <SingleSelectPills
             direction="row"
-            disabled={accountNo !== ""}
+            disabled={isEpf === true}
             disabledValues={disabledEpfApproved}
             header={PRODUCT_FILTER.LABEL_EPF}
             labels={FILTER_EPF_LABEL}

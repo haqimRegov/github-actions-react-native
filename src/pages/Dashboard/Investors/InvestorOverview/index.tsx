@@ -133,10 +133,10 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     setPrompt(true);
   };
 
-  const handleClientRegister = async (req?: IClientRegisterRequest, item?: IInvestorAccountsData) => {
+  const handleClientRegister = async (req?: IClientRegisterRequest, item?: IInvestorAccountsData): Promise<undefined | boolean> => {
     if (newSalesLoading === false || fullScreenLoader.current === true) {
       setNewSalesLoading(true);
-      fullScreenLoader.current = fullScreenLoader.current === false && req === undefined ? true : false;
+      fullScreenLoader.current = fullScreenLoader.current === false && req === undefined;
       const principalDob =
         investorData?.dateOfBirth && investorData.idType !== "NRIC"
           ? { dateOfBirth: moment(investorData?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
@@ -264,16 +264,21 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           jointClientId.current = "";
           if (accountType !== 1 && req === undefined) {
             setPrompt(false);
-            return navigation.navigate("NewSales");
-          } else if (accountType === 1 && req === undefined) {
+            navigation.navigate("NewSales");
+            return undefined;
+          }
+          if (accountType === 1 && req === undefined) {
             setRegistered(true);
-            return;
-          } else if (req !== undefined) {
+            return undefined;
+          }
+          if (req !== undefined) {
             return true;
           }
         }
+        return undefined;
       }
     }
+    return undefined;
   };
 
   const handleCheckClient = async (): Promise<boolean | string> => {
@@ -418,7 +423,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       principalHolder: principalInfo,
       jointHolder: jointInfo,
     };
-    let forceUpdateRequired = false;
+    const forceUpdateRequired = false;
 
     // TODO Check for force update
 

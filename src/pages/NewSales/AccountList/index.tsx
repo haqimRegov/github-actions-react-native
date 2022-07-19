@@ -142,15 +142,13 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               ...newSales.accountDetails,
               accountNo: eachAccount.accountNo,
               fundType: eachAccount.fundType.toLowerCase() as ProductType,
-              isEpf: eachAccount.paymentMethod.toLowerCase() === "epf" ? true : false,
+              isEpf: eachAccount.paymentMethod.toLowerCase() === "epf",
               isRecurring: eachAccount.isRecurring,
             },
           });
           handleNextStep("RiskProfile");
-        } else {
-          if (error !== undefined) {
-            Alert.alert(error?.message);
-          }
+        } else if (error !== undefined) {
+          Alert.alert(error?.message);
         }
       }
     }

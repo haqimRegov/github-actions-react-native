@@ -46,6 +46,7 @@ export const fullWidth = { width: "100%" } as const;
 export const fullHW = { ...fullHeight, ...fullWidth } as const;
 export const autoWidth = { width: "auto" } as const;
 export const autoHeight = { height: "auto" } as const;
+export const borderBottomBlue2 = { borderBottomWidth: 1, borderBottomColor: colorBlue._2 } as const;
 export const borderBottomBlue3 = { borderBottomWidth: 1, borderBottomColor: colorBlue._3 } as const;
 export const borderBottomBlue4 = { borderBottomWidth: 1, borderBottomColor: colorBlue._4 } as const;
 export const borderBottomBlue5 = { borderBottomWidth: 1, borderBottomColor: colorBlue._5 } as const;

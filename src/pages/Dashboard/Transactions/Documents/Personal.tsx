@@ -269,6 +269,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           <Fragment>
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
+                <CustomSpacer space={sh24} />
                 {documentList.joint && documentsPrincipal.length > 0 ? (
                   <AccountHeader
                     headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}

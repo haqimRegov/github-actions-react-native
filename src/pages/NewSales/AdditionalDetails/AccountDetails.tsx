@@ -60,8 +60,14 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
 
   useEffect(() => {
     if (fundsWithPayout.length === 0) {
-      setPersonalInfo({ signatory: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST });
+      return setPersonalInfo({
+        incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
+        signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW,
+      });
     }
+    return setPersonalInfo({
+      signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW,
+    });
   }, []);
 
   return (

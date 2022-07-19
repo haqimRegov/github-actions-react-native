@@ -149,8 +149,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
         setPromptModal(true);
         return false;
       default:
-        setPromptModal(true);
-        return false;
+        return true;
     }
   };
 

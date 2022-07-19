@@ -10,6 +10,7 @@ declare interface IAccountList {
 }
 declare interface IEtbCheckResult {
   accounts?: IAccountList[] | null;
+  clientId?: string;
   forceUpdate: boolean;
   highRisk: boolean;
   message: string;

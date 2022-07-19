@@ -309,7 +309,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                   <CustomSpacer isHorizontal space={sw3} />
                   <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_1_SUB}</Text>
                   <CustomSpacer isHorizontal space={sw3} />
-                  <Text style={fs10BoldGray6}>{personalInfo!.principal!.contactDetails!.emailAddress}</Text>
+                  <Text style={fs10BoldGray6}>{personalInfo!.joint!.contactDetails!.emailAddress}</Text>
                 </Fragment>
               ) : null}
             </View>

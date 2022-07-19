@@ -2,11 +2,11 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ColorCard, ContentPage, CustomSpacer } from "../../../components";
+import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
-import { ERROR } from "../../../data/dictionary";
+import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh24, sw24 } from "../../../styles";
+import { px, sh16, sh24, sw24 } from "../../../styles";
 import { isNotEmpty, isNumber } from "../../../utils";
 import { defaultContentProps } from "../Content";
 import { AccountDetails } from "./AccountDetails";
@@ -29,10 +29,11 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   updateNewSales,
 }: PersonalDetailsProps) => {
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
-  const { epfInvestment, epfShariah } = personalInfo;
+  const { epfInvestment, epfShariah, signatory, incomeDistribution } = personalInfo;
   const { disabledSteps, finishedSteps } = newSales;
-  const { bankSummary, epfDetails } = personalInfo.principal!;
+  const { bankSummary, epfDetails, personalDetails } = personalInfo.principal!;
   const { localBank, foreignBank } = bankSummary!;
+  const { otherRelationship, relationship } = personalDetails!;
   const inputEpfType = epfDetails!.epfAccountType!;
   const inputEpfNumber = epfDetails!.epfMemberNumber!;
 
@@ -127,6 +128,32 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     setEpfNumberValidation(checkEpfNumber);
   };
 
+  const handleRelationship = (value: string) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        personalDetails: {
+          ...personalInfo.principal?.personalDetails,
+          relationship: value,
+        },
+      },
+    });
+  };
+
+  const handleOtherRelationship = (otherRelationValue: string) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        personalDetails: {
+          ...personalInfo.principal?.personalDetails,
+          otherRelationship: otherRelationValue,
+        },
+      },
+    });
+  };
+
   // TODO change account name check to !== for both local and foreign
 
   const checkLocalBank = bankSummary!.localBank!.map(
@@ -179,13 +206,16 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     : [];
   const checkCurrencyRemaining = nonMyrCurrencies.filter((eachCurrency: string) => !selectedNonMyrCurrencies.includes(eachCurrency));
   const checkEpf = epfInvestment === true ? epfNumberValidation !== undefined || inputEpfNumber === "" || inputEpfType === "" : false;
+  const checkJoint = accountType === "Joint" ? relationship === "" || (relationship === "Others" && otherRelationship === "") : false;
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
   const continueDisabled =
     checkLocalBank.includes(false) === true ||
     checkForeignBank.includes(false) === true ||
     checkCurrencyRemaining.length !== 0 ||
-    checkEpf === true;
-
+    checkEpf === true ||
+    signatory === "" ||
+    incomeDistribution === "" ||
+    checkJoint;
   if (accountType === "Joint") {
     accountNames.push(
       { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
@@ -203,6 +233,32 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       subtitle={PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS}>
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
+        {accountType === "Joint" ? (
+          <Fragment>
+            <ColorCard
+              header={{ label: PERSONAL_DETAILS.LABEL_HEADER_JOINT_RELATIONSHIP }}
+              content={
+                <Fragment>
+                  <NewDropdown
+                    handleChange={handleRelationship}
+                    items={DICTIONARY_RELATIONSHIP}
+                    label={PERSONAL_DETAILS.LABEL_RELATIONSHIP}
+                    value={relationship!}
+                  />
+                  {relationship! === "Others" ? (
+                    <CustomTextInput
+                      label={PERSONAL_DETAILS.LABEL_RELATIONSHIP_OTHER}
+                      onChangeText={handleOtherRelationship}
+                      spaceToTop={sh16}
+                      value={otherRelationship}
+                    />
+                  ) : null}
+                </Fragment>
+              }
+            />
+            <CustomSpacer space={sh24} />
+          </Fragment>
+        ) : null}
         {epfInvestment === true ? (
           <Fragment>
             <ColorCard

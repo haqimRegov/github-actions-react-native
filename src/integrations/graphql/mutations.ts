@@ -24,18 +24,18 @@ const clientRegister = gql`
     clientRegisterV2(input: $input) {
       data {
         result {
-          initId
           message
+          initId
           principalHolder {
+            name
             clientId
             dateOfBirth
             id
-            name
           }
           jointHolder {
-            dateOfBirth
-            id
             name
+            id
+            dateOfBirth
             clientId
           }
           riskInfo {
@@ -43,6 +43,7 @@ const clientRegister = gql`
             expectedRange
             profile
             type
+            hnwStatus
           }
         }
       }

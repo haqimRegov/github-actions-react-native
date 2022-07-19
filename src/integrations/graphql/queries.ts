@@ -95,6 +95,7 @@ const etbCheck = gql`
           status
           highRisk
           forceUpdate
+          clientId
           accounts {
             name
             jointName
@@ -378,12 +379,21 @@ const investorDetailsDashboard = gql`
           idNumber
           idType
           accountHolder
+
           emailLastUpdated
           mobileNoLastUpdated
+          mobileNoLastUpdated
+          emailLastUpdated
           isForceUpdate
           investorDetails {
+            clientId
+            jointId
+            email
+            jointEmail
             idNumber
+            idType
             jointIdNumber
+            jointIdType
             name
             accountHolder
             dateOfBirth

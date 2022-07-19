@@ -12,6 +12,7 @@ export const ProductsMapStateToProps = (state: RootState) => ({
   accountDetails: state.newSales.accountDetails,
   accountType: state.client.accountType,
   amp: state.products.amp,
+  client: state.client,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
   global: state.global,

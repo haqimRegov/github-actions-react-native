@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, ContentPageProps } from "../../components";
@@ -41,7 +41,7 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     handleResetNewSales: handleResetNewSales,
   };
 
-  let content: JSX.Element;
+  let content: JSX.Element = <View />;
   const backToDashboardLabel = NEW_SALES.LABEL_BACK_NEW_SALES;
 
   switch (newProps.route) {
@@ -81,9 +81,8 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     case NEW_SALES_ROUTES.Payment:
       content = <Sample title="sample" {...newProps} />;
       break;
-
     default:
-      content = <Sample title="sample" {...newProps} />;
+      <View />;
       break;
   }
   return (

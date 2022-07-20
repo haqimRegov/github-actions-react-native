@@ -15,8 +15,7 @@ import {
 import { Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
-import { submitClientAccountTransactions } from "../../../network-actions/new-sales";
-import { getEtbAccountList } from "../../../network-actions/new-sales/etb-account-list";
+import { getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
 import { PersonalInfoStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import {
   alignFlexStart,
@@ -517,6 +516,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         handleCancel={handleCancelPrompt}
         handleContinue={handleConfirmPrompt}
         label={INVESTMENT.LABEL_DUPLICATE_PROMPT_TITLE}
+        labelContinue={INVESTMENT.BUTTON_CONFIRM}
         labelStyle={fs24BoldGray6}
         spaceToTitle={sh4}
         spaceToButton={sh40}

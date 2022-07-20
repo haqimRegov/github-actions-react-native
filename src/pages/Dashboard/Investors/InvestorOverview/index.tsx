@@ -27,7 +27,7 @@ import {
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
-import { InvestorAccountsHeader } from "./Header";
+import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
 import { NewSalesPrompt } from "./NewSalesPrompt";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
@@ -478,13 +478,12 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     borderBottomLeftRadius: sw24,
   };
 
-  const headerData = {
+  const headerData: IInvestorAccountHeaderProps = {
     email: investorData !== undefined ? investorData.email : undefined,
-    emailLastUpdated: investorData !== undefined ? investorData.emailLastUpdated : undefined,
+    emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
     handleNewSales: handleNewSalesPrompt,
     handleViewProfile: handleViewProfile,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
-    mobileNoLastUpdated: investorData !== undefined ? investorData.mobileNoLastUpdated : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
     setScreen: dashboardProps.setScreen,
   };

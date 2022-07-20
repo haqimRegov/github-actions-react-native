@@ -1,32 +1,37 @@
-import moment from "moment";
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
 import { Avatar, CustomFlexSpacer, CustomSpacer, IconButton, OutlineButton } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
   absolutePosition,
   border,
   centerHorizontal,
+  centerHV,
   centerVertical,
+  circle,
+  colorBlack,
   colorBlue,
+  colorGreen,
   colorTransparent,
   colorWhite,
   disabledOpacity4,
   flexRow,
-  fs10RegGray4,
-  fs16BoldBlue1,
+  fs16BoldBlack2,
   fs24BoldWhite1,
   fs32BoldBlue1,
   fullWidth,
   px,
   py,
   rowCenterVertical,
+  sh12,
   sh24,
   sh8,
   shadow12Black112,
   sw1,
+  sw10,
+  sw14,
   sw16,
   sw24,
   sw4,
@@ -37,23 +42,21 @@ import {
 import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
-interface IInvestorAccountHeaderProps {
+export interface IInvestorAccountHeaderProps {
   email?: string;
-  emailLastUpdated?: string;
+  emailVerified?: boolean;
   handleNewSales: () => void;
   handleViewProfile: () => void;
   mobileNo?: string;
-  mobileNoLastUpdated?: string;
   name?: string;
   setScreen: (route: InvestorsPageType) => void;
 }
 
 export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderProps> = ({
   email,
-  emailLastUpdated,
+  emailVerified,
   handleNewSales,
   mobileNo,
-  mobileNoLastUpdated,
   name,
   handleViewProfile,
 }: IInvestorAccountHeaderProps) => {
@@ -82,25 +85,12 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
           .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
           .join("")
       : "";
+
   const iconContainer: ViewStyle = {
     ...border(colorBlue._1, sw1, sw24),
     ...px(sw8),
     ...py(sh8),
   };
-  const prefixIconContainer: ViewStyle = {
-    ...centerHorizontal,
-    height: sh24,
-  };
-
-  const emailDate =
-    emailLastUpdated !== undefined
-      ? `${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(emailLastUpdated, "x").format(DEFAULT_DATE_FORMAT)}`
-      : "";
-
-  const mobileDate =
-    mobileNoLastUpdated !== undefined
-      ? `${DASHBOARD_HOME.LABEL_LAST_UPDATED} ${moment(mobileNoLastUpdated, "x").format(DEFAULT_DATE_FORMAT)}`
-      : "";
 
   return (
     <View style={pageContainer}>
@@ -112,29 +102,23 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={centerHorizontal}>
               <Text style={fs32BoldBlue1}>{name}</Text>
-              <CustomSpacer space={sh8} />
+              <CustomSpacer space={sh12} />
               <View style={rowCenterVertical}>
-                <View style={flexRow}>
-                  <View style={prefixIconContainer}>
-                    <IcoMoon color={colorBlue._1} name="phone" size={sw16} />
-                  </View>
+                <Fragment>
+                  <IcoMoon color={colorBlack._2} name="phone" size={sw16} />
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <View>
-                    <Text style={fs16BoldBlue1}>{mobileNo}</Text>
-                    <Text style={fs10RegGray4}>{mobileDate}</Text>
-                  </View>
-                </View>
+                  <Text style={fs16BoldBlack2}>{mobileNo}</Text>
+                </Fragment>
                 <CustomSpacer isHorizontal={true} space={sw40} />
-                <View style={flexRow}>
-                  <View style={prefixIconContainer}>
-                    <IcoMoon color={colorBlue._1} name="mail" size={sw16} />
-                  </View>
+                <Fragment>
+                  <IcoMoon color={colorBlack._2} name="mail" size={sw16} />
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  <View>
-                    <Text style={fs16BoldBlue1}>{email}</Text>
-                    <Text style={fs10RegGray4}>{emailDate}</Text>
-                  </View>
-                </View>
+                  <Text style={fs16BoldBlack2}>{email}</Text>
+                  <CustomSpacer isHorizontal={true} space={sw4} />
+                  {emailVerified === true ? (
+                    <IconButton color={colorWhite._1} name="success" size={sw10} style={{ ...centerHV, ...circle(sw14, colorGreen._1) }} />
+                  ) : null}
+                </Fragment>
               </View>
             </View>
             <CustomFlexSpacer />

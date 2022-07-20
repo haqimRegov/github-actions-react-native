@@ -25,11 +25,19 @@ declare interface IInvestorAccountsData {
   address: IAddressState;
   clientId: string;
   dateOfBirth: string;
-  idNumber: string;
-  jointIdNumber: string;
+  email: string;
+  fundType: string;
   initId: string;
+  idNumber: string;
+  idType: string;
+  isRecurring: boolean;
+  jointEmail: string;
+  jointId: string;
+  jointIdNumber: string;
+  jointIdType: string;
   jointName: string;
   name: string;
+  paymentMethod: string;
   riskTolerance: string;
 }
 

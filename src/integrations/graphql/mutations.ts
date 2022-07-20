@@ -495,6 +495,54 @@ const submitClientAccount = gql`
   }
 `;
 
+const submitClientAccountTransactions = gql`
+  mutation submitClientAccountTransaction($input: SubmitClientAccountTransactionsInput) {
+    submitClientAccountTransactions(input: $input) {
+      data {
+        result {
+          grandTotal {
+            currency
+            amount
+          }
+          orders {
+            orderNumber
+            orderDate
+            allowedRecurringType
+            orderTotalAmount {
+              currency
+              amount
+            }
+            investments {
+              fundingOption
+              distributionInstruction
+              fundCurrency
+              fundId
+              fundClass
+              fundIssuer
+              fundName
+              fundType
+              investmentAmount
+              isEpf
+              isSyariah
+              salesCharge
+              isScheduled
+              scheduledInvestmentAmount
+              scheduledSalesCharge
+              isFea
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const submitProofOfPayments = gql`
   mutation submitProofOfPayments($input: SubmitPopInput) {
     submitProofOfPayments(input: $input) {
@@ -679,6 +727,7 @@ export const GQL_MUTATIONS = {
   riskAssessment,
   submitChangeRequest,
   submitClientAccount,
+  submitClientAccountTransactions,
   submitEDDCase,
   submitHardCopyDocuments,
   submitPdf,

@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
+import { Alert, FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -14,7 +14,8 @@ import {
 import { Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
-import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
+import { submitClientAccountTransactions } from "../../../network-actions/new-sales";
+import { PersonalInfoStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import {
   borderBottomBlue4,
   centerVertical,
@@ -49,12 +50,12 @@ import {
   sw4,
   sw8,
 } from "../../../styles";
-import { isNotEmpty, titleCaseString } from "../../../utils";
+import { isNotEmpty, parseAmountToString, titleCaseString } from "../../../utils";
 import { Investment } from "./Investment";
 
 const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
 
-export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesContentProps {
+export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesContentProps, PersonalInfoStoreProps {
   handleNextStep: (step: TypeNewSalesRoute) => void;
   navigation: IStackNavigationProp;
   route: string;
@@ -63,13 +64,15 @@ export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesCo
 export const ProductConfirmationComponent: FunctionComponent<ProductConfirmationProps> = ({
   accountDetails,
   accountType,
+  addOrders,
   addInvestmentDetails: setInvestmentDetails,
   addPersonalInfo,
   addSelectedFund: setSelectedFund,
-  // details,
+  client,
   global,
   handleNextStep,
   investmentDetails,
+  navigation,
   newSales,
   selectedFunds,
   updateNewSales,
@@ -93,6 +96,27 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     }
   };
 
+  let isInvestmentEpf = false;
+  const investments = investmentDetails!.map(({ fundDetails, investment }) => {
+    if (investment.fundPaymentMethod === "EPF") {
+      isInvestmentEpf = true;
+    }
+    return {
+      fundId: investment.fundId!,
+      fundingOption: investment.fundPaymentMethod, // TODO backend to fix
+      fundClass: investment.fundClass !== "No Class" ? investment.fundClass : "",
+      fundCurrency: investment.fundCurrency!,
+      investmentAmount: parseAmountToString(investment.investmentAmount),
+      isScheduled: `${investment.scheduledInvestment}`,
+      scheduledInvestmentAmount: investment.scheduledInvestmentAmount
+        ? parseAmountToString(investment.scheduledInvestmentAmount)
+        : undefined,
+      salesCharge: investment.investmentSalesCharge,
+      scheduledSalesCharge: investment.scheduledSalesCharge,
+      prsType: fundDetails.prsType,
+    };
+  });
+
   const handleUndoDelete = () => {
     const updatedProducts = investmentDetails!.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
     setSelectedFund(updatedProducts);
@@ -112,7 +136,30 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     handleNextStep("ProductsList");
   };
 
-  const handleConfirmIdentity = () => {
+  const handleSetupClient = async () => {
+    const request: ISubmitClientAccountTransactionsRequest = {
+      initId: client.details?.initId!,
+      accountNo: newSales.accountDetails.accountNo,
+      investments: investments,
+    };
+    const response: ISubmitClientAccountResponse = await submitClientAccountTransactions(request, navigation);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        addOrders(data.result);
+        return;
+      }
+
+      if (error !== null) {
+        const errorList = error.errorList?.join("\n");
+        setTimeout(() => {
+          Alert.alert(error.message, errorList);
+        }, 150);
+      }
+    }
+  };
+
+  const handleConfirmIdentity = async () => {
     const epfInvestments = investmentDetails!
       .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
       .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
@@ -121,10 +168,15 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
     addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
-    handleNextStep("IdentityVerification");
+    if (client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") {
+      await handleSetupClient();
+    }
+    const checkNextStep: TypeNewSalesRoute =
+      client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "" ? "OrderPreview" : "IdentityVerification";
+    handleNextStep(checkNextStep);
     const updatedFinishedSteps: TypeNewSalesKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
-        ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation"]
+        ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation", "AccountList"]
         : [...finishedSteps, "Products", "ProductsList", "ProductsConfirmation"];
     const updatedDisabledSteps: TypeNewSalesKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
@@ -139,14 +191,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             "Payment",
           ]
         : [...disabledSteps];
-    // if (disabledSteps.includes("EmailVerification")) {
-    //   updatedFinishedSteps.push("EmailVerification");
-    //   updatedDisabledSteps.push("EmailVerification");
-    // }
-    // const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
-    // if (findPersonalInfo !== -1) {
-    //   updatedDisabledSteps.splice(findPersonalInfo, 1);
-    // }
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 

@@ -57,7 +57,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
     switch (productType) {
       case "ut":
         if (accountNo !== "") {
-          const epfFilterArray: string[] = accountDetails.isEpf === true ? ["Yes"] : ["No"];
+          const epfFilterArray: string[] = accountDetails.isEpf === true ? ["Yes"] : [];
           addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
         } else {
           resetUTFilter();

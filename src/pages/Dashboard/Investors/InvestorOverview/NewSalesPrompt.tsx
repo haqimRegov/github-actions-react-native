@@ -18,9 +18,7 @@ import {
   colorTransparent,
   colorWhite,
   flexRow,
-  fs12BoldGray5,
   fs12RegBlue5,
-  fs16BoldBlack2,
   fs16BoldBlue1,
   fs16RegGray5,
   fs24BoldGray6,
@@ -49,7 +47,7 @@ interface NewSalesProps extends ClientStoreProps {
   errorMessage?: string;
   fetching: boolean;
   handleCheckClient: () => Promise<boolean | string>;
-  handleClientRegister: () => Promise<void>;
+  handleClientRegister: () => Promise<boolean | void>;
   inputError1?: string;
   investorData: IInvestor;
   modalData: LabeledTitleProps[];
@@ -275,8 +273,6 @@ const NewSalesPromptComponent = ({
       </View>
     </View>
   );
-
-  const infoStyles = { labelStyle: fs12BoldGray5, spaceToBottom: sh16, titleStyle: fs16BoldBlack2 };
 
   return (
     <NewPromptModal

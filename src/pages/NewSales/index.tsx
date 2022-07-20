@@ -1,4 +1,5 @@
 import { CommonActions } from "@react-navigation/native";
+import cloneDeep from "lodash.clonedeep";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 
@@ -111,12 +112,17 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   const { disabledSteps, finishedSteps, toast } = newSales;
 
   const findAccountList = NEW_SALES_DATA.findIndex((step: INewSales) => step.route === NEW_SALES_ROUTES.AccountList);
+  const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.route === NEW_SALES_ROUTES.AccountInformation);
 
-  const updatedNewSalesSteps = [...NEW_SALES_DATA];
-
+  const updatedNewSalesSteps = cloneDeep(NEW_SALES_DATA);
   if (client.isNewFundPurchase === true && findAccountList === -1) {
     updatedNewSalesSteps.splice(0, 0, ACCOUNT_LIST);
   }
+  if ((client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") && findAdditionalInfo !== -1) {
+    const checkIndex = client.isNewFundPurchase === true ? 3 : 2;
+    updatedNewSalesSteps.splice(checkIndex, 1);
+  }
+
   const [promptModal, setPromptModal] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<IItem | undefined>(undefined);
   const [cancelNewSales, setCancelNewSales] = useState<boolean>(false);

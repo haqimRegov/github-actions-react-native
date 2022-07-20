@@ -1,17 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomFlexSpacer, CustomSpacer, Pagination, PromptModal, Tab } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, Loading, Pagination, PromptModal, RNModal, Tab } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientStoreProps, InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
   borderBottomGray2,
+  centerHV,
+  colorBlack,
   colorWhite,
   flexChild,
   flexRow,
@@ -48,6 +50,7 @@ const initialJointInfo = {
 };
 
 export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
+  addAccountDetails,
   addAccountType,
   addRiskInfo,
   addRiskScore,
@@ -78,6 +81,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [registered, setRegistered] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
+  const fullScreenLoader = useRef<boolean>(false);
   const jointClientId = useRef<string>("");
   const { principalHolder, jointHolder } = client.details!;
 
@@ -129,129 +133,152 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     setPrompt(true);
   };
 
-  const handleClientRegister = async (req?: IClientRegisterRequest) => {
-    setNewSalesLoading(true);
-    const principalDob =
-      investorData?.dateOfBirth && investorData.idType !== "NRIC"
-        ? { dateOfBirth: moment(investorData?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
-        : {};
-    const jointDob =
-      jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
-        ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
-        : {};
-    const jointInfo =
-      accountType === 0
-        ? undefined
-        : {
-            ...jointDob,
-            id: jointHolder?.id!,
-            idType: jointIdType,
-            name: jointHolder?.name!,
-          };
-    const request: IClientRegisterRequest =
-      req !== undefined
-        ? req
-        : {
-            accountType: accountType === 0 ? "Individual" : "Joint",
-            isEtb: true,
-            isNewFundPurchased: false,
-            principalHolder: {
-              ...principalDob,
-              id: investorData?.idNumber!,
-              idType: investorData!.idType,
-              name: investorData?.name!,
+  const handleClientRegister = async (req?: IClientRegisterRequest, item?: IInvestorAccountsData): Promise<undefined | boolean> => {
+    if (newSalesLoading === false || fullScreenLoader.current === true) {
+      setNewSalesLoading(true);
+      fullScreenLoader.current = fullScreenLoader.current === false && req === undefined;
+      const principalDob =
+        investorData?.dateOfBirth && investorData.idType !== "NRIC"
+          ? { dateOfBirth: moment(investorData?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
+      const jointDob =
+        jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+          ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
+      const jointInfo =
+        accountType === 1
+          ? {
+              ...jointDob,
+              id: jointHolder?.id!,
+              idType: jointIdType,
+              name: jointHolder?.name!,
+            }
+          : undefined;
+      const request: IClientRegisterRequest =
+        req !== undefined
+          ? req
+          : {
+              accountType: accountType === 1 ? "Joint" : "Individual",
+              isEtb: true,
+              isNewFundPurchased: false,
+              principalHolder: {
+                ...principalDob,
+                id: investorData?.idNumber!,
+                idType: investorData!.idType,
+                name: investorData?.name!,
+              },
+              jointHolder: jointInfo,
+            };
+      const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation);
+      setNewSalesLoading(false);
+      fullScreenLoader.current = false;
+      if (clientResponse !== undefined) {
+        const { data, error } = clientResponse;
+        if (error === null && data !== null) {
+          let riskInfo: IRiskProfile | undefined;
+          if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
+            riskInfo = data.result.riskInfo;
+            addRiskScore({
+              ...riskAssessment,
+              appetite: data.result.riskInfo.appetite,
+              rangeOfReturn: data.result.riskInfo.expectedRange,
+              profile: data.result.riskInfo.profile,
+              type: data.result.riskInfo.type,
+              fundSuggestion: "",
+              netWorth: data.result.riskInfo.hnwStatus,
+            });
+          }
+          updateNewSales({
+            ...newSales,
+            investorProfile: {
+              ...newSales.investorProfile,
+              principalClientId: investorData!.clientId,
+              jointClientId: jointClientId.current,
             },
-            jointHolder: jointInfo,
-          };
-    const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
-    setNewSalesLoading(false);
-    if (clientResponse !== undefined) {
-      const { data, error } = clientResponse;
-      if (error === null && data !== null) {
-        let riskInfo: IRiskProfile | undefined;
-        if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
-          riskInfo = data.result.riskInfo;
-          addRiskScore({
-            ...riskAssessment,
-            appetite: data.result.riskInfo.appetite,
-            rangeOfReturn: data.result.riskInfo.expectedRange,
-            profile: data.result.riskInfo.profile,
-            type: data.result.riskInfo.type,
-            fundSuggestion: "",
-            netWorth: data.result.riskInfo.hnwStatus,
+            riskInfo: riskInfo,
+            accountDetails: {
+              ...newSales.accountDetails,
+              accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
+              fundType: item !== undefined ? (item.fundType.toLowerCase() as ProductType) : newSales.accountDetails.fundType,
+              isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
+              isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
+            },
           });
-        }
-        updateNewSales({
-          ...newSales,
-          investorProfile: { ...newSales.investorProfile, principalClientId: investorData!.clientId, jointClientId: jointClientId.current },
-          riskInfo: riskInfo,
-        });
-        const resetJointInfo =
-          accountType === 0 &&
-          (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
-        const moreJointInfo =
-          data.result.jointHolder !== undefined && data.result.jointHolder !== null
-            ? {
-                dateOfBirth: data.result.jointHolder.dateOfBirth,
-                clientId: data.result.jointHolder.clientId,
-              }
-            : {};
-        addClientDetails({
-          ...client.details,
-          principalHolder: {
-            ...client.details!.principalHolder,
-            dateOfBirth: investorData!.dateOfBirth,
-            clientId: data.result.principalHolder.clientId,
-            id: investorData!.idNumber,
-            name: investorData!.name,
-          },
-          jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
-          initId: data.result.initId.toString(),
-          accountHolder: accountType === 0 ? "Principal" : "Joint",
-        });
-        addAccountType(accountType === 0 ? "Individual" : "Joint");
-        const updatedJointInfo: IHolderInfoState =
-          accountType === 0
-            ? { ...personalInfo.joint }
-            : {
-                ...personalInfo.joint,
-                contactDetails: {
-                  ...personalInfo.joint?.contactDetails,
-                  emailAddress: investorData!.email,
-                },
-                personalDetails: {
-                  ...personalInfo.joint?.personalDetails,
-                  dateOfBirth: moment(data.result.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-                  idNumber: data.result.jointHolder!.id,
-                  name: data.result.jointHolder!.name,
-                },
-              };
-        addPersonalInfo({
-          ...personalInfo,
-          principal: {
-            ...personalInfo.principal,
-            contactDetails: {
-              ...personalInfo.principal?.contactDetails,
-              emailAddress: investorData!.email,
+          const resetJointInfo =
+            accountType !== 1 &&
+            (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
+          const moreJointInfo =
+            data.result.jointHolder !== undefined && data.result.jointHolder !== null
+              ? {
+                  dateOfBirth: data.result.jointHolder.dateOfBirth,
+                  clientId: data.result.jointHolder.clientId,
+                }
+              : {};
+          addClientDetails({
+            ...client.details,
+            principalHolder: {
+              ...client.details!.principalHolder,
+              dateOfBirth: investorData!.dateOfBirth,
+              clientId: data.result.principalHolder.clientId,
+              id: investorData!.idNumber,
+              name: investorData!.name,
             },
-            personalDetails: {
-              ...personalInfo.principal?.personalDetails,
-              dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-              idNumber: data.result.principalHolder.id,
-              name: data.result.principalHolder.name,
+            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+            initId: data.result.initId.toString(),
+            accountHolder: accountType === 1 ? "Joint" : "Principal",
+          });
+          addAccountType(accountType === 1 ? "Joint" : "Individual");
+          const updatedJointInfo: IHolderInfoState =
+            accountType === 1
+              ? {
+                  ...personalInfo.joint,
+                  contactDetails: {
+                    ...personalInfo.joint?.contactDetails,
+                    emailAddress: investorData!.email,
+                  },
+                  personalDetails: {
+                    ...personalInfo.joint?.personalDetails,
+                    dateOfBirth: moment(data.result.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+                    idNumber: data.result.jointHolder!.id,
+                    name: data.result.jointHolder!.name,
+                  },
+                }
+              : { ...personalInfo.joint };
+          addPersonalInfo({
+            ...personalInfo,
+            principal: {
+              ...personalInfo.principal,
+              contactDetails: {
+                ...personalInfo.principal?.contactDetails,
+                emailAddress: investorData!.email,
+              },
+              personalDetails: {
+                ...personalInfo.principal?.personalDetails,
+                dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+                idNumber: data.result.principalHolder.id,
+                name: data.result.principalHolder.name,
+              },
             },
-          },
-          joint: updatedJointInfo,
-        });
-        jointClientId.current = "";
-        if (accountType === 0) {
-          setPrompt(false);
-          navigation.navigate("NewSales");
-        } else {
-          setRegistered(true);
+            joint: updatedJointInfo,
+          });
+          jointClientId.current = "";
+          if (accountType !== 1 && req === undefined) {
+            setPrompt(false);
+            navigation.navigate("NewSales");
+            return undefined;
+          }
+          if (accountType === 1 && req === undefined) {
+            setRegistered(true);
+            return undefined;
+          }
+          if (req !== undefined) {
+            return true;
+          }
         }
+        return undefined;
       }
     }
+    return undefined;
   };
 
   const handleCheckClient = async (): Promise<boolean | string> => {
@@ -293,6 +320,16 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
                   },
                 },
               });
+              addPersonalInfo({
+                ...personalInfo,
+                joint: {
+                  ...personalInfo.joint,
+                  contactDetails: {
+                    ...personalInfo.joint?.contactDetails,
+                    emailAddress: data.result.emailAddress,
+                  },
+                },
+              });
               return true;
             }
             // if (data.result.forceUpdate === true) {
@@ -322,11 +359,11 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         ...client.details,
         principalHolder: {
           ...client.details!.principalHolder,
-          dateOfBirth: accountType === 0 ? investorData.dateOfBirth : jointHolder?.dateOfBirth,
-          clientId: accountType === 0 ? investorData.clientId : jointHolder?.clientId,
-          id: accountType === 0 ? investorData.idNumber : jointHolder?.id,
+          dateOfBirth: accountType === 1 ? jointHolder?.dateOfBirth : investorData.dateOfBirth,
+          clientId: accountType === 1 ? jointHolder?.clientId : investorData.clientId,
+          id: accountType === 1 ? jointHolder?.id : investorData.idNumber,
         },
-        initId: accountType === 0 ? investorData.initId : undefined,
+        initId: accountType === 1 ? undefined : investorData.initId,
         accountHolder: investorData.accountHolder,
       });
       addPersonalInfo({
@@ -335,15 +372,15 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           ...personalInfo.principal,
           addressInformation: {
             ...personalInfo.principal?.addressInformation,
-            mailingAddress: accountType === 0 ? investorData.address : undefined,
+            mailingAddress: accountType === 1 ? undefined : investorData.address,
           },
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
             dateOfBirth:
-              accountType === 0
-                ? moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
-                : moment(jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-            name: accountType === 0 ? investorData.name : jointHolder?.name,
+              accountType === 1
+                ? moment(jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
+                : moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+            name: accountType === 1 ? jointHolder?.name : investorData.name,
           },
         },
       });
@@ -372,32 +409,34 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             clientId: item.clientId,
             id: item.idNumber,
             name: item.name,
-            // clientid
           }
         : {};
     const principalInfo: IClientRegisterInfo = {
-      // clientId: item.clientId,
       id: item.idNumber,
       name: item.name,
     };
     const req: IClientRegisterRequest = {
+      accountNo: item.accountNo,
       accountType: item.jointName === null ? "Individual" : "Joint",
       isEtb: true,
       isNewFundPurchased: true,
       principalHolder: principalInfo,
       jointHolder: jointInfo,
     };
-    // let forceUpdateRequired = false;
+    const forceUpdateRequired = false;
 
     // TODO Check for force update
 
-    // if (forceUpdateRequired === true) {
-    //   setTimeout(() => {
-    //     setForceUpdatePrompt(true);
-    //   }, 400);
-    // } else {
-    //   await handleClientRegister(req);
-    // }
+    if (forceUpdateRequired === true) {
+      setTimeout(() => {
+        setForceUpdatePrompt(true);
+      }, 400);
+    } else {
+      const check = await handleClientRegister(req, item);
+      if (check === true) {
+        navigation.navigate("NewSales");
+      }
+    }
   };
 
   const etbCheckInvestor: IInvestorData =
@@ -451,6 +490,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${investorData !== undefined ? investorData.name : "-"}.`;
+  const modalStyle = fullScreenLoader.current === false ? undefined : { backgroundColor: colorBlack._1_4 };
 
   return (
     <Fragment>
@@ -522,6 +562,11 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         setVisible={setPrompt}
         visible={prompt}
       />
+      <RNModal animationType="fade" style={modalStyle} visible={fullScreenLoader.current}>
+        <View style={{ ...centerHV, ...fullHW }}>
+          <Loading color={colorWhite._1} />
+        </View>
+      </RNModal>
     </Fragment>
   );
 };

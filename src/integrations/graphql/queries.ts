@@ -96,11 +96,15 @@ const etbCheck = gql`
           highRisk
           forceUpdate
           clientId
+          emailAddress
           accounts {
             name
             jointName
             accountNo
             isJoint
+            fundType
+            paymentMethod
+            isRecurring
           }
         }
       }
@@ -401,6 +405,9 @@ const investorDetailsDashboard = gql`
             accountNo
             jointName
             accountOpeningDate
+            paymentMethod
+            fundType
+            isRecurring
           }
         }
       }

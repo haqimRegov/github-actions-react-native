@@ -2,6 +2,7 @@ import React, { Component, Fragment, FunctionComponent } from "react";
 import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer } from "../../components";
+import { Language } from "../../constants";
 import { IcoMoon } from "../../icons";
 import {
   centerHV,
@@ -34,6 +35,8 @@ import {
   sw8,
 } from "../../styles";
 
+const { INVESTOR_ACCOUNTS } = Language.PAGE;
+
 interface IAccountCardProps {
   data: IAccountList;
   style?: ViewStyle;
@@ -46,7 +49,7 @@ interface ITagStyle {
 }
 
 export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handlePress, style }: IAccountCardProps) => {
-  const { accountType, accountNo, name, isJoint, jointName, tags } = data;
+  const { accountNo, fundType, name, isJoint, jointName, paymentMethod } = data;
 
   const handleTagStyle = (text: string): ITagStyle => {
     switch (text) {
@@ -71,7 +74,9 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
     width: sw404,
     ...style,
   };
-  const checkIconName = accountType === "Joint" ? "avatar-joint" : "avatar";
+  const tags = [fundType, paymentMethod];
+  const checkIconName = isJoint === true ? "avatar-joint" : "avatar";
+  const checkAccountType = isJoint === true ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
   return (
     <Pressable onPress={handlePress}>
       <View style={containerStyle}>
@@ -82,7 +87,7 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
                 <IcoMoon name={checkIconName} size={sw16} />
               </View>
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={fs12RegGray5}>{accountType}</Text>
+              <Text style={fs12RegGray5}>{checkAccountType}</Text>
               <CustomSpacer isHorizontal={true} space={sw8} />
               <View style={{ height: sh16, width: sw1, backgroundColor: colorBlue._4 }} />
               <CustomSpacer isHorizontal={true} space={sw8} />

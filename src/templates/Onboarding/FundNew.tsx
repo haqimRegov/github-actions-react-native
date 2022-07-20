@@ -73,7 +73,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
   const fundInfo: LabeledTitleProps[] = [
     {
       label: ORDER_SUMMARY.LABEL_FUND_CODE,
-      title: fundCode,
+      title: fundCode || "-",
       titleStyle: fsTransformNone,
     },
     {
@@ -86,23 +86,16 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
       title: isSyariah ? ORDER_SUMMARY.LABEL_SHARIAH : ORDER_SUMMARY.LABEL_CONVENTIONAL,
     },
     {
+      label: ORDER_SUMMARY.LABEL_FUND_CLASS,
+      title: fundClass || "-",
+      titleStyle: fsTransformNone,
+    },
+    {
       label: ORDER_SUMMARY.LABEL_FUND_CURRENCY,
       title: fundCurrency,
       titleStyle: fsTransformNone,
     },
-    // {
-    //   label: ORDER_SUMMARY.LABEL_FEA,
-    //   title: isFea ? "Yes" : "No",
-    // },
   ];
-
-  if (fundClass) {
-    fundInfo.splice(3, 0, {
-      label: ORDER_SUMMARY.LABEL_FUND_CLASS,
-      title: "fundClass" in fund && fundClass !== null && fundClass !== "" ? `${fundClass}` : "-",
-      titleStyle: fsTransformNone,
-    });
-  }
 
   // investment section
   const investment: LabeledTitleProps[] = [

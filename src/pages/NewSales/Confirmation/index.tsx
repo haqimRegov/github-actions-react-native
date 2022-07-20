@@ -8,6 +8,7 @@ import {
   CustomSpacer,
   CustomToast,
   LabeledTitle,
+  PromptModal,
   SafeAreaPage,
   SelectionBanner,
 } from "../../../components";
@@ -15,24 +16,32 @@ import { Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
 import { submitClientAccountTransactions } from "../../../network-actions/new-sales";
+import { getEtbAccountList } from "../../../network-actions/new-sales/etb-account-list";
 import { PersonalInfoStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import {
+  alignFlexStart,
+  border,
   borderBottomBlue4,
   centerVertical,
   colorBlack,
   colorBlue,
   colorGray,
+  colorTransparent,
   colorWhite,
   flexChild,
   flexCol,
   flexRow,
+  fs10RegGray5,
   fs14BoldBlack2,
+  fs14BoldBlue1,
   fs14RegGray5,
   fs16BoldBlack2,
   fs16BoldGray6,
   fs16RegGray5,
   fs16RegGray6,
   fs18BoldGray6,
+  fs24BoldGray6,
+  fullWidth,
   px,
   py,
   rowCenterVertical,
@@ -83,6 +92,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const withEpf = true;
   const flatListRef = useRef<FlatList | null>(null);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
+  const [duplicatePrompt, setDuplicatePrompt] = useState<boolean>(true);
+  const [etbAccountList, setEtbAccountList] = useState<IEtbAccountDescription[]>([]);
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails!, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
   const handleScrollToFund = () => {
@@ -136,6 +147,40 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     handleNextStep("ProductsList");
   };
 
+  const handleNavigation = () => {
+    const epfInvestments = investmentDetails!
+      .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
+      .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
+    const epfShariah = epfInvestments.includes("Yes");
+    const allEpf = epfInvestments.length === investmentDetails!.length;
+    const epfObject =
+      epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
+    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
+    const checkNextStep: TypeNewSalesRoute =
+      client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "" ? "OrderPreview" : "IdentityVerification";
+    handleNextStep(checkNextStep);
+    const updatedFinishedSteps: TypeNewSalesKey[] = disabledSteps.includes("IdentityVerification")
+      ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation", "AccountList"]
+      : [...finishedSteps, "Products", "ProductsList", "ProductsConfirmation"];
+    const newFundPurchaseDisable: TypeNewSalesKey[] =
+      client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== ""
+        ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation", "AccountList"]
+        : ["OrderPreview"];
+    const updatedDisabledSteps: TypeNewSalesKey[] = disabledSteps.includes("IdentityVerification")
+      ? [
+          "IdentityVerification",
+          "AdditionalDetails",
+          "Summary",
+          "Acknowledgement",
+          "TermsAndConditions",
+          "Signatures",
+          "Payment",
+          ...newFundPurchaseDisable,
+        ]
+      : [...disabledSteps, ...newFundPurchaseDisable];
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+  };
+
   const handleSetupClient = async () => {
     const request: ISubmitClientAccountTransactionsRequest = {
       initId: client.details?.initId!,
@@ -159,39 +204,53 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     }
   };
 
+  const handleCheckAccounts = async () => {
+    const request: IEtbAccountListRequest = {
+      initId: client.details?.initId!,
+      principal: {
+        clientId: client.details?.principalHolder!.clientId!,
+      },
+      isEtb: true,
+      investments: investments,
+    };
+    const response: IEtbAccountListResponse = await getEtbAccountList(request, navigation);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        if (data.result.etbAccountList.length > 0) {
+          setEtbAccountList(data.result.etbAccountList);
+          setDuplicatePrompt(true);
+        } else {
+          handleNavigation();
+        }
+        return;
+      }
+
+      if (error !== null) {
+        const errorList = error.errorList?.join("\n");
+        setTimeout(() => {
+          Alert.alert(error.message, errorList);
+        }, 150);
+      }
+    }
+  };
+
+  const handleCancelPrompt = () => {
+    setDuplicatePrompt(false);
+  };
+
+  const handleConfirmPrompt = () => {
+    setDuplicatePrompt(false);
+    handleNavigation();
+  };
+
   const handleConfirmIdentity = async () => {
-    const epfInvestments = investmentDetails!
-      .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
-      .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
-    const epfShariah = epfInvestments.includes("Yes");
-    const allEpf = epfInvestments.length === investmentDetails!.length;
-    const epfObject =
-      epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
-    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
     if (client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") {
       await handleSetupClient();
+      handleNavigation();
+    } else {
+      await handleCheckAccounts();
     }
-    const checkNextStep: TypeNewSalesRoute =
-      client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "" ? "OrderPreview" : "IdentityVerification";
-    handleNextStep(checkNextStep);
-    const updatedFinishedSteps: TypeNewSalesKey[] =
-      epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
-        ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation", "AccountList"]
-        : [...finishedSteps, "Products", "ProductsList", "ProductsConfirmation"];
-    const updatedDisabledSteps: TypeNewSalesKey[] =
-      epfInvestments.length === 0 || disabledSteps.includes("IdentityVerification")
-        ? [
-            "IdentityVerification",
-            "AdditionalDetails",
-            "Summary",
-            "OrderPreview",
-            "Acknowledgement",
-            "TermsAndConditions",
-            "Signatures",
-            "Payment",
-          ]
-        : [...disabledSteps];
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
   let utCount = 0;
@@ -453,6 +512,48 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
           <Text style={fs16RegGray6}>{INVESTMENT.DELETE_MODAL_LINE_2}</Text>
         </View>
       </ConfirmationModal>
+      <PromptModal
+        contentStyle={alignFlexStart}
+        handleCancel={handleCancelPrompt}
+        handleContinue={handleConfirmPrompt}
+        label={INVESTMENT.LABEL_DUPLICATE_PROMPT_TITLE}
+        labelStyle={fs24BoldGray6}
+        spaceToTitle={sh4}
+        spaceToButton={sh40}
+        title={INVESTMENT.LABEL_DUPLICATE_PROMPT_SUBTITLE}
+        titleStyle={fs16RegGray5}
+        visible={duplicatePrompt && etbAccountList.length > 0}>
+        <View style={fullWidth}>
+          <CustomSpacer space={sh24} />
+          <View style={border(colorBlue._3, sw1, sw8)}>
+            {etbAccountList
+              .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
+              .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
+                const containerStyle: ViewStyle = {
+                  ...px(sw24),
+                  ...py(sh12),
+                  ...flexRow,
+                  backgroundColor: colorWhite._1,
+                  borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
+                  borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
+                  borderTopLeftRadius: index === 0 ? sw8 : 0,
+                  borderTopRightRadius: index === 0 ? sw8 : 0,
+                  borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                  borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                };
+                return (
+                  <View key={index} style={containerStyle}>
+                    <IcoMoon color={colorBlue._1} name="account" size={sw16} />
+                    <CustomSpacer isHorizontal={true} space={sw8} />
+                    <Text style={fs14BoldBlue1}>{eachDuplicateAccount.accountNumber}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw8} />
+                    <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
+                  </View>
+                );
+              })}
+          </View>
+        </View>
+      </PromptModal>
     </Fragment>
   );
 };

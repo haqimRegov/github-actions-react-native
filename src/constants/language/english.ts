@@ -1018,6 +1018,8 @@ export const english = {
       LABEL_MYR: "MYR",
       LABEL_NONE: "None",
       LABEL_PRS: "PRS",
+      LABEL_DUPLICATE_PROMPT_TITLE: "Duplicate account detected",
+      LABEL_DUPLICATE_PROMPT_SUBTITLE: "We noticed that your new account matches another account.",
       LABEL_RECURRING_AMOUNT: "Recurring Amount",
       LABEL_RECURRING_SALES_CHARGE: "Recurring Sales Charge (%)",
       LABEL_RECURRING: "Recurring",

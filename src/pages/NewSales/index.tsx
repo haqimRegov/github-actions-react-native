@@ -47,7 +47,6 @@ const NEW_SALES_DATA: INewSales[] = [
     ],
     label: NEW_SALES.TITLE_PRODUCTS_AND_SERVICE,
     key: NEW_SALES_KEYS.Products,
-    route: NEW_SALES_ROUTES.Products,
   },
   {
     content: [
@@ -57,7 +56,6 @@ const NEW_SALES_DATA: INewSales[] = [
     ],
     label: NEW_SALES.TITLE_ACCOUNT_INFORMATION,
     key: NEW_SALES_KEYS.AccountInformation,
-    route: NEW_SALES_KEYS.AccountInformation,
   },
   {
     content: [
@@ -75,7 +73,6 @@ const NEW_SALES_DATA: INewSales[] = [
     ],
     label: NEW_SALES.TITLE_ACKNOWLEDGEMENT,
     key: NEW_SALES_KEYS.Acknowledgement,
-    route: NEW_SALES_KEYS.Acknowledgement,
   },
   {
     label: NEW_SALES.TITLE_PROOF_OF_PAYMENT,
@@ -112,7 +109,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   const { disabledSteps, finishedSteps, toast } = newSales;
 
   const findAccountList = NEW_SALES_DATA.findIndex((step: INewSales) => step.route === NEW_SALES_ROUTES.AccountList);
-  const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.route === NEW_SALES_ROUTES.AccountInformation);
+  const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.AccountInformation);
 
   const updatedNewSalesSteps = cloneDeep(NEW_SALES_DATA);
   if (client.isNewFundPurchase === true && findAccountList === -1) {

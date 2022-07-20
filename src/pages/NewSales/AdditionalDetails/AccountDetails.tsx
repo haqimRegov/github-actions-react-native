@@ -68,6 +68,7 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
     return setPersonalInfo({
       signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

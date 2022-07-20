@@ -14,7 +14,7 @@ interface PRSFilterProps {
   setFilter: (value: IProductFilter) => void;
 }
 
-export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ availableFilters, filter, productType, setFilter }: PRSFilterProps) => {
+export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ availableFilters, filter, setFilter }: PRSFilterProps) => {
   const { conventional, fundType, shariahApproved, issuingHouse, riskCategory } = filter;
 
   const handleShariah = (value: string) => {

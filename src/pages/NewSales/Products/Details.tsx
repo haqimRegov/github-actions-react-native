@@ -76,7 +76,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "No Class" : fund.masterList[0].class);
   const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(fund.masterList[0]);
 
-  const { currency, salesCharge, newSalesAmount, topUpAmount } = filteredCurrency;
+  const { salesCharge, newSalesAmount, topUpAmount } = filteredCurrency;
   const isAmp = fund.fundType === "AMP";
   const isEpf = fund.isEpf === "Yes";
   const isEpfOnly = fund.isEpfOnly === "Yes";
@@ -151,17 +151,17 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     data.push({ label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf });
   }
 
-  const minAmountCash = `${currency} ${formatAmount(newSalesAmount.cash.min)}`;
-  const minAdditionalAmountCash = `${currency} ${formatAmount(topUpAmount.cash.min)}`;
+  const minAmountCash = `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`;
+  const minAdditionalAmountCash = `${filteredCurrency.currency} ${formatAmount(topUpAmount.cash.min)}`;
   const salesChargeCash = `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.cash.max}%`;
 
   const minAmountEpf = isEpfOnly
-    ? `${currency} ${formatAmount(newSalesAmount.epf.min)}`
-    : `${minAmountCash} / ${currency} ${formatAmount(newSalesAmount.epf.min)}`;
+    ? `${filteredCurrency.currency} ${formatAmount(newSalesAmount.epf.min)}`
+    : `${minAmountCash} / ${filteredCurrency.currency} ${formatAmount(newSalesAmount.epf.min)}`;
 
   const minAdditionalAmountEpf = isEpfOnly
-    ? `${currency} ${formatAmount(topUpAmount.epf.min)}`
-    : `${minAdditionalAmountCash} / ${currency} ${formatAmount(topUpAmount.epf.min)}`;
+    ? `${filteredCurrency.currency} ${formatAmount(topUpAmount.epf.min)}`
+    : `${minAdditionalAmountCash} / ${filteredCurrency.currency} ${formatAmount(topUpAmount.epf.min)}`;
 
   const maxSalesChargeEpf = isEpfOnly
     ? `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`

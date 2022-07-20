@@ -1,4 +1,4 @@
-import React, { Component, Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer } from "../../components";

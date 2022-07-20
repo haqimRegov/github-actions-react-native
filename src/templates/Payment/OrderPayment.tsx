@@ -589,12 +589,8 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 if (isPaymentEqual === false) {
                   // current POP is an existing CTA
                   if (findExistingCtaParent !== -1 && isPaymentEqual === false) {
-                    // eslint-disable-next-line no-console
-
                     // current POP is an existing CTA and it is an updated CTA Parent
                     if (updatedPayments[index].ctaParent !== undefined) {
-                      // eslint-disable-next-line no-console
-
                       // TODO Scenario: Edit CTA Parent
                       // TODO update CTA parent prompt
                       cloneLocalCtaDetails[findExistingCtaParent] = {
@@ -602,8 +598,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                         ...updatedPayments[index],
                       };
                     } else {
-                      // eslint-disable-next-line no-console
-
                       // current POP is an existing CTA but is not a CTA Parent anymore
                       // current POP may be a CTA Child but it will be handled separately
                       // TODO Scenario: Edit CTA Parent to Non-CTA (delete old CTA Parent)
@@ -614,8 +608,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       removeAllChildren = true;
                     }
                   } else if (updatedPayments[index].ctaParent !== undefined && updatedPayments[index].ctaTag === undefined) {
-                    // eslint-disable-next-line no-console
-
                     // current POP is not an existing CTA and it is a new CTA Parent
                     const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
 
@@ -631,8 +623,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                   // current POP is a CTA Child (Use of CTA)
                   if ("ctaTag" in updatedPayments[index] && updatedPayments[index].ctaTag !== undefined) {
-                    // eslint-disable-next-line no-console
-
                     // check if current CTA Child POP is an existing CTA Child
                     const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
                     // update ctaUsedBy of the old parent of the CTA Child
@@ -649,8 +639,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                     if (findParentCta !== -1) {
                       // current CTA Child has a valid CTA Parent
-                      // eslint-disable-next-line no-console
-
                       const updatedCtaUsedBy =
                         "ctaUsedBy" in cloneLocalCtaDetails[findParentCta] && cloneLocalCtaDetails[findParentCta].ctaUsedBy !== undefined
                           ? [...cloneLocalCtaDetails[findParentCta].ctaUsedBy!]
@@ -672,8 +660,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                   // TODO Scenario: Edit CTA Child to Non-CTA
                   if (updatedPayments[index].ctaParent === undefined && updatedPayments[index].ctaTag === undefined) {
-                    // eslint-disable-next-line no-console
-
                     const latestCtaUsedBy = updateCtaUsedBy(cloneLocalCtaDetails, updatedPayments[index]);
                     if (latestCtaUsedBy !== undefined) {
                       cloneLocalCtaDetails[latestCtaUsedBy.index].ctaUsedBy = latestCtaUsedBy.ctaUsedBy;

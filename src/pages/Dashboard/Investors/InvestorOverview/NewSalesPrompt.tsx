@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Alert, Pressable, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 

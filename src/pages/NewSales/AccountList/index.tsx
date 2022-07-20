@@ -33,7 +33,7 @@ declare interface IAccountListProps extends NewSalesContentProps, NewSalesStoreP
 }
 
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
-  addRiskInfo,
+  // addRiskInfo,
   addRiskScore,
   client,
   handleNextStep,

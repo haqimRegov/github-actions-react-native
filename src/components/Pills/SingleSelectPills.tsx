@@ -56,7 +56,6 @@ export const SingleSelectPills: FunctionComponent<SingleSelectPillsProps> = ({
   disabledValues,
   header,
   headerStyle,
-  iconSize,
   labels,
   labelStyle: mainLabelStyle,
   onSelect,

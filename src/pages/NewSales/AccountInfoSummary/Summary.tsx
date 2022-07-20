@@ -49,7 +49,7 @@ import {
 } from "../../../styles";
 import { defaultContentProps } from "../Content";
 
-const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
+const { NEW_SALES_SUMMARY } = Language.PAGE;
 
 interface NewSalesSummaryProps extends PersonalInfoStoreProps {
   handleNextStep: (route: TypeNewSalesRoute) => void;

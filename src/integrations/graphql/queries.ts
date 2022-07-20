@@ -118,6 +118,27 @@ const etbCheck = gql`
   }
 `;
 
+const etbAccountList = gql`
+  query etbAccountList($input: SubmitClientAccountInput) {
+    etbAccountList(input: $input) {
+      data {
+        result {
+          etbAccountList {
+            accountNumber
+            description
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const investorDashboard = gql`
   query investorDashboard($input: DashboardInput) {
     investorDashboard(input: $input) {
@@ -1535,6 +1556,7 @@ export const GQL_QUERIES = {
   checkPassword,
   clientProfile,
   dashboard,
+  etbAccountList,
   eddCaseQuestions,
   eddDashboard,
   etbCheck,

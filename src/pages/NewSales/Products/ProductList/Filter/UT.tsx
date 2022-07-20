@@ -24,7 +24,7 @@ interface UTFilterProps {
 }
 
 export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: UTFilterProps) => {
-  const { accountNo, isEpf } = accountDetails;
+  const { isEpf } = accountDetails;
   const { fundType, epfApproved, fundCurrency, riskCategory, shariahApproved, issuingHouse, conventional } = filter;
 
   const handleEpf = (value: string) => {

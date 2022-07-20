@@ -96,11 +96,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     }
   };
 
-  let isInvestmentEpf = false;
+  // let isInvestmentEpf = false;
   const investments = investmentDetails!.map(({ fundDetails, investment }) => {
-    if (investment.fundPaymentMethod === "EPF") {
-      isInvestmentEpf = true;
-    }
+    // if (investment.fundPaymentMethod === "EPF") {
+    //   isInvestmentEpf = true;
+    // }
     return {
       fundId: investment.fundId!,
       fundingOption: investment.fundPaymentMethod, // TODO backend to fix

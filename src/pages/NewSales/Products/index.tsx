@@ -30,7 +30,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
-  const [page, setPage] = useState<number>(0);
+  const [page] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
@@ -146,9 +146,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     return handleInvest();
   };
 
-  const handleBackToListing = () => {
-    return page === 1 ? setPage(0) : addSelectedFund([]);
-  };
+  // const handleBackToListing = () => {
+  //   return page === 1 ? setPage(0) : addSelectedFund([]);
+  // };
 
   const handleCancelProducts = () => {
     setPrompt("cancel");

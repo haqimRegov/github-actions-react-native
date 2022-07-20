@@ -196,6 +196,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
     if (debouncedCurrentPassword !== "") {
       handleCheckPassword();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedCurrentPassword]);
 
   return (

@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -27,7 +27,7 @@ import {
 } from "../../../../styles";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
-import { InvestorAccountsHeader } from "./Header";
+import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
 import { NewSalesPrompt } from "./NewSalesPrompt";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
@@ -50,9 +50,9 @@ const initialJointInfo = {
 };
 
 export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
-  addAccountDetails,
+  // addAccountDetails,
   addAccountType,
-  addRiskInfo,
+  // addRiskInfo,
   addRiskScore,
   addClientDetails,
   addPersonalInfo,
@@ -83,10 +83,10 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const fullScreenLoader = useRef<boolean>(false);
   const jointClientId = useRef<string>("");
-  const { principalHolder, jointHolder } = client.details!;
+  const { jointHolder } = client.details!;
 
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
-  const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
+  // const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
 
   const modalData: LabeledTitleProps[] = [
     {
@@ -478,13 +478,12 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     borderBottomLeftRadius: sw24,
   };
 
-  const headerData = {
+  const headerData: IInvestorAccountHeaderProps = {
     email: investorData !== undefined ? investorData.email : undefined,
-    emailLastUpdated: investorData !== undefined ? investorData.emailLastUpdated : undefined,
+    emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
     handleNewSales: handleNewSalesPrompt,
     handleViewProfile: handleViewProfile,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
-    mobileNoLastUpdated: investorData !== undefined ? investorData.mobileNoLastUpdated : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
     setScreen: dashboardProps.setScreen,
   };

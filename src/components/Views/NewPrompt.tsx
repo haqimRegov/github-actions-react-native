@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useRef } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Image, ImageSourcePropType, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
@@ -48,13 +48,13 @@ export interface NewPromptProps extends NewActionButtonsProps {
   titleStyle?: TextStyle;
 }
 
-interface IPropsCache {
-  illustration?: ImageSourcePropType;
-  primaryButton?: string;
-  secondaryButton?: string;
-  subtitle?: string;
-  title?: string;
-}
+// interface IPropsCache {
+//   illustration?: ImageSourcePropType;
+//   primaryButton?: string;
+//   secondaryButton?: string;
+//   subtitle?: string;
+//   title?: string;
+// }
 
 export const NewPrompt: FunctionComponent<NewPromptProps> = ({
   children,

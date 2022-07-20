@@ -76,11 +76,12 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   const [inputClass, setInputClass] = useState<string>(fund.masterList[0].class === null ? "No Class" : fund.masterList[0].class);
   const [filteredCurrency, setFilteredCurrency] = useState<IProductMasterList>(fund.masterList[0]);
 
-  const { salesCharge, newSalesAmount } = filteredCurrency;
+  const { salesCharge, newSalesAmount, topUpAmount } = filteredCurrency;
   const isAmp = fund.fundType === "AMP";
   const isEpf = fund.isEpf === "Yes";
   const isEpfOnly = fund.isEpfOnly === "Yes";
   const isPrsDefault = fund.fundCode.includes("prsdefault");
+  const isScheduled = fund.isScheduled === "Yes";
 
   const documentList =
     fund.docs !== undefined
@@ -136,7 +137,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   };
 
   const data: LabeledTitleProps[] = [
-    { label: isAmp ? PRODUCT_DETAILS.LABEL_AMP_CATEGORY : PRODUCT_DETAILS.LABEL_FUND_CATEGORY, title: fund.fundCategory },
+    { label: PRODUCT_DETAILS.LABEL_FUND_CATEGORY, title: fund.fundCategory },
     {
       label: PRODUCT_DETAILS.LABEL_PRODUCT_TYPE,
       title: getProductType(isPrsDefault ? "prsdefault" : fund.fundType),
@@ -151,7 +152,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   }
 
   const minAmountCash = `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`;
-  const minAdditionalAmountCash = `${filteredCurrency.currency} ${formatAmount(filteredCurrency.topUpAmount.cash.min)}`;
+  const minAdditionalAmountCash = `${filteredCurrency.currency} ${formatAmount(topUpAmount.cash.min)}`;
   const salesChargeCash = `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.cash.max}%`;
 
   const minAmountEpf = isEpfOnly
@@ -159,8 +160,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     : `${minAmountCash} / ${filteredCurrency.currency} ${formatAmount(newSalesAmount.epf.min)}`;
 
   const minAdditionalAmountEpf = isEpfOnly
-    ? `${filteredCurrency.currency} ${formatAmount(filteredCurrency.topUpAmount.epf.min)}`
-    : `${minAdditionalAmountCash} / ${filteredCurrency.currency} ${formatAmount(filteredCurrency.topUpAmount.epf.min)}`;
+    ? `${filteredCurrency.currency} ${formatAmount(topUpAmount.epf.min)}`
+    : `${minAdditionalAmountCash} / ${filteredCurrency.currency} ${formatAmount(topUpAmount.epf.min)}`;
 
   const maxSalesChargeEpf = isEpfOnly
     ? `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`
@@ -195,12 +196,27 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
       title: `${fund.annualManagementFee}%`,
       titleStyle: fsTransformNone,
     },
+    {
+      label: PRODUCT_DETAILS.LABEL_ANNUAL_TRUSTEE,
+      title: "-",
+      titleStyle: fsTransformNone,
+    },
     // TODO 2 other values left. Will add after after BE comes back
   ];
 
   if (isAmp) {
     data.push({ label: PRODUCT_DETAILS.LABEL_LANDING_FUND, title: `${fund.landingFund}` });
+    data.splice(0, 1, { label: PRODUCT_DETAILS.LABEL_AMP_CATEGORY, title: "-" });
     transactionInfo.splice(3, 0, { label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` });
+    transactionInfo.splice(-1, 1);
+  }
+
+  if (isScheduled) {
+    transactionInfo.push({
+      label: PRODUCT_DETAILS.LABEL_REGULAR_INVESTMENT,
+      title: `${PRODUCT_DETAILS.LABEL_MIN} ${inputCurrency} ${formatAmount(topUpAmount.cash.min)} ${PRODUCT_DETAILS.LABEL_PER_MONTH}`,
+      titleStyle: fsTransformNone,
+    });
   }
 
   const fundData = data.filter((raw) => raw.label !== "");
@@ -229,6 +245,11 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
       : [];
 
   const showMulti = currencies.length > 1 || classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class");
+
+  if (showMulti === false) {
+    transactionData.push({ label: PRODUCT_DETAILS.LABEL_CURRENCY, title: inputCurrency, titleStyle: fsTransformNone });
+  }
+
   const buttonStyle: ViewStyle = {
     width: sw168,
     height: sh32,

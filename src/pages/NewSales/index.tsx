@@ -28,7 +28,7 @@ const NEW_SALES_DATA: INewSales[] = [
         key: NEW_SALES_ROUTES.RiskAssessment,
       },
     ],
-    label: NEW_SALES.TITLE_RISK_PROFILE,
+    label: NEW_SALES.TITLE_ACCOUNT_OPENING,
     route: NEW_SALES_ROUTES.RiskProfile,
     key: NEW_SALES_KEYS.RiskProfile,
   },

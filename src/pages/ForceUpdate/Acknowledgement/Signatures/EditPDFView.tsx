@@ -18,10 +18,10 @@ import {
   flexRow,
   fs24BoldGray6,
   px,
+  py,
   sh32,
   sh4,
   sh48,
-  sh56,
   sh64,
   sw100,
   sw20,
@@ -144,13 +144,14 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
               </View>
               <CustomSpacer isHorizontal={true} space={sw96} />
             </View>
-            {completed === true ? (
-              <View style={px(sw20)}>
-                <CustomSpacer space={sh48} />
-                <RoundedButton onPress={handleContinue} loading={pageLoading} text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE} />
-                <CustomSpacer space={sh56} />
-              </View>
-            ) : null}
+            <View style={{ ...px(sw20), ...py(sh48) }}>
+              <RoundedButton
+                disabled={completed === false}
+                onPress={handleContinue}
+                loading={pageLoading}
+                text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
+              />
+            </View>
           </View>
         </ScrollView>
         {completed === true ? null : (

@@ -204,6 +204,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleCheckAccounts = async () => {
+    const checkJoint = accountType === "Joint" ? { joint: { clientId: client.details?.jointHolder?.clientId! } } : {};
     const request: IEtbAccountListRequest = {
       initId: client.details?.initId!,
       principal: {
@@ -211,6 +212,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       },
       isEtb: true,
       investments: investments,
+      ...checkJoint,
     };
     const response: IEtbAccountListResponse = await getEtbAccountList(request, navigation);
     if (response !== undefined) {

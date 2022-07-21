@@ -156,7 +156,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
           })}
       </ContentPage>
       <SelectionBanner
-        label={ORDER_SUMMARY.LABEL_ORDER_CONFIRMATION}
+        label={ORDER_SUMMARY.BANNER_LABEL}
         bottomContent={
           <View style={flexRow}>
             {isNotEmpty(orders?.orders) ? <Text style={fs16BoldGray6}>{bannerSubtitle}</Text> : null}

@@ -266,6 +266,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               const epfTitle = receipt.isEpf === "true" ? " - EPF" : "";
               const recurringTitle = receipt.isScheduled === "true" ? " - Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
+              const fullOpacity = { opacity: 1 };
+
               return (
                 <Fragment key={index}>
                   <SignatureUploadWithModal
@@ -284,6 +286,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                     tooltip={false}
                     onPress={handleEdit}
                     value={receipt.signedPdf}
+                    containerStyle={fullOpacity}
                   />
                   <CustomSpacer space={sh8} />
                 </Fragment>

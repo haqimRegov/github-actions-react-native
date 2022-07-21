@@ -3,6 +3,9 @@ declare interface IEtbAccountListRequest {
   principal: {
     clientId: string;
   };
+  joint?: {
+    clientId: string;
+  };
   investments: ISubmitInvestment[];
   isEtb: boolean;
 }

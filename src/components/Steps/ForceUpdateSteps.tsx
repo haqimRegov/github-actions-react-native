@@ -15,7 +15,6 @@ import {
   fs12RegGray6,
   fs14BoldGray6,
   fs14RegGray4,
-  fs14RegGray6,
   fullHW,
   px,
   py,
@@ -25,7 +24,7 @@ import {
   sh24,
   sh32,
   sw112,
-  sw120,
+  sw124,
   sw200,
   sw24,
   sw32,
@@ -79,7 +78,7 @@ export const ForceUpdateSteps: FunctionComponent<ForceUpdateStepsProps> = ({
   const accordionHeader = (step: IForceUpdate, stepIndex: number, isActive: boolean) => {
     const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.key) : false;
     const currentStep = (stepIndex + 1).toString();
-    const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegGray6 : fs14BoldGray6;
+    const activeTextStyle: TextStyle = fs14BoldGray6;
     const textStyle: TextStyle = isActive ? activeTextStyle : { ...fs14RegGray4, ...disabledOpacity6 };
 
     const handleChange = () => {
@@ -103,7 +102,7 @@ export const ForceUpdateSteps: FunctionComponent<ForceUpdateStepsProps> = ({
             <View style={flexRow}>
               <Step active={isActive} step={currentStep} visited={visited} />
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={{ ...textStyle, lineHeight: sh24, width: sw120 }}>{step.label}</Text>
+              <Text style={{ ...textStyle, lineHeight: sh24, width: sw124 }}>{step.label}</Text>
             </View>
           </View>
         </TouchableWithoutFeedback>

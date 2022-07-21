@@ -3,12 +3,14 @@ import { Alert, FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
+  BasicModal,
   ConfirmationModal,
   CustomFlexSpacer,
   CustomSpacer,
   CustomToast,
   LabeledTitle,
-  PromptModal,
+  Loading,
+  NewPrompt,
   SafeAreaPage,
   SelectionBanner,
 } from "../../../components";
@@ -18,9 +20,10 @@ import { IcoMoon } from "../../../icons";
 import { getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
 import { PersonalInfoStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import {
-  alignFlexStart,
+  alignSelfStart,
   border,
   borderBottomBlue4,
+  centerHV,
   centerVertical,
   colorBlack,
   colorBlue,
@@ -40,6 +43,7 @@ import {
   fs16RegGray6,
   fs18BoldGray6,
   fs24BoldGray6,
+  fullHW,
   fullWidth,
   px,
   py,
@@ -53,10 +57,12 @@ import {
   shadow4Blue008,
   sw1,
   sw16,
+  sw212,
   sw24,
   sw32,
   sw4,
   sw8,
+  sw96,
 } from "../../../styles";
 import { isNotEmpty, parseAmountToString, titleCaseString } from "../../../utils";
 import { Investment } from "./Investment";
@@ -91,7 +97,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const withEpf = true;
   const flatListRef = useRef<FlatList | null>(null);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
-  const [duplicatePrompt, setDuplicatePrompt] = useState<boolean>(true);
+  const [duplicatePrompt, setDuplicatePrompt] = useState<boolean>(false);
+  const [accountListLoader, setAccountListLoader] = useState<boolean>(false);
   const [etbAccountList, setEtbAccountList] = useState<IEtbAccountDescription[]>([]);
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails!, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -204,6 +211,9 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleCheckAccounts = async () => {
+    setAccountListLoader(true);
+    setDuplicatePrompt(true);
+    const checkJoint = accountType === "Joint" ? { joint: { clientId: client.details?.jointHolder?.clientId! } } : {};
     const request: IEtbAccountListRequest = {
       initId: client.details?.initId!,
       principal: {
@@ -211,14 +221,15 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       },
       isEtb: true,
       investments: investments,
+      ...checkJoint,
     };
     const response: IEtbAccountListResponse = await getEtbAccountList(request, navigation);
+    setAccountListLoader(false);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
         if (data.result.etbAccountList.length > 0) {
           setEtbAccountList(data.result.etbAccountList);
-          setDuplicatePrompt(true);
         } else {
           handleNavigation();
         }
@@ -236,10 +247,12 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 
   const handleCancelPrompt = () => {
     setDuplicatePrompt(false);
+    setAccountListLoader(false);
   };
 
   const handleConfirmPrompt = () => {
     setDuplicatePrompt(false);
+    setAccountListLoader(false);
     handleNavigation();
   };
 
@@ -511,49 +524,55 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
           <Text style={fs16RegGray6}>{INVESTMENT.DELETE_MODAL_LINE_2}</Text>
         </View>
       </ConfirmationModal>
-      <PromptModal
-        contentStyle={alignFlexStart}
-        handleCancel={handleCancelPrompt}
-        handleContinue={handleConfirmPrompt}
-        label={INVESTMENT.LABEL_DUPLICATE_PROMPT_TITLE}
-        labelContinue={INVESTMENT.BUTTON_CONFIRM}
-        labelStyle={fs24BoldGray6}
-        spaceToTitle={sh4}
-        spaceToButton={sh40}
-        title={INVESTMENT.LABEL_DUPLICATE_PROMPT_SUBTITLE}
-        titleStyle={fs16RegGray5}
-        visible={duplicatePrompt && etbAccountList.length > 0}>
-        <View style={fullWidth}>
-          <CustomSpacer space={sh24} />
-          <View style={border(colorBlue._3, sw1, sw8)}>
-            {etbAccountList
-              .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
-              .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
-                const containerStyle: ViewStyle = {
-                  ...px(sw24),
-                  ...py(sh12),
-                  ...flexRow,
-                  backgroundColor: colorWhite._1,
-                  borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
-                  borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
-                  borderTopLeftRadius: index === 0 ? sw8 : 0,
-                  borderTopRightRadius: index === 0 ? sw8 : 0,
-                  borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
-                  borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
-                };
-                return (
-                  <View key={index} style={containerStyle}>
-                    <IcoMoon color={colorBlue._1} name="account" size={sw16} />
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <Text style={fs14BoldBlue1}>{eachDuplicateAccount.accountNumber}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
-                  </View>
-                );
-              })}
-          </View>
+      <BasicModal backdropOpacity={0.65} visible={duplicatePrompt}>
+        <View style={{ ...centerHV, ...fullHW }}>
+          {accountListLoader === false ? (
+            <NewPrompt
+              primary={{ buttonStyle: { width: sw212 }, onPress: handleConfirmPrompt, text: INVESTMENT.BUTTON_CONFIRM }}
+              secondary={{ buttonStyle: { width: sw212 }, onPress: handleCancelPrompt }}
+              spaceToTitle={sh4}
+              subtitle={INVESTMENT.LABEL_DUPLICATE_PROMPT_SUBTITLE}
+              subtitleStyle={{ ...fs16RegGray5, ...alignSelfStart }}
+              title={INVESTMENT.LABEL_DUPLICATE_PROMPT_TITLE}
+              titleStyle={{ ...fs24BoldGray6, ...alignSelfStart }}>
+              <View style={fullWidth}>
+                <CustomSpacer space={sh24} />
+                <View style={border(colorBlue._3, sw1, sw8)}>
+                  {etbAccountList
+                    .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
+                    .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
+                      const containerStyle: ViewStyle = {
+                        ...px(sw24),
+                        ...py(sh12),
+                        ...rowCenterVertical,
+                        backgroundColor: colorWhite._1,
+                        borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
+                        borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
+                        borderTopLeftRadius: index === 0 ? sw8 : 0,
+                        borderTopRightRadius: index === 0 ? sw8 : 0,
+                        borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                        borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                      };
+                      return (
+                        <View key={index} style={containerStyle}>
+                          <IcoMoon color={colorBlue._1} name="account" size={sw16} />
+                          <CustomSpacer isHorizontal={true} space={sw8} />
+                          <Text style={{ ...fs14BoldBlue1, width: sw96 }}>{eachDuplicateAccount.accountNumber}</Text>
+                          <CustomSpacer isHorizontal={true} space={sw8} />
+                          <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
+                        </View>
+                      );
+                    })}
+                </View>
+              </View>
+            </NewPrompt>
+          ) : (
+            <View style={{ ...centerHV, ...fullHW }}>
+              <Loading color={colorWhite._1} />
+            </View>
+          )}
         </View>
-      </PromptModal>
+      </BasicModal>
     </Fragment>
   );
 };

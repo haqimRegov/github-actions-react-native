@@ -1278,8 +1278,9 @@ export const english = {
       TABLE_HEADER_TRANSACTION_TYPE: "Trans. Type",
     },
     ORDER_SUMMARY: {
-      BUTTON_CONFIRM: "Confirm",
+      BANNER_LABEL: "Order Summary",
       BUTTON_CANCEL: "Cancel",
+      BUTTON_CONFIRM: "Confirm",
       LABEL_ORDER_CONFIRMATION: "Order Confirmation",
       LABEL_FUND_CLASS: "Class",
       LABEL_SALES_CHARGE: "Sales Charge",
@@ -1865,6 +1866,7 @@ export const english = {
       BUTTON_AGREE: "Agree & Confirm",
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONTINUE: "Continue",
+      BUTTON_CREATE: "Create Order",
       BUTTON_DASHBOARD: "Back to Dashboard",
       BUTTON_PAY: "Pay Now",
       BUTTON_SUBMIT: "Submit",

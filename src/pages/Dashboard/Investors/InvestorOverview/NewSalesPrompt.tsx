@@ -282,7 +282,7 @@ const NewSalesPromptComponent = ({
         loading: fetching,
         onPress: handleContinue,
         buttonStyle: { width: sw212 },
-        text: buttonContinue,
+        text: prompt === "accountType" ? INVESTOR_ACCOUNTS.BUTTON_GET_STARTED : buttonContinue,
       }}
       secondary={{
         onPress: handleCancel,

@@ -215,7 +215,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleSubmit}
-        labelContinue={TERMS_AND_CONDITIONS.BUTTON_SUBMIT}
+        labelContinue={TERMS_AND_CONDITIONS.BUTTON_CREATE}
         subheading={TERMS_AND_CONDITIONS.HEADING_SIGNATURE}
         subtitle={TERMS_AND_CONDITIONS.SUBTITLE_SIGNATURE}
         {...defaultContentProps}>

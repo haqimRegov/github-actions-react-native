@@ -139,6 +139,7 @@ export const sw116 = scaleWidth(116);
 export const sw119 = scaleWidth(119);
 export const sw120 = scaleWidth(120);
 export const sw123 = scaleWidth(123);
+export const sw124 = scaleWidth(124);
 export const sw128 = scaleWidth(128);
 export const sw134 = scaleWidth(134);
 export const sw136 = scaleWidth(136);

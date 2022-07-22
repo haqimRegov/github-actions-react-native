@@ -557,10 +557,23 @@ const submitProofOfPayments = gql`
             paymentType
             status
             remarks
+            totalPayment {
+              currency
+              amount
+            }
+            excessAmount {
+              currency
+              amount
+            }
+            docList {
+              title
+              remarks
+            }
           }
           withFloating
           message
           txRef
+          withHardcopy
         }
       }
       error {

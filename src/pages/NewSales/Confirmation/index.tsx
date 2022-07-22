@@ -555,7 +555,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                       };
                       return (
                         <View key={index} style={containerStyle}>
-                          <IcoMoon color={colorBlue._1} name="account" size={sw16} />
+                          <IcoMoon color={colorBlue._1} name="duplicate-account" size={sw16} />
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <Text style={{ ...fs14BoldBlue1, width: sw96 }}>{eachDuplicateAccount.accountNumber}</Text>
                           <CustomSpacer isHorizontal={true} space={sw8} />

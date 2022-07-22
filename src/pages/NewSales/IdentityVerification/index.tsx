@@ -160,15 +160,21 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     const updatedFinishedStep = [...finishedSteps];
     let route: TypeNewSalesRoute = "AdditionalDetails";
     const findFinishedId = finishedSteps.indexOf("IdentityVerification");
-    if (findFinishedId !== -1) {
+    const findFinishedDetails = finishedSteps.indexOf("AdditionalDetails");
+    if (findFinishedId !== -1 && findFinishedDetails !== -1) {
       route = "Summary";
-    } else {
+    } else if (findFinishedId === -1) {
       updatedFinishedStep.push("IdentityVerification");
     }
-    const findIdVerification = disabledSteps.indexOf("IdentityVerification");
-    if (findIdVerification !== -1 && findFinishedId === -1) {
-      updatedDisabledSteps.splice(findIdVerification, 1);
+    const findDisabledId = updatedDisabledSteps.indexOf("IdentityVerification");
+    if (findDisabledId !== -1 && findFinishedId === -1) {
+      updatedDisabledSteps.splice(findDisabledId, 1);
     }
+    const findDisabledDetails = updatedDisabledSteps.indexOf("AdditionalDetails");
+    if (findDisabledDetails !== -1 && route === "AdditionalDetails") {
+      updatedDisabledSteps.splice(findDisabledDetails, 1);
+    }
+
     updateNewSales({
       ...newSales,
       disabledSteps: updatedDisabledSteps,

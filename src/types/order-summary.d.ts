@@ -36,6 +36,7 @@ declare interface IOrderInvestment {
   isFea: boolean | null;
   isScheduled: boolean;
   isSyariah: boolean;
+  landingFund?: string;
   salesCharge: string;
   scheduledInvestmentAmount: string | null;
   scheduledSalesCharge: string | null;

@@ -403,6 +403,8 @@ export const english = {
       LABEL_RISK_PROFILE: "Risk Profile",
     },
     DASHBOARD_ORDER_DETAILS: {
+      SECTION_JOINT: "Joint Holder",
+      SECTION_PRINCIPAL: "Principal Holder",
       LABEL_ACCOUNT_NO: "Bank Account Number",
       LABEL_ACCOUNT_NUMBER: "Account Number",
       LABEL_ACCOUNT_TYPE_AND_NUMBER: "Account Type & Number",
@@ -1288,6 +1290,7 @@ export const english = {
       LABEL_FUND_CURRENCY: "Currency",
       LABEL_FUNDING_OPTION: "Funding Option",
       LABEL_ACCOUNT_FUND: "Account Fund",
+      LABEL_LANDING_FUND: "Landing Fund",
       LABEL_TYPE: "Type",
       LABEL_Shariah: "Shariah",
       LABEL_FUND_INFORMATION: "Fund Information",

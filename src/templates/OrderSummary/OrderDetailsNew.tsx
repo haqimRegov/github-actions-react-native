@@ -11,7 +11,6 @@ import {
   borderBottomBlue3,
   borderBottomBlue4,
   borderBottomBlue5,
-  centerHV,
   centerVertical,
   colorBlue,
   flexChild,
@@ -32,7 +31,6 @@ import {
   sh24,
   sh32,
   sh8,
-  sw10,
   sw16,
   sw24,
   sw32,
@@ -152,7 +150,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
           {...summaryColorCardStyleProps}
           content={
             <Fragment>
-              {profile.map((details, point: number) => {
+              {profile.map((details, profileIndex: number) => {
                 // investor overview
                 const investorOverview: LabeledTitleProps[] = [
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR_NAME, title: details.name, titleStyle: fsTransformNone },
@@ -172,24 +170,18 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                   });
                 }
                 return (
-                  <Fragment>
+                  <Fragment key={profileIndex}>
                     {transactionDetails.accountType === "Joint" ? (
                       <Fragment>
                         <View style={flexChild}>
                           <View style={rowCenterVertical}>
-                            {/* TODO new account joint icon */}
-                            <IcoMoon name={point !== 0 ? "avatar-joint" : "account"} size={sh24} color={colorBlue._1} />
-                            <CustomSpacer isHorizontal={true} space={sw10} />
-                            <View style={{ ...flexRow, ...centerHV }}>
-                              <Text style={fs16BoldBlack2}>{details.name}</Text>
-                              <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Text style={fs12RegGray5}>{details.accountType}</Text>
-                            </View>
-
+                            <IcoMoon name={profileIndex !== 0 ? "account-joint" : "account"} size={sh24} color={colorBlue._1} />
+                            <CustomSpacer isHorizontal={true} space={sw8} />
+                            <Text style={fs16BoldBlack2}>
+                              {profileIndex === 0 ? DASHBOARD_ORDER_DETAILS.SECTION_PRINCIPAL : DASHBOARD_ORDER_DETAILS.SECTION_JOINT}
+                            </Text>
                             <CustomSpacer isHorizontal={true} space={sw16} />
-                            <View style={flexChild}>
-                              <View style={borderBottomBlue4} />
-                            </View>
+                            <View style={{ ...borderBottomBlue4, ...flexChild }} />
                           </View>
                         </View>
                         <CustomSpacer space={sh8} />

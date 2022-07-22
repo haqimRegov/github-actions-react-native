@@ -6,13 +6,13 @@ import { ConfirmationModal, ContentPageProps } from "../../components";
 import { Language, NEW_SALES_ROUTES } from "../../constants";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
 import { fs14RegGray5, fs16RegGray6, fs18BoldGray6, fs24BoldGray6, sh4, sh40, sh48 } from "../../styles";
-import { Sample } from "../ForceUpdate/Sample";
 import { AdditionalInfoSummary } from "./AccountInfoSummary";
 import { AccountList } from "./AccountList";
 import { OrderPreview, Signatures, TermsAndConditions } from "./Acknowledgement";
 import { AdditionalInfo } from "./AdditionalDetails";
 import { ProductConfirmation } from "./Confirmation";
 import { NewSalesIdentityConfirmation } from "./IdentityVerification";
+import { NewSalesPayment } from "./Payment";
 import { Products } from "./Products";
 import { NewSalesRiskAssessment } from "./RiskAssessment";
 import { NewSalesRiskProfile } from "./RiskProfile";
@@ -79,7 +79,7 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
       content = <AdditionalInfoSummary {...newProps} />;
       break;
     case NEW_SALES_ROUTES.Payment:
-      content = <Sample title="sample" {...newProps} />;
+      content = <NewSalesPayment {...newProps} />;
       break;
     default:
       <View />;

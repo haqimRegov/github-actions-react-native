@@ -59,6 +59,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     salesCharge,
     scheduledInvestmentAmount,
     scheduledSalesCharge,
+    landingFund,
     fundCode,
   } = fund;
 
@@ -96,6 +97,14 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
       titleStyle: fsTransformNone,
     },
   ];
+
+  if (fundType === "AMP") {
+    fundInfo.push({
+      label: ORDER_SUMMARY.LABEL_LANDING_FUND,
+      title: landingFund || "-",
+      titleStyle: fsTransformNone,
+    });
+  }
 
   // investment section
   const investment: LabeledTitleProps[] = [

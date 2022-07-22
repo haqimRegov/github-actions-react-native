@@ -224,7 +224,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               const amountTitle = receipt
                 .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
                 .join(", ");
-              const epfTitle = receipt.isEpf === "true" ? "- EPF" : "";
+              const cashTitle = receipt.isEpf !== "true" && receipt.isScheduled !== "true" ? " Cash" : "";
+              const epfTitle = receipt.isEpf === "true" ? " - EPF" : cashTitle;
               const recurringTitle = receipt.isScheduled === "true" ? "- Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               return (

@@ -18,7 +18,7 @@ import { Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
 import { getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
-import { PersonalInfoStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
+import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import {
   alignSelfStart,
   border,
@@ -69,7 +69,7 @@ import { Investment } from "./Investment";
 
 const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
 
-export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesContentProps, PersonalInfoStoreProps {
+export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesContentProps {
   handleNextStep: (step: TypeNewSalesRoute) => void;
   navigation: IStackNavigationProp;
   route: string;

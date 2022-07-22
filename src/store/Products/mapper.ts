@@ -1,5 +1,6 @@
 import { bindActionCreators, Dispatch } from "redux";
 
+import { AcknowledgementActionProps } from "../Acknowledgement";
 import { GlobalActionProps } from "../Global/actions";
 import { NewSalesActionProps } from "../NewSales";
 import { OnboardingActionProps } from "../Onboarding/actions";
@@ -40,6 +41,7 @@ export const ProductsMapDispatchToProps = (dispatch: Dispatch) => {
       ...NewSalesActionProps,
       ...SelectedFundActionProps,
       ...GlobalActionProps,
+      ...AcknowledgementActionProps,
     },
     dispatch,
   );

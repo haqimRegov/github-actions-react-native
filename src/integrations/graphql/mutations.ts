@@ -467,6 +467,7 @@ const submitClientAccount = gql`
             investments {
               distributionInstruction
               fundClass
+              fundCode
               fundCurrency
               fundingOption
               fundId

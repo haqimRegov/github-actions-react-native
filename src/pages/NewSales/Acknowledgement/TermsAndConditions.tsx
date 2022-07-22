@@ -16,8 +16,8 @@ import {
   disabledOpacity5,
   disabledOpacity6,
   flexRow,
+  fs12BoldBlue1,
   fs12BoldWhite1,
-  fs12SemiBoldBlue1,
   fs14RegGray5,
   fs16RegBlack2,
   justifyContentEnd,
@@ -146,7 +146,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
                     <IcoMoon color={colorBlue._1} name={expandAll ? "expand" : "collapse"} size={sw14} />
                   </View>
                   <CustomSpacer isHorizontal space={sw4} />
-                  <Text style={fs12SemiBoldBlue1}>{headerText}</Text>
+                  <Text style={fs12BoldBlue1}>{headerText}</Text>
                 </View>
               </Pressable>
             </View>

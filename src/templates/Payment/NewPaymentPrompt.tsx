@@ -70,7 +70,7 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
     result !== undefined
       ? result.orders.map((eachOrder) => {
           const amount = eachOrder.totalPayment.map((eachAmount) => `${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
-          const excessAmount = eachOrder.excessAmount.map((eachAmount) => `${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
+          const excessAmount = eachOrder.excessAmount.map((eachAmount) => `+ ${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
           const softcopyDocuments: ISubmissionSummaryRemarks[] = eachOrder.docList.map((doc) => ({ ...doc, otherRemarks: undefined }));
           const totalPayment: ISubmissionSummaryRemarks[] =
             eachOrder.totalPayment.length === 0 ||

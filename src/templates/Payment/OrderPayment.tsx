@@ -41,7 +41,7 @@ import {
   sw8,
 } from "../../styles";
 import { AnimationUtils, formatAmount, isEmpty, isNotEmpty, isObjectEqual, parseAmount } from "../../utils";
-import { OrderOverview } from "../Onboarding/OrderOverview";
+import { FundOverview } from "../Onboarding";
 import { AddedInfo } from "./AddedInfo";
 import { filterDeletedSavedChild, generateNewInfo, handleAvailableBalance, handleReduceAmount, updateCtaUsedBy } from "./helpers";
 import { PaymentInfo } from "./PaymentInfo";
@@ -267,7 +267,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
   return (
     <View>
-      <OrderOverview
+      <FundOverview
         completed={completed}
         createdOn={moment(createdOn, "x").format(DEFAULT_DATE_FORMAT)}
         funds={funds}

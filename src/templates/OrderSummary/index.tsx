@@ -145,6 +145,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   const buttonJointStyle: ViewStyle = {
     borderColor: colorBlue._1,
     borderWidth: sw1,
+    borderLeftWidth: 0,
     height: sh24,
     width: sw120,
     borderTopLeftRadius: 0,

@@ -15,10 +15,6 @@ declare interface ISubmitPdfRequest {
   isForceUpdate: boolean;
 }
 
-declare interface ISubmitPdfRemarks {
-  title: string;
-  remarks: string[];
-}
 declare interface ISubmitPdfResult extends ISubmissionSummaryOrder {
   message: string;
 }

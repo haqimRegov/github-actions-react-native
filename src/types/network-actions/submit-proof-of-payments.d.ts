@@ -34,22 +34,29 @@ declare interface ISubmitProofOfPaymentsRequest {
 }
 
 declare interface ISubmitProofOfPaymentResultOrder {
+  docList: ISubmissionSummaryRemarks[];
+  excessAmount: IOrderAmount[];
   orderNumber: string;
   paymentType: string;
-  status: string;
   remarks: string[];
+  status: string;
+  totalPayment: IOrderAmount[];
 }
 
 declare interface ISubmitProofOfPaymentResultAccount {
   status: string;
   remarks: string[];
 }
+
 declare interface ISubmitProofOfPaymentsResult {
-  account: ISubmitProofOfPaymentResultAccount;
-  orders: ISubmitProofOfPaymentResultOrder[];
+  account: ISubmitProofOfPaymentResultAccount[];
   message: string;
+  orders: ISubmitProofOfPaymentResultOrder[];
+  txRef: string;
   withFloating: boolean;
+  withHardcopy: boolean;
 }
+
 declare type ISubmitProofOfPaymentsResponse = IMutationResponse<ISubmitProofOfPaymentsResult> | undefined;
 
 declare interface ISubmitProofOfPaymentsMutation {

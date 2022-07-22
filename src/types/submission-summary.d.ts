@@ -1,5 +1,6 @@
 declare interface ISubmissionSummaryRemarks {
   title: string;
+  otherRemarks?: string[];
   remarks: string[];
 }
 

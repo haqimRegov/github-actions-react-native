@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useRef } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { Language } from "../../constants";
@@ -35,13 +35,6 @@ export interface SubmissionSummaryPromptProps extends NewActionButtonsProps {
   titleStyle?: TextStyle;
 }
 
-interface IPropsCache {
-  checkboxLabel?: string;
-  title?: string;
-  primaryButton?: string;
-  secondaryButton?: string;
-}
-
 export const SubmissionSummaryPrompt: FunctionComponent<SubmissionSummaryPromptProps> = ({
   checkbox,
   children,
@@ -55,12 +48,12 @@ export const SubmissionSummaryPrompt: FunctionComponent<SubmissionSummaryPromptP
 }: SubmissionSummaryPromptProps) => {
   const { buttonContainerStyle, primary, secondary } = newActionButtonProps;
 
-  const propsCache = useRef<IPropsCache>({
+  const propsCache = {
     checkboxLabel: checkbox !== undefined && checkbox.label !== undefined ? checkbox.label : "",
     primaryButton: primary !== undefined && primary.text !== undefined ? primary.text : SUBMISSION_SUMMARY.BUTTON_CONFIRM,
     secondaryButton: secondary !== undefined && secondary.text !== undefined ? secondary.text : SUBMISSION_SUMMARY.BUTTON_CANCEL,
     title: title,
-  });
+  };
 
   const modalContainer: ViewStyle = {
     backgroundColor: colorBlue._2,
@@ -82,8 +75,8 @@ export const SubmissionSummaryPrompt: FunctionComponent<SubmissionSummaryPromptP
     <View style={modalContainer}>
       <CustomSpacer space={spaceToTop || sh40} />
       <View style={{ ...px(sw48), ...contentStyle }}>
-        {propsCache.current !== null && propsCache.current.title !== undefined ? (
-          <Text style={{ ...fs18BoldBlue1, ...titleStyle }}>{propsCache.current.title}</Text>
+        {propsCache !== null && propsCache.title !== undefined ? (
+          <Text style={{ ...fs18BoldBlue1, ...titleStyle }}>{propsCache.title}</Text>
         ) : null}
         {children}
         {checkbox !== undefined ? (
@@ -97,14 +90,8 @@ export const SubmissionSummaryPrompt: FunctionComponent<SubmissionSummaryPromptP
       {primary !== undefined || secondary !== undefined ? (
         <NewActionButtons
           buttonContainerStyle={buttonContainer}
-          primary={
-            primary !== undefined && propsCache.current.primaryButton ? { ...primary, text: propsCache.current.primaryButton } : undefined
-          }
-          secondary={
-            secondary !== undefined && propsCache.current.secondaryButton
-              ? { ...secondary, text: propsCache.current.secondaryButton }
-              : undefined
-          }
+          primary={primary !== undefined && propsCache.primaryButton ? { ...primary, text: propsCache.primaryButton } : undefined}
+          secondary={secondary !== undefined && propsCache.secondaryButton ? { ...secondary, text: propsCache.secondaryButton } : undefined}
         />
       ) : null}
     </View>

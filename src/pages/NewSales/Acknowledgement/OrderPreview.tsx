@@ -40,7 +40,7 @@ import {
   sw4,
   sw588,
 } from "../../../styles";
-import { OrderOverviewNew } from "../../../templates";
+import { FundOverview } from "../../../templates";
 import { formatAmount, isNotEmpty } from "../../../utils";
 import { defaultContentProps } from "../Content";
 
@@ -142,7 +142,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
               <Fragment key={index}>
                 {index !== 0 ? <CustomSpacer space={sh24} /> : null}
                 <View style={px(sw24)}>
-                  <OrderOverviewNew
+                  <FundOverview
                     funds={orderSummary.investments}
                     createdOn={orderSummary.orderDate}
                     noBadge={true}
@@ -156,7 +156,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
           })}
       </ContentPage>
       <SelectionBanner
-        label={ORDER_SUMMARY.BANNER_LABEL}
+        label={ORDER_SUMMARY.LABEL_ORDER_CONFIRMATION}
         bottomContent={
           <View style={flexRow}>
             {isNotEmpty(orders?.orders) ? <Text style={fs16BoldGray6}>{bannerSubtitle}</Text> : null}
@@ -166,7 +166,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
         }
         labelStyle={fs20BoldBlack2}
         labelCancel={ORDER_SUMMARY.BUTTON_CANCEL}
-        labelSubmit={ORDER_SUMMARY.BUTTON_CONFIRM}
+        labelSubmit={ORDER_SUMMARY.BUTTON_CONTINUE}
         submitOnPress={handleConfirm}
       />
     </View>

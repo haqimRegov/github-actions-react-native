@@ -23,8 +23,9 @@ import {
   shadow50Black115,
   sw24,
 } from "../../../styles";
-import { OrderPayment, PaymentPopup } from "../../../templates";
+import { OrderPayment } from "../../../templates";
 import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys, handleEPFStructuring } from "../../../templates/Payment/helpers";
+import { NewPaymentPrompt } from "../../../templates/Payment/NewPaymentPrompt";
 import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
 import { parseAmount } from "../../../utils";
 
@@ -48,7 +49,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
   const [localRecurringDetails, setLocalRecurringDetails] = useState<IRecurringDetails | undefined>(undefined);
   const [localCtaDetails, setLocalCtaDetails] = useState<TypeCTADetails[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
+
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
   const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
 
@@ -87,7 +92,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const handleSubmit = async (confirmed?: boolean) => {
     try {
-      setLoading(true);
+      if (confirmed === undefined) {
+        setShowPopup(true);
+      } else {
+        setButtonLoading(true);
+      }
       const updatedPayments: IPaymentRequired[] = [];
       if (tempData !== undefined) {
         tempData.forEach((eachOrder) => {
@@ -109,11 +118,22 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         }),
       );
       const request = { orders: paymentOrders, isConfirmed: confirmed === true };
-      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(
+        request,
+        navigation,
+        confirmed === true ? setButtonLoading : setShowPopup,
+      );
+      if (confirmed === true) {
+        setButtonLoading(false);
+      }
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;
         if (error === null && data !== null) {
-          setPaymentResult(data.result);
+          if (confirmed === true) {
+            setPromptType("success");
+          } else {
+            setPaymentResult(data.result);
+          }
         }
         if (error !== null) {
           throw error;
@@ -121,7 +141,11 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      setLoading(false);
+      if (confirmed === undefined) {
+        setShowPopup(false);
+      } else {
+        setButtonLoading(false);
+      }
       if ("errorCode" in error) {
         Alert.alert(error.message);
       }
@@ -131,7 +155,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const handleCancelPopup = () => {
     setPaymentResult(undefined);
-    setLoading(false);
+    setShowPopup(false);
   };
 
   const handleConfirmPopup = async () => {
@@ -183,7 +207,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     tempData !== undefined && pendingLength === tempData.length ? `All (${tempData.length}) pending` : `${pendingLength} pending, `;
   const completedText =
     tempData !== undefined && completedLength === tempData.length ? `All (${tempData.length}) completed` : `${completedLength} completed`;
-  const bannerText = `${PAYMENT.LABEL_PENDING_SUMMARY}: ${pendingLength > 0 ? pendingText : ""}${completedLength > 0 ? completedText : ""}`;
+  const bannerText = `${PAYMENT.BANNER_LABEL}: ${pendingLength > 0 ? pendingText : ""}${completedLength > 0 ? completedText : ""}`;
   // To show the available balance and also the excess
   const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
   const checkAllCompleted =
@@ -342,12 +366,13 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
           />
         )}
       </View>
-      <PaymentPopup
+      <NewPaymentPrompt
+        buttonLoading={buttonLoading}
         handleCancel={handleCancelPopup}
         handleConfirm={handleConfirmPopup}
-        loading={loading}
+        promptType={promptType}
         result={paymentResult}
-        withExcess={completedCurrencies.length > 0}
+        visible={showPopup}
       />
       <CustomToast
         count={deleteCount}

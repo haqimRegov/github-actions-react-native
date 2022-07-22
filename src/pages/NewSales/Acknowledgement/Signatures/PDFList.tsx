@@ -204,6 +204,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       ? `${details!.principalHolder!.name} `
       : `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
 
+  const signIcon = accountType === "Individual" ? "account" : "account-joint";
+
   const getCollectionBank = orders!.grandTotal.map((eachTotal) => {
     const collectionBank = DICTIONARY_KIB_BANK_ACCOUNTS.filter((bank) => bank.currency === eachTotal.currency);
     return collectionBank[0];
@@ -222,7 +224,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <View style={rowCenterVertical}>
-            <IconText color={colorBlue._1} name="account" text={toSignLabel} textStyle={fs14BoldBlack2} />
+            <IconText color={colorBlue._1} name={signIcon} text={toSignLabel} textStyle={fs14BoldBlack2} />
             <Text style={fs14RegBlack2}>{TERMS_AND_CONDITIONS.LABEL_TO_SIGN}</Text>
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ ...borderBottomBlue5, ...flexChild }} />
@@ -263,7 +265,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               const amountTitle = receipt
                 .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
                 .join(", ");
-              const epfTitle = receipt.isEpf === "true" ? " - EPF" : "";
+              const cashTitle = receipt.isEpf !== "true" && receipt.isScheduled !== "true" ? " Cash" : "";
+              const epfTitle = receipt.isEpf === "true" ? " - EPF" : cashTitle;
               const recurringTitle = receipt.isScheduled === "true" ? " - Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               const fullOpacity = { opacity: 1 };

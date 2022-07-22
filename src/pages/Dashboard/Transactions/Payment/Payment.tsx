@@ -10,13 +10,14 @@ import { useDelete } from "../../../../hooks";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
-import { OrderPayment, PaymentPopup } from "../../../../templates";
+import { OrderPayment } from "../../../../templates";
 import {
   calculateExcess,
   checkCurrencyCompleted,
   generatePaymentWithKeys,
   handleEPFStructuring,
 } from "../../../../templates/Payment/helpers";
+import { NewPaymentPrompt } from "../../../../templates/Payment/NewPaymentPrompt";
 import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanner";
 import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -37,7 +38,9 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
   const [localCtaDetails, setLocalCtaDetails] = useState<TypeCTADetails[]>([]);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
 
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
@@ -52,7 +55,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
   const handleFetch = async () => {
     const request: IGetPaymentRequiredRequest = { orderNumber: currentOrder!.orderNumber };
-    const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation, setLoading);
+    const response: IGetPaymentRequiredResponse = await getPaymentRequired(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -95,7 +98,11 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
   const handleSubmit = async (confirmed?: boolean) => {
     try {
-      setLoading(true);
+      if (confirmed === undefined) {
+        setShowPopup(true);
+      } else {
+        setButtonLoading(true);
+      }
       const paymentWithDeleted: IPaymentInfo[] = [];
       if (tempDeletedPayment.length > 0) {
         paymentWithDeleted.push(...tempDeletedPayment);
@@ -115,12 +122,22 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       ];
 
       const request = { orders: paymentOrders, isConfirmed: confirmed === true };
-      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation, setLoading);
-
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(
+        request,
+        navigation,
+        confirmed === true ? setButtonLoading : setShowPopup,
+      );
+      if (confirmed === true) {
+        setButtonLoading(false);
+      }
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;
         if (error === null && data !== null) {
-          setPaymentResult(data.result);
+          if (confirmed === true) {
+            setPromptType("success");
+          } else {
+            setPaymentResult(data.result);
+          }
         }
         if (error !== null) {
           throw error;
@@ -128,8 +145,11 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // console.log("Error in handleSubmit", error);
-      setLoading(false);
+      if (confirmed === undefined) {
+        setShowPopup(false);
+      } else {
+        setButtonLoading(false);
+      }
       if ("errorCode" in error) {
         Alert.alert(error.message);
       }
@@ -139,7 +159,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
   const handleCancelPopup = () => {
     setPaymentResult(undefined);
-    setLoading(false);
+    setShowPopup(false);
   };
 
   const handleConfirmPopup = async () => {
@@ -227,7 +247,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       : false;
 
   const bannerText =
-    tempData !== undefined ? `${PAYMENT.LABEL_PENDING_SUMMARY}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
+    tempData !== undefined ? `${PAYMENT.BANNER_LABEL}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
   const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
   const updatedBalancePayments =
@@ -335,12 +355,13 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         setCount={setDeleteCount}
       />
       <CustomToast parentVisible={savedChangesToast} setParentVisible={setSavedChangesToast} />
-      <PaymentPopup
+      <NewPaymentPrompt
+        buttonLoading={buttonLoading}
         handleCancel={handleCancelPopup}
         handleConfirm={handleConfirmPopup}
-        loading={loading}
+        promptType={promptType}
         result={paymentResult}
-        withExcess={tempData !== undefined && tempData.isLastOrder === true && completedCurrencies.length > 0}
+        visible={showPopup}
       />
     </Fragment>
   );

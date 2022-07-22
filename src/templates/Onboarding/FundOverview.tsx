@@ -30,7 +30,7 @@ import { FundNew } from "./FundNew";
 
 const { PAYMENT } = Language.PAGE;
 
-interface OrderOverviewProps {
+interface FundOverviewProps {
   completed?: boolean;
   createdOn: string;
   funds: IOrderInvestment[];
@@ -39,7 +39,7 @@ interface OrderOverviewProps {
   paymentType: TypePaymentType;
   totalInvestment: IOrderAmount[];
 }
-export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
+export const FundOverview: FunctionComponent<FundOverviewProps> = ({
   completed,
   createdOn,
   funds,
@@ -47,7 +47,7 @@ export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
   orderNumber,
   paymentType,
   totalInvestment,
-}: OrderOverviewProps) => {
+}: FundOverviewProps) => {
   const [viewFund, setViewFund] = useState<string>("");
 
   const cardHeaderStyle: ViewStyle = {
@@ -73,9 +73,10 @@ export const OrderOverviewNew: FunctionComponent<OrderOverviewProps> = ({
           <Text style={fs10RegGray6}>{createdOn}</Text>
         </View>
         <CustomFlexSpacer />
+        {noBadge === true ? null : <StatusBadge color={tagColor} text={tagLabel} />}
+        <CustomSpacer isHorizontal space={sw24} />
         <View style={alignItemsEnd}>
           <View style={rowCenterVertical}>
-            {noBadge === true ? null : <StatusBadge color={tagColor} text={tagLabel} />}
             <CustomSpacer isHorizontal={true} space={sw8} />
             <Text style={fs10RegGray6}>{totalAmountLabel}</Text>
           </View>

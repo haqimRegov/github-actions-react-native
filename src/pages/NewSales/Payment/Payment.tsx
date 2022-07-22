@@ -30,14 +30,14 @@ import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
 import { parseAmount } from "../../../utils";
 
 const { PAYMENT, TOAST } = Language.PAGE;
-interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {
+interface PaymentProps extends AcknowledgementStoreProps, NewSalesContentProps {
   navigation: IStackNavigationProp;
 }
 
-const PaymentComponent: FunctionComponent<PaymentProps> = ({
+const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
   accountType,
   details,
-  handleResetOnboarding,
+  handleResetNewSales,
   navigation,
   orders,
   personalInfo,
@@ -51,16 +51,15 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   const [localCtaDetails, setLocalCtaDetails] = useState<TypeCTADetails[]>([]);
 
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
-  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
-
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
   const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
-
   const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
-  const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
   const checkProofOfPayments = proofOfPayments !== undefined ? [...proofOfPayments] : [];
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IPaymentRequired[]>(checkProofOfPayments, setProofOfPayments);
+
+  const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
 
   const handleFetch = async () => {
     if (orders !== undefined) {
@@ -160,7 +159,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const handleConfirmPopup = async () => {
     if (confirmPayment === true) {
-      return handleResetOnboarding();
+      return handleResetNewSales();
     }
 
     const response = await handleSubmit(true);
@@ -386,4 +385,4 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     </SafeAreaPage>
   );
 };
-export const Payment = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(PaymentComponent);
+export const NewSalesPayment = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(NewSalesPaymentComponent);

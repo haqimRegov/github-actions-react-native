@@ -141,6 +141,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
         clientId: clientId!,
         id: id!,
         initId: details!.initId!,
+        isEtb: true,
         isForceUpdate: false,
         riskAssessment: {
           questionTwo: questionTwo,

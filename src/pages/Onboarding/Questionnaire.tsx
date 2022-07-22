@@ -132,6 +132,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         clientId: clientId!,
         id: id!,
         initId: details!.initId!,
+        isEtb: false,
         isForceUpdate: false,
         riskAssessment: {
           questionTwo: questionTwo,

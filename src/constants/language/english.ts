@@ -1281,6 +1281,7 @@ export const english = {
       BANNER_LABEL: "Order Summary",
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",
+      BUTTON_CONTINUE: "Continue",
       LABEL_ORDER_CONFIRMATION: "Order Confirmation",
       LABEL_FUND_CLASS: "Class",
       LABEL_SALES_CHARGE: "Sales Charge",
@@ -1342,6 +1343,7 @@ export const english = {
       LABEL_SHOWING: "Showing",
     },
     PAYMENT: {
+      BANNER_LABEL: "Payment Summary",
       BUTTON_ADDITIONAL: "Add Additional Payment",
       BUTTON_BACK_TO_PAYMENT: "Back to Payment",
       BUTTON_CONFIRM: "Confirm",
@@ -1451,9 +1453,9 @@ export const english = {
       PROMPT_SUBTITLE_CONTINUE:
         "Click ‘Continue editing’ to continue to update payment info.\n\nIf you close without saving, everything you changed will reset to its previous state.",
       PROMPT_SUBTITLE_PENDING:
-        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.",
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.",
       PROMPT_SUBTITLE_PENDING_EXCESS:
-        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n\n3. You can continue to update the order from the dashboard to complete the submission.\n\n4. Your investor has an excess amount in their account. This amount will be refunded.",
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.\n4. Your investor has an excess amount in their account. This amount will be refunded.",
       PROMPT_SUBTITLE_DUPLICATE_SURPLUS:
         "This use of surplus matches the other proof of payment info in this order. Continuing will merge the proof of payments.\n\nDo you want to continue?",
       PROMPT_SUBTITLE_CLIENT_NAME: "with client name",
@@ -1484,8 +1486,11 @@ export const english = {
       PROMPT_TITLE_EDIT: "Edit payment info?",
       PROMPT_TITLE_ORDER: "Your completed order(s) have been\nsubmitted successfully",
       PROMPT_TITLE_SAVED: "Your order(s) have been\nsaved successfully",
+      PROMPT_TITLE_SAVED_SINGLE: "has been\nsaved successfully",
       PROMPT_TITLE_STATUS: "Order & Submission Status",
+      PROMPT_TITLE_STATUS_NEW: "Order & Submission Summary",
       PROMPT_TITLE_SUBMITTED: "Your order(s) have been\nsubmitted successfully",
+      PROMPT_TITLE_SUBMITTED_SINGLE: "has been\nsubmitted successfully",
       PROMPT_TITLE_UNSAVED: "There are unsaved changes",
       PROMPT_TITLE_UPDATE: "Update this payment info?",
       PROMPT_TITLE_VIEW: "Are you sure you want to view this payment info?",
@@ -1494,6 +1499,8 @@ export const english = {
       TITLE: "Add Proof of Payment",
       TOOLTIP_REMOVE: "This payment info cannot be deleted as its surplus has been used on another submitted order.",
       TOOLTIP_EDIT_NORMAL_POP: "Edit button will be available after you update / delete for the surplus payment info.",
+      CHECKBOX_NEW_SALES:
+        "Your investment application will be processed once we've received your complete proof of payment and supporting documents (if any)",
     },
     PRODUCT_DETAILS: {
       LABEL_AMP_CATEGORY: "AMP Category",

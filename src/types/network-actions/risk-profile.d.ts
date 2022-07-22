@@ -2,6 +2,7 @@ declare interface IGetRiskProfileRequest {
   clientId: string;
   id: string;
   initId: string;
+  isEtb: boolean;
   isForceUpdate: boolean;
   riskAssessment: {
     questionTwo: number;

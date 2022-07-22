@@ -6,7 +6,7 @@ import { ContentPage, CustomSpacer, LabeledTitle, Loading, RNModal } from "../..
 import { Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
 import { clientRegister } from "../../../network-actions";
-import { addClientDetails, NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
+import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
 import {
   centerHV,
   colorBlack,
@@ -34,6 +34,7 @@ declare interface IAccountListProps extends NewSalesContentProps, NewSalesStoreP
 
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   // addRiskInfo,
+  addClientDetails,
   addRiskScore,
   client,
   handleNextStep,

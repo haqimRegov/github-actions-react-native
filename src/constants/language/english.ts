@@ -1707,6 +1707,7 @@ export const english = {
       NEW_SALES_PRODUCT_AND_SERVICE_CHECK_AIMS: "Check AIMS",
       HEADING_RISK: "Risk Assessment",
       SUBHEADING: "Complete your risk assessment to continue.",
+      SUBHEADING_RISK_TO_PROCEED: "Risk Assessment information is required in order to proceed.",
       LABEL_ACCOUNT: "Account",
       LABEL_DATE_OF_BIRTH: "Date of Birth",
       LABEL_QUESTION_1: "Question 1:",

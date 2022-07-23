@@ -12,6 +12,7 @@ export type NewSalesState = {
     jointClientId?: string;
   };
   toast: INewSalesToast;
+  transactionType: TTransactionType | undefined;
   riskInfo?: IRiskProfile;
 };
 
@@ -48,5 +49,6 @@ export const newSalesInitialState: NewSalesState = {
     toastVisible: false,
     toastText: "All changes saved",
   },
+  transactionType: undefined,
   riskInfo: undefined,
 };

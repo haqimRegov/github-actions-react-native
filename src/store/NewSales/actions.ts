@@ -33,6 +33,10 @@ export const updateToast = (toast: INewSalesToast) => {
   return typedAction("newSales/UPDATE_TOAST_TEXT", toast);
 };
 
+export const updateTransactionType = (type: TTransactionType) => {
+  return typedAction("newSales/UPDATE_TRANSACTION_TYPE", type);
+};
+
 export type NewSalesAction = ReturnType<
   | typeof addAccountDetails
   | typeof addRiskInfo
@@ -42,6 +46,7 @@ export type NewSalesAction = ReturnType<
   | typeof updateNewSalesFinishedSteps
   | typeof updateToast
   | typeof updateToastVisible
+  | typeof updateTransactionType
 >;
 
 export const NewSalesActionProps = {
@@ -53,6 +58,7 @@ export const NewSalesActionProps = {
   updateNewSalesFinishedSteps,
   updateToast,
   updateToastVisible,
+  updateTransactionType,
 };
 
 export type NewSalesActionsType = typeof NewSalesActionProps;

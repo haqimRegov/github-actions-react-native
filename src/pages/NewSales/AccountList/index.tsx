@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer, LabeledTitle, Loading, RNModal } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
+import { getProductTabType } from "../../../helpers";
 import { clientRegister } from "../../../network-actions";
-import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
+import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps, productsInitialFilter } from "../../../store";
 import {
   centerHV,
   colorBlack,
@@ -37,12 +38,14 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   addAccountType,
   addClientDetails,
   addRiskScore,
+  addUtFilters,
   client,
   handleNextStep,
   navigation,
   newSales,
   riskScore,
   updateNewSales,
+  updateProductType,
 }: IAccountListProps) => {
   const { disabledSteps, finishedSteps } = newSales;
   const { accountList, accountType, details } = client;
@@ -80,22 +83,6 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               netWorth: "",
             });
           }
-          updateNewSales({
-            ...newSales,
-            investorProfile: {
-              ...newSales.investorProfile,
-              principalClientId: data.result.principalHolder!.clientId,
-              jointClientId: data.result.jointHolder !== null ? data.result.jointHolder!.clientId : undefined,
-            },
-            riskInfo: riskInfo,
-            accountDetails: {
-              ...newSales.accountDetails,
-              accountNo: eachAccount.accountNo,
-              fundType: eachAccount.fundType.toLowerCase() as ProductType,
-              isRecurring: eachAccount.isRecurring,
-              isEpf: eachAccount.paymentMethod.toLowerCase() === "epf",
-            },
-          });
           const resetJointInfo =
             accountType === "Individual" &&
             (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
@@ -139,14 +126,25 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           if (findRisk !== -1) {
             updatedDisabledSteps.splice(findRisk, 1);
           }
+          if (eachAccount.fundType === "UT" && eachAccount.paymentMethod === "EPF") {
+            const epfFilterArray: string[] = eachAccount.paymentMethod === "EPF" ? ["Yes"] : [];
+            addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+            updateProductType(getProductTabType(eachAccount.fundType));
+          }
           updateNewSales({
             ...newSales,
             finishedSteps: updatedFinishedSteps,
             disabledSteps: updatedDisabledSteps,
+            investorProfile: {
+              ...newSales.investorProfile,
+              principalClientId: data.result.principalHolder!.clientId,
+              jointClientId: data.result.jointHolder !== null ? data.result.jointHolder!.clientId : undefined,
+            },
+            riskInfo: riskInfo,
             accountDetails: {
               ...newSales.accountDetails,
               accountNo: eachAccount.accountNo,
-              fundType: eachAccount.fundType.toLowerCase() as ProductType,
+              fundType: getProductTabType(eachAccount.fundType),
               isEpf: eachAccount.paymentMethod.toLowerCase() === "epf",
               isRecurring: eachAccount.isRecurring,
             },

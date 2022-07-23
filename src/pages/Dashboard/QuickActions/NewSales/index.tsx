@@ -65,6 +65,7 @@ const NewSalesComponent = ({
   showOpenAccount,
   updateClient,
   updateShowOpenAccount,
+  updateTransactionType,
   visible,
 }: NewSalesProps) => {
   const fetching = useRef<boolean>(false);
@@ -227,6 +228,7 @@ const NewSalesComponent = ({
                   },
                 },
               });
+              updateTransactionType("Sales-NS");
               setVisible(false);
               return navigation.navigate("NewSales");
             }

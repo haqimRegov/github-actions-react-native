@@ -66,6 +66,7 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           toastVisible: false,
           toastText: "All changes saved",
         },
+        transactionType: undefined,
       };
     case "newSales/UPDATE_TOAST_TEXT":
       return {
@@ -82,6 +83,11 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           ...state.toast,
           toastVisible: action.payload,
         },
+      };
+    case "newSales/UPDATE_TRANSACTION_TYPE":
+      return {
+        ...state,
+        transactionType: action.payload,
       };
 
     default:

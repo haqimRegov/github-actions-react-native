@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { AcknowledgementActionProps } from "../Acknowledgement/actions";
 import { ClientActionProps } from "../Client/actions";
+import { InvestorsActionProps } from "../Investors";
 import { OnboardingActionProps } from "../Onboarding";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { ProductsActionProps } from "../Products";
@@ -17,6 +18,7 @@ export const NewSalesMapStateToProps = (state: RootState) => ({
   client: state.client,
   newSales: state.newSales,
   riskScore: state.riskAssessment.riskScore,
+  transactionType: state.newSales.transactionType,
 });
 
 export const NewSalesMapDispatchToProps = (dispatch: Dispatch) => {
@@ -25,6 +27,7 @@ export const NewSalesMapDispatchToProps = (dispatch: Dispatch) => {
       ...NewSalesActionProps,
       ...AcknowledgementActionProps,
       ...ClientActionProps,
+      ...InvestorsActionProps,
       ...OnboardingActionProps,
       ...PersonalInfoActionProps,
       ...ProductsActionProps,

@@ -66,6 +66,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   updateCurrentAccount,
   updateShowOpenAccount,
   updateNewSales,
+  updateTransactionType,
   ...dashboardProps
 }: InvestorOverviewProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -437,6 +438,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     } else {
       const check = await handleClientRegister(req, item);
       if (check === true) {
+        updateTransactionType("Sales-NS");
         navigation.navigate("NewSales");
       }
     }

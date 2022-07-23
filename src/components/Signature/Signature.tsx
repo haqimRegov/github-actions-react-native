@@ -44,6 +44,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
     setSignature("");
     if (signRef !== null) {
       signRef.resetImage();
+      setDisabled(true);
     }
   };
 
@@ -96,9 +97,7 @@ export const CustomSignature: FunctionComponent<CustomSignatureProps> = ({
   const base64Signature = `data:image/png;base64,${signature}`;
 
   useEffect(() => {
-    if (signature === "") {
-      setDisabled(true);
-    }
+    setDisabled(signature === "");
   }, [signature]);
 
   return (

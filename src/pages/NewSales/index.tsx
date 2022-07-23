@@ -97,6 +97,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     navigation,
     resetAcknowledgement,
     resetClientDetails,
+    resetInvestors,
     resetNewSales,
     resetPersonalInfo,
     resetProducts,
@@ -160,6 +161,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     setCancelNewSales(false);
     resetAcknowledgement();
     resetClientDetails();
+    resetInvestors();
     resetPersonalInfo();
     resetRiskAssessment();
     resetSelectedFund();

@@ -17,3 +17,22 @@ export const getProductType = (type: string) => {
       return type;
   }
 };
+
+export const getProductTabType = (type: string): ProductType => {
+  switch (type) {
+    case "UT":
+      return "ut";
+
+    case "PRS":
+      return "prs";
+
+    case "PRS Default":
+      return "prsDefault";
+
+    case "AMP":
+      return "amp";
+
+    default:
+      return "ut";
+  }
+};

@@ -8,8 +8,15 @@ import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomFlexSpacer, CustomSpacer, Loading, Pagination, PromptModal, RNModal, Tab } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
+import { getProductTabType } from "../../../../helpers";
 import { checkClient, clientRegister } from "../../../../network-actions";
-import { ClientStoreProps, InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
+import {
+  ClientStoreProps,
+  InvestorsMapDispatchToProps,
+  InvestorsMapStateToProps,
+  InvestorsStoreProps,
+  productsInitialFilter,
+} from "../../../../store";
 import {
   borderBottomGray2,
   centerHV,
@@ -56,6 +63,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   addRiskScore,
   addClientDetails,
   addPersonalInfo,
+  addUtFilters,
   client,
   currentInvestor,
   newSales,
@@ -67,6 +75,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   updateShowOpenAccount,
   updateNewSales,
   updateTransactionType,
+  updateProductType,
   ...dashboardProps
 }: InvestorOverviewProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -200,7 +209,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             accountDetails: {
               ...newSales.accountDetails,
               accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
-              fundType: item !== undefined ? (item.fundType.toLowerCase() as ProductType) : newSales.accountDetails.fundType,
+              fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
               isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
               isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
             },
@@ -437,6 +446,11 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       }, 400);
     } else {
       const check = await handleClientRegister(req, item);
+      if (item.fundType === "UT" && item.paymentMethod === "EPF") {
+        const epfFilterArray: string[] = item.paymentMethod === "EPF" ? ["Yes"] : [];
+        addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+        updateProductType(getProductTabType(item.fundType));
+      }
       if (check === true) {
         updateTransactionType("Sales-NS");
         navigation.navigate("NewSales");

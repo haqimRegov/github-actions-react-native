@@ -82,13 +82,6 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productType]);
 
-  useEffect(() => {
-    if (accountNo !== "") {
-      updateProductType(fundType);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <SafeAreaPage>
       <ScrollView

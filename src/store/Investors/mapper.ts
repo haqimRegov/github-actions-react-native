@@ -5,6 +5,7 @@ import { ForceUpdateActionProps } from "../ForceUpdate";
 import { GlobalActionProps } from "../Global/actions";
 import { NewSalesActionProps } from "../NewSales";
 import { PersonalInfoActionProps } from "../PersonalInfo";
+import { ProductsActionProps } from "../Products";
 import { RiskAssessmentActionProps } from "../RiskAssessment";
 import { RootState } from "../rootReducer";
 import { TransactionsActionProps } from "../Transactions";
@@ -36,6 +37,7 @@ export const InvestorsMapDispatchToProps = (dispatch: Dispatch) => {
       ...GlobalActionProps,
       ...NewSalesActionProps,
       ...PersonalInfoActionProps,
+      ...ProductsActionProps,
       ...RiskAssessmentActionProps,
       ...TransactionsActionProps,
     },

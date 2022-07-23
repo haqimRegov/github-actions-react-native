@@ -34,6 +34,7 @@ declare interface IAccountListProps extends NewSalesContentProps, NewSalesStoreP
 
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   // addRiskInfo,
+  addAccountType,
   addClientDetails,
   addRiskScore,
   client,
@@ -58,8 +59,6 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
         isNewFundPurchased: true,
         principalHolder: {
           id: principalHolder?.id!,
-          // TODO check with BE on the idtype
-          idType: "NRIC",
           name: principalHolder?.name!,
         },
       };
@@ -110,20 +109,25 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           };
           const moreJointInfo = isNotEmpty(data.result.jointHolder)
             ? {
-                dateOfBirth: data.result.jointHolder!.dateOfBirth,
                 clientId: data.result.jointHolder!.clientId,
+                dateOfBirth: data.result.jointHolder!.dateOfBirth,
+                id: data.result.jointHolder!.id,
+                name: data.result.jointHolder!.name,
               }
             : {};
           addClientDetails({
             ...details,
             principalHolder: {
               ...principalHolder,
-              dateOfBirth: data.result.principalHolder.dateOfBirth,
               clientId: data.result.principalHolder.clientId,
+              dateOfBirth: data.result.principalHolder.dateOfBirth,
+              id: data.result.principalHolder.id,
+              name: data.result.principalHolder.name,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
             initId: `${data.result.initId}`,
           });
+          addAccountType(data.result.jointHolder !== null ? "Joint" : "Individual");
           const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
           const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
           updatedFinishedSteps.push("AccountList");

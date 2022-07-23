@@ -210,24 +210,26 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
-                  dateOfBirth: data.result.jointHolder.dateOfBirth,
                   clientId: data.result.jointHolder.clientId,
+                  dateOfBirth: data.result.jointHolder.dateOfBirth,
+                  id: data.result.jointHolder.id,
+                  name: data.result.jointHolder.name,
                 }
               : {};
           addClientDetails({
             ...client.details,
             principalHolder: {
               ...client.details!.principalHolder,
-              dateOfBirth: investorData!.dateOfBirth,
               clientId: data.result.principalHolder.clientId,
-              id: investorData!.idNumber,
-              name: investorData!.name,
+              dateOfBirth: data.result.principalHolder.dateOfBirth,
+              id: data.result.principalHolder.id,
+              name: data.result.principalHolder.name,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
             initId: data.result.initId.toString(),
             accountHolder: accountType === 1 ? "Joint" : "Principal",
           });
-          addAccountType(accountType === 1 ? "Joint" : "Individual");
+          addAccountType(accountType === 1 || data.result.jointHolder !== null ? "Joint" : "Individual");
           const updatedJointInfo: IHolderInfoState =
             accountType === 1
               ? {
@@ -402,11 +404,11 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const handleBuyNewFund = async (item: IInvestorAccountsData) => {
+    const accountType = item.jointName === null ? "Individual" : "Joint";
     const jointInfo =
       item.jointName !== null
         ? {
             dateOfBirth: item.dateOfBirth,
-            clientId: item.clientId,
             id: item.idNumber,
             name: item.name,
           }
@@ -417,12 +419,13 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     };
     const req: IClientRegisterRequest = {
       accountNo: item.accountNo,
-      accountType: item.jointName === null ? "Individual" : "Joint",
+      accountType: accountType,
       isEtb: true,
       isNewFundPurchased: true,
       principalHolder: principalInfo,
       jointHolder: jointInfo,
     };
+    jointClientId.current = item.jointId;
     const forceUpdateRequired = false;
 
     // TODO Check for force update

@@ -404,7 +404,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   };
 
   const handleBuyNewFund = async (item: IInvestorAccountsData) => {
-    const accountType = item.jointName === null ? "Individual" : "Joint";
+    const updatedAccountType = item.jointName === null ? "Individual" : "Joint";
     const jointInfo =
       item.jointName !== null
         ? {
@@ -419,7 +419,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     };
     const req: IClientRegisterRequest = {
       accountNo: item.accountNo,
-      accountType: accountType,
+      accountType: updatedAccountType,
       isEtb: true,
       isNewFundPurchased: true,
       principalHolder: principalInfo,

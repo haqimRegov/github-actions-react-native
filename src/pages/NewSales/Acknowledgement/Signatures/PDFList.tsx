@@ -8,7 +8,7 @@ import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CollectionBankCard, ContentPage, CustomSpacer, IconText, NewPromptModal, SignatureUploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { DICTIONARY_KIB_BANK_ACCOUNTS } from "../../../../data/dictionary";
-import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
+import { generatePdf, generatePdfTransactions, getReceiptSummaryList, submitPdf, submitPdfTransactions } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import {
   borderBottomBlue5,
@@ -65,8 +65,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const documents: ISubmitPdfDocument[] = receipts!.map((receipt) => {
-        const receiptData: ISubmitPdfDocument = {
+      const documents: ISubmitPdfTransactionsDocument[] = receipts!.map((receipt) => {
+        const receiptData: ISubmitPdfTransactionsDocument = {
           adviserSignature: receipt.adviserSignature!,
           clientSignature: receipt.principalSignature!,
           orderNumber: receipt.orderNumber!,
@@ -77,7 +77,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         }
         return receiptData;
       });
-      const request: ISubmitPdfRequest = {
+
+      const request: ISubmitPdfTransactionsRequest | ISubmitPdfRequest = {
         clientId: clientId!,
         documents: documents,
         initId: details?.initId!,
@@ -85,7 +86,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         isEtb: true,
         isForceUpdate: false,
       };
-      const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
+
+      const submitPdfResponse: ISubmitPdfTransactionsResponse | ISubmitPdfResponse =
+        newSales.transactionType === "Sales-NS"
+          ? await submitPdfTransactions(request, navigation, setLoading)
+          : await submitPdf(request, navigation, setLoading);
+
       fetching.current = false;
       setLoading(false);
       if (submitPdfResponse !== undefined) {
@@ -108,8 +114,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleContinue = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
-    const newDisabledStep: TypeNewSalesKey[] = ["RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
+    const newDisabledStep: TypeNewSalesKey[] = ["AccountList", "RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
     handleNextStep("Payment");
   };
@@ -141,14 +147,27 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request: IGeneratePdfRequest = {
+
+      const transactionsRequest: IGeneratePdfTransactionsRequest = {
+        accountNo: newSales.accountDetails.accountNo,
+        clientId: clientId!,
+        initId: details!.initId!,
+        orderNo: receipt.orderNumber!,
+      };
+
+      const accountOpeningRequest: IGeneratePdfRequest = {
         clientId: clientId!,
         initId: details!.initId!,
         isEtb: true,
         isForceUpdate: false,
         orderNo: receipt.orderNumber!,
       };
-      const accountOpeningReceipt: IGeneratePdfResponse = await generatePdf(request, navigation, setLoading);
+
+      const accountOpeningReceipt: IGeneratePdfTransactionsResponse | IGeneratePdfResponse =
+        newSales.transactionType === "Sales-NS"
+          ? await generatePdfTransactions(transactionsRequest, navigation, setLoading)
+          : await generatePdf(accountOpeningRequest, navigation, setLoading);
+
       fetching.current = false;
       setLoading(false);
       if (accountOpeningReceipt !== undefined) {

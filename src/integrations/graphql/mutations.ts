@@ -181,6 +181,33 @@ const generatePdf = gql`
   }
 `;
 
+const generatePdfTransactions = gql`
+  mutation generatePdfTransactions($input: TransactionsPdfInput) {
+    generatePdfTransactions(input: $input) {
+      data {
+        result {
+          message
+          status
+          pdf {
+            url
+            base64
+            name
+            date
+            urlPageCount
+            type
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const submitPdf = gql`
   mutation submitPdf($input: SubmitPdfInputV2) {
     submitPdfV2(input: $input) {
@@ -193,6 +220,25 @@ const submitPdf = gql`
             title
             remarks
           }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitPdfTransactions = gql`
+  mutation submitPdfTransactions($input: SubmitPdfInputV2) {
+    submitPdfTransactions(input: $input) {
+      data {
+        result {
+          message
+          status
         }
       }
       error {
@@ -513,6 +559,7 @@ const submitClientAccountTransactions = gql`
               currency
               amount
             }
+            paymentType
             investments {
               fundingOption
               distributionInstruction
@@ -733,6 +780,7 @@ export const GQL_MUTATIONS = {
   firstTimeSignUp,
   forgotPassword,
   generatePdf,
+  generatePdfTransactions,
   orderTrackingSummary,
   registerPassword,
   resendLockOtp,
@@ -745,6 +793,7 @@ export const GQL_MUTATIONS = {
   submitEDDCase,
   submitHardCopyDocuments,
   submitPdf,
+  submitPdfTransactions,
   submitProofOfPayments,
   submitSoftCopyDocuments,
   summaryReceipt,

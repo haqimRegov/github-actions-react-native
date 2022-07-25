@@ -50,7 +50,7 @@ interface UploadHardCopyProps extends TransactionsStoreProps {
 }
 
 const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: UploadHardCopyProps) => {
-  const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setScreen, updateCurrentOrder, updatePill } = props;
   const fetching = useRef<boolean>(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -249,7 +249,8 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
 
   const handleConfirmPopup = async () => {
     if (isConfirmed === true) {
-      return handleBack();
+      handleBack();
+      return updatePill("submitted");
     }
 
     const response = await handleSubmit(true);

@@ -30,7 +30,7 @@ interface DashPaymentProps extends TransactionsStoreProps {
 }
 
 const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: DashPaymentProps) => {
-  const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setScreen, updateCurrentOrder, updatePill } = props;
   const [proofOfPayment, setProofOfPayment] = useState<IPaymentRequired | undefined>(undefined);
   const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [grandTotal, setGrandTotal] = useState<IOrderAmount[]>([]);
@@ -164,7 +164,15 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
   const handleConfirmPopup = async () => {
     if (confirmPayment === true) {
-      return handleBack();
+      handleBack();
+      if (
+        paymentResult !== undefined &&
+        paymentResult.orders.filter((eachOrder: ISubmitProofOfPaymentResultOrder) => eachOrder.status === "Submitted").length ===
+          paymentResult.orders.length
+      ) {
+        return updatePill("submitted");
+      }
+      return undefined;
     }
 
     const response = await handleSubmit(true);

@@ -35,7 +35,7 @@ import {
   sw7,
   sw8,
 } from "../../../../styles";
-import { OrderOverview } from "../../../../templates/Onboarding/OrderOverview";
+import { FundOverview } from "../../../../templates";
 import { formatAmount } from "../../../../utils";
 
 interface OrderSummaryProps extends AcknowledgementStoreProps {
@@ -121,7 +121,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
             <Fragment key={index}>
               {index !== 0 ? <CustomSpacer space={sh24} /> : null}
               <View style={{ ...px(sw24), ...shadow50Black115 }}>
-                <OrderOverview
+                <FundOverview
                   funds={orderSummary.investments}
                   createdOn={orderSummary.orderDate}
                   noBadge={true}

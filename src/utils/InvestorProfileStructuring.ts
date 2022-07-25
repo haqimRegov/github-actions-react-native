@@ -8,7 +8,7 @@ const { INVESTOR_PROFILE } = Language.PAGE;
 export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   const { addressInformation, contactDetails, declaration, employmentInformation, epfDetails, personalDetails, investorOverview } = data;
   const { idNumber, idType } = investorOverview[0];
-  const { fatca, crs } = declaration!;
+  const { fatca, crs } = declaration !== null ? declaration : { fatca: null, crs: null };
 
   const identificationDetails: LabeledTitleProps[] = [
     { label: `${idType} ${INVESTOR_PROFILE.LABEL_ID_NUMBER}`, title: idNumber || "-" },
@@ -136,17 +136,19 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     ];
   }
 
-  const isTaxResident = crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0].label;
+  const isTaxResident = crs !== null && crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0].label;
 
-  const fatcaSummary: LabeledTitleProps[] = [{ label: INVESTOR_PROFILE.LABEL_CITIZENSHIP, title: fatca.usCitizen as string }];
+  const fatcaSummary: LabeledTitleProps[] = [
+    { label: INVESTOR_PROFILE.LABEL_CITIZENSHIP, title: fatca !== null && fatca.usCitizen !== null ? (fatca.usCitizen as string) : "-" },
+  ];
 
-  const fatcaAddress = `${Object.values(addressInformation!.mailingAddress!.address!).join("")}, ${
-    addressInformation!.mailingAddress!.postCode
-  }, ${addressInformation!.mailingAddress!.city}, ${addressInformation!.mailingAddress!.state}, ${
-    addressInformation!.mailingAddress!.country
-  }`;
+  const fatcaAddress = isNotEmpty(addressInformation)
+    ? `${Object.values(addressInformation!.mailingAddress!.address!).join("")}, ${addressInformation!.mailingAddress!.postCode}, ${
+        addressInformation!.mailingAddress!.city
+      }, ${addressInformation!.mailingAddress!.state}, ${addressInformation!.mailingAddress!.country}`
+    : "-";
 
-  if (fatca.usCitizen === "No") {
+  if (fatca !== null && fatca.usCitizen === "No") {
     fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: fatca.usBorn as string });
     if (fatca.usBorn === "Yes") {
       fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
@@ -176,11 +178,11 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     }
   }
 
-  if (fatca.formW9 === true) {
+  if (fatca !== null && fatca.formW9 === true) {
     fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_W9, title: "Yes" });
   }
 
-  if (fatca.formW8Ben === true) {
+  if (fatca !== null && fatca.formW8Ben === true) {
     fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_W8BEN, title: "Yes" });
   }
 
@@ -189,13 +191,13 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       label: INVESTOR_PROFILE.LABEL_JURISDICTION,
       labelStyle: { width: sw328 },
       spaceToLabel: sh4,
-      title: crs.taxResident || "-",
+      title: crs !== null && crs.taxResident !== null ? crs.taxResident : "-",
     },
   ];
 
   const crsTinSummary: LabeledTitleProps[][] = [];
 
-  if (isTaxResident === false && crs.tin) {
+  if (crs !== null && isTaxResident === false && crs.tin) {
     crs.tin.forEach((multiTin) => {
       const tinSummary: LabeledTitleProps[] = [];
       tinSummary.push(
@@ -218,19 +220,27 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   }
 
   const permanentAddressLabel =
-    addressInformation!.permanentAddress!.address!.line2 !== undefined || addressInformation!.permanentAddress!.address!.line3 !== undefined
+    isNotEmpty(addressInformation) &&
+    (isNotEmpty(addressInformation!.permanentAddress!.address!.line2) || isNotEmpty(addressInformation!.permanentAddress!.address!.line3))
       ? `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 1`
       : INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS;
 
   const permanentAddressSummary: LabeledTitleProps[] = [
-    { label: permanentAddressLabel, title: addressInformation!.permanentAddress!.address!.line1!, titleStyle: fsTransformNone },
-    { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: addressInformation!.permanentAddress!.postCode! },
-    { label: INVESTOR_PROFILE.LABEL_CITY, title: addressInformation!.permanentAddress!.city! },
-    { label: INVESTOR_PROFILE.LABEL_STATE, title: addressInformation!.permanentAddress!.state! },
-    { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: addressInformation!.permanentAddress!.country! },
+    {
+      label: permanentAddressLabel,
+      title: isNotEmpty(addressInformation) ? addressInformation!.permanentAddress!.address!.line1! : "-",
+      titleStyle: fsTransformNone,
+    },
+    {
+      label: INVESTOR_PROFILE.LABEL_POSTCODE,
+      title: isNotEmpty(addressInformation) ? addressInformation!.permanentAddress!.postCode! : "-",
+    },
+    { label: INVESTOR_PROFILE.LABEL_CITY, title: isNotEmpty(addressInformation) ? addressInformation!.permanentAddress!.city! : "-" },
+    { label: INVESTOR_PROFILE.LABEL_STATE, title: isNotEmpty(addressInformation) ? addressInformation!.permanentAddress!.state! : "-" },
+    { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: isNotEmpty(addressInformation) ? addressInformation!.permanentAddress!.country! : "-" },
   ];
 
-  if (isNotEmpty(addressInformation!.permanentAddress!.address!.line2)) {
+  if (isNotEmpty(addressInformation) && isNotEmpty(addressInformation!.permanentAddress!.address!.line2)) {
     permanentAddressSummary.splice(1, 0, {
       label: `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 2`,
       title: addressInformation!.permanentAddress!.address!.line2!,
@@ -238,7 +248,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     });
   }
 
-  if (isNotEmpty(addressInformation!.permanentAddress!.address!.line3)) {
+  if (isNotEmpty(addressInformation) && isNotEmpty(addressInformation!.permanentAddress!.address!.line3)) {
     const index = addressInformation!.permanentAddress!.address!.line2 !== undefined ? 2 : 1;
     permanentAddressSummary.splice(index, 0, {
       label: `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 3`,
@@ -248,19 +258,24 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   }
 
   const mailingAddressLabel =
-    addressInformation!.mailingAddress!.address!.line2 !== undefined || addressInformation!.mailingAddress!.address!.line3 !== undefined
+    isNotEmpty(addressInformation) &&
+    (isNotEmpty(addressInformation!.mailingAddress!.address!.line2) || isNotEmpty(addressInformation!.mailingAddress!.address!.line3))
       ? `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 1`
       : INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS;
 
   const mailingAddressSummary: LabeledTitleProps[] = [
-    { label: mailingAddressLabel, title: addressInformation!.mailingAddress!.address!.line1!, titleStyle: fsTransformNone },
-    { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
-    { label: INVESTOR_PROFILE.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
-    { label: INVESTOR_PROFILE.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
-    { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
+    {
+      label: mailingAddressLabel,
+      title: isNotEmpty(addressInformation) ? addressInformation!.mailingAddress!.address!.line1! : "-",
+      titleStyle: fsTransformNone,
+    },
+    { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: isNotEmpty(addressInformation) ? addressInformation!.mailingAddress!.postCode! : "-" },
+    { label: INVESTOR_PROFILE.LABEL_CITY, title: isNotEmpty(addressInformation) ? addressInformation!.mailingAddress!.city! : "-" },
+    { label: INVESTOR_PROFILE.LABEL_STATE, title: isNotEmpty(addressInformation) ? addressInformation!.mailingAddress!.state! : "-" },
+    { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: isNotEmpty(addressInformation) ? addressInformation!.mailingAddress!.country! : "-" },
   ];
 
-  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
+  if (isNotEmpty(addressInformation) && isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
     mailingAddressSummary.splice(1, 0, {
       label: `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 2`,
       title: addressInformation!.mailingAddress!.address!.line2!,
@@ -268,7 +283,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     });
   }
 
-  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
+  if (isNotEmpty(addressInformation) && isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
     const index = addressInformation!.mailingAddress!.address!.line2 !== undefined ? 2 : 1;
     mailingAddressSummary.splice(index, 0, {
       label: `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 3`,

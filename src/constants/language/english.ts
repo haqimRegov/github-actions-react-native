@@ -407,6 +407,7 @@ export const english = {
       SECTION_PRINCIPAL: "Principal Holder",
       LABEL_ACCOUNT_NO: "Bank Account Number",
       LABEL_ACCOUNT_NUMBER: "Account Number",
+      LABEL_ACCOUNT_TYPE: "Account Type",
       LABEL_ACCOUNT_TYPE_AND_NUMBER: "Account Type & Number",
       LABEL_AMOUNT: "Amount",
       LABEL_BANK_ACCOUNT_NAME: "Account Holder’s Name",

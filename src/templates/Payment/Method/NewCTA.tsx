@@ -51,7 +51,7 @@ export const NewCTA: FunctionComponent<NewCTAProps> = ({
   const updatedAccountNames = accountNames.filter((eachAccountName: TypeLabelValue) => eachAccountName.value !== "Combined");
 
   const inputItems = [
-    <NewDropdown items={updatedAccountNames} handleChange={handleClientName} label={PAYMENT.LABEL_CLIENT_NAME} value={clientName} />,
+    <LabeledTitle label={PAYMENT.LABEL_CLIENT_NAME} spaceToLabel={sh4} title={accountNames[0].value} style={{ width: sw360 }} />,
     <CustomTextInput
       error={error.ctaNumber}
       label={PAYMENT.LABEL_TRUST_ACCOUNT_NO}
@@ -61,6 +61,14 @@ export const NewCTA: FunctionComponent<NewCTAProps> = ({
       value={clientTrustAccountNumber}
     />,
   ];
+
+  if (accountNames.length > 1) {
+    inputItems.splice(
+      0,
+      1,
+      <NewDropdown items={updatedAccountNames} handleChange={handleClientName} label={PAYMENT.LABEL_CLIENT_NAME} value={clientName} />,
+    );
+  }
 
   const ctaItems = [
     <LabeledTitle label={PAYMENT.LABEL_CLIENT_NAME} spaceToLabel={sh4} title={clientName} style={{ width: sw360 }} />,

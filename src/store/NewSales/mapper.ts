@@ -19,6 +19,7 @@ export const NewSalesMapStateToProps = (state: RootState) => ({
   newSales: state.newSales,
   riskScore: state.riskAssessment.riskScore,
   transactionType: state.newSales.transactionType,
+  transactions: state.transactions,
 });
 
 export const NewSalesMapDispatchToProps = (dispatch: Dispatch) => {

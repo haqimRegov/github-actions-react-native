@@ -37,7 +37,7 @@ interface UploadDocumentsProps extends TransactionsStoreProps {
 }
 
 const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props: UploadDocumentsProps) => {
-  const { currentOrder, navigation, setScreen, updateCurrentOrder } = props;
+  const { currentOrder, navigation, setScreen, updateCurrentOrder, updatePill } = props;
   const fetching = useRef<boolean>(false);
   const [documentList, setDocumentList] = useState<IGetSoftCopyDocumentsResult | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -239,7 +239,15 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
 
   const handleConfirmPopup = async () => {
     if (isConfirmed === true) {
-      return handleBack();
+      handleBack();
+      if (
+        submissionResult !== undefined &&
+        submissionResult.orders.filter((eachResult: ISubmitHardCopyResult) => eachResult.status === "Submitted").length ===
+          submissionResult.orders.length
+      ) {
+        return updatePill("submitted");
+      }
+      return undefined;
     }
 
     const response = await handleSubmit(true);

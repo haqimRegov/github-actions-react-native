@@ -10,6 +10,7 @@ import { ProductsActionProps } from "../Products/actions";
 import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
 import { RootState } from "../rootReducer";
 import { SelectedFundActionProps } from "../SelectedFund/actions";
+import { TransactionsActionProps } from "../Transactions";
 import { AcknowledgementActionProps } from "./actions";
 
 export const AcknowledgementMapStateToProps = (state: RootState) => ({
@@ -27,6 +28,7 @@ export const AcknowledgementMapStateToProps = (state: RootState) => ({
   receipts: state.acknowledgement.receipts,
   personalInfo: state.personalInfo,
   paymentSummary: state.acknowledgement.paymentSummary,
+  transactions: state.transactions,
 });
 
 export const AcknowledgementMapDispatchToProps = (dispatch: Dispatch) => {
@@ -41,6 +43,7 @@ export const AcknowledgementMapDispatchToProps = (dispatch: Dispatch) => {
       ...ClientActionProps,
       ...SelectedFundActionProps,
       ...RiskAssessmentActionProps,
+      ...TransactionsActionProps,
       ...ProductsActionProps,
     },
     dispatch,

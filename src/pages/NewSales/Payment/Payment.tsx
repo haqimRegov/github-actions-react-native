@@ -41,6 +41,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
   navigation,
   orders,
   personalInfo,
+  updatePill,
 }: PaymentProps) => {
   const [proofOfPayments, setProofOfPayments] = useState<IPaymentRequired[] | undefined>(undefined);
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
@@ -159,7 +160,15 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
 
   const handleConfirmPopup = async () => {
     if (confirmPayment === true) {
-      return handleResetNewSales();
+      handleResetNewSales();
+      if (
+        paymentResult !== undefined &&
+        paymentResult.orders.filter((eachOrder: ISubmitProofOfPaymentResultOrder) => eachOrder.status === "Submitted").length ===
+          paymentResult.orders.length
+      ) {
+        return updatePill("submitted");
+      }
+      return undefined;
     }
 
     const response = await handleSubmit(true);

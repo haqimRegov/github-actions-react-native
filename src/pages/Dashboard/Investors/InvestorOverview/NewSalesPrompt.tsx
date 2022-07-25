@@ -50,6 +50,7 @@ interface NewSalesProps extends ClientStoreProps {
   handleClientRegister: () => Promise<boolean | void>;
   inputError1?: string;
   investorData: IInvestor;
+  isNtb?: boolean;
   modalData: LabeledTitleProps[];
   navigation: IStackNavigationProp;
   newAccountType: number;
@@ -73,6 +74,7 @@ const NewSalesPromptComponent = ({
   fetching,
   handleCheckClient,
   handleClientRegister,
+  isNtb,
   modalData,
   navigation,
   newAccountType,
@@ -197,7 +199,11 @@ const NewSalesPromptComponent = ({
     });
     setVisible(false);
     setRegistered(false);
-    navigation.navigate("NewSales");
+    if (isNtb === true) {
+      navigation.navigate("Onboarding");
+    } else {
+      navigation.navigate("NewSales");
+    }
   };
 
   const handleContinue = async () => {

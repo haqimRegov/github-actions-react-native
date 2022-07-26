@@ -9,7 +9,7 @@ import { Language } from "../../../../constants";
 import { useDelete } from "../../../../hooks";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
-import { flexChild, px, py, sh112, sh24, sw24 } from "../../../../styles";
+import { flexChild, px, py, sh152, sh24, sw24 } from "../../../../styles";
 import { OrderPayment } from "../../../../templates";
 import {
   calculateExcess,
@@ -305,7 +305,6 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           <View style={flexChild}>
             {tempData !== undefined ? (
               <View>
-                <CustomSpacer space={sh24} />
                 <View style={px(sw24)}>
                   <OrderPayment
                     accountNames={accountNames}
@@ -324,35 +323,38 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     setSavedChangesToast={setSavedChangesToast}
                   />
                 </View>
-                <CustomSpacer space={sh24} />
               </View>
             ) : (
               <Loading />
             )}
-            {activeOrder.order !== "" ? null : <CustomSpacer space={sh112} />}
+            {activeOrder.order !== "" ? null : <CustomSpacer space={sh152} />}
           </View>
         </SafeAreaPage>
       </DashboardLayout>
       {activeOrder.order !== "" || tempData === undefined ? null : (
-        <SelectionBanner
-          bottomContent={
-            tempData !== undefined ? (
-              <PaymentBannerContent
-                balancePayments={updatedBalancePayments}
-                excessPayments={completedCurrencies}
-                grandTotal={checkGrandTotal}
-                grandTotalRecurring={checkGrandTotalRecurring}
-                paymentType={tempData.paymentType}
-              />
-            ) : null
-          }
-          containerStyle={py(sh24)}
-          continueDebounce={false}
-          continueDisabled={continueDisabled}
-          labelSubmit={PAYMENT.BUTTON_SUBMIT}
-          submitOnPress={handleSubmit}
-          label={bannerText}
-        />
+        <Fragment>
+          {updatedBalancePayments.length > 0 ? <CustomSpacer space={sh24} /> : null}
+          {completedCurrencies.length > 0 ? <CustomSpacer space={sh24} /> : null}
+          <SelectionBanner
+            bottomContent={
+              tempData !== undefined ? (
+                <PaymentBannerContent
+                  balancePayments={updatedBalancePayments}
+                  excessPayments={completedCurrencies}
+                  grandTotal={checkGrandTotal}
+                  grandTotalRecurring={checkGrandTotalRecurring}
+                  paymentType={tempData.paymentType}
+                />
+              ) : null
+            }
+            containerStyle={py(sh24)}
+            continueDebounce={false}
+            continueDisabled={continueDisabled}
+            labelSubmit={PAYMENT.BUTTON_SUBMIT}
+            submitOnPress={handleSubmit}
+            label={bannerText}
+          />
+        </Fragment>
       )}
       <CustomToast
         count={deleteCount}

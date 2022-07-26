@@ -9,14 +9,13 @@ import { useDelete } from "../../../hooks";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
-  borderBottomGray2,
   flexChild,
   flexGrow,
   fs16SemiBoldGray6,
   fs24BoldGray6,
   px,
   py,
-  sh112,
+  sh152,
   sh24,
   sh32,
   sh8,
@@ -318,13 +317,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
 
                 return (
                   <Fragment key={index}>
-                    {index === 0 ? null : (
-                      <Fragment>
-                        <View style={borderBottomGray2} />
-                      </Fragment>
-                    )}
                     <BlurView visible={activeOrder.order === "" || activeOrder.order === proofOfPayment.orderNumber}>
-                      <CustomSpacer space={sh24} />
                       <View style={{ ...px(sw24), ...shadow50Black115 }}>
                         <OrderPayment
                           accountNames={accountNames}
@@ -345,33 +338,36 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
                           setSavedChangesToast={setSavedChangesToast}
                         />
                       </View>
-                      <CustomSpacer space={sh24} />
                     </BlurView>
                   </Fragment>
                 );
               })}
-            {activeOrder.order !== "" ? null : <CustomSpacer space={sh112} />}
+            {activeOrder.order !== "" ? null : <CustomSpacer space={sh152} />}
           </View>
         </ScrollView>
         {activeOrder.order !== "" ? null : (
-          <SelectionBanner
-            bottomContent={
-              tempData !== undefined && grandTotal !== undefined ? (
-                <PaymentBannerContent
-                  balancePayments={updatedBalancePayments}
-                  excessPayments={completedCurrencies}
-                  grandTotal={grandTotal.grandTotal}
-                  grandTotalRecurring={grandTotal?.grandTotalRecurring}
-                  paymentType={"Cash"}
-                />
-              ) : null
-            }
-            containerStyle={py(sh24)}
-            continueDisabled={continueDisabled}
-            labelSubmit={PAYMENT.BUTTON_SUBMIT}
-            submitOnPress={handleSubmit}
-            label={bannerText}
-          />
+          <Fragment>
+            {updatedBalancePayments.length > 0 ? <CustomSpacer space={sh24} /> : null}
+            {completedCurrencies.length > 0 ? <CustomSpacer space={sh24} /> : null}
+            <SelectionBanner
+              bottomContent={
+                tempData !== undefined && grandTotal !== undefined ? (
+                  <PaymentBannerContent
+                    balancePayments={updatedBalancePayments}
+                    excessPayments={completedCurrencies}
+                    grandTotal={grandTotal.grandTotal}
+                    grandTotalRecurring={grandTotal?.grandTotalRecurring}
+                    paymentType={"Cash"}
+                  />
+                ) : null
+              }
+              containerStyle={py(sh24)}
+              continueDisabled={continueDisabled}
+              labelSubmit={PAYMENT.BUTTON_SUBMIT}
+              submitOnPress={handleSubmit}
+              label={bannerText}
+            />
+          </Fragment>
         )}
       </View>
       <NewPaymentPrompt

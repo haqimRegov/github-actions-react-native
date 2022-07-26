@@ -1,10 +1,20 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { View } from "react-native";
 
-import { CustomCard, CustomSpacer, CustomTextInput, Dash, NewDropdown, RadioButtonGroup, Switch, TextSpaceArea } from "../../../components";
+import {
+  CustomCard,
+  CustomSpacer,
+  CustomTextInput,
+  Dash,
+  LabeledTitle,
+  NewDropdown,
+  RadioButtonGroup,
+  Switch,
+  TextSpaceArea,
+} from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
-import { fs12BoldGray5, fs16RegBlack2, px, sh16, sh24, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
+import { fs12BoldGray5, fs16RegBlack2, px, sh16, sh24, sh4, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
 import { deleteKey, isObjectEqual } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
@@ -142,13 +152,7 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
   }
 
   const infoItems = [
-    <NewDropdown
-      disabled={accountNames.length === 1}
-      items={accountNames}
-      handleChange={handleBankName}
-      label={PAYMENT.LABEL_BANK_ACCOUNT_NAME}
-      value={bankAccountName}
-    />,
+    <LabeledTitle label={PAYMENT.LABEL_BANK_ACCOUNT_NAME} spaceToLabel={sh4} title={accountNames[0].value} style={{ width: sw360 }} />,
     <View>
       <CustomTextInput
         keyboardType="numeric"
@@ -174,6 +178,14 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
       space={sh16}
     />,
   ];
+
+  if (accountNames.length > 1) {
+    infoItems.splice(
+      0,
+      1,
+      <NewDropdown items={accountNames} handleChange={handleBankName} label={PAYMENT.LABEL_BANK_ACCOUNT_NAME} value={bankAccountName} />,
+    );
+  }
 
   if (bankAccountName === "Combined") {
     infoItems.splice(

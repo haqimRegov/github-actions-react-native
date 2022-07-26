@@ -22,7 +22,7 @@ export const generateNewInfo = (
     bankAccountNumber: "",
     bankName: "",
     checkNumber: "",
-    clientName: "",
+    clientName: accountNames !== undefined && accountNames.length === 1 ? accountNames[0].value : "",
     clientTrustAccountNumber: "",
     currency: currencies.value,
     // deleted: false,

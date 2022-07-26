@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -34,7 +34,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
     updateCases,
     updateHistoryFilter,
     updateNewCasesFilter,
-    updateSearch,
+    updateEDDSearch,
   } = props;
   const { newCount, historyCount } = edd;
 
@@ -49,6 +49,8 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
+    updateEDDSearch("");
+    setInputSearch("");
     setActiveTab(tabs[index]);
   };
 
@@ -78,7 +80,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
 
   const handleSearch = () => {
     if (filterVisible === false) {
-      updateSearch(inputSearch);
+      updateEDDSearch(inputSearch);
     }
   };
 
@@ -101,7 +103,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
         resetNewCasesFilter();
         break;
     }
-    updateSearch(inputSearch);
+    updateEDDSearch(inputSearch);
   };
 
   const handleConfirmFilter = () => {
@@ -116,7 +118,7 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
         updateNewCasesFilter(filterTemp);
         break;
     }
-    updateSearch(inputSearch);
+    updateEDDSearch(inputSearch);
   };
 
   const handleCancelFilter = () => {

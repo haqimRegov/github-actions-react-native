@@ -141,6 +141,8 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     } else {
       // reset current tab filter before moving to another tab
       resetFilter();
+      updateSearch("");
+      setInputSearch("");
       setActiveTab(tabs[index]);
     }
   };

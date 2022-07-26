@@ -32,7 +32,7 @@ import {
   fsAlignLeft,
   px,
   sh12,
-  sh124,
+  sh200,
   sh24,
   sh32,
   sh8,
@@ -420,7 +420,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         ) : (
           <Loading />
         )}
-        <CustomSpacer space={sh124} />
+        <CustomSpacer space={sh200} />
       </DashboardLayout>
       {documentList !== undefined ? (
         <SelectionBanner

@@ -34,9 +34,15 @@ interface InvestorProfileProps {
   data: IInvestorAccount | undefined;
   handleBack: () => void;
   handleEdit?: () => void;
+  spaceToTop?: number;
 }
 
-export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({ data, handleBack, handleEdit }: InvestorProfileProps) => {
+export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({
+  data,
+  handleBack,
+  handleEdit,
+  spaceToTop,
+}: InvestorProfileProps) => {
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<InvestorProfileTabType>("profile");
 
@@ -111,7 +117,7 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({ data,
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         style={{ ...px(sw24), backgroundColor: colorBlue._2 }}>
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={spaceToTop || sh24} />
         <View style={flexRow}>
           <View>
             <IcoMoon name="arrow-left" onPress={handleBack} size={sw24} suppressHighlighting={true} />

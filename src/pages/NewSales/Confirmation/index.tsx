@@ -64,7 +64,7 @@ import {
   sw8,
   sw96,
 } from "../../../styles";
-import { isNotEmpty, parseAmountToString, titleCaseString } from "../../../utils";
+import { isNotEmpty, parseAmountToString } from "../../../utils";
 import { Investment } from "./Investment";
 
 const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
@@ -449,7 +449,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                       <View style={{ ...flexRow, ...centerVertical, ...px(sw8) }}>
                         <IcoMoon name="house" size={sw16} color={colorBlack._2} />
                         <CustomSpacer isHorizontal={true} space={sw8} />
-                        <Text style={fs16BoldBlack2}>{titleCaseString(item.fundDetails.issuingHouse)}</Text>
+                        <Text style={fs16BoldBlack2}>{item.fundDetails.issuingHouse}</Text>
                         <CustomSpacer isHorizontal={true} space={sw16} />
                         <View style={flexChild}>
                           <View style={borderBottomBlue4} />

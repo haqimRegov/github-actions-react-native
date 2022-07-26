@@ -50,8 +50,8 @@ import {
   sh2,
   sh24,
   sh32,
-  sh40,
   sh8,
+  sh96,
   sw05,
   sw1,
   sw120,
@@ -228,7 +228,14 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     maxWidth: sw228,
   };
 
-  const profileButtonStyle: ViewStyle = { ...px(sw24), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 };
+  const profileButtonStyle: ViewStyle = {
+    ...px(sw16),
+    ...autoWidth,
+    backgroundColor: colorTransparent,
+    height: sh24,
+    borderWidth: 0,
+  };
+
   const checkPrincipalId =
     accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
   const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
@@ -245,7 +252,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
           subtitle={subtitle}
           sideElement={
             <View>
-              <CustomSpacer space={sh40} />
+              <CustomSpacer space={sh96} />
               <View style={containerStyle}>
                 <CustomButton
                   secondary={true}
@@ -383,17 +390,19 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
       ) : (
         <InvestorProfilePage clientId={clientId} setPage={setPage} />
       )}
-      <CustomSpacer space={sh24} />
       {page === 0 ? (
-        <SelectionBanner
-          cancelOnPress={handleCancelNewSales}
-          continueDisabled={riskProfile.appetite === ""}
-          label={RISK_ASSESSMENT.NEW_SALES_RISK_PROFILE_SUMMARY}
-          labelStyle={fs20BoldBlack2}
-          labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
-          labelSubmit={checkContinueLabel}
-          submitOnPress={handlePageContinue}
-        />
+        <Fragment>
+          <CustomSpacer space={sh24} />
+          <SelectionBanner
+            cancelOnPress={handleCancelNewSales}
+            continueDisabled={riskProfile.appetite === ""}
+            label={RISK_ASSESSMENT.NEW_SALES_RISK_PROFILE_SUMMARY}
+            labelStyle={fs20BoldBlack2}
+            labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
+            labelSubmit={checkContinueLabel}
+            submitOnPress={handlePageContinue}
+          />
+        </Fragment>
       ) : null}
     </View>
   );

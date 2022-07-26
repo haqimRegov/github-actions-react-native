@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CustomSpacer, TextSpaceArea, UploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { fs12BoldGray6, sh32, sh8 } from "../../../../styles";
-import { isEmpty, titleCaseString } from "../../../../utils";
+import { isEmpty } from "../../../../utils";
 
 const { UPLOAD_DOCUMENTS } = Language.PAGE;
 
@@ -39,8 +39,7 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
                   document !== undefined && ((document.url !== undefined && document.url !== null) || document.path !== undefined)
                     ? document
                     : undefined;
-                const checkName =
-                  relatedDocuments.name === "NRIC" ? UPLOAD_DOCUMENTS.LABEL_INVESTORS_ID : titleCaseString(relatedDocuments.name);
+                const checkName = relatedDocuments.name === "NRIC" ? UPLOAD_DOCUMENTS.LABEL_INVESTORS_ID : relatedDocuments.name;
                 const checkHeader =
                   header !== undefined ? header : <TextSpaceArea spaceToBottom={sh8} style={fs12BoldGray6} text={checkName} />;
                 const checkHeaderSpace = headerSpace === false ? null : <CustomSpacer space={sh8} />;

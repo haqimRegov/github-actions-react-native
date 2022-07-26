@@ -12,6 +12,7 @@ import {
   sh32,
   sh40,
   sh96,
+  sw212,
   sw404,
   sw48,
   sw536,
@@ -71,6 +72,8 @@ export const SubmissionSummaryPrompt: FunctionComponent<SubmissionSummaryPromptP
     ...buttonContainerStyle,
   };
 
+  const buttonWidth: ViewStyle = { width: sw212 };
+
   return (
     <View style={modalContainer}>
       <CustomSpacer space={spaceToTop || sh40} />
@@ -90,8 +93,16 @@ export const SubmissionSummaryPrompt: FunctionComponent<SubmissionSummaryPromptP
       {primary !== undefined || secondary !== undefined ? (
         <NewActionButtons
           buttonContainerStyle={buttonContainer}
-          primary={primary !== undefined && propsCache.primaryButton ? { ...primary, text: propsCache.primaryButton } : undefined}
-          secondary={secondary !== undefined && propsCache.secondaryButton ? { ...secondary, text: propsCache.secondaryButton } : undefined}
+          primary={
+            primary !== undefined
+              ? { ...primary, text: propsCache.primaryButton, buttonStyle: { ...buttonWidth, ...primary.buttonStyle } }
+              : undefined
+          }
+          secondary={
+            secondary !== undefined
+              ? { ...secondary, text: propsCache.secondaryButton, buttonStyle: { ...buttonWidth, ...secondary.buttonStyle } }
+              : undefined
+          }
         />
       ) : null}
     </View>

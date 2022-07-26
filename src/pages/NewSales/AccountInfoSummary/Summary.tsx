@@ -246,7 +246,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     maxWidth: sw228,
   };
 
-  const buttonStyle: ViewStyle = { ...px(sw24), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 };
+  const buttonStyle: ViewStyle = { ...px(sw16), ...autoWidth, backgroundColor: colorTransparent, height: sh24, borderWidth: 0 };
 
   const textCardProps = {
     itemsPerGroup: 3,

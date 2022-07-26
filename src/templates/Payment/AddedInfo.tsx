@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTooltip, IconButton } from "../../components";
@@ -42,6 +42,7 @@ export const AddedInfo: FunctionComponent<AddedInfoProps> = ({ availableBalance,
     return findSurplusPayment.length > 0;
   });
   const filteredSurplus = findSurplus.filter((eachSurplus: IPaymentInfo) => eachSurplus.currency === payment.currency);
+  const ctaAccountNumber = payment.clientTrustAccountNumber !== "" && payment.clientTrustAccountNumber !== null;
 
   return (
     <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8 }}>
@@ -52,6 +53,15 @@ export const AddedInfo: FunctionComponent<AddedInfoProps> = ({ availableBalance,
         <CustomSpacer isHorizontal={true} space={sw16} />
         <View style={{ ...borderLeftGray3, height: sh24 }} />
         <CustomSpacer isHorizontal={true} space={sw16} />
+        {ctaAccountNumber ? (
+          <Fragment>
+            <Text style={fs14BoldGray6}>{payment.clientTrustAccountNumber}</Text>
+            <CustomSpacer isHorizontal={true} space={sw16} />
+            <View style={{ ...borderLeftGray3, height: sh24 }} />
+            <CustomSpacer isHorizontal={true} space={sw16} />
+          </Fragment>
+        ) : null}
+
         <Text style={fs14BoldGray6}>{`${payment.currency} ${formatAmount(payment.amount)}`}</Text>
         <CustomSpacer isHorizontal={true} space={sw16} />
         {filteredSurplus.length === 0 ||

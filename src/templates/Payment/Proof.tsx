@@ -3,7 +3,7 @@ import { View, ViewStyle } from "react-native";
 
 import { UploadWithModal } from "../../components";
 import { Language } from "../../constants";
-import { colorWhite, shadow16Blue112, sw8 } from "../../styles";
+import { colorWhite, shadow12Blue108, sw8 } from "../../styles";
 
 const { PAYMENT } = Language.PAGE;
 interface PaymentProofProps {
@@ -19,7 +19,7 @@ export const PaymentProof: FunctionComponent<PaymentProofProps> = ({ payment, se
   };
 
   const container: ViewStyle = {
-    ...shadow16Blue112,
+    ...shadow12Blue108,
     backgroundColor: colorWhite._1,
     borderRadius: sw8,
   };

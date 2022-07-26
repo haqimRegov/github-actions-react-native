@@ -3,9 +3,8 @@ import { Pressable, ScrollView, Text, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 import ParsedText from "react-native-parsed-text";
 
-import { CustomFlexSpacer, CustomSpacer, StatusBadgeColorType, TableBadge } from "../../components";
+import { CustomFlexSpacer, CustomSpacer, TableBadge } from "../../components";
 import { Language } from "../../constants";
-import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
 import {
   alignItemsEnd,
@@ -72,25 +71,6 @@ export const SubmissionSummaryCollapsible: FunctionComponent<SubmissionSummaryCo
 
             const borderCheck: ViewStyle = index === data.length - 1 ? noBorderBottom : borderBottomBlue3;
 
-            const badgeTitle = details.status === "Submitted" ? SUBMISSION_SUMMARY.BADGE_SUBMITTING : details.status;
-
-            let statusColor: StatusBadgeColorType;
-
-            if (details.status === DICTIONARY_ORDER_STATUS.void || details.status === DICTIONARY_ORDER_STATUS.rejected) {
-              statusColor = "error";
-            } else if (details.status === DICTIONARY_ORDER_STATUS.submitted) {
-              statusColor = "success";
-            } else if (
-              details.status === DICTIONARY_ORDER_STATUS.completed ||
-              details.status === DICTIONARY_ORDER_STATUS.pendingInitialOrder
-            ) {
-              statusColor = "complete";
-            } else if (details.status === DICTIONARY_ORDER_STATUS.reroutedBr || details.status === DICTIONARY_ORDER_STATUS.reroutedHq) {
-              statusColor = "danger";
-            } else {
-              statusColor = "warning";
-            }
-
             return (
               <Fragment key={index}>
                 {isNotEmpty(details.remarks) === true && details.remarks.length > 0 ? (
@@ -100,7 +80,7 @@ export const SubmissionSummaryCollapsible: FunctionComponent<SubmissionSummaryCo
                       <CustomSpacer isHorizontal={true} space={sw8} />
                       <IcoMoon color={colorBlue._1} name={defaultIcon} size={sw16} />
                       <CustomFlexSpacer />
-                      <TableBadge text={badgeTitle} color={statusColor} />
+                      <TableBadge text={SUBMISSION_SUMMARY.BADGE_SUBMITTING} color="success" />
                     </Pressable>
                     <Collapsible duration={120} collapsed={!active} style={noBGColor}>
                       <View>
@@ -162,7 +142,7 @@ export const SubmissionSummaryCollapsible: FunctionComponent<SubmissionSummaryCo
                     <View style={rowCenterVertical}>
                       <Text style={fs18BoldBlack2}>{details.orderNumber}</Text>
                       <CustomFlexSpacer />
-                      <TableBadge text={badgeTitle} color={statusColor} />
+                      <TableBadge text={SUBMISSION_SUMMARY.BADGE_SUBMITTING} color="success" />
                     </View>
                   </View>
                 )}

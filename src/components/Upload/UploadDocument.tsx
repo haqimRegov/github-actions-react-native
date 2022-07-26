@@ -20,6 +20,7 @@ import {
   disabledOpacity4,
   flexRow,
   fs12RegBlack2,
+  fs12RegGray4,
   fs12RegGray5,
   fs16BoldBlue1,
   px,
@@ -29,7 +30,7 @@ import {
   sh40,
   sh72,
   sh8,
-  shadow16Blue112,
+  shadow4Blue116,
   sw10,
   sw16,
   sw2,
@@ -95,9 +96,9 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     const valueSize = value.size !== undefined ? value.size : -1;
     const fileSizeUnit = valueSize >= 100000 ? "MB" : "KB";
     const fileSize = valueSize >= 100000 ? valueSize / BYTE_TO_MEGABYTE : valueSize / BYTE_TO_KILOBYTE;
-    fileSizeLabel = valueSize !== -1 ? `- ${fileSize.toFixed(2)}${fileSizeUnit}` : "";
+    fileSizeLabel = valueSize !== -1 ? `${fileSize.toFixed(2)}${fileSizeUnit}` : "";
 
-    uploadLabel = `${shortFileName}.${selectedExtension} `;
+    uploadLabel = `${shortFileName}.${selectedExtension} - `;
     descriptionStyle.color = colorBlack._2;
   }
 
@@ -202,7 +203,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     ...flexRow,
     ...px(sw40),
     ...py(sh16),
-    ...shadow16Blue112,
+    ...shadow4Blue116,
     backgroundColor: colorWhite._1,
     borderRadius: sw10,
     minHeight: sh72,
@@ -246,7 +247,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
             ) : null}
             <View style={{ ...centerVertical, ...flexRow }}>
               <Text style={{ ...descriptionStyle, ...errorStyle, ...titleStyle }}>{title || defaultLabel}</Text>
-              {value !== undefined && fileSizeLabel ? <Text style={fs12RegGray5}>{fileSizeLabel}</Text> : null}
+              {value !== undefined && fileSizeLabel ? <Text style={fs12RegGray4}>{fileSizeLabel}</Text> : null}
             </View>
             {progress !== undefined ? (
               <Fragment>

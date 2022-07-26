@@ -24,7 +24,7 @@ import {
   sh40,
   sh500,
   sh96,
-  shadow12Blue104,
+  shadow12Blue108,
   sw10,
   sw204,
   sw40,
@@ -72,7 +72,7 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
   const headerBGColor = value !== undefined && value.type === "application/pdf" ? { backgroundColor: colorWhite._1 } : {};
   const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorGray._6 : colorWhite._1;
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
-  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow12Blue104 };
+  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow12Blue108 };
   const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
   const previewStyle: ImageStyle = { ...imageContain, height: sh140, width: sw204 };
 

@@ -11,6 +11,7 @@ import {
   flexRow,
   fs18BoldBlack2,
   fsTransformNone,
+  fsUppercase,
   px,
   rowCenterVertical,
   sh16,
@@ -84,16 +85,13 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
                           title: bank.bankAccountNumber,
                           titleStyle: fsTransformNone,
                         },
+                        {
+                          label: DASHBOARD_ACCOUNT_TAB.LABEL_BANK_SWIFT_CODE,
+                          title: bank.bankSwiftCode || "-",
+                          titleStyle: fsUppercase,
+                        },
                       ];
 
-                      // swift code
-                      if (bank.bankSwiftCode !== null && isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "") {
-                        localBankDetails.push({
-                          label: DASHBOARD_ACCOUNT_TAB.LABEL_BANK_SWIFT_CODE,
-                          title: bank.bankSwiftCode,
-                          titleStyle: fsTransformNone,
-                        });
-                      }
                       return (
                         <Fragment key={numberIndex}>
                           <View style={flexRow}>
@@ -152,7 +150,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
                             foreignBankDetails.push({
                               label: DASHBOARD_ACCOUNT_TAB.LABEL_BANK_SWIFT_CODE,
                               title: bank.bankSwiftCode,
-                              titleStyle: fsTransformNone,
+                              titleStyle: fsUppercase,
                             });
                           }
                           return (
@@ -185,13 +183,8 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
             />
           </Fragment>
         ) : null}
-
         {investmentSummary !== null && investmentSummary[0] !== null ? (
           <SummaryColorCard data={accountSettings} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_ACCOUNT_SETTINGS} spaceToTop={sh32} />
-        ) : null}
-
-        {riskInfo !== null ? (
-          <SummaryColorCard data={riskDetails} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
         ) : null}
       </View>
     </Fragment>

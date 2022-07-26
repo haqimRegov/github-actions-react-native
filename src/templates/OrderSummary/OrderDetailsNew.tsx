@@ -97,6 +97,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
           })
           .join("")
       : "";
+
   const epfAccount: LabeledTitleProps[] = [];
   if (paymentSummary !== null && paymentSummary !== undefined && paymentSummary.length > 0 && paymentSummary[0].paymentMethod === "EPF") {
     epfAccount.push({ label: DASHBOARD_ORDER_DETAILS.LABEL_EPF_ACCOUNT, title: paymentSummary[0].epfAccountNumber! });
@@ -141,6 +142,11 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     textWithCount: true,
     data: crsTin,
   };
+
+  const moreOrderDetails: LabeledTitleProps[] = [
+    { label: DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_TYPE, title: transactionDetails.accountType, titleStyle: fsTransformNone },
+    { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
+  ];
 
   return (
     <Fragment>
@@ -233,6 +239,13 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                     </Fragment>
                   )}
                   <CustomSpacer space={sh16} />
+                </Fragment>
+              ) : null}
+              {transactionType !== "CR" ? (
+                <Fragment>
+                  <View style={borderBottomBlue2} />
+                  <CustomSpacer space={sh16} />
+                  <TextCard data={moreOrderDetails} itemStyle={{ width: sw328 }} />
                 </Fragment>
               ) : null}
             </View>
@@ -385,11 +398,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
               {...summaryColorCardStyleProps}
               content={
                 <Fragment>
-                  {isNotEmpty(paymentSummary[0].epfAccountNumber) ? (
-                    <View style={{ marginBottom: sh24 }}>
-                      <TextCard data={epfAccount} />
-                    </View>
-                  ) : null}
+                  {isNotEmpty(paymentSummary[0].epfAccountNumber) ? <TextCard data={epfAccount} /> : null}
                   {paymentSummary.map((payment: IOrderSummaryPayment, index: number) => {
                     const surplusLabel = payment.surplusNote !== null ? payment.surplusNote : "";
                     const paymentNormalLabel =
@@ -635,6 +644,9 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
               header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_ORDER_DETAILS.TITLE_PAYMENT_SUMMARY }}
             />
           </Fragment>
+        ) : null}
+        {transactionType !== "CR" ? (
+          <SummaryColorCard data={riskAssessmentDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
         ) : null}
         {transactionType !== "Sales-AO" && transactionType !== "Sales-NS" ? (
           <Fragment>

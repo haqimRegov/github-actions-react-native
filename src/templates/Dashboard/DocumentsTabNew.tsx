@@ -16,7 +16,6 @@ import {
   sh16,
   sh20,
   sh24,
-  sh32,
   sh8,
   sw16,
   sw24,
@@ -80,7 +79,6 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
                           </Fragment>
                         ) : null}
                         <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
-                        <CustomSpacer space={sh16} />
                       </Fragment>
                     );
                   })}
@@ -124,7 +122,6 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
                                 {isNotEmpty(products.documents.length) && products.documents.length > 0 ? (
                                   <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
                                 ) : null}
-                                <CustomSpacer space={sh32} />
                               </Fragment>
                             );
                           })}

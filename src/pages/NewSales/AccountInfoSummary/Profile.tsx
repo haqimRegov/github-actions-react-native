@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer } from "../../../components";
+import { SafeAreaPage } from "../../../components";
 import { getInvestorAccountDetails } from "../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../store";
-import { flexChild, sh32 } from "../../../styles";
+import { sh32 } from "../../../styles";
 import { InvestorProfile } from "../../../templates";
 
 interface InvestorProfilePageProps extends InvestorsStoreProps {
@@ -48,10 +48,9 @@ const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
   }, []);
 
   return (
-    <View style={flexChild}>
-      <CustomSpacer space={sh32} />
-      <InvestorProfile handleBack={handleBack} data={investorProfile} />
-    </View>
+    <SafeAreaPage>
+      <InvestorProfile handleBack={handleBack} data={investorProfile} spaceToTop={sh32} />
+    </SafeAreaPage>
   );
 };
 

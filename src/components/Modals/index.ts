@@ -7,3 +7,4 @@ export * from "./NewPrompt";
 export * from "./Prompt";
 export * from "./RNModal";
 export * from "./SignatureModal";
+export * from "./SubmissionSummary";

@@ -56,6 +56,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   navigation,
   route,
   resetClientDetails,
+  resetTransactions,
+  resetEDD,
+  resetInvestors,
   unreadMessages,
 }: DashboardPageProps) => {
   const { isLogout, setIsLogout } = route.params;
@@ -73,6 +76,22 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     logout(navigation);
   };
 
+  const handleDataReset = (currentRoute: DashboardPageType) => {
+    switch (currentRoute) {
+      case "Transactions":
+        resetTransactions();
+        break;
+      case "Investors":
+        resetInvestors();
+        break;
+      case "EDD":
+        resetEDD();
+        break;
+      default:
+        resetTransactions();
+    }
+  };
+
   const handleAims = () => {
     RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
   };
@@ -86,14 +105,17 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleDashboard = () => {
+    handleDataReset("Transactions");
     setPage("Transactions");
   };
 
   const handleInvestors = () => {
+    handleDataReset("Investors");
     setPage("Investors");
   };
 
   const handleEDD = () => {
+    handleDataReset("EDD");
     setPage("EDD");
   };
 

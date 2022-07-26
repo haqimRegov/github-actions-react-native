@@ -49,6 +49,7 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
   updateAllSort,
   updateCurrentInvestor,
   updateInvestors,
+  updateInvestorSearch,
 }: InvestorListingProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
 
@@ -90,6 +91,7 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
 
   const handleView = (item: ITableRowData) => {
     updateCurrentInvestor(item.rawData as unknown as IInvestorData);
+    updateInvestorSearch("");
     setScreen("InvestorOverview");
   };
 

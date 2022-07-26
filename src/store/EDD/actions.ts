@@ -41,7 +41,7 @@ export const updatePill = (pill: EDDNewCaseTagKey) => {
   return typedAction("edd/UPDATE_PILL", pill);
 };
 
-export const updateSearch = (search: string) => {
+export const updateEDDSearch = (search: string) => {
   return typedAction("edd/UPDATE_SEARCH", search);
 };
 
@@ -56,7 +56,7 @@ export type eddActions = ReturnType<
   | typeof updateNewCasesFilter
   | typeof updateNewCasesSort
   | typeof updatePill
-  | typeof updateSearch
+  | typeof updateEDDSearch
 >;
 
 export const EDDActionProps = {
@@ -70,7 +70,7 @@ export const EDDActionProps = {
   updateNewCasesFilter,
   updateNewCasesSort,
   updatePill,
-  updateSearch,
+  updateEDDSearch,
 };
 
 export type eddActionType = typeof EDDActionProps;

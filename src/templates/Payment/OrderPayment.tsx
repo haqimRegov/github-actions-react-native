@@ -31,7 +31,7 @@ import {
   sh6,
   sh8,
   sh80,
-  shadow16Blue112,
+  shadow4Blue008,
   sw1,
   sw16,
   sw18,
@@ -190,7 +190,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   };
 
   const container: ViewStyle = {
-    ...shadow16Blue112,
+    ...shadow4Blue008,
     backgroundColor: colorWhite._1,
     borderRadius: sw8,
   };
@@ -267,6 +267,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
   return (
     <View>
+      <CustomSpacer space={sh24} />
       <FundOverview
         completed={completed}
         createdOn={moment(createdOn, "x").format(DEFAULT_DATE_FORMAT)}
@@ -956,7 +957,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
           </Fragment>
         ) : null}
       </View>
-      <CustomSpacer space={sh24} />
       <PromptModal
         handleCancel={handleCancelPrompt}
         handleContinue={handleContinuePrompt}

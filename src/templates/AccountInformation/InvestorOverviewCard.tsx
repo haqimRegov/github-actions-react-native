@@ -98,7 +98,7 @@ InvestorOverviewCardProps) => {
       <View style={rowCenterVertical}>
         <LabeledTitle {...labeledTitleProps} label={ACCOUNT_INFORMATION.LABEL_RISK} title={info.riskProfile || "-"} />
       </View>
-      <CustomSpacer space={sh24} />
+      <CustomSpacer space={sh16} />
     </View>
   );
 };

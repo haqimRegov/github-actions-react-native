@@ -5,12 +5,12 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import {
   AccountHeader,
-  CheckBox,
   CustomSpacer,
   Loading,
   NewDropdown,
   PromptModal,
   SelectionBanner,
+  SubmissionSummaryModal,
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -27,6 +27,8 @@ import {
   fs12BoldBlack2,
   fs12BoldGray6,
   fs16RegGray5,
+  fs16RegGray6,
+  fs20BoldBlack2,
   fsAlignLeft,
   px,
   sh12,
@@ -37,7 +39,6 @@ import {
   sw24,
   sw56,
 } from "../../../../styles";
-import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
@@ -52,14 +53,15 @@ interface UploadHardCopyProps extends TransactionsStoreProps {
 const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: UploadHardCopyProps) => {
   const { currentOrder, navigation, setScreen, updateCurrentOrder, updatePill } = props;
   const fetching = useRef<boolean>(false);
-  const [prompt, setPrompt] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [branch, setBranch] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
   const [documentList, setDocumentList] = useState<IGetHardCopyDocumentsResult | undefined>(undefined);
   const [backPrompt, setBackPrompt] = useState<boolean>(false);
-  const [submissionResult, setSubmissionResult] = useState<ISubmitHardCopyDocumentsResult | undefined>(undefined);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [submissionSummary, setSubmissionSummary] = useState<ISubmissionSummaryOrder[] | undefined>(undefined);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
+  const [showPopup, setShowPopup] = useState<boolean>(false);
 
   const handleBackToTransactions = () => {
     setScreen("Transactions");
@@ -102,7 +104,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
 
   const handleFetch = async () => {
     const request: IGetHardCopyDocumentsRequest = { orderNumber: currentOrder!.orderNumber };
-    const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request, navigation, setLoading);
+    const response: IGetHardCopyDocumentsResponse = await getHardCopyDocuments(request, navigation);
     if (response !== undefined) {
       const { data, error } = response;
       if (error === null && data !== null) {
@@ -176,7 +178,11 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     }
     if (fetching.current === false) {
       fetching.current = true;
-      setLoading(true);
+      if (confirmed === undefined) {
+        setShowPopup(true);
+      } else {
+        setButtonLoading(true);
+      }
       const findBranch = documentList!.branchList.filter(({ name }: IHardCopyBranchList) => name === branch);
       const branchId = findBranch.length > 0 ? findBranch[0].branchId.toString() : "";
       const principalDocs =
@@ -211,8 +217,9 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         fundDocs.length > 0 ? fundDocs.findIndex(({ docs }) => docs === undefined || docs.includes(undefined)) : -1;
       // no need to check for principal and joint docs without keys since it can happen if the docs are already uploaded in S3 by other others
       if (checkFundDocsWithKeys !== -1) {
-        setPrompt(false);
-        setLoading(false);
+        setPromptType("summary");
+        setButtonLoading(false);
+        setShowPopup(false);
         setTimeout(() => {
           Alert.alert(ERRORS.storage.message);
         }, 100);
@@ -224,14 +231,25 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
           orderNumber: currentOrder!.orderNumber,
           ...checkAccount,
         };
-        const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setLoading);
+        const response: ISubmitHardCopyDocumentsResponse = await submitHardCopyDocuments(request, navigation, setShowPopup);
+        if (confirmed === true) {
+          setButtonLoading(false);
+        }
         if (response !== undefined) {
           const { data, error } = response;
           if (error === null && data !== null) {
-            setSubmissionResult(data.result);
+            if (confirmed === true) {
+              setPromptType("success");
+            } else {
+              const resultWithoutRemarks: ISubmissionSummaryOrder[] = data.result.orders.map((eachOrder) => ({
+                orderNumber: eachOrder.orderNumber,
+                remarks: [],
+                status: eachOrder.status,
+              }));
+              setSubmissionSummary(resultWithoutRemarks);
+            }
           } else {
-            setPrompt(false);
-            setLoading(false);
+            setPromptType("summary");
             setTimeout(() => {
               Alert.alert(error!.message);
             }, 100);
@@ -243,13 +261,18 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   };
 
   const handleCancelPopup = () => {
-    setSubmissionResult(undefined);
-    setLoading(false);
+    if (buttonLoading === false) {
+      if (toggle === true) {
+        setToggle(false);
+      }
+      setSubmissionSummary(undefined);
+      setShowPopup(false);
+    }
   };
 
   const handleConfirmPopup = async () => {
     if (isConfirmed === true) {
-      handleBack();
+      handleBackToTransactions();
       return updatePill("submitted");
     }
 
@@ -392,8 +415,6 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                 label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_SUBMISSION_BRANCH}
                 value={branch}
               />
-              <CustomSpacer space={sh32} />
-              <CheckBox label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_CHECKBOX} onPress={handleToggle} toggle={toggle} />
             </View>
           </Fragment>
         ) : (
@@ -403,32 +424,35 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       </DashboardLayout>
       {documentList !== undefined ? (
         <SelectionBanner
-          continueDisabled={pendingDocCount > 0 || branch === "" || toggle === false}
+          continueDisabled={pendingDocCount > 0 || branch === ""}
           label={footer}
+          labelStyle={fs20BoldBlack2}
           submitOnPress={handleSubmit}
-          labelSubmit={UPLOAD_DOCUMENTS.BUTTON_CONTINUE}
+          labelSubmit={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_SAVE}
         />
       ) : null}
-      <PromptModal
-        backdropOpacity={loading ? 0.4 : undefined}
-        handleContinue={handleBackToTransactions}
-        isLoading={loading}
-        illustration={LocalAssets.illustration.hardcopySuccess}
-        label={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_SUBMITTED}
-        labelContinue={UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_DONE}
-        title={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HARD_COPY_RECEIVED}
-        visible={prompt}
+      <SubmissionSummaryModal
+        data={submissionSummary}
+        prompt={{
+          illustration: LocalAssets.illustration.orderReceived,
+          primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
+          subtitle: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD,
+          subtitleStyle: fs16RegGray6,
+          title:
+            submissionSummary !== undefined
+              ? `${submissionSummary[0].orderNumber} ${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HAS_BEEN_SUBMITTED_SUCCESSFULLY}`
+              : "",
+        }}
+        promptType={promptType}
+        summary={{
+          checkbox: { label: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_CHECKBOX, onPress: handleToggle, toggle: toggle },
+          primary: { disabled: !toggle, loading: buttonLoading, onPress: handleConfirmPopup },
+          secondary: { onPress: handleCancelPopup },
+          title: UPLOAD_HARD_COPY_DOCUMENTS.PROMPT_TITLE_STATUS,
+        }}
+        visible={showPopup}
       />
-      <DocumentsPopup
-        handleBack={handleBackToTransactions}
-        handleCancel={handleCancelPopup}
-        handleConfirm={handleConfirmPopup}
-        loading={loading}
-        result={submissionResult}
-        subtitle={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD}
-      />
       <PromptModal
-        backdropOpacity={loading ? 0.4 : undefined}
         contentStyle={alignFlexStart}
         handleCancel={handleBackToTransactions}
         handleContinue={handleCancel}

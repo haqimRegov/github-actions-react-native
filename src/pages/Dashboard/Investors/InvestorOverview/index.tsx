@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { Alert, View, ViewStyle } from "react-native";
+import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
@@ -89,6 +89,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
   const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
+  const [isNtb, setIsNtb] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const fullScreenLoader = useRef<boolean>(false);
@@ -169,7 +170,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           ? req
           : {
               accountType: accountType === 1 ? "Joint" : "Individual",
-              isEtb: true,
+              isEtb: isNtb !== true,
               isNewFundPurchased: false,
               principalHolder: {
                 ...principalDob,
@@ -187,33 +188,35 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         if (error === null && data !== null) {
           let riskInfo: IRiskProfile | undefined;
           if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
-            riskInfo = data.result.riskInfo;
-            addRiskScore({
-              ...riskAssessment,
-              appetite: data.result.riskInfo.appetite,
-              rangeOfReturn: data.result.riskInfo.expectedRange,
-              profile: data.result.riskInfo.profile,
-              type: data.result.riskInfo.type,
-              fundSuggestion: "",
-              netWorth: data.result.riskInfo.hnwStatus,
+            if (isNtb !== true) {
+              riskInfo = data.result.riskInfo;
+              addRiskScore({
+                ...riskAssessment,
+                appetite: data.result.riskInfo.appetite,
+                rangeOfReturn: data.result.riskInfo.expectedRange,
+                profile: data.result.riskInfo.profile,
+                type: data.result.riskInfo.type,
+                fundSuggestion: "",
+                netWorth: data.result.riskInfo.hnwStatus,
+              });
+            }
+            updateNewSales({
+              ...newSales,
+              investorProfile: {
+                ...newSales.investorProfile,
+                principalClientId: investorData!.clientId,
+                jointClientId: jointClientId.current,
+              },
+              riskInfo: riskInfo,
+              accountDetails: {
+                ...newSales.accountDetails,
+                accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
+                fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
+                isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
+                isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
+              },
             });
           }
-          updateNewSales({
-            ...newSales,
-            investorProfile: {
-              ...newSales.investorProfile,
-              principalClientId: investorData!.clientId,
-              jointClientId: jointClientId.current,
-            },
-            riskInfo: riskInfo,
-            accountDetails: {
-              ...newSales.accountDetails,
-              accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
-              fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
-              isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
-              isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
-            },
-          });
           const resetJointInfo =
             accountType !== 1 &&
             (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
@@ -240,13 +243,15 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             accountHolder: accountType === 1 ? "Joint" : "Principal",
           });
           addAccountType(accountType === 1 || data.result.jointHolder !== null ? "Joint" : "Individual");
+          const updatedEmailPrincipal = isNtb !== true ? { emailAddress: investorData?.email } : {};
+          const updatedEmailJoint = isNtb !== true && accountType === 1 ? { emailAddress: investorData?.email } : {};
           const updatedJointInfo: IHolderInfoState =
             accountType === 1
               ? {
                   ...personalInfo.joint,
                   contactDetails: {
                     ...personalInfo.joint?.contactDetails,
-                    emailAddress: investorData!.email,
+                    ...updatedEmailJoint,
                   },
                   personalDetails: {
                     ...personalInfo.joint?.personalDetails,
@@ -262,7 +267,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
               ...personalInfo.principal,
               contactDetails: {
                 ...personalInfo.principal?.contactDetails,
-                emailAddress: investorData!.email,
+                ...updatedEmailPrincipal,
               },
               personalDetails: {
                 ...personalInfo.principal?.personalDetails,
@@ -316,7 +321,8 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
             // TODO handle NTB flow
             // return setClientType("NTB");
             setNewSalesLoading(false);
-            Alert.alert("NTB Client");
+            setIsNtb(true);
+            await handleClientRegister();
           }
           if (data.result.message === "ETB") {
             if (data.result.forceUpdate === false) {
@@ -564,18 +570,19 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       />
       <NewSalesPrompt
         errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-        inputError1={inputError1}
-        setInputError1={setInputError1}
         fetching={newSalesLoading}
-        handleClientRegister={handleClientRegister}
-        investorData={investorData!}
         handleCheckClient={handleCheckClient}
+        handleClientRegister={handleClientRegister}
+        inputError1={inputError1}
+        investorData={investorData!}
+        isNtb={isNtb}
         modalData={modalData}
         navigation={navigation}
         newAccountType={accountType}
         registered={registered}
         setAccountType={setAccountType}
+        setErrorMessage={setErrorMessage}
+        setInputError1={setInputError1}
         setRegistered={setRegistered}
         setVisible={setPrompt}
         visible={prompt}

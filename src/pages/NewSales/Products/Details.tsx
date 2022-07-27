@@ -81,7 +81,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
   const isEpf = fund.isEpf === "Yes";
   const isEpfOnly = fund.isEpfOnly === "Yes";
   const isPrsDefault = fund.fundCode.includes("prsdefault");
-  const isScheduled = fund.isScheduled === "Yes";
+  const isScheduled = fund.isScheduled === "Yes" && fund.isEpfOnly !== "Yes";
 
   const documentList =
     fund.docs !== undefined
@@ -198,15 +198,14 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     },
     {
       label: PRODUCT_DETAILS.LABEL_ANNUAL_TRUSTEE,
-      title: "-",
+      title: `${fund.annualTrusteeFee}%`,
       titleStyle: fsTransformNone,
     },
-    // TODO 2 other values left. Will add after after BE comes back
   ];
 
   if (isAmp) {
-    data.push({ label: PRODUCT_DETAILS.LABEL_LANDING_FUND, title: `${fund.landingFund}` });
-    data.splice(0, 1, { label: PRODUCT_DETAILS.LABEL_AMP_CATEGORY, title: "-" });
+    data.push({ label: PRODUCT_DETAILS.LABEL_LANDING_FUND, title: fund.landingFund || "-" });
+    data.splice(0, 1, { label: PRODUCT_DETAILS.LABEL_AMP_CATEGORY, title: fund.ampCategory || "-" });
     transactionInfo.splice(3, 0, { label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` });
     transactionInfo.splice(-1, 1);
   }

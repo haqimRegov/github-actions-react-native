@@ -29,6 +29,7 @@ import {
   sh8,
   sw16,
   sw24,
+  sw288,
   sw440,
   sw448,
   sw8,
@@ -95,31 +96,33 @@ export const SubmissionSummaryCollapsible: FunctionComponent<SubmissionSummaryCo
                                   <View style={flexRow}>
                                     <Text style={fs10RegGray4}>{document.title}</Text>
                                     <CustomFlexSpacer />
-                                    {document.otherRemarks !== undefined ? (
-                                      <Fragment>
-                                        <View style={{ ...alignItemsEnd, width: sw96 }}>
-                                          {document.otherRemarks.map((otherRemarks, remark: number) => {
-                                            return (
-                                              <Text key={remark} style={{ ...fs10BoldGray5, color: colorYellow._2 }}>
-                                                {otherRemarks}
-                                              </Text>
-                                            );
-                                          })}
-                                        </View>
-                                        <CustomSpacer isHorizontal={true} space={sw8} />
-                                      </Fragment>
-                                    ) : null}
+                                    <View style={{ ...flexRow, maxWidth: sw288 }}>
+                                      {document.otherRemarks !== undefined ? (
+                                        <Fragment>
+                                          <View style={{ ...alignItemsEnd, minWidth: sw96 }}>
+                                            {document.otherRemarks.map((otherRemarks, remark: number) => {
+                                              return (
+                                                <Text key={remark} style={{ ...fs10BoldGray5, color: colorYellow._2 }}>
+                                                  {otherRemarks}
+                                                </Text>
+                                              );
+                                            })}
+                                          </View>
+                                          <CustomSpacer isHorizontal={true} space={sw8} />
+                                        </Fragment>
+                                      ) : null}
 
-                                    <View style={{ ...alignItemsEnd, width: sw96 }}>
-                                      {document.remarks.map((docRemark, remark: number) => {
-                                        return (
-                                          <Fragment key={remark}>
-                                            <ParsedText style={fs10BoldGray5} parse={[{ pattern: /\(\w+\)/, style: fs10RegGray5 }]}>
-                                              {docRemark}
-                                            </ParsedText>
-                                          </Fragment>
-                                        );
-                                      })}
+                                      <View style={{ ...alignItemsEnd, minWidth: sw96 }}>
+                                        {document.remarks.map((docRemark, remark: number) => {
+                                          return (
+                                            <Fragment key={remark}>
+                                              <ParsedText style={fs10BoldGray5} parse={[{ pattern: /\(\w+\)/, style: fs10RegGray5 }]}>
+                                                {docRemark}
+                                              </ParsedText>
+                                            </Fragment>
+                                          );
+                                        })}
+                                      </View>
                                     </View>
                                   </View>
                                   {docIndex === details.remarks.length - 1 ? null : (

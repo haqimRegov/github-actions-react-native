@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CollectionBankCard, ContentPage, CustomSpacer, IconText, NewPromptModal, SignatureUploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
-import { DICTIONARY_KIB_BANK_ACCOUNTS } from "../../../../data/dictionary";
 import { generatePdf, generatePdfTransactions, getReceiptSummaryList, submitPdf, submitPdfTransactions } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import {
@@ -225,11 +224,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const signIcon = accountType === "Individual" ? "account" : "account-joint";
 
-  const getCollectionBank = orders!.grandTotal.map((eachTotal) => {
-    const collectionBank = DICTIONARY_KIB_BANK_ACCOUNTS.filter((bank) => bank.currency === eachTotal.currency);
-    return collectionBank[0];
-  });
-
   return (
     <Fragment>
       <ContentPage
@@ -341,7 +335,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
             <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_2_AND_3}</Text>
           </View>
           <CustomSpacer space={sh8} />
-          <CollectionBankCard data={getCollectionBank} />
+          <CollectionBankCard data={orders!.grandTotal} />
         </View>
       </NewPromptModal>
     </Fragment>

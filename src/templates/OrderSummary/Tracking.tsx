@@ -57,6 +57,7 @@ export const Tracking: FunctionComponent<ITrackingProps> = ({ data, handleExport
       key: [{ key: "level", textStyle: fs12RegBlue1 }],
       title: DASHBOARD_TRACKING.LABEL_LEVEL,
       viewStyle: { width: sw104 },
+      textStyle: fsTransformNone,
     },
     { customItem: true, key: [{ key: "remark" }], title: DASHBOARD_TRACKING.LABEL_REMARKS, viewStyle: { width: sw376 } },
   ];

@@ -137,9 +137,10 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const handleCancel = () => {
     setPromptModal(false);
-    setActiveContent(currentItem?.item);
-    setActiveSection(currentItem?.section!);
-    setCurrentItem(undefined);
+    if (currentItem !== undefined) {
+      setActiveSection(currentItem?.section!);
+      setCurrentItem(undefined);
+    }
   };
   const handleContinue = () => {
     setPromptModal(false);
@@ -147,8 +148,8 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const handleCheckRoute = (item: INewSales, section: number): boolean => {
     // TODO improvement
-    switch (item.route) {
-      case "ProductsList":
+    switch (item.key) {
+      case "Products":
         setCurrentItem({ item: item, section: section });
         setPromptModal(true);
         return false;

@@ -67,7 +67,7 @@ import {
 import { isNotEmpty, parseAmountToString } from "../../../utils";
 import { Investment } from "./Investment";
 
-const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
+const { ACTION_BUTTONS, INVESTMENT, PERSONAL_DETAILS } = Language.PAGE;
 
 export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesContentProps {
   handleNextStep: (step: TypeNewSalesRoute) => void;
@@ -161,7 +161,18 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const allEpf = epfInvestments.length === investmentDetails!.length;
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
-    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
+    const fundsWithPayout = investmentDetails!.filter(({ fundDetails, investment }) => {
+      return (
+        (fundDetails.fundType !== "PRS" && investment.fundPaymentMethod !== "EPF") ||
+        (investment.fundPaymentMethod === "Cash" && fundDetails.fundType !== "PRS")
+      );
+    });
+
+    const checkPayout =
+      fundsWithPayout.length === 0
+        ? { incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST, signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW }
+        : { signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW };
+    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf, ...checkPayout });
     const checkNextStep: TypeNewSalesRoute =
       client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "" ? "OrderPreview" : "IdentityVerification";
     handleNextStep(checkNextStep);

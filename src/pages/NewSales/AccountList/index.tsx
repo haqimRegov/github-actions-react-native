@@ -1,9 +1,10 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, LabeledTitle, Loading, RNModal } from "../../../components";
-import { Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
 import { getProductTabType } from "../../../helpers";
 import { clientRegister } from "../../../network-actions";
@@ -37,12 +38,14 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   // addRiskInfo,
   addAccountType,
   addClientDetails,
+  addPersonalInfo,
   addRiskScore,
   addUtFilters,
   client,
   handleNextStep,
   navigation,
   newSales,
+  personalInfo,
   riskScore,
   updateNewSales,
   updateProductType,
@@ -86,6 +89,18 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           const resetJointInfo =
             accountType === "Individual" &&
             (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
+          let dataJointIdType = {};
+          if (isNotEmpty(data.result.jointHolder)) {
+            dataJointIdType =
+              data.result.jointHolder!.idType !== "NRIC" && data.result.jointHolder!.idType !== "Passport"
+                ? { idType: "Other", otherIdType: data.result.jointHolder!.idType as TypeIDOther }
+                : { idType: data.result.jointHolder!.idType };
+          }
+          const storeJointIdType = isNotEmpty(data.result.jointHolder) ? dataJointIdType : {};
+          const storePrincipalIdType =
+            data.result.principalHolder.idType !== "NRIC" && data.result.principalHolder.idType !== "Passport"
+              ? { idType: "Other", otherIdType: data.result.principalHolder.idType as TypeIDOther }
+              : { idType: data.result.principalHolder.idType };
           const initialJointInfo = {
             name: "",
             country: "",
@@ -113,6 +128,39 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
             initId: `${data.result.initId}`,
+          });
+          const updatedJointInfo: IHolderInfoState =
+            data.result.jointHolder !== null
+              ? {
+                  ...personalInfo.joint,
+                  contactDetails: {
+                    ...personalInfo.joint?.contactDetails,
+                  },
+                  personalDetails: {
+                    ...personalInfo.joint?.personalDetails,
+                    dateOfBirth: moment(data.result.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+                    idNumber: data.result.jointHolder!.id,
+                    name: data.result.jointHolder!.name,
+                    ...storeJointIdType,
+                  },
+                }
+              : { ...personalInfo.joint };
+          addPersonalInfo({
+            ...personalInfo,
+            principal: {
+              ...personalInfo.principal,
+              contactDetails: {
+                ...personalInfo.principal?.contactDetails,
+              },
+              personalDetails: {
+                ...personalInfo.principal?.personalDetails,
+                dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+                idNumber: data.result.principalHolder.id,
+                name: data.result.principalHolder.name,
+                ...storePrincipalIdType,
+              },
+            },
+            joint: updatedJointInfo,
           });
           addAccountType(data.result.jointHolder !== null ? "Joint" : "Individual");
           const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];

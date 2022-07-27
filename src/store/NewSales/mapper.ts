@@ -17,6 +17,7 @@ export const NewSalesMapStateToProps = (state: RootState) => ({
   accountHolder: state.client.details?.accountHolder,
   client: state.client,
   newSales: state.newSales,
+  personalInfo: state.personalInfo,
   riskScore: state.riskAssessment.riskScore,
   transactionType: state.newSales.transactionType,
   transactions: state.transactions,

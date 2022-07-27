@@ -32,6 +32,7 @@ import {
   shadow12Black112,
   sw24,
 } from "../../../../styles";
+import { isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
@@ -45,6 +46,11 @@ interface InvestorOverviewProps extends InvestorsStoreProps, ClientStoreProps {
   isLogout: boolean;
   setActiveTab: (route: InvestorsTabType) => void;
   setScreen: (route: InvestorsPageType) => void;
+}
+
+declare interface IIdType {
+  idType: TypeIDChoices;
+  otherIdType?: TypeIDOther;
 }
 
 const initialJointInfo = {
@@ -220,15 +226,27 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           const resetJointInfo =
             accountType !== 1 &&
             (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
+          let dataJointIdType = {};
+          if (isNotEmpty(data.result.jointHolder)) {
+            dataJointIdType =
+              data.result.jointHolder!.idType !== "NRIC" && data.result.jointHolder!.idType !== "Passport"
+                ? { idType: "Other", otherIdType: data.result.jointHolder!.idType as TypeIDOther }
+                : { idType: data.result.jointHolder!.idType };
+          }
+          const storeJointIdType = isNotEmpty(data.result.jointHolder) ? dataJointIdType : {};
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
                   clientId: data.result.jointHolder.clientId,
                   dateOfBirth: data.result.jointHolder.dateOfBirth,
-                  id: data.result.jointHolder.id,
                   name: data.result.jointHolder.name,
+                  ...storeJointIdType,
                 }
               : {};
+          const storePrincipalIdType: IIdType =
+            data.result.principalHolder.idType !== "NRIC" && data.result.principalHolder.idType !== "Passport"
+              ? { idType: "Other", otherIdType: data.result.principalHolder.idType as TypeIDOther }
+              : { idType: data.result.principalHolder.idType };
           addClientDetails({
             ...client.details,
             principalHolder: {
@@ -237,6 +255,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               id: data.result.principalHolder.id,
               name: data.result.principalHolder.name,
+              ...storePrincipalIdType,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
             initId: data.result.initId.toString(),
@@ -258,6 +277,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
                     dateOfBirth: moment(data.result.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
                     idNumber: data.result.jointHolder!.id,
                     name: data.result.jointHolder!.name,
+                    ...storeJointIdType,
                   },
                 }
               : { ...personalInfo.joint };
@@ -274,6 +294,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
                 dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
                 idNumber: data.result.principalHolder.id,
                 name: data.result.principalHolder.name,
+                ...storePrincipalIdType,
               },
             },
             joint: updatedJointInfo,

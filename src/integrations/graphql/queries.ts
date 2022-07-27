@@ -1113,6 +1113,8 @@ const productList = gql`
       data {
         result {
           products {
+            annualTrusteeFee
+            ampCategory
             fundCode
             fundCurrencies
             fundClasses

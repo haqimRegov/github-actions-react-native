@@ -528,6 +528,7 @@ const submitClientAccount = gql`
               salesCharge
               scheduledInvestmentAmount
               scheduledSalesCharge
+              landingFund
             }
           }
         }
@@ -577,6 +578,8 @@ const submitClientAccountTransactions = gql`
               scheduledInvestmentAmount
               scheduledSalesCharge
               isFea
+              landingFund
+              fundCode
             }
           }
         }

@@ -31,12 +31,14 @@ const clientRegister = gql`
             clientId
             dateOfBirth
             id
+            idType
           }
           jointHolder {
             name
             id
             dateOfBirth
             clientId
+            idType
           }
           riskInfo {
             appetite

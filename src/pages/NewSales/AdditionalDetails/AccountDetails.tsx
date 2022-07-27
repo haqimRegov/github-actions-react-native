@@ -58,19 +58,6 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
     distributionDisabled.push(0);
   }
 
-  useEffect(() => {
-    if (fundsWithPayout.length === 0) {
-      return setPersonalInfo({
-        incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
-        signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW,
-      });
-    }
-    return setPersonalInfo({
-      signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <Fragment>
       <CustomSpacer space={sh24} />

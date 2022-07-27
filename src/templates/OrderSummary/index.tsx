@@ -97,7 +97,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     />
   );
 
-  if (activeTab === "document" && orderSummary !== undefined) {
+  if (activeTab === "document" && orderSummary !== undefined && isNotEmpty(orderSummary?.documentSummary)) {
     content = <DocumentsTabNew documentSummary={orderSummary.documentSummary} setFile={setFile} />;
   }
 

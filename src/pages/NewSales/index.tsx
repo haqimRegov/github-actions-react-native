@@ -1,17 +1,19 @@
 import { CommonActions } from "@react-navigation/native";
 import cloneDeep from "lodash.clonedeep";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomToast, PromptModal } from "../../components";
-import { NewSalesSteps } from "../../components/Steps/NewSalesSteps";
+import { StepperBar } from "../../components/Steps/StepperBar";
 import { Language } from "../../constants";
 import { NEW_SALES_KEYS, NEW_SALES_ROUTES } from "../../constants/routes/new-sales";
+import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../data/dictionary";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
-import { alignFlexStart, fs14BoldGray6, fsAlignLeft } from "../../styles";
+import { alignFlexStart, flexRow, fs14BoldGray6, fsAlignLeft, fullHW } from "../../styles";
 import { NewSalesContent } from "./Content";
 
-const { NEW_SALES } = Language.PAGE;
+const { NEW_SALES, PERSONAL_DETAILS } = Language.PAGE;
 
 const ACCOUNT_LIST: INewSales = {
   label: NEW_SALES.TITLE_ACCOUNT_LIST,
@@ -85,16 +87,13 @@ interface NewSalesPageProps extends NewSalesContentProps, NewSalesStoreProps {
   navigation: IStackNavigationProp;
 }
 
-interface IItem {
-  item: INewSales;
-  section: number;
-}
-
 export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (props: NewSalesPageProps) => {
   const {
+    addPersonalInfo,
     client,
     newSales,
     navigation,
+    personalInfo,
     resetAcknowledgement,
     resetClientDetails,
     resetInvestors,
@@ -104,6 +103,8 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     resetRiskAssessment,
     resetSelectedFund,
     resetTransactions,
+    riskAssessment,
+    updateNewSales,
     updateNewSalesFinishedSteps,
     updateToastVisible,
   } = props;
@@ -121,11 +122,17 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     updatedNewSalesSteps.splice(checkIndex, 1);
   }
 
-  const [promptModal, setPromptModal] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<IItem | undefined>(undefined);
+  const stepperBarRef = useRef<IStepperBarRef<TypeNewSalesKey>>();
+  const [unsavedPrompt, setUnsavedPrompt] = useState<boolean>(false);
   const [cancelNewSales, setCancelNewSales] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<INewSalesContentItem | INewSales | undefined>(updatedNewSalesSteps[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
+
+  const handleNextStep = (route: TypeNewSalesRoute) => {
+    if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
+      stepperBarRef!.current!.handleNextStep(route);
+    }
+  };
 
   const handleContentChange = (item: INewSalesContentItem | INewSales) => {
     setActiveContent(item);
@@ -135,23 +142,74 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     setCancelNewSales(!cancelNewSales);
   };
 
-  const handleCancel = () => {
-    setPromptModal(false);
-    if (currentItem !== undefined) {
-      setActiveSection(currentItem?.section!);
-      setCurrentItem(undefined);
+  const handleOpenProducts = () => {
+    setUnsavedPrompt(false);
+    handleNextStep("ProductsConfirmation");
+    addPersonalInfo({
+      ...personalInfo,
+      incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
+      signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
+      principal: {
+        ...personalInfo.principal,
+        bankSummary: {
+          localBank: [
+            {
+              bankAccountName: "",
+              bankAccountNumber: "",
+              bankLocation: DICTIONARY_COUNTRIES[0].value,
+              bankName: "",
+              bankSwiftCode: "",
+              currency: [DICTIONARY_CURRENCY[0].value],
+              otherBankName: "",
+            },
+          ],
+          foreignBank: [],
+        },
+        epfDetails: {
+          epfAccountType: "",
+          epfMemberNumber: "",
+        },
+        personalDetails: { ...personalInfo.principal!.personalDetails, relationship: "", otherRelationship: "" },
+      },
+    });
+
+    // combined New Fund and AO
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskProfile"];
+
+    if (riskAssessment.isRiskUpdated === true) {
+      updatedFinishedSteps.push("RiskAssessment");
     }
-  };
-  const handleContinue = () => {
-    setPromptModal(false);
+
+    // set to initial disabled steps without Products and ProductsList
+    // not using reducer initial state because of redux mutating issue
+    const updatedDisabledSteps: TypeNewSalesKey[] = [
+      "RiskAssessment",
+      // "Products",
+      // "ProductsList",
+      "ProductsConfirmation",
+      "AccountInformation",
+      "IdentityVerification",
+      "AdditionalDetails",
+      "Summary",
+      "Acknowledgement",
+      "OrderPreview",
+      "TermsAndConditions",
+      "Signatures",
+      "Payment",
+    ];
+
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
-  const handleCheckRoute = (item: INewSales, section: number): boolean => {
-    // TODO improvement
+  const handleContinue = () => {
+    setUnsavedPrompt(false);
+  };
+
+  const handleCheckRoute = (item: INewSales, _section: number): boolean => {
+    // TODO improvement to more dynamic step
     switch (item.key) {
       case "Products":
-        setCurrentItem({ item: item, section: section });
-        setPromptModal(true);
+        setUnsavedPrompt(true);
         return false;
       default:
         return true;
@@ -177,11 +235,9 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     );
   };
 
-  // TODO scroll position resetting when back to dashboard
-
   return (
-    <Fragment>
-      <NewSalesSteps
+    <View style={{ ...flexRow, ...fullHW }}>
+      <StepperBar<TypeNewSalesKey>
         activeContent={activeContent}
         activeSection={activeSection}
         activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskProfile" ? fs14BoldGray6 : {}}
@@ -190,27 +246,24 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
         handleCheckRoute={handleCheckRoute}
         handleContentChange={handleContentChange}
         handleBackToDashboard={handleCancelNewSales}
-        RenderContent={({ handleNextStep }) => {
-          return (
-            <NewSalesContent
-              handleCancelNewSales={handleCancelNewSales}
-              handleResetNewSales={handleResetNewSales}
-              cancelNewSales={cancelNewSales}
-              handleNextStep={handleNextStep}
-              navigation={navigation}
-              route={activeContent !== undefined ? activeContent.route! : NEW_SALES_ROUTES.RiskProfile}
-            />
-          );
-        }}
+        ref={stepperBarRef}
         setActiveContent={setActiveContent}
         setActiveSection={setActiveSection}
         setFinishedStep={updateNewSalesFinishedSteps}
         steps={updatedNewSalesSteps}
       />
+      <NewSalesContent
+        handleCancelNewSales={handleCancelNewSales}
+        handleResetNewSales={handleResetNewSales}
+        cancelNewSales={cancelNewSales}
+        handleNextStep={handleNextStep}
+        navigation={navigation}
+        route={activeContent !== undefined ? activeContent.route! : NEW_SALES_ROUTES.RiskProfile}
+      />
       <PromptModal
         backdropOpacity={0.4}
         contentStyle={alignFlexStart}
-        handleCancel={handleCancel}
+        handleCancel={handleOpenProducts}
         handleContinue={handleContinue}
         label={NEW_SALES.LABEL_PROMPT_TITLE}
         labelCancel={NEW_SALES.LABEL_PROMPT_CLOSE_WITHOUT_SAVING}
@@ -218,10 +271,10 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
         labelStyle={fsAlignLeft}
         title={NEW_SALES.LABEL_PROMPT_SUBTITLE}
         titleStyle={fsAlignLeft}
-        visible={promptModal}
+        visible={unsavedPrompt}
       />
       <CustomToast parentVisible={toast.toastVisible} setParentVisible={updateToastVisible} />
-    </Fragment>
+    </View>
   );
 };
 

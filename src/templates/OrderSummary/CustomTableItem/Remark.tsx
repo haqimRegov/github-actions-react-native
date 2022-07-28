@@ -24,6 +24,7 @@ import {
   sh4,
   sw12,
   sw296,
+  sw312,
   sw4,
   sw8,
 } from "../../../styles";
@@ -61,7 +62,7 @@ export const Remark: FunctionComponent<RemarkProps> = ({ item }: RemarkProps) =>
   };
 
   return (
-    <View style={{ ...flexRow, ...flexChild, ...py(sw12) }}>
+    <View style={{ ...flexRow, ...flexChild, ...py(sw12), maxWidth: sw312 }}>
       <View style={outerContainerStyle}>
         {remark === null || (isNotEmpty(remark) && remark.length === 0) ? (
           <View style={{ ...rowCenterVertical, ...fullHeight }}>

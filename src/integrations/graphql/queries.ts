@@ -97,6 +97,7 @@ const etbCheck = gql`
           forceUpdate
           clientId
           emailAddress
+          declarationRequired
           accounts {
             name
             jointName
@@ -405,7 +406,7 @@ const investorDetailsDashboard = gql`
           idNumber
           idType
           accountHolder
-
+          declarationRequired
           emailLastUpdated
           mobileNoLastUpdated
           mobileNoLastUpdated
@@ -430,6 +431,7 @@ const investorDetailsDashboard = gql`
             paymentMethod
             fundType
             isRecurring
+            jointDeclarationRequired
           }
         }
       }

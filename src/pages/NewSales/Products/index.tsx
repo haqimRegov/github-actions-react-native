@@ -23,10 +23,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addViewFund,
   handleNextStep,
   investmentDetails,
+  newSales,
   resetProducts,
   resetSelectedFund,
+  riskAssessment,
   riskScore,
   selectedFunds,
+  updateNewSales,
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
@@ -37,6 +40,31 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const handleBackToAssessment = () => {
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskProfile"];
+
+    if (riskAssessment.isRiskUpdated === true) {
+      updatedFinishedSteps.push("RiskAssessment");
+    }
+
+    // not using reducer initial state because of redux mutating issue
+    const initialDisabledSteps: TypeNewSalesKey[] = [
+      "RiskAssessment",
+      "Products",
+      "ProductsList",
+      "ProductsConfirmation",
+      "AccountInformation",
+      "IdentityVerification",
+      "AdditionalDetails",
+      "Summary",
+      "Acknowledgement",
+      "OrderPreview",
+      "TermsAndConditions",
+      "Signatures",
+      "Payment",
+    ];
+
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: initialDisabledSteps });
+
     setPrompt(undefined);
     handleNextStep("RiskProfile");
     resetProducts();
@@ -44,18 +72,20 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleCancel = () => {
-    const temp = [...selectedFunds];
-    const updatedFunds: IProduct[] = [];
-    temp.forEach((eachFund: IProduct) => {
-      if (
-        (riskScore.appetite.toLowerCase() === "medium" &&
-          (eachFund.riskCategory.toLowerCase() === "low" || eachFund.riskCategory.toLowerCase() === "medium")) ||
-        (riskScore.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
-      ) {
-        updatedFunds.push(eachFund);
-      }
-    });
-    addSelectedFund(updatedFunds);
+    if (prompt === "risk") {
+      const temp = [...selectedFunds];
+      const updatedFunds: IProduct[] = [];
+      temp.forEach((eachFund: IProduct) => {
+        if (
+          (riskScore.appetite.toLowerCase() === "medium" &&
+            (eachFund.riskCategory.toLowerCase() === "low" || eachFund.riskCategory.toLowerCase() === "medium")) ||
+          (riskScore.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
+        ) {
+          updatedFunds.push(eachFund);
+        }
+      });
+      addSelectedFund(updatedFunds);
+    }
     setPrompt(undefined);
   };
 
@@ -115,6 +145,14 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       });
     const sortedInvestmentArray = [...kenangaArray, ...sortedWithoutKenanga];
     addInvestmentDetails(sortedInvestmentArray);
+
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...newSales.disabledSteps];
+    const findProductList = updatedDisabledSteps.indexOf("ProductsList");
+    if (findProductList !== -1) {
+      updatedDisabledSteps.splice(findProductList, 1);
+    }
+
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
     handleNextStep("ProductsConfirmation");
   };
 

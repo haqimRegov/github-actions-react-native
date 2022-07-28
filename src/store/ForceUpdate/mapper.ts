@@ -10,6 +10,7 @@ import { ForceUpdateActionProps } from "./actions";
 
 export const ForceUpdateMapStateToProps = (state: RootState) => ({
   accountHolder: state.client.details?.accountHolder,
+  declarations: state.forceUpdate.declarations,
   disabledSteps: state.forceUpdate.disabledSteps,
   finishedSteps: state.forceUpdate.finishedSteps,
 });

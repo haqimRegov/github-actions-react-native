@@ -476,8 +476,8 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
       if (item.fundType === "UT" && item.paymentMethod === "EPF") {
         const epfFilterArray: string[] = item.paymentMethod === "EPF" ? ["Yes"] : [];
         addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
-        updateProductType(getProductTabType(item.fundType));
       }
+      updateProductType(getProductTabType(item.fundType));
       if (check === true) {
         updateTransactionType("Sales-NS");
         navigation.navigate("NewSales");

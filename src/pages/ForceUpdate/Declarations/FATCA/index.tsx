@@ -22,6 +22,7 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
   updateForceUpdate,
 }: FatcaDeclarationProps) => {
   const { principal } = personalInfo;
+  const { declarations } = forceUpdate;
   const [fatcaDefinition, setFatcaDefinition] = useState<boolean>(false);
 
   const principalAddress =
@@ -41,7 +42,7 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
   };
 
   const handleContinue = () => {
-    let route: TypeForceUpdateKey = "CRSDeclaration";
+    let route: TypeForceUpdateKey = declarations.includes("crs") ? "CRSDeclaration" : "DeclarationSummary";
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
     const updatedFinishedSteps: TypeForceUpdateKey[] = [...forceUpdate.finishedSteps];
     const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");

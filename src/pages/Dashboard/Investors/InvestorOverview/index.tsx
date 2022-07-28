@@ -82,6 +82,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   updateNewSales,
   updateTransactionType,
   updateProductType,
+  updateForceUpdateDeclarations,
   ...dashboardProps
 }: InvestorOverviewProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -138,6 +139,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   const handleCancelForceUpdate = () => {
     if (client.isForceUpdate === true) {
       updateShowOpenAccount(true);
+      updateForceUpdateDeclarations([]);
       resetClientDetails();
       dashboardProps.handleRoute("Transactions");
     } else {
@@ -515,6 +517,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
     setScreen: dashboardProps.setScreen,
     setSort,
     sort,
+    updateForceUpdateDeclarations,
   };
 
   const content: JSX.Element = <AccountListing handleBuyNewFund={handleBuyNewFund} handleViewAccount={handleViewAccount} {...tabProps} />;

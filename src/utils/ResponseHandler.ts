@@ -32,12 +32,12 @@ export const responseHandler = async <
       await Auth.currentSession();
       // // eslint-disable-next-line no-console
     }
-    // eslint-disable-next-line no-console
-    console.log("request", variables);
+    // // eslint-disable-next-line no-console
+    // console.log("request", variables);
     // // eslint-disable-next-line no-console
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
-    // eslint-disable-next-line no-console
-    console.log("response", data);
+    // // eslint-disable-next-line no-console
+    // console.log("response", data);
 
     if ("errors" in data) {
       throw data;

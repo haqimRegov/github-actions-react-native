@@ -15,6 +15,7 @@ import {
   SelectionBanner,
 } from "../../../components";
 import { Language } from "../../../constants";
+import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../data/dictionary";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
 import { getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
@@ -88,11 +89,12 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   investmentDetails,
   navigation,
   newSales,
+  personalInfo,
+  riskAssessment,
   selectedFunds,
   updateNewSales,
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
-  const { disabledSteps, finishedSteps } = newSales;
   // const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = true;
   const flatListRef = useRef<FlatList | null>(null);
@@ -154,13 +156,60 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleNavigation = () => {
-    const epfInvestments = investmentDetails!
-      .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
-      .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
-    const epfShariah = epfInvestments.includes("Yes");
+    const epfInvestments = investmentDetails!.filter(({ investment }) => investment.fundPaymentMethod === "EPF");
+    const epfInvestmentsShariah = epfInvestments.map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
+    const epfShariah = epfInvestmentsShariah.includes("Yes");
     const allEpf = epfInvestments.length === investmentDetails!.length;
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
+
+    // dynamically reset EPF details when the Funding Option was changed
+    const resetEpfDetails =
+      epfInvestments.length === 0
+        ? {
+            epfDetails: {
+              epfAccountType: "",
+              epfMemberNumber: "",
+            },
+          }
+        : {};
+
+    const investmentCurrencies = investmentDetails!.map(({ investment }) => investment.fundCurrency!);
+
+    // dynamically reset local bank details when the selectedFunds was changed
+    const filterLocalBankDetails = personalInfo!
+      .principal!.bankSummary!.localBank!.map((eachBank) => ({
+        ...eachBank,
+        currency: eachBank!.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+      }))
+      .filter((eachLocalBank) => eachLocalBank.currency.length > 0);
+
+    // dynamically reset foreign bank details when the selectedFunds was changed
+    const filterForeignBankDetails =
+      personalInfo!.principal!.bankSummary!.foreignBank!.length > 0
+        ? personalInfo!
+            .principal!.bankSummary!.foreignBank!.map((eachBank) => ({
+              ...eachBank,
+              currency: eachBank!.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+            }))
+            .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
+        : [];
+
+    const initialLocalBank =
+      filterLocalBankDetails.length > 0
+        ? filterLocalBankDetails
+        : [
+            {
+              bankAccountName: "",
+              bankAccountNumber: "",
+              bankLocation: DICTIONARY_COUNTRIES[0].value,
+              bankName: "",
+              bankSwiftCode: "",
+              currency: [DICTIONARY_CURRENCY[0].value],
+              otherBankName: "",
+            },
+          ];
+
     const fundsWithPayout = investmentDetails!.filter(({ fundDetails, investment }) => {
       return (
         (fundDetails.fundType !== "PRS" && investment.fundPaymentMethod !== "EPF") ||
@@ -172,30 +221,53 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       fundsWithPayout.length === 0
         ? { incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST, signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW }
         : { signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW };
-    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf, ...checkPayout });
-    const checkNextStep: TypeNewSalesRoute =
-      client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "" ? "OrderPreview" : "IdentityVerification";
-    handleNextStep(checkNextStep);
-    const updatedFinishedSteps: TypeNewSalesKey[] = disabledSteps.includes("IdentityVerification")
-      ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation", "AccountList"]
-      : [...finishedSteps, "Products", "ProductsList", "ProductsConfirmation"];
-    const newFundPurchaseDisable: TypeNewSalesKey[] =
-      client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== ""
-        ? ["RiskProfile", "RiskAssessment", "Products", "ProductsList", "ProductsConfirmation", "AccountList"]
-        : ["OrderPreview"];
-    const updatedDisabledSteps: TypeNewSalesKey[] = disabledSteps.includes("IdentityVerification")
-      ? [
+
+    addPersonalInfo({
+      ...personalInfo,
+      ...epfObject,
+      editPersonal: false,
+      isAllEpf: allEpf,
+      ...checkPayout,
+      principal: {
+        ...personalInfo.principal,
+        ...resetEpfDetails,
+        bankSummary: { localBank: initialLocalBank, foreignBank: filterForeignBankDetails },
+      },
+    });
+
+    const isNewFund = client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "";
+    const checkNextStep: TypeNewSalesRoute = isNewFund ? "OrderPreview" : "IdentityVerification";
+
+    // combined New Fund and AO
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskProfile", "Products", "ProductsList", "ProductsConfirmation"];
+
+    if (riskAssessment.isRiskUpdated === true) {
+      updatedFinishedSteps.push("RiskAssessment");
+    }
+
+    const updatedDisabledSteps: TypeNewSalesKey[] = isNewFund
+      ? ["AccountList", "RiskProfile", "Products", "AccountInformation", "TermsAndConditions", "Signatures", "Payment"]
+      : // set to initial disabled steps without Products and ProductsList
+        // not using reducer initial state because of redux mutating issue
+        [
+          "RiskAssessment",
+          // "Products",
+          // "ProductsList",
+          "ProductsConfirmation",
+          "AccountInformation",
           "IdentityVerification",
           "AdditionalDetails",
           "Summary",
           "Acknowledgement",
+          "OrderPreview",
           "TermsAndConditions",
           "Signatures",
           "Payment",
-          ...newFundPurchaseDisable,
-        ]
-      : [...disabledSteps, ...newFundPurchaseDisable];
+        ];
+
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+
+    handleNextStep(checkNextStep);
   };
 
   const handleSetupClient = async () => {

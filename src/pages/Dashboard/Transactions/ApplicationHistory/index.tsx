@@ -39,7 +39,7 @@ import { RejectedOrders } from "./Rejected";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
-interface ApplicationHistoryProps extends TransactionsStoreProps, NewSalesContentProps {
+interface ApplicationHistoryProps extends TransactionsStoreProps {
   activeTab: TransactionsTabType;
   isLogout: boolean;
   navigation: IStackNavigationProp;

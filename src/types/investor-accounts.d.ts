@@ -5,6 +5,7 @@ declare interface IInvestor {
   address: IAddressState;
   clientId: string;
   dateOfBirth: string;
+  declarationRequired: string[];
   email: string;
   emailLastUpdated: string;
   idNumber: string;
@@ -31,6 +32,7 @@ declare interface IInvestorAccountsData {
   idNumber: string;
   idType: string;
   isRecurring: boolean;
+  jointDeclarationRequired: string[] | null;
   jointEmail: string;
   jointId: string;
   jointIdNumber: string;

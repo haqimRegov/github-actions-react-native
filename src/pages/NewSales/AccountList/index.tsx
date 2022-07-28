@@ -177,8 +177,8 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           if (eachAccount.fundType === "UT" && eachAccount.paymentMethod === "EPF") {
             const epfFilterArray: string[] = eachAccount.paymentMethod === "EPF" ? ["Yes"] : [];
             addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
-            updateProductType(getProductTabType(eachAccount.fundType));
           }
+          updateProductType(getProductTabType(eachAccount.fundType));
           updateNewSales({
             ...newSales,
             finishedSteps: updatedFinishedSteps,

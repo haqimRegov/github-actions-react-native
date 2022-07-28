@@ -89,7 +89,10 @@ export const CollectionBankCard: FunctionComponent<CollectionBankCardProps> = ({
   const banks = kibAccount.concat(kibTrustAccount);
 
   return (
-    <ScrollView contentContainerStyle={flexGrow} style={{ maxHeight: sh216, width: sw448 }}>
+    <ScrollView
+      scrollEnabled={banks.length > 1 || (kibTrustAccount.length > 0 && kibTrustAccount[0].currency.length > 3)}
+      contentContainerStyle={flexGrow}
+      style={{ maxHeight: sh216, width: sw448 }}>
       {banks.map((eachBank, index) => {
         return (
           <Fragment key={index}>
@@ -120,7 +123,7 @@ export const CollectionBankCard: FunctionComponent<CollectionBankCardProps> = ({
 
                     return (
                       <Fragment key={currencyIndex}>
-                        {index === 0 ? null : <CustomSpacer space={sh8} />}
+                        <CustomSpacer space={sh8} />
                         <View style={{ ...rowCenterVertical, ...alignSelfEnd }}>
                           <Text style={fs12RegGray4}>{`(${eachCurrency})`}</Text>
                           <CustomSpacer isHorizontal={true} space={sw16} />

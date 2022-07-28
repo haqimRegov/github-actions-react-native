@@ -3,6 +3,7 @@ import { ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomSpacer, SafeAreaPage } from "../../../../components";
+import { usePrevious } from "../../../../hooks";
 import { productsInitialFilter, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
 import { flexChild, flexGrow, sh104, sh810 } from "../../../../styles";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
@@ -30,6 +31,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   setScrollEnabled,
   updateProductType,
 }: ProductListProps) => {
+  const previousType = usePrevious<ProductType>(productType, true);
   const { accountNo, fundType } = accountDetails;
 
   const handleProductType = (type: ProductType) => {
@@ -78,7 +80,9 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   };
 
   useEffect(() => {
-    handleResetFilter();
+    if (previousType !== productType) {
+      handleResetFilter();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productType]);
 

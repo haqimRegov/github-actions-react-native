@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 
 import { AdvanceToggleButton, ColorCard, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";

@@ -1,10 +1,12 @@
 import { CommonActions } from "@react-navigation/native";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ForceUpdateSteps } from "../../components";
+import { StepperBar } from "../../components";
 import { FORCE_UPDATE_KEYS, FORCE_UPDATE_ROUTES, Language } from "../../constants";
 import { ForceUpdateMapDispatchToProps, ForceUpdateMapStateToProps, ForceUpdateStoreProps } from "../../store/ForceUpdate";
+import { flexRow, fullHW } from "../../styles";
 import { ForceUpdateContent } from "./Content";
 
 const { FORCE_UPDATE } = Language.PAGE;
@@ -75,6 +77,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     updateFUFinishedSteps,
   } = props;
 
+  const stepperBarRef = useRef<IStepperBarRef<TypeForceUpdateKey>>();
   const [cancelForceUpdate, setCancelForceUpdate] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<IForceUpdateContentItem | IForceUpdate | undefined>(FORCE_UPDATE_DATA[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
@@ -84,6 +87,12 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
   if (accountHolder === "Principal" && findRiskAssessment === -1) {
     FORCE_UPDATE_DATA.splice(1, 0, RISK_ASSESSMENT);
   }
+
+  const handleNextStep = (route: TypeForceUpdateKey) => {
+    if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
+      stepperBarRef!.current!.handleNextStep(route);
+    }
+  };
 
   const handleContentChange = (item: IForceUpdateContentItem | IForceUpdate) => {
     setActiveContent(item);
@@ -115,35 +124,30 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     }
   }, []);
 
-  // TODO scroll position resetting when back to dashboard
-
   return (
-    <Fragment>
-      <ForceUpdateSteps
+    <View style={{ ...flexRow, ...fullHW }}>
+      <StepperBar<TypeForceUpdateKey>
         activeContent={activeContent}
         activeSection={activeSection}
         disabledSteps={disabledSteps}
         finishedSteps={finishedSteps}
         handleContentChange={handleContentChange}
         handleBackToDashboard={handleCancelForceUpdate}
-        RenderContent={({ handleNextStep }) => {
-          return (
-            <ForceUpdateContent
-              handleCancelForceUpdate={handleCancelForceUpdate}
-              handleResetForceUpdate={handleResetForceUpdate}
-              cancelForceUpdate={cancelForceUpdate}
-              handleNextStep={handleNextStep}
-              navigation={navigation}
-              route={activeContent !== undefined ? activeContent.route! : FORCE_UPDATE_ROUTES.Contact}
-            />
-          );
-        }}
+        ref={stepperBarRef}
         setActiveContent={setActiveContent}
         setActiveSection={setActiveSection}
         setFinishedStep={updateFUFinishedSteps}
         steps={FORCE_UPDATE_DATA}
       />
-    </Fragment>
+      <ForceUpdateContent
+        handleCancelForceUpdate={handleCancelForceUpdate}
+        handleResetForceUpdate={handleResetForceUpdate}
+        cancelForceUpdate={cancelForceUpdate}
+        handleNextStep={handleNextStep}
+        navigation={navigation}
+        route={activeContent !== undefined ? activeContent.route! : FORCE_UPDATE_ROUTES.Contact}
+      />
+    </View>
   );
 };
 

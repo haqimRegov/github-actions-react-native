@@ -310,8 +310,10 @@ const NewSalesComponent = ({
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
-                  dateOfBirth: data.result.jointHolder.dateOfBirth,
                   clientId: data.result.jointHolder.clientId,
+                  dateOfBirth: data.result.jointHolder.dateOfBirth,
+                  id: data.result.jointHolder.id,
+                  name: data.result.jointHolder.name,
                 }
               : {};
           setErrorMessage(undefined);

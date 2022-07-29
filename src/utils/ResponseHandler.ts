@@ -33,9 +33,11 @@ export const responseHandler = async <
       // // eslint-disable-next-line no-console
     }
     // // eslint-disable-next-line no-console
+    // console.log("request", variables);
     // // eslint-disable-next-line no-console
     const data: ResultType = await gqlOperation<string, VariablesType, HeadersType>(query, variables, headers);
     // // eslint-disable-next-line no-console
+    // console.log("response", data);
 
     if ("errors" in data) {
       throw data;

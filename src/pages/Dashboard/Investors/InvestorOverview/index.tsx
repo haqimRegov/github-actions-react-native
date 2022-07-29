@@ -239,6 +239,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
               ? {
                   clientId: data.result.jointHolder.clientId,
                   dateOfBirth: data.result.jointHolder.dateOfBirth,
+                  id: data.result.jointHolder.id,
                   name: data.result.jointHolder.name,
                   ...storeJointIdType,
                 }
@@ -383,6 +384,7 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           }
         }
         if (error !== null) {
+          setNewSalesLoading(false);
           return error.message;
         }
       }

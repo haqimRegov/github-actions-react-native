@@ -35,6 +35,7 @@ import {
   sw16,
   sw24,
   sw278,
+  sw312,
   sw340,
   sw370,
   sw4,
@@ -162,7 +163,9 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                           })}
                         </Fragment>
                       ) : (
-                        <Fragment>{content.length > 0 ? <Text style={fs10RegGray6}>{content[0]}</Text> : null}</Fragment>
+                        <Fragment>
+                          {content.length > 0 ? <Text style={{ ...fs10RegGray6, maxWidth: sw312 }}>{content[0]}</Text> : null}
+                        </Fragment>
                       )}
                     </View>
                   </View>

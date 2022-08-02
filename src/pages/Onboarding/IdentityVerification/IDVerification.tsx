@@ -43,7 +43,9 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   const validateDetails = (details: IHolderInfoState, rules: IIDVerificationValidations) => {
     const { addressInformation, personalDetails } = details;
     const checkPassport =
-      personalDetails!.idType === "Passport" ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined : true;
+      personalDetails!.idType === "Passport"
+        ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined && personalDetails!.countryOfBirth !== ""
+        : true;
 
     return (
       personalDetails!.idNumber !== "" &&

@@ -343,8 +343,8 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <View style={{ ...rowCenterVertical, ...flexChild }}>
                             <View>
-                              <Text style={fs18BoldBlack2}>{titleCaseString(investment.fundName)}</Text>
-                              <Text style={fs12RegGray5}>{titleCaseString(investment.fundIssuer)}</Text>
+                              <Text style={fs18BoldBlack2}>{investment.fundName}</Text>
+                              <Text style={fs12RegGray5}>{investment.fundIssuer}</Text>
                             </View>
                             <CustomSpacer isHorizontal={true} space={sw16} />
                             <View style={{ ...borderBottomBlue5, ...flexChild }} />

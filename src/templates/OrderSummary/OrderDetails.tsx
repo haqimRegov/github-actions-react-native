@@ -159,13 +159,13 @@ export const OrderDetails: FunctionComponent<OrderDetailsProps> = ({ data, isSch
                       <CustomSpacer isHorizontal={true} space={sw8} />
                       <View style={flexChild}>
                         <View style={rowCenterVertical}>
-                          <Text style={fs18BoldBlack2}>{titleCaseString(investment.fundName)}</Text>
+                          <Text style={fs18BoldBlack2}>{investment.fundName}</Text>
                           <CustomSpacer isHorizontal={true} space={sw16} />
                           <View style={flexChild}>
                             <View style={borderBottomBlue5} />
                           </View>
                         </View>
-                        <Text style={fs12RegGray5}>{titleCaseString(investment.fundIssuer)}</Text>
+                        <Text style={fs12RegGray5}>{investment.fundIssuer}</Text>
                       </View>
                     </View>
                     <CustomSpacer space={sh24} />

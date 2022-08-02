@@ -14,7 +14,7 @@ import {
 } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
-import { fs12BoldGray5, fs16RegBlack2, px, sh16, sh24, sh4, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
+import { fs12BoldGray5, fs16RegBlack2, px, sh16, sh2, sh24, sh4, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
 import { deleteKey, isObjectEqual } from "../../../utils";
 
 const { PAYMENT } = Language.PAGE;
@@ -161,13 +161,7 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
         value={bankAccountNumber}
       />
     </View>,
-    <NewDropdown
-      disabled={recurringType === "DDA"}
-      items={ddaBank}
-      handleChange={handleRecurringBank}
-      label={PAYMENT.LABEL_SELECT_RECURRING_BANK}
-      value={recurringBank}
-    />,
+    <NewDropdown items={ddaBank} handleChange={handleRecurringBank} label={PAYMENT.LABEL_SELECT_RECURRING_BANK} value={recurringBank} />,
     <RadioButtonGroup
       direction="column"
       label={PAYMENT.LABEL_RECURRING_TYPE}
@@ -184,6 +178,19 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
       0,
       1,
       <NewDropdown items={accountNames} handleChange={handleBankName} label={PAYMENT.LABEL_BANK_ACCOUNT_NAME} value={bankAccountName} />,
+    );
+  }
+
+  if (recurringType === "DDA") {
+    infoItems.splice(
+      2,
+      1,
+      <LabeledTitle
+        label={PAYMENT.LABEL_SELECT_RECURRING_BANK}
+        spaceToLabel={sh2}
+        title={DICTIONARY_DDA_BANK[0].label}
+        style={{ width: sw360 }}
+      />,
     );
   }
 

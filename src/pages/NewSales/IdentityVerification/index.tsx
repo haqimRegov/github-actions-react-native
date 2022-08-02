@@ -8,14 +8,11 @@ import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
-  borderBottomBlue4,
   centerVertical,
   colorRed,
-  flexChild,
   flexRow,
   fs10RegGray6,
   fs12BoldBlack2,
-  fs12RegGray5,
   fs16BoldBlack2,
   px,
   rowCenterVertical,
@@ -295,12 +292,12 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const checkJointIdType = principalIdType === "Other" ? `${jointClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : jointIdType;
   const jointCardHeader =
     accountType === "Joint"
-      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER} ${checkJointIdType}`
+      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER}'s ${checkJointIdType}`
       : `${IDENTITY_CONFIRMATION.LABEL_UPLOAD_YOUR} ${checkJointIdType}`;
   const checkPrincipalIdType = principalIdType === "Other" ? `${principalClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : principalIdType;
   const principalCardHeader =
     accountType === "Joint"
-      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER} ${checkPrincipalIdType}`
+      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER}'s ${checkPrincipalIdType}`
       : `${IDENTITY_CONFIRMATION.LABEL_UPLOAD_YOUR} ${checkPrincipalIdType}`;
 
   return (
@@ -334,7 +331,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             customHeader={
               <View style={rowCenterVertical}>
                 <Text style={fs16BoldBlack2}>{principalCardHeader}</Text>
-                {accountType === "Joint" ? (
+                {/* {accountType === "Joint" ? (
                   <Fragment>
                     <CustomSpacer isHorizontal={true} space={sw12} />
                     <Text style={fs12RegGray5}>{principalHolder!.name}</Text>
@@ -343,7 +340,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
                       <View style={borderBottomBlue4} />
                     </View>
                   </Fragment>
-                ) : null}
+                ) : null} */}
               </View>
             }
             content={
@@ -384,12 +381,12 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
                 customHeader={
                   <View style={rowCenterVertical}>
                     <Text style={fs16BoldBlack2}>{jointCardHeader}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw12} />
+                    {/* <CustomSpacer isHorizontal={true} space={sw12} />
                     <Text style={fs12RegGray5}>{jointHolder!.name}</Text>
                     <CustomSpacer isHorizontal={true} space={sw12} />
                     <View style={flexChild}>
                       <View style={borderBottomBlue4} />
-                    </View>
+                    </View> */}
                   </View>
                 }
                 content={

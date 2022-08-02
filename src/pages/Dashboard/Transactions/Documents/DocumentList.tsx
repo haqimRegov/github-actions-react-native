@@ -5,7 +5,7 @@ import { CustomSpacer, UploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { FILTER_ISSUING_HOUSE } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
-import { borderBottomBlue5, colorBlack, flexChild, fs14BoldBlack2, rowCenterVertical, sh32, sh8, sw16, sw8 } from "../../../../styles";
+import { colorBlack, fs14BoldBlack2, rowCenterVertical, sh16, sh8, sw16, sw8 } from "../../../../styles";
 import { isEmpty } from "../../../../utils";
 
 const { UPLOAD_DOCUMENTS } = Language.PAGE;
@@ -26,7 +26,7 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
         data.map((relatedDocuments: ISoftCopyDocument, index: number) => {
           return (
             <View key={index}>
-              {index === 0 ? null : <CustomSpacer space={sh32} />}
+              {index === 0 ? null : <CustomSpacer space={sh16} />}
               {relatedDocuments.docs.map((document: ISoftCopyFile | undefined, documentIndex: number) => {
                 const handleProof = (file: DocumentFileBase64 | undefined) => {
                   const updatedData = [...data];
@@ -56,8 +56,6 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
                           </Fragment>
                         ) : null}
                         <Text style={fs14BoldBlack2}>{checkName}</Text>
-                        <CustomSpacer isHorizontal={true} space={sw16} />
-                        <View style={{ ...borderBottomBlue5, ...flexChild }} />
                       </View>
                       <CustomSpacer space={sh8} />
                     </Fragment>

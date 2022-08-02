@@ -138,13 +138,13 @@ declare interface IOrderSummaryDeclaration {
   };
   fatca: {
     certificate: DocumentFileBase64 | null;
-    confirmAddress: "Yes" | "No" | null;
+    confirmAddress: "true" | "false" | null;
     correspondenceDeclaration: "Yes" | "No" | null;
     formW8Ben: DocumentFileBase64 | null;
     formW9: DocumentFileBase64 | null;
     reason: string | null;
-    usBorn: "Yes" | "No" | null;
-    usCitizen: "Yes" | "No" | null;
+    usBorn: "true" | "false" | null;
+    usCitizen: "true" | "false" | null;
   };
   fea: {
     balance: string;

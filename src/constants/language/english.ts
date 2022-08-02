@@ -1687,7 +1687,7 @@ export const english = {
       NEW_SALES_HEADING_2: "Let’s get you set up.",
       NEW_SALES_HEADING_2_JOINT: "Let’s get you set up on your new investment account.",
       NEW_SALES_HEADING_2_NEW_FUND: "Let’s get you set up to purchase a new fund.",
-      NEW_SALES_HEADING_3: "Review and ensure all information are the latest. Tap on the edit button to change your risk profile.",
+      NEW_SALES_HEADING_3: "Review and ensure all information are the latest.\nTap on the edit button to change your risk profile.",
       NEW_SALES_HEADING_3_JOINT:
         "Set a joint holder for this account. Tap on the edit button to change your risk profile.\nReview and ensure all information are the latest before proceeding.",
       NEW_SALES_HEADING_3_NEW_FUND:

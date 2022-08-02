@@ -138,8 +138,18 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
 
   const isTaxResident = crs !== null && crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0].label;
 
+  const textChange = (text: string) => {
+    if (text === "true") {
+      return "Yes";
+    }
+    return "No";
+  };
+
   const fatcaSummary: LabeledTitleProps[] = [
-    { label: INVESTOR_PROFILE.LABEL_CITIZENSHIP, title: fatca !== null && fatca.usCitizen !== null ? (fatca.usCitizen as string) : "-" },
+    {
+      label: INVESTOR_PROFILE.LABEL_CITIZENSHIP,
+      title: fatca !== null && fatca.usCitizen !== null ? textChange(fatca.usCitizen as string) : "-",
+    },
   ];
 
   const fatcaAddress = isNotEmpty(addressInformation)
@@ -148,9 +158,9 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       }, ${addressInformation!.mailingAddress!.state}, ${addressInformation!.mailingAddress!.country}`
     : "-";
 
-  if (fatca !== null && fatca.usCitizen === "No") {
-    fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: fatca.usBorn as string });
-    if (fatca.usBorn === "Yes") {
+  if (fatca !== null && fatca.usCitizen === "false") {
+    fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: textChange(fatca.usBorn as string) });
+    if (fatca.usBorn === "true") {
       fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
       if (fatca.certificate) {
         fatcaSummary.push({

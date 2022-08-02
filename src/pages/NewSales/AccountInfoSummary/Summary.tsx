@@ -148,15 +148,18 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       titleIcon: "file",
       titleStyle: fsTransformNone,
     },
-    {
+  ];
+
+  if (principalHolder!.idType! !== "Passport") {
+    idVerificationPrincipal.push({
       label: handleIdLabel(principalHolder!.idType!, "back", undefined),
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.secondPage),
       title: personalInfo.principal?.personalDetails?.id?.secondPage?.name,
       titleIcon: "file",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
-    },
-  ];
+    });
+  }
   const idVerificationJoint = [
     {
       label: handleIdLabel(jointHolder!.idType!, "front", undefined),
@@ -337,6 +340,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                     </View>
                   </View>
                   <CustomSpacer space={sh12} />
+
                   <TextCard data={idVerificationJoint} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
                 </Fragment>
               ) : (
@@ -362,6 +366,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           headerStyle={{ ...border(colorGray._2, sw1), backgroundColor: colorWhite._1, ...px(0) }}
           header="custom"
         />
+
         {epfDetailsSummary.length > 0 ? (
           <Fragment>
             <CustomSpacer space={sh24} />

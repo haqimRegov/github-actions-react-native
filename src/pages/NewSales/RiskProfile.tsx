@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, Pressable, Text, View, ViewStyle } from "react-native";
+import { Image, Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
@@ -12,6 +12,7 @@ import {
   IconButton,
   SelectionBanner,
   TextCard,
+  TextSpaceArea,
 } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
@@ -41,6 +42,7 @@ import {
   fs16BoldBlue1,
   fs16RegBlack2,
   fs20BoldBlack2,
+  fs24BoldGray6,
   fsTransformNone,
   noBorder,
   px,
@@ -51,7 +53,6 @@ import {
   sh24,
   sh32,
   sh8,
-  sh96,
   sw05,
   sw1,
   sw120,
@@ -63,6 +64,7 @@ import {
   sw32,
   sw4,
   sw40,
+  sw638,
   sw8,
 } from "../../styles";
 import { InvestorProfilePage } from "./AccountInfoSummary/Profile";
@@ -236,6 +238,11 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     borderWidth: 0,
   };
 
+  const headerStyle: TextStyle = {
+    ...fs24BoldGray6,
+    maxWidth: sw638,
+  };
+
   const checkPrincipalId =
     accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
   const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
@@ -244,15 +251,12 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   return (
     <View style={flexChild}>
       {page === 0 ? (
-        <ContentPage
-          {...defaultContentProps}
-          heading={heading}
-          spaceToHeading={sh24}
-          subheading={header}
-          subtitle={subtitle}
-          sideElement={
-            <View>
-              <CustomSpacer space={sh96} />
+        <ContentPage {...defaultContentProps} heading={heading} headingStyle={headerStyle}>
+          <CustomSpacer space={sh24} />
+          <View style={px(sw24)}>
+            <View style={flexRow}>
+              <TextSpaceArea style={defaultContentProps.subheadingStyle} text={header} />
+              <CustomFlexSpacer />
               <View style={containerStyle}>
                 <CustomButton
                   secondary={true}
@@ -261,7 +265,6 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
                   text={checkLabel}
                   textStyle={fs10BoldBlue1}
                 />
-
                 {client.accountType === "Joint" ? (
                   <Fragment>
                     <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} />
@@ -276,7 +279,8 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
                 ) : null}
               </View>
             </View>
-          }>
+            <TextSpaceArea spaceToTop={defaultContentProps.spaceToTitle} style={defaultContentProps.subtitleStyle} text={subtitle} />
+          </View>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>
             <ColorCard

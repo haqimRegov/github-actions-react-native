@@ -282,14 +282,6 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                       },
                     ];
 
-                    if (investment.fundClass !== null && investment.fundClass !== "" && investment.fundClass !== undefined) {
-                      fundDetails.splice(2, 0, {
-                        label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CLASS,
-                        title: investment.fundClass,
-                        titleStyle: fsTransformNone,
-                      });
-                    }
-
                     // if (investment.isFea !== null) {
                     //   fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.isFea });
                     // }

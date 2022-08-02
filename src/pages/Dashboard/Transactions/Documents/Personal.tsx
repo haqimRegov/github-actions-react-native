@@ -2,7 +2,16 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AccountHeader, CustomSpacer, Loading, PromptModal, SelectionBanner, TextSpaceArea } from "../../../../components";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
+import {
+  AccountHeader,
+  CustomSpacer,
+  Loading,
+  PromptModal,
+  SelectionBanner,
+  SubmissionSummaryModal,
+  TextSpaceArea,
+} from "../../../../components";
 import { Language } from "../../../../constants";
 import { ERRORS } from "../../../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
@@ -10,26 +19,25 @@ import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../netwo
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
   alignFlexStart,
-  borderBottomBlue4,
   colorBlue,
   fs10RegGray6,
   fs12BoldBlack2,
   fs16RegGray5,
+  fs16RegGray6,
   fsAlignLeft,
   px,
+  sh16,
   sh176,
   sh24,
   sh32,
-  sh8,
   sw24,
   sw56,
 } from "../../../../styles";
-import { DocumentsPopup } from "../../../../templates/Payment/DocumentsPopup";
 import { AlertDialog, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { DocumentList } from "./DocumentList";
 
-const { PAYMENT, UPLOAD_DOCUMENTS } = Language.PAGE;
+const { PAYMENT, UPLOAD_DOCUMENTS, UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
 
 interface UploadDocumentsProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
@@ -42,8 +50,11 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   const [documentList, setDocumentList] = useState<IGetSoftCopyDocumentsResult | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [backPrompt, setBackPrompt] = useState<boolean>(false);
-  const [submissionResult, setSubmissionResult] = useState<ISubmitHardCopyDocumentsResult | undefined>(undefined);
+  const [submissionResult, setSubmissionResult] = useState<ISubmissionSummaryOrder[] | undefined>(undefined);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
 
   const handleBackToTransactions = () => {
     setScreen("Transactions");
@@ -182,13 +193,20 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   const handleSubmit = async (confirmed?: boolean) => {
     if (fetching.current === false) {
       fetching.current = true;
-      setLoading(true);
+      if (confirmed === undefined) {
+        setShowPopup(true);
+      } else {
+        setLoading(true);
+      }
+
       let pendingDocumentsPrincipalWithKeys: ISubmitSoftCopyDocuments[] = [];
       let pendingDocumentsJointWithKeys: ISubmitSoftCopyDocuments[] = [];
 
       if (pendingDocumentsPrincipal.length !== 0) {
         pendingDocumentsPrincipalWithKeys = await handleUpload(pendingDocumentsPrincipal, currentOrder!.clientId);
         if (pendingDocumentsPrincipalWithKeys === undefined) {
+          setPromptType("summary");
+          setShowPopup(false);
           AlertDialog(ERRORS.storage.message, () => setLoading(false));
           return undefined;
         }
@@ -197,6 +215,8 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       if (pendingDocumentsJoint.length !== 0) {
         pendingDocumentsJointWithKeys = await handleUpload(pendingDocumentsJoint, currentOrder!.jointId!);
         if (pendingDocumentsJointWithKeys === undefined) {
+          setPromptType("summary");
+          setShowPopup(false);
           AlertDialog(ERRORS.storage.message, () => setLoading(false));
           return undefined;
         }
@@ -219,9 +239,19 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
-          setSubmissionResult(data.result);
+          if (confirmed === true) {
+            setPromptType("success");
+          } else {
+            const resultWithoutRemarks: ISubmissionSummaryOrder[] = data.result.orders.map((eachOrder) => ({
+              orderNumber: eachOrder.orderNumber,
+              remarks: [],
+              status: eachOrder.status,
+            }));
+            setSubmissionResult(resultWithoutRemarks);
+          }
         }
         if (error !== null) {
+          setPromptType("summary");
           setLoading(false);
           setTimeout(() => {
             Alert.alert(error.message);
@@ -233,21 +263,19 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   };
 
   const handleCancelPopup = () => {
-    setSubmissionResult(undefined);
-    setLoading(false);
+    if (loading === false) {
+      if (toggle === true) {
+        setToggle(false);
+      }
+      setSubmissionResult(undefined);
+      setLoading(false);
+    }
   };
 
   const handleConfirmPopup = async () => {
     if (isConfirmed === true) {
       handleBack();
-      if (
-        submissionResult !== undefined &&
-        submissionResult.orders.filter((eachResult: ISubmitHardCopyResult) => eachResult.status === "Submitted").length ===
-          submissionResult.orders.length
-      ) {
-        return updatePill("submitted");
-      }
-      return undefined;
+      return updatePill("submitted");
     }
 
     const response = await handleSubmit(true);
@@ -257,6 +285,10 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     }
 
     return undefined;
+  };
+
+  const handleToggle = () => {
+    setToggle(!toggle);
   };
 
   useEffect(() => {
@@ -278,10 +310,11 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
             {documentList.principal === undefined || documentList.principal === null ? null : (
               <View style={px(sw24)}>
                 <CustomSpacer space={sh24} />
+
                 {documentList.joint && documentsPrincipal.length > 0 ? (
                   <AccountHeader
                     headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                    spaceToBottom={sh8}
+                    spaceToBottom={sh16}
                     subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
                     subtitleStyle={fs10RegGray6}
                     title={currentOrder?.investorName.principal!}
@@ -293,18 +326,12 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
             )}
             {documentList.joint === undefined || documentList.joint === null ? null : (
               <Fragment>
-                {documentsPrincipal.length > 0 && documentsJoint.length > 0 ? (
-                  <Fragment>
-                    <CustomSpacer space={sh24} />
-                    <View style={borderBottomBlue4} />
-                    <CustomSpacer space={sh24} />
-                  </Fragment>
-                ) : null}
+                <CustomSpacer space={sh24} />
                 <View style={px(sw24)}>
                   {documentList.joint && documentsJoint.length > 0 ? (
                     <AccountHeader
                       headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                      spaceToBottom={sh8}
+                      spaceToBottom={sh16}
                       subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
                       subtitleStyle={fs10RegGray6}
                       title={currentOrder?.investorName.joint!}
@@ -329,15 +356,30 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           labelSubmit={UPLOAD_DOCUMENTS.BUTTON_CONTINUE}
         />
       ) : null}
-      <DocumentsPopup
-        handleBack={handleBackToTransactions}
-        handleCancel={handleCancelPopup}
-        handleConfirm={handleConfirmPopup}
-        loading={loading}
-        result={submissionResult}
+
+      <SubmissionSummaryModal
+        data={submissionResult}
+        prompt={{
+          illustration: LocalAssets.illustration.orderReceived,
+          primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
+          subtitle: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD,
+          subtitleStyle: fs16RegGray6,
+          title:
+            submissionResult !== undefined
+              ? `${submissionResult[0].orderNumber} ${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HAS_BEEN_SUBMITTED_SUCCESSFULLY}`
+              : "",
+        }}
+        promptType={promptType}
+        summary={{
+          checkbox: { label: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_CHECKBOX, onPress: handleToggle, toggle: toggle },
+          primary: { disabled: !toggle, loading: loading, onPress: handleConfirmPopup },
+          secondary: { onPress: handleCancelPopup },
+          title: UPLOAD_HARD_COPY_DOCUMENTS.PROMPT_TITLE_STATUS,
+        }}
+        visible={showPopup}
       />
       <PromptModal
-        backdropOpacity={loading ? 0.4 : undefined}
+        // backdropOpacity={loading ? 0.4 : undefined}
         contentStyle={alignFlexStart}
         handleCancel={handleBackToTransactions}
         handleContinue={handleCancel}

@@ -26,6 +26,7 @@ import {
   overflowHidden,
   px,
   py,
+  rowCenterVertical,
   scaleHeight,
   sh16,
   sh176,
@@ -42,7 +43,7 @@ import {
   sw228,
   sw24,
   sw256,
-  sw268,
+  sw264,
   sw296,
   sw32,
   sw336,
@@ -99,6 +100,8 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
   const [collapse, setCollapse] = useState<boolean>(true);
   const [collapsibleModal, setCollapsibleModal] = useState<boolean>(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+
+  const PILLS_MAX_WIDTH = sw264;
 
   const placeholderLabel = placeholder || DROPDOWN.PLACEHOLDER_MANY;
   const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
@@ -173,7 +176,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
 
   const handleCalculate = async (texts: string[]) => {
     const shortenArray = texts.map((text: string) => shortenString(text, 25, 27));
-    const count = await CalculateCount(shortenArray, sw268, sw32, fs12BoldBlue1);
+    const count = await CalculateCount(shortenArray, PILLS_MAX_WIDTH, sw32, sw8, fs12BoldBlue1);
     return count;
   };
 
@@ -218,10 +221,10 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
   const handleWidth = async (event: LayoutChangeEvent) => {
     const { height, width } = event.nativeEvent.layout;
     if (showMore.active === false) {
-      if (width >= sw256) {
+      if (width >= PILLS_MAX_WIDTH) {
         setShowMore({ ...showMore, active: true });
       }
-    } else if ((height < sh24 && showMore.active === true) || width < sw256) {
+    } else if ((height < sh24 && showMore.active === true) || width < PILLS_MAX_WIDTH) {
       setShowMore({ ...showMore, active: false, number: 0 });
     }
   };
@@ -231,7 +234,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
     ...flexWrap,
     ...overflowHidden,
     height: sh24,
-    maxWidth: sw268,
+    maxWidth: PILLS_MAX_WIDTH,
   };
 
   const input = (
@@ -251,7 +254,6 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
               return (
                 <View key={index} style={flexRow}>
                   <Fragment>
-                    {index !== 0 ? <CustomSpacer isHorizontal={true} space={sw4} /> : null}
                     <TouchableWithoutFeedback onPress={handleClose}>
                       <View style={defaultTagStyle}>
                         <Text style={{ ...fs12BoldBlue1, maxWidth: sw228 }}>{shortenString(item, 25, 27)}</Text>
@@ -261,6 +263,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
                         </View>
                       </View>
                     </TouchableWithoutFeedback>
+                    {index !== value.length - 1 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
                   </Fragment>
                 </View>
               );
@@ -272,11 +275,10 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
       </View>
       <View>
         {showMore.active === true && showMore.number > 0 ? (
-          <View style={{ ...centerVertical, ...flexRow }}>
+          <View style={{ ...rowCenterVertical, width: sw24 }}>
+            <IcoMoon color={colorBlue._1} name="plus" size={sw12} />
             <CustomSpacer isHorizontal={true} space={sw4} />
-            <IcoMoon color={colorBlue._1} name="plus" size={sw16} />
-            <CustomSpacer isHorizontal={true} space={sw4} />
-            <Text style={fs12BoldBlue1}>{showMore.number}</Text>
+            <Text style={{ ...fs12BoldBlue1, lineHeight: sh16 }}>{showMore.number}</Text>
           </View>
         ) : null}
       </View>

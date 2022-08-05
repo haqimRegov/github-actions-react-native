@@ -399,6 +399,7 @@ const investorDetailsDashboard = gql`
             city
             country
             postCode
+            state
           }
           initId
           idNumber

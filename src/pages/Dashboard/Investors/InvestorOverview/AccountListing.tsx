@@ -109,7 +109,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   const handleView = (item: ITableRowData) => {
     const data = item.rawData as unknown as IInvestorAccountsData;
     if (investorData !== undefined && data !== undefined && data.accountNo !== undefined) {
-      handleViewAccount({ accountNumber: data.accountNo, clientId: investorData.clientId });
+      handleViewAccount({ accountNumber: data.accountNo, clientId: data.clientId });
     }
   };
 

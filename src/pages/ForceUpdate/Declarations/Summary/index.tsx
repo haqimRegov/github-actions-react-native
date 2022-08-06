@@ -66,11 +66,12 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
     principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0].label;
   const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
-  const address = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
-    principal?.addressInformation?.permanentAddress?.postCode
-  }, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${
-    principal?.addressInformation?.permanentAddress?.country
+  const address = `${Object.values(principal?.addressInformation?.mailingAddress?.address!).join("")}, ${
+    principal?.addressInformation?.mailingAddress?.postCode
+  }, ${principal?.addressInformation?.mailingAddress?.city}, ${principal?.addressInformation?.mailingAddress?.state}, ${
+    principal?.addressInformation?.mailingAddress?.country
   }`;
+
   const request: ISubmitChangeRequestRequest = {
     id: details?.principalHolder?.id!,
     initId: details?.initId as string,

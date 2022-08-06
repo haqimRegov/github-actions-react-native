@@ -254,8 +254,12 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       ? tempData.payments.some((findPayment) => findPayment.saved === true) === false && tempDeletedPayment.length === 0
       : false;
 
+  const checkRerouted = tempData !== undefined && tempData.status.toLowerCase().includes("rerouted");
+
   const bannerText =
-    tempData !== undefined ? `${PAYMENT.BANNER_LABEL}: 1 ${tempData?.status.toLowerCase()}` : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
+    tempData !== undefined
+      ? `${PAYMENT.BANNER_LABEL}: 1 ${checkRerouted === true ? "pending" : tempData?.status.toLowerCase()}`
+      : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
   const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
   const updatedBalancePayments =

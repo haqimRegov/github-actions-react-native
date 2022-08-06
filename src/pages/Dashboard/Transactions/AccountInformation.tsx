@@ -15,6 +15,7 @@ interface AccountInformationPageProps extends InvestorsStoreProps {
 const AccountInformationComponent: FunctionComponent<AccountInformationPageProps> = ({
   currentAccount,
   setScreen,
+  updateCurrentAccount,
   updateCurrentOrder,
 }: AccountInformationPageProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
@@ -24,7 +25,8 @@ const AccountInformationComponent: FunctionComponent<AccountInformationPageProps
     setScreen("OrderSummary");
   };
 
-  const handleViewProfile = () => {
+  const handleViewProfile = (clientIdToView: string) => {
+    updateCurrentAccount({ ...currentAccount, clientId: clientIdToView });
     setScreen("InvestorProfile");
   };
 

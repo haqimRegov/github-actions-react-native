@@ -500,7 +500,7 @@ PODS:
     - TOCropViewController
   - RNInAppBrowser (3.6.3):
     - React-Core
-  - RNPDF (0.11.0):
+  - RNPDF (0.13.2):
     - React
   - RNReanimated (2.2.3):
     - DoubleConversion
@@ -868,7 +868,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNInAppBrowser: 3ff3a3b8f458aaf25aaee879d057352862edf357
-  RNPDF: b575ff11a65121f346b2851e3da736e7c51c18ab
+  RNPDF: c68cd74a3393b80f572fb62347f4efe293e01658
   RNReanimated: b04ef2a4f0cb61b062bbcf033f84a9e470f4f60b
   RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
   RNShare: edd621a71124961e29a7ba43a84bd1c6f9980d88

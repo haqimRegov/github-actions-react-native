@@ -1,6 +1,6 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { GestureResponderEvent, Image, ImageStyle, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import PDFView from "react-native-view-pdf";
+import PDFViewer from "react-native-view-pdf";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../../../components";
@@ -16,9 +16,11 @@ import {
   flexChild,
   flexGrow,
   flexRow,
-  fs24BoldGray6,
+  fs18BoldGray6,
+  fullHeight,
   px,
   py,
+  sh1148,
   sh32,
   sh4,
   sh48,
@@ -27,8 +29,6 @@ import {
   sw20,
   sw24,
   sw40,
-  sw8,
-  sw96,
 } from "../../../../styles";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -89,10 +89,16 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         break;
     }
   }
-  const pdfViewContainer: ViewStyle = { ...px(sw8), width: 595, height: 800 };
-  const remotePdfViewContainer: ViewStyle = { ...px(sw8), width: 595, height: parseInt(urlPageCount!, 10) * 796 };
-  const pdfContainer: ViewStyle = { height: parseInt(urlPageCount!, 10) * 1600 }; // To display the page number correctly in the viewer
-  const pdfSignContainer: ViewStyle = { height: 800 };
+
+  const DEFAULT_URL_PAGE_COUNT = urlPageCount !== undefined ? parseInt(urlPageCount, 10) : 0;
+  const DEFAULT_PDF_HEIGHT = sh1148;
+  const remotePdfHeight = DEFAULT_URL_PAGE_COUNT * DEFAULT_PDF_HEIGHT;
+
+  const localPdfHeight = DEFAULT_PDF_HEIGHT + 2; // added 2 for shadow
+
+  const remotePdfContainer: ViewStyle = { height: remotePdfHeight };
+  const dummyRemotePdfContainer: ViewStyle = { height: remotePdfHeight + DEFAULT_PDF_HEIGHT }; // To display the page number correctly in the viewer
+  const pdfContainer: ViewStyle = { height: localPdfHeight };
   const defaultTooltipStyle: ImageStyle = {
     bottom: 52,
     height: 32,
@@ -118,31 +124,32 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
           <View>
-            <View style={flexRow}>
-              <View>
-                <CustomSpacer space={sh32} />
-                <View style={px(sw24)}>
-                  <View style={{ ...centerVertical, ...flexRow }}>
-                    <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} suppressHighlighting={true} />
-                    <CustomSpacer isHorizontal={true} space={sw20} />
-                    <Text style={fs24BoldGray6}>{editReceipt!.name}</Text>
-                  </View>
+            <View>
+              <CustomSpacer space={sh32} />
+              <View style={px(sw24)}>
+                <View style={{ ...centerVertical, ...flexRow }}>
+                  <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} suppressHighlighting={true} />
+                  <CustomSpacer isHorizontal={true} space={sw20} />
+                  <Text style={fs18BoldGray6}>{editReceipt!.name}</Text>
                 </View>
-                <CustomSpacer space={sh4} />
-                <View style={remotePdfViewContainer}>
+              </View>
+              <CustomSpacer space={sh4} />
+              <View style={px(sw24)}>
+                <View style={remotePdfContainer}>
                   <View pointerEvents="none">
-                    <PDFView style={pdfContainer} resource={editReceipt!.url!} resourceType="url" />
+                    <View style={dummyRemotePdfContainer}>
+                      <PDFViewer style={fullHeight} resource={editReceipt!.url!} resourceType="url" />
+                    </View>
                   </View>
                 </View>
                 <TouchableWithoutFeedback onPress={handlePosition}>
-                  <View style={pdfViewContainer}>
+                  <View style={pdfContainer}>
                     <View pointerEvents="none">
-                      <PDFView style={pdfSignContainer} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
+                      <PDFViewer style={fullHeight} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
               </View>
-              <CustomSpacer isHorizontal={true} space={sw96} />
             </View>
             <View style={{ ...px(sw20), ...py(sh48) }}>
               <RoundedButton

@@ -4,6 +4,7 @@ import { View, ViewStyle } from "react-native";
 import { IconText } from "../../../../../components";
 import { Language } from "../../../../../constants/language";
 import { borderBottomGray2, fs12BoldBlue1, px, sh48, sw16, sw200, sw8 } from "../../../../../styles";
+import { isNotEmpty } from "../../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 
@@ -22,7 +23,7 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   setCurrentOrder,
   setScreen,
 }: PendingOrderActionsProps) => {
-  const { canProceed, isScheduled, orderNumber, remark, status, withHardcopy } = data.rawData as unknown as IDashboardOrder;
+  const { canProceed, isScheduled, orderNumber, reason, remark, status, withHardcopy } = data.rawData as unknown as IDashboardOrder;
 
   const canSubmitHardcopy = isScheduled === true ? canProceed === true : true;
 
@@ -72,6 +73,13 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
 
   const labelUploadPayment = isScheduled ? DASHBOARD_HOME.LABEL_UPLOAD_RECURRING : DASHBOARD_HOME.LABEL_UPLOAD_PROOF;
 
+  const findPaymentReason =
+    isNotEmpty(reason) === true
+      ? reason.findIndex((eachReason) => eachReason.title === "Invalid Proof of Payment:" && eachReason.isSubmitted === true)
+      : -1;
+
+  const isReroutedPaymentSubmitted = findPaymentReason !== -1;
+
   return (
     <View style={{ borderRadius: sw8 }}>
       <IconText name="eye-show" onPress={handleViewOrder} style={itemStyle} text="View Details" />
@@ -79,14 +87,15 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
         remark &&
-        remark.findIndex((reason) => reason.label === "Payment" || reason.label === "Others") !== -1) ? (
+        remark.findIndex((eachRemark) => eachRemark.label === "Payment" || eachRemark.label === "Others") !== -1 &&
+        isReroutedPaymentSubmitted === false) ? (
         <IconText name="upload" onPress={handleUploadPayment} style={itemStyle} text={labelUploadPayment} />
       ) : null}
       {status === "Pending Doc" ||
       status === "Pending Doc & Payment" ||
       ((status === "BR - Rerouted" || status === "HQ - Rerouted") &&
         remark &&
-        remark.findIndex((reason) => reason.label === "Document" || reason.label === "Others") !== -1) ? (
+        remark.findIndex((eachRemark) => eachRemark.label === "Document" || eachRemark.label === "Others") !== -1) ? (
         <IconText name="upload" onPress={handleUploadDocs} style={itemStyle} text={DASHBOARD_HOME.LABEL_UPLOAD} />
       ) : null}
       {status === "Pending Physical Doc" && canSubmitHardcopy === true ? (

@@ -1,6 +1,7 @@
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
-import { fsTransformNone, sh4, sw328 } from "../styles";
+import { fsTransformNone, fsUppercase, sh4, sw328 } from "../styles";
+import { booleanTextChange } from "./Validator";
 import { isNotEmpty } from "./Value";
 
 const { INVESTOR_PROFILE } = Language.PAGE;
@@ -11,7 +12,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   const { fatca, crs } = declaration !== null ? declaration : { fatca: null, crs: null };
 
   const identificationDetails: LabeledTitleProps[] = [
-    { label: `${idType} ${INVESTOR_PROFILE.LABEL_ID_NUMBER}`, title: idNumber || "-" },
+    { label: `${idType} ${INVESTOR_PROFILE.LABEL_ID_NUMBER}`, title: idNumber || "-", titleStyle: fsUppercase },
     {
       label: INVESTOR_PROFILE.LABEL_DATE_OF_BIRTH,
       title: personalDetails !== null && personalDetails.dateOfBirth ? personalDetails.dateOfBirth : "-",
@@ -59,13 +60,13 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     },
   ];
 
-  if (personalDetails !== null && personalDetails.race !== null && personalDetails.bumiputera !== null) {
+  if (personalDetails !== null && personalDetails.race !== null && personalDetails.bumiputera !== null && idType !== "Passport") {
     personalDetailsSummary.splice(
       2,
       0,
       {
         label: INVESTOR_PROFILE.LABEL_BUMIPUTERA,
-        title: personalDetails.bumiputera,
+        title: booleanTextChange(personalDetails.bumiputera),
       },
       { label: INVESTOR_PROFILE.LABEL_RACE, title: personalDetails.race },
     );
@@ -138,17 +139,10 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
 
   const isTaxResident = crs !== null && crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0].label;
 
-  const textChange = (text: string) => {
-    if (text === "true") {
-      return "Yes";
-    }
-    return "No";
-  };
-
   const fatcaSummary: LabeledTitleProps[] = [
     {
       label: INVESTOR_PROFILE.LABEL_CITIZENSHIP,
-      title: fatca !== null && fatca.usCitizen !== null ? textChange(fatca.usCitizen as string) : "-",
+      title: fatca !== null && fatca.usCitizen !== null ? booleanTextChange(fatca.usCitizen as string) : "-",
     },
   ];
 
@@ -159,7 +153,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     : "-";
 
   if (fatca !== null && fatca.usCitizen === "false") {
-    fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: textChange(fatca.usBorn as string) });
+    fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: booleanTextChange(fatca.usBorn as string) });
     if (fatca.usBorn === "true") {
       fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
       if (fatca.certificate) {

@@ -85,7 +85,8 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
     TERMS_AND_CONDITION_LIST.splice(0, 1);
   }
   if (!declarations.includes("crs")) {
-    TERMS_AND_CONDITION_LIST.splice(1, 1);
+    const checkIndex = !declarations.includes("fatca") ? 0 : 1;
+    TERMS_AND_CONDITION_LIST.splice(checkIndex, 1);
   }
 
   const GENERAL: ITermsAccordionSection = {

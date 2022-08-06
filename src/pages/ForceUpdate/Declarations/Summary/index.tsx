@@ -88,7 +88,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
       declaration: {
         crs: {
           taxResident:
-            principalTaxResident === -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
+            principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
           tin: principalTin,
         },
         fatca: {

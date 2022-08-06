@@ -99,24 +99,23 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     addAssessmentQuestions({ questionEight: index, questionNine: index === 0 || index === -1 ? -1 : questionNine });
   const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
-  const request: ISubmitChangeRequestRequest = {
-    id: details?.principalHolder?.id!,
-    initId: details?.initId as string,
-    clientId: details!.principalHolder!.clientId!,
-    clientInfo: {
-      contactDetails: {
-        contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
-          code: contact.code,
-          label: contact.label,
-          value: contact.value,
-        })),
-        emailAddress: principal!.contactDetails!.emailAddress!,
-      },
-    },
-  };
-
   const handleSetupClient = async () => {
     if (fetching.current === false) {
+      const request: ISubmitChangeRequestRequest = {
+        id: details?.principalHolder?.id!,
+        initId: details?.initId as string,
+        clientId: details!.principalHolder!.clientId!,
+        clientInfo: {
+          contactDetails: {
+            contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
+              code: contact.code,
+              label: contact.label,
+              value: contact.value,
+            })),
+            emailAddress: principal!.contactDetails!.emailAddress!,
+          },
+        },
+      };
       fetching.current = true;
       setContinueLoader(true);
       const response: ISubmitChangeRequestResponse = await submitChangeRequest(request, navigation, setLoading);

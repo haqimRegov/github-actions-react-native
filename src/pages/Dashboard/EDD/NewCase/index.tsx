@@ -70,7 +70,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   setLoading,
   setScreen,
   updateCurrentCase,
-  updatePill,
+  updateEDDPill,
   ...props
 }: NewCaseProps) => {
   const [expand, setExpand] = useState<boolean>(true);
@@ -125,7 +125,7 @@ export const NewCaseComponent: FunctionComponent<NewCaseProps> = ({
   };
 
   const handleDone = () => {
-    updatePill("submitted");
+    updateEDDPill("submitted");
     setScreen("Cases");
   };
 

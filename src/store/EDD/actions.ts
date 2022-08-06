@@ -37,7 +37,7 @@ export const updateHistorySort = (historySort: IEDDDashboardSort[]) => {
   return typedAction("edd/UPDATE_HISTORY_SORT", historySort);
 };
 
-export const updatePill = (pill: EDDNewCaseTagKey) => {
+export const updateEDDPill = (pill: EDDNewCaseTagKey) => {
   return typedAction("edd/UPDATE_PILL", pill);
 };
 
@@ -55,7 +55,7 @@ export type eddActions = ReturnType<
   | typeof updateHistorySort
   | typeof updateNewCasesFilter
   | typeof updateNewCasesSort
-  | typeof updatePill
+  | typeof updateEDDPill
   | typeof updateEDDSearch
 >;
 
@@ -69,7 +69,7 @@ export const EDDActionProps = {
   updateHistorySort,
   updateNewCasesFilter,
   updateNewCasesSort,
-  updatePill,
+  updateEDDPill,
   updateEDDSearch,
 };
 

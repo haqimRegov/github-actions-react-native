@@ -274,8 +274,15 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
 
   const handleConfirmPopup = async () => {
     if (isConfirmed === true) {
-      handleBack();
-      return updatePill("submitted");
+      handleBackToTransactions();
+      if (
+        submissionResult !== undefined &&
+        submissionResult.filter((eachResult: ISubmissionSummaryOrder) => eachResult.status === "Submitted").length ===
+          submissionResult.length
+      ) {
+        return updatePill("submitted");
+      }
+      return undefined;
     }
 
     const response = await handleSubmit(true);
@@ -362,7 +369,6 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         prompt={{
           illustration: LocalAssets.illustration.orderReceived,
           primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
-          subtitle: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD,
           subtitleStyle: fs16RegGray6,
           title:
             submissionResult !== undefined

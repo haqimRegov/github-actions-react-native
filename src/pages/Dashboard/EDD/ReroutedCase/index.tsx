@@ -67,7 +67,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
   loading,
   setLoading,
   setScreen,
-  updatePill,
+  updateEDDPill,
   updateCurrentCase,
   ...props
 }: ReroutedCaseProps) => {
@@ -100,7 +100,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
   };
 
   const handleDone = () => {
-    updatePill("submitted");
+    updateEDDPill("submitted");
     setScreen("Cases");
   };
 

@@ -75,7 +75,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
   updateCases,
   updateCurrentCase,
   updateNewCasesSort,
-  updatePill,
+  updateEDDPill,
 }: NewCasesProps) => {
   const { pendingCount, reroutedCount, submittedCount } = edd;
   const { filter, page, cases, sort, pill } = edd.new;
@@ -213,7 +213,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
     }
     handleSeen();
     updateCases({ ...edd, new: { ...edd.new, page: 1, pages: 1 } });
-    updatePill(updatedPill);
+    updateEDDPill(updatedPill);
   };
 
   const handleView = async (item: ITableRowData) => {

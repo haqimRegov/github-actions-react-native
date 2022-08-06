@@ -1945,6 +1945,7 @@ export const english = {
       TERMS_HEADING_5: "FEA Declaration",
       TERMS_HEADING_6: "UT ",
       TERMS_HEADING_7: "Information Disclosed",
+      UPLOAD_CARD_SUBTITLE_WITHOUT_DECLARATION: "Change Request - Contact, Risk Assessment",
       UPLOAD_CARD_SUBTITLE: "Change Request - Contact, Risk Assessment, Declarations",
     },
     TEXT_INPUT_AREA: {

@@ -1,5 +1,6 @@
 export type ForceUpdateState = {
   disabledSteps: TypeForceUpdateKey[];
+  declarations: string[];
   emailVerified?: boolean;
   finishedSteps: TypeForceUpdateKey[];
   showOpenAccount?: boolean;
@@ -17,6 +18,7 @@ export const forceUpdateInitialState: ForceUpdateState = {
     "TermsAndConditions",
     "Signatures",
   ],
+  declarations: [],
   emailVerified: false,
   finishedSteps: [],
   showOpenAccount: false,

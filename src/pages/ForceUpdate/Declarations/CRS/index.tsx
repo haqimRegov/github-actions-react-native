@@ -22,6 +22,7 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
   updateForceUpdate,
 }: CrsDeclarationProps) => {
   const { principal } = personalInfo;
+  const { declarations } = forceUpdate;
   const [crsDefinition, setCRSDefinition] = useState<boolean>(false);
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
@@ -95,7 +96,8 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
     principal?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false;
 
   const handleBack = () => {
-    handleNextStep("FATCADeclaration");
+    const checkDeclaration: TypeForceUpdateRoute = declarations.includes("fatca") ? "FATCADeclaration" : "RiskAssessment";
+    handleNextStep(checkDeclaration);
   };
 
   return (

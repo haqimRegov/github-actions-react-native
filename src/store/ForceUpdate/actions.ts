@@ -13,6 +13,10 @@ export const updateForceUpdate = (forceUpdate: ForceUpdateState) => {
   return typedAction("forceUpdate/UPDATE_FORCE_UPDATE", forceUpdate);
 };
 
+export const updateForceUpdateDeclarations = (declarations: string[]) => {
+  return typedAction("forceUpdate/UPDATE_FORCE_UPDATE_DECLARATIONS", declarations);
+};
+
 export const updateEmailVerified = (verified: boolean) => {
   return typedAction("forceUpdate/UPDATE_EMAIL_VERIFIED", verified);
 };
@@ -28,6 +32,7 @@ export const resetForceUpdate = () => {
 export type ForceUpdateAction = ReturnType<
   | typeof updateEmailVerified
   | typeof updateForceUpdate
+  | typeof updateForceUpdateDeclarations
   | typeof updateFUDisabledSteps
   | typeof updateFUFinishedSteps
   | typeof updateShowOpenAccount
@@ -38,6 +43,7 @@ export const ForceUpdateActionProps = {
   resetForceUpdate,
   updateEmailVerified,
   updateForceUpdate,
+  updateForceUpdateDeclarations,
   updateFUDisabledSteps,
   updateFUFinishedSteps,
   updateShowOpenAccount,

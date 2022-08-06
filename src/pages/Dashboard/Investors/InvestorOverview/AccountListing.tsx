@@ -42,6 +42,7 @@ interface AccountListingProps {
   setScreen: (route: InvestorsPageType) => void;
   setSort: (sort: IInvestorAccountsSort[]) => void;
   sort: IInvestorAccountsSort[];
+  updateForceUpdateDeclarations: (declarations: string[]) => void;
 }
 
 export const AccountListing: FunctionComponent<AccountListingProps> = ({
@@ -59,6 +60,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   setPages,
   setSort,
   sort,
+  updateForceUpdateDeclarations,
 }: AccountListingProps) => {
   const handleSortInvestorName = async () => {
     const sortColumns = sort.map((sortType) => sortType.column);
@@ -239,6 +241,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
         });
         if (data.result.isForceUpdate === true) {
           setForceUpdatePrompt(true);
+          updateForceUpdateDeclarations(data.result.declarationRequired);
         }
         setPage(currentPage);
         setPages(pages);

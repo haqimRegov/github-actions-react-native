@@ -1,6 +1,6 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { GestureResponderEvent, Image, ImageStyle, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import PDFViewer from "react-native-view-pdf";
+import PDFView from "react-native-view-pdf";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../../../components";
@@ -21,15 +21,14 @@ import {
   px,
   py,
   sh1148,
-  sh120,
   sh32,
   sh4,
   sh48,
+  sh64,
   sw100,
   sw20,
   sw24,
-  sw40,
-  sw64,
+  sw32,
 } from "../../../../styles";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -57,7 +56,7 @@ declare interface PDFViewProps {
   setScrollRef: (ref: ScrollView) => void;
 }
 
-export const PdfView: FunctionComponent<PDFViewProps> = ({
+export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
   accountType,
   adviserSignature,
   editReceipt,
@@ -115,9 +114,9 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
   const dummyRemotePdfContainer: ViewStyle = { height: remotePdfHeight + DEFAULT_PDF_HEIGHT }; // To display the page number correctly in the viewer
   const pdfContainer: ViewStyle = { height: localPdfHeight };
   const defaultTooltipStyle: ImageStyle = {
-    bottom: 72,
-    height: 34,
-    position: "absolute",
+    ...absolutePosition,
+    bottom: 52,
+    height: 32,
     width: 96,
     zIndex: 1,
   };
@@ -153,14 +152,14 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
                 <View style={remotePdfContainer}>
                   <View pointerEvents="none">
                     <View style={dummyRemotePdfContainer}>
-                      <PDFViewer style={fullHeight} resource={editReceipt!.url!} resourceType="url" />
+                      <PDFView style={fullHeight} resource={editReceipt!.url!} resourceType="url" />
                     </View>
                   </View>
                 </View>
                 <TouchableWithoutFeedback onPress={handlePosition}>
                   <View style={pdfContainer}>
                     <View pointerEvents="none">
-                      <PDFViewer style={fullHeight} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
+                      <PDFView style={fullHeight} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
@@ -178,15 +177,15 @@ export const PdfView: FunctionComponent<PDFViewProps> = ({
         </ScrollView>
         {completed === true ? null : (
           <TouchableWithoutFeedback onPress={handleScroll}>
-            <View style={{ ...absolutePosition, right: sw40, top: sh120 }}>
+            <View style={{ ...absolutePosition, right: sw32, top: sh64 }}>
               <View style={{ width: sw100, ...centerVertical }}>
                 <Image source={LocalAssets.tooltip.addSign} style={defaultTooltipStyle} />
                 <IconButton
                   color={colorBlue._1}
                   name="sign"
                   onPress={handleScroll}
-                  size={48}
-                  style={circleBorder(sw64, 1, colorBlue._4, colorWhite._1)}
+                  size={44}
+                  style={circleBorder(64, 1, colorBlue._4, colorWhite._1)}
                 />
               </View>
             </View>

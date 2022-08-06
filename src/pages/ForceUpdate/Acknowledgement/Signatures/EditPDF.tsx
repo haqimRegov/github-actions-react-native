@@ -11,7 +11,7 @@ import { Language } from "../../../../constants/language";
 import { ReactFileSystem } from "../../../../integrations/file-system/functions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import { GetEmbeddedBase64 } from "../../../../utils";
-import { PdfView, Signer } from "./EditPDFView";
+import { PdfViewForceUpdate, Signer } from "./EditPDFView";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -252,7 +252,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
   }, [completed]);
 
   return (
-    <PdfView
+    <PdfViewForceUpdate
       adviserSignature={adviserSignature}
       completed={completed}
       editReceipt={editReceipt}

@@ -52,6 +52,7 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
   updateForceUpdate,
 }: TermsAndConditionsProps) => {
   const [expandAll, setExpandAll] = useState<boolean>(false);
+  const { declarations } = forceUpdate;
 
   const handleAgree1 = () => {
     updateAgree({ agreeTerms: { ...agreeTerms, agree1: !agreeTerms.agree1 } });
@@ -80,6 +81,12 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
   };
 
   const TERMS_AND_CONDITION_LIST: ITermsAccordionSection[] = [FATCA_NEW, CRS_NEW, INVESTOR_UPDATE];
+  if (!declarations.includes("fatca")) {
+    TERMS_AND_CONDITION_LIST.splice(0, 1);
+  }
+  if (!declarations.includes("crs")) {
+    TERMS_AND_CONDITION_LIST.splice(1, 1);
+  }
 
   const GENERAL: ITermsAccordionSection = {
     title: TERMS_AND_CONDITIONS.LABEL_GENERAL_TERMS_AND_CONDITIONS,

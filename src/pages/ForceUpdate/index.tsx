@@ -1,4 +1,5 @@
 import { CommonActions } from "@react-navigation/native";
+import cloneDeep from "lodash.clonedeep";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
@@ -65,6 +66,7 @@ interface ForceUpdatePageProps extends ForceUpdateContentProps, ForceUpdateStore
 export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> = (props: ForceUpdatePageProps) => {
   const {
     accountHolder,
+    declarations,
     disabledSteps,
     finishedSteps,
     navigation,
@@ -82,10 +84,25 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
   const [activeContent, setActiveContent] = useState<IForceUpdateContentItem | IForceUpdate | undefined>(FORCE_UPDATE_DATA[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
 
-  const findRiskAssessment = FORCE_UPDATE_DATA.findIndex((step: IForceUpdate) => step.route === FORCE_UPDATE_ROUTES.RiskAssessment);
+  const updatedNewSalesSteps = cloneDeep(FORCE_UPDATE_DATA);
+  const findRiskAssessment = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.route === FORCE_UPDATE_ROUTES.RiskAssessment);
 
   if (accountHolder === "Principal" && findRiskAssessment === -1) {
-    FORCE_UPDATE_DATA.splice(1, 0, RISK_ASSESSMENT);
+    updatedNewSalesSteps.splice(1, 0, RISK_ASSESSMENT);
+  }
+  const findDeclarations = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.key === FORCE_UPDATE_KEYS.Declarations);
+  if (findDeclarations !== -1) {
+    if (declarations.length === 0) {
+      updatedNewSalesSteps.splice(findDeclarations, 1);
+    } else {
+      const updatedContent = cloneDeep(updatedNewSalesSteps[findDeclarations].content!).filter(
+        (eachContent: IForceUpdateContentItem) =>
+          (eachContent.route === FORCE_UPDATE_ROUTES.FATCADeclaration && declarations.includes("fatca")) ||
+          (eachContent.route === FORCE_UPDATE_ROUTES.CRSDeclaration && declarations.includes("crs")) ||
+          eachContent.route === "DeclarationSummary",
+      );
+      updatedNewSalesSteps[findDeclarations].content = updatedContent;
+    }
   }
 
   const handleNextStep = (route: TypeForceUpdateKey) => {
@@ -137,7 +154,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
         setActiveContent={setActiveContent}
         setActiveSection={setActiveSection}
         setFinishedStep={updateFUFinishedSteps}
-        steps={FORCE_UPDATE_DATA}
+        steps={updatedNewSalesSteps}
       />
       <ForceUpdateContent
         handleCancelForceUpdate={handleCancelForceUpdate}

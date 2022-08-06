@@ -18,6 +18,11 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
         ...state,
         ...action.payload,
       };
+    case "forceUpdate/UPDATE_FORCE_UPDATE_DECLARATIONS":
+      return {
+        ...state,
+        declarations: action.payload,
+      };
     case "forceUpdate/UPDATE_EMAIL_VERIFIED":
       return {
         ...state,
@@ -42,6 +47,7 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
           "TermsAndConditions",
           "Signatures",
         ],
+        declarations: [],
         emailVerified: false,
         finishedSteps: [],
         showOpenAccount: false,

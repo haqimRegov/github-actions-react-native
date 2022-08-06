@@ -43,6 +43,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
   updateForceUpdate,
 }: DeclarationSummaryProps) => {
   const { principal } = personalInfo;
+  const { declarations } = forceUpdate;
 
   const fetching = useRef<boolean>(false);
 
@@ -86,21 +87,25 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
         emailAddress: principal!.contactDetails!.emailAddress!,
       },
       declaration: {
-        crs: {
-          taxResident:
-            principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
-          tin: principalTin,
-        },
-        fatca: {
-          formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-          formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-          confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-          certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
-          noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-          reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
-          usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
-          usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
-        },
+        crs: declarations.includes("crs")
+          ? {
+              taxResident:
+                principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
+              tin: principalTin,
+            }
+          : undefined,
+        fatca: declarations.includes("fatca")
+          ? {
+              formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
+              formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
+              confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
+              certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
+              noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
+              reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
+              usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
+              usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
+            }
+          : undefined,
       },
     },
   };
@@ -190,6 +195,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
             <CustomSpacer space={sh24} />
             <DeclarationDetails
               address={address}
+              declarations={declarations}
               handleEditCrs={handleEditCrs}
               handleEditFatca={handleEditFatca}
               summary={personalInfo.principal?.declaration!}

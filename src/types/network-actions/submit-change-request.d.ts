@@ -2,9 +2,9 @@ declare interface ISubmitChangeRequestRequest {
   clientId: string;
   clientInfo: {
     contactDetails: ISubmitContactDetails;
-    declaration: {
-      crs: ISubmitCrs;
-      fatca: ISubmitFatca;
+    declaration?: {
+      crs?: ISubmitCrs;
+      fatca?: ISubmitFatca;
       fea?: ISubmitFea;
     };
   };

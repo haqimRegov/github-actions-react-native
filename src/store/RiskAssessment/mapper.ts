@@ -18,6 +18,7 @@ export const RiskMapStateToProps = (state: RootState) => ({
   isRiskUpdated: state.riskAssessment.isRiskUpdated,
   newSales: state.newSales,
   onboarding: state.onboarding,
+  personalInfo: state.personalInfo,
   principalHolder: state.client.details?.principalHolder,
   questionnaire: state.riskAssessment.questionnaire,
   riskScore: state.riskAssessment.riskScore,

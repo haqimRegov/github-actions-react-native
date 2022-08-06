@@ -3,8 +3,8 @@ declare interface ISubmitChangeRequestRequest {
   clientInfo: {
     contactDetails: ISubmitContactDetails;
     declaration?: {
-      crs: ISubmitCrs;
-      fatca: ISubmitFatca;
+      crs?: ISubmitCrs;
+      fatca?: ISubmitFatca;
       fea?: ISubmitFea;
     };
   };

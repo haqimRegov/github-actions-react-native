@@ -125,8 +125,6 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                   }
                 : {};
 
-            const iconName = isSubmitted === false ? "success" : "warning";
-
             return (
               <Fragment key={index}>
                 <View style={containerStyle}>
@@ -135,8 +133,8 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                       <Fragment>
                         {isSubmitted === true ? (
                           <View>
-                            <Badge icon={{ name: iconName, size: sh8 }} style={circle(sw16, colorGreen._1)}>
-                              <IcoMoon color={colorWhite._1} name={iconName} size={sw16} />
+                            <Badge icon={{ name: "success", size: sh8 }} style={circle(sw16, colorGreen._1)}>
+                              <IcoMoon color={colorWhite._1} name="success" size={sw16} />
                             </Badge>
                           </View>
                         ) : (

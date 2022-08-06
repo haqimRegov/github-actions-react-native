@@ -28,6 +28,7 @@ export interface PDFListProps extends AcknowledgementStoreProps, ForceUpdateCont
 
 const PDFListComponent: FunctionComponent<PDFListProps> = ({
   details,
+  forceUpdate,
   handleNextStep,
   handleResetForceUpdate,
   receipts,
@@ -37,6 +38,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { clientId } = details!.principalHolder!;
+  const { declarations } = forceUpdate;
   const fetching = useRef<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [promptType, setPromptType] = useState<"summary" | "success">("summary");
@@ -250,6 +252,10 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                 "principalSignature" in receipt &&
                 receipt.principalSignature !== undefined;
               const completed = baseSignatureValid;
+              const checkSubtitle =
+                declarations.length === 0
+                  ? TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE_WITHOUT_DECLARATION
+                  : TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE;
               // const disable = receipt.completed !== true;
               // const disabled = index === 0 ? false : disabledCondition;
               return (
@@ -267,7 +273,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                     resourceType="base64"
                     setValue={() => {}}
                     tooltip={incompleteIndex === index}
-                    title={TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE}
+                    title={checkSubtitle}
                     onPress={handleEdit}
                     value={receipt.signedPdf}
                   />

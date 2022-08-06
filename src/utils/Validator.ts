@@ -58,3 +58,14 @@ export const validateInput = (value: string, type: TInputs) => {
   }
   return checkInput;
 };
+
+export const booleanTextChange = (text: string) => {
+  const lowerCase = text.toLowerCase();
+  if (lowerCase === "true" || lowerCase === "yes") {
+    return "Yes";
+  }
+  if (lowerCase === "false" || lowerCase === "no") {
+    return "No";
+  }
+  return text;
+};

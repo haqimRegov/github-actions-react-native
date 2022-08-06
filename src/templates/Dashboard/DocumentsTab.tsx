@@ -76,31 +76,13 @@ export const DocumentsTab: FunctionComponent<DocumentsTabProps> = ({ documentSum
       ) : null}
       {documentSummary !== null && isNotEmpty(documentSummary.hardcopy) ? (
         <View>
-          {(isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0) ||
-          (isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0) ? (
+          {isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0 ? (
             <Fragment>
               <CustomSpacer space={sh24} />
               <ColorCard
                 {...summaryColorCardStyleProps}
                 content={
                   <Fragment>
-                    {isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0 ? (
-                      <Fragment>
-                        <View>
-                          {documentSummary.hardcopy.utmcDocs.map((products, index: number) => {
-                            // function that populates the data
-                            const updatedData = populateData(products);
-                            return (
-                              <Fragment key={index}>
-                                {isNotEmpty(products.documents.length) && products.documents.length > 0 ? (
-                                  <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
-                                ) : null}
-                              </Fragment>
-                            );
-                          })}
-                        </View>
-                      </Fragment>
-                    ) : null}
                     {isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0 ? (
                       <Fragment>
                         {isNotEmpty(documentSummary.hardcopy.accDocs[0].documents) &&

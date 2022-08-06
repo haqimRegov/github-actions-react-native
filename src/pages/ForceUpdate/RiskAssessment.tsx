@@ -16,7 +16,7 @@ import {
 import { Language, NunitoBold, NunitoRegular } from "../../constants";
 import { Q2_OPTIONS, Q3_OPTIONS, Q4_OPTIONS_NEW, Q5_OPTIONS, Q6_OPTIONS, Q7_OPTIONS, Q8_OPTIONS, Q9_OPTIONS } from "../../data/dictionary";
 import { IcoMoon } from "../../icons";
-import { getRiskProfile } from "../../network-actions";
+import { getRiskProfile, submitChangeRequest } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   alignSelfStart,
@@ -71,6 +71,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   handleNextStep,
   navigation,
   forceUpdate,
+  personalInfo,
   principalHolder,
   questionnaire,
   resetRiskAssessment,
@@ -79,10 +80,12 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   updateForceUpdate,
 }: RiskAssessmentContentProps) => {
   const { clientId, dateOfBirth, id } = principalHolder!;
-  const { disabledSteps, finishedSteps } = forceUpdate;
+  const { principal } = personalInfo;
+  const { declarations, disabledSteps, finishedSteps } = forceUpdate;
 
   const fetching = useRef<boolean>(false);
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
+  const [continueLoader, setContinueLoader] = useState<boolean>(false);
   const [prevRiskAssessment, setPrevRiskAssessment] = useState<IRiskAssessmentQuestions | undefined>(undefined);
   const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine } = questionnaire;
 
@@ -96,35 +99,96 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     addAssessmentQuestions({ questionEight: index, questionNine: index === 0 || index === -1 ? -1 : questionNine });
   const setQ9 = (index: number) => addAssessmentQuestions({ questionNine: index });
 
-  const handleConfirmAssessment = () => {
-    let nextStep: TypeForceUpdateKey = "FATCADeclaration";
-    const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
-    const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
+  const request: ISubmitChangeRequestRequest = {
+    id: details?.principalHolder?.id!,
+    initId: details?.initId as string,
+    clientId: details!.principalHolder!.clientId!,
+    clientInfo: {
+      contactDetails: {
+        contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
+          code: contact.code,
+          label: contact.label,
+          value: contact.value,
+        })),
+        emailAddress: principal!.contactDetails!.emailAddress!,
+      },
+    },
+  };
 
-    updatedFinishedSteps.push("RiskAssessment");
+  const handleSetupClient = async () => {
+    if (fetching.current === false) {
+      fetching.current = true;
+      setContinueLoader(true);
+      const response: ISubmitChangeRequestResponse = await submitChangeRequest(request, navigation, setLoading);
+      fetching.current = false;
+      setContinueLoader(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          return true;
+        }
 
-    const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
-    if (findDeclarations !== -1) {
-      updatedDisabledSteps.splice(findDeclarations, 1);
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
+      }
     }
+    return false;
+  };
 
-    const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
-    if (findFinishedFatca !== -1) {
-      nextStep = "CRSDeclaration";
+  const handleConfirmAssessment = async () => {
+    let setupClient = false;
+    if (forceUpdate.declarations.length === 0) {
+      setupClient = await handleSetupClient();
     }
+    if (forceUpdate.declarations.length !== 0 || setupClient === true) {
+      const checkFatca: TypeForceUpdateKey = declarations.includes("fatca") ? "FATCADeclaration" : "CRSDeclaration";
+      let nextStep: TypeForceUpdateKey = declarations.length === 0 ? "TermsAndConditions" : checkFatca;
+      const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
+      const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
 
-    const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
-    if (findFinishedCrs !== -1 && findFinishedFatca !== -1) {
-      nextStep = "DeclarationSummary";
+      updatedFinishedSteps.push("RiskAssessment");
+
+      const findDeclarations = updatedDisabledSteps.indexOf("Declarations");
+      if (findDeclarations !== -1) {
+        updatedDisabledSteps.splice(findDeclarations, 1);
+      }
+
+      const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
+      if (findFinishedFatca !== -1 && declarations.includes("crs")) {
+        nextStep = "CRSDeclaration";
+      }
+
+      const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
+      if (findFinishedCrs !== -1) {
+        nextStep = "DeclarationSummary";
+      }
+
+      if (declarations.includes("fatca")) {
+        const findFatca = updatedDisabledSteps.indexOf("FATCADeclaration");
+        if (findFatca !== -1 && findFinishedFatca === -1) {
+          updatedDisabledSteps.splice(findFatca, 1);
+        }
+      }
+      if (declarations.includes("crs")) {
+        const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
+        if (findCrs !== -1 && findFinishedFatca === -1) {
+          updatedDisabledSteps.splice(findCrs, 1);
+        }
+      }
+      if (declarations.length === 0) {
+        const findTerms = updatedDisabledSteps.indexOf("TermsAndConditions");
+        if (findTerms !== -1) {
+          updatedDisabledSteps.splice(findTerms, 1);
+        }
+      }
+
+      updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+      handleNextStep(nextStep);
     }
-
-    const findFatca = updatedDisabledSteps.indexOf("FATCADeclaration");
-    if (findFatca !== -1 && findFinishedFatca === -1) {
-      updatedDisabledSteps.splice(findFatca, 1);
-    }
-
-    updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
-    handleNextStep(nextStep);
   };
 
   const handleRetakeAssessment = () => {
@@ -136,7 +200,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request: IGetRiskProfileRequest = {
+      const riskRequest: IGetRiskProfileRequest = {
         clientId: clientId!,
         id: id!,
         initId: details!.initId!,
@@ -153,7 +217,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
           questionNine: questionNine,
         },
       };
-      const response: IGetRiskProfileResponse = await getRiskProfile(request, navigation, setLoading);
+      const response: IGetRiskProfileResponse = await getRiskProfile(riskRequest, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {
@@ -433,6 +497,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
       </ContentPage>
       {confirmModal !== undefined ? (
         <ConfirmationModal
+          continueLoading={continueLoader}
           handleCancel={handleCancel}
           handleContinue={handleContinue}
           labelCancel={labelCancel}

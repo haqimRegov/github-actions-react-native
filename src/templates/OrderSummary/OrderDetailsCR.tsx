@@ -32,6 +32,7 @@ declare interface OrderDetailsCRProps {
 export const OrderDetailsCR: FunctionComponent<OrderDetailsCRProps> = ({ data, handleViewAccountDetails }: OrderDetailsCRProps) => {
   const { orderNumber, profile, riskInfo, transactionDetails } = data;
   const investor = profile[0];
+  const { declaration } = investor;
 
   const profileToStructure: IInvestorAccount = {
     accountDetails: null,
@@ -147,8 +148,12 @@ export const OrderDetailsCR: FunctionComponent<OrderDetailsCRProps> = ({ data, h
       />
       <SummaryColorCard data={contactDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CONTACT} spaceToTop={sh32} />
       <SummaryColorCard data={riskAssessmentDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
-      <SummaryColorCard data={fatca} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_FATCA} spaceToTop={sh32} />
-      <SummaryColorCard data={crs} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CRS} spaceToTop={sh32} section={crsSection} />
+      {declaration !== null && declaration.fatca !== null ? (
+        <SummaryColorCard data={fatca} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_FATCA} spaceToTop={sh32} />
+      ) : null}
+      {declaration !== null && declaration.crs !== null ? (
+        <SummaryColorCard data={crs} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CRS} spaceToTop={sh32} section={crsSection} />
+      ) : null}
     </View>
   );
 };

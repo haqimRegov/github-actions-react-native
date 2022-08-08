@@ -21,7 +21,7 @@ declare interface INewSales {
 
 declare interface NewSalesContentProps {
   cancelNewSales?: boolean;
-  handleCancelNewSales?: () => void;
+  handleCancelNewSales?: (backToInvestor?: boolean) => void;
   handleResetNewSales: () => void;
   handleNextStep: (route: TypeNewSalesRoute) => void;
 }

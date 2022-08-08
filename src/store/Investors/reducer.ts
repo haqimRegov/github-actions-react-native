@@ -24,6 +24,25 @@ export function investorsReducer(state = investorsInitialState, action: Investor
         search: "",
         currentAccount: undefined,
         currentInvestor: undefined,
+        backToInvestorOverview: false,
+      };
+    case "investors/PARTIAL_RESET_INVESTORS":
+      return {
+        ...state,
+        all: {
+          filter: {
+            riskProfile: [],
+          },
+          investors: [],
+          page: 1,
+          pages: 1,
+          sort: [{ value: "ascending", column: "name" }],
+        },
+
+        allCount: 0,
+        search: "",
+        currentAccount: undefined,
+        backToInvestorOverview: true,
       };
     case "investors/RESET_ALL_FILTER":
       return {

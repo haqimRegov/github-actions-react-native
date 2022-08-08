@@ -53,6 +53,7 @@ interface DashboardPageProps extends TransactionsStoreProps {
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   agent,
   client,
+  investors,
   navigation,
   route,
   resetClientDetails,
@@ -64,7 +65,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   const { isLogout, setIsLogout } = route.params;
   const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
-  const [page, setPage] = useState<DashboardPageType>("Transactions");
+  const [page, setPage] = useState<DashboardPageType>(investors.backToInvestorOverview === true ? "Investors" : "Transactions");
   const prevPage = usePrevious(page);
 
   const handleRoute = (nextPage: DashboardPageType) => {
@@ -129,7 +130,12 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     content = <Transactions {...props} />;
   }
   if (page === "Investors") {
-    content = <Investors {...props} showInvestorOverview={client.isForceUpdate === true || client.isNewSales === true} />;
+    content = (
+      <Investors
+        {...props}
+        showInvestorOverview={client.isForceUpdate === true || client.isNewSales === true || investors.backToInvestorOverview === true}
+      />
+    );
   }
   if (page === "EDD") {
     content = <EDD {...props} />;

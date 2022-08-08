@@ -10,12 +10,14 @@ declare interface IInvestorData {
   name: string;
   riskTolerance: string | null;
 }
+
 declare interface IInvestorsDashboard {
   all: IInvestorsTab;
   allCount: number;
   currentAccount: ICurrentAccount | undefined;
   currentInvestor: IInvestorData | undefined;
   search: string;
+  backToInvestorOverview?: boolean;
 }
 
 declare interface IInvestorsFilter {

@@ -4,6 +4,10 @@ export const updateInvestors = (investors: IInvestorsDashboard) => {
   return typedAction("investors/UPDATE_INVESTORS", investors);
 };
 
+export const partialResetInvestors = () => {
+  return typedAction("investors/PARTIAL_RESET_INVESTORS");
+};
+
 export const resetInvestors = () => {
   return typedAction("investors/RESET_INVESTORS");
 };
@@ -33,6 +37,7 @@ export const updateAllFilter = (filter: IInvestorsFilter) => {
 };
 
 export type InvestorsAction = ReturnType<
+  | typeof partialResetInvestors
   | typeof resetAllFilter
   | typeof resetInvestors
   | typeof updateAllFilter
@@ -44,6 +49,7 @@ export type InvestorsAction = ReturnType<
 >;
 
 export const InvestorsActionProps = {
+  partialResetInvestors,
   resetAllFilter,
   resetInvestors,
   updateAllFilter,

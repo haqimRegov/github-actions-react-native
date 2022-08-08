@@ -17,6 +17,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
   downloadInitiated: state.transactions.downloadInitiated,
   loading: state.global.loading,
   incomplete: state.transactions.incomplete,
+  investors: state.investors,
   rejected: state.transactions.rejected,
   search: state.transactions.search,
   selectedOrders: state.transactions.selectedOrders,

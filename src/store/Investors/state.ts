@@ -16,4 +16,5 @@ export const investorsInitialState: investorsState = {
   search: "",
   currentAccount: undefined,
   currentInvestor: undefined,
+  backToInvestorOverview: false,
 };

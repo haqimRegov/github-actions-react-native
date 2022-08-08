@@ -94,6 +94,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     newSales,
     navigation,
     personalInfo,
+    partialResetInvestors,
     resetAcknowledgement,
     resetClientDetails,
     resetInvestors,
@@ -127,6 +128,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   const [cancelNewSales, setCancelNewSales] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<INewSalesContentItem | INewSales | undefined>(updatedNewSalesSteps[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
+  const [cancelBackToInvestor, setCancelBackToInvestor] = useState<boolean>(false);
 
   const handleNextStep = (route: TypeNewSalesRoute) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
@@ -138,7 +140,10 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     setActiveContent(item);
   };
 
-  const handleCancelNewSales = () => {
+  const handleCancelNewSales = (backToInvestor?: boolean) => {
+    if (backToInvestor !== undefined) {
+      setCancelBackToInvestor(backToInvestor);
+    }
     setCancelNewSales(!cancelNewSales);
   };
 
@@ -220,7 +225,11 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     setCancelNewSales(false);
     resetAcknowledgement();
     resetClientDetails();
-    resetInvestors();
+    if (cancelBackToInvestor === true) {
+      partialResetInvestors();
+    } else {
+      resetInvestors();
+    }
     resetPersonalInfo();
     resetRiskAssessment();
     resetSelectedFund();

@@ -192,6 +192,12 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     setPage(1);
   };
 
+  const handleBackToInvestor = () => {
+    if (handleCancelNewSales !== undefined) {
+      handleCancelNewSales(true);
+    }
+  };
+
   const handleAims = () => {
     RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
   };
@@ -398,7 +404,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
         <Fragment>
           <CustomSpacer space={sh24} />
           <SelectionBanner
-            cancelOnPress={handleCancelNewSales}
+            cancelOnPress={handleBackToInvestor}
             continueDisabled={riskProfile.appetite === ""}
             label={RISK_ASSESSMENT.NEW_SALES_RISK_PROFILE_SUMMARY}
             labelStyle={fs20BoldBlack2}

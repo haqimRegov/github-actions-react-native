@@ -24,7 +24,8 @@ import {
   sw8,
   sw96,
 } from "../../styles";
-import { DocumentsTab } from "../Dashboard";
+import { isArrayNotEmpty, isNotEmpty } from "../../utils";
+import { ProfileDocumentsTab } from "../Dashboard";
 import { DeclarationsTab } from "./DeclarationsTab";
 import { ProfileTab } from "./ProfileTab";
 
@@ -46,7 +47,16 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<InvestorProfileTabType>("profile");
 
-  const tabs: InvestorProfileTabType[] = ["profile", "declarations", "document"];
+  const documentCheck =
+    isNotEmpty(data) &&
+    isNotEmpty(data!.documentSummary) &&
+    ((isNotEmpty(data!.documentSummary!.softcopy) && isArrayNotEmpty(data!.documentSummary!.softcopy.documents)) ||
+      (isNotEmpty(data!.documentSummary!.hardcopy) && isArrayNotEmpty(data!.documentSummary!.hardcopy.accDocs)));
+
+  const tabs: InvestorProfileTabType[] = ["profile", "declarations"];
+  if (documentCheck === true) {
+    tabs.push("document");
+  }
 
   const handleTabs = (index: number) => {
     setActiveTab(tabs[index]);
@@ -67,7 +77,7 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({
   }
 
   if (activeTab === "document" && data !== undefined) {
-    content = <DocumentsTab documentSummary={data.documentSummary!} {...tabProps} />;
+    content = <ProfileDocumentsTab documentSummary={data.documentSummary!} {...tabProps} />;
   }
 
   if (activeTab === "profile" && data !== undefined) {
@@ -95,11 +105,11 @@ export const InvestorProfile: FunctionComponent<InvestorProfileProps> = ({
 
   const profileTabs: { text: string }[] = [{ text: INVESTOR_PROFILE.TAB_TITLE_PROFILE }];
 
-  if (data !== undefined && data !== null && data.declaration !== null) {
+  if (isNotEmpty(data) && isNotEmpty(data!.declaration)) {
     profileTabs.push({ text: INVESTOR_PROFILE.TAB_TITLE_DECLARATIONS });
   }
 
-  if (data !== undefined && data !== null && data.documentSummary !== null) {
+  if (documentCheck === true) {
     profileTabs.push({ text: INVESTOR_PROFILE.TAB_TITLE_DOCUMENT });
   }
 

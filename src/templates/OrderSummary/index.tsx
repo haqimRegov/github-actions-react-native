@@ -19,7 +19,7 @@ import {
   sw24,
   sw8,
 } from "../../styles";
-import { isNotEmpty } from "../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../utils";
 import { AccountTab, DocumentsTabNew } from "../Dashboard";
 import { OrderDetailsNew } from "./OrderDetailsNew";
 import { Tracking } from "./Tracking";
@@ -66,7 +66,14 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     { text: DASHBOARD_ORDER_SUMMARY.TAB_TRACKING },
   ];
 
-  if (isNotEmpty(orderSummary?.documentSummary)) {
+  const documentCheck =
+    isNotEmpty(orderSummary) &&
+    isNotEmpty(orderSummary!.documentSummary) &&
+    (isArrayNotEmpty(orderSummary!.documentSummary.softcopy.documents) ||
+      isArrayNotEmpty(orderSummary!.documentSummary.hardcopy.accDocs) ||
+      isArrayNotEmpty(orderSummary!.documentSummary.hardcopy.utmcDocs));
+
+  if (documentCheck === true) {
     tabs.splice(1, 0, "document");
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT });
   }
@@ -97,7 +104,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     />
   );
 
-  if (activeTab === "document" && orderSummary !== undefined && isNotEmpty(orderSummary?.documentSummary)) {
+  if (activeTab === "document" && documentCheck === true && orderSummary !== undefined) {
     content = <DocumentsTabNew documentSummary={orderSummary.documentSummary} setFile={setFile} />;
   }
 

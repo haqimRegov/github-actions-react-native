@@ -22,7 +22,7 @@ import {
   sw328,
   sw8,
 } from "../../styles";
-import { isNotEmpty } from "../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../utils";
 
 const { DASHBOARD_DOCUMENT } = Language.PAGE;
 
@@ -60,7 +60,7 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
 
   return (
     <View style={px(sw24)}>
-      {isNotEmpty(documentSummary.softcopy) ? (
+      {isNotEmpty(documentSummary) && isNotEmpty(documentSummary.softcopy) && isArrayNotEmpty(documentSummary.softcopy.documents) ? (
         <View>
           <CustomSpacer space={sh24} />
           <ColorCard
@@ -91,15 +91,14 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
       ) : null}
       {isNotEmpty(documentSummary.hardcopy) ? (
         <View>
-          {(isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0) ||
-          (isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0) ? (
+          {isArrayNotEmpty(documentSummary.hardcopy.utmcDocs) || isArrayNotEmpty(documentSummary.hardcopy.accDocs) ? (
             <Fragment>
               <CustomSpacer space={sh24} />
               <ColorCard
                 {...summaryColorCardStyleProps}
                 content={
                   <Fragment>
-                    {isNotEmpty(documentSummary.hardcopy.utmcDocs) && documentSummary.hardcopy.utmcDocs.length > 0 ? (
+                    {isArrayNotEmpty(documentSummary.hardcopy.utmcDocs) ? (
                       <Fragment>
                         <View>
                           {documentSummary.hardcopy.utmcDocs.map((products, index: number) => {
@@ -128,10 +127,9 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
                         </View>
                       </Fragment>
                     ) : null}
-                    {isNotEmpty(documentSummary.hardcopy.accDocs) && documentSummary.hardcopy.accDocs.length > 0 ? (
+                    {isArrayNotEmpty(documentSummary.hardcopy.accDocs) ? (
                       <Fragment>
-                        {isNotEmpty(documentSummary.hardcopy.accDocs[0].documents) &&
-                        documentSummary.hardcopy.accDocs[0].documents.length > 0 ? (
+                        {isArrayNotEmpty(documentSummary.hardcopy.accDocs[0].documents) ? (
                           <Fragment>
                             <View>
                               {documentSummary.hardcopy.accDocs.map((accPhysicalDoc, index: number) => {

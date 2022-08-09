@@ -19,7 +19,6 @@ import {
   flexChild,
   flexRow,
   fullHW,
-  sh140,
   sh16,
   sh24,
   sh48,
@@ -573,7 +572,6 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           titleIcon="arrow-left">
           <View style={flexChild}>
             <CustomSpacer space={sh24} />
-            <InvestorAccountsHeader {...headerData} />
             <View
               style={{
                 ...flexChild,
@@ -582,7 +580,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                 backgroundColor: colorWhite._2,
                 borderRadius: sw24,
               }}>
-              <CustomSpacer space={sh140} />
+              <InvestorAccountsHeader {...headerData} />
+
               <CustomSpacer space={sh16} />
               <View style={flexRow}>
                 <Tab

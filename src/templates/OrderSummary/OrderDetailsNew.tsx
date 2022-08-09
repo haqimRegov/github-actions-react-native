@@ -495,6 +495,11 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           onPress: handleFile,
                           titleIcon: "file",
                         },
+                        {
+                          label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+                          title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
+                          titleStyle: fsTransformNone,
+                        },
                       );
                     }
 
@@ -573,13 +578,6 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           titleStyle: fsTransformNone,
                         },
                       );
-                    }
-                    if (payment.remark !== null && payment.remark !== undefined) {
-                      paymentDetails.push({
-                        label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                        title: payment.remark,
-                        titleStyle: fsTransformNone,
-                      });
                     }
 
                     return (

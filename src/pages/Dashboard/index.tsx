@@ -38,7 +38,6 @@ import {
   sw66,
   sw96,
 } from "../../styles";
-import { EDD } from "./EDD";
 import { InboxPage } from "./Inbox";
 import { Investors } from "./Investors";
 import { Profile } from "./Profile";
@@ -115,10 +114,10 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     setPage("Investors");
   };
 
-  const handleEDD = () => {
-    handleDataReset("EDD");
-    setPage("EDD");
-  };
+  // const handleEDD = () => {
+  //   handleDataReset("EDD");
+  //   setPage("EDD");
+  // };
 
   const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
 
@@ -137,9 +136,9 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
       />
     );
   }
-  if (page === "EDD") {
-    content = <EDD {...props} />;
-  }
+  // if (page === "EDD") {
+  //   content = <EDD {...props} />;
+  // }
   if (page === "Profile") {
     content = <Profile {...props} />;
   }
@@ -149,7 +148,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   const MENU_ITEMS: MenuItemProps[] = [
     { name: "transaction", onPress: handleDashboard, title: DASHBOARD.MENU_DASHBOARD },
     { name: "investors", onPress: handleInvestors, title: DASHBOARD.MENU_INVESTORS },
-    { name: "edd", onPress: handleEDD, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
+    // { name: "edd", onPress: handleEDD, title: DASHBOARD.MENU_EDD, subtitle: DASHBOARD.MENU_EDD_SUBTITLE },
     { badgeCount: inboxCount, name: "bell", onPress: handleInbox, title: DASHBOARD.MENU_INBOX },
     { name: "profile", onPress: handleProfile, title: DASHBOARD.MENU_PROFILE },
     { name: "logout-new", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
@@ -167,7 +166,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   const logoAimsStyle: ImageStyle = { ...imageContain, height: sh32, width: sw66 };
 
   useEffect(() => {
-    const pages: DashboardPageType[] = ["Transactions", "Investors", "EDD", "Inbox", "Profile"];
+    const pages: DashboardPageType[] = ["Transactions", "Investors", "Inbox", "Profile"];
     const pageIndex = pages.indexOf(page);
     if (activeMenu !== pageIndex) {
       setActiveMenu(pageIndex);

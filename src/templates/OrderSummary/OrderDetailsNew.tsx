@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 import { ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
-import { getProductType } from "../../helpers";
+import { getDocumentFile, getProductType } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import {
   borderBottomBlue2,
@@ -59,7 +59,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
   setFile,
   transactionType,
 }: OrderDetailsProps) => {
-  const { transactionDetails, investmentSummary, paymentSummary, orderNumber, totalInvestment, profile, riskInfo } = data;
+  const { documentSummary, transactionDetails, investmentSummary, paymentSummary, orderNumber, totalInvestment, profile, riskInfo } = data;
   const investor = profile[0];
   const { declaration } = investor;
 
@@ -158,14 +158,22 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
           content={
             <Fragment>
               {profile.map((details, profileIndex: number) => {
-                // investor overview
+                const id = getDocumentFile(documentSummary, "id", profileIndex === 0 ? "Principal" : "Joint");
+
+                const handleViewId = () => {
+                  if (id !== undefined) {
+                    setFile(id);
+                  }
+                };
+
                 const investorOverview: LabeledTitleProps[] = [
                   { label: DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR_NAME, title: details.name, titleStyle: fsTransformNone },
                   {
                     label: `${DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR} ${details.idType}`,
+                    onPress: handleViewId,
                     title: details.idNumber,
                     titleStyle: fsTransformNone,
-                    titleIcon: "profile-card",
+                    titleIcon: id !== undefined ? "profile-card" : undefined,
                   },
                 ];
 

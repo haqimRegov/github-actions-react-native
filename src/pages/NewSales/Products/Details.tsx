@@ -145,11 +145,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     },
     { label: PRODUCT_DETAILS.LABEL_RISK, title: fund.riskCategory },
     { label: PRODUCT_DETAILS.LABEL_SHARIAH_COMPLAINT, title: fund.isSyariah },
+    { label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf },
   ];
-
-  if (fund.fundType !== "PRS") {
-    data.push({ label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf });
-  }
 
   const minAmountCash = `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`;
   const minAdditionalAmountCash = `${filteredCurrency.currency} ${formatAmount(topUpAmount.cash.min)}`;
@@ -191,23 +188,25 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
       title: maxSalesCharge,
       titleStyle: fsTransformNone,
     },
-    {
-      label: PRODUCT_DETAILS.LABEL_ANNUAL,
-      title: `${fund.annualManagementFee}%`,
-      titleStyle: fsTransformNone,
-    },
-    {
-      label: PRODUCT_DETAILS.LABEL_ANNUAL_TRUSTEE,
-      title: `${fund.annualTrusteeFee}%`,
-      titleStyle: fsTransformNone,
-    },
   ];
 
   if (isAmp) {
     data.push({ label: PRODUCT_DETAILS.LABEL_LANDING_FUND, title: fund.landingFund || "-" });
     data.splice(0, 1, { label: PRODUCT_DETAILS.LABEL_AMP_CATEGORY, title: fund.ampCategory || "-" });
-    transactionInfo.splice(3, 0, { label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` });
-    transactionInfo.splice(-1, 1);
+    transactionInfo.push({ label: PRODUCT_DETAILS.LABEL_AMP_FEE, title: `${fund.ampFee}%` });
+  } else {
+    transactionInfo.push(
+      {
+        label: PRODUCT_DETAILS.LABEL_ANNUAL,
+        title: `${fund.annualManagementFee}%`,
+        titleStyle: fsTransformNone,
+      },
+      {
+        label: PRODUCT_DETAILS.LABEL_ANNUAL_TRUSTEE,
+        title: `${fund.annualTrusteeFee}%`,
+        titleStyle: fsTransformNone,
+      },
+    );
   }
 
   if (isScheduled) {

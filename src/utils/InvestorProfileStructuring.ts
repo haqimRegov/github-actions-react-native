@@ -79,7 +79,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       0,
       {
         label: INVESTOR_PROFILE.LABEL_BUMIPUTERA,
-        title: booleanTextChange(personalDetails.bumiputera),
+        title: isNotEmpty(personalDetails.bumiputera) ? booleanTextChange(personalDetails.bumiputera!) : "-",
       },
       { label: INVESTOR_PROFILE.LABEL_RACE, title: personalDetails.race },
     );
@@ -155,7 +155,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   const fatcaSummary: LabeledTitleProps[] = [
     {
       label: INVESTOR_PROFILE.LABEL_CITIZENSHIP,
-      title: fatca !== null && fatca.usCitizen !== null ? booleanTextChange(fatca.usCitizen as string) : "-",
+      title: isNotEmpty(fatca) && isNotEmpty(fatca!.usCitizen) ? booleanTextChange(fatca!.usCitizen!) : "-",
     },
   ];
 
@@ -165,41 +165,41 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       }, ${addressInformation!.mailingAddress!.state}, ${addressInformation!.mailingAddress!.country}`
     : "-";
 
-  if (fatca !== null && fatca.usCitizen === "false") {
-    fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: booleanTextChange(fatca.usBorn as string) });
-    if (fatca.usBorn === "true") {
-      fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
-      if (fatca.certificate) {
+  if (isNotEmpty(fatca) && isNotEmpty(fatca!.usCitizen) && booleanTextChange(fatca!.usCitizen!) === "No") {
+    fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: booleanTextChange(fatca!.usBorn!) });
+    if (isNotEmpty(fatca!.usBorn) && booleanTextChange(fatca!.usBorn!) === "Yes") {
+      if (isNotEmpty(fatca!.certificate) && isNotEmpty(fatca!.certificate!.name!)) {
         fatcaSummary.push({
           label: INVESTOR_PROFILE.LABEL_CERTIFICATE,
-          title: fatca.certificate.name!,
+          title: fatca!.certificate!.name!,
           titleStyle: fsTransformNone,
         });
-      } else {
-        fatcaSummary.push(
-          { label: INVESTOR_PROFILE.LABEL_CERTIFICATE, title: "-" },
-          {
-            label: INVESTOR_PROFILE.LABEL_CERTIFICATE_REASON,
-            title: fatca.reason || "-",
-            titleStyle: fsTransformNone,
-          },
-        );
       }
-      if (fatca.correspondenceDeclaration === "Yes") {
-        fatcaSummary.splice(2, 0, {
-          label: INVESTOR_PROFILE.LABEL_CORRESPONDENCE_DECLARATION,
-          title: fatca.correspondenceDeclaration || "-",
+      if (isNotEmpty(fatca!.reason)) {
+        fatcaSummary.push({
+          label: INVESTOR_PROFILE.LABEL_CERTIFICATE_REASON,
+          title: fatca!.reason || "-",
           titleStyle: fsTransformNone,
         });
+      }
+
+      fatcaSummary.push({
+        label: INVESTOR_PROFILE.LABEL_CORRESPONDENCE_DECLARATION,
+        title: fatca!.correspondenceDeclaration || "-",
+        titleStyle: fsTransformNone,
+      });
+
+      if (isNotEmpty(fatca!.correspondenceDeclaration) && booleanTextChange(fatca!.correspondenceDeclaration!) === "Yes") {
+        fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
       }
     }
   }
 
-  if (fatca !== null && fatca.formW9 === true) {
+  if (isNotEmpty(fatca) && booleanTextChange(fatca!.usCitizen!) === "Yes") {
     fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_W9, title: "Yes" });
   }
 
-  if (fatca !== null && fatca.formW8Ben === true) {
+  if (isNotEmpty(fatca) && isNotEmpty(fatca!.usBorn) && booleanTextChange(fatca!.usBorn!) === "Yes") {
     fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_W8BEN, title: "Yes" });
   }
 

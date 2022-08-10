@@ -226,6 +226,7 @@ const investorAccountDetails = gql`
           }
           withOrderHistory
           investorOverview {
+            lastUpdated
             name
             idNumber
             riskProfile
@@ -244,6 +245,7 @@ const investorAccountDetails = gql`
             distributionInstruction
           }
           personalDetails {
+            expirationDate
             dateOfBirth
             salutation
             gender
@@ -273,6 +275,7 @@ const investorAccountDetails = gql`
                 line1
                 line2
                 line3
+                line4
               }
               city
               country
@@ -286,6 +289,7 @@ const investorAccountDetails = gql`
                 line1
                 line2
                 line3
+                line4
               }
               city
               country
@@ -297,6 +301,7 @@ const investorAccountDetails = gql`
                 line1
                 line2
                 line3
+                line4
               }
               city
               country
@@ -640,6 +645,7 @@ const getOrderSummary = gql`
               riskProfile
               relationship
               monthlyHouseholdIncome
+              expirationDate
             }
             epfDetails {
               epfMemberNumber
@@ -655,6 +661,7 @@ const getOrderSummary = gql`
                   line1
                   line2
                   line3
+                  line4
                 }
                 city
                 country
@@ -668,6 +675,7 @@ const getOrderSummary = gql`
                   line1
                   line2
                   line3
+                  line4
                 }
                 city
                 country
@@ -679,6 +687,7 @@ const getOrderSummary = gql`
                   line1
                   line2
                   line3
+                  line4
                 }
                 city
                 country

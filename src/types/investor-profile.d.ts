@@ -16,6 +16,7 @@ declare interface IRiskProfile {
 
 declare interface IAccountInvestorOverview {
   clientId: string;
+  lastUpdated?: string;
   name: string;
   id?: FileBase64 | null;
   idNumber: string;

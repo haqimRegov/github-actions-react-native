@@ -175,6 +175,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
           titleStyle: fsTransformNone,
         });
       }
+
       if (isNotEmpty(fatca!.reason)) {
         fatcaSummary.push({
           label: INVESTOR_PROFILE.LABEL_CERTIFICATE_REASON,
@@ -185,11 +186,11 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
 
       fatcaSummary.push({
         label: INVESTOR_PROFILE.LABEL_CORRESPONDENCE_DECLARATION,
-        title: fatca!.correspondenceDeclaration || "-",
+        title: isNotEmpty(fatca!.confirmAddress) ? booleanTextChange(fatca!.confirmAddress!) : "-",
         titleStyle: fsTransformNone,
       });
 
-      if (isNotEmpty(fatca!.correspondenceDeclaration) && booleanTextChange(fatca!.correspondenceDeclaration!) === "Yes") {
+      if (isNotEmpty(fatca!.confirmAddress) && booleanTextChange(fatca!.confirmAddress!) === "Yes") {
         fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_MALAYSIAN_ADDRESS, title: fatcaAddress, titleStyle: fsTransformNone });
       }
     }

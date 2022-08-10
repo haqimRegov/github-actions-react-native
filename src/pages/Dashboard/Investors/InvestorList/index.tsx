@@ -109,7 +109,7 @@ export const InvestorListComponent: FunctionComponent<InvestorListProps> = (prop
 
   return (
     <View style={fullHW}>
-      <ScrollView contentContainerStyle={flexGrow} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={flexChild}>
           <InvestorListHeader
             filter={filterTemp}

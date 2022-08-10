@@ -148,7 +148,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     setPrompt(true);
   };
 
-  const handleClientRegister = async (req?: IClientRegisterRequest, item?: IInvestorAccountsData): Promise<undefined | boolean> => {
+  const handleClientRegister = async (
+    req?: IClientRegisterRequest,
+    item?: IInvestorAccountsData,
+    ntb?: boolean,
+  ): Promise<undefined | boolean> => {
     if (newSalesLoading === false || fullScreenLoader.current === true) {
       setNewSalesLoading(true);
       fullScreenLoader.current = fullScreenLoader.current === false && req === undefined;
@@ -174,7 +178,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           ? req
           : {
               accountType: accountType === 1 ? "Joint" : "Individual",
-              isEtb: isNtb !== true,
+              isEtb: ntb === undefined || ntb !== true,
               isNewFundPurchased: false,
               principalHolder: {
                 ...principalDob,
@@ -342,7 +346,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             // return setClientType("NTB");
             setNewSalesLoading(false);
             setIsNtb(true);
-            await handleClientRegister();
+            await handleClientRegister(undefined, undefined, true);
           }
           if (data.result.message === "ETB") {
             if (data.result.forceUpdate === false) {

@@ -248,7 +248,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
   const illustration = noResults === true ? undefined : LocalAssets.illustration.inboxEmpty;
 
   return (
-    <ScrollView contentContainerStyle={flexGrow} showsVerticalScrollIndicator={false}>
+    <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
       <View style={cardStyle}>
         <CustomSpacer space={sh153} />
         <CustomSpacer space={sh16} />

@@ -35,15 +35,15 @@ const FINISHED_STEPS_WHILE_EDITING: TypeForceUpdateKey[] = ["InvestorInformation
 
 export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSummaryProps> = ({
   details,
+  forceUpdate,
   handleNextStep,
   navigation,
-  forceUpdate,
   personalInfo,
   setLoading,
   updateForceUpdate,
 }: DeclarationSummaryProps) => {
   const { principal } = personalInfo;
-  const { declarations } = forceUpdate;
+  const { address, declarations } = forceUpdate;
 
   const fetching = useRef<boolean>(false);
 
@@ -66,12 +66,6 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
   const principalCertReason =
     principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0].label;
   const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
-
-  const address = `${Object.values(principal?.addressInformation?.mailingAddress?.address!).join("")}, ${
-    principal?.addressInformation?.mailingAddress?.postCode
-  }, ${principal?.addressInformation?.mailingAddress?.city}, ${principal?.addressInformation?.mailingAddress?.state}, ${
-    principal?.addressInformation?.mailingAddress?.country
-  }`;
 
   const request: ISubmitChangeRequestRequest = {
     id: details?.principalHolder?.id!,

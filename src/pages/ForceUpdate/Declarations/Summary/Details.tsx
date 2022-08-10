@@ -44,7 +44,7 @@ import {
 const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
 interface DeclarationDetailsProps {
-  address: string;
+  address?: string;
   declarations: string[];
   handleEditCrs: () => void;
   handleEditFatca: () => void;
@@ -105,7 +105,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
         titleStyle: fsTransformNone,
       });
       if (fatca!.confirmAddress === 0) {
-        fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_RESIDENT, title: address, titleStyle: fsTransformNone });
+        fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_RESIDENT, title: address || "-", titleStyle: fsTransformNone });
       }
     }
   }

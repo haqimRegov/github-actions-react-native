@@ -51,7 +51,7 @@ interface IFatcaValidations {
 }
 
 interface FatcaDeclarationDetailsProps {
-  address: string;
+  address?: string;
   fatca: IFatcaState;
   handleFatcaDeclaration: (declaration: IFatcaState) => void;
   validations: IFatcaValidations;

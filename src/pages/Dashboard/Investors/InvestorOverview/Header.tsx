@@ -5,7 +5,6 @@ import { Avatar, CustomFlexSpacer, CustomSpacer, IconButton, OutlineButton } fro
 import { Language } from "../../../../constants";
 import { IcoMoon } from "../../../../icons";
 import {
-  absolutePosition,
   border,
   centerHorizontal,
   centerHV,
@@ -14,7 +13,6 @@ import {
   colorBlack,
   colorBlue,
   colorGreen,
-  colorTransparent,
   colorWhite,
   disabledOpacity4,
   flexRow,
@@ -36,6 +34,7 @@ import {
   sw24,
   sw4,
   sw40,
+  sw512,
   sw8,
   sw80,
 } from "../../../../styles";
@@ -62,18 +61,12 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
 }: IInvestorAccountHeaderProps) => {
   const pageContainer: ViewStyle = {
     ...fullWidth,
-    ...absolutePosition,
-    backgroundColor: colorTransparent,
-    left: 0,
-    top: 0,
     zIndex: 1,
   };
 
   const container: ViewStyle = {
     ...shadow12Black112,
     backgroundColor: colorWhite._1,
-    marginHorizontal: sw24,
-    marginBottom: sh24,
     borderRadius: sw24,
   };
 
@@ -94,14 +87,13 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
 
   return (
     <View style={pageContainer}>
-      <CustomSpacer space={sh24} />
       <View style={container}>
         <View style={{ ...px(sw24), ...py(sh24) }}>
           <View style={{ ...centerVertical, ...flexRow }}>
             <Avatar size={sw80} text={initials} textStyle={fs24BoldWhite1} type="client" />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={centerHorizontal}>
-              <Text style={fs32BoldBlue1}>{name}</Text>
+              <Text style={{ ...fs32BoldBlue1, maxWidth: sw512 }}>{name}</Text>
               <CustomSpacer space={sh12} />
               <View style={rowCenterVertical}>
                 <Fragment>

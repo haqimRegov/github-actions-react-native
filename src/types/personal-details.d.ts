@@ -39,6 +39,7 @@ declare interface IAddressMultiline {
   line1?: string;
   line2?: string;
   line3?: string;
+  line4?: string;
 }
 
 declare interface IAddressState extends IBaseAddress {

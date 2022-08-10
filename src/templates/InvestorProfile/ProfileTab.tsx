@@ -28,7 +28,7 @@ declare interface ProfileTabProps {
 
 export const ProfileTab: FunctionComponent<ProfileTabProps> = ({ data }: ProfileTabProps) => {
   const { investorOverview } = data;
-  const { name } = investorOverview[0];
+  const { lastUpdated, name } = investorOverview[0];
   const { identificationDetails, personalDetails, contactDetails, employmentDetails, employmentAddress, permanentAddress } =
     getStructuredInvestorProfile(data);
 
@@ -53,10 +53,7 @@ export const ProfileTab: FunctionComponent<ProfileTabProps> = ({ data }: Profile
           .join("")
       : "";
 
-  const riskProfileLastUpdated =
-    data.personalDetails !== null && data.personalDetails.riskProfileLastUpdated !== null
-      ? moment(data.personalDetails.riskProfileLastUpdated, "x").format(DEFAULT_DATE_FORMAT)
-      : "-";
+  const riskProfileLastUpdated = isNotEmpty(lastUpdated) ? moment(lastUpdated, "x").format(DEFAULT_DATE_FORMAT) : "-";
 
   return (
     <View style={px(sw24)}>

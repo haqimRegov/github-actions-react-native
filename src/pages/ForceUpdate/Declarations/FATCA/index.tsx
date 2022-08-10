@@ -22,17 +22,8 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
   updateForceUpdate,
 }: FatcaDeclarationProps) => {
   const { principal } = personalInfo;
-  const { declarations } = forceUpdate;
+  const { address, declarations } = forceUpdate;
   const [fatcaDefinition, setFatcaDefinition] = useState<boolean>(false);
-
-  const principalAddress =
-    principal?.addressInformation?.mailingAddress !== undefined && principal?.addressInformation?.mailingAddress.address !== null
-      ? `${Object.values(principal?.addressInformation?.mailingAddress?.address!).join("")}, ${
-          principal?.addressInformation?.mailingAddress?.postCode
-        }, ${principal?.addressInformation?.mailingAddress?.city}, ${principal?.addressInformation?.mailingAddress?.state}, ${
-          principal?.addressInformation?.mailingAddress?.country
-        }`
-      : "";
 
   const handlePrincipalFatca = (fatcaDeclaration: IFatcaState) => {
     addPersonalInfo({
@@ -143,7 +134,7 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
         <LinkText onPress={handleRead} text={DECLARATIONS.READ_FATCA} style={fs12SemiBoldBlue1} />
       </View>
       <FatcaDeclarationDetails
-        address={principalAddress}
+        address={address}
         fatca={principal?.declaration?.fatca!}
         handleFatcaDeclaration={handlePrincipalFatca}
         validations={validationsPrincipal}

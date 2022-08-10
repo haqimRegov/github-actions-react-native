@@ -36,6 +36,7 @@ export function forceUpdateReducer(state = forceUpdateInitialState, action: Forc
 
     case "forceUpdate/RESET_FORCE_UPDATE":
       return {
+        address: undefined,
         disabledSteps: [
           "ContactSummary",
           "RiskAssessment",

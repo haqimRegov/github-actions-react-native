@@ -16,6 +16,7 @@ declare interface IRiskProfile {
 
 declare interface IAccountInvestorOverview {
   clientId: string;
+  lastUpdated?: string;
   name: string;
   id?: FileBase64 | null;
   idNumber: string;
@@ -24,14 +25,14 @@ declare interface IAccountInvestorOverview {
 }
 
 declare interface IStructuredInvestorProfile {
-  identificationDetails: LabeledTitleProps[];
-  personalDetails: LabeledTitleProps[];
-  contactDetails: LabeledTitleProps[];
-  permanentAddress: LabeledTitleProps[];
-  correspondenceAddress: LabeledTitleProps[];
-  employmentDetails: LabeledTitleProps[];
-  employmentAddress: LabeledTitleProps[];
+  identificationDetails: LabeledTitleProps[]; // required in Investor Profile ProfileTab
+  personalDetails: LabeledTitleProps[]; // required in Investor Profile ProfileTab
+  contactDetails: LabeledTitleProps[]; // required in OrderSummary, Investor Profile ProfileTab
+  permanentAddress: LabeledTitleProps[]; // required in Investor Profile ProfileTab
+  employmentDetails: LabeledTitleProps[]; // required in Investor Profile ProfileTab
+  employmentAddress: LabeledTitleProps[]; // required in Investor Profile ProfileTab
   declarations: {
+    // required in OrderSummary, Investor Profile DeclarationsTab
     crs: LabeledTitleProps[];
     crsTin: LabeledTitleProps[][];
     fatca: LabeledTitleProps[];

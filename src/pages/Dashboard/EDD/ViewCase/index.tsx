@@ -47,7 +47,6 @@ import {
 import { AccountSummary } from "../../../../templates";
 import { QuestionCard } from "../../../../templates/EDD/QuestionCard";
 import { AnimationUtils } from "../../../../utils/Animation";
-import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
 
 const { DASHBOARD_EDD, DASHBOARD_EDD_CASE, DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
@@ -389,7 +388,7 @@ export const ViewCaseComponent: FunctionComponent<ViewCaseProps> = ({
                     <AccountSummary
                       accountHolder="Principal"
                       accountType={profile.accountType!}
-                      data={structureProfile("Principal", profile, setFile, false)}
+                      data={structureEddProfile("Principal", profile, setFile, false)}
                       handleViewId={handleViewId}
                       idNumber={profile.idNumber}
                       idType={profile.idType}

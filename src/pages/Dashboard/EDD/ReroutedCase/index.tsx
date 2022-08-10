@@ -50,7 +50,6 @@ import {
 import { AccountSummary } from "../../../../templates";
 import { QuestionCard } from "../../../../templates/EDD/QuestionCard";
 import { AnimationUtils } from "../../../../utils/Animation";
-import { structureProfile } from "../../../../utils/ProfileStructuring";
 import { DashboardLayout } from "../../DashboardLayout";
 import { handleDataToSubmit } from "../helpers";
 import { validateSubmitCase } from "../validation";
@@ -535,7 +534,7 @@ export const ReroutedCaseComponent: FunctionComponent<ReroutedCaseProps> = ({
                     <AccountSummary
                       accountHolder="Principal"
                       accountType={profile.accountType!}
-                      data={structureProfile("Principal", profile, setFile, false)}
+                      data={structureEddProfile("Principal", profile, setFile, false)}
                       handleViewId={handleViewId}
                       idNumber={profile.idNumber}
                       idType={profile.idType}

@@ -8,7 +8,7 @@ import { isNotEmpty } from "./Value";
 
 const { DASHBOARD_PROFILE } = Language.PAGE;
 
-export const structureProfile = (
+export const structureEddProfile = (
   accountHolder: TypeAccountHolder,
   data: IOrderSummaryProfile,
   setFile: (value?: FileBase64) => void,

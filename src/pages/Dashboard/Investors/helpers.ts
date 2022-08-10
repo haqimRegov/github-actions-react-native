@@ -37,34 +37,54 @@ export const getStructuredAccountInformation = (account: IInvestorAccount) => {
     },
   ];
 
-  const mailingAddressLabel =
-    addressInformation!.mailingAddress!.address!.line2 !== undefined || addressInformation!.mailingAddress!.address!.line3 !== undefined
-      ? `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 1`
-      : ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS;
+  const mailingAddressSummary: LabeledTitleProps[] = [];
+  if (isNotEmpty(addressInformation)) {
+    if (isNotEmpty(addressInformation.mailingAddress)) {
+      if (isNotEmpty(addressInformation.mailingAddress.address)) {
+        const mailingAddressLabel =
+          isNotEmpty(addressInformation!.mailingAddress!.address!.line2) ||
+          isNotEmpty(addressInformation!.mailingAddress!.address!.line3) ||
+          isNotEmpty(addressInformation!.mailingAddress!.address!.line4)
+            ? `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 1`
+            : ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS;
 
-  const mailingAddressSummary: LabeledTitleProps[] = [
-    { label: mailingAddressLabel, title: addressInformation!.mailingAddress!.address!.line1!, titleStyle: fsTransformNone },
-    { label: ACCOUNT_INFORMATION.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
-    { label: ACCOUNT_INFORMATION.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
-    { label: ACCOUNT_INFORMATION.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
-    { label: ACCOUNT_INFORMATION.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
-  ];
+        mailingAddressSummary.push({
+          label: mailingAddressLabel,
+          title: addressInformation!.mailingAddress!.address!.line1 || "-",
+          titleStyle: fsTransformNone,
+        });
 
-  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
-    mailingAddressSummary.splice(1, 0, {
-      label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 2`,
-      title: addressInformation!.mailingAddress!.address!.line2!,
-      titleStyle: fsTransformNone,
-    });
-  }
+        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
+          mailingAddressSummary.push({
+            label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 2`,
+            title: addressInformation!.mailingAddress!.address!.line2 || "-",
+            titleStyle: fsTransformNone,
+          });
+        }
 
-  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
-    const index = addressInformation!.mailingAddress!.address!.line2 !== undefined ? 2 : 1;
-    mailingAddressSummary.splice(index, 0, {
-      label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 3`,
-      title: addressInformation!.mailingAddress!.address!.line3!,
-      titleStyle: fsTransformNone,
-    });
+        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
+          mailingAddressSummary.push({
+            label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 3`,
+            title: addressInformation!.mailingAddress!.address!.line3! || "-",
+            titleStyle: fsTransformNone,
+          });
+        }
+
+        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line4)) {
+          mailingAddressSummary.push({
+            label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 4`,
+            title: addressInformation!.mailingAddress!.address!.line4! || "-",
+            titleStyle: fsTransformNone,
+          });
+        }
+      }
+      mailingAddressSummary.push(
+        { label: ACCOUNT_INFORMATION.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
+        { label: ACCOUNT_INFORMATION.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
+        { label: ACCOUNT_INFORMATION.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
+        { label: ACCOUNT_INFORMATION.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
+      );
+    }
   }
 
   const localBankDetails: LabeledTitleProps[][] = [];

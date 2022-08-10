@@ -1,4 +1,5 @@
 export type ForceUpdateState = {
+  address?: string;
   disabledSteps: TypeForceUpdateKey[];
   declarations: string[];
   emailVerified?: boolean;
@@ -7,6 +8,7 @@ export type ForceUpdateState = {
 };
 
 export const forceUpdateInitialState: ForceUpdateState = {
+  address: undefined,
   disabledSteps: [
     "ContactSummary",
     "RiskAssessment",

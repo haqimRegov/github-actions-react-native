@@ -19,6 +19,7 @@ export const InvestorsMapStateToProps = (state: RootState) => ({
   currentAccount: state.investors.currentAccount,
   currentInvestor: state.investors.currentInvestor,
   currentOrder: state.transactions.currentOrder,
+  forceUpdate: state.forceUpdate,
   investors: state.investors,
   loading: state.global.loading,
   newSales: state.newSales,

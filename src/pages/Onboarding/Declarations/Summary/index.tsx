@@ -5,12 +5,8 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../../constants";
-import {
-  OPTION_CRS_NO_TIN_REQUIRED,
-  OPTIONS_CRS_TAX_RESIDENCY,
-  OPTIONS_CRS_TIN_REASONS,
-  OPTIONS_FATCA_NO_CERTIFICATE,
-} from "../../../../data/dictionary";
+import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
+import { getFatcaRequest } from "../../../../helpers";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomGray2, sh24 } from "../../../../styles";
@@ -145,12 +141,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     };
   });
 
-  const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
-  const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-  const principalCertReason =
-    principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0].label;
-  const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
-
   const jointTaxResident = joint!.declaration!.crs!.taxResident!;
 
   const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
@@ -165,12 +155,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     };
   });
 
-  const jointUsCitizen = joint!.declaration!.fatca!.usCitizen! === 0;
-  const jointUsBorn = joint!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-  const jointCertReason =
-    joint!.declaration!.fatca!.reason! === 1 ? joint!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0].label;
-  const jointConfirmAddress = joint!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
-
   const jointId =
     jointIdType === "Passport"
       ? [joint?.personalDetails?.id?.frontPage!]
@@ -178,6 +162,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   const jointAddress = { ...joint!.addressInformation! };
   delete jointAddress.sameAddress;
+
+  const jointFatcaRequest = accountType === "Joint" ? getFatcaRequest(joint!.declaration!.fatca!) : {};
 
   const jointDetails =
     accountType === "Joint"
@@ -190,21 +176,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               taxResident: jointTaxResident === -1 ? OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident] : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
               tin: jointTin,
             },
-            fatca: {
-              formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-              formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-              confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-              certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
-              noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-              reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
-              usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
-              usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
-            },
-            // fea: {
-            //   balance: parseAmountToString(joint!.declaration!.fea!.balance!),
-            //   borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
-            //   resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
-            // },
+            fatca: { ...jointFatcaRequest },
           },
           employmentDetails: joint!.employmentDetails,
           personalDetails: {
@@ -246,6 +218,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   if (jointEmploymentDetails !== undefined) {
     delete jointEmploymentDetails.isEnabled;
   }
+
+  const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
+
   const request: ISubmitClientAccountRequest = {
     initId: details!.initId!,
     isEtb: false,
@@ -278,16 +253,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
           tin: principalTin,
         },
-        fatca: {
-          formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-          formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-          confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-          certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
-          noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-          reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
-          usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
-          usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
-        },
+        fatca: { ...principalFatcaRequest },
         // fea: {
         //   balance: parseAmountToString(principal!.declaration!.fea!.balance!),
         //   borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",

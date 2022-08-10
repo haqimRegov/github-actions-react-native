@@ -4,12 +4,8 @@ import { connect } from "react-redux";
 
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../../components";
 import { Language } from "../../../../constants";
-import {
-  OPTION_CRS_NO_TIN_REQUIRED,
-  OPTIONS_CRS_TAX_RESIDENCY,
-  OPTIONS_CRS_TIN_REASONS_NEW,
-  OPTIONS_FATCA_NO_CERTIFICATE,
-} from "../../../../data/dictionary";
+import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS_NEW } from "../../../../data/dictionary";
+import { getFatcaRequest } from "../../../../helpers";
 import { submitChangeRequest } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh124, sh24, sh4, sh40, sw24 } from "../../../../styles";
@@ -61,11 +57,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
     };
   });
 
-  const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
-  const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-  const principalCertReason =
-    principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0].label;
-  const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
+  const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
 
   const request: ISubmitChangeRequestRequest = {
     id: details?.principalHolder?.id!,
@@ -88,18 +80,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
               tin: principalTin,
             }
           : undefined,
-        fatca: declarations.includes("fatca")
-          ? {
-              formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-              formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-              confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-              certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
-              noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-              reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
-              usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
-              usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
-            }
-          : undefined,
+        fatca: declarations.includes("fatca") ? { ...principalFatcaRequest } : undefined,
       },
     },
   };

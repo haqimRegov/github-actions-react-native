@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 
 import { Avatar, CustomFlexSpacer, CustomSpacer, IconButton, OutlineButton } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -85,11 +85,6 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
     ...py(sh8),
   };
 
-  const nameStyle: TextStyle = {
-    ...fs32BoldBlue1,
-    maxWidth: sw512,
-  };
-
   return (
     <View style={pageContainer}>
       <View style={container}>
@@ -98,7 +93,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
             <Avatar size={sw80} text={initials} textStyle={fs24BoldWhite1} type="client" />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={centerHorizontal}>
-              <Text style={nameStyle}>{name}</Text>
+              <Text style={{ ...fs32BoldBlue1, maxWidth: sw512 }}>{name}</Text>
               <CustomSpacer space={sh12} />
               <View style={rowCenterVertical}>
                 <Fragment>

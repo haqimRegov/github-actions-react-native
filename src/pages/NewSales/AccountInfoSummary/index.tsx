@@ -131,9 +131,6 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
         }
       : undefined;
 
-  const principalAddress = { ...principal!.addressInformation! };
-  delete principalAddress.sameAddress;
-
   const request: ISubmitClientAccountRequest = {
     initId: details!.initId!,
     isEtb: true,

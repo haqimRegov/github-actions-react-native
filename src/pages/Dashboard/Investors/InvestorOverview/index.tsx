@@ -10,13 +10,7 @@ import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../..
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
 import { getProductTabType } from "../../../../helpers";
 import { checkClient, clientRegister } from "../../../../network-actions";
-import {
-  ClientStoreProps,
-  InvestorsMapDispatchToProps,
-  InvestorsMapStateToProps,
-  InvestorsStoreProps,
-  productsInitialFilter,
-} from "../../../../store";
+import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps, productsInitialFilter } from "../../../../store";
 import {
   borderBottomGray2,
   centerHV,
@@ -32,7 +26,7 @@ import {
   shadow12Black112,
   sw24,
 } from "../../../../styles";
-import { isNotEmpty } from "../../../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
@@ -40,7 +34,7 @@ import { NewSalesPrompt } from "./NewSalesPrompt";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
-interface InvestorOverviewProps extends InvestorsStoreProps, ClientStoreProps {
+interface InvestorOverviewProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
   handleRoute: (route: DashboardPageType) => void;
   isLogout: boolean;
@@ -62,7 +56,7 @@ const initialJointInfo = {
   otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
 };
 
-export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
+const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   // addAccountDetails,
   addAccountType,
   // addRiskInfo,
@@ -72,12 +66,14 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
   addUtFilters,
   client,
   currentInvestor,
+  forceUpdate,
   newSales,
   personalInfo,
   resetClientDetails,
   riskAssessment,
   updateClient,
   updateCurrentAccount,
+  updateForceUpdate,
   updateShowOpenAccount,
   updateNewSales,
   updateTransactionType,
@@ -413,10 +409,6 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
         ...personalInfo,
         principal: {
           ...personalInfo.principal,
-          addressInformation: {
-            ...personalInfo.principal?.addressInformation,
-            mailingAddress: accountType === 1 ? undefined : investorData.address,
-          },
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
             dateOfBirth:
@@ -427,6 +419,29 @@ export const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps>
           },
         },
       });
+
+      const cleanAddressLines =
+        isNotEmpty(investorData) && isNotEmpty(investorData!.address) && isNotEmpty(investorData!.address.address)
+          ? Object.values(investorData!.address!.address!).filter((eachAddress) => isNotEmpty(eachAddress))
+          : [];
+
+      const addressLines = isArrayNotEmpty(cleanAddressLines)
+        ? cleanAddressLines.map((eachAddress, index) => (index !== cleanAddressLines.length - 1 ? `${eachAddress} ` : eachAddress)).join("")
+        : undefined;
+
+      const cleanAddress =
+        isNotEmpty(investorData) && isNotEmpty(investorData!.address)
+          ? {
+              address: isNotEmpty(addressLines) ? `${addressLines}, ` : undefined,
+              postCode: isNotEmpty(investorData!.address!.postCode) ? `${investorData!.address!.postCode} ` : undefined,
+              city: isNotEmpty(investorData!.address!.city) ? `${investorData!.address!.city}, ` : undefined,
+              state: isNotEmpty(investorData!.address!.state) ? `${investorData!.address!.state}, ` : undefined,
+              country: isNotEmpty(investorData!.address!.country) ? `${investorData!.address!.country}` : undefined,
+            }
+          : undefined;
+      const fatcaAddress = isNotEmpty(cleanAddress) ? Object.values(cleanAddress!).join("") : undefined;
+
+      updateForceUpdate({ ...forceUpdate, address: fatcaAddress });
       setAccountType(0);
       navigation.navigate("ForceUpdate");
     }

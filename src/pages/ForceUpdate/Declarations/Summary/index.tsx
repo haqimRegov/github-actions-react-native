@@ -57,7 +57,18 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
     };
   });
 
-  const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
+  const fatcaRequest = declarations.includes("fatca") ? { fatca: getFatcaRequest(principal!.declaration!.fatca!) } : {};
+  const crsRequest = declarations.includes("crs")
+    ? {
+        crs: {
+          taxResident:
+            principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
+          tin: principalTin,
+        },
+      }
+    : {};
+
+  const declarationRequest = { ...fatcaRequest, ...crsRequest };
 
   const request: ISubmitChangeRequestRequest = {
     id: details?.principalHolder?.id!,
@@ -72,16 +83,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
         })),
         emailAddress: principal!.contactDetails!.emailAddress!,
       },
-      declaration: {
-        crs: declarations.includes("crs")
-          ? {
-              taxResident:
-                principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
-              tin: principalTin,
-            }
-          : undefined,
-        fatca: declarations.includes("fatca") ? { ...principalFatcaRequest } : undefined,
-      },
+      declaration: declarationRequest,
     },
   };
 

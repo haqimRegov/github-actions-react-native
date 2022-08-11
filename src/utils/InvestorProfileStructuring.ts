@@ -200,7 +200,12 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_W9, title: "Yes" });
   }
 
-  if (isNotEmpty(fatca) && isNotEmpty(fatca!.usBorn) && booleanTextChange(fatca!.usBorn!) === "Yes") {
+  if (
+    isNotEmpty(fatca) &&
+    isNotEmpty(fatca!.usBorn) &&
+    booleanTextChange(fatca!.usBorn!) === "Yes" &&
+    booleanTextChange(fatca?.confirmAddress!) === "Yes"
+  ) {
     fatcaSummary.push({ label: INVESTOR_PROFILE.LABEL_W8BEN, title: "Yes" });
   }
 

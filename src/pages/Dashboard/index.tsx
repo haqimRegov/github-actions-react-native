@@ -77,18 +77,20 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleDataReset = (currentRoute: DashboardPageType) => {
-    switch (currentRoute) {
-      case "Transactions":
-        resetTransactions();
-        break;
-      case "Investors":
-        resetInvestors();
-        break;
-      case "EDD":
-        resetEDD();
-        break;
-      default:
-        resetTransactions();
+    if (currentRoute !== page) {
+      switch (currentRoute) {
+        case "Transactions":
+          resetTransactions();
+          break;
+        case "Investors":
+          resetInvestors();
+          break;
+        case "EDD":
+          resetEDD();
+          break;
+        default:
+          resetTransactions();
+      }
     }
   };
 

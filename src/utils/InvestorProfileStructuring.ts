@@ -3,6 +3,7 @@ import moment from "moment";
 import { DEFAULT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
+import { getAddress } from "../helpers";
 import { fsTransformNone, fsUppercase, sh4, sw328 } from "../styles";
 import { booleanTextChange } from "./Validator";
 import { isNotEmpty } from "./Value";
@@ -159,11 +160,10 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     },
   ];
 
-  const fatcaAddress = isNotEmpty(addressInformation)
-    ? `${Object.values(addressInformation!.mailingAddress!.address!).join("")}, ${addressInformation!.mailingAddress!.postCode}, ${
-        addressInformation!.mailingAddress!.city
-      }, ${addressInformation!.mailingAddress!.state}, ${addressInformation!.mailingAddress!.country}`
-    : "-";
+  const fatcaAddress =
+    isNotEmpty(addressInformation) && isNotEmpty(addressInformation!.mailingAddress)
+      ? getAddress(addressInformation!.mailingAddress)
+      : undefined;
 
   if (isNotEmpty(fatca) && isNotEmpty(fatca!.usCitizen) && booleanTextChange(fatca!.usCitizen!) === "No") {
     fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: booleanTextChange(fatca!.usBorn!) });

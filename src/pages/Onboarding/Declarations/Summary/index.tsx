@@ -6,11 +6,11 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer } from "../../../../components";
 import { Language, ONBOARDING_ROUTES } from "../../../../constants";
 import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
-import { getFatcaRequest } from "../../../../helpers";
+import { getAddress, getFatcaRequest } from "../../../../helpers";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomGray2, sh24 } from "../../../../styles";
-import { parseAmountToString } from "../../../../utils";
+import { isNotEmpty, parseAmountToString } from "../../../../utils";
 import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
@@ -349,6 +349,16 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   // const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
   const subtitle = accountType === "Joint" ? DECLARATION_SUMMARY.SUBHEADING_JOINT : DECLARATION_SUMMARY.SUBHEADING;
 
+  const principalFatcaAddress =
+    isNotEmpty(principal!.addressInformation) && isNotEmpty(principal!.addressInformation!.mailingAddress)
+      ? getAddress(principal!.addressInformation!.mailingAddress!)
+      : undefined;
+
+  const jointFatcaAddress =
+    accountType === "Joint" && isNotEmpty(joint!.addressInformation) && isNotEmpty(joint!.addressInformation!.mailingAddress)
+      ? getAddress(joint!.addressInformation!.mailingAddress!)
+      : undefined;
+
   return (
     <ContentPage
       handleCancel={handleBack}
@@ -358,6 +368,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       subtitle={subtitle}>
       <CustomSpacer space={sh24} />
       <DeclarationDetails
+        address={principalFatcaAddress}
         accountHolder="Principal"
         accountType={accountType}
         handleNextStep={handleNextStep}
@@ -371,6 +382,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           <View style={borderBottomGray2} />
           <CustomSpacer space={sh24} />
           <DeclarationDetails
+            address={jointFatcaAddress}
             accountHolder="Joint"
             accountType="Joint"
             handleNextStep={handleNextStep}

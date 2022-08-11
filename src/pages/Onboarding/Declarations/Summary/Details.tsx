@@ -32,6 +32,7 @@ import {
 const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
 interface DeclarationDetailsProps {
+  address?: string;
   accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
   handleNextStep: (route: TypeOnboardingRoute) => void;
@@ -57,6 +58,7 @@ const TitleIcon = ({ onPress, title, titleStyle }: TitleIconProps) => {
 };
 
 export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
+  address,
   accountHolder,
   accountType,
   handleNextStep,
@@ -105,7 +107,10 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
   if (fatca!.usCitizen === 1) {
     fatcaSummary.splice(1, 0, { label: DECLARATION_SUMMARY.LABEL_US_BORN, title: fatca!.usBorn === 0 ? "Yes" : "No" });
     if (fatca!.usBorn === 0) {
-      fatcaSummary.push({ label: DECLARATION_SUMMARY.LABEL_RESIDENT, title: fatca!.confirmAddress === 0 ? "Yes" : "No" });
+      fatcaSummary.push({
+        label: DECLARATION_SUMMARY.LABEL_RESIDENT,
+        title: fatca!.confirmAddress === 0 && address !== undefined ? address : "-",
+      });
       if (fatca!.certificate !== undefined) {
         fatcaSummary.push({
           label: DECLARATION_SUMMARY.LABEL_CERTIFICATE,

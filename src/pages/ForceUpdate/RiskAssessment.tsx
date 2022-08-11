@@ -114,6 +114,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
             })),
             emailAddress: principal!.contactDetails!.emailAddress!,
           },
+          declaration: {},
         },
       };
       fetching.current = true;

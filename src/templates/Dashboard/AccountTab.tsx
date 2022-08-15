@@ -9,7 +9,7 @@ import {
   colorBlue,
   flexChild,
   flexRow,
-  fs18BoldBlack2,
+  fs16BoldBlue1,
   fsTransformNone,
   fsUppercase,
   px,
@@ -99,7 +99,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
                             <CustomSpacer isHorizontal={true} space={sw8} />
                             <View style={flexChild}>
                               <View style={rowCenterVertical}>
-                                <Text style={fs18BoldBlack2}>{label}</Text>
+                                <Text style={fs16BoldBlue1}>{label}</Text>
                                 <CustomSpacer isHorizontal={true} space={sw16} />
                                 <View style={flexChild}>
                                   <View style={borderBottomBlue4} />
@@ -161,7 +161,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
                                 <CustomSpacer isHorizontal={true} space={sw8} />
                                 <View style={flexChild}>
                                   <View style={rowCenterVertical}>
-                                    <Text style={fs18BoldBlack2}>{label}</Text>
+                                    <Text style={fs16BoldBlue1}>{label}</Text>
                                     <CustomSpacer isHorizontal={true} space={sw16} />
                                     <View style={flexChild}>
                                       <View style={borderBottomBlue4} />

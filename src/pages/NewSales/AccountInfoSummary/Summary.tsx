@@ -20,7 +20,6 @@ import {
   flexRow,
   fs10BoldBlue1,
   fs10RegGray6,
-  fs12BoldBlack2,
   fs12BoldGray5,
   fs16BoldBlack2,
   fs16BoldBlue1,
@@ -302,9 +301,10 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
             <View style={rowCenterVertical}>
               <CustomSpacer isHorizontal={true} space={sw24} />
               <View style={flexRow}>
-                <Text style={fs10RegGray6}>{accountType}</Text>
+                <Text style={fs10RegGray6}>{`${accountType} ${NEW_SALES_SUMMARY.LABEL_ACCOUNT}`}</Text>
                 <CustomSpacer isHorizontal={true} space={sw16} />
-                <Text style={fs12BoldBlack2}>-</Text>
+                {/* TOMS ID  */}
+                {/* <Text style={fs12BoldBlack2}>-</Text> */}
               </View>
             </View>
           }

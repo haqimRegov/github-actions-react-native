@@ -32,7 +32,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   updateProductType,
 }: ProductListProps) => {
   const previousType = usePrevious<ProductType>(productType, true);
-  const { accountNo, fundType } = accountDetails;
+  const { accountNo } = accountDetails;
 
   const handleProductType = (type: ProductType) => {
     setScrollEnabled(true);
@@ -75,7 +75,6 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
         resetAMPFilter();
         break;
       default:
-        resetUTFilter();
     }
   };
 

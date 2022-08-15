@@ -17,7 +17,6 @@ import {
   flexRow,
   fs10BoldGray5,
   fs10RegGray4,
-  fs10RegGray5,
   fs18BoldBlack2,
   noBGColor,
   noBorderBottom,
@@ -116,7 +115,14 @@ export const SubmissionSummaryCollapsible: FunctionComponent<SubmissionSummaryCo
                                         {document.remarks.map((docRemark, remark: number) => {
                                           return (
                                             <Fragment key={remark}>
-                                              <ParsedText style={fs10BoldGray5} parse={[{ pattern: /\(\w+\)/, style: fs10RegGray5 }]}>
+                                              <ParsedText
+                                                style={fs10BoldGray5}
+                                                parse={[
+                                                  {
+                                                    pattern: /(?:Principal Holder|Joint Holder|Principal & Joint Holder)/,
+                                                    style: fs10RegGray4,
+                                                  },
+                                                ]}>
                                                 {docRemark}
                                               </ParsedText>
                                             </Fragment>

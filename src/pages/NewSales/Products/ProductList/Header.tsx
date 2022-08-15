@@ -166,7 +166,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     }
   };
 
-  const headerLabel = accountNo !== "" ? handleHeader() : PRODUCT_LIST.HEADING;
+  const headerLabel = accountNo !== "" ? handleHeader() : PRODUCT_LIST.HEADING_NEW;
 
   const overflow: ViewStyle = showMorePills ? {} : { height: sh40, overflow: "hidden" };
 

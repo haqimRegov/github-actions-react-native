@@ -40,7 +40,9 @@ import {
   fs12BoldBlue1,
   fs12RegBlack2,
   fs16BoldBlue1,
+  fs16BoldGray6,
   fs16RegBlack2,
+  fs16RegGray6,
   fs20BoldBlack2,
   fs24BoldGray6,
   fsTransformNone,
@@ -201,9 +203,8 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   const handleAims = () => {
     RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
   };
-  const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_SKIP;
-  const name = client.accountType === "Joint" ? `${principalHolder!.name!} and ${jointHolder!.name!}` : principalHolder!.name!;
-  const heading = `${RISK_ASSESSMENT.NEW_SALES_HEADING} ${name}`;
+  const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_NEXT;
+  const heading = RISK_ASSESSMENT.NEW_SALES_HEADING;
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
 
   const buttonStyle: ViewStyle = {
@@ -219,11 +220,12 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   const checkEpf = isEpf === true ? "EPF" : "Cash";
   const tags = accountNo !== "" ? [fundType.toUpperCase(), checkEpf] : [];
-  const checkJointHeader = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_2;
+  const checkJointHeader = RISK_ASSESSMENT.NEW_SALES_HEADING_2_JOINT;
   const header = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : checkJointHeader;
-  const checkJointSubtitle = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
-  const subtitle = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : checkJointSubtitle;
-  const checkAccountNo = accountNo !== "" ? accountNo : "-";
+  // const checkJointSubtitle = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
+  // const subtitle = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND : RISK_ASSESSMENT.NEW_SALES_HEADING_3;
+  const subtitle = RISK_ASSESSMENT.NEW_SALES_HEADING_3_NEW_FUND;
+  const checkAccountNo = accountNo !== "" ? accountNo : null;
 
   const checkLabel = client.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
 
@@ -253,7 +255,6 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
     accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
   const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
   const clientId = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
-
   return (
     <View style={flexChild}>
       {page === 0 ? (
@@ -411,6 +412,17 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
             labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
             labelSubmit={checkContinueLabel}
             submitOnPress={handlePageContinue}
+            bottomContent={
+              isRiskUpdated === true ? (
+                <Fragment>
+                  <View style={flexRow}>
+                    <Text style={fs16BoldGray6}>{RISK_ASSESSMENT.BANNER_RISK_ASSESSMENT}</Text>
+                    <CustomSpacer isHorizontal space={sw4} />
+                    <Text style={fs16RegGray6}>{RISK_ASSESSMENT.BANNER_UPDATED}</Text>
+                  </View>
+                </Fragment>
+              ) : null
+            }
           />
         </Fragment>
       ) : null}

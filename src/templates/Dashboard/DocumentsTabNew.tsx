@@ -9,7 +9,7 @@ import {
   borderBottomBlue4,
   colorBlue,
   flexChild,
-  fs16BoldBlack2,
+  fs16BoldBlue1,
   fsTransformNone,
   px,
   rowCenterVertical,
@@ -110,7 +110,7 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
                                   <View style={rowCenterVertical}>
                                     <IcoMoon name="house" size={sh20} color={colorBlue._1} />
                                     <CustomSpacer isHorizontal={true} space={sw8} />
-                                    <Text style={fs16BoldBlack2}>{products.mainHeader}</Text>
+                                    <Text style={fs16BoldBlue1}>{products.mainHeader}</Text>
                                     <CustomSpacer isHorizontal={true} space={sw16} />
                                     <View style={flexChild}>
                                       <View style={borderBottomBlue4} />

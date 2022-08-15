@@ -6,6 +6,7 @@ declare interface IAccountList {
   fundType: string;
   isJoint: boolean;
   isRecurring: boolean;
+  isSyariah: boolean;
   jointName: string | null;
   name: string;
   paymentMethod: string;

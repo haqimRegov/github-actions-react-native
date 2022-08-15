@@ -34,6 +34,7 @@ declare interface IInvestorAccountsData {
   idNumber: string;
   idType: string;
   isRecurring: boolean;
+  isSyariah: boolean;
   jointDeclarationRequired: string[] | null;
   jointEmail: string;
   jointId: string;

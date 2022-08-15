@@ -620,7 +620,10 @@ const submitProofOfPayments = gql`
             }
             docList {
               title
-              remarks
+              remarks {
+                principalHolder
+                jointHolder
+              }
             }
           }
           withFloating

@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, LabeledTitle, Loading, RNModal } from "../../../components";
@@ -13,6 +13,7 @@ import {
   centerHV,
   colorBlack,
   colorWhite,
+  disabledOpacity6,
   flexRow,
   flexWrap,
   fs16RegGray5,
@@ -226,10 +227,14 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                 const handleSelectAccount = async () => {
                   await handleClientRegister(eachAccount);
                 };
+                const checkAmpStyle: ViewStyle = eachAccount.fundType === "AMP" ? disabledOpacity6 : {};
+                const checkPointerEvents = eachAccount.fundType === "AMP" ? "none" : "auto";
                 return (
                   <Fragment key={index}>
                     {index % 2 !== 0 ? <CustomSpacer isHorizontal={true} space={sw24} /> : null}
-                    <AccountCard data={eachAccount} handlePress={handleSelectAccount} />
+                    <View style={checkAmpStyle} pointerEvents={checkPointerEvents}>
+                      <AccountCard data={eachAccount} handlePress={handleSelectAccount} />
+                    </View>
                   </Fragment>
                 );
               })}

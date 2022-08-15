@@ -49,15 +49,15 @@ interface ITagStyle {
 }
 
 export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handlePress, style }: IAccountCardProps) => {
-  const { accountNo, fundType, name, isJoint, jointName, paymentMethod } = data;
+  const { accountNo, fundType, name, isJoint, jointName, paymentMethod, riskTolerance } = data;
 
   const handleTagStyle = (text: string): ITagStyle => {
     switch (text) {
-      case "Low Risk":
+      case "Low":
         return { container: { backgroundColor: colorGreen._2, borderColor: colorGreen._1 }, text: { color: colorGreen._1 } };
-      case "Medium Risk":
+      case "Medium":
         return { container: { backgroundColor: colorYellow._3, borderColor: colorYellow._2 }, text: { color: colorYellow._2 } };
-      case "High Risk":
+      case "High":
         return { container: { backgroundColor: colorRed._4, borderColor: colorRed._2 }, text: { color: colorRed._2 } };
       default:
         return { container: {}, text: {} };
@@ -74,7 +74,7 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
     width: sw404,
     ...style,
   };
-  const tags = [fundType, paymentMethod];
+  const tags = [fundType, paymentMethod, riskTolerance];
   const checkIconName = isJoint === true ? "avatar-joint" : "avatar";
   const checkAccountType = isJoint === true ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
   return (
@@ -113,11 +113,12 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
                       borderRadius: sw4,
                       ...checkTagStyle.container,
                     };
+                    const checkContent = tagIndex === tags.length - 1 ? `${eachTag} Risk` : eachTag;
                     return (
                       <Fragment key={tagIndex}>
                         {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
                         <View key={tagIndex} style={tagStyle}>
-                          <Text style={{ ...fs10RegGray5, ...checkTagStyle.text }}>{eachTag}</Text>
+                          <Text style={{ ...fs10RegGray5, ...checkTagStyle.text }}>{checkContent}</Text>
                         </View>
                       </Fragment>
                     );

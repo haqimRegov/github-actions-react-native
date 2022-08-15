@@ -62,7 +62,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   addRiskScore,
   addClientDetails,
   addPersonalInfo,
-  addPrsFilters,
+  addPrsDefaultFilters,
   addUtFilters,
   client,
   currentInvestor,
@@ -483,7 +483,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       }
       if (getProductTabType(item.fundType) === "prsDefault") {
         const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
-        addPrsFilters({ ...productsInitialFilter, ...syariahConventional });
+        addPrsDefaultFilters({ ...productsInitialFilter, ...syariahConventional });
       }
       updateProductType(getProductTabType(item.fundType));
       if (check === true) {

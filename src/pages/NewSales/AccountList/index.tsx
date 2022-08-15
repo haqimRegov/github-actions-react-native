@@ -41,7 +41,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   addClientDetails,
   addPersonalInfo,
   addRiskScore,
-  addPrsFilters,
+  addPrsDefaultFilters,
   addUtFilters,
   client,
   handleNextStep,
@@ -182,7 +182,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           }
           if (getProductTabType(eachAccount.fundType) === "prsDefault") {
             const syariahConventional = eachAccount.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
-            addPrsFilters({ ...productsInitialFilter, ...syariahConventional });
+            addPrsDefaultFilters({ ...productsInitialFilter, ...syariahConventional });
           }
           updateProductType(getProductTabType(eachAccount.fundType));
           updateNewSales({

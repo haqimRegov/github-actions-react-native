@@ -13,7 +13,7 @@ import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, Ackn
 import { GetEmbeddedBase64 } from "../../../../utils";
 import { PdfViewNewSales, Signer } from "./EditPDFView";
 
-const { TERMS_AND_CONDITIONS } = Language.PAGE;
+const { PERSONAL_DETAILS, TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
   adviser: { x: 16, y: 158 },
@@ -29,6 +29,7 @@ interface EditPdfProps extends AcknowledgementStoreProps {
 const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   accountType,
   editReceipt,
+  newSales,
   personalInfo,
   receipts,
   setEditReceipt,
@@ -47,6 +48,11 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
+  const { signatory } = personalInfo;
+  const { accountDetails } = newSales;
+  const { accountNo, authorisedSignatory } = accountDetails;
+
+  const updatedSignatory = accountNo !== "" ? authorisedSignatory : signatory;
 
   const modifyPdf = async (value: string) => {
     if (editReceipt !== undefined && signer !== undefined) {
@@ -285,12 +291,31 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
-
   const checkJointSignature = jointAge !== undefined && jointAge >= 18 ? jointSignature !== "" : true;
-  const completed =
-    accountType === "Individual"
-      ? adviserSignature !== "" && principalSignature !== ""
-      : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+  const checkSignatory = () => {
+    switch (updatedSignatory) {
+      case PERSONAL_DETAILS.OPTION_CONTROL_BOTH_NEW:
+        return adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+
+      case PERSONAL_DETAILS.OPTION_CONTROL_EITHER_NEW:
+        return accountNo !== ""
+          ? adviserSignature !== "" && (principalSignature !== "" || checkJointSignature === true)
+          : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+
+      case PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW: {
+        const checkSign =
+          accountNo !== ""
+            ? adviserSignature !== "" && principalSignature !== ""
+            : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+        return accountType === "Individual" ? adviserSignature !== "" && principalSignature !== "" : checkSign;
+      }
+
+      default:
+        return adviserSignature !== "" && principalSignature !== "";
+    }
+  };
+
+  const completed = checkSignatory();
 
   useEffect(() => {
     if (signer !== undefined) {

@@ -17,12 +17,11 @@ import {
   flexRow,
   fs12BoldGray5,
   fs12RegGray5,
-  fs14BoldBlack2,
   fs14BoldBlue1,
   fs14BoldGray5,
   fs14RegGray6,
   fs16BoldBlack2,
-  fs18BoldBlack2,
+  fs16BoldBlue1,
   fsTransformNone,
   px,
   rowCenterVertical,
@@ -32,6 +31,7 @@ import {
   sh32,
   sh8,
   sw16,
+  sw168,
   sw24,
   sw32,
   sw328,
@@ -146,6 +146,9 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
 
   const moreOrderDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_TYPE, title: transactionDetails.accountType, titleStyle: fsTransformNone },
+  ];
+
+  const totalInvestmentDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 
@@ -221,40 +224,49 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                 <Fragment>
                   <View style={borderBottomBlue2} />
                   <CustomSpacer space={sh16} />
-                  <Text style={fs12BoldGray5}>{DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_NUMBER}</Text>
-                  {typeof transactionDetails.accountNumber === "string" ? null : (
-                    <Fragment>
-                      {transactionDetails.accountNumber.map((acctNo: string, index: number) => {
-                        const handleViewDetails = () => {
-                          handleViewAccountDetails({ accountNumber: acctNo, clientId: investor.clientId! });
-                        };
-                        return (
-                          <View key={index}>
-                            <View style={rowCenterVertical}>
-                              <Text style={fs16BoldBlack2}>{acctNo}</Text>
-                              <CustomSpacer isHorizontal={true} space={sw8} />
-                              <IconText
-                                color={colorBlue._8}
-                                iconPosition="right"
-                                name="arrow-right"
-                                onPress={handleViewDetails}
-                                spaceBetween={sw4}
-                                text={DASHBOARD_ORDER_DETAILS.LINK_VIEW_DETAILS}
-                              />
-                            </View>
-                          </View>
-                        );
-                      })}
-                    </Fragment>
-                  )}
-                  <CustomSpacer space={sh16} />
+                  <View style={flexRow}>
+                    <View>
+                      <Text style={fs12BoldGray5}>{DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_NUMBER}</Text>
+                      {typeof transactionDetails.accountNumber === "string" ? null : (
+                        <Fragment>
+                          {transactionDetails.accountNumber.map((acctNo: string, index: number) => {
+                            const handleViewDetails = () => {
+                              handleViewAccountDetails({ accountNumber: acctNo, clientId: investor.clientId! });
+                            };
+                            return (
+                              <View key={index}>
+                                <View style={rowCenterVertical}>
+                                  <Text style={fs16BoldBlack2}>{acctNo}</Text>
+                                  <CustomSpacer isHorizontal={true} space={sw8} />
+                                  <IconText
+                                    color={colorBlue._8}
+                                    iconPosition="right"
+                                    name="arrow-right"
+                                    onPress={handleViewDetails}
+                                    spaceBetween={sw4}
+                                    text={DASHBOARD_ORDER_DETAILS.LINK_VIEW_DETAILS}
+                                  />
+                                </View>
+                              </View>
+                            );
+                          })}
+                        </Fragment>
+                      )}
+                      <CustomSpacer space={sh16} />
+                    </View>
+
+                    {transactionType !== "CR" ? (
+                      <Fragment>
+                        <CustomSpacer isHorizontal={true} space={sw168} />
+                        <TextCard data={moreOrderDetails} />
+                      </Fragment>
+                    ) : null}
+                  </View>
                 </Fragment>
               ) : null}
               {transactionType !== "CR" ? (
                 <Fragment>
-                  <View style={borderBottomBlue2} />
-                  <CustomSpacer space={sh16} />
-                  <TextCard data={moreOrderDetails} itemStyle={{ width: sw328 }} />
+                  <TextCard data={totalInvestmentDetails} itemStyle={{ width: sw328 }} />
                 </Fragment>
               ) : null}
             </View>
@@ -344,7 +356,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <View style={{ ...rowCenterVertical, ...flexChild }}>
                             <View>
-                              <Text style={fs18BoldBlack2}>{investment.fundName}</Text>
+                              <Text style={fs16BoldBlue1}>{investment.fundName}</Text>
                               <Text style={fs12RegGray5}>{investment.fundIssuer}</Text>
                             </View>
                             <CustomSpacer isHorizontal={true} space={sw16} />
@@ -595,7 +607,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           {payment.paymentMethod === "EPF" ? (
                             <Fragment>
-                              <Text style={fs18BoldBlack2}>{titleCaseString(paymentLabel!)}</Text>
+                              <Text style={fs16BoldBlue1}>{titleCaseString(paymentLabel!)}</Text>
                               <CustomSpacer isHorizontal={true} space={sw16} />
                               <View style={flexChild}>
                                 <View style={borderBottomBlue5} />
@@ -603,14 +615,14 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                               <CustomSpacer isHorizontal={true} space={sw16} />
                               {isNotEmpty(payment.fundCurrency && payment.investmentAmount) ? (
                                 <View>
-                                  <Text style={fs14BoldBlack2}>{`${payment.fundCurrency} ${payment.investmentAmount}`}</Text>
+                                  <Text style={fs14BoldBlue1}>{`${payment.fundCurrency} ${payment.investmentAmount}`}</Text>
                                 </View>
                               ) : null}
                             </Fragment>
                           ) : (
                             <View style={flexChild}>
                               <View style={rowCenterVertical}>
-                                <Text style={fs18BoldBlack2}>{titleCaseString(paymentLabel!)}</Text>
+                                <Text style={fs16BoldBlue1}>{titleCaseString(paymentLabel!)}</Text>
                                 <CustomSpacer isHorizontal={true} space={sw16} />
                                 <View style={flexChild}>
                                   <View style={borderBottomBlue4} />
@@ -618,7 +630,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                                 <CustomSpacer isHorizontal={true} space={sw16} />
                                 {isNotEmpty(payment.fundCurrency && payment.investmentAmount) ? (
                                   <View>
-                                    <Text style={fs14BoldBlack2}>{`${payment.fundCurrency} ${payment.investmentAmount}`}</Text>
+                                    <Text style={fs14BoldBlue1}>{`${payment.fundCurrency} ${payment.investmentAmount}`}</Text>
                                   </View>
                                 ) : null}
                               </View>

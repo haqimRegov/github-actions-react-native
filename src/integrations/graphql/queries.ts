@@ -106,6 +106,10 @@ const etbCheck = gql`
             fundType
             paymentMethod
             isRecurring
+            declarationRequired
+            riskTolerance
+            authorisedSignatory
+            currency
           }
         }
       }
@@ -127,6 +131,9 @@ const etbAccountList = gql`
           etbAccountList {
             accountNumber
             description
+            authorisedSignatory
+            riskTolerance
+            currency
           }
         }
       }
@@ -401,11 +408,12 @@ const investorDetailsDashboard = gql`
               line1
               line2
               line3
+              line4
             }
             city
             country
-            postCode
             state
+            postCode
           }
           initId
           idNumber
@@ -437,6 +445,10 @@ const investorDetailsDashboard = gql`
             fundType
             isRecurring
             jointDeclarationRequired
+            authorisedSignatory
+            principalRisk
+            jointRisk
+            currency
           }
         }
       }

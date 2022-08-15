@@ -6,6 +6,7 @@ import { ConfirmationModal, CustomSpacer, SelectionBanner } from "../../../compo
 import { Language, NunitoRegular } from "../../../constants";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild, flexCol, flexRow, fs16BoldGray6, fs16RegGray6, sh56, sw4 } from "../../../styles";
+import { isArrayNotEmpty } from "../../../utils";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
 
@@ -22,6 +23,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addSelectedFund,
   addViewFund,
   handleNextStep,
+  global,
   investmentDetails,
   newSales,
   resetProducts,
@@ -33,6 +35,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
+  const { isMultiUtmc } = global;
+  const { disabledSteps, transactionType } = newSales;
   const [page] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
@@ -146,7 +150,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const sortedInvestmentArray = [...kenangaArray, ...sortedWithoutKenanga];
     addInvestmentDetails(sortedInvestmentArray);
 
-    const updatedDisabledSteps: TypeNewSalesKey[] = [...newSales.disabledSteps];
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
     const findProductList = updatedDisabledSteps.indexOf("ProductsList");
     if (findProductList !== -1) {
       updatedDisabledSteps.splice(findProductList, 1);
@@ -219,6 +223,17 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     );
   });
 
+  const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
+  const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
+  const selectViewFundDisabled =
+    isMultiUtmc === false &&
+    transactionType === "Sales-NS" &&
+    isArrayNotEmpty(selectedFunds) &&
+    selectedUtmc !== undefined &&
+    viewFund !== undefined
+      ? viewFund.issuingHouse !== selectedUtmc
+      : false;
+
   let screen = {
     content: (
       <ProductList
@@ -239,6 +254,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       ...screen,
       content: (
         <ProductDetails
+          disabled={selectViewFundDisabled}
           fund={viewFund}
           handleBack={handleBack}
           handleShareDocuments={handleShareDocuments}

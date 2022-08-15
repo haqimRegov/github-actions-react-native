@@ -29,6 +29,8 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   addUtSort,
   addViewFund,
   // details,
+  global,
+  newSales,
   products,
   productType,
   resetSelectedFund,
@@ -42,6 +44,8 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   updateUtShowBy,
   updateAvailableFilters,
 }: UnitTrustProps) => {
+  const { isMultiUtmc } = global;
+  const { transactionType } = newSales;
   const navigation = useNavigation<IStackNavigationProp>();
   const { availableFilters } = products;
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.ut;
@@ -256,19 +260,21 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
+        isMultiUtmc={isMultiUtmc}
         loading={loading}
-        list={loading === true ? [] : list}
+        list={loading === true ? [] : (list as unknown as ITableData[])}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
         // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
-        selectedFunds={selectedFunds}
+        selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}
         showBy={showBy}
         sort={sort}
         totalCount={totalCount}
+        transactionType={transactionType}
         updateFilter={handleUpdateFilter}
         updateSort={addUtSort}
       />

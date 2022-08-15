@@ -5,6 +5,7 @@ import Collapsible from "react-native-collapsible";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, StatusBadge } from "../../../../components";
 import { Language } from "../../../../constants";
+import { getProductTabType } from "../../../../helpers";
 import {
   absolutePosition,
   centerHorizontal,
@@ -80,7 +81,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
-  const { accountNo } = accountDetails;
+  const { accountNo, fundType } = accountDetails;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   const [showMorePills, setShowMorePills] = useState<boolean>(false);
   const filterKeys = isNotEmpty(currentFilter) ? Object.keys(currentFilter) : [];
@@ -248,6 +249,12 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                       case "EPF Approved: Yes":
                       case "EPF Approved: No":
                         if (accountNo !== "") {
+                          return true;
+                        }
+                        return false;
+                      case "Type: Conventional":
+                      case "Type: Shariah":
+                        if (getProductTabType(fundType) === "prsDefault") {
                           return true;
                         }
                         return false;

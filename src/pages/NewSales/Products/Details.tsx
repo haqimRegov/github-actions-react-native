@@ -56,6 +56,7 @@ import { formatAmount } from "../../../utils";
 const { PRODUCT_DETAILS } = Language.PAGE;
 
 interface ProductDetailsProps {
+  disabled?: boolean;
   fund: IProduct;
   handleBack: () => void;
   handleShareDocuments: () => void;
@@ -64,6 +65,7 @@ interface ProductDetailsProps {
   setViewFund: (data: IProduct | undefined) => void;
 }
 export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
+  disabled,
   fund,
   handleBack,
   selectedFunds,
@@ -289,6 +291,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
             <CustomFlexSpacer />
             <RoundedButton
               buttonStyle={buttonStyle}
+              disabled={disabled}
               icon="check"
               onPress={handleSelect}
               text={PRODUCT_DETAILS.LABEL_SELECT_THIS_FUND}

@@ -8,7 +8,7 @@ import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomFlexSpacer, CustomSpacer, Loading, Pagination, PromptModal, RNModal, Tab } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
-import { getAddress, getProductTabType } from "../../../../helpers";
+import { getAddress, getProductTabType, handleSignatoryFromBE } from "../../../../helpers";
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps, productsInitialFilter } from "../../../../store";
 import {
@@ -218,6 +218,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               accountDetails: {
                 ...newSales.accountDetails,
                 accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
+                authorisedSignatory: item !== undefined ? handleSignatoryFromBE(item.authorisedSignatory) : "",
                 fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
                 isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
                 isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
@@ -267,7 +268,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           const updatedEmailPrincipal = isNtb !== true ? { emailAddress: investorData?.email } : {};
           const updatedEmailJoint = isNtb !== true && accountType === 1 ? { emailAddress: investorData?.email } : {};
           const updatedJointInfo: IHolderInfoState =
-            accountType === 1
+            accountType === 1 || data.result.jointHolder !== null
               ? {
                   ...personalInfo.joint,
                   contactDetails: {

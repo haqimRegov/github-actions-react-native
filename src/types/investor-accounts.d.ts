@@ -23,8 +23,10 @@ declare interface IInvestorAccountsData {
   accountHolder: TypeAccountHolder;
   accountNo: string;
   accountOpeningDate: string;
+  authorisedSignatory: string;
   address: IAddressState;
   clientId: string;
+  currency: string[];
   dateOfBirth: string;
   email: string;
   fundType: string;

@@ -19,6 +19,7 @@ export type NewSalesState = {
 export const newSalesInitialState: NewSalesState = {
   accountDetails: {
     accountNo: "",
+    authorisedSignatory: "",
     fundType: "ut",
     isEpf: undefined,
     isRecurring: undefined,

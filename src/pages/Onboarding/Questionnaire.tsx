@@ -225,6 +225,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         handleCancel={handleCancelOnboarding}
         handleContinue={handlePageContinue}
         heading={`${RISK_ASSESSMENT.HEADING} ${name},`}
+        headingStyle={{ lineHeight: sh56 }}
         subheading={RISK_ASSESSMENT.SUBHEADING}>
         <View style={flexRow}>
           <CustomSpacer isHorizontal={true} space={sw24} />

@@ -1803,6 +1803,11 @@ export const english = {
       BADGE_SUBMITTING: "Submitting",
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",
+      LABEL_JOINT: "Joint Holder",
+      LABEL_PRINCIPAL_JOINT: "Principal & Joint Holder",
+      LABEL_PRINCIPAL: "Principal Holder",
+      TITLE_PAYMENT: "Total Payment",
+      TITLE_SOFTCOPY: "Softcopy Documents",
     },
     SUMMARY: {
       HEADING: "Summary",

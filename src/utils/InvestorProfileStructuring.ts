@@ -24,32 +24,12 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     },
   ];
 
-  if (idType === "Passport") {
-    identificationDetails.push(
-      {
-        label: INVESTOR_PROFILE.LABEL_COUNTRY,
-        title: isNotEmpty(personalDetails) && isNotEmpty(personalDetails!.countryOfBirth) ? personalDetails!.countryOfBirth : "-",
-      },
-      {
-        label: INVESTOR_PROFILE.LABEL_EXPIRATION,
-        title:
-          isNotEmpty(personalDetails) && isNotEmpty(personalDetails!.expirationDate)
-            ? moment(data.personalDetails!.expirationDate, "x").format(DEFAULT_DATE_FORMAT)
-            : "-",
-      },
-    );
-  }
-
   const personalDetailsSummary: LabeledTitleProps[] = [
     {
       label: INVESTOR_PROFILE.LABEL_SALUTATION,
       title: personalDetails !== null && personalDetails.salutation ? personalDetails.salutation : "-",
     },
     { label: INVESTOR_PROFILE.LABEL_GENDER, title: personalDetails !== null && personalDetails.gender ? personalDetails.gender : "-" },
-    {
-      label: INVESTOR_PROFILE.LABEL_NATIONALITY,
-      title: personalDetails !== null && personalDetails.nationality ? personalDetails.nationality : "-",
-    },
     {
       label: INVESTOR_PROFILE.LABEL_PLACE_OF_BIRTH,
       title: personalDetails !== null && personalDetails.placeOfBirth ? personalDetails.placeOfBirth : "-",
@@ -73,6 +53,26 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       title: personalDetails !== null && personalDetails.maritalStatus ? personalDetails.maritalStatus : "-",
     },
   ];
+
+  if (idType === "Passport") {
+    identificationDetails.push(
+      {
+        label: INVESTOR_PROFILE.LABEL_COUNTRY,
+        title: isNotEmpty(personalDetails) && isNotEmpty(personalDetails!.countryOfBirth) ? personalDetails!.countryOfBirth : "-",
+      },
+      {
+        label: INVESTOR_PROFILE.LABEL_EXPIRATION,
+        title:
+          isNotEmpty(personalDetails) && isNotEmpty(personalDetails!.expirationDate)
+            ? moment(data.personalDetails!.expirationDate, "x").format(DEFAULT_DATE_FORMAT)
+            : "-",
+      },
+    );
+    personalDetailsSummary.splice(2, 0, {
+      label: INVESTOR_PROFILE.LABEL_NATIONALITY,
+      title: personalDetails !== null && personalDetails.nationality ? personalDetails.nationality : "-",
+    });
+  }
 
   if (personalDetails !== null && personalDetails.race !== null && personalDetails.bumiputera !== null && idType !== "Passport") {
     personalDetailsSummary.splice(

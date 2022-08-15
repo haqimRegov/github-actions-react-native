@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { Alert, FlatList, Keyboard, Text, View, ViewStyle } from "react-native";
+import { Alert, FlatList, Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -33,6 +33,7 @@ import {
   colorWhite,
   flexChild,
   flexCol,
+  flexGrow,
   flexRow,
   fs10RegGray5,
   fs14BoldBlack2,
@@ -53,6 +54,7 @@ import {
   sh124,
   sh16,
   sh24,
+  sh240,
   sh4,
   sh40,
   shadow4Blue008,
@@ -620,32 +622,36 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               titleStyle={{ ...fs24BoldGray6, ...alignSelfStart }}>
               <View style={fullWidth}>
                 <CustomSpacer space={sh24} />
-                <View style={border(colorBlue._3, sw1, sw8)}>
-                  {etbAccountList
-                    .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
-                    .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
-                      const containerStyle: ViewStyle = {
-                        ...px(sw24),
-                        ...py(sh12),
-                        ...rowCenterVertical,
-                        backgroundColor: colorWhite._1,
-                        borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
-                        borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
-                        borderTopLeftRadius: index === 0 ? sw8 : 0,
-                        borderTopRightRadius: index === 0 ? sw8 : 0,
-                        borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
-                        borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
-                      };
-                      return (
-                        <View key={index} style={containerStyle}>
-                          <IcoMoon color={colorBlue._1} name="duplicate-account" size={sw16} />
-                          <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={{ ...fs14BoldBlue1, width: sw96 }}>{eachDuplicateAccount.accountNumber}</Text>
-                          <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
-                        </View>
-                      );
-                    })}
+                <View style={{ maxHeight: sh240 }}>
+                  <ScrollView bounces={false} contentContainerStyle={flexGrow} showsVerticalScrollIndicator={false}>
+                    <View style={border(colorBlue._3, sw1, sw8)}>
+                      {etbAccountList
+                        .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
+                        .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
+                          const containerStyle: ViewStyle = {
+                            ...px(sw24),
+                            ...py(sh12),
+                            ...rowCenterVertical,
+                            backgroundColor: colorWhite._1,
+                            borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
+                            borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
+                            borderTopLeftRadius: index === 0 ? sw8 : 0,
+                            borderTopRightRadius: index === 0 ? sw8 : 0,
+                            borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                            borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                          };
+                          return (
+                            <View key={index} style={containerStyle}>
+                              <IcoMoon color={colorBlue._1} name="duplicate-account" size={sw16} />
+                              <CustomSpacer isHorizontal={true} space={sw8} />
+                              <Text style={{ ...fs14BoldBlue1, width: sw96 }}>{eachDuplicateAccount.accountNumber}</Text>
+                              <CustomSpacer isHorizontal={true} space={sw8} />
+                              <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
+                            </View>
+                          );
+                        })}
+                    </View>
+                  </ScrollView>
                 </View>
               </View>
             </NewPrompt>

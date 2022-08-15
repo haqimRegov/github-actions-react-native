@@ -343,7 +343,6 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           if (data.result.message === "NTB") {
             // TODO handle NTB flow
             // return setClientType("NTB");
-            setNewSalesLoading(false);
             setIsNtb(true);
             await handleClientRegister(undefined, undefined, true);
           }

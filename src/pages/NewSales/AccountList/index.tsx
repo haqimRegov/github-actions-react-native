@@ -41,6 +41,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   addClientDetails,
   addPersonalInfo,
   addRiskScore,
+  addPrsFilters,
   addUtFilters,
   client,
   handleNextStep,
@@ -178,6 +179,10 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           if (eachAccount.fundType === "UT" && eachAccount.paymentMethod === "EPF") {
             const epfFilterArray: string[] = eachAccount.paymentMethod === "EPF" ? ["Yes"] : [];
             addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+          }
+          if (getProductTabType(eachAccount.fundType) === "prsDefault") {
+            const syariahConventional = eachAccount.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
+            addPrsFilters({ ...productsInitialFilter, ...syariahConventional });
           }
           updateProductType(getProductTabType(eachAccount.fundType));
           updateNewSales({

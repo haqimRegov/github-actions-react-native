@@ -5,10 +5,10 @@ import { LocalAssets } from "../../assets/images/LocalAssets";
 import { BasicModal, CustomSpacer, Loading, NewPrompt, SubmissionSummaryPrompt } from "../../components";
 import { Language } from "../../constants";
 import { centerHV, colorWhite, fsAlignLeft, fullHeight, fullHW, sh16 } from "../../styles";
-import { formatAmount } from "../../utils";
+import { formatAmount, isArrayNotEmpty } from "../../utils";
 import { SubmissionSummaryCollapsible } from "../OrderSubmission";
 
-const { PAYMENT } = Language.PAGE;
+const { PAYMENT, SUBMISSION_SUMMARY } = Language.PAGE;
 
 interface NewPaymentPromptProps {
   buttonLoading: boolean;
@@ -71,13 +71,56 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
       ? result.orders.map((eachOrder) => {
           const amount = eachOrder.totalPayment.map((eachAmount) => `${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
           const excessAmount = eachOrder.excessAmount.map((eachAmount) => `+ ${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
-          const softcopyDocuments: ISubmissionSummaryRemarks[] = eachOrder.docList.map((doc) => ({ ...doc, otherRemarks: undefined }));
           const totalPayment: ISubmissionSummaryRemarks[] =
             eachOrder.totalPayment.length === 0 ||
             (eachOrder.totalPayment.length === 1 && eachOrder.totalPayment[0].amount === null) ||
             (eachOrder.totalPayment.length === 1 && eachOrder.totalPayment[0].currency === null)
               ? []
-              : [{ title: "Total Payment", otherRemarks: excessAmount, remarks: amount }];
+              : [{ title: SUBMISSION_SUMMARY.TITLE_PAYMENT, otherRemarks: excessAmount, remarks: amount }];
+
+          const findSoftcopy = eachOrder.docList.findIndex((eachDocList) => eachDocList.title === "Softcopy Documents");
+
+          const softcopyDocList = findSoftcopy !== -1 ? eachOrder.docList[findSoftcopy] : undefined;
+          let softcopyDocs: string[] = [];
+
+          if (softcopyDocList !== undefined) {
+            const principalSoftcopy: string[] = [];
+            const jointSoftcopy: string[] = [];
+            const bothSoftcopy: string[] = [];
+
+            softcopyDocList.remarks.principalHolder.forEach((eachPrincipalDoc) => {
+              if (softcopyDocList.remarks.jointHolder.includes(eachPrincipalDoc)) {
+                // softcopy is for both
+                bothSoftcopy.push(eachPrincipalDoc);
+              } else {
+                // softcopy is for principal
+                principalSoftcopy.push(eachPrincipalDoc);
+              }
+            });
+
+            softcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
+              if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothSoftcopy.includes(eachJointDoc) === false) {
+                // softcopy is for both
+                bothSoftcopy.push(eachJointDoc);
+              } else {
+                // softcopy is for joint
+                jointSoftcopy.push(eachJointDoc);
+              }
+            });
+
+            const principalDocs = principalSoftcopy.map((eachDoc) =>
+              isArrayNotEmpty(jointSoftcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
+            );
+            const jointDocs = jointSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
+            const bothDocs = bothSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);
+
+            softcopyDocs = principalDocs.concat(jointDocs).concat(bothDocs);
+          }
+
+          const softcopyDocuments: ISubmissionSummaryRemarks[] = isArrayNotEmpty(softcopyDocs)
+            ? [{ title: SUBMISSION_SUMMARY.TITLE_SOFTCOPY, remarks: softcopyDocs }]
+            : [];
+
           const remarks: ISubmissionSummaryRemarks[] = softcopyDocuments.concat(totalPayment);
           return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
         })
@@ -105,7 +148,13 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
               <NewPrompt
                 illustration={illustration}
                 primary={{ onPress: handleConfirm, text: PAYMENT.BUTTON_DASHBOARD }}
-                subtitle={(result !== undefined && result.withHardcopy === true) || checkNonPendingOrder === false ? subtitles : undefined}
+                subtitle={
+                  (result !== undefined && result.withFloating === true) ||
+                  (result !== undefined && result.withHardcopy === true) ||
+                  checkNonPendingOrder === false
+                    ? subtitles
+                    : undefined
+                }
                 subtitleStyle={fsAlignLeft}
                 title={message}
               />

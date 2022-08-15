@@ -165,7 +165,8 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
         paymentResult.orders.filter((eachOrder: ISubmitProofOfPaymentResultOrder) => eachOrder.status === "Submitted").length ===
           paymentResult.orders.length
       ) {
-        return updatePill("submitted");
+        updatePill("submitted");
+        return true;
       }
       return undefined;
     }

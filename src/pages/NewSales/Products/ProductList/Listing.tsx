@@ -8,8 +8,10 @@ import {
   centerHV,
   centerVertical,
   colorBlue,
+  colorGray,
   colorRed,
   colorWhite,
+  disabledOpacity5,
   flexChild,
   flexRow,
   fs12RegBlue1,
@@ -35,7 +37,7 @@ import {
   sw88,
   sw96,
 } from "../../../../styles";
-import { titleCaseString } from "../../../../utils";
+import { isArrayNotEmpty, titleCaseString } from "../../../../utils";
 import { GroupBy } from "./GroupBy";
 
 const { EMPTY_STATE, PRODUCT_LIST, DASHBOARD_EDD } = Language.PAGE;
@@ -50,6 +52,7 @@ interface ProductListViewProps {
   handleRecommendedFunds?: () => void;
   handleResetSelected: () => void;
   handleSelectProduct: (product: IProduct) => void;
+  isMultiUtmc?: boolean;
   list: ITableData[];
   loading: boolean;
   page: number;
@@ -63,6 +66,7 @@ interface ProductListViewProps {
   showBy?: ProductListShowByType;
   sort: IProductSort[];
   totalCount: IProductTotalCount;
+  transactionType?: TTransactionType;
   updateFilter: (filter: IProductFilter) => void;
   updateSort: (sort: IProductSort[]) => void;
 }
@@ -77,6 +81,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   handleRecommendedFunds,
   handleResetSelected,
   handleSelectProduct,
+  isMultiUtmc,
   list,
   loading,
   page,
@@ -89,6 +94,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   showBy,
   sort,
   totalCount,
+  transactionType,
   updateFilter,
   updateSort,
 }: ProductListViewProps) => {
@@ -99,6 +105,19 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   const sortName = findName.length > 0 ? findName[0].value : "ascending";
   const sortRisk = findRisk.length > 0 ? findRisk[0].value : "ascending";
   const sortedColumns = sort.filter((eachSort) => eachSort.value !== "").map((currentSortType) => currentSortType.column);
+
+  const singleUtmcOnly = isMultiUtmc === false && transactionType === "Sales-NS";
+  const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
+  const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
+  const checkUtmcIndex =
+    singleUtmcOnly === true && isArrayNotEmpty(selectedFunds) && selectedUtmc !== undefined
+      ? list.map((eachRow, index) => (eachRow.issuingHouse !== selectedUtmc ? index : null))
+      : undefined;
+
+  const disabledIndex: number[] | undefined =
+    checkUtmcIndex !== undefined
+      ? checkUtmcIndex.filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null).map((eachIndex) => eachIndex!)
+      : undefined;
 
   const handleSortAbbr = async () => {
     const updatedAbbrSort: IProductSort[] = sort.map((abbrSort) =>
@@ -243,11 +262,15 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     handleSelectProduct(data as unknown as IProduct);
   };
 
+  const checkboxDisabled = singleUtmcOnly === true && isArrayNotEmpty(selectedFunds) === false;
+
   const handleRowSelectionHeader = () => {
-    if (selectedFunds.length > 0) {
-      handleResetSelected();
-    } else {
-      addFunds(list as unknown as IProduct[]);
+    if (checkboxDisabled === false) {
+      if (selectedFunds.length > 0) {
+        handleResetSelected();
+      } else {
+        addFunds(list as unknown as IProduct[]);
+      }
     }
   };
 
@@ -312,6 +335,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             // activeAccordion={activeAccordion}
             columns={columns}
             data={list}
+            disabledIndex={disabledIndex}
             headerPopup={{
               content: riskCategory.map((contentRisk) => ({ text: contentRisk })),
               onPressContent: ({ hide, text }) => {
@@ -363,10 +387,14 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               return <GroupBy {...props} />;
             }}
             RowSelectionItem={() => {
+              const disabledCheckbox = checkboxDisabled === true ? disabledOpacity5 : {};
+              const disabledBackground = checkboxDisabled === true ? { backgroundColor: colorGray._4 } : {};
               const checkBoxStyle: ViewStyle = {
                 backgroundColor: selectedFunds.length > 0 ? colorRed._1 : colorWhite._1,
                 borderWidth: sw1,
                 borderColor: selectedFunds.length > 0 ? colorRed._1 : colorBlue._1,
+                ...disabledBackground,
+                ...disabledCheckbox,
               };
               return (
                 <TouchableWithoutFeedback onPress={handleRowSelectionHeader}>
@@ -380,7 +408,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                         width: sw18,
                         ...checkBoxStyle,
                       }}>
-                      <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
+                      {checkboxDisabled === true ? null : (
+                        <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
+                      )}
                     </View>
                   </View>
                 </TouchableWithoutFeedback>

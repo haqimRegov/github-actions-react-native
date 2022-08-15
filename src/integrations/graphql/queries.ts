@@ -110,6 +110,7 @@ const etbCheck = gql`
             riskTolerance
             authorisedSignatory
             currency
+            isSyariah
           }
         }
       }
@@ -444,6 +445,7 @@ const investorDetailsDashboard = gql`
             paymentMethod
             fundType
             isRecurring
+            isSyariah
             jointDeclarationRequired
             authorisedSignatory
             principalRisk

@@ -4,17 +4,20 @@ import { View } from "react-native";
 import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import { FILTER_FUND_TYPE, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
+import { getProductTabType } from "../../../../../helpers";
 import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface PRSFilterProps {
+  accountDetails: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   productType: ProductType;
   setFilter: (value: IProductFilter) => void;
 }
 
-export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ availableFilters, filter, setFilter }: PRSFilterProps) => {
+export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: PRSFilterProps) => {
+  const { fundType: accountFundType } = accountDetails;
   const { conventional, fundType, shariahApproved, issuingHouse, riskCategory } = filter;
 
   const handleShariah = (value: string) => {
@@ -108,6 +111,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ availableFilters,
         <View>
           <SingleSelectPills
             direction="row"
+            disabled={getProductTabType(accountFundType) === "prsDefault"}
             disabledValues={disabledType}
             header={PRODUCT_FILTER.LABEL_TYPE}
             labels={FILTER_TYPE}

@@ -17,13 +17,13 @@ export const ProductFilter: FunctionComponent<ProductFilterProps> = ({ accountDe
     case "ut":
       return <UTFilter accountDetails={accountDetails} {...rest} />;
     case "prs":
-      return <PRSFilter {...rest} />;
+      return <PRSFilter accountDetails={accountDetails} {...rest} />;
     case "prsDefault":
-      return <PRSFilter {...rest} />;
+      return <PRSFilter accountDetails={accountDetails} {...rest} />;
     case "amp":
       return <AMPFilter {...rest} />;
 
     default:
-      return <PRSFilter {...rest} />;
+      return <UTFilter accountDetails={accountDetails} {...rest} />;
   }
 };

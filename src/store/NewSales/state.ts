@@ -23,6 +23,7 @@ export const newSalesInitialState: NewSalesState = {
     fundType: "ut",
     isEpf: undefined,
     isRecurring: undefined,
+    isSyariah: false,
     riskScore: "",
   },
   disabledSteps: [

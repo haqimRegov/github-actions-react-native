@@ -62,6 +62,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   addRiskScore,
   addClientDetails,
   addPersonalInfo,
+  addPrsFilters,
   addUtFilters,
   client,
   currentInvestor,
@@ -479,6 +480,10 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       if (item.fundType === "UT" && item.paymentMethod === "EPF") {
         const epfFilterArray: string[] = item.paymentMethod === "EPF" ? ["Yes"] : [];
         addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+      }
+      if (getProductTabType(item.fundType) === "prsDefault") {
+        const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
+        addPrsFilters({ ...productsInitialFilter, ...syariahConventional });
       }
       updateProductType(getProductTabType(item.fundType));
       if (check === true) {

@@ -40,6 +40,7 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           fundType: "ut",
           isEpf: undefined,
           isRecurring: undefined,
+          isSyariah: false,
           riskScore: "",
         },
         disabledSteps: [

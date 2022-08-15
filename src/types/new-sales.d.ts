@@ -3,6 +3,7 @@ declare interface INewSalesAccountDetails {
   authorisedSignatory: string;
   fundType: ProductType;
   isEpf?: boolean;
+  isSyariah: boolean;
   riskScore: string;
   isRecurring?: boolean;
 }

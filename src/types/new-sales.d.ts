@@ -1,5 +1,6 @@
 declare interface INewSalesAccountDetails {
   accountNo: string;
+  authorisedSignatory: string;
   fundType: ProductType;
   isEpf?: boolean;
   riskScore: string;

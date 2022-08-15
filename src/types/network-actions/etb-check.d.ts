@@ -9,7 +9,7 @@ declare interface IAccountList {
   jointName: string | null;
   name: string;
   paymentMethod: string;
-  tags?: string[];
+  riskTolerance: string;
 }
 declare interface IEtbCheckResult {
   accounts?: IAccountList[] | null;

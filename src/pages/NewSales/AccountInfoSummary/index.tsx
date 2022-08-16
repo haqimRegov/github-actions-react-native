@@ -1,12 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { FileViewer, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
 import { handleSignatory } from "../../../helpers";
+import { submitClientAccount } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
 import { parseAmountToString } from "../../../utils";
@@ -157,38 +158,37 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      console.log("req", request);
-      // const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation, setLoading);
+      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
-      // if (response !== undefined) {
-      //   const { data, error } = response;
-      //   if (error === null && data !== null) {
-      //     addOrders(data.result);
-      //     const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-      //     updatedFinishedSteps.push("Summary", "AccountInformation");
-      //     const newDisabledStep: TypeNewSalesKey[] = [
-      //       "RiskProfile",
-      //       "Products",
-      //       "AccountInformation",
-      //       "IdentityVerification",
-      //       "AdditionalDetails",
-      //       "Summary",
-      //       "Signatures",
-      //       "TermsAndConditions",
-      //       "Payment",
-      //     ];
-      //     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
-      //     return handleNextStep("OrderPreview");
-      //   }
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          addOrders(data.result);
+          const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+          updatedFinishedSteps.push("Summary", "AccountInformation");
+          const newDisabledStep: TypeNewSalesKey[] = [
+            "RiskProfile",
+            "Products",
+            "AccountInformation",
+            "IdentityVerification",
+            "AdditionalDetails",
+            "Summary",
+            "Signatures",
+            "TermsAndConditions",
+            "Payment",
+          ];
+          updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+          return handleNextStep("OrderPreview");
+        }
 
-      //   if (error !== null) {
-      //     const errorList = error.errorList?.join("\n");
-      //     setTimeout(() => {
-      //       Alert.alert(error.message, errorList);
-      //     }, 150);
-      //   }
-      // }
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
+      }
     }
     return null;
   };

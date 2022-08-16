@@ -66,6 +66,7 @@ interface ForceUpdatePageProps extends ForceUpdateContentProps, ForceUpdateStore
 export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> = (props: ForceUpdatePageProps) => {
   const {
     accountHolder,
+    declarations,
     disabledSteps,
     finishedSteps,
     navigation,
@@ -92,20 +93,20 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
 
   // For optional declarations
 
-  // const findDeclarations = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.key === FORCE_UPDATE_KEYS.Declarations);
-  // if (findDeclarations !== -1) {
-  //   if (declarations.length === 0) {
-  //     updatedNewSalesSteps.splice(findDeclarations, 1);
-  //   } else {
-  //     const updatedContent = cloneDeep(updatedNewSalesSteps[findDeclarations].content!).filter(
-  //       (eachContent: IForceUpdateContentItem) =>
-  //         (eachContent.route === FORCE_UPDATE_ROUTES.FATCADeclaration && declarations.includes("fatca")) ||
-  //         (eachContent.route === FORCE_UPDATE_ROUTES.CRSDeclaration && declarations.includes("crs")) ||
-  //         eachContent.route === "DeclarationSummary",
-  //     );
-  //     updatedNewSalesSteps[findDeclarations].content = updatedContent;
-  //   }
-  // }
+  const findDeclarations = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.key === FORCE_UPDATE_KEYS.Declarations);
+  if (findDeclarations !== -1) {
+    if (declarations.length === 0) {
+      updatedNewSalesSteps.splice(findDeclarations, 1);
+    } else {
+      const updatedContent = cloneDeep(updatedNewSalesSteps[findDeclarations].content!).filter(
+        (eachContent: IForceUpdateContentItem) =>
+          (eachContent.route === FORCE_UPDATE_ROUTES.FATCADeclaration && declarations.includes("fatca")) ||
+          (eachContent.route === FORCE_UPDATE_ROUTES.CRSDeclaration && declarations.includes("crs")) ||
+          eachContent.route === "DeclarationSummary",
+      );
+      updatedNewSalesSteps[findDeclarations].content = updatedContent;
+    }
+  }
 
   const handleNextStep = (route: TypeForceUpdateKey) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {

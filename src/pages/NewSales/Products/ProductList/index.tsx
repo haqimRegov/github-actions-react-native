@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { CustomSpacer, SafeAreaPage } from "../../../../components";
 import { usePrevious } from "../../../../hooks";
-import { productsInitialFilter, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
+import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
 import { flexChild, flexGrow, sh104, sh810 } from "../../../../styles";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 import { ProductTabs } from "./Tabs";
@@ -60,7 +60,15 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
       case "ut":
         if (accountNo !== "") {
           const epfFilterArray: string[] = accountDetails.isEpf === true ? ["Yes"] : [];
-          addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+          addUtFilters({
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+            epfApproved: epfFilterArray,
+          });
         } else {
           resetUTFilter();
         }

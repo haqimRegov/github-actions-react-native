@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
-import { FILTER_FUND_TYPE, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
+import { FILTER_FUND_TYPE_NEW, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
 import { getProductTabType } from "../../../../../helpers";
 import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
 
@@ -53,7 +53,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
 
   // TODO Change to not includes
 
-  const disabledFundTypes: string[] = FILTER_FUND_TYPE.map((eachFundType) => eachFundType.value).filter(
+  const disabledFundTypes: string[] = FILTER_FUND_TYPE_NEW.map((eachFundType) => eachFundType.value).filter(
     (eachValue: string) =>
       !availableFilters.fundCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
@@ -77,7 +77,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
           <NewCheckBoxDropdown
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
-            items={FILTER_FUND_TYPE}
+            items={FILTER_FUND_TYPE_NEW}
             label={PRODUCT_FILTER.LABEL_FUND_TYPE}
             value={fundType!}
           />

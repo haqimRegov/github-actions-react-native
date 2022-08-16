@@ -10,7 +10,7 @@ import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../..
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
 import { getAddress, getProductTabType, handleSignatoryFromBE } from "../../../../helpers";
 import { checkClient, clientRegister } from "../../../../network-actions";
-import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps, productsInitialFilter } from "../../../../store";
+import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
   borderBottomGray2,
   centerHV,
@@ -503,11 +503,28 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       const check = await handleClientRegister(req, item);
       if (item.fundType === "UT" && item.paymentMethod === "EPF") {
         const epfFilterArray: string[] = item.paymentMethod === "EPF" ? ["Yes"] : [];
-        addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+        addUtFilters({
+          fundCurrency: [],
+          fundType: [],
+          issuingHouse: [],
+          riskCategory: [],
+          shariahApproved: [],
+          conventional: [],
+          epfApproved: epfFilterArray,
+        });
       }
       if (getProductTabType(item.fundType) === "prsDefault") {
         const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
-        addPrsDefaultFilters({ ...productsInitialFilter, ...syariahConventional });
+        addPrsDefaultFilters({
+          epfApproved: [],
+          fundCurrency: [],
+          fundType: [],
+          issuingHouse: [],
+          riskCategory: [],
+          shariahApproved: [],
+          conventional: [],
+          ...syariahConventional,
+        });
       }
       updateProductType(getProductTabType(item.fundType));
       if (check === true) {

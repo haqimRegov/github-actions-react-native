@@ -6,7 +6,7 @@ import { Language } from "../../../../../constants";
 import {
   FILTER_EPF_LABEL,
   FILTER_FUND_CURRENCY,
-  FILTER_FUND_TYPE,
+  FILTER_FUND_TYPE_NEW,
   FILTER_ISSUING_HOUSE,
   FILTER_RISK_CATEGORY,
   FILTER_TYPE,
@@ -71,7 +71,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
 
   // TODO Change to not includes
 
-  const disabledFundTypes: string[] = FILTER_FUND_TYPE.map((eachFundType) => eachFundType.value).filter(
+  const disabledFundTypes: string[] = FILTER_FUND_TYPE_NEW.map((eachFundType) => eachFundType.value).filter(
     (eachValue: string) =>
       !availableFilters.fundCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
@@ -100,7 +100,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
           <NewCheckBoxDropdown
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
-            items={FILTER_FUND_TYPE}
+            items={FILTER_FUND_TYPE_NEW}
             label={PRODUCT_FILTER.LABEL_FUND_TYPE}
             value={fundType!}
           />

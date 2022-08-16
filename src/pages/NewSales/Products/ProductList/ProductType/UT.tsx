@@ -126,7 +126,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
           },
         });
       }
-      let updatedFilters: string[] = funds.filters.fundCategory!;
+      const updatedFilters: string[] = funds.filters.fundCategory!;
       if (funds.filters.fundCategory!.includes("BALANCE")) {
         const findBalanceIndex = funds.filters.fundCategory!.findIndex((eachCategory: string) => eachCategory === "BALANCE");
         updatedFilters.splice(findBalanceIndex, 1, "BALANCED");

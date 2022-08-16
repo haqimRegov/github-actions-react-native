@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 

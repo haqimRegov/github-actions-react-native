@@ -66,7 +66,6 @@ interface ForceUpdatePageProps extends ForceUpdateContentProps, ForceUpdateStore
 export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> = (props: ForceUpdatePageProps) => {
   const {
     accountHolder,
-    declarations,
     disabledSteps,
     finishedSteps,
     navigation,

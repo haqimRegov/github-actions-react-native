@@ -382,19 +382,18 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                 },
               });
               return true;
-            } else {
-              setClientCheckData({
-                ...data.result,
-                name: req !== undefined ? req.name! : jointHolder!.name!,
-                id: req !== undefined ? req.id! : jointHolder!.id!,
-              });
-              setPrompt(false);
-              setTimeout(() => {
-                setForceUpdatePrompt(true);
-              }, 400);
-              return false;
             }
+            setClientCheckData({
+              ...data.result,
+              name: req !== undefined ? req.name! : jointHolder!.name!,
+              id: req !== undefined ? req.id! : jointHolder!.id!,
+            });
+            setPrompt(false);
+            setTimeout(() => {
+              setForceUpdatePrompt(true);
+            }, 400);
             return false;
+
             // }
           }
         }

@@ -249,7 +249,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
         </View>
       ) : null}
       <ProductListView
-        accountNo={accountDetails.accountNo}
+        accountDetails={accountDetails}
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleAllFunds={handleAllFunds}

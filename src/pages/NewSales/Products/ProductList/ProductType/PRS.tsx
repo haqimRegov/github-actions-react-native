@@ -234,7 +234,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
         </View>
       ) : null}
       <ProductListView
-        accountNo={accountDetails.accountNo}
+        accountDetails={accountDetails}
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
@@ -243,14 +243,14 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={loading === true ? [] : list}
+        list={loading === true ? [] : (list as unknown as ITableData[])}
         loading={loading}
         page={defaultPage}
         pages={defaultPages}
         // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         productType={productType}
-        selectedFunds={selectedFunds}
+        selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}
         showBy={showBy}

@@ -90,6 +90,9 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
   if (accountHolder === "Principal" && findRiskAssessment === -1) {
     updatedNewSalesSteps.splice(1, 0, RISK_ASSESSMENT);
   }
+
+  // For optional declarations
+
   const findDeclarations = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.key === FORCE_UPDATE_KEYS.Declarations);
   if (findDeclarations !== -1) {
     if (declarations.length === 0) {

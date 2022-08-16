@@ -14,10 +14,13 @@ declare interface IAccountList {
 }
 declare interface IEtbCheckResult {
   accounts?: IAccountList[] | null;
+  address?: IAddressState;
   clientId?: string;
+  declarationRequired: string[];
   emailAddress: string;
   forceUpdate: boolean;
   highRisk: boolean;
+  initId: string;
   message: string;
   status: string;
 }

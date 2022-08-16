@@ -29,6 +29,15 @@ export const FILTER_FUND_TYPE = [
   { label: "Alternative", value: "Alternative" },
 ];
 
+export const FILTER_FUND_TYPE_NEW = [
+  { label: "Balanced", value: "Balanced" },
+  { label: "Equity", value: "Equity" },
+  { label: "Fixed Income", value: "Fixed Income" },
+  { label: "Growth", value: "Growth" },
+  { label: "Mixed Asset", value: "Mixed Asset" },
+  { label: "Money Market", value: "Money Market" },
+];
+
 export const FILTER_RISK_CATEGORY = [
   { label: "Low", value: "Low" },
   { label: "Medium", value: "Medium" },

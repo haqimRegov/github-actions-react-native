@@ -91,17 +91,9 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   const handleFetchPRSDefault = async (newPage: string) => {
     Keyboard.dismiss();
     const funds = await handleFetch(newPage);
-    const updatedAvailableFilters: IProductAvailableFilter = {
-      fundType: [],
-      issuingHouse: [],
-      riskCategory: [],
-      fundCurrency: [],
-      shariahConventional: [],
-      epfApproved: [],
-    };
     if (funds !== undefined) {
       addPrsDefaultRecommendedFunds(funds);
-      updateAvailableFilters(updatedAvailableFilters);
+      updateAvailableFilters(funds.filters);
     }
   };
 

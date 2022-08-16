@@ -9,12 +9,10 @@ declare interface IProductFilter {
 }
 
 declare interface IProductAvailableFilter {
-  epfApproved?: string[];
   fundCurrency?: string[];
-  fundType?: string[];
+  fundCategory?: string[];
   issuingHouse?: string[];
   riskCategory?: string[];
-  shariahConventional?: string[];
 }
 
 declare type ProductFilterType =

@@ -158,6 +158,7 @@ declare interface IProductSalesCharge {
 }
 
 declare interface IProductListResult {
+  filters: IProductAvailableFilter;
   products: IProduct[];
   page: string;
   pages: string;

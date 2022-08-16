@@ -6,7 +6,7 @@ import { Language } from "../../../../../constants";
 import {
   FILTER_EPF_LABEL,
   FILTER_FUND_CURRENCY,
-  FILTER_FUND_TYPE,
+  FILTER_FUND_TYPE_NEW,
   FILTER_ISSUING_HOUSE,
   FILTER_RISK_CATEGORY,
   FILTER_TYPE,
@@ -71,23 +71,21 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
 
   // TODO Change to not includes
 
-  const disabledFundTypes: string[] = FILTER_FUND_TYPE.map((eachFundType) => eachFundType.value).filter((eachValue: string) =>
-    availableFilters.fundType!.includes(eachValue),
+  const disabledFundTypes: string[] = FILTER_FUND_TYPE_NEW.map((eachFundType) => eachFundType.value).filter(
+    (eachValue: string) =>
+      !availableFilters.fundCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
   const disabledIssuingHouse: string[] = FILTER_ISSUING_HOUSE.map((eachIssuingHouse) => eachIssuingHouse.value).filter(
-    (eachValue: string) => availableFilters.issuingHouse!.includes(eachValue),
+    (eachValue: string) =>
+      !availableFilters.issuingHouse!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
-  const disabledRiskCategory: string[] = FILTER_RISK_CATEGORY.map((eachRisk) => eachRisk.value).filter((eachValue: string) =>
-    availableFilters.riskCategory!.includes(eachValue),
+  const disabledRiskCategory: string[] = FILTER_RISK_CATEGORY.map((eachRisk) => eachRisk.value).filter(
+    (eachValue: string) =>
+      !availableFilters.riskCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
-  const disabledFundCurrency: string[] = FILTER_FUND_CURRENCY.map((eachCurrency) => eachCurrency.value).filter((eachValue: string) =>
-    availableFilters.fundCurrency!.includes(eachValue),
-  );
-  const disabledEpfApproved: string[] = FILTER_EPF_LABEL.map((eachEpf) => eachEpf.value!).filter((eachValue: string) =>
-    availableFilters.epfApproved!.includes(eachValue),
-  );
-  const disabledType: string[] = FILTER_TYPE.map((eachType) => eachType.value!).filter((eachValue: string) =>
-    availableFilters.shariahConventional!.includes(eachValue),
+  const disabledFundCurrency: string[] = FILTER_FUND_CURRENCY.map((eachCurrency) => eachCurrency.value).filter(
+    (eachValue: string) =>
+      !availableFilters.fundCurrency!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
 
   const conventionalSelected = conventional![0] === "Yes" ? "Conventional" : "";
@@ -102,7 +100,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
           <NewCheckBoxDropdown
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
-            items={FILTER_FUND_TYPE}
+            items={FILTER_FUND_TYPE_NEW}
             label={PRODUCT_FILTER.LABEL_FUND_TYPE}
             value={fundType!}
           />
@@ -135,7 +133,6 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
         <View>
           <SingleSelectPills
             direction="row"
-            disabledValues={disabledType}
             header={PRODUCT_FILTER.LABEL_TYPE}
             labels={FILTER_TYPE}
             labelStyle={{ lineHeight: sh24 }}
@@ -156,7 +153,6 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
           <SingleSelectPills
             direction="row"
             disabled={isEpf === true}
-            disabledValues={disabledEpfApproved}
             header={PRODUCT_FILTER.LABEL_EPF}
             labels={FILTER_EPF_LABEL}
             labelStyle={{ lineHeight: sh24 }}

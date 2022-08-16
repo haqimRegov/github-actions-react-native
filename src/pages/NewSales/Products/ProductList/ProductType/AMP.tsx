@@ -105,14 +105,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const handleFetchAMP = async (newPage: string) => {
     Keyboard.dismiss();
     const funds = await handleFetch(newPage);
-    const updatedAvailableFilters: IProductAvailableFilter = {
-      fundType: [],
-      issuingHouse: [],
-      riskCategory: [],
-      fundCurrency: [],
-      shariahConventional: [],
-      epfApproved: [],
-    };
     if (funds !== undefined) {
       if (showBy === "all") {
         addAmpAllFunds({
@@ -131,7 +123,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
           },
         });
       }
-      updateAvailableFilters(updatedAvailableFilters);
+      updateAvailableFilters(funds.filters);
     }
   };
 

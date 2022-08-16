@@ -100,14 +100,6 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   const handleFetchPRS = async (newPage: string) => {
     Keyboard.dismiss();
     const funds = await handleFetch(newPage);
-    const updatedAvailableFilters: IProductAvailableFilter = {
-      fundType: [],
-      issuingHouse: [],
-      riskCategory: [],
-      fundCurrency: [],
-      shariahConventional: [],
-      epfApproved: [],
-    };
     if (funds !== undefined) {
       if (showBy === "all") {
         addPrsAllFunds({
@@ -126,7 +118,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
           },
         });
       }
-      updateAvailableFilters(updatedAvailableFilters);
+      updateAvailableFilters(funds.filters);
     }
   };
 

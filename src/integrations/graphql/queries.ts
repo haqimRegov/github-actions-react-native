@@ -96,6 +96,7 @@ const etbCheck = gql`
           highRisk
           forceUpdate
           clientId
+          initId
           emailAddress
           declarationRequired
           accounts {
@@ -111,6 +112,18 @@ const etbCheck = gql`
             authorisedSignatory
             currency
             isSyariah
+          }
+          address {
+            address {
+              line1
+              line2
+              line3
+              line4
+            }
+            city
+            country
+            postCode
+            state
           }
         }
       }
@@ -1138,13 +1151,20 @@ const productList = gql`
     productList(input: $input) {
       data {
         result {
+          filters {
+            fundCategory
+            issuingHouse
+            fundType
+            riskCategory
+            fundCurrency
+          }
           products {
             annualTrusteeFee
             ampCategory
-            fundCode
             fundCurrencies
             fundClasses
             fundId
+            fundCode
             fundAbbr
             fundName
             fundType
@@ -1153,10 +1173,12 @@ const productList = gql`
             riskCategory
             isEpf
             isEpfOnly
-            prsType
             isSyariah
             isWholesale
             isScheduled
+            isFea
+            prsType
+            incomeDistribution
             ampFee
             masterList {
               fundId

@@ -8,7 +8,7 @@ import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
 import { getProductTabType } from "../../../helpers";
 import { clientRegister } from "../../../network-actions";
-import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps, productsInitialFilter } from "../../../store";
+import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
 import {
   centerHV,
   colorBlack,
@@ -178,11 +178,28 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           }
           if (eachAccount.fundType === "UT" && eachAccount.paymentMethod === "EPF") {
             const epfFilterArray: string[] = eachAccount.paymentMethod === "EPF" ? ["Yes"] : [];
-            addUtFilters({ ...productsInitialFilter, epfApproved: epfFilterArray });
+            addUtFilters({
+              fundCurrency: [],
+              fundType: [],
+              issuingHouse: [],
+              riskCategory: [],
+              shariahApproved: [],
+              conventional: [],
+              epfApproved: epfFilterArray,
+            });
           }
           if (getProductTabType(eachAccount.fundType) === "prsDefault") {
             const syariahConventional = eachAccount.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
-            addPrsDefaultFilters({ ...productsInitialFilter, ...syariahConventional });
+            addPrsDefaultFilters({
+              epfApproved: [],
+              fundCurrency: [],
+              fundType: [],
+              issuingHouse: [],
+              riskCategory: [],
+              shariahApproved: [],
+              conventional: [],
+              ...syariahConventional,
+            });
           }
           updateProductType(getProductTabType(eachAccount.fundType));
           updateNewSales({

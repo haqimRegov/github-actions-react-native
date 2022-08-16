@@ -1,5 +1,5 @@
 import { ProductsAction } from "./actions";
-import { ampInitialFilter, initialAvailableFilters, productsInitialFilter, productsInitialState, productsState } from "./state";
+import { ampInitialFilter, productsInitialState, productsState } from "./state";
 
 export function productsReducer(state = productsInitialState, action: ProductsAction): productsState {
   switch (action.type) {
@@ -206,7 +206,15 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
         ...state,
         ut: {
           ...state.ut,
-          filters: productsInitialFilter,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
         },
       };
     case "products/RESET_PRS_FILTER":
@@ -214,7 +222,15 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
         ...state,
         prs: {
           ...state.prs,
-          filters: productsInitialFilter,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
         },
       };
     case "products/RESET_PRS_DEFAULT_FILTER":
@@ -222,7 +238,15 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
         ...state,
         prsDefault: {
           ...state.prsDefault,
-          filters: productsInitialFilter,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
         },
       };
     case "products/RESET_AMP_FILTER":
@@ -347,7 +371,12 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             recommended: "",
           },
         },
-        availableFilters: initialAvailableFilters,
+        availableFilters: {
+          fundCurrency: [],
+          fundCategory: [],
+          issuingHouse: [],
+          riskCategory: [],
+        },
         productType: "ut",
       };
 

@@ -332,7 +332,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
             ) : (
               <Loading />
             )}
-            {activeOrder.order !== "" ? null : <CustomSpacer space={sh152} />}
+            {activeOrder.order !== "" ? <CustomSpacer space={sh24} /> : <CustomSpacer space={sh152} />}
           </View>
         </SafeAreaPage>
       </DashboardLayout>

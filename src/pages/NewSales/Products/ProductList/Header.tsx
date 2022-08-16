@@ -5,7 +5,6 @@ import Collapsible from "react-native-collapsible";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, StatusBadge } from "../../../../components";
 import { Language } from "../../../../constants";
-import { getProductTabType } from "../../../../helpers";
 import {
   absolutePosition,
   centerHorizontal,
@@ -254,7 +253,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                         return false;
                       case "Type: Conventional":
                       case "Type: Shariah":
-                        if (getProductTabType(fundType) === "prsDefault") {
+                        if (fundType === "prsDefault") {
                           return true;
                         }
                         return false;

@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../../../components";
 import { DEFAULT_DATE_FORMAT } from "../../../../../constants";
 import { getProductList } from "../../../../../network-actions";
-import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps, updateAvailableFilters } from "../../../../../store";
+import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
@@ -38,6 +38,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   setScrollEnabled,
   shareSuccess,
   tabsContent,
+  updateAvailableFilters,
 }: PRSDefaultProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { availableFilters } = products;
@@ -93,7 +94,14 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     const funds = await handleFetch(newPage);
     if (funds !== undefined) {
       addPrsDefaultRecommendedFunds(funds);
-      updateAvailableFilters(funds.filters);
+      const updatedFilters: IProductAvailableFilter = { ...funds.filters };
+      if (funds.filters.fundCategory!.includes("BALANCE")) {
+        const updatedFundCategory = [...funds.filters.fundCategory!];
+        const findBalanceIndex = funds.filters.fundCategory!.findIndex((eachCategory: string) => eachCategory === "BALANCE");
+        updatedFundCategory.splice(findBalanceIndex, 1, "BALANCED");
+        updatedFilters.fundCategory = updatedFundCategory;
+      }
+      updateAvailableFilters(updatedFilters);
     }
   };
 

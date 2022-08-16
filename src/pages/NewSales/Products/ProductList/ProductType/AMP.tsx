@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
-import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps, updateAvailableFilters } from "../../../../../store";
+import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
@@ -40,6 +40,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   setScrollEnabled,
   shareSuccess,
   tabsContent,
+  updateAvailableFilters,
   updateAmpShowBy,
 }: AMPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();

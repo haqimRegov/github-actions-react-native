@@ -1,5 +1,5 @@
 import { ProductsAction } from "./actions";
-import { ampInitialFilter, productsInitialState, productsState } from "./state";
+import { productsInitialState, productsState } from "./state";
 
 export function productsReducer(state = productsInitialState, action: ProductsAction): productsState {
   switch (action.type) {
@@ -254,7 +254,15 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
         ...state,
         amp: {
           ...state.amp,
-          filters: ampInitialFilter,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: ["KENANGA INVESTORS BERHAD"],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
         },
       };
     case "products/UPDATE_AVAILABLE_FILTERS":

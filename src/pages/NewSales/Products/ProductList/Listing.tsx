@@ -43,7 +43,7 @@ import { GroupBy } from "./GroupBy";
 const { EMPTY_STATE, PRODUCT_LIST, DASHBOARD_EDD } = Language.PAGE;
 
 interface ProductListViewProps {
-  accountNo: string;
+  accountDetails: INewSalesAccountDetails;
   addFunds: (data: IProduct[]) => void;
   filter: IProductFilter;
   handleAllFunds?: () => void;
@@ -72,7 +72,7 @@ interface ProductListViewProps {
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
-  accountNo,
+  accountDetails,
   addFunds,
   filter,
   handleAllFunds,
@@ -98,6 +98,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   updateFilter,
   updateSort,
 }: ProductListViewProps) => {
+  const { accountNo, isEpf } = accountDetails;
   const findAbbr = sort.filter((sortType) => sortType.column === "fundAbbr" && sortType.value !== "");
   const findName = sort.filter((sortType) => sortType.column === "fundName" && sortType.value !== "");
   const findRisk = sort.filter((sortType) => sortType.column === "riskCategory" && sortType.value !== "");
@@ -106,7 +107,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   const sortRisk = findRisk.length > 0 ? findRisk[0].value : "ascending";
   const sortedColumns = sort.filter((eachSort) => eachSort.value !== "").map((currentSortType) => currentSortType.column);
 
-  const singleUtmcOnly = isMultiUtmc === false && transactionType === "Sales-NS";
+  const singleUtmcOnly = isMultiUtmc === false && transactionType === "Sales-NS" && isEpf === true;
   const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
   const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
   const checkUtmcIndex =

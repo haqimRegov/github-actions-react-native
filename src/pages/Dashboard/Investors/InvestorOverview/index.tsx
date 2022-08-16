@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { View, ViewStyle } from "react-native";
+import { Alert, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
@@ -44,6 +44,11 @@ interface InvestorOverviewProps extends InvestorsStoreProps {
 declare interface IIdType {
   idType: TypeIDChoices;
   otherIdType?: TypeIDOther;
+}
+
+declare interface IEtbCheckData extends IEtbCheckResult {
+  id: string;
+  name: string;
 }
 
 const initialJointInfo = {
@@ -95,6 +100,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const [isNtb, setIsNtb] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
+  const [clientCheckData, setClientCheckData] = useState<IEtbCheckData | undefined>(undefined);
   const fullScreenLoader = useRef<boolean>(false);
   const jointClientId = useRef<string>("");
   const { jointHolder } = client.details!;
@@ -323,19 +329,22 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     return undefined;
   };
 
-  const handleCheckClient = async (): Promise<boolean | string> => {
+  const handleCheckClient = async (req: IEtbCheckRequest): Promise<boolean | string> => {
     if (newSalesLoading === false) {
       setNewSalesLoading(true);
-      const request: IEtbCheckRequest = {
-        country: jointHolder?.country,
-        dateOfBirth:
-          jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
-            ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-            : "",
-        id: jointHolder?.id,
-        idType: jointIdType,
-        name: jointHolder?.name?.trim(),
-      };
+      const request: IEtbCheckRequest =
+        req === undefined
+          ? {
+              country: jointHolder?.country,
+              dateOfBirth:
+                jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+                  ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+                  : "",
+              id: jointHolder?.id,
+              idType: jointIdType,
+              name: jointHolder?.name?.trim(),
+            }
+          : req;
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
@@ -373,14 +382,18 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                 },
               });
               return true;
+            } else {
+              setClientCheckData({
+                ...data.result,
+                name: req !== undefined ? req.name! : jointHolder!.name!,
+                id: req !== undefined ? req.id! : jointHolder!.id!,
+              });
+              setPrompt(false);
+              setTimeout(() => {
+                setForceUpdatePrompt(true);
+              }, 400);
+              return false;
             }
-            // if (data.result.forceUpdate === true) {
-            // BE is returning forceUpdate true even if the investor already finished it (supposed to be bug)
-            // TODO handle redirection to InvestorOverview even if forceUpdate is false
-            setPrompt(false);
-            setTimeout(() => {
-              setForceUpdatePrompt(true);
-            }, 400);
             return false;
             // }
           }
@@ -403,10 +416,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         principalHolder: {
           ...client.details!.principalHolder,
           dateOfBirth: accountType === 1 ? jointHolder?.dateOfBirth : investorData.dateOfBirth,
-          clientId: accountType === 1 ? jointHolder?.clientId : investorData.clientId,
-          id: accountType === 1 ? jointHolder?.id : investorData.idNumber,
+          clientId: clientCheckData !== undefined ? clientCheckData!.clientId : investorData.clientId,
+          id: clientCheckData !== undefined ? clientCheckData?.id : investorData.idNumber,
+          name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
         },
-        initId: accountType === 1 ? undefined : investorData.initId,
+        initId: clientCheckData !== undefined ? clientCheckData?.initId : investorData.initId,
         accountHolder: investorData.accountHolder,
       });
       addPersonalInfo({
@@ -419,14 +433,21 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               accountType === 1
                 ? moment(jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
                 : moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-            name: accountType === 1 ? jointHolder?.name : investorData.name,
+            name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
           },
         },
       });
+      const checkDeclarations =
+        clientCheckData !== undefined && clientCheckData?.declarationRequired !== null
+          ? clientCheckData!.declarationRequired
+          : ["fatca", "crs"];
 
-      const fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData!.address) ? getAddress(investorData!.address) : undefined;
+      let fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData!.address) ? getAddress(investorData!.address) : undefined;
+      if (clientCheckData !== undefined && isNotEmpty(clientCheckData.address)) {
+        fatcaAddress = getAddress(clientCheckData!.address!);
+      }
 
-      updateForceUpdate({ ...forceUpdate, address: fatcaAddress });
+      updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: checkDeclarations });
       setAccountType(0);
       navigation.navigate("ForceUpdate");
     }
@@ -467,15 +488,19 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       jointHolder: jointInfo,
     };
     jointClientId.current = item.jointId;
-    const forceUpdateRequired = false;
+    let checkForceUpdateETB: string | boolean = false;
+    if (item.jointName !== null) {
+      const clientCheckRequest: IEtbCheckRequest = {
+        idType: item.jointIdType!,
+        id: item.jointIdNumber,
+        name: item.jointName,
+      };
+      checkForceUpdateETB = await handleCheckClient(clientCheckRequest);
+    }
 
-    // TODO Check for force update
-
-    if (forceUpdateRequired === true) {
-      setTimeout(() => {
-        setForceUpdatePrompt(true);
-      }, 400);
-    } else {
+    if (typeof checkForceUpdateETB === "string") {
+      Alert.alert(checkForceUpdateETB);
+    } else if (checkForceUpdateETB === true) {
       const check = await handleClientRegister(req, item);
       if (item.fundType === "UT" && item.paymentMethod === "EPF") {
         const epfFilterArray: string[] = item.paymentMethod === "EPF" ? ["Yes"] : [];
@@ -543,7 +568,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     setScreen: dashboardProps.setScreen,
   };
 
-  const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${investorData !== undefined ? investorData.name : "-"}.`;
+  const checkInvestorName = investorData !== undefined ? investorData.name : "-";
+  const checkName = investorData !== undefined && clientCheckData !== undefined ? clientCheckData.name : checkInvestorName;
+  const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${checkName}.`;
   const modalStyle = fullScreenLoader.current === false ? undefined : { backgroundColor: colorBlack._1_4 };
 
   return (

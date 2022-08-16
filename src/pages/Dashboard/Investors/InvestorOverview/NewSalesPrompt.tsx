@@ -46,7 +46,7 @@ const { INVESTOR_ACCOUNTS } = Language.PAGE;
 interface NewSalesProps extends ClientStoreProps {
   errorMessage?: string;
   fetching: boolean;
-  handleCheckClient: () => Promise<boolean | string>;
+  handleCheckClient: (req: IEtbCheckRequest) => Promise<boolean | string>;
   handleClientRegister: () => Promise<boolean | void>;
   inputError1?: string;
   investorData: IInvestor;

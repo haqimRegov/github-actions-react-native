@@ -408,6 +408,14 @@ const submitHardCopyDocuments = gql`
             orderNumber
             status
             remarks
+            docList {
+              title
+              remarks {
+                principalHolder
+                jointHolder
+                hardcopy
+              }
+            }
           }
           message
         }
@@ -432,6 +440,13 @@ const submitSoftCopyDocuments = gql`
             status
             remarks
             txRef
+            docList {
+              title
+              remarks {
+                principalHolder
+                jointHolder
+              }
+            }
           }
           message
         }
@@ -607,6 +622,7 @@ const submitProofOfPayments = gql`
           }
           orders {
             orderNumber
+            totalRecurring
             paymentType
             status
             remarks

@@ -235,6 +235,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         <View style={borderBottomGray2} />
       </View>
       <ProductListView
+        accountDetails={accountDetails}
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
@@ -243,14 +244,14 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={loading === true ? [] : list}
+        list={loading === true ? [] : (list as unknown as ITableData[])}
         loading={loading}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
         // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
-        selectedFunds={selectedFunds}
+        selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}
         showBy={showBy}

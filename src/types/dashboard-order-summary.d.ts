@@ -19,6 +19,7 @@ declare interface IOrderSummaryInvestment {
   fundType: string;
   investmentAmount: string;
   investmentType: string;
+  landingFund?: string;
   isFea: string;
   recurring: string;
   salesCharge: string;

@@ -8,7 +8,7 @@ declare interface ISubmitHardCopyDocuments {
   docs: ISubmitHardCopyDocument[];
 }
 
-declare interface ISubmitHardCopyResult {
+declare interface ISubmitHardCopyResult extends ISubmissionSummaryResponse {
   orderNumber: string;
   status: string;
   remarks: string[];

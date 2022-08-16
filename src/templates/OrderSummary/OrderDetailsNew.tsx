@@ -303,6 +303,14 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                       },
                     ];
 
+                    if (investment.fundType === "AMP") {
+                      fundDetails.push({
+                        label: DASHBOARD_ORDER_DETAILS.LABEL_LANDING_FUND,
+                        title: investment.landingFund || "-",
+                        titleStyle: fsTransformNone,
+                      });
+                    }
+
                     // if (investment.isFea !== null) {
                     //   fundDetails.splice(-3, 0, { label: DASHBOARD_ORDER_DETAILS.LABEL_FEA, title: investment.isFea });
                     // }

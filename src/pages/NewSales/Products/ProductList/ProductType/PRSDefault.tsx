@@ -197,20 +197,20 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
         </View>
       ) : null}
       <ProductListView
-        accountNo={accountDetails.accountNo}
+        accountDetails={accountDetails}
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleNext={handleNext}
         handlePrev={handlePrev}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
-        list={loading === true ? [] : recommended}
+        list={loading === true ? [] : (recommended as unknown as ITableData[])}
         loading={loading}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
         search={search}
-        selectedFunds={selectedFunds}
+        selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
         shareSuccess={shareSuccess}
         sort={sort}

@@ -16,6 +16,7 @@ import {
 } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
+import { getProductTagType } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -219,7 +220,7 @@ const NewSalesRiskProfileComponent: FunctionComponent<IRiskSummaryProps> = ({
   };
 
   const checkEpf = isEpf === true ? "EPF" : "Cash";
-  const tags = accountNo !== "" ? [fundType.toUpperCase(), checkEpf] : [];
+  const tags = accountNo !== "" ? [getProductTagType(fundType), checkEpf] : [];
   const checkJointHeader = RISK_ASSESSMENT.NEW_SALES_HEADING_2_JOINT;
   const header = accountNo !== "" ? RISK_ASSESSMENT.NEW_SALES_HEADING_2_NEW_FUND : checkJointHeader;
   // const checkJointSubtitle = accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_HEADING_3_JOINT : RISK_ASSESSMENT.NEW_SALES_HEADING_3;

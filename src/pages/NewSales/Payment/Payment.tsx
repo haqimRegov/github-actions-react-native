@@ -343,7 +343,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
                   </Fragment>
                 );
               })}
-            {activeOrder.order !== "" ? null : <CustomSpacer space={sh152} />}
+            {activeOrder.order !== "" ? <CustomSpacer space={sh24} /> : <CustomSpacer space={sh152} />}
           </View>
         </ScrollView>
         {activeOrder.order !== "" ? null : (

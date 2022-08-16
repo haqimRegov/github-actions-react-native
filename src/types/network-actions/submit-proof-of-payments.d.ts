@@ -33,20 +33,10 @@ declare interface ISubmitProofOfPaymentsRequest {
   orders: ISubmitProofOfPaymentOrder[];
 }
 
-declare interface ISubmitProofOfPaymentsDocRemarks {
-  jointHolder: string[];
-  principalHolder: string[];
-}
-
-declare interface ISubmitProofOfPaymentsDocList {
-  remarks: ISubmitProofOfPaymentsDocRemarks;
-  title: string;
-}
-
-declare interface ISubmitProofOfPaymentResultOrder {
-  docList: ISubmitProofOfPaymentsDocList[];
+declare interface ISubmitProofOfPaymentResultOrder extends ISubmissionSummaryResponse {
   excessAmount: IOrderAmount[];
   orderNumber: string;
+  totalRecurring: string;
   paymentType: string;
   remarks: string[];
   status: string;

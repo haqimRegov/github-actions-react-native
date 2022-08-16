@@ -435,6 +435,7 @@ export const english = {
       LABEL_INVESTOR_NAME: "Investor Name",
       LABEL_KIB_ACCOUNT: "KIB Bank Account Number",
       LABEL_KIB_CURRENCY: "KIB Bank Currency",
+      LABEL_LANDING_FUND: "Landing Fund",
       LABEL_ORDER_NUMBER: "Order Number",
       LABEL_PAYMENT_METHOD: "Payment Method",
       LABEL_PAYMENT: "Payment",
@@ -1812,6 +1813,7 @@ export const english = {
       LABEL_PRINCIPAL_JOINT: "Principal & Joint Holder",
       LABEL_PRINCIPAL: "Principal Holder",
       TITLE_PAYMENT: "Total Payment",
+      TITLE_RECURRING: "Total Recurring",
       TITLE_SOFTCOPY: "Softcopy Documents",
     },
     SUMMARY: {

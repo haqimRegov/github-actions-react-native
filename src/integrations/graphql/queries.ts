@@ -615,6 +615,7 @@ const getOrderSummary = gql`
             investmentType
             isFea
             recurring
+            landingFund
             salesCharge
             scheduledInvestmentAmount
             scheduledSalesCharge
@@ -995,6 +996,8 @@ const listPaymentRequired = gql`
             fundType
             fundClass
             fundName
+            fundCode
+            landingFund
             fundIssuer
             fundCurrency
             investmentAmount

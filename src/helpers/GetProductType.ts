@@ -18,6 +18,26 @@ export const getProductType = (type: string) => {
   }
 };
 
+export const getProductTagType = (type: string) => {
+  switch (type.toLowerCase()) {
+    case "ut":
+      return "UT";
+
+    case "prs":
+      return "PRS";
+
+    case "prsdefault":
+    case "prs default":
+      return "PRS Default";
+
+    case "amp":
+      return "AMP";
+
+    default:
+      return type;
+  }
+};
+
 export const getProductTabType = (type: string): ProductType => {
   switch (type) {
     case "UT":

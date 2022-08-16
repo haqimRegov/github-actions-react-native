@@ -5,7 +5,7 @@ import { LocalAssets } from "../../assets/images/LocalAssets";
 import { BasicModal, CustomSpacer, Loading, NewPrompt, SubmissionSummaryPrompt } from "../../components";
 import { Language } from "../../constants";
 import { centerHV, colorWhite, fsAlignLeft, fullHeight, fullHW, sh16 } from "../../styles";
-import { formatAmount, isArrayNotEmpty } from "../../utils";
+import { formatAmount, isArrayNotEmpty, isNotEmpty } from "../../utils";
 import { SubmissionSummaryCollapsible } from "../OrderSubmission";
 
 const { PAYMENT, SUBMISSION_SUMMARY } = Language.PAGE;
@@ -70,7 +70,9 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
     result !== undefined
       ? result.orders.map((eachOrder) => {
           const amount = eachOrder.totalPayment.map((eachAmount) => `${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
-          const excessAmount = eachOrder.excessAmount.map((eachAmount) => `+ ${eachAmount.currency} ${formatAmount(eachAmount.amount)}`);
+          const excessAmount = eachOrder.excessAmount.map((eachAmount) =>
+            isNotEmpty(eachAmount) ? `+ ${eachAmount.currency} ${formatAmount(eachAmount.amount)}` : "",
+          );
           const totalPayment: ISubmissionSummaryRemarks[] =
             eachOrder.totalPayment.length === 0 ||
             (eachOrder.totalPayment.length === 1 && eachOrder.totalPayment[0].amount === null) ||
@@ -121,7 +123,15 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             ? [{ title: SUBMISSION_SUMMARY.TITLE_SOFTCOPY, remarks: softcopyDocs }]
             : [];
 
-          const remarks: ISubmissionSummaryRemarks[] = softcopyDocuments.concat(totalPayment);
+          const cashRemarks: ISubmissionSummaryRemarks[] = softcopyDocuments.concat(totalPayment);
+
+          const recurringRemark: ISubmissionSummaryRemarks[] =
+            eachOrder.paymentType === "Recurring"
+              ? [{ title: SUBMISSION_SUMMARY.TITLE_RECURRING, remarks: [eachOrder.totalRecurring] }]
+              : [];
+
+          const remarks = eachOrder.paymentType === "Cash" ? cashRemarks : recurringRemark;
+
           return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
         })
       : [];

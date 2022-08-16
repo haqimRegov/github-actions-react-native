@@ -123,14 +123,11 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             ? [{ title: SUBMISSION_SUMMARY.TITLE_SOFTCOPY, remarks: softcopyDocs }]
             : [];
 
-          const cashRemarks: ISubmissionSummaryRemarks[] = softcopyDocuments.concat(totalPayment);
-
-          const recurringRemark: ISubmissionSummaryRemarks[] =
+          const remarks: ISubmissionSummaryRemarks[] = softcopyDocuments.concat(
             eachOrder.paymentType === "Recurring"
               ? [{ title: SUBMISSION_SUMMARY.TITLE_RECURRING, remarks: [eachOrder.totalRecurring] }]
-              : [];
-
-          const remarks = eachOrder.paymentType === "Cash" ? cashRemarks : recurringRemark;
+              : totalPayment,
+          );
 
           return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
         })

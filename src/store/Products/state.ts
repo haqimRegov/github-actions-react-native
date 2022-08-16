@@ -58,12 +58,10 @@ export const productsInitialFilter = {
 };
 
 export const initialAvailableFilters: IProductAvailableFilter = {
-  epfApproved: [],
   fundCurrency: [],
-  fundType: [],
+  fundCategory: [],
   issuingHouse: [],
   riskCategory: [],
-  shariahConventional: [],
 };
 
 export const ampInitialFilter = {

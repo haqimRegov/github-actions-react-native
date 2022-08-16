@@ -201,37 +201,35 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         const { data, error } = clientResponse;
         if (error === null && data !== null) {
           let riskInfo: IRiskProfile | undefined;
-          if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
-            if (isNtb !== true) {
-              riskInfo = data.result.riskInfo;
-              addRiskScore({
-                ...riskAssessment,
-                appetite: data.result.riskInfo.appetite,
-                rangeOfReturn: data.result.riskInfo.expectedRange,
-                profile: data.result.riskInfo.profile,
-                type: data.result.riskInfo.type,
-                fundSuggestion: "",
-                netWorth: data.result.riskInfo.hnwStatus,
-              });
-            }
-            updateNewSales({
-              ...newSales,
-              investorProfile: {
-                ...newSales.investorProfile,
-                principalClientId: investorData!.clientId,
-                jointClientId: jointClientId.current,
-              },
-              riskInfo: riskInfo,
-              accountDetails: {
-                ...newSales.accountDetails,
-                accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
-                authorisedSignatory: item !== undefined ? handleSignatoryFromBE(item.authorisedSignatory) : "",
-                fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
-                isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
-                isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
-              },
+          if (isNtb !== true && isNotEmpty(data.result.riskInfo)) {
+            riskInfo = data.result.riskInfo;
+            addRiskScore({
+              ...riskAssessment,
+              appetite: data.result.riskInfo!.appetite,
+              rangeOfReturn: data.result.riskInfo!.expectedRange,
+              profile: data.result.riskInfo!.profile,
+              type: data.result.riskInfo!.type,
+              fundSuggestion: "",
+              netWorth: data.result.riskInfo!.hnwStatus,
             });
           }
+          updateNewSales({
+            ...newSales,
+            investorProfile: {
+              ...newSales.investorProfile,
+              principalClientId: investorData!.clientId,
+              jointClientId: jointClientId.current,
+            },
+            riskInfo: riskInfo,
+            accountDetails: {
+              ...newSales.accountDetails,
+              accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
+              authorisedSignatory: item !== undefined ? handleSignatoryFromBE(item.authorisedSignatory) : "",
+              fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
+              isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
+              isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
+            },
+          });
           const resetJointInfo =
             accountType !== 1 &&
             (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");

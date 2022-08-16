@@ -4,7 +4,6 @@ import { View } from "react-native";
 import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import { FILTER_FUND_TYPE_NEW, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
-import { getProductTabType } from "../../../../../helpers";
 import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
@@ -110,7 +109,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
         <View>
           <SingleSelectPills
             direction="row"
-            disabled={getProductTabType(accountFundType) === "prsDefault"}
+            disabled={accountFundType === "prsDefault"}
             header={PRODUCT_FILTER.LABEL_TYPE}
             labels={FILTER_TYPE}
             labelStyle={{ lineHeight: sh24 }}

@@ -126,12 +126,14 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
           },
         });
       }
-      const updatedFilters: string[] = funds.filters.fundCategory!;
+      const updatedFilters: IProductAvailableFilter = { ...funds.filters };
       if (funds.filters.fundCategory!.includes("BALANCE")) {
+        const updatedFundCategory = [...funds.filters.fundCategory!];
         const findBalanceIndex = funds.filters.fundCategory!.findIndex((eachCategory: string) => eachCategory === "BALANCE");
-        updatedFilters.splice(findBalanceIndex, 1, "BALANCED");
+        updatedFundCategory.splice(findBalanceIndex, 1, "BALANCED");
+        updatedFilters.fundCategory = updatedFundCategory;
       }
-      updateAvailableFilters(funds.filters);
+      updateAvailableFilters(updatedFilters);
     }
   };
 

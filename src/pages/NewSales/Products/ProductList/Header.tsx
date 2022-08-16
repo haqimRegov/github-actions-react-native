@@ -123,7 +123,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   };
 
   const handleCancelFilter = () => {
-    handleCancel();
+    handleResetFilter();
     handleShowFilter();
   };
 
@@ -292,6 +292,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
             cancelButtonStyle={{ width: sw218 }}
             continueButtonStyle={{ width: sw218 }}
             labelContinue={PRODUCT_FILTER.BUTTON_APPLY}
+            labelCancel={PRODUCT_FILTER.LABEL_RESET}
             handleCancel={handleCancelFilter}
             handleContinue={handleApplyFilter}
           />

@@ -90,20 +90,23 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
   if (accountHolder === "Principal" && findRiskAssessment === -1) {
     updatedNewSalesSteps.splice(1, 0, RISK_ASSESSMENT);
   }
-  const findDeclarations = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.key === FORCE_UPDATE_KEYS.Declarations);
-  if (findDeclarations !== -1) {
-    if (declarations.length === 0) {
-      updatedNewSalesSteps.splice(findDeclarations, 1);
-    } else {
-      const updatedContent = cloneDeep(updatedNewSalesSteps[findDeclarations].content!).filter(
-        (eachContent: IForceUpdateContentItem) =>
-          (eachContent.route === FORCE_UPDATE_ROUTES.FATCADeclaration && declarations.includes("fatca")) ||
-          (eachContent.route === FORCE_UPDATE_ROUTES.CRSDeclaration && declarations.includes("crs")) ||
-          eachContent.route === "DeclarationSummary",
-      );
-      updatedNewSalesSteps[findDeclarations].content = updatedContent;
-    }
-  }
+
+  // For optional declarations
+
+  // const findDeclarations = updatedNewSalesSteps.findIndex((step: IForceUpdate) => step.key === FORCE_UPDATE_KEYS.Declarations);
+  // if (findDeclarations !== -1) {
+  //   if (declarations.length === 0) {
+  //     updatedNewSalesSteps.splice(findDeclarations, 1);
+  //   } else {
+  //     const updatedContent = cloneDeep(updatedNewSalesSteps[findDeclarations].content!).filter(
+  //       (eachContent: IForceUpdateContentItem) =>
+  //         (eachContent.route === FORCE_UPDATE_ROUTES.FATCADeclaration && declarations.includes("fatca")) ||
+  //         (eachContent.route === FORCE_UPDATE_ROUTES.CRSDeclaration && declarations.includes("crs")) ||
+  //         eachContent.route === "DeclarationSummary",
+  //     );
+  //     updatedNewSalesSteps[findDeclarations].content = updatedContent;
+  //   }
+  // }
 
   const handleNextStep = (route: TypeForceUpdateKey) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {

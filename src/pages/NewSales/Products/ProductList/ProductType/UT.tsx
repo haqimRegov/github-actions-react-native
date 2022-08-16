@@ -13,6 +13,7 @@ import { ProductListView } from "../Listing";
 
 interface UnitTrustProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
+  handleResetFilter: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
@@ -107,14 +108,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   const handleFetchUT = async (newPage: string) => {
     Keyboard.dismiss();
     const funds = await handleFetch(newPage);
-    const updatedAvailableFilters: IProductAvailableFilter = {
-      fundType: [],
-      issuingHouse: [],
-      riskCategory: [],
-      fundCurrency: [],
-      shariahConventional: [],
-      epfApproved: [],
-    };
     if (funds !== undefined) {
       if (showBy === "all") {
         addUtAllFunds({
@@ -133,7 +126,12 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
           },
         });
       }
-      updateAvailableFilters(updatedAvailableFilters);
+      let updatedFilters: string[] = funds.filters.fundCategory!;
+      if (funds.filters.fundCategory!.includes("BALANCE")) {
+        const findBalanceIndex = funds.filters.fundCategory!.findIndex((eachCategory: string) => eachCategory === "BALANCE");
+        updatedFilters.splice(findBalanceIndex, 1, "BALANCED");
+      }
+      updateAvailableFilters(funds.filters);
     }
   };
 

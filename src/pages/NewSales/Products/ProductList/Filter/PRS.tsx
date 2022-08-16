@@ -53,18 +53,17 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
 
   // TODO Change to not includes
 
-  const disabledFundTypes: string[] = FILTER_FUND_TYPE.map((eachFundType) => eachFundType.value).filter((eachValue: string) =>
-    availableFilters.fundType!.includes(eachValue),
+  const disabledFundTypes: string[] = FILTER_FUND_TYPE.map((eachFundType) => eachFundType.value).filter(
+    (eachValue: string) =>
+      !availableFilters.fundCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
   const disabledIssuingHouse: string[] = FILTER_ISSUING_HOUSE.map((eachIssuingHouse) => eachIssuingHouse.value).filter(
-    (eachValue: string) => availableFilters.issuingHouse!.includes(eachValue),
+    (eachValue: string) =>
+      !availableFilters.issuingHouse!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
-  const disabledRiskCategory: string[] = FILTER_RISK_CATEGORY.map((eachRisk) => eachRisk.value).filter((eachValue: string) =>
-    availableFilters.riskCategory!.includes(eachValue),
-  );
-
-  const disabledType: string[] = FILTER_TYPE.map((eachType) => eachType.value!).filter((eachValue: string) =>
-    availableFilters.shariahConventional!.includes(eachValue),
+  const disabledRiskCategory: string[] = FILTER_RISK_CATEGORY.map((eachRisk) => eachRisk.value).filter(
+    (eachValue: string) =>
+      !availableFilters.riskCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
 
   const conventionalSelected = conventional![0] === "Yes" ? "Conventional" : "";
@@ -112,7 +111,6 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
           <SingleSelectPills
             direction="row"
             disabled={getProductTabType(accountFundType) === "prsDefault"}
-            disabledValues={disabledType}
             header={PRODUCT_FILTER.LABEL_TYPE}
             labels={FILTER_TYPE}
             labelStyle={{ lineHeight: sh24 }}

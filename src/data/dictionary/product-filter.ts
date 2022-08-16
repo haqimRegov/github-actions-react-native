@@ -21,12 +21,12 @@ export const FILTER_FUND_CURRENCY = [
 ];
 
 export const FILTER_FUND_TYPE = [
+  { label: "Balanced", value: "Balanced" },
   { label: "Equity", value: "Equity" },
-  { label: "Fixed Income / Bond / Sukuk", value: "Fixed Income / Bond / Sukuk" },
+  { label: "Fixed Income", value: "Fixed Income" },
   { label: "Growth", value: "Growth" },
-  { label: "Mixed Asset / Balanced", value: "Mixed Asset / Balanced" },
+  { label: "Mixed Asset", value: "Mixed Asset" },
   { label: "Money Market", value: "Money Market" },
-  { label: "Alternative", value: "Alternative" },
 ];
 
 export const FILTER_RISK_CATEGORY = [

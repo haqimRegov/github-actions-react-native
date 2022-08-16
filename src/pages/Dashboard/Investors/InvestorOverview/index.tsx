@@ -490,7 +490,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     let checkForceUpdateETB: string | boolean = false;
     if (item.jointName !== null) {
       const clientCheckRequest: IEtbCheckRequest = {
-        idType: item.jointIdType!,
+        idType: item.jointIdType as TypeClientID,
         id: item.jointIdNumber,
         name: item.jointName,
       };
@@ -499,7 +499,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
 
     if (typeof checkForceUpdateETB === "string") {
       Alert.alert(checkForceUpdateETB);
-    } else if (checkForceUpdateETB === true) {
+    } else if (checkForceUpdateETB === true || (checkForceUpdateETB === false && item.jointName === null)) {
       const check = await handleClientRegister(req, item);
       if (item.fundType === "UT" && item.paymentMethod === "EPF") {
         const epfFilterArray: string[] = item.paymentMethod === "EPF" ? ["Yes"] : [];

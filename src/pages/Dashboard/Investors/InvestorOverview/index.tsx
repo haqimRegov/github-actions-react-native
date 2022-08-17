@@ -213,6 +213,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               netWorth: data.result.riskInfo!.hnwStatus,
             });
           }
+
+          const fundType = item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType;
           updateNewSales({
             ...newSales,
             investorProfile: {
@@ -225,9 +227,10 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               ...newSales.accountDetails,
               accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
               authorisedSignatory: item !== undefined ? handleSignatoryFromBE(item.authorisedSignatory) : "",
-              fundType: item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType,
+              fundType: fundType,
               isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
               isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
+              isSyariah: item !== undefined && fundType === "prsDefault" ? item.isSyariah : false,
             },
           });
           const resetJointInfo =
@@ -512,6 +515,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         });
       }
       if (getProductTabType(item.fundType) === "prsDefault") {
+        console.log("item", item);
         const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
         addPrsDefaultFilters({
           epfApproved: [],

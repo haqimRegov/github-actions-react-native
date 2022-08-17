@@ -201,7 +201,8 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               ...syariahConventional,
             });
           }
-          updateProductType(getProductTabType(eachAccount.fundType));
+          const fundType = getProductTabType(eachAccount.fundType);
+          updateProductType(fundType);
           updateNewSales({
             ...newSales,
             finishedSteps: updatedFinishedSteps,
@@ -215,9 +216,10 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             accountDetails: {
               ...newSales.accountDetails,
               accountNo: eachAccount.accountNo,
-              fundType: getProductTabType(eachAccount.fundType),
+              fundType: fundType,
               isEpf: eachAccount.paymentMethod.toLowerCase() === "epf",
               isRecurring: eachAccount.isRecurring,
+              isSyariah: fundType === "prsDefault" ? eachAccount.isSyariah : false,
             },
           });
           handleNextStep("RiskProfile");

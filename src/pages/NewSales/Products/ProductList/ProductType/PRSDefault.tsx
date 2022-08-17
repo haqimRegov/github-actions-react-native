@@ -29,6 +29,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   addSelectedFund,
   addViewFund,
   details,
+  newSales,
   products,
   productType,
   resetSelectedFund,
@@ -41,6 +42,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   updateAvailableFilters,
 }: PRSDefaultProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const { transactionType } = newSales;
   const { availableFilters } = products;
   const { filters, page, pages, recommended, search, sort, totalCount } = products.prsDefault;
   const [loading, setLoading] = useState<boolean>(false);
@@ -128,6 +130,26 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     setFilterTemp(filters);
   };
 
+  const handleResetFilter = () => {
+    const prsDefaultType = transactionType === "Sales-NS" && accountDetails.fundType === "prsDefault";
+    if (prsDefaultType === true) {
+      const syariahConventional = accountDetails.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
+
+      addPrsDefaultFilters({
+        epfApproved: [],
+        fundCurrency: [],
+        fundType: [],
+        issuingHouse: [],
+        riskCategory: [],
+        shariahApproved: [],
+        conventional: [],
+        ...syariahConventional,
+      });
+    } else {
+      resetPRSDefaultFilter();
+    }
+  };
+
   const handleUpdateFilter = (newFilter: IProductFilter) => {
     setFilterTemp(newFilter);
     addPrsDefaultFilters(newFilter);
@@ -181,7 +203,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
         filterVisible={filterVisible}
         handleCancel={handleCancelFilter}
         handleConfirm={handleConfirmFilter}
-        handleResetFilter={resetPRSDefaultFilter}
+        handleResetFilter={handleResetFilter}
         handleSearch={handleSearch}
         handleShowFilter={handleShowFilter}
         handleUpdateFilter={handleUpdateFilter}

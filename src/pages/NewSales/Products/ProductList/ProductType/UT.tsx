@@ -165,6 +165,23 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
     setFilterTemp(filters);
   };
 
+  const handleResetFilter = () => {
+    const epfAccountType = transactionType === "Sales-NS" && accountDetails.fundType === "ut" && accountDetails.isEpf === true;
+    if (epfAccountType === true) {
+      addUtFilters({
+        fundCurrency: [],
+        fundType: [],
+        issuingHouse: [],
+        riskCategory: [],
+        shariahApproved: [],
+        conventional: [],
+        epfApproved: ["Yes"],
+      });
+    } else {
+      resetUTFilter();
+    }
+  };
+
   const handleAllFunds = () => {
     if (showBy === "recommended") {
       updateUtShowBy("all");
@@ -227,7 +244,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
         filterVisible={filterVisible}
         handleCancel={handleCancelFilter}
         handleConfirm={handleConfirmFilter}
-        handleResetFilter={resetUTFilter}
+        handleResetFilter={handleResetFilter}
         handleSearch={handleSearch}
         handleShowFilter={handleShowFilter}
         handleUpdateFilter={handleUpdateFilter}

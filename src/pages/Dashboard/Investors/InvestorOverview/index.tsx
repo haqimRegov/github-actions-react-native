@@ -515,7 +515,6 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         });
       }
       if (getProductTabType(item.fundType) === "prsDefault") {
-        console.log("item", item);
         const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
         addPrsDefaultFilters({
           epfApproved: [],

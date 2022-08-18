@@ -25,7 +25,7 @@ import {
   shadow12Black112,
   sw24,
 } from "../../../../styles";
-import { isNotEmpty } from "../../../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
@@ -438,9 +438,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         },
       });
       const checkDeclarations =
-        clientCheckData !== undefined && clientCheckData?.declarationRequired !== null
-          ? clientCheckData!.declarationRequired
-          : ["fatca", "crs"];
+        isNotEmpty(clientCheckData) && isArrayNotEmpty(clientCheckData!.declarationRequired) ? clientCheckData!.declarationRequired : [];
 
       let fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData!.address) ? getAddress(investorData!.address) : undefined;
       if (clientCheckData !== undefined && isNotEmpty(clientCheckData.address)) {

@@ -597,6 +597,7 @@ const submitClientAccountTransactions = gql`
               isFea
               landingFund
               fundCode
+              isTopup
             }
           }
         }

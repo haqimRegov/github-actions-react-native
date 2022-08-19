@@ -13,26 +13,31 @@ import {
   colorWhite,
   flexChild,
   flexRow,
+  fs10RegBlue9,
   fs12BoldGray5,
   fs16BoldBlack2,
   fs18BoldBlue1,
   fsCapitalize,
   fsTransformNone,
   px,
+  py,
   rowCenterVertical,
   sh1,
   sh10,
   sh12,
+  sh2,
   sh24,
   sh64,
   sh8,
+  sw05,
   sw16,
   sw239,
   sw24,
+  sw4,
   sw40,
   sw8,
 } from "../../styles";
-import { formatAmount } from "../../utils";
+import { formatAmount, isNotEmpty } from "../../utils";
 
 const { FUND_OVERVIEW, ORDER_SUMMARY } = Language.PAGE;
 
@@ -171,26 +176,26 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     titleStyle: { ...fs16BoldBlack2, ...fsTransformNone },
   };
 
-  // const tagStyle: ViewStyle = {
-  //   ...px(sw4),
-  //   ...py(sh2),
-  //   ...border(colorBlue._9, sw05, sw4),
-  //   ...centerHV,
-  // };
+  const tagStyle: ViewStyle = {
+    ...px(sw4),
+    ...py(sh2),
+    ...border(colorBlue._9, sw05, sw4),
+    ...centerHV,
+  };
 
   return (
     <View style={{ backgroundColor: colorWhite._1, ...style }}>
       <Pressable style={headerStyle} onPress={handleExpand}>
         <View style={flexRow}>
           <Text style={fs18BoldBlue1}>{fundName}</Text>
-          {/* {isTopup === true ? (
+          {isNotEmpty(isTopup) && isTopup === false ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw8} />
               <View style={tagStyle}>
                 <Text style={fs10RegBlue9}>{ORDER_SUMMARY.LABEL_NEW_FUND}</Text>
               </View>
             </Fragment>
-          ) : null} */}
+          ) : null}
         </View>
         <CustomFlexSpacer />
         <IconButton

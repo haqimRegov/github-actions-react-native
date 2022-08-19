@@ -56,16 +56,17 @@ import {
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
 import { isObjectEqual } from "../../utils";
-import { defaultContentProps } from "./Content";
+import { defaultContentProps } from "../ForceUpdate/Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
-interface RiskAssessmentContentProps extends NewSalesContentProps, RiskStoreProps {
+interface RiskAssessmentContentProps extends RiskStoreProps, NewSalesContentProps {
   navigation: IStackNavigationProp;
 }
 
 const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentProps> = ({
   addAssessmentQuestions,
+  addRiskInfo,
   addRiskScore,
   details,
   handleNextStep,
@@ -122,9 +123,18 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
         toastVisible: true,
       },
     });
-    addRiskScore(currentRiskScore);
+    if (riskScore.appetite === "") {
+      addRiskScore(currentRiskScore);
+    }
+    addRiskInfo({
+      appetite: currentRiskScore!.appetite,
+      hnwStatus: currentRiskScore!.netWorth,
+      profile: currentRiskScore!.profile,
+      expectedRange: currentRiskScore!.rangeOfReturn,
+      type: currentRiskScore!.type,
+    });
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
-    handleNextStep("RiskProfile");
+    handleNextStep("RiskSummary");
   };
 
   const handleRetakeAssessment = () => {
@@ -192,7 +202,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
 
   const handleCancelAssessment = () => {
     resetQuestionnaire();
-    handleNextStep("RiskProfile");
+    handleNextStep("RiskSummary");
   };
 
   const isAssessment = confirmModal === "assessment";

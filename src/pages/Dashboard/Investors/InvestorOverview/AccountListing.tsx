@@ -22,6 +22,7 @@ import {
   sw224,
   sw56,
 } from "../../../../styles";
+import { isArrayNotEmpty } from "../../../../utils";
 import { InvestorDetailsCustomTableItem } from "./CustomItems";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
@@ -241,7 +242,9 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
         });
         if (data.result.isForceUpdate === true) {
           setForceUpdatePrompt(true);
-          updateForceUpdateDeclarations(data.result.declarationRequired);
+          if (isArrayNotEmpty(data.result.declarationRequired)) {
+            updateForceUpdateDeclarations(data.result.declarationRequired);
+          }
         }
         setPage(currentPage);
         setPages(pages);

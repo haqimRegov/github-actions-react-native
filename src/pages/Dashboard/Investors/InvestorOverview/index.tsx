@@ -439,13 +439,15 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       });
       const checkDeclarations =
         isNotEmpty(clientCheckData) && isArrayNotEmpty(clientCheckData!.declarationRequired) ? clientCheckData!.declarationRequired : [];
+      const checkInvestorDeclarations = isArrayNotEmpty(investorData.declarationRequired) ? investorData.declarationRequired : [];
+      const declarationToUse = isArrayNotEmpty(checkDeclarations) ? checkDeclarations : checkInvestorDeclarations;
 
       let fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData!.address) ? getAddress(investorData!.address) : undefined;
       if (clientCheckData !== undefined && isNotEmpty(clientCheckData.address)) {
         fatcaAddress = getAddress(clientCheckData!.address!);
       }
 
-      updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: checkDeclarations });
+      updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: declarationToUse });
       setAccountType(0);
       navigation.navigate("ForceUpdate");
     }

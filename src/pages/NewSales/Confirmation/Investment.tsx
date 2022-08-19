@@ -20,7 +20,6 @@ import {
   borderBottomBlue5,
   borderBottomGray2,
   centerVertical,
-  colorBlack,
   colorBlue,
   colorWhite,
   flexRow,
@@ -38,19 +37,17 @@ import {
   sh24,
   sh4,
   sh64,
-  sh8,
   sw116,
   sw12,
   sw120,
   sw148,
   sw152,
-  sw16,
   sw32,
   sw360,
   sw64,
   sw7,
 } from "../../../styles";
-import { formatAmount, isAmount, parseAmount } from "../../../utils";
+import { AnimationUtils, formatAmount, isAmount, parseAmount } from "../../../utils";
 
 const { INVESTMENT } = Language.PAGE;
 
@@ -73,8 +70,8 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   setData,
   withEpf,
 }: InvestmentProps) => {
-  const { allowEpf, investment, fundDetails, masterClassList } = data;
-  const { isRecurring: isExistingAccountRecurring } = accountDetails;
+  const { allowEpf, investment, fundDetails, isNewFund, masterClassList } = data;
+  const { accountNo, isRecurring: isExistingAccountRecurring } = accountDetails;
 
   const {
     amountError,
@@ -89,6 +86,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     scheduledInvestmentAmount,
     scheduledSalesCharge,
     scheduledSalesChargeError,
+    isTopup,
   } = investment;
 
   const { isEpf, isScheduled } = fundDetails;
@@ -98,7 +96,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
 
   const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
-  const radioColor = isEpf === "Yes" ? undefined : colorBlack._1;
   const fundingOption =
     fundDetails.isEpfOnly === "Yes" || (accountDetails.isEpf !== undefined && accountDetails.isEpf === true)
       ? [INVESTMENT.QUESTION_1_OPTION_2]
@@ -112,6 +109,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   ) {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
+  const fundSelectedOptions = [INVESTMENT.LABEL_NEW_FUND, INVESTMENT.LABEL_EXISTING_FUND];
   const classCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === fundCurrency);
   const { newSalesAmount, salesCharge, topUpAmount } = masterClassList[fundClass!][classCurrencyIndex];
 
@@ -129,7 +127,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
 
   const minNewSalesAmount = formatAmount(newSalesAmount[fundingMethod].min);
   const minTopUpAmount = formatAmount(topUpAmount[fundingMethod].min);
-  const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${minNewSalesAmount})`;
+  const minNewSalesAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${fundCurrency} ${isTopup === true ? minTopUpAmount : minNewSalesAmount})`;
   const minTopUpAmountLabel = ` (${INVESTMENT.LABEL_MINIMUM} ${DICTIONARY_RECURRING_CURRENCY} ${minTopUpAmount})`;
 
   const currencies =
@@ -204,11 +202,21 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   };
 
   const checkInvestmentAmount = () => {
-    setAmountError(validateAmount(investmentAmount, "newSalesAmount"));
+    setAmountError(validateAmount(investmentAmount, isTopup === true ? "topUpAmount" : "newSalesAmount"));
   };
 
   const checkScheduledInvestmentAmount = () => {
     setScheduledAmountError(validateAmount(scheduledInvestmentAmount!, "topUpAmount"));
+  };
+
+  const handleFundStatus = (option: string) => {
+    const fundStatus = option === INVESTMENT.LABEL_NEW_FUND;
+    setData({
+      ...data,
+      isNewFund: fundStatus,
+      investment: { ...investment, investmentAmount: "", investmentSalesCharge: "", isTopup: false },
+    });
+    AnimationUtils.layout();
   };
 
   const handleCurrency = (value: string) => {
@@ -317,6 +325,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     setData(newData);
   };
 
+  const handleTopUp = () => {
+    setData({ ...data, investment: { ...investment, isTopup: !isTopup } });
+  };
+
   const handleScheduledAmount = (value: string) => {
     setData({ ...data, investment: { ...investment, scheduledInvestmentAmount: value } });
   };
@@ -365,10 +377,28 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const initialSalesCharge = salesChargeDifference === 0 && investmentSalesCharge === "" ? `${maxSalesCharge}` : investmentSalesCharge;
   const initialRecurringSalesCharge =
     salesChargeDifference === 0 && scheduledInvestment === true && scheduledSalesCharge === "" ? `${maxSalesCharge}` : scheduledSalesCharge;
+  const fundStatusString = isNewFund === true ? INVESTMENT.LABEL_NEW_FUND : INVESTMENT.LABEL_EXISTING_FUND;
 
   return (
     <Fragment>
       <View style={px(sw32)}>
+        {accountNo !== "" ? (
+          <Fragment>
+            <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh4} text={INVESTMENT.LABEL_CURRENT_ACCOUNT} />
+            <RadioButtonGroup
+              direction="row"
+              labelStyle={autoWidth}
+              options={fundSelectedOptions}
+              optionStyle={{ width: sw116 }}
+              space={sw64}
+              selected={fundStatusString}
+              setSelected={handleFundStatus}
+            />
+            <CustomSpacer space={sh16} />
+            <View style={borderBottomGray2} />
+            <CustomSpacer space={sh16} />
+          </Fragment>
+        ) : null}
         <View style={flexRow}>
           <View>
             <TextSpaceArea style={{ width: sw360 }} spaceToBottom={checkSpaceToLabel} text={INVESTMENT.LABEL_FUNDING_OPTION} />
@@ -382,7 +412,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                 optionStyle={{ width: sw116 }}
                 space={sw64}
                 selected={fundPaymentMethod}
-                selectedColor={radioColor}
                 setSelected={handleFundingMethod}
                 tooltipContent={
                   <View>
@@ -424,43 +453,92 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
         ) : null}
         <View style={borderBottomGray2} />
         <CustomSpacer space={sh16} />
-        <View style={flexRow}>
-          <View>
-            <View style={rowCenterVertical}>
-              <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_AMOUNT}</Text>
-              <Text style={fs12RegGray6}>{minNewSalesAmountLabel}</Text>
+
+        {isNewFund === true ? (
+          <View style={flexRow}>
+            <View>
+              <View style={rowCenterVertical}>
+                <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_AMOUNT}</Text>
+                <Text style={fs12RegGray6}>{minNewSalesAmountLabel}</Text>
+              </View>
+              <CustomTextInput
+                error={amountError}
+                inputPrefix={fundCurrency}
+                keyboardType="numeric"
+                onBlur={checkInvestmentAmount}
+                onChangeText={handleInvestmentAmount}
+                placeholder="0.00"
+                spaceToBottom={isRecurring === true ? sh12 : undefined}
+                spaceToTop={sh4}
+                value={investmentAmount}
+              />
             </View>
-            <CustomTextInput
-              error={amountError}
-              inputPrefix={fundCurrency}
-              keyboardType="numeric"
-              onBlur={checkInvestmentAmount}
-              onChangeText={handleInvestmentAmount}
-              placeholder="0.00"
-              spaceToBottom={isRecurring === true ? sh12 : undefined}
-              spaceToTop={sh4}
-              value={investmentAmount}
-            />
+            <CustomSpacer isHorizontal={true} space={sw64} />
+            <View>
+              <NumberPicker
+                disabled={salesChargeDifference === 0}
+                error={investmentSalesChargeError}
+                innerContainerStyle={innerContainer}
+                interval={salesChargeInterval}
+                label={INVESTMENT.LABEL_SALES_CHARGE_NEW}
+                onBlur={onBlurSalesCharge}
+                maxValue={maxSalesCharge}
+                minValue={minSalesCharge}
+                setValue={handleSalesCharge}
+                value={initialSalesCharge}
+              />
+              {investmentSalesChargeError !== undefined ? null : (
+                <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />
+              )}
+            </View>
           </View>
-          <CustomSpacer isHorizontal={true} space={sw64} />
+        ) : (
           <View>
-            <NumberPicker
-              disabled={salesChargeDifference === 0}
-              error={investmentSalesChargeError}
-              innerContainerStyle={innerContainer}
-              interval={salesChargeInterval}
-              label={INVESTMENT.LABEL_SALES_CHARGE}
-              onBlur={onBlurSalesCharge}
-              maxValue={maxSalesCharge}
-              minValue={minSalesCharge}
-              setValue={handleSalesCharge}
-              value={initialSalesCharge}
-            />
-            {investmentSalesChargeError !== undefined ? null : (
-              <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />
-            )}
+            <Switch label={INVESTMENT.LABEL_TOP_UP} labelStyle={fs16RegBlack2} onPress={handleTopUp} toggle={isTopup!} />
+            {isTopup === true ? (
+              <Fragment>
+                <CustomSpacer space={sh16} />
+                <View style={flexRow}>
+                  <View>
+                    <View style={rowCenterVertical}>
+                      <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_TOP_UP_AMOUNT}</Text>
+                      <Text style={fs12RegGray6}>{minTopUpAmountLabel}</Text>
+                    </View>
+                    <CustomTextInput
+                      error={amountError}
+                      inputPrefix={fundCurrency}
+                      keyboardType="numeric"
+                      onBlur={checkInvestmentAmount}
+                      onChangeText={handleInvestmentAmount}
+                      placeholder="0.00"
+                      spaceToBottom={isRecurring === true ? sh12 : undefined}
+                      spaceToTop={sh4}
+                      value={investmentAmount}
+                    />
+                  </View>
+                  <CustomSpacer isHorizontal={true} space={sw64} />
+                  <View>
+                    <NumberPicker
+                      disabled={salesChargeDifference === 0}
+                      error={investmentSalesChargeError}
+                      innerContainerStyle={innerContainer}
+                      interval={salesChargeInterval}
+                      label={INVESTMENT.LABEL_SALES_CHARGE_NEW}
+                      onBlur={onBlurSalesCharge}
+                      maxValue={maxSalesCharge}
+                      minValue={minSalesCharge}
+                      setValue={handleSalesCharge}
+                      value={initialSalesCharge}
+                    />
+                    {investmentSalesChargeError !== undefined ? null : (
+                      <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={salesChargeHintText} />
+                    )}
+                  </View>
+                </View>
+              </Fragment>
+            ) : null}
           </View>
-        </View>
+        )}
         {isRecurring === true ? (
           <Fragment>
             <CustomSpacer space={sh16} />
@@ -505,12 +583,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
         {scheduledInvestment === true ? (
           <Fragment>
             <CustomSpacer space={sh16} />
-            <View style={borderBottomGray2} />
-            <CustomSpacer space={sh16} />
             <View style={flexRow}>
               <View>
                 <View style={{ ...flexRow, ...centerVertical }}>
-                  <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_AMOUNT}</Text>
+                  <Text style={fs12BoldGray6}>{INVESTMENT.LABEL_RECURRING_AMOUNT}</Text>
                   <Text style={fs12RegGray6}>{minTopUpAmountLabel}</Text>
                 </View>
                 <CustomTextInput
@@ -523,11 +599,6 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   spaceToTop={sh4}
                   value={scheduledInvestmentAmount}
                 />
-                <CustomSpacer space={sh8} />
-                <View style={{ ...px(sw16) }}>
-                  <Text style={fs12RegGray5}>{`${INVESTMENT.HINT_FPX} ${minimumFpx}`}</Text>
-                  <Text style={fs12RegGray5}>{INVESTMENT.HINT_DDA}</Text>
-                </View>
               </View>
               <CustomSpacer isHorizontal={true} space={sw64} />
               <View>
@@ -536,7 +607,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   error={scheduledSalesChargeError}
                   innerContainerStyle={innerContainer}
                   interval={salesChargeInterval}
-                  label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE}
+                  label={INVESTMENT.LABEL_RECURRING_SALES_CHARGE_NEW}
                   onBlur={onBlurScheduledSalesCharge}
                   maxValue={maxSalesCharge}
                   minValue={minSalesCharge}

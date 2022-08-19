@@ -36,6 +36,7 @@ import {
   flexGrow,
   flexRow,
   fs10RegGray5,
+  fs12RegGray5,
   fs14BoldBlack2,
   fs14BoldBlue1,
   fs14RegGray5,
@@ -50,20 +51,25 @@ import {
   px,
   py,
   rowCenterVertical,
+  sh11,
   sh12,
   sh124,
   sh16,
+  sh20,
   sh24,
   sh240,
   sh4,
   sh40,
   shadow4Blue008,
   sw1,
+  sw100,
+  sw14,
   sw16,
   sw212,
   sw24,
   sw32,
   sw4,
+  sw760,
   sw8,
   sw96,
 } from "../../../styles";
@@ -97,6 +103,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   updateNewSales,
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
+  const { accountNo, ampFund, isEpf } = accountDetails;
   // const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = true;
   const flatListRef = useRef<FlatList | null>(null);
@@ -106,6 +113,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const [etbAccountList, setEtbAccountList] = useState<IEtbAccountDescription[]>([]);
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails!, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const checkAMP: TypeNewSalesRoute = ampFund !== undefined ? "RiskSummary" : "ProductsList";
+
   const handleScrollToFund = () => {
     const findIndex = isNotEmpty(investmentDetails)
       ? investmentDetails!.findIndex(
@@ -135,6 +144,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       salesCharge: investment.investmentSalesCharge,
       scheduledSalesCharge: investment.scheduledSalesCharge,
       prsType: fundDetails.prsType,
+      isTopup: investment.isTopup,
     };
   });
 
@@ -154,7 +164,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleBackToListing = () => {
-    handleNextStep("ProductsList");
+    handleNextStep(checkAMP);
   };
 
   const handleNavigation = () => {
@@ -237,18 +247,18 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       },
     });
 
-    const isNewFund = client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "";
-    const checkNextStep: TypeNewSalesRoute = isNewFund ? "OrderPreview" : "IdentityVerification";
+    const isNewFundPurchase = client.isNewFundPurchase === true || accountNo !== "";
+    const checkNextStep: TypeNewSalesRoute = isNewFundPurchase ? "OrderPreview" : "IdentityVerification";
 
     // combined New Fund and AO
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskProfile", "Products", "ProductsList", "ProductsConfirmation"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "Products", "ProductsList", "ProductsConfirmation"];
 
     if (riskAssessment.isRiskUpdated === true) {
       updatedFinishedSteps.push("RiskAssessment");
     }
 
-    const updatedDisabledSteps: TypeNewSalesKey[] = isNewFund
-      ? ["AccountList", "RiskProfile", "Products", "AccountInformation", "TermsAndConditions", "Signatures", "Payment"]
+    const updatedDisabledSteps: TypeNewSalesKey[] = isNewFundPurchase
+      ? ["AccountList", "RiskSummary", "Products", "AccountInformation", "TermsAndConditions", "Signatures", "Payment"]
       : // set to initial disabled steps without Products and ProductsList
         // not using reducer initial state because of redux mutating issue
         [
@@ -275,7 +285,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const handleSetupClient = async () => {
     const request: ISubmitClientAccountTransactionsRequest = {
       initId: client.details?.initId!,
-      accountNo: newSales.accountDetails.accountNo,
+      accountNo: accountNo,
       investments: investments,
     };
     const response: ISubmitClientAccountResponse = await submitClientAccountTransactions(request, navigation);
@@ -283,7 +293,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       const { data, error } = response;
       if (error === null && data !== null) {
         addOrders(data.result);
-        return;
       }
 
       if (error !== null) {
@@ -291,8 +300,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         setTimeout(() => {
           Alert.alert(error.message, errorList);
         }, 150);
+        return error;
       }
     }
+    return undefined;
   };
 
   const handleCheckAccounts = async () => {
@@ -342,9 +353,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleConfirmIdentity = async () => {
-    if (client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") {
-      await handleSetupClient();
-      handleNavigation();
+    if (client.isNewFundPurchase === true || accountNo !== "") {
+      const submitTransactionResponse = await handleSetupClient();
+      if (submitTransactionResponse === undefined) {
+        handleNavigation();
+      }
     } else {
       await handleCheckAccounts();
     }
@@ -373,11 +386,15 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const ampLabel = ampCount > 0 ? `${ampCount} ${INVESTMENT.LABEL_AMP}` : "";
 
   const bannerText = `${utLabel}${utSuffix}${prsPrefix}${prsLabel}${prsSuffix}${ampPrefix}${ampLabel}`;
+  const recurringContentOptions = [INVESTMENT.LABEL_RECURRING_CONTENT_1, INVESTMENT.LABEL_RECURRING_CONTENT_2];
 
-  const disableContinue = investmentDetails?.find(({ investment }) => {
+  const disableContinue = investmentDetails?.find(({ investment, isNewFund }) => {
     return (
-      investment.investmentAmount === "" ||
-      investment.investmentSalesCharge === "" ||
+      (isNewFund === true && investment.investmentAmount === "") ||
+      (isNewFund === false && investment.isTopup === true && investment.investmentAmount === "") ||
+      (isNewFund === true && investment.investmentSalesCharge === "") ||
+      (isNewFund === false && investment.isTopup === true && investment.investmentSalesCharge === "") ||
+      (isNewFund === false && investment.scheduledInvestment === false && investment.isTopup === false) ||
       (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
       (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
       investment.amountError !== undefined ||
@@ -409,7 +426,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     setSelectedFund(updatedProducts);
     setTempData(investmentDetails!);
     if (investmentDetails?.length === 0) {
-      handleNextStep("ProductsList");
+      handleNextStep(checkAMP);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [investmentDetails]);
@@ -422,8 +439,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       const checkData =
         findEpfIndex !== -1 ? eachDetails.fundDetails.issuingHouse === investmentDetails![findEpfIndex].fundDetails.issuingHouse : true;
       const checkMultipleUtmc = multiUtmc === true && eachDetails.fundDetails.isEpf ? true : checkData;
-      const checkEpf = accountDetails.isEpf === true ? "EPF" : "Cash";
-      const checkNewFundPurchase = accountDetails.isEpf !== undefined ? checkEpf : eachDetails.investment.fundPaymentMethod;
+      const checkEpf = isEpf === true ? "EPF" : "Cash";
+      const checkNewFundPurchase = isEpf !== undefined ? checkEpf : eachDetails.investment.fundPaymentMethod;
       const checkFundPaymentMethod = checkMultipleUtmc === false ? "Cash" : checkNewFundPurchase;
       return {
         ...eachDetails,
@@ -439,6 +456,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   }, []);
 
   const lastFundName = tempData !== undefined && tempData.length > 0 && tempData !== undefined ? tempData[0].fundDetails.fundName : "";
+  const checkRecurring = investmentDetails
+    ?.map((eachInvestment: IProductSales) => eachInvestment.investment.scheduledInvestment)
+    .includes(true);
+  const checkHeading = accountNo !== "" ? INVESTMENT.HEADING_NEW_SALES : INVESTMENT.HEADING;
+  const checkSubHeading = accountNo !== "" ? INVESTMENT.SUBHEADING_NEW_SALES : INVESTMENT.SUBHEADING;
 
   return (
     <Fragment>
@@ -452,17 +474,49 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               <View style={px(sw8)}>
                 <CustomSpacer space={sh40} />
                 <LabeledTitle
-                  label={INVESTMENT.HEADING}
+                  label={checkHeading}
                   labelStyle={fs18BoldGray6}
                   spaceToLabel={sh4}
-                  title={INVESTMENT.SUBHEADING}
+                  title={checkSubHeading}
                   titleStyle={fs14RegGray5}
                 />
-                {multiUtmc === false ? <Text style={fs16RegGray5}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text> : null}
+                {multiUtmc === false && accountNo === "" ? <Text style={fs14RegGray5}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text> : null}
                 <CustomSpacer space={sh24} />
               </View>
             }
-            ListFooterComponent={<CustomSpacer space={sh124} />}
+            ListFooterComponent={
+              <Fragment>
+                {checkRecurring === true ? (
+                  <Fragment>
+                    <CustomSpacer space={sh24} />
+                    <View style={{ ...border(colorBlue._9, sw1, sw8), ...px(sw24), ...py(sh16), marginLeft: sw8, marginRight: sw8 }}>
+                      <View style={flexRow}>
+                        <View style={{ ...centerHV, height: sh20 }}>
+                          <View style={{ width: sw14, height: sw14, ...centerHV, borderRadius: sw100, backgroundColor: colorBlue._1 }}>
+                            <Text style={{ fontSize: sh11, color: colorWhite._1 }}>i</Text>
+                          </View>
+                        </View>
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                        <View>
+                          <Text style={fs14BoldBlack2}>{INVESTMENT.LABEL_RECURRING_CONTENT_TITLE}</Text>
+                          <CustomSpacer space={sh4} />
+                          {recurringContentOptions.map((eachContent: string, eachIndex: number) => {
+                            return (
+                              <View key={eachIndex} style={{ ...flexRow, maxWidth: sw760 }}>
+                                <CustomSpacer isHorizontal={true} space={sw4} />
+                                <Text style={fs12RegGray5}>{eachIndex + 1}. </Text>
+                                <Text style={fs12RegGray5}>{eachContent} </Text>
+                              </View>
+                            );
+                          })}
+                        </View>
+                      </View>
+                    </View>
+                  </Fragment>
+                ) : null}
+                <CustomSpacer space={sh124} />
+              </Fragment>
+            }
             ref={flatListRef}
             renderItem={({ item, index }) => {
               const { fundName, issuingHouse } = item.fundDetails;

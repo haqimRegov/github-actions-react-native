@@ -235,7 +235,7 @@ const submitPdf = gql`
 `;
 
 const submitPdfTransactions = gql`
-  mutation submitPdfTransactions($input: SubmitPdfInputV2) {
+  mutation submitPdfTransactions($input: submitPdfTransactionsInput) {
     submitPdfTransactions(input: $input) {
       data {
         result {

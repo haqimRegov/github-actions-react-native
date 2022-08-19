@@ -140,11 +140,13 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
       titleStyle: fundingOption === "EPF" ? undefined : fsCapitalize,
     });
 
-    investment.splice(4, 0, {
-      label: ORDER_SUMMARY.LABEL_DISTRIBUTION,
-      title: distributionInstruction,
-      titleStyle: fsTransformNone,
-    });
+    if (isTopup !== true) {
+      investment.splice(4, 0, {
+        label: ORDER_SUMMARY.LABEL_DISTRIBUTION,
+        title: distributionInstruction,
+        titleStyle: fsTransformNone,
+      });
+    }
   }
 
   if (isScheduled === true) {

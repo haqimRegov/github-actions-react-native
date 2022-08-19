@@ -134,7 +134,7 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
             const handleNavigateToContent = () => {
               handleContentChange(item);
             };
-            const activeKey = activeContent !== undefined && "title" in activeContent ? activeContent.key : "";
+            const activeKey = activeContent !== undefined && "key" in activeContent ? activeContent.key : "";
             const disabledContent = disabledSteps !== undefined && disabledSteps.includes(item.key) === true;
             const defaultTextStyle = disabledContent === true ? fs12RegGray4 : fs12RegGray6;
             const textStyle: TextStyle = item.key === activeKey ? fs12BoldGray6 : defaultTextStyle;

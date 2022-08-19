@@ -16,7 +16,7 @@ import { NewSalesContent } from "./Content";
 const { NEW_SALES, PERSONAL_DETAILS } = Language.PAGE;
 
 const ACCOUNT_LIST: INewSales = {
-  label: NEW_SALES.TITLE_ACCOUNT_LIST,
+  label: NEW_SALES.TITLE_ACCOUNT_SELECTION,
   route: NEW_SALES_KEYS.AccountList,
   key: NEW_SALES_KEYS.AccountList,
 };
@@ -30,9 +30,9 @@ const NEW_SALES_DATA: INewSales[] = [
         key: NEW_SALES_ROUTES.RiskAssessment,
       },
     ],
-    label: NEW_SALES.TITLE_ACCOUNT_OPENING,
-    route: NEW_SALES_ROUTES.RiskProfile,
-    key: NEW_SALES_KEYS.RiskProfile,
+    label: NEW_SALES.TITLE_SALES,
+    key: NEW_SALES_KEYS.RiskSummary,
+    route: NEW_SALES_ROUTES.RiskSummary,
   },
   {
     content: [
@@ -111,16 +111,36 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   } = props;
   const { disabledSteps, finishedSteps, toast } = newSales;
 
-  const findAccountList = NEW_SALES_DATA.findIndex((step: INewSales) => step.route === NEW_SALES_ROUTES.AccountList);
   const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.AccountInformation);
+  const findProducts = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.Products);
 
   const updatedNewSalesSteps = cloneDeep(NEW_SALES_DATA);
-  if (client.isNewFundPurchase === true && findAccountList === -1) {
-    updatedNewSalesSteps.splice(0, 0, ACCOUNT_LIST);
+  if (client.isNewFundPurchase === true) {
+    updatedNewSalesSteps!.splice(0, 0, ACCOUNT_LIST);
+  }
+  if (newSales.accountDetails.accountNo === "" && client.isNewFundPurchase === false) {
+    const updatedContent: INewSalesContentItem = {
+      ...updatedNewSalesSteps[0].content![0],
+      title: NEW_SALES.SUBTITLE_RISK_ASSESSMENT,
+      route: NEW_SALES_ROUTES.RiskAssessment,
+      key: NEW_SALES_ROUTES.RiskAssessment,
+    };
+    updatedNewSalesSteps[0] = {
+      ...updatedNewSalesSteps[0],
+      content: [updatedContent],
+      key: NEW_SALES_ROUTES.RiskSummary,
+      label: NEW_SALES.TITLE_ACCOUNT_OPENING,
+      route: NEW_SALES_ROUTES.RiskSummary,
+    };
   }
   if ((client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") && findAdditionalInfo !== -1) {
     const checkIndex = client.isNewFundPurchase === true ? 3 : 2;
     updatedNewSalesSteps.splice(checkIndex, 1);
+  }
+  if (newSales.accountDetails.ampFund !== undefined && findProducts !== -1) {
+    const productsContent = updatedNewSalesSteps[findProducts].content!;
+    productsContent.splice(0, 1);
+    updatedNewSalesSteps[findProducts].content = productsContent;
   }
 
   const stepperBarRef = useRef<IStepperBarRef<TypeNewSalesKey>>();
@@ -179,7 +199,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     });
 
     // combined New Fund and AO
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskProfile"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary"];
 
     if (riskAssessment.isRiskUpdated === true) {
       updatedFinishedSteps.push("RiskAssessment");
@@ -214,8 +234,11 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     // TODO improvement to more dynamic step
     switch (item.key) {
       case "Products":
-        setUnsavedPrompt(true);
-        return false;
+        if (finishedSteps.includes("Products")) {
+          setUnsavedPrompt(true);
+          return false;
+        }
+        return true;
       default:
         return true;
     }
@@ -243,13 +266,22 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       }),
     );
   };
+  const typedActiveContent: INewSales = { ...activeContent } as INewSales;
+  let activeContentRoute: TypeNewSalesRoute = "RiskSummary";
+  if (typedActiveContent.route !== undefined) {
+    activeContentRoute = typedActiveContent.route;
+  } else if (typedActiveContent.route === undefined && typedActiveContent.content !== undefined) {
+    activeContentRoute = typedActiveContent.content[0].route;
+  }
+
+  const initialRoute = client.isNewFundPurchase === true ? NEW_SALES_ROUTES.AccountList : NEW_SALES_ROUTES.RiskSummary;
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>
       <StepperBar<TypeNewSalesKey>
         activeContent={activeContent}
         activeSection={activeSection}
-        activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskProfile" ? fs14BoldGray6 : {}}
+        activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskSummary" ? fs14BoldGray6 : {}}
         disabledSteps={disabledSteps}
         finishedSteps={finishedSteps}
         handleCheckRoute={handleCheckRoute}
@@ -267,7 +299,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
         cancelNewSales={cancelNewSales}
         handleNextStep={handleNextStep}
         navigation={navigation}
-        route={activeContent !== undefined ? activeContent.route! : NEW_SALES_ROUTES.RiskProfile}
+        route={activeContent !== undefined ? activeContentRoute : initialRoute}
       />
       <PromptModal
         backdropOpacity={0.4}

@@ -184,6 +184,14 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
         if (findTerms !== -1) {
           updatedDisabledSteps.splice(findTerms, 1);
         }
+        const findInvestorInfo = updatedDisabledSteps.indexOf("InvestorInformation");
+        if (findInvestorInfo === -1) {
+          updatedDisabledSteps.push("InvestorInformation");
+        }
+        const findRiskAssessment = updatedDisabledSteps.indexOf("RiskAssessment");
+        if (findRiskAssessment === -1) {
+          updatedDisabledSteps.push("RiskAssessment");
+        }
       }
 
       updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });

@@ -91,7 +91,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
       // style: borderBottomGray2,
     },
     {
-      label: QUICK_ACTIONS.LABEL_NEW_SALES,
+      label: QUICK_ACTIONS.LABEL_SALES,
       onPress: newSales,
     },
     // {

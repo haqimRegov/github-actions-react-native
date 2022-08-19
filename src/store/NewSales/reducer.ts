@@ -37,6 +37,7 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
         accountDetails: {
           accountNo: "",
           authorisedSignatory: "",
+          ampFund: undefined,
           fundType: "ut",
           isEpf: undefined,
           isRecurring: undefined,
@@ -44,6 +45,7 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           riskScore: "",
         },
         disabledSteps: [
+          "RiskSummary",
           "RiskAssessment",
           "Products",
           "ProductsList",

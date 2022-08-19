@@ -20,6 +20,7 @@ export const newSalesInitialState: NewSalesState = {
   accountDetails: {
     accountNo: "",
     authorisedSignatory: "",
+    ampFund: undefined,
     fundType: "ut",
     isEpf: undefined,
     isRecurring: undefined,
@@ -27,7 +28,9 @@ export const newSalesInitialState: NewSalesState = {
     riskScore: "",
   },
   disabledSteps: [
+    "AccountList",
     "RiskAssessment",
+    "RiskSummary",
     "Products",
     "ProductsList",
     "ProductsConfirmation",

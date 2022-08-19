@@ -105,17 +105,26 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
               <Text style={fs12BoldGray6}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
               <CustomSpacer isHorizontal={true} space={sw4} />
               <View style={{ ...flexRow, ...flexWrap, maxWidth: sw588 }}>
-                {orders !== undefined &&
-                  orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                    return (
-                      <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                        {index !== 0 ? <Text style={{ ...fs18BoldBlack2, ...px(sw4) }}>+</Text> : null}
-                        <Text style={{ ...fs18BoldBlack2 }}>{totalAmount.currency}</Text>
-                        <CustomSpacer isHorizontal={true} space={sw4} />
-                        <Text style={fs18BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
-                      </View>
-                    );
-                  })}
+                {orders !== undefined ? (
+                  <Fragment>
+                    {orders.grandTotal !== undefined ? (
+                      <Fragment>
+                        {orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
+                          return (
+                            <View key={index} style={{ ...centerVertical, ...flexRow }}>
+                              {index !== 0 ? <Text style={{ ...fs18BoldBlack2, ...px(sw4) }}>+</Text> : null}
+                              <Text style={fs18BoldBlack2}>{totalAmount.currency}</Text>
+                              <CustomSpacer isHorizontal={true} space={sw4} />
+                              <Text style={fs18BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
+                            </View>
+                          );
+                        })}
+                      </Fragment>
+                    ) : (
+                      <Text style={fs18BoldBlack2}>-</Text>
+                    )}
+                  </Fragment>
+                ) : null}
               </View>
             </View>
             {orders !== undefined && orders.grandTotalRecurring ? (

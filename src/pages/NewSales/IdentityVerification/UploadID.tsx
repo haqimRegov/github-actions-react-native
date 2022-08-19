@@ -34,12 +34,12 @@ export const UploadID: FunctionComponent<UploadIDProps> = ({
   const extractedIdType = typeof idType === "string" ? idType : DICTIONARY_ALL_ID_TYPE[idType];
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(extractedIdType) !== 1;
 
-  let firstLabel = `${idType} - ${IDENTITY_CONFIRMATION.LABEL_FRONT}`;
-  let secondLabel = `${idType} - ${IDENTITY_CONFIRMATION.LABEL_BACK}`;
+  let firstLabel = `${idType} (${IDENTITY_CONFIRMATION.LABEL_FRONT_NEW})`;
+  let secondLabel = `${idType} (${IDENTITY_CONFIRMATION.LABEL_BACK_NEW})`;
 
   if (extractedIdType !== "NRIC" && extractedIdType !== "Passport") {
-    firstLabel = `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID} - ${IDENTITY_CONFIRMATION.LABEL_FRONT}`;
-    secondLabel = `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID} - ${IDENTITY_CONFIRMATION.LABEL_BACK}`;
+    firstLabel = `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID} (${IDENTITY_CONFIRMATION.LABEL_FRONT_NEW})`;
+    secondLabel = `${idType} ${IDENTITY_CONFIRMATION.LABEL_ID} (${IDENTITY_CONFIRMATION.LABEL_BACK_NEW})`;
   }
 
   if (!isMalaysian) {

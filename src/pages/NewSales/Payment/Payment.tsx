@@ -8,20 +8,7 @@ import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
-import {
-  flexChild,
-  flexGrow,
-  fs16SemiBoldGray6,
-  fs24BoldGray6,
-  px,
-  py,
-  sh152,
-  sh24,
-  sh32,
-  sh8,
-  shadow50Black115,
-  sw24,
-} from "../../../styles";
+import { flexChild, flexGrow, fs14RegGray5, fs18BoldGray6, px, py, sh152, sh24, sh32, shadow50Black115, sw24 } from "../../../styles";
 import { OrderPayment } from "../../../templates";
 import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys, handleEPFStructuring } from "../../../templates/Payment/helpers";
 import { NewPaymentPrompt } from "../../../templates/Payment/NewPaymentPrompt";
@@ -263,13 +250,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
           <View style={flexChild}>
             <CustomSpacer space={sh32} />
             <View style={px(sw24)}>
-              <LabeledTitle
-                label={PAYMENT.HEADING}
-                labelStyle={fs24BoldGray6}
-                spaceToLabel={sh8}
-                title={PAYMENT.SUBHEADING}
-                titleStyle={fs16SemiBoldGray6}
-              />
+              <LabeledTitle label={PAYMENT.HEADING} labelStyle={fs18BoldGray6} title={PAYMENT.SUBHEADING} titleStyle={fs14RegGray5} />
             </View>
             {tempData !== undefined &&
               tempData.map((proofOfPayment: IPaymentRequired, index: number) => {

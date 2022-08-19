@@ -113,8 +113,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleContinue = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
-    const newDisabledStep: TypeNewSalesKey[] = ["AccountList", "RiskProfile", "Products", "AccountInformation", "Acknowledgement"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "Products", "AccountInformation", "Acknowledgement"];
+    const newDisabledStep: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "Products", "AccountInformation", "Acknowledgement"];
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
     handleNextStep("Payment");
   };

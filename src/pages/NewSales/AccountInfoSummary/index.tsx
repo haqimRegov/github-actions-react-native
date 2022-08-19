@@ -168,7 +168,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
           const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
           updatedFinishedSteps.push("Summary", "AccountInformation");
           const newDisabledStep: TypeNewSalesKey[] = [
-            "RiskProfile",
+            "RiskSummary",
             "Products",
             "AccountInformation",
             "IdentityVerification",

@@ -89,7 +89,13 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
+    {
+      label: NEW_SALES_SUMMARY.LABEL_RISK_CATEGORY,
+      title: principal!.personalDetails?.riskProfile !== "" ? principal!.personalDetails?.riskProfile : "-",
+      titleStyle: fsTransformNone,
+    },
   ];
+
   if (client.accountType === "Joint") {
     accountDetails.push(
       {
@@ -144,7 +150,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.frontPage),
       title: personalInfo.principal?.personalDetails?.id?.frontPage?.name,
       titleNumberOfLines: 1,
-      titleIcon: "file",
+      titleIcon: "tax-card",
       titleStyle: fsTransformNone,
     },
   ];
@@ -154,7 +160,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       label: handleIdLabel(principalHolder!.idType!, "back", undefined),
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.secondPage),
       title: personalInfo.principal?.personalDetails?.id?.secondPage?.name,
-      titleIcon: "file",
+      titleIcon: "tax-card",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
     });
@@ -164,7 +170,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       label: handleIdLabel(jointHolder!.idType!, "front", undefined),
       onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.frontPage),
       title: personalInfo.joint?.personalDetails?.id?.frontPage?.name,
-      titleIcon: "file",
+      titleIcon: "tax-card",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
     },
@@ -174,7 +180,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       label: handleIdLabel(jointHolder!.idType!, "back", undefined),
       onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.secondPage),
       title: personalInfo.joint?.personalDetails?.id?.secondPage?.name,
-      titleIcon: "file",
+      titleIcon: "tax-card",
       titleNumberOfLines: 1,
       titleStyle: fsTransformNone,
     });
@@ -295,7 +301,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       <View style={px(sw24)}>
         <ColorCard
           containerStyle={noBorder}
-          content={<TextCard data={accountDetails} />}
+          content={<TextCard data={accountDetails} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
           contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
           customHeader={
             <View style={rowCenterVertical}>
@@ -398,6 +404,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           containerStyle={noBorder}
           content={
             <Fragment>
+              {/* <CustomSpacer space={sh24} /> */}
               {localBankDetails.map((bank, numberIndex) => {
                 const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;
                 return (
@@ -461,7 +468,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
               <TextCard data={accountSettings} {...textCardProps} />
             </Fragment>
           }
-          contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 }}
+          contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8, paddingTop: sh24 }}
           customHeader={
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
               <Text style={fs16BoldBlue1}>{NEW_SALES_SUMMARY.LABEL_ACCOUNT_DETAILS}</Text>

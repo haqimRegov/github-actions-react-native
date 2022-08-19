@@ -18,6 +18,7 @@ import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../netwo
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import { centerHV, fsAlignLeft, fullHW, px, sh16, sh24, sh8, sw24 } from "../../../../styles";
 import { SubmissionSummaryCollapsible } from "../../../../templates";
+import { isArrayNotEmpty } from "../../../../utils";
 import { defaultContentProps } from "../../Content";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -37,7 +38,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   updateReceipts,
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { clientId } = details!.principalHolder!;
+  const { accountHolder, principalHolder } = details!;
+  const { clientId } = principalHolder!;
   const { declarations } = forceUpdate;
   const fetching = useRef<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
@@ -252,10 +254,11 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                 "principalSignature" in receipt &&
                 receipt.principalSignature !== undefined;
               const completed = baseSignatureValid;
-              const checkSubtitle =
-                declarations.length === 0
-                  ? TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE_WITHOUT_DECLARATION
-                  : TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE;
+
+              const checkSubtitleRisk = accountHolder === "Joint" ? "" : `, ${"Risk Assessment"}`;
+              const checkSubtitleDeclaration = isArrayNotEmpty(declarations) ? `, ${"Declarations"}` : "";
+              const checkSubtitle = `${TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE}${checkSubtitleRisk}${checkSubtitleDeclaration}`;
+
               // const disable = receipt.completed !== true;
               // const disabled = index === 0 ? false : disabledCondition;
               return (

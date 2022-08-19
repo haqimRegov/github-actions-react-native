@@ -26,6 +26,7 @@ import {
   sw24,
 } from "../../../../styles";
 import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
+import { ampData } from "../../../NewSales/dummy-amp";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
@@ -63,7 +64,6 @@ const initialJointInfo = {
 const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   // addAccountDetails,
   addAccountType,
-  // addRiskInfo,
   addRiskScore,
   addClientDetails,
   addPersonalInfo,
@@ -215,6 +215,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           }
 
           const fundType = item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType;
+          const checkAmp = item !== undefined && item.fundType === "AMP" ? { ampFund: ampData } : {};
           updateNewSales({
             ...newSales,
             investorProfile: {
@@ -231,6 +232,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
               isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
               isSyariah: item !== undefined && fundType === "prsDefault" ? item.isSyariah : false,
+              ...checkAmp,
             },
           });
           const resetJointInfo =

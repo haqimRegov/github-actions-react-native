@@ -42,7 +42,7 @@ export const InvestorOverviewActionContent: FunctionComponent<InvestorOverviewAc
   return (
     <View style={{ borderRadius: sw8 }}>
       <IconText name="eye-show" onPress={handleView} style={itemStyle} text={INVESTOR_ACCOUNTS.LABEL_VIEW_DETAILS} />
-      <IconText name="buy-new-fund" onPress={handleBuy} style={itemStyle} text={INVESTOR_ACCOUNTS.LABEL_BUY_NEW_FUND} />
+      <IconText name="buy-new-fund" onPress={handleBuy} style={itemStyle} text={INVESTOR_ACCOUNTS.LABEL_SALES} />
     </View>
   );
 };

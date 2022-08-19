@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer } from "../../components";
@@ -49,6 +49,7 @@ interface ITagStyle {
 }
 
 export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handlePress, style }: IAccountCardProps) => {
+  const [pressed, setPressed] = useState<boolean>(false);
   const { accountNo, fundType, name, isJoint, jointName, paymentMethod, riskTolerance } = data;
 
   const handleTagStyle = (text: string): ITagStyle => {
@@ -63,13 +64,22 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
         return { container: {}, text: {} };
     }
   };
+
+  const handlePressIn = () => {
+    setPressed(true);
+  };
+
+  const handlePressOut = () => {
+    setPressed(false);
+  };
+
   const containerStyle: ViewStyle = {
     ...px(sw24),
     ...py(sh16),
-    backgroundColor: colorWhite._1,
+    backgroundColor: pressed === true ? colorBlue._3 : colorWhite._1,
     borderRadius: sw8,
     borderWidth: sw1,
-    borderColor: colorGray._2,
+    borderColor: pressed === true ? colorBlue._4 : colorGray._2,
     marginBottom: sh24,
     width: sw404,
     ...style,
@@ -78,7 +88,7 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
   const checkIconName = isJoint === true ? "avatar-joint" : "avatar";
   const checkAccountType = isJoint === true ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
   return (
-    <Pressable onPress={handlePress}>
+    <Pressable onPress={handlePress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <View style={containerStyle}>
         <View style={flexRow}>
           <View>

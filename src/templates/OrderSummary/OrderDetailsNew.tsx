@@ -22,6 +22,7 @@ import {
   fs14RegGray6,
   fs16BoldBlack2,
   fs16BoldBlue1,
+  fs18BoldBlack2,
   fsTransformNone,
   px,
   rowCenterVertical,
@@ -152,6 +153,13 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 
+  // const tagStyle: ViewStyle = {
+  //   ...px(sw4),
+  //   ...border(colorBlue._9, sw05, sw4),
+  //   ...centerHV,
+  //   height: sh17,
+  // };
+
   return (
     <Fragment>
       <View style={px(sw24)}>
@@ -281,6 +289,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
               content={
                 <Fragment>
                   {investmentSummary.map((investment: IOrderSummaryInvestment, index: number) => {
+                    // const { isTopup } = investment;
                     const fundDetails: LabeledTitleProps[] = [
                       { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CODE, title: investment.fundCode, titleStyle: fsTransformNone },
 
@@ -364,14 +373,27 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           <CustomSpacer isHorizontal={true} space={sw8} />
                           <View style={{ ...rowCenterVertical, ...flexChild }}>
                             <View>
-                              <Text style={fs16BoldBlue1}>{investment.fundName}</Text>
-                              <Text style={fs12RegGray5}>{investment.fundIssuer}</Text>
+                              <View style={rowCenterVertical}>
+                                <Text style={fs18BoldBlack2}>{investment.fundName}</Text>
+                                {/* {isTopup === true ? null : (
+                                  <Fragment>
+                                    <CustomSpacer isHorizontal={true} space={sw8} />
+                                    <View style={tagStyle}>
+                                      <Text style={fs10RegBlue9}>{DASHBOARD_ORDER_DETAILS.LABEL_NEW_FUND}</Text>
+                                    </View>
+                                  </Fragment>
+                                )} */}
+                              </View>
                             </View>
                             <CustomSpacer isHorizontal={true} space={sw16} />
                             <View style={{ ...borderBottomBlue5, ...flexChild }} />
                             <CustomSpacer isHorizontal space={sh16} />
                             <Text style={fs14BoldBlue1}>{amountLabel}</Text>
                           </View>
+                        </View>
+                        <View style={flexRow}>
+                          <CustomSpacer isHorizontal={true} space={sw32} />
+                          <Text style={fs12RegGray5}>{investment.fundIssuer}</Text>
                         </View>
                         <CustomSpacer space={sh12} />
                         {/* subheading fund info  */}

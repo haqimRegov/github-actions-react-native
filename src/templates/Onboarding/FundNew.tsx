@@ -55,6 +55,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     fundName,
     fundType,
     investmentAmount,
+    isTopup,
     isSyariah,
     salesCharge,
     scheduledInvestmentAmount,
@@ -70,6 +71,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     scheduledSalesCharge !== null;
 
   const icon = expanded ? "caret-up" : "caret-down";
+  const investmentAmountLabel = isTopup === true ? ORDER_SUMMARY.LABEL_TOP_UP_AMOUNT : ORDER_SUMMARY.LABEL_INVESTMENT_AMOUNT;
 
   const fundInfo: LabeledTitleProps[] = [
     {
@@ -116,7 +118,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
   ];
   if (isScheduled === false) {
     investment.splice(0, 0, {
-      label: ORDER_SUMMARY.LABEL_INVESTMENT_AMOUNT,
+      label: investmentAmountLabel,
       title: `${fundCurrency} ${formatAmount(investmentAmount || "")}`,
     });
 
@@ -169,10 +171,27 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
     titleStyle: { ...fs16BoldBlack2, ...fsTransformNone },
   };
 
+  // const tagStyle: ViewStyle = {
+  //   ...px(sw4),
+  //   ...py(sh2),
+  //   ...border(colorBlue._9, sw05, sw4),
+  //   ...centerHV,
+  // };
+
   return (
     <View style={{ backgroundColor: colorWhite._1, ...style }}>
       <Pressable style={headerStyle} onPress={handleExpand}>
-        <Text style={fs18BoldBlue1}>{fundName}</Text>
+        <View style={flexRow}>
+          <Text style={fs18BoldBlue1}>{fundName}</Text>
+          {/* {isTopup === true ? (
+            <Fragment>
+              <CustomSpacer isHorizontal={true} space={sw8} />
+              <View style={tagStyle}>
+                <Text style={fs10RegBlue9}>{ORDER_SUMMARY.LABEL_NEW_FUND}</Text>
+              </View>
+            </Fragment>
+          ) : null} */}
+        </View>
         <CustomFlexSpacer />
         <IconButton
           color={colorBlue._1}

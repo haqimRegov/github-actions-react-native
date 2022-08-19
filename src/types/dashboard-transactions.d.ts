@@ -18,7 +18,7 @@ declare interface IDashboardReason {
   title: string;
 }
 
-declare type TTransactionType = "Sales-AO" | "CR" | "Sales-NS";
+declare type TTransactionType = "Sales-AO" | "CR" | "Sales-NS" | "Sales";
 
 declare interface IDashboardOrder {
   accountType: TypeAccountChoices;

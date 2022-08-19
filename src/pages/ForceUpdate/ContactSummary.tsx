@@ -1,5 +1,5 @@
-import React, { Fragment, FunctionComponent } from "react";
-import { Text, View } from "react-native";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -14,6 +14,7 @@ import {
   TextCard,
 } from "../../components";
 import { Language } from "../../constants";
+import { submitChangeRequest } from "../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../store";
 import {
   border,
@@ -41,24 +42,32 @@ import {
   sw4,
   sw40,
 } from "../../styles";
+import { isArrayNotEmpty } from "../../utils";
 
 const { INVESTOR_INFORMATION } = Language.PAGE;
 
-interface ContactSummaryProps extends ForceUpdateContentProps, PersonalInfoStoreProps {}
+interface ContactSummaryProps extends ForceUpdateContentProps, PersonalInfoStoreProps {
+  navigation: IStackNavigationProp;
+}
 
 const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
   accountHolder,
+  details,
   forceUpdate,
   handleNextStep,
+  navigation,
   personalInfo,
   updateEmailVerified,
   updateForceUpdate,
 }: ContactSummaryProps) => {
   const { principal } = personalInfo;
-  const { disabledSteps, finishedSteps, emailVerified } = forceUpdate;
+  const { declarations, disabledSteps, finishedSteps, emailVerified } = forceUpdate;
   const contactNumber = principal!.contactDetails!.contactNumber!;
   const inputEmail = principal!.contactDetails!.emailAddress!;
   const inputMobile = contactNumber[0];
+
+  const fetching = useRef<boolean>(false);
+  const [continueLoader, setContinueLoader] = useState<boolean>(false);
 
   const contactSummary: LabeledTitleProps[] = [
     { label: INVESTOR_INFORMATION.LABEL_EMAIL, title: inputEmail, titleStyle: fsTransformNone },
@@ -69,25 +78,67 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
     updateEmailVerified(value);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     let nextStep: TypeForceUpdateKey = accountHolder === "Principal" ? "RiskAssessment" : "FATCADeclaration";
-    const updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
+    let updatedDisabledSteps: TypeForceUpdateKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeForceUpdateKey[] = [...finishedSteps];
-    const findRiskAssessment = updatedDisabledSteps.indexOf("RiskAssessment");
-    if (findRiskAssessment !== -1) {
-      updatedDisabledSteps.splice(findRiskAssessment, 1);
-    }
 
     updatedFinishedSteps.push("InvestorInformation", "ContactSummary");
 
-    const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
-    if (findFinishedFatca !== -1 && accountHolder === "Joint") {
-      nextStep = "CRSDeclaration";
+    if (isArrayNotEmpty(declarations) === true) {
+      // Investor has to do Declaration
+      const findRiskAssessment = updatedDisabledSteps.indexOf("RiskAssessment");
+      if (findRiskAssessment !== -1) {
+        updatedDisabledSteps.splice(findRiskAssessment, 1);
+      }
+
+      const findFinishedFatca = updatedFinishedSteps.indexOf("FATCADeclaration");
+      if (findFinishedFatca !== -1 && accountHolder === "Joint") {
+        nextStep = "CRSDeclaration";
+      }
+
+      const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
+      if (findFinishedCrs !== -1 && findFinishedFatca !== -1 && accountHolder === "Joint") {
+        nextStep = "DeclarationSummary";
+      }
     }
 
-    const findFinishedCrs = updatedFinishedSteps.indexOf("CRSDeclaration");
-    if (findFinishedCrs !== -1 && findFinishedFatca !== -1 && accountHolder === "Joint") {
-      nextStep = "DeclarationSummary";
+    if (isArrayNotEmpty(declarations) === false && fetching.current === false && accountHolder === "Joint") {
+      const request: ISubmitChangeRequestRequest = {
+        id: details?.principalHolder?.id!,
+        initId: details?.initId as string,
+        clientId: details!.principalHolder!.clientId!,
+        clientInfo: {
+          contactDetails: {
+            contactNumber: principal!.contactDetails!.contactNumber!.map((contact) => ({
+              code: contact.code,
+              label: contact.label,
+              value: contact.value,
+            })),
+            emailAddress: principal!.contactDetails!.emailAddress!,
+          },
+          declaration: {},
+        },
+      };
+      setContinueLoader(true);
+      fetching.current = true;
+      const response: ISubmitChangeRequestResponse = await submitChangeRequest(request, navigation);
+      fetching.current = false;
+      setContinueLoader(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          nextStep = "TermsAndConditions";
+          updatedDisabledSteps = ["InvestorInformation", "Acknowledgement", "Signatures"];
+        }
+
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
+      }
     }
 
     updateForceUpdate({ ...forceUpdate, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
@@ -156,6 +207,7 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
               <Text style={fs16RegGray6}>{INVESTOR_INFORMATION.BANNER_SUBTITLE_UPDATED}</Text>
             </View>
           }
+          continueLoading={continueLoader}
           label={INVESTOR_INFORMATION.BANNER_TITLE}
           submitOnPress={handleContinue}
           labelSubmit={INVESTOR_INFORMATION.BUTTON_CONTINUE}

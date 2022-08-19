@@ -1,14 +1,32 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer, UploadWithModal } from "../../../../components";
+import { CustomSpacer, CustomTooltip, UploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { FILTER_ISSUING_HOUSE } from "../../../../data/dictionary";
 import { IcoMoon } from "../../../../icons";
-import { colorBlack, fs14BoldBlack2, rowCenterVertical, sh16, sh8, sw16, sw8 } from "../../../../styles";
+import {
+  colorBlack,
+  flexRow,
+  fs12RegWhite1,
+  fs14BoldBlack2,
+  rowCenterVertical,
+  sh16,
+  sh18,
+  sh6,
+  sh8,
+  sh96,
+  sw10,
+  sw16,
+  sw18,
+  sw280,
+  sw317,
+  sw4,
+  sw8,
+} from "../../../../styles";
 import { isEmpty } from "../../../../utils";
 
-const { UPLOAD_DOCUMENTS } = Language.PAGE;
+const { UPLOAD_DOCUMENTS, UPLOAD_HARD_COPY_DOCUMENTS } = Language.PAGE;
 
 interface DocumentListProps {
   data: ISoftCopyDocument[];
@@ -18,6 +36,18 @@ interface DocumentListProps {
 }
 
 export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, header, headerSpace, setData }: DocumentListProps) => {
+  const popupInfo = [UPLOAD_HARD_COPY_DOCUMENTS.CONTENT_HARDCOPY_INFO_1, UPLOAD_HARD_COPY_DOCUMENTS.CONTENT_HARDCOPY_INFO_2];
+  const popupContent = (
+    <View>
+      {popupInfo.map((eachContent: string) => (
+        <View style={flexRow}>
+          <Text style={fs12RegWhite1}>•</Text>
+          <CustomSpacer isHorizontal={true} space={sw4} />
+          <Text style={{ ...fs12RegWhite1, maxWidth: sw280 }}>{eachContent}</Text>
+        </View>
+      ))}
+    </View>
+  );
   return (
     <Fragment>
       {data !== undefined &&
@@ -56,6 +86,18 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
                           </Fragment>
                         ) : null}
                         <Text style={fs14BoldBlack2}>{checkName}</Text>
+                        {checkIfUtmc !== -1 ? (
+                          <Fragment>
+                            <CustomSpacer isHorizontal={true} space={sw8} />
+                            <CustomTooltip
+                              arrowSize={{ width: sw10, height: sh6 }}
+                              content={popupContent}
+                              contentStyle={{ width: sw317, height: sh96 }}
+                              infoStyle={{ width: sw18, height: sh18 }}
+                              theme="dark"
+                            />
+                          </Fragment>
+                        ) : null}
                       </View>
                       <CustomSpacer space={sh8} />
                     </Fragment>

@@ -28,10 +28,10 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   addPrsSort,
   addSelectedFund,
   addViewFund,
+  newSales,
   products,
   productType,
   resetSelectedFund,
-  riskScore,
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
@@ -43,6 +43,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 }: PRSProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { availableFilters } = products;
+  const { riskInfo } = newSales;
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.prs;
   const [loading, setLoading] = useState<boolean>(false);
   const list = showBy === "recommended" ? recommended : all;
@@ -58,7 +59,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 
   const absoluteHeaderSpace = filterValues.length > 0 ? sh192 : sh152;
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo!.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -73,7 +74,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: filters.shariahApproved![0] || "",
-      recommendedRisk: riskScore.appetite,
+      recommendedRisk: riskInfo!.appetite,
       riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       isConventional: filters.conventional![0],

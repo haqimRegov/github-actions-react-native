@@ -29,14 +29,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   resetProducts,
   resetSelectedFund,
   riskAssessment,
-  riskScore,
   selectedFunds,
   updateNewSales,
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
   const { isMultiUtmc } = global;
-  const { disabledSteps, transactionType } = newSales;
+  const { disabledSteps, riskInfo, transactionType } = newSales;
   const [page] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
@@ -44,7 +43,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
   const handleBackToAssessment = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskProfile"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskSummary"];
 
     if (riskAssessment.isRiskUpdated === true) {
       updatedFinishedSteps.push("RiskAssessment");
@@ -70,7 +69,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: initialDisabledSteps });
 
     setPrompt(undefined);
-    handleNextStep("RiskProfile");
+    handleNextStep("RiskSummary");
     resetProducts();
     resetSelectedFund();
   };
@@ -81,9 +80,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       const updatedFunds: IProduct[] = [];
       temp.forEach((eachFund: IProduct) => {
         if (
-          (riskScore.appetite.toLowerCase() === "medium" &&
+          (riskInfo!.appetite.toLowerCase() === "medium" &&
             (eachFund.riskCategory.toLowerCase() === "low" || eachFund.riskCategory.toLowerCase() === "medium")) ||
-          (riskScore.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
+          (riskInfo!.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
         ) {
           updatedFunds.push(eachFund);
         }
@@ -123,10 +122,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           fundClass: item.masterList[0].class !== null ? item.masterList[0].class : "No Class",
           scheduledInvestment: false,
           prsType: item.prsType,
+          isTopup: false,
           ...existingInvestmentDetails,
         },
         fundDetails: { ...item },
         masterClassList: newMasterClassList,
+        isNewFund: true,
       };
 
       return initialStateArray.push(newState);
@@ -171,10 +172,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const checkOutsideRiskFactor = () => {
     const fundsRisk = selectedFunds.map((item) => (item.prsType === "prsDefault" ? "" : item.riskCategory.toLowerCase()));
-    if (riskScore.appetite.toLowerCase() === "medium") {
+    if (riskInfo!.appetite.toLowerCase() === "medium") {
       return fundsRisk.includes("high");
     }
-    if (riskScore.appetite.toLowerCase() === "low") {
+    if (riskInfo!.appetite.toLowerCase() === "low") {
       return fundsRisk.includes("high") || fundsRisk.includes("medium");
     }
 

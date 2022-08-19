@@ -13,7 +13,6 @@ import { ProductListView } from "../Listing";
 
 interface UnitTrustProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
-  handleResetFilter: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
@@ -35,7 +34,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   products,
   productType,
   resetSelectedFund,
-  riskScore,
   resetUTFilter,
   scrollEnabled,
   selectedFunds,
@@ -46,7 +44,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   updateAvailableFilters,
 }: UnitTrustProps) => {
   const { isMultiUtmc } = global;
-  const { transactionType } = newSales;
+  const { riskInfo, transactionType } = newSales;
   const navigation = useNavigation<IStackNavigationProp>();
   const { availableFilters } = products;
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.ut;
@@ -64,7 +62,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
 
   const absoluteHeaderSpace = filterValues.length > 0 ? sh192 : sh152;
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo!.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -80,9 +78,9 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       isEpf: filters.epfApproved![0] || "",
       issuingHouse: filters.issuingHouse || [],
       isSyariah: filters.shariahApproved![0] || "",
-      netWorth: riskScore.netWorth,
+      netWorth: riskInfo!.hnwStatus,
       page: newPage,
-      recommendedRisk: riskScore.appetite,
+      recommendedRisk: riskInfo!.appetite,
       riskCategory: riskCategory || [],
       search: search,
       showBy: showBy,

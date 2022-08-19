@@ -172,7 +172,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           if (findAccountList !== -1) {
             updatedDisabledSteps.splice(findAccountList, 1);
           }
-          const findRisk = disabledSteps.indexOf("RiskProfile");
+          const findRisk = disabledSteps.indexOf("RiskSummary");
           if (findRisk !== -1) {
             updatedDisabledSteps.splice(findRisk, 1);
           }
@@ -222,7 +222,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               isSyariah: fundType === "prsDefault" ? eachAccount.isSyariah : false,
             },
           });
-          handleNextStep("RiskProfile");
+          handleNextStep("RiskSummary");
         } else if (error !== undefined) {
           Alert.alert(error?.message);
         }
@@ -230,11 +230,10 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
     }
   };
 
-  const header = `${ACCOUNT_LIST.LABEL_WELCOME_BACK} ${client.details?.principalHolder?.name}`;
   const modalStyle = loading === false ? undefined : { backgroundColor: colorBlack._1_4 };
   return (
     <View>
-      <ContentPage {...defaultContentProps} subheading={header}>
+      <ContentPage {...defaultContentProps} subheading={ACCOUNT_LIST.LABEL_WELCOME_BACK}>
         <Fragment>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>

@@ -8,6 +8,7 @@ declare interface ISubmitInvestment {
   salesCharge: string;
 
   isScheduled?: string;
+  isTopup?: boolean;
   fundClass?: string;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;

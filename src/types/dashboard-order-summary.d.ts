@@ -21,6 +21,7 @@ declare interface IOrderSummaryInvestment {
   investmentType: string;
   landingFund?: string;
   isFea: string;
+  isTopup?: boolean;
   recurring: string;
   salesCharge: string;
   scheduledInvestmentAmount: string;

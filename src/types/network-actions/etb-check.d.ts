@@ -3,6 +3,7 @@ declare type IEtbCheckRequest = IClientRegisterInfo;
 declare interface IAccountList {
   accountNo: string;
   accountType?: TypeAccountChoices;
+  ampFund?: IProduct;
   fundType: string;
   isJoint: boolean;
   isRecurring: boolean;

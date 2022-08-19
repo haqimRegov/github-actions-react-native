@@ -2,6 +2,7 @@ declare interface IProductSales {
   allowEpf?: boolean;
   fundDetails: IProduct;
   investment: IProductInvestment;
+  isNewFund?: boolean;
   masterClassList: IProductClasses;
 }
 
@@ -16,6 +17,7 @@ declare interface IProductInvestment {
   investmentSalesChargeError?: string;
   scheduledAmountError?: string;
   scheduledInvestment: boolean;
+  isTopup?: boolean;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;
   scheduledSalesChargeError?: string;

@@ -1,6 +1,7 @@
 declare interface INewSalesAccountDetails {
   accountNo: string;
   authorisedSignatory: string;
+  ampFund?: IProduct;
   fundType: ProductType;
   isEpf?: boolean;
   isSyariah: boolean;
@@ -59,7 +60,7 @@ declare interface INewSalesRoutes {
   ProductsList: TypeNewSalesRoute;
   ProductsConfirmation: TypeNewSalesRoute;
   RiskAssessment: TypeNewSalesRoute;
-  RiskProfile: TypeNewSalesRoute;
+  RiskSummary: TypeNewSalesRoute;
   Signatures: TypeNewSalesRoute;
   Summary: TypeNewSalesRoute;
   TermsAndConditions: TypeNewSalesRoute;
@@ -77,7 +78,7 @@ declare interface INewSalesKeys {
   ProductsList: TypeNewSalesKey;
   ProductsConfirmation: TypeNewSalesKey;
   RiskAssessment: TypeNewSalesKey;
-  RiskProfile: TypeNewSalesKey;
+  RiskSummary: TypeNewSalesKey;
   Signatures: TypeNewSalesKey;
   Summary: TypeNewSalesKey;
   TermsAndConditions: TypeNewSalesKey;

@@ -3,6 +3,7 @@ import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomFlexSpacer, CustomSpacer } from "../../components";
 import { Language } from "../../constants";
+import { getProductTagType } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import {
   centerHV,
@@ -84,7 +85,8 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
     width: sw404,
     ...style,
   };
-  const tags = [fundType, paymentMethod, riskTolerance];
+  const checkEpf = paymentMethod === "EPF" ? "EPF" : "Cash";
+  const tags = [getProductTagType(fundType), checkEpf, riskTolerance];
   const checkIconName = isJoint === true ? "avatar-joint" : "avatar";
   const checkAccountType = isJoint === true ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
   return (

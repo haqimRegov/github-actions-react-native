@@ -326,7 +326,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   };
 
   const handleTopUp = () => {
-    setData({ ...data, investment: { ...investment, isTopup: !isTopup } });
+    setData({ ...data, investment: { ...investment, isTopup: !isTopup, amountError: undefined, investmentSalesChargeError: undefined } });
   };
 
   const handleScheduledAmount = (value: string) => {

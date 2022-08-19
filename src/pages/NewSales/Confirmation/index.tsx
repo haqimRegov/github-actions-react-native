@@ -127,7 +127,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   // let isInvestmentEpf = false;
-  const investments = investmentDetails!.map(({ fundDetails, investment }) => {
+  const investments = investmentDetails!.map(({ fundDetails, investment, isNewFund }) => {
     // if (investment.fundPaymentMethod === "EPF") {
     //   isInvestmentEpf = true;
     // }
@@ -136,7 +136,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       fundingOption: investment.fundPaymentMethod, // TODO backend to fix
       fundClass: investment.fundClass !== "No Class" ? investment.fundClass : "",
       fundCurrency: investment.fundCurrency!,
-      investmentAmount: parseAmountToString(investment.investmentAmount),
+      investmentAmount: investment.investmentAmount !== "" ? parseAmountToString(investment.investmentAmount) : "",
       isScheduled: `${investment.scheduledInvestment}`,
       scheduledInvestmentAmount: investment.scheduledInvestmentAmount
         ? parseAmountToString(investment.scheduledInvestmentAmount)
@@ -144,7 +144,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       salesCharge: investment.investmentSalesCharge,
       scheduledSalesCharge: investment.scheduledSalesCharge,
       prsType: fundDetails.prsType,
-      isTopup: investment.isTopup,
+      isTopup: !isNewFund,
     };
   });
 

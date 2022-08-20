@@ -102,7 +102,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const [clientCheckData, setClientCheckData] = useState<IEtbCheckData | undefined>(undefined);
   const fullScreenLoader = useRef<boolean>(false);
   const jointClientId = useRef<string>("");
-  const { jointHolder } = client.details!;
+  const { details, directToAccountOpening, isForceUpdate, isNewSales } = client;
+  const { jointHolder, principalHolder } = details!;
 
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   // const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
@@ -131,14 +132,14 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   };
 
   const handleBackToInvestorList = () => {
-    if (client.details?.principalHolder?.name !== "") {
+    if (principalHolder?.name !== "") {
       resetClientDetails();
     }
     dashboardProps.setScreen("InvestorList");
   };
 
   const handleCancelForceUpdate = () => {
-    if (client.isForceUpdate === true) {
+    if (isForceUpdate === true) {
       updateShowOpenAccount(true);
       updateForceUpdateDeclarations([]);
       resetClientDetails();
@@ -265,9 +266,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               ? { idType: "Other", otherIdType: data.result.principalHolder.idType as TypeIDOther }
               : { idType: data.result.principalHolder.idType };
           addClientDetails({
-            ...client.details,
+            ...details,
             principalHolder: {
-              ...client.details!.principalHolder,
+              ...details!.principalHolder,
               clientId: data.result.principalHolder.clientId,
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               id: data.result.principalHolder.id,
@@ -386,9 +387,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                 ...client,
                 accountList: data.result.accounts!,
                 details: {
-                  ...client.details,
+                  ...details,
                   jointHolder: {
-                    ...client.details?.jointHolder,
+                    ...jointHolder,
                     name: jointHolder!.name!.trim(),
                   },
                 },
@@ -434,9 +435,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     if (investorData !== undefined) {
       setForceUpdatePrompt(false);
       addClientDetails({
-        ...client.details,
+        ...details,
         principalHolder: {
-          ...client.details!.principalHolder,
+          ...details!.principalHolder,
           dateOfBirth: accountType === 1 ? jointHolder?.dateOfBirth : investorData.dateOfBirth,
           clientId: clientCheckData !== undefined ? clientCheckData!.clientId : investorData.clientId,
           id: clientCheckData !== undefined ? clientCheckData?.id : investorData.idNumber,
@@ -558,10 +559,10 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   };
 
   const etbCheckInvestor: IInvestorData =
-    client.isForceUpdate === true || client.isNewSales === true
+    isForceUpdate === true || isNewSales === true || directToAccountOpening === true
       ? {
           clientId: "",
-          idNumber: client.details?.principalHolder?.id!,
+          idNumber: principalHolder?.id!,
           name: "",
           email: "",
           riskTolerance: "",
@@ -571,6 +572,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
 
   const tabProps = {
     currentInvestor: etbCheckInvestor,
+    directToAccountOpening,
     investorData,
     isFetching: loading,
     isLogout: dashboardProps.isLogout,
@@ -578,6 +580,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     page,
     pages,
     setForceUpdatePrompt,
+    setPrompt,
     setInvestorData,
     setIsFetching: setLoading,
     setPage,
@@ -611,6 +614,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const checkName = investorData !== undefined && clientCheckData !== undefined ? clientCheckData.name : checkInvestorName;
   const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${checkName}.`;
   const modalStyle = fullScreenLoader.current === false ? undefined : { backgroundColor: colorBlack._1_4 };
+  const checkDirectToAccountOpening = isForceUpdate === true ? INVESTOR_ACCOUNTS.BUTTON_GO_BACK : INVESTOR_ACCOUNTS.BUTTON_CANCEL;
 
   return (
     <Fragment>
@@ -660,6 +664,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         handleContinue={handleForceUpdate}
         illustration={LocalAssets.illustration.investorWarning}
         label={promptLabel}
+        labelCancel={checkDirectToAccountOpening}
         spaceToIllustration={sh24}
         title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
         visible={forceUpdatePrompt}

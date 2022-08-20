@@ -119,18 +119,9 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     updatedNewSalesSteps!.splice(0, 0, ACCOUNT_LIST);
   }
   if (newSales.accountDetails.accountNo === "" && client.isNewFundPurchase === false) {
-    const updatedContent: INewSalesContentItem = {
-      ...updatedNewSalesSteps[0].content![0],
-      title: NEW_SALES.SUBTITLE_RISK_ASSESSMENT,
-      route: NEW_SALES_ROUTES.RiskAssessment,
-      key: NEW_SALES_ROUTES.RiskAssessment,
-    };
     updatedNewSalesSteps[0] = {
       ...updatedNewSalesSteps[0],
-      content: [updatedContent],
-      key: NEW_SALES_ROUTES.RiskSummary,
       label: NEW_SALES.TITLE_ACCOUNT_OPENING,
-      route: NEW_SALES_ROUTES.RiskSummary,
     };
   }
   if (newSales.accountDetails.accountNo !== "" && client.isNewFundPurchase === false && findProducts !== -1) {

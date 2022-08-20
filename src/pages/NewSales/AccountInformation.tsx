@@ -25,7 +25,6 @@ export const NewSalesAccountInformation: FunctionComponent<AccountInformationPag
   const [accountInformation, setAccountInformation] = useState<IInvestorAccount | undefined>(undefined);
 
   const handleBack = () => {
-    console.log("enter");
     setClientId("");
     setScreen("accountSummary");
   };

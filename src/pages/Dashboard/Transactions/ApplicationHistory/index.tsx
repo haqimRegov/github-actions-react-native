@@ -52,6 +52,7 @@ interface ApplicationHistoryProps extends TransactionsStoreProps {
 export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryProps> = (props: ApplicationHistoryProps) => {
   const {
     activeTab,
+    addClientDirectToAccountOpening,
     addClientNewFund,
     availableFilters,
     downloadInitiated,
@@ -132,6 +133,10 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const handleNewSales = () => {
     addClientNewFund(true);
+  };
+
+  const handleAccountOpening = () => {
+    addClientDirectToAccountOpening(true);
   };
 
   const handleTabs = (index: number) => {
@@ -346,7 +351,12 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   return (
     <View style={fullHW}>
-      <DashboardLayout handleNewSales={handleNewSales} scrollEnabled={!filterVisible} ref={dashboardLayoutRef} {...props}>
+      <DashboardLayout
+        handleAccountOpening={handleAccountOpening}
+        handleNewSales={handleNewSales}
+        scrollEnabled={!filterVisible}
+        ref={dashboardLayoutRef}
+        {...props}>
         <View style={flexChild}>
           <ApplicationHistoryHeader
             activeTab={activeTab}

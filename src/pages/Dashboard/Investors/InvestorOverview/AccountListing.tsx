@@ -29,6 +29,7 @@ const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface AccountListingProps {
   currentInvestor?: IInvestorData;
+  directToAccountOpening: boolean;
   handleBuyNewFund: (item: IInvestorAccountsData) => void;
   handleViewAccount: (account: ICurrentAccount) => void;
   investorData?: IInvestor;
@@ -40,6 +41,7 @@ interface AccountListingProps {
   setIsFetching: (value: boolean) => void;
   setPage: (page: number) => void;
   setPages: (page: number) => void;
+  setPrompt: (toggle: boolean) => void;
   setScreen: (route: InvestorsPageType) => void;
   setSort: (sort: IInvestorAccountsSort[]) => void;
   sort: IInvestorAccountsSort[];
@@ -48,6 +50,7 @@ interface AccountListingProps {
 
 export const AccountListing: FunctionComponent<AccountListingProps> = ({
   currentInvestor,
+  directToAccountOpening,
   handleBuyNewFund,
   handleViewAccount,
   investorData,
@@ -59,6 +62,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   setIsFetching,
   setPage,
   setPages,
+  setPrompt,
   setSort,
   sort,
   updateForceUpdateDeclarations,
@@ -245,6 +249,8 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
           if (isArrayNotEmpty(data.result.declarationRequired)) {
             updateForceUpdateDeclarations(data.result.declarationRequired);
           }
+        } else if (data.result.isForceUpdate === false && directToAccountOpening === true) {
+          setPrompt(true);
         }
         setPage(currentPage);
         setPages(pages);

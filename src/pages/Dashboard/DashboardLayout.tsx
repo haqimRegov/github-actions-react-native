@@ -33,6 +33,7 @@ export interface IDashboardLayoutRef {
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  handleAccountOpening?: () => void;
   handleNewSales?: () => void;
   hideQuickActions?: boolean;
   navigation: IStackNavigationProp;
@@ -50,6 +51,7 @@ interface DashboardLayoutProps {
 export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, DashboardLayoutProps>((props, ref) => {
   const {
     children,
+    handleAccountOpening,
     handleNewSales,
     hideQuickActions,
     navigation,
@@ -66,6 +68,9 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
   const [addClient, setAddClient] = useState<boolean>(false);
 
   const handleAddClient = () => {
+    if (handleAccountOpening !== undefined) {
+      handleAccountOpening();
+    }
     setAddClient(true);
   };
 

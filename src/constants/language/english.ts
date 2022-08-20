@@ -868,6 +868,7 @@ export const english = {
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",
       BUTTON_CONTINUE: "Continue",
+      BUTTON_GO_BACK: "Go Back",
       BUTTON_GET_STARTED: "Get Started",
       LABEL_ACCOUNT_NO: "Account No.",
       LABEL_ACCOUNT_OPENING_DATE: "Acc Opening Date",
@@ -1691,6 +1692,7 @@ export const english = {
     },
     QUICK_ACTIONS: {
       LABEL_ACCOUNT_OPENING_NEW_SALES: "Open Account",
+      LABEL_BUY_FUND: "Buy Fund",
       LABEL_NEW_SALES: "Buy New Fund",
       LABEL_REDEMPTION: "Redemption",
       LABEL_SALES: "Sales",

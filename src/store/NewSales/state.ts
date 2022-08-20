@@ -20,7 +20,7 @@ export const newSalesInitialState: NewSalesState = {
   accountDetails: {
     accountNo: "",
     authorisedSignatory: "",
-    ampFund: undefined,
+    ampDetails: undefined,
     fundType: "ut",
     isEpf: undefined,
     isRecurring: undefined,

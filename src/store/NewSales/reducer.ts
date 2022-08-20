@@ -37,7 +37,7 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
         accountDetails: {
           accountNo: "",
           authorisedSignatory: "",
-          ampFund: undefined,
+          ampDetails: undefined,
           fundType: "ut",
           isEpf: undefined,
           isRecurring: undefined,

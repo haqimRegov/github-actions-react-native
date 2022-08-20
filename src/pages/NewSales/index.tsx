@@ -141,7 +141,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     const checkIndex = client.isNewFundPurchase === true ? 3 : 2;
     updatedNewSalesSteps.splice(checkIndex, 1);
   }
-  if (newSales.accountDetails.ampFund !== undefined && findProducts !== -1) {
+  if (newSales.accountDetails.ampDetails !== undefined && findProducts !== -1) {
     const productsContent = updatedNewSalesSteps[findProducts].content!;
     productsContent.splice(0, 1);
     updatedNewSalesSteps[findProducts].content = productsContent;

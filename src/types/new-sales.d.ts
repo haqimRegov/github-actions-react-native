@@ -1,7 +1,7 @@
 declare interface INewSalesAccountDetails {
   accountNo: string;
   authorisedSignatory: string;
-  ampFund?: IProduct;
+  ampDetails?: IProduct;
   fundType: ProductType;
   isEpf?: boolean;
   isSyariah: boolean;

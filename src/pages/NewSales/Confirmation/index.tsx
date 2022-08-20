@@ -102,7 +102,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   updateNewSales,
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
-  const { accountNo, ampFund, isEpf } = accountDetails;
+  const { accountNo, ampDetails, isEpf } = accountDetails;
   // const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = true;
   const flatListRef = useRef<FlatList | null>(null);
@@ -112,7 +112,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const [etbAccountList, setEtbAccountList] = useState<IEtbAccountDescription[]>([]);
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails!, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const checkAMP: TypeNewSalesRoute = ampFund !== undefined ? "RiskSummary" : "ProductsList";
+  const checkAMP: TypeNewSalesRoute = ampDetails !== undefined ? "RiskSummary" : "ProductsList";
 
   const handleScrollToFund = () => {
     const findIndex = isNotEmpty(investmentDetails)
@@ -518,7 +518,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             }
             ref={flatListRef}
             renderItem={({ item, index }) => {
-              const { fundName, issuingHouse } = item.fundDetails;
+              const { fundName, fundType, issuingHouse } = item.fundDetails;
               // const type = prsType === "prsDefault" ? "PRS DEFAULT" : fundType;
               const newData = tempData !== undefined ? [...tempData] : [];
 
@@ -608,7 +608,9 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                       <View style={rowCenterVertical}>
                         <Text style={fs14BoldBlack2}>{fundName}</Text>
                         <CustomFlexSpacer />
-                        <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sw24} suppressHighlighting={true} />
+                        {fundType.toLowerCase() === "amp" && accountNo !== "" ? null : (
+                          <IcoMoon name="trash" color={colorBlue._1} onPress={handleDelete} size={sw24} suppressHighlighting={true} />
+                        )}
                       </View>
                     </View>
                     <CustomSpacer space={sh16} />

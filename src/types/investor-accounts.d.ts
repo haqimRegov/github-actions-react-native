@@ -23,18 +23,24 @@ declare interface IInvestorAccountsData {
   accountHolder: TypeAccountHolder;
   accountNo: string;
   accountOpeningDate: string;
+  ampDetails?: IProduct;
   authorisedSignatory: string;
   address: IAddressState;
   clientId: string;
   currency: string[];
   dateOfBirth: string;
   email: string;
+  epfDetails: {
+    epfMemberNumber: string;
+    epfAccountType: string;
+  };
   fundType: string;
   initId: string;
   idNumber: string;
   idType: string;
   isRecurring: boolean;
   isSyariah: boolean;
+  jointDateOfBirth: string;
   jointDeclarationRequired: string[] | null;
   jointEmail: string;
   jointId: string;

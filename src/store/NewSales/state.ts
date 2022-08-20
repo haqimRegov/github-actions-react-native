@@ -13,7 +13,7 @@ export type NewSalesState = {
   };
   toast: INewSalesToast;
   transactionType: TTransactionType | undefined;
-  riskInfo?: IRiskProfile;
+  riskInfo: IRiskProfile;
 };
 
 export const newSalesInitialState: NewSalesState = {
@@ -55,5 +55,11 @@ export const newSalesInitialState: NewSalesState = {
     toastText: "All changes saved",
   },
   transactionType: undefined,
-  riskInfo: undefined,
+  riskInfo: {
+    appetite: "",
+    profile: "",
+    expectedRange: "",
+    hnwStatus: "",
+    type: "",
+  },
 };

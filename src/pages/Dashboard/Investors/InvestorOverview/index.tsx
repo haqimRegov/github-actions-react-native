@@ -281,6 +281,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           addAccountType(accountType === 1 || data.result.jointHolder !== null ? "Joint" : "Individual");
           const updatedEmailPrincipal = isNtb !== true ? { emailAddress: investorData?.email } : {};
           const updatedEmailJoint = isNtb !== true && accountType === 1 ? { emailAddress: investorData?.email } : {};
+          const accountJointEmail = item !== undefined && isNotEmpty(item.jointEmail) ? { emailAddress: item.jointEmail } : {};
           const updatedJointInfo: IHolderInfoState =
             accountType === 1 || data.result.jointHolder !== null
               ? {
@@ -288,6 +289,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   contactDetails: {
                     ...personalInfo.joint?.contactDetails,
                     ...updatedEmailJoint,
+                    ...accountJointEmail,
                   },
                   personalDetails: {
                     ...personalInfo.joint?.personalDetails,

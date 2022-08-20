@@ -124,14 +124,13 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
-  ];
-  if (riskProfile.appetite !== "") {
-    accountDetailsArray.push({
+    {
       label: RISK_ASSESSMENT.NEW_SALES_RISK_CATEGORY,
-      title: riskProfile.appetite,
+      title: riskProfile.appetite || "-",
       titleStyle: fsTransformNone,
-    });
-  }
+    },
+  ];
+
   if (client.accountType === "Joint") {
     accountDetailsArray.push(
       {

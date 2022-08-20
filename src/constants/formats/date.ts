@@ -13,5 +13,6 @@ export const NRIC_DATE_FORMAT = "YYMMDD";
 export const MONTH_YEAR_FORMAT = "MMMM YYYY";
 export const MIN_DATE = "1900-01-01";
 export const MIN_DATE_FORMAT = "YYYY-MM-DD";
+export const NRIC_AGE_FORMAT = "YYYYMMDD";
 
 export const DATE_DAY_DIFF_FORMAT = "days" as const;

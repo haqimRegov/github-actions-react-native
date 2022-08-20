@@ -78,10 +78,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT });
   }
 
-  if (
-    currentOrder !== undefined &&
-    (currentOrder.transactionType === "Sales-AO" || currentOrder.transactionType === "Sales-NS" || currentOrder.transactionType === "Sales")
-  ) {
+  if (currentOrder !== undefined && currentOrder.transactionType === "Sales-AO") {
     tabs.splice(1, 0, "account");
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }

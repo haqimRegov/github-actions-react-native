@@ -38,6 +38,7 @@ interface FundOverviewProps {
   orderNumber: string;
   paymentType: TypePaymentType;
   totalInvestment: IOrderAmount[];
+  transactionType?: TTransactionType;
 }
 export const FundOverview: FunctionComponent<FundOverviewProps> = ({
   completed,
@@ -47,6 +48,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({
   orderNumber,
   paymentType,
   totalInvestment,
+  transactionType,
 }: FundOverviewProps) => {
   const [viewFund, setViewFund] = useState<string>("");
 
@@ -63,7 +65,11 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({
   const tagColor = completed === true ? "complete" : "warning";
   const tagLabel = completed === true ? "Completed" : "Pending";
 
-  const totalAmountLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
+  const investmentAmountLabel =
+    transactionType === "Sales-NS" || transactionType === "Sales"
+      ? PAYMENT.LABEL_TOTAL_SALES_AMOUNT
+      : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
+  const totalAmountLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : investmentAmountLabel;
 
   return (
     <View style={border(colorGray._2, sw1, sw8)}>

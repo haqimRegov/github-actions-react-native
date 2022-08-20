@@ -55,7 +55,6 @@ import {
   sw8,
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
-import { isObjectEqual } from "../../utils";
 import { defaultContentProps } from "../ForceUpdate/Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
@@ -133,6 +132,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
       expectedRange: currentRiskScore!.rangeOfReturn,
       type: currentRiskScore!.type,
     });
+    resetQuestionnaire();
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
     handleNextStep("RiskSummary");
   };
@@ -225,9 +225,9 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     if (prevRiskAssessment === undefined && updatedFinishedSteps.includes("RiskAssessment")) {
       setPrevRiskAssessment(questionnaire);
     }
-    if (prevRiskAssessment !== undefined && !isObjectEqual(questionnaire, prevRiskAssessment)) {
-      setConfirmModal("promptAssessment");
-    }
+    // if (prevRiskAssessment !== undefined && !isObjectEqual(questionnaire, prevRiskAssessment)) {
+    //   setConfirmModal("promptAssessment");
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finishedSteps, prevRiskAssessment, questionnaire]);
 

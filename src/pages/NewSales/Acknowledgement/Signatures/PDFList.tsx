@@ -68,10 +68,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       const documents: ISubmitPdfTransactionsDocument[] = receipts!.map((receipt) => {
         const receiptData: ISubmitPdfTransactionsDocument = {
           adviserSignature: receipt.adviserSignature!,
-          clientSignature: receipt.principalSignature!,
           orderNumber: receipt.orderNumber!,
           pdf: receipt.signedPdf!,
         };
+        if (receipt.principalSignature?.base64) {
+          receiptData.clientSignature = receipt.principalSignature;
+        }
         if (receipt.jointSignature?.base64) {
           receiptData.jointSignature = receipt.jointSignature;
         }

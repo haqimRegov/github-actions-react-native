@@ -63,8 +63,8 @@ import {
   sh8,
   sw05,
   sw1,
-  sw10,
   sw120,
+  sw14,
   sw16,
   sw20,
   sw228,
@@ -98,7 +98,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   updateNewSales,
 }: IRiskSummaryProps) => {
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
-  const [, setCurrentClientId] = useState<string>("");
+  const [currentClientId, setCurrentClientId] = useState<string>("");
   const [currentOrder, setCurrentOrder] = useState<IDashboardOrder | undefined>(undefined);
   const [page, setPage] = useState<TRiskProfilePages>("accountSummary");
   const prevPage = usePrevious<TRiskProfilePages>(page);
@@ -281,6 +281,9 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     if (prevPage === "orderSummary") {
       nextPage = "orderSummary";
     }
+    if (nextPage === "accountSummary") {
+      setCurrentClientId("");
+    }
 
     setPage(nextPage);
   };
@@ -339,7 +342,8 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const checkPrincipalId =
     accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
   const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
-  const clientId = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
+  const checkCurrentProfile = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
+  const clientId = currentClientId !== "" ? currentClientId : checkCurrentProfile;
 
   const profileContent = (
     <ContentPage {...defaultContentProps} heading={RISK_ASSESSMENT.NEW_SALES_HEADING} headingStyle={headerStyle}>
@@ -389,7 +393,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
                     <CustomSpacer isHorizontal={true} space={sw16} />
                     <Text style={fs12BoldBlack2}>{RISK_ASSESSMENT.LABEL_VIEW_ACCOUNT_DETAILS}</Text>
                     <CustomSpacer isHorizontal={true} space={sw4} />
-                    <IcoMoon color={colorBlue._1} name="arrow-right" size={sw10} />
+                    <IcoMoon color={colorBlue._1} name="arrow-right" size={sw14} />
                   </View>
                 </TouchableWithoutFeedback>
               ) : null}

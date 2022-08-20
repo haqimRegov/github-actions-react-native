@@ -51,7 +51,7 @@ interface ITagStyle {
 
 export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handlePress, style }: IAccountCardProps) => {
   const [pressed, setPressed] = useState<boolean>(false);
-  const { accountNo, fundType, name, isJoint, jointName, paymentMethod, riskTolerance } = data;
+  const { accountNo, fundType, name, jointName, paymentMethod, riskTolerance } = data;
 
   const handleTagStyle = (text: string): ITagStyle => {
     switch (text) {

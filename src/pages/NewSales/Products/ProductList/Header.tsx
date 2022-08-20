@@ -69,7 +69,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   currentFilter,
   handleShowFilter,
   filterVisible,
-  handleCancel,
+  // handleCancel,
   handleConfirm,
   handleResetFilter,
   handleUpdateFilter,

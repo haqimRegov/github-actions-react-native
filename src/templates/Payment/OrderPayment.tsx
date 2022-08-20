@@ -70,6 +70,7 @@ export interface OrderPaymentProps {
     setActiveInfo?: (index: number) => void,
   ) => void;
   setSavedChangesToast: (toggle: boolean) => void;
+  transactionType?: TTransactionType;
 }
 
 export interface ISetPaymentOptions {
@@ -96,6 +97,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   setLocalRecurringDetails,
   setProofOfPayment,
   setSavedChangesToast,
+  transactionType,
 }: OrderPaymentProps) => {
   const {
     allowedRecurringType,
@@ -274,6 +276,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
         funds={funds}
         orderNumber={orderNumber}
         totalInvestment={totalInvestment}
+        transactionType={transactionType}
         paymentType={paymentType}
       />
       <CustomSpacer space={sh8} />

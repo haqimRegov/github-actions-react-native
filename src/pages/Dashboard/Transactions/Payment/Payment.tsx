@@ -326,6 +326,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     setLocalCtaDetails={setLocalCtaDetails}
                     setProofOfPayment={handleSetPayment}
                     setSavedChangesToast={setSavedChangesToast}
+                    transactionType={currentOrder!.transactionType}
                   />
                 </View>
               </View>

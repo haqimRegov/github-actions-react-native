@@ -6,9 +6,9 @@ import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomFlexSpacer, CustomSpacer, Loading, Pagination, PromptModal, RNModal, Tab } from "../../../../components";
-import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language, NRIC_AGE_FORMAT } from "../../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
-import { getAddress, getProductTabType, handleSignatoryFromBE } from "../../../../helpers";
+import { findDOBFromNric, getAddress, getProductTabType, handleSignatoryFromBE } from "../../../../helpers";
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
 import {
@@ -48,7 +48,9 @@ declare interface IIdType {
 
 declare interface IEtbCheckData extends IEtbCheckResult {
   id: string;
+  idType?: string;
   name: string;
+  dateOfBirth?: string;
 }
 
 const initialJointInfo = {
@@ -352,7 +354,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     return undefined;
   };
 
-  const handleCheckClient = async (req: IEtbCheckRequest): Promise<boolean | string> => {
+  const handleCheckClient = async (req: IEtbCheckData): Promise<boolean | string> => {
     if (newSalesLoading === false) {
       setNewSalesLoading(true);
       const request: IEtbCheckRequest =
@@ -367,7 +369,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               idType: jointIdType,
               name: jointHolder?.name?.trim(),
             }
-          : req;
+          : {
+              id: req.id,
+              idType: req.idType as TypeClientID,
+              name: req.name,
+            };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
@@ -406,8 +412,14 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               });
               return true;
             }
+            // const checkDOB = jointHolder?.dateOfBirth === "" ? `jointHolder.id.`
+            const nricDOB =
+              jointHolder?.dateOfBirth === ""
+                ? moment(findDOBFromNric(jointHolder.id), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT)
+                : jointHolder?.dateOfBirth;
             setClientCheckData({
               ...data.result,
+              dateOfBirth: req !== undefined ? req.dateOfBirth : nricDOB,
               name: req !== undefined ? req.name! : jointHolder!.name!,
               id: req !== undefined ? req.id! : jointHolder!.id!,
             });
@@ -438,7 +450,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         ...details,
         principalHolder: {
           ...details!.principalHolder,
-          dateOfBirth: accountType === 1 ? jointHolder?.dateOfBirth : investorData.dateOfBirth,
+          dateOfBirth: accountType === 1 && clientCheckData !== undefined ? clientCheckData?.dateOfBirth : investorData.dateOfBirth,
           clientId: clientCheckData !== undefined ? clientCheckData!.clientId : investorData.clientId,
           id: clientCheckData !== undefined ? clientCheckData?.id : investorData.idNumber,
           name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
@@ -453,8 +465,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
             dateOfBirth:
-              accountType === 1
-                ? moment(jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
+              accountType === 1 && clientCheckData !== undefined
+                ? moment(clientCheckData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
                 : moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
             name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
           },
@@ -493,7 +505,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     const jointInfo =
       item.jointName !== null
         ? {
-            dateOfBirth: item.dateOfBirth,
+            dateOfBirth: item.jointDateOfBirth,
             id: item.idNumber,
             name: item.name,
           }
@@ -513,7 +525,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     jointClientId.current = item.jointId;
     let checkForceUpdateETB: string | boolean = false;
     if (item.jointName !== null) {
-      const clientCheckRequest: IEtbCheckRequest = {
+      const clientCheckRequest: IEtbCheckData = {
+        dateOfBirth: item.jointDateOfBirth,
         idType: item.jointIdType as TypeClientID,
         id: item.jointIdNumber,
         name: item.jointName,

@@ -40,7 +40,6 @@ import {
   fs14BoldBlack2,
   fs14BoldBlue1,
   fs14RegGray5,
-  fs16BoldBlack2,
   fs16BoldGray6,
   fs16RegGray5,
   fs16RegGray6,
@@ -588,7 +587,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                       <View style={{ ...flexRow, ...centerVertical, ...px(sw8) }}>
                         <IcoMoon name="house" size={sw16} color={colorBlack._2} />
                         <CustomSpacer isHorizontal={true} space={sw8} />
-                        <Text style={fs16BoldBlack2}>{item.fundDetails.issuingHouse}</Text>
+                        <Text style={fs14BoldBlack2}>{item.fundDetails.issuingHouse}</Text>
                         <CustomSpacer isHorizontal={true} space={sw16} />
                         <View style={flexChild}>
                           <View style={borderBottomBlue4} />

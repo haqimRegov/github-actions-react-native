@@ -230,6 +230,16 @@ const NewSalesComponent = ({
                 },
               });
               if (client.isNewFundPurchase === true) {
+              addPersonalInfo({
+                ...personalInfo,
+                principal: {
+                  ...personalInfo.principal,
+                  contactDetails: {
+                    ...personalInfo.principal?.contactDetails,
+                    emailAddress: data.result.emailAddress,
+                  },
+                },
+              });
                 updateTransactionType("Sales-NS");
                 return navigation.navigate("NewSales");
               }

@@ -23,7 +23,7 @@ import {
   sw64,
   sw8,
 } from "../../styles";
-import { isNotEmpty } from "../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../utils";
 import { SummaryColorCard, summaryColorCardStyleProps } from "./SummaryColorCard";
 
 interface AccountTabProps {
@@ -60,7 +60,9 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
   return (
     <Fragment>
       <View style={px(sw24)}>
-        {isNotEmpty(principal.bankInformation) && isNotEmpty(principal.bankInformation?.localBank) ? (
+        {isNotEmpty(principal.bankInformation) &&
+        (isNotEmpty(principal.bankInformation?.localBank) || isNotEmpty(principal.bankInformation?.foreignBank)) &&
+        (isArrayNotEmpty(principal.bankInformation?.localBank) || isArrayNotEmpty(principal.bankInformation?.foreignBank)) ? (
           <Fragment>
             <CustomSpacer space={sh24} />
 

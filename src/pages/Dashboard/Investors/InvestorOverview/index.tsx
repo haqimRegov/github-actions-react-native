@@ -26,7 +26,6 @@ import {
   sw24,
 } from "../../../../styles";
 import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
-import { ampData } from "../../../NewSales/dummy-amp";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
@@ -220,7 +219,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           }
 
           const fundType = item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType;
-          const checkAmp = item !== undefined && item.fundType === "AMP" ? { ampFund: ampData } : {};
+          const checkAmp = item !== undefined && item.fundType === "AMP" ? { ampDetails: item.ampDetails } : {};
           updateNewSales({
             ...newSales,
             investorProfile: {

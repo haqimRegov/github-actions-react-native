@@ -105,7 +105,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const { jointHolder, principalHolder } = details!;
   const { accountType } = client;
   const { accountDetails, disabledSteps, finishedSteps, riskInfo } = newSales;
-  const { accountNo, ampFund, fundType, isEpf } = accountDetails;
+  const { accountNo, ampDetails, fundType, isEpf } = accountDetails;
 
   const checkIdType = (data: IClientBasicInfo) => {
     return data.idType === "Other" ? `${data.otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : data.idType;
@@ -171,9 +171,9 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   const handleInvest = () => {
     const initialStateArray: IProductSales[] = [];
-    if (ampFund !== undefined) {
+    if (ampDetails !== undefined) {
       let newMasterClassList: IProductClasses = {};
-      ampFund!.masterList.forEach((list: IProductMasterList) => {
+      ampDetails!.masterList.forEach((list: IProductMasterList) => {
         const dump = { class: list.class !== null ? list.class : "No Class", currency: list.currency };
         const findClassIndex = Object.keys(newMasterClassList).indexOf(dump.class);
         if (findClassIndex === -1) {
@@ -186,16 +186,17 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
       const newState: IProductSales = {
         investment: {
-          fundId: ampFund.masterList[0].fundId,
-          fundPaymentMethod: ampFund.isEpfOnly === "Yes" ? "EPF" : "Cash",
+          fundId: ampDetails.masterList[0].fundId,
+          fundPaymentMethod: ampDetails.isEpfOnly === "Yes" ? "EPF" : "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",
-          fundCurrency: ampFund.masterList[0].currency,
-          fundClass: ampFund.masterList[0].class !== null ? ampFund.masterList[0].class : "No Class",
+          fundCurrency: ampDetails.masterList[0].currency,
+          fundClass: ampDetails.masterList[0].class !== null ? ampDetails.masterList[0].class : "No Class",
           scheduledInvestment: false,
-          prsType: ampFund.prsType,
+          prsType: ampDetails.prsType,
         },
-        fundDetails: { ...ampFund },
+        isNewFund: false,
+        fundDetails: { ...ampDetails },
         masterClassList: newMasterClassList,
       };
 
@@ -207,7 +208,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const handlePageContinue = () => {
     const updatedFinishedSteps: TypeNewSalesKey[] = [...new Set(finishedSteps)];
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
-    const nextStep: TypeNewSalesRoute = accountDetails.ampFund !== undefined ? "ProductsConfirmation" : "ProductsList";
+    const nextStep: TypeNewSalesRoute = accountDetails.ampDetails !== undefined ? "ProductsConfirmation" : "ProductsList";
     updatedFinishedSteps.push("RiskSummary");
     const findRiskProfile = disabledSteps.indexOf("RiskSummary");
     if (findRiskProfile !== -1) {
@@ -218,10 +219,10 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     if (findProducts !== -1) {
       updatedDisabledSteps.splice(findProducts, 1);
     }
-    if (findProductsConfirmation !== -1 && accountDetails.ampFund !== undefined) {
+    if (findProductsConfirmation !== -1 && accountDetails.ampDetails !== undefined) {
       updatedDisabledSteps.splice(findProductsConfirmation, 1);
     }
-    if (accountDetails.ampFund !== undefined) {
+    if (accountDetails.ampDetails !== undefined) {
       handleInvest();
     }
 
@@ -238,17 +239,16 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     setPage("profile");
   };
 
-  const ampDetails: LabeledTitleProps[] = [];
-  // TODO change to !==
+  const ampDetailsArray: LabeledTitleProps[] = [];
   if (fundType === "amp") {
-    ampDetails.push(
+    ampDetailsArray.push(
       {
         label: RISK_ASSESSMENT.LABEL_LANDING_FUND,
-        title: ampFund?.landingFund,
+        title: ampDetails?.landingFund,
       },
       {
         label: RISK_ASSESSMENT.NEW_SALES_RISK_CATEGORY,
-        title: ampFund?.riskCategory,
+        title: ampDetails?.riskCategory,
       },
     );
   }
@@ -451,16 +451,16 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
                       <View style={flexRow}>
                         <IcoMoon color={colorBlue._1} name="fund" size={sw24} />
                         <CustomSpacer isHorizontal={true} space={sw8} />
-                        <Text style={fs16BoldBlue1}>{ampFund!.fundAbbr}</Text>
+                        <Text style={fs16BoldBlue1}>{ampDetails!.fundAbbr}</Text>
                         <CustomSpacer isHorizontal={true} space={sw16} />
                         <View style={{ ...flexChild, ...centerHorizontal }}>
                           <View style={borderBottomBlue4} />
                         </View>
                       </View>
-                      <Text style={{ ...fs12RegGray5, paddingLeft: sw32 }}>{ampFund?.issuingHouse}</Text>
+                      <Text style={{ ...fs12RegGray5, paddingLeft: sw32 }}>{ampDetails?.issuingHouse}</Text>
                       <CustomSpacer space={sh12} />
                       <TextCard
-                        data={ampDetails}
+                        data={ampDetailsArray}
                         itemsPerGroup={3}
                         spaceBetweenItem={sw32}
                         spaceBetweenGroup={0}

@@ -129,20 +129,22 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     orderDetails.push({ label: DASHBOARD_ORDER_DETAILS.LABEL_CONSENT, title: "Yes", titleStyle: fsTransformNone });
   }
 
-  const riskAssessmentDetails: LabeledTitleProps[] = [
-    {
-      label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_APPETITE,
-      title: riskInfo!.appetite,
-      titleStyle: fsTransformNone,
-    },
-    { label: DASHBOARD_ORDER_DETAILS.LABEL_EXPECTED_RANGE, title: riskInfo!.expectedRange, titleStyle: fsTransformNone },
-    { label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_TYPE, title: riskInfo!.type, titleStyle: fsTransformNone },
-    {
-      label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_PROFILE,
-      title: riskInfo!.profile,
-      titleStyle: fsTransformNone,
-    },
-  ];
+  const riskAssessmentDetails: LabeledTitleProps[] = isNotEmpty(riskInfo)
+    ? [
+        {
+          label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_APPETITE,
+          title: riskInfo!.appetite || "-",
+          titleStyle: fsTransformNone,
+        },
+        { label: DASHBOARD_ORDER_DETAILS.LABEL_EXPECTED_RANGE, title: riskInfo!.expectedRange || "-", titleStyle: fsTransformNone },
+        { label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_TYPE, title: riskInfo!.type || "-", titleStyle: fsTransformNone },
+        {
+          label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_PROFILE,
+          title: riskInfo!.profile || "-",
+          titleStyle: fsTransformNone,
+        },
+      ]
+    : [];
 
   const crsSection: ISummaryColorCardSection = {
     iconName: "tax-card",
@@ -177,13 +179,6 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     ...centerHV,
     height: sh17,
   };
-
-  const riskInfoCheck =
-    riskInfo !== null &&
-    riskInfo.appetite !== null &&
-    riskInfo.expectedRange !== null &&
-    riskInfo.profile !== null &&
-    riskInfo.type !== null;
 
   return (
     <Fragment>
@@ -722,7 +717,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
             />
           </Fragment>
         ) : null}
-        {transactionType !== "CR" && riskInfoCheck ? (
+        {transactionType !== "CR" && isNotEmpty(riskInfo) ? (
           <SummaryColorCard data={riskAssessmentDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
         ) : null}
 

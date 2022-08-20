@@ -31,7 +31,7 @@ import {
   sw440,
   sw80,
 } from "../../../../styles";
-import { formatAmount, isNotEmpty } from "../../../../utils";
+import { formatAmount, isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { defaultContentProps } from "../../Content";
 
 const { TERMS_AND_CONDITIONS, NEW_SALES_PROMPT } = Language.PAGE;
@@ -56,6 +56,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { clientId } = details!.principalHolder!;
+  const { accountDetails, transactionType } = newSales;
   const { emailAddress } = personalInfo!.principal!.contactDetails!;
   const fetching = useRef<boolean>(false);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -87,7 +88,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       };
 
       const submitPdfResponse: ISubmitPdfTransactionsResponse | ISubmitPdfResponse =
-        newSales.transactionType === "Sales-NS"
+        transactionType === "Sales-NS"
           ? await submitPdfTransactions(request, navigation, setLoading)
           : await submitPdf(request, navigation, setLoading);
 
@@ -148,7 +149,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       setLoading(true);
 
       const transactionsRequest: IGeneratePdfTransactionsRequest = {
-        accountNo: newSales.accountDetails.accountNo,
+        accountNo: accountDetails.accountNo,
         clientId: clientId!,
         initId: details!.initId!,
         orderNo: receipt.orderNumber!,
@@ -163,7 +164,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       };
 
       const accountOpeningReceipt: IGeneratePdfTransactionsResponse | IGeneratePdfResponse =
-        newSales.transactionType === "Sales-NS"
+        transactionType === "Sales-NS"
           ? await generatePdfTransactions(transactionsRequest, navigation, setLoading)
           : await generatePdf(accountOpeningRequest, navigation, setLoading);
 
@@ -223,6 +224,13 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       : `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
 
   const signIcon = accountType === "Individual" ? "account" : "account-joint";
+
+  const orderNumberLabel = isArrayNotEmpty(receipts)
+    ? receipts!.map(({ orderNumber }, index) => (index === 0 ? orderNumber : ` and ${orderNumber}`)).join("")
+    : "";
+
+  const promptTitle =
+    transactionType === "Sales-NS" ? `${NEW_SALES_PROMPT.SUBHEADING_SALES}\n${orderNumberLabel}.` : NEW_SALES_PROMPT.SUBHEADING;
 
   return (
     <Fragment>
@@ -314,7 +322,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         illustration={LocalAssets.illustration.orderReceived}
         primary={{ onPress: handleContinue, buttonStyle: { width: sw212 }, text: NEW_SALES_PROMPT.BUTTON_PAY_NOW }}
         secondary={{ onPress: handleResetNewSales, buttonStyle: { width: sw212 }, text: NEW_SALES_PROMPT.BUTTON_BACK }}
-        title={NEW_SALES_PROMPT.SUBHEADING}
+        title={promptTitle}
         visible={showPrompt}>
         <View style={{ width: sw440 }}>
           <CustomSpacer space={sh16} />

@@ -2,12 +2,9 @@ import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 
-import { Language } from "../../constants";
 import { RNInAppBrowser } from "../../integrations";
 import { getOrderSummary, orderTrackingSummary } from "../../network-actions";
 import { OrderSummary } from "../../templates";
-
-const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 interface OrderSummaryPageProps {
   accountNo: string;
@@ -30,7 +27,7 @@ export const NewSalesOrderSummary: FunctionComponent<OrderSummaryPageProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleBackToTransactions = () => {
-    setScreen("accountSummary");
+    setScreen("accountDetails");
   };
 
   const handleViewPrincipalInvestorProfile = () => {

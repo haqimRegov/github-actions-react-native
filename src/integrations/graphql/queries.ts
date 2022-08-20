@@ -619,6 +619,7 @@ const getOrderSummary = gql`
             salesCharge
             scheduledInvestmentAmount
             scheduledSalesCharge
+            isTopup
           }
           paymentSummary {
             isCombined
@@ -1008,6 +1009,7 @@ const listPaymentRequired = gql`
             isScheduled
             isEpf
             isSyariah
+            isTopup
           }
           paymentCount
           surplusBalance {

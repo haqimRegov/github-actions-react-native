@@ -1,20 +1,23 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 
 import { ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
 import { getDocumentFile, getProductType } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import {
+  border,
   borderBottomBlue2,
   borderBottomBlue3,
   borderBottomBlue4,
   borderBottomBlue5,
+  centerHV,
   centerVertical,
   colorBlue,
   flexChild,
   flexRow,
+  fs10RegBlue9,
   fs12BoldGray5,
   fs12RegGray5,
   fs14BoldBlue1,
@@ -28,9 +31,11 @@ import {
   rowCenterVertical,
   sh12,
   sh16,
+  sh17,
   sh24,
   sh32,
   sh8,
+  sw05,
   sw16,
   sw168,
   sw24,
@@ -153,12 +158,12 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 
-  // const tagStyle: ViewStyle = {
-  //   ...px(sw4),
-  //   ...border(colorBlue._9, sw05, sw4),
-  //   ...centerHV,
-  //   height: sh17,
-  // };
+  const tagStyle: ViewStyle = {
+    ...px(sw4),
+    ...border(colorBlue._9, sw05, sw4),
+    ...centerHV,
+    height: sh17,
+  };
 
   return (
     <Fragment>
@@ -289,7 +294,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
               content={
                 <Fragment>
                   {investmentSummary.map((investment: IOrderSummaryInvestment, index: number) => {
-                    // const { isTopup } = investment;
+                    const { isTopup } = investment;
                     const fundDetails: LabeledTitleProps[] = [
                       { label: DASHBOARD_ORDER_DETAILS.LABEL_FUND_CODE, title: investment.fundCode, titleStyle: fsTransformNone },
 
@@ -341,12 +346,15 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           isScheduled === true ? DASHBOARD_ORDER_DETAILS.LABEL_TERM_RECURRING : DASHBOARD_ORDER_DETAILS.LABEL_TERM_ONE_TIME,
                         titleStyle: fsTransformNone,
                       },
-                      {
+                    ];
+
+                    if (isTopup !== true) {
+                      investmentDetails.push({
                         label: DASHBOARD_ORDER_DETAILS.LABEL_DISTRIBUTION,
                         title: investment.distributionInstruction || "-",
                         titleStyle: fsTransformNone,
-                      },
-                    ];
+                      });
+                    }
 
                     // if (isScheduled === true) {
                     //   investmentDetails.splice(
@@ -375,14 +383,14 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                             <View>
                               <View style={rowCenterVertical}>
                                 <Text style={fs18BoldBlack2}>{investment.fundName}</Text>
-                                {/* {isTopup === true ? null : (
+                                {isNotEmpty(isTopup) && isTopup === false ? (
                                   <Fragment>
                                     <CustomSpacer isHorizontal={true} space={sw8} />
                                     <View style={tagStyle}>
                                       <Text style={fs10RegBlue9}>{DASHBOARD_ORDER_DETAILS.LABEL_NEW_FUND}</Text>
                                     </View>
                                   </Fragment>
-                                )} */}
+                                ) : null}
                               </View>
                             </View>
                             <CustomSpacer isHorizontal={true} space={sw16} />

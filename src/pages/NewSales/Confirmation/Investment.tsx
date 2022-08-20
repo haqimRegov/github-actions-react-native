@@ -180,6 +180,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const validateAmount = (value: string, amountType: "newSalesAmount" | "topUpAmount") => {
     const cleanValue = value.replace(/[,]/g, "");
     const amount: IAmountValueError = { value: cleanValue, error: undefined };
+
     if (isAmount(cleanValue) === false) {
       return { ...amount, error: ERROR.INVESTMENT_INVALID_AMOUNT };
     }
@@ -189,6 +190,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     if (parseAmount(cleanValue) < parseFloat(masterClassList[fundClass!][classCurrencyIndex][amountType][fundingMethod].min)) {
       return { ...amount, error: ERROR.INVESTMENT_MIN_AMOUNT };
     }
+
     return { ...amount, value: formatAmount(cleanValue) };
   };
 
@@ -213,7 +215,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     setData({
       ...data,
       isNewFund: fundStatus,
-      investment: { ...investment, investmentAmount: "", investmentSalesCharge: "", isTopup: false },
+      investment: { ...investment, investmentAmount: "", investmentSalesCharge: "", isTopup: false, amountError: undefined },
     });
     AnimationUtils.layout();
   };

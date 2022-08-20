@@ -13,10 +13,7 @@ declare interface IAccountList {
   name: string;
   paymentMethod: string;
   riskTolerance: string;
-  epfDetails: {
-    epfMemberNumber: string;
-    epfAccountType: string;
-  };
+  epfDetails: IEpfDetailsState;
 }
 declare interface IEtbCheckResult {
   accounts?: IAccountList[] | null;

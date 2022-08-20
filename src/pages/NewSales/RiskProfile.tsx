@@ -97,7 +97,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   updateNewSales,
 }: IRiskSummaryProps) => {
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
-  const [currentClientId, setCurrentClientId] = useState<string>("");
+  const [, setCurrentClientId] = useState<string>("");
   const [currentOrder, setCurrentOrder] = useState<IDashboardOrder | undefined>(undefined);
   const [page, setPage] = useState<TRiskProfilePages>("accountSummary");
   const { jointHolder, principalHolder } = details!;
@@ -124,7 +124,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     },
     {
       label: RISK_ASSESSMENT.NEW_SALES_RISK_CATEGORY,
-      title: riskProfile.appetite || "-",
+      title: riskScore.appetite || "-",
       titleStyle: fsTransformNone,
     },
   ];
@@ -147,22 +147,22 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const riskProfileData: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.PROFILE_APPETITE,
-      title: riskProfile.appetite || "-",
+      title: riskScore.appetite || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN,
-      title: riskProfile.expectedRange || "-",
+      title: riskScore.rangeOfReturn || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE,
-      title: riskProfile.type || "-",
+      title: riskScore.type || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE,
-      title: riskProfile.profile || "-",
+      title: riskScore.profile || "-",
       titleStyle: fsTransformNone,
     },
   ];

@@ -1591,7 +1591,7 @@ export const english = {
     },
     NEW_SALES_PROMPT: {
       SUBHEADING: "Thank you for your\naccount opening application.",
-      SUBHEADING_SALES: "Thank you for your sales order of",
+      SUBHEADING_SALES: "Thank you for your sales order",
       TEXT_1: "1. A copy of the order summary receipt has been sent to the investor’s email,",
       TEXT_1_SUB: "and",
       TEXT_2_AND_3:

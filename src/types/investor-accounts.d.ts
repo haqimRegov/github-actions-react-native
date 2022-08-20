@@ -30,10 +30,7 @@ declare interface IInvestorAccountsData {
   currency: string[];
   dateOfBirth: string;
   email: string;
-  epfDetails: {
-    epfMemberNumber: string;
-    epfAccountType: string;
-  };
+  epfDetails?: IEpfDetailsState;
   fundType: string;
   initId: string;
   idNumber: string;

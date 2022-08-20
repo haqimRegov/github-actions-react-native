@@ -229,8 +229,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     ? receipts!.map(({ orderNumber }, index) => (index === 0 ? orderNumber : ` and ${orderNumber}`)).join("")
     : "";
 
+  const ofLabel = receipts !== undefined && receipts.length > 1 ? " of" : "";
   const promptTitle =
-    transactionType === "Sales-NS" ? `${NEW_SALES_PROMPT.SUBHEADING_SALES}\n${orderNumberLabel}.` : NEW_SALES_PROMPT.SUBHEADING;
+    transactionType === "Sales-NS" ? `${NEW_SALES_PROMPT.SUBHEADING_SALES}${ofLabel}\n${orderNumberLabel}.` : NEW_SALES_PROMPT.SUBHEADING;
 
   return (
     <Fragment>

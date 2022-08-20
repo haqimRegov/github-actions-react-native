@@ -133,6 +133,10 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       route: NEW_SALES_ROUTES.RiskSummary,
     };
   }
+  if (newSales.accountDetails.accountNo !== "" && client.isNewFundPurchase === false && findProducts !== -1) {
+    updatedNewSalesSteps[findProducts].label = NEW_SALES.TITLE_PRODUCTS_AND_SERVICE_NEW;
+  }
+
   if ((client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") && findAdditionalInfo !== -1) {
     const checkIndex = client.isNewFundPurchase === true ? 3 : 2;
     updatedNewSalesSteps.splice(checkIndex, 1);

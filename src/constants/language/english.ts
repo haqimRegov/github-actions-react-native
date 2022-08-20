@@ -1732,6 +1732,7 @@ export const english = {
       LABEL_ID: "ID",
       LABEL_INVESTOR: "Investor",
       LABEL_LANDING_FUND: "Landing Fund",
+      LABEL_VIEW_ACCOUNT_DETAILS: "View Account Details",
       NEW_SALES_RISK_CATEGORY: "Risk Category",
       NEW_SALES_ACCOUNT_SUMMARY: "Account Summary",
       NEW_SALES_PRODUCT_AND_SERVICE: "Product and Service",

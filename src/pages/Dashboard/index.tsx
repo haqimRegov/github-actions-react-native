@@ -134,7 +134,12 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     content = (
       <Investors
         {...props}
-        showInvestorOverview={client.isForceUpdate === true || client.isNewSales === true || investors.backToInvestorOverview === true}
+        showInvestorOverview={
+          client.isForceUpdate === true ||
+          client.isNewSales === true ||
+          investors.backToInvestorOverview === true ||
+          client.directToAccountOpening === true
+        }
       />
     );
   }

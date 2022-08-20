@@ -215,7 +215,8 @@ const NewSalesComponent = ({
           }
           if (data.result.message === "ETB" && setPage !== undefined) {
             setClientType("ETB");
-            if (client.isNewFundPurchase === true) {
+            setVisible(false);
+            if (data.result.forceUpdate === false) {
               updateClient({
                 ...client,
                 accountList: data.result.accounts!,
@@ -228,16 +229,17 @@ const NewSalesComponent = ({
                   },
                 },
               });
-              updateTransactionType("Sales-NS");
-              setVisible(false);
-              return navigation.navigate("NewSales");
+              if (client.isNewFundPurchase === true) {
+                updateTransactionType("Sales-NS");
+                return navigation.navigate("NewSales");
+              }
+              updateTransactionType("Sales-AO");
+              return setPage("Investors");
             }
-            // if (data.result.forceUpdate === true) {
-            // BE is returning forceUpdate true even if the investor already finished it (supposed to be bug)
-            // TODO handle redirection to InvestorOverview even if forceUpdate is false
-            addClientForceUpdate(true);
-            return setPage("Investors");
-            // }
+            if (data.result.forceUpdate === true) {
+              addClientForceUpdate(true);
+              return setPage("Investors");
+            }
           }
         }
         if (error !== null) {

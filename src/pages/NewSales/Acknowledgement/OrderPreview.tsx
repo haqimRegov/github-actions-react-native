@@ -157,6 +157,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
                     noBadge={true}
                     orderNumber={orderSummary.orderNumber}
                     totalInvestment={orderSummary.orderTotalAmount}
+                    transactionType={newSales.transactionType}
                     paymentType={orderSummary.paymentType}
                   />
                 </View>

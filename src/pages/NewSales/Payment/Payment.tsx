@@ -25,6 +25,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
   details,
   handleResetNewSales,
   navigation,
+  newSales,
   orders,
   personalInfo,
   updatePill,
@@ -318,6 +319,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
                           setLocalRecurringDetails={setLocalRecurringDetails}
                           setProofOfPayment={setProofOfPayment}
                           setSavedChangesToast={setSavedChangesToast}
+                          transactionType={newSales.transactionType}
                         />
                       </View>
                     </BlurView>

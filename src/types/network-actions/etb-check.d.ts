@@ -3,15 +3,20 @@ declare type IEtbCheckRequest = IClientRegisterInfo;
 declare interface IAccountList {
   accountNo: string;
   accountType?: TypeAccountChoices;
-  ampFund?: IProduct;
+  ampDetails?: IProduct;
   fundType: string;
   isJoint: boolean;
   isRecurring: boolean;
   isSyariah: boolean;
   jointName: string | null;
+  jointDateOfBirth: string;
   name: string;
   paymentMethod: string;
   riskTolerance: string;
+  epfDetails: {
+    epfMemberNumber: string;
+    epfAccountType: string;
+  };
 }
 declare interface IEtbCheckResult {
   accounts?: IAccountList[] | null;

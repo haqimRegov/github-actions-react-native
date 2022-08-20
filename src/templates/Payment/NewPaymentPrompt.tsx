@@ -143,9 +143,9 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             {promptType === "summary" ? (
               <SubmissionSummaryPrompt
                 checkbox={
-                  checkNonPendingOrder === true ? { label: PAYMENT.CHECKBOX_NEW_SALES, onPress: handleCheckbox, toggle: toggle } : undefined
+                  allOrdersSubmitted === true ? { label: PAYMENT.CHECKBOX_NEW_SALES, onPress: handleCheckbox, toggle: toggle } : undefined
                 }
-                primary={{ disabled: checkNonPendingOrder === true && !toggle, loading: buttonLoading, onPress: handleConfirm }}
+                primary={{ disabled: allOrdersSubmitted === true && !toggle, loading: buttonLoading, onPress: handleConfirm }}
                 secondary={{ onPress: handleCancelPrompt }}
                 title={PAYMENT.PROMPT_TITLE_STATUS_NEW}>
                 <View>
@@ -160,7 +160,7 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
                 subtitle={
                   (result !== undefined && result.withFloating === true) ||
                   (result !== undefined && result.withHardcopy === true) ||
-                  checkNonPendingOrder === false
+                  allOrdersSubmitted === false
                     ? subtitles
                     : undefined
                 }

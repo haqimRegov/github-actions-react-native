@@ -2,13 +2,10 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
-import { Language } from "../../../constants";
 import { RNInAppBrowser } from "../../../integrations";
 import { getOrderSummary, orderTrackingSummary } from "../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../store";
 import { OrderSummary } from "../../../templates";
-
-const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 interface OrderSummaryPageProps extends TransactionsStoreProps {
   activeTab: OrderSummaryTabType;

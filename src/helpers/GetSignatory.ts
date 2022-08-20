@@ -16,8 +16,10 @@ export const handleSignatoryFromBE = (text: string) => {
     case "Principal to sign":
       return "Principal Applicant";
     case "Both Applicants to sign":
+    case "Both to sign":
       return "Both Applicants";
     case "Either Applicant to sign":
+    case "Either to sign":
       return "Either Applicant";
     default:
       return "Principal Applicant";

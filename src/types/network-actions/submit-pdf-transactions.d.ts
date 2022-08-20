@@ -2,7 +2,7 @@ declare interface ISubmitPdfTransactionsDocument {
   pdf: FileBase64;
   orderNumber: string;
   adviserSignature: FileBase64;
-  clientSignature: FileBase64;
+  clientSignature?: FileBase64;
   jointSignature?: FileBase64;
 }
 

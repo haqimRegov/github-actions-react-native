@@ -354,7 +354,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     return undefined;
   };
 
-  const handleCheckClient = async (req: IEtbCheckData): Promise<boolean | string> => {
+  const handleCheckClient = async (req?: IEtbCheckRequest, holder?: TypeAccountHolder): Promise<boolean | string> => {
     if (newSalesLoading === false) {
       setNewSalesLoading(true);
       const request: IEtbCheckRequest =
@@ -389,32 +389,56 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           if (data.result.message === "ETB") {
             if (data.result.forceUpdate === false) {
               jointClientId.current = data.result.clientId!;
+              const checkClientHolder =
+                holder === "Principal"
+                  ? {
+                      principalHolder: {
+                        ...principalHolder,
+                        name: investorData!.name!.trim(),
+                      },
+                    }
+                  : {
+                      jointHolder: {
+                        ...jointHolder,
+                        name: jointHolder!.name!.trim(),
+                      },
+                    };
+              const checkPersonalInfo =
+                holder === "Principal"
+                  ? {
+                      principal: {
+                        ...personalInfo.principal,
+                        contactDetails: {
+                          ...personalInfo.principal?.contactDetails,
+                          emailAddress: data.result.emailAddress,
+                        },
+                      },
+                    }
+                  : {
+                      joint: {
+                        ...personalInfo.joint,
+                        contactDetails: {
+                          ...personalInfo.joint?.contactDetails,
+                          emailAddress: data.result.emailAddress,
+                        },
+                      },
+                    };
               updateClient({
                 ...client,
                 accountList: data.result.accounts!,
                 details: {
                   ...details,
-                  jointHolder: {
-                    ...jointHolder,
-                    name: jointHolder!.name!.trim(),
-                  },
+                  ...checkClientHolder,
                 },
               });
               addPersonalInfo({
                 ...personalInfo,
-                joint: {
-                  ...personalInfo.joint,
-                  contactDetails: {
-                    ...personalInfo.joint?.contactDetails,
-                    emailAddress: data.result.emailAddress,
-                  },
-                },
+                ...checkPersonalInfo,
               });
               return true;
             }
-            // const checkDOB = jointHolder?.dateOfBirth === "" ? `jointHolder.id.`
             const nricDOB =
-              jointHolder?.dateOfBirth === ""
+              jointHolder?.dateOfBirth === "" && jointHolder.idType === "NRIC"
                 ? moment(findDOBFromNric(jointHolder.id), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT)
                 : jointHolder?.dateOfBirth;
             setClientCheckData({
@@ -450,7 +474,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         ...details,
         principalHolder: {
           ...details!.principalHolder,
-          dateOfBirth: accountType === 1 && clientCheckData !== undefined ? clientCheckData?.dateOfBirth : investorData.dateOfBirth,
+          dateOfBirth: clientCheckData !== undefined ? clientCheckData?.dateOfBirth! : investorData.dateOfBirth,
           clientId: clientCheckData !== undefined ? clientCheckData!.clientId : investorData.clientId,
           id: clientCheckData !== undefined ? clientCheckData?.id : investorData.idNumber,
           name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
@@ -465,7 +489,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
             dateOfBirth:
-              accountType === 1 && clientCheckData !== undefined
+              clientCheckData !== undefined
                 ? moment(clientCheckData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
                 : moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
             name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
@@ -525,13 +549,18 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     jointClientId.current = item.jointId;
     let checkForceUpdateETB: string | boolean = false;
     if (item.jointName !== null) {
-      const clientCheckRequest: IEtbCheckData = {
-        dateOfBirth: item.jointDateOfBirth,
-        idType: item.jointIdType as TypeClientID,
-        id: item.jointIdNumber,
-        name: item.jointName,
+      const clientCheckRequest: IEtbCheckRequest = {
+        // dateOfBirth: item.accountHolder === "Principal" ? item.dateOfBirth : item.jointDateOfBirth,
+        idType: item.accountHolder === "Principal" ? (item.jointIdType as TypeClientID) : (item.idType as TypeClientID),
+        id: item.accountHolder === "Principal" ? item.jointIdNumber : item.idNumber,
+        name: item.accountHolder === "Principal" ? item.jointName : item.name,
       };
-      checkForceUpdateETB = await handleCheckClient(clientCheckRequest);
+      if (item.accountHolder === "Principal" && item.jointIdType !== "NRIC") {
+        clientCheckRequest.dateOfBirth = item.jointDateOfBirth;
+      } else if (item.accountHolder === "Joint" && item.idType !== "NRIC") {
+        clientCheckRequest.dateOfBirth = item.dateOfBirth;
+      }
+      checkForceUpdateETB = await handleCheckClient(clientCheckRequest, item.accountHolder);
     }
 
     if (typeof checkForceUpdateETB === "string") {

@@ -200,6 +200,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       if (clientResponse !== undefined) {
         const { data, error } = clientResponse;
         if (error === null && data !== null) {
+          const checkEmptyPaymentFund = isNotEmpty(item) && (item!.paymentMethod === null || item!.fundType === null);
+          if (checkEmptyPaymentFund === true) {
+            Alert.alert("Payment Method and/or Fund Type is null");
+            return undefined;
+          }
           let riskInfo: IRiskProfile | undefined;
           if (isNtb !== true && isNotEmpty(data.result.riskInfo)) {
             riskInfo = data.result.riskInfo;
@@ -326,6 +331,12 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             return true;
           }
         }
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
         return undefined;
       }
     }
@@ -402,6 +413,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         }
         if (error !== null) {
           setNewSalesLoading(false);
+          Alert.alert(error.message);
           return error.message;
         }
       }

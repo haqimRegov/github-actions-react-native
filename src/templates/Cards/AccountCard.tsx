@@ -87,8 +87,8 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
   };
   const checkEpf = paymentMethod === "EPF" ? "EPF" : "Cash";
   const tags = [getProductTagType(fundType), checkEpf, riskTolerance];
-  const checkIconName = isJoint === true ? "avatar-joint" : "avatar";
-  const checkAccountType = isJoint === true ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
+  const checkIconName = jointName !== null ? "avatar-joint" : "avatar";
+  const checkAccountType = jointName !== null ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
   return (
     <Pressable onPress={handlePress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <View style={containerStyle}>
@@ -107,7 +107,7 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
             </View>
             <CustomSpacer space={sh4} />
             <Text style={fs18BoldBlue1}>{name}</Text>
-            {isJoint === true ? <Text style={fs18BoldBlue1}>{jointName}</Text> : null}
+            {jointName !== null ? <Text style={fs18BoldBlue1}>{jointName}</Text> : null}
             <CustomSpacer space={sh8} />
             <View style={flexRow}>
               {tags !== undefined

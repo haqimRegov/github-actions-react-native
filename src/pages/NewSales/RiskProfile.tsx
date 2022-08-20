@@ -1,5 +1,6 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Image, Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
@@ -17,6 +18,7 @@ import {
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { getProductTagType } from "../../helpers";
+import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -62,6 +64,7 @@ import {
   sw05,
   sw1,
   sw120,
+  sw14,
   sw16,
   sw20,
   sw228,
@@ -74,8 +77,10 @@ import {
   sw638,
   sw8,
 } from "../../styles";
+import { NewSalesAccountInformation } from "./AccountInformation";
 import { InvestorProfilePage } from "./AccountInfoSummary/Profile";
 import { defaultContentProps } from "./Content";
+import { NewSalesOrderSummary } from "./OrderSummary";
 
 const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
 
@@ -93,19 +98,14 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   updateNewSales,
 }: IRiskSummaryProps) => {
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
-  const [page, setPage] = useState<number>(0);
+  const [currentClientId, setCurrentClientId] = useState<string>("");
+  const [currentOrder, setCurrentOrder] = useState<IDashboardOrder | undefined>(undefined);
+  const [page, setPage] = useState<TRiskProfilePages>("accountSummary");
+  const prevPage = usePrevious<TRiskProfilePages>(page);
   const { jointHolder, principalHolder } = details!;
   const { accountType } = client;
-  const { accountDetails, disabledSteps, finishedSteps } = newSales;
+  const { accountDetails, disabledSteps, finishedSteps, riskInfo } = newSales;
   const { accountNo, ampFund, fundType, isEpf } = accountDetails;
-
-  const riskProfile: IRiskProfile = {
-    appetite: riskScore.appetite,
-    expectedRange: riskScore.rangeOfReturn,
-    hnwStatus: riskScore.netWorth,
-    profile: riskScore.profile,
-    type: riskScore.type,
-  };
 
   const checkIdType = (data: IClientBasicInfo) => {
     return data.idType === "Other" ? `${data.otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : data.idType;
@@ -126,7 +126,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     },
     {
       label: RISK_ASSESSMENT.NEW_SALES_RISK_CATEGORY,
-      title: riskProfile.appetite || "-",
+      title: riskScore.appetite || "-",
       titleStyle: fsTransformNone,
     },
   ];
@@ -149,22 +149,22 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const riskProfileData: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.PROFILE_APPETITE,
-      title: riskProfile.appetite || "-",
+      title: riskScore.appetite || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN,
-      title: riskProfile.expectedRange || "-",
+      title: riskScore.rangeOfReturn || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE,
-      title: riskProfile.type || "-",
+      title: riskScore.type || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE,
-      title: riskProfile.profile || "-",
+      title: riskScore.profile || "-",
       titleStyle: fsTransformNone,
     },
   ];
@@ -235,7 +235,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   const handlePrincipalProfile = () => {
     setCurrentProfile("Principal");
-    setPage(1);
+    setPage("profile");
   };
 
   const ampDetails: LabeledTitleProps[] = [];
@@ -255,13 +255,37 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   const handleJointProfile = () => {
     setCurrentProfile("Joint");
-    setPage(1);
+    setPage("profile");
   };
 
   const handleBackToInvestor = () => {
     if (handleCancelNewSales !== undefined) {
       handleCancelNewSales(true);
     }
+  };
+
+  const handleAccountDetails = () => {
+    setPage("accountDetails");
+  };
+
+  const handleProfilePage = (_: number) => {
+    setPage("accountSummary");
+  };
+
+  const handleInvestorProfileBack = () => {
+    let nextPage: TRiskProfilePages = "accountSummary";
+
+    if (prevPage === "accountDetails") {
+      nextPage = "accountDetails";
+    }
+    if (prevPage === "orderSummary") {
+      nextPage = "orderSummary";
+    }
+    if (nextPage === "accountSummary") {
+      setCurrentClientId("");
+    }
+
+    setPage(nextPage);
   };
 
   const handleAims = () => {
@@ -318,182 +342,229 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const checkPrincipalId =
     accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
   const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
-  const clientId = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
-  return (
-    <View style={flexChild}>
-      {page === 0 ? (
-        <ContentPage {...defaultContentProps} heading={RISK_ASSESSMENT.NEW_SALES_HEADING} headingStyle={headerStyle}>
-          <CustomSpacer space={sh24} />
-          <View style={px(sw24)}>
-            <View style={flexRow}>
-              <TextSpaceArea style={defaultContentProps.subheadingStyle} text={header} />
-              <CustomFlexSpacer />
-              <View style={containerStyle}>
+  const checkCurrentProfile = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
+  const clientId = currentClientId !== "" ? currentClientId : checkCurrentProfile;
+
+  const profileContent = (
+    <ContentPage {...defaultContentProps} heading={RISK_ASSESSMENT.NEW_SALES_HEADING} headingStyle={headerStyle}>
+      <CustomSpacer space={sh24} />
+      <View style={px(sw24)}>
+        <View style={flexRow}>
+          <TextSpaceArea style={defaultContentProps.subheadingStyle} text={header} />
+          <CustomFlexSpacer />
+          <View style={containerStyle}>
+            <CustomButton
+              secondary={true}
+              buttonStyle={profileButtonStyle}
+              onPress={handlePrincipalProfile}
+              text={checkLabel}
+              textStyle={fs10BoldBlue1}
+            />
+            {client.accountType === "Joint" ? (
+              <Fragment>
+                <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} />
                 <CustomButton
                   secondary={true}
                   buttonStyle={profileButtonStyle}
-                  onPress={handlePrincipalProfile}
-                  text={checkLabel}
+                  onPress={handleJointProfile}
+                  text={NEW_SALES_SUMMARY.LABEL_JOINT_PROFILE}
                   textStyle={fs10BoldBlue1}
-                />
-                {client.accountType === "Joint" ? (
-                  <Fragment>
-                    <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} />
-                    <CustomButton
-                      secondary={true}
-                      buttonStyle={profileButtonStyle}
-                      onPress={handleJointProfile}
-                      text={NEW_SALES_SUMMARY.LABEL_JOINT_PROFILE}
-                      textStyle={fs10BoldBlue1}
-                    />
-                  </Fragment>
-                ) : null}
-              </View>
-            </View>
-            <TextSpaceArea spaceToTop={defaultContentProps.spaceToTitle} style={defaultContentProps.subtitleStyle} text={subtitle} />
-          </View>
-          <CustomSpacer space={sh24} />
-          <View style={px(sw24)}>
-            <ColorCard
-              containerStyle={noBorder}
-              content={<TextCard data={accountDetailsArray} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
-              contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
-              customHeader={
-                <View style={{ ...rowCenterVertical, ...px(sw24) }}>
-                  <Text style={fs10RegGray6}>{accountTitle}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw16} />
-                  <Text style={fs12BoldBlack2}>{checkAccountNo}</Text>
-                  <CustomFlexSpacer />
-                  {tags.length > 0
-                    ? tags.map((eachTag: string, tagIndex: number) => {
-                        const tagStyle: ViewStyle = {
-                          ...px(sw4),
-                          ...py(sh2),
-                          backgroundColor: colorGray._1,
-                          borderColor: colorGray._5,
-                          borderWidth: sw05,
-                          borderRadius: sw4,
-                        };
-                        return (
-                          <Fragment key={tagIndex}>
-                            {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
-                            <View key={tagIndex} style={tagStyle}>
-                              <Text style={fs10RegGray5}>{eachTag}</Text>
-                            </View>
-                          </Fragment>
-                        );
-                      })
-                    : null}
-                </View>
-              }
-              header="custom"
-              headerStyle={{
-                ...border(colorBlue._3, sw1),
-                ...px(0),
-                ...py(sh8),
-                backgroundColor: colorBlue._3,
-                borderBottomColor: colorRed._1,
-              }}
-            />
-            {accountNo !== "" ? (
-              <Fragment>
-                <CustomSpacer space={sh24} />
-                <ColorCard
-                  containerStyle={noBorder}
-                  content={
-                    <View>
-                      <View style={flexRow}>
-                        <Text style={fs16RegBlack2}>{RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE_HINT}</Text>
-                        <CustomFlexSpacer />
-                        <Pressable onPress={handleAims} style={buttonStyle}>
-                          <Text style={fs10BoldGray6}>{RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE_CHECK_AIMS}</Text>
-                          <CustomSpacer isHorizontal={true} space={sw8} />
-                          <IcoMoon color={colorBlue._1} name="external" size={sw16} />
-                        </Pressable>
-                      </View>
-                      {fundType === "amp" ? (
-                        <Fragment>
-                          <CustomSpacer space={sh24} />
-                          <View style={flexRow}>
-                            <IcoMoon color={colorBlue._1} name="fund" size={sw24} />
-                            <CustomSpacer isHorizontal={true} space={sw8} />
-                            <Text style={fs16BoldBlue1}>{ampFund!.fundAbbr}</Text>
-                            <CustomSpacer isHorizontal={true} space={sw16} />
-                            <View style={{ ...flexChild, ...centerHorizontal }}>
-                              <View style={borderBottomBlue4} />
-                            </View>
-                          </View>
-                          <Text style={{ ...fs12RegGray5, paddingLeft: sw32 }}>{ampFund?.issuingHouse}</Text>
-                          <CustomSpacer space={sh12} />
-                          <TextCard
-                            data={ampDetails}
-                            itemsPerGroup={3}
-                            spaceBetweenItem={sw32}
-                            spaceBetweenGroup={0}
-                            itemStyle={{ width: sw240 }}
-                          />
-                        </Fragment>
-                      ) : null}
-                    </View>
-                  }
-                  contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), ...py(sh24) }}
-                  header={{ label: RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE, labelStyle: fs16BoldBlue1 }}
-                  headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(sw24), ...py(sh16) }}
                 />
               </Fragment>
             ) : null}
+          </View>
+        </View>
+        <TextSpaceArea spaceToTop={defaultContentProps.spaceToTitle} style={defaultContentProps.subtitleStyle} text={subtitle} />
+      </View>
+      <CustomSpacer space={sh24} />
+      <View style={px(sw24)}>
+        <ColorCard
+          containerStyle={noBorder}
+          content={<TextCard data={accountDetailsArray} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
+          contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
+          customHeader={
+            <View style={{ ...rowCenterVertical, ...px(sw24) }}>
+              <Text style={fs10RegGray6}>{accountTitle}</Text>
+              <CustomSpacer isHorizontal={true} space={sw16} />
+              <Text style={fs12BoldBlack2}>{checkAccountNo}</Text>
+              {accountNo !== "" ? (
+                <TouchableWithoutFeedback onPress={handleAccountDetails}>
+                  <View style={rowCenterVertical}>
+                    <CustomSpacer isHorizontal={true} space={sw16} />
+                    <Text style={fs12BoldBlack2}>{RISK_ASSESSMENT.LABEL_VIEW_ACCOUNT_DETAILS}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw4} />
+                    <IcoMoon color={colorBlue._1} name="arrow-right" size={sw14} />
+                  </View>
+                </TouchableWithoutFeedback>
+              ) : null}
+              <CustomFlexSpacer />
+              {tags.length > 0
+                ? tags.map((eachTag: string, tagIndex: number) => {
+                    const tagStyle: ViewStyle = {
+                      ...px(sw4),
+                      ...py(sh2),
+                      backgroundColor: colorGray._1,
+                      borderColor: colorGray._5,
+                      borderWidth: sw05,
+                      borderRadius: sw4,
+                    };
+                    return (
+                      <Fragment key={tagIndex}>
+                        {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
+                        <View key={tagIndex} style={tagStyle}>
+                          <Text style={fs10RegGray5}>{eachTag}</Text>
+                        </View>
+                      </Fragment>
+                    );
+                  })
+                : null}
+            </View>
+          }
+          header="custom"
+          headerStyle={{
+            ...border(colorBlue._3, sw1),
+            ...px(0),
+            ...py(sh8),
+            backgroundColor: colorBlue._3,
+            borderBottomColor: colorRed._1,
+          }}
+        />
+        {accountNo !== "" ? (
+          <Fragment>
             <CustomSpacer space={sh24} />
             <ColorCard
               containerStyle={noBorder}
-              content={<TextCard data={riskProfileData} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
-              contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
-              customHeader={
-                <View style={{ ...rowCenterVertical, ...px(sw24) }}>
-                  <View>
-                    <Text style={fs16BoldBlue1}>{RISK_ASSESSMENT.HEADING_RISK}</Text>
-                    {riskProfile.appetite === "" ? (
-                      <Fragment>
-                        <View style={rowCenterVertical}>
-                          <Image source={LocalAssets.icon.iconWarning} style={{ width: sw16, height: sh16 }} />
-                          <CustomSpacer isHorizontal={true} space={sw8} />
-                          <Text style={{ ...fs12RegBlack2, color: colorYellow._2 }}>{RISK_ASSESSMENT.SUBHEADING_RISK_TO_PROCEED}</Text>
-                        </View>
-                      </Fragment>
-                    ) : null}
-                  </View>
-                  {isRiskUpdated === true ? (
-                    <Fragment>
+              content={
+                <View>
+                  <View style={flexRow}>
+                    <Text style={fs16RegBlack2}>{RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE_HINT}</Text>
+                    <CustomFlexSpacer />
+                    <Pressable onPress={handleAims} style={buttonStyle}>
+                      <Text style={fs10BoldGray6}>{RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE_CHECK_AIMS}</Text>
                       <CustomSpacer isHorizontal={true} space={sw8} />
-                      <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
-                        <Text style={fs10RegBlue9}>{RISK_ASSESSMENT.LABEL_UPDATED}</Text>
+                      <IcoMoon color={colorBlue._1} name="external" size={sw16} />
+                    </Pressable>
+                  </View>
+                  {fundType === "amp" ? (
+                    <Fragment>
+                      <CustomSpacer space={sh24} />
+                      <View style={flexRow}>
+                        <IcoMoon color={colorBlue._1} name="fund" size={sw24} />
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                        <Text style={fs16BoldBlue1}>{ampFund!.fundAbbr}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                        <View style={{ ...flexChild, ...centerHorizontal }}>
+                          <View style={borderBottomBlue4} />
+                        </View>
                       </View>
+                      <Text style={{ ...fs12RegGray5, paddingLeft: sw32 }}>{ampFund?.issuingHouse}</Text>
+                      <CustomSpacer space={sh12} />
+                      <TextCard
+                        data={ampDetails}
+                        itemsPerGroup={3}
+                        spaceBetweenItem={sw32}
+                        spaceBetweenGroup={0}
+                        itemStyle={{ width: sw240 }}
+                      />
                     </Fragment>
                   ) : null}
-                  <CustomFlexSpacer />
-                  <IconButton
-                    color={colorBlue._1}
-                    name="pencil"
-                    onPress={handleEdit}
-                    size={sw20}
-                    style={{ ...circle(sw40, colorWhite._1) }}
-                    withHover={{ color: colorBlue._2 }}
-                  />
                 </View>
               }
-              headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(0) }}
-              header="custom"
+              contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), ...py(sh24) }}
+              header={{ label: RISK_ASSESSMENT.NEW_SALES_PRODUCT_AND_SERVICE, labelStyle: fs16BoldBlue1 }}
+              headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(sw24), ...py(sh16) }}
             />
-          </View>
-        </ContentPage>
-      ) : (
-        <InvestorProfilePage clientId={clientId!} setPage={setPage} />
-      )}
-      {page === 0 ? (
+          </Fragment>
+        ) : null}
+        <CustomSpacer space={sh24} />
+        <ColorCard
+          containerStyle={noBorder}
+          content={<TextCard data={riskProfileData} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
+          contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
+          customHeader={
+            <View style={{ ...rowCenterVertical, ...px(sw24) }}>
+              <View>
+                <Text style={fs16BoldBlue1}>{RISK_ASSESSMENT.HEADING_RISK}</Text>
+                {riskInfo!.appetite === "" ? (
+                  <Fragment>
+                    <View style={rowCenterVertical}>
+                      <Image source={LocalAssets.icon.iconWarning} style={{ width: sw16, height: sh16 }} />
+                      <CustomSpacer isHorizontal={true} space={sw8} />
+                      <Text style={{ ...fs12RegBlack2, color: colorYellow._2 }}>{RISK_ASSESSMENT.SUBHEADING_RISK_TO_PROCEED}</Text>
+                    </View>
+                  </Fragment>
+                ) : null}
+              </View>
+              {isRiskUpdated === true ? (
+                <Fragment>
+                  <CustomSpacer isHorizontal={true} space={sw8} />
+                  <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
+                    <Text style={fs10RegBlue9}>{RISK_ASSESSMENT.LABEL_UPDATED}</Text>
+                  </View>
+                </Fragment>
+              ) : null}
+              <CustomFlexSpacer />
+              <IconButton
+                color={colorBlue._1}
+                name="pencil"
+                onPress={handleEdit}
+                size={sw20}
+                style={{ ...circle(sw40, colorWhite._1) }}
+                withHover={{ color: colorBlue._2 }}
+              />
+            </View>
+          }
+          headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorWhite._1, ...px(0) }}
+          header="custom"
+        />
+      </View>
+    </ContentPage>
+  );
+  let content: JSX.Element = <View />;
+  if (page === "accountSummary") {
+    content = profileContent;
+  }
+  if (page === "profile") {
+    content = <InvestorProfilePage clientId={clientId!} handleBack={handleInvestorProfileBack} setPage={handleProfilePage} />;
+  }
+  if (page === "accountDetails") {
+    content = (
+      <View style={flexChild}>
+        <CustomSpacer space={sh24} />
+        <NewSalesAccountInformation
+          accountNo={accountNo}
+          clientId={clientId!}
+          setClientId={setCurrentClientId}
+          setCurrentOrder={setCurrentOrder}
+          setScreen={setPage}
+        />
+      </View>
+    );
+  }
+  if (page === "orderSummary") {
+    content = (
+      <View style={flexChild}>
+        <CustomSpacer space={sh24} />
+        <NewSalesOrderSummary
+          accountNo={accountNo}
+          clientId={clientId!}
+          order={currentOrder!}
+          setClientId={setCurrentClientId}
+          setCurrentOrder={setCurrentOrder}
+          setScreen={setPage}
+        />
+      </View>
+    );
+  }
+  return (
+    <View style={flexChild}>
+      {content}
+      {page === "accountSummary" ? (
         <Fragment>
           <CustomSpacer space={sh24} />
           <SelectionBanner
             cancelOnPress={handleBackToInvestor}
-            continueDisabled={riskProfile.appetite === ""}
+            continueDisabled={riskInfo!.appetite === ""}
             label={RISK_ASSESSMENT.NEW_SALES_ACCOUNT_SUMMARY}
             labelStyle={fs20BoldBlack2}
             labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}

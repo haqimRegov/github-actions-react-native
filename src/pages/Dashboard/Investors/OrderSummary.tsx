@@ -3,14 +3,10 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
-import { Language } from "../../../constants";
 import { RNInAppBrowser } from "../../../integrations";
 import { getOrderSummary, orderTrackingSummary } from "../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../store";
 import { OrderSummary } from "../../../templates";
-import { isNotEmpty } from "../../../utils";
-
-const { DASHBOARD_ORDER_SUMMARY } = Language.PAGE;
 
 interface OrderSummaryPageProps extends InvestorsStoreProps {
   activeTab: OrderSummaryTabType;
@@ -30,28 +26,6 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = ({
   const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const tabs: OrderSummaryTabType[] = ["order", "tracking"];
-
-  const headerTabs = [
-    {
-      text: DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS,
-    },
-    { text: DASHBOARD_ORDER_SUMMARY.TAB_TRACKING },
-  ];
-
-  if (isNotEmpty(orderSummary?.documentSummary)) {
-    tabs.splice(1, 0, "document");
-    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT });
-  }
-
-  if (
-    currentOrder !== undefined &&
-    (currentOrder.transactionType === "Sales-AO" || currentOrder.transactionType === "Sales-NS" || currentOrder.transactionType === "Sales")
-  ) {
-    tabs.splice(1, 0, "account");
-    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
-  }
 
   const handleBackToTransactions = () => {
     updateCurrentOrder(undefined);

@@ -34,11 +34,12 @@ interface AccountInformationProps {
   handleBack: () => void;
   handleEdit: () => void;
   handleViewProfile: (clientId: string) => void;
+  noEdit?: boolean;
   orderHistory: OrderHistoryTabProps;
 }
 
 export const AccountInformation: FunctionComponent<AccountInformationProps> = (props: AccountInformationProps) => {
-  const { data, handleBack, handleEdit, handleViewProfile, orderHistory } = props;
+  const { data, handleBack, handleEdit, handleViewProfile, noEdit, orderHistory } = props;
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<AccountInformationTabType>("account");
 
@@ -113,17 +114,19 @@ export const AccountInformation: FunctionComponent<AccountInformationProps> = (p
           <CustomSpacer isHorizontal={true} space={sw8} />
           <Text style={fs18BoldGray6}>{ACCOUNT_INFORMATION.HEADER_TITLE}</Text>
           <CustomFlexSpacer />
-          <RoundedButton
-            buttonStyle={buttonStyle}
-            disabled={true}
-            icon="pencil"
-            iconColor={colorBlue._1}
-            iconSize={sw11}
-            onPress={handleEdit}
-            secondary={true}
-            text="Edit Account"
-            textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
-          />
+          {noEdit === true ? null : (
+            <RoundedButton
+              buttonStyle={buttonStyle}
+              disabled={true}
+              icon="pencil"
+              iconColor={colorBlue._1}
+              iconSize={sw11}
+              onPress={handleEdit}
+              secondary={true}
+              text="Edit Account"
+              textStyle={{ ...fs10BoldGray6, ...fsTransformNone }}
+            />
+          )}
         </View>
         <CustomSpacer space={sh24} />
         <View style={data !== undefined ? undefined : flexChild}>

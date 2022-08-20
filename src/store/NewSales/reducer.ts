@@ -66,6 +66,13 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           principalClientId: undefined,
           jointClientId: undefined,
         },
+        riskInfo: {
+          appetite: "",
+          profile: "",
+          expectedRange: "",
+          hnwStatus: "",
+          type: "",
+        },
         toast: {
           toastVisible: false,
           toastText: "All changes saved",

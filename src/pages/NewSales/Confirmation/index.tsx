@@ -140,7 +140,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       scheduledInvestmentAmount: investment.scheduledInvestmentAmount
         ? parseAmountToString(investment.scheduledInvestmentAmount)
         : undefined,
-      salesCharge: investment.investmentSalesCharge,
+      salesCharge: investment.investmentAmount !== "" ? investment.investmentSalesCharge : "",
       scheduledSalesCharge: investment.scheduledSalesCharge,
       prsType: fundDetails.prsType,
       isTopup: !isNewFund,

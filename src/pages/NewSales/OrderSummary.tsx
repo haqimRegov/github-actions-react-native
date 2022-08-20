@@ -1,51 +1,54 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
-import { connect } from "react-redux";
 
-import { RNInAppBrowser } from "../../../integrations";
-import { getOrderSummary, orderTrackingSummary } from "../../../network-actions";
-import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../store";
-import { OrderSummary } from "../../../templates";
+import { RNInAppBrowser } from "../../integrations";
+import { getOrderSummary, orderTrackingSummary } from "../../network-actions";
+import { OrderSummary } from "../../templates";
 
-interface OrderSummaryPageProps extends TransactionsStoreProps {
-  activeTab: OrderSummaryTabType;
-  navigation: IStackNavigationProp;
-  setActiveTab: (route: OrderSummaryTabType) => void;
-  setScreen: (route: TransactionsPageType) => void;
+interface OrderSummaryPageProps {
+  accountNo: string;
+  clientId: string;
+  order: IDashboardOrder;
+  setClientId: (id: string) => void;
+  setCurrentOrder: (order: IDashboardOrder) => void;
+  setScreen: (page: TRiskProfilePages) => void;
 }
 
-const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: OrderSummaryPageProps) => {
-  const { activeTab, currentOrder, setScreen, navigation, setActiveTab, updateCurrentOrder, updateCurrentAccount } = props;
+export const NewSalesOrderSummary: FunctionComponent<OrderSummaryPageProps> = ({
+  order,
+  setClientId,
+  setScreen,
+}: OrderSummaryPageProps) => {
+  const navigation = useNavigation<IStackNavigationProp>();
   const [orderSummary, setOrderSummary] = useState<IDashboardOrderSummary | undefined>(undefined);
+  const [activeTab, setActiveTab] = useState<OrderSummaryTabType>("order");
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleBackToTransactions = () => {
-    updateCurrentOrder(undefined);
-    setActiveTab("order");
-    setScreen("Transactions");
+    setScreen("accountDetails");
   };
 
   const handleViewPrincipalInvestorProfile = () => {
     if (orderSummary!.profile[0].clientId !== undefined && orderSummary!.profile[0].clientId !== null) {
-      updateCurrentAccount({ accountNumber: undefined, clientId: orderSummary!.profile[0].clientId });
-      setScreen("InvestorProfile");
+      setClientId(orderSummary!.profile[0].clientId);
+      setScreen("profile");
     }
   };
   const handleViewJointInvestorProfile = () => {
     if (orderSummary!.profile[1].clientId !== undefined && orderSummary!.profile[1].clientId !== null) {
-      updateCurrentAccount({ accountNumber: undefined, clientId: orderSummary!.profile[1].clientId });
-      setScreen("InvestorProfile");
+      setClientId(orderSummary!.profile[1].clientId);
+      setScreen("profile");
     }
   };
 
-  const handleViewAccountDetails = (account: ICurrentAccount) => {
-    updateCurrentAccount(account);
-    setScreen("AccountInformation");
+  const handleViewAccountDetails = (_) => {
+    setScreen("accountDetails");
   };
 
   const handleFetch = async () => {
-    const request: IGetOrderSummaryRequest = { orderNumber: currentOrder!.orderNumber };
+    const request: IGetOrderSummaryRequest = { orderNumber: order.orderNumber };
     const orderSummaryResponse: IGetOrderSummaryResponse = await getOrderSummary(request, navigation);
     if (orderSummaryResponse !== undefined) {
       const { data, error } = orderSummaryResponse;
@@ -64,7 +67,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: 
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request = { orderNo: currentOrder!.orderNumber };
+      const request = { orderNo: order.orderNumber };
       const response: IOrderTrackingSummaryResponse = await orderTrackingSummary(request);
       fetching.current = false;
       setLoading(false);
@@ -92,7 +95,7 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: 
   return (
     <OrderSummary
       activeTab={activeTab}
-      currentOrder={currentOrder}
+      currentOrder={order}
       handleBackToTransactions={handleBackToTransactions}
       handleExportPDF={handleExportPDF}
       handleFetch={handleFetch}
@@ -105,5 +108,3 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryPageProps> = (props: 
     />
   );
 };
-
-export const OrderSummaryPage = connect(TransactionsMapStateToProps, TransactionsMapDispatchToProps)(OrderSummaryComponent);

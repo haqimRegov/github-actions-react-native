@@ -149,22 +149,22 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const riskProfileData: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.PROFILE_APPETITE,
-      title: riskProfile.appetite === "" ? "-" : riskProfile.appetite,
+      title: riskProfile.appetite || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN,
-      title: riskProfile.expectedRange === "" ? "-" : riskProfile.expectedRange,
+      title: riskProfile.expectedRange || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE,
-      title: riskProfile.type === "" ? "-" : riskProfile.type,
+      title: riskProfile.type || "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE,
-      title: riskProfile.profile === "" ? "-" : riskProfile.profile,
+      title: riskProfile.profile || "-",
       titleStyle: fsTransformNone,
     },
   ];

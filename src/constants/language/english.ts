@@ -1412,6 +1412,7 @@ export const english = {
       LABEL_COMBINED: "Specify Combined Account Holder’s Name",
       LABEL_COMPLETED: "completed",
       LABEL_CURRENCY: "Currency",
+      LABEL_CURRENCY_NEW: "KIB Bank Currency",
       LABEL_DATE_FORMAT: "dd/mm/yy",
       LABEL_DDA: "DDA / FPX",
       LABEL_EMAIL: "Kindly email your payment receipts to your agent at",

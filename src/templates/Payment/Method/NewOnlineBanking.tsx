@@ -58,7 +58,7 @@ export const NewOnlineBanking: FunctionComponent<NewOnlineBankingProps> = ({
       title={`${kibBankName} - ${kibBankAccountNumber}`}
       style={{ width: sw360 }}
     />,
-    <LabeledTitle label={PAYMENT.LABEL_CURRENCY} spaceToLabel={sh4} title={currency || "-"} style={{ width: sw360 }} />,
+    <LabeledTitle label={PAYMENT.LABEL_CURRENCY_NEW} spaceToLabel={sh4} title={currency || "-"} style={{ width: sw360 }} />,
   ];
 
   const inputItems = [

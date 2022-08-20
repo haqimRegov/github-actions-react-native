@@ -462,6 +462,7 @@ export const english = {
       LABEL_TERM_RECURRING: "Recurring",
       LABEL_TOTAL_INVESTMENT: "Total Investment",
       LABEL_TOTAL_RECURRING: "Total Recurring",
+      LABEL_TOTAL_SALES: "Total Sales",
       LABEL_TRANSACTION_DATE: "Transaction Date",
       LABEL_TRANSACTION_TIME: "Transaction Time",
       LABEL_TRANSACTION_TYPE: "Transaction Type",

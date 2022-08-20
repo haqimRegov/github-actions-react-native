@@ -49,6 +49,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
           initId: undefined,
           accountHolder: undefined,
         },
+        directToAccountOpening: false,
         isForceUpdate: false,
         isNewFundPurchase: false,
         isNewSales: false,
@@ -70,6 +71,12 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
       return {
         ...state,
         isNewSales: action.payload,
+      };
+
+    case "client/ADD_CLIENT_DIRECT_TO_ACCOUNT_OPENING":
+      return {
+        ...state,
+        directToAccountOpening: action.payload,
       };
     case "client/UPDATE_CLIENT":
       return {

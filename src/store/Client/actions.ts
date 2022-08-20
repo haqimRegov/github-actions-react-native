@@ -29,6 +29,10 @@ export const addClientNewSales = (newSales: boolean) => {
   return typedAction("client/ADD_CLIENT_NEW_SALES", newSales);
 };
 
+export const addClientDirectToAccountOpening = (accountOpening: boolean) => {
+  return typedAction("client/ADD_CLIENT_DIRECT_TO_ACCOUNT_OPENING", accountOpening);
+};
+
 export const resetClientDetails = () => {
   return typedAction("client/RESET_DETAILS");
 };
@@ -40,6 +44,7 @@ export const updateClient = (client: ClientState) => {
 export type ClientAction = ReturnType<
   | typeof addAccountType
   | typeof addClientDetails
+  | typeof addClientDirectToAccountOpening
   | typeof addClientForceUpdate
   | typeof addClientNewFund
   | typeof addClientNewSales
@@ -52,6 +57,7 @@ export type ClientAction = ReturnType<
 export const ClientActionProps = {
   addAccountType,
   addClientDetails,
+  addClientDirectToAccountOpening,
   addClientForceUpdate,
   addClientNewFund,
   addClientNewSales,

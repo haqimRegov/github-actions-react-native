@@ -142,8 +142,10 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
           <Fragment>
             {promptType === "summary" ? (
               <SubmissionSummaryPrompt
-                checkbox={{ label: PAYMENT.CHECKBOX_NEW_SALES, onPress: handleCheckbox, toggle: toggle }}
-                primary={{ disabled: !toggle, loading: buttonLoading, onPress: handleConfirm }}
+                checkbox={
+                  checkNonPendingOrder === true ? { label: PAYMENT.CHECKBOX_NEW_SALES, onPress: handleCheckbox, toggle: toggle } : undefined
+                }
+                primary={{ disabled: checkNonPendingOrder === true && !toggle, loading: buttonLoading, onPress: handleConfirm }}
                 secondary={{ onPress: handleCancelPrompt }}
                 title={PAYMENT.PROMPT_TITLE_STATUS_NEW}>
                 <View>

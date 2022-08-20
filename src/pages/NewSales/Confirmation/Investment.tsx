@@ -71,8 +71,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   withEpf,
 }: InvestmentProps) => {
   const { allowEpf, investment, fundDetails, isNewFund, masterClassList } = data;
-  const { accountNo, isRecurring: isExistingAccountRecurring } = accountDetails;
-
+  const { accountNo, fundType, isRecurring: isExistingAccountRecurring } = accountDetails;
   const {
     amountError,
     fundClass,
@@ -382,7 +381,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   return (
     <Fragment>
       <View style={px(sw32)}>
-        {accountNo !== "" ? (
+        {accountNo !== "" && fundType !== "amp" ? (
           <Fragment>
             <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh4} text={INVESTMENT.LABEL_CURRENT_ACCOUNT} />
             <RadioButtonGroup

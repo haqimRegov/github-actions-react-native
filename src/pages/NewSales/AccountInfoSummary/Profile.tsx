@@ -6,20 +6,29 @@ import { connect } from "react-redux";
 import { SafeAreaPage } from "../../../components";
 import { getInvestorAccountDetails } from "../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../store";
-import { sh32 } from "../../../styles";
+import { sh28 } from "../../../styles";
 import { InvestorProfile } from "../../../templates";
 
 interface InvestorProfilePageProps extends InvestorsStoreProps {
   clientId: string;
+  handleBack?: () => void;
   setPage: (index: number) => void;
 }
 
-const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({ clientId, setPage }: InvestorProfilePageProps) => {
+const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
+  clientId,
+  handleBack,
+  setPage,
+}: InvestorProfilePageProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const [investorProfile, setInvestorProfile] = useState<IInvestorAccount | undefined>(undefined);
 
-  const handleBack = () => {
-    setPage(0);
+  const handleInvestorProfileBack = () => {
+    if (handleBack !== undefined) {
+      handleBack();
+    } else {
+      setPage(0);
+    }
   };
 
   const handleFetch = async () => {
@@ -49,7 +58,7 @@ const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
 
   return (
     <SafeAreaPage>
-      <InvestorProfile handleBack={handleBack} data={investorProfile} spaceToTop={sh32} />
+      <InvestorProfile handleBack={handleInvestorProfileBack} data={investorProfile} spaceToTop={sh28} />
     </SafeAreaPage>
   );
 };

@@ -18,6 +18,7 @@ import {
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { getProductTagType } from "../../helpers";
+import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -100,6 +101,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const [, setCurrentClientId] = useState<string>("");
   const [currentOrder, setCurrentOrder] = useState<IDashboardOrder | undefined>(undefined);
   const [page, setPage] = useState<TRiskProfilePages>("accountSummary");
+  const prevPage = usePrevious<TRiskProfilePages>(page);
   const { jointHolder, principalHolder } = details!;
   const { accountType } = client;
   const { accountDetails, disabledSteps, finishedSteps, riskInfo } = newSales;
@@ -268,6 +270,19 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   const handleProfilePage = (_: number) => {
     setPage("accountSummary");
+  };
+
+  const handleInvestorProfileBack = () => {
+    let nextPage: TRiskProfilePages = "accountSummary";
+
+    if (prevPage === "accountDetails") {
+      nextPage = "accountDetails";
+    }
+    if (prevPage === "orderSummary") {
+      nextPage = "orderSummary";
+    }
+
+    setPage(nextPage);
   };
 
   const handleAims = () => {
@@ -506,7 +521,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     content = profileContent;
   }
   if (page === "profile") {
-    content = <InvestorProfilePage clientId={clientId!} setPage={handleProfilePage} />;
+    content = <InvestorProfilePage clientId={clientId!} handleBack={handleInvestorProfileBack} setPage={handleProfilePage} />;
   }
   if (page === "accountDetails") {
     content = (

@@ -155,8 +155,18 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     { label: DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_TYPE, title: transactionDetails.accountType, titleStyle: fsTransformNone },
   ];
 
+  let totalAmountLabel = DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT;
+
+  if (transactionType === "Sales" || transactionType === "Sales-NS") {
+    totalAmountLabel = DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_SALES;
+  }
+
+  if (isScheduled) {
+    totalAmountLabel = DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_RECURRING;
+  }
+
   const totalInvestmentDetails: LabeledTitleProps[] = [
-    { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
+    { label: totalAmountLabel, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 
   const accountNumberDetail: LabeledTitleProps[] = [{ label: DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_NUMBER, title: "-" }];

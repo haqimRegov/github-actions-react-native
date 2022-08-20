@@ -100,8 +100,75 @@ const etbCheck = gql`
           emailAddress
           declarationRequired
           accounts {
+            ampDetails {
+              annualTrusteeFee
+              ampCategory
+              fundCurrencies
+              fundClasses
+              fundId
+              fundCode
+              fundAbbr
+              fundName
+              fundType
+              fundCategory
+              issuingHouse
+              riskCategory
+              isEpf
+              isEpfOnly
+              isSyariah
+              isWholesale
+              isScheduled
+              isFea
+              prsType
+              incomeDistribution
+              ampFee
+              masterList {
+                fundId
+                class
+                currency
+                salesCharge {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                newSalesAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                topUpAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+              }
+              fundObjective
+              landingFund
+              annualManagementFee
+              performance
+              docs {
+                url
+                name
+              }
+            }
             name
             jointName
+            jointDateOfBirth
             accountNo
             isJoint
             fundType
@@ -112,6 +179,10 @@ const etbCheck = gql`
             authorisedSignatory
             currency
             isSyariah
+            epfDetails {
+              epfMemberNumber
+              epfAccountType
+            }
           }
           address {
             address {
@@ -440,6 +511,72 @@ const investorDetailsDashboard = gql`
           emailLastUpdated
           isForceUpdate
           investorDetails {
+            ampDetails {
+              annualTrusteeFee
+              ampCategory
+              fundCurrencies
+              fundClasses
+              fundId
+              fundCode
+              fundAbbr
+              fundName
+              fundType
+              fundCategory
+              issuingHouse
+              riskCategory
+              isEpf
+              isEpfOnly
+              isSyariah
+              isWholesale
+              isScheduled
+              isFea
+              prsType
+              incomeDistribution
+              ampFee
+              masterList {
+                fundId
+                class
+                currency
+                salesCharge {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                newSalesAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                topUpAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+              }
+              fundObjective
+              landingFund
+              annualManagementFee
+              performance
+              docs {
+                url
+                name
+              }
+            }
             clientId
             jointId
             email
@@ -448,6 +585,7 @@ const investorDetailsDashboard = gql`
             idType
             jointIdNumber
             jointIdType
+            jointDateOfBirth
             name
             accountHolder
             dateOfBirth
@@ -464,6 +602,10 @@ const investorDetailsDashboard = gql`
             principalRisk
             jointRisk
             currency
+            epfDetails {
+              epfMemberNumber
+              epfAccountType
+            }
           }
         }
       }

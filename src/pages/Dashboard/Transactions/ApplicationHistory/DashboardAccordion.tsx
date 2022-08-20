@@ -224,7 +224,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
                   const handlePress = () => {
                     handleNavigation(eachContent.document);
                   };
-                  const checkIcon = eachContent.document === "Recurring Info" ? "plus" : "upload";
+                  const checkIcon = eachContent.document === "Recurring Info" ? "plus" : "download";
                   return (
                     <View key={eachContent.document} style={flexRow}>
                       {itemIndex === -1 || eachContentIndex < itemIndex || showAll === true ? (

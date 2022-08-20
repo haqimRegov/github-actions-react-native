@@ -25,7 +25,6 @@ import {
   fs14RegGray6,
   fs16BoldBlack2,
   fs16BoldBlue1,
-  fs18BoldBlack2,
   fsTransformNone,
   px,
   rowCenterVertical,
@@ -37,10 +36,11 @@ import {
   sh8,
   sw05,
   sw16,
-  sw168,
+  sw170,
   sw24,
   sw32,
   sw328,
+  sw360,
   sw4,
   sw64,
   sw8,
@@ -112,6 +112,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
 
   const orderDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_ORDER_DETAILS.LABEL_ORDER_NUMBER, title: orderNumber, titleStyle: fsTransformNone },
+    { label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_TYPE, title: transactionType, titleStyle: fsTransformNone },
     {
       label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
       title: moment(transactionDetails.registrationDate, "x").format(DEFAULT_DATE_FORMAT),
@@ -158,12 +159,21 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     { label: DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT, title: totalInvestmentAmount, titleStyle: fsTransformNone },
   ];
 
+  const accountNumberDetail: LabeledTitleProps[] = [{ label: DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_NUMBER, title: "-" }];
+
   const tagStyle: ViewStyle = {
     ...px(sw4),
     ...border(colorBlue._9, sw05, sw4),
     ...centerHV,
     height: sh17,
   };
+
+  const riskInfoCheck =
+    riskInfo !== null &&
+    riskInfo.appetite !== null &&
+    riskInfo.expectedRange !== null &&
+    riskInfo.profile !== null &&
+    riskInfo.type !== null;
 
   return (
     <Fragment>
@@ -228,55 +238,63 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
           header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_ORDER_DETAILS.TITLE_INVESTOR_OVERVIEW }}
         />
         <CustomSpacer space={sh32} />
+
         <ColorCard
           {...summaryColorCardStyleProps}
           content={
             <View>
               <TextCard data={orderDetails} itemStyle={{ width: sw328 }} />
-              {transactionDetails.accountNumber[0] !== null ? (
-                <Fragment>
-                  <View style={borderBottomBlue2} />
-                  <CustomSpacer space={sh16} />
-                  <View style={flexRow}>
-                    <View>
-                      <Text style={fs12BoldGray5}>{DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_NUMBER}</Text>
-                      {typeof transactionDetails.accountNumber === "string" ? null : (
-                        <Fragment>
-                          {transactionDetails.accountNumber.map((acctNo: string, index: number) => {
-                            const handleViewDetails = () => {
-                              handleViewAccountDetails({ accountNumber: acctNo, clientId: investor.clientId! });
-                            };
-                            return (
-                              <View key={index}>
-                                <View style={rowCenterVertical}>
-                                  <Text style={fs16BoldBlack2}>{acctNo}</Text>
-                                  <CustomSpacer isHorizontal={true} space={sw8} />
-                                  <IconText
-                                    color={colorBlue._8}
-                                    iconPosition="right"
-                                    name="arrow-right"
-                                    onPress={handleViewDetails}
-                                    spaceBetween={sw4}
-                                    text={DASHBOARD_ORDER_DETAILS.LINK_VIEW_DETAILS}
-                                  />
-                                </View>
-                              </View>
-                            );
-                          })}
-                        </Fragment>
-                      )}
-                      <CustomSpacer space={sh16} />
-                    </View>
-
-                    {transactionType !== "CR" ? (
-                      <Fragment>
-                        <CustomSpacer isHorizontal={true} space={sw168} />
-                        <TextCard data={moreOrderDetails} />
-                      </Fragment>
-                    ) : null}
-                  </View>
-                </Fragment>
-              ) : null}
+              <View style={borderBottomBlue2} />
+              <CustomSpacer space={sh16} />
+              <View style={flexRow}>
+                <View>
+                  {transactionDetails.accountNumber[0] !== null ? (
+                    <Fragment>
+                      <View style={flexRow}>
+                        <View>
+                          <Text style={fs12BoldGray5}>{DASHBOARD_ORDER_DETAILS.LABEL_ACCOUNT_NUMBER}</Text>
+                          {typeof transactionDetails.accountNumber === "string" ? null : (
+                            <Fragment>
+                              {transactionDetails.accountNumber.map((acctNo: string, index: number) => {
+                                const handleViewDetails = () => {
+                                  handleViewAccountDetails({ accountNumber: acctNo, clientId: investor.clientId! });
+                                };
+                                return (
+                                  <View key={index}>
+                                    <View style={rowCenterVertical}>
+                                      <Text style={fs16BoldBlack2}>{acctNo}</Text>
+                                      <CustomSpacer isHorizontal={true} space={sw8} />
+                                      <IconText
+                                        color={colorBlue._8}
+                                        iconPosition="right"
+                                        name="arrow-right"
+                                        onPress={handleViewDetails}
+                                        spaceBetween={sw4}
+                                        text={DASHBOARD_ORDER_DETAILS.LINK_VIEW_DETAILS}
+                                      />
+                                      <CustomSpacer isHorizontal={true} space={sw170} />
+                                    </View>
+                                  </View>
+                                );
+                              })}
+                            </Fragment>
+                          )}
+                          <CustomSpacer space={sh16} />
+                        </View>
+                      </View>
+                    </Fragment>
+                  ) : (
+                    <TextCard data={accountNumberDetail} itemStyle={{ width: sw360 }} />
+                  )}
+                </View>
+                <View>
+                  {transactionType !== "CR" ? (
+                    <Fragment>
+                      <TextCard data={moreOrderDetails} itemStyle={{ width: sw328 }} />
+                    </Fragment>
+                  ) : null}
+                </View>
+              </View>
               {transactionType !== "CR" ? (
                 <Fragment>
                   <TextCard data={totalInvestmentDetails} itemStyle={{ width: sw328 }} />
@@ -382,7 +400,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           <View style={{ ...rowCenterVertical, ...flexChild }}>
                             <View>
                               <View style={rowCenterVertical}>
-                                <Text style={fs18BoldBlack2}>{investment.fundName}</Text>
+                                <Text style={fs16BoldBlue1}>{investment.fundName}</Text>
                                 {isNotEmpty(isTopup) && isTopup === false ? (
                                   <Fragment>
                                     <CustomSpacer isHorizontal={true} space={sw8} />
@@ -694,9 +712,10 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
             />
           </Fragment>
         ) : null}
-        {transactionType !== "CR" ? (
+        {transactionType !== "CR" && riskInfoCheck ? (
           <SummaryColorCard data={riskAssessmentDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
         ) : null}
+
         {transactionType !== "Sales-AO" && transactionType !== "Sales-NS" && transactionType !== "Sales" ? (
           <Fragment>
             <SummaryColorCard data={contactDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CONTACT} spaceToTop={sh32} />

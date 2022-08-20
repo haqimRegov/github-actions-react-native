@@ -146,6 +146,10 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                   },
                 }
               : { ...personalInfo.joint };
+
+          const checkEpf =
+            eachAccount.paymentMethod === "EPF" && isNotEmpty(eachAccount.epfDetails) ? { epfDetails: { ...eachAccount.epfDetails } } : {};
+
           addPersonalInfo({
             ...personalInfo,
             principal: {
@@ -160,6 +164,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                 name: data.result.principalHolder.name,
                 ...storePrincipalIdType,
               },
+              ...checkEpf,
             },
             joint: updatedJointInfo,
           });

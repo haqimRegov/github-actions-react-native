@@ -298,6 +298,12 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   },
                 }
               : { ...personalInfo.joint };
+
+          const checkEpf =
+            item !== undefined && item.paymentMethod === "EPF" && isNotEmpty(item.epfDetails)
+              ? { epfDetails: { ...item.epfDetails! } }
+              : {};
+
           addPersonalInfo({
             ...personalInfo,
             principal: {
@@ -313,6 +319,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                 name: data.result.principalHolder.name,
                 ...storePrincipalIdType,
               },
+              ...checkEpf,
             },
             joint: updatedJointInfo,
           });

@@ -99,6 +99,10 @@ const etbCheck = gql`
           initId
           emailAddress
           declarationRequired
+          dateOfBirth
+          idType
+          accountHolder
+          idNumber
           accounts {
             ampDetails {
               annualTrusteeFee
@@ -167,7 +171,14 @@ const etbCheck = gql`
               }
             }
             name
+            idNumber
+            idType
             jointName
+            jointIdNumber
+            jointIdType
+            dateOfBirth
+            jointEmail
+            accountHolder
             jointDateOfBirth
             accountNo
             isJoint

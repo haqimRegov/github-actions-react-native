@@ -39,8 +39,8 @@ export const DocumentList: FunctionComponent<DocumentListProps> = ({ data, heade
   const popupInfo = [UPLOAD_HARD_COPY_DOCUMENTS.CONTENT_HARDCOPY_INFO_1, UPLOAD_HARD_COPY_DOCUMENTS.CONTENT_HARDCOPY_INFO_2];
   const popupContent = (
     <View>
-      {popupInfo.map((eachContent: string) => (
-        <View style={flexRow}>
+      {popupInfo.map((eachContent: string, index: number) => (
+        <View key={index} style={flexRow}>
           <Text style={fs12RegWhite1}>•</Text>
           <CustomSpacer isHorizontal={true} space={sw4} />
           <Text style={{ ...fs12RegWhite1, maxWidth: sw280 }}>{eachContent}</Text>

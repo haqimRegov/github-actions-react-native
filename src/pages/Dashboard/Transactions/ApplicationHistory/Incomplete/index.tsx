@@ -33,6 +33,7 @@ import {
   sw10,
   sw128,
   sw144,
+  sw152,
   sw16,
   sw160,
   sw18,
@@ -224,7 +225,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       textStyle: sortedColumns.includes("orderNumber") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_ORDER_NO,
       titleStyle: sortedColumns.includes("orderNumber") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: showCheckbox === true ? sw80 : sw88 },
+      viewStyle: { width: sw88 },
     },
     {
       customItem: true,
@@ -234,7 +235,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       textStyle: sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_HOME.LABEL_INVESTOR_NAME_ID_NO,
       titleStyle: sortedColumns.includes("principal") ? { ...fs10BoldBlue1, lineHeight: sh13, paddingLeft: sw32 } : { paddingLeft: sw32 },
-      viewStyle: { width: sw160 },
+      viewStyle: { width: showCheckbox === true ? sw152 : sw160 },
     },
     {
       icon: { name: sortTransactionType === "descending" ? "arrow-down" : "arrow-up" },

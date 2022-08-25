@@ -62,6 +62,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   details,
   handleNextStep,
   personalInfo,
+  riskScore,
   setCurrentProfile,
   setFile,
   setPage,
@@ -90,7 +91,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     },
     {
       label: NEW_SALES_SUMMARY.LABEL_RISK_CATEGORY,
-      title: principal!.personalDetails?.riskProfile !== "" ? principal!.personalDetails?.riskProfile : "-",
+      title: riskScore.appetite || "-",
       titleStyle: fsTransformNone,
     },
   ];

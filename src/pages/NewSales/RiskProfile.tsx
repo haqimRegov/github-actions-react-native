@@ -451,13 +451,13 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
                       <View style={flexRow}>
                         <IcoMoon color={colorBlue._1} name="fund" size={sw24} />
                         <CustomSpacer isHorizontal={true} space={sw8} />
-                        <Text style={fs16BoldBlue1}>{ampDetails!.fundAbbr}</Text>
+                        <Text style={fs16BoldBlue1}>{ampDetails?.fundAbbr || "-"}</Text>
                         <CustomSpacer isHorizontal={true} space={sw16} />
                         <View style={{ ...flexChild, ...centerHorizontal }}>
                           <View style={borderBottomBlue4} />
                         </View>
                       </View>
-                      <Text style={{ ...fs12RegGray5, paddingLeft: sw32 }}>{ampDetails?.issuingHouse}</Text>
+                      <Text style={{ ...fs12RegGray5, paddingLeft: sw32 }}>{ampDetails?.issuingHouse || "-"}</Text>
                       <CustomSpacer space={sh12} />
                       <TextCard
                         data={ampDetailsArray}

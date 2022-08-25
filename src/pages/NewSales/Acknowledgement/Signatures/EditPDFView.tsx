@@ -19,11 +19,12 @@ import {
   fs18BoldGray6,
   fullHeight,
   px,
-  py,
   sh1148,
   sh32,
   sh4,
+  sh40,
   sh48,
+  sh6,
   sh64,
   sw100,
   sw20,
@@ -104,14 +105,15 @@ export const PdfViewNewSales: FunctionComponent<PDFViewProps> = ({
     }
   }
 
-  const DEFAULT_URL_PAGE_COUNT = urlPageCount !== undefined ? parseInt(urlPageCount, 10) : 0;
+  const DEFAULT_URL_PAGE_COUNT = urlPageCount !== undefined ? parseInt(3, 10) : 0;
   const DEFAULT_PDF_HEIGHT = sh1148;
   const remotePdfHeight = DEFAULT_URL_PAGE_COUNT * DEFAULT_PDF_HEIGHT;
 
   const localPdfHeight = DEFAULT_PDF_HEIGHT + 2; // added 2 for shadow
 
   const remotePdfContainer: ViewStyle = { height: remotePdfHeight };
-  const dummyRemotePdfContainer: ViewStyle = { height: remotePdfHeight + DEFAULT_PDF_HEIGHT }; // To display the page number correctly in the viewer
+  const dummyRemotePdfContainer: ViewStyle = { height: remotePdfHeight + DEFAULT_PDF_HEIGHT };
+  const pageNumberFix: ViewStyle = { height: (remotePdfHeight + DEFAULT_PDF_HEIGHT) * 1600 }; // To display the page number correctly in the viewer
   const pdfContainer: ViewStyle = { height: localPdfHeight };
   const defaultTooltipStyle: ImageStyle = {
     ...absolutePosition,
@@ -152,26 +154,28 @@ export const PdfViewNewSales: FunctionComponent<PDFViewProps> = ({
                 <View style={remotePdfContainer}>
                   <View pointerEvents="none">
                     <View style={dummyRemotePdfContainer}>
-                      <PDFView style={fullHeight} resource={editReceipt!.url!} resourceType="url" />
+                      <PDFView style={pageNumberFix} resource={editReceipt!.url!} resourceType="url" />
                     </View>
                   </View>
                 </View>
                 <TouchableWithoutFeedback onPress={handlePosition}>
                   <View style={pdfContainer}>
                     <View pointerEvents="none">
-                      <PDFView style={fullHeight} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
+                      <PDFView style={{ ...fullHeight, top: -sh6 }} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            <View style={{ ...px(sw20), ...py(sh48) }}>
+            <View style={px(sw20)}>
+              <CustomSpacer space={sh40} />
               <RoundedButton
                 disabled={completed === false}
                 onPress={handleContinue}
                 loading={pageLoading}
                 text={TERMS_AND_CONDITIONS.BUTTON_CONTINUE}
               />
+              <CustomSpacer space={sh48} />
             </View>
           </View>
         </ScrollView>

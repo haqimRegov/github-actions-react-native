@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer } from "../../../../components";
@@ -11,9 +11,12 @@ import { LocalBankDetails } from "./Local";
 interface IBankDetailsProps {
   bankNames: TypeLabelValue[];
   bankSummary: IBankSummaryState;
+  enableBank: boolean;
   foreignBankDetails: IBankDetailsState[];
   localBankDetails: IBankDetailsState[];
   investmentCurrencies: string[];
+  isAllEpf: boolean;
+  handleEnableLocalBank: (enable: boolean) => void;
   remainingCurrencies: string[];
   setForeignBankDetails: (input: IBankDetailsState[]) => void;
   setLocalBankDetails: (input: IBankDetailsState[]) => void;
@@ -22,9 +25,12 @@ interface IBankDetailsProps {
 export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   bankNames,
   bankSummary,
+  enableBank,
   foreignBankDetails,
   localBankDetails,
   investmentCurrencies,
+  isAllEpf,
+  handleEnableLocalBank,
   remainingCurrencies,
   setForeignBankDetails,
   setLocalBankDetails,
@@ -66,25 +72,32 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
         bankNames={bankNames}
         bankSummary={bankSummary}
         currentCurrency={currentCurrency}
+        enableBank={enableBank}
         initialForeignBankState={initialForeignBankState}
         investmentCurrencies={investmentCurrencies}
+        handleEnableLocalBank={handleEnableLocalBank}
+        isAllEpf={isAllEpf}
         remainingCurrencies={remainingCurrencies}
         setBankingDetails={setLocalBankDetails}
         setCurrentCurrency={setCurrentCurrency}
         setForeignBankDetails={setForeignBankDetails}
       />
-      <CustomSpacer space={spaceToButton} />
-      <ForeignBankDetails
-        addDisabled={checkDisabled}
-        bankingDetails={foreignBankDetails}
-        bankNames={bankNames}
-        currentCurrency={currentCurrency}
-        initialForeignBankState={initialForeignBankState}
-        investmentCurrencies={investmentCurrencies}
-        remainingCurrencies={remainingCurrencies}
-        setBankingDetails={setForeignBankDetails}
-        setCurrentCurrency={setCurrentCurrency}
-      />
+      {isAllEpf === true ? null : (
+        <Fragment>
+          <CustomSpacer space={spaceToButton} />
+          <ForeignBankDetails
+            addDisabled={checkDisabled}
+            bankingDetails={foreignBankDetails}
+            bankNames={bankNames}
+            currentCurrency={currentCurrency}
+            initialForeignBankState={initialForeignBankState}
+            investmentCurrencies={investmentCurrencies}
+            remainingCurrencies={remainingCurrencies}
+            setBankingDetails={setForeignBankDetails}
+            setCurrentCurrency={setCurrentCurrency}
+          />
+        </Fragment>
+      )}
     </View>
   );
 };

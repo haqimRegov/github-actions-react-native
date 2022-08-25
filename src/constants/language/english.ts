@@ -121,7 +121,7 @@ export const english = {
       LABEL_BANK_LOCATION: "Bank Location",
       LABEL_BANK_NAME: "Bank Name",
       LABEL_BANK_OTHER_NAME: "Other Bank Name",
-      LABEL_ADD_BANK_DETAILS_OPTIONAL: "Add banking details (optional)",
+      LABEL_ADD_BANK_DETAILS_OPTIONAL: "Add banking details",
       LABEL_BANK_SUBTITLE: "These are your withdrawal bank accounts for each currency. Please make sure your information is correct.",
       LABEL_BANK_SWIFT_CODE_OPTIONAL: "Bank Swift Code (optional)",
       LABEL_BANK_SWIFT_CODE: "Bank Swift Code",

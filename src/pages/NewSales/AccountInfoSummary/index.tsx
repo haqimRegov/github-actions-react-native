@@ -138,7 +138,10 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     signatory: accountType === "Joint" ? handleSignatory(personalInfo.signatory!) : undefined,
     principal: {
       clientId: details!.principalHolder!.clientId!,
-      bankSummary: { localBank: localBank as ISubmitBank[], foreignBank: foreignBank as ISubmitBank[] },
+      bankSummary:
+        (principal?.personalDetails?.enableBankDetails === true && personalInfo.isAllEpf === true) || personalInfo.isAllEpf === false
+          ? { localBank: localBank as ISubmitBank[], foreignBank: foreignBank as ISubmitBank[] }
+          : { localBank: [], foreignBank: [] },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
       personalDetails: {
         id: principalId,

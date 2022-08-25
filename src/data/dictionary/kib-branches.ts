@@ -14,4 +14,6 @@ export const DICTIONARY_KIB_BRANCHES: IKIBBranches = {
   "HQ - Kuala Lumpur": { label: "HQ - Kuala Lumpur", code: "HQ" },
   "BR - Kuala Lumpur": { label: "BR - Kuala Lumpur", code: "KL" },
   "Batu Pahat - PW Office": { label: "Batu Pahat - PW Office", code: "BP" },
+  Kluang: { label: "Kluang", code: "KU" },
+  "Kota Damansara": { label: "Kota Damansara", code: "KD" },
 };

@@ -20,7 +20,7 @@ import {
   sw8,
 } from "../../styles";
 import { isArrayNotEmpty, isNotEmpty } from "../../utils";
-import { AccountTab, DocumentsTabNew } from "../Dashboard";
+import { AccountTab, DocumentsTabNew, ProfileTabNew } from "../Dashboard";
 import { OrderDetailsNew } from "./OrderDetailsNew";
 import { Tracking } from "./Tracking";
 
@@ -83,6 +83,11 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
 
+  if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true) {
+    tabs.splice(1, 0, "profile");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
+  }
+
   const activeTabIndex = tabs.indexOf(activeTab);
 
   const handleTabs = (index: number) => {
@@ -110,6 +115,10 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
 
   if (activeTab === "account") {
     content = <AccountTab {...contentProps} />;
+  }
+
+  if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true && activeTab === "profile") {
+    content = <ProfileTabNew {...contentProps} />;
   }
 
   if (activeTab === "tracking") {
@@ -163,41 +172,41 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     color: colorWhite._1,
   };
 
-  const holderType = currentOrder?.accountType === "Joint";
+  const holderType =
+    currentOrder?.accountType === "Joint" ? (
+      <View style={flexRow}>
+        <RoundedButton
+          buttonStyle={buttonPrincipalStyle}
+          text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PRINCIPAL_PROFILE}
+          onPress={handleViewPrincipalInvestorProfile}
+          secondary={true}
+          textStyle={fs10BoldBlue1}
+        />
+        <RoundedButton
+          buttonStyle={buttonJointStyle}
+          text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_JOINT_PROFILE}
+          onPress={handleViewJointInvestorProfile}
+          secondary={true}
+          textStyle={fs10BoldBlue1}
+        />
+      </View>
+    ) : (
+      <RoundedButton
+        buttonStyle={buttonStyle}
+        onPress={handleViewPrincipalInvestorProfile}
+        secondary={true}
+        text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PROFILE}
+        textStyle={fs10BoldBlue1}
+      />
+    );
+  const showButton = currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb === true ? holderType : null;
 
   return (
     <Fragment>
       <DashboardLayout
         navigation={navigation}
         hideQuickActions={true}
-        sideElement={
-          holderType ? (
-            <View style={flexRow}>
-              <RoundedButton
-                buttonStyle={buttonPrincipalStyle}
-                text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PRINCIPAL_PROFILE}
-                onPress={handleViewPrincipalInvestorProfile}
-                secondary={true}
-                textStyle={fs10BoldBlue1}
-              />
-              <RoundedButton
-                buttonStyle={buttonJointStyle}
-                text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_JOINT_PROFILE}
-                onPress={handleViewJointInvestorProfile}
-                secondary={true}
-                textStyle={fs10BoldBlue1}
-              />
-            </View>
-          ) : (
-            <RoundedButton
-              buttonStyle={buttonStyle}
-              onPress={handleViewPrincipalInvestorProfile}
-              secondary={true}
-              text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PROFILE}
-              textStyle={fs10BoldBlue1}
-            />
-          )
-        }
+        sideElement={showButton ? holderType : null}
         status={currentOrder!.status}
         title={DASHBOARD_ORDER_SUMMARY.HEADING}
         titleIcon="arrow-left"

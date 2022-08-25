@@ -172,6 +172,7 @@ declare interface IOrderSummaryProfile extends IAccountDetails {
 
 declare interface IDashboardOrderSummary {
   documentSummary: IDocumentSummary;
+  isEtb: boolean;
   extensionRemark: string | null;
   investmentSummary: IOrderSummaryInvestment[] | null;
   orderNumber: string;

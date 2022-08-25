@@ -728,6 +728,7 @@ const getOrderSummary = gql`
         result {
           status
           orderNumber
+          isEtb
           remark {
             label
             remark

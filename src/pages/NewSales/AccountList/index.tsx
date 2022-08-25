@@ -132,6 +132,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           name: clientCheckData?.name,
         },
         initId: clientCheckData?.initId,
+        accountHolder: clientCheckData?.accountHolder,
       });
       addPersonalInfo({
         ...personalInfo,
@@ -235,6 +236,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
             initId: `${data.result.initId}`,
+            accountHolder: eachAccount.accountHolder,
           });
           const updatedJointInfo: IHolderInfoState =
             data.result.jointHolder !== null

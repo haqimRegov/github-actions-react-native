@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 
 import { ColorCard, CustomSpacer, TextCard } from "../../components";
 import { Language } from "../../constants";
+import { handleSignatoryFromBE } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import {
   borderBottomBlue4,
@@ -34,7 +35,7 @@ interface AccountTabProps {
 const { DASHBOARD_ACCOUNT_TAB, DASHBOARD_PROFILE } = Language.PAGE;
 
 export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: AccountTabProps) => {
-  const { profile, investmentSummary, riskInfo } = data;
+  const { profile, investmentSummary, riskInfo, transactionDetails } = data;
   const principal = profile[0];
 
   const accountSettings: LabeledTitleProps[] = [];
@@ -43,6 +44,13 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
     accountSettings.push({
       label: DASHBOARD_ACCOUNT_TAB.LABEL_INCOME_DISTRIBUTION,
       title: investmentSummary[0].distributionInstruction,
+      titleStyle: fsTransformNone,
+    });
+  }
+  if (transactionDetails.accountOperationMode !== null) {
+    accountSettings.push({
+      label: DASHBOARD_ACCOUNT_TAB.LABEL_AUTHORISED_SIGNATORY,
+      title: handleSignatoryFromBE(transactionDetails.accountOperationMode),
       titleStyle: fsTransformNone,
     });
   }

@@ -455,7 +455,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                   </Fragment>
                 );
               })}
-              <CustomSpacer space={sh8} />
+              {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : <CustomSpacer space={sh8} />}
               <View style={flexRow}>
                 <IcoMoon color={colorBlue._1} name="account-settings" size={sw24} />
                 <CustomSpacer isHorizontal={true} space={sw8} />

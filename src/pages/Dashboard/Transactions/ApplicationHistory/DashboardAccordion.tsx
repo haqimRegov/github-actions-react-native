@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { LayoutChangeEvent, Pressable, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import ParsedText from "react-native-parsed-text";
 
 import { CustomFlexSpacer, CustomSpacer, OutlineButton } from "../../../../components";
 import { Language, NunitoBold } from "../../../../constants";
@@ -34,7 +33,7 @@ import {
   sw648,
   sw8,
 } from "../../../../styles";
-import { isNotEmpty } from "../../../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { OrderRemarks } from "./OrderRemarks";
 
 const { DASHBOARD_HOME } = Language.PAGE;
@@ -56,7 +55,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
   setOrderSummaryActiveTab,
   setScreen,
 }: IDashboardAccordionProps) => {
-  const { documents, highlightedText, reason, status, label, withHardcopy } = item;
+  const { documents, highlightedText, isScheduled, reason, status, withHardcopy } = item;
   const [itemWidths, setItemWidths] = useState<number[]>([]);
   const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -94,53 +93,29 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
     setScreen("OrderSummary");
   };
 
-  const formattedLabel = () => {
+  const getStatusDescription = () => {
     switch (status) {
+      case "Pending Doc":
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_DOC;
+      case "Pending Doc & Payment":
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_DOC_PAYMENT;
+      case "Pending Payment":
+        return isScheduled === true ? DASHBOARD_HOME.DESCRIPTION_STATUS_RECURRING : DASHBOARD_HOME.DESCRIPTION_STATUS_PAYMENT;
+      case "Pending Physical Doc":
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_PHYSICAL;
+      case "Pending Initial Order":
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_INITIAL;
       case "Submitted":
-        if (withHardcopy === true) {
-          return (
-            <View>
-              <View style={flexRow}>
-                <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_SUBMITTED_SUBTITLE_1}</Text>
-                <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{highlightedText}</Text>
-                <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_REROUTED_SUBTITLE_2}</Text>
-              </View>
-              <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_SUBMITTED_SUBTITLE_2}</Text>
-            </View>
-          );
-        }
-        return null;
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED;
       case "BR - Rerouted":
       case "HQ - Rerouted":
-        if (reason.filter((eachReason: IDashboardReason) => eachReason.title === "Invalid Physical Documents:").length > 0) {
-          return (
-            <View>
-              <View style={flexRow}>
-                <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_REROUTED_SUBTITLE_1}</Text>
-                <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{highlightedText}</Text>
-              </View>
-              <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_REROUTED_SUBTITLE_2}</Text>
-            </View>
-          );
-        }
-        return null;
-      case "Completed":
-        return (
-          <View style={flexRow}>
-            <Text style={fs12RegGray5}>{DASHBOARD_HOME.LABEL_COMPLETED_SUBTITLE}</Text>
-            <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{highlightedText}</Text>
-          </View>
-        );
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_REROUTED;
+      case "Rejected":
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_REJECTED;
       case "Void":
-        return (
-          <ParsedText
-            style={fs12RegGray5}
-            parse={[{ pattern: /Order has exceeded due date:/, style: { ...fs12RegGray5, fontFamily: NunitoBold } }]}>
-            {label}
-          </ParsedText>
-        );
+        return DASHBOARD_HOME.DESCRIPTION_STATUS_VOID;
       default:
-        return <View />;
+        return "";
     }
   };
 
@@ -159,10 +134,8 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
       return false;
     });
   }
-  const itemsLabel =
-    isNotEmpty(documents) && documents !== undefined && documents.length > 1
-      ? DASHBOARD_HOME.LABEL_PENDING_ITEMS
-      : DASHBOARD_HOME.LABEL_PENDING_ITEM;
+  const itemsLabel = isArrayNotEmpty(documents) ? DASHBOARD_HOME.LABEL_PENDING_ITEMS : null;
+
   const buttonStyle: ViewStyle = {
     ...border(colorBlue._1, sw1, sw24),
     backgroundColor: colorTransparent,
@@ -181,16 +154,27 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
     borderBottomLeftRadius: sw8,
     borderBottomRightRadius: sw8,
   };
+
   return (
     <Pressable onPress={() => {}}>
       <View style={containerStyle}>
         <View style={flexRow}>
           <View style={{ maxWidth: sw648 }}>
             <Text style={fs12BoldGray6}>{status}</Text>
-            {(isNotEmpty(highlightedText) && highlightedText !== "") || status === "Void" ? (
-              formattedLabel()
+            {isNotEmpty(highlightedText) &&
+            highlightedText !== "" &&
+            ((status === "Submitted" && withHardcopy === true) || status === "Completed") ? (
+              <Text style={fs12RegGray5}>
+                {status === "Completed"
+                  ? DASHBOARD_HOME.DESCRIPTION_STATUS_COMPLETED_1
+                  : DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED_HARDCOPY_1}
+                <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{` ${highlightedText}. `}</Text>
+                {status === "Completed"
+                  ? DASHBOARD_HOME.DESCRIPTION_STATUS_COMPLETED_2
+                  : DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED_HARDCOPY_2}
+              </Text>
             ) : (
-              <Text style={fs12RegGray5}>{label}</Text>
+              <Text style={fs12RegGray5}>{getStatusDescription()}</Text>
             )}
           </View>
           {status !== "Pending Payment" &&
@@ -212,11 +196,11 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
           ) : null}
         </View>
         <CustomSpacer space={sh16} />
-        {isNotEmpty(documents) && documents!.length > 0 ? (
+        {isArrayNotEmpty(documents) ? (
           <View>
             <View style={borderBottomGray3} />
             <CustomSpacer space={sh16} />
-            <Text style={fs12RegGray6}>{itemsLabel}</Text>
+            {documents[0].document !== "Submission Summary Receipt" ? <Text style={fs12RegGray6}>{itemsLabel}</Text> : null}
             <CustomSpacer space={sh8} />
             <View style={rowCenterVertical}>
               <View style={{ ...itemContainerStyle }}>

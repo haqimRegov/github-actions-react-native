@@ -197,7 +197,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                   <LabeledTitle
                     label={PERSONAL_DETAILS.LABEL_BANK_LOCAL}
                     labelStyle={fs16BoldBlack2}
-                    title={PERSONAL_DETAILS.LABEL_BANK_SUBTITLE}
+                    title={enableBank === true ? PERSONAL_DETAILS.LABEL_BANK_SUBTITLE : undefined}
                     titleStyle={fs12RegGray5}
                   />
                 }

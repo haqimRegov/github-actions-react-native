@@ -11,6 +11,7 @@ import {
   NewDropdown,
   OutlineButton,
   PromptModal,
+  Switch,
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
@@ -23,6 +24,7 @@ import {
   flexRow,
   fs12RegGray5,
   fs16BoldBlack2,
+  fs16RegBlack2,
   fsAlignLeft,
   py,
   sh16,
@@ -42,8 +44,11 @@ interface ILocalBankDetailsProps {
   bankSummary: IBankSummaryState;
   bankNames: TypeLabelValue[];
   currentCurrency: string;
+  enableBank: boolean;
+  handleEnableLocalBank: (enable: boolean) => void;
   initialForeignBankState: IBankDetailsState;
   investmentCurrencies: string[];
+  isAllEpf: boolean;
   remainingCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
   setCurrentCurrency: (current: string) => void;
@@ -56,8 +61,11 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
   bankSummary,
   bankNames,
   currentCurrency,
+  enableBank,
+  handleEnableLocalBank,
   initialForeignBankState,
   investmentCurrencies,
+  isAllEpf,
   remainingCurrencies,
   setBankingDetails,
   setCurrentCurrency,
@@ -85,6 +93,10 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
       updatedBankingDetails[findIndex] = updatedData;
     }
     setBankingDetails(updatedBankingDetails);
+  };
+
+  const handleEnable = (toggle: boolean | undefined) => {
+    handleEnableLocalBank(toggle!);
   };
 
   const handleCancel = () => {
@@ -191,122 +203,153 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 }
                 content={
                   <View>
-                    <CustomTextInput disabled={true} label={checkCurrencyLabel} value={item.currency![0]} />
-                    {item
-                      .currency!.filter((thisCurrency) => thisCurrency !== item.currency![0])
-                      .map((value: string, currencyIndex: number) => {
-                        const handleRemoveCurrency = () => {
-                          setCurrentCurrency(value);
-                          setPromptModal(true);
-                        };
+                    {isAllEpf === true ? (
+                      <Fragment>
+                        <Switch
+                          label={PERSONAL_DETAILS.LABEL_ADD_BANK_DETAILS_OPTIONAL}
+                          labelStyle={fs16RegBlack2}
+                          onPress={handleEnable}
+                          toggle={enableBank}
+                        />
+                        {enableBank === true ? (
+                          <Fragment>
+                            <CustomSpacer space={sh16} />
+                            <View style={borderBottomGray2} />
+                            <CustomSpacer space={sh16} />
+                          </Fragment>
+                        ) : null}
+                      </Fragment>
+                    ) : null}
+                    {isAllEpf === false || enableBank === true ? (
+                      <Fragment>
+                        <CustomTextInput disabled={true} label={checkCurrencyLabel} value={item.currency![0]} />
+                        {item
+                          .currency!.filter((thisCurrency) => thisCurrency !== item.currency![0])
+                          .map((value: string, currencyIndex: number) => {
+                            const handleRemoveCurrency = () => {
+                              setCurrentCurrency(value);
+                              setPromptModal(true);
+                            };
 
-                        const handleOtherCurrency = (input: string) => {
-                          const updatedDetails = [...bankingDetails];
-                          const updatedCurrency = [...bankingDetails[index].currency!];
-                          updatedCurrency[currencyIndex + 1] = input as TypeBankCurrency;
-                          updatedDetails[index].currency = updatedCurrency;
-                          setBankingDetails(updatedDetails);
-                        };
-                        const label =
-                          item.currency!.length === 1
-                            ? PERSONAL_DETAILS.LABEL_CURRENCY
-                            : `${PERSONAL_DETAILS.LABEL_CURRENCY} ${currencyIndex + 2}`;
+                            const handleOtherCurrency = (input: string) => {
+                              const updatedDetails = [...bankingDetails];
+                              const updatedCurrency = [...bankingDetails[index].currency!];
+                              updatedCurrency[currencyIndex + 1] = input as TypeBankCurrency;
+                              updatedDetails[index].currency = updatedCurrency;
+                              setBankingDetails(updatedDetails);
+                            };
+                            const label =
+                              item.currency!.length === 1
+                                ? PERSONAL_DETAILS.LABEL_CURRENCY
+                                : `${PERSONAL_DETAILS.LABEL_CURRENCY} ${currencyIndex + 2}`;
 
-                        return (
-                          <View key={currencyIndex} style={{ ...centerVertical, ...flexRow }}>
-                            <NewDropdown
-                              disabled={value !== ""}
-                              handleChange={handleOtherCurrency}
-                              items={currencyExtractor}
-                              label={label}
-                              spaceToTop={sh16}
-                              value={value}
+                            return (
+                              <View key={currencyIndex} style={{ ...centerVertical, ...flexRow }}>
+                                <NewDropdown
+                                  disabled={value !== ""}
+                                  handleChange={handleOtherCurrency}
+                                  items={currencyExtractor}
+                                  label={label}
+                                  spaceToTop={sh16}
+                                  value={value}
+                                />
+                                <CustomSpacer isHorizontal={true} space={sw16} />
+                                <View>
+                                  <CustomFlexSpacer />
+                                  <IconButton
+                                    name="trash"
+                                    color={colorBlack._1}
+                                    onPress={handleRemoveCurrency}
+                                    size={sh24}
+                                    style={py(sh8)}
+                                  />
+                                </View>
+                              </View>
+                            );
+                          })}
+                        {remainingCurrencies.length === 0 ? null : (
+                          <Fragment>
+                            <CustomSpacer space={sh16} />
+                            <OutlineButton
+                              buttonType="dashed"
+                              disabled={addDisabled}
+                              icon="plus"
+                              onPress={handleAddCurrency}
+                              text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
                             />
-                            <CustomSpacer isHorizontal={true} space={sw16} />
-                            <View>
-                              <CustomFlexSpacer />
-                              <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveCurrency} size={sh24} style={py(sh8)} />
-                            </View>
-                          </View>
-                        );
-                      })}
-                    {remainingCurrencies.length === 0 ? null : (
-                      <Fragment>
-                        <CustomSpacer space={sh16} />
-                        <OutlineButton
-                          buttonType="dashed"
-                          disabled={addDisabled}
-                          icon="plus"
-                          onPress={handleAddCurrency}
-                          text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
+                            <CustomSpacer space={sh16} />
+                            <View style={borderBottomGray2} />
+                          </Fragment>
+                        )}
+                        <NewDropdown
+                          handleChange={handleOtherBank}
+                          items={DICTIONARY_MALAYSIA_BANK}
+                          label={PERSONAL_DETAILS.LABEL_BANK_NAME}
+                          spaceToTop={sh16}
+                          value={item.bankName!}
                         />
-                        <CustomSpacer space={sh16} />
-                        <View style={borderBottomGray2} />
-                      </Fragment>
-                    )}
-                    <NewDropdown
-                      handleChange={handleOtherBank}
-                      items={DICTIONARY_MALAYSIA_BANK}
-                      label={PERSONAL_DETAILS.LABEL_BANK_NAME}
-                      spaceToTop={sh16}
-                      value={item.bankName!}
-                    />
-                    {item.bankName === "Others" ? (
-                      <CustomTextInput
-                        label={PERSONAL_DETAILS.LABEL_BANK_OTHER_NAME}
-                        onChangeText={handleOtherBankName}
-                        spaceToTop={sh16}
-                        value={item.otherBankName}
-                      />
-                    ) : null}
-                    <NewDropdown
-                      handleChange={handleAccountName}
-                      items={bankNames}
-                      label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
-                      spaceToTop={sh16}
-                      value={item.bankAccountName!}
-                    />
-                    {item.bankAccountName === "Combined" ? (
-                      <CustomTextInput
-                        autoCapitalize="words"
-                        error={item.bankAccountNameError}
-                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
-                        onBlur={checkAccountBankName}
-                        onChangeText={handleCombinedName}
-                        spaceToTop={sh16}
-                        value={item.combinedBankAccountName}
-                      />
-                    ) : null}
-                    <CustomTextInput
-                      error={item.bankAccountNumberError}
-                      keyboardType="numeric"
-                      label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
-                      onBlur={checkNumber}
-                      onChangeText={handleAccountNumber}
-                      spaceToTop={sh16}
-                      value={item.bankAccountNumber}
-                    />
-                    <CustomTextInput
-                      label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
-                      onChangeText={handleSwiftCode}
-                      spaceToTop={sh16}
-                      value={item.bankSwiftCode}
-                    />
-                    <TextSpaceArea spaceToTop={sh4} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
-                    {remainingCurrencies.length === 0 || foreignBank!.length > 0 ? null : (
-                      <Fragment>
-                        <CustomSpacer space={sh16} />
-                        <View style={borderBottomGray2} />
-                        <CustomSpacer space={sh16} />
-                        <OutlineButton
-                          buttonType="dashed"
-                          disabled={addDisabled}
-                          icon="plus"
-                          onPress={handleAddForeignBank}
-                          text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN}
+                        {item.bankName === "Others" ? (
+                          <CustomTextInput
+                            label={PERSONAL_DETAILS.LABEL_BANK_OTHER_NAME}
+                            onChangeText={handleOtherBankName}
+                            spaceToTop={sh16}
+                            value={item.otherBankName}
+                          />
+                        ) : null}
+                        <NewDropdown
+                          handleChange={handleAccountName}
+                          items={bankNames}
+                          label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                          spaceToTop={sh16}
+                          value={item.bankAccountName!}
                         />
+                        {item.bankAccountName === "Combined" ? (
+                          <CustomTextInput
+                            autoCapitalize="words"
+                            error={item.bankAccountNameError}
+                            label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                            onBlur={checkAccountBankName}
+                            onChangeText={handleCombinedName}
+                            spaceToTop={sh16}
+                            value={item.combinedBankAccountName}
+                          />
+                        ) : null}
+                        <CustomTextInput
+                          error={item.bankAccountNumberError}
+                          keyboardType="numeric"
+                          label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
+                          onBlur={checkNumber}
+                          onChangeText={handleAccountNumber}
+                          spaceToTop={sh16}
+                          value={item.bankAccountNumber}
+                        />
+                        <CustomTextInput
+                          label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
+                          onChangeText={handleSwiftCode}
+                          spaceToTop={sh16}
+                          value={item.bankSwiftCode}
+                        />
+                        <TextSpaceArea
+                          spaceToTop={sh4}
+                          style={{ ...fs12RegGray5, maxWidth: sw360 }}
+                          text={PERSONAL_DETAILS.HINT_SWIFT_CODE}
+                        />
+                        {remainingCurrencies.length === 0 || foreignBank!.length > 0 ? null : (
+                          <Fragment>
+                            <CustomSpacer space={sh16} />
+                            <View style={borderBottomGray2} />
+                            <CustomSpacer space={sh16} />
+                            <OutlineButton
+                              buttonType="dashed"
+                              disabled={addDisabled}
+                              icon="plus"
+                              onPress={handleAddForeignBank}
+                              text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN}
+                            />
+                          </Fragment>
+                        )}
                       </Fragment>
-                    )}
+                    ) : null}
                   </View>
                 }
               />

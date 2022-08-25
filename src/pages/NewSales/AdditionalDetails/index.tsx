@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
 import { isNotEmpty, isNumber } from "../../../utils";
@@ -14,6 +14,16 @@ import { BankDetails } from "./BankDetails";
 import { EPFDetails } from "./EPFDetails";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
+
+const initialBankDetails: IBankDetailsState = {
+  bankAccountName: "",
+  bankAccountNumber: "",
+  bankLocation: DICTIONARY_COUNTRIES[0].value,
+  bankName: "",
+  bankSwiftCode: "",
+  currency: [DICTIONARY_CURRENCY[0].value],
+  otherBankName: "",
+};
 
 interface PersonalDetailsProps extends PersonalInfoStoreProps, NewSalesContentProps {}
 
@@ -29,11 +39,11 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   updateNewSales,
 }: PersonalDetailsProps) => {
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
-  const { epfInvestment, epfShariah, signatory, incomeDistribution } = personalInfo;
+  const { epfInvestment, epfShariah, signatory, incomeDistribution, isAllEpf, principal } = personalInfo;
   const { disabledSteps, finishedSteps } = newSales;
   const { bankSummary, epfDetails, personalDetails } = personalInfo.principal!;
   const { localBank, foreignBank } = bankSummary!;
-  const { otherRelationship, relationship } = personalDetails!;
+  const { enableBankDetails, otherRelationship, relationship } = personalDetails!;
   const inputEpfType = epfDetails!.epfAccountType!;
   const inputEpfNumber = epfDetails!.epfMemberNumber!;
 
@@ -94,6 +104,23 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
         bankSummary: {
           ...bankSummary,
           localBank: updatedLocalBank,
+        },
+      },
+    });
+  };
+
+  const handleEnableLocalBank = (enable: boolean) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        personalDetails: {
+          ...personalInfo.principal?.personalDetails,
+          enableBankDetails: enable,
+        },
+        bankSummary: {
+          localBank: [{ ...initialBankDetails }],
+          foreignBank: [],
         },
       },
     });
@@ -208,9 +235,10 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   const checkEpf = epfInvestment === true ? epfNumberValidation !== undefined || inputEpfNumber === "" || inputEpfType === "" : false;
   const checkJoint = accountType === "Joint" ? relationship === "" || (relationship === "Others" && otherRelationship === "") : false;
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
+  const principalEpfCheck = personalInfo.isAllEpf === true ? principal?.personalDetails?.enableBankDetails === true : true;
   const continueDisabled =
-    checkLocalBank.includes(false) === true ||
-    checkForeignBank.includes(false) === true ||
+    (checkLocalBank.includes(false) === true && principalEpfCheck === true) ||
+    (checkForeignBank.includes(false) === true && principalEpfCheck === true) ||
     checkCurrencyRemaining.length !== 0 ||
     checkEpf === true ||
     signatory === "" ||
@@ -281,8 +309,11 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
         <BankDetails
           bankNames={accountNames}
           bankSummary={bankSummary!}
+          enableBank={enableBankDetails!}
           foreignBankDetails={foreignBank!}
           investmentCurrencies={investmentCurrencies}
+          isAllEpf={isAllEpf || false}
+          handleEnableLocalBank={handleEnableLocalBank}
           localBankDetails={localBank!}
           remainingCurrencies={checkCurrencyRemaining}
           setForeignBankDetails={handleForeignBank}

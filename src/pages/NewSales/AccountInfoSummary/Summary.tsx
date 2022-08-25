@@ -45,6 +45,7 @@ import {
   sw40,
   sw8,
 } from "../../../styles";
+import { isNotEmpty } from "../../../utils";
 import { defaultContentProps } from "../Content";
 
 const { NEW_SALES_SUMMARY } = Language.PAGE;
@@ -69,8 +70,9 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 }: NewSalesSummaryProps) => {
   const { width } = Dimensions.get("window");
   const { principalHolder, jointHolder } = details!;
-  const { incomeDistribution, principal, signatory } = personalInfo;
-  const { bankSummary, epfDetails } = principal!;
+  const { incomeDistribution, isAllEpf, principal, signatory } = personalInfo;
+  const { bankSummary, epfDetails, personalDetails } = principal!;
+  const { enableBankDetails } = personalDetails!;
 
   const checkIdType = (data: IClientBasicInfo) => {
     return data.idType === "Other" ? `${data.otherIdType} ${NEW_SALES_SUMMARY.LABEL_ID}` : data.idType;
@@ -404,28 +406,32 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           containerStyle={noBorder}
           content={
             <Fragment>
-              {localBankDetails.map((bank, numberIndex) => {
-                const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;
-                return (
-                  <Fragment key={numberIndex}>
-                    <View style={flexRow}>
-                      <IcoMoon color={colorBlue._1} name="bank-new" size={sw24} />
-                      <CustomSpacer isHorizontal={true} space={sw8} />
-                      <View style={flexChild}>
-                        <View style={rowCenterVertical}>
-                          <Text style={fs16BoldBlue1}>{label}</Text>
-                          <CustomSpacer isHorizontal={true} space={sw16} />
+              {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : (
+                <Fragment>
+                  {localBankDetails.map((bank, numberIndex) => {
+                    const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;
+                    return (
+                      <Fragment key={numberIndex}>
+                        <View style={flexRow}>
+                          <IcoMoon color={colorBlue._1} name="bank-new" size={sw24} />
+                          <CustomSpacer isHorizontal={true} space={sw8} />
                           <View style={flexChild}>
-                            <View style={borderBottomBlue4} />
+                            <View style={rowCenterVertical}>
+                              <Text style={fs16BoldBlue1}>{label}</Text>
+                              <CustomSpacer isHorizontal={true} space={sw16} />
+                              <View style={flexChild}>
+                                <View style={borderBottomBlue4} />
+                              </View>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                    </View>
-                    <CustomSpacer space={sh16} />
-                    <TextCard data={bank} {...textCardProps} />
-                  </Fragment>
-                );
-              })}
+                        <CustomSpacer space={sh16} />
+                        <TextCard data={bank} {...textCardProps} />
+                      </Fragment>
+                    );
+                  })}
+                </Fragment>
+              )}
               {foreignBankDetails.map((bank, numberIndex) => {
                 const label = `${NEW_SALES_SUMMARY.LABEL_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;
                 return (

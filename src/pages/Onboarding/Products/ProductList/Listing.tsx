@@ -30,6 +30,7 @@ import {
   sw90,
   sw96,
 } from "../../../../styles";
+import { isNotEmpty } from "../../../../utils";
 import { ProductOptions } from "./Actions";
 
 const { EMPTY_STATE, PRODUCT_LIST } = Language.PAGE;
@@ -57,6 +58,7 @@ interface ProductListViewProps {
   totalCount: IProductTotalCount;
   updateFilter: (filter: IProductFilter) => void;
   updateSort: (sort: IProductSort[]) => void;
+  withEpf?: boolean;
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
@@ -82,6 +84,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   totalCount,
   updateFilter,
   updateSort,
+  withEpf,
 }: ProductListViewProps) => {
   // const performanceColumn = {
   //   icon: {
@@ -184,6 +187,14 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     // setActiveAccordion(newSections);
   };
 
+  const checkEpf =
+    isNotEmpty(withEpf) && withEpf === false
+      ? list
+          .map((eachRow: ITableData, index) => (eachRow.isEpf === "Yes" ? index : null))
+          .filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null)
+          .map((eachIndex) => eachIndex!)
+      : [];
+
   const onRowSelect = (data: ITableData) => {
     handleSelectProduct(data as IProduct);
   };
@@ -230,6 +241,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             // activeAccordion={activeAccordion}
             columns={columns}
             data={list}
+            disabledIndex={checkEpf}
             headerPopup={{
               content: riskCategory.map((contentRisk) => ({ text: contentRisk })),
               onPressContent: ({ hide, text }) => {

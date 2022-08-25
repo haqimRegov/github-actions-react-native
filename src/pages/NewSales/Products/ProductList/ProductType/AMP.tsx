@@ -17,6 +17,7 @@ interface AMPProps extends ProductsStoreProps {
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
   tabsContent?: ReactNode;
+  withEpf: boolean;
 }
 
 const AMPComponent: FunctionComponent<AMPProps> = ({
@@ -42,6 +43,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   tabsContent,
   updateAvailableFilters,
   updateAmpShowBy,
+  withEpf,
 }: AMPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { availableFilters } = products;
@@ -260,6 +262,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         totalCount={totalCount}
         updateFilter={handleUpdateFilter}
         updateSort={addAmpSort}
+        withEpf={withEpf}
       />
     </View>
   );

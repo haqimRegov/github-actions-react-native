@@ -3,11 +3,12 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, LabeledTitle, Loading, RNModal } from "../../../components";
+import { LocalAssets } from "../../../assets/images/LocalAssets";
+import { ContentPage, CustomSpacer, LabeledTitle, Loading, PromptModal, RNModal } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
-import { getProductTabType } from "../../../helpers";
-import { clientRegister } from "../../../network-actions";
+import { getAddress, getProductTabType } from "../../../helpers";
+import { checkClient, clientRegister } from "../../../network-actions";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
 import {
   centerHV,
@@ -24,30 +25,37 @@ import {
   sw24,
 } from "../../../styles";
 import { AccountCard } from "../../../templates/Cards";
-import { isNotEmpty } from "../../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../../utils";
 import { defaultContentProps } from "../Content";
 
-const { ACCOUNT_LIST } = Language.PAGE;
+const { ACCOUNT_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 declare interface IAccountListProps extends NewSalesContentProps, NewSalesStoreProps {
   navigation: IStackNavigationProp;
   route: string;
 }
+declare interface IEtbCheckData extends IEtbCheckResult {
+  address: IAddressState;
+  id: string;
+  name: string;
+}
 
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   // addRiskInfo,
   addAccountType,
+  addRiskScore,
   addClientDetails,
   addPersonalInfo,
-  addRiskScore,
   addPrsDefaultFilters,
   addUtFilters,
   client,
-  handleNextStep,
-  navigation,
+  forceUpdate,
   newSales,
   personalInfo,
+  handleNextStep,
+  navigation,
   riskScore,
+  updateForceUpdate,
   updateNewSales,
   updateProductType,
 }: IAccountListProps) => {
@@ -55,6 +63,106 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   const { accountList, accountType, details } = client;
   const { principalHolder, jointHolder } = details!;
   const [loading, setLoading] = useState<boolean>(false);
+  const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
+  const [clientCheckData, setClientCheckData] = useState<IEtbCheckData | undefined>(undefined);
+
+  const handleCheckClient = async (account: IAccountList): Promise<boolean | string> => {
+    if (loading === false) {
+      setLoading(true);
+      const checkIdType = account.accountHolder === "Principal" ? account.jointIdType : account.idType!;
+      const checkDOB =
+        checkIdType !== "NRIC"
+          ? { dateOfBirth: account.accountHolder === "Principal" ? account.jointDateOfBirth : account.dateOfBirth }
+          : {};
+      const request: IEtbCheckRequest = {
+        id: account.accountHolder === "Principal" ? account.jointIdNumber : account.idNumber,
+        idType: checkIdType,
+        name: account.accountHolder === "Principal" ? account.name! : account.jointName!,
+        ...checkDOB,
+      };
+      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      if (clientCheck !== undefined) {
+        const { data, error } = clientCheck;
+        if (data !== null && (data.result.forceUpdate === true || data.result.message === "NTB")) {
+          setLoading(false);
+        }
+        if (error === null && data !== null) {
+          if (data.result.message === "NTB") {
+            Alert.alert("Client is NTB");
+            return false;
+          }
+          if (data.result.message === "ETB") {
+            if (data.result.forceUpdate === false) {
+              return false;
+            }
+            setClientCheckData({
+              ...data.result,
+              dateOfBirth: account.accountHolder === "Principal" ? account.jointDateOfBirth : account.dateOfBirth,
+              name: account.accountHolder === "Principal" ? account.jointName : account.name,
+              id: account.accountHolder === "Principal" ? account.jointIdNumber : account.jointIdNumber,
+            });
+            setTimeout(() => {
+              setForceUpdatePrompt(true);
+            }, 400);
+            return true;
+
+            // }
+          }
+        }
+        if (error !== null) {
+          setLoading(false);
+          return error.message;
+        }
+      }
+      return false;
+    }
+    return false;
+  };
+
+  const handleForceUpdate = () => {
+    if (clientCheckData !== undefined) {
+      setForceUpdatePrompt(false);
+      addClientDetails({
+        ...details,
+        principalHolder: {
+          ...details!.principalHolder,
+          dateOfBirth: clientCheckData?.dateOfBirth!,
+          clientId: clientCheckData!.clientId,
+          id: clientCheckData?.id,
+          name: clientCheckData?.name,
+        },
+        initId: clientCheckData?.initId,
+      });
+      addPersonalInfo({
+        ...personalInfo,
+        principal: {
+          ...personalInfo.principal,
+          personalDetails: {
+            ...personalInfo.principal?.personalDetails,
+            dateOfBirth: moment(clientCheckData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+            name: clientCheckData?.name,
+          },
+          contactDetails: {
+            ...personalInfo.principal?.contactDetails,
+            emailAddress: "",
+          },
+        },
+      });
+      const checkDeclarations =
+        isNotEmpty(clientCheckData) && isArrayNotEmpty(clientCheckData!.declarationRequired) ? clientCheckData!.declarationRequired : [];
+      const checkInvestorDeclarations = isArrayNotEmpty(clientCheckData.declarationRequired) ? clientCheckData.declarationRequired : [];
+      const declarationToUse = isArrayNotEmpty(checkDeclarations) ? checkDeclarations : checkInvestorDeclarations;
+
+      let fatcaAddress =
+        isNotEmpty(clientCheckData) && isNotEmpty(clientCheckData!.address) ? getAddress(clientCheckData!.address) : undefined;
+      if (clientCheckData !== undefined && isNotEmpty(clientCheckData.address)) {
+        fatcaAddress = getAddress(clientCheckData!.address!);
+      }
+
+      updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: declarationToUse });
+      navigation.navigate("ForceUpdate");
+    }
+  };
 
   const handleClientRegister = async (eachAccount: IAccountList) => {
     if (loading === false) {
@@ -87,9 +195,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               netWorth: "",
             });
           }
-          const resetJointInfo =
-            accountType === "Individual" &&
-            (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
+          const resetJointInfo = eachAccount.jointName === null;
           let dataJointIdType = {};
           if (isNotEmpty(data.result.jointHolder)) {
             dataJointIdType =
@@ -136,6 +242,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                   ...personalInfo.joint,
                   contactDetails: {
                     ...personalInfo.joint?.contactDetails,
+                    emailAddress: eachAccount.jointEmail,
                   },
                   personalDetails: {
                     ...personalInfo.joint?.personalDetails,
@@ -236,7 +343,12 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
     }
   };
 
+  const handleCancelForceUpdate = () => {
+    setForceUpdatePrompt(false);
+  };
+
   const modalStyle = loading === false ? undefined : { backgroundColor: colorBlack._1_4 };
+  const promptLabel = clientCheckData !== undefined ? `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${clientCheckData.name}.` : "";
   return (
     <View>
       <ContentPage {...defaultContentProps} subheading={ACCOUNT_LIST.LABEL_WELCOME_BACK}>
@@ -254,7 +366,16 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             <View style={{ ...flexRow, ...flexWrap }}>
               {accountList.map((eachAccount: IAccountList, index: number) => {
                 const handleSelectAccount = async () => {
-                  await handleClientRegister(eachAccount);
+                  let checkEtbLegacy: string | boolean = false;
+                  if (eachAccount.jointName !== null) {
+                    checkEtbLegacy = await handleCheckClient(eachAccount);
+                  }
+                  if (typeof checkEtbLegacy === "string") {
+                    Alert.alert(checkEtbLegacy);
+                  }
+                  if (checkEtbLegacy === false) {
+                    await handleClientRegister(eachAccount);
+                  }
                 };
                 return (
                   <Fragment key={index}>
@@ -267,6 +388,15 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           </View>
         </Fragment>
       </ContentPage>
+      <PromptModal
+        handleCancel={handleCancelForceUpdate}
+        handleContinue={handleForceUpdate}
+        illustration={LocalAssets.illustration.investorWarning}
+        label={promptLabel}
+        spaceToIllustration={sh24}
+        title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
+        visible={forceUpdatePrompt}
+      />
       <RNModal animationType="fade" style={modalStyle} visible={loading}>
         <View style={{ ...centerHV, ...fullHW }}>
           <Loading color={colorWhite._1} />

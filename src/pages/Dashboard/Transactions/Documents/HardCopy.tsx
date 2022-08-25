@@ -378,8 +378,8 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   const completedCount = totalCount - pendingDocCount;
   const checkAllCompleted = pendingDocCount !== 0 ? `${pendingDocCount} pending, ` : "";
   const checkCompleted = completedCount !== 0 ? `${completedCount} completed` : "";
-  const completedLabel = pendingDocCount === 0 ? `All(${totalCount}) completed` : checkCompleted;
-  const pendingLabel = pendingDocCount === totalCount ? `All(${pendingDocCount}) pending` : checkAllCompleted;
+  const completedLabel = pendingDocCount === 0 ? `All (${totalCount}) completed` : checkCompleted;
+  const pendingLabel = pendingDocCount === totalCount ? `All (${pendingDocCount}) pending` : checkAllCompleted;
   const footer = `${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PHYSICAL_DOC_SUMMARY}: ${pendingLabel}${completedLabel}`;
 
   return (

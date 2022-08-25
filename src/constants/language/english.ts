@@ -415,6 +415,8 @@ export const english = {
     DASHBOARD_ORDER_DETAILS: {
       SECTION_JOINT: "Joint Holder",
       SECTION_PRINCIPAL: "Principal Holder",
+      SECTION_JOINT_NEW: "Joint",
+      SECTION_PRINCIPAL_NEW: "Principal",
       LABEL_ACCOUNT_NO: "Bank Account Number",
       LABEL_ACCOUNT_NUMBER: "Account Number",
       LABEL_ACCOUNT_TYPE: "Account Type",
@@ -501,6 +503,7 @@ export const english = {
       TAB_ACCOUNT: "Account",
       TAB_DOCUMENT: "Document",
       TAB_TRACKING: "Tracking",
+      TAB_PROFILE: "Profile",
       HEADING: "Order Summary",
     },
     DASHBOARD_TRACKING: {
@@ -1157,6 +1160,8 @@ export const english = {
       TAB_TITLE_DECLARATIONS: "Declarations",
       TAB_TITLE_DOCUMENT: "Documents",
       TAB_TITLE_PROFILE: "Profile",
+      BUTTON_PRINCIPAL: "Principal Profile",
+      BUTTON_JOINT: "Joint Profile",
     },
     LOGIN: {
       BUTTON_CONTINUE: "Continue",

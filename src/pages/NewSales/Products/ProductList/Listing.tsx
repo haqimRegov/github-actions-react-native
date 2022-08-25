@@ -37,7 +37,7 @@ import {
   sw88,
   sw96,
 } from "../../../../styles";
-import { isArrayNotEmpty, titleCaseString } from "../../../../utils";
+import { isArrayNotEmpty, isNotEmpty, titleCaseString } from "../../../../utils";
 import { GroupBy } from "./GroupBy";
 
 const { EMPTY_STATE, PRODUCT_LIST, DASHBOARD_EDD } = Language.PAGE;
@@ -69,6 +69,7 @@ interface ProductListViewProps {
   transactionType?: TTransactionType;
   updateFilter: (filter: IProductFilter) => void;
   updateSort: (sort: IProductSort[]) => void;
+  withEpf?: boolean;
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
@@ -97,6 +98,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   transactionType,
   updateFilter,
   updateSort,
+  withEpf,
 }: ProductListViewProps) => {
   const { accountNo, isEpf } = accountDetails;
   const findAbbr = sort.filter((sortType) => sortType.column === "fundAbbr" && sortType.value !== "");
@@ -115,10 +117,17 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
       ? list.map((eachRow, index) => (eachRow.issuingHouse !== selectedUtmc ? index : null))
       : undefined;
 
+  const checkEpf =
+    isNotEmpty(withEpf) && withEpf === false
+      ? list
+          .map((eachRow: ITableData, index) => (eachRow.isEpf === "Yes" ? index : null))
+          .filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null)
+          .map((eachIndex) => eachIndex!)
+      : [];
   const disabledIndex: number[] | undefined =
     checkUtmcIndex !== undefined
       ? checkUtmcIndex.filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null).map((eachIndex) => eachIndex!)
-      : undefined;
+      : checkEpf;
 
   const handleSortAbbr = async () => {
     const updatedAbbrSort: IProductSort[] = sort.map((abbrSort) =>

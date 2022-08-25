@@ -219,6 +219,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         handleShareDocuments={handleShareDocuments}
         scrollEnabled={scrollEnabled}
         setScrollEnabled={setScrollEnabled}
+        withEpf={withEpf}
       />
     ),
     onPressCancel: handleCancelProducts,

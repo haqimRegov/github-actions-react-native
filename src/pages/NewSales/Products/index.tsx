@@ -1,9 +1,11 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal, CustomSpacer, SelectionBanner } from "../../../components";
-import { Language, NunitoRegular } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language, NunitoRegular } from "../../../constants";
+import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild, flexCol, flexRow, fs16BoldGray6, fs16RegGray6, sh56, sw4 } from "../../../styles";
 import { isArrayNotEmpty } from "../../../utils";
@@ -22,6 +24,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addInvestmentDetails,
   addSelectedFund,
   addViewFund,
+  client,
+  details,
   handleNextStep,
   global,
   investmentDetails,
@@ -34,6 +38,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
+  const { accountType } = client;
   const { isMultiUtmc } = global;
   const { disabledSteps, riskInfo, transactionType } = newSales;
   const [page] = useState<number>(0);
@@ -41,6 +46,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+
+  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
+  const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
 
   const handleBackToAssessment = () => {
     const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskSummary"];
@@ -226,7 +234,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
   const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
-  const selectViewFundDisabled =
+  const checkUtmc =
     isMultiUtmc === false &&
     transactionType === "Sales-NS" &&
     isArrayNotEmpty(selectedFunds) &&
@@ -234,6 +242,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     viewFund !== undefined
       ? viewFund.issuingHouse !== selectedUtmc
       : false;
+  const selectViewFundDisabled = withEpf === false ? true : checkUtmc;
 
   let screen = {
     content: (
@@ -242,6 +251,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         handleShareDocuments={handleShareDocuments}
         scrollEnabled={scrollEnabled}
         setScrollEnabled={setScrollEnabled}
+        withEpf={withEpf}
       />
     ),
     continueDisabled: selectedFunds.length === 0,

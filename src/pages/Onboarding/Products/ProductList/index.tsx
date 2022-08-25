@@ -17,6 +17,7 @@ interface ProductListProps extends ProductsStoreProps {
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
+  withEpf: boolean;
 }
 
 const ProductListComponent: FunctionComponent<ProductListProps> = ({
@@ -28,6 +29,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   selectedFunds,
   setScrollEnabled,
   updateProductType,
+  withEpf,
 }: ProductListProps) => {
   // const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
 
@@ -63,7 +65,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   } else if (productType === "prsDefault") {
     content = <PRSDefault {...productTypeProps} />;
   } else if (productType === "amp") {
-    content = <AMP {...productTypeProps} />;
+    content = <AMP withEpf={withEpf} {...productTypeProps} />;
   } else {
     content = <UnitTrust {...productTypeProps} />;
   }

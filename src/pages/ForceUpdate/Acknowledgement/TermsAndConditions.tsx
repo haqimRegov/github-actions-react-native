@@ -51,6 +51,7 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
   updateAgree,
   updateForceUpdate,
 }: TermsAndConditionsProps) => {
+  const [activeSections, setActiveSections] = useState<number[]>([]);
   const [expandAll, setExpandAll] = useState<boolean>(false);
   const { declarations } = forceUpdate;
 
@@ -76,10 +77,6 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
     handleNextStep("Signatures");
   };
 
-  const handleExpandAll = () => {
-    setExpandAll(!expandAll);
-  };
-
   const TERMS_AND_CONDITION_LIST: ITermsAccordionSection[] = [FATCA_NEW, CRS_NEW, INVESTOR_UPDATE];
   if (!declarations.includes("fatca")) {
     TERMS_AND_CONDITION_LIST.splice(0, 1);
@@ -101,7 +98,24 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
 
   TERMS_AND_CONDITION_LIST.push(GENERAL);
 
-  const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
+  const handleExpandAll = () => {
+    setExpandAll(!expandAll);
+    if (activeSections.length === TERMS_AND_CONDITION_LIST.length) {
+      setActiveSections([]);
+      setExpandAll(true);
+    } else {
+      const allActiveSections: number[] = [];
+      TERMS_AND_CONDITION_LIST.forEach((_section, index) => {
+        return allActiveSections.push(index);
+      });
+      setActiveSections(allActiveSections);
+    }
+  };
+
+  const headerText =
+    activeSections.length === TERMS_AND_CONDITION_LIST.length
+      ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL
+      : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
 
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
@@ -136,7 +150,11 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
               <Pressable onPress={handleExpandAll}>
                 <View style={{ ...justifyContentEnd, ...flexRow }}>
                   <View>
-                    <IcoMoon color={colorBlue._1} name={expandAll ? "expand" : "collapse"} size={sw14} />
+                    <IcoMoon
+                      color={colorBlue._1}
+                      name={activeSections.length === TERMS_AND_CONDITION_LIST.length ? "collapse" : "expand"}
+                      size={sw14}
+                    />
                   </View>
                   <CustomSpacer isHorizontal space={sw4} />
                   <Text style={fs12SemiBoldBlue1}>{headerText}</Text>
@@ -144,7 +162,12 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
               </Pressable>
             </View>
             <CustomSpacer space={sh24} />
-            <TermsAccordionNew expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
+            <TermsAccordionNew
+              activeSections={activeSections}
+              expandMultiple={true}
+              sections={TERMS_AND_CONDITION_LIST}
+              setActiveSections={setActiveSections}
+            />
             <CustomSpacer space={sh32} />
           </View>
           <View style={borderBottomBlue4} />

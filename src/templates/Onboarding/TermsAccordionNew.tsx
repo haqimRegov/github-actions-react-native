@@ -36,39 +36,28 @@ import {
 } from "../../styles";
 
 interface TermsAccordionNewProps {
-  expandAll?: boolean;
+  activeSections: number[];
   expandMultiple?: boolean;
   headerStyle?: ViewStyle;
   hideIcon?: boolean;
   icon?: string;
   sections: ITermsAccordionSection[];
+  setActiveSections: (updateSections: number[]) => void;
   spaceInBetween?: number;
   titleStyle?: TextStyle;
 }
 
 export const TermsAccordionNew: FunctionComponent<TermsAccordionNewProps> = ({
-  expandAll,
+  activeSections,
   expandMultiple,
   headerStyle,
   hideIcon,
   icon,
   sections,
+  setActiveSections,
   spaceInBetween,
   titleStyle,
 }: TermsAccordionNewProps) => {
-  const [activeSections, setActiveSections] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (expandAll === true) {
-      const allActiveSections: number[] = [];
-      sections.forEach((_section, index) => {
-        return allActiveSections.push(index);
-      });
-      setActiveSections(allActiveSections);
-    } else {
-      setActiveSections([]);
-    }
-  }, [expandAll, sections]);
   const defaultHeaderStyle: ViewStyle = {
     // ...centerVertical,
     ...shadow16Blue112,

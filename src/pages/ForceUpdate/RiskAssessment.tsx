@@ -259,8 +259,8 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
       "TermsAndConditions",
       "Signatures",
     ];
-
-    return updateForceUpdate({
+    setPrevRiskAssessment(undefined);
+    updateForceUpdate({
       ...forceUpdate,
       disabledSteps: updatedDisabledSteps,
       finishedSteps: ["Contact", "InvestorInformation", "ContactSummary"],

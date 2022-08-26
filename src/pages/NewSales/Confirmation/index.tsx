@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, FlatList, Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
@@ -14,8 +15,8 @@ import {
   SafeAreaPage,
   SelectionBanner,
 } from "../../../components";
-import { Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../data/dictionary";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
 import { getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
@@ -103,8 +104,9 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
   const { accountNo, ampDetails, isEpf } = accountDetails;
-  // const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
-  const withEpf = true;
+  const { details } = client;
+  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
+  const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
   const flatListRef = useRef<FlatList | null>(null);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [duplicatePrompt, setDuplicatePrompt] = useState<boolean>(false);

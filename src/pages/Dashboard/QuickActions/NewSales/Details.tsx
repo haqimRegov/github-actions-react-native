@@ -20,11 +20,13 @@ interface NewSalesDetailsProps {
   accountType: TypeAccountChoices;
   clientInfo: IClientBasicInfo;
   clientType: TypeClient | "";
+  ageErrorMessage?: string | undefined;
   errorMessage: string | undefined;
   holderToFill: "jointHolder" | "principalHolder";
   inputError1: string | undefined;
   setAccountType?: (value: string) => void;
   setClientInfo: (value: IClientBasicInfo) => void;
+  setAgeErrorMessage: (value: string | undefined) => void;
   setErrorMessage: (value: string | undefined) => void;
   setInputError1: (value: string | undefined) => void;
   subHeading?: string;
@@ -35,11 +37,13 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   accountType,
   clientInfo,
   clientType,
+  ageErrorMessage,
   errorMessage,
   holderToFill,
   inputError1,
   setAccountType,
   setClientInfo,
+  setAgeErrorMessage,
   setErrorMessage,
   setInputError1,
   subHeading,
@@ -56,9 +60,10 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
 
   const setInputIdType = (value: TypeIDChoices) => {
+    setAgeErrorMessage(undefined);
     setErrorMessage(undefined);
     setInputError1(undefined);
-    setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
+    setClientInfo({ ...[holderToFill], idType: value, name: "", id: "", country: "", dateOfBirth: "" });
   };
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
   const setInputCountry = (value: string) => setClientInfo({ ...[holderToFill], country: value });
@@ -141,6 +146,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             <NewDatePicker
               buttonStyle={{ width: sw440 }}
               disabled={clientType !== "" && holderToFill === "principalHolder"}
+              error={ageErrorMessage}
               datePickerStyle={{ height: sh120 }}
               mode="date"
               setValue={setInputDateOfBirth}

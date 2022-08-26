@@ -72,6 +72,7 @@ const NewSalesComponent = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [ageErrorMessage, setAgeErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
@@ -112,6 +113,7 @@ const NewSalesComponent = ({
     setClientType("");
     setHolderToFill("principalHolder");
     setInputError1(undefined);
+    setAgeErrorMessage(undefined);
     setErrorMessage(undefined);
     resetClientDetails();
     if (showOpenAccount === true) {
@@ -208,6 +210,7 @@ const NewSalesComponent = ({
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
         if (error === null && data !== null) {
+          setAgeErrorMessage(undefined);
           setErrorMessage(undefined);
           setInputError1(undefined);
           if (data.result.message === "NTB") {
@@ -328,6 +331,7 @@ const NewSalesComponent = ({
                   name: data.result.jointHolder.name,
                 }
               : {};
+          setAgeErrorMessage(undefined);
           setErrorMessage(undefined);
           setInputError1(undefined);
           addClientDetails({
@@ -342,7 +346,15 @@ const NewSalesComponent = ({
           });
           return setRegistered(true);
         }
-        setErrorMessage(error?.message);
+        if (
+          error !== null &&
+          principalIdType !== "NRIC" &&
+          (error.errorCode === ERROR_CODE.clientAgeMinimum || error.errorCode === ERROR_CODE.clientAgeMaximum)
+        ) {
+          setAgeErrorMessage(error?.message);
+        } else {
+          setErrorMessage(error?.message);
+        }
       }
     }
     return undefined;
@@ -385,7 +397,7 @@ const NewSalesComponent = ({
 
   return (
     <RNModal animationType="fade" visible={visible}>
-      <KeyboardAwareScrollView bounces={false} extraHeight={8} contentContainerStyle={flexGrow}>
+      <KeyboardAwareScrollView bounces={false} extraHeight={8} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
         <View style={{ ...centerHV, ...fullHW }}>
           <View style={modalContainer}>
             {prompt !== undefined ? (
@@ -400,11 +412,13 @@ const NewSalesComponent = ({
                       accountType={accountType}
                       clientInfo={details![holderToFill]!}
                       clientType={clientType}
+                      ageErrorMessage={ageErrorMessage}
                       errorMessage={errorMessage}
                       holderToFill={holderToFill}
                       inputError1={inputError1}
                       setAccountType={setAccountType}
                       setClientInfo={setClientInfo}
+                      setAgeErrorMessage={setAgeErrorMessage}
                       setErrorMessage={setErrorMessage}
                       setInputError1={setInputError1}
                     />

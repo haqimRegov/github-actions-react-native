@@ -122,9 +122,6 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
         toastVisible: true,
       },
     });
-    if (riskScore.appetite === "") {
-      addRiskScore(currentRiskScore);
-    }
     addRiskInfo({
       appetite: currentRiskScore!.appetite,
       hnwStatus: currentRiskScore!.netWorth,

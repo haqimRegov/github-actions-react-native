@@ -172,7 +172,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     color: colorWhite._1,
   };
 
-  const holderType =
+  const investorProfileButton =
     currentOrder?.accountType === "Joint" ? (
       <View style={flexRow}>
         <RoundedButton
@@ -199,14 +199,15 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
         textStyle={fs10BoldBlue1}
       />
     );
-  const showButton = currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb === true ? holderType : null;
+
+  const isEtb = currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb === true;
 
   return (
     <Fragment>
       <DashboardLayout
         navigation={navigation}
         hideQuickActions={true}
-        sideElement={showButton ? holderType : null}
+        sideElement={isEtb ? investorProfileButton : null}
         status={currentOrder!.status}
         title={DASHBOARD_ORDER_SUMMARY.HEADING}
         titleIcon="arrow-left"

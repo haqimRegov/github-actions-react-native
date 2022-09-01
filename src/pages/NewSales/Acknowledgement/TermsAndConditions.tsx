@@ -53,6 +53,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   updateNewSales,
 }: TermsAndConditionsProps) => {
   const { disabledSteps } = newSales;
+  const [activeSections, setActiveSections] = useState<number[]>([]);
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
   const handleAgree1 = () => {
@@ -75,10 +76,6 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
     }
     updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
     handleNextStep("Signatures");
-  };
-
-  const handleExpandAll = () => {
-    setExpandAll(!expandAll);
   };
 
   const fundTypeArray: string[] =
@@ -108,7 +105,24 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
 
   TERMS_AND_CONDITION_LIST.push(GENERAL);
 
-  const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
+  const handleExpandAll = () => {
+    setExpandAll(!expandAll);
+    if (activeSections.length === TERMS_AND_CONDITION_LIST.length) {
+      setActiveSections([]);
+      setExpandAll(true);
+    } else {
+      const allActiveSections: number[] = [];
+      TERMS_AND_CONDITION_LIST.forEach((_section, index) => {
+        return allActiveSections.push(index);
+      });
+      setActiveSections(allActiveSections);
+    }
+  };
+
+  const headerText =
+    activeSections.length === TERMS_AND_CONDITION_LIST.length
+      ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL
+      : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
 
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
@@ -151,7 +165,12 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
               </Pressable>
             </View>
             <CustomSpacer space={sh24} />
-            <TermsAccordionNew expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
+            <TermsAccordionNew
+              activeSections={activeSections}
+              expandMultiple={true}
+              sections={TERMS_AND_CONDITION_LIST}
+              setActiveSections={setActiveSections}
+            />
             <CustomSpacer space={sh32} />
           </View>
           <View style={borderBottomBlue4} />

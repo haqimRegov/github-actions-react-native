@@ -44,9 +44,10 @@ import { NewSalesSummary } from "../../QuickActions/NewSales/Summary";
 const { INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface NewSalesProps extends ClientStoreProps {
+  ageErrorMessage?: string;
   errorMessage?: string;
   fetching: boolean;
-  handleCheckClient: (req: IEtbCheckRequest) => Promise<boolean | string>;
+  handleCheckClient: (req?: IEtbCheckRequest) => Promise<boolean | string>;
   handleClientRegister: () => Promise<boolean | void>;
   inputError1?: string;
   investorData: IInvestor;
@@ -56,8 +57,9 @@ interface NewSalesProps extends ClientStoreProps {
   newAccountType: number;
   registered: boolean;
   setAccountType: (type: number) => void;
-  setErrorMessage: (error: string) => void;
-  setInputError1: (error: string) => void;
+  setAgeErrorMessage: (error: string | undefined) => void;
+  setErrorMessage: (error: string | undefined) => void;
+  setInputError1: (error: string | undefined) => void;
   setPage?: (page: DashboardPageType) => void;
   setRegistered: (toggle: boolean) => void;
   setVisible: (visibility: boolean) => void;
@@ -70,10 +72,13 @@ const NewSalesPromptComponent = ({
   accountType,
   addJointInfo,
   addPersonalInfo,
+  ageErrorMessage,
   details,
+  errorMessage,
   fetching,
   handleCheckClient,
   handleClientRegister,
+  inputError1,
   isNtb,
   modalData,
   navigation,
@@ -83,14 +88,15 @@ const NewSalesPromptComponent = ({
   resetClientDetails,
   resetPersonalInfo,
   setAccountType,
+  setAgeErrorMessage,
+  setErrorMessage,
+  setInputError1,
   setRegistered,
   setVisible,
   showOpenAccount,
   updateShowOpenAccount,
   visible,
 }: NewSalesProps) => {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const [prompt, setPrompt] = useState<TPromptType>("accountType");
   const { jointHolder, principalHolder } = details!;
   const { dateOfBirth, id, idType, name, country } = jointHolder!;
@@ -125,6 +131,7 @@ const NewSalesPromptComponent = ({
 
   const handleReset = () => {
     setInputError1(undefined);
+    setAgeErrorMessage(undefined);
     setErrorMessage(undefined);
     resetClientDetails();
     if (showOpenAccount === true) {
@@ -304,12 +311,14 @@ const NewSalesPromptComponent = ({
             <CustomSpacer space={sh4} />
             <NewSalesDetails
               accountType={accountType}
+              ageErrorMessage={ageErrorMessage}
               clientInfo={details!.jointHolder!}
               clientType={"ETB"}
               errorMessage={errorMessage}
               holderToFill={"jointHolder"}
               inputError1={inputError1}
               setClientInfo={setClientInfo}
+              setAgeErrorMessage={setAgeErrorMessage}
               setErrorMessage={setErrorMessage}
               setInputError1={setInputError1}
               subHeading={INVESTOR_ACCOUNTS.NEW_SALES_JOINT_SUBTITLE}

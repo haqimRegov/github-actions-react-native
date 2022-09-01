@@ -99,6 +99,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const [investorData, setInvestorData] = useState<IInvestor | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
   const [isNtb, setIsNtb] = useState<boolean>(false);
+  const [ageErrorMessage, setAgeErrorMessage] = useState<string | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const [clientCheckData, setClientCheckData] = useState<IEtbCheckData | undefined>(undefined);
@@ -712,6 +713,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         visible={forceUpdatePrompt}
       />
       <NewSalesPrompt
+        ageErrorMessage={ageErrorMessage}
         errorMessage={errorMessage}
         fetching={newSalesLoading}
         handleCheckClient={handleCheckClient}
@@ -724,6 +726,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         newAccountType={accountType}
         registered={registered}
         setAccountType={setAccountType}
+        setAgeErrorMessage={setAgeErrorMessage}
         setErrorMessage={setErrorMessage}
         setInputError1={setInputError1}
         setRegistered={setRegistered}

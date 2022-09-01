@@ -47,12 +47,20 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
       titleStyle: fsTransformNone,
     });
   }
-  if (transactionDetails.accountOperationMode !== null) {
-    accountSettings.push({
-      label: DASHBOARD_ACCOUNT_TAB.LABEL_AUTHORISED_SIGNATORY,
-      title: handleSignatoryFromBE(transactionDetails.accountOperationMode),
-      titleStyle: fsTransformNone,
-    });
+
+  if (transactionDetails.accountType === "Joint") {
+    accountSettings.push(
+      {
+        label: DASHBOARD_ACCOUNT_TAB.LABEL_RELATIONSHIP,
+        title: principal?.personalDetails?.relationship || "-",
+        titleStyle: fsTransformNone,
+      },
+      {
+        label: DASHBOARD_ACCOUNT_TAB.LABEL_AUTHORISED_SIGNATORY,
+        title: isNotEmpty(transactionDetails.accountOperationMode) ? handleSignatoryFromBE(transactionDetails.accountOperationMode!) : "-",
+        titleStyle: fsTransformNone,
+      },
+    );
   }
 
   const riskDetails: LabeledTitleProps[] = [];
@@ -194,7 +202,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
           </Fragment>
         ) : null}
         {investmentSummary !== null && investmentSummary[0] !== null ? (
-          <SummaryColorCard data={accountSettings} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_ACCOUNT_SETTINGS} spaceToTop={sh32} />
+          <SummaryColorCard data={accountSettings} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_ACCOUNT_DETAILS} spaceToTop={sh32} />
         ) : null}
       </View>
     </Fragment>

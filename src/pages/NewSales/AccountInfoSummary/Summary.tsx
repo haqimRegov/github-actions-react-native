@@ -232,17 +232,25 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           { label: NEW_SALES_SUMMARY.LABEL_EPF_ACCOUNT, title: epfDetails.epfAccountType! },
         ]
       : [];
+
   const accountSettings: LabeledTitleProps[] = [
     {
       label: NEW_SALES_SUMMARY.LABEL_INCOME_DISTRIBUTION,
       title: incomeDistribution,
     },
   ];
+
   if (client.accountType === "Joint") {
-    accountSettings.splice(-1, 0, {
-      label: NEW_SALES_SUMMARY.LABEL_SIGNATURE,
-      title: signatory!,
-    });
+    accountSettings.push(
+      {
+        label: NEW_SALES_SUMMARY.LABEL_RELATIONSHIP,
+        title: principal?.personalDetails?.relationship || "-",
+      },
+      {
+        label: NEW_SALES_SUMMARY.LABEL_SIGNATURE,
+        title: signatory || "-",
+      },
+    );
   }
 
   const checkLabel = client.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
@@ -406,6 +414,8 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           containerStyle={noBorder}
           content={
             <Fragment>
+              <TextCard data={accountSettings} {...textCardProps} />
+              <CustomSpacer space={sh8} />
               {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : (
                 <Fragment>
                   {localBankDetails.map((bank, numberIndex) => {
@@ -456,21 +466,6 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                 );
               })}
               {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : <CustomSpacer space={sh8} />}
-              <View style={flexRow}>
-                <IcoMoon color={colorBlue._1} name="account-settings" size={sw24} />
-                <CustomSpacer isHorizontal={true} space={sw8} />
-                <View style={flexChild}>
-                  <View style={rowCenterVertical}>
-                    <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_ACCOUNT_SETTINGS}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <View style={flexChild}>
-                      <View style={borderBottomBlue4} />
-                    </View>
-                  </View>
-                </View>
-              </View>
-              <CustomSpacer space={sh16} />
-              <TextCard data={accountSettings} {...textCardProps} />
             </Fragment>
           }
           contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8, paddingTop: sh24 }}

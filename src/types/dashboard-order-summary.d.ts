@@ -172,6 +172,7 @@ declare interface IOrderSummaryProfile extends IAccountDetails {
 
 declare interface IDashboardOrderSummary {
   documentSummary: IDocumentSummary;
+  isEtb: boolean;
   extensionRemark: string | null;
   investmentSummary: IOrderSummaryInvestment[] | null;
   orderNumber: string;
@@ -204,4 +205,4 @@ declare interface IStructuredData {
   showJointToggle?: boolean;
 }
 
-declare type OrderSummaryTabType = "order" | "document" | "account" | "tracking";
+declare type OrderSummaryTabType = "order" | "profile" | "document" | "account" | "tracking";

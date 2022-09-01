@@ -4,4 +4,5 @@ export * from "./DocumentsTab";
 export * from "./DocumentsTabNew";
 export * from "./EmptyStateTable";
 export * from "./JointDocumentHeader";
+export * from "./ProfileTabNew";
 export * from "./SummaryColorCard";

@@ -93,7 +93,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     },
     {
       label: NEW_SALES_SUMMARY.LABEL_RISK_CATEGORY,
-      title: riskScore.appetite || "-",
+      title: isNotEmpty(riskScore) && riskScore.appetite !== "" ? riskScore.appetite : "-",
       titleStyle: fsTransformNone,
     },
   ];

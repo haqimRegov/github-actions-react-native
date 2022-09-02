@@ -30,7 +30,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   global,
   investmentDetails,
   newSales,
-  resetProducts,
   resetSelectedFund,
   riskAssessment,
   selectedFunds,
@@ -78,7 +77,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
     setPrompt(undefined);
     handleNextStep("RiskSummary");
-    resetProducts();
     resetSelectedFund();
   };
 

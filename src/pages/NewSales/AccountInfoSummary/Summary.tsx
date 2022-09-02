@@ -148,7 +148,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   const idVerificationPrincipal: LabeledTitleProps[] = [
     {
-      label: handleIdLabel(principalHolder!.idType!, "front", undefined),
+      label: handleIdLabel(principalHolder!.idType!, "front", principalHolder?.otherIdType),
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.frontPage),
       title: personalInfo.principal?.personalDetails?.id?.frontPage?.name,
       titleNumberOfLines: 1,
@@ -159,7 +159,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   if (principalHolder!.idType! !== "Passport") {
     idVerificationPrincipal.push({
-      label: handleIdLabel(principalHolder!.idType!, "back", undefined),
+      label: handleIdLabel(principalHolder!.idType!, "back", principalHolder?.otherIdType),
       onPress: () => setFile(personalInfo.principal?.personalDetails?.id?.secondPage),
       title: personalInfo.principal?.personalDetails?.id?.secondPage?.name,
       titleIcon: "tax-card",
@@ -169,7 +169,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   }
   const idVerificationJoint = [
     {
-      label: handleIdLabel(jointHolder!.idType!, "front", undefined),
+      label: handleIdLabel(jointHolder!.idType!, "front", jointHolder?.otherIdType),
       onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.frontPage),
       title: personalInfo.joint?.personalDetails?.id?.frontPage?.name,
       titleIcon: "tax-card",
@@ -179,7 +179,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   ];
   if (personalInfo.joint?.personalDetails?.idType !== "Passport") {
     idVerificationJoint.push({
-      label: handleIdLabel(jointHolder!.idType!, "back", undefined),
+      label: handleIdLabel(jointHolder!.idType!, "back", jointHolder?.otherIdType),
       onPress: () => setFile(personalInfo.joint?.personalDetails?.id?.secondPage),
       title: personalInfo.joint?.personalDetails?.id?.secondPage?.name,
       titleIcon: "tax-card",

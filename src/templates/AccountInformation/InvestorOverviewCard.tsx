@@ -94,10 +94,14 @@ InvestorOverviewCardProps) => {
           title={info.idNumber || "-"}
         />
       </View>
-      <CustomSpacer space={sh16} />
-      <View style={rowCenterVertical}>
-        <LabeledTitle {...labeledTitleProps} label={ACCOUNT_INFORMATION.LABEL_RISK} title={info.riskProfile || "-"} />
-      </View>
+      {accountHolder === "Principal" ? (
+        <Fragment>
+          <CustomSpacer space={sh16} />
+          <View style={rowCenterVertical}>
+            <LabeledTitle {...labeledTitleProps} label={ACCOUNT_INFORMATION.LABEL_RISK} title={info.riskProfile || "-"} />
+          </View>
+        </Fragment>
+      ) : null}
       <CustomSpacer space={sh16} />
     </View>
   );

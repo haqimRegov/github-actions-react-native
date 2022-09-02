@@ -51,7 +51,7 @@ import {
   sw64,
   sw8,
 } from "../../../styles";
-import { formatAmount } from "../../../utils";
+import { formatAmount, isNotEmpty } from "../../../utils";
 
 const { PRODUCT_DETAILS } = Language.PAGE;
 
@@ -200,12 +200,12 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     transactionInfo.push(
       {
         label: PRODUCT_DETAILS.LABEL_ANNUAL,
-        title: `${fund.annualManagementFee}%`,
+        title: isNotEmpty(fund?.annualManagementFee) ? `${parseFloat(fund.annualManagementFee).toFixed(2)}%` : "-",
         titleStyle: fsTransformNone,
       },
       {
         label: PRODUCT_DETAILS.LABEL_ANNUAL_TRUSTEE,
-        title: `${fund.annualTrusteeFee}%`,
+        title: isNotEmpty(fund?.annualTrusteeFee) ? `${parseFloat(fund.annualTrusteeFee).toFixed(2)}%` : "-",
         titleStyle: fsTransformNone,
       },
     );

@@ -80,7 +80,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
-  const { accountNo, fundType } = accountDetails;
+  const { accountNo, fundType, isEpf } = accountDetails;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   const [showMorePills, setShowMorePills] = useState<boolean>(false);
   const filterKeys = isNotEmpty(currentFilter) ? Object.keys(currentFilter) : [];
@@ -247,7 +247,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                         return false;
                       case "EPF Approved: Yes":
                       case "EPF Approved: No":
-                        if (accountNo !== "") {
+                        if (accountNo !== "" && isEpf === true) {
                           return true;
                         }
                         return false;

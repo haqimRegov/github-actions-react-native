@@ -123,15 +123,31 @@ export const updateProducts = (value: productsState) => {
 export const resetUTFilter = () => {
   return typedAction("products/RESET_UT_FILTER");
 };
+
+export const partialResetUTProducts = (filters?: IProductFilter) => {
+  return typedAction("products/PARTIAL_RESET_UT_PRODUCTS", filters);
+};
+
 export const resetPRSFilter = () => {
   return typedAction("products/RESET_PRS_FILTER");
 };
+
+export const partialResetPRSProducts = (filters?: IProductFilter) => {
+  return typedAction("products/PARTIAL_RESET_PRS_PRODUCTS", filters);
+};
+
 export const resetPRSDefaultFilter = () => {
   return typedAction("products/RESET_PRS_DEFAULT_FILTER");
 };
+
+export const partialResetPRSDefaultProducts = (filters?: IProductFilter) => {
+  return typedAction("products/PARTIAL_RESET_PRS_DEFAULT_PRODUCTS", filters);
+};
+
 export const resetAMPFilter = () => {
   return typedAction("products/RESET_AMP_FILTER");
 };
+
 export const resetProducts = () => {
   return typedAction("products/RESET_PRODUCTS");
 };
@@ -163,8 +179,11 @@ export type ProductsAction = ReturnType<
   | typeof updateProducts
   | typeof resetProducts
   | typeof resetUTFilter
+  | typeof partialResetUTProducts
   | typeof resetPRSFilter
+  | typeof partialResetPRSProducts
   | typeof resetPRSDefaultFilter
+  | typeof partialResetPRSDefaultProducts
   | typeof resetAMPFilter
   | typeof addUtSort
   | typeof addPrsSort
@@ -200,7 +219,10 @@ export const ProductsActionProps = {
   updatePrsDefaultShowBy,
   updateAmpShowBy,
   updateProducts,
+  partialResetUTProducts,
+  partialResetPRSProducts,
   resetProducts,
+  partialResetPRSDefaultProducts,
   resetUTFilter,
   resetPRSFilter,
   resetPRSDefaultFilter,

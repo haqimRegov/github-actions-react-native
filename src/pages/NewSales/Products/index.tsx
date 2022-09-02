@@ -30,6 +30,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   global,
   investmentDetails,
   newSales,
+  partialResetUTProducts,
+  partialResetPRSDefaultProducts,
+  partialResetPRSProducts,
+  products,
+  resetProducts,
   resetSelectedFund,
   riskAssessment,
   selectedFunds,
@@ -39,7 +44,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 }: ProductsProps) => {
   const { accountType } = client;
   const { isMultiUtmc } = global;
-  const { disabledSteps, riskInfo, transactionType } = newSales;
+  const { accountDetails, disabledSteps, riskInfo, transactionType } = newSales;
+  const { accountNo, fundType, isEpf } = accountDetails;
+  const { ut, prsDefault } = products;
   const [page] = useState<number>(0);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
@@ -48,6 +55,32 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
+
+  const handleProductReset = () => {
+    switch (fundType) {
+      case "ut": {
+        const checkUtFilter = isEpf === true ? { epfApproved: ut.filters.epfApproved } : undefined;
+        partialResetUTProducts(checkUtFilter);
+        break;
+      }
+      case "prs":
+        partialResetPRSProducts();
+        break;
+      case "prsDefault":
+        partialResetPRSDefaultProducts({
+          shariahApproved: prsDefault.filters.shariahApproved,
+          conventional: prsDefault.filters.conventional,
+        });
+        break;
+      case "amp":
+        break;
+      default: {
+        const checkUt = isEpf === true ? { epfApproved: ut.filters.epfApproved } : undefined;
+        partialResetUTProducts(checkUt);
+        break;
+      }
+    }
+  };
 
   const handleBackToAssessment = () => {
     const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskSummary"];
@@ -77,6 +110,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
     setPrompt(undefined);
     handleNextStep("RiskSummary");
+    if (accountNo === "") {
+      resetProducts();
+    } else {
+      handleProductReset();
+    }
     resetSelectedFund();
   };
 

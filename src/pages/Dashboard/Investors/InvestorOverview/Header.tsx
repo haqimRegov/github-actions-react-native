@@ -42,6 +42,7 @@ import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 export interface IInvestorAccountHeaderProps {
+  disableAccountOpening: boolean;
   email?: string;
   emailVerified?: boolean;
   handleAccountOpening: () => void;
@@ -52,6 +53,7 @@ export interface IInvestorAccountHeaderProps {
 }
 
 export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderProps> = ({
+  disableAccountOpening,
   email,
   emailVerified,
   handleAccountOpening,
@@ -120,7 +122,13 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
               <IconButton color={colorBlue._1} name="pencil" onPress={() => {}} size={sw16} style={iconContainer} />
             </View>
             <CustomSpacer isHorizontal={true} space={sw16} />
-            <IconButton color={colorBlue._1} name="plus" onPress={handleAccountOpening} size={sw16} style={iconContainer} />
+            {disableAccountOpening === true ? (
+              <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
+                <IconButton color={colorBlue._1} name="plus" onPress={handleAccountOpening} size={sw16} style={iconContainer} />
+              </View>
+            ) : (
+              <IconButton color={colorBlue._1} name="plus" onPress={handleAccountOpening} size={sw16} style={iconContainer} />
+            )}
           </View>
         </View>
       </View>

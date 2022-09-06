@@ -112,7 +112,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       }
       if (error !== null) {
         setTimeout(() => {
-          AlertDialog(error.message, handleBackToTransactions);
+          AlertDialog(error.message, () => handleBackToTransactions());
         }, 100);
       }
     }

@@ -35,6 +35,7 @@ import {
   sw404,
   sw8,
 } from "../../styles";
+import { isNotEmpty } from "../../utils";
 
 const { INVESTOR_ACCOUNTS } = Language.PAGE;
 
@@ -113,7 +114,7 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
               {tags !== undefined
                 ? tags.map((eachTag: string, tagIndex: number) => {
                     const checkTagStyle: ITagStyle =
-                      eachTag.includes("High") || eachTag.includes("Low") || eachTag.includes("Medium")
+                      isNotEmpty(eachTag) && (eachTag.includes("High") || eachTag.includes("Low") || eachTag.includes("Medium"))
                         ? handleTagStyle(eachTag)
                         : { container: {}, text: {} };
                     const tagStyle: ViewStyle = {

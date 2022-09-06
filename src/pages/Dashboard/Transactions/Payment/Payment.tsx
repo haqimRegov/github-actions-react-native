@@ -90,7 +90,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       }
       if (error !== null) {
         setTimeout(() => {
-          AlertDialog(error.message, handleBack);
+          AlertDialog(error.message, () => handleBack());
         }, 100);
       }
     }

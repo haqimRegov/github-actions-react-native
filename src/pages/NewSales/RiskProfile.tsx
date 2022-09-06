@@ -93,6 +93,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   details,
   handleNextStep,
   handleCancelNewSales,
+  investors,
   isRiskUpdated,
   newSales,
   riskScore,
@@ -261,7 +262,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
   const handleBackToInvestor = () => {
     if (handleCancelNewSales !== undefined) {
-      handleCancelNewSales(true);
+      handleCancelNewSales(investors.backToInvestorOverview);
     }
   };
 

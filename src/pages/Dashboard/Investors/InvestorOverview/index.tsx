@@ -29,7 +29,7 @@ import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
-import { NewSalesPrompt } from "./NewSalesPrompt";
+import { InvestorSalesPrompt } from "./InvestorSalesPrompt";
 
 const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
@@ -73,13 +73,16 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   client,
   currentInvestor,
   forceUpdate,
+  investors,
   newSales,
   personalInfo,
   resetClientDetails,
   riskAssessment,
   updateClient,
   updateCurrentAccount,
+  updateCurrentInvestor,
   updateForceUpdate,
+  updateInvestors,
   updateShowOpenAccount,
   updateNewSales,
   updateTransactionType,
@@ -153,7 +156,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     }
   };
 
-  const handleNewSalesPrompt = () => {
+  const handleSalesPrompt = () => {
     setPrompt(true);
   };
 
@@ -332,6 +335,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           jointClientId.current = "";
           if (accountType !== 1 && req === undefined) {
             setPrompt(false);
+            updateInvestors({ ...investors, backToInvestorOverview: true });
             navigation.navigate("NewSales");
             return undefined;
           }
@@ -596,6 +600,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       updateProductType(getProductTabType(item.fundType));
       if (check === true) {
         updateTransactionType("Sales-NS");
+        updateInvestors({ ...investors, backToInvestorOverview: true });
         navigation.navigate("NewSales");
       }
     }
@@ -634,7 +639,14 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     updateForceUpdateDeclarations,
   };
 
-  const content: JSX.Element = <AccountListing handleBuyNewFund={handleBuyNewFund} handleViewAccount={handleViewAccount} {...tabProps} />;
+  const content: JSX.Element = (
+    <AccountListing
+      handleBuyNewFund={handleBuyNewFund}
+      handleViewAccount={handleViewAccount}
+      updateCurrentInvestor={updateCurrentInvestor}
+      {...tabProps}
+    />
+  );
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -646,7 +658,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const headerData: IInvestorAccountHeaderProps = {
     email: investorData !== undefined ? investorData.email : undefined,
     emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
-    handleNewSales: handleNewSalesPrompt,
+    handleNewSales: handleSalesPrompt,
     handleViewProfile: handleViewProfile,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
@@ -712,7 +724,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
         visible={forceUpdatePrompt}
       />
-      <NewSalesPrompt
+      <InvestorSalesPrompt
         ageErrorMessage={ageErrorMessage}
         errorMessage={errorMessage}
         fetching={newSalesLoading}

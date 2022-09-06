@@ -55,6 +55,7 @@ InvestorOverviewCardProps) => {
   // };
 
   // const idNumberIcon = info.id !== undefined && info.id !== null ? "profile-card" : undefined;
+  const icon = accountHolder === "Principal" ? "account" : "account-joint";
 
   return (
     <View>
@@ -62,7 +63,7 @@ InvestorOverviewCardProps) => {
         <Fragment>
           <CustomSpacer space={sh8} />
           <View style={rowCenterVertical}>
-            <IconText name="account" iconSize={sw24} text={sectionTitle} textStyle={fs16BoldBlack2} />
+            <IconText name={icon} iconSize={sw24} text={sectionTitle} textStyle={fs16BoldBlack2} />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ ...borderBottomBlue4, ...flexChild }} />
             <CustomSpacer isHorizontal={true} space={sw24} />

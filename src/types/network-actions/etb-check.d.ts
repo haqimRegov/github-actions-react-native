@@ -36,6 +36,7 @@ declare interface IEtbCheckResult {
   idNumber: string;
   idType: string;
   initId: string;
+  isMinor: boolean;
   message: string;
   status: string;
 }

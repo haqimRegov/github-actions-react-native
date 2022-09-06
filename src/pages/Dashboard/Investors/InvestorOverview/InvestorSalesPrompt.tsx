@@ -43,7 +43,7 @@ import { NewSalesSummary } from "../../QuickActions/NewSales/Summary";
 
 const { INVESTOR_ACCOUNTS } = Language.PAGE;
 
-interface NewSalesProps extends ClientStoreProps {
+interface InvestorSalesProps extends ClientStoreProps {
   ageErrorMessage?: string;
   errorMessage?: string;
   fetching: boolean;
@@ -68,7 +68,7 @@ interface NewSalesProps extends ClientStoreProps {
 
 type TPromptType = "accountType" | "joint";
 
-const NewSalesPromptComponent = ({
+const InvestorSalesPromptComponent = ({
   accountType,
   addJointInfo,
   addPersonalInfo,
@@ -79,6 +79,7 @@ const NewSalesPromptComponent = ({
   handleCheckClient,
   handleClientRegister,
   inputError1,
+  investors,
   isNtb,
   modalData,
   navigation,
@@ -94,9 +95,10 @@ const NewSalesPromptComponent = ({
   setRegistered,
   setVisible,
   showOpenAccount,
+  updateInvestors,
   updateShowOpenAccount,
   visible,
-}: NewSalesProps) => {
+}: InvestorSalesProps) => {
   const [prompt, setPrompt] = useState<TPromptType>("accountType");
   const { jointHolder, principalHolder } = details!;
   const { dateOfBirth, id, idType, name, country } = jointHolder!;
@@ -209,6 +211,7 @@ const NewSalesPromptComponent = ({
     if (isNtb === true) {
       navigation.navigate("Onboarding");
     } else {
+      updateInvestors({ ...investors, backToInvestorOverview: true });
       navigation.navigate("NewSales");
     }
   };
@@ -337,4 +340,4 @@ const NewSalesPromptComponent = ({
   );
 };
 
-export const NewSalesPrompt = connect(ClientMapStateToProps, ClientMapDispatchToProps)(NewSalesPromptComponent);
+export const InvestorSalesPrompt = connect(ClientMapStateToProps, ClientMapDispatchToProps)(InvestorSalesPromptComponent);

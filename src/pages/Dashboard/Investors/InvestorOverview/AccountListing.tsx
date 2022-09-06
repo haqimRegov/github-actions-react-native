@@ -37,6 +37,7 @@ interface AccountListingProps {
   navigation: IStackNavigationProp;
   page: number;
   setForceUpdatePrompt: (value: boolean) => void;
+  setMinorHolderPrompt: (value: boolean) => void;
   setInvestorData: (data: IInvestor) => void;
   setIsFetching: (value: boolean) => void;
   setPage: (page: number) => void;
@@ -59,6 +60,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   navigation,
   page,
   setForceUpdatePrompt,
+  setMinorHolderPrompt,
   setInvestorData,
   setIsFetching,
   setPage,
@@ -247,9 +249,13 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
           ...updatedInvestorData,
         });
         if (data.result.isForceUpdate === true) {
-          setForceUpdatePrompt(true);
-          if (isArrayNotEmpty(data.result.declarationRequired)) {
-            updateForceUpdateDeclarations(data.result.declarationRequired);
+          if (data.result.accountHolder === "Joint" && data.result.isMinor === true) {
+            setMinorHolderPrompt(true);
+          } else {
+            setForceUpdatePrompt(true);
+            if (isArrayNotEmpty(data.result.declarationRequired)) {
+              updateForceUpdateDeclarations(data.result.declarationRequired);
+            }
           }
         } else if (data.result.isForceUpdate === false && directToAccountOpening === true) {
           updateCurrentInvestor({ ...currentInvestor!, idNumber: data.result.idNumber });

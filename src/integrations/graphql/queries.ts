@@ -97,6 +97,7 @@ const etbCheck = gql`
           forceUpdate
           clientId
           initId
+          isMinor
           emailAddress
           declarationRequired
           dateOfBirth
@@ -521,6 +522,7 @@ const investorDetailsDashboard = gql`
           mobileNoLastUpdated
           emailLastUpdated
           isForceUpdate
+          isMinor
           investorDetails {
             ampDetails {
               annualTrusteeFee

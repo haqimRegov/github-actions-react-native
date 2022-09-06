@@ -10,6 +10,7 @@ import illustrationInboxEmpty from "./illustration_inbox_empty/illustration_inbo
 import illustrationInvestorWarning from "./illustration_investor_warning/illustration_investor_warning.png";
 import illustrationInvestorsEmpty from "./illustration_investors_empty/illustration_investors_empty.png";
 import illustrationLoginError from "./illustration_login_error/illustration_login_error.png";
+import illustrationMinorSales from "./illustration_minor_sales/Illustration_minor_sales.png";
 import illustrationNoResults from "./illustration_no_results/illustration_no_results.png";
 import illustrationOrderReceived from "./illustration_order_received/illustration_order_received.png";
 import illustrationOrderSaved from "./illustration_order_saved/illustration_order_saved.png";
@@ -49,6 +50,7 @@ export const LocalAssets = {
     investorsEmpty: illustrationInvestorsEmpty,
     investorWarning: illustrationInvestorWarning,
     loginError: illustrationLoginError,
+    minorSales: illustrationMinorSales,
     noResults: illustrationNoResults,
     orderReceived: illustrationOrderReceived,
     orderSaved: illustrationOrderSaved,

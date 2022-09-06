@@ -45,6 +45,7 @@ interface AccountListingProps {
   setScreen: (route: InvestorsPageType) => void;
   setSort: (sort: IInvestorAccountsSort[]) => void;
   sort: IInvestorAccountsSort[];
+  updateCurrentInvestor: (order: IInvestorData | undefined) => void;
   updateForceUpdateDeclarations: (declarations: string[]) => void;
 }
 
@@ -65,6 +66,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   setPrompt,
   setSort,
   sort,
+  updateCurrentInvestor,
   updateForceUpdateDeclarations,
 }: AccountListingProps) => {
   const handleSortInvestorName = async () => {
@@ -250,6 +252,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
             updateForceUpdateDeclarations(data.result.declarationRequired);
           }
         } else if (data.result.isForceUpdate === false && directToAccountOpening === true) {
+          updateCurrentInvestor({ ...currentInvestor!, idNumber: data.result.idNumber });
           setPrompt(true);
         }
         setPage(currentPage);

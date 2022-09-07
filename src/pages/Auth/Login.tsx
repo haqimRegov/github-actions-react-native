@@ -34,6 +34,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   const [inputNewPassword, setInputNewPassword] = useState<string>("");
   const [inputRetypePassword, setInputRetypePassword] = useState<string>("");
   const [input1Error, setInput1Error] = useState<string | undefined>(undefined);
+  const [nricInputError, setNricInputError] = useState<string | undefined>(undefined);
   const [input2Error, setInput2Error] = useState<string | undefined>(undefined);
   const [lockPrompt, setLockPrompt] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,6 +65,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       setLoading(true);
       setLockPrompt(false);
       setInput1Error(undefined);
+      setNricInputError(undefined);
       const credentials = await Auth.Credentials.get();
       if ("sessionToken" in credentials === false) {
         setLoading(false);
@@ -148,6 +150,9 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
             setLockPrompt(true);
             setRecoveryEmail(maskedString(data?.result.email, 0, 4));
           }
+        } else if (error.errorCode === ERROR_CODE.invalidNricFormat) {
+          setNricInputError(error.message);
+          setLoading(false);
         } else {
           setInput1Error(error.message);
           setLoading(false);
@@ -297,6 +302,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           handleLogin={handleLogin}
           inputNRIC={inputNRIC}
           inputPassword={inputPassword}
+          nricErrorMessage={nricInputError}
           passwordRecovery={passwordRecovery}
           setInputNRIC={setInputNRIC}
           setInputPassword={setInputPassword}

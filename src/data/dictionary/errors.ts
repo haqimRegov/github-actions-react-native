@@ -47,6 +47,7 @@ export const ERROR_CODE = {
   otpAttempt: "EM002",
   invalidNric: "EM011",
   invalidNricData: "EM012",
+  invalidNricFormat: "EM408",
   clientAgeMinimum: "EM600",
   clientAgeMaximum: "EM601",
   clientBannedCountry: "EM602",

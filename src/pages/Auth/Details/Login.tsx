@@ -14,6 +14,7 @@ interface LoginDetailsProps {
   handleLogin: () => void;
   inputNRIC: string;
   inputPassword: string;
+  nricErrorMessage?: string;
   passwordRecovery?: boolean;
   setInputNRIC: (value: string) => void;
   setInputPassword: (value: string) => void;
@@ -25,6 +26,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
   handleLogin,
   inputNRIC,
   inputPassword,
+  nricErrorMessage,
   passwordRecovery,
   setInputNRIC,
   setInputPassword,
@@ -52,6 +54,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
         <Text style={{ width: sw360, ...fs24RegGray6 }}>{LOGIN.SUBHEADING_LOGIN}</Text>
         <CustomSpacer space={sh40} />
         <CustomTextInput
+          error={nricErrorMessage}
           keyboardType="numeric"
           label={LOGIN.LABEL_NRIC}
           maxLength={12}

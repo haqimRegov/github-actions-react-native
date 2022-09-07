@@ -375,6 +375,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               name: jointHolder?.name?.trim(),
             }
           : {
+              dateOfBirth:
+                req.dateOfBirth && req.idType !== "NRIC" ? moment(req.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) : "",
               id: req.id,
               idType: req.idType as TypeClientID,
               name: req.name,

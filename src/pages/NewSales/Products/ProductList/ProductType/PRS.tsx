@@ -8,6 +8,7 @@ import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../../../styles";
+import { isNotEmpty } from "../../../../../utils";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -73,11 +74,11 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       fundType: filters.fundType![0] || "",
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
-      isSyariah: filters.shariahApproved![0] || "",
+      isSyariah: isNotEmpty(filters.shariahApproved) && filters.shariahApproved!.length > 0 ? filters.shariahApproved![0] : "",
       recommendedRisk: riskInfo!.appetite,
       riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
-      isConventional: filters.conventional![0],
+      // isConventional: filters.conventional![0], // Not used in BE
       page: newPage,
       sort: sort,
       showBy: showBy,

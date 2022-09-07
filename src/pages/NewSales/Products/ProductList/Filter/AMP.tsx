@@ -16,7 +16,7 @@ interface AMPFilterProps {
 }
 
 export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters, filter, setFilter }: AMPFilterProps) => {
-  const { conventional, epfApproved, issuingHouse, riskCategory, shariahApproved } = filter;
+  const { epfApproved, issuingHouse, riskCategory, shariahApproved } = filter;
 
   const handleEpf = (value: string) => {
     const filterClone = { ...filter };
@@ -36,16 +36,9 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters,
 
   const handleShariah = (value: string) => {
     const filterClone = { ...filter };
-    const shariahTmp = value === "Shariah" ? ["Yes"] : [];
-    const conventionalTmp = value === "Conventional" ? ["Yes"] : [];
-    filterClone.shariahApproved =
-      filterClone.shariahApproved?.length === 0 || (filterClone.shariahApproved!.length > 0 && filterClone.shariahApproved![0] !== "Yes")
-        ? shariahTmp
-        : [];
-    filterClone.conventional =
-      filterClone.conventional?.length === 0 || (filterClone.conventional!.length > 0 && filterClone.conventional![0] !== "Yes")
-        ? conventionalTmp
-        : [];
+    const checkConventionalType = value === "Conventional" ? ["No"] : [];
+    const checkShariah = value === "Shariah" ? ["Yes"] : checkConventionalType;
+    filterClone.shariahApproved = checkShariah;
     setFilter(filterClone);
   };
 
@@ -55,14 +48,12 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters,
     return { label: eachRisk.label };
   });
 
-  // TODO Change to not includes
-
   const disabledRiskCategory: string[] = FILTER_RISK_CATEGORY.map((eachRisk) => eachRisk.value).filter(
     (eachValue: string) =>
       !availableFilters.riskCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
 
-  const conventionalSelected = conventional![0] === "Yes" ? "Conventional" : "";
+  const conventionalSelected = shariahApproved![0] === "No" ? "Conventional" : "";
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
   const checkEpfValue = isNotEmpty(epfApproved) && epfApproved!.length > 0 ? epfApproved![0] : "";
 

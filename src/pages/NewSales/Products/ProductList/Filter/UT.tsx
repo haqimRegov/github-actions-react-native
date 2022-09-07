@@ -25,7 +25,7 @@ interface UTFilterProps {
 
 export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: UTFilterProps) => {
   const { isEpf } = accountDetails;
-  const { fundType, epfApproved, fundCurrency, riskCategory, shariahApproved, issuingHouse, conventional } = filter;
+  const { fundType, epfApproved, fundCurrency, riskCategory, shariahApproved, issuingHouse } = filter;
 
   const handleEpf = (value: string) => {
     const filterClone = { ...filter };
@@ -48,16 +48,12 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
 
   const handleShariah = (value: string) => {
     const filterClone = { ...filter };
-    const shariahTmp = value === "Shariah" ? ["Yes"] : [];
-    const conventionalTmp = value === "Conventional" ? ["Yes"] : [];
-    filterClone.shariahApproved =
-      filterClone.shariahApproved?.length === 0 || (filterClone.shariahApproved!.length > 0 && filterClone.shariahApproved![0] !== "Yes")
-        ? shariahTmp
-        : [];
-    filterClone.conventional =
-      filterClone.conventional?.length === 0 || (filterClone.conventional!.length > 0 && filterClone.conventional![0] !== "Yes")
-        ? conventionalTmp
-        : [];
+    const checkConventionalExisting =
+      isNotEmpty(shariahApproved) && shariahApproved!.length > 0 && shariahApproved![0] === "No" ? [] : ["No"];
+    const checkConventionalType = value === "Conventional" ? checkConventionalExisting : [];
+    const checkShariahExisting = isNotEmpty(shariahApproved) && shariahApproved!.length > 0 && shariahApproved![0] === "Yes" ? [] : ["Yes"];
+    const checkShariah = value === "Shariah" ? checkShariahExisting : checkConventionalType;
+    filterClone.shariahApproved = checkShariah;
     setFilter(filterClone);
   };
 
@@ -88,7 +84,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
       !availableFilters.fundCurrency!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
 
-  const conventionalSelected = conventional![0] === "Yes" ? "Conventional" : "";
+  const conventionalSelected = shariahApproved![0] === "No" ? "Conventional" : "";
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
   const checkEpfValue = isNotEmpty(epfApproved) && epfApproved!.length > 0 ? epfApproved![0] : "";
 

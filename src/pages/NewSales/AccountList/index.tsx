@@ -302,14 +302,13 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             });
           }
           if (getProductTabType(eachAccount.fundType) === "prsDefault") {
-            const syariahConventional = eachAccount.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
+            const syariahConventional = eachAccount.isSyariah === true ? { shariahApproved: ["Yes"] } : { shariahApproved: ["No"] };
             addPrsDefaultFilters({
               epfApproved: [],
               fundCurrency: [],
               fundType: [],
               issuingHouse: [],
               riskCategory: [],
-              shariahApproved: [],
               conventional: [],
               ...syariahConventional,
             });

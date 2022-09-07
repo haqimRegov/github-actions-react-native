@@ -585,14 +585,13 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         });
       }
       if (getProductTabType(item.fundType) === "prsDefault") {
-        const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
+        const syariahConventional = item.isSyariah === true ? { shariahApproved: ["Yes"] } : { shariahApproved: ["No"] };
         addPrsDefaultFilters({
           epfApproved: [],
           fundCurrency: [],
           fundType: [],
           issuingHouse: [],
           riskCategory: [],
-          shariahApproved: [],
           conventional: [],
           ...syariahConventional,
         });

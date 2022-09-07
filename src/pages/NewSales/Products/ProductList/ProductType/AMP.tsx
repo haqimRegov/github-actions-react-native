@@ -8,6 +8,7 @@ import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
 import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../../../styles";
+import { isNotEmpty } from "../../../../../utils";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -77,10 +78,10 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       accountType: accountType.toLowerCase(),
       fundCurrency: filters.fundCurrency || [],
       fundType: filters.fundType![0] || "",
-      isConventional: filters.conventional![0],
+      // isConventional: filters.conventional![0], // Not used in BE
       isEpf: filters.epfApproved![0] || "",
       issuingHouse: filters.issuingHouse || [],
-      isSyariah: filters.shariahApproved![0] || "",
+      isSyariah: isNotEmpty(filters.shariahApproved) && filters.shariahApproved!.length > 0 ? filters.shariahApproved![0] : "",
       page: newPage,
       recommendedRisk: riskInfo!.appetite,
       riskCategory: riskCategory || [],

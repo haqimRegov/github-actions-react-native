@@ -17,20 +17,13 @@ interface PRSFilterProps {
 
 export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: PRSFilterProps) => {
   const { fundType: accountFundType } = accountDetails;
-  const { conventional, fundType, shariahApproved, issuingHouse, riskCategory } = filter;
+  const { fundType, shariahApproved, issuingHouse, riskCategory } = filter;
 
   const handleShariah = (value: string) => {
     const filterClone = { ...filter };
-    const shariahTmp = value === "Shariah" ? ["Yes"] : [];
-    const conventionalTmp = value === "Conventional" ? ["Yes"] : [];
-    filterClone.shariahApproved =
-      filterClone.shariahApproved?.length === 0 || (filterClone.shariahApproved!.length > 0 && filterClone.shariahApproved![0] !== "Yes")
-        ? shariahTmp
-        : [];
-    filterClone.conventional =
-      filterClone.conventional?.length === 0 || (filterClone.conventional!.length > 0 && filterClone.conventional![0] !== "Yes")
-        ? conventionalTmp
-        : [];
+    const checkConventionalType = value === "Conventional" ? ["No"] : [];
+    const checkShariah = value === "Shariah" ? ["Yes"] : checkConventionalType;
+    filterClone.shariahApproved = checkShariah;
     setFilter(filterClone);
   };
 
@@ -65,7 +58,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
       !availableFilters.riskCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
   );
 
-  const conventionalSelected = conventional![0] === "Yes" ? "Conventional" : "";
+  const conventionalSelected = shariahApproved![0] === "No" ? "Conventional" : "";
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
 
   return (

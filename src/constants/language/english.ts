@@ -58,6 +58,8 @@ export const english = {
     ADD_CLIENT: {
       BUTTON_ADD: "Add New",
       BUTTON_BACK: "Back",
+      BUTTON_GO_BACK: "Go Back",
+      BUTTON_OPEN_ACCOUNT: "Open Account",
       BUTTON_CANCEL: "Cancel",
       BUTTON_CONFIRM: "Confirm",
       BUTTON_CONTINUE: "Continue",
@@ -95,6 +97,9 @@ export const english = {
       PLACEHOLDER_DATE: "dd/mm/yyyy",
       PROMPT_SUBTITLE: "Click 'Cancel' to exit or 'Add New' to add a new investor.",
       PROMPT_TITLE: "You must meet certain age requirements to open an account.",
+      SALES_PROMPT_TITLE: "is your new investor",
+      SALES_PROMPT_SUBTITLE:
+        "Create a KIB App account for easy access to order history. Click “Open Account” to continue with the onboarding process.",
       SUBHEADING_JOINT: "Add joint account holder details",
       SUBHEADING: "Enter details to get started.",
     },

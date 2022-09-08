@@ -1,10 +1,11 @@
 import moment from "moment";
 import React, { Fragment, useRef, useState } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 
-import { ActionButtons, CustomSpacer, RNModal } from "../../../../components";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
+import { ActionButtons, CustomSpacer, LabeledTitle, RNModal } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_COUNTRIES,
@@ -17,18 +18,26 @@ import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
 import {
   centerHV,
+  centerVertical,
   colorBlue,
   colorWhite,
   flexGrow,
   flexRowCC,
+  fs16RegGray6,
   fs24BoldBlue1,
   fs36BoldBlack2,
+  fsAlignCenter,
   fullHW,
+  imageContain,
   px,
+  sh16,
+  sh24,
+  sh40,
   sh48,
   sh56,
   sh96,
   sw10,
+  sw136,
   sw218,
   sw5,
   sw56,
@@ -76,11 +85,14 @@ const NewSalesComponent = ({
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
+  const [salesNewPrompt, setSalesNewPrompt] = useState<boolean>(false);
   const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
   const { jointHolder, principalHolder } = details!;
   const { dateOfBirth, id, idType, name, country } = details![holderToFill]!;
 
-  const BUTTON_LABEL_UNREGISTERED = clientType !== "" ? ADD_CLIENT.BUTTON_PROCEED : ADD_CLIENT.BUTTON_STARTED;
+  const BUTTON_LABEL_NEW_SALES = salesNewPrompt === true ? ADD_CLIENT.BUTTON_OPEN_ACCOUNT : ADD_CLIENT.BUTTON_CONTINUE;
+  const BUTTON_LABEL_UNREGISTERED =
+    clientType !== "" && holderToFill === "principalHolder" ? ADD_CLIENT.BUTTON_STARTED : BUTTON_LABEL_NEW_SALES;
   const BUTTON_CONTINUE_PROMPT = prompt === "bannedCountry" ? ADD_CLIENT.BUTTON_BACK : ADD_CLIENT.BUTTON_ADD;
   const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_UNREGISTERED;
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
@@ -132,6 +144,9 @@ const NewSalesComponent = ({
       handleCancelNewSales();
     } else if (registered === true) {
       setRegistered(false);
+    } else if (salesNewPrompt === true) {
+      setPrompt(undefined);
+      setSalesNewPrompt(false);
     } else if (clientType !== "" && holderToFill === "jointHolder") {
       setHolderToFill("principalHolder");
     } else if (clientType !== "" && holderToFill === "principalHolder") {
@@ -214,7 +229,11 @@ const NewSalesComponent = ({
           setErrorMessage(undefined);
           setInputError1(undefined);
           if (data.result.message === "NTB") {
-            return setClientType("NTB");
+            if (client.isNewFundPurchase === true) {
+              setSalesNewPrompt(true);
+            } else {
+              setClientType("NTB");
+            }
           }
           if (data.result.message === "ETB" && setPage !== undefined) {
             setClientType("ETB");
@@ -371,6 +390,11 @@ const NewSalesComponent = ({
       return handleNavigation();
     }
 
+    if (salesNewPrompt === true) {
+      setSalesNewPrompt(false);
+      return setClientType("NTB");
+    }
+
     if (clientType === "NTB") {
       if (accountType === "Joint" && holderToFill === "principalHolder") {
         return setHolderToFill("jointHolder");
@@ -394,6 +418,11 @@ const NewSalesComponent = ({
     borderBottomRightRadius: sw10,
     height: sh96,
   };
+  const illustrationStyle: ImageStyle = { ...imageContain, height: sw136, width: sw136 };
+
+  const newSalesPromptTitle = `${principalHolder?.name} ${ADD_CLIENT.SALES_PROMPT_TITLE}`;
+  const checkSalesPrompt = salesNewPrompt === true ? sh40 : sh56;
+  const checkCancelLabel = salesNewPrompt === true ? ADD_CLIENT.BUTTON_GO_BACK : ADD_CLIENT.BUTTON_CANCEL;
 
   return (
     <RNModal animationType="fade" visible={visible}>
@@ -407,26 +436,42 @@ const NewSalesComponent = ({
                 <CustomSpacer space={registered === true ? sh56 : sh48} />
                 {registered === false ? (
                   <Fragment>
-                    <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
-                    <NewSalesDetails
-                      accountType={accountType}
-                      clientInfo={details![holderToFill]!}
-                      clientType={clientType}
-                      ageErrorMessage={ageErrorMessage}
-                      errorMessage={errorMessage}
-                      holderToFill={holderToFill}
-                      inputError1={inputError1}
-                      setAccountType={setAccountType}
-                      setClientInfo={setClientInfo}
-                      setAgeErrorMessage={setAgeErrorMessage}
-                      setErrorMessage={setErrorMessage}
-                      setInputError1={setInputError1}
-                    />
+                    {salesNewPrompt === true ? (
+                      <View style={centerVertical}>
+                        <Image source={LocalAssets.illustration.investorWarning} style={illustrationStyle} />
+                        <CustomSpacer space={sh24} />
+                        <LabeledTitle
+                          label={newSalesPromptTitle}
+                          labelStyle={{ ...fs24BoldBlue1, ...fsAlignCenter }}
+                          spaceToLabel={sh16}
+                          title={ADD_CLIENT.SALES_PROMPT_SUBTITLE}
+                          titleStyle={{ ...fs16RegGray6, ...fsAlignCenter }}
+                        />
+                      </View>
+                    ) : (
+                      <Fragment>
+                        <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
+                        <NewSalesDetails
+                          accountType={accountType}
+                          clientInfo={details![holderToFill]!}
+                          clientType={clientType}
+                          ageErrorMessage={ageErrorMessage}
+                          errorMessage={errorMessage}
+                          holderToFill={holderToFill}
+                          inputError1={inputError1}
+                          setAccountType={setAccountType}
+                          setClientInfo={setClientInfo}
+                          setAgeErrorMessage={setAgeErrorMessage}
+                          setErrorMessage={setErrorMessage}
+                          setInputError1={setInputError1}
+                        />
+                      </Fragment>
+                    )}
                   </Fragment>
                 ) : (
                   <NewSalesSummary accountType={accountType} jointHolder={jointHolder} principalHolder={principalHolder!} />
                 )}
-                <CustomSpacer space={sh56} />
+                <CustomSpacer space={checkSalesPrompt} />
               </View>
             )}
             <ActionButtons
@@ -438,6 +483,7 @@ const NewSalesComponent = ({
               handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}
               labelContinue={BUTTON_LABEL}
+              labelCancel={checkCancelLabel}
             />
           </View>
         </View>

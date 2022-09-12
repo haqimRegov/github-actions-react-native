@@ -312,6 +312,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
     setIsFetching(true);
     const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: ["approved"] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    setIsFetching(false);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
       if (error !== null) {

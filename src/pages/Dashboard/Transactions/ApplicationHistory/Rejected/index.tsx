@@ -313,6 +313,7 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
     setIsFetching(true);
     const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: ["rejected"] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    setIsFetching(false);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
       if (error !== null) {

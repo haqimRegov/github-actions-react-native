@@ -389,6 +389,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     fetching.current = true;
     const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: [incomplete.pill!] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    fetching.current = false;
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
       if (error !== null) {

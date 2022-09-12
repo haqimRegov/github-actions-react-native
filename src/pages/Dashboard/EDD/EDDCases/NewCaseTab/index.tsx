@@ -189,6 +189,7 @@ const NewCasesTabComponent: FunctionComponent<NewCasesProps> = ({
     setIsFetching(true);
     const request: IUpdateSeenRequest = { dashboard: "eddDashboardV2", tab: [pill] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
+    setIsFetching(false);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
       if (error !== null) {

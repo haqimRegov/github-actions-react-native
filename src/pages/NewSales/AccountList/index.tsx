@@ -1,11 +1,11 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../assets/images/LocalAssets";
 import { ContentPage, CustomSpacer, LabeledTitle, Loading, PromptModal, RNModal } from "../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
 import { getAddress, getProductTabType } from "../../../helpers";
 import { checkClient, clientRegister } from "../../../network-actions";
@@ -30,19 +30,27 @@ import { defaultContentProps } from "../Content";
 
 const { ACCOUNT_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
-declare interface IAccountListProps extends NewSalesContentProps, NewSalesStoreProps {
+interface IAccountListProps extends NewSalesContentProps, NewSalesStoreProps {
   navigation: IStackNavigationProp;
   route: string;
 }
-declare interface IEtbCheckData extends IEtbCheckResult {
-  address: IAddressState;
+
+interface IOtherInvestorData extends IEtbCheckResult {
+  address?: IAddressState;
   id: string;
   name: string;
 }
 
+interface IBasicInvestorData {
+  email: string;
+  country?: string;
+  dateOfBirth?: string;
+  id: string;
+  idType: TypeClientID;
+  name: string;
+}
+
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
-  // addRiskInfo,
-  addAccountType,
   addRiskScore,
   addClientDetails,
   addPersonalInfo,
@@ -58,13 +66,14 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   updateForceUpdate,
   updateNewSales,
   updateProductType,
+  updateClient,
 }: IAccountListProps) => {
   const { disabledSteps, finishedSteps } = newSales;
-  const { accountList, accountType, details } = client;
+  const { accountList, details } = client;
   const { principalHolder, jointHolder } = details!;
   const [loading, setLoading] = useState<boolean>(false);
   const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
-  const [clientCheckData, setClientCheckData] = useState<IEtbCheckData | undefined>(undefined);
+  const otherInvestorDataRef = useRef<IOtherInvestorData | null>(null);
 
   const handleCheckClient = async (account: IAccountList): Promise<boolean | string> => {
     if (loading === false) {
@@ -76,8 +85,8 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           : {};
       const request: IEtbCheckRequest = {
         id: account.accountHolder === "Principal" ? account.jointIdNumber : account.idNumber,
-        idType: checkIdType,
-        name: account.accountHolder === "Principal" ? account.name! : account.jointName!,
+        idType: checkIdType as TypeClientID,
+        name: account.accountHolder === "Principal" ? account.jointName! : account.name!,
         ...checkDOB,
       };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
@@ -92,15 +101,14 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             return false;
           }
           if (data.result.message === "ETB") {
+            otherInvestorDataRef.current = {
+              ...data.result,
+              name: account.accountHolder === "Principal" ? account.jointName! : account.name!,
+              id: data.result.idNumber,
+            };
             if (data.result.forceUpdate === false) {
               return false;
             }
-            setClientCheckData({
-              ...data.result,
-              dateOfBirth: account.accountHolder === "Principal" ? account.jointDateOfBirth : account.dateOfBirth,
-              name: account.accountHolder === "Principal" ? account.jointName : account.name,
-              id: account.accountHolder === "Principal" ? account.jointIdNumber : account.jointIdNumber,
-            });
             setTimeout(() => {
               setForceUpdatePrompt(true);
             }, 400);
@@ -120,19 +128,19 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   };
 
   const handleForceUpdate = () => {
-    if (clientCheckData !== undefined) {
+    if (otherInvestorDataRef !== undefined && otherInvestorDataRef !== null && otherInvestorDataRef.current !== null) {
       setForceUpdatePrompt(false);
       addClientDetails({
         ...details,
         principalHolder: {
           ...details!.principalHolder,
-          dateOfBirth: clientCheckData?.dateOfBirth!,
-          clientId: clientCheckData!.clientId,
-          id: clientCheckData?.id,
-          name: clientCheckData?.name,
+          dateOfBirth: otherInvestorDataRef.current.dateOfBirth!,
+          clientId: otherInvestorDataRef.current.clientId,
+          id: otherInvestorDataRef.current.id,
+          name: otherInvestorDataRef.current.name,
         },
-        initId: clientCheckData?.initId,
-        accountHolder: clientCheckData?.accountHolder,
+        initId: otherInvestorDataRef.current.initId,
+        accountHolder: otherInvestorDataRef.current.accountHolder,
       });
       addPersonalInfo({
         ...personalInfo,
@@ -140,8 +148,8 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           ...personalInfo.principal,
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
-            dateOfBirth: moment(clientCheckData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-            name: clientCheckData?.name,
+            dateOfBirth: moment(otherInvestorDataRef.current.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
+            name: otherInvestorDataRef.current.name,
           },
           contactDetails: {
             ...personalInfo.principal?.contactDetails,
@@ -149,15 +157,17 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           },
         },
       });
-      const checkDeclarations =
-        isNotEmpty(clientCheckData) && isArrayNotEmpty(clientCheckData!.declarationRequired) ? clientCheckData!.declarationRequired : [];
-      const checkInvestorDeclarations = isArrayNotEmpty(clientCheckData.declarationRequired) ? clientCheckData.declarationRequired : [];
+      const checkDeclarations = isArrayNotEmpty(otherInvestorDataRef.current.declarationRequired)
+        ? otherInvestorDataRef.current.declarationRequired
+        : [];
+      const checkInvestorDeclarations = isArrayNotEmpty(otherInvestorDataRef.current.declarationRequired)
+        ? otherInvestorDataRef.current.declarationRequired
+        : [];
       const declarationToUse = isArrayNotEmpty(checkDeclarations) ? checkDeclarations : checkInvestorDeclarations;
 
-      let fatcaAddress =
-        isNotEmpty(clientCheckData) && isNotEmpty(clientCheckData!.address) ? getAddress(clientCheckData!.address) : undefined;
-      if (clientCheckData !== undefined && isNotEmpty(clientCheckData.address)) {
-        fatcaAddress = getAddress(clientCheckData!.address!);
+      let fatcaAddress = isNotEmpty(otherInvestorDataRef.current.address) ? getAddress(otherInvestorDataRef.current.address) : undefined;
+      if (isNotEmpty(otherInvestorDataRef.current.address)) {
+        fatcaAddress = getAddress(otherInvestorDataRef.current.address!);
       }
 
       updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: declarationToUse });
@@ -168,16 +178,75 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   const handleClientRegister = async (eachAccount: IAccountList) => {
     if (loading === false) {
       setLoading(true);
+
+      const isJointAccount = isNotEmpty(eachAccount.jointName);
+      const holderToUse = isJointAccount === true && eachAccount.accountHolder === "Joint" ? "jointHolder" : "principalHolder";
+      const investorData: IBasicInvestorData = {
+        email: personalInfo?.principal?.contactDetails?.emailAddress!,
+        id: details![holderToUse]?.id!,
+        idType: details![holderToUse]?.idType as TypeClientID,
+        name: details![holderToUse]?.name!,
+        country: details![holderToUse]?.country,
+        dateOfBirth: details![holderToUse]?.dateOfBirth,
+      };
+
+      let principalEmail: string | undefined = investorData.email;
+      let jointEmail: string | undefined;
+      const investorDob =
+        isNotEmpty(investorData.dateOfBirth) && investorData.idType !== "NRIC"
+          ? { dateOfBirth: moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
+
       const request: IClientRegisterRequest = {
         accountNo: eachAccount.accountNo,
-        accountType: accountType,
+        accountType: isJointAccount === true ? "Joint" : "Individual",
         isEtb: true,
-        isNewFundPurchased: true,
+        isNewFundPurchased: false,
         principalHolder: {
-          id: principalHolder?.id!,
-          name: principalHolder?.name!,
+          ...investorDob,
+          id: investorData.id,
+          idType: investorData.idType,
+          name: investorData.name,
         },
+        jointHolder: undefined,
       };
+
+      request.isNewFundPurchased = true;
+
+      if (isJointAccount === true && otherInvestorDataRef !== undefined && otherInvestorDataRef.current !== null) {
+        const accountOtherDob =
+          otherInvestorDataRef.current.dateOfBirth && otherInvestorDataRef.current.idType !== "NRIC"
+            ? { dateOfBirth: moment(otherInvestorDataRef.current.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+            : {};
+
+        if (eachAccount.accountHolder === "Joint") {
+          // Current Investor is the Joint Holder of the Account
+
+          request.jointHolder = { ...request.principalHolder };
+
+          jointEmail = principalEmail;
+
+          request.principalHolder = {
+            ...accountOtherDob,
+            id: otherInvestorDataRef.current.idNumber,
+            idType: otherInvestorDataRef.current.idType as TypeClientID,
+            name: otherInvestorDataRef.current.name!,
+          };
+
+          principalEmail = otherInvestorDataRef.current.emailAddress;
+        } else {
+          // Current Investor is the Principal Holder of the Account
+          request.jointHolder = {
+            ...accountOtherDob,
+            id: otherInvestorDataRef.current.idNumber,
+            idType: otherInvestorDataRef.current.idType as TypeClientID,
+            name: otherInvestorDataRef.current.name!,
+          };
+
+          jointEmail = otherInvestorDataRef.current.emailAddress;
+        }
+      }
+
       const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation);
       setLoading(false);
       if (clientResponse !== undefined) {
@@ -209,6 +278,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             data.result.principalHolder.idType !== "NRIC" && data.result.principalHolder.idType !== "Passport"
               ? { idType: "Other", otherIdType: data.result.principalHolder.idType as TypeIDOther }
               : { idType: data.result.principalHolder.idType };
+
           const initialJointInfo = {
             name: "",
             country: "",
@@ -217,6 +287,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             idType: DICTIONARY_ID_TYPE[0],
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           };
+
           const moreJointInfo = isNotEmpty(data.result.jointHolder)
             ? {
                 clientId: data.result.jointHolder!.clientId,
@@ -225,26 +296,32 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                 name: data.result.jointHolder!.name,
               }
             : {};
-          addClientDetails({
-            ...details,
-            principalHolder: {
-              ...principalHolder,
-              clientId: data.result.principalHolder.clientId,
-              dateOfBirth: data.result.principalHolder.dateOfBirth,
-              id: data.result.principalHolder.id,
-              name: data.result.principalHolder.name,
+
+          updateClient({
+            ...client,
+            accountType: data.result.jointHolder !== null ? "Joint" : "Individual",
+            details: {
+              ...details,
+              principalHolder: {
+                ...principalHolder,
+                clientId: data.result.principalHolder.clientId,
+                dateOfBirth: data.result.principalHolder.dateOfBirth,
+                id: data.result.principalHolder.id,
+                name: data.result.principalHolder.name,
+              },
+              jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+              initId: `${data.result.initId}`,
+              accountHolder: eachAccount.accountHolder,
             },
-            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
-            initId: `${data.result.initId}`,
-            accountHolder: eachAccount.accountHolder,
           });
+
           const updatedJointInfo: IHolderInfoState =
             data.result.jointHolder !== null
               ? {
                   ...personalInfo.joint,
                   contactDetails: {
                     ...personalInfo.joint?.contactDetails,
-                    emailAddress: eachAccount.jointEmail,
+                    emailAddress: jointEmail,
                   },
                   personalDetails: {
                     ...personalInfo.joint?.personalDetails,
@@ -265,6 +342,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               ...personalInfo.principal,
               contactDetails: {
                 ...personalInfo.principal?.contactDetails,
+                emailAddress: principalEmail,
               },
               personalDetails: {
                 ...personalInfo.principal?.personalDetails,
@@ -277,7 +355,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             },
             joint: updatedJointInfo,
           });
-          addAccountType(data.result.jointHolder !== null ? "Joint" : "Individual");
+
           const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
           const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
           updatedFinishedSteps.push("AccountList");
@@ -349,7 +427,11 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   };
 
   const modalStyle = loading === false ? undefined : { backgroundColor: colorBlack._1_4 };
-  const promptLabel = clientCheckData !== undefined ? `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${clientCheckData.name}.` : "";
+  const promptLabel =
+    otherInvestorDataRef !== undefined && otherInvestorDataRef.current !== null
+      ? `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${otherInvestorDataRef.current.name}.`
+      : "";
+
   return (
     <View>
       <ContentPage {...defaultContentProps} subheading={ACCOUNT_LIST.LABEL_WELCOME_BACK}>

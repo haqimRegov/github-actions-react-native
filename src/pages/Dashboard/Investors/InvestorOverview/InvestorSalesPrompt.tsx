@@ -228,6 +228,7 @@ const InvestorSalesPromptComponent = ({
       if (registered === true) {
         handleNavigation();
       } else {
+        // This checks if Joint Holder of AO is an ETB or not
         const checkETB = await handleCheckClient();
         if (checkETB === true) {
           handleClientRegister();

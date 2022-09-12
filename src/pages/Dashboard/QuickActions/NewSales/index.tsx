@@ -244,6 +244,7 @@ const NewSalesComponent = ({
                 accountList: data.result.accounts!,
                 details: {
                   ...client.details,
+                  // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
                   principalHolder: {
                     ...client.details?.principalHolder,
                     name: principalHolder!.name!.trim(),
@@ -252,6 +253,7 @@ const NewSalesComponent = ({
                 },
               });
               if (client.isNewFundPurchase === true) {
+                // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
                 addPersonalInfo({
                   ...personalInfo,
                   principal: {
@@ -292,6 +294,7 @@ const NewSalesComponent = ({
   };
 
   const handleClientRegister = async () => {
+    // This is used only if NTB Investor was used in Sales
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);

@@ -5,7 +5,7 @@ import { InvestorOverviewActions } from "./Actions";
 
 interface CustomTableItemProps extends ITableCustomItem {
   sortedColumns: InvestorAccountsSortColumnType[];
-  handleBuyNewFund?: (item: IInvestorAccountsData) => void;
+  handleSales?: (item: IInvestorAccountsData) => void;
   handleViewAccount?: (item: ITableRowData) => void;
 }
 export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemProps> = ({

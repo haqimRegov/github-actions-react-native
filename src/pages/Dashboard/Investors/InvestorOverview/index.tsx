@@ -10,7 +10,7 @@ import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language, NRIC_AGE_FORMAT } 
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../../data/dictionary";
 import { findDOBFromNric, getAddress, getProductTabType, handleSignatoryFromBE } from "../../../../helpers";
 import { checkClient, clientRegister } from "../../../../network-actions";
-import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../../store";
+import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps, NewSalesState } from "../../../../store";
 import {
   borderBottomGray2,
   centerHV,
@@ -105,9 +105,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const [ageErrorMessage, setAgeErrorMessage] = useState<string | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
-  const [clientCheckData, setClientCheckData] = useState<IEtbCheckData | undefined>(undefined);
+  const [otherInvestorData, setOtherInvestorData] = useState<IEtbCheckData | undefined>(undefined);
   const fullScreenLoader = useRef<boolean>(false);
   const jointClientId = useRef<string>("");
+  const jointEmailRef = useRef<string>("");
+
   const { details, directToAccountOpening, isForceUpdate, isNewSales } = client;
   const { jointHolder, principalHolder } = details!;
 
@@ -156,7 +158,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     }
   };
 
-  const handleSalesPrompt = () => {
+  const handleAccountOpening = () => {
     setPrompt(true);
   };
 
@@ -168,41 +170,99 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     if (newSalesLoading === false || fullScreenLoader.current === true) {
       setNewSalesLoading(true);
       fullScreenLoader.current = fullScreenLoader.current === false && req === undefined;
+
+      const isAccountOpening = req === undefined && item === undefined;
+      let principalEmail: string | undefined = investorData?.email;
+      let jointEmail: string | undefined;
       const principalDob =
         investorData?.dateOfBirth && investorData.idType !== "NRIC"
           ? { dateOfBirth: moment(investorData?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
           : {};
-      const jointDob =
-        jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
-          ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
-          : {};
-      const jointInfo =
-        accountType === 1
-          ? {
-              ...jointDob,
-              id: jointHolder?.id!,
-              idType: jointIdType,
-              name: jointHolder?.name!,
-            }
-          : undefined;
-      const request: IClientRegisterRequest =
-        req !== undefined
-          ? req
-          : {
-              accountType: accountType === 1 ? "Joint" : "Individual",
-              isEtb: ntb === undefined || ntb !== true,
-              isNewFundPurchased: false,
-              principalHolder: {
-                ...principalDob,
-                id: investorData?.idNumber!,
-                idType: investorData!.idType,
-                name: investorData?.name!,
-              },
-              jointHolder: jointInfo,
+
+      const request: IClientRegisterRequest = {
+        accountNo: isAccountOpening === false && item !== undefined ? item.accountNo : undefined,
+        accountType: accountType === 1 ? "Joint" : "Individual",
+        isEtb: ntb === undefined || ntb !== true,
+        isNewFundPurchased: false,
+        principalHolder: {
+          ...principalDob,
+          id: investorData?.idNumber!,
+          idType: investorData!.idType,
+          name: investorData?.name!,
+        },
+        jointHolder: undefined,
+      };
+
+      if (isAccountOpening === true) {
+        if (accountType === 1) {
+          // Joint Account Opening, this is always the Joint Holder (the other investor)
+          const jointHolderDob =
+            jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+              ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+              : {};
+
+          const jointHolderIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
+
+          request.jointHolder =
+            accountType === 1
+              ? {
+                  ...jointHolderDob,
+                  id: jointHolder?.id!,
+                  idType: jointHolderIdType as TypeClientID,
+                  name: jointHolder?.name!,
+                }
+              : undefined;
+
+          jointEmail = jointEmailRef.current;
+        }
+      } else if (isAccountOpening === false && item !== undefined) {
+        const isJointAccount = isNotEmpty(item.jointName);
+
+        request.isNewFundPurchased = true;
+
+        if (isJointAccount === true) {
+          if (item.accountHolder === "Joint") {
+            // Current Investor is the Joint Holder of the Account
+            request.jointHolder = { ...request.principalHolder };
+
+            jointEmail = principalEmail;
+
+            const accountPrincipalDob =
+              item.dateOfBirth && item.idType !== "NRIC"
+                ? { dateOfBirth: moment(item.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+                : {};
+
+            request.principalHolder = {
+              ...accountPrincipalDob,
+              id: item.idNumber,
+              idType: item.idType as TypeClientID,
+              name: item.name!,
             };
+
+            principalEmail = item.email;
+          } else {
+            // Current Investor is the Principal Holder of the Account
+            const accountJointDob =
+              item.jointDateOfBirth && item.jointIdType !== "NRIC"
+                ? { dateOfBirth: moment(item.jointDateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+                : {};
+
+            request.jointHolder = {
+              ...accountJointDob,
+              id: item.jointIdNumber,
+              idType: item.jointIdType as TypeClientID,
+              name: item.jointName!,
+            };
+
+            jointEmail = item.jointEmail;
+          }
+        }
+      }
+
       const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation);
       setNewSalesLoading(false);
       fullScreenLoader.current = false;
+
       if (clientResponse !== undefined) {
         const { data, error } = clientResponse;
         if (error === null && data !== null) {
@@ -211,9 +271,10 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             Alert.alert("Payment Method and/or Fund Type is null");
             return undefined;
           }
+
           let riskInfo: IRiskProfile | undefined;
           if (isNtb !== true && isNotEmpty(data.result.riskInfo)) {
-            riskInfo = data.result.riskInfo;
+            riskInfo = { ...data.result.riskInfo! };
             addRiskScore({
               ...riskAssessment,
               appetite: data.result.riskInfo!.appetite,
@@ -225,27 +286,33 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             });
           }
 
-          const fundType = item !== undefined ? getProductTabType(item.fundType) : newSales.accountDetails.fundType;
-          const checkAmp = item !== undefined && item.fundType === "AMP" ? { ampDetails: item.ampDetails } : {};
-          updateNewSales({
+          const updatedNewSales: NewSalesState = {
             ...newSales,
             investorProfile: {
               ...newSales.investorProfile,
               principalClientId: investorData!.clientId,
               jointClientId: jointClientId.current,
             },
-            riskInfo: riskInfo,
-            accountDetails: {
+            riskInfo: { ...newSales.riskInfo, ...riskInfo },
+          };
+
+          if (isAccountOpening === false && item !== undefined) {
+            const fundType = getProductTabType(item.fundType);
+            const checkAmp = item.fundType === "AMP" ? { ampDetails: item.ampDetails } : {};
+
+            updatedNewSales.accountDetails = {
               ...newSales.accountDetails,
-              accountNo: item !== undefined ? item.accountNo : newSales.accountDetails.accountNo,
-              authorisedSignatory: item !== undefined ? handleSignatoryFromBE(item.authorisedSignatory) : "",
+              accountNo: item.accountNo,
+              authorisedSignatory: handleSignatoryFromBE(item.authorisedSignatory),
               fundType: fundType,
-              isRecurring: item !== undefined ? item.isRecurring : newSales.accountDetails.isRecurring,
-              isEpf: item !== undefined ? item.paymentMethod.toLowerCase() === "epf" : newSales.accountDetails.isEpf,
-              isSyariah: item !== undefined && fundType === "prsDefault" ? item.isSyariah : false,
+              isRecurring: item.isRecurring,
+              isEpf: item.paymentMethod.toLowerCase() === "epf",
+              isSyariah: fundType === "prsDefault" ? item.isSyariah : false,
               ...checkAmp,
-            },
-          });
+            };
+          }
+          updateNewSales(updatedNewSales);
+
           const resetJointInfo =
             accountType !== 1 &&
             (jointHolder?.name !== "" || jointHolder?.country !== "" || jointHolder?.dateOfBirth !== "" || jointHolder?.id !== "");
@@ -286,17 +353,13 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             accountHolder: accountType === 1 ? "Joint" : "Principal",
           });
           addAccountType(accountType === 1 || data.result.jointHolder !== null ? "Joint" : "Individual");
-          const updatedEmailPrincipal = isNtb !== true ? { emailAddress: investorData?.email } : {};
-          const updatedEmailJoint = isNtb !== true && accountType === 1 ? { emailAddress: investorData?.email } : {};
-          const accountJointEmail = item !== undefined && isNotEmpty(item.jointEmail) ? { emailAddress: item.jointEmail } : {};
           const updatedJointInfo: IHolderInfoState =
             accountType === 1 || data.result.jointHolder !== null
               ? {
                   ...personalInfo.joint,
                   contactDetails: {
                     ...personalInfo.joint?.contactDetails,
-                    ...updatedEmailJoint,
-                    ...accountJointEmail,
+                    emailAddress: jointEmail,
                   },
                   personalDetails: {
                     ...personalInfo.joint?.personalDetails,
@@ -319,7 +382,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               ...personalInfo.principal,
               contactDetails: {
                 ...personalInfo.principal?.contactDetails,
-                ...updatedEmailPrincipal,
+                emailAddress: principalEmail,
               },
               personalDetails: {
                 ...personalInfo.principal?.personalDetails,
@@ -333,6 +396,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             joint: updatedJointInfo,
           });
           jointClientId.current = "";
+          jointEmailRef.current = "";
           if (accountType !== 1 && req === undefined) {
             setPrompt(false);
             updateInvestors({ ...investors, backToInvestorOverview: true });
@@ -359,9 +423,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     return undefined;
   };
 
-  const handleCheckClient = async (req?: IEtbCheckRequest, holder?: TypeAccountHolder): Promise<boolean | string> => {
+  const handleCheckClient = async (req?: IEtbCheckRequest, currentInvestorHolder?: TypeAccountHolder): Promise<boolean | string> => {
     if (newSalesLoading === false) {
       setNewSalesLoading(true);
+      // If req and currentInvestorHolder is undefined, then it's AO
+      const isAccountOpening = req === undefined && currentInvestorHolder === undefined;
       const request: IEtbCheckRequest =
         req === undefined
           ? {
@@ -382,6 +448,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               name: req.name,
             };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      // This is for AO, clientCheck is always for Joint Holder
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
         if (error === null && data !== null) {
@@ -396,8 +463,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           if (data.result.message === "ETB") {
             if (data.result.forceUpdate === false) {
               jointClientId.current = data.result.clientId!;
+              // This is only for Sales
               const checkClientHolder =
-                holder === "Principal"
+                currentInvestorHolder === "Principal"
                   ? {
                       principalHolder: {
                         ...principalHolder,
@@ -410,26 +478,10 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                         name: jointHolder!.name!.trim(),
                       },
                     };
-              const checkPersonalInfo =
-                holder === "Principal"
-                  ? {
-                      principal: {
-                        ...personalInfo.principal,
-                        contactDetails: {
-                          ...personalInfo.principal?.contactDetails,
-                          emailAddress: data.result.emailAddress,
-                        },
-                      },
-                    }
-                  : {
-                      joint: {
-                        ...personalInfo.joint,
-                        contactDetails: {
-                          ...personalInfo.joint?.contactDetails,
-                          emailAddress: data.result.emailAddress,
-                        },
-                      },
-                    };
+              if (isAccountOpening === true) {
+                jointEmailRef.current = data.result.emailAddress;
+              }
+
               updateClient({
                 ...client,
                 accountList: data.result.accounts!,
@@ -438,17 +490,17 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   ...checkClientHolder,
                 },
               });
-              addPersonalInfo({
-                ...personalInfo,
-                ...checkPersonalInfo,
-              });
+
               return true;
             }
+            // This is for Force Update
             const nricDOB =
               jointHolder?.dateOfBirth === "" && jointHolder.idType === "NRIC"
                 ? moment(findDOBFromNric(jointHolder.id), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT)
                 : jointHolder?.dateOfBirth;
-            setClientCheckData({
+
+            // This is for Force Update
+            setOtherInvestorData({
               ...data.result,
               dateOfBirth: req !== undefined ? req.dateOfBirth : nricDOB,
               name: req !== undefined ? req.name! : jointHolder!.name!,
@@ -481,12 +533,12 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         ...details,
         principalHolder: {
           ...details!.principalHolder,
-          dateOfBirth: clientCheckData !== undefined ? clientCheckData?.dateOfBirth! : investorData.dateOfBirth,
-          clientId: clientCheckData !== undefined ? clientCheckData!.clientId : investorData.clientId,
-          id: clientCheckData !== undefined ? clientCheckData?.id : investorData.idNumber,
-          name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
+          dateOfBirth: otherInvestorData !== undefined ? otherInvestorData?.dateOfBirth! : investorData.dateOfBirth,
+          clientId: otherInvestorData !== undefined ? otherInvestorData!.clientId : investorData.clientId,
+          id: otherInvestorData !== undefined ? otherInvestorData?.id : investorData.idNumber,
+          name: otherInvestorData !== undefined ? otherInvestorData?.name : investorData.name,
         },
-        initId: clientCheckData !== undefined ? clientCheckData?.initId : investorData.initId,
+        initId: otherInvestorData !== undefined ? otherInvestorData?.initId : investorData.initId,
         accountHolder: investorData.accountHolder,
       });
       addPersonalInfo({
@@ -496,21 +548,23 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           personalDetails: {
             ...personalInfo.principal?.personalDetails,
             dateOfBirth:
-              clientCheckData !== undefined
-                ? moment(clientCheckData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
+              otherInvestorData !== undefined
+                ? moment(otherInvestorData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
                 : moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
-            name: clientCheckData !== undefined ? clientCheckData?.name : investorData.name,
+            name: otherInvestorData !== undefined ? otherInvestorData?.name : investorData.name,
           },
         },
       });
       const checkDeclarations =
-        isNotEmpty(clientCheckData) && isArrayNotEmpty(clientCheckData!.declarationRequired) ? clientCheckData!.declarationRequired : [];
+        isNotEmpty(otherInvestorData) && isArrayNotEmpty(otherInvestorData!.declarationRequired)
+          ? otherInvestorData!.declarationRequired
+          : [];
       const checkInvestorDeclarations = isArrayNotEmpty(investorData.declarationRequired) ? investorData.declarationRequired : [];
       const declarationToUse = isArrayNotEmpty(checkDeclarations) ? checkDeclarations : checkInvestorDeclarations;
 
       let fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData!.address) ? getAddress(investorData!.address) : undefined;
-      if (clientCheckData !== undefined && isNotEmpty(clientCheckData.address)) {
-        fatcaAddress = getAddress(clientCheckData!.address!);
+      if (otherInvestorData !== undefined && isNotEmpty(otherInvestorData.address)) {
+        fatcaAddress = getAddress(otherInvestorData!.address!);
       }
 
       updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: declarationToUse });
@@ -531,7 +585,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     }
   };
 
-  const handleBuyNewFund = async (item: IInvestorAccountsData) => {
+  const handleSales = async (item: IInvestorAccountsData) => {
     const updatedAccountType = item.jointName === null ? "Individual" : "Joint";
     const jointInfo =
       item.jointName !== null
@@ -642,7 +696,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
 
   const content: JSX.Element = (
     <AccountListing
-      handleBuyNewFund={handleBuyNewFund}
+      handleSales={handleSales}
       handleViewAccount={handleViewAccount}
       updateCurrentInvestor={updateCurrentInvestor}
       {...tabProps}
@@ -659,7 +713,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const headerData: IInvestorAccountHeaderProps = {
     email: investorData !== undefined ? investorData.email : undefined,
     emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
-    handleNewSales: handleSalesPrompt,
+    handleAccountOpening: handleAccountOpening,
     handleViewProfile: handleViewProfile,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
@@ -667,7 +721,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   };
 
   const checkInvestorName = investorData !== undefined ? investorData.name : "-";
-  const checkName = investorData !== undefined && clientCheckData !== undefined ? clientCheckData.name : checkInvestorName;
+  const checkName = investorData !== undefined && otherInvestorData !== undefined ? otherInvestorData.name : checkInvestorName;
   const promptLabel = `${INVESTOR_ACCOUNTS.PROMPT_LABEL} ${checkName}.`;
   const modalStyle = fullScreenLoader.current === false ? undefined : { backgroundColor: colorBlack._1_4 };
   const checkDirectToAccountOpening = isForceUpdate === true ? INVESTOR_ACCOUNTS.BUTTON_GO_BACK : INVESTOR_ACCOUNTS.BUTTON_CANCEL;

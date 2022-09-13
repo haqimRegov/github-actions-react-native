@@ -8,19 +8,19 @@ import { borderBottomGray2, fs12BoldBlue1, px, sh48, sw16, sw200, sw8 } from "..
 const { INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface InvestorOverviewActionContentProps extends ITableOptions {
-  handleBuyNewFund?: (item: IInvestorAccountsData) => void;
+  handleSales?: (item: IInvestorAccountsData) => void;
   handleViewAccount?: (item: ITableRowData) => void;
 }
 
 export const InvestorOverviewActionContent: FunctionComponent<InvestorOverviewActionContentProps> = ({
   data,
-  handleBuyNewFund,
+  handleSales,
   handleViewAccount,
   onClose,
 }: InvestorOverviewActionContentProps) => {
   const handleBuy = () => {
-    if (handleBuyNewFund !== undefined) {
-      handleBuyNewFund(data.rawData as unknown as IInvestorAccountsData);
+    if (handleSales !== undefined) {
+      handleSales(data.rawData as unknown as IInvestorAccountsData);
     }
     onClose();
   };

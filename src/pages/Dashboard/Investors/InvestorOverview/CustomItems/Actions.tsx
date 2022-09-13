@@ -8,13 +8,13 @@ import { InvestorOverviewActionContent } from "../Actions";
 
 declare interface IInvestorOverviewActions {
   item: ITableRowData;
-  handleBuyNewFund?: (item: IInvestorAccountsData) => void;
+  handleSales?: (item: IInvestorAccountsData) => void;
   handleViewAccount?: (item: ITableRowData) => void;
 }
 
 export const InvestorOverviewActions: FunctionComponent<IInvestorOverviewActions> = ({
   item,
-  handleBuyNewFund,
+  handleSales,
   handleViewAccount,
 }: IInvestorOverviewActions) => {
   return (
@@ -31,12 +31,7 @@ export const InvestorOverviewActions: FunctionComponent<IInvestorOverviewActions
         }}
         RenderContent={({ hide }) => {
           return (
-            <InvestorOverviewActionContent
-              data={item}
-              onClose={hide}
-              handleBuyNewFund={handleBuyNewFund}
-              handleViewAccount={handleViewAccount}
-            />
+            <InvestorOverviewActionContent data={item} onClose={hide} handleSales={handleSales} handleViewAccount={handleViewAccount} />
           );
         }}
       />

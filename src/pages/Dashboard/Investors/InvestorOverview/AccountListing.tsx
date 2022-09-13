@@ -30,7 +30,7 @@ const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 interface AccountListingProps {
   currentInvestor?: IInvestorData;
   directToAccountOpening: boolean;
-  handleBuyNewFund: (item: IInvestorAccountsData) => void;
+  handleSales: (item: IInvestorAccountsData) => void;
   handleViewAccount: (account: ICurrentAccount) => void;
   investorData?: IInvestor;
   isFetching: boolean;
@@ -52,7 +52,7 @@ interface AccountListingProps {
 export const AccountListing: FunctionComponent<AccountListingProps> = ({
   currentInvestor,
   directToAccountOpening,
-  handleBuyNewFund,
+  handleSales,
   handleViewAccount,
   investorData,
   isFetching,
@@ -285,7 +285,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
         RenderCustomItem={(data: ITableCustomItem) => (
           <InvestorDetailsCustomTableItem
             {...data}
-            handleBuyNewFund={handleBuyNewFund}
+            handleSales={handleSales}
             handleViewAccount={handleView}
             sortedColumns={sortedColumns}
           />

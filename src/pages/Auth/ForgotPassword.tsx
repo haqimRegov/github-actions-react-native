@@ -131,6 +131,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           setError={setInput1Error}
           setInputNRIC={setInputNRIC}
           subheading={LOGIN.SUBHEADING_RECOVERY}
+          setPage={setRootPage}
         />
       );
       break;
@@ -147,6 +148,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           setError={setInput1Error}
           setInputOTP={setInputOTP}
           setResendTimer={setResendTimer}
+          setPage={setRootPage}
         />
       );
       break;

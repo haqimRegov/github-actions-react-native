@@ -41,9 +41,5 @@ export const AuthPage: FunctionComponent<LoginPageProps> = ({ navigation }: Logi
     content = <ForgotPassword setRootPage={setPage} setPasswordRecovery={setPasswordRecovery} />;
   }
 
-  return (
-    <LoginBackground page={page} setPage={setPage}>
-      {content}
-    </LoginBackground>
-  );
+  return <LoginBackground>{content}</LoginBackground>;
 };

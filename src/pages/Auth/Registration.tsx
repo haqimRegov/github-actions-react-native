@@ -132,6 +132,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
           inputNRIC={inputNRIC}
           setError={setInput1Error}
           setInputNRIC={setInputNRIC}
+          setPage={setRootPage}
         />
       );
       break;
@@ -147,6 +148,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
           setError={setInput1Error}
           setInputOTP={setInputOTP}
           setResendTimer={setResendTimer}
+          setPage={setRootPage}
         />
       );
       break;

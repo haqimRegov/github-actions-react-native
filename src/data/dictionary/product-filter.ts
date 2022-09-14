@@ -38,6 +38,11 @@ export const FILTER_FUND_TYPE_NEW = [
   { label: "Money Market", value: "Money Market" },
 ];
 
+export const FILTER_FUND_TYPE_AMP = [
+  { label: "Conservative", value: "Conservative" },
+  { label: "Moderate", value: "Moderate" },
+];
+
 export const FILTER_RISK_CATEGORY = [
   { label: "Low", value: "Low" },
   { label: "Medium", value: "Medium" },

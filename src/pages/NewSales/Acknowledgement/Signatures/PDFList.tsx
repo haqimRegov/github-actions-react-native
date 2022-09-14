@@ -55,8 +55,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   updateReceipts,
 }: PDFListProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { clientId } = details!.principalHolder!;
   const { accountDetails, transactionType } = newSales;
+  const { authorisedSignatory } = accountDetails;
+  const { clientId } = details!.principalHolder!;
   const { emailAddress } = personalInfo!.principal!.contactDetails!;
   const fetching = useRef<boolean>(false);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -113,6 +114,19 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const handleBack = () => {
     handleNextStep("TermsAndConditions");
+  };
+
+  const checkSignatory = () => {
+    switch (authorisedSignatory) {
+      case "Principal Applicant":
+        return `${details!.principalHolder!.name} `;
+      case "Both Applicants":
+        return `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
+      case "Either Applicant":
+        return `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_OR} ${details!.jointHolder!.name} `;
+      default:
+        return `${details!.principalHolder!.name} `;
+    }
   };
 
   const handleContinue = () => {
@@ -220,10 +234,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   const incompleteIndex = receipts !== undefined ? receipts.findIndex((receipt) => receipt.completed !== true) : 0;
   const buttonDisabled = incompleteIndex !== -1;
 
-  const toSignLabel =
+  const checkSignLabel =
     accountType === "Individual"
       ? `${details!.principalHolder!.name} `
       : `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
+
+  const toSignLabel = transactionType === "Sales" || transactionType === "Sales-NS" ? checkSignatory() : checkSignLabel;
 
   const signIcon = accountType === "Individual" ? "account" : "account-joint";
 

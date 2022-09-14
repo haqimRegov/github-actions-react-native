@@ -3,7 +3,13 @@ import { View } from "react-native";
 
 import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
-import { FILTER_EPF_LABEL, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
+import {
+  FILTER_EPF_LABEL,
+  FILTER_FUND_TYPE_AMP,
+  FILTER_ISSUING_HOUSE,
+  FILTER_RISK_CATEGORY,
+  FILTER_TYPE,
+} from "../../../../../data/dictionary";
 import { borderBottomGray2, flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
 import { isNotEmpty } from "../../../../../utils";
 
@@ -16,12 +22,11 @@ interface AMPFilterProps {
 }
 
 export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters, filter, setFilter }: AMPFilterProps) => {
-  const { epfApproved, issuingHouse, riskCategory, shariahApproved } = filter;
+  const { epfApproved, fundType, issuingHouse, riskCategory, shariahApproved } = filter;
 
   const handleEpf = (value: string) => {
     const filterClone = { ...filter };
-    const tmp = [...epfApproved!];
-    tmp.splice(0, tmp.includes(value) ? 1 : 0, tmp.includes(value) ? "" : value);
+    const tmp = [...epfApproved!].includes(value) ? [] : [value];
     filterClone.epfApproved = tmp;
     setFilter(filterClone);
   };
@@ -36,13 +41,21 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters,
 
   const handleShariah = (value: string) => {
     const filterClone = { ...filter };
-    const checkConventionalType = value === "Conventional" ? ["No"] : [];
-    const checkShariah = value === "Shariah" ? ["Yes"] : checkConventionalType;
+    const checkConventionalExisting =
+      isNotEmpty(shariahApproved) && shariahApproved!.length > 0 && shariahApproved![0] === "No" ? [] : ["No"];
+    const checkConventionalType = value === "Conventional" ? checkConventionalExisting : [];
+    const checkShariahExisting = isNotEmpty(shariahApproved) && shariahApproved!.length > 0 && shariahApproved![0] === "Yes" ? [] : ["Yes"];
+    const checkShariah = value === "Shariah" ? checkShariahExisting : checkConventionalType;
     filterClone.shariahApproved = checkShariah;
     setFilter(filterClone);
   };
 
-  const handleAMPCategory = () => {};
+  const handleAMPCategory = (value: string) => {
+    const filterClone = { ...filter };
+    const tmp = [...fundType!].includes(value) ? [] : [value];
+    filterClone.fundType = tmp;
+    setFilter(filterClone);
+  };
 
   const riskCategoryList = FILTER_RISK_CATEGORY.map((eachRisk: ICheckBoxWithSubLabel) => {
     return { label: eachRisk.label };
@@ -57,7 +70,6 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters,
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
   const checkEpfValue = isNotEmpty(epfApproved) && epfApproved!.length > 0 ? epfApproved![0] : "";
 
-  // TODO Update on confirmation from BE for AMP Category filter
   return (
     <View style={px(sw24)}>
       <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16BoldGray6} text={PRODUCT_FILTER.LABEL_FILTER_AMP} />
@@ -65,16 +77,13 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters,
         <View style={{ width: sw360 }}>
           <SingleSelectPills
             direction="row"
-            header={"AMP Category"}
-            labels={[
-              { label: "Conservative", value: "Conservative" },
-              { label: "Moderate", value: "Moderate" },
-            ]}
+            header={PRODUCT_FILTER.LABEL_AMP_CATEGORY}
+            labels={FILTER_FUND_TYPE_AMP}
             labelStyle={{ lineHeight: sh24 }}
             space={sw8}
             spaceToHeader={sh4}
             onSelect={handleAMPCategory}
-            value={""}
+            value={fundType![0] || ""}
           />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />

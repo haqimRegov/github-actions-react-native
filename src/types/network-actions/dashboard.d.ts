@@ -10,6 +10,7 @@ declare interface ITransactionsAvailableFilterResponse {
 }
 
 declare interface IDashboardRequest {
+  isTermsAgreed?: boolean;
   filter: IDashboardFilter[];
   hardcopyFilter?: boolean;
   page: number;

@@ -717,6 +717,7 @@ const userLogin = gql`
           secretAccessKey
           sessionToken
           isMultiUtmc
+          isTermsAgreed
           events {
             checkbox
             description

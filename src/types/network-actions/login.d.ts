@@ -19,6 +19,7 @@ declare interface ILoginResult {
   identityId: string;
   inboxCount: string;
   isExpired: boolean;
+  isTermsAgreed: boolean;
   isMultiUtmc: boolean;
   licenseCode: string;
   licenseType: string[];

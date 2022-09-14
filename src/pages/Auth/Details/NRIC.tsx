@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_NRIC_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs12BoldBlue1, fs24RegGray6, fs40BoldGray6, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs12BoldBlue8, fs24RegGray6, fs40BoldGray6, sh16, sh32, sh40, sh56, sh8, sw112, sw144, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -17,6 +17,7 @@ interface NRICDetailsProps {
   inputNRIC: string;
   setError: (value?: string) => void;
   setInputNRIC: (value: string) => void;
+  setPage: (TypeLoginPages) => void;
   subheading?: string;
 }
 
@@ -28,6 +29,7 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
   inputNRIC,
   setError,
   setInputNRIC,
+  setPage,
   subheading,
 }: NRICDetailsProps) => {
   const handleValidateNRIC = () => {
@@ -41,6 +43,10 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
     if (isNumber(value) || value === "") {
       setInputNRIC(value);
     }
+  };
+
+  const handleBackToLogin = () => {
+    setPage("LOGIN");
   };
 
   return (
@@ -69,10 +75,16 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
         text={LOGIN.BUTTON_CONTINUE}
         withDebounce={true}
       />
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh16} />
       {handleExistingLogin !== undefined ? (
-        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={fs12BoldBlue1} withUnderline={true} />
-      ) : null}
+        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ ...fs12BoldBlue8, marginLeft: sw112 }} />
+      ) : (
+        <LinkText
+          onPress={handleBackToLogin}
+          text={LOGIN.LINK_BACK_TO_LOGIN}
+          style={{ ...fs12BoldBlue8, marginLeft: sw144, marginTop: sh16 }}
+        />
+      )}
     </View>
   );
 };

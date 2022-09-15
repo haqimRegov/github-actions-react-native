@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "Kenanga app logo-20@1x.png",
+      "filename" : "ipadNotification20.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "Kenanga app logo-20@2x.png",
+      "filename" : "ipadSpotlight40.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "Kenanga app logo-29@1x.png",
+      "filename" : "ipadSettings29.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "Kenanga app logo-29@2x.png",
+      "filename" : "ipadSettings58.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "Kenanga app logo-40@1x.png",
+      "filename" : "ipadSpotlight40 1.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "Kenanga app logo-40@2x.png",
+      "filename" : "ipadSpotlight80.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "Kenanga app logo-76@1x.png",
+      "filename" : "ipad76.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "Kenanga app logo-76@2x.png",
+      "filename" : "ipad152.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "Kenanga app logo-83.5@2x.png",
+      "filename" : "ipadPro167.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "Kenanga app logo-1024@1x.png",
+      "filename" : "appstore1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

@@ -18,9 +18,9 @@ import {
   sh44,
   sh56,
   shadow50Black115,
+  sw104,
   sw200,
   sw24,
-  sw94,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
@@ -41,7 +41,7 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
   spaceToBottom,
   spaceToContent,
 }: SideMenuProps) => {
-  const defaultLogoStyle: ImageStyle = { ...imageContain, width: sw94, height: sh40, ...logoStyle };
+  const defaultLogoStyle: ImageStyle = { ...imageContain, width: sw104, height: sh40, ...logoStyle };
   const container: ViewStyle = {
     ...flexRow,
     backgroundColor: colorTransparent,

@@ -24,8 +24,8 @@ import {
   sh64,
   sw1,
   sw16,
-  sw160,
   sw164,
+  sw168,
   sw24,
   sw48,
   sw532,
@@ -110,7 +110,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   }
 
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
-  const logoStyle: ImageStyle = { ...imageContain, height: sh64, width: sw160 };
+  const logoStyle: ImageStyle = { ...imageContain, height: sh64, width: sw168 };
   const buttonStyle: ViewStyle = { ...border(colorBlue._1, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
 
   // issue with importing scaled size

@@ -2,11 +2,11 @@ import React, { FunctionComponent, useEffect, useRef } from "react";
 import { Animated, Image, ImageStyle, View } from "react-native";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
-import { centerHV, colorWhite, fullHW, imageContain, sh16, sh56, sw120, sw298, sw306 } from "../../styles";
+import { centerHV, colorWhite, fullHW, imageContain, sh16, sh56, sw120, sw298, sw312 } from "../../styles";
 
 export const Splash: FunctionComponent = () => {
   const fade = useRef(new Animated.Value(0)).current;
-  const imageStyle: ImageStyle = { ...imageContain, width: sw306, height: sw120 };
+  const imageStyle: ImageStyle = { ...imageContain, width: sw312, height: sw120 };
   const footerStyle: ImageStyle = { ...imageContain, width: sw298, height: sh16, position: "absolute", bottom: sh56 };
 
   useEffect(() => {

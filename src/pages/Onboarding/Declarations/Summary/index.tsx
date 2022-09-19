@@ -173,7 +173,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           addressInformation: jointAddress,
           declaration: {
             crs: {
-              taxResident: jointTaxResident === -1 ? OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident] : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
+              taxResident: jointTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident] : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
               tin: jointTin,
             },
             fatca: { ...jointFatcaRequest },

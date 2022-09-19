@@ -65,7 +65,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
-    const sortAllFunds = showBy === "all" ? [{ column: "fundAbbr", value: "asc" }] : [];
     const request: IProductListRequest = {
       accountType: accountType.toLowerCase(),
       fundCurrency: filters.fundCurrency || [],
@@ -80,7 +79,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       riskCategory: riskCategory || [],
       search: search,
       showBy: showBy,
-      sort: sortAllFunds,
+      sort: sort,
       tab: "amp",
     };
     const productListResponse: IProductListResponse = await getProductList(request, navigation, setLoading);

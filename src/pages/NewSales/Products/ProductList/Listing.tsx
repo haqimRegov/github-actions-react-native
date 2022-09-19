@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../../../components";
 import { Language, NunitoBold, NunitoRegular } from "../../../../constants";
@@ -357,6 +357,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             onRowSelect={onRowSelect}
             RenderCustomItem={(customItem: ITableCustomItem) => {
               const type = customItem.item.rawData.isSyariah === "Yes" ? "Shariah" : "Conventional";
+              const sortFontFamily: TextStyle = sortedColumns.includes("riskCategory")
+                ? { fontFamily: NunitoBold }
+                : { fontFamily: NunitoRegular };
               switch (customItem.keyName.key) {
                 case "isSyariah":
                   return (
@@ -367,7 +370,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                 case "riskCategory":
                   return (
                     <View style={centerHV}>
-                      <Text style={fs12RegBlue1}>{titleCaseString(customItem.item.rawData.riskCategory as string)}</Text>
+                      <Text style={{ ...fs12RegBlue1, ...sortFontFamily }}>
+                        {titleCaseString(customItem.item.rawData.riskCategory as string)}
+                      </Text>
                     </View>
                   );
                 case "fundCategory":

@@ -385,18 +385,17 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     modalContent = (
       <View style={{ ...centerHV, ...fullHW }}>
         <Prompt
-          handleClose={handleClosePrompt}
-          closable
+          closable={true}
           containerStyle={promptContainerStyle}
           continueDisabled={agreementCheckbox === false ? !agreementCheckbox : false}
           handleContinue={handleLogin}
+          handleClose={handleClosePrompt}
           labelContinue={LOGIN.BUTTON_AGREE}>
           <View>
             <Text style={{ ...alignSelfCenter, ...fs12RegBlue5 }}>{LOGIN.LABEL_IMPORTANT_UPDATES}</Text>
             <Text style={{ ...alignSelfCenter, ...fs24BoldBlue1 }}>{LOGIN.TITLE_AGREEMENT}</Text>
             <CustomSpacer space={sh16} />
             <PDFView style={{ height: sh266, width: sw600 }} resource={DICTIONARY_LINK_PLATFORM_AGREEMENT} resourceType="url" />
-
             <CustomSpacer space={sh24} />
             <CheckBox
               onPress={handleCheckbox}

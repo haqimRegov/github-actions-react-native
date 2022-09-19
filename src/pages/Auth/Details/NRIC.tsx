@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_NRIC_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs12BoldBlue8, fs24RegGray6, fs40BoldGray6, sh16, sh32, sh40, sh56, sh8, sw112, sw144, sw360 } from "../../../styles";
+import { centerVertical, fs12BoldBlue8, fs24RegGray6, fs40BoldGray6, sh32, sh4, sh40, sh72, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -51,9 +51,9 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
 
   return (
     <View>
-      <CustomSpacer space={sh56} />
+      <CustomSpacer space={sh72} />
       <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_WELCOME}</Text>
-      <CustomSpacer space={sh8} />
+      <CustomSpacer space={sh4} />
       <Text style={{ width: sw360, ...fs24RegGray6 }}>{subheading || LOGIN.SUBHEADING_FIRST_TIME}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
@@ -75,16 +75,14 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
         text={LOGIN.BUTTON_CONTINUE}
         withDebounce={true}
       />
-      <CustomSpacer space={sh16} />
-      {handleExistingLogin !== undefined ? (
-        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ ...fs12BoldBlue8, marginLeft: sw112 }} />
-      ) : (
-        <LinkText
-          onPress={handleBackToLogin}
-          text={LOGIN.LINK_BACK_TO_LOGIN}
-          style={{ ...fs12BoldBlue8, marginLeft: sw144, marginTop: sh16 }}
-        />
-      )}
+      <CustomSpacer space={sh32} />
+      <View style={{ ...centerVertical, width: sw360 }}>
+        {handleExistingLogin !== undefined ? (
+          <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ ...fs12BoldBlue8 }} />
+        ) : (
+          <LinkText onPress={handleBackToLogin} text={LOGIN.LINK_BACK_TO_LOGIN} style={{ ...fs12BoldBlue8 }} />
+        )}
+      </View>
     </View>
   );
 };

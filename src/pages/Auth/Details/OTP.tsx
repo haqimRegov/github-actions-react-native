@@ -6,6 +6,8 @@ import { Language, OTP_CONFIG } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
 import {
   borderBottomBlue3,
+  centerHorizontal,
+  centerVertical,
   flexRow,
   fs12BoldBlue8,
   fs12RegGray5,
@@ -13,14 +15,11 @@ import {
   fs40BoldGray6,
   sh16,
   sh32,
+  sh4,
   sh40,
-  sh56,
-  sh8,
-  sw124,
-  sw144,
+  sh72,
   sw360,
   sw4,
-  sw40,
 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
@@ -91,9 +90,9 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
 
   return (
     <View>
-      <CustomSpacer space={sh56} />
+      <CustomSpacer space={sh72} />
       <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_OTP}</Text>
-      <CustomSpacer space={sh8} />
+      <CustomSpacer space={sh4} />
       <Text style={{ ...fs16SemiBoldGray6, width: sw360 }}>{subheading || `${LOGIN.SUBHEADING_OTP} ${email}`}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
@@ -115,7 +114,7 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
         withDebounce={true}
       />
       <CustomSpacer space={sh32} />
-      <View style={{ ...flexRow, marginLeft: sw40 }}>
+      <View style={{ ...flexRow, ...centerHorizontal, width: sw360 }}>
         <Text style={fs12RegGray5}>{LOGIN.LABEL_DID_NOT_GET}</Text>
         <CustomSpacer isHorizontal={true} space={sw4} />
         {resendTimer <= 0 ? (
@@ -124,9 +123,11 @@ export const OTPDetails: FunctionComponent<OTPDetailsProps> = ({
           <Text style={fs12RegGray5}>{`${LOGIN.LABEL_RESEND} ${resendMinutes}:${formattedResendSeconds}`}</Text>
         )}
       </View>
-      <View style={{ ...borderBottomBlue3, marginRight: sw124, marginTop: sh16, marginBottom: sh16 }} />
-      <View>
-        <LinkText onPress={handleBackToLogin} text={LOGIN.LINK_BACK_TO_LOGIN} style={{ ...fs12BoldBlue8, marginLeft: sw144 }} />
+      <CustomSpacer space={sh16} />
+      <View style={{ ...borderBottomBlue3, width: sw360 }} />
+      <CustomSpacer space={sh16} />
+      <View style={{ ...centerVertical, width: sw360 }}>
+        <LinkText onPress={handleBackToLogin} text={LOGIN.LINK_BACK_TO_LOGIN} style={fs12BoldBlue8} />
       </View>
     </View>
   );

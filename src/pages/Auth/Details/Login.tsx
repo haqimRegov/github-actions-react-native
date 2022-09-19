@@ -13,9 +13,9 @@ import {
   sh16,
   sh24,
   sh32,
+  sh4,
   sh40,
-  sh56,
-  sh8,
+  sh72,
   sw128,
   sw360,
   sw4,
@@ -72,9 +72,9 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
   return (
     <Fragment>
       <View>
-        <CustomSpacer space={sh56} />
+        <CustomSpacer space={sh72} />
         <Text style={fs40BoldGray6}>{HEADING}</Text>
-        <CustomSpacer space={sh8} />
+        <CustomSpacer space={sh4} />
         <Text style={{ width: sw360, ...fs24RegGray6 }}>{LOGIN.SUBHEADING_LOGIN}</Text>
         <CustomSpacer space={sh40} />
         <CustomTextInput

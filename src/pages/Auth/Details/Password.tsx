@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, PasswordValidation, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_PASSWORD_MAX_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegGray6, fs40BoldGray6, px, sh24, sh32, sh40, sh56, sh8, sw24, sw360 } from "../../../styles";
+import { fs24RegGray6, fs40BoldGray6, sh32, sh4, sh40, sh72, sw360 } from "../../../styles";
 import { isPassword } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -52,9 +52,9 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
 
   return (
     <View>
-      <CustomSpacer space={sh56} />
+      <CustomSpacer space={sh72} />
       <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_PASSWORD}</Text>
-      <CustomSpacer space={sh8} />
+      <CustomSpacer space={sh4} />
       <Text style={{ width: sw360, ...fs24RegGray6 }}>{subheading || LOGIN.SUBHEADING_PASSWORD}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
@@ -68,9 +68,7 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
         secureTextEntry={showPassword}
         value={inputNewPassword}
       />
-      <View style={px(sw24)}>
-        <PasswordValidation password={inputNewPassword} />
-      </View>
+      <PasswordValidation password={inputNewPassword} />
       <CustomTextInput
         error={error2}
         keyboardType="default"
@@ -79,7 +77,7 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
         onChangeText={setInputRetypePassword}
         rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
         secureTextEntry={showPassword}
-        spaceToTop={sh24}
+        spaceToTop={sh32}
         value={inputRetypePassword}
       />
       <CustomSpacer space={sh32} />

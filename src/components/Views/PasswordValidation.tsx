@@ -12,9 +12,9 @@ import {
   colorWhite,
   flexRow,
   fs12RegGray5,
-  sh8,
+  sh12,
+  sh4,
   sw1,
-  sw11,
   sw16,
   sw8,
 } from "../../styles";
@@ -34,11 +34,11 @@ export const PasswordValidation: FunctionComponent<PasswordValidationProps> = ({
         const iconBackground = valid ? colorGreen._1 : colorWhite._1;
         return (
           <Fragment key={index}>
-            <CustomSpacer space={sh8} />
+            <CustomSpacer space={sh4} />
             <View style={{ ...centerVertical, ...flexRow }}>
               <View style={{ ...centerHV, height: sw16, width: sw16 }}>
-                <View style={{ ...centerHV, ...circleBorder(sw11, sw1, iconBorder, iconBackground) }}>
-                  <IcoMoon color={iconColor} name="check-v2" size={sh8} />
+                <View style={{ ...centerHV, ...circleBorder(sw16, sw1, iconBorder, iconBackground) }}>
+                  <IcoMoon color={iconColor} name="check-v2" size={sh12} />
                 </View>
               </View>
               <CustomSpacer isHorizontal={true} space={sw8} />

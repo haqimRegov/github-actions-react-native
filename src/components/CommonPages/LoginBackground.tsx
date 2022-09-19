@@ -1,7 +1,8 @@
-import React, { Fragment, ReactNode, version } from "react";
+import React, { Fragment, ReactNode } from "react";
 import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { version } from "../../../package.json";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_PLATFORM_AGREEMENT, DICTIONARY_LINK_PRIVACY } from "../../data/dictionary";
@@ -19,16 +20,10 @@ import {
   scaleHeight,
   sh32,
   sh64,
-  sw1,
-  sw16,
-  sw160,
-  sw164,
   sw168,
-  sw24,
-  sw48,
+  sw428,
   sw532,
   sw56,
-  sw72,
   sw8,
 } from "../../styles";
 import { LinkTextGroup, LinkTextProps } from "../Touchables";
@@ -51,10 +46,6 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
     RNInAppBrowser.openLink(DICTIONARY_LINK_PLATFORM_AGREEMENT);
   };
 
-  // const handleTermsAndConditions = () => {
-  //   LinkUtils.openLink(DICTIONARY_LINK_TERMS);
-  // };
-
   // TODO Module 1A will only support English language
   // const topLinks: LinkTextProps[] = [
   //   {
@@ -69,12 +60,6 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
   //   },
   // ];
 
-  // const agentOnboardingLink = {
-  //   onPress: handleAgentOnboarding,
-  //   text: LOGIN.LINK_AGENT_ONBOARDING,
-  //   style: fs12SemiBoldBlue1,
-  // };
-
   const bottomLinks: LinkTextProps[] = [
     {
       onPress: handlePlatformAgreement,
@@ -88,13 +73,8 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
     },
   ];
 
-  // if (page === "LOGIN") {
-  //   bottomLinks.push(agentOnboardingLink);
-  // }
-
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
   const logoStyle: ImageStyle = { ...imageContain, height: sh64, width: sw168 };
-  const buttonStyle: ViewStyle = { ...border(colorBlue._1, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
 
   // issue with importing scaled size
   const bottomSpace = scaleHeight(24) + bottom;
@@ -115,19 +95,16 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
                 <TouchableWithoutFeedback>
                   <Image source={LocalAssets.logo.kenangaBrand} style={logoStyle} />
                 </TouchableWithoutFeedback>
-                {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-                  <LinkTextGroup links={[]} spaceToDivider={sw4} />
-                </View> */}
-                <CustomSpacer isHorizontal={true} space={sw48} />
+                <CustomSpacer isHorizontal={true} space={sw56} />
               </View>
               {children}
               <CustomFlexSpacer />
               <View style={flexRow}>
                 <LinkTextGroup links={bottomLinks} style={{ minHeight: sh32 }} spaceToDivider={sw8} />
               </View>
-              <View style={flexRow}>
+              <View style={{ ...flexRow, width: sw428 }}>
                 <TextSpaceArea spaceToBottom={bottomSpace} style={fs10RegGray5} text={LOGIN.FOOTER_KIB} />
-                <CustomSpacer isHorizontal space={sw72} />
+                <CustomFlexSpacer />
                 <TextSpaceArea spaceToBottom={bottomSpace} style={fs10RegGray3} text={`Build Version ${version}`} />
               </View>
             </View>

@@ -3,7 +3,7 @@ import { TextStyle } from "react-native";
 import { NunitoBold, NunitoRegular, NunitoSemiBold } from "../constants/fonts";
 import { colorBlack, colorBlue, colorGray, colorRed, colorWhite, colorYellow } from "./colors";
 import { scaleHeight } from "./scaler";
-import { sh10, sh12, sh14, sh16, sh18, sh20, sh24, sh32, sh36, sh40 } from "./sizes";
+import { sh10, sh12, sh14, sh16, sh18, sh20, sh24, sh32, sh36, sh40, sh48 } from "./sizes";
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsAlignLeft: TextStyle = { textAlign: "left" };
@@ -549,5 +549,5 @@ export const fs40BoldGray6: TextStyle = {
   color: colorGray._6,
   fontFamily: NunitoBold,
   fontSize: sh40,
-  lineHeight: scaleHeight(40 * 1.03),
+  lineHeight: sh48,
 };

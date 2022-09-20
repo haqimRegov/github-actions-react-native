@@ -1954,6 +1954,7 @@ export const english = {
       LABEL_ADD_SIGN: "Add Signature",
       LABEL_ADVISER_SIGNATURE: "Adviser's Signature",
       LABEL_AND: "and",
+      LABEL_OR: "or",
       LABEL_INVESTORS_SIGNATURE: "Investor’s Signature",
       LABEL_AGREE: "Agree",
       LABEL_GENERAL_TERMS_AND_CONDITIONS: "General Terms and Conditions",

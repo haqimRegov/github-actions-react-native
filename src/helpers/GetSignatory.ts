@@ -12,14 +12,15 @@ export const handleSignatory = (text: string) => {
 };
 
 export const handleSignatoryFromBE = (text: string) => {
-  switch (text) {
-    case "Principal to sign":
+  switch (text.toLowerCase()) {
+    case "principal to sign":
+    case "principal applicant to sign":
       return "Principal Applicant";
-    case "Both Applicants to sign":
-    case "Both to sign":
+    case "both applicants to sign":
+    case "both to sign":
       return "Both Applicants";
-    case "Either Applicant to sign":
-    case "Either to sign":
+    case "either applicant to sign":
+    case "either to sign":
       return "Either Applicant";
     default:
       return "Principal Applicant";

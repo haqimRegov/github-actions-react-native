@@ -29,7 +29,6 @@ import {
   fs24BoldGray6,
   px,
   sh16,
-  sh24,
   sh32,
   sh56,
   sw16,
@@ -254,7 +253,7 @@ const ChangePasswordComponent: FunctionComponent<ChangePasswordProps> = ({ confi
             onChangeText={setInputRetypePassword}
             rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
             secureTextEntry={showPassword}
-            spaceToTop={sh24}
+            spaceToTop={sh32}
             value={inputRetypePassword}
           />
         </View>

@@ -68,6 +68,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   incomplete,
   isFetching,
   isLogout,
+  isTermsAgreed,
   isNotFiltered,
   navigation,
   resetPendingFilter,
@@ -319,6 +320,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const hardCopyFilter = downloadInitiated === true ? { hardcopyFilter: true } : {};
 
     const request: IDashboardRequest = {
+      isTermsAgreed: !isTermsAgreed,
       tab: pill!,
       page: page,
       search: search,

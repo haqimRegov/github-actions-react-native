@@ -24,6 +24,7 @@ export const TransactionsMapStateToProps = (state: RootState) => ({
   showOpenAccount: state.forceUpdate.showOpenAccount,
   transactions: state.transactions,
   unreadMessages: state.global.unreadMessages,
+  isTermsAgreed: state.global.isTermsAgreed,
 });
 
 export const TransactionsMapDispatchToProps = (dispatch: Dispatch) => {

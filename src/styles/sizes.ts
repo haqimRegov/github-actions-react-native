@@ -82,6 +82,7 @@ export const sh403 = scaleHeight(403);
 export const sh424 = scaleHeight(424);
 export const sh456 = scaleHeight(456);
 export const sh500 = scaleHeight(500);
+export const sh576 = scaleHeight(576);
 export const sh810 = scaleHeight(810);
 export const sh1148 = scaleHeight(1148);
 
@@ -210,6 +211,7 @@ export const sw376 = scaleWidth(376);
 export const sw400 = scaleWidth(400);
 export const sw404 = scaleWidth(404);
 export const sw424 = scaleWidth(424);
+export const sw428 = scaleWidth(428);
 export const sw432 = scaleWidth(432);
 export const sw440 = scaleWidth(440);
 export const sw448 = scaleWidth(448);

@@ -1,18 +1,35 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { Alert, Keyboard, View } from "react-native";
+import { Alert, Keyboard, Text, View, ViewStyle } from "react-native";
 import { isEmulator } from "react-native-device-info";
+import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
-import { Loading, Prompt, RNModal } from "../../components";
+import { CheckBox, CustomSpacer, Loading, Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
-import { ERROR_CODE, ERRORS } from "../../data/dictionary";
+import { DICTIONARY_LINK_PLATFORM_AGREEMENT, ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { getStorageData, removeStorageData, RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
 import { expiredPassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
-import { centerHV, colorWhite, fullHeight, fullHW } from "../../styles";
+import {
+  alignSelfCenter,
+  centerHV,
+  colorWhite,
+  fs12RegBlue5,
+  fs16BoldBlack2,
+  fs24BoldBlue1,
+  fullHeight,
+  fullHW,
+  sh16,
+  sh24,
+  sh266,
+  sh576,
+  sw10,
+  sw600,
+  sw696,
+} from "../../styles";
 import { AlertDialog, Encrypt, maskedString } from "../../utils";
 import { LoginDetails, OTPDetails, PasswordDetails } from "./Details";
 
@@ -40,6 +57,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(OTP_CONFIG.EXPIRY);
+  const [agreementPrompt, setAgreementPrompt] = useState<boolean>(false);
 
   const handleForgotPassword = () => {
     setRootPage("PASSWORD_RECOVERY");
@@ -54,6 +72,18 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
   const handleDone = () => {
     setShowModal(false);
     setRootPage("LOGIN");
+  };
+
+  const [agreementCheckbox, setAgreementCheckbox] = useState<boolean>(false);
+  const promptContainerStyle: ViewStyle = { width: sw696, maxHeight: sh576 };
+
+  const handleCheckbox = () => {
+    setAgreementCheckbox(!agreementCheckbox);
+  };
+
+  const handleClosePrompt = () => {
+    setAgreementCheckbox(false);
+    setAgreementPrompt(false);
   };
 
   const handleLogin = async () => {
@@ -93,55 +123,63 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
               inboxCount,
               isExpired,
               isMultiUtmc,
+              isTermsAgreed,
               licenseCode,
               licenseType,
               name,
               rank,
             } = data.result;
-            await Auth.signIn(inputNRIC, inputPassword);
-            if (isExpired === false) {
-              props.addGlobal({
-                agent: {
-                  category: agentCategory as TypeAgentCategory,
-                  name: name,
-                  email: email,
-                  licenseCode: licenseCode,
-                  licenseType: licenseType,
-                  id: agentId,
-                  branch: branch,
-                  rank: rank,
-                },
-                config: {
-                  identityId: data.result.identityId,
-                  secretAccessKey: data.result.secretAccessKey,
-                  sessionToken: data.result.sessionToken,
-                  accessKeyId: data.result.accessKeyId,
-                },
-                events: events && events.length > 0 ? events : undefined,
-                isMultiUtmc: isMultiUtmc,
-                unreadMessages: inboxCount,
-              });
+            if (isTermsAgreed === false && agreementCheckbox === false) {
               setLoading(false);
-              RNPushNotification.setBadge(inboxCount);
-              await updateStorageData("visited", true);
-              if (checkEmulator === false) {
-                RNPushNotification.requestPermission();
-              }
-              props.resetTransactions();
-
-              if (hideEvent) {
-                await removeStorageData("hideEvent");
-              }
-
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{ name: "Private" }],
-                }),
-              );
+              setAgreementPrompt(true);
             } else {
-              setLoading(false);
-              setRootPage("EXPIRED_PASSWORD");
+              setAgreementPrompt(false);
+              await Auth.signIn(inputNRIC, inputPassword);
+              if (isExpired === false) {
+                props.addGlobal({
+                  agent: {
+                    category: agentCategory as TypeAgentCategory,
+                    name: name,
+                    email: email,
+                    licenseCode: licenseCode,
+                    licenseType: licenseType,
+                    id: agentId,
+                    branch: branch,
+                    rank: rank,
+                  },
+                  config: {
+                    identityId: data.result.identityId,
+                    secretAccessKey: data.result.secretAccessKey,
+                    sessionToken: data.result.sessionToken,
+                    accessKeyId: data.result.accessKeyId,
+                  },
+                  events: events && events.length > 0 ? events : undefined,
+                  isMultiUtmc: isMultiUtmc,
+                  isTermsAgreed: isTermsAgreed,
+                  unreadMessages: inboxCount,
+                });
+                setLoading(false);
+                RNPushNotification.setBadge(inboxCount);
+                await updateStorageData("visited", true);
+                if (checkEmulator === false) {
+                  RNPushNotification.requestPermission();
+                }
+                props.resetTransactions();
+
+                if (hideEvent) {
+                  await removeStorageData("hideEvent");
+                }
+
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: "Private" }],
+                  }),
+                );
+              } else {
+                setLoading(false);
+                setRootPage("EXPIRED_PASSWORD");
+              }
             }
           }
         } else if (error.errorCode === ERROR_CODE.lockedAccount) {
@@ -273,6 +311,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           setError={setInput1Error}
           setInputOTP={setInputOTP}
           setResendTimer={setResendTimer}
+          setPage={setRootPage}
         />
       );
       break;
@@ -306,6 +345,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
           passwordRecovery={passwordRecovery}
           setInputNRIC={setInputNRIC}
           setInputPassword={setInputPassword}
+          setPage={setRootPage}
         />
       );
       break;
@@ -341,12 +381,39 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
         />
       </View>
     );
+  } else if (agreementPrompt) {
+    modalContent = (
+      <View style={{ ...centerHV, ...fullHW }}>
+        <Prompt
+          closable={true}
+          containerStyle={promptContainerStyle}
+          continueDisabled={agreementCheckbox === false ? !agreementCheckbox : false}
+          handleContinue={handleLogin}
+          handleClose={handleClosePrompt}
+          labelContinue={LOGIN.BUTTON_AGREE}>
+          <View>
+            <Text style={{ ...alignSelfCenter, ...fs12RegBlue5 }}>{LOGIN.LABEL_IMPORTANT_UPDATES}</Text>
+            <Text style={{ ...alignSelfCenter, ...fs24BoldBlue1 }}>{LOGIN.TITLE_AGREEMENT}</Text>
+            <CustomSpacer space={sh16} />
+            <PDFView style={{ height: sh266, width: sw600 }} resource={DICTIONARY_LINK_PLATFORM_AGREEMENT} resourceType="url" />
+            <CustomSpacer space={sh24} />
+            <CheckBox
+              onPress={handleCheckbox}
+              toggle={agreementCheckbox}
+              label={LOGIN.LABEL_CHECKBOX_AGREEMENT}
+              style={{ marginLeft: sw10 }}
+              labelStyle={fs16BoldBlack2}
+            />
+          </View>
+        </Prompt>
+      </View>
+    );
   }
 
   return (
     <Fragment>
       {content}
-      <RNModal animationType="fade" visible={loading || lockPrompt || showModal}>
+      <RNModal animationType="fade" visible={loading || lockPrompt || showModal || agreementPrompt}>
         <Fragment>{modalContent}</Fragment>
       </RNModal>
     </Fragment>

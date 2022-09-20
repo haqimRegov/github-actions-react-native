@@ -1210,6 +1210,13 @@ export const english = {
       SUBHEADING_PASSWORD: "Create your password.",
       SUBHEADING_RECOVERY: "Reset your password.",
       TITLE_LOCKED_ACCOUNT: "Please check your email for the OTP to access your account.",
+      LABEL_PLATFORM_AGREEMENT: "Platform Agreement",
+      LABEL_PRIVACY_POLICY: "Privacy Policy",
+      LABEL_IMPORTANT_UPDATES: "Important Updates",
+      TITLE_AGREEMENT: "Kenanga Reach Platform Agreement",
+      LABEL_CHECKBOX_AGREEMENT: "I have read, understood and accepted the above.",
+      BUTTON_AGREE: "I Agree",
+      LABEL_FIRST_TIME_HERE: "First time here?",
     },
     NEW_SALES: {
       BUTTON_CANCEL: "Cancel",

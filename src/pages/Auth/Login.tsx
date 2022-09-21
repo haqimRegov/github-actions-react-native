@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, Keyboard, Text, View, ViewStyle } from "react-native";
 import { isEmulator } from "react-native-device-info";
-import PDFView from "react-native-view-pdf";
+import { WebView } from "react-native-webview";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
@@ -395,7 +395,9 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
             <Text style={{ ...alignSelfCenter, ...fs12RegBlue5 }}>{LOGIN.LABEL_IMPORTANT_UPDATES}</Text>
             <Text style={{ ...alignSelfCenter, ...fs24BoldBlue1 }}>{LOGIN.TITLE_AGREEMENT}</Text>
             <CustomSpacer space={sh16} />
-            <PDFView style={{ height: sh266, width: sw600 }} resource={DICTIONARY_LINK_PLATFORM_AGREEMENT} resourceType="url" />
+            <View style={{ height: sh266, width: sw600 }}>
+              <WebView source={{ uri: DICTIONARY_LINK_PLATFORM_AGREEMENT }} />
+            </View>
             <CustomSpacer space={sh24} />
             <CheckBox
               onPress={handleCheckbox}

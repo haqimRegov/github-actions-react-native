@@ -569,6 +569,10 @@ const submitClientAccountTransactions = gql`
             currency
             amount
           }
+          grandTotalRecurring {
+            currency
+            amount
+          }
           orders {
             orderNumber
             orderDate

@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, Keyboard, Text, View, ViewStyle } from "react-native";
 import { isEmulator } from "react-native-device-info";
-import { WebView } from "react-native-webview";
+import { WebView, WebViewNavigation } from "react-native-webview";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
@@ -44,6 +44,7 @@ interface LoginProps extends GlobalStoreProps {
 
 const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passwordRecovery, setRootPage, ...props }: LoginProps) => {
   const fetching = useRef<boolean>(false);
+  const webViewRef = useRef<WebView | null>(null);
   const [inputNRIC, setInputNRIC] = useState<string>("");
   const [inputOTP, setInputOTP] = useState<string>("");
   const [recoveryEmail, setRecoveryEmail] = useState<string | undefined>(undefined);
@@ -295,6 +296,15 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
     }
   };
 
+  const handleWebViewNavigationStateChange = (newNavState: WebViewNavigation) => {
+    const { url } = newNavState;
+    if (!url) return;
+
+    if ((url === "http://www.kenanga.com.my/pdpa/" || url === "https://www.kenanga.com.my/pdpa/") && webViewRef.current !== null) {
+      webViewRef.current.stopLoading();
+    }
+  };
+
   let content: JSX.Element = <View />;
   const checkHeading = page === "EXPIRED_PASSWORD" ? LOGIN.LABEL_PASSWORD_EXPIRED : undefined;
 
@@ -396,7 +406,12 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
             <Text style={{ ...alignSelfCenter, ...fs24BoldBlue1 }}>{LOGIN.TITLE_AGREEMENT}</Text>
             <CustomSpacer space={sh16} />
             <View style={{ height: sh266, width: sw600 }}>
-              <WebView source={{ uri: DICTIONARY_LINK_PLATFORM_AGREEMENT }} />
+              <WebView
+                incognito={true}
+                onNavigationStateChange={handleWebViewNavigationStateChange}
+                ref={webViewRef}
+                source={{ uri: DICTIONARY_LINK_PLATFORM_AGREEMENT }}
+              />
             </View>
             <CustomSpacer space={sh24} />
             <CheckBox

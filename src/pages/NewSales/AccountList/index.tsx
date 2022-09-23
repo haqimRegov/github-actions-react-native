@@ -7,7 +7,7 @@ import { LocalAssets } from "../../../assets/images/LocalAssets";
 import { ContentPage, CustomSpacer, LabeledTitle, Loading, PromptModal, RNModal } from "../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../../data/dictionary";
-import { getAddress, getProductTabType } from "../../../helpers";
+import { getAddress, getProductTabType, handleSignatoryFromBE } from "../../../helpers";
 import { checkClient, clientRegister } from "../../../network-actions";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../../store";
 import {
@@ -411,6 +411,8 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               isEpf: eachAccount.paymentMethod.toLowerCase() === "epf",
               isRecurring: eachAccount.isRecurring,
               isSyariah: fundType === "prsDefault" ? eachAccount.isSyariah : false,
+              authorisedSignatory:
+                eachAccount.authorisedSignatory !== null ? handleSignatoryFromBE(eachAccount.authorisedSignatory) : "Principal Applicant",
               ...checkAmp,
             },
           });

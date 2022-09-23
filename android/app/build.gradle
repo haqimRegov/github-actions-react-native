@@ -137,8 +137,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         // for react-native-image-crop-picker
         vectorDrawables.useSupportLibrary = true
-        versionCode 200
-        versionName "19.6.3-sit"
+        versionCode 201
+        versionName "19.6.4-sit"
     }
     splits {
         abi {

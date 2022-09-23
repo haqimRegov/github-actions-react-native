@@ -303,7 +303,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             updatedNewSales.accountDetails = {
               ...newSales.accountDetails,
               accountNo: item.accountNo,
-              authorisedSignatory: handleSignatoryFromBE(item.authorisedSignatory),
+              authorisedSignatory:
+                item.authorisedSignatory !== null ? handleSignatoryFromBE(item.authorisedSignatory) : "Principal Applicant",
               fundType: fundType,
               isRecurring: item.isRecurring,
               isEpf: item.paymentMethod.toLowerCase() === "epf",

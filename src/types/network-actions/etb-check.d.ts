@@ -5,6 +5,7 @@ declare interface IAccountList {
   accountNo: string;
   accountType?: TypeAccountChoices;
   ampDetails?: IProduct;
+  authorisedSignatory: string;
   dateOfBirth: string;
   epfDetails: IEpfDetailsState;
   fundType: string;

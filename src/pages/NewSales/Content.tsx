@@ -82,9 +82,9 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
       content = <NewSalesPayment {...newProps} />;
       break;
     default:
-      <View />;
-      break;
+      content = <View />;
   }
+
   return (
     <Fragment>
       {content}

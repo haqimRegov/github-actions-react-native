@@ -472,7 +472,7 @@ export const english = {
       LABEL_RISK_PROFILE: "Risk Profile",
       LABEL_RISK_TYPE: "Type",
       LABEL_SALES_CHARGE: "Sales Charge",
-      LABEL_SERVICING: "Servicing Adviser Name and Code",
+      LABEL_SERVICING: "Adviser Name and Code",
       LABEL_SWIFT_CODE: "Bank Swift Code",
       LABEL_TAXPAYER: "Taxpayer Identification Number",
       LABEL_TERM_ONE_TIME: "One-time payment",

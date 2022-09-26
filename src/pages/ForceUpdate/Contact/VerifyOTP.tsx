@@ -46,6 +46,7 @@ declare interface VerifyOTPProps {
   handleResend: () => void;
   inputEmail: string;
   setEmailOtpSent: (value: boolean) => void;
+  setOtpVerified: (toggle: boolean) => void;
 }
 
 export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
@@ -56,6 +57,7 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
   handleResend,
   inputEmail,
   setEmailOtpSent,
+  setOtpVerified,
 }: VerifyOTPProps) => {
   const inputClientId = details?.principalHolder?.clientId!;
 
@@ -97,6 +99,7 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
         const { data, error } = response;
         if (error === null && data !== null) {
           if (data.result.status === true) {
+            setOtpVerified(true);
             handleNavigate();
           }
         }

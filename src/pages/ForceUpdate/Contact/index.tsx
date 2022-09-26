@@ -31,6 +31,7 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
   const [page, setPage] = useState<"contact-update" | "verify-otp">("contact-update");
   const [inputEmail, setInputEmail] = useState(emailAddress!);
   const [emailError, setEmailError] = useState<string | undefined>(undefined);
+  const [otpVerified, setOtpVerified] = useState<boolean>(false);
 
   const isOtpNeeded = inputEmail !== emailAddress || emailAddress === "" || inputEmail === "";
 
@@ -92,7 +93,9 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
   };
 
   const handleContinue = () => {
-    if (isOtpNeeded === true) {
+    if (isOtpNeeded === false) {
+      setPage("verify-otp");
+    } else if (otpVerified === false) {
       handleEmailVerification();
     } else {
       handleNavigate();
@@ -137,6 +140,7 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
           handleResend={handleEmailVerification}
           inputEmail={inputEmail}
           setEmailOtpSent={setEmailOtpSent}
+          setOtpVerified={setOtpVerified}
         />
       )}
     </Fragment>

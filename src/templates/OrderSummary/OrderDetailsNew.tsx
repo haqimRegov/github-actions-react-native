@@ -120,6 +120,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     {
       label: DASHBOARD_ORDER_DETAILS.LABEL_SERVICING,
       title: transactionDetails.servicingAdviserName,
+      titleStyle: fsTransformNone,
       subtitle: transactionDetails.servicingAdviserCode,
     },
     { label: DASHBOARD_ORDER_DETAILS.LABEL_PROCESSING, title: transactionDetails.kibProcessingBranch, titleStyle: fsTransformNone },

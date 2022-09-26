@@ -5,7 +5,6 @@ export const DICTIONARY_TRANSACTIONS_DATE = [
 
 export const DICTIONARY_TRANSACTIONS_TYPE = [
   { label: "Sales-AO", value: "Sales-AO" },
-  { label: "Sales-NS", value: "Sales-NS" },
   { label: "Sales", value: "Sales" },
   { label: "CR", value: "CR" },
 ];

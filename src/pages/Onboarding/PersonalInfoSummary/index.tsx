@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../constants";
+import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { Joint } from "./Joint";
 import { SummaryJointDetails } from "./JointDetails";
@@ -22,7 +22,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   const { disabledSteps, finishedSteps } = onboarding;
   const { principal, joint } = personalInfo;
   const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.FATCADeclaration);
+    handleNextStep("FATCADeclaration");
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     updatedFinishedSteps.push("PersonalInformation");

@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { ContentPage, CustomSpacer, PromptModal, SignatureUploadWithModal } from "../../../../components";
-import { ONBOARDING_ROUTES } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { ERRORS } from "../../../../data/dictionary";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
@@ -90,7 +89,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.Payment);
+    handleNextStep("Payment");
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     updatedFinishedSteps.push("Acknowledgement");
     const newDisabledStep: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];

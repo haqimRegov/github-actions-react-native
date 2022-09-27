@@ -248,7 +248,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleBack = () => {
-    handleNextStep("ProductRecommendation");
+    handleNextStep("Products");
   };
 
   return (

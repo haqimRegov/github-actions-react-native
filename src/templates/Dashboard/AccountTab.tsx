@@ -35,7 +35,7 @@ interface AccountTabProps {
 const { DASHBOARD_ACCOUNT_TAB, DASHBOARD_PROFILE } = Language.PAGE;
 
 export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: AccountTabProps) => {
-  const { profile, investmentSummary, riskInfo, transactionDetails } = data;
+  const { profile, investmentSummary, transactionDetails } = data;
   const principal = profile[0];
   const { addressInformation } = principal;
 
@@ -64,62 +64,62 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
     );
   }
 
-  const riskDetails: LabeledTitleProps[] = [];
-  if (riskInfo !== null) {
-    riskDetails.push(
-      { label: DASHBOARD_ACCOUNT_TAB.LABEL_RISK_APPETITE, title: riskInfo.appetite, titleStyle: fsTransformNone },
-      { label: DASHBOARD_ACCOUNT_TAB.LABEL_EXPECTED_RANGE_OF_RETURN, title: riskInfo.expectedRange, titleStyle: fsTransformNone },
-      { label: DASHBOARD_ACCOUNT_TAB.LABEL_TYPE, title: riskInfo.type, titleStyle: fsTransformNone },
-      { label: DASHBOARD_ACCOUNT_TAB.LABEL_RISK_PROFILE, title: riskInfo.profile, titleStyle: fsTransformNone },
-    );
-  }
+  // const riskDetails: LabeledTitleProps[] = [];
+  // if (riskInfo !== null) {
+  //   riskDetails.push(
+  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_RISK_APPETITE, title: riskInfo.appetite, titleStyle: fsTransformNone },
+  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_EXPECTED_RANGE_OF_RETURN, title: riskInfo.expectedRange, titleStyle: fsTransformNone },
+  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_TYPE, title: riskInfo.type, titleStyle: fsTransformNone },
+  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_RISK_PROFILE, title: riskInfo.profile, titleStyle: fsTransformNone },
+  //   );
+  // }
 
   const correspondenceAddressSummary: LabeledTitleProps[] = [];
   if (isNotEmpty(addressInformation)) {
     if (isNotEmpty(addressInformation.mailingAddress)) {
       if (isNotEmpty(addressInformation.mailingAddress.address)) {
         const mailingAddressLabel =
-          isNotEmpty(addressInformation!.mailingAddress!.address!.line2) ||
-          isNotEmpty(addressInformation!.mailingAddress!.address!.line3) ||
-          isNotEmpty(addressInformation!.mailingAddress!.address!.line4)
+          isNotEmpty(addressInformation.mailingAddress.address.line2) ||
+          isNotEmpty(addressInformation.mailingAddress.address.line3) ||
+          isNotEmpty(addressInformation.mailingAddress.address.line4)
             ? `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 1`
             : DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS;
 
         correspondenceAddressSummary.push({
           label: mailingAddressLabel,
-          title: addressInformation!.mailingAddress!.address!.line1 || "-",
+          title: addressInformation.mailingAddress.address.line1 || "-",
           titleStyle: fsTransformNone,
         });
 
-        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
+        if (isNotEmpty(addressInformation.mailingAddress.address.line2)) {
           correspondenceAddressSummary.push({
             label: `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 2`,
-            title: addressInformation!.mailingAddress!.address!.line2 || "-",
+            title: addressInformation.mailingAddress.address.line2 || "-",
             titleStyle: fsTransformNone,
           });
         }
 
-        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
+        if (isNotEmpty(addressInformation.mailingAddress.address.line3)) {
           correspondenceAddressSummary.push({
             label: `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 3`,
-            title: addressInformation!.mailingAddress!.address!.line3! || "-",
+            title: addressInformation.mailingAddress.address.line3! || "-",
             titleStyle: fsTransformNone,
           });
         }
 
-        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line4)) {
+        if (isNotEmpty(addressInformation.mailingAddress.address.line4)) {
           correspondenceAddressSummary.push({
             label: `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 4`,
-            title: addressInformation!.mailingAddress!.address!.line4! || "-",
+            title: addressInformation.mailingAddress.address.line4! || "-",
             titleStyle: fsTransformNone,
           });
         }
       }
       correspondenceAddressSummary.push(
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
+        { label: DASHBOARD_ACCOUNT_TAB.LABEL_POSTCODE, title: addressInformation.mailingAddress.postCode },
+        { label: DASHBOARD_ACCOUNT_TAB.LABEL_CITY, title: addressInformation.mailingAddress.city },
+        { label: DASHBOARD_ACCOUNT_TAB.LABEL_STATE, title: addressInformation.mailingAddress.state },
+        { label: DASHBOARD_ACCOUNT_TAB.LABEL_COUNTRY, title: addressInformation.mailingAddress.country },
       );
     }
   }

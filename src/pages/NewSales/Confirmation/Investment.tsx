@@ -14,7 +14,7 @@ import {
   TextSpaceArea,
 } from "../../../components";
 import { Language } from "../../../constants/language";
-import { DICTIONARY_RECURRING_CURRENCY, DICTIONARY_RECURRING_MINIMUM_FPX, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_RECURRING_CURRENCY, ERROR } from "../../../data/dictionary";
 import {
   autoWidth,
   borderBottomBlue5,
@@ -352,18 +352,18 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const epfIndex = fundingOption.findIndex((eachFundingOption) => eachFundingOption === INVESTMENT.QUESTION_1_OPTION_2);
   const disableEpf = allowEpf !== undefined && allowEpf === false ? [epfIndex] : [];
 
-  let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
+  // let minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.ut;
 
-  switch (fundDetails.fundType) {
-    case "PRS":
-      minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.prs;
-      break;
-    case "AMP":
-      minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.amp;
-      break;
-    default:
-      break;
-  }
+  // switch (fundDetails.fundType) {
+  //   case "PRS":
+  //     minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.prs;
+  //     break;
+  //   case "AMP":
+  //     minimumFpx = DICTIONARY_RECURRING_MINIMUM_FPX.amp;
+  //     break;
+  //   default:
+  //     break;
+  // }
 
   const checkSpaceToLabel = fundingOption.length > 1 ? sh4 : 0;
 
@@ -438,7 +438,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
             <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
           ) : null}
           {multiClass === false && currencies.length === 1 ? (
-            <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} style={{ width: sw360 }} />
+            <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency} style={{ width: sw360 }} />
           ) : null}
         </View>
         <CustomSpacer space={sh24} />

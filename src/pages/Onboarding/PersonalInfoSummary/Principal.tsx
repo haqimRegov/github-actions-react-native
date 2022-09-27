@@ -10,7 +10,7 @@ const { SUMMARY } = Language.PAGE;
 
 interface PrincipalProps {
   accountType: TypeAccountChoices;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   isAllEpf: boolean;
   summary: IHolderInfoState;
 }

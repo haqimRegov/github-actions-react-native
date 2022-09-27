@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
-import { GlobalStoreProps, ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
+import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild, flexCol, fs16RegGray6, sh56 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
@@ -14,7 +14,7 @@ import { ProductList } from "./ProductList";
 
 const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
 
-interface ProductsProps extends ProductsStoreProps, OnboardingContentProps, GlobalStoreProps {}
+interface ProductsProps extends ProductsStoreProps, OnboardingContentProps {}
 
 export const ProductComponent: FunctionComponent<ProductsProps> = ({
   accountType,
@@ -166,7 +166,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
     addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
-    const route: TypeOnboardingRoute = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
+    const route: TypeOnboardingKey = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
     handleNextStep(route);
     const updatedFinishedSteps: TypeOnboardingKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")

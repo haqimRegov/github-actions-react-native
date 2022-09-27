@@ -13,7 +13,7 @@ const { ID_VERIFICATION } = Language.PAGE;
 
 interface IDVerificationProps extends PersonalInfoStoreProps {
   handleBack: () => void;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
 }
 
 const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
@@ -67,7 +67,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
 
   const handleSubmit = () => {
     addPersonalInfo({ principal: { ...principal, personalDetails: { ...principal?.personalDetails, riskProfile: riskScore.appetite } } });
-    const route: TypeOnboardingRoute = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "PersonalDetails";
+    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "PersonalDetails";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findPersonalDetails = updatedDisabledSteps.indexOf("PersonalDetails");
     if (findPersonalDetails !== -1) {

@@ -4,7 +4,7 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../../constants";
+import { Language } from "../../../../constants";
 import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import { getAddress, getFatcaRequest } from "../../../../helpers";
 import { submitClientAccount } from "../../../../network-actions";
@@ -323,7 +323,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             "Payment",
           ];
           updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
-          return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
+          return handleNextStep("OrderSummary");
         }
 
         if (error !== null) {

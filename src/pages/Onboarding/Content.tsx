@@ -37,7 +37,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.RiskAssessment:
       content = <QuestionnaireContent {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.ProductRecommendation:
+    case ONBOARDING_ROUTES.Products:
       content = <Products {...newProps} />;
       break;
     case ONBOARDING_ROUTES.EmailVerification:
@@ -58,7 +58,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.CRSDeclaration:
       content = <CrsDeclaration {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.FEADeclarations:
+    case ONBOARDING_ROUTES.FEADeclaration:
       content = <FeaDeclaration {...newProps} />;
       break;
     case ONBOARDING_ROUTES.DeclarationSummary:

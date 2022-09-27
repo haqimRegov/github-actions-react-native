@@ -49,7 +49,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   };
 
   const handleContinue = () => {
-    const route: TypeOnboardingRoute = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
+    const route: TypeOnboardingKey = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
     if (findCrs !== -1) {

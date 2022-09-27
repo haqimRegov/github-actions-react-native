@@ -23,7 +23,7 @@ const signPosition = {
 
 interface EditPdfProps extends AcknowledgementStoreProps {
   editReceipt: IOnboardingReceiptState | undefined;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 

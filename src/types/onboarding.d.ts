@@ -4,8 +4,14 @@ declare interface IContentItem {
   key: TypeOnboardingKey;
 }
 
+declare interface IOnboardingContentItem {
+  route: TypeOnboardingRoute;
+  title: string;
+  key: TypeOnboardingKey;
+}
+
 declare interface IOnboarding {
-  content?: IContentItem[];
+  content?: IOnboardingContentItem[];
   key: TypeOnboardingKey;
   label: string;
   route?: TypeOnboardingRoute;
@@ -15,7 +21,7 @@ declare interface OnboardingContentProps {
   cancelOnboarding?: boolean;
   handleCancelOnboarding?: () => void;
   handleResetOnboarding: () => void;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
 }
 
 declare interface OnboardingStepsContentProps {
@@ -37,60 +43,27 @@ declare interface OnboardingStepsProps {
   steps: IOnboarding[];
 }
 
-declare type TypeOnboardingRoute =
-  | "CRSDeclaration"
-  | "DeclarationSummary"
-  | "EmailVerification"
-  | "EmploymentDetails"
-  | "FATCADeclaration"
-  | "FEADeclaration"
-  | "IdentityVerification"
-  | "OrderSummary"
-  | "Payment"
-  | "PersonalDetails"
-  | "PersonalInfoSummary"
-  | "ProductRecommendation"
-  | "RiskAssessment"
-  | "Signatures"
-  | "TermsAndConditions";
-
-declare type TypeOnboardingKey =
-  | "Acknowledgement"
-  | "CRSDeclaration"
-  | "Declarations"
-  | "DeclarationSummary"
-  | "EmailVerification"
-  | "EmploymentDetails"
-  | "FATCADeclaration"
-  | "FEADeclaration"
-  | "IdentityVerification"
-  | "OrderSummary"
-  | "Payment"
-  | "PersonalDetails"
-  | "PersonalInformation"
-  | "PersonalInfoSummary"
-  | "Products"
-  | "RiskAssessment"
-  | "Signatures"
-  | "TermsAndConditions";
-
 declare interface IOnboardingRoutes {
+  Acknowledgement: TypeOnboardingRoute;
   CRSDeclaration: TypeOnboardingRoute;
+  Declarations: TypeOnboardingRoute;
   DeclarationSummary: TypeOnboardingRoute;
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
   FATCADeclaration: TypeOnboardingRoute;
-  FEADeclarations: TypeOnboardingRoute;
+  FEADeclaration: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
   OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
   PersonalDetails: TypeOnboardingRoute;
+  PersonalInformation: TypeOnboardingRoute;
   PersonalInfoSummary: TypeOnboardingRoute;
-  ProductRecommendation: TypeOnboardingRoute;
+  Products: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
   Signatures: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
 }
+
 declare interface IOnboardingKeys {
   Acknowledgement: TypeOnboardingKey;
   CRSDeclaration: TypeOnboardingKey;
@@ -111,3 +84,6 @@ declare interface IOnboardingKeys {
   Signatures: TypeOnboardingKey;
   TermsAndConditions: TypeOnboardingKey;
 }
+
+declare type TypeOnboardingKey = keyof IOnboardingKeys;
+declare type TypeOnboardingRoute = keyof IOnboardingRoutes;

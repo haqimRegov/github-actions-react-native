@@ -145,7 +145,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
         checkRelationship === false;
 
   const handleSubmit = () => {
-    const route: TypeOnboardingRoute = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
+    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
     addPersonalInfo({ ...personalInfo, editPersonal: findInfoSummary === -1 });

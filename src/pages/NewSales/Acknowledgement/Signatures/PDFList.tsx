@@ -58,7 +58,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   const { accountDetails, transactionType } = newSales;
   const { authorisedSignatory } = accountDetails;
   const { clientId } = details!.principalHolder!;
-  const { emailAddress } = personalInfo!.principal!.contactDetails!;
+  const { emailAddress } = personalInfo.principal!.contactDetails!;
   const fetching = useRef<boolean>(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
@@ -350,12 +350,12 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
             <View style={flexRow}>
               <CustomSpacer isHorizontal={true} space={sw10} />
               <Text style={fs10BoldGray6}>{emailAddress}</Text>
-              {accountType === "Joint" && isNotEmpty(personalInfo!.principal!.contactDetails!.emailAddress) ? (
+              {accountType === "Joint" && isNotEmpty(personalInfo.principal!.contactDetails!.emailAddress) ? (
                 <Fragment>
                   <CustomSpacer isHorizontal space={sw3} />
                   <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_1_SUB}</Text>
                   <CustomSpacer isHorizontal space={sw3} />
-                  <Text style={fs10BoldGray6}>{personalInfo!.joint!.contactDetails!.emailAddress}</Text>
+                  <Text style={fs10BoldGray6}>{personalInfo.joint!.contactDetails!.emailAddress}</Text>
                 </Fragment>
               ) : null}
             </View>

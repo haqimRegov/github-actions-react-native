@@ -147,29 +147,29 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
               .map(async (documents) => {
                 try {
                   let title = "";
-                  if (documents!.title === "Passport") {
+                  if (documents.title === "Passport") {
                     title = "passport";
-                  } else if (documents!.title === "Certificate of Loss of Nationality") {
+                  } else if (documents.title === "Certificate of Loss of Nationality") {
                     title = "certificate";
                   } else {
-                    title = `${documents!.title!.toLowerCase().replace(" - ", "_")}`;
+                    title = `${documents.title!.toLowerCase().replace(" - ", "_")}`;
                   }
 
-                  const url = S3UrlGenerator.document(clientId, title, documents!.type!);
-                  const uploadedFile = await StorageUtil.put(documents!.path!, url, documents!.type!);
+                  const url = S3UrlGenerator.document(clientId, title, documents.type!);
+                  const uploadedFile = await StorageUtil.put(documents.path!, url, documents.type!);
 
                   if (uploadedFile === undefined) {
                     throw new Error();
                   }
                   return {
-                    title: documents!.title!,
+                    title: documents.title!,
                     file: {
-                      // base64: documents!.base64!,
-                      name: documents!.name!,
-                      size: documents!.size!,
-                      type: documents!.type!,
-                      date: documents!.date!,
-                      path: documents!.path!,
+                      // base64: documents.base64!,
+                      name: documents.name!,
+                      size: documents.size!,
+                      type: documents.type!,
+                      date: documents.date!,
+                      path: documents.path!,
                       url: uploadedFile.key,
                     },
                   };

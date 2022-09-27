@@ -80,7 +80,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       0,
       {
         label: INVESTOR_PROFILE.LABEL_BUMIPUTERA,
-        title: isNotEmpty(personalDetails.bumiputera) ? booleanTextChange(personalDetails.bumiputera!) : "-",
+        title: isNotEmpty(personalDetails.bumiputera) ? booleanTextChange(personalDetails.bumiputera) : "-",
       },
       { label: INVESTOR_PROFILE.LABEL_RACE, title: personalDetails.race },
     );
@@ -161,14 +161,14 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   ];
 
   const fatcaAddress =
-    isNotEmpty(addressInformation) && isNotEmpty(addressInformation!.mailingAddress)
-      ? getAddress(addressInformation!.mailingAddress)
+    isNotEmpty(addressInformation) && isNotEmpty(addressInformation.mailingAddress)
+      ? getAddress(addressInformation.mailingAddress)
       : undefined;
 
   if (isNotEmpty(fatca) && isNotEmpty(fatca!.usCitizen) && booleanTextChange(fatca!.usCitizen!) === "No") {
     fatcaSummary.splice(1, 0, { label: INVESTOR_PROFILE.LABEL_US_BORN, title: booleanTextChange(fatca!.usBorn!) });
     if (isNotEmpty(fatca!.usBorn) && booleanTextChange(fatca!.usBorn!) === "Yes") {
-      if (isNotEmpty(fatca!.certificate) && isNotEmpty(fatca!.certificate!.name!)) {
+      if (isNotEmpty(fatca!.certificate) && isNotEmpty(fatca!.certificate!.name)) {
         fatcaSummary.push({
           label: INVESTOR_PROFILE.LABEL_CERTIFICATE,
           title: fatca!.certificate!.name!,
@@ -247,47 +247,47 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     if (isNotEmpty(addressInformation.permanentAddress)) {
       if (isNotEmpty(addressInformation.permanentAddress.address)) {
         const permanentAddressLabel =
-          isNotEmpty(addressInformation!.permanentAddress!.address!.line2) ||
-          isNotEmpty(addressInformation!.permanentAddress!.address!.line3) ||
-          isNotEmpty(addressInformation!.permanentAddress!.address!.line4)
+          isNotEmpty(addressInformation.permanentAddress.address.line2) ||
+          isNotEmpty(addressInformation.permanentAddress.address.line3) ||
+          isNotEmpty(addressInformation.permanentAddress.address.line4)
             ? `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 1`
             : INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS;
 
         permanentAddressSummary.push({
           label: permanentAddressLabel,
-          title: addressInformation!.permanentAddress!.address!.line1 || "-",
+          title: addressInformation.permanentAddress.address.line1 || "-",
           titleStyle: fsTransformNone,
         });
 
-        if (isNotEmpty(addressInformation!.permanentAddress!.address!.line2)) {
+        if (isNotEmpty(addressInformation.permanentAddress.address.line2)) {
           permanentAddressSummary.push({
             label: `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 2`,
-            title: addressInformation!.permanentAddress!.address!.line2 || "-",
+            title: addressInformation.permanentAddress.address.line2 || "-",
             titleStyle: fsTransformNone,
           });
         }
 
-        if (isNotEmpty(addressInformation!.permanentAddress!.address!.line3)) {
+        if (isNotEmpty(addressInformation.permanentAddress.address.line3)) {
           permanentAddressSummary.push({
             label: `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 3`,
-            title: addressInformation!.permanentAddress!.address!.line3! || "-",
+            title: addressInformation.permanentAddress.address.line3! || "-",
             titleStyle: fsTransformNone,
           });
         }
 
-        if (isNotEmpty(addressInformation!.permanentAddress!.address!.line4)) {
+        if (isNotEmpty(addressInformation.permanentAddress.address.line4)) {
           permanentAddressSummary.push({
             label: `${INVESTOR_PROFILE.LABEL_PERMANENT_ADDRESS} 4`,
-            title: addressInformation!.permanentAddress!.address!.line4! || "-",
+            title: addressInformation.permanentAddress.address.line4! || "-",
             titleStyle: fsTransformNone,
           });
         }
       }
       permanentAddressSummary.push(
-        { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: addressInformation!.permanentAddress!.postCode! },
-        { label: INVESTOR_PROFILE.LABEL_CITY, title: addressInformation!.permanentAddress!.city! },
-        { label: INVESTOR_PROFILE.LABEL_STATE, title: addressInformation!.permanentAddress!.state! },
-        { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: addressInformation!.permanentAddress!.country! },
+        { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: addressInformation.permanentAddress.postCode },
+        { label: INVESTOR_PROFILE.LABEL_CITY, title: addressInformation.permanentAddress.city },
+        { label: INVESTOR_PROFILE.LABEL_STATE, title: addressInformation.permanentAddress.state },
+        { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: addressInformation.permanentAddress.country },
       );
     }
   }

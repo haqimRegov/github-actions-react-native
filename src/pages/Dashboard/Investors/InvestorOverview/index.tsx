@@ -236,7 +236,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               ...accountPrincipalDob,
               id: item.idNumber,
               idType: item.idType as TypeClientID,
-              name: item.name!,
+              name: item.name,
             };
 
             principalEmail = item.email;
@@ -251,7 +251,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               ...accountJointDob,
               id: item.jointIdNumber,
               idType: item.jointIdType as TypeClientID,
-              name: item.jointName!,
+              name: item.jointName,
             };
 
             jointEmail = item.jointEmail;
@@ -470,7 +470,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   ? {
                       principalHolder: {
                         ...principalHolder,
-                        name: investorData!.name!.trim(),
+                        name: investorData!.name.trim(),
                       },
                     }
                   : {
@@ -535,7 +535,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         principalHolder: {
           ...details!.principalHolder,
           dateOfBirth: otherInvestorData !== undefined ? otherInvestorData?.dateOfBirth! : investorData.dateOfBirth,
-          clientId: otherInvestorData !== undefined ? otherInvestorData!.clientId : investorData.clientId,
+          clientId: otherInvestorData !== undefined ? otherInvestorData.clientId : investorData.clientId,
           id: otherInvestorData !== undefined ? otherInvestorData?.id : investorData.idNumber,
           name: otherInvestorData !== undefined ? otherInvestorData?.name : investorData.name,
         },
@@ -550,7 +550,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             ...personalInfo.principal?.personalDetails,
             dateOfBirth:
               otherInvestorData !== undefined
-                ? moment(otherInvestorData!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
+                ? moment(otherInvestorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate()
                 : moment(investorData.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
             name: otherInvestorData !== undefined ? otherInvestorData?.name : investorData.name,
           },
@@ -563,9 +563,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       const checkInvestorDeclarations = isArrayNotEmpty(investorData.declarationRequired) ? investorData.declarationRequired : [];
       const declarationToUse = isArrayNotEmpty(checkDeclarations) ? checkDeclarations : checkInvestorDeclarations;
 
-      let fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData!.address) ? getAddress(investorData!.address) : undefined;
+      let fatcaAddress = isNotEmpty(investorData) && isNotEmpty(investorData.address) ? getAddress(investorData.address) : undefined;
       if (otherInvestorData !== undefined && isNotEmpty(otherInvestorData.address)) {
-        fatcaAddress = getAddress(otherInvestorData!.address!);
+        fatcaAddress = getAddress(otherInvestorData.address!);
       }
 
       updateForceUpdate({ ...forceUpdate, address: fatcaAddress, declarations: declarationToUse });

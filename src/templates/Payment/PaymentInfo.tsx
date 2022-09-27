@@ -684,7 +684,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
   ];
 
   const epfBaseItems = [
-    <LabeledTitle label={PAYMENT.LABEL_EPF_ACCOUNT} spaceToLabel={sh4} title={epfAccountNumber!} style={{ width: sw360 }} />,
+    <LabeledTitle label={PAYMENT.LABEL_EPF_ACCOUNT} spaceToLabel={sh4} title={epfAccountNumber} style={{ width: sw360 }} />,
   ];
 
   if (updatedCurrencies.length > 1 && draftPayment.paymentMethod !== "Cheque") {

@@ -42,47 +42,47 @@ export const getStructuredAccountInformation = (account: IInvestorAccount) => {
     if (isNotEmpty(addressInformation.mailingAddress)) {
       if (isNotEmpty(addressInformation.mailingAddress.address)) {
         const mailingAddressLabel =
-          isNotEmpty(addressInformation!.mailingAddress!.address!.line2) ||
-          isNotEmpty(addressInformation!.mailingAddress!.address!.line3) ||
-          isNotEmpty(addressInformation!.mailingAddress!.address!.line4)
+          isNotEmpty(addressInformation.mailingAddress.address.line2) ||
+          isNotEmpty(addressInformation.mailingAddress.address.line3) ||
+          isNotEmpty(addressInformation.mailingAddress.address.line4)
             ? `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 1`
             : ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS;
 
         mailingAddressSummary.push({
           label: mailingAddressLabel,
-          title: addressInformation!.mailingAddress!.address!.line1 || "-",
+          title: addressInformation.mailingAddress.address.line1 || "-",
           titleStyle: fsTransformNone,
         });
 
-        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
+        if (isNotEmpty(addressInformation.mailingAddress.address.line2)) {
           mailingAddressSummary.push({
             label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 2`,
-            title: addressInformation!.mailingAddress!.address!.line2 || "-",
+            title: addressInformation.mailingAddress.address.line2 || "-",
             titleStyle: fsTransformNone,
           });
         }
 
-        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
+        if (isNotEmpty(addressInformation.mailingAddress.address.line3)) {
           mailingAddressSummary.push({
             label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 3`,
-            title: addressInformation!.mailingAddress!.address!.line3! || "-",
+            title: addressInformation.mailingAddress.address.line3! || "-",
             titleStyle: fsTransformNone,
           });
         }
 
-        if (isNotEmpty(addressInformation!.mailingAddress!.address!.line4)) {
+        if (isNotEmpty(addressInformation.mailingAddress.address.line4)) {
           mailingAddressSummary.push({
             label: `${ACCOUNT_INFORMATION.LABEL_CORRESPONDENCE_ADDRESS} 4`,
-            title: addressInformation!.mailingAddress!.address!.line4! || "-",
+            title: addressInformation.mailingAddress.address.line4! || "-",
             titleStyle: fsTransformNone,
           });
         }
       }
       mailingAddressSummary.push(
-        { label: ACCOUNT_INFORMATION.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
-        { label: ACCOUNT_INFORMATION.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
-        { label: ACCOUNT_INFORMATION.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
-        { label: ACCOUNT_INFORMATION.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
+        { label: ACCOUNT_INFORMATION.LABEL_POSTCODE, title: addressInformation.mailingAddress.postCode },
+        { label: ACCOUNT_INFORMATION.LABEL_CITY, title: addressInformation.mailingAddress.city },
+        { label: ACCOUNT_INFORMATION.LABEL_STATE, title: addressInformation.mailingAddress.state },
+        { label: ACCOUNT_INFORMATION.LABEL_COUNTRY, title: addressInformation.mailingAddress.country },
       );
     }
   }

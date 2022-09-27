@@ -1,5 +1,5 @@
 import { CommonActions } from "@react-navigation/native";
-import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
@@ -116,7 +116,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
 
   const handleNextStep = (route: TypeOnboardingKey) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
-      stepperBarRef!.current!.handleNextStep(route);
+      stepperBarRef.current.handleNextStep(route);
     }
   };
 

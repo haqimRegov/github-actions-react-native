@@ -123,11 +123,11 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
       },
     });
     addRiskInfo({
-      appetite: currentRiskScore!.appetite,
-      hnwStatus: currentRiskScore!.netWorth,
-      profile: currentRiskScore!.profile,
-      expectedRange: currentRiskScore!.rangeOfReturn,
-      type: currentRiskScore!.type,
+      appetite: currentRiskScore.appetite,
+      hnwStatus: currentRiskScore.netWorth,
+      profile: currentRiskScore.profile,
+      expectedRange: currentRiskScore.rangeOfReturn,
+      type: currentRiskScore.type,
     });
     resetQuestionnaire();
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });

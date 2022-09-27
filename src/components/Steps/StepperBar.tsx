@@ -75,7 +75,7 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
     if (sections.length > 0) {
       const sectionIndex = sections[0];
       const selectedSection = steps[sectionIndex];
-      const checkRoute = handleCheckRoute !== undefined ? handleCheckRoute(selectedSection!, sectionIndex) : true;
+      const checkRoute = handleCheckRoute !== undefined ? handleCheckRoute(selectedSection, sectionIndex) : true;
       if (checkRoute === true) {
         setActiveSection(sectionIndex);
         if (selectedSection.route !== undefined) {

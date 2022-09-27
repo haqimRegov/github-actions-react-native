@@ -152,7 +152,7 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
                   </View>
                   <CustomSpacer isHorizontal={true} space={sw40} />
                   <View>
-                    <LabeledTitle label={PROFILE.LABEL_NAME} title={agent!.name!} titleStyle={fs16BoldBlack1} style={{ maxWidth: sw432 }} />
+                    <LabeledTitle label={PROFILE.LABEL_NAME} title={agent!.name} titleStyle={fs16BoldBlack1} style={{ maxWidth: sw432 }} />
                     <CustomSpacer space={sh16} />
                     <LabeledTitle label={PROFILE.LABEL_NRIC} title={agentProfile.nric} titleStyle={fs16BoldBlack1} />
                   </View>

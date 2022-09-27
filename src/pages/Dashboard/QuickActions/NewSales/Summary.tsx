@@ -29,8 +29,8 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
       <TextSpaceArea spaceToBottom={sh24} style={fs24BoldBlue1} text={subheading} />
       <View style={flexRow}>
         <View style={{ width: sw208 }}>
-          <LabeledTitle label={principalLabelName} title={principalHolder.name!} {...infoStyles} />
-          <LabeledTitle label={principalHolder.idType!} title={principalHolder.id!} {...infoStyles} />
+          <LabeledTitle label={principalLabelName} title={principalHolder.name} {...infoStyles} />
+          <LabeledTitle label={principalHolder.idType!} title={principalHolder.id} {...infoStyles} />
           <LabeledTitle
             label={ADD_CLIENT.DETAILS_LABEL_DOB}
             title={moment(principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
@@ -40,8 +40,8 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
         <CustomSpacer isHorizontal={true} space={sw32} />
         {jointHolder !== undefined && accountType === "Joint" ? (
           <View style={{ width: sw208 }}>
-            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_NAME_JOINT} title={jointHolder.name!} {...infoStyles} />
-            <LabeledTitle label={jointHolder.idType!} title={jointHolder.id!} {...infoStyles} />
+            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_NAME_JOINT} title={jointHolder.name} {...infoStyles} />
+            <LabeledTitle label={jointHolder.idType!} title={jointHolder.id} {...infoStyles} />
             <LabeledTitle
               label={ADD_CLIENT.DETAILS_LABEL_DOB}
               title={moment(jointHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}

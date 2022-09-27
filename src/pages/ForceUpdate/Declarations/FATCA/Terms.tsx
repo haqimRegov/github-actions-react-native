@@ -71,12 +71,7 @@ export const FATCATerms: FunctionComponent<FATCATermsProps> = ({ acceptFatca, ha
               </ScrollView>
             </View>
             <CustomSpacer space={sh16} />
-            <CheckBox
-              toggle={acceptFatca!}
-              onPress={handleAcceptFatca}
-              label={DECLARATIONS.LABEL_ACCEPT_FATCA}
-              labelStyle={checkBoxStyle}
-            />
+            <CheckBox toggle={acceptFatca} onPress={handleAcceptFatca} label={DECLARATIONS.LABEL_ACCEPT_FATCA} labelStyle={checkBoxStyle} />
           </View>
         }
       />

@@ -60,7 +60,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
 
   const absoluteHeaderSpace = filterValues.length > 0 ? sh192 : sh152;
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo!.appetite);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -75,7 +75,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: isNotEmpty(filters.shariahApproved) && filters.shariahApproved!.length > 0 ? filters.shariahApproved![0] : "",
-      recommendedRisk: riskInfo!.appetite,
+      recommendedRisk: riskInfo.appetite,
       riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       // isConventional: filters.conventional![0], // Not used in BE

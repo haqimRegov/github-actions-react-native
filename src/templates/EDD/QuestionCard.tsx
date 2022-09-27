@@ -359,7 +359,7 @@ export const QuestionCard: FunctionComponent<IQuestionCard> = ({
                   case "reroute":
                     content = (
                       <View>
-                        <LabeledTitle label={title!} labelStyle={fs10RegGray5} title={description!} titleStyle={fs16BoldBlack2} />
+                        <LabeledTitle label={title!} labelStyle={fs10RegGray5} title={description} titleStyle={fs16BoldBlack2} />
                       </View>
                     );
                     break;

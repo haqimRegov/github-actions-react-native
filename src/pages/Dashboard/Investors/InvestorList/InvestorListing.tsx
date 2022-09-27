@@ -188,7 +188,7 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
     setIsFetching(true);
     const filterRisk: IInvestorDashboardFilter[] =
       filter.riskProfile.length > 0
-        ? filter.riskProfile!.map((eachProfile: string) => ({ column: "riskTolerance", value: eachProfile }))
+        ? filter.riskProfile.map((eachProfile: string) => ({ column: "riskTolerance", value: eachProfile }))
         : [];
     const defaultSort: IInvestorsSort[] = sort.length === 0 ? [{ column: "name", value: "descending" }] : sort;
 

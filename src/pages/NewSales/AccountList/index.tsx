@@ -78,7 +78,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
   const handleCheckClient = async (account: IAccountList): Promise<boolean | string> => {
     if (loading === false) {
       setLoading(true);
-      const checkIdType = account.accountHolder === "Principal" ? account.jointIdType : account.idType!;
+      const checkIdType = account.accountHolder === "Principal" ? account.jointIdType : account.idType;
       const checkDOB =
         checkIdType !== "NRIC"
           ? { dateOfBirth: account.accountHolder === "Principal" ? account.jointDateOfBirth : account.dateOfBirth }
@@ -86,7 +86,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
       const request: IEtbCheckRequest = {
         id: account.accountHolder === "Principal" ? account.jointIdNumber : account.idNumber,
         idType: checkIdType as TypeClientID,
-        name: account.accountHolder === "Principal" ? account.jointName! : account.name!,
+        name: account.accountHolder === "Principal" ? account.jointName! : account.name,
         ...checkDOB,
       };
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
@@ -103,7 +103,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           if (data.result.message === "ETB") {
             otherInvestorDataRef.current = {
               ...data.result,
-              name: account.accountHolder === "Principal" ? account.jointName! : account.name!,
+              name: account.accountHolder === "Principal" ? account.jointName! : account.name,
               id: data.result.idNumber,
             };
             if (data.result.forceUpdate === false) {
@@ -134,7 +134,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
         ...details,
         principalHolder: {
           ...details!.principalHolder,
-          dateOfBirth: otherInvestorDataRef.current.dateOfBirth!,
+          dateOfBirth: otherInvestorDataRef.current.dateOfBirth,
           clientId: otherInvestorDataRef.current.clientId,
           id: otherInvestorDataRef.current.id,
           name: otherInvestorDataRef.current.name,
@@ -230,7 +230,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             ...accountOtherDob,
             id: otherInvestorDataRef.current.idNumber,
             idType: otherInvestorDataRef.current.idType as TypeClientID,
-            name: otherInvestorDataRef.current.name!,
+            name: otherInvestorDataRef.current.name,
           };
 
           principalEmail = otherInvestorDataRef.current.emailAddress;
@@ -240,7 +240,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             ...accountOtherDob,
             id: otherInvestorDataRef.current.idNumber,
             idType: otherInvestorDataRef.current.idType as TypeClientID,
-            name: otherInvestorDataRef.current.name!,
+            name: otherInvestorDataRef.current.name,
           };
 
           jointEmail = otherInvestorDataRef.current.emailAddress;
@@ -400,7 +400,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             disabledSteps: updatedDisabledSteps,
             investorProfile: {
               ...newSales.investorProfile,
-              principalClientId: data.result.principalHolder!.clientId,
+              principalClientId: data.result.principalHolder.clientId,
               jointClientId: data.result.jointHolder !== null ? data.result.jointHolder!.clientId : undefined,
             },
             riskInfo: riskInfo,

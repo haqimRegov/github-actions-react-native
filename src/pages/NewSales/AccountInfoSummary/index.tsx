@@ -200,8 +200,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     handleSetupClient();
   };
 
-  const clientId =
-    currentProfile === "Principal" ? newSales!.investorProfile!.principalClientId! : newSales!.investorProfile!.jointClientId!;
+  const clientId = currentProfile === "Principal" ? newSales.investorProfile.principalClientId! : newSales.investorProfile.jointClientId!;
 
   let content = (
     <NewSalesAccountSummary handleNextStep={handleNextStep} setCurrentProfile={setCurrentProfile} setFile={setFile} setPage={setPage} />

@@ -294,7 +294,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
 
   const handleShowOpenAccount = () => {
     if (showOpenAccount === true && dashboardLayoutRef.current !== null && dashboardLayoutRef.current !== undefined) {
-      dashboardLayoutRef!.current!.setAddClient(true);
+      dashboardLayoutRef.current.setAddClient(true);
     }
   };
 

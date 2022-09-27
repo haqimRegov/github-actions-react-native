@@ -75,7 +75,7 @@ export const NewSalesSteps: FunctionComponent<INewSalesStepsProps> = ({
     if (sections.length > 0) {
       const sectionIndex = sections[0];
       const selectedSection = steps[sectionIndex];
-      const checkRoute = handleCheckRoute(selectedSection!, sectionIndex);
+      const checkRoute = handleCheckRoute(selectedSection, sectionIndex);
       if (checkRoute === true) {
         setActiveSection(sectionIndex);
         if (selectedSection.route !== undefined) {

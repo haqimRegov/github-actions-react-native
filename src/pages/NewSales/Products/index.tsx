@@ -124,9 +124,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       const updatedFunds: IProduct[] = [];
       temp.forEach((eachFund: IProduct) => {
         if (
-          (riskInfo!.appetite.toLowerCase() === "medium" &&
+          (riskInfo.appetite.toLowerCase() === "medium" &&
             (eachFund.riskCategory.toLowerCase() === "low" || eachFund.riskCategory.toLowerCase() === "medium")) ||
-          (riskInfo!.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
+          (riskInfo.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
         ) {
           updatedFunds.push(eachFund);
         }
@@ -216,10 +216,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const checkOutsideRiskFactor = () => {
     const fundsRisk = selectedFunds.map((item) => (item.prsType === "prsDefault" ? "" : item.riskCategory.toLowerCase()));
-    if (riskInfo!.appetite.toLowerCase() === "medium") {
+    if (riskInfo.appetite.toLowerCase() === "medium") {
       return fundsRisk.includes("high");
     }
-    if (riskInfo!.appetite.toLowerCase() === "low") {
+    if (riskInfo.appetite.toLowerCase() === "low") {
       return fundsRisk.includes("high") || fundsRisk.includes("medium");
     }
 

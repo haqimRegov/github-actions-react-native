@@ -175,7 +175,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     const initialStateArray: IProductSales[] = [];
     if (ampDetails !== undefined) {
       let newMasterClassList: IProductClasses = {};
-      ampDetails!.masterList.forEach((list: IProductMasterList) => {
+      ampDetails.masterList.forEach((list: IProductMasterList) => {
         const dump = { class: list.class !== null ? list.class : "No Class", currency: list.currency };
         const findClassIndex = Object.keys(newMasterClassList).indexOf(dump.class);
         if (findClassIndex === -1) {

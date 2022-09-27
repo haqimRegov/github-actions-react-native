@@ -20,7 +20,7 @@ interface NewSalesDetailsProps {
   accountType: TypeAccountChoices;
   clientInfo: IClientBasicInfo;
   clientType: TypeClient | "";
-  ageErrorMessage?: string | undefined;
+  ageErrorMessage?: string;
   errorMessage: string | undefined;
   holderToFill: "jointHolder" | "principalHolder";
   inputError1: string | undefined;

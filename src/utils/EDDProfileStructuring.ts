@@ -267,61 +267,61 @@ export const structureEddProfile = (
   }
 
   const permanentAddressLabel =
-    addressInformation!.permanentAddress!.address!.line2 !== undefined || addressInformation!.permanentAddress!.address!.line3 !== undefined
+    addressInformation.permanentAddress.address.line2 !== undefined || addressInformation.permanentAddress.address.line3 !== undefined
       ? `${DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} 1`
       : DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS;
 
   const permanentAddressSummary: LabeledTitleProps[] = [
-    { label: permanentAddressLabel, title: addressInformation!.permanentAddress!.address!.line1!, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: addressInformation!.permanentAddress!.postCode! },
-    { label: DASHBOARD_PROFILE.LABEL_CITY, title: addressInformation!.permanentAddress!.city! },
-    { label: DASHBOARD_PROFILE.LABEL_STATE, title: addressInformation!.permanentAddress!.state! },
-    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: addressInformation!.permanentAddress!.country! },
+    { label: permanentAddressLabel, title: addressInformation.permanentAddress.address.line1!, titleStyle: fsTransformNone },
+    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: addressInformation.permanentAddress.postCode },
+    { label: DASHBOARD_PROFILE.LABEL_CITY, title: addressInformation.permanentAddress.city },
+    { label: DASHBOARD_PROFILE.LABEL_STATE, title: addressInformation.permanentAddress.state },
+    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: addressInformation.permanentAddress.country },
   ];
 
-  if (isNotEmpty(addressInformation!.permanentAddress!.address!.line2)) {
+  if (isNotEmpty(addressInformation.permanentAddress.address.line2)) {
     permanentAddressSummary.splice(1, 0, {
       label: `${DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} 2`,
-      title: addressInformation!.permanentAddress!.address!.line2!,
+      title: addressInformation.permanentAddress.address.line2!,
       titleStyle: fsTransformNone,
     });
   }
 
-  if (isNotEmpty(addressInformation!.permanentAddress!.address!.line3)) {
-    const index = addressInformation!.permanentAddress!.address!.line2 !== undefined ? 2 : 1;
+  if (isNotEmpty(addressInformation.permanentAddress.address.line3)) {
+    const index = addressInformation.permanentAddress.address.line2 !== undefined ? 2 : 1;
     permanentAddressSummary.splice(index, 0, {
       label: `${DASHBOARD_PROFILE.LABEL_PERMANENT_ADDRESS} 3`,
-      title: addressInformation!.permanentAddress!.address!.line3!,
+      title: addressInformation.permanentAddress.address.line3!,
       titleStyle: fsTransformNone,
     });
   }
 
   const mailingAddressLabel =
-    addressInformation!.mailingAddress!.address!.line2 !== undefined || addressInformation!.mailingAddress!.address!.line3 !== undefined
+    addressInformation.mailingAddress.address.line2 !== undefined || addressInformation.mailingAddress.address.line3 !== undefined
       ? `${DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 1`
       : DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS;
 
   const mailingAddressSummary: LabeledTitleProps[] = [
-    { label: mailingAddressLabel, title: addressInformation!.mailingAddress!.address!.line1!, titleStyle: fsTransformNone },
-    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: addressInformation!.mailingAddress!.postCode! },
-    { label: DASHBOARD_PROFILE.LABEL_CITY, title: addressInformation!.mailingAddress!.city! },
-    { label: DASHBOARD_PROFILE.LABEL_STATE, title: addressInformation!.mailingAddress!.state! },
-    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: addressInformation!.mailingAddress!.country! },
+    { label: mailingAddressLabel, title: addressInformation.mailingAddress.address.line1!, titleStyle: fsTransformNone },
+    { label: DASHBOARD_PROFILE.LABEL_POSTCODE, title: addressInformation.mailingAddress.postCode },
+    { label: DASHBOARD_PROFILE.LABEL_CITY, title: addressInformation.mailingAddress.city },
+    { label: DASHBOARD_PROFILE.LABEL_STATE, title: addressInformation.mailingAddress.state },
+    { label: DASHBOARD_PROFILE.LABEL_COUNTRY, title: addressInformation.mailingAddress.country },
   ];
 
-  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line2)) {
+  if (isNotEmpty(addressInformation.mailingAddress.address.line2)) {
     mailingAddressSummary.splice(1, 0, {
       label: `${DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 2`,
-      title: addressInformation!.mailingAddress!.address!.line2!,
+      title: addressInformation.mailingAddress.address.line2!,
       titleStyle: fsTransformNone,
     });
   }
 
-  if (isNotEmpty(addressInformation!.mailingAddress!.address!.line3)) {
-    const index = addressInformation!.mailingAddress!.address!.line2 !== undefined ? 2 : 1;
+  if (isNotEmpty(addressInformation.mailingAddress.address.line3)) {
+    const index = addressInformation.mailingAddress.address.line2 !== undefined ? 2 : 1;
     mailingAddressSummary.splice(index, 0, {
       label: `${DASHBOARD_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 3`,
-      title: addressInformation!.mailingAddress!.address!.line3!,
+      title: addressInformation.mailingAddress.address.line3!,
       titleStyle: fsTransformNone,
     });
   }

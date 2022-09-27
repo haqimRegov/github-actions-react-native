@@ -70,7 +70,7 @@ export const CRSTerms: FunctionComponent<CRSTermsProps> = ({ acceptCrs, handleAc
               </ScrollView>
             </View>
             <CustomSpacer space={sh16} />
-            <CheckBox toggle={acceptCrs!} onPress={handleAcceptCrs} label={DECLARATIONS.LABEL_ACCEPT_CRS_NEW} labelStyle={checkBoxStyle} />
+            <CheckBox toggle={acceptCrs} onPress={handleAcceptCrs} label={DECLARATIONS.LABEL_ACCEPT_CRS_NEW} labelStyle={checkBoxStyle} />
           </View>
         }
       />

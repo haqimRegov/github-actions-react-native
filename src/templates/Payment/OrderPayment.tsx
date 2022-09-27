@@ -111,7 +111,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     payments,
     paymentType,
     totalInvestment,
-    totalPaidAmount,
     recurringDetails,
     // surplusBalance,
     // balance,
@@ -203,7 +202,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     height: sh80,
   };
 
-  const withPayment = payments.some((payment) => payment.saved || payment.paymentId) || (totalPaidAmount && totalPaidAmount.length < 0);
+  const withPayment = payments.some((payment) => payment.saved || payment.paymentId);
   const withSurplus = payments.some((payment) => payment.tag !== undefined);
   const collapsedHeaderIcon = payments.some((findSaved) => findSaved.saved) || withPayment === true ? "caret-down" : "plus";
   const headerIcon = activeOrder.order === orderNumber ? "minus" : collapsedHeaderIcon;

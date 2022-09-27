@@ -149,7 +149,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
                 color={colorBlue._1}
                 name="pencil"
                 onPress={handleEditFatca}
-                style={circle(sw40, undefined)}
+                style={circle(sw40)}
                 withHover={{ color: colorBlue._2 }}
               />
               <CustomSpacer isHorizontal={true} space={sw16} />
@@ -175,7 +175,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
                   color={colorBlue._1}
                   name="pencil"
                   onPress={handleEditCrs}
-                  style={circle(sw40, undefined)}
+                  style={circle(sw40)}
                   withHover={{ color: colorBlue._2 }}
                 />
                 <CustomSpacer isHorizontal={true} space={sw16} />

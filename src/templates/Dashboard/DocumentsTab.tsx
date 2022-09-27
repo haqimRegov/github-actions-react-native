@@ -25,21 +25,20 @@ export const ProfileDocumentsTab: FunctionComponent<ProfileDocumentsTabProps> = 
     if (dataToModify.documents !== null) {
       dataToModify.documents.forEach((document: IInnerDocument, index) => {
         if (document.name === "-") {
-          const newData: LabeledTitleProps = {
+          return displayedData.push({
             label: document.title,
             title: document.name,
             titleStyle: fsTransformNone,
-          };
-          return displayedData.push(newData);
+          });
         }
-        const newData: LabeledTitleProps = {
+
+        return displayedData.push({
           label: document.title,
           title: document.name,
           titleStyle: fsTransformNone,
           titleIcon: document.label === "id" ? "profile-card" : "file",
           onPress: () => setFile(dataToModify.documents[index]),
-        };
-        return displayedData.push(newData);
+        });
       });
     }
     return displayedData;

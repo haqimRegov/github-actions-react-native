@@ -116,7 +116,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const updatedNewSalesSteps = cloneDeep(NEW_SALES_DATA);
   if (client.isNewFundPurchase === true) {
-    updatedNewSalesSteps!.splice(0, 0, ACCOUNT_LIST);
+    updatedNewSalesSteps.splice(0, 0, ACCOUNT_LIST);
   }
   if (newSales.accountDetails.accountNo === "" && client.isNewFundPurchase === false) {
     updatedNewSalesSteps[0] = {
@@ -147,7 +147,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const handleNextStep = (route: TypeNewSalesRoute) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
-      stepperBarRef!.current!.handleNextStep(route);
+      stepperBarRef.current.handleNextStep(route);
     }
   };
 
@@ -227,16 +227,11 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const handleCheckRoute = (item: INewSales, _section: number): boolean => {
     // TODO improvement to more dynamic step
-    switch (item.key) {
-      case "Products":
-        if (finishedSteps.includes("Products")) {
-          setUnsavedPrompt(true);
-          return false;
-        }
-        return true;
-      default:
-        return true;
+    if (item.key === "Products" && finishedSteps.includes("Products")) {
+      setUnsavedPrompt(true);
+      return false;
     }
+    return true;
   };
 
   const handleResetNewSales = () => {

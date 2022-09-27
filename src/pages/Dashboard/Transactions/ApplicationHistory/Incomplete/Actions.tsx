@@ -78,8 +78,8 @@ export const PendingOrderActions: FunctionComponent<PendingOrderActionsProps> = 
   const findDocumentReason = isNotEmpty(reason) === true ? reason.findIndex((eachReason) => eachReason.title === "Invalid Documents:") : -1;
   const onlyOtherReason = isNotEmpty(reason) === true && reason.length === 1 && reason[0].title === "Others";
 
-  const isPaymentSubmitted = findPaymentReason !== -1 ? reason![findPaymentReason].isSubmitted === true : true;
-  const isDocumentSubmitted = findDocumentReason !== -1 ? reason![findDocumentReason].isSubmitted === true : true;
+  const isPaymentSubmitted = findPaymentReason !== -1 ? reason[findPaymentReason].isSubmitted === true : true;
+  const isDocumentSubmitted = findDocumentReason !== -1 ? reason[findDocumentReason].isSubmitted === true : true;
   const isSubmitted = isPaymentSubmitted === true && isDocumentSubmitted === true;
 
   return (

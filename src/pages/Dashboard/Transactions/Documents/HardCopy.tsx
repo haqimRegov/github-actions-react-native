@@ -129,27 +129,27 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                 try {
                   const url =
                     accountHolder === undefined
-                      ? S3UrlGenerator.hardcopy(currentOrder!.clientId, currentOrder!.orderNumber, name, document!.title!, document!.type!)
+                      ? S3UrlGenerator.hardcopy(currentOrder!.clientId, currentOrder!.orderNumber, name, document.title!, document.type!)
                       : S3UrlGenerator.hardcopyAccount(
                           currentOrder!.clientId,
                           currentOrder!.orderNumber,
                           accountHolder,
-                          document!.title!,
-                          document!.type!,
+                          document.title!,
+                          document.type!,
                         );
-                  const uploadedFile = await StorageUtil.put(document!.path!, url, document!.type!);
+                  const uploadedFile = await StorageUtil.put(document.path, url, document.type!);
                   if (uploadedFile === undefined) {
                     throw new Error();
                   }
                   return {
-                    title: document!.title!,
+                    title: document.title!,
                     file: {
                       // base64: documents!.base64!,
-                      name: document!.name!,
-                      size: document!.size!,
-                      type: document!.type!,
-                      date: document!.date!,
-                      path: document!.path!,
+                      name: document.name!,
+                      size: document.size!,
+                      type: document.type!,
+                      date: document.date!,
+                      path: document.path,
                       url: uploadedFile.key,
                     },
                   };
@@ -342,7 +342,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   const handleSetJointDocument = (value: IHardCopyDocument[]) => {
     if (documentList?.account.joint !== undefined) {
       setDocumentList({
-        ...documentList!,
+        ...documentList,
         account: { ...documentList?.account, joint: value },
       });
     }

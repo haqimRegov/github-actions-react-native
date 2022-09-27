@@ -383,7 +383,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
           <NewDropdown handleChange={handleCurrency} items={currencies} label={INVESTMENT.LABEL_CURRENCY} value={fundCurrency!} />
         ) : null}
         {multiClass === false && currencies.length === 1 ? (
-          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency!} spaceToLabel={checkSpaceToLabel} style={{ width: sw360 }} />
+          <LabeledTitle label={INVESTMENT.LABEL_CURRENCY} title={fundCurrency} spaceToLabel={checkSpaceToLabel} style={{ width: sw360 }} />
         ) : null}
       </View>
       <CustomSpacer space={sh24} />

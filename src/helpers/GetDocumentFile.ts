@@ -2,9 +2,9 @@ import { isArrayNotEmpty, isNotEmpty } from "../utils";
 
 export const getDocumentFile = (docSummary: IDocumentSummary, type: "id" | "cert", holder: TypeAccountHolder) => {
   const findCurrentInvestor =
-    isNotEmpty(docSummary) && isNotEmpty(docSummary!.softcopy) && isArrayNotEmpty(docSummary!.softcopy!.documents)
-      ? docSummary!
-          .softcopy!.documents!.filter((eachOuterDoc) => isNotEmpty(eachOuterDoc.subHeader) && eachOuterDoc.subHeader.includes(holder))
+    isNotEmpty(docSummary) && isNotEmpty(docSummary.softcopy) && isArrayNotEmpty(docSummary.softcopy.documents)
+      ? docSummary.softcopy.documents
+          .filter((eachOuterDoc) => isNotEmpty(eachOuterDoc.subHeader) && eachOuterDoc.subHeader.includes(holder))
           .map((eachFilteredDoc) => eachFilteredDoc)
       : [];
 

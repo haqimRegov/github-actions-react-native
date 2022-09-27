@@ -174,7 +174,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
         typeof currentFilter[key] === "object" && (key === "endDate" || key === "startDate")
           ? [moment(currentFilter[key]).format(DEFAULT_DATE_FORMAT)]
           : checkArray;
-      const pillValues = dataArray!.map((value) => generatePillLabel(key, value));
+      const pillValues = dataArray.map((value) => generatePillLabel(key, value));
       return pillValues;
     });
   const pillList = newPills.map((pillValues) => pillValues).flat();

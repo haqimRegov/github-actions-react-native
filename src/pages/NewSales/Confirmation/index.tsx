@@ -190,20 +190,20 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const investmentCurrencies = investmentDetails!.map(({ investment }) => investment.fundCurrency!);
 
     // dynamically reset local bank details when the selectedFunds was changed
-    const filterLocalBankDetails = personalInfo!
+    const filterLocalBankDetails = personalInfo
       .principal!.bankSummary!.localBank!.map((eachBank) => ({
         ...eachBank,
-        currency: eachBank!.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+        currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
       }))
       .filter((eachLocalBank) => eachLocalBank.currency.length > 0);
 
     // dynamically reset foreign bank details when the selectedFunds was changed
     const filterForeignBankDetails =
-      personalInfo!.principal!.bankSummary!.foreignBank!.length > 0
-        ? personalInfo!
+      personalInfo.principal!.bankSummary!.foreignBank!.length > 0
+        ? personalInfo
             .principal!.bankSummary!.foreignBank!.map((eachBank) => ({
               ...eachBank,
-              currency: eachBank!.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+              currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
             }))
             .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
         : [];

@@ -204,7 +204,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
             <CustomSpacer space={sh8} />
             <View style={rowCenterVertical}>
               <View style={{ ...itemContainerStyle }}>
-                {documents!.map((eachContent: IItemWithCount, eachContentIndex: number) => {
+                {documents.map((eachContent: IItemWithCount, eachContentIndex: number) => {
                   const handlePress = () => {
                     handleNavigation(eachContent.document);
                   };
@@ -242,7 +242,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
                   <CustomSpacer isHorizontal={true} space={sw16} />
                   <Pressable onPress={handleShowAll}>
                     <View>
-                      <Text style={fs12BoldBlue1}>{`+${documents!.length - itemIndex} more`}</Text>
+                      <Text style={fs12BoldBlue1}>{`+${documents.length - itemIndex} more`}</Text>
                     </View>
                   </Pressable>
                 </View>

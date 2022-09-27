@@ -110,7 +110,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
 
   const handleNextStep = (route: TypeForceUpdateKey) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
-      stepperBarRef!.current!.handleNextStep(route);
+      stepperBarRef.current.handleNextStep(route);
     }
   };
 

@@ -375,12 +375,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                       </Text>
                     </View>
                   );
-                case "fundCategory":
-                  return (
-                    <View style={centerHV}>
-                      <Text style={fs12RegBlue1}>{titleCaseString(customItem.item.rawData.fundCategory as string)}</Text>
-                    </View>
-                  );
                 case "fundCurrencies":
                   return (
                     <View style={centerHV}>

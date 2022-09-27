@@ -172,7 +172,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
             return filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value);
           });
           const header =
-            bankingDetails!.length > 1 ? `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}` : PERSONAL_DETAILS.LABEL_BANK_FOREIGN;
+            bankingDetails.length > 1 ? `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}` : PERSONAL_DETAILS.LABEL_BANK_FOREIGN;
 
           return (
             <Fragment key={index}>
@@ -199,7 +199,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       };
 
                       const handleRemoveCurrency = () => {
-                        let modalText: IPromptText = { ...promptText };
+                        let modalText: IPromptText;
                         if (item.currency!.length === 1) {
                           modalText = {
                             title: `${PERSONAL_DETAILS.LABEL_REMOVE} ${value} ${PERSONAL_DETAILS.LABEL_AND_FOREIGN_BANK_ACCOUNT}`,

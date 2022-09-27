@@ -41,7 +41,7 @@ const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, c
     handleResetNewSales: handleResetNewSales,
   };
 
-  let content: JSX.Element = <View />;
+  let content: JSX.Element;
   const backToDashboardLabel = NEW_SALES.LABEL_BACK_NEW_SALES;
 
   switch (newProps.route) {

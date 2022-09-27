@@ -9,7 +9,7 @@ import { SummaryDetails } from "./Details";
 const { SUMMARY } = Language.PAGE;
 
 interface JointProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   summary: IHolderInfoState;
 }
 

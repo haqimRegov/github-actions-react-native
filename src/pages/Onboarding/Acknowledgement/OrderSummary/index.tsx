@@ -39,7 +39,7 @@ import { FundOverview } from "../../../../templates";
 import { formatAmount } from "../../../../utils";
 
 interface OrderSummaryProps extends AcknowledgementStoreProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
 }
 
 const { ORDER_SUMMARY } = Language.PAGE;

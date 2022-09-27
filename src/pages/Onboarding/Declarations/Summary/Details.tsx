@@ -35,7 +35,7 @@ interface DeclarationDetailsProps {
   address?: string;
   accountHolder: TypeAccountHolder;
   accountType: TypeAccountChoices;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   isFea: boolean;
   name: string;
   summary: IDeclarationState;

@@ -41,7 +41,7 @@ interface SummaryDetailsProps {
   employmentDetails: LabeledTitleProps[];
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   localBankDetails: LabeledTitleProps[][];
   mailingAddress: LabeledTitleProps[];
   name: string;

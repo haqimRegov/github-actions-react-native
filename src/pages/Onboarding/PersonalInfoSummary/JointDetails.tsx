@@ -29,7 +29,7 @@ import {
 const { SUMMARY } = Language.PAGE;
 
 interface SummaryJointDetailsProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   principalName: string;
   jointName: string;
   jointDetails: LabeledTitleProps[];

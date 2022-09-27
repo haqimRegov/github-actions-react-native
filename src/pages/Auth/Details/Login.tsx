@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";

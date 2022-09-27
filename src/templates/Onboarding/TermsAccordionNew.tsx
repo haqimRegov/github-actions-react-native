@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Pressable, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 

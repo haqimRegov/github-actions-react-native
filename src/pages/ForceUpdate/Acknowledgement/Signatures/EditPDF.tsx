@@ -129,10 +129,10 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       coordinateX = locationX;
       coordinateY = positionY;
     }
-    if (coordinateY > 90 && coordinateY < 220) {
-      if (coordinateX < 245 && coordinateX > 0) {
+    if (coordinateY > 90 && coordinateY < 300 && coordinateX < 680) {
+      if (coordinateX <= 330 && coordinateX > 0) {
         setSigner("adviser");
-      } else if (coordinateX > 245 && coordinateX < 470) {
+      } else if (coordinateX > 330) {
         setSigner("principal");
       }
       setShowSignPdf(true);

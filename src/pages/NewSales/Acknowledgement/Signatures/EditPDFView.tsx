@@ -55,6 +55,7 @@ declare interface PDFViewProps {
   handlePosition: (e: GestureResponderEvent) => void;
   pageLoading: boolean;
   setScrollRef: (ref: ScrollView) => void;
+  transactionType?: TTransactionType;
 }
 
 export const PdfViewNewSales: FunctionComponent<PDFViewProps> = ({
@@ -76,6 +77,7 @@ export const PdfViewNewSales: FunctionComponent<PDFViewProps> = ({
   handlePosition,
   pageLoading,
   setScrollRef,
+  transactionType,
 }: PDFViewProps) => {
   const { urlPageCount } = editReceipt!;
   let signerLabel = "";
@@ -92,13 +94,15 @@ export const PdfViewNewSales: FunctionComponent<PDFViewProps> = ({
           accountType === "Joint" ? TERMS_AND_CONDITIONS.LABEL_PRINCIPAL_SIGNATURE : TERMS_AND_CONDITIONS.LABEL_INVESTORS_SIGNATURE;
         signatureToDisplay = principalSignature;
         break;
-      case "joint":
-        signerLabel =
+      case "joint": {
+        const checkJoint =
           jointAge !== undefined && jointAge > 18
             ? TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE
             : TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE_OPTIONAL;
+        signerLabel = transactionType !== "Sales-AO" ? TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE : checkJoint;
         signatureToDisplay = jointSignature;
         break;
+      }
       default:
         signerLabel = TERMS_AND_CONDITIONS.LABEL_ADVISER_SIGNATURE;
         break;

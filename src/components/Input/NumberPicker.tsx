@@ -59,7 +59,7 @@ export interface NumberPickerProps {
   minValue?: number;
   onBlur?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
-  onLayout?: ((event: LayoutChangeEvent) => void) | undefined;
+  onLayout?: (event: LayoutChangeEvent) => void;
   onPressLabel?: () => void;
   placeholder?: string;
   setValue: (value: string) => void;

@@ -205,7 +205,7 @@ export const FundNew: FunctionComponent<FundProps> = ({ expanded, fund, handleEx
           name={icon}
           onPress={handleExpand}
           size={sw24}
-          style={circle(sw40, undefined)}
+          style={circle(sw40)}
           withHover={{ color: colorBlue._2 }}
         />
       </Pressable>

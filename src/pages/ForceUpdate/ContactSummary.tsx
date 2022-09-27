@@ -187,7 +187,7 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
                   color={colorBlue._1}
                   name="pencil"
                   onPress={handleEdit}
-                  style={circle(sw40, undefined)}
+                  style={circle(sw40)}
                   withHover={{ color: colorBlue._2 }}
                 />
                 <CustomSpacer isHorizontal={true} space={sw16} />

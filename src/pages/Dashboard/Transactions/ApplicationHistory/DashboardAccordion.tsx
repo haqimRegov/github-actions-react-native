@@ -13,6 +13,7 @@ import {
   colorRed,
   colorTransparent,
   flexRow,
+  flexWrap,
   fs12BoldBlue1,
   fs12BoldGray6,
   fs12RegGray5,
@@ -145,6 +146,7 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
   const itemContainerStyle: ViewStyle = {
     ...rowCenterVertical,
     ...checkMaxWidth,
+    ...flexWrap,
   };
   const sideElementContainer: ViewStyle = { ...flexRow, ...centerHV, borderBottomColor: colorRed._1, borderBottomWidth: sw1 };
   const containerStyle: ViewStyle = {
@@ -201,7 +203,6 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
             <View style={borderBottomGray3} />
             <CustomSpacer space={sh16} />
             {documents[0].document !== "Submission Summary Receipt" ? <Text style={fs12RegGray6}>{itemsLabel}</Text> : null}
-            <CustomSpacer space={sh8} />
             <View style={rowCenterVertical}>
               <View style={{ ...itemContainerStyle }}>
                 {documents.map((eachContent: IItemWithCount, eachContentIndex: number) => {
@@ -211,40 +212,46 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
                   const checkDownload = eachContent.document === "Submission Summary Receipt" ? "download" : "upload";
                   const checkIcon = eachContent.document === "Recurring Info" ? "plus" : checkDownload;
                   return (
-                    <View key={eachContent.document} style={flexRow}>
-                      {itemIndex === -1 || eachContentIndex < itemIndex || showAll === true ? (
-                        <Fragment>
-                          {eachContentIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
-                          <View
-                            onLayout={(event: LayoutChangeEvent) => {
-                              const { width } = event.nativeEvent.layout;
-                              const updatedWidth = [...itemWidths];
-                              updatedWidth[eachContentIndex] = width;
-                              setItemWidths(updatedWidth);
-                            }}>
-                            <OutlineButton
-                              badgeCount={eachContent.count > 1 ? eachContent.count : undefined}
-                              buttonStyle={buttonStyle}
-                              color={colorBlue._1}
-                              icon={checkIcon}
-                              onPress={handlePress}
-                              text={eachContent.document}
-                            />
-                          </View>
-                        </Fragment>
-                      ) : null}
+                    <View key={eachContent.document}>
+                      <CustomSpacer space={sh8} />
+                      <View style={flexRow}>
+                        {itemIndex === -1 || eachContentIndex < itemIndex || showAll === true ? (
+                          <Fragment>
+                            <View
+                              onLayout={(event: LayoutChangeEvent) => {
+                                const { width } = event.nativeEvent.layout;
+                                const updatedWidth = [...itemWidths];
+                                updatedWidth[eachContentIndex] = width;
+                                setItemWidths(updatedWidth);
+                              }}>
+                              <OutlineButton
+                                badgeCount={eachContent.count > 1 ? eachContent.count : undefined}
+                                buttonStyle={buttonStyle}
+                                color={colorBlue._1}
+                                icon={checkIcon}
+                                onPress={handlePress}
+                                text={eachContent.document}
+                              />
+                            </View>
+                            {eachContentIndex !== documents.length - 1 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
+                          </Fragment>
+                        ) : null}
+                      </View>
                     </View>
                   );
                 })}
               </View>
               {showAll === false && itemIndex !== -1 ? (
-                <View style={rowCenterVertical}>
-                  <CustomSpacer isHorizontal={true} space={sw16} />
-                  <Pressable onPress={handleShowAll}>
-                    <View>
-                      <Text style={fs12BoldBlue1}>{`+${documents.length - itemIndex} more`}</Text>
-                    </View>
-                  </Pressable>
+                <View>
+                  <CustomSpacer space={sh8} />
+                  <View style={rowCenterVertical}>
+                    <CustomSpacer isHorizontal={true} space={sw16} />
+                    <Pressable onPress={handleShowAll}>
+                      <View>
+                        <Text style={fs12BoldBlue1}>{`+${documents.length - itemIndex} more`}</Text>
+                      </View>
+                    </Pressable>
+                  </View>
                 </View>
               ) : null}
             </View>

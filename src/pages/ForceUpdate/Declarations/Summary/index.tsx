@@ -2,13 +2,13 @@ import React, { Fragment, FunctionComponent, useRef } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../../components";
+import { CustomFlexSpacer, CustomSpacer, defaultContentProps, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS_NEW } from "../../../../data/dictionary";
 import { getFatcaRequest } from "../../../../helpers";
 import { submitChangeRequest } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh124, sh24, sh4, sh40, sw24 } from "../../../../styles";
+import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh124, sh24, sh4, sw24 } from "../../../../styles";
 import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
@@ -160,8 +160,8 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
           contentContainerStyle={{ ...flexGrow, backgroundColor: colorBlue._2 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
-          <CustomSpacer space={sh40} />
-          <View style={{ ...px(sw24) }}>
+          <CustomSpacer space={defaultContentProps.spaceToTop!} />
+          <View style={px(sw24)}>
             <LabeledTitle
               label={DECLARATION_SUMMARY.HEADING_DECLARATION}
               labelStyle={fs18BoldGray6}

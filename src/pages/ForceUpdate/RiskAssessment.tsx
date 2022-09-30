@@ -56,7 +56,6 @@ import {
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
 import { isObjectEqual } from "../../utils";
-import { defaultContentProps } from "./Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -316,7 +315,6 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
   return (
     <Fragment>
       <ContentPage
-        {...defaultContentProps}
         continueDisabled={disabled}
         handleCancel={handleBackToContactSummary}
         handleContinue={handlePageContinue}

@@ -7,7 +7,6 @@ import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../../styles";
 import { CRSDefinition } from "../../../Onboarding/Declarations/CRS/CRSDefinition";
-import { defaultContentProps } from "../../Content";
 import { CrsDeclarationDetails } from "./Details";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -102,7 +101,6 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
 
   return (
     <ContentPage
-      {...defaultContentProps}
       continueDisabled={!continueEnabledPrincipal}
       handleCancel={handleBack}
       handleContinue={showButtonContinuePrincipal}

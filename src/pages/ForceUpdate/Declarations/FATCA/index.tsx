@@ -7,7 +7,6 @@ import { Language } from "../../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../../styles";
 import { FatcaDefinition } from "../../../Onboarding/Declarations/FATCA/FatcaDefinition";
-import { defaultContentProps } from "../../Content";
 import { FatcaDeclarationDetails } from "./Details";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -123,7 +122,6 @@ const FATCAContentComponent: FunctionComponent<FatcaDeclarationProps> = ({
 
   return (
     <ContentPage
-      {...defaultContentProps}
       continueDisabled={!continueEnabled}
       handleCancel={handleBack}
       handleContinue={handleContinue}

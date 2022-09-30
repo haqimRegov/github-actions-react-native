@@ -19,7 +19,6 @@ import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, Ackn
 import { centerHV, fsAlignLeft, fullHW, px, sh16, sh24, sh8, sw24 } from "../../../../styles";
 import { SubmissionSummaryCollapsible } from "../../../../templates";
 import { isArrayNotEmpty } from "../../../../utils";
-import { defaultContentProps } from "../../Content";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -219,7 +218,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   return (
     <Fragment>
       <ContentPage
-        {...defaultContentProps}
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleSubmit}

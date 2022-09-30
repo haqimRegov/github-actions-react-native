@@ -254,7 +254,7 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
               <LabeledTitle
                 label={PAYMENT.HEADING}
                 labelStyle={defaultContentProps.subheadingStyle}
-                spaceToLabel={defaultContentProps.spaceToTitle!}
+                spaceToLabel={defaultContentProps.spaceToTitle}
                 title={PAYMENT.SUBHEADING}
                 titleStyle={defaultContentProps.subtitleStyle}
               />

@@ -57,7 +57,7 @@ const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
 
   return (
     <SafeAreaPage>
-      <InvestorProfile handleBack={handleInvestorProfileBack} data={investorProfile} spaceToTop={defaultContentProps.spaceToTop!} />
+      <InvestorProfile handleBack={handleInvestorProfileBack} data={investorProfile} spaceToTop={defaultContentProps.spaceToTop} />
     </SafeAreaPage>
   );
 };

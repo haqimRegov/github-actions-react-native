@@ -67,7 +67,7 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
             <LabeledTitle
               label={EMPLOYMENT_DETAILS.HEADING}
               labelStyle={defaultContentProps.subheadingStyle}
-              spaceToLabel={defaultContentProps.spaceToTitle!}
+              spaceToLabel={defaultContentProps.spaceToTitle}
               style={padding}
               title={EMPLOYMENT_DETAILS.SUBHEADING}
               titleStyle={defaultContentProps.subtitleStyle}

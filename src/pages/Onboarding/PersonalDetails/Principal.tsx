@@ -56,7 +56,7 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
         <LabeledTitle
           label={PERSONAL_DETAILS.SUBHEADING_PERSONAL}
           labelStyle={defaultContentProps.subheadingStyle}
-          spaceToLabel={defaultContentProps.spaceToTitle!}
+          spaceToLabel={defaultContentProps.spaceToTitle}
           style={padding}
           title={PERSONAL_DETAILS.SUBTITLE_REACH}
           titleStyle={defaultContentProps.subtitleStyle}

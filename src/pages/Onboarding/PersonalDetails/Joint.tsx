@@ -51,7 +51,7 @@ export const JointDetails: FunctionComponent<JointDetails> = ({
           <LabeledTitle
             label={PERSONAL_DETAILS.SUBHEADING_PERSONAL}
             labelStyle={defaultContentProps.subheadingStyle}
-            spaceToLabel={defaultContentProps.spaceToTitle!}
+            spaceToLabel={defaultContentProps.spaceToTitle}
             title={PERSONAL_DETAILS.SUBTITLE_REACH}
             titleStyle={defaultContentProps.subtitleStyle}
           />

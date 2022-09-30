@@ -31,7 +31,7 @@ export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps
         <LabeledTitle
           label={ID_VERIFICATION.LABEL_ID_VERIFY}
           labelStyle={defaultContentProps.subheadingStyle}
-          spaceToLabel={defaultContentProps.spaceToTitle!}
+          spaceToLabel={defaultContentProps.spaceToTitle}
           title={ID_VERIFICATION.TITLE}
           titleStyle={defaultContentProps.subtitleStyle}
         />

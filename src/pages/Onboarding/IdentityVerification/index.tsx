@@ -7,7 +7,7 @@ import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh40, sh56, sw24 } from "../../../styles";
+import { px, sh24, sh56, sw24 } from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -262,7 +262,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           subheading={IDENTITY_CONFIRMATION.HEADING}
           subtitle={defaultSubtitle}>
           <View style={px(sw24)}>
-            <CustomSpacer space={sh40} />
+            <CustomSpacer space={sh24} />
             {accountType === "Joint" ? (
               <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} title={principalHolder!.name!} />
             ) : null}

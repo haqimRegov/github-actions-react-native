@@ -7,6 +7,7 @@ import {
   CustomFlexSpacer,
   CustomSpacer,
   CustomToast,
+  defaultContentProps,
   IconButton,
   LabeledTitle,
   SafeAreaPage,
@@ -34,7 +35,6 @@ import {
   rowCenterVertical,
   sh24,
   sh4,
-  sh40,
   sw1,
   sw16,
   sw24,
@@ -165,7 +165,7 @@ const ContactSummaryComponent: FunctionComponent<ContactSummaryProps> = ({
   return (
     <Fragment>
       <SafeAreaPage>
-        <CustomSpacer space={sh40} />
+        <CustomSpacer space={defaultContentProps.spaceToTop!} />
         <View style={{ ...px(sw24) }}>
           <LabeledTitle
             label={INVESTOR_INFORMATION.HEADING_CONTACT_SUMMARY}

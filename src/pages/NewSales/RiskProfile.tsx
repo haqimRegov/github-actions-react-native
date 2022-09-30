@@ -10,6 +10,7 @@ import {
   CustomButton,
   CustomFlexSpacer,
   CustomSpacer,
+  defaultContentProps,
   IconButton,
   SelectionBanner,
   TextCard,
@@ -80,7 +81,6 @@ import {
 import { isEmpty, isNotEmpty } from "../../utils";
 import { NewSalesAccountInformation } from "./AccountInformation";
 import { InvestorProfilePage } from "./AccountInfoSummary/Profile";
-import { defaultContentProps } from "./Content";
 import { NewSalesOrderSummary } from "./OrderSummary";
 
 const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
@@ -348,7 +348,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const clientId = currentClientId !== "" ? currentClientId : checkCurrentProfile;
 
   const profileContent = (
-    <ContentPage {...defaultContentProps} heading={RISK_ASSESSMENT.NEW_SALES_HEADING} headingStyle={headerStyle}>
+    <ContentPage heading={RISK_ASSESSMENT.NEW_SALES_HEADING} headingStyle={headerStyle}>
       <CustomSpacer space={sh24} />
       <View style={px(sw24)}>
         <View style={flexRow}>

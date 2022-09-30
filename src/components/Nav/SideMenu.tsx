@@ -15,8 +15,7 @@ import {
   sh16,
   sh24,
   sh40,
-  sh44,
-  sh56,
+  sh48,
   shadow50Black115,
   sw104,
   sw200,
@@ -66,9 +65,9 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
     <View style={container}>
       <View style={sideMenuV2Container}>
         <View style={px(sw24)}>
-          <CustomSpacer space={sh44} />
+          <CustomSpacer space={sh40} />
           <Image source={image || LocalAssets.logo.kenangaBrand} style={defaultLogoStyle} />
-          <CustomSpacer space={spaceToContent || sh56} />
+          <CustomSpacer space={spaceToContent || sh48} />
         </View>
         {children}
         {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : <CustomFlexSpacer />}

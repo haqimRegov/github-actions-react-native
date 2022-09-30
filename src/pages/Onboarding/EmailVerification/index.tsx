@@ -5,7 +5,7 @@ import { Alert, Text } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language, OTP_CONFIG } from "../../../constants";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { fs16RegGray6 } from "../../../styles";
@@ -34,6 +34,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const [prompt, setPrompt] = useState<"cancel" | undefined>(undefined);
   const [principalEmailError, setPrincipalEmailError] = useState<string | undefined>(undefined);
   const [jointEmailError, setJointEmailError] = useState<string | undefined>(undefined);
+  const [resendTimer, setResendTimer] = useState(0);
 
   const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
@@ -70,6 +71,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       const response: IEmailVerificationResponse = await emailVerification(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
+      setResendTimer(OTP_CONFIG.EXPIRY);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
@@ -117,6 +119,16 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    let otpTimer: ReturnType<typeof setTimeout>;
+    if (resendTimer > 0) {
+      otpTimer = setInterval(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(otpTimer);
+  }, [resendTimer]);
+
   return (
     <Fragment>
       {page === "verification" ? (
@@ -129,6 +141,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           jointError={jointEmailError}
           personalInfo={personalInfo}
           principalError={principalEmailError}
+          resendTimer={resendTimer}
           setJointError={setJointEmailError}
           setPrincipalError={setPrincipalEmailError}
         />
@@ -139,15 +152,17 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           handleCancel={handleCancel}
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}
-          jointEmailCheck={jointEmailCheck}
           jointEmail={inputJointEmail}
+          jointEmailCheck={jointEmailCheck}
           jointOtp={jointOtp}
           principalClientId={principalClientId}
           principalEmail={inputPrincipalEmail}
           principalOtp={principalOtp}
+          resendTimer={resendTimer}
           setJointOtp={setJointOtp}
           setPage={setPage}
           setPrincipalOtp={setPrincipalOtp}
+          setResendTimer={setResendTimer}
         />
       )}
       <ConfirmationModal

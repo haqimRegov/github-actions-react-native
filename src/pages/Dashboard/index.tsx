@@ -28,7 +28,6 @@ import {
   px,
   py,
   sh16,
-  sh20,
   sh24,
   sh32,
   sw16,
@@ -186,10 +185,10 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>
-      <SideMenu spaceToBottom={0} spaceToContent={sh32}>
+      <SideMenu spaceToBottom={0} spaceToContent={sh16}>
         <View>
           <View style={borderBottomGray2} />
-          <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh24) }}>
+          <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
             <Avatar text={initials} type="agent" />
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ width: sw96 }}>
@@ -199,7 +198,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
             </View>
           </View>
           <View style={borderBottomGray2} />
-          <View style={{ ...flexRow, ...py(sh20) }}>
+          <View style={{ ...flexRow, ...py(sh16) }}>
             <CustomSpacer isHorizontal={true} space={sw24} />
             <View style={{ width: sw160 }}>
               <Text style={fs12BoldGray6}>{agent?.rank}</Text>

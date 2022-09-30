@@ -3,10 +3,9 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
-import { SafeAreaPage } from "../../../components";
+import { defaultContentProps, SafeAreaPage } from "../../../components";
 import { getInvestorAccountDetails } from "../../../network-actions";
 import { InvestorsMapDispatchToProps, InvestorsMapStateToProps, InvestorsStoreProps } from "../../../store";
-import { sh28 } from "../../../styles";
 import { InvestorProfile } from "../../../templates";
 
 interface InvestorProfilePageProps extends InvestorsStoreProps {
@@ -58,7 +57,7 @@ const InvestorProfileComponent: FunctionComponent<InvestorProfilePageProps> = ({
 
   return (
     <SafeAreaPage>
-      <InvestorProfile handleBack={handleInvestorProfileBack} data={investorProfile} spaceToTop={sh28} />
+      <InvestorProfile handleBack={handleInvestorProfileBack} data={investorProfile} spaceToTop={defaultContentProps.spaceToTop} />
     </SafeAreaPage>
   );
 };

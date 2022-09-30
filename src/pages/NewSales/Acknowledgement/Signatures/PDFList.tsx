@@ -32,7 +32,6 @@ import {
   sw80,
 } from "../../../../styles";
 import { formatAmount, isArrayNotEmpty, isNotEmpty } from "../../../../utils";
-import { defaultContentProps } from "../../Content";
 
 const { TERMS_AND_CONDITIONS, NEW_SALES_PROMPT } = Language.PAGE;
 
@@ -259,8 +258,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         handleContinue={handleSubmit}
         labelContinue={TERMS_AND_CONDITIONS.BUTTON_CREATE}
         subheading={TERMS_AND_CONDITIONS.HEADING_SIGNATURE}
-        subtitle={TERMS_AND_CONDITIONS.SUBTITLE_SIGNATURE}
-        {...defaultContentProps}>
+        subtitle={TERMS_AND_CONDITIONS.SUBTITLE_SIGNATURE}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <View style={rowCenterVertical}>

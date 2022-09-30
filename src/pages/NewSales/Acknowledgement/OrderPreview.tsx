@@ -42,7 +42,6 @@ import {
 } from "../../../styles";
 import { FundOverview } from "../../../templates";
 import { formatAmount, isNotEmpty } from "../../../utils";
-import { defaultContentProps } from "../Content";
 
 const { ORDER_SUMMARY } = Language.PAGE;
 
@@ -84,7 +83,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
 
   return (
     <View style={flexChild}>
-      <ContentPage {...defaultContentProps} subheading={ORDER_SUMMARY.HEADING_NEW} spaceToBottom={sh72}>
+      <ContentPage subheading={ORDER_SUMMARY.HEADING_NEW} spaceToBottom={sh72}>
         <View style={orderSummaryHeader}>
           <Text style={fs14RegGray5}>{ORDER_SUMMARY.SUBHEADING_NEW}</Text>
           <CustomSpacer isHorizontal={true} space={sw4} />

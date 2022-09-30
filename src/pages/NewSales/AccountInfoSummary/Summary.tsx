@@ -2,7 +2,16 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Dimensions, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { ColorCard, ContentPage, CustomButton, CustomFlexSpacer, CustomSpacer, IconButton, TextCard } from "../../../components";
+import {
+  ColorCard,
+  ContentPage,
+  CustomButton,
+  CustomFlexSpacer,
+  CustomSpacer,
+  defaultContentProps,
+  IconButton,
+  TextCard,
+} from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
@@ -31,7 +40,6 @@ import {
   sh12,
   sh16,
   sh24,
-  sh40,
   sh72,
   sh8,
   sw1,
@@ -46,7 +54,6 @@ import {
   sw8,
 } from "../../../styles";
 import { isNotEmpty } from "../../../utils";
-import { defaultContentProps } from "../Content";
 
 const { NEW_SALES_SUMMARY } = Language.PAGE;
 
@@ -276,11 +283,10 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   return (
     <ContentPage
-      {...defaultContentProps}
       spaceToBottom={sh72}
       sideElement={
         <View>
-          <CustomSpacer space={sh40} />
+          <CustomSpacer space={defaultContentProps.spaceToTop!} />
           <View style={containerStyle}>
             <CustomButton
               secondary={true}
@@ -289,7 +295,6 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
               text={checkLabel}
               textStyle={fs10BoldBlue1}
             />
-
             {client.accountType === "Joint" ? (
               <Fragment>
                 <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} />

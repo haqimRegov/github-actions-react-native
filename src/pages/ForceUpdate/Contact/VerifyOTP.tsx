@@ -10,6 +10,7 @@ import {
   CustomSpacer,
   CustomTextInput,
   CustomToast,
+  defaultContentProps,
   LinkText,
   SafeAreaPage,
 } from "../../../components";
@@ -22,12 +23,12 @@ import {
   flexGrow,
   flexRow,
   fs12BoldBlue8,
+  fs12BoldGray5,
   fs12RegGray5,
-  fs18BoldGray6,
+  fs16BoldBlack2,
   px,
+  sh16,
   sh24,
-  sh4,
-  sh40,
   sh48,
   sh56,
   sw24,
@@ -36,7 +37,7 @@ import {
 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
-const { INVESTOR_INFORMATION } = Language.PAGE;
+const { INVESTOR_INFORMATION, EMAIL_VERIFICATION } = Language.PAGE;
 
 declare interface VerifyOTPProps {
   details?: IClientDetailsState;
@@ -45,8 +46,10 @@ declare interface VerifyOTPProps {
   handleNavigate: () => void;
   handleResend: () => void;
   inputEmail: string;
+  resendTimer: number;
   setEmailOtpSent: (value: boolean) => void;
   setOtpVerified: (toggle: boolean) => void;
+  setResendTimer: (value: number) => void;
 }
 
 export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
@@ -56,15 +59,16 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
   handleNavigate,
   handleResend,
   inputEmail,
+  resendTimer,
   setEmailOtpSent,
   setOtpVerified,
+  setResendTimer,
 }: VerifyOTPProps) => {
   const inputClientId = details?.principalHolder?.clientId!;
 
   const navigation = useNavigation<IStackNavigationProp>();
   const fetching = useRef<boolean>(false);
   const [inputOtp, setInputOtp] = useState<string>("");
-  const [resendTimer, setResendTimer] = useState(OTP_CONFIG.EXPIRY);
   const [otpError, setOtpError] = useState<string | undefined>(undefined);
 
   const validateOtp = (value: string) => {
@@ -125,17 +129,6 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
   const disabled = inputOtp === "";
   const inputOtpLabel = INVESTOR_INFORMATION.LABEL_OTP;
-  const otpLabel = `${INVESTOR_INFORMATION.CARD_TITLE_OTP} ${inputEmail}`;
-
-  useEffect(() => {
-    let otpTimer: ReturnType<typeof setTimeout>;
-    if (resendTimer > 0) {
-      otpTimer = setInterval(() => {
-        setResendTimer(resendTimer - 1);
-      }, 1000);
-    }
-    return () => clearInterval(otpTimer);
-  }, [resendTimer]);
 
   useEffect(() => {
     let redirectTimer: ReturnType<typeof setTimeout>;
@@ -154,19 +147,29 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           style={{ ...px(sw24), backgroundColor: colorBlue._2 }}>
-          <CustomSpacer space={sh40} />
+          <CustomSpacer space={defaultContentProps.spaceToTop!} />
           <View style={flexRow}>
             <CustomSpacer space={sw4} />
-            <View style={{}}>
+            <View>
               <IcoMoon name="arrow-left" onPress={handleCancel} size={sw24} suppressHighlighting={true} />
             </View>
             <CustomSpacer isHorizontal={true} space={sw8} />
-            <Text style={fs18BoldGray6}>{INVESTOR_INFORMATION.HEADING_CONTACT}</Text>
+            <Text style={defaultContentProps.subheadingStyle}>{INVESTOR_INFORMATION.HEADING_CONTACT}</Text>
           </View>
           <CustomSpacer space={sh24} />
           <View>
             <ColorCard
-              header={{ label: INVESTOR_INFORMATION.CARD_LABEL_OTP, title: otpLabel }}
+              header="custom"
+              customHeader={
+                <View>
+                  <Text style={fs16BoldBlack2}>{INVESTOR_INFORMATION.CARD_LABEL_OTP}</Text>
+                  <View style={flexRow}>
+                    <Text style={fs12RegGray5}>{EMAIL_VERIFICATION.LABEL_OTP_SEND_TO}</Text>
+                    <CustomSpacer isHorizontal space={sw4} />
+                    <Text style={fs12BoldGray5}>{inputEmail}</Text>
+                  </View>
+                </View>
+              }
               content={
                 <View>
                   <CustomTextInput
@@ -179,15 +182,20 @@ export const VerifyOTP: FunctionComponent<VerifyOTPProps> = ({
                     placeholder={INVESTOR_INFORMATION.LABEL_OTP_PLACEHOLDER}
                     value={inputOtp}
                   />
-                  <CustomSpacer space={sh4} />
+                  <CustomSpacer space={sh16} />
                   <View style={flexRow}>
                     <Text style={fs12RegGray5}>{INVESTOR_INFORMATION.LABEL_RESEND}</Text>
                     <CustomSpacer isHorizontal={true} space={sw4} />
                     {resendTimer <= 0 ? (
                       <LinkText onPress={handleResendOtp} style={fs12BoldBlue8} text={INVESTOR_INFORMATION.LINK_RESEND} />
                     ) : (
-                      <Text
-                        style={fs12RegGray5}>{`${INVESTOR_INFORMATION.LABEL_RESEND_IN} ${resendMinutes}:${formattedResendSeconds}`}</Text>
+                      <View style={flexRow}>
+                        <Text style={fs12RegGray5}>{INVESTOR_INFORMATION.LABEL_RESEND_IN}</Text>
+                        <CustomSpacer space={sw4} isHorizontal />
+                        <Text style={fs12BoldGray5}>
+                          {resendMinutes}:{formattedResendSeconds}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 </View>

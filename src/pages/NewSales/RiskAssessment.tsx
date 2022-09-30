@@ -55,7 +55,6 @@ import {
   sw8,
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
-import { defaultContentProps } from "../ForceUpdate/Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -66,7 +65,6 @@ interface RiskAssessmentContentProps extends RiskStoreProps, NewSalesContentProp
 const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentProps> = ({
   addAssessmentQuestions,
   addRiskInfo,
-  addRiskScore,
   details,
   handleNextStep,
   navigation,
@@ -241,7 +239,6 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   return (
     <Fragment>
       <ContentPage
-        {...defaultContentProps}
         cancelDisabled={isEditConfirmed}
         continueDisabled={disabled}
         handleCancel={handleCancelAssessment}

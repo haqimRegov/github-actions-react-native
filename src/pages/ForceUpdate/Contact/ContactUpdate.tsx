@@ -1,14 +1,13 @@
-import React, { FunctionComponent } from "react";
-import { View } from "react-native";
+import React, { Fragment, FunctionComponent } from "react";
+import { Text, View } from "react-native";
 
-import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewMobileInput } from "../../../components";
+import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewMobileInput, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
-import { fsTransformNone, px, sh24, sw24 } from "../../../styles";
+import { borderBottomGray2, flexRow, fs12BoldGray5, fs12RegGray5, fsTransformNone, px, sh16, sh24, sh4, sw24, sw4 } from "../../../styles";
 import { isEmail, isNumber } from "../../../utils";
-import { defaultContentProps } from "../Content";
 
-const { INVESTOR_INFORMATION } = Language.PAGE;
+const { INVESTOR_INFORMATION, EMAIL_VERIFICATION } = Language.PAGE;
 
 interface ContactUpdate {
   contactNumber: IContactNumber[];
@@ -16,8 +15,7 @@ interface ContactUpdate {
   handleContinue: () => void;
   inputEmail: string;
   inputEmailError: string | undefined;
-  isOtpNeeded: boolean;
-  name: string;
+  resendTimer: number;
   setContactNumber: (value: IContactNumber[]) => void;
   setInputEmail: (value: string) => void;
   setInputEmailError: (value: string | undefined) => void;
@@ -29,8 +27,7 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
   handleContinue,
   inputEmail,
   inputEmailError,
-  isOtpNeeded,
-  name,
+  resendTimer,
   setContactNumber,
   setInputEmail,
   setInputEmailError,
@@ -68,17 +65,22 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
     inputEmailError !== undefined ||
     validateEmail(inputEmail) !== undefined ||
     inputMobile.value === "" ||
-    inputMobile.error !== undefined;
+    inputMobile.error !== undefined ||
+    resendTimer !== 0;
+
+  const otpLabel = resendTimer === 0 ? EMAIL_VERIFICATION.NOTE_LINK : EMAIL_VERIFICATION.LABEL_OTP_REQUEST;
+  const resendMinutes = Math.floor(resendTimer / 60);
+  const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
+  const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
 
   return (
     <ContentPage
-      {...defaultContentProps}
       continueDisabled={disabled}
       continueTextStyle={fsTransformNone}
       handleCancel={handleCancel}
       handleContinue={handleContinue}
-      heading={`${INVESTOR_INFORMATION.HEADING_HELLO} ${name},`}
-      labelContinue={isOtpNeeded === true ? INVESTOR_INFORMATION.BUTTON_GET_OTP : INVESTOR_INFORMATION.BUTTON_SAVE}
+      heading={`${INVESTOR_INFORMATION.HEADING_HELLO}.`}
+      labelContinue={INVESTOR_INFORMATION.BUTTON_GET_OTP}
       noBounce={true}
       spaceToHeading={sh24}
       subheading={INVESTOR_INFORMATION.SUBHEADING_EMAIL}
@@ -88,15 +90,32 @@ export const ContactUpdate: FunctionComponent<ContactUpdate> = ({
         <ColorCard
           header={{ label: INVESTOR_INFORMATION.CARD_LABEL_EMAIL, title: INVESTOR_INFORMATION.CARD_TITLE_EMAIL }}
           content={
-            <CustomTextInput
-              autoCapitalize="none"
-              error={inputEmailError}
-              keyboardType="email-address"
-              label={INVESTOR_INFORMATION.LABEL_EMAIL}
-              onBlur={checkEmail}
-              onChangeText={setInputEmail}
-              value={inputEmail}
-            />
+            <Fragment>
+              <CustomTextInput
+                autoCapitalize="none"
+                error={inputEmailError}
+                keyboardType="email-address"
+                label={INVESTOR_INFORMATION.LABEL_EMAIL}
+                onBlur={checkEmail}
+                onChangeText={setInputEmail}
+                value={inputEmail}
+              />
+              <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={otpLabel} />
+              {resendTimer !== 0 ? (
+                <Fragment>
+                  <CustomSpacer space={sh16} />
+                  <View style={borderBottomGray2} />
+                  <CustomSpacer space={sh16} />
+                  <View style={flexRow}>
+                    <Text style={fs12RegGray5}>{EMAIL_VERIFICATION.LABEL_PLEASE_TRY_AGAIN}</Text>
+                    <CustomSpacer space={sw4} isHorizontal />
+                    <Text style={fs12BoldGray5}>
+                      {resendMinutes}:{formattedResendSeconds}
+                    </Text>
+                  </View>
+                </Fragment>
+              ) : null}
+            </Fragment>
           }
         />
         <CustomSpacer space={sh24} />

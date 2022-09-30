@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AccountHeader, LabeledTitle } from "../../../components";
+import { AccountHeader, defaultContentProps, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { fs16SemiBoldGray6, fs24BoldGray6, px, sh8, sw24 } from "../../../styles";
+import { px, sw24 } from "../../../styles";
 import { PersonalInfo } from "./Details";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
@@ -55,11 +55,11 @@ export const PrincipalDetails: FunctionComponent<PrincipalDetails> = ({
         )}
         <LabeledTitle
           label={PERSONAL_DETAILS.SUBHEADING_PERSONAL}
-          labelStyle={fs24BoldGray6}
-          spaceToLabel={sh8}
+          labelStyle={defaultContentProps.subheadingStyle}
+          spaceToLabel={defaultContentProps.spaceToTitle}
           style={padding}
           title={PERSONAL_DETAILS.SUBTITLE_REACH}
-          titleStyle={fs16SemiBoldGray6}
+          titleStyle={defaultContentProps.subtitleStyle}
         />
       </View>
       <View style={padding}>

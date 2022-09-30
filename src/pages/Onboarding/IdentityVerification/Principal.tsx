@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View, ViewStyle } from "react-native";
 
-import { AccountHeader, LabeledTitle } from "../../../components";
+import { AccountHeader, defaultContentProps, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { fs16SemiBoldGray6, fs24BoldGray6, px, sh8, sw24 } from "../../../styles";
+import { px, sw24 } from "../../../styles";
 import { IDDetails, IDDetailsProps } from "./Details";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -30,10 +30,10 @@ export const PrincipalVerification: FunctionComponent<PrincipalVerificationProps
       <View style={jointStyle}>
         <LabeledTitle
           label={ID_VERIFICATION.LABEL_ID_VERIFY}
-          labelStyle={fs24BoldGray6}
-          spaceToLabel={sh8}
+          labelStyle={defaultContentProps.subheadingStyle}
+          spaceToLabel={defaultContentProps.spaceToTitle}
           title={ID_VERIFICATION.TITLE}
-          titleStyle={fs16SemiBoldGray6}
+          titleStyle={defaultContentProps.subtitleStyle}
         />
         <IDDetails
           accountHolder="Principal"

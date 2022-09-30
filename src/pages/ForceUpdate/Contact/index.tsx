@@ -3,6 +3,7 @@ import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from 
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
+import { OTP_CONFIG } from "../../../constants";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { ContactUpdate } from "./ContactUpdate";
@@ -32,8 +33,7 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
   const [inputEmail, setInputEmail] = useState(emailAddress!);
   const [emailError, setEmailError] = useState<string | undefined>(undefined);
   const [otpVerified, setOtpVerified] = useState<boolean>(false);
-
-  const isOtpNeeded = inputEmail !== emailAddress || emailAddress === "" || inputEmail === "";
+  const [resendTimer, setResendTimer] = useState(0);
 
   const handleNavigate = () => {
     handleNextStep("ContactSummary");
@@ -67,6 +67,7 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
       const response: IEmailVerificationResponse = await emailVerification(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
+      setResendTimer(OTP_CONFIG.EXPIRY);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
@@ -93,9 +94,7 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
   };
 
   const handleContinue = () => {
-    if (isOtpNeeded === false) {
-      setPage("verify-otp");
-    } else if (otpVerified === false) {
+    if (otpVerified === false) {
       handleEmailVerification();
     } else {
       handleNavigate();
@@ -116,6 +115,16 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    let otpTimer: ReturnType<typeof setTimeout>;
+    if (resendTimer > 0) {
+      otpTimer = setInterval(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(otpTimer);
+  }, [resendTimer]);
+
   return (
     <Fragment>
       {page === "contact-update" ? (
@@ -125,8 +134,7 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
           handleContinue={handleContinue}
           inputEmail={inputEmail}
           inputEmailError={emailError}
-          isOtpNeeded={isOtpNeeded}
-          name={personalInfo.principal!.personalDetails!.name!}
+          resendTimer={resendTimer}
           setContactNumber={setContactNumber}
           setInputEmail={setInputEmail}
           setInputEmailError={setEmailError}
@@ -139,8 +147,10 @@ const ContactContentComponent: FunctionComponent<ContactContentProps> = ({
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}
           inputEmail={inputEmail}
+          resendTimer={resendTimer}
           setEmailOtpSent={setEmailOtpSent}
           setOtpVerified={setOtpVerified}
+          setResendTimer={setResendTimer}
         />
       )}
     </Fragment>

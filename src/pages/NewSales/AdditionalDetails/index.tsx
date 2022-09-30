@@ -8,7 +8,6 @@ import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_RELATIONSHIP, ERR
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
 import { isNotEmpty, isNumber } from "../../../utils";
-import { defaultContentProps } from "../Content";
 import { AccountDetails } from "./AccountDetails";
 import { BankDetails } from "./BankDetails";
 import { EPFDetails } from "./EPFDetails";
@@ -253,7 +252,6 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
 
   return (
     <ContentPage
-      {...defaultContentProps}
       continueDisabled={continueDisabled}
       handleCancel={handleCancel}
       handleContinue={handleContinue}

@@ -13,7 +13,6 @@ import {
   sw16,
   sw200,
   sw24,
-  sw8,
 } from "../../styles";
 import { RoundedButton } from "../Touchables/RoundedButton";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
@@ -52,8 +51,8 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     ...fullWidth,
     ...px(sw24),
     backgroundColor: colorYellow._1,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
+    borderTopLeftRadius: sw24,
+    borderTopRightRadius: sw24,
     bottom: 0,
     minHeight: sh96,
     position: "absolute",

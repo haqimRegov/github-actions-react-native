@@ -24,7 +24,6 @@ import {
 } from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
 import { ImageReview } from "../../Onboarding/IdentityVerification/ImageReview";
-import { defaultContentProps } from "../Content";
 import { UploadID } from "./UploadID";
 
 const { IDENTITY_CONFIRMATION } = Language.PAGE;
@@ -303,7 +302,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   return (
     <Fragment>
       <ContentPage
-        {...defaultContentProps}
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleContinue}

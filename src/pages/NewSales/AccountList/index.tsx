@@ -26,7 +26,6 @@ import {
 } from "../../../styles";
 import { AccountCard } from "../../../templates/Cards";
 import { isArrayNotEmpty, isNotEmpty } from "../../../utils";
-import { defaultContentProps } from "../Content";
 
 const { ACCOUNT_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 
@@ -436,7 +435,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
 
   return (
     <View>
-      <ContentPage {...defaultContentProps} subheading={ACCOUNT_LIST.LABEL_WELCOME_BACK}>
+      <ContentPage subheading={ACCOUNT_LIST.LABEL_WELCOME_BACK}>
         <Fragment>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>

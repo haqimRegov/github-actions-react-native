@@ -37,7 +37,6 @@ import {
   sw800,
 } from "../../../styles";
 import { TermsAccordionNew } from "../../../templates";
-import { defaultContentProps } from "../Content";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -134,7 +133,6 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
 
   return (
     <ContentPage
-      {...defaultContentProps}
       continueDisabled={disabled}
       handleContinue={handleContinue}
       labelContinue={TERMS_AND_CONDITIONS.BUTTON_AGREE}

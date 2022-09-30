@@ -55,7 +55,6 @@ import {
   sw8,
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
-import { defaultContentProps } from "../ForceUpdate/Content";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -241,7 +240,6 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   return (
     <Fragment>
       <ContentPage
-        {...defaultContentProps}
         cancelDisabled={isEditConfirmed}
         continueDisabled={disabled}
         handleCancel={handleCancelAssessment}

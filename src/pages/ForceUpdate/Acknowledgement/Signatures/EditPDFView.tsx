@@ -30,6 +30,7 @@ import {
   sw20,
   sw24,
   sw32,
+  sw8,
 } from "../../../../styles";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -131,7 +132,7 @@ export const PdfViewForceUpdate: FunctionComponent<PDFViewProps> = ({
               <View style={px(sw24)}>
                 <View style={{ ...centerVertical, ...flexRow }}>
                   <IcoMoon color={colorBlack._1} name="arrow-left" onPress={handleBack} size={sw24} suppressHighlighting={true} />
-                  <CustomSpacer isHorizontal={true} space={sw20} />
+                  <CustomSpacer isHorizontal={true} space={sw8} />
                   <Text style={fs18BoldGray6}>{editReceipt!.name}</Text>
                 </View>
               </View>

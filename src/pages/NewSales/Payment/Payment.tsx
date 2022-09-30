@@ -3,12 +3,12 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
-import { BlurView, CustomSpacer, CustomToast, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
+import { BlurView, CustomSpacer, CustomToast, defaultContentProps, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { useDelete } from "../../../hooks";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
-import { flexChild, flexGrow, fs14RegGray5, fs18BoldGray6, px, py, sh152, sh24, sh32, shadow50Black115, sw24 } from "../../../styles";
+import { flexChild, flexGrow, px, py, sh152, sh24, shadow50Black115, sw24 } from "../../../styles";
 import { OrderPayment } from "../../../templates";
 import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys, handleEPFStructuring } from "../../../templates/Payment/helpers";
 import { NewPaymentPrompt } from "../../../templates/Payment/NewPaymentPrompt";
@@ -249,9 +249,15 @@ const NewSalesPaymentComponent: FunctionComponent<PaymentProps> = ({
       <View style={flexChild}>
         <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={flexChild}>
-            <CustomSpacer space={sh32} />
+            <CustomSpacer space={defaultContentProps.spaceToTop!} />
             <View style={px(sw24)}>
-              <LabeledTitle label={PAYMENT.HEADING} labelStyle={fs18BoldGray6} title={PAYMENT.SUBHEADING} titleStyle={fs14RegGray5} />
+              <LabeledTitle
+                label={PAYMENT.HEADING}
+                labelStyle={defaultContentProps.subheadingStyle}
+                spaceToLabel={defaultContentProps.spaceToTitle!}
+                title={PAYMENT.SUBHEADING}
+                titleStyle={defaultContentProps.subtitleStyle}
+              />
             </View>
             {tempData !== undefined &&
               tempData.map((proofOfPayment: IPaymentRequired, index: number) => {

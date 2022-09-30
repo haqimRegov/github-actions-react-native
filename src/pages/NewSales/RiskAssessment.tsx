@@ -65,7 +65,6 @@ interface RiskAssessmentContentProps extends RiskStoreProps, NewSalesContentProp
 const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentProps> = ({
   addAssessmentQuestions,
   addRiskInfo,
-  addRiskScore,
   details,
   handleNextStep,
   navigation,

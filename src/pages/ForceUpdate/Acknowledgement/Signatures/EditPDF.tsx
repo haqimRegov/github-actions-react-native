@@ -16,8 +16,9 @@ import { PdfViewForceUpdate, Signer } from "./EditPDFView";
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
-  adviser: { x: 16, y: 158 },
-  principal: { x: 271, y: 158 },
+  adviser: { x: 20, y: 225 },
+  principal: { x: 310, y: 225 },
+  joint: { x: 20, y: 445 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
@@ -41,7 +42,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
     if (editReceipt !== undefined && signer !== undefined) {
       const dataUri = GetEmbeddedBase64(editReceipt.signedPdf!);
       const loadPdf = await PDFDocument.load(dataUri);
-      const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
+      const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-Bold.ttf");
       loadPdf.registerFontkit(fontkit);
       const customFont = await loadPdf.embedFont(fileData);
       const textHeight = customFont.heightAtSize(6);
@@ -52,9 +53,9 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
       const whiteBGConfig = {
-        height: 40,
+        height: 60,
         opacity: 1,
-        width: 180,
+        width: 240,
         x: signPosition[signer].x,
         y: height - signPosition[signer].y,
       };
@@ -71,7 +72,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
         }
       }
 
-      selectedPage.moveTo(textPosition.x, height - textPosition.y + 30);
+      selectedPage.moveTo(textPosition.x + 80, height - textPosition.y + 40);
       selectedPage.drawImage(whiteImage, whiteBGConfig);
       selectedPage.drawImage(whiteImage, {
         ...whiteBGConfig,
@@ -86,8 +87,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       selectedPage.drawSvgPath(svgPath[0], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawSvgPath(svgPath[1], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawText(TERMS_AND_CONDITIONS.LABEL_SIGN_NOW, {
-        x: textPosition.x + 18,
-        y: height - textPosition.y + 20,
+        x: textPosition.x + 100,
+        y: height - textPosition.y + 30,
         size: textHeight,
         font: customFont,
         color: rgb(0, 0.537, 0.925),
@@ -95,8 +96,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       if (signatureImage !== undefined) {
         if (Platform.OS === "ios") {
           selectedPage.drawImage(signatureImage, {
-            height: 40,
-            width: 180,
+            height: 60,
+            width: 240,
             x: signPosition[signer].x,
             y: height - signPosition[signer].y,
           });
@@ -129,10 +130,10 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       coordinateX = locationX;
       coordinateY = positionY;
     }
-    if (coordinateY > 90 && coordinateY < 300 && coordinateX < 680) {
-      if (coordinateX <= 330 && coordinateX > 0) {
+    if (coordinateY > 180 && coordinateY <= 460) {
+      if (coordinateX <= 400 && coordinateX > 0) {
         setSigner("adviser");
-      } else if (coordinateX > 330) {
+      } else if (coordinateX > 400) {
         setSigner("principal");
       }
       setShowSignPdf(true);

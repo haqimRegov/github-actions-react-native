@@ -16,9 +16,9 @@ import { PdfViewNewSales, Signer } from "./EditPDFView";
 const { PERSONAL_DETAILS, TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
-  adviser: { x: 16, y: 158 },
-  principal: { x: 271, y: 158 },
-  joint: { x: 16, y: 298 },
+  adviser: { x: 20, y: 225 },
+  principal: { x: 310, y: 225 },
+  joint: { x: 20, y: 445 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
@@ -58,7 +58,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     if (editReceipt !== undefined && signer !== undefined) {
       const dataUri = GetEmbeddedBase64(editReceipt.signedPdf!);
       const loadPdf = await PDFDocument.load(dataUri);
-      const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
+      const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-Bold.ttf");
       loadPdf.registerFontkit(fontkit);
       const customFont = await loadPdf.embedFont(fileData);
       const textHeight = customFont.heightAtSize(6);
@@ -69,9 +69,9 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
       const whiteBGConfig = {
-        height: 40,
+        height: 60,
         opacity: 1,
-        width: 180,
+        width: 240,
         x: signPosition[signer].x,
         y: height - signPosition[signer].y,
       };
@@ -80,7 +80,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         if (principalSignature === "") {
           textPosition.x = signPosition.principal.x;
           textPosition.y = signPosition.principal.y;
-        } else if (accountType === "Joint" && jointSignature === "") {
+        } else if (
+          (accountType === "Joint" && jointSignature === "" && transactionType !== "Sales" && transactionType !== "Sales-NS") ||
+          (jointSignature === "" &&
+            (transactionType === "Sales" || transactionType === "Sales-NS") &&
+            accountType === "Joint" &&
+            updatedSignatory !== "Principal Applicant")
+        ) {
           textPosition.x = signPosition.joint.x;
           textPosition.y = signPosition.joint.y;
         }
@@ -88,7 +94,13 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         if (adviserSignature === "") {
           textPosition.x = signPosition.adviser.x;
           textPosition.y = signPosition.adviser.y;
-        } else if (accountType === "Joint" && jointSignature === "") {
+        } else if (
+          (accountType === "Joint" && jointSignature === "" && transactionType !== "Sales" && transactionType !== "Sales-NS") ||
+          (jointSignature === "" &&
+            (transactionType === "Sales" || transactionType === "Sales-NS") &&
+            accountType === "Joint" &&
+            updatedSignatory !== "Principal Applicant")
+        ) {
           textPosition.x = signPosition.joint.x;
           textPosition.y = signPosition.joint.y;
         }
@@ -102,7 +114,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         }
       }
 
-      selectedPage.moveTo(textPosition.x, height - textPosition.y + 30);
+      selectedPage.moveTo(textPosition.x + 80, height - textPosition.y + 40);
       selectedPage.drawImage(whiteImage, whiteBGConfig);
       selectedPage.drawImage(whiteImage, {
         ...whiteBGConfig,
@@ -117,8 +129,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       selectedPage.drawSvgPath(svgPath[0], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawSvgPath(svgPath[1], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawText(TERMS_AND_CONDITIONS.LABEL_SIGN_NOW, {
-        x: textPosition.x + 18,
-        y: height - textPosition.y + 20,
+        x: textPosition.x + 100,
+        y: height - textPosition.y + 30,
         size: textHeight,
         font: customFont,
         color: rgb(0, 0.537, 0.925),
@@ -126,8 +138,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       if (signatureImage !== undefined) {
         if (Platform.OS === "ios") {
           selectedPage.drawImage(signatureImage, {
-            height: 40,
-            width: 180,
+            height: 60,
+            width: 240,
             x: signPosition[signer].x,
             y: height - signPosition[signer].y,
           });
@@ -160,19 +172,18 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       coordinateX = locationX;
       coordinateY = positionY;
     }
-    if (coordinateY > 90 && coordinateY <= 300 && coordinateX < 680) {
-      if (coordinateX <= 330 && coordinateX > 0) {
+    if (coordinateY > 180 && coordinateY <= 460) {
+      if (coordinateX <= 400 && coordinateX > 0) {
         setSigner("adviser");
-      } else if (coordinateX > 330) {
+      } else if (coordinateX > 400) {
         setSigner("principal");
       }
       setShowSignPdf(true);
-    } else if (coordinateX <= 330 && coordinateY > 300 && coordinateY < 480 && accountType === "Joint") {
-      // To not allow joint to sing based on operation mode
-      // if (updatedSignatory === "Either Applicant" || updatedSignatory === "Both Applicants") {
-      setSigner("joint");
-      setShowSignPdf(true);
-      // }
+    } else if (coordinateX <= 400 && coordinateY > 460 && coordinateY < 740 && accountType === "Joint") {
+      if (updatedSignatory === "Either Applicant" || updatedSignatory === "Both Applicants") {
+        setSigner("joint");
+        setShowSignPdf(true);
+      }
     }
   };
 
@@ -191,7 +202,18 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         if (signer === "adviser") {
           if (principalSignature === "") {
             setSigner("principal");
-          } else if (principalSignature !== "" && accountType === "Joint" && jointSignature === "") {
+          } else if (
+            (accountType === "Joint" &&
+              jointSignature === "" &&
+              transactionType !== "Sales" &&
+              transactionType !== "Sales-NS" &&
+              principalSignature !== "") ||
+            (jointSignature === "" &&
+              (transactionType === "Sales" || transactionType === "Sales-NS") &&
+              accountType === "Joint" &&
+              updatedSignatory !== "Principal Applicant" &&
+              principalSignature !== "")
+          ) {
             setSigner("joint");
           } else {
             setShowSignPdf(false);
@@ -199,7 +221,20 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         } else if (signer === "principal") {
           if (adviserSignature === "") {
             setSigner("adviser");
-          } else if (adviserSignature !== "" && accountType === "Joint" && jointSignature === "") {
+          } else if (
+            (accountType === "Joint" &&
+              jointSignature === "" &&
+              transactionType !== "Sales" &&
+              transactionType !== "Sales-NS" &&
+              principalSignature !== "" &&
+              adviserSignature !== "") ||
+            (jointSignature === "" &&
+              (transactionType === "Sales" || transactionType === "Sales-NS") &&
+              accountType === "Joint" &&
+              updatedSignatory !== "Principal Applicant" &&
+              principalSignature !== "" &&
+              adviserSignature !== "")
+          ) {
             setSigner("joint");
           } else {
             setShowSignPdf(false);

@@ -68,7 +68,13 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
         case "Pending Doc & Payment":
         case "BR - Rerouted":
         case "HQ - Rerouted":
-          if (route === "Certificate of Loss of Nationality" || route.includes("NRIC")) {
+          if (
+            route === "Certificate of Loss of Nationality" ||
+            route.includes("NRIC") ||
+            route.includes("Passport") ||
+            route.includes("Back") ||
+            route.includes("Front")
+          ) {
             setScreen("UploadDocuments");
           } else {
             setScreen("DashboardPayment");

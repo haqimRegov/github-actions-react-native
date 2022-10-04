@@ -32,6 +32,10 @@ export const globalReducer = (state = globalInitialState, action: GlobalAction):
       return {
         agent: undefined,
         config: undefined,
+        events: undefined,
+        isLogout: undefined,
+        isMultiUtmc: undefined,
+        isTermsAgreed: false,
         loading: false,
         unreadMessages: "0",
       };

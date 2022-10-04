@@ -7,6 +7,7 @@ import { EDDActionProps } from "./actions";
 export const EDDMapStateToProps = (state: RootState) => ({
   config: state.global.config,
   currentCase: state.edd.currentCase,
+  global: state.global,
   loading: state.global.loading,
   new: state.edd.new,
   history: state.edd.history,

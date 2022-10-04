@@ -57,11 +57,17 @@ export const ERROR_CODE = {
   storage: "OMNI403",
   submittedPdf: "EM448",
   currentPassword: "EM403",
+  duplicateLogin: "OMNI411",
 };
 
 type TypeOmniErrors = Record<string, IResponseError>;
 
 export const ERRORS: TypeOmniErrors = {
+  duplicateLogin: {
+    errorCode: ERROR_CODE.duplicateLogin,
+    message: "This account has been logged in from another device.",
+    statusCode: "400",
+  },
   internal: { errorCode: ERROR_CODE.internal, message: "Something went wrong", statusCode: "400" },
   network: { errorCode: ERROR_CODE.network, message: "No Internet Connection", statusCode: "402" },
   storage: { errorCode: ERROR_CODE.storage, message: "Something went wrong. Please try again.", statusCode: "403" },

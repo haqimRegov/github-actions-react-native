@@ -122,7 +122,6 @@ declare interface IDashboardAll extends IDashboardOrder, IInvestorAccountsData {
 declare interface ITransactionPageProps {
   activeTab: boolean;
   isFetching: boolean;
-  isLogout: boolean;
   isNotFiltered: boolean;
   navigation: IStackNavigationProp;
   setIsFetching: (value: boolean) => void;

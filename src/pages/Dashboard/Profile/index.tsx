@@ -48,11 +48,10 @@ const { PROFILE } = Language.PAGE;
 
 interface ProfileProps extends GlobalStoreProps {
   handleRoute: (route: DashboardPageType) => void;
-  isLogout: boolean;
   navigation: IStackNavigationProp;
 }
 
-const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }: ProfileProps) => {
+const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, global, navigation }: ProfileProps) => {
   const [agentProfile, setAgentProfile] = useState<IGetAgentProfileResult | undefined>(undefined);
   const [page, setPage] = useState<"profile" | "password">("profile");
 
@@ -86,7 +85,9 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
   };
 
   useEffect(() => {
-    handleFetch();
+    if (global.isLogout === false) {
+      handleFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

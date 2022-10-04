@@ -291,6 +291,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
         RenderCustomItem={(data: ITableCustomItem) => (
           <InvestorDetailsCustomTableItem
             {...data}
+            investorData={investorData}
             handleSales={handleSales}
             handleViewAccount={handleView}
             sortedColumns={sortedColumns}

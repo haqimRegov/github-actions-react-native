@@ -147,6 +147,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                     id: agentId,
                     branch: branch,
                     rank: rank,
+                    username: inputNRIC,
                   },
                   config: {
                     identityId: data.result.identityId,
@@ -156,6 +157,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                   },
                   events: events && events.length > 0 ? events : undefined,
                   isMultiUtmc: isMultiUtmc,
+                  isLogout: false,
                   isTermsAgreed: isTermsAgreed,
                   unreadMessages: inboxCount,
                 });

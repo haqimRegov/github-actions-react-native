@@ -1,4 +1,4 @@
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import cloneDeep from "lodash.clonedeep";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
@@ -59,9 +59,7 @@ const FORCE_UPDATE_DATA: IForceUpdate[] = [
   },
 ];
 
-interface ForceUpdatePageProps extends ForceUpdateContentProps, ForceUpdateStoreProps {
-  navigation: IStackNavigationProp;
-}
+type ForceUpdatePageProps = ForceUpdateStoreProps;
 
 export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> = (props: ForceUpdatePageProps) => {
   const {
@@ -69,7 +67,6 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     declarations,
     disabledSteps,
     finishedSteps,
-    navigation,
     resetAcknowledgement,
     resetClientDetails,
     resetForceUpdate,
@@ -79,6 +76,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     updateFUFinishedSteps,
   } = props;
 
+  const navigation = useNavigation<IStackNavigationProp>();
   const stepperBarRef = useRef<IStepperBarRef<TypeForceUpdateKey>>();
   const [cancelForceUpdate, setCancelForceUpdate] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<IForceUpdateContentItem | IForceUpdate | undefined>(FORCE_UPDATE_DATA[0]);

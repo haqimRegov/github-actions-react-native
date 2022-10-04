@@ -19,4 +19,5 @@ declare interface IAgentProfile {
   name?: string;
   rank?: string;
   role?: string;
+  username?: string;
 }

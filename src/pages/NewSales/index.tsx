@@ -1,4 +1,4 @@
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import cloneDeep from "lodash.clonedeep";
 import React, { FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
@@ -83,16 +83,13 @@ const NEW_SALES_DATA: INewSales[] = [
   },
 ];
 
-interface NewSalesPageProps extends NewSalesContentProps, NewSalesStoreProps {
-  navigation: IStackNavigationProp;
-}
+type NewSalesPageProps = NewSalesStoreProps;
 
 export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (props: NewSalesPageProps) => {
   const {
     addPersonalInfo,
     client,
     newSales,
-    navigation,
     personalInfo,
     partialResetInvestors,
     resetAcknowledgement,
@@ -110,6 +107,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     updateToastVisible,
   } = props;
   const { disabledSteps, finishedSteps, toast } = newSales;
+  const navigation = useNavigation<IStackNavigationProp>();
 
   const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.AccountInformation);
   const findProducts = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.Products);

@@ -1,4 +1,3 @@
-import { RouteProp } from "@react-navigation/native";
 import moment from "moment";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Image, ImageStyle, Text, TouchableWithoutFeedback, View } from "react-native";
@@ -45,22 +44,21 @@ import { Transactions } from "./Transactions";
 const { DASHBOARD } = Language.PAGE;
 interface DashboardPageProps extends TransactionsStoreProps {
   navigation: IStackNavigationProp;
-  route: RouteProp<PrivateNavigatorType, "Dashboard">;
 }
 
 const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
+  addGlobal,
   agent,
   client,
   investors,
   navigation,
-  route,
+  global,
   resetClientDetails,
   resetTransactions,
   resetEDD,
   resetInvestors,
   unreadMessages,
 }: DashboardPageProps) => {
-  const { isLogout, setIsLogout } = route.params;
   const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
   const [page, setPage] = useState<DashboardPageType>(investors.backToInvestorOverview === true ? "Investors" : "Transactions");
@@ -71,7 +69,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleLogout = () => {
-    setIsLogout(true);
+    addGlobal({ ...global, isLogout: true });
     logout(navigation);
   };
 
@@ -120,7 +118,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   //   setPage("EDD");
   // };
 
-  const props = { handleRoute: handleRoute, navigation: navigation, isLogout };
+  const props = { handleRoute: handleRoute, navigation: navigation };
 
   let content: JSX.Element = <Transactions {...props} />;
   if (page === "Inbox") {

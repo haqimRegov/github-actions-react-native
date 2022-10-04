@@ -40,7 +40,7 @@ declare interface IInvestorAccountsData {
   jointDateOfBirth: string;
   jointDeclarationRequired: string[] | null;
   jointEmail: string;
-  jointId: string;
+  jointId: string | null;
   jointIdNumber: string;
   jointIdType: string;
   jointName: string;

@@ -15,7 +15,6 @@ const { DASHBOARD_EDD } = Language.PAGE;
 
 interface EDDCasesProps extends EDDStoreProps {
   activeTab: EDDTabType;
-  isLogout: boolean;
   navigation: IStackNavigationProp;
   setActiveTab: (route: EDDTabType) => void;
   setScreen: (route: EDDPageType) => void;
@@ -129,7 +128,6 @@ export const EDDCasesComponent: FunctionComponent<EDDCasesProps> = (props: EDDCa
     setScreen: setScreen,
     navigation: navigation,
     isFetching: loading,
-    isLogout: props.isLogout,
     setIsFetching: setLoading,
   };
   let content: JSX.Element = <View />;

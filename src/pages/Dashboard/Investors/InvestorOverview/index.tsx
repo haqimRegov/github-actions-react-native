@@ -36,7 +36,6 @@ const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
 interface InvestorOverviewProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
   handleRoute: (route: DashboardPageType) => void;
-  isLogout: boolean;
   setActiveTab: (route: InvestorsTabType) => void;
   setScreen: (route: InvestorsPageType) => void;
 }
@@ -679,7 +678,6 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     directToAccountOpening,
     investorData,
     isFetching: loading,
-    isLogout: dashboardProps.isLogout,
     navigation: navigation,
     page,
     pages,

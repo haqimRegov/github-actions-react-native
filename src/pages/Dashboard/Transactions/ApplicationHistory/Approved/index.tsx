@@ -43,8 +43,8 @@ interface ApprovedOrdersProps extends ITransactionPageProps, TransactionsStorePr
 const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
   activeTab,
   approved,
+  global,
   isFetching,
-  isLogout,
   isNotFiltered,
   navigation,
   resetApprovedFilter,
@@ -325,15 +325,17 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
 
   useEffect(() => {
     return () => {
-      if (isLogout !== true) {
+      if (global.isLogout === false) {
         handleSeen();
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogout]);
+  }, [global.isLogout]);
 
   useEffect(() => {
-    handleFetch();
+    if (global.isLogout === false) {
+      handleFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter]);
 

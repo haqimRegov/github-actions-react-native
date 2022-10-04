@@ -41,7 +41,6 @@ const { DASHBOARD_HOME } = Language.PAGE;
 
 interface ApplicationHistoryProps extends TransactionsStoreProps {
   activeTab: TransactionsTabType;
-  isLogout: boolean;
   navigation: IStackNavigationProp;
   setActiveTab: (route: TransactionsTabType) => void;
   setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
@@ -57,7 +56,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     availableFilters,
     downloadInitiated,
     incomplete,
-    isLogout,
     navigation,
     resetApprovedFilter,
     resetPendingFilter,
@@ -301,7 +299,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   const tabProps: Omit<ITransactionPageProps, "activeTab"> = {
     isFetching: loading,
     isNotFiltered: isNotFiltered,
-    isLogout: isLogout,
     navigation: navigation,
     setIsFetching: setLoading,
     setOrderSummaryActiveTab,

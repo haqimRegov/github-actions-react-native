@@ -11,12 +11,11 @@ import { InvestorProfilePage } from "./Profile";
 
 interface TransactionsProps {
   handleRoute: (route: DashboardPageType) => void;
-  isLogout: boolean;
   navigation: IStackNavigationProp;
 }
 
 export const Transactions: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { handleRoute, navigation, isLogout } = props;
+  const { handleRoute, navigation } = props;
   const [route, setRoute] = useState<TransactionsPageType>("Transactions");
   const [activeTab, setActiveTab] = useState<TransactionsTabType>("incomplete");
   const [orderSummaryActiveTab, setOrderSummaryActiveTab] = useState<OrderSummaryTabType>("order");
@@ -31,7 +30,6 @@ export const Transactions: FunctionComponent<TransactionsProps> = (props: Transa
     <ApplicationHistory
       {...pageProps}
       activeTab={activeTab}
-      isLogout={isLogout}
       setActiveTab={setActiveTab}
       setPage={handleRoute}
       setOrderSummaryActiveTab={setOrderSummaryActiveTab}

@@ -64,10 +64,10 @@ interface PendingOrdersProps extends ITransactionPageProps, TransactionsStorePro
 const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   activeTab,
   downloadInitiated,
+  global,
   handleShowOpenAccount,
   incomplete,
   isFetching,
-  isLogout,
   isTermsAgreed,
   isNotFiltered,
   navigation,
@@ -425,15 +425,17 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
 
   useEffect(() => {
     return () => {
-      if (isLogout !== true) {
+      if (global.isLogout === false) {
         handleSeen();
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogout]);
+  }, [global.isLogout]);
 
   useEffect(() => {
-    handleFetch();
+    if (global.isLogout === false) {
+      handleFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, activeTab, sort, page, filter, pill, downloadInitiated]);
 

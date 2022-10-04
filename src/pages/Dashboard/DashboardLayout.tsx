@@ -81,36 +81,15 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     setAddClient(true);
   };
 
-  // const handleTopUp = () => {
-  //   navigation.navigate("Onboarding");
-  // };
-
-  // const handleLogout = () => {
-  //   logout(resetGlobal!, navigation);
-  // };
-
   const actions: IQuickAction[] = [
     {
       label: QUICK_ACTIONS.LABEL_ACCOUNT_OPENING_NEW_SALES,
       onPress: handleAddClient,
-      // style: borderBottomGray2,
     },
     {
       label: QUICK_ACTIONS.LABEL_SALES,
       onPress: newSales,
     },
-    // {
-    //   label: QUICK_ACTIONS.LABEL_SWITCHING,
-    //   onPress: handleTopUp,
-    // },
-    // {
-    //   label: QUICK_ACTIONS.LABEL_REDEMPTION,
-    //   onPress: handleTopUp,
-    // },
-    // {
-    //   label: QUICK_ACTIONS.LABEL_TRANSFER,
-    //   onPress: handleLogout,
-    // },
   ];
 
   let statusColor: StatusBadgeColorType;

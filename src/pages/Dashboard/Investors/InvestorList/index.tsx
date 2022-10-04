@@ -26,7 +26,6 @@ const { DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 
 interface InvestorListProps extends InvestorsStoreProps {
   activeTab: InvestorsTabType;
-  isLogout: boolean;
   setActiveTab: (route: InvestorsTabType) => void;
   setScreen: (route: InvestorsPageType) => void;
 }
@@ -92,12 +91,8 @@ export const InvestorListComponent: FunctionComponent<InvestorListProps> = (prop
     setFilterTemp(filter);
   };
 
-  const tabProps = {
-    setScreen: setScreen,
-    isFetching: loading,
-    isLogout: props.isLogout,
-    setIsFetching: setLoading,
-  };
+  const tabProps = { setScreen: setScreen, isFetching: loading, setIsFetching: setLoading };
+
   const content: JSX.Element = <InvestorListing activeTab={true} {...tabProps} />;
 
   const tableContainer: ViewStyle = {

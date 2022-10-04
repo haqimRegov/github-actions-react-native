@@ -11,11 +11,10 @@ import { InvestorProfilePage } from "./Profile";
 interface TransactionsProps {
   handleRoute: (route: DashboardPageType) => void;
   showInvestorOverview: boolean;
-  isLogout: boolean;
 }
 
 export const Investors: FunctionComponent<TransactionsProps> = (props: TransactionsProps) => {
-  const { handleRoute, showInvestorOverview, isLogout } = props;
+  const { handleRoute, showInvestorOverview } = props;
   const [route, setRoute] = useState<InvestorsPageType>(showInvestorOverview === true ? "InvestorOverview" : "InvestorList");
   const [activeTab, setActiveTab] = useState<InvestorsTabType>("all");
   const [orderSummaryActiveTab, setOrderSummaryActiveTab] = useState<OrderSummaryTabType>("order");
@@ -26,12 +25,10 @@ export const Investors: FunctionComponent<TransactionsProps> = (props: Transacti
 
   const pageProps = { setScreen: setScreen };
 
-  let investorsPage: JSX.Element = <InvestorList {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} />;
+  let investorsPage: JSX.Element = <InvestorList {...pageProps} activeTab={activeTab} setActiveTab={setActiveTab} />;
 
   if (route === "InvestorOverview") {
-    investorsPage = (
-      <InvestorOverview {...pageProps} activeTab={activeTab} isLogout={isLogout} setActiveTab={setActiveTab} handleRoute={handleRoute} />
-    );
+    investorsPage = <InvestorOverview {...pageProps} activeTab={activeTab} setActiveTab={setActiveTab} handleRoute={handleRoute} />;
   }
 
   if (route === "InvestorProfile") {

@@ -34,7 +34,6 @@ const { EMPTY_STATE, DASHBOARD_HOME, DASHBOARD_INVESTORS_LIST } = Language.PAGE;
 interface InvestorListingProps extends InvestorsStoreProps {
   activeTab: boolean;
   isFetching: boolean;
-  isLogout: boolean;
   setIsFetching: (value: boolean) => void;
   setScreen: (route: InvestorsPageType) => void;
 }

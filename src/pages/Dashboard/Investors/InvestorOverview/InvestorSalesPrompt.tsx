@@ -233,7 +233,11 @@ const InvestorSalesPromptComponent = ({
         if (checkETB === true) {
           handleClientRegister();
         }
-        if (typeof checkETB === "string") {
+        if (checkETB === "Minor") {
+          setPrompt("accountType");
+          setAccountType(-1);
+        }
+        if (typeof checkETB === "string" && checkETB !== "Minor") {
           Alert.alert(checkETB);
         }
       }

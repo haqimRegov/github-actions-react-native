@@ -108,6 +108,10 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             if (data.result.forceUpdate === false) {
               return false;
             }
+            if (data.result.accountHolder === "Joint" && data.result.isMinor === true) {
+              return false;
+            }
+
             setTimeout(() => {
               setForceUpdatePrompt(true);
             }, 400);

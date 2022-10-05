@@ -4,11 +4,13 @@ import { DateTime, InvestorName } from "../../../../../templates";
 import { InvestorOverviewActions } from "./Actions";
 
 interface CustomTableItemProps extends ITableCustomItem {
+  investorData?: IInvestor;
   sortedColumns: InvestorAccountsSortColumnType[];
   handleSales?: (item: IInvestorAccountsData) => void;
   handleViewAccount?: (item: ITableRowData) => void;
 }
 export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemProps> = ({
+  investorData,
   sortedColumns,
   ...data
 }: CustomTableItemProps) => {
@@ -18,6 +20,6 @@ export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemPr
     case "accountOpeningDate":
       return <DateTime sortedColumns={sortedColumns} {...data} />;
     default:
-      return <InvestorOverviewActions {...data} />;
+      return <InvestorOverviewActions {...data} investorData={investorData} />;
   }
 };

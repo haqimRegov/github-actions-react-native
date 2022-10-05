@@ -21,9 +21,11 @@ import {
   fullHW,
   sh16,
   sh24,
+  sh40,
   sh48,
   shadow12Black112,
   sw24,
+  sw536,
 } from "../../../../styles";
 import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -95,6 +97,8 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   const [prompt, setPrompt] = useState<boolean>(false);
   const [accountType, setAccountType] = useState<number>(-1);
   const [forceUpdatePrompt, setForceUpdatePrompt] = useState<boolean>(false);
+  const [minorHolderPrompt, setMinorHolderPrompt] = useState<boolean>(false);
+  const [disableAccountOpening, setDisableAccountOpening] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(1);
   const [sort, setSort] = useState<IInvestorAccountsSort[]>([{ column: "accountOpeningDate", value: "descending" }]);
@@ -143,6 +147,13 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       resetClientDetails();
     }
     dashboardProps.setScreen("InvestorList");
+  };
+
+  const handleCancelMinorPrompt = () => {
+    setMinorHolderPrompt(false);
+    if (investorData?.accountHolder === "Joint" && investorData.isMinor === true) {
+      setDisableAccountOpening(true);
+    }
   };
 
   const handleCancelForceUpdate = () => {
@@ -507,9 +518,15 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               id: req !== undefined ? req.id! : jointHolder!.id!,
             });
             setPrompt(false);
-            setTimeout(() => {
-              setForceUpdatePrompt(true);
-            }, 400);
+            if (data.result.accountHolder === "Joint" && data.result.isMinor === true) {
+              setTimeout(() => {
+                setMinorHolderPrompt(true);
+              }, 400);
+            } else {
+              setTimeout(() => {
+                setForceUpdatePrompt(true);
+              }, 400);
+            }
             return false;
 
             // }
@@ -682,6 +699,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     page,
     pages,
     setForceUpdatePrompt,
+    setMinorHolderPrompt,
     setPrompt,
     setInvestorData,
     setIsFetching: setLoading,
@@ -710,6 +728,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   };
 
   const headerData: IInvestorAccountHeaderProps = {
+    disableAccountOpening,
     email: investorData !== undefined ? investorData.email : undefined,
     emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
     handleAccountOpening: handleAccountOpening,
@@ -777,6 +796,17 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
         spaceToIllustration={sh24}
         title={INVESTOR_ACCOUNTS.PROMPT_TITLE}
         visible={forceUpdatePrompt}
+      />
+      <PromptModal
+        containerStyle={{ width: sw536 }}
+        handleContinue={handleCancelMinorPrompt}
+        illustration={LocalAssets.illustration.minorSales}
+        label={INVESTOR_ACCOUNTS.MINOR_PROMPT_LABEL}
+        labelContinue={INVESTOR_ACCOUNTS.BUTTON_OKAY}
+        spaceToButton={sh40}
+        spaceToIllustration={sh16}
+        title={INVESTOR_ACCOUNTS.MINOR_PROMPT_TITLE}
+        visible={minorHolderPrompt}
       />
       <InvestorSalesPrompt
         ageErrorMessage={ageErrorMessage}

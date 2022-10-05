@@ -900,6 +900,7 @@ export const english = {
       BUTTON_CONTINUE: "Continue",
       BUTTON_GO_BACK: "Go Back",
       BUTTON_GET_STARTED: "Get Started",
+      BUTTON_OKAY: "Okay",
       LABEL_ACCOUNT_NO: "Account No.",
       LABEL_ACCOUNT_OPENING_DATE: "Acc Opening Date",
       LABEL_ACCOUNTS: "Accounts",
@@ -919,6 +920,9 @@ export const english = {
       NEW_SALES_PROMPT_TITLE: "Create an account",
       NEW_SALES_VERIFY_DETAILS: "Please verify details",
       PROMPT_LABEL: "Investor update is required for",
+      MINOR_PROMPT_LABEL: "Investor update is currently unavailable for investor under 18 years old",
+      MINOR_PROMPT_TITLE:
+        "You may proceed with transactions if your Principal account holder has completed investor update.\n\nPlease contact your respective BDM/ RM for more details.",
       PROMPT_TITLE: "Tap on continue to proceed with the update.",
     },
     PRODUCT_FILTER: {

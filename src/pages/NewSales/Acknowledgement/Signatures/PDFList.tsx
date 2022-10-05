@@ -348,7 +348,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
             <View style={flexRow}>
               <CustomSpacer isHorizontal={true} space={sw10} />
               <Text style={fs10BoldGray6}>{emailAddress}</Text>
-              {accountType === "Joint" && isNotEmpty(personalInfo.principal!.contactDetails!.emailAddress) ? (
+              {accountType === "Joint" && isNotEmpty(personalInfo.joint) && isNotEmpty(personalInfo.joint!.contactDetails!.emailAddress) ? (
                 <Fragment>
                   <CustomSpacer isHorizontal space={sw3} />
                   <Text style={fs10RegGray6}>{NEW_SALES_PROMPT.TEXT_1_SUB}</Text>

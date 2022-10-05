@@ -47,17 +47,8 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     }, 150);
   };
 
-  const handleCloseWS = () => {
-    if (isNotEmpty(ws)) {
-      const wsClose = ws.close();
-      // eslint-disable-next-line no-console
-      console.log("wsClose", wsClose);
-    }
-  };
-
   const handleLogout = (globalLogout?: boolean) => {
     setInactivityStatus(true);
-    handleCloseWS();
     logout(navigation, globalLogout);
   };
 

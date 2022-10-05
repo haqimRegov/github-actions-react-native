@@ -68,6 +68,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   addAccountType,
   addRiskScore,
   addClientDetails,
+  addJointInfo,
   addPersonalInfo,
   addPrsDefaultFilters,
   addUtFilters,
@@ -150,10 +151,20 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
   };
 
   const handleCancelMinorPrompt = () => {
-    setMinorHolderPrompt(false);
+    addJointInfo({
+      clientId: undefined,
+      name: "",
+      country: "",
+      dateOfBirth: "",
+      id: "",
+      idType: DICTIONARY_ID_TYPE[0],
+      otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+    });
+    setRegistered(false);
     if (investorData?.accountHolder === "Joint" && investorData.isMinor === true) {
       setDisableAccountOpening(true);
     }
+    setMinorHolderPrompt(false);
   };
 
   const handleCancelForceUpdate = () => {
@@ -519,14 +530,23 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             });
             setPrompt(false);
             if (data.result.accountHolder === "Joint" && data.result.isMinor === true) {
-              setTimeout(() => {
-                setMinorHolderPrompt(true);
-              }, 400);
-            } else {
-              setTimeout(() => {
-                setForceUpdatePrompt(true);
-              }, 400);
+              setNewSalesLoading(false);
+              if (isAccountOpening === true) {
+                setTimeout(() => {
+                  setMinorHolderPrompt(true);
+                }, 400);
+                return "Minor";
+              }
+              if (isAccountOpening === false) {
+                return true;
+              }
             }
+
+            setNewSalesLoading(false);
+            setTimeout(() => {
+              setForceUpdatePrompt(true);
+            }, 400);
+
             return false;
 
             // }

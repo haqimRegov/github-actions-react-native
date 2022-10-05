@@ -32,7 +32,10 @@ export const InvestorOverviewActions: FunctionComponent<IInvestorOverviewActions
           return (
             <TouchableWithoutFeedback onPress={show}>
               <View style={{ ...px(sw4), ...py(sh4) }}>
-                {isNotEmpty(investorData) && investorData!.accountHolder === "Joint" && investorData!.isMinor === true ? (
+                {isNotEmpty(investorData) &&
+                investorData?.isForceUpdate === true &&
+                investorData!.accountHolder === "Joint" &&
+                investorData!.isMinor === true ? (
                   <IcoMoon color={colorGray._6} name="eye-show" onPress={handleView} size={sh24} />
                 ) : (
                   <IcoMoon color={colorGray._6} name="action-menu" size={sh24} />

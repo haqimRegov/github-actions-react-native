@@ -22,9 +22,9 @@ import { logout } from "../network-actions";
 import { DashboardPage, ForceUpdatePage, LogoutPage, NewSalesPage, OnboardingPage } from "../pages";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../store";
 import { sw212 } from "../styles";
-import { AlertDialog, isNotEmpty } from "../utils";
+import { isNotEmpty } from "../utils";
 
-const { INACTIVITY } = Language.PAGE;
+const { INACTIVITY, SESSION } = Language.PAGE;
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -35,6 +35,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   const [inactivityStatus, setInactivityStatus] = useState<boolean>(true);
   const [dontShowEpf, setDontShowEpf] = useState<boolean>(false);
   const [eventPrompt, setEventPrompt] = useState<boolean>(false);
+  const [duplicateLoginPrompt, setDuplicateLoginPrompt] = useState<boolean>(false);
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const ws = useRef<WebSocket | null>(null);
@@ -47,7 +48,12 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   };
 
   const handleLogout = (globalLogout?: boolean) => {
-    setInactivityStatus(true);
+    if (duplicateLoginPrompt === true) {
+      setDuplicateLoginPrompt(false);
+    }
+    if (inactivityStatus === false) {
+      setInactivityStatus(true);
+    }
     logout(navigation, globalLogout);
   };
 
@@ -80,6 +86,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     let webSocketInterval: ReturnType<typeof setInterval>;
     const webSocketUrl = `wss://${WEB_SOCKET_CONFIG.url}/${WEB_SOCKET_CONFIG.stage}?username=${props.agent?.username}&x-api-key=${WEB_SOCKET_CONFIG.apiKey}`;
     ws.current = new WebSocket(webSocketUrl);
+    // console.log("Initializing Web Socket Connection");
 
     const handlePing = () => {
       if (ws !== undefined && ws.current !== null) {
@@ -118,7 +125,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
           if (response.message === ERRORS.duplicateLogin.message) {
             props.addGlobal({ ...props.global, isLogout: true });
             clearInterval(webSocketInterval);
-            AlertDialog(ERRORS.duplicateLogin.message, () => handleLogout(false), "You've been logged out");
+            setDuplicateLoginPrompt(true);
           }
         }
       };
@@ -126,6 +133,10 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
 
     return () => {
       clearInterval(webSocketInterval);
+      if (ws !== undefined && ws.current !== null) {
+        // console.log("Closing Web Socket Connection");
+        ws.current.close();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -211,6 +222,14 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
         labelContinue={expired.current === true ? INACTIVITY.BUTTON_PROCEED : INACTIVITY.BUTTON_YES}
         title={subtitle}
         visible={inactivityStatus === false}
+      />
+      <PromptModal
+        handleContinue={handleLogout}
+        illustration={LocalAssets.illustration.clientWarning}
+        label={SESSION.PROMPT_LOGOUT}
+        labelContinue={SESSION.BUTTON_LOGIN}
+        title={ERRORS.duplicateLogin.message}
+        visible={duplicateLoginPrompt}
       />
       <EventModal
         checkboxLabel={event.checkbox}

@@ -753,6 +753,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
     handleAccountOpening: handleAccountOpening,
     handleViewProfile: handleViewProfile,
+    accountDetails: investorData !== undefined ? investorData!.investorDetails : undefined,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
     setScreen: dashboardProps.setScreen,

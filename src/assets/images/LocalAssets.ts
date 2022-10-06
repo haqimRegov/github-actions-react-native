@@ -1,5 +1,6 @@
 import { COUNTRY_FLAG } from "./country_flag";
 import iconWarning from "./icon_warning_filled/icon_warning_filled.png";
+import illustrationAccountsEmpty from "./illustration_accounts_empty/illustration_accounts_empty.png";
 import illustrationClientError from "./illustration_client_error/illustration_client_error.png";
 import illustrationClientWarning from "./illustration_client_warning/illustration_client_warning.png";
 import illustrationEDDEmpty from "./illustration_edd_empty/illustration_edd_empty.png";
@@ -40,6 +41,7 @@ export const LocalAssets = {
     iconWarning: iconWarning,
   },
   illustration: {
+    accountsEmpty: illustrationAccountsEmpty,
     clientError: illustrationClientError,
     clientWarning: illustrationClientWarning,
     emailVerified: illustrationEmailVerified,

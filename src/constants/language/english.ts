@@ -99,7 +99,7 @@ export const english = {
       PROMPT_TITLE: "You must meet certain age requirements to open an account.",
       SALES_PROMPT_TITLE: "is your new investor",
       SALES_PROMPT_SUBTITLE:
-        "Create a KIB App account for easy access to order history. Click “Open Account” to continue with the onboarding process.",
+        "Create a Kenanga Reach App account for easy access to order history. Click “Open Account” to continue with the onboarding process.",
       SUBHEADING_JOINT: "Add joint account holder details",
       SUBHEADING: "Enter details to get started.",
     },
@@ -394,10 +394,15 @@ export const english = {
       LABEL_INVESTOR_SEARCH: "Search by Investor Name, Email and Mobile",
       LABEL_MOBILE_NO: "Mobile No.",
       LABEL_EMPTY_TITLE: "No investor yet",
-      LABEL_EMPTY_SUBTITLE: "Get started by onboarding your new investor to KIB App.",
+      LABEL_EMPTY_SUBTITLE: "Get started by onboarding your new investor to Kenanga Reach App.",
       LABEL_EMPTY_CONTENT: "Open Account & New Sales",
       LABEL_RISK_CATEGORY: "Risk Category",
     },
+    DASHBOARD_INVESTOR_OVERVIEW: {
+      LABEL_EMPTY_SUBTITLE: "Create an account by onboarding your investor to Kenanga Reach App.",
+      LABEL_EMPTY_TITLE: "No accounts available",
+    },
+
     DASHBOARD_ACCOUNT_TAB: {
       CARD_TITLE_CORRESPONDENCE_ADDRESS: "Correspondence Address",
       LABEL_ACCOUNT_HOLDER_NAME: "Account Holder's Name",
@@ -1713,7 +1718,7 @@ export const english = {
       LABEL_NAME: "Full Name",
       LABEL_NEW_PASSWORD: "New Password",
       LABEL_NRIC: "NRIC",
-      LABEL_OMNI_ENABLED: "OMNI Enabled",
+      LABEL_OMNI_ENABLED: "Reach Enabled",
       LABEL_POSTCODE: "Postcode",
       LABEL_PROCESSING_BRANCH: "Designated KIB Branch",
       LABEL_RETYPE_PASSWORD: "Re-enter Password",

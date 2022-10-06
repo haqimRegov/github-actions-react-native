@@ -18,16 +18,15 @@ import {
   sw120,
   sw144,
   sw16,
-  sw208,
+  sw200,
   sw56,
-  sw80,
   sw88,
   sw96,
 } from "../../../../styles";
 import { isArrayNotEmpty } from "../../../../utils";
 import { InvestorDetailsCustomTableItem } from "./CustomItems";
 
-const { DASHBOARD_INVESTORS_LIST, INVESTOR_ACCOUNTS } = Language.PAGE;
+const { DASHBOARD_INVESTORS_LIST, DASHBOARD_INVESTOR_OVERVIEW, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface AccountListingProps {
   currentInvestor?: IInvestorData;
@@ -165,7 +164,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       textStyle: sortedColumns.includes("name") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_INVESTORS_LIST.LABEL_INVESTOR_NAME,
       titleStyle: sortedColumns.includes("name") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw208 },
+      viewStyle: { width: sw200 },
     },
     {
       icon: { name: sortRisk === "descending" ? "arrow-down" : "arrow-up" },
@@ -183,7 +182,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       titleStyle: sortedColumns.includes("riskTolerance")
         ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 }
         : { ...fsTransformNone },
-      viewStyle: { width: sw80 },
+      viewStyle: { width: sw88 },
     },
     {
       icon: { name: sortAccountNo === "descending" ? "arrow-down" : "arrow-up" },
@@ -306,10 +305,6 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, page]);
 
-  const title = DASHBOARD_INVESTORS_LIST.LABEL_EMPTY_TITLE;
-  const subtitle = DASHBOARD_INVESTORS_LIST.LABEL_EMPTY_SUBTITLE;
-  const hintText = DASHBOARD_INVESTORS_LIST.LABEL_EMPTY_CONTENT;
-
   return (
     <View style={{ ...flexChild, ...px(sw16) }}>
       <AdvanceTable
@@ -326,11 +321,10 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
         )}
         RenderEmptyState={() => (
           <EmptyTable
-            hintText={hintText}
             loading={isFetching}
-            illustration={LocalAssets.illustration.investorsEmpty}
-            title={title}
-            subtitle={subtitle}
+            illustration={LocalAssets.illustration.accountsEmpty}
+            title={DASHBOARD_INVESTOR_OVERVIEW.LABEL_EMPTY_TITLE}
+            subtitle={DASHBOARD_INVESTOR_OVERVIEW.LABEL_EMPTY_SUBTITLE}
           />
         )}
       />

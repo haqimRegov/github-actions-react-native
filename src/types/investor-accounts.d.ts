@@ -48,6 +48,7 @@ declare interface IInvestorAccountsData {
   name: string;
   paymentMethod: string;
   riskTolerance: string;
+  status: string;
 }
 
 declare interface ICurrentAccount {
@@ -60,4 +61,4 @@ declare interface IInvestorAccountsSort {
   value: TransactionsSortValueType;
 }
 
-declare type InvestorAccountsSortColumnType = "name" | "riskTolerance" | "accountNo" | "jointName" | "accountOpeningDate";
+declare type InvestorAccountsSortColumnType = "name" | "riskTolerance" | "accountNo" | "jointName" | "accountOpeningDate" | "status";

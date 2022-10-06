@@ -22,6 +22,7 @@ declare interface IAccountList {
   name: string;
   paymentMethod: string;
   riskTolerance: string;
+  status: string;
 }
 declare interface IEtbCheckResult {
   accountHolder: TypeAccountHolder;

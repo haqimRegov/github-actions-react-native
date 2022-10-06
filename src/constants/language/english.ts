@@ -1867,6 +1867,10 @@ export const english = {
       BANNER_RISK_ASSESSMENT: "Risk Assessment",
       BANNER_UPDATED: "updated",
     },
+    SESSION: {
+      BUTTON_LOGIN: "Back to Login",
+      PROMPT_LOGOUT: "You've been logged out",
+    },
     SIDE_MENU: {
       LABEL_FOOTER: "KIB © All Rights Reserved",
     },

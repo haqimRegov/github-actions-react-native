@@ -106,20 +106,16 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     if (ws !== undefined && ws.current !== null) {
       ws.current.onopen = () => {
         // connection opened
-        // eslint-disable-next-line no-console
         handlePing();
       };
-      ws.current.onclose = (e) => {
+      ws.current.onclose = () => {
         // connection closed
-        // eslint-disable-next-line no-console
       };
-      ws.current.onerror = (e) => {
+      ws.current.onerror = () => {
         // an error occurred
-        // eslint-disable-next-line no-console
       };
       ws.current.onmessage = (e) => {
         // a message was received
-        // eslint-disable-next-line no-console
         if (isNotEmpty(e) && isNotEmpty(e?.data) && e?.data !== "PONG") {
           const response = JSON.parse(e?.data) as IResponseError;
           if (response.message === ERRORS.duplicateLogin.message) {

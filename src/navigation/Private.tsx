@@ -57,6 +57,10 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     logout(navigation, globalLogout);
   };
 
+  const handleDuplicateLogout = () => {
+    handleLogout(false);
+  };
+
   const handleEvents = async () => {
     setEventPrompt(false);
     if (dontShowEpf === true) {
@@ -224,7 +228,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
         visible={inactivityStatus === false}
       />
       <PromptModal
-        handleContinue={handleLogout}
+        handleContinue={handleDuplicateLogout}
         illustration={LocalAssets.illustration.clientWarning}
         label={SESSION.PROMPT_LOGOUT}
         labelContinue={SESSION.BUTTON_LOGIN}

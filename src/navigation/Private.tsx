@@ -37,8 +37,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   const [eventPrompt, setEventPrompt] = useState<boolean>(false);
   const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
-  const webSocketUrl = `wss://${WEB_SOCKET_CONFIG.url}/${WEB_SOCKET_CONFIG.stage}?username=${props.agent?.username}&x-api-key=${WEB_SOCKET_CONFIG.apiKey}`;
-  const ws = useRef(new WebSocket(webSocketUrl)).current;
+  const ws = useRef<WebSocket | null>(null);
 
   const handleExtend = () => {
     setInactivityStatus(true);
@@ -79,43 +78,52 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
 
   useEffect(() => {
     let webSocketInterval: ReturnType<typeof setInterval>;
+    const webSocketUrl = `wss://${WEB_SOCKET_CONFIG.url}/${WEB_SOCKET_CONFIG.stage}?username=${props.agent?.username}&x-api-key=${WEB_SOCKET_CONFIG.apiKey}`;
+    ws.current = new WebSocket(webSocketUrl);
+
     const handlePing = () => {
-      if (ws !== undefined) {
-        ws.send("PING");
+      if (ws !== undefined && ws.current !== null) {
+        ws.current.send("PING");
         webSocketInterval = setInterval(() => {
-          ws.send("PING");
+          if (ws !== undefined && ws.current !== null) {
+            ws.current.send("PING");
+          }
         }, 10000);
       }
     };
-    ws.onopen = () => {
-      // connection opened
-      // eslint-disable-next-line no-console
-      console.log("onopen");
-      handlePing();
-    };
-    ws.onclose = (e) => {
-      // connection closed
-      // eslint-disable-next-line no-console
-      console.log("closed", e);
-    };
-    ws.onerror = (e) => {
-      // an error occurred
-      // eslint-disable-next-line no-console
-      console.log("error", e);
-    };
-    ws.onmessage = (e) => {
-      // a message was received
-      // eslint-disable-next-line no-console
-      console.log("message", e?.data);
-      if (isNotEmpty(e) && isNotEmpty(e?.data) && e?.data !== "PONG") {
-        const response = JSON.parse(e?.data) as IResponseError;
-        if (response.message === ERRORS.duplicateLogin.message) {
-          props.addGlobal({ ...props.global, isLogout: true });
-          clearInterval(webSocketInterval);
-          AlertDialog(ERRORS.duplicateLogin.message, () => handleLogout(false), "You've been logged out");
+
+    if (ws !== undefined && ws.current !== null) {
+      ws.current.onopen = () => {
+        // connection opened
+        // eslint-disable-next-line no-console
+        console.log("onopen");
+        handlePing();
+      };
+      ws.current.onclose = (e) => {
+        // connection closed
+        // eslint-disable-next-line no-console
+        console.log("closed", e);
+      };
+      ws.current.onerror = (e) => {
+        // an error occurred
+        // eslint-disable-next-line no-console
+        console.log("error", e);
+      };
+      ws.current.onmessage = (e) => {
+        // a message was received
+        // eslint-disable-next-line no-console
+        console.log("message", e?.data);
+        if (isNotEmpty(e) && isNotEmpty(e?.data) && e?.data !== "PONG") {
+          const response = JSON.parse(e?.data) as IResponseError;
+          if (response.message === ERRORS.duplicateLogin.message) {
+            props.addGlobal({ ...props.global, isLogout: true });
+            clearInterval(webSocketInterval);
+            AlertDialog(ERRORS.duplicateLogin.message, () => handleLogout(false), "You've been logged out");
+          }
         }
-      }
-    };
+      };
+    }
+
     return () => {
       clearInterval(webSocketInterval);
     };

@@ -467,8 +467,12 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                 };
                 return (
                   <Fragment key={index}>
-                    {index % 2 !== 0 ? <CustomSpacer isHorizontal={true} space={sw24} /> : null}
-                    <AccountCard data={eachAccount} handlePress={handleSelectAccount} />
+                    {eachAccount.status === INVESTOR_ACCOUNTS.LABEL_ACTIVE ? (
+                      <Fragment>
+                        {index % 2 !== 0 ? <CustomSpacer isHorizontal={true} space={sw24} /> : null}
+                        <AccountCard data={eachAccount} handlePress={handleSelectAccount} />
+                      </Fragment>
+                    ) : null}
                   </Fragment>
                 );
               })}

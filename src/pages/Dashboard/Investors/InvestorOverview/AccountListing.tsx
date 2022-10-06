@@ -15,12 +15,14 @@ import {
   px,
   sh13,
   sh32,
-  sw104,
-  sw136,
+  sw120,
+  sw144,
   sw16,
-  sw176,
-  sw224,
+  sw208,
   sw56,
+  sw80,
+  sw88,
+  sw96,
 } from "../../../../styles";
 import { isArrayNotEmpty } from "../../../../utils";
 import { InvestorDetailsCustomTableItem } from "./CustomItems";
@@ -111,6 +113,14 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
     setSort([newSort]);
   };
 
+  // const handleSortStatus = async () => {
+  //   const sortColumns = sort.map((sortType) => sortType.column);
+  //   const newSort: IInvestorAccountsSort = sortColumns.includes("status")
+  //     ? { ...sort[0], value: sort[0].value === "descending" ? "ascending" : "descending" }
+  //     : { column: "status", value: "descending" };
+  //   setSort([newSort]);
+  // };
+
   const checkLoading = (functionToBeCalled: () => void) => {
     if (isFetching === false) {
       functionToBeCalled();
@@ -129,11 +139,13 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
   const findAccountNo = sort.filter((sortType) => sortType.column === "accountNo");
   const findJointAccount = sort.filter((sortType) => sortType.column === "jointName");
   const findAccountOpening = sort.filter((sortType) => sortType.column === "accountOpeningDate");
+  // const findStatus = sort.filter((sortType) => sortType.column === "status");
   const sortInvestorName = findInvestorName.length > 0 ? findInvestorName[0].value : "ascending";
   const sortRisk = findRisk.length > 0 ? findRisk[0].value : "ascending";
   const sortAccountNo = findAccountNo.length > 0 ? findAccountNo[0].value : "ascending";
   const sortJointAccount = findJointAccount.length > 0 ? findJointAccount[0].value : "ascending";
   const sortAccountOpening = findAccountOpening.length > 0 ? findAccountOpening[0].value : "ascending";
+  // const sortStatus = findStatus.length > 0 ? findStatus[0].value : "ascending";
   const sortedColumns = sort.map((currentSortType) => currentSortType.column);
   const columns: ITableColumn[] = [
     {
@@ -153,7 +165,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       textStyle: sortedColumns.includes("name") ? { fontFamily: NunitoBold } : {},
       title: DASHBOARD_INVESTORS_LIST.LABEL_INVESTOR_NAME,
       titleStyle: sortedColumns.includes("name") ? { ...fs10BoldBlue1, lineHeight: sh13 } : {},
-      viewStyle: { width: sw224 },
+      viewStyle: { width: sw208 },
     },
     {
       icon: { name: sortRisk === "descending" ? "arrow-down" : "arrow-up" },
@@ -171,7 +183,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       titleStyle: sortedColumns.includes("riskTolerance")
         ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 }
         : { ...fsTransformNone },
-      viewStyle: { width: sw104 },
+      viewStyle: { width: sw80 },
     },
     {
       icon: { name: sortAccountNo === "descending" ? "arrow-down" : "arrow-up" },
@@ -185,7 +197,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       textStyle: fsTransformNone,
       title: INVESTOR_ACCOUNTS.LABEL_ACCOUNT_NO,
       titleStyle: sortedColumns.includes("accountNo") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : { ...fsTransformNone },
-      viewStyle: { width: sw104 },
+      viewStyle: { width: sw88 },
     },
     {
       icon: { name: sortJointAccount === "descending" ? "arrow-down" : "arrow-up" },
@@ -199,7 +211,7 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       textStyle: fsTransformNone,
       title: INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT_NAME,
       titleStyle: sortedColumns.includes("jointName") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : { ...fsTransformNone },
-      viewStyle: { width: sw176 },
+      viewStyle: { width: sw144 },
     },
     {
       customItem: true,
@@ -216,7 +228,22 @@ export const AccountListing: FunctionComponent<AccountListingProps> = ({
       titleStyle: sortedColumns.includes("accountOpeningDate")
         ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 }
         : { ...fsTransformNone },
-      viewStyle: { width: sw136 },
+      viewStyle: { width: sw120 },
+    },
+    {
+      customItem: true,
+      // icon: { name: sortStatus === "descending" ? "arrow-down" : "arrow-up" },
+      key: [
+        {
+          key: "status",
+          textStyle: { ...fs12RegBlue1, fontFamily: sortedColumns.includes("status") ? NunitoBold : NunitoRegular },
+        },
+      ],
+      // onPressHeader: () => checkLoading(handleSortStatus),
+      textStyle: fsTransformNone,
+      title: INVESTOR_ACCOUNTS.LABEL_STATUS,
+      titleStyle: sortedColumns.includes("status") ? { ...fs10BoldBlue1, ...fsTransformNone, lineHeight: sh13 } : { ...fsTransformNone },
+      viewStyle: { width: sw96 },
     },
     {
       customItem: true,

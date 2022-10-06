@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 
 import { DateTime, InvestorName } from "../../../../../templates";
+import { AccountStatus } from "./AccountStatus";
 import { InvestorOverviewActions } from "./Actions";
 
 interface CustomTableItemProps extends ITableCustomItem {
@@ -19,6 +20,8 @@ export const InvestorDetailsCustomTableItem: FunctionComponent<CustomTableItemPr
       return <InvestorName {...data} sortedColumns={sortedColumns} />;
     case "accountOpeningDate":
       return <DateTime sortedColumns={sortedColumns} {...data} />;
+    case "status":
+      return <AccountStatus sortedColumns={sortedColumns} {...data} />;
     default:
       return <InvestorOverviewActions {...data} investorData={investorData} />;
   }

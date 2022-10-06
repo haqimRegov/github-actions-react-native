@@ -95,9 +95,9 @@ const etbCheck = gql`
           status
           highRisk
           forceUpdate
+          isMinor
           clientId
           initId
-          isMinor
           emailAddress
           declarationRequired
           dateOfBirth
@@ -182,6 +182,7 @@ const etbCheck = gql`
             accountHolder
             jointDateOfBirth
             accountNo
+            status
             isJoint
             fundType
             paymentMethod
@@ -191,6 +192,7 @@ const etbCheck = gql`
             authorisedSignatory
             currency
             isSyariah
+            accountOpeningDate
             epfDetails {
               epfMemberNumber
               epfAccountType
@@ -604,17 +606,18 @@ const investorDetailsDashboard = gql`
             dateOfBirth
             riskTolerance
             accountNo
+            status
             jointName
             accountOpeningDate
             paymentMethod
             fundType
             isRecurring
-            isSyariah
             jointDeclarationRequired
             authorisedSignatory
             principalRisk
             jointRisk
             currency
+            isSyariah
             epfDetails {
               epfMemberNumber
               epfAccountType

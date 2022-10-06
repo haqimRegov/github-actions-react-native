@@ -78,7 +78,7 @@ import {
   sw638,
   sw8,
 } from "../../styles";
-import { isEmpty, isNotEmpty } from "../../utils";
+import { isEmpty, isNotEmpty, titleCaseString } from "../../utils";
 import { NewSalesAccountInformation } from "./AccountInformation";
 import { InvestorProfilePage } from "./AccountInfoSummary/Profile";
 import { NewSalesOrderSummary } from "./OrderSummary";
@@ -110,7 +110,10 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const { accountNo, ampDetails, fundType, isEpf } = accountDetails;
 
   const checkIdType = (data: IClientBasicInfo) => {
-    return data.idType === "Other" ? `${data.otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : data.idType;
+    const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
+    const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
+
+    return data.idType === "Other" ? `${otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : idType;
   };
   const accountDetailsArray: LabeledTitleProps[] = [
     {

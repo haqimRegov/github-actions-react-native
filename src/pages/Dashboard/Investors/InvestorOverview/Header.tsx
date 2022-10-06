@@ -42,6 +42,7 @@ import { isNotEmpty } from "../../../../utils";
 
 const { DASHBOARD_HOME } = Language.PAGE;
 export interface IInvestorAccountHeaderProps {
+  accountDetails?: IInvestorAccountsData[];
   disableAccountOpening: boolean;
   email?: string;
   emailVerified?: boolean;
@@ -53,6 +54,7 @@ export interface IInvestorAccountHeaderProps {
 }
 
 export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderProps> = ({
+  accountDetails,
   disableAccountOpening,
   email,
   emailVerified,
@@ -116,13 +118,19 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
               </View>
             </View>
             <CustomFlexSpacer />
-            <OutlineButton buttonType="solid" disabledOpacity={0.4} onPress={handleViewProfile} text={DASHBOARD_HOME.LABEL_VIEW} />
+            {isNotEmpty(accountDetails) && accountDetails?.length === 0 ? (
+              <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
+                <OutlineButton buttonType="solid" disabledOpacity={0.4} onPress={handleViewProfile} text={DASHBOARD_HOME.LABEL_VIEW} />
+              </View>
+            ) : (
+              <OutlineButton buttonType="solid" disabledOpacity={0.4} onPress={handleViewProfile} text={DASHBOARD_HOME.LABEL_VIEW} />
+            )}
             <CustomSpacer isHorizontal={true} space={sw16} />
             <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
               <IconButton color={colorBlue._1} name="pencil" onPress={() => {}} size={sw16} style={iconContainer} />
             </View>
             <CustomSpacer isHorizontal={true} space={sw16} />
-            {disableAccountOpening === true ? (
+            {disableAccountOpening === true || (isNotEmpty(accountDetails) && accountDetails?.length === 0) ? (
               <View style={{ ...flexRow, ...disabledOpacity4 }} pointerEvents="none">
                 <IconButton color={colorBlue._1} name="plus" onPress={handleAccountOpening} size={sw16} style={iconContainer} />
               </View>

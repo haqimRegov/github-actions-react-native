@@ -10,6 +10,7 @@ export interface ContentPageProps extends ActionButtonsProps {
   heading?: string;
   headingStyle?: TextStyle;
   noBounce?: boolean;
+  setScrollViewRef?: (ref: ScrollView | null) => void;
   sideElement?: ReactNode;
   spaceToBottom?: number;
   spaceToButton?: number;
@@ -38,6 +39,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
   heading,
   headingStyle,
   noBounce,
+  setScrollViewRef,
   sideElement,
   spaceToBottom,
   spaceToButton,
@@ -65,6 +67,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
         bounces={!noBounce}
         contentContainerStyle={{ ...flexGrow, backgroundColor: colorBlue._2 }}
         keyboardShouldPersistTaps="handled"
+        ref={setScrollViewRef}
         showsVerticalScrollIndicator={false}>
         <View style={{ ...flexRow, ...px(sw24) }}>
           <View>

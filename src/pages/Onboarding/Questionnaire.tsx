@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, ReactElement, useEffect, useRef, useState } from "react";
-import { Alert, Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Alert, Image, ScrollView, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
@@ -58,7 +58,7 @@ import {
   sw8,
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
-import { isObjectEqual } from "../../utils";
+import { isNotEmpty, isObjectEqual } from "../../utils";
 
 const { RISK_ASSESSMENT } = Language.PAGE;
 
@@ -89,7 +89,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const { disabledSteps, finishedSteps } = onboarding;
 
   const fetching = useRef<boolean>(false);
+  const [checkUpdatedFinishedSteps, setCheckUpdatedFinishedSteps] = useState<TypeOnboardingRoute[]>(finishedSteps);
   const [confirmModal, setConfirmModal] = useState<TypeRiskAssessmentModal>(undefined);
+  const [scrollViewRef, setScrollViewRef] = useState<ScrollView | null>(null);
   const [prevQuestionnaire, setPrevQuestionnaire] = useState<IRiskAssessmentQuestions | undefined>(undefined);
   const { questionTwo, questionThree, questionFour, questionFive, questionSix, questionSeven, questionEight, questionNine } = questionnaire;
 
@@ -123,6 +125,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const handleRetakeAssessment = () => {
     setConfirmModal(undefined);
     resetRiskAssessment();
+    if (scrollViewRef !== null) {
+      scrollViewRef.scrollTo({ x: 0, y: 0, animated: true });
+    }
   };
 
   const handlePageContinue = async () => {
@@ -175,6 +180,8 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (findProducts === -1) {
       updatedDisabledSteps.push("Products");
     }
+    setPrevQuestionnaire(undefined);
+    setCheckUpdatedFinishedSteps([]);
     resetSelectedFund();
     return updateOnboarding({ ...onboarding, finishedSteps: [], disabledSteps: updatedDisabledSteps });
   };
@@ -183,6 +190,12 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (prevQuestionnaire !== undefined) {
       setConfirmModal(undefined);
       addAssessmentQuestions(prevQuestionnaire);
+    }
+  };
+
+  const handleScrollViewRef = (ref: ScrollView | null) => {
+    if (isNotEmpty(ref)) {
+      setScrollViewRef(ref!);
     }
   };
 
@@ -203,7 +216,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   ];
 
   useEffect(() => {
-    if (prevQuestionnaire === undefined && finishedSteps.includes("RiskAssessment")) {
+    if (prevQuestionnaire === undefined && checkUpdatedFinishedSteps.includes("RiskAssessment")) {
       setPrevQuestionnaire(questionnaire);
     }
     if (prevQuestionnaire !== undefined && !isObjectEqual(questionnaire, prevQuestionnaire)) {
@@ -230,7 +243,8 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         heading={`${RISK_ASSESSMENT.HEADING} ${name},`}
         headingStyle={fs18BoldGray6}
         subheading={RISK_ASSESSMENT.SUBHEADING}
-        subheadingStyle={fs14RegGray5}>
+        subheadingStyle={fs14RegGray5}
+        setScrollViewRef={handleScrollViewRef}>
         <CustomSpacer space={sh24} />
         <View style={questionnaireStyle}>
           <CustomSpacer isHorizontal={true} space={sw24} />

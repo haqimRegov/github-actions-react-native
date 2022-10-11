@@ -516,15 +516,19 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               return true;
             }
             // This is for Force Update
+            const checkReqDob =
+              req !== undefined && req?.dateOfBirth === undefined
+                ? moment(findDOBFromNric(req.id!), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT)
+                : req?.dateOfBirth;
             const nricDOB =
-              jointHolder?.dateOfBirth === "" && jointHolder.idType === "NRIC"
+              (jointHolder?.dateOfBirth === "" || jointHolder?.dateOfBirth === undefined) && jointHolder.idType === "NRIC"
                 ? moment(findDOBFromNric(jointHolder.id), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT)
                 : jointHolder?.dateOfBirth;
 
             // This is for Force Update
             setOtherInvestorData({
               ...data.result,
-              dateOfBirth: req !== undefined ? req.dateOfBirth : nricDOB,
+              dateOfBirth: req !== undefined ? checkReqDob : nricDOB,
               name: req !== undefined ? req.name! : jointHolder!.name!,
               id: req !== undefined ? req.id! : jointHolder!.id!,
             });

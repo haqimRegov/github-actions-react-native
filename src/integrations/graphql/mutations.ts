@@ -66,6 +66,7 @@ const emailVerification = gql`
         result {
           message
           status
+          otpSendTime
         }
       }
       error {

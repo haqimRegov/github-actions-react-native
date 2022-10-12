@@ -14,6 +14,7 @@ declare interface IEmailVerificationRequest {
 declare interface IEmailVerificationResult {
   message: string;
   status: boolean;
+  otpSendTime: string;
 }
 
 declare interface IEmailVerificationMutation {

@@ -157,6 +157,7 @@ declare interface IPersonalInfoState {
   editPersonal?: boolean;
   editDeclaration?: boolean;
   emailOtpSent?: boolean;
+  emailTimestamp?: string;
   epfInvestment?: boolean;
   epfShariah?: boolean;
   isAllEpf?: boolean;

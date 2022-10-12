@@ -65,7 +65,7 @@ type TypeOmniErrors = Record<string, IResponseError>;
 export const ERRORS: TypeOmniErrors = {
   duplicateLogin: {
     errorCode: ERROR_CODE.duplicateLogin,
-    message: "This account has been logged in from another device.",
+    message: "Your account was used on multiple devices at the same time.\nTo keep your account safe, you were signed out.",
     statusCode: "400",
   },
   internal: { errorCode: ERROR_CODE.internal, message: "Something went wrong", statusCode: "400" },

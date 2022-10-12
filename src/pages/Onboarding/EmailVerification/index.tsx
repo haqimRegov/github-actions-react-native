@@ -5,7 +5,8 @@ import { Alert, Text } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../../components";
-import { DEFAULT_DATE_FORMAT, Language, OTP_CONFIG } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { CalculateTimeDifference } from "../../../helpers";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { fs16RegGray6 } from "../../../styles";
@@ -26,7 +27,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   updateOnboarding,
 }: EmailVerificationProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { emailOtpSent } = personalInfo;
+  const { emailOtpSent, emailTimestamp } = personalInfo;
   const fetching = useRef<boolean>(false);
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
@@ -34,7 +35,9 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const [prompt, setPrompt] = useState<"cancel" | undefined>(undefined);
   const [principalEmailError, setPrincipalEmailError] = useState<string | undefined>(undefined);
   const [jointEmailError, setJointEmailError] = useState<string | undefined>(undefined);
-  const [resendTimer, setResendTimer] = useState(0);
+  const checkTimeDifference = CalculateTimeDifference(emailTimestamp);
+
+  const [resendTimer, setResendTimer] = useState(checkTimeDifference);
 
   const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
@@ -71,12 +74,13 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       const response: IEmailVerificationResponse = await emailVerification(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
-      setResendTimer(OTP_CONFIG.EXPIRY);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
+          const otpDifference = CalculateTimeDifference(data.result.otpSendTime);
+          setResendTimer(otpDifference);
           if (data.result.status === true) {
-            addPersonalInfo({ ...personalInfo, emailOtpSent: true });
+            addPersonalInfo({ ...personalInfo, emailOtpSent: true, emailTimestamp: response.data?.result.otpSendTime });
             setPage("otp");
           }
         }
@@ -148,6 +152,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       ) : (
         <EmailOTP
           accountType={accountType}
+          addPersonalInfo={addPersonalInfo}
           details={details}
           handleCancel={handleCancel}
           handleNavigate={handleNavigate}
@@ -155,6 +160,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           jointEmail={inputJointEmail}
           jointEmailCheck={jointEmailCheck}
           jointOtp={jointOtp}
+          personalInfo={personalInfo}
           principalClientId={principalClientId}
           principalEmail={inputPrincipalEmail}
           principalOtp={principalOtp}

@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -45,6 +46,7 @@ import { isNumber } from "../../../utils";
 const { EMAIL_VERIFICATION, INVESTOR_INFORMATION } = Language.PAGE;
 declare interface EmailOTPProps {
   accountType: TypeAccountChoices;
+  addPersonalInfo: (state: IPersonalInfoState) => void;
   details?: IClientDetailsState;
   handleCancel?: () => void;
   handleNavigate: () => void;
@@ -52,6 +54,7 @@ declare interface EmailOTPProps {
   jointEmail: string;
   jointEmailCheck: boolean;
   jointOtp: string;
+  personalInfo: IPersonalInfoState;
   principalClientId: string;
   principalEmail: string;
   principalOtp: string;
@@ -63,6 +66,7 @@ declare interface EmailOTPProps {
 }
 
 export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
+  addPersonalInfo,
   details,
   handleCancel,
   handleNavigate,
@@ -70,6 +74,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   jointEmail,
   jointEmailCheck,
   jointOtp,
+  personalInfo,
   principalClientId,
   principalEmail,
   principalOtp,
@@ -130,6 +135,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
           setJointError(error.message);
           if (error.errorCode === ERROR_CODE.otpAttempt) {
             setResendTimer(OTP_CONFIG.COOL_OFF);
+            addPersonalInfo({ ...personalInfo, emailOtpSent: true, emailTimestamp: moment().format("x") });
           }
         }
       }
@@ -139,7 +145,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
 
   const handleResendOtp = () => {
     handleResend();
-    setResendTimer(OTP_CONFIG.EXPIRY);
   };
 
   const handleBack = () => {

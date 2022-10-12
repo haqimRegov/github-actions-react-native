@@ -11,6 +11,7 @@ export const personalInfoInitialState: PersonalInfoState = {
   editPersonal: false,
   editDeclaration: false,
   emailOtpSent: false,
+  emailTimestamp: undefined,
   epfInvestment: false,
   epfShariah: false,
   incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,

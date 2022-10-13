@@ -15,7 +15,7 @@ const webSocketConfig = {
   prod: {
     apiKey: "abc",
     stage: "prod",
-    url: "x27xhz7bdf.execute-api.ap-southeast-1.amazonaws.com",
+    url: "w7sx4ckaba.execute-api.ap-southeast-1.amazonaws.com",
   },
   sit: {
     apiKey: "abc",
@@ -24,8 +24,8 @@ const webSocketConfig = {
   },
   staging: {
     apiKey: "abc",
-    stage: "staging",
-    url: "x27xhz7bdf.execute-api.ap-southeast-1.amazonaws.com",
+    stage: "prod",
+    url: "kuid6ukot0.execute-api.ap-southeast-1.amazonaws.com",
   },
   uat: {
     apiKey: "abc",

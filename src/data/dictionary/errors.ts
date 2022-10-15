@@ -57,7 +57,7 @@ export const ERROR_CODE = {
   storage: "OMNI403",
   submittedPdf: "EM448",
   currentPassword: "EM403",
-  duplicateLogin: "OMNI411",
+  duplicateLogin: "EM011",
 };
 
 type TypeOmniErrors = Record<string, IResponseError>;

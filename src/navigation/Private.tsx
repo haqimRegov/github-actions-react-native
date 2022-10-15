@@ -118,7 +118,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
         // a message was received
         if (isNotEmpty(e) && isNotEmpty(e?.data) && e?.data !== "PONG") {
           const response = JSON.parse(e?.data) as IResponseError;
-          if (response.message === ERRORS.duplicateLogin.message) {
+          if (response.errorCode === ERRORS.duplicateLogin.errorCode) {
             props.addGlobal({ ...props.global, isLogout: true });
             clearInterval(webSocketInterval);
             setDuplicateLoginPrompt(true);

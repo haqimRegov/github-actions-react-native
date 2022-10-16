@@ -5,8 +5,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { version } from "../../../package.json";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
-import { DICTIONARY_LINK_PLATFORM_AGREEMENT, DICTIONARY_LINK_PRIVACY } from "../../data/dictionary";
-import { RNInAppBrowser } from "../../integrations";
+import { DICTIONARY_LINK_PRIVACY } from "../../data/dictionary";
+import { RNInAppBrowser, S3_URL } from "../../integrations";
 import {
   colorWhite,
   DEVICE,
@@ -43,7 +43,7 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
   };
 
   const handlePlatformAgreement = () => {
-    RNInAppBrowser.openLink(DICTIONARY_LINK_PLATFORM_AGREEMENT);
+    RNInAppBrowser.openLink(S3_URL.platformAgreement);
   };
 
   // TODO Module 1A will only support English language

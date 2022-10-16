@@ -9,8 +9,8 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { CheckBox, CustomSpacer, Loading, Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
-import { DICTIONARY_LINK_PLATFORM_AGREEMENT, ERROR_CODE, ERRORS } from "../../data/dictionary";
-import { getStorageData, removeStorageData, RNFirebase, RNPushNotification, updateStorageData } from "../../integrations";
+import { ERROR_CODE, ERRORS } from "../../data/dictionary";
+import { getStorageData, removeStorageData, RNFirebase, RNPushNotification, S3_URL, updateStorageData } from "../../integrations";
 import { expiredPassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
 import {
@@ -412,7 +412,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                 incognito={true}
                 onNavigationStateChange={handleWebViewNavigationStateChange}
                 ref={webViewRef}
-                source={{ uri: DICTIONARY_LINK_PLATFORM_AGREEMENT }}
+                source={{ uri: S3_URL.platformAgreement }}
               />
             </View>
             <CustomSpacer space={sh24} />

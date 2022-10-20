@@ -49,6 +49,7 @@ import {
   sw228,
   sw239,
   sw24,
+  sw30,
   sw32,
   sw40,
   sw8,
@@ -277,7 +278,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     itemsPerGroup: 3,
     itemStyle: { width: sw239 },
     labelStyle: fs12BoldGray5,
-    spaceBetweenItem: width < 1080 ? 30 : 32,
+    spaceBetweenItem: width < 1080 || width > 1080 ? sw30 : sw32,
     titleStyle: fs16BoldBlack2,
   };
 
@@ -316,7 +317,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       <View style={px(sw24)}>
         <ColorCard
           containerStyle={noBorder}
-          content={<TextCard data={accountDetails} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
+          content={<TextCard data={accountDetails} {...textCardProps} />}
           contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
           customHeader={
             <View style={rowCenterVertical}>

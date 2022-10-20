@@ -35,6 +35,7 @@ import {
   colorTransparent,
   colorWhite,
   colorYellow,
+  DEVICE,
   flexChild,
   flexRow,
   fs10BoldBlue1,
@@ -81,6 +82,7 @@ import {
 import { isEmpty, isNotEmpty, titleCaseString } from "../../utils";
 import { NewSalesAccountInformation } from "./AccountInformation";
 import { InvestorProfilePage } from "./AccountInfoSummary/Profile";
+import { scaledSpaceBetween } from "./helper";
 import { NewSalesOrderSummary } from "./OrderSummary";
 
 const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
@@ -349,6 +351,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
   const checkCurrentProfile = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
   const clientId = currentClientId !== "" ? currentClientId : checkCurrentProfile;
+  const scaledSpace = DEVICE.SCREEN.WIDTH > 1080 ? scaledSpaceBetween() : sw32;
 
   const profileContent = (
     <ContentPage heading={RISK_ASSESSMENT.NEW_SALES_HEADING} headingStyle={headerStyle}>
@@ -385,7 +388,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
       <View style={px(sw24)}>
         <ColorCard
           containerStyle={noBorder}
-          content={<TextCard data={accountDetailsArray} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
+          content={<TextCard data={accountDetailsArray} itemsPerGroup={3} spaceBetweenItem={scaledSpace} itemStyle={{ width: sw239 }} />}
           contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
           customHeader={
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
@@ -484,7 +487,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
         <CustomSpacer space={sh24} />
         <ColorCard
           containerStyle={noBorder}
-          content={<TextCard data={riskProfileData} itemsPerGroup={3} spaceBetweenItem={sw32} itemStyle={{ width: sw239 }} />}
+          content={<TextCard data={riskProfileData} itemsPerGroup={3} spaceBetweenItem={scaledSpace} itemStyle={{ width: sw239 }} />}
           contentStyle={{ ...border(colorBlue._3, sw1), ...px(sw24), paddingBottom: sh8 }}
           customHeader={
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>

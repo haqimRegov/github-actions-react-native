@@ -28,6 +28,7 @@ import {
   circle,
   colorBlue,
   colorGray,
+  DEVICE,
   disabledOpacity6,
   fs10RegBlue9,
   fs12RegGray5,
@@ -68,7 +69,7 @@ import {
   parseAmountToString,
   validateObject,
 } from "../../utils";
-import { generateNewInfo, getAmount, validateCtaNumber } from "./helpers";
+import { generateNewInfo, getAmount, scaledSpaceBetween, validateCtaNumber } from "./helpers";
 import { NewCheque, NewCTA, NewEPF, NewOnlineBanking, NewRecurring } from "./Method";
 import { IPaymentCardStackRef, PaymentCardStack } from "./Surplus";
 
@@ -782,6 +783,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchedCta]);
 
+  const checkScaledSpace = DEVICE.SCREEN.WIDTH !== 1080 ? scaledSpaceBetween() : sw64;
   const textContainerStyle: ViewStyle = { ...px(sw4), ...py(sh2), ...border(colorBlue._9, sw05, sw4) };
   const checkPaymentLabel = payment.paymentType === "Recurring" ? PAYMENT.LABEL_ADD_RECURRING_INFO : PAYMENT.LABEL_ADD_PAYMENT;
   const checkPaymentLabelEPF = payment.paymentType === "EPF" ? PAYMENT.LABEL_ADD_EPF_DETAILS : checkPaymentLabel;
@@ -836,7 +838,7 @@ export const PaymentInfo: FunctionComponent<PaymentInfoProps> = ({
         <View style={px(sw24)}>
           <CustomCard
             spaceBetweenGroup={sh24}
-            spaceBetweenItem={sw64}
+            spaceBetweenItem={checkScaledSpace}
             items={useOfSurplus === true || draftPayment.isEditable === false ? surplusItems : checkBaseItems}
           />
         </View>

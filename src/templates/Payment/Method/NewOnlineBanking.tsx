@@ -14,7 +14,8 @@ import {
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
-import { fsTransformNone, px, sh143, sh24, sh4, sw24, sw360, sw4, sw64 } from "../../../styles";
+import { DEVICE, fsTransformNone, px, sh143, sh24, sh4, sw24, sw360, sw4, sw64 } from "../../../styles";
+import { scaledSpaceBetween } from "../helpers";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -99,14 +100,16 @@ export const NewOnlineBanking: FunctionComponent<NewOnlineBankingProps> = ({
     />,
   ];
 
+  const scaledSpace = DEVICE.SCREEN.WIDTH !== 1080 ? scaledSpaceBetween() : sw64;
+
   return (
     <View style={px(sw24)}>
-      <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={sw64} items={infoItems} />
+      <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={scaledSpace} items={infoItems} />
       <Dash />
       <CustomSpacer space={sh24} />
       <CustomCard
         spaceBetweenGroup={sh24}
-        spaceBetweenItem={sw64}
+        spaceBetweenItem={scaledSpace}
         items={useOfSurplus === true || isEditable === false ? surplusItems : inputItems}
       />
       {useOfSurplus === true ? <Dash /> : null}

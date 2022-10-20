@@ -14,8 +14,9 @@ import {
 } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
-import { fs12BoldGray5, fs16RegBlack2, px, sh16, sh2, sh24, sh4, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
+import { DEVICE, fs12BoldGray5, fs16RegBlack2, px, sh16, sh2, sh24, sh4, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
 import { deleteKey, isObjectEqual } from "../../../utils";
+import { scaledSpaceBetween } from "../helpers";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -224,12 +225,14 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payment]);
 
+  const scaledSpace = DEVICE.SCREEN.WIDTH !== 1080 ? scaledSpaceBetween() : sw64;
+
   return (
     <View style={px(sw24)}>
-      <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={sw64} items={optionItems} />
+      <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={scaledSpace} items={optionItems} />
       <Dash />
       <CustomSpacer space={sh24} />
-      <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={sw64} items={infoItems} />
+      <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={scaledSpace} items={infoItems} />
       <Dash />
     </View>
   );

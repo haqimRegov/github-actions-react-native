@@ -3,7 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { DEFAULT_DATE_FORMAT, Language, NRIC_AGE_FORMAT } from "../../../../constants";
 import {
   DICTIONARY_ACCOUNT_TYPE,
   DICTIONARY_COUNTRIES,
@@ -11,6 +11,7 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
+import { findDOBFromNric } from "../../../../helpers";
 import { disabledOpacity5, fs20BoldGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
@@ -71,6 +72,14 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
 
   const setInputIdNumber = (value: string) => {
     if ((idType === "NRIC" && isNumber(value)) || idType !== "NRIC" || value === "") {
+      if (idType === "NRIC") {
+        const checkYears = moment().diff(moment(findDOBFromNric(value), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT), "years");
+        if (checkYears < 18 && holderToFill === "principalHolder") {
+          setErrorMessage(ADD_CLIENT.LABEL_PRINCIPAL_UNDER_18);
+        } else {
+          setErrorMessage(undefined);
+        }
+      }
       setClientInfo({ ...[holderToFill], id: value.toUpperCase() });
     }
   };
@@ -94,6 +103,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const hideInput = clientType !== "" && holderToFill === "principalHolder";
   const disabledStyle: ViewStyle = hideInput ? disabledOpacity5 : {};
   const dateValue = dateOfBirth !== "" ? moment(dateOfBirth, DEFAULT_DATE_FORMAT).toDate() : undefined;
+  const maximumPrincipalDob = holderToFill === "principalHolder" ? moment().subtract(18, "years").toDate() : new Date();
 
   return (
     <View>
@@ -148,6 +158,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
               disabled={clientType !== "" && holderToFill === "principalHolder"}
               error={ageErrorMessage}
               datePickerStyle={{ height: sh120 }}
+              maximumDate={maximumPrincipalDob}
               mode="date"
               setValue={setInputDateOfBirth}
               value={dateValue}

@@ -349,6 +349,8 @@ const investorAccountDetails = gql`
             accountType
             registrationDate
             distributionInstruction
+            status
+            operatingMode
           }
           personalDetails {
             expirationDate

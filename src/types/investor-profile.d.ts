@@ -1,8 +1,8 @@
 declare interface IAccountDetails {
   accountNumber?: string[];
-  accountOperationMode?: string | null;
   accountType?: TypeAccountChoices;
   distributionInstruction?: string;
+  operatingMode?: string | null;
   registrationDate?: string;
 }
 

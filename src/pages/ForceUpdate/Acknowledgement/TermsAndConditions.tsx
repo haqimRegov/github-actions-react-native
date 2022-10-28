@@ -145,18 +145,16 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
                 />
               </View>
               <CustomFlexSpacer />
-              <Pressable onPress={handleExpandAll}>
-                <View style={{ ...justifyContentEnd, ...flexRow }}>
-                  <View>
-                    <IcoMoon
-                      color={colorBlue._1}
-                      name={activeSections.length === TERMS_AND_CONDITION_LIST.length ? "collapse" : "expand"}
-                      size={sw14}
-                    />
-                  </View>
-                  <CustomSpacer isHorizontal space={sw4} />
-                  <Text style={fs12SemiBoldBlue1}>{headerText}</Text>
+              <Pressable onPress={handleExpandAll} style={{ ...justifyContentEnd, ...rowCenterVertical }}>
+                <View>
+                  <IcoMoon
+                    color={colorBlue._1}
+                    name={activeSections.length === TERMS_AND_CONDITION_LIST.length ? "collapse" : "expand"}
+                    size={sw14}
+                  />
                 </View>
+                <CustomSpacer isHorizontal space={sw4} />
+                <Text style={fs12SemiBoldBlue1}>{headerText}</Text>
               </Pressable>
             </View>
             <CustomSpacer space={sh24} />

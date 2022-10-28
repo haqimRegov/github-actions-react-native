@@ -164,109 +164,105 @@ export const DashboardAccordion: React.FunctionComponent<IDashboardAccordionProp
   };
 
   return (
-    <Pressable onPress={() => {}}>
-      <View style={containerStyle}>
-        <View style={flexRow}>
-          <View style={{ maxWidth: sw648 }}>
-            <Text style={fs12BoldGray6}>{status}</Text>
-            {isNotEmpty(highlightedText) &&
-            highlightedText !== "" &&
-            ((status === "Submitted" && withHardcopy === true) || status === "Completed") ? (
-              <Text style={fs12RegGray5}>
-                {status === "Completed"
-                  ? DASHBOARD_HOME.DESCRIPTION_STATUS_COMPLETED_1
-                  : DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED_HARDCOPY_1}
-                <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{` ${highlightedText}. `}</Text>
-                {status === "Completed"
-                  ? DASHBOARD_HOME.DESCRIPTION_STATUS_COMPLETED_2
-                  : DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED_HARDCOPY_2}
-              </Text>
-            ) : (
-              <Text style={fs12RegGray5}>{getStatusDescription()}</Text>
-            )}
-          </View>
-          {status !== "Pending Payment" &&
-          status !== "Pending Doc & Payment" &&
-          status !== "Pending Doc" &&
-          status !== "Pending Physical Doc" ? (
-            <Fragment>
-              <CustomFlexSpacer />
-              <View style={alignSelfEnd}>
-                <TouchableWithoutFeedback onPress={handleTrackStatus}>
-                  <View style={sideElementContainer}>
-                    <Text style={fs12BoldBlue1}>{DASHBOARD_HOME.LABEL_TRACK_STATUS}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw4} />
-                    <IcoMoon name="arrow-right" color={colorBlue._1} size={sw12} />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            </Fragment>
-          ) : null}
+    <Pressable onPress={() => {}} style={containerStyle}>
+      <View style={flexRow}>
+        <View style={{ maxWidth: sw648 }}>
+          <Text style={fs12BoldGray6}>{status}</Text>
+          {isNotEmpty(highlightedText) &&
+          highlightedText !== "" &&
+          ((status === "Submitted" && withHardcopy === true) || status === "Completed") ? (
+            <Text style={fs12RegGray5}>
+              {status === "Completed"
+                ? DASHBOARD_HOME.DESCRIPTION_STATUS_COMPLETED_1
+                : DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED_HARDCOPY_1}
+              <Text style={{ ...fs12RegGray5, fontFamily: NunitoBold }}>{` ${highlightedText}. `}</Text>
+              {status === "Completed"
+                ? DASHBOARD_HOME.DESCRIPTION_STATUS_COMPLETED_2
+                : DASHBOARD_HOME.DESCRIPTION_STATUS_SUBMITTED_HARDCOPY_2}
+            </Text>
+          ) : (
+            <Text style={fs12RegGray5}>{getStatusDescription()}</Text>
+          )}
         </View>
-        <CustomSpacer space={sh16} />
-        {isArrayNotEmpty(documents) ? (
-          <View>
-            <View style={borderBottomGray3} />
-            <CustomSpacer space={sh16} />
-            {documents[0].document !== "Submission Summary Receipt" ? <Text style={fs12RegGray6}>{itemsLabel}</Text> : null}
-            <View style={rowCenterVertical}>
-              <View style={{ ...itemContainerStyle }}>
-                {documents.map((eachContent: IItemWithCount, eachContentIndex: number) => {
-                  const handlePress = () => {
-                    handleNavigation(eachContent.document);
-                  };
-                  const checkDownload = eachContent.document === "Submission Summary Receipt" ? "download" : "upload";
-                  const checkIcon = eachContent.document === "Recurring Info" ? "plus" : checkDownload;
-                  return (
-                    <View key={eachContent.document}>
-                      <CustomSpacer space={sh8} />
-                      <View style={flexRow}>
-                        {itemIndex === -1 || eachContentIndex < itemIndex || showAll === true ? (
-                          <Fragment>
-                            <View
-                              onLayout={(event: LayoutChangeEvent) => {
-                                const { width } = event.nativeEvent.layout;
-                                const updatedWidth = [...itemWidths];
-                                updatedWidth[eachContentIndex] = width;
-                                setItemWidths(updatedWidth);
-                              }}>
-                              <OutlineButton
-                                badgeCount={eachContent.count > 1 ? eachContent.count : undefined}
-                                buttonStyle={buttonStyle}
-                                color={colorBlue._1}
-                                icon={checkIcon}
-                                onPress={handlePress}
-                                text={eachContent.document}
-                              />
-                            </View>
-                            {eachContentIndex !== documents.length - 1 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
-                          </Fragment>
-                        ) : null}
-                      </View>
-                    </View>
-                  );
-                })}
-              </View>
-              {showAll === false && itemIndex !== -1 ? (
-                <View>
-                  <CustomSpacer space={sh8} />
-                  <View style={rowCenterVertical}>
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <Pressable onPress={handleShowAll}>
-                      <View>
-                        <Text style={fs12BoldBlue1}>{`+${documents.length - itemIndex} more`}</Text>
-                      </View>
-                    </Pressable>
-                  </View>
+        {status !== "Pending Payment" &&
+        status !== "Pending Doc & Payment" &&
+        status !== "Pending Doc" &&
+        status !== "Pending Physical Doc" ? (
+          <Fragment>
+            <CustomFlexSpacer />
+            <View style={alignSelfEnd}>
+              <TouchableWithoutFeedback onPress={handleTrackStatus}>
+                <View style={sideElementContainer}>
+                  <Text style={fs12BoldBlue1}>{DASHBOARD_HOME.LABEL_TRACK_STATUS}</Text>
+                  <CustomSpacer isHorizontal={true} space={sw4} />
+                  <IcoMoon name="arrow-right" color={colorBlue._1} size={sw12} />
                 </View>
-              ) : null}
+              </TouchableWithoutFeedback>
             </View>
-          </View>
-        ) : null}
-        {isNotEmpty(reason) && reason.length > 0 ? (
-          <OrderRemarks handleNavigation={handleNavigation} remarkTitle={remarkTitle} remarks={reason} status={status} />
+          </Fragment>
         ) : null}
       </View>
+      <CustomSpacer space={sh16} />
+      {isArrayNotEmpty(documents) ? (
+        <View>
+          <View style={borderBottomGray3} />
+          <CustomSpacer space={sh16} />
+          {documents[0].document !== "Submission Summary Receipt" ? <Text style={fs12RegGray6}>{itemsLabel}</Text> : null}
+          <View style={rowCenterVertical}>
+            <View style={{ ...itemContainerStyle }}>
+              {documents.map((eachContent: IItemWithCount, eachContentIndex: number) => {
+                const handlePress = () => {
+                  handleNavigation(eachContent.document);
+                };
+                const checkDownload = eachContent.document === "Submission Summary Receipt" ? "download" : "upload";
+                const checkIcon = eachContent.document === "Recurring Info" ? "plus" : checkDownload;
+                return (
+                  <View key={eachContent.document}>
+                    <CustomSpacer space={sh8} />
+                    <View style={flexRow}>
+                      {itemIndex === -1 || eachContentIndex < itemIndex || showAll === true ? (
+                        <Fragment>
+                          <View
+                            onLayout={(event: LayoutChangeEvent) => {
+                              const { width } = event.nativeEvent.layout;
+                              const updatedWidth = [...itemWidths];
+                              updatedWidth[eachContentIndex] = width;
+                              setItemWidths(updatedWidth);
+                            }}>
+                            <OutlineButton
+                              badgeCount={eachContent.count > 1 ? eachContent.count : undefined}
+                              buttonStyle={buttonStyle}
+                              color={colorBlue._1}
+                              icon={checkIcon}
+                              onPress={handlePress}
+                              text={eachContent.document}
+                            />
+                          </View>
+                          {eachContentIndex !== documents.length - 1 ? <CustomSpacer isHorizontal={true} space={sw16} /> : null}
+                        </Fragment>
+                      ) : null}
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+            {showAll === false && itemIndex !== -1 ? (
+              <View>
+                <CustomSpacer space={sh8} />
+                <View style={rowCenterVertical}>
+                  <CustomSpacer isHorizontal={true} space={sw16} />
+                  <Pressable onPress={handleShowAll}>
+                    <Text style={fs12BoldBlue1}>{`+${documents.length - itemIndex} more`}</Text>
+                  </Pressable>
+                </View>
+              </View>
+            ) : null}
+          </View>
+        </View>
+      ) : null}
+      {isNotEmpty(reason) && reason.length > 0 ? (
+        <OrderRemarks handleNavigation={handleNavigation} remarkTitle={remarkTitle} remarks={reason} status={status} />
+      ) : null}
     </Pressable>
   );
 };

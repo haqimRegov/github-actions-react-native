@@ -1,6 +1,6 @@
 import debounce from "lodash.debounce";
 import React, { FunctionComponent, useCallback, useState } from "react";
-import { ColorValue, Pressable, View, ViewStyle } from "react-native";
+import { ColorValue, Pressable, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
 import { centerHV, colorTransparent, colorWhite, sh20 } from "../../styles";
@@ -51,10 +51,12 @@ export const IconButton: FunctionComponent<IconButtonProps> = ({
   const bgColor = withHover !== undefined && hover === true ? withHover.color : defaultBgColor;
 
   return (
-    <Pressable onPress={handlePress} onPressIn={() => setHover(true)} onPressOut={() => setHover(false)}>
-      <View style={{ ...centerHV, ...style, backgroundColor: bgColor }}>
-        <IcoMoon color={defaultColor} name={name} size={defaultSize} />
-      </View>
+    <Pressable
+      onPress={handlePress}
+      onPressIn={() => setHover(true)}
+      onPressOut={() => setHover(false)}
+      style={{ ...centerHV, ...style, backgroundColor: bgColor }}>
+      <IcoMoon color={defaultColor} name={name} size={defaultSize} />
     </Pressable>
   );
 };

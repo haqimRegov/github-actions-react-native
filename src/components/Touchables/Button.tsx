@@ -1,6 +1,6 @@
 import debounce from "lodash.debounce";
 import React, { Fragment, FunctionComponent, useCallback, useState } from "react";
-import { Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Pressable, Text, TextStyle, ViewStyle } from "react-native";
 import { CircleSnail } from "react-native-progress";
 
 import { IcoMoon } from "../../icons";
@@ -84,22 +84,24 @@ export const CustomButton: FunctionComponent<CustomButtonProps> = ({
   };
 
   return (
-    <Pressable onPress={disabled === true ? undefined : handlePress} onPressIn={() => setHover(true)} onPressOut={() => setHover(false)}>
-      <View style={defaultButtonStyle}>
-        {loading === true ? (
-          <Fragment>
-            <CircleSnail color={colorWhite._1} size={sw20} thickness={sw2} />
-            <CustomSpacer isHorizontal={true} space={sw8} />
-          </Fragment>
-        ) : null}
-        {icon === undefined ? null : (
-          <Fragment>
-            <IcoMoon color={defaultIconColor} name={icon} size={iconSize || sh16} />
-            <CustomSpacer isHorizontal={true} space={sw8} />
-          </Fragment>
-        )}
-        <Text style={{ ...fs16BoldWhite1, ...fsCapitalize, color: textColor, ...textStyle }}>{text}</Text>
-      </View>
+    <Pressable
+      onPress={disabled === true ? undefined : handlePress}
+      onPressIn={() => setHover(true)}
+      onPressOut={() => setHover(false)}
+      style={defaultButtonStyle}>
+      {loading === true ? (
+        <Fragment>
+          <CircleSnail color={colorWhite._1} size={sw20} thickness={sw2} />
+          <CustomSpacer isHorizontal={true} space={sw8} />
+        </Fragment>
+      ) : null}
+      {icon === undefined ? null : (
+        <Fragment>
+          <IcoMoon color={defaultIconColor} name={icon} size={iconSize || sh16} />
+          <CustomSpacer isHorizontal={true} space={sw8} />
+        </Fragment>
+      )}
+      <Text style={{ ...fs16BoldWhite1, ...fsCapitalize, color: textColor, ...textStyle }}>{text}</Text>
     </Pressable>
   );
 };

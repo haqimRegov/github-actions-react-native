@@ -1,11 +1,9 @@
 import React, { FunctionComponent } from "react";
 
-import { AMPFilter } from "./AMP";
-import { PRSFilter } from "./PRS";
-import { UTFilter } from "./UT";
+import { AMPFilter, PRSFilter, UTFilter } from "../../../../../templates";
 
 export interface ProductFilterProps {
-  accountDetails: INewSalesAccountDetails;
+  accountDetails?: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   setFilter: (filter: IProductFilter) => void;

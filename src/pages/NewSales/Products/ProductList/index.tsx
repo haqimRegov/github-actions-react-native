@@ -6,8 +6,8 @@ import { CustomSpacer, SafeAreaPage } from "../../../../components";
 import { usePrevious } from "../../../../hooks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
 import { flexChild, flexGrow, sh104, sh810 } from "../../../../styles";
+import { ProductTabs } from "../../../../templates";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
-import { ProductTabs } from "./Tabs";
 
 interface ProductListProps extends ProductsStoreProps {
   handleCancelProducts: () => void;

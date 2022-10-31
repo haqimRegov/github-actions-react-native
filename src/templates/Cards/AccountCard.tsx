@@ -91,58 +91,56 @@ export const AccountCard: FunctionComponent<IAccountCardProps> = ({ data, handle
   const checkIconName = jointName !== null ? "avatar-joint" : "avatar";
   const checkAccountType = jointName !== null ? INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT : INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT;
   return (
-    <Pressable onPress={handlePress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
-      <View style={containerStyle}>
-        <View style={flexRow}>
-          <View>
-            <View style={rowCenterVertical}>
-              <View style={{ ...circle(sw24, colorGray._1), ...centerHV }}>
-                <IcoMoon name={checkIconName} size={sw16} />
-              </View>
-              <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={fs12RegGray5}>{checkAccountType}</Text>
-              <CustomSpacer isHorizontal={true} space={sw8} />
-              <View style={{ height: sh16, width: sw1, backgroundColor: colorBlue._4 }} />
-              <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={fs12BoldGray6}>{accountNo}</Text>
+    <Pressable onPress={handlePress} onPressIn={handlePressIn} onPressOut={handlePressOut} style={containerStyle}>
+      <View style={flexRow}>
+        <View>
+          <View style={rowCenterVertical}>
+            <View style={{ ...circle(sw24, colorGray._1), ...centerHV }}>
+              <IcoMoon name={checkIconName} size={sw16} />
             </View>
-            <CustomSpacer space={sh4} />
-            <Text style={fs18BoldBlue1}>{name}</Text>
-            {jointName !== null ? <Text style={fs18BoldBlue1}>{jointName}</Text> : null}
-            <CustomSpacer space={sh8} />
-            <View style={flexRow}>
-              {tags !== undefined
-                ? tags.map((eachTag: string, tagIndex: number) => {
-                    const checkTagStyle: ITagStyle =
-                      isNotEmpty(eachTag) && (eachTag.includes("High") || eachTag.includes("Low") || eachTag.includes("Medium"))
-                        ? handleTagStyle(eachTag)
-                        : { container: {}, text: {} };
-                    const tagStyle: ViewStyle = {
-                      ...px(sw4),
-                      ...py(sh2),
-                      backgroundColor: colorGray._1,
-                      borderColor: colorGray._5,
-                      borderWidth: sw05,
-                      borderRadius: sw4,
-                      ...checkTagStyle.container,
-                    };
-                    const checkContent = tagIndex === tags.length - 1 ? `${eachTag} Risk` : eachTag;
-                    return (
-                      <Fragment key={tagIndex}>
-                        {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
-                        <View key={tagIndex} style={tagStyle}>
-                          <Text style={{ ...fs10RegGray5, ...checkTagStyle.text }}>{checkContent}</Text>
-                        </View>
-                      </Fragment>
-                    );
-                  })
-                : null}
-            </View>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <Text style={fs12RegGray5}>{checkAccountType}</Text>
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <View style={{ height: sh16, width: sw1, backgroundColor: colorBlue._4 }} />
+            <CustomSpacer isHorizontal={true} space={sw8} />
+            <Text style={fs12BoldGray6}>{accountNo}</Text>
           </View>
-          <CustomFlexSpacer />
-          <View style={centerHV}>
-            <IcoMoon name={"caret-right"} size={sw24} />
+          <CustomSpacer space={sh4} />
+          <Text style={fs18BoldBlue1}>{name}</Text>
+          {jointName !== null ? <Text style={fs18BoldBlue1}>{jointName}</Text> : null}
+          <CustomSpacer space={sh8} />
+          <View style={flexRow}>
+            {tags !== undefined
+              ? tags.map((eachTag: string, tagIndex: number) => {
+                  const checkTagStyle: ITagStyle =
+                    isNotEmpty(eachTag) && (eachTag.includes("High") || eachTag.includes("Low") || eachTag.includes("Medium"))
+                      ? handleTagStyle(eachTag)
+                      : { container: {}, text: {} };
+                  const tagStyle: ViewStyle = {
+                    ...px(sw4),
+                    ...py(sh2),
+                    backgroundColor: colorGray._1,
+                    borderColor: colorGray._5,
+                    borderWidth: sw05,
+                    borderRadius: sw4,
+                    ...checkTagStyle.container,
+                  };
+                  const checkContent = tagIndex === tags.length - 1 ? `${eachTag} Risk` : eachTag;
+                  return (
+                    <Fragment key={tagIndex}>
+                      {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
+                      <View key={tagIndex} style={tagStyle}>
+                        <Text style={{ ...fs10RegGray5, ...checkTagStyle.text }}>{checkContent}</Text>
+                      </View>
+                    </Fragment>
+                  );
+                })
+              : null}
           </View>
+        </View>
+        <CustomFlexSpacer />
+        <View style={centerHV}>
+          <IcoMoon name={"caret-right"} size={sw24} />
         </View>
       </View>
     </Pressable>

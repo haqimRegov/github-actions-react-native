@@ -277,14 +277,12 @@ const InvestorSalesPromptComponent = ({
           return (
             <Fragment key={index}>
               <CustomSpacer space={sh16} />
-              <Pressable onPress={handlePress}>
-                <View style={containerStyle}>
-                  <View style={{ ...flexRow, ...centerVertical }}>
-                    <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
-                    <CustomFlexSpacer />
-                    <View style={iconStyle}>
-                      <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
-                    </View>
+              <Pressable onPress={handlePress} style={containerStyle}>
+                <View style={{ ...flexRow, ...centerVertical }}>
+                  <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
+                  <CustomFlexSpacer />
+                  <View style={iconStyle}>
+                    <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
                   </View>
                 </View>
               </Pressable>

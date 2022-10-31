@@ -112,12 +112,10 @@ export const TermsAccordionNew: FunctionComponent<TermsAccordionNewProps> = ({
 
             <View style={defaultHeaderStyle}>
               <Fragment>
-                <Pressable onPress={handleSetSections}>
-                  <View style={{ ...flexRow, height: sh56, ...centerVertical, ...px(sw24) }}>
-                    <Text style={{ ...fs16BoldBlue1, ...titleStyle }}>{title}</Text>
-                    <CustomFlexSpacer />
-                    {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
-                  </View>
+                <Pressable onPress={handleSetSections} style={{ ...flexRow, height: sh56, ...centerVertical, ...px(sw24) }}>
+                  <Text style={{ ...fs16BoldBlue1, ...titleStyle }}>{title}</Text>
+                  <CustomFlexSpacer />
+                  {hideIcon === true ? null : <IcoMoon name={customIcon} size={sw20} />}
                 </Pressable>
               </Fragment>
 

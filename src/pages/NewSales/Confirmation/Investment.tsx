@@ -559,15 +559,13 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                   theme="dark"
                   isVisible={recurringTooltipVisible}>
                   <Pressable onStartShouldSetResponderCapture={() => true} onPress={handleRecurringTooltip}>
-                    <View>
-                      <Switch
-                        disabled={true}
-                        label={INVESTMENT.LABEL_RECURRING}
-                        labelStyle={fs16RegBlack2}
-                        onPress={handleScheduled}
-                        toggle={scheduledInvestment}
-                      />
-                    </View>
+                    <Switch
+                      disabled={true}
+                      label={INVESTMENT.LABEL_RECURRING}
+                      labelStyle={fs16RegBlack2}
+                      onPress={handleScheduled}
+                      toggle={scheduledInvestment}
+                    />
                   </Pressable>
                 </CustomTooltip>
               </View>

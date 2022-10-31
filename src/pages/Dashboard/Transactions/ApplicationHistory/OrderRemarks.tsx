@@ -217,9 +217,7 @@ export const OrderRemarks: FunctionComponent<OrderRemarksProps> = ({
                       {showAll === false && itemIndex !== -1 ? (
                         <View style={rowCenterVertical}>
                           <Pressable onPress={handleShowAll}>
-                            <View>
-                              <Text style={fs12BoldBlue1}>{`+${documents!.length - itemIndex} more`}</Text>
-                            </View>
+                            <Text style={fs12BoldBlue1}>{`+${documents!.length - itemIndex} more`}</Text>
                           </Pressable>
                         </View>
                       ) : null}

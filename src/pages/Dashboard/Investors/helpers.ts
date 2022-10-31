@@ -37,6 +37,13 @@ export const getStructuredAccountInformation = (account: IInvestorAccount) => {
     },
   ];
 
+  if (isNotEmpty(accountDetails) && isNotEmpty(accountDetails!.operatingMode)) {
+    accountDetailsSummary.push({
+      label: ACCOUNT_INFORMATION.LABEL_AUTHORISED_SIGNATORY,
+      title: accountDetails!.operatingMode!,
+    });
+  }
+
   const mailingAddressSummary: LabeledTitleProps[] = [];
   if (isNotEmpty(addressInformation)) {
     if (isNotEmpty(addressInformation.mailingAddress)) {

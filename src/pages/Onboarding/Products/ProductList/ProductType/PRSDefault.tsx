@@ -1,25 +1,26 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { Alert, Keyboard, View } from "react-native";
+import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { Alert, Keyboard } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomSpacer } from "../../../../../components";
 import { DEFAULT_DATE_FORMAT } from "../../../../../constants";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { colorWhite, flexChild, sh232, sh272, shadow12Black116, sw24 } from "../../../../../styles";
-import { ProductHeader } from "../Header";
-import { ProductListView } from "../Listing";
+import { PRSDefaultTemplate } from "../../../../../templates";
+import { isNotEmpty } from "../../../../../utils";
 
 interface PRSDefaultProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
+  tabsContent?: ReactNode;
 }
 
 const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
+  accountDetails,
+  addPrsDefaultAllFunds,
   addPrsDefaultFilters,
   addPrsDefaultRecommendedFunds,
   addPrsDefaultSearch,
@@ -30,25 +31,18 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   products,
   productType,
   resetSelectedFund,
+  resetPRSDefaultFilter,
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
   shareSuccess,
+  tabsContent,
+  updateAvailableFilters,
+  updatePrsDefaultShowBy,
 }: PRSDefaultProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { filters, page, pages, recommended, search, sort, totalCount } = products.prsDefault;
+  const { filters, page, pages, search, sort } = products.prsDefault;
   const [loading, setLoading] = useState<boolean>(false);
-  const [filterTemp, setFilterTemp] = useState<IProductFilter>(filters);
-  const [filterVisible, setFilterVisible] = useState<boolean>(false);
-  const [inputSearch, setInputSearch] = useState<string>(search);
-  const defaultPage = page !== "" ? parseInt(page, 10) : 0;
-  const defaultPages = pages !== "" ? parseInt(pages, 10) : 0;
-
-  const filterValues = Object.values(filters)
-    .flat(1)
-    .filter((value) => value !== "");
-
-  const absoluteHeaderSpace = filterValues.length > 0 ? sh272 : sh232;
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
@@ -58,10 +52,10 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       fundType: filters.fundType![0] || "",
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
-      isSyariah: filters.shariahApproved![0] || "",
+      isSyariah: isNotEmpty(filters.shariahApproved) && filters.shariahApproved!.length > 0 ? filters.shariahApproved![0] : "",
       riskCategory: filters.riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
-      isConventional: filters.conventional![0],
+      // isConventional: filters.conventional![0], // Not used in BE
       page: newPage,
       sort: sort,
       showBy: "recommended",
@@ -88,59 +82,14 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
     const funds = await handleFetch(newPage);
     if (funds !== undefined) {
       addPrsDefaultRecommendedFunds(funds);
-    }
-  };
-
-  const handleShowFilter = () => {
-    if (filterVisible === false) {
-      setFilterTemp(filters);
-    }
-    setFilterVisible(!filterVisible);
-    setScrollEnabled(!scrollEnabled);
-  };
-
-  const handleSearch = () => {
-    if (filterVisible === false) {
-      addPrsDefaultSearch(inputSearch);
-    }
-  };
-
-  const handleConfirmFilter = () => {
-    addPrsDefaultFilters(filterTemp);
-    addPrsDefaultSearch(inputSearch);
-  };
-
-  const handleCancelFilter = () => {
-    setFilterTemp(filters);
-  };
-
-  const handleUpdateFilter = (newFilter: IProductFilter) => {
-    setFilterTemp(newFilter);
-    addPrsDefaultFilters(newFilter);
-  };
-
-  const handleSelectProduct = (product: IProduct) => {
-    const sectionIndex = selectedFunds.findIndex((fund) => fund.fundCode === product.fundCode);
-    const newSelectedFunds = [...selectedFunds];
-    if (sectionIndex === -1) {
-      newSelectedFunds.push(product);
-    } else if (sectionIndex > -1) {
-      newSelectedFunds.splice(sectionIndex, 1);
-    }
-    addSelectedFund(newSelectedFunds);
-  };
-
-  const handleNext = async () => {
-    if (loading === false) {
-      const nextPage = parseInt(page, 10) < parseInt(pages, 10) ? parseInt(page, 10) + 1 : parseInt(pages, 10);
-      handleFetchPRSDefault(nextPage.toString());
-    }
-  };
-
-  const handlePrev = () => {
-    if (loading === false) {
-      const prevPage = parseInt(page, 10) > 1 ? parseInt(page, 10) - 1 : 1;
-      handleFetchPRSDefault(prevPage.toString());
+      const updatedFilters: IProductAvailableFilter = { ...funds.filters };
+      if (funds.filters.fundCategory!.includes("BALANCE")) {
+        const updatedFundCategory = [...funds.filters.fundCategory!];
+        const findBalanceIndex = funds.filters.fundCategory!.findIndex((eachCategory: string) => eachCategory === "BALANCE");
+        updatedFundCategory.splice(findBalanceIndex, 1, "BALANCED");
+        updatedFilters.fundCategory = updatedFundCategory;
+      }
+      updateAvailableFilters(updatedFilters);
     }
   };
 
@@ -151,42 +100,28 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   }, [sort, search, filters]);
 
   return (
-    <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadow12Black116 }}>
-      <ProductHeader
-        filter={filterTemp}
-        filterVisible={filterVisible}
-        handleCancel={handleCancelFilter}
-        handleConfirm={handleConfirmFilter}
-        handleSearch={handleSearch}
-        handleShowFilter={handleShowFilter}
-        handleUpdateFilter={handleUpdateFilter}
-        inputSearch={inputSearch}
-        productType={productType}
-        setFilter={setFilterTemp}
-        setInputSearch={setInputSearch}
-      />
-      <CustomSpacer space={absoluteHeaderSpace} />
-      <ProductListView
-        filter={filterTemp}
-        handleNext={handleNext}
-        handlePrev={handlePrev}
-        handleResetSelected={resetSelectedFund}
-        handleSelectProduct={handleSelectProduct}
-        list={loading === true ? [] : recommended}
-        loading={loading}
-        page={defaultPage}
-        pages={defaultPages}
-        productType={productType}
-        search={search}
-        selectedFunds={selectedFunds}
-        setViewFund={addViewFund}
-        shareSuccess={shareSuccess}
-        sort={sort}
-        totalCount={totalCount}
-        updateFilter={handleUpdateFilter}
-        updateSort={addPrsDefaultSort}
-      />
-    </View>
+    <PRSDefaultTemplate
+      accountDetails={accountDetails}
+      addPrsDefaultAllFunds={addPrsDefaultAllFunds}
+      addPrsDefaultFilters={addPrsDefaultFilters}
+      addPrsDefaultRecommendedFunds={addPrsDefaultRecommendedFunds}
+      addPrsDefaultSearch={addPrsDefaultSearch}
+      addPrsDefaultSort={addPrsDefaultSort}
+      addSelectedFund={addSelectedFund}
+      addViewFund={addViewFund}
+      handleFetchPrsDefault={handleFetchPRSDefault}
+      loading={loading}
+      products={products}
+      productType={productType}
+      resetPrsDefaultFilter={resetPRSDefaultFilter}
+      resetSelectedFund={resetSelectedFund}
+      scrollEnabled={scrollEnabled}
+      selectedFunds={selectedFunds as unknown as IProduct[]}
+      setScrollEnabled={setScrollEnabled}
+      shareSuccess={shareSuccess}
+      tabsContent={tabsContent}
+      updatePrsDefaultShowBy={updatePrsDefaultShowBy}
+    />
   );
 };
 

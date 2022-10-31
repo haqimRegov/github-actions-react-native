@@ -49,9 +49,12 @@ export const responseHandler = async <
     console.warn("Error in ResponseHandler", error);
     let err = error;
 
-    if (JSON.stringify(error).includes("No current user") || JSON.stringify(error?.message).includes("Refresh Token has expired")) {
+    if (
+      JSON.stringify(error).includes("No current user") ||
+      ("message" in error && JSON.stringify(error.message).includes("Refresh Token has expired"))
+    ) {
       err = ERRORS.unauthenticated;
-    } else if ("errors" in error) {
+    } else {
       err = ERRORS.internal;
     }
 

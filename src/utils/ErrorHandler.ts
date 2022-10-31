@@ -28,4 +28,6 @@ export const ErrorHandler = (error: ErrorType, navigation?: IStackNavigationProp
 
     AlertDialog(err.message, () => handleDialog());
   }
+
+  return { data: null, error: err };
 };

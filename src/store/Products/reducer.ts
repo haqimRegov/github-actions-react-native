@@ -451,7 +451,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
             epfApproved: [],
             fundCurrency: [],
             fundType: [],
-            issuingHouse: [],
+            issuingHouse: ["KENANGA INVESTORS BERHAD"],
             riskCategory: [],
             shariahApproved: [],
             conventional: [],

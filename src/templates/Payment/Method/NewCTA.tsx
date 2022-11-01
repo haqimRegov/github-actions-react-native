@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { validateCtaNumber } from "..";
 import { CustomCard, CustomSpacer, CustomTextInput, Dash, LabeledTitle, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
-import { fsTransformNone, px, sh24, sh4, sw24, sw360, sw4, sw64 } from "../../../styles";
+import { DEVICE, fsTransformNone, px, sh24, sh4, sw24, sw360, sw4, sw64 } from "../../../styles";
+import { scaledSpaceBetween, validateCtaNumber } from "../helpers";
 import { IPaymentError } from "../PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;
@@ -86,13 +86,15 @@ export const NewCTA: FunctionComponent<NewCTAProps> = ({
     />,
   ];
 
+  const scaledSpace = DEVICE.SCREEN.WIDTH !== 1080 ? scaledSpaceBetween() : sw64;
+
   return (
     <View style={px(sw24)}>
       <Dash />
       <CustomSpacer space={sh24} />
       <CustomCard
         spaceBetweenGroup={sh24}
-        spaceBetweenItem={sw64}
+        spaceBetweenItem={scaledSpace}
         items={ctaTag !== undefined || isEditable === false ? ctaItems : inputItems}
       />
     </View>

@@ -2,6 +2,7 @@ import moment from "moment";
 
 import { DICTIONARY_KIB_BANK_ACCOUNTS, ERROR, ERRORS } from "../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../integrations";
+import { DEVICE, sw59, sw63, sw64 } from "../../styles";
 import { deleteKey, extractKey, isAlphaNumeric, isAmount, isNumber, parseAmount, parseAmountToString } from "../../utils";
 
 export const generateNewInfo = (
@@ -536,4 +537,18 @@ export const filterDeletedSavedChild = (latestPayments: IPaymentInfo[], currentI
     }));
 
   return filtered;
+};
+
+export const scaledSpaceBetween = () => {
+  const width = DEVICE.SCREEN.WIDTH;
+  let scaledSpace: number = sw64;
+  if (width === 1366) {
+    scaledSpace = sw63;
+    return scaledSpace;
+  }
+  if (width < 1080) {
+    scaledSpace = sw59;
+    return scaledSpace;
+  }
+  return scaledSpace;
 };

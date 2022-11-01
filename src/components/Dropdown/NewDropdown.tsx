@@ -50,6 +50,7 @@ interface NewDropdownProps {
   keyboardAvoidingRef?: TypeKeyboardAvoidingView;
   label?: string;
   labelStyle?: TextStyle;
+  maxHeight?: number;
   placeholder?: string;
   spaceToLabel?: number;
   spaceToTop?: number;
@@ -66,6 +67,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
   keyboardAvoidingRef,
   label,
   labelStyle,
+  maxHeight,
   placeholder,
   spaceToLabel,
   spaceToTop,
@@ -197,7 +199,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                 <IcoMoon color={colorBlue._1} name="caret-down" size={sw24} />
               </View>
               <Collapsible duration={100} collapsed={collapse} style={noBGColor}>
-                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._1 }}>
+                <View style={{ borderTopWidth: sw2, borderTopColor: colorBlue._1, maxHeight: maxHeight }}>
                   <View style={style}>
                     <FlatList
                       data={labelExtractor}

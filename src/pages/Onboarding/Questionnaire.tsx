@@ -222,6 +222,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     if (prevQuestionnaire !== undefined && !isObjectEqual(questionnaire, prevQuestionnaire)) {
       setConfirmModal("promptAssessment");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finishedSteps, prevQuestionnaire, questionnaire]);
 
   const disabled =

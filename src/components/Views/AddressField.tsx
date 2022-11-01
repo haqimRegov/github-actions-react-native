@@ -3,7 +3,7 @@ import { NativeSyntheticEvent, TextInputFocusEventData, View, ViewStyle } from "
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
-import { centerHorizontal, colorBlue, flexRow, py, sh16, sh24, sh32, sh8, sw360, sw40, sw424 } from "../../styles";
+import { centerHorizontal, colorBlue, DEVICE, flexRow, py, sh126, sh16, sh176, sh24, sh32, sh8, sw360, sw40, sw424 } from "../../styles";
 import { NewDropdown } from "../Dropdown/NewDropdown";
 import { CustomTextInput, TextInputMultiline } from "../Input";
 import { IconButton, OutlineButton } from "../Touchables";
@@ -54,6 +54,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   }, [addressType, inputCountry, inputState, setInputState]);
 
   const addressValues = Object.values(inputAddress);
+  const checkScaledDropdownHeight = DEVICE.SCREEN.WIDTH > 1080 || DEVICE.SCREEN.WIDTH < 1080 ? sh126 : sh176;
 
   return (
     <View>
@@ -131,6 +132,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           items={DICTIONARY_COUNTRIES}
           handleChange={setInputCountry}
           label={ADDRESS.LABEL_COUNTRY}
+          maxHeight={checkScaledDropdownHeight}
           spaceToTop={sh32}
           style={countryDropdownStyle}
           value={inputCountry || ""}

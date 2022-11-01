@@ -6,6 +6,7 @@ import { Language } from "../../../constants";
 import {
   borderBottomBlue4,
   centerVertical,
+  DEVICE,
   flexChild,
   flexRow,
   fs16BoldBlack1,
@@ -18,6 +19,7 @@ import {
   sw64,
 } from "../../../styles";
 import { formatAmount, parseAmount } from "../../../utils";
+import { scaledSpaceBetween } from "../helpers";
 
 const { PAYMENT } = Language.PAGE;
 
@@ -47,6 +49,8 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
       fundsPerUtmc = { ...fundsPerUtmc, [fundIssuer]: formatAmount(investmentPerUtmc) };
     }
   });
+
+  const scaledSpace = DEVICE.SCREEN.WIDTH !== 1080 ? scaledSpaceBetween() : sw64;
 
   return (
     <View style={px(sw24)}>
@@ -117,7 +121,7 @@ export const NewEPF: FunctionComponent<NewEPFProps> = ({ funds, payment, setPaym
               </View>
             </View>
             <CustomSpacer space={sh8} />
-            <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={sw64} items={epfItems} />
+            <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={scaledSpace} items={epfItems} />
           </Fragment>
         );
       })}

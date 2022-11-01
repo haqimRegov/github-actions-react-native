@@ -14,8 +14,8 @@ import {
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_BANK_BASE } from "../../../data/dictionary";
-import { fsTransformNone, px, sh143, sh24, sh4, sw24, sw360, sw64 } from "../../../styles";
-import { validateChequeNumber } from "../helpers";
+import { DEVICE, fsTransformNone, px, sh143, sh24, sh4, sw24, sw360, sw64 } from "../../../styles";
+import { scaledSpaceBetween, validateChequeNumber } from "../helpers";
 import { IPaymentError } from "../PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;
@@ -114,6 +114,8 @@ export const NewCheque: FunctionComponent<NewChequeProps> = ({
     />,
   ];
 
+  const scaledSpace = DEVICE.SCREEN.WIDTH !== 1080 ? scaledSpaceBetween() : sw64;
+
   return (
     <View style={px(sw24)}>
       <CustomCard spaceBetweenGroup={sh24} spaceBetweenItem={sw64} items={infoItems} />
@@ -121,7 +123,7 @@ export const NewCheque: FunctionComponent<NewChequeProps> = ({
       <CustomSpacer space={sh24} />
       <CustomCard
         spaceBetweenGroup={sh24}
-        spaceBetweenItem={sw64}
+        spaceBetweenItem={scaledSpace}
         items={useOfSurplus === true || isEditable === false ? surplusItems : inputItems}
       />
     </View>

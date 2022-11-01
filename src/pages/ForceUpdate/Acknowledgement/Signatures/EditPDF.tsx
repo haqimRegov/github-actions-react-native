@@ -10,6 +10,7 @@ import { Base64 } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { ReactFileSystem } from "../../../../integrations/file-system/functions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
+import { sh180, sh460, sw400 } from "../../../../styles";
 import { GetEmbeddedBase64 } from "../../../../utils";
 import { PdfViewForceUpdate, Signer } from "./EditPDFView";
 
@@ -130,10 +131,10 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({ editReceipt, rec
       coordinateX = locationX;
       coordinateY = positionY;
     }
-    if (coordinateY > 180 && coordinateY <= 460) {
-      if (coordinateX <= 400 && coordinateX > 0) {
+    if (coordinateY > sh180 && coordinateY <= sh460) {
+      if (coordinateX <= sw400 && coordinateX > 0) {
         setSigner("adviser");
-      } else if (coordinateX > 400) {
+      } else if (coordinateX > sw400) {
         setSigner("principal");
       }
       setShowSignPdf(true);

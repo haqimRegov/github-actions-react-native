@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CustomCard, CustomSpacer, CustomTextInput, Dash, LabeledTitle, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DEVICE, fsTransformNone, px, sh24, sh4, sw24, sw360, sw4, sw64 } from "../../../styles";
-import { scaledSpaceBetween } from "../helpers";
+import { scaledSpaceBetween, validateCtaNumber } from "../helpers";
 import { IPaymentError } from "../PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;

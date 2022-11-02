@@ -207,7 +207,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                           };
                         } else {
                           modalText = {
-                            title: `${PERSONAL_DETAILS.LABEL_REMOVE} ${value} ${PERSONAL_DETAILS.LABEL_CURRENCY}?`,
+                            title: `${PERSONAL_DETAILS.LABEL_REMOVE} ${value} ${PERSONAL_DETAILS.LABEL_CURRENCY_SALES}?`,
                             subtitle: PERSONAL_DETAILS.LABEL_REMOVE_CURRENCY_SUBTITLE,
                           };
                         }

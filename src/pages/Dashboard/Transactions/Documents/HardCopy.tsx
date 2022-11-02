@@ -295,6 +295,8 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
           } else {
             setPromptType("summary");
             setTimeout(() => {
+              setButtonLoading(false);
+              setShowPopup(false);
               Alert.alert(error!.message);
             }, 100);
           }

@@ -36,6 +36,7 @@ import {
   fs16RegGray6,
   fs18BoldGray6,
   imageContain,
+  px,
   rowCenterVertical,
   sh143,
   sh155,
@@ -54,7 +55,6 @@ import {
   sw24,
   sw432,
   sw7,
-  sw72,
   sw8,
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
@@ -233,8 +233,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
     questionEight === -1 ||
     (questionEight !== 0 && questionNine === -1);
 
-  const questionnaireStyle: ViewStyle = { marginLeft: sw24, marginRight: sw72 };
-
   return (
     <Fragment>
       <ContentPage
@@ -247,7 +245,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         subheadingStyle={fs14RegGray5}
         setScrollViewRef={handleScrollViewRef}>
         <CustomSpacer space={sh24} />
-        <View style={questionnaireStyle}>
+        <View style={px(sw24)}>
           <CustomSpacer isHorizontal={true} space={sw24} />
           <View>
             <View onStartShouldSetResponderCapture={() => true}>

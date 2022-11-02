@@ -34,6 +34,7 @@ import {
   fs16RegBlack2,
   fs16RegGray6,
   imageContain,
+  px,
   rowCenterVertical,
   sh143,
   sh155,
@@ -51,7 +52,6 @@ import {
   sw24,
   sw432,
   sw7,
-  sw72,
   sw8,
 } from "../../styles";
 import { QuestionContent, QuestionHeader } from "../../templates";
@@ -306,8 +306,6 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
     questionEight === -1 ||
     (questionEight !== 0 && questionNine === -1);
 
-  const questionnaireStyle: ViewStyle = { marginLeft: sw24, marginRight: sw72 };
-
   const handleBackToContactSummary = () => {
     handleNextStep("ContactSummary");
   };
@@ -321,7 +319,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
         subheading={RISK_ASSESSMENT.HEADING_RISK}
         subtitle={RISK_ASSESSMENT.SUBHEADING}>
         <CustomSpacer space={sh24} />
-        <View style={questionnaireStyle}>
+        <View style={px(sw24)}>
           <CustomSpacer isHorizontal={true} space={sw24} />
           <View>
             <View onStartShouldSetResponderCapture={() => true}>

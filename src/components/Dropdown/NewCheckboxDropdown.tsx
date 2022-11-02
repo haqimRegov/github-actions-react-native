@@ -339,17 +339,19 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
                         const checkDisabled = disabledValues !== undefined && disabledValues?.includes(items[index].value);
 
                         const handleSelect = () => {
-                          let reset = false;
-                          if (itemExtractor !== undefined) {
-                            let newValue = [...value];
-                            if (newValue.includes(itemValue)) {
-                              newValue = newValue.filter((item) => item !== itemValue);
-                              reset = true;
-                            } else {
-                              newValue.push(itemValue);
+                          if (checkDisabled === false) {
+                            let reset = false;
+                            if (itemExtractor !== undefined) {
+                              let newValue = [...value];
+                              if (newValue.includes(itemValue)) {
+                                newValue = newValue.filter((item) => item !== itemValue);
+                                reset = true;
+                              } else {
+                                newValue.push(itemValue);
+                              }
+                              handleChange(newValue);
+                              handleReset(index, reset);
                             }
-                            handleChange(newValue);
-                            handleReset(index, reset);
                           }
                         };
                         return (

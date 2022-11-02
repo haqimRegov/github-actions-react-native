@@ -18,7 +18,7 @@ import {
   fsTransformNone,
   px,
   sh13,
-  sh32,
+  sh16,
   sw120,
   sw144,
   sw16,
@@ -247,7 +247,7 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
           <EmptyTable
             hintContainerStyle={{ borderBottomWidth: sw2, borderBottomColor: colorBlue._1 }}
             hintText={hintText}
-            hintTextStyle={{ ...fs12BoldBlue1 }}
+            hintTextStyle={fs12BoldBlue1}
             loading={isFetching}
             illustration={LocalAssets.illustration.investorsEmpty}
             title={title}
@@ -256,7 +256,7 @@ const InvestorListingComponent: FunctionComponent<InvestorListingProps> = ({
           />
         )}
       />
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh16} />
     </View>
   );
 };

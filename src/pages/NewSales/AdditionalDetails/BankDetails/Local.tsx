@@ -107,7 +107,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
     setPromptModal(false);
     handleRemove();
   };
-  const promptTitle = `${PERSONAL_DETAILS.LABEL_REMOVE} ${currentCurrency} ${PERSONAL_DETAILS.LABEL_CURRENCY}?`;
+  const promptTitle = `${PERSONAL_DETAILS.LABEL_REMOVE} ${currentCurrency} ${PERSONAL_DETAILS.LABEL_CURRENCY_SALES}?`;
 
   return (
     <Fragment>

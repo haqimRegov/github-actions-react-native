@@ -377,7 +377,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
               <Text style={fs12RegBlack2}>{PRODUCT_DETAILS.LABEL_DISCLAIMER}</Text>
             </View>
           </View>
-          <CustomSpacer space={sh16} />
+          <CustomSpacer space={sh24} />
         </View>
       </ScrollView>
     </SafeAreaPage>

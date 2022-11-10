@@ -322,12 +322,26 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
       newData.investment.scheduledSalesCharge = "";
       newData.investment.scheduledInvestmentAmount = "";
       newData.investment.scheduledAmountError = undefined;
+      newData.investment.scheduledSalesChargeError = undefined;
     }
     setData(newData);
   };
 
   const handleTopUp = () => {
-    setData({ ...data, investment: { ...investment, isTopup: !isTopup, amountError: undefined, investmentSalesChargeError: undefined } });
+    const updatedData: IProductInvestment = {
+      ...investment,
+      isTopup: !isTopup,
+      amountError: undefined,
+      investmentSalesChargeError: undefined,
+    };
+    if (updatedData.isTopup === false) {
+      updatedData.investmentAmount = "";
+      updatedData.investmentSalesCharge = "";
+    }
+    setData({
+      ...data,
+      investment: updatedData,
+    });
   };
 
   const handleScheduledAmount = (value: string) => {

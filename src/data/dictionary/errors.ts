@@ -58,6 +58,8 @@ export const ERROR_CODE = {
   submittedPdf: "EM448",
   currentPassword: "EM403",
   duplicateLogin: "EM011",
+  nativeException: "R004",
+  jsException: "R005",
 };
 
 type TypeOmniErrors = Record<string, IResponseError>;

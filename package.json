@@ -100,6 +100,8 @@
     "react-native-device-info": "8.4.5",
     "react-native-document-picker": "7.1.1",
     "react-native-enhanced-popup-menu": "0.7.0",
+    "react-native-error-boundary": "1.1.16",
+    "react-native-exception-handler": "2.10.10",
     "react-native-fs": "2.18.0",
     "react-native-gesture-handler": "1.10.3",
     "react-native-get-random-values": "1.7.1",

@@ -6,6 +6,7 @@ import illustrationClientWarning from "./illustration_client_warning/illustratio
 import illustrationEDDEmpty from "./illustration_edd_empty/illustration_edd_empty.png";
 import illustrationEDDSubmitted from "./illustration_edd_submitted/illustration_edd_submitted.png";
 import illustrationEmailVerified from "./illustration_email_verified/illustration_email_verified.png";
+import illustrationGlobalError from "./illustration_global_error/illustration_global_error.png";
 import illustrationHardcopySuccess from "./illustration_hardcopy_success/illustration_hardcopy_success.png";
 import illustrationInboxEmpty from "./illustration_inbox_empty/illustration_inbox_empty.png";
 import illustrationInvestorWarning from "./illustration_investor_warning/illustration_investor_warning.png";
@@ -51,6 +52,7 @@ export const LocalAssets = {
     inboxEmpty: illustrationInboxEmpty,
     investorsEmpty: illustrationInvestorsEmpty,
     investorWarning: illustrationInvestorWarning,
+    globalError: illustrationGlobalError,
     loginError: illustrationLoginError,
     minorSales: illustrationMinorSales,
     noResults: illustrationNoResults,

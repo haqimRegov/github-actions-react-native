@@ -9220,6 +9220,16 @@ react-native-enhanced-popup-menu@0.7.0:
   resolved "https://registry.npmjs.org/react-native-enhanced-popup-menu/-/react-native-enhanced-popup-menu-0.7.0.tgz"
   integrity sha512-PEinhLrt0I7HvBpSAH0hO1jlg2KGAiIpxyD8M0c5kO4ds/HaRdW1nYhTR92uF+LJTESJH7KQLQYvP/NJe+zc0g==
 
+react-native-error-boundary@1.1.16:
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/react-native-error-boundary/-/react-native-error-boundary-1.1.16.tgz#a95334b932982965fcab33d4f1a7d2aa75bcf551"
+  integrity sha512-yCbKhjGo2kMJBoUdy503L3oaInrLo1gychGr5e/IrezfPhfUGhfr8EtG2EKgZDcSfmvodBXvARq942hWis5sUA==
+
+react-native-exception-handler@2.10.10:
+  version "2.10.10"
+  resolved "https://registry.yarnpkg.com/react-native-exception-handler/-/react-native-exception-handler-2.10.10.tgz#b6bfe2b7e6ea4a4deb1f518f48ce2ee1d4843497"
+  integrity sha512-otAXGoZDl1689OoUJWN/rXxVbdoZ3xcmyF1uq/CsizdLwwyZqVGd6d+p/vbYvnF996FfEyAEBnHrdFxulTn51w==
+
 react-native-fs@2.18.0:
   version "2.18.0"
   resolved "https://registry.npmjs.org/react-native-fs/-/react-native-fs-2.18.0.tgz"

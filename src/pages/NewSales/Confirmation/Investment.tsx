@@ -231,6 +231,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
         fundCurrency: value,
         fundId: newFundId,
         investmentAmount: "",
+        investmentSalesCharge: "",
         scheduledInvestment: false,
         scheduledSalesCharge: "",
         scheduledInvestmentAmount: "",
@@ -251,6 +252,11 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
         fundCurrency: newCurrency,
         fundId: newFundId,
         investmentAmount: "",
+        investmentSalesCharge: "",
+        scheduledInvestment: false,
+        scheduledSalesCharge: "",
+        scheduledInvestmentAmount: "",
+        scheduledAmountError: undefined,
       },
     });
   };

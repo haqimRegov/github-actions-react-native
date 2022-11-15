@@ -190,13 +190,13 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
         }
         return dump;
       });
-
       const newState: IProductSales = {
         investment: {
           fundId: ampDetails.masterList[0].fundId,
-          fundPaymentMethod: ampDetails.isEpfOnly === "Yes" ? "EPF" : "Cash",
+          fundPaymentMethod: ampDetails.isEpf === "Yes" ? "EPF" : "Cash",
           investmentAmount: "",
           investmentSalesCharge: "",
+          isTopup: false,
           fundCurrency: ampDetails.masterList[0].currency,
           fundClass: ampDetails.masterList[0].class !== null ? ampDetails.masterList[0].class : "No Class",
           scheduledInvestment: false,

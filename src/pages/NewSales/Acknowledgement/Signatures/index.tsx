@@ -1,7 +1,9 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
+import { LayoutChangeEvent, View } from "react-native";
 import { connect } from "react-redux";
 
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
+import { flexChild } from "../../../../styles";
 import { EditPdf } from "./EditPDF";
 import { PDFList } from "./PDFList";
 
@@ -9,15 +11,20 @@ interface SignaturesProps extends AcknowledgementStoreProps, NewSalesContentProp
 
 export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({ handleNextStep, handleResetNewSales }: SignaturesProps) => {
   const [editReceipt, setEditReceipt] = useState<IOnboardingReceiptState | undefined>(undefined);
+  const [pageWidth, setPageWidth] = useState<number>(0);
 
   return (
-    <Fragment>
+    <View
+      onLayout={(e: LayoutChangeEvent) => {
+        setPageWidth(e.nativeEvent.layout.width);
+      }}
+      style={flexChild}>
       {editReceipt === undefined ? (
         <PDFList handleNextStep={handleNextStep} handleResetNewSales={handleResetNewSales} setEditReceipt={setEditReceipt} />
       ) : (
-        <EditPdf setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
+        <EditPdf pageWidth={pageWidth} setEditReceipt={setEditReceipt} editReceipt={editReceipt} />
       )}
-    </Fragment>
+    </View>
   );
 };
 

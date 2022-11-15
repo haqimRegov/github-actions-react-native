@@ -61,8 +61,11 @@
     "bump-major": "npm version major --no-git-tag-version && bundle exec fastlane bump",
     "bump-manual": "bundle exec fastlane bump",
     "fix:react-native-image": "npx react-native-fix-image",
-    "fix:modules": "npm run fix:react-native-image && npm run fix:collapsible && npm run fix:image:picker",
-    "postinstall": "npm run fix:image:picker",
+    "fix:react-native-view-pdf": "cp ./fixes/react-native-view-pdf ./node_modules/react-native-view-pdf/ReactNativeViewPDF/RNPDFView.m",
+    "fix:react-native-webview": "cp ./fixes/react-native-webview ./node_modules/react-native-webview/apple/RNCWebView.m",
+    "fix:hide-pdf-page-count": "npm run fix:react-native-view-pdf && npm run fix:react-native-webview",
+    "fix:modules": "npm run fix:image:picker && npm run fix:hide-pdf-page-count",
+    "postinstall": "npm run fix:modules",
     "sonar": "node sonar-project.js",
     "prepare": "husky install"
   },

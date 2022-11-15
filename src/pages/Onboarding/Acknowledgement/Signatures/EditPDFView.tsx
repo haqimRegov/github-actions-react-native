@@ -1,6 +1,17 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { GestureResponderEvent, Image, ImageStyle, ScrollView, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import {
+  GestureResponderEvent,
+  Image,
+  ImageStyle,
+  PixelRatio,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from "react-native";
 import PDFView from "react-native-view-pdf";
+import WebView from "react-native-webview";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../../../components";
@@ -12,15 +23,15 @@ import {
   circleBorder,
   colorBlack,
   colorBlue,
+  colorTransparent,
   colorWhite,
   flexChild,
   flexGrow,
   flexRow,
   fs18BoldGray6,
   fullHeight,
+  fullHW,
   px,
-  sh1148,
-  sh12,
   sh32,
   sh4,
   sh40,
@@ -45,6 +56,7 @@ declare interface PDFViewProps {
   principalSignature: string;
   jointAge?: number;
   jointSignature: string;
+  pageWidth: number;
   showSignPdf: boolean;
   signer: Signer;
   handleScroll: () => void;
@@ -66,6 +78,7 @@ export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
   principalSignature,
   jointAge,
   jointSignature,
+  pageWidth,
   showSignPdf,
   signer,
   handleScroll,
@@ -107,15 +120,25 @@ export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
   }
 
   const DEFAULT_URL_PAGE_COUNT = urlPageCount !== undefined ? parseInt(urlPageCount, 10) : 0;
-  const DEFAULT_PDF_HEIGHT = sh1148;
-  const remotePdfHeight = DEFAULT_URL_PAGE_COUNT * DEFAULT_PDF_HEIGHT;
+  const DEFAULT_PADDING_MULTIPLIER = 73.33;
+  const pagePadding = pageWidth / DEFAULT_PADDING_MULTIPLIER;
+  const PDF_WIDTH = pageWidth - 2 * pagePadding;
+  const NO_BOTTOM_MULTIPLIER = 1.378504672897196;
+  const PDF_HEIGHT = PDF_WIDTH * NO_BOTTOM_MULTIPLIER;
+  const BOTTOM_MULTIPLIER = 131.11;
+  const SPACE_BETWEEN = PDF_HEIGHT / BOTTOM_MULTIPLIER;
 
-  const localPdfHeight = DEFAULT_PDF_HEIGHT + 2; // added 2 for shadow
+  // space between 16px
+  // pdf height with padding 1196
+  // pdf height without bottom padding 1180
+  // pdf width without padding 856
+  const remotePdfHeight = DEFAULT_URL_PAGE_COUNT * Math.ceil(PDF_HEIGHT);
 
-  const remotePdfContainer: ViewStyle = { height: remotePdfHeight };
-  const dummyRemotePdfContainer: ViewStyle = { height: remotePdfHeight + DEFAULT_PDF_HEIGHT };
-  const pageNumberFix: ViewStyle = { height: (remotePdfHeight + DEFAULT_PDF_HEIGHT) * 1600 }; // To display the page number correctly in the viewer
-  const pdfContainer: ViewStyle = { height: localPdfHeight };
+  const remotePdfContainer: ViewStyle = {
+    height: PixelRatio.roundToNearestPixel(remotePdfHeight),
+  };
+  const dummyRemotePdfContainer: ViewStyle = { height: remotePdfHeight };
+  const pdfContainer: ViewStyle = { height: PDF_HEIGHT };
   const defaultTooltipStyle: ImageStyle = {
     ...absolutePosition,
     bottom: 52,
@@ -151,18 +174,24 @@ export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
                 </View>
               </View>
               <CustomSpacer space={sh4} />
-              <View style={px(sw24)}>
+              <View style={px(pagePadding)}>
                 <View style={remotePdfContainer}>
-                  <View pointerEvents="none">
+                  <View pointerEvents="none" style={fullHW}>
                     <View style={dummyRemotePdfContainer}>
-                      <PDFView style={pageNumberFix} resource={editReceipt!.url!} resourceType="url" />
+                      <WebView
+                        incognito={true}
+                        scrollEnabled={false}
+                        source={{ uri: editReceipt!.url! }}
+                        style={{ backgroundColor: colorTransparent }}
+                      />
                     </View>
                   </View>
                 </View>
+                <CustomSpacer space={SPACE_BETWEEN} />
                 <TouchableWithoutFeedback onPress={handlePosition}>
                   <View style={pdfContainer}>
                     <View pointerEvents="none">
-                      <PDFView style={{ ...fullHeight, top: -sh12 }} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
+                      <PDFView style={fullHeight} resource={editReceipt!.signedPdf?.base64!} resourceType="base64" />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>

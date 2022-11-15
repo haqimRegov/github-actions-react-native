@@ -24,13 +24,14 @@ const signPosition = {
 
 interface EditPdfProps extends AcknowledgementStoreProps {
   editReceipt: IOnboardingReceiptState | undefined;
-  handleNextStep: (route: TypeOnboardingKey) => void;
+  pageWidth: number;
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 
 const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   accountType,
   editReceipt,
+  pageWidth,
   personalInfo,
   receipts,
   setEditReceipt,
@@ -319,6 +320,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       adviserSignature={adviserSignature}
       completed={completed}
       editReceipt={editReceipt}
+      pageWidth={pageWidth}
       principalSignature={principalSignature}
       jointAge={jointAge}
       jointSignature={jointSignature}

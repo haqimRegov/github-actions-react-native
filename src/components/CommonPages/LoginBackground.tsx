@@ -2,7 +2,7 @@ import React, { Fragment, ReactNode } from "react";
 import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { version } from "../../../package.json";
+import { environment, version } from "../../../package.json";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
 import { DICTIONARY_LINK_PRIVACY } from "../../data/dictionary";
@@ -84,7 +84,7 @@ export const LoginBackground = ({ children }: LoginPageProps) => {
       <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
           <View>
-            <Image source={LocalAssets.login.background} style={backgroundStyle} />
+            <Image source={LocalAssets.login.background[environment]} style={backgroundStyle} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw56} />
           <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>

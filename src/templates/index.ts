@@ -3,6 +3,7 @@ export * from "./CustomItems";
 export * from "./Dashboard";
 export * from "./EDD";
 export * from "./InvestorProfile";
+export * from "./OrderPreview";
 export * from "./OrderSubmission";
 export * from "./OrderSummary";
 export * from "./Onboarding";

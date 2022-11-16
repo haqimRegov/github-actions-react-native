@@ -1,3 +1,6 @@
+import backgroundLoginSit from "./background_login_sit/background_login_sit.png";
+import backgroundLoginStg from "./background_login_stg/background_login_stg.png";
+import backgroundLoginUat from "./background_login_uat/background_login_uat.png";
 import { COUNTRY_FLAG } from "./country_flag";
 import iconWarning from "./icon_warning_filled/icon_warning_filled.png";
 import illustrationAccountsEmpty from "./illustration_accounts_empty/illustration_accounts_empty.png";
@@ -64,7 +67,12 @@ export const LocalAssets = {
     sessionExpired: illustrationSessionExpired,
   },
   login: {
-    background: kenangaTower,
+    background: {
+      prod: kenangaTower,
+      staging: backgroundLoginStg,
+      uat: backgroundLoginUat,
+      sit: backgroundLoginSit,
+    },
   },
   logo: {
     aims: logoAims,

@@ -1339,6 +1339,7 @@ export const english = {
       TITLE_FEA_DECLARATION: "FEA Declaration",
       TITLE_FUNDING_OPTIONS: "Funding Options & FEA Status",
       TITLE_ID_VERIFICATION: "ID Verification",
+      TITLE_ORDER_PREVIEW: "Order Preview",
       TITLE_ORDER_SUMMARY: "Order Summary",
       TITLE_PAYMENT: "Proof of Payment",
       TITLE_PERSONAL_DETAILS: "Personal Details",

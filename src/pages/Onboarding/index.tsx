@@ -70,7 +70,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
   {
     content: [
-      { title: ONBOARDING.TITLE_ORDER_SUMMARY, route: ONBOARDING_ROUTES.OrderSummary, key: ONBOARDING_KEYS.OrderSummary },
+      { title: ONBOARDING.TITLE_ORDER_PREVIEW, route: ONBOARDING_ROUTES.OrderSummary, key: ONBOARDING_KEYS.OrderSummary },
       {
         title: ONBOARDING.TITLE_TERMS_CONDITIONS,
         route: ONBOARDING_ROUTES.TermsAndConditions,

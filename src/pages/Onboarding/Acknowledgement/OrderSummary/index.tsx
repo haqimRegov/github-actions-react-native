@@ -2,41 +2,33 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, CustomTooltip, Dash } from "../../../../components";
+import { ContentPage, CustomSpacer, CustomTooltip, SelectionBanner } from "../../../../components";
 import { Language } from "../../../../constants";
-import { IcoMoon } from "../../../../icons";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
 import {
-  border,
-  centerVertical,
-  colorBlue,
-  colorGray,
+  flexChild,
   flexRow,
-  flexWrap,
   fs12BoldWhite1,
+  fs14RegGray5,
+  fs16BoldGray6,
   fs16RegGray6,
-  fs16SemiBoldGray6,
-  fs24BoldGray6,
-  fs24RegGray6,
+  fs20BoldBlack2,
   px,
-  py,
-  sh16,
+  rowCenterVertical,
+  sh128,
+  sh18,
   sh24,
-  sh56,
-  sh8,
-  sh88,
-  shadow50Black115,
-  sw1,
-  sw12,
+  sh4,
+  sh6,
+  sh72,
+  sw10,
+  sw18,
   sw24,
-  sw376,
+  sw317,
   sw4,
-  sw588,
-  sw7,
-  sw8,
 } from "../../../../styles";
-import { FundOverview } from "../../../../templates";
-import { formatAmount } from "../../../../utils";
+import { FundOverview, GrandTotal } from "../../../../templates";
+import { isNotEmpty } from "../../../../utils";
 
 interface OrderSummaryProps extends AcknowledgementStoreProps {
   handleNextStep: (route: TypeOnboardingKey) => void;
@@ -65,75 +57,62 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
       <Text style={fs12BoldWhite1}>{ORDER_SUMMARY.INFO}</Text>
     </View>
   );
-  const orderSummaryHeader: ViewStyle = { ...flexRow, ...px(sw24), zIndex: 2 };
+  const orderSummaryHeader: ViewStyle = { ...rowCenterVertical, ...px(sw24), zIndex: 2 };
+
+  const bannerSubtitle = `${orders!.orders.length} ${orders!.orders.length > 1 ? ORDER_SUMMARY.LABEL_ORDERS : ORDER_SUMMARY.LABEL_ORDER}`;
 
   return (
-    <ContentPage handleContinue={handleConfirm} subheading={ORDER_SUMMARY.HEADING}>
-      <CustomSpacer space={sh8} />
-      <View style={orderSummaryHeader}>
-        <Text style={fs16SemiBoldGray6}>{ORDER_SUMMARY.SUBHEADING}</Text>
-        <CustomSpacer isHorizontal={true} space={sw12} />
-        <CustomTooltip arrowSize={{ width: sw12, height: sw7 }} content={popupContent} contentStyle={{ width: sw376 }} />
-      </View>
-      <CustomSpacer space={sh24} />
-      <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow, ...border(colorBlue._4, sw1, sw8), minHeight: sh88, ...px(sw24), ...py(sh16) }}>
-          <IcoMoon color={colorBlue._4} name="order-total" size={sh56} />
-          <CustomSpacer isHorizontal={true} space={sw8} />
-          <View>
-            <View style={flexRow}>
-              <Text style={fs24RegGray6}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
-              <CustomSpacer isHorizontal={true} space={sw4} />
-              <View style={{ ...flexRow, ...flexWrap, maxWidth: sw588 }}>
-                {orders !== undefined &&
-                  orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                    return (
-                      <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                        {index !== 0 ? <Text style={{ ...fs24RegGray6, ...px(sw4) }}>+</Text> : null}
-                        <Text style={{ ...fs24BoldGray6 }}>{totalAmount.currency}</Text>
-                        <CustomSpacer isHorizontal={true} space={sw4} />
-                        <Text style={fs24RegGray6}>{formatAmount(totalAmount.amount)}</Text>
-                      </View>
-                    );
-                  })}
-              </View>
-            </View>
-            {orders !== undefined && orders.grandTotalRecurring ? (
-              <View style={flexRow}>
-                <Text style={fs16RegGray6}>{ORDER_SUMMARY.LABEL_RECURRING}</Text>
-                <CustomSpacer isHorizontal={true} space={sw4} />
-                <View style={{ ...centerVertical, ...flexRow }}>
-                  <Text style={fs16RegGray6}>{orders.grandTotalRecurring.currency}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={fs16RegGray6}>{formatAmount(orders.grandTotalRecurring.amount)}</Text>
-                </View>
-              </View>
-            ) : null}
-          </View>
+    <View style={flexChild}>
+      <ContentPage subheading={ORDER_SUMMARY.HEADING_NEW} spaceToBottom={sh72}>
+        <CustomSpacer space={sh4} />
+        <View style={orderSummaryHeader}>
+          <Text style={fs14RegGray5}>{ORDER_SUMMARY.SUBHEADING_NEW}</Text>
+          <CustomSpacer isHorizontal={true} space={sw4} />
+          <CustomTooltip
+            arrowSize={{ width: sw10, height: sh6 }}
+            content={popupContent}
+            contentStyle={{ width: sw317, height: sh128 }}
+            infoStyle={{ width: sw18, height: sh18 }}
+            theme="dark"
+          />
         </View>
-      </View>
-      <CustomSpacer space={sh24} />
-      <Dash color={colorGray._3} />
-      <CustomSpacer space={sh24} />
-      {orders !== undefined &&
-        orders.orders.map((orderSummary: IOrder, index: number) => {
-          return (
-            <Fragment key={index}>
-              {index !== 0 ? <CustomSpacer space={sh24} /> : null}
-              <View style={{ ...px(sw24), ...shadow50Black115 }}>
-                <FundOverview
-                  funds={orderSummary.investments}
-                  createdOn={orderSummary.orderDate}
-                  noBadge={true}
-                  orderNumber={orderSummary.orderNumber}
-                  totalInvestment={orderSummary.orderTotalAmount}
-                  paymentType={orderSummary.paymentType}
-                />
-              </View>
-            </Fragment>
-          );
-        })}
-    </ContentPage>
+        <CustomSpacer space={sh24} />
+        <GrandTotal grandTotal={orders?.grandTotal!} grandTotalRecurring={orders?.grandTotalRecurring} />
+        <CustomSpacer space={sh24} />
+        {orders !== undefined &&
+          orders.orders.map((orderSummary, index: number) => {
+            return (
+              <Fragment key={index}>
+                {index !== 0 ? <CustomSpacer space={sh24} /> : null}
+                <View style={px(sw24)}>
+                  <FundOverview
+                    funds={orderSummary.investments}
+                    createdOn={orderSummary.orderDate}
+                    noBadge={true}
+                    orderNumber={orderSummary.orderNumber}
+                    totalInvestment={orderSummary.orderTotalAmount}
+                    paymentType={orderSummary.paymentType}
+                  />
+                </View>
+              </Fragment>
+            );
+          })}
+      </ContentPage>
+      <SelectionBanner
+        label={ORDER_SUMMARY.LABEL_ORDER_CONFIRMATION}
+        bottomContent={
+          <View style={flexRow}>
+            {isNotEmpty(orders?.orders) ? <Text style={fs16BoldGray6}>{bannerSubtitle}</Text> : null}
+            <CustomSpacer isHorizontal space={sw4} />
+            <Text style={fs16RegGray6}>{ORDER_SUMMARY.LABEL_CREATED}</Text>
+          </View>
+        }
+        labelStyle={fs20BoldBlack2}
+        labelCancel={ORDER_SUMMARY.BUTTON_CANCEL}
+        labelSubmit={ORDER_SUMMARY.BUTTON_CONTINUE}
+        submitOnPress={handleConfirm}
+      />
+    </View>
   );
 };
 

@@ -4,44 +4,30 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer, CustomTooltip, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
-import { IcoMoon } from "../../../icons";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
-  borderLeftGray3,
-  centerVertical,
-  colorBlue,
-  colorWhite,
   flexChild,
   flexRow,
-  flexWrap,
-  fs12BoldGray6,
   fs12RegWhite1,
   fs14RegGray5,
   fs16BoldGray6,
   fs16RegGray6,
-  fs18BoldBlack2,
   fs20BoldBlack2,
   px,
-  py,
   rowCenterVertical,
   sh128,
-  sh16,
   sh18,
   sh24,
-  sh40,
   sh6,
   sh72,
-  sh8,
   sw10,
-  sw16,
   sw18,
   sw24,
   sw317,
   sw4,
-  sw588,
 } from "../../../styles";
-import { FundOverview } from "../../../templates";
-import { formatAmount, isNotEmpty } from "../../../utils";
+import { FundOverview, GrandTotal } from "../../../templates";
+import { isNotEmpty } from "../../../utils";
 
 const { ORDER_SUMMARY } = Language.PAGE;
 
@@ -69,16 +55,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
     </View>
   );
   const orderSummaryHeader: ViewStyle = { ...rowCenterVertical, ...px(sw24), zIndex: 2 };
-  const topStatusStyle: ViewStyle = {
-    ...rowCenterVertical,
-    ...px(sw24),
-    ...py(sh16),
-    backgroundColor: colorWhite._1,
-    borderRadius: sh8,
-    minHeight: sh72,
-  };
 
-  const topStatusRecurringStyle: ViewStyle = { marginLeft: "auto", ...flexRow };
   const bannerSubtitle = `${orders!.orders.length} ${orders!.orders.length > 1 ? ORDER_SUMMARY.LABEL_ORDERS : ORDER_SUMMARY.LABEL_ORDER}`;
 
   return (
@@ -96,53 +73,7 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
           />
         </View>
         <CustomSpacer space={sh24} />
-        <View style={{ ...px(sw24) }}>
-          <View style={topStatusStyle}>
-            <IcoMoon color={colorBlue._1} name="order" size={sh40} />
-            <CustomSpacer isHorizontal={true} space={sw16} />
-            <View>
-              <Text style={fs12BoldGray6}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
-              <CustomSpacer isHorizontal={true} space={sw4} />
-              <View style={{ ...flexRow, ...flexWrap, maxWidth: sw588 }}>
-                {orders !== undefined ? (
-                  <Fragment>
-                    {orders.grandTotal !== undefined ? (
-                      <Fragment>
-                        {orders.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                          return (
-                            <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                              {index !== 0 ? <Text style={{ ...fs18BoldBlack2, ...px(sw4) }}>+</Text> : null}
-                              <Text style={fs18BoldBlack2}>{totalAmount.currency}</Text>
-                              <CustomSpacer isHorizontal={true} space={sw4} />
-                              <Text style={fs18BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
-                            </View>
-                          );
-                        })}
-                      </Fragment>
-                    ) : (
-                      <Text style={fs18BoldBlack2}>-</Text>
-                    )}
-                  </Fragment>
-                ) : null}
-              </View>
-            </View>
-            {orders !== undefined && orders.grandTotalRecurring ? (
-              <View style={topStatusRecurringStyle}>
-                <View style={borderLeftGray3} />
-                <CustomSpacer isHorizontal space={sw24} />
-                <View>
-                  <Text style={fs12BoldGray6}>{ORDER_SUMMARY.LABEL_RECURRING}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw4} />
-                  <View style={{ ...centerVertical, ...flexRow }}>
-                    <Text style={fs18BoldBlack2}>{orders.grandTotalRecurring.currency}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw4} />
-                    <Text style={fs18BoldBlack2}>{formatAmount(orders.grandTotalRecurring.amount)}</Text>
-                  </View>
-                </View>
-              </View>
-            ) : null}
-          </View>
-        </View>
+        <GrandTotal grandTotal={orders?.grandTotal!} grandTotalRecurring={orders?.grandTotalRecurring} />
         <CustomSpacer space={sh24} />
         {orders !== undefined &&
           orders.orders.map((orderSummary, index: number) => {

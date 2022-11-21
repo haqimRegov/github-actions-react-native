@@ -2,11 +2,11 @@ import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import {
-  AdvancedDropdown,
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
   IconButton,
+  NewDropdown,
   OutlineButton,
   TextSpaceArea,
 } from "../../../../components";
@@ -15,20 +15,17 @@ import { DICTIONARY_CURRENCY, DICTIONARY_MALAYSIA_BANK, ERROR } from "../../../.
 import {
   centerVertical,
   colorBlack,
-  colorBlue,
   flexRow,
-  fs12BoldBlue2,
-  fs12SemiBoldGray8,
-  fs16BoldBlue2,
+  fs12RegGray5,
+  fs16BoldBlue1,
   px,
   py,
   sh24,
   sh32,
   sh8,
-  sw02,
   sw16,
   sw24,
-  sw328,
+  sw360,
 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
@@ -123,7 +120,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
-        const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} ${index + 1}`;
+        const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} `;
         const currencyExtractor = DICTIONARY_CURRENCY.filter(
           (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
         );
@@ -131,7 +128,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
         return (
           <View key={index}>
             <View style={{ ...centerVertical, ...flexRow, ...px(sw24) }}>
-              <TextSpaceArea style={fs16BoldBlue2} text={localBankLabel} />
+              <TextSpaceArea style={fs16BoldBlue1} text={localBankLabel} />
               <CustomSpacer isHorizontal={true} space={sw16} />
               {index === 0 ? null : <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveNumber} size={sh24} />}
             </View>
@@ -159,7 +156,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
 
                   return (
                     <View key={currencyIndex} style={{ ...centerVertical, ...flexRow }}>
-                      <AdvancedDropdown
+                      <NewDropdown
                         handleChange={handleOtherCurrency}
                         items={currencyExtractor}
                         label={PERSONAL_DETAILS.LABEL_OTHER_CURRENCY}
@@ -175,7 +172,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                   );
                 })}
 
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={handleOtherBank}
                 items={DICTIONARY_MALAYSIA_BANK}
                 label={PERSONAL_DETAILS.LABEL_BANK_NAME}
@@ -190,7 +187,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                   value={item.otherBankName}
                 />
               ) : null}
-              <AdvancedDropdown
+              <NewDropdown
                 handleChange={handleAccountName}
                 items={bankNames}
                 label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
@@ -218,27 +215,16 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 value={item.bankAccountNumber}
               />
               <CustomTextInput
-                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
+                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
                 onChangeText={handleSwiftCode}
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}
               />
-              <TextSpaceArea
-                spaceToTop={sh8}
-                style={{ ...fs12SemiBoldGray8, ...px(sw16), letterSpacing: -sw02, maxWidth: sw328 }}
-                text={PERSONAL_DETAILS.HINT_SWIFT_CODE}
-              />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
               {item.currency!.length === investmentCurrencies.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
-                  <OutlineButton
-                    buttonType="dashed"
-                    color={colorBlue._2}
-                    icon="plus"
-                    onPress={handleAddCurrency}
-                    text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
-                    textStyle={fs12BoldBlue2}
-                  />
+                  <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
                 </Fragment>
               )}
             </View>

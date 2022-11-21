@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { AdvanceTextInputArea, AdvanceToggleButton, CheckBox, CustomSpacer, ToggleButton, UploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants";
 import { OPTIONS_FATCA_NO_CERTIFICATE } from "../../../../data/dictionary";
-import { flexRow, fs12BoldBlack2, fs16SemiBoldBlack2, sh16, sh20, sh32, sh40, sh8, sw200 } from "../../../../styles";
+import { flexRow, fs12BoldGray6, fs16SemiBoldGray6, sh16, sh20, sh24, sh32, sh40, sh8, sw12, sw200, sw24 } from "../../../../styles";
 import { FatcaAddress, FatcaAddressProps } from "./AddressConfirmation";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -50,16 +50,16 @@ export const FatcaUSBorn: FunctionComponent<FatcaUSBornProps> = ({
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
-      <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.BORN_US}</Text>
+      <Text style={fs16SemiBoldGray6}>{DECLARATIONS.BORN_US}</Text>
       <CustomSpacer space={sh8} />
       <ToggleButton value={usBorn} onSelect={setUsBorn} />
       {usBorn === 0 ? (
         <Fragment>
           <CustomSpacer space={sh32} />
-          <Text style={fs12BoldBlack2}>{DECLARATIONS.UPLOAD}</Text>
+          <Text style={fs12BoldGray6}>{DECLARATIONS.UPLOAD}</Text>
           <CustomSpacer space={sh16} />
           <UploadWithModal
-            features={["camera", "file", "gallery"]}
+            features={["camera", "gallery", "file"]}
             label={DECLARATIONS.LABEL_LOSS}
             value={certificate}
             setValue={setCertificate}
@@ -67,15 +67,21 @@ export const FatcaUSBorn: FunctionComponent<FatcaUSBornProps> = ({
           />
           <CustomSpacer space={sh32} />
           {certificate !== undefined ? null : (
-            <CheckBox toggle={noCertificate} onPress={handleNoCertificate} label={DECLARATIONS.LABEL_CANT} labelStyle={fs12BoldBlack2} />
+            <CheckBox toggle={noCertificate} onPress={handleNoCertificate} label={DECLARATIONS.LABEL_CANT} />
           )}
           {noCertificate ? (
             <Fragment>
               <CustomSpacer space={sh40} />
-              <Text style={fs12BoldBlack2}>{DECLARATIONS.LABEL_CANT_CONFIRM}</Text>
-              <Text style={fs12BoldBlack2}>{DECLARATIONS.LABEL_REASON}</Text>
+              <Text style={fs12BoldGray6}>{DECLARATIONS.LABEL_CANT_CONFIRM}</Text>
+              <Text style={fs12BoldGray6}>{DECLARATIONS.LABEL_REASON}</Text>
               <CustomSpacer space={sh8} />
-              <AdvanceToggleButton labels={OPTIONS_FATCA_NO_CERTIFICATE} onSelect={setReason} value={reason} />
+              <AdvanceToggleButton
+                buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}
+                labels={OPTIONS_FATCA_NO_CERTIFICATE}
+                labelStyle={{ lineHeight: sh24 }}
+                onSelect={setReason}
+                value={reason}
+              />
               {reason === 1 ? (
                 <View style={flexRow}>
                   <CustomSpacer isHorizontal={true} space={sw200} />

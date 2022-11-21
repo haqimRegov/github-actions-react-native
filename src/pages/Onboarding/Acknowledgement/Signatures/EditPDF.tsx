@@ -10,26 +10,28 @@ import { Base64 } from "../../../../constants";
 import { Language } from "../../../../constants/language";
 import { ReactFileSystem } from "../../../../integrations/file-system/functions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
+import { sh180, sh460, sh740, sw400 } from "../../../../styles";
 import { GetEmbeddedBase64 } from "../../../../utils";
-import { PdfView, Signer } from "./EditPDFView";
+import { PdfViewOnboarding, Signer } from "./EditPDFView";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
-  adviser: { x: 16, y: 160 },
-  principal: { x: 271, y: 160 },
-  joint: { x: 16, y: 300 },
+  adviser: { x: 20, y: 225 },
+  principal: { x: 310, y: 225 },
+  joint: { x: 20, y: 445 },
 };
 
 interface EditPdfProps extends AcknowledgementStoreProps {
   editReceipt: IOnboardingReceiptState | undefined;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  pageWidth: number;
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
 }
 
 const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   accountType,
   editReceipt,
+  pageWidth,
   personalInfo,
   receipts,
   setEditReceipt,
@@ -44,7 +46,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   const [jointSignature, setJointSignature] = useState<string>(
     editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
   );
-
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
@@ -53,7 +55,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     if (editReceipt !== undefined && signer !== undefined) {
       const dataUri = GetEmbeddedBase64(editReceipt.signedPdf!);
       const loadPdf = await PDFDocument.load(dataUri);
-      const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-SemiBold.ttf");
+      const fileData = await ReactFileSystem.readFileMainBundle("NunitoSans-Bold.ttf");
       loadPdf.registerFontkit(fontkit);
       const customFont = await loadPdf.embedFont(fileData);
       const textHeight = customFont.heightAtSize(6);
@@ -64,9 +66,9 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       const selectedPage = pages[0];
       const { height } = selectedPage.getSize();
       const whiteBGConfig = {
-        height: 40,
+        height: 60,
         opacity: 1,
-        width: 180,
+        width: 240,
         x: signPosition[signer].x,
         y: height - signPosition[signer].y,
       };
@@ -97,7 +99,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         }
       }
 
-      selectedPage.moveTo(textPosition.x, height - textPosition.y + 30);
+      selectedPage.moveTo(textPosition.x + 80, height - textPosition.y + 40);
       selectedPage.drawImage(whiteImage, whiteBGConfig);
       selectedPage.drawImage(whiteImage, {
         ...whiteBGConfig,
@@ -112,8 +114,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       selectedPage.drawSvgPath(svgPath[0], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawSvgPath(svgPath[1], { color: rgb(0, 0.537, 0.925), scale: 0.015 });
       selectedPage.drawText(TERMS_AND_CONDITIONS.LABEL_SIGN_NOW, {
-        x: textPosition.x + 18,
-        y: height - textPosition.y + 20,
+        x: textPosition.x + 100,
+        y: height - textPosition.y + 30,
         size: textHeight,
         font: customFont,
         color: rgb(0, 0.537, 0.925),
@@ -121,8 +123,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       if (signatureImage !== undefined) {
         if (Platform.OS === "ios") {
           selectedPage.drawImage(signatureImage, {
-            height: 40,
-            width: 180,
+            height: 60,
+            width: 240,
             x: signPosition[signer].x,
             y: height - signPosition[signer].y,
           });
@@ -149,20 +151,20 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const calculatePosition = (locationX?: number, positionY?: number) => {
-    let coordinateX: number = 0;
-    let coordinateY: number = 0;
+    let coordinateX = 0;
+    let coordinateY = 0;
     if (locationX !== undefined && positionY !== undefined) {
       coordinateX = locationX;
       coordinateY = positionY;
     }
-    if (coordinateY > 90 && coordinateY < 220) {
-      if (coordinateX < 245 && coordinateX > 0) {
+    if (coordinateY > sh180 && coordinateY <= sh460) {
+      if (coordinateX <= sw400 && coordinateX > 0) {
         setSigner("adviser");
-      } else if (coordinateX > 245 && coordinateX < 470) {
+      } else if (coordinateX > sw400) {
         setSigner("principal");
       }
       setShowSignPdf(true);
-    } else if (coordinateX < 245 && coordinateY > 220 && coordinateY < 370 && accountType === "Joint") {
+    } else if (coordinateX <= sw400 && coordinateY > sh460 && coordinateY < sh740 && accountType === "Joint") {
       setSigner("joint");
       setShowSignPdf(true);
     }
@@ -246,39 +248,43 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   };
 
   const handleSave = () => {
-    const updatedReceipts = [...receipts!];
-    const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
-    const adviser = {
-      base64: adviserSignature,
-      date: `${moment().valueOf()}`,
-      name: "AdviserSignature.png",
-      type: "image/png",
-    };
-    const principal = {
-      base64: principalSignature,
-      date: `${moment().valueOf()}`,
-      name: "PrincipalSignature.png",
-      type: "image/png",
-    };
-    const joint =
-      accountType === "Individual"
-        ? undefined
-        : {
-            base64: jointSignature,
-            date: `${moment().valueOf()}`,
-            name: "JointSignature.png",
-            type: "image/png",
-          };
-    updatedReceipts[receiptIndex] = {
-      ...updatedReceipts[receiptIndex],
-      signedPdf: editReceipt!.signedPdf,
-      adviserSignature: adviser,
-      principalSignature: principal,
-      jointSignature: joint,
-      completed: true,
-    };
-    updateReceipts(updatedReceipts);
-    setEditReceipt(undefined);
+    setPageLoading(true);
+    setTimeout(() => {
+      const updatedReceipts = [...receipts!];
+      const receiptIndex = updatedReceipts.findIndex((receipt) => receipt.orderNumber === editReceipt!.orderNumber);
+      const adviser = {
+        base64: adviserSignature,
+        date: `${moment().valueOf()}`,
+        name: "AdviserSignature.png",
+        type: "image/png",
+      };
+      const principal = {
+        base64: principalSignature,
+        date: `${moment().valueOf()}`,
+        name: "PrincipalSignature.png",
+        type: "image/png",
+      };
+      const joint =
+        accountType === "Individual"
+          ? undefined
+          : {
+              base64: jointSignature,
+              date: `${moment().valueOf()}`,
+              name: "JointSignature.png",
+              type: "image/png",
+            };
+      updatedReceipts[receiptIndex] = {
+        ...updatedReceipts[receiptIndex],
+        signedPdf: editReceipt!.signedPdf,
+        adviserSignature: adviser,
+        principalSignature: principal,
+        jointSignature: joint,
+        completed: true,
+      };
+      updateReceipts(updatedReceipts);
+      setEditReceipt(undefined);
+      setPageLoading(false);
+    }, 500);
   };
 
   const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
@@ -309,11 +315,14 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   }, [completed]);
 
   return (
-    <PdfView
+    <PdfViewOnboarding
+      accountType={accountType}
       adviserSignature={adviserSignature}
       completed={completed}
       editReceipt={editReceipt}
+      pageWidth={pageWidth}
       principalSignature={principalSignature}
+      jointAge={jointAge}
       jointSignature={jointSignature}
       showSignPdf={showSignPdf}
       signer={signer}
@@ -324,6 +333,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       handleClose={handleClose}
       handleConfirm={handleConfirm}
       handlePosition={handlePosition}
+      pageLoading={pageLoading}
       setScrollRef={setScrollRef}
     />
   );

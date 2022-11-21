@@ -1,4 +1,3 @@
-import { DICTIONARY_TRANSACTIONS_DATE, DICTIONARY_TRANSACTIONS_TYPE } from "../../data/dictionary";
 import { TransactionsAction } from "./actions";
 import { transactionsInitialState, transactionsState } from "./state";
 
@@ -18,69 +17,79 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
       return {
         approved: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
-        pending: {
+        incomplete: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          pill: "pending",
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
         rejected: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
-        selectedOrders: [],
+        availableFilters: {
+          transactionType: [],
+          accountType: [],
+          orderStatus: [],
+        },
         approvedCount: 0,
-        rejectedCount: 0,
-        pendingCount: 0,
-        search: "",
         currentOrder: undefined,
+        downloadInitiated: false,
+        incompleteCount: 0,
+        pendingCount: 0,
+        rejectedCount: 0,
+        reroutedCount: 0,
+        search: "",
+        selectedOrders: [],
+        submittedCount: 0,
       };
     case "transactions/RESET_APPROVED_FILTER":
       return {
         ...state,
         approved: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
           page: 1,
           pages: 1,
-          sort: [],
+          sort: [{ value: "descending", column: "lastUpdated" }],
         },
       };
     case "transactions/RESET_REJECTED_FILTER":
@@ -88,11 +97,11 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
         ...state,
         rejected: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
@@ -104,18 +113,19 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
     case "transactions/RESET_PENDING_FILTER":
       return {
         ...state,
-        pending: {
+        incomplete: {
           filter: {
-            dateSorting: DICTIONARY_TRANSACTIONS_DATE[1].value,
+            dateSorting: "",
             startDate: undefined,
             endDate: new Date(),
-            transactionsType: DICTIONARY_TRANSACTIONS_TYPE[0].value,
-            accountType: "",
+            transactionsType: [],
+            accountType: [],
             orderStatus: [],
           },
           orders: [],
           page: 1,
           pages: 1,
+          pill: action.payload !== undefined ? action.payload : "pending",
           sort: [],
         },
       };
@@ -137,8 +147,8 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
     case "transactions/UPDATE_PENDING_SORT":
       return {
         ...state,
-        pending: {
-          ...state.pending,
+        incomplete: {
+          ...state.incomplete,
           page: 1,
           sort: action.payload,
         },
@@ -164,10 +174,10 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
     case "transactions/UPDATE_PENDING_FILTER":
       return {
         ...state,
-        pending: {
-          ...state.pending,
+        incomplete: {
+          ...state.incomplete,
           filter: {
-            ...state.pending.filter,
+            ...state.incomplete.filter,
             ...action.payload,
           },
         },
@@ -193,6 +203,24 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
             ...action.payload,
           },
         },
+      };
+    case "transactions/UPDATE_PILL":
+      return {
+        ...state,
+        incomplete: {
+          ...state.incomplete,
+          pill: action.payload,
+        },
+      };
+    case "transactions/UPDATE_AVAILABLE_FILTER":
+      return {
+        ...state,
+        availableFilters: action.payload,
+      };
+    case "transactions/UPDATE_DOWNLOAD_INITIATED":
+      return {
+        ...state,
+        downloadInitiated: action.payload,
       };
 
     default:

@@ -2,10 +2,10 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AccountHeader, CustomSpacer, LabeledTitle, Switch } from "../../../components";
+import { AccountHeader, CustomSpacer, defaultContentProps, LabeledTitle, Switch } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES } from "../../../data/dictionary";
-import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh40, sh8, sw24 } from "../../../styles";
+import { px, sh40, sw24 } from "../../../styles";
 import { EmploymentInfo } from "./Details";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -66,11 +66,11 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
             <AccountHeader subtitle={EMPLOYMENT_DETAILS.LABEL_JOINT} title={personalDetails.name!} />
             <LabeledTitle
               label={EMPLOYMENT_DETAILS.HEADING}
-              labelStyle={fs24BoldBlack2}
-              spaceToLabel={sh8}
+              labelStyle={defaultContentProps.subheadingStyle}
+              spaceToLabel={defaultContentProps.spaceToTitle}
               style={padding}
               title={EMPLOYMENT_DETAILS.SUBHEADING}
-              titleStyle={fs16SemiBoldBlack2}
+              titleStyle={defaultContentProps.subtitleStyle}
             />
             <View>
               <EmploymentInfo

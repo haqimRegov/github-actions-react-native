@@ -3,22 +3,23 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 import Accordion from "react-native-collapsible/Accordion";
 
 import {
-  borderBottomGray4,
-  colorBlue,
+  borderBottomGray2,
   colorTransparent,
   colorWhite,
+  disabledOpacity6,
   flexRow,
-  fs12BoldBlack2,
-  fs12RegBlack2,
-  fs12RegGray7,
-  fs14BoldBlack2,
-  fs14RegBlack2,
-  fs14RegGray7,
+  fs12BoldGray6,
+  fs12RegGray4,
+  fs12RegGray6,
+  fs14BoldGray6,
+  fs14RegGray4,
+  fs14RegGray6,
   fullHW,
   px,
   py,
   sh16,
   sh20,
+  sh24,
   sh32,
   sw112,
   sw120,
@@ -59,8 +60,8 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   const accordionHeader = (step: IOnboarding, stepIndex: number, isActive: boolean) => {
     const visited = finishedSteps !== undefined ? finishedSteps.some((visitedStep) => visitedStep === step.key) : false;
     const currentStep = (stepIndex + 1).toString();
-    const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegBlack2 : fs14BoldBlack2;
-    const textStyle: TextStyle = isActive ? { ...activeTextStyle, width: sw120 } : { ...fs14RegGray7, width: sw120 };
+    const activeTextStyle: TextStyle = step.content !== undefined ? fs14RegGray6 : fs14BoldGray6;
+    const textStyle: TextStyle = isActive ? activeTextStyle : { ...fs14RegGray4, ...disabledOpacity6 };
 
     const handleChange = () => {
       if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {
@@ -83,7 +84,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
             <View style={flexRow}>
               <Step active={isActive} step={currentStep} visited={visited} />
               <CustomSpacer isHorizontal={true} space={sw8} />
-              <Text style={textStyle}>{step.label}</Text>
+              <Text style={{ ...textStyle, lineHeight: sh24, width: sw120 }}>{step.label}</Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -105,17 +106,17 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
             const handleNavigateToContent = () => {
               handleContentChange(item);
             };
-            const activeTitle = activeContent !== undefined && "title" in activeContent ? activeContent.title : "";
+            const activeKey = activeContent !== undefined && "title" in activeContent ? activeContent.key : "";
             const disabledContent = disabledSteps !== undefined && disabledSteps.includes(item.key) === true;
-            const defaultTextStyle = disabledContent === true ? fs12RegGray7 : fs12RegBlack2;
-            const textStyle: TextStyle = item.title === activeTitle ? fs12BoldBlack2 : defaultTextStyle;
+            const defaultTextStyle = disabledContent === true ? fs12RegGray4 : fs12RegGray6;
+            const textStyle: TextStyle = item.key === activeKey ? fs12BoldGray6 : defaultTextStyle;
             const onPress = disabledContent === true ? undefined : handleNavigateToContent;
 
             return (
               <TouchableWithoutFeedback key={index} onPress={onPress}>
                 <View style={{ width: sw112 }}>
                   <CustomSpacer space={sh16} />
-                  <Text style={{ ...textStyle, lineHeight: sh16 }}>{item.title}</Text>
+                  <Text style={textStyle}>{item.title}</Text>
                 </View>
               </TouchableWithoutFeedback>
             );
@@ -126,7 +127,7 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
   };
 
   const handleNextStep = (nextRoute: string) => {
-    let newIndex: number = 0;
+    let newIndex = 0;
     const parentRoute = steps.filter((item: IOnboarding, index: number) => {
       if (item.route === nextRoute) {
         newIndex = index;
@@ -175,16 +176,9 @@ export const OnboardingSteps: FunctionComponent<OnboardingStepsProps> = ({
           />
         </View>
         <CustomFlexSpacer />
-        <View style={borderBottomGray4} />
+        <View style={borderBottomGray2} />
         <View style={{ ...px(sw24), ...py(sh20) }}>
-          <IconText
-            color={colorBlue._2}
-            name="arrow-left"
-            onPress={handleBackToDashboard}
-            iconSize={sw24}
-            text="Back to Dashboard"
-            textStyle={fs12RegBlack2}
-          />
+          <IconText name="arrow-left" onPress={handleBackToDashboard} iconSize={sw24} text="Back to Dashboard" textStyle={fs12RegGray6} />
         </View>
       </SideMenu>
       <CustomSpacer isHorizontal={true} space={sw200} />

@@ -1,7 +1,7 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const verifySignUp = async (variables: IVerifySignUpRequest) => {
+export const verifySignUp = async (variables: IVerifySignUpRequest, handleLoading?: (loading: boolean) => void) => {
   try {
     const data = await responseHandler<IVerifySignUpMutation, IVerifySignUpRequest>(
       GQL_MUTATIONS.verifySignUp,
@@ -9,6 +9,7 @@ export const verifySignUp = async (variables: IVerifySignUpRequest) => {
       undefined,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { ActivityIndicator, View } from "react-native";
 
-import { centerHV, colorWhite, fullHW } from "../../styles";
+import { colorBlack, colorWhite, fullHeight } from "../../styles";
+import { Loading } from "../Views/Loading";
 import { RNModal } from "./RNModal";
 
 interface LoaderProps {
@@ -10,10 +10,8 @@ interface LoaderProps {
 
 export const Loader: FunctionComponent<LoaderProps> = ({ visible }: LoaderProps) => {
   return (
-    <RNModal animationType="fade" visible={visible}>
-      <View style={{ ...fullHW, ...centerHV }}>
-        <ActivityIndicator color={colorWhite._1} size="small" />
-      </View>
+    <RNModal animationType="fade" style={{ backgroundColor: colorBlack._1_4 }} visible={visible}>
+      <Loading color={colorWhite._1} style={fullHeight} />
     </RNModal>
   );
 };

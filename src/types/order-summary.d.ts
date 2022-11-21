@@ -1,8 +1,9 @@
 declare interface IFundOrderSummary {
-  fundingOption: string;
   accountType: string;
   distributionChannel: string;
+  fundCode?: string;
   fundCurrency: string;
+  fundingOption: string;
   fundIssuer: string;
   fundName: string;
   fundType: string;
@@ -10,8 +11,6 @@ declare interface IFundOrderSummary {
   isEpf: boolean;
   isShariah: boolean;
   salesCharge: string;
-
-  fundCode?: string;
   scheduledPayment?: boolean;
 }
 
@@ -25,7 +24,7 @@ declare interface IOrderSummary {
 declare interface IOrderInvestment {
   distributionInstruction: string;
   fundClass: string | null;
-  fundCode: string;
+  fundCode?: string;
   fundCurrency: string;
   fundId?: string;
   fundingOption: string;
@@ -34,19 +33,21 @@ declare interface IOrderInvestment {
   fundType: string;
   investmentAmount: string;
   isEpf: boolean;
-  isFea: boolean;
+  isFea: boolean | null;
   isScheduled: boolean;
   isSyariah: boolean;
+  isTopup?: boolean;
+  landingFund?: string;
   salesCharge: string;
   scheduledInvestmentAmount: string | null;
   scheduledSalesCharge: string | null;
 }
 
 declare interface IOrder {
+  allowedRecurringType?: string[];
   investments: IOrderInvestment[];
   orderDate: string;
   orderNumber: string;
-  allowedRecurringType?: string[];
   orderTotalAmount: IOrderAmount[];
   paymentType: TypePaymentType;
 }
@@ -66,3 +67,48 @@ declare interface IOrderAmount {
   amount: string;
   currency: TypeCurrency;
 }
+
+declare interface IInnerDocument {
+  label: string;
+  name: string;
+  title: string;
+  type: string;
+  url: string;
+}
+
+declare interface IOuterDocument {
+  documents: IInnerDocument[];
+  mainHeader: string;
+  subHeader: string;
+}
+
+declare interface ISoftcopy {
+  documents: IOuterDocument[];
+  required: boolean;
+}
+
+declare interface IHardcopy {
+  accDocs: IOuterDocument[];
+  required: boolean;
+  utmcDocs: IOuterDocument[];
+}
+
+declare interface IDocumentSummary {
+  accountType: string;
+  hardcopy: IHardcopy;
+  softcopy: ISoftcopy;
+}
+
+declare interface ITrackingSummary {
+  createdOn: string;
+  level: string;
+  remark: IOuterRemark[];
+  status: string;
+}
+
+declare interface IOuterRemark {
+  label: string;
+  remark: string[];
+}
+
+declare type IAcknowledgementPage = "OrderPreview" | "TermsAndConditions" | "Signature";

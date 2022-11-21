@@ -7,7 +7,7 @@ import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { colorWhite, flexChild, sh232, sh272, shadowBlack116, sw24 } from "../../../../../styles";
+import { colorWhite, flexChild, sh232, sh272, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -16,6 +16,7 @@ interface AMPProps extends ProductsStoreProps {
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   shareSuccess?: boolean;
+  withEpf: boolean;
 }
 
 const AMPComponent: FunctionComponent<AMPProps> = ({
@@ -37,6 +38,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   setScrollEnabled,
   shareSuccess,
   updateAmpShowBy,
+  withEpf,
 }: AMPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.amp;
@@ -63,7 +65,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
 
   const handleFetch = async (newPage: string) => {
     setLoading(true);
-    const sortAllFunds = showBy === "all" ? [{ column: "fundAbbr", value: "asc" }] : [];
     const request: IProductListRequest = {
       accountType: accountType.toLowerCase(),
       fundCurrency: filters.fundCurrency || [],
@@ -78,10 +79,10 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       riskCategory: riskCategory || [],
       search: search,
       showBy: showBy,
-      sort: sortAllFunds,
+      sort: sort,
       tab: "amp",
     };
-    const productListResponse: IProductListResponse = await getProductList(request, navigation);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation, setLoading);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -192,7 +193,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   }, [sort, search, filters, showBy]);
 
   return (
-    <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadowBlack116 }}>
+    <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadow12Black116 }}>
       <ProductHeader
         filter={filterTemp}
         filterVisible={filterVisible}
@@ -230,6 +231,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
         totalCount={totalCount}
         updateFilter={handleUpdateFilter}
         updateSort={addAmpSort}
+        withEpf={withEpf}
       />
     </View>
   );

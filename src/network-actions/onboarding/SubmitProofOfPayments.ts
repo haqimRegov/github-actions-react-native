@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const submitProofOfPayments = async (
   variables: ISubmitProofOfPaymentsRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const submitProofOfPayments = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "submitProofOfPayments" in data === false) {

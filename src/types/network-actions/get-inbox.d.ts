@@ -6,6 +6,7 @@ declare interface IGetInboxRequest {
 declare interface IGetInboxMessage {
   createdOn: string;
   isRead: boolean;
+  isSeen: boolean;
   message: string;
   notificationId: string;
   searchKey: string;

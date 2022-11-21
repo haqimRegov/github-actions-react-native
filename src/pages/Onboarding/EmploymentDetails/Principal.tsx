@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AccountHeader, LabeledTitle } from "../../../components";
+import { AccountHeader, defaultContentProps, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh8, sw24 } from "../../../styles";
+import { px, sw24 } from "../../../styles";
 import { EmploymentInfo } from "./Details";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -33,11 +33,11 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
         {accountType === "Joint" ? <AccountHeader subtitle={EMPLOYMENT_DETAILS.LABEL_PRINCIPAL} title={personalDetails.name!} /> : null}
         <LabeledTitle
           label={EMPLOYMENT_DETAILS.HEADING}
-          labelStyle={fs24BoldBlack2}
-          spaceToLabel={sh8}
+          labelStyle={defaultContentProps.subheadingStyle}
+          spaceToLabel={defaultContentProps.spaceToTitle}
           style={padding}
           title={EMPLOYMENT_DETAILS.SUBHEADING}
-          titleStyle={fs16SemiBoldBlack2}
+          titleStyle={defaultContentProps.subtitleStyle}
         />
       </View>
       <View style={padding}>

@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_NRIC_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegBlack2, fs40BoldBlack2, sh16, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { centerVertical, fs12BoldBlue8, fs24RegGray6, fs40BoldGray6, sh32, sh4, sh40, sh72, sw360 } from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -17,6 +17,7 @@ interface NRICDetailsProps {
   inputNRIC: string;
   setError: (value?: string) => void;
   setInputNRIC: (value: string) => void;
+  setPage: (TypeLoginPages) => void;
   subheading?: string;
 }
 
@@ -28,6 +29,7 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
   inputNRIC,
   setError,
   setInputNRIC,
+  setPage,
   subheading,
 }: NRICDetailsProps) => {
   const handleValidateNRIC = () => {
@@ -43,12 +45,16 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
     }
   };
 
+  const handleBackToLogin = () => {
+    setPage("LOGIN");
+  };
+
   return (
     <View>
-      <CustomSpacer space={sh56} />
-      <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_WELCOME}</Text>
-      <CustomSpacer space={sh8} />
-      <Text style={{ width: sw360, ...fs24RegBlack2 }}>{subheading || LOGIN.SUBHEADING_FIRST_TIME}</Text>
+      <CustomSpacer space={sh72} />
+      <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_WELCOME}</Text>
+      <CustomSpacer space={sh4} />
+      <Text style={{ width: sw360, ...fs24RegGray6 }}>{subheading || LOGIN.SUBHEADING_FIRST_TIME}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error}
@@ -70,9 +76,13 @@ export const NRICDetails: FunctionComponent<NRICDetailsProps> = ({
         withDebounce={true}
       />
       <CustomSpacer space={sh32} />
-      {handleExistingLogin !== undefined ? (
-        <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ height: sh16 }} />
-      ) : null}
+      <View style={{ ...centerVertical, width: sw360 }}>
+        {handleExistingLogin !== undefined ? (
+          <LinkText onPress={handleExistingLogin} text={LOGIN.LABEL_ALREADY} style={{ ...fs12BoldBlue8 }} />
+        ) : (
+          <LinkText onPress={handleBackToLogin} text={LOGIN.LINK_BACK_TO_LOGIN} style={{ ...fs12BoldBlue8 }} />
+        )}
+      </View>
     </View>
   );
 };

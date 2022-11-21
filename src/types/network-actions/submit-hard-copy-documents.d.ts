@@ -8,20 +8,28 @@ declare interface ISubmitHardCopyDocuments {
   docs: ISubmitHardCopyDocument[];
 }
 
+declare interface ISubmitHardCopyResult extends ISubmissionSummaryResponse {
+  orderNumber: string;
+  status: string;
+  remarks: string[];
+  txRef: string;
+}
+
 declare interface ISubmitHardCopyDocumentsRequest {
+  account?: IHardCopyAccount;
   branchId: string;
+  isConfirmed: boolean;
   orderNumber: string;
   hardcopy: ISubmitHardCopyDocuments[];
 }
 
 declare interface ISubmitHardCopyDocumentsResult {
-  status: boolean;
+  orders: ISubmitHardCopyResult[];
   message: string;
-  txRef: string;
 }
 
 declare type ISubmitHardCopyDocumentsResponse = IQueryResponse<ISubmitHardCopyDocumentsResult> | undefined;
 
 declare interface ISubmitHardCopyDocumentsQuery {
-  submitHardcopyDocuments: ISubmitHardCopyDocumentsResponse;
+  submitHardcopyDocumentsV2: ISubmitHardCopyDocumentsResponse;
 }

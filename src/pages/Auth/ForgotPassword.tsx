@@ -38,7 +38,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
       fetching.current = true;
       setLoading(true);
       setInput1Error(undefined);
-      const response: IVerifySignUpResponse = await verifyOtp({ nric: inputNRIC, code: inputOTP });
+      const response: IVerifySignUpResponse = await verifyOtp({ nric: inputNRIC, code: inputOTP }, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response === undefined) {
@@ -74,6 +74,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           confirmPassword: encryptedRetypePassword,
         },
         { encryptionKey: credentials.sessionToken },
+        setLoading,
       );
       fetching.current = false;
       setLoading(false);
@@ -88,7 +89,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           setPasswordRecovery(true);
         }
       } else {
-        setInput2Error(error.message);
+        setInput1Error(error.message);
       }
     }
   };
@@ -98,7 +99,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
       fetching.current = true;
       setLoading(true);
       setInput1Error(undefined);
-      const response: IVerifyAgentResponse = await forgotPassword({ nric: inputNRIC });
+      const response: IVerifyAgentResponse = await forgotPassword({ nric: inputNRIC }, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response === undefined) {
@@ -130,6 +131,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           setError={setInput1Error}
           setInputNRIC={setInputNRIC}
           subheading={LOGIN.SUBHEADING_RECOVERY}
+          setPage={setRootPage}
         />
       );
       break;
@@ -146,6 +148,7 @@ const ForgotPasswordComponent: FunctionComponent<ForgotPasswordProps> = ({
           setError={setInput1Error}
           setInputOTP={setInputOTP}
           setResendTimer={setResendTimer}
+          setPage={setRootPage}
         />
       );
       break;

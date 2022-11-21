@@ -13,14 +13,14 @@ export const updateOnboarding = (onboarding: OnboardingState) => {
   return typedAction("onboarding/UPDATE_ONBOARDING", onboarding);
 };
 
-export const resetSteps = () => {
-  return typedAction("onboarding/RESET_STEPS");
+export const resetOnboarding = () => {
+  return typedAction("onboarding/RESET_ONBOARDING");
 };
 
 export type OnboardingAction = ReturnType<
-  typeof resetSteps | typeof updateFinishedSteps | typeof updateDisabledSteps | typeof updateOnboarding
+  typeof resetOnboarding | typeof updateFinishedSteps | typeof updateDisabledSteps | typeof updateOnboarding
 >;
 
-export const OnboardingActionProps = { resetSteps, updateDisabledSteps, updateFinishedSteps, updateOnboarding };
+export const OnboardingActionProps = { resetOnboarding, updateDisabledSteps, updateFinishedSteps, updateOnboarding };
 
 export type OnboardingActionsType = typeof OnboardingActionProps;

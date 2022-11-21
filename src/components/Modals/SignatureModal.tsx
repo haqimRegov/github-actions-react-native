@@ -1,24 +1,26 @@
 import React, { FunctionComponent } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { TextStyle, View, ViewStyle } from "react-native";
 
 import {
   circleBorder,
   colorBlack,
-  colorGray,
+  colorBlue,
   colorWhite,
   flexColCC,
   flexRow,
-  fs16BoldBlack2,
+  fs18BoldBlue1,
   px,
+  sh16,
   sh24,
   sh368,
   sw1,
-  sw14,
   sw24,
+  sw40,
   sw8,
   sw832,
 } from "../../styles";
 import { CustomSignature } from "../Signature";
+import { IconText } from "../Touchables";
 import { IconButton } from "../Touchables/Icon";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
@@ -49,17 +51,17 @@ export const SignatureModal: FunctionComponent<SignatureModalProps> = ({
         <View style={modalContainer}>
           <CustomSpacer space={sh24} />
           <View style={{ ...flexRow, ...px(sw24) }}>
-            <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{title}</Text>
+            <IconText iconSize={sw24} name="sign" text={title} textStyle={{ ...fs18BoldBlue1, ...titleStyle }} />
             <CustomFlexSpacer />
             <IconButton
               color={colorBlack._1}
               name="close"
               onPress={handleClose}
-              size={sw14}
-              style={circleBorder(sw24, sw1, colorGray._3)}
+              size={sw24}
+              style={circleBorder(sw40, sw1, colorBlue._4)}
             />
           </View>
-          <CustomSpacer space={sh24} />
+          <CustomSpacer space={sh16} />
           <CustomSignature handleConfirm={handleConfirm} setSignature={handleSignature} signature={signature} />
         </View>
       </View>

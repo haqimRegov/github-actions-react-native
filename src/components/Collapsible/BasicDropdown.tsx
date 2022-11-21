@@ -4,23 +4,26 @@ import Collapsible from "react-native-collapsible";
 
 import { CustomSpacer } from "../../components/Views/Spacer";
 import {
-  borderBottomGray7,
+  alignFlexStart,
   centerVertical,
   colorBlack,
   colorTransparent,
   colorWhite,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
-  fs12SemiBoldBlack2,
+  fs12RegGray5,
+  fs16BoldBlack2,
+  fs16RegBlack2,
   fullHW,
   noBGColor,
   px,
-  py,
-  sh10,
+  sh16,
   sh176,
-  sh24,
-  sh6,
+  sh20,
+  sh22,
+  sh4,
+  sh40,
+  sh8,
   sw12,
   sw16,
   sw2,
@@ -150,11 +153,11 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
   const handleExpand = () => {
     if (ref !== null) {
       ref.measure((_x, _y, _width, _height, pageX, pageY) => {
-        let measurement = { x: pageX, y: pageY, height: _height, width: _width };
+        const measurement = { x: pageX, y: pageY, height: _height, width: _width };
         if (keyboardAvoidingRef !== undefined && keyboardAvoidingRef !== null) {
           Keyboard.dismiss();
           const keyboardOffset = keyboardAvoidingRef.state.bottom;
-          measurement = { ...measurement, y: measurement.y + keyboardOffset };
+          measurement.y += keyboardOffset;
           setLayout({ x: pageX, y: pageY + keyboardOffset, height: _height, width: _width });
         }
         setLayout(measurement);
@@ -221,7 +224,6 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
                 <Collapsible duration={100} collapsed={collapse} style={{ ...noBGColor, ...collapsibleStyle }}>
                   {RenderDropdown === undefined ? (
                     <View>
-                      <View style={borderBottomGray7} />
                       <View style={dropdownStyle}>
                         <FlatList
                           extraData={value}
@@ -230,17 +232,20 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
                           keyboardDismissMode="on-drag"
                           keyboardShouldPersistTaps="always"
                           keyExtractor={(item: string) => item}
-                          ListHeaderComponent={() => <CustomSpacer space={sh6} />}
-                          ListFooterComponent={() => <CustomSpacer space={sh6} />}
+                          ListHeaderComponent={() => <CustomSpacer space={sh16} />}
+                          ListFooterComponent={() => <CustomSpacer space={sh16} />}
                           renderItem={({ index }) => {
                             const itemExtractor = items![index];
                             const itemValue = itemExtractor.value;
                             const selected = value!.includes(itemValue);
-                            const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, ...py(sh10) };
-                            const itemStyle: TextStyle = selected ? fs12BoldBlack2 : fs12SemiBoldBlack2;
+                            const itemContainer: ViewStyle = { ...centerVertical, ...flexRow, height: sh40 };
+                            const labelHeight = itemExtractor.subLabel !== undefined ? { lineHeight: sh20 } : { lineHeight: sh22 };
+                            const itemStyle: TextStyle = selected
+                              ? { ...fs16BoldBlack2, ...labelHeight }
+                              : { ...fs16RegBlack2, ...labelHeight };
 
                             const handleSelect = () => {
-                              let reset: boolean = false;
+                              let reset = false;
                               if (itemExtractor !== undefined) {
                                 let newValue = [...value!];
                                 if (newValue.includes(itemValue)) {
@@ -256,16 +261,22 @@ export const CollapsibleDropdown: FunctionComponent<CollapsibleDropdownProps> = 
 
                             return (
                               <TouchableWithoutFeedback key={index} onPress={handleSelect}>
-                                <View style={itemContainer}>
-                                  <CheckBox
-                                    label={itemExtractor.label}
-                                    labelStyle={{ ...itemStyle, width: sw296, ...checkboxLabelStyle }}
-                                    numberOfLines={1}
-                                    onPress={handleSelect}
-                                    spaceToLabel={sw12}
-                                    style={{ ...flexChild, height: sh24 }}
-                                    toggle={selected}
-                                  />
+                                <View>
+                                  {index !== 0 ? <CustomSpacer space={sh8} /> : null}
+                                  <View style={itemContainer}>
+                                    <CheckBox
+                                      checkboxStyle={{ paddingTop: sh4 }}
+                                      label={itemExtractor.label}
+                                      labelStyle={{ ...itemStyle, width: sw296, ...checkboxLabelStyle }}
+                                      numberOfLines={1}
+                                      onPress={handleSelect}
+                                      spaceToLabel={sw12}
+                                      subLabel={itemExtractor.subLabel}
+                                      subLabelStyle={fs12RegGray5}
+                                      style={{ ...flexChild, ...alignFlexStart }}
+                                      toggle={selected}
+                                    />
+                                  </View>
                                 </View>
                               </TouchableWithoutFeedback>
                             );

@@ -3,7 +3,7 @@ import { Text } from "react-native";
 
 import { CustomSpacer, ToggleButton } from "../../../../components";
 import { Language } from "../../../../constants";
-import { fs16SemiBoldBlack2, sh16, sw600 } from "../../../../styles";
+import { fs16SemiBoldGray6, sh16, sw600 } from "../../../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -18,7 +18,7 @@ export const FatcaAddress: FunctionComponent<FatcaAddressProps> = ({ address, co
 
   return (
     <Fragment>
-      <Text style={{ ...fs16SemiBoldBlack2, width: sw600 }}>{label}</Text>
+      <Text style={{ ...fs16SemiBoldGray6, width: sw600 }}>{label}</Text>
       <CustomSpacer space={sh16} />
       <ToggleButton value={confirmed} onSelect={setConfirmation} />
     </Fragment>

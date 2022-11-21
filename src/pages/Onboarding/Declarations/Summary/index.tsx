@@ -4,17 +4,13 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
-import { Language, ONBOARDING_ROUTES } from "../../../../constants";
-import {
-  OPTION_CRS_NO_TIN_REQUIRED,
-  OPTIONS_CRS_TAX_RESIDENCY,
-  OPTIONS_CRS_TIN_REASONS,
-  OPTIONS_FATCA_NO_CERTIFICATE,
-} from "../../../../data/dictionary";
+import { Language } from "../../../../constants";
+import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
+import { getAddress, getFatcaRequest } from "../../../../helpers";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { borderBottomBlack21, sh24 } from "../../../../styles";
-import { parseAmountToString } from "../../../../utils";
+import { borderBottomGray2, sh24 } from "../../../../styles";
+import { isNotEmpty, parseAmountToString } from "../../../../utils";
 import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
@@ -134,8 +130,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const principalTaxResident = principal!.declaration!.crs!.taxResident!;
 
   const principalTin = principal!.declaration!.crs!.tin!.map((multiTin) => {
-    const principalNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
-    const principalTinReason = multiTin.reason! === 2 ? multiTin.explanation! : principalNoTinReason;
+    const reason = multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[0].label;
+    const principalNoTinReason = multiTin.reason === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
+    const principalTinReason = multiTin.reason === 2 ? multiTin.explanation! : principalNoTinReason;
     return {
       country: principalTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
       noTin: principalTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
@@ -144,17 +141,12 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     };
   });
 
-  const principalUsCitizen = principal!.declaration!.fatca!.usCitizen! === 0;
-  const principalUsBorn = principal!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-  const principalCertReason =
-    principal!.declaration!.fatca!.reason! === 1 ? principal!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0];
-  const principalConfirmAddress = principal!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
-
   const jointTaxResident = joint!.declaration!.crs!.taxResident!;
 
   const jointTin = joint!.declaration!.crs!.tin!.map((multiTin) => {
-    const jointNoTinReason = multiTin.reason! === 1 ? OPTION_CRS_NO_TIN_REQUIRED : OPTIONS_CRS_TIN_REASONS[multiTin.reason!];
-    const jointTinReason = multiTin.reason! === 2 ? multiTin.explanation! : jointNoTinReason;
+    const reason = multiTin.reason !== -1 ? OPTIONS_CRS_TIN_REASONS[multiTin.reason!].label : OPTIONS_CRS_TIN_REASONS[0].label;
+    const jointNoTinReason = multiTin.reason === 1 ? OPTION_CRS_NO_TIN_REQUIRED : reason;
+    const jointTinReason = multiTin.reason === 2 ? multiTin.explanation! : jointNoTinReason;
     return {
       country: jointTaxResident === 0 ? undefined : multiTin.country!, // undefined if taxResident === 0
       noTin: jointTaxResident === 0 ? undefined : `${multiTin.noTin!}`, // "true" || "false", undefined if taxResident === 0
@@ -162,12 +154,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       tinNumber: jointTaxResident === 0 || multiTin.noTin! === true ? undefined : multiTin.tinNumber!, // undefined if taxResident === 0 or noTin === true}
     };
   });
-
-  const jointUsCitizen = joint!.declaration!.fatca!.usCitizen! === 0;
-  const jointUsBorn = joint!.declaration!.fatca!.usBorn! === 0 ? "true" : "false";
-  const jointCertReason =
-    joint!.declaration!.fatca!.reason! === 1 ? joint!.declaration!.fatca!.explanation! : OPTIONS_FATCA_NO_CERTIFICATE[0];
-  const jointConfirmAddress = joint!.declaration!.fatca!.confirmAddress! === 0 ? "true" : "false";
 
   const jointId =
     jointIdType === "Passport"
@@ -177,6 +163,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const jointAddress = { ...joint!.addressInformation! };
   delete jointAddress.sameAddress;
 
+  const jointFatcaRequest = accountType === "Joint" ? getFatcaRequest(joint!.declaration!.fatca!) : {};
+
   const jointDetails =
     accountType === "Joint"
       ? {
@@ -185,24 +173,10 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           addressInformation: jointAddress,
           declaration: {
             crs: {
-              taxResident: OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident], // required
+              taxResident: jointTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[jointTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
               tin: jointTin,
             },
-            fatca: {
-              formW9: jointUsCitizen ? `${joint!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-              formW8Ben: jointUsBorn === "false" ? undefined : `${joint!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-              confirmAddress: jointUsBorn === "false" ? undefined : jointConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-              certificate: joint!.declaration!.fatca!.certificate, // required if noCertificate === false
-              noCertificate: `${joint!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-              reason: joint!.declaration!.fatca!.noCertificate === true ? jointCertReason : undefined, // required if noCertificate === true
-              usBorn: jointUsCitizen ? undefined : jointUsBorn, // "true" || "false", required if usCitizen === false
-              usCitizen: jointUsCitizen ? "true" : "false", // "true" || "false", required
-            },
-            // fea: {
-            //   balance: parseAmountToString(joint!.declaration!.fea!.balance!),
-            //   borrowingFacility: joint!.declaration!.fea!.facility! === 0 ? "true" : "false",
-            //   resident: joint!.declaration!.fea!.resident! === 0 ? "true" : "false",
-            // },
+            fatca: { ...jointFatcaRequest },
           },
           employmentDetails: joint!.employmentDetails,
           personalDetails: {
@@ -244,7 +218,12 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   if (jointEmploymentDetails !== undefined) {
     delete jointEmploymentDetails.isEnabled;
   }
-  const request = {
+
+  const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
+
+  const request: ISubmitClientAccountRequest = {
+    initId: details!.initId!,
+    isEtb: false,
     incomeDistribution: personalInfo.incomeDistribution!,
     signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
     principal: {
@@ -270,19 +249,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       },
       declaration: {
         crs: {
-          taxResident: OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident], // required
+          taxResident:
+            principalTaxResident !== -1 ? OPTIONS_CRS_TAX_RESIDENCY[principalTaxResident].label : OPTIONS_CRS_TAX_RESIDENCY[0].label, // required
           tin: principalTin,
         },
-        fatca: {
-          formW9: principalUsCitizen ? `${principal!.declaration!.fatca!.formW9!}` : undefined, // "true" || "false", required if usCitizen === true
-          formW8Ben: principalUsBorn === "false" ? undefined : `${principal!.declaration!.fatca!.formW8Ben!}`, // "true" || "false", required if usCitizen === false && usBorn === true && confirmAddress === true,
-          confirmAddress: principalUsBorn === "false" ? undefined : principalConfirmAddress, // "true" || "false", only required if usCitizen is false and usBorn is true
-          certificate: principal!.declaration!.fatca!.certificate, // required if noCertificate === false
-          noCertificate: `${principal!.declaration!.fatca!.noCertificate}`, // "true" || "false", required if certificate === undefined
-          reason: principal!.declaration!.fatca!.noCertificate === true ? principalCertReason : undefined, // required if noCertificate === true
-          usBorn: principalUsCitizen ? undefined : principalUsBorn, // "true" || "false", required if usCitizen === false
-          usCitizen: principalUsCitizen ? "true" : "false", // "true" || "false", required
-        },
+        fatca: { ...principalFatcaRequest },
         // fea: {
         //   balance: parseAmountToString(principal!.declaration!.fea!.balance!),
         //   borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
@@ -333,7 +304,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation);
+      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {
@@ -352,7 +323,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             "Payment",
           ];
           updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
-          return handleNextStep(ONBOARDING_ROUTES.OrderSummary);
+          return handleNextStep("OrderSummary");
         }
 
         if (error !== null) {
@@ -378,6 +349,16 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   // const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
   const subtitle = accountType === "Joint" ? DECLARATION_SUMMARY.SUBHEADING_JOINT : DECLARATION_SUMMARY.SUBHEADING;
 
+  const principalFatcaAddress =
+    isNotEmpty(principal!.addressInformation) && isNotEmpty(principal!.addressInformation!.mailingAddress)
+      ? getAddress(principal!.addressInformation!.mailingAddress!)
+      : undefined;
+
+  const jointFatcaAddress =
+    accountType === "Joint" && isNotEmpty(joint!.addressInformation) && isNotEmpty(joint!.addressInformation!.mailingAddress)
+      ? getAddress(joint!.addressInformation!.mailingAddress!)
+      : undefined;
+
   return (
     <ContentPage
       handleCancel={handleBack}
@@ -387,6 +368,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       subtitle={subtitle}>
       <CustomSpacer space={sh24} />
       <DeclarationDetails
+        address={principalFatcaAddress}
         accountHolder="Principal"
         accountType={accountType}
         handleNextStep={handleNextStep}
@@ -397,9 +379,10 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <CustomSpacer space={sh24} />
           <DeclarationDetails
+            address={jointFatcaAddress}
             accountHolder="Joint"
             accountType="Joint"
             handleNextStep={handleNextStep}

@@ -4,8 +4,9 @@ type SuccessCallback = (result: DocumentPickerResponse) => void;
 
 export const documentPicker = async (handleSuccess: SuccessCallback) => {
   try {
-    const res = await DocumentPicker.pick({
+    const res = await DocumentPicker.pickSingle({
       type: [DocumentPicker.types.pdf],
+      copyTo: "cachesDirectory",
     });
 
     return handleSuccess(res);
@@ -21,7 +22,7 @@ export const documentPicker = async (handleSuccess: SuccessCallback) => {
 export const multipleDocumentPicker = async () => {
   // Pick multiple files
   try {
-    const results = await DocumentPicker.pickMultiple({
+    const results = await DocumentPicker.pick({
       type: [DocumentPicker.types.images],
     });
     return results;

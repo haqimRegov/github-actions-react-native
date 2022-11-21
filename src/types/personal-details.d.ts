@@ -39,6 +39,7 @@ declare interface IAddressMultiline {
   line1?: string;
   line2?: string;
   line3?: string;
+  line4?: string;
 }
 
 declare interface IAddressState extends IBaseAddress {
@@ -51,10 +52,11 @@ declare interface IAddressInfoState {
 }
 
 declare interface IContactNumberState {
-  label: string;
   code: string;
-  value: string;
   error?: string;
+  id: string;
+  label: string;
+  value: string;
 }
 declare interface IContactDetailsState {
   emailAddress?: string;
@@ -155,6 +157,7 @@ declare interface IPersonalInfoState {
   editPersonal?: boolean;
   editDeclaration?: boolean;
   emailOtpSent?: boolean;
+  emailTimestamp?: string;
   epfInvestment?: boolean;
   epfShariah?: boolean;
   isAllEpf?: boolean;

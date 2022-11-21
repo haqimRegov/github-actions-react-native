@@ -2,12 +2,11 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Dimensions, ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import {
-  AdvancedDropdown,
   ButtonSelectionList,
   CustomSpacer,
   Dash,
   LabeledTitle,
-  LabeledTitleProps,
+  NewDropdown,
   SafeAreaPage,
   TextCard,
   TextCardProps,
@@ -17,19 +16,18 @@ import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import { RNInAppBrowser } from "../../../integrations";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   centerHV,
   centerVertical,
-  colorBlue,
   colorGray,
   colorWhite,
   flexGrow,
   flexRow,
-  fs10BoldBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
-  fs16SemiBoldBlack2,
-  fs24BoldBlack2,
+  fs10BoldGray6,
+  fs16BoldGray6,
+  fs16RegGray6,
+  fs16SemiBoldGray6,
+  fs24BoldGray6,
   fsTransformNone,
   px,
   py,
@@ -120,14 +118,13 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     { label: PRODUCT_DETAILS.LABEL_SHARIAH, title: fund.isSyariah },
     { label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf },
     {
-      label: PRODUCT_DETAILS.LABEL_SALES_CASH,
+      label: PRODUCT_DETAILS.LABEL_SALES_CHARGE_CASH,
       title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.cash.max}%`,
       titleStyle: fsTransformNone,
     },
     {
       label: PRODUCT_DETAILS.LABEL_MINIMUM_CASH,
       titlePrefix: inputCurrency,
-      titlePrefixStyle: { lineHeight: sh24 },
       title: formatAmount(newSalesAmount.cash.min || 0),
     },
   ];
@@ -145,7 +142,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
 
   if (fund.isEpf === "Yes") {
     data.splice(-1, 0, {
-      label: PRODUCT_DETAILS.LABEL_SALES_EPF,
+      label: PRODUCT_DETAILS.LABEL_SALES_CHARGE_EPF,
       title: `${PRODUCT_DETAILS.LABEL_UP_TO} ${salesCharge.epf.max}%`,
       titleStyle: fsTransformNone,
     });
@@ -159,7 +156,6 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     data.push({
       label: PRODUCT_DETAILS.LABEL_MINIMUM_EPF,
       titlePrefix: inputCurrency,
-      titlePrefixStyle: { lineHeight: sh24 },
       title: formatAmount(newSalesAmount.epf.min),
     });
   }
@@ -168,9 +164,8 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
     data: data.filter((raw) => raw.label !== ""),
     itemsPerGroup: 5,
     itemStyle: { width: sw144 },
-    labelStyle: fs10BoldBlack2,
+    labelStyle: fs10BoldGray6,
     spaceBetweenItem: width < 1080 ? 15 : 16,
-    titleStyle: fs16BoldBlack2,
   };
 
   const currencies =
@@ -218,31 +213,31 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
           <CustomSpacer isHorizontal={true} space={sw16} />
           <LabeledTitle
             label={fund.fundName}
-            labelStyle={fs24BoldBlack2}
+            labelStyle={fs24BoldGray6}
             spaceToLabel={sh8}
             title={fund.issuingHouse}
-            titleStyle={fs16SemiBoldBlack2}
+            titleStyle={fs16SemiBoldGray6}
           />
         </View>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
           <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...py(sh24) }}>
             <View style={px(sw24)}>
-              <Text style={fs16BoldBlack2}>{PRODUCT_DETAILS.LABEL_FUND_OBJECTIVE}</Text>
-              <TextSpaceArea spaceToTop={sh8} style={{ ...fs16RegBlack2, lineHeight: sh24 }} text={fund.fundObjective} />
+              <Text style={fs16BoldGray6}>{PRODUCT_DETAILS.LABEL_FUND_OBJECTIVE}</Text>
+              <TextSpaceArea spaceToTop={sh8} style={fs16RegGray6} text={fund.fundObjective} />
             </View>
             <CustomSpacer space={sw24} />
-            <View style={borderBottomGray4} />
+            <View style={borderBottomGray2} />
             {showMulti === true ? (
               <Fragment>
                 <View style={{ ...flexRow, ...px(sw24), ...py(sh24) }}>
                   {classes.length > 1 || (classes.length === 1 && classes[0].label !== "No Class") ? (
                     <Fragment>
-                      <AdvancedDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
+                      <NewDropdown handleChange={handleClass} items={classes} label={PRODUCT_DETAILS.LABEL_CLASS} value={inputClass} />
                       <CustomSpacer isHorizontal={true} space={sw64} />
                     </Fragment>
                   ) : null}
-                  <AdvancedDropdown
+                  <NewDropdown
                     handleChange={handleCurrency}
                     items={currencies}
                     label={PRODUCT_DETAILS.LABEL_CURRENCY}
@@ -255,37 +250,31 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({ fund, h
             <TextSpaceArea
               spaceToBottom={sh16}
               spaceToTop={sh24}
-              style={{ ...fs16BoldBlack2, ...px(sw24) }}
+              style={{ ...fs16BoldGray6, ...px(sw24) }}
               text={PRODUCT_DETAILS.LABEL_FUND_FACTS}
             />
             <View style={px(sw24)}>
               <TextCard {...textCardProps} />
             </View>
             {/* <CustomSpacer space={sw24} />
-          <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
+          <View style={{ ...flexRow, borderColor: colorGray._2, borderWidth: sh05 }} />
           <ProductGraph fund={fund} layout={{ width: sw832 }} /> */}
             {/* <CustomSpacer space={sw24} /> */}
             {documentList.length > 0 ? (
               <Fragment>
-                <View style={{ ...flexRow, borderColor: colorGray._1, borderWidth: sh05 }} />
-                <View style={{ ...px(sw24) }}>
+                <View style={{ ...flexRow, borderColor: colorGray._2, borderWidth: sh05 }} />
+                <View style={px(sw24)}>
                   <CustomSpacer space={sh24} />
                   <View style={{ ...flexRow, ...centerVertical }}>
-                    <Text style={{ ...fs16BoldBlack2 }}>{PRODUCT_DETAILS.LABEL_FUND_DOCUMENTS}</Text>
+                    <Text style={fs16BoldGray6}>{PRODUCT_DETAILS.LABEL_FUND_DOCUMENTS}</Text>
                     <CustomSpacer isHorizontal={true} space={sw12} />
                     {/* <TouchableWithoutFeedback onPress={handleShareDocuments}>
-                  <IcoMoon name="share" color={colorBlue._1} size={sw16} />
+                  <IcoMoon name="share" color={colorBlue._8} size={sw16} />
                 </TouchableWithoutFeedback> */}
                   </View>
                   <CustomSpacer space={sh14} />
                   <View style={flexRow}>
-                    <ButtonSelectionList
-                      color={colorBlue._2}
-                      data={documentList}
-                      icon="file"
-                      onPress={handleViewDocument}
-                      spaceBetween={sw16}
-                    />
+                    <ButtonSelectionList data={documentList} icon="file" onPress={handleViewDocument} spaceBetween={sw16} />
                   </View>
                 </View>
               </Fragment>

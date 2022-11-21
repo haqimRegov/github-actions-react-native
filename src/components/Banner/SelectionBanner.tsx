@@ -6,23 +6,25 @@ import {
   centerVertical,
   colorYellow,
   flexRowCC,
-  fs24BoldBlue2,
+  fs24BoldBlack2,
   fullWidth,
   px,
-  sh112,
+  sh96,
   sw16,
   sw200,
   sw24,
-  sw8,
 } from "../../styles";
 import { RoundedButton } from "../Touchables/RoundedButton";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
 interface SelectionBannerProps {
   bottomContent?: ReactNode;
+  buttonStyle?: ViewStyle;
   cancelOnPress?: () => void;
+  containerStyle?: ViewStyle;
   continueDebounce?: boolean;
   continueDisabled?: boolean;
+  continueLoading?: boolean;
   label: string;
   labelCancel?: string;
   labelStyle?: TextStyle;
@@ -32,9 +34,12 @@ interface SelectionBannerProps {
 
 export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
   bottomContent,
+  buttonStyle,
   cancelOnPress,
+  containerStyle,
   continueDebounce,
   continueDisabled,
+  continueLoading,
   label,
   labelCancel,
   labelStyle,
@@ -46,11 +51,12 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     ...fullWidth,
     ...px(sw24),
     backgroundColor: colorYellow._1,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
+    borderTopLeftRadius: sw24,
+    borderTopRightRadius: sw24,
     bottom: 0,
-    height: sh112,
+    minHeight: sh96,
     position: "absolute",
+    ...containerStyle,
   };
 
   const submitLabel = labelSubmit || "Done";
@@ -60,19 +66,26 @@ export const SelectionBanner: FunctionComponent<SelectionBannerProps> = ({
     <View style={{ ...centerVertical, ...px(sw24) }}>
       <View style={bottomContainer}>
         <View style={centerHorizontal}>
-          <Text style={{ ...fs24BoldBlue2, ...labelStyle }}>{label}</Text>
+          <Text style={{ ...fs24BoldBlack2, ...labelStyle }}>{label}</Text>
           {bottomContent}
         </View>
         <CustomFlexSpacer />
         {labelCancel !== undefined && cancelOnPress !== undefined ? (
           <Fragment>
-            <RoundedButton buttonStyle={{ width: sw200 }} onPress={cancelOnPress} radius={sw24} secondary={true} text={cancelLabel} />
+            <RoundedButton
+              buttonStyle={{ width: sw200, ...buttonStyle }}
+              onPress={cancelOnPress}
+              radius={sw24}
+              secondary={true}
+              text={cancelLabel}
+            />
             <CustomSpacer isHorizontal={true} space={sw16} />
           </Fragment>
         ) : null}
         <RoundedButton
           disabled={continueDisabled}
-          buttonStyle={{ width: sw200 }}
+          buttonStyle={{ width: sw200, ...buttonStyle }}
+          loading={continueLoading}
           onPress={submitOnPress}
           radius={sw24}
           text={submitLabel}

@@ -1,36 +1,21 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import { Alert, ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
-import { BlurView, CustomSpacer, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
-import { Language } from "../../../constants";
+import { BlurView, CustomSpacer, CustomToast, defaultContentProps, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { useDelete } from "../../../hooks";
 import { submitProofOfPayments } from "../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
-import {
-  borderBottomBlack21,
-  centerVertical,
-  flexChild,
-  flexGrow,
-  flexRow,
-  fs12RegBlack2,
-  fs16BoldBlack2,
-  fs16RegBlack2,
-  fs16SemiBoldBlack2,
-  fs24BoldBlack2,
-  px,
-  sh112,
-  sh24,
-  sh32,
-  sh8,
-  shadow5,
-  sw24,
-  sw4,
-} from "../../../styles";
-import { PaymentOrder, PaymentPopup } from "../../../templates";
-import { AlertDialog, formatAmount, parseAmountToString } from "../../../utils";
+import { flexChild, flexGrow, px, py, sh152, sh24, shadow50Black115, sw24 } from "../../../styles";
+import { OrderPayment } from "../../../templates";
+import { calculateExcess, checkCurrencyCompleted, generatePaymentWithKeys, handleEPFStructuring } from "../../../templates/Payment/helpers";
+import { NewPaymentPrompt } from "../../../templates/Payment/NewPaymentPrompt";
+import { PaymentBannerContent } from "../../../templates/Payment/PaymentBanner";
+import { parseAmount } from "../../../utils";
 
-const { PAYMENT } = Language.PAGE;
+const { PAYMENT, TOAST } = Language.PAGE;
 interface PaymentProps extends AcknowledgementStoreProps, OnboardingContentProps {
   navigation: IStackNavigationProp;
 }
@@ -41,101 +26,161 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
   handleResetOnboarding,
   navigation,
   orders,
-  paymentSummary,
   personalInfo,
-  updatePaymentSummary,
+  updatePill,
 }: PaymentProps) => {
-  const fetching = useRef<boolean>(false);
-  const [activeOrder, setActiveOrder] = useState<string>("");
+  const [proofOfPayments, setProofOfPayments] = useState<IPaymentRequired[] | undefined>(undefined);
+  const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
+  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
+  const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
+  const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
+  const [localRecurringDetails, setLocalRecurringDetails] = useState<IRecurringDetails | undefined>(undefined);
+  const [localCtaDetails, setLocalCtaDetails] = useState<TypeCTADetails[]>([]);
+
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [promptType, setPromptType] = useState<"summary" | "success">("summary");
+
+  const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
+  const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
+
+  const [activeOrder, setActiveOrder] = useState<{ order: string; fund: string }>({ order: "", fund: "" });
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
-  const [viewFund, setViewFund] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const checkProofOfPayments = proofOfPayments !== undefined ? [...proofOfPayments] : [];
+  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IPaymentRequired[]>(checkProofOfPayments, setProofOfPayments);
 
-  const handleSubmit = async () => {
-    if (fetching.current === false) {
-      fetching.current = true;
-      setLoading(true);
-      const paymentOrders: ISubmitProofOfPaymentOrder[] = paymentSummary!.orders.map(
-        ({ orderNumber, paymentType, payments }: IPaymentOrderState) => {
-          const payment: ISubmitProofOfPayment[] = payments
-            .map((paymentInfo: IPaymentState, index: number) => {
-              const updatedPaymentInfo = { ...paymentInfo };
-              delete updatedPaymentInfo.combinedBankAccountName;
-              const temporaryReference =
-                updatedPaymentInfo.paymentMethod === "Online Banking / TT / ATM" ||
-                updatedPaymentInfo.paymentMethod === "Client Trust Account (CTA)"
-                  ? `${orderNumber}${index}${moment().format("x")}`
-                  : undefined;
+  const handleFetch = async () => {
+    if (orders !== undefined) {
+      const result: IPaymentRequired[] = orders.orders.map((order: IOrder) => {
+        const state: IPaymentRequired = {
+          allowedRecurringType: order.allowedRecurringType || [],
+          createdOn: moment(order.orderDate, DEFAULT_DATE_FORMAT).format("x"),
+          ctaDetails: [],
+          epfAccountNumber: order.paymentType === "EPF" ? personalInfo.principal!.epfDetails!.epfMemberNumber! : null,
+          funds: order.investments,
+          orderNumber: order.orderNumber,
+          paymentCount: 0,
+          payments: [],
+          paymentType: order.paymentType,
+          recurringDetails: undefined,
+          status: "Pending Payment",
+          surplusBalance: [],
+          totalInvestment: order.orderTotalAmount,
+          totalPaidAmount: [],
+        };
 
-              return {
-                ...updatedPaymentInfo,
-                referenceNumber: temporaryReference, // TODO temporary
-                amount: paymentType === "Recurring" ? undefined : parseAmountToString(paymentInfo.amount!),
-                bankAccountName:
-                  paymentInfo.combinedBankAccountName !== undefined && paymentInfo.combinedBankAccountName !== ""
-                    ? paymentInfo.combinedBankAccountName
-                    : paymentInfo.bankAccountName,
-                currency: paymentType === "Recurring" ? "MYR" : paymentInfo.currency!,
-                transactionDate: paymentType === "EPF" ? undefined : moment(paymentInfo.transactionDate).valueOf(),
-                transactionTime: paymentInfo.transactionTime !== undefined ? moment(paymentInfo.transactionTime).valueOf() : undefined,
-              };
-            })
-            .filter((value) => value.saved === true);
+        return state;
+      });
+      setProofOfPayments(result);
+      setTempData(result);
+      setGrandTotal({ grandTotal: orders.grandTotal, grandTotalRecurring: orders.grandTotalRecurring! });
+    }
+  };
+
+  const handleSubmit = async (confirmed?: boolean) => {
+    try {
+      if (confirmed === undefined) {
+        setShowPopup(true);
+      } else {
+        setButtonLoading(true);
+      }
+      const updatedPayments: IPaymentRequired[] = [];
+      if (tempData !== undefined) {
+        tempData.forEach((eachOrder) => {
+          const structuredPayments: IPaymentInfo[] = handleEPFStructuring(eachOrder.payments);
+          updatedPayments.push({ ...eachOrder, payments: structuredPayments });
+        });
+      }
+      const paymentOrders = await Promise.all(
+        updatedPayments.map(async ({ orderNumber, paymentType, payments }: IPaymentRequired) => {
+          const payment = await generatePaymentWithKeys(
+            payments,
+            paymentType,
+            orderNumber,
+            details!.principalHolder!.clientId!,
+            "Onboarding",
+          );
+
           return { orderNumber: orderNumber, paymentType: paymentType, payments: payment };
-        },
+        }),
       );
-      const request = { orders: paymentOrders };
-      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(request, navigation);
-      fetching.current = false;
+      const request = { orders: paymentOrders, isConfirmed: confirmed === true };
+      const paymentResponse: ISubmitProofOfPaymentsResponse = await submitProofOfPayments(
+        request,
+        navigation,
+        confirmed === true ? setButtonLoading : setShowPopup,
+      );
+      if (confirmed === true) {
+        setButtonLoading(false);
+      }
       if (paymentResponse !== undefined) {
         const { data, error } = paymentResponse;
         if (error === null && data !== null) {
-          setPaymentResult(data.result);
-          // setErrorMessage(undefined);
-          // return data.result.message === "NTB" ? setClientType("NTB") : Alert.alert("Client is ETB");
+          if (confirmed === true) {
+            setPromptType("success");
+          } else {
+            setPaymentResult(data.result);
+          }
         }
         if (error !== null) {
-          const errorList = error.errorList?.join("\n");
-          AlertDialog(error.message, () => setLoading(false), errorList);
+          throw error;
         }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (confirmed === undefined) {
+        setShowPopup(false);
+      } else {
+        setButtonLoading(false);
+      }
+      if ("errorCode" in error) {
+        Alert.alert(error.message);
       }
     }
     return undefined;
   };
 
-  const completedOrders: IPaymentOrderState[] =
-    paymentSummary !== undefined ? paymentSummary.orders.filter((order) => order.completed === true) : [];
+  const handleCancelPopup = () => {
+    setPaymentResult(undefined);
+    setShowPopup(false);
+  };
 
-  const completedText = `${completedOrders.length} ${PAYMENT.LABEL_COMPLETED}`;
-  const pendingCount = paymentSummary !== undefined ? paymentSummary.orders.length - completedOrders.length : 0;
-  const pendingText = `${pendingCount} ${PAYMENT.LABEL_PENDING_PAYMENT}`;
-  const completedBannerText = pendingCount === 0 ? `${completedText}` : `${pendingText}, ${completedText}`;
-  const bannerText = completedOrders.length === 0 ? `${pendingText}` : completedBannerText;
+  const handleConfirmPopup = async () => {
+    if (confirmPayment === true) {
+      handleResetOnboarding();
+      if (
+        paymentResult !== undefined &&
+        paymentResult.orders.filter((eachOrder: ISubmitProofOfPaymentResultOrder) => eachOrder.status === "Submitted").length ===
+          paymentResult.orders.length
+      ) {
+        updatePill("submitted");
+        return true;
+      }
+      return undefined;
+    }
 
-  const withFloatingAmount =
-    paymentSummary !== undefined
-      ? paymentSummary.orders.filter(
-          (order) => order.floatingAmount !== undefined && order.floatingAmount.length > 0 && order.paymentType === "Cash",
-        )
-      : [];
+    const response = await handleSubmit(true);
+    if (response === undefined) {
+      setConfirmPayment(true);
+      return true;
+    }
 
-  const floatingTotalAmount = withFloatingAmount.map(({ floatingAmount }) => floatingAmount!).flat(1);
-  const floatingLabel =
-    floatingTotalAmount.length > 0
-      ? floatingTotalAmount
-          .reduce((accumulator: IFloatingAmount[], current: IFloatingAmount) => {
-            const currencyIndex = accumulator.findIndex((value: IFloatingAmount) => value.currency === current.currency);
-            if (currencyIndex === -1) {
-              accumulator.push(current);
-            } else {
-              accumulator[currencyIndex].amount += current.amount;
-            }
-            return accumulator;
-          }, [])
-          .filter(({ amount }) => amount > 0)
-          .map(({ amount, currency }) => `${currency} ${formatAmount(amount)}`)
-          .join(", ")
-      : "";
+    return undefined;
+  };
+
+  const handleApplicationBalance = (currentData: IPaymentInfo[], deleted?: boolean) => {
+    if (deleted !== true) {
+      setApplicationBalance(currentData);
+    }
+    setTempApplicationBalance(currentData);
+  };
+
+  const handleUndoDelete = () => {
+    if (proofOfPayments !== undefined) {
+      setTempData(proofOfPayments);
+      setApplicationBalance(applicationBalance);
+    }
+  };
 
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
@@ -146,108 +191,191 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
     );
   }
 
-  useEffect(() => {
-    if (paymentSummary === undefined && orders !== undefined) {
-      const newOrders: IPaymentOrderState[] = orders.orders.map((order: IOrder) => {
-        return {
-          ...order,
-          payments: [],
+  const pendingLength =
+    tempData !== undefined && tempData.length > 0
+      ? [...tempData].filter((eachPayment: IPaymentRequired) => eachPayment.status !== "Completed").length
+      : 0;
+  const completedLength =
+    tempData !== undefined && tempData.length > 0
+      ? tempData.filter((eachPayment: IPaymentRequired) => eachPayment.status === "Completed").length
+      : 0;
+  const pendingText =
+    tempData !== undefined && pendingLength === tempData.length ? `All (${tempData.length}) pending` : `${pendingLength} pending, `;
+  const completedText =
+    tempData !== undefined && completedLength === tempData.length ? `All (${tempData.length}) completed` : `${completedLength} completed`;
+  const bannerText = `${PAYMENT.BANNER_LABEL}: ${pendingLength > 0 ? pendingText : ""}${completedLength > 0 ? completedText : ""}`;
+  // To show the available balance and also the excess
+  const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
+  const checkAllCompleted =
+    tempData !== undefined
+      ? tempData.filter(
+          (eachPOPCheck: IPaymentRequired) =>
+            eachPOPCheck.status === "Completed" || eachPOPCheck.paymentType !== "Cash" || checkCurrencyCompleted(eachPOPCheck, "MYR"),
+        )
+      : [];
+  const updatedBalancePayments =
+    tempData !== undefined
+      ? balancePayments.filter(
+          (eachBalance: IOrderAmount) =>
+            eachBalance.currency === "MYR" && checkAllCompleted.length !== tempData?.length && parseAmount(eachBalance.amount) !== 0,
+        )
+      : [];
+  const completedCurrencies =
+    tempData !== undefined
+      ? balancePayments.filter(
+          (eachSurplus: IOrderAmount) =>
+            (eachSurplus.currency !== "MYR" || checkAllCompleted.length === tempData.length) && parseAmount(eachSurplus.amount) !== 0,
+        )
+      : [];
 
-          completed: false,
-          floatingAmount: [],
-        };
-      });
-      updatePaymentSummary({ grandTotal: orders.grandTotal, orders: newOrders });
+  const continueDisabled =
+    tempData !== undefined &&
+    tempData.map((pop) => pop.payments.some((findPayment) => findPayment.saved === true)).includes(true) === false;
+
+  useEffect(() => {
+    if (deleteCount === 0) {
+      setApplicationBalance(tempApplicationBalance);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [deleteCount]);
 
-  const findSavedPayment = paymentSummary !== undefined ? paymentSummary.orders.map((order) => order.payments).flat() : [];
-  const continueDisabled = findSavedPayment.findIndex((payment) => payment.saved === true) === -1;
+  useEffect(() => {
+    handleFetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SafeAreaPage>
       <View style={flexChild}>
         <ScrollView contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={flexChild}>
-            <CustomSpacer space={sh32} />
+            <CustomSpacer space={defaultContentProps.spaceToTop!} />
             <View style={px(sw24)}>
               <LabeledTitle
                 label={PAYMENT.HEADING}
-                labelStyle={fs24BoldBlack2}
-                spaceToLabel={sh8}
+                labelStyle={defaultContentProps.subheadingStyle}
+                spaceToLabel={defaultContentProps.spaceToTitle}
                 title={PAYMENT.SUBHEADING}
-                titleStyle={fs16SemiBoldBlack2}
+                titleStyle={defaultContentProps.subtitleStyle}
               />
             </View>
-            {paymentSummary !== undefined &&
-              paymentSummary.orders.map((order: IPaymentOrderState, index: number) => {
-                const setPaymentOrder = (paymentOrder: IPaymentOrderState) => {
-                  const updatedPaymentOrders = [...paymentSummary.orders];
-                  updatedPaymentOrders[index] = paymentOrder;
-                  updatePaymentSummary({ ...paymentSummary, orders: updatedPaymentOrders });
+            {tempData !== undefined &&
+              tempData.map((proofOfPayment: IPaymentRequired, index: number) => {
+                const setProofOfPayment = (
+                  value: IPaymentRequired,
+                  action?: ISetProofOfPaymentAction,
+                  deleted?: boolean,
+                  setActiveInfo?: (activeIndex: number) => void,
+                ) => {
+                  let updatedProofOfPayments: IPaymentRequired[] = [...tempData];
+                  updatedProofOfPayments[index] = { ...updatedProofOfPayments[index], ...value };
+                  if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined) {
+                    const tagKey = action.mode === "surplus" ? "tag" : "ctaTag";
+                    const parentKey = action.mode === "surplus" ? "parent" : "ctaParent";
+                    const updatedPOP = updatedProofOfPayments.map((eachOrder) => {
+                      const filteredPayments = eachOrder.payments.filter((eachPOP) => {
+                        const deleteCondition =
+                          (eachPOP[tagKey] === undefined && eachPOP[parentKey] !== action.paymentId) ||
+                          (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
+                        const updateCondition =
+                          eachPOP[tagKey] === undefined || (eachPOP[tagKey] !== undefined && eachPOP[tagKey]!.uuid !== action.paymentId);
+
+                        return action.option === "delete" ? deleteCondition : updateCondition;
+                      });
+                      return {
+                        ...eachOrder,
+                        status: filteredPayments.length === 0 ? "Pending Payment" : eachOrder.status,
+                        payments: filteredPayments,
+                      };
+                    });
+                    updatedProofOfPayments = [...updatedPOP];
+                  }
+                  if (
+                    updatedProofOfPayments[index].payments.length !== 0 &&
+                    "saved" in updatedProofOfPayments[index].payments[updatedProofOfPayments[index].payments.length - 1] &&
+                    updatedProofOfPayments[index].payments[updatedProofOfPayments[index].payments.length - 1].saved === false &&
+                    setActiveInfo !== undefined
+                  ) {
+                    setActiveInfo(updatedProofOfPayments[index].payments.length - 1);
+                  }
+                  setTempData(updatedProofOfPayments);
+                  if (deleted === false) {
+                    setProofOfPayments(updatedProofOfPayments);
+                  }
                 };
+
                 return (
                   <Fragment key={index}>
-                    {index === 0 ? null : (
-                      <Fragment>
-                        <View style={borderBottomBlack21} />
-                      </Fragment>
-                    )}
-                    <BlurView visible={activeOrder === "" || activeOrder === order.orderNumber}>
-                      <CustomSpacer space={sh24} />
-                      <View style={{ ...px(sw24), ...shadow5 }}>
-                        <PaymentOrder
+                    <BlurView visible={activeOrder.order === "" || activeOrder.order === proofOfPayment.orderNumber}>
+                      <View style={{ ...px(sw24), ...shadow50Black115 }}>
+                        <OrderPayment
                           accountNames={accountNames}
                           activeOrder={activeOrder}
-                          epfAccountNumber={personalInfo.principal!.epfDetails!.epfMemberNumber}
-                          paymentOrder={order}
+                          applicationBalance={tempApplicationBalance}
+                          deleteCount={deleteCount}
+                          deletedPayment={tempDeletedPayment}
+                          localCtaDetails={localCtaDetails}
+                          localRecurringDetails={localRecurringDetails}
+                          proofOfPayment={proofOfPayment}
                           setActiveOrder={setActiveOrder}
-                          setPaymentOrder={setPaymentOrder}
-                          setViewFund={setViewFund}
-                          viewFund={viewFund}
+                          setApplicationBalance={handleApplicationBalance}
+                          setDeleteCount={setDeleteCount}
+                          setDeletedPayment={setTempDeletedPayment}
+                          setLocalCtaDetails={setLocalCtaDetails}
+                          setLocalRecurringDetails={setLocalRecurringDetails}
+                          setProofOfPayment={setProofOfPayment}
+                          setSavedChangesToast={setSavedChangesToast}
                         />
                       </View>
-                      <CustomSpacer space={sh24} />
                     </BlurView>
                   </Fragment>
                 );
               })}
-            {activeOrder !== "" ? null : <CustomSpacer space={sh112} />}
+            {activeOrder.order !== "" ? <CustomSpacer space={sh24} /> : <CustomSpacer space={sh152} />}
           </View>
         </ScrollView>
-        {activeOrder !== "" ? null : (
-          <SelectionBanner
-            bottomContent={
-              <View>
-                <View style={{ ...centerVertical, ...flexRow }}>
-                  {paymentSummary !== undefined &&
-                    paymentSummary.grandTotal.map((totalAmount: IOrderAmount, index: number) => {
-                      return (
-                        <View key={index} style={{ ...centerVertical, ...flexRow }}>
-                          {index !== 0 ? (
-                            <Text style={{ ...fs16RegBlack2, ...px(sw4) }}>+</Text>
-                          ) : (
-                            <Text style={fs16RegBlack2}>{`${PAYMENT.LABEL_GRAND_TOTAL} `}</Text>
-                          )}
-                          <Text style={fs16RegBlack2}>{totalAmount.currency}</Text>
-                          <CustomSpacer isHorizontal={true} space={sw4} />
-                          <Text style={fs16BoldBlack2}>{formatAmount(totalAmount.amount)}</Text>
-                        </View>
-                      );
-                    })}
-                </View>
-                {floatingLabel !== "" ? <Text style={fs12RegBlack2}>{`${PAYMENT.LABEL_SURPLUS}: ${floatingLabel}`}</Text> : null}
-              </View>
-            }
-            continueDisabled={continueDisabled}
-            labelSubmit={PAYMENT.BUTTON_SUBMIT}
-            submitOnPress={handleSubmit}
-            label={bannerText}
-          />
+        {activeOrder.order !== "" ? null : (
+          <Fragment>
+            {updatedBalancePayments.length > 0 ? <CustomSpacer space={sh24} /> : null}
+            {completedCurrencies.length > 0 ? <CustomSpacer space={sh24} /> : null}
+            <SelectionBanner
+              bottomContent={
+                tempData !== undefined && grandTotal !== undefined ? (
+                  <PaymentBannerContent
+                    balancePayments={updatedBalancePayments}
+                    excessPayments={completedCurrencies}
+                    grandTotal={grandTotal.grandTotal}
+                    grandTotalRecurring={grandTotal?.grandTotalRecurring}
+                    paymentType={"Cash"}
+                  />
+                ) : null
+              }
+              containerStyle={py(sh24)}
+              continueDisabled={continueDisabled}
+              labelSubmit={PAYMENT.BUTTON_SUBMIT}
+              submitOnPress={handleSubmit}
+              label={bannerText}
+            />
+          </Fragment>
         )}
       </View>
-      <PaymentPopup handleDone={handleResetOnboarding} loading={loading} result={paymentResult} />
+      <NewPaymentPrompt
+        buttonLoading={buttonLoading}
+        handleCancel={handleCancelPopup}
+        handleConfirm={handleConfirmPopup}
+        promptType={promptType}
+        result={paymentResult}
+        visible={showPopup}
+      />
+      <CustomToast
+        count={deleteCount}
+        deleteText={TOAST.LABEL_PAYMENT_INFO_DELETED}
+        duration={5}
+        isDeleteToast={true}
+        onPress={handleUndoDelete}
+        setCount={setDeleteCount}
+      />
+      <CustomToast parentVisible={savedChangesToast} setParentVisible={setSavedChangesToast} />
     </SafeAreaPage>
   );
 };

@@ -1,26 +1,26 @@
 import React, { FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CustomFlexSpacer, CustomSpacer, LabeledTitleProps, TextCard } from "../../../components";
+import { CustomFlexSpacer, CustomSpacer, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
-  borderBottomRed4,
+  borderBottomRed1,
   centerVertical,
   colorBlue,
   colorWhite,
   flexRow,
-  fs12RegBlack2,
-  fs16BoldBlack2,
-  fs24BoldBlack2,
+  fs12RegGray6,
+  fs16BoldGray6,
+  fs24BoldGray6,
   fsTransformNone,
   px,
   py,
   sh16,
   sh24,
   sh64,
-  shadowBlack116,
-  shadowBlue204,
+  shadow12Black116,
+  shadow12Blue104,
   sw16,
   sw24,
   sw8,
@@ -29,7 +29,7 @@ import {
 const { SUMMARY } = Language.PAGE;
 
 interface SummaryJointDetailsProps {
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   principalName: string;
   jointName: string;
   jointDetails: LabeledTitleProps[];
@@ -44,9 +44,9 @@ interface TitleIconProps {
 const TitleIcon = ({ onPress, title, titleStyle }: TitleIconProps) => {
   return (
     <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-      <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{title}</Text>
+      <Text style={{ ...fs16BoldGray6, ...titleStyle }}>{title}</Text>
       <CustomSpacer isHorizontal={true} space={sw16} />
-      <IcoMoon color={colorBlue._1} name="edit" onPress={onPress} size={sh24} />
+      <IcoMoon color={colorBlue._8} name="edit" onPress={onPress} size={sh24} suppressHighlighting={true} />
     </View>
   );
 };
@@ -61,8 +61,8 @@ export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = 
     ...centerVertical,
     ...flexRow,
     ...px(sw24),
-    ...borderBottomRed4,
-    ...shadowBlue204,
+    ...borderBottomRed1,
+    ...shadow12Blue104,
     backgroundColor: colorWhite._1,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
@@ -78,11 +78,11 @@ export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = 
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
-      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
+      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadow12Black116 }}>
         <View style={headerStyle}>
-          <Text style={fs24BoldBlack2}>{`${principalName} & ${jointName}`}</Text>
+          <Text style={fs24BoldGray6}>{`${principalName} & ${jointName}`}</Text>
           <CustomFlexSpacer />
-          <Text style={fs12RegBlack2}>{SUMMARY.TITLE_JOINT_ACCOUNT}</Text>
+          <Text style={fs12RegGray6}>{SUMMARY.TITLE_JOINT_ACCOUNT}</Text>
         </View>
         <View>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_ADDITIONAL} />

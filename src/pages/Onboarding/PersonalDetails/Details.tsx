@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, Switch, TextSpaceArea } from "../../../components";
+import { CustomSpacer, NewDropdown, Switch, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
 import {
   DICTIONARY_ALL_ID_TYPE,
@@ -10,7 +10,7 @@ import {
   DICTIONARY_HOUSEHOLD_INCOME,
   ERROR,
 } from "../../../data/dictionary";
-import { borderBottomBlack21, fs12SemiBoldGray8, fs24BoldBlack2, px, sh24, sh32, sh40, sh8, sw24, sw40 } from "../../../styles";
+import { borderBottomGray2, fs12RegGray5, fs24BoldGray6, px, sh24, sh32, sh40, sh8, sw24, sw360, sw40 } from "../../../styles";
 import { isNonNumber, isNumber } from "../../../utils";
 import { BankDetails } from "./BankDetails";
 import { ContactDetails } from "./ContactDetails";
@@ -161,7 +161,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
         setInputOtherEducation={setInputOtherEducation}
       />
       <View style={px(sw24)}>
-        <AdvancedDropdown
+        <NewDropdown
           items={DICTIONARY_HOUSEHOLD_INCOME}
           handleChange={setInputMonthlyHousehold}
           label={
@@ -172,7 +172,7 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
           value={inputMonthlyHousehold}
         />
       </View>
-      <TextSpaceArea spaceToTop={sh8} style={{ ...fs12SemiBoldGray8, ...px(sw40) }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
+      <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, ...px(sw40), width: sw360 }} text={PERSONAL_DETAILS.LABEL_COMBINED} />
       {epfInvestment === true && accountHolder === "Principal" ? (
         <EPFDetails
           epfNumberError={validations.epfNumber}
@@ -184,21 +184,21 @@ export const PersonalInfo: FunctionComponent<PersonalInfoProps> = ({
           setInputEpfType={setInputEpfType}
         />
       ) : (
-        <CustomSpacer space={sh24} />
+        <CustomSpacer space={sh32} />
       )}
       {accountType === "Joint" && accountHolder === "Joint" ? null : (
         <Fragment>
           {isAllEpf === true ? (
             <View style={px(sw24)}>
               <Switch label={PERSONAL_DETAILS.LABEL_ADD_BANK_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
+              <CustomSpacer space={sh40} />
             </View>
           ) : null}
           {enabled === true || isAllEpf === false ? (
             <Fragment>
-              <CustomSpacer space={sh40} />
-              <View style={borderBottomBlack21} />
+              <View style={borderBottomGray2} />
               <View style={px(sw24)}>
-                <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldBlack2} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
+                <TextSpaceArea spaceToBottom={sh24} spaceToTop={sh32} style={fs24BoldGray6} text={PERSONAL_DETAILS.HEADING_ADDITIONAL} />
               </View>
               <BankDetails
                 bankNames={accountNames}

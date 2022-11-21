@@ -19,7 +19,7 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
         ...action.payload,
       };
 
-    case "onboarding/RESET_STEPS":
+    case "onboarding/RESET_ONBOARDING":
       return {
         disabledSteps: [
           "Products",

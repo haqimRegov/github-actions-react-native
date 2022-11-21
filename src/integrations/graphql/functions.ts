@@ -10,7 +10,6 @@ export const gqlOperation = async <ResultType extends {}, VariablesType extends 
       data: ResultType;
     };
     // // eslint-disable-next-line no-console
-    // console.log("Response from gqlOperation", response);
     // if ("error" in response.data || Object.values(response.data).includes(null)) {
     //   throw Error;
     // }

@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const clientRegister = async (
   variables: IClientRegisterRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,13 +14,14 @@ export const clientRegister = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
-    if (data === undefined || "clientRegister" in data === false) {
+    if (data === undefined || "clientRegisterV2" in data === false) {
       throw data;
     }
 
-    return data.clientRegister;
+    return data.clientRegisterV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in clientRegister at ClientRegister.ts", error);

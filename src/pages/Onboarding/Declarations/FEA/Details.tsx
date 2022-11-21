@@ -8,7 +8,7 @@ import {
   flexChild,
   flexRow,
   fs12BoldWhite1,
-  fs16SemiBoldBlack2,
+  fs16SemiBoldGray6,
   px,
   sh16,
   sh24,
@@ -83,7 +83,7 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
         )}
         <CustomSpacer space={sh24} />
         <View style={flexRow}>
-          <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.LABEL_MALAYSIAN}</Text>
+          <Text style={fs16SemiBoldGray6}>{DECLARATIONS.LABEL_MALAYSIAN}</Text>
           <CustomSpacer isHorizontal={true} space={sw12} />
           <CustomTooltip
             arrowSize={{ width: sw12, height: sw7 }}
@@ -98,9 +98,15 @@ export const FeaDeclarationDetails: FunctionComponent<FeaDeclarationDetailsProps
         <CustomSpacer space={sh8} />
         <ToggleButton value={resident!} onSelect={handleResident} />
         <CustomSpacer space={sh32} />
-        <Text style={{ ...fs16SemiBoldBlack2, width: sw600 }}>{DECLARATIONS.LABEL_BANK_NEGARA}</Text>
+        <Text style={{ ...fs16SemiBoldGray6, width: sw600 }}>{DECLARATIONS.LABEL_BANK_NEGARA}</Text>
         <CustomSpacer space={sh16} />
-        <AdvanceToggleButton labels={OPTIONS_FEA_FACILITY} onSelect={handleFacility} value={facility!} />
+        <AdvanceToggleButton
+          buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}
+          labels={OPTIONS_FEA_FACILITY}
+          labelStyle={{ lineHeight: sh24 }}
+          onSelect={handleFacility}
+          value={facility!}
+        />
         <CustomSpacer space={sw32} />
         <CustomTextInput
           error={balanceError}

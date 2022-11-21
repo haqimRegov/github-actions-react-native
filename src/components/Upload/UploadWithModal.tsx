@@ -7,6 +7,7 @@ import {
   centerHV,
   centerVertical,
   colorBlack,
+  colorGray,
   colorTransparent,
   colorWhite,
   flexChild,
@@ -23,7 +24,7 @@ import {
   sh40,
   sh500,
   sh96,
-  shadow5,
+  shadow12Blue108,
   sw10,
   sw204,
   sw40,
@@ -31,14 +32,16 @@ import {
 } from "../../styles";
 import { BasicModal } from "../Modals";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
-import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./Upload";
+import { BYTE_TO_KILOBYTE, BYTE_TO_MEGABYTE, UploadDocument } from "./UploadDocument";
+
+type ResourceType = "url" | "file" | "base64";
 
 interface UploadWithModalProps extends UploadProps {
-  resourceType?: "url" | "file" | "base64";
+  resourceType?: ResourceType;
   withPreview?: boolean;
 }
 
-export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalProps>((props, ref) => {
+export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, UploadWithModalProps>((props, ref) => {
   const { onPress, resourceType, value, withPreview, ...uploadProps }: UploadWithModalProps = props;
   const [viewFile, setViewFile] = useState<boolean>(false);
 
@@ -67,9 +70,9 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
     height: sh32,
   };
   const headerBGColor = value !== undefined && value.type === "application/pdf" ? { backgroundColor: colorWhite._1 } : {};
-  const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorBlack._2 : colorWhite._1;
+  const headerTextColor = value !== undefined && value.type === "application/pdf" ? colorGray._6 : colorWhite._1;
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
-  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow5 };
+  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow12Blue108 };
   const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
   const previewStyle: ImageStyle = { ...imageContain, height: sh140, width: sw204 };
 
@@ -78,11 +81,13 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
   let pdfValue = "";
   let isFileValid = false;
   let imageValue: ImageSourcePropType = [];
+  let pdfResourceType: ResourceType = "base64";
 
   if (resourceType === "file" && value !== undefined && value.path !== undefined) {
     pdfValue = value.path;
     isFileValid = true;
     imageValue = { uri: value.path };
+    pdfResourceType = "file";
   }
 
   if (resourceType === "base64" && value !== undefined && value.base64 !== undefined) {
@@ -90,18 +95,21 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
     isFileValid = true;
     const base64String = `data:${value.type};base64,${value.base64}`;
     imageValue = { uri: base64String };
+    pdfResourceType = "base64";
   }
 
   if (resourceType === undefined && value !== undefined && value.path !== undefined) {
     pdfValue = value.base64 !== undefined ? value.base64 : "";
     isFileValid = true;
     imageValue = { uri: value.path };
+    pdfResourceType = "base64";
   }
 
   if (resourceType === undefined && value !== undefined && value.url !== undefined) {
     pdfValue = value.url;
     isFileValid = true;
     imageValue = { uri: value.url };
+    pdfResourceType = "url";
   }
 
   return (
@@ -131,7 +139,7 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
                 <View style={viewImageHeader}>
                   <LabeledTitle label={value.name} labelStyle={headerTextStyle} title={fileSizeLabel} titleStyle={headerTextStyle} />
                   <CustomFlexSpacer />
-                  <IcoMoon color={headerTextColor} name="close" onPress={handleCloseFile} size={sh24} />
+                  <IcoMoon color={headerTextColor} name="close" onPress={handleCloseFile} size={sh24} suppressHighlighting={true} />
                 </View>
                 <CustomSpacer space={sh24} />
               </View>
@@ -144,11 +152,11 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef, UploadWithModalPro
                         fadeInDuration={350}
                         style={{ ...fullHW, ...flexChild }}
                         resource={pdfValue}
-                        resourceType={resourceType || "base64"}
+                        resourceType={pdfResourceType}
                       />
                     </View>
                   ) : (
-                    <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_85 }}>
+                    <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_7 }}>
                       <Image source={imageValue} style={imageStyle} />
                     </View>
                   )}

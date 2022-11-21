@@ -1,39 +1,32 @@
 import React, { Fragment, ReactNode } from "react";
-import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, ScrollView, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { version } from "../../../package.json";
+import { environment, version } from "../../../package.json";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
+import { DICTIONARY_LINK_PRIVACY } from "../../data/dictionary";
+import { RNInAppBrowser, S3_URL } from "../../integrations";
 import {
-  border,
-  colorBlue,
   colorWhite,
   DEVICE,
   flexChild,
   flexGrow,
   flexRow,
-  fs12RegBlack2,
-  fs12SemiBoldBlue2,
-  fs12SemiBoldGray8,
+  fs10RegGray3,
+  fs10RegGray5,
+  fs12BoldBlue1,
   imageContain,
-  px,
   scaleHeight,
-  sh12,
   sh32,
   sh64,
-  sw1,
-  sw16,
-  sw160,
-  sw164,
-  sw24,
-  sw48,
+  sw168,
+  sw428,
   sw532,
   sw56,
-  sw64,
   sw8,
 } from "../../styles";
-import { IconText, LinkTextGroup, LinkTextProps } from "../Touchables";
+import { LinkTextGroup, LinkTextProps } from "../Touchables";
 import { CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../Views";
 import { SafeAreaPage } from "./SafeAreaPage";
 
@@ -41,26 +34,16 @@ const { LOGIN } = Language.PAGE;
 
 interface LoginPageProps {
   children: ReactNode;
-  page?: TypeLoginPages;
-  setPage: (page: TypeLoginPages) => void;
 }
 
-export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => {
+export const LoginBackground = ({ children }: LoginPageProps) => {
   const { bottom } = useSafeAreaInsets();
-  // const handlePrivacyPolicy = () => {
-  //   LinkUtils.openLink(DICTIONARY_LINK_PRIVACY);
-  // };
-
-  // const handleTermsAndConditions = () => {
-  //   LinkUtils.openLink(DICTIONARY_LINK_TERMS);
-  // };
-
-  const handleAgentOnboarding = () => {
-    setPage("FIRST_TIME_LOGIN");
+  const handlePrivacyPolicy = () => {
+    RNInAppBrowser.openLink(DICTIONARY_LINK_PRIVACY);
   };
 
-  const handleBackToLogin = () => {
-    setPage("LOGIN");
+  const handlePlatformAgreement = () => {
+    RNInAppBrowser.openLink(S3_URL.platformAgreement);
   };
 
   // TODO Module 1A will only support English language
@@ -72,46 +55,26 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
   //   },
   //   {
   //     onPress: undefined,
-  //     style: fs12RegBlack2,
+  //     style: fs12RegGray6,
   //     text: LOGIN.LANGUAGE_ENGLISH,
   //   },
   // ];
 
-  // const agentOnboardingLink = {
-  //   onPress: handleAgentOnboarding,
-  //   text: LOGIN.LINK_AGENT_ONBOARDING,
-  //   style: fs12SemiBoldBlue2,
-  // };
-
-  const backToLoginLink = {
-    onPress: handleBackToLogin,
-    text: LOGIN.LINK_BACK_TO_LOGIN,
-    style: fs12SemiBoldBlue2,
-  };
-
   const bottomLinks: LinkTextProps[] = [
-    // {
-    //   onPress: handlePrivacyPolicy,
-    //   text: LOGIN.LINK_PRIVACY_POLICY,
-    //   style: fs12SemiBoldBlue2,
-    // },
     {
-      text: `Build Version ${version}`,
-      style: fs12SemiBoldGray8,
+      onPress: handlePlatformAgreement,
+      text: LOGIN.LABEL_PLATFORM_AGREEMENT,
+      style: fs12BoldBlue1,
+    },
+    {
+      onPress: handlePrivacyPolicy,
+      text: LOGIN.LINK_PRIVACY_POLICY,
+      style: fs12BoldBlue1,
     },
   ];
 
-  // if (page === "LOGIN") {
-  //   bottomLinks.push(agentOnboardingLink);
-  // }
-
-  if (page === "PASSWORD_RECOVERY") {
-    bottomLinks.push(backToLoginLink);
-  }
-
   const backgroundStyle: ImageStyle = { width: sw532, height: DEVICE.WINDOW.HEIGHT };
-  const logoStyle: ImageStyle = { ...imageContain, height: sh64, width: sw160 };
-  const buttonStyle: ViewStyle = { ...border(colorBlue._2, sw1, sw24), ...px(sw16), width: sw164, height: sh32 };
+  const logoStyle: ImageStyle = { ...imageContain, height: sh64, width: sw168 };
 
   // issue with importing scaled size
   const bottomSpace = scaleHeight(24) + bottom;
@@ -121,7 +84,7 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
       <ScrollView bounces={false} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
           <View>
-            <Image source={LocalAssets.login.background} style={backgroundStyle} />
+            <Image source={LocalAssets.login.background[environment]} style={backgroundStyle} />
           </View>
           <CustomSpacer isHorizontal={true} space={sw56} />
           <SafeAreaPage bottomBackgroundColor={colorWhite._1} topBackgroundColor={colorWhite._1}>
@@ -132,31 +95,18 @@ export const LoginBackground = ({ children, page, setPage }: LoginPageProps) => 
                 <TouchableWithoutFeedback>
                   <Image source={LocalAssets.logo.kenangaBrand} style={logoStyle} />
                 </TouchableWithoutFeedback>
-                {/* <View style={{ ...centerVertical, ...flexRow, height: sh16 }}>
-                  <LinkTextGroup links={[]} spaceToDivider={sw4} />
-                </View> */}
-                <CustomSpacer isHorizontal={true} space={sw48} />
+                <CustomSpacer isHorizontal={true} space={sw56} />
               </View>
               {children}
               <CustomFlexSpacer />
               <View style={flexRow}>
                 <LinkTextGroup links={bottomLinks} style={{ minHeight: sh32 }} spaceToDivider={sw8} />
-                {page === "LOGIN" ? (
-                  <Fragment>
-                    <CustomFlexSpacer />
-                    <IconText
-                      color={colorBlue._2}
-                      iconPosition="right"
-                      name="profile"
-                      onPress={handleAgentOnboarding}
-                      text={LOGIN.LINK_AGENT_ONBOARDING}
-                      style={buttonStyle}
-                    />
-                    <CustomSpacer isHorizontal={true} space={sw64} />
-                  </Fragment>
-                ) : null}
               </View>
-              <TextSpaceArea spaceToBottom={bottomSpace} spaceToTop={sh12} style={fs12RegBlack2} text={LOGIN.FOOTER_KIB} />
+              <View style={{ ...flexRow, width: sw428 }}>
+                <TextSpaceArea spaceToBottom={bottomSpace} style={fs10RegGray5} text={LOGIN.FOOTER_KIB} />
+                <CustomFlexSpacer />
+                <TextSpaceArea spaceToBottom={bottomSpace} style={fs10RegGray3} text={`Build Version ${version}`} />
+              </View>
             </View>
           </SafeAreaPage>
         </View>

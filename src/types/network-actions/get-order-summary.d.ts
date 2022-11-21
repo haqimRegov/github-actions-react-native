@@ -2,10 +2,10 @@ declare interface IGetOrderSummaryRequest {
   orderNumber: string;
 }
 
-declare interface IGetOrderSummaryResult extends IDashboardOrderSummary {}
+type IGetOrderSummaryResult = IDashboardOrderSummary;
 
 declare type IGetOrderSummaryResponse = IQueryResponse<IGetOrderSummaryResult> | undefined;
 
 declare interface IGetOrderSummaryQuery {
-  getOrderSummary: IGetOrderSummaryResponse;
+  getOrderSummaryV2: IGetOrderSummaryResponse;
 }

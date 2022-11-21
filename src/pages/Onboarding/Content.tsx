@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ConfirmationModal } from "../../components";
 import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
-import { fs16BoldBlack2 } from "../../styles";
+import { fs16RegGray6 } from "../../styles";
 import { OrderSummary, Signatures, TermsAndConditions } from "./Acknowledgement";
 import { CrsDeclaration, DeclarationSummary, FatcaDeclaration, FeaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
@@ -37,7 +37,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.RiskAssessment:
       content = <QuestionnaireContent {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.ProductRecommendation:
+    case ONBOARDING_ROUTES.Products:
       content = <Products {...newProps} />;
       break;
     case ONBOARDING_ROUTES.EmailVerification:
@@ -58,7 +58,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.CRSDeclaration:
       content = <CrsDeclaration {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.FEADeclarations:
+    case ONBOARDING_ROUTES.FEADeclaration:
       content = <FeaDeclaration {...newProps} />;
       break;
     case ONBOARDING_ROUTES.DeclarationSummary:
@@ -94,7 +94,7 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
         labelContinue={ONBOARDING.BUTTON_YES}
         title={ONBOARDING.EDIT_TITLE}
         visible={cancelOnboarding!}>
-        <Text style={fs16BoldBlack2}>{backToDashboardLabel}</Text>
+        <Text style={fs16RegGray6}>{backToDashboardLabel}</Text>
       </ConfirmationModal>
     </Fragment>
   );

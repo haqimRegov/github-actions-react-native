@@ -14,11 +14,10 @@ import {
   colorRed,
   colorWhite,
   flexRow,
-  fs12SemiBoldBlack2,
-  fs12SemiBoldGray3,
-  fs14BoldBlack2,
-  fs16RegBlack2,
-  fs16RegBlue2,
+  fs12SemiBoldBlue1,
+  fs12SemiBoldGray6,
+  fs14BoldGray6,
+  fs16RegGray6,
   fsAlignCenter,
   fullHW,
   px,
@@ -27,7 +26,7 @@ import {
   sh24,
   sh56,
   sh8,
-  shadowBlue5,
+  shadow16Blue112,
   spaceBetweenHorizontal,
   sw16,
   sw24,
@@ -201,7 +200,7 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
 
   const calendarContainer: ViewStyle = {
     // backgroundColor: colorWhite._1,
-    ...shadowBlue5,
+    ...shadow16Blue112,
   };
 
   return (
@@ -225,11 +224,11 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
               {...otherProps}
               dayComponent={(dayComponentProps) => {
                 const isSelected = CustomCalendarDateConverter(startDate).dateString === dayComponentProps.date.dateString;
-                const dayTextColor = isSelected ? colorWhite._1 : colorBlue._2;
+                const dayTextColor = isSelected ? colorWhite._1 : colorBlue._1;
                 const selectedDayStyle: ViewStyle = { backgroundColor: colorRed._1, ...circle(sw32, colorRed._1) };
                 const defaultDayStyle: ViewStyle = { width: sw32, height: sw32 };
                 const dayViewStyle: ViewStyle = isSelected ? selectedDayStyle : defaultDayStyle;
-                const dayTextStyle: TextStyle = { ...fs16RegBlue2, color: dayTextColor };
+                const dayTextStyle: TextStyle = { ...fs16RegGray6, color: dayTextColor };
 
                 const dayPress = () => {
                   handleSelectDate(dayComponentProps.date);
@@ -245,7 +244,7 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
                 );
               }}
               renderHeader={(date) => {
-                return <Text style={fs14BoldBlack2}>{moment(date[0]).format(MONTH_YEAR_FORMAT)}</Text>;
+                return <Text style={fs14BoldGray6}>{moment(date[0]).format(MONTH_YEAR_FORMAT)}</Text>;
               }}
               current={selectedMonth?.dateString || current}
               disableMonthChange={disableMonthChange !== undefined ? disableMonthChange : true}
@@ -261,12 +260,12 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
               onDayPress={handleSelectDate}
               onMonthChange={handleChangeMonth}
               renderArrow={(dir: string) => {
-                return <IcoMoon name={`caret-${dir}`} color={arrowColor || colorBlue._2} size={sw24} />;
+                return <IcoMoon name={`caret-${dir}`} color={arrowColor || colorBlue._1} size={sw24} />;
               }}
               style={{ width: sw360, ...px(sw16), ...py(sh16), borderRadius: sw16 }}
               showWeekNumbers={showWeekNumbers !== undefined ? showWeekNumbers : false}
               theme={{
-                arrowColor: arrowColor || colorBlue._2,
+                arrowColor: arrowColor || colorBlue._1,
                 backgroundColor: backgroundColor || colorWhite._1,
                 calendarBackground: backgroundColor || colorWhite._1,
                 dayTextColor: textColor || colorBlack._1,
@@ -274,21 +273,21 @@ export const CustomCalendar: FunctionComponent<CalendarProps> = ({
                 selectedDayBackgroundColor: arrowColor || colorRed._1,
                 selectedDayTextColor: selectedDayColor || colorWhite._1,
                 selectedDotColor: colorRed._1,
-                textDayFontFamily: fs16RegBlack2.fontFamily,
-                textDayFontSize: fs16RegBlack2.fontSize,
-                textDayFontWeight: fs16RegBlack2.fontWeight || "normal",
+                textDayFontFamily: fs16RegGray6.fontFamily,
+                textDayFontSize: fs16RegGray6.fontSize,
+                textDayFontWeight: fs16RegGray6.fontWeight || "normal",
                 textDisabledColor: textDisabledColor || colorWhite._1,
-                textMonthFontFamily: fs12SemiBoldBlack2.fontFamily,
-                textMonthFontSize: fs12SemiBoldBlack2.fontSize,
+                textMonthFontFamily: fs12SemiBoldGray6.fontFamily,
+                textMonthFontSize: fs12SemiBoldGray6.fontSize,
                 textMonthFontWeight: undefined,
                 todayTextColor: todayTextColor || colorBlack._1,
                 "stylesheet.calendar.header": {
                   week: { ...centerVertical, ...flexRow, ...spaceBetweenHorizontal, height: sh24 },
-                  dayHeader: { ...fs12SemiBoldGray3, ...fsAlignCenter, width: sw48 },
+                  dayHeader: { ...fs12SemiBoldBlue1, ...fsAlignCenter, width: sw48 },
                   header: { ...centerVertical, ...flexRow, ...spaceBetweenHorizontal, height: sh56, marginBottom: sh8 },
                 },
                 // textDayHeaderFontSize: 40,
-                // textDayStyle: fs12RegBlue6,
+                // textDayStyle: fs12RegBlue12,
                 // dotColor: "",
                 // textDayHeaderFontFamily: "",
                 // textDayHeaderFontWeight: "",

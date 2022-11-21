@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 
 import {
   AccountHeader,
-  AdvancedDropdown,
   AdvanceTextInputArea,
   AdvanceToggleButton,
   CheckBox,
@@ -11,19 +10,16 @@ import {
   CustomSpacer,
   CustomTextInput,
   IconButton,
+  NewDropdown,
   OutlineButton,
 } from "../../../../components";
 import { Language } from "../../../../constants";
 import { DICTIONARY_COUNTRIES, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
 import {
   colorBlack,
-  colorBlue,
   flexChild,
   flexRow,
-  fs12BoldBlack2,
-  fs12BoldBlue2,
-  fs16RegBlack2,
-  fs16SemiBoldBlack2,
+  fs16SemiBoldGray6,
   px,
   py,
   sh12,
@@ -32,6 +28,7 @@ import {
   sh24,
   sh32,
   sh8,
+  sw12,
   sw16,
   sw24,
 } from "../../../../styles";
@@ -107,13 +104,20 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
           </Fragment>
         )}
         <CustomSpacer space={sh24} />
-        <Text style={fs16RegBlack2}>{DECLARATIONS.CRS_ARE_YOU}</Text>
+        <Text style={fs16SemiBoldGray6}>{DECLARATIONS.CRS_ARE_YOU}</Text>
         <CustomSpacer space={sh12} />
-        <AdvanceToggleButton direction="column" labels={OPTIONS_CRS_TAX_RESIDENCY} onSelect={handleResident} value={taxResident!} />
+        <AdvanceToggleButton
+          buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}
+          direction="column"
+          labels={OPTIONS_CRS_TAX_RESIDENCY}
+          labelStyle={{ lineHeight: sh24 }}
+          onSelect={handleResident}
+          value={taxResident!}
+        />
         {taxResident! > 0 && tin !== undefined ? (
           <View>
             <CustomSpacer space={sh32} />
-            <Text style={fs16RegBlack2}>{DECLARATIONS.LABEL_DECLARE_TIN}</Text>
+            <Text style={fs16SemiBoldGray6}>{DECLARATIONS.LABEL_DECLARE_TIN}</Text>
             {tin.map((tax: ITinMultiple, index: number) => {
               const handleCountry = (value: string) => {
                 const updatedTin = [...tin];
@@ -169,7 +173,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
               return (
                 <View key={index}>
                   <View style={flexRow}>
-                    <AdvancedDropdown
+                    <NewDropdown
                       items={DICTIONARY_COUNTRIES}
                       handleChange={handleCountry}
                       label={labelCountry}
@@ -187,35 +191,33 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
                   <CustomSpacer space={sh24} />
                   <CustomTextInput label={labelTin} onChangeText={handleTinNumber} value={tax.tinNumber} disabled={tax.country === ""} />
                   <CustomSpacer space={sh20} />
-                  <CheckBox
-                    disabled={tax.country === ""}
-                    toggle={tax.noTin!}
-                    onPress={handleNoTin}
-                    label={DECLARATIONS.LABEL_NO_TIN}
-                    labelStyle={fs12BoldBlack2}
-                  />
+                  <CheckBox disabled={tax.country === ""} toggle={tax.noTin!} onPress={handleNoTin} label={DECLARATIONS.LABEL_NO_TIN} />
                   {tax.noTin === true ? (
                     <Fragment>
                       <CustomSpacer space={sh32} />
-                      <Text style={fs16SemiBoldBlack2}>{DECLARATIONS.LABEL_REASON_HEADING}</Text>
+                      <Text style={fs16SemiBoldGray6}>{DECLARATIONS.LABEL_REASON_HEADING}</Text>
                       <CustomSpacer space={sh8} />
                       <AdvanceToggleButton
+                        buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}
                         direction="column"
                         labels={OPTIONS_CRS_TIN_REASONS}
+                        labelStyle={{ lineHeight: sh24 }}
                         onSelect={handleTinReason}
                         space={sh24}
                         value={tax.reason!}
                       />
                       {tax.reason === 2 ? (
-                        <View>
-                          <CustomSpacer space={sh16} />
-                          <AdvanceTextInputArea
-                            handleContinue={handleExplanation}
-                            handleSave={handleSave}
-                            placeholder={DECLARATIONS.PLACEHOLDER}
-                            saved={tax.explanationSaved!}
-                            value={tax.explanation}
-                          />
+                        <View style={flexRow}>
+                          <View>
+                            <CustomSpacer space={sh16} />
+                            <AdvanceTextInputArea
+                              handleContinue={handleExplanation}
+                              handleSave={handleSave}
+                              placeholder={DECLARATIONS.PLACEHOLDER}
+                              saved={tax.explanationSaved!}
+                              value={tax.explanation}
+                            />
+                          </View>
                         </View>
                       ) : null}
                     </Fragment>
@@ -223,14 +225,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
                   {index < 6 && index === tin.length - 1 ? (
                     <Fragment>
                       <CustomSpacer space={sh24} />
-                      <OutlineButton
-                        buttonType="dashed"
-                        color={colorBlue._2}
-                        icon="plus"
-                        onPress={handleAddTin}
-                        text={"Add Additional Line"}
-                        textStyle={fs12BoldBlue2}
-                      />
+                      <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddTin} text={DECLARATIONS.BUTTON_ADD_TIN} />
                     </Fragment>
                   ) : null}
                 </View>

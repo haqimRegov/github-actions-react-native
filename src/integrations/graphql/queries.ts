@@ -1,12 +1,55 @@
 import gql from "graphql-tag";
 
 const dashboard = gql`
-  query dashboard($input: DashboardInput) {
-    dashboard(input: $input) {
+  query agentDashboard($input: DashboardInput) {
+    agentDashboardV2(input: $input) {
       data {
         result {
+          approvedCount
+          rejectedCount
+          pendingCount
+          rerouteCount
+          submittedCount
+          incompleteCount
+          page
+          pages
+          filters {
+            transactionType
+            agentStatus
+            accountType
+          }
           orders {
+            reason {
+              title
+              content
+              documents {
+                document
+                count
+              }
+            }
+            label
+            highlightedText
+            documents {
+              document
+              count
+            }
             orderNumber
+            reason {
+              isSubmitted
+              title
+              content
+              documents {
+                document
+                count
+              }
+            }
+            label
+            documents {
+              document
+              count
+            }
+            clientId
+            jointId
             accountType
             investorName {
               principal
@@ -18,22 +61,19 @@ const dashboard = gql`
               amount
             }
             createdOn
+            isSeen
             status
             dueDate
             lastUpdated
-            isScheduled
-            canProceed
-            withHardcopy
+            dueDate
             remark {
               label
               remark
             }
+            canProceed
+            isScheduled
+            withHardcopy
           }
-          approvedCount
-          rejectedCount
-          pendingCount
-          page
-          pages
         }
       }
       error {
@@ -47,18 +87,543 @@ const dashboard = gql`
 `;
 
 const etbCheck = gql`
-  query etbCheck($input: clientStatusInput) {
-    etbCheck(input: $input) {
+  query etbCheckV2($input: etbCheckV2Input) {
+    etbCheckV2(input: $input) {
       data {
         result {
           message
           status
           highRisk
+          forceUpdate
+          isMinor
+          clientId
+          initId
+          emailAddress
+          declarationRequired
+          dateOfBirth
+          idType
+          accountHolder
+          idNumber
           accounts {
-            accountNumber
-            date
-            accountType
+            ampDetails {
+              annualTrusteeFee
+              ampCategory
+              fundCurrencies
+              fundClasses
+              fundId
+              fundCode
+              fundAbbr
+              fundName
+              fundType
+              fundCategory
+              issuingHouse
+              riskCategory
+              isEpf
+              isEpfOnly
+              isSyariah
+              isWholesale
+              isScheduled
+              isFea
+              prsType
+              incomeDistribution
+              ampFee
+              masterList {
+                fundId
+                class
+                currency
+                salesCharge {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                newSalesAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                topUpAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+              }
+              fundObjective
+              landingFund
+              annualManagementFee
+              performance
+              docs {
+                url
+                name
+              }
+            }
             name
+            idNumber
+            idType
+            jointName
+            jointIdNumber
+            jointIdType
+            dateOfBirth
+            jointEmail
+            accountHolder
+            jointDateOfBirth
+            accountNo
+            status
+            isJoint
+            fundType
+            paymentMethod
+            isRecurring
+            declarationRequired
+            riskTolerance
+            authorisedSignatory
+            currency
+            isSyariah
+            accountOpeningDate
+            epfDetails {
+              epfMemberNumber
+              epfAccountType
+            }
+          }
+          address {
+            address {
+              line1
+              line2
+              line3
+              line4
+            }
+            city
+            country
+            postCode
+            state
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const etbAccountList = gql`
+  query etbAccountList($input: SubmitClientAccountInput) {
+    etbAccountList(input: $input) {
+      data {
+        result {
+          etbAccountList {
+            accountNumber
+            description
+            authorisedSignatory
+            riskTolerance
+            currency
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const investorDashboard = gql`
+  query investorDashboard($input: DashboardInput) {
+    investorDashboard(input: $input) {
+      data {
+        result {
+          totalCount
+          pages
+          page
+          investors {
+            name
+            mobileNo
+            riskTolerance
+            email
+            idNumber
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const investorAccountDetails = gql`
+  query investorAccountDetails($input: investorAccountDetailsInput) {
+    investorAccountDetails(input: $input) {
+      data {
+        result {
+          orderHistory {
+            orderNumber
+            transactionType
+            totalInvestment {
+              currency
+              amount
+            }
+            status
+            lastUpdated
+          }
+          documentSummary {
+            accountType
+            softcopy {
+              required
+              documents {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+            hardcopy {
+              required
+              utmcDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+              accDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+          }
+          withOrderHistory
+          investorOverview {
+            lastUpdated
+            name
+            idNumber
+            riskProfile
+            clientId
+            idType
+            id {
+              url
+              name
+              type
+            }
+          }
+          accountDetails {
+            accountNumber
+            accountType
+            registrationDate
+            distributionInstruction
+            status
+            operatingMode
+          }
+          personalDetails {
+            expirationDate
+            dateOfBirth
+            salutation
+            gender
+            nationality
+            bumiputera
+            race
+            placeOfBirth
+            countryOfBirth
+            educationLevel
+            mothersMaidenName
+            maritalStatus
+            riskProfile
+            relationship
+            monthlyHouseholdIncome
+          }
+          epfDetails {
+            epfMemberNumber
+            epfAccountType
+          }
+          employmentInformation {
+            occupation
+            natureOfBusiness
+            annualIncome
+            nameOfEmployer
+            address {
+              address {
+                line1
+                line2
+                line3
+                line4
+              }
+              city
+              country
+              postCode
+              state
+            }
+          }
+          addressInformation {
+            mailingAddress {
+              address {
+                line1
+                line2
+                line3
+                line4
+              }
+              city
+              country
+              postCode
+              state
+            }
+            permanentAddress {
+              address {
+                line1
+                line2
+                line3
+                line4
+              }
+              city
+              country
+              postCode
+              state
+            }
+          }
+          contactDetails {
+            officeNumber
+            homeNumber
+            mobileNumber
+            faxNumber
+            email
+          }
+          bankInformation {
+            localBank {
+              currency
+              bankName
+              bankAccountName
+              bankAccountNumber
+              bankLocation
+              bankSwiftCode
+            }
+            foreignBank {
+              currency
+              bankName
+              bankAccountName
+              bankAccountNumber
+              bankLocation
+              bankSwiftCode
+            }
+          }
+          declaration {
+            fatca {
+              usCitizen
+              usBorn
+              confirmAddress
+              certificate {
+                name
+                url
+                type
+              }
+              formW9 {
+                name
+                url
+                type
+              }
+              formW8Ben {
+                name
+                url
+                type
+              }
+              reason
+              correspondenceDeclaration
+            }
+            crs {
+              taxResident
+              tin {
+                country
+                tinNumber
+                reason
+              }
+            }
+            fea {
+              resident
+              borrowingFacility
+              balance
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const investorDetailsDashboard = gql`
+  query investorDetailsDashboard($input: InvestorInput) {
+    investorDetailsDashboard(input: $input) {
+      data {
+        result {
+          totalCount
+          pages
+          page
+          name
+          email
+          mobileNo
+          clientId
+          dateOfBirth
+          address {
+            address {
+              line1
+              line2
+              line3
+              line4
+            }
+            city
+            country
+            state
+            postCode
+          }
+          initId
+          idNumber
+          idType
+          accountHolder
+          declarationRequired
+          emailLastUpdated
+          mobileNoLastUpdated
+          mobileNoLastUpdated
+          emailLastUpdated
+          isForceUpdate
+          isMinor
+          investorDetails {
+            ampDetails {
+              annualTrusteeFee
+              ampCategory
+              fundCurrencies
+              fundClasses
+              fundId
+              fundCode
+              fundAbbr
+              fundName
+              fundType
+              fundCategory
+              issuingHouse
+              riskCategory
+              isEpf
+              isEpfOnly
+              isSyariah
+              isWholesale
+              isScheduled
+              isFea
+              prsType
+              incomeDistribution
+              ampFee
+              masterList {
+                fundId
+                class
+                currency
+                salesCharge {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                newSalesAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+                topUpAmount {
+                  epf {
+                    min
+                    max
+                  }
+                  cash {
+                    min
+                    max
+                  }
+                }
+              }
+              fundObjective
+              landingFund
+              annualManagementFee
+              performance
+              docs {
+                url
+                name
+              }
+            }
+            clientId
+            jointId
+            email
+            jointEmail
+            idNumber
+            idType
+            jointIdNumber
+            jointIdType
+            jointDateOfBirth
+            name
+            accountHolder
+            dateOfBirth
+            riskTolerance
+            accountNo
+            status
+            jointName
+            accountOpeningDate
+            paymentMethod
+            fundType
+            isRecurring
+            jointDeclarationRequired
+            authorisedSignatory
+            principalRisk
+            jointRisk
+            currency
+            isSyariah
+            epfDetails {
+              epfMemberNumber
+              epfAccountType
+            }
           }
         }
       }
@@ -125,6 +690,7 @@ const getInbox = gql`
             searchKey
             searchType
             isRead
+            isSeen
             updatedAt
             createdOn
           }
@@ -143,16 +709,42 @@ const getInbox = gql`
   }
 `;
 
+const checkPassword = gql`
+  query checkPassword($input: CheckPasswordInput) {
+    checkPassword(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const getOrderSummary = gql`
-  query getOrderSummary($input: OrderSummaryInput) {
-    getOrderSummary(input: $input) {
+  query getOrderSummaryV2($input: OrderSummaryInputV2) {
+    getOrderSummaryV2(input: $input) {
       data {
         result {
           status
           orderNumber
+          isEtb
           remark {
             label
             remark
+          }
+          riskInfo {
+            type
+            appetite
+            profile
+            expectedRange
           }
           extensionRemark {
             date
@@ -168,7 +760,7 @@ const getOrderSummary = gql`
             servicingAdviserCode
             kibProcessingBranch
             accountType
-            accountNo
+            accountNumber
             accountOperationMode
           }
           investmentSummary {
@@ -184,19 +776,27 @@ const getOrderSummary = gql`
             investmentType
             isFea
             recurring
+            landingFund
             salesCharge
             scheduledInvestmentAmount
             scheduledSalesCharge
+            isTopup
           }
           paymentSummary {
+            isCombined
+            surplusNote
             fundCurrency
             investmentAmount
             paymentMethod
             transactionDate
             remark
             proofOfPayment {
+              base64
+              date
               name
               url
+              path
+              size
               type
             }
             referenceNumber
@@ -213,11 +813,13 @@ const getOrderSummary = gql`
             recurringType
             recurringBank
             frequency
+            utmc
           }
           profile {
             name
             idNumber
             idType
+            clientId
             personalDetails {
               dateOfBirth
               salutation
@@ -233,6 +835,7 @@ const getOrderSummary = gql`
               riskProfile
               relationship
               monthlyHouseholdIncome
+              expirationDate
             }
             epfDetails {
               epfMemberNumber
@@ -248,6 +851,7 @@ const getOrderSummary = gql`
                   line1
                   line2
                   line3
+                  line4
                 }
                 city
                 country
@@ -261,6 +865,7 @@ const getOrderSummary = gql`
                   line1
                   line2
                   line3
+                  line4
                 }
                 city
                 country
@@ -272,6 +877,7 @@ const getOrderSummary = gql`
                   line1
                   line2
                   line3
+                  line4
                 }
                 city
                 country
@@ -347,6 +953,57 @@ const getOrderSummary = gql`
               type
             }
           }
+          documentSummary {
+            accountType
+            softcopy {
+              required
+              documents {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+            hardcopy {
+              required
+              utmcDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+              accDocs {
+                mainHeader
+                subHeader
+                documents {
+                  title
+                  name
+                  url
+                  type
+                  label
+                }
+              }
+            }
+          }
+          trackingSummary {
+            createdOn
+            status
+            level
+            remark {
+              label
+              remark
+            }
+          }
         }
       }
       error {
@@ -360,8 +1017,8 @@ const getOrderSummary = gql`
 `;
 
 const getReceiptSummaryList = gql`
-  query getReceiptSummaryList($input: getReceiptSummaryListInput) {
-    getReceiptSummaryList(input: $input) {
+  query getReceiptSummaryList($input: ReceiptSummaryInput) {
+    receiptSummary(input: $input) {
       data {
         result {
           message
@@ -391,10 +1048,34 @@ const getReceiptSummaryList = gql`
 `;
 
 const listHardCopyDocuments = gql`
-  query listHardcopyDocuments($input: OrderDetailsInput) {
-    listHardcopyDocuments(input: $input) {
+  query listHardcopyDocumentsV2($input: OrderDetailsInput) {
+    listHardcopyDocumentsV2(input: $input) {
       data {
         result {
+          account {
+            principal {
+              name
+              docs {
+                id
+                title
+                url
+                name
+                type
+                isEditable
+              }
+            }
+            joint {
+              name
+              docs {
+                id
+                title
+                url
+                name
+                type
+                isEditable
+              }
+            }
+          }
           documents {
             name
             docs {
@@ -402,6 +1083,8 @@ const listHardCopyDocuments = gql`
               title
               url
               name
+              type
+              isEditable
             }
           }
           branchList {
@@ -425,12 +1108,42 @@ const listPaymentRequired = gql`
     listPaymentRequired(input: $input) {
       data {
         result {
+          status
           orderNumber
+          createdOn
+          paymentType
           allowedRecurringType
           epfAccountNumber
-          paymentType
-          status
-          createdOn
+          ctaDetails {
+            clientName
+            clientTrustAccountNumber
+            ctaParent
+            orderNumber
+            paymentMethod
+            paymentId
+            proof {
+              name
+              url
+              type
+            }
+            sharedTo
+          }
+          completedSurplusCurrencies
+          isLastOrder
+          recurringDetails {
+            dda {
+              bankAccountName
+              bankAccountNumber
+              recurringBank
+              frequency
+            }
+            fpx {
+              bankAccountName
+              bankAccountNumber
+              recurringBank
+              frequency
+            }
+          }
           totalInvestment {
             currency
             amount
@@ -439,30 +1152,114 @@ const listPaymentRequired = gql`
             currency
             amount
           }
-          surplusBalance
-          paymentCount
           funds {
             distributionInstruction
-            fundClass
-            fundCurrency
             fundingOption
-            fundIssuer
-            fundName
             fundType
+            fundClass
+            fundName
+            fundCode
+            landingFund
+            fundIssuer
+            fundCurrency
             investmentAmount
-            isEpf
-            isFea
-            isScheduled
-            isSyariah
             salesCharge
             scheduledInvestmentAmount
             scheduledSalesCharge
+            isFea
+            isScheduled
+            isEpf
+            isSyariah
+            isTopup
+          }
+          paymentCount
+          surplusBalance {
+            parent # payment info id NOT payment id
+            belongsTo
+            sharedTo
+            excess {
+              currency
+              amount
+            }
+            initialExcess {
+              currency
+              amount
+            }
+            utilised {
+              orderNumber
+              paymentId
+              currency
+              amount
+            }
+            orderNumber
+            currency
+            amount
+            paymentMethod
+            transactionDate
+            referenceNumber
+            kibBankName
+            kibBankAccountNumber
+            bankName
+            checkNumber
+            clientName
+            clientTrustAccountNumber
+            epfReferenceNo
+            epfAccountNumber
+            bankAccountName
+            bankAccountNumber
+            recurringType
+            recurringBank
+            frequency
+            remark
+            proof {
+              name
+              url
+              type
+            }
           }
           payment {
-            id
-            title
-            url
-            name
+            paymentId
+            isEditable
+            belongsTo
+            sharedTo
+            parent
+            excess {
+              currency
+              amount
+            }
+            tag {
+              uuid
+              orderNumber
+            }
+            currency
+            amount
+            paymentMethod
+            transactionDate
+            referenceNumber
+            kibBankName
+            kibBankAccountNumber
+            bankName
+            checkNumber
+            clientName
+            clientTrustAccountNumber
+            ctaParent
+            ctaTag {
+              uuid
+              orderNumber
+            }
+            epfReferenceNo
+            epfAccountNumber
+            bankAccountName
+            bankAccountNumber
+            recurringType
+            recurringBank
+            frequency
+            remark
+            proof {
+              name
+              url
+              type
+            }
           }
         }
       }
@@ -477,19 +1274,10 @@ const listPaymentRequired = gql`
 `;
 
 const listSoftCopyDocuments = gql`
-  query listSoftcopyDocuments($input: OrderDetailsInput) {
-    listSoftcopyDocuments(input: $input) {
+  query listSoftcopyDocumentsV2($input: OrderDetailsInput) {
+    listSoftcopyDocumentsV2(input: $input) {
       data {
         result {
-          joint {
-            name
-            docs {
-              id
-              title
-              url
-              name
-            }
-          }
           principal {
             name
             docs {
@@ -497,6 +1285,19 @@ const listSoftCopyDocuments = gql`
               title
               url
               name
+              type
+              isEditable
+            }
+          }
+          joint {
+            name
+            docs {
+              id
+              title
+              url
+              name
+              type
+              isEditable
             }
           }
         }
@@ -516,11 +1317,20 @@ const productList = gql`
     productList(input: $input) {
       data {
         result {
+          filters {
+            fundCategory
+            issuingHouse
+            fundType
+            riskCategory
+            fundCurrency
+          }
           products {
-            fundCode
+            annualTrusteeFee
+            ampCategory
             fundCurrencies
             fundClasses
             fundId
+            fundCode
             fundAbbr
             fundName
             fundType
@@ -529,10 +1339,12 @@ const productList = gql`
             riskCategory
             isEpf
             isEpfOnly
-            prsType
             isSyariah
             isWholesale
             isScheduled
+            isFea
+            prsType
+            incomeDistribution
             ampFee
             masterList {
               fundId
@@ -596,15 +1408,384 @@ const productList = gql`
   }
 `;
 
+const eddDashboard = gql`
+  query eddDashboardV2($input: DashboardInput) {
+    eddDashboardV2(input: $input) {
+      data {
+        result {
+          cases {
+            label
+            rerouteReason {
+              title
+              remark
+            }
+            isSeen
+            caseId
+            clientId
+            caseNo
+            clientName
+            createdOn
+            targetDate
+            closeDate
+            status
+            accountNo
+            lastUpdated
+            daysRemaining
+            remark {
+              label
+              remark
+            }
+          }
+          pendingCount
+          reroutedCount
+          newCount
+          historyCount
+          submittedCount
+          page
+          pages
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const eddCaseQuestions = gql`
+  query caseQuestions($input: EddCommonInput) {
+    caseQuestions(input: $input) {
+      data {
+        result {
+          client {
+            name
+            status
+          }
+          data {
+            amlaTitle {
+              user
+              status
+              time
+            }
+            questions {
+              id
+              description
+              title
+              options {
+                type
+                title
+                hasDoc
+                hasRemark
+                autoHide
+                id
+                parent
+                values
+                info
+                valuesDescription
+                multiSelection
+                description
+                format {
+                  type
+                  limit
+                }
+                options {
+                  id
+                  title
+                  type
+                  parent
+                  info
+                  values
+                  valuesDescription
+                  multiSelection
+                  description
+                  format {
+                    type
+                    limit
+                  }
+                  options {
+                    id
+                    title
+                    type
+                    parent
+                    info
+                    values
+                    valuesDescription
+                    multiSelection
+                    description
+                    format {
+                      type
+                      limit
+                    }
+                  }
+                }
+              }
+            }
+            additionalQuestions {
+              title
+              options {
+                type
+                hasRemark
+                hasDoc
+              }
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
+const clientProfile = gql`
+  query clientProfile($input: EddCommonInput) {
+    clientProfile(input: $input) {
+      data {
+        result {
+          profile {
+            createdAt
+            incomeDistribution
+            signatory
+            accountType
+            client {
+              name
+              idNumber
+              idType
+              personalDetails {
+                dateOfBirth
+                salutation
+                gender
+                nationality
+                bumiputera
+                race
+                placeOfBirth
+                countryOfBirth
+                educationLevel
+                mothersMaidenName
+                maritalStatus
+                riskProfile
+                relationship
+                monthlyHouseholdIncome
+              }
+              epfDetails {
+                epfMemberNumber
+                epfAccountType
+              }
+              employmentInformation {
+                occupation
+                natureOfBusiness
+                annualIncome
+                nameOfEmployer
+                address {
+                  address {
+                    line1
+                    line2
+                    line3
+                  }
+                  city
+                  country
+                  postCode
+                  state
+                }
+              }
+              addressInformation {
+                mailingAddress {
+                  address {
+                    line1
+                    line2
+                    line3
+                  }
+                  city
+                  country
+                  postCode
+                  state
+                }
+                permanentAddress {
+                  address {
+                    line1
+                    line2
+                    line3
+                  }
+                  city
+                  country
+                  postCode
+                  state
+                }
+              }
+              contactDetails {
+                officeNumber
+                homeNumber
+                mobileNumber
+                faxNumber
+                email
+              }
+              bankInformation {
+                localBank {
+                  currency
+                  bankName
+                  bankAccountName
+                  bankAccountNumber
+                  bankLocation
+                  bankSwiftCode
+                }
+                foreignBank {
+                  currency
+                  bankName
+                  bankAccountName
+                  bankAccountNumber
+                  bankLocation
+                  bankSwiftCode
+                }
+              }
+              declaration {
+                fatca {
+                  usCitizen
+                  usBorn
+                  confirmAddress
+                  certificate {
+                    name
+                    url
+                    type
+                  }
+                  formW9 {
+                    name
+                    url
+                    type
+                  }
+                  formW8Ben {
+                    name
+                    url
+                    type
+                  }
+                  reason
+                  correspondenceDeclaration
+                }
+                crs {
+                  taxResident
+                  tin {
+                    country
+                    tinNumber
+                    reason
+                  }
+                }
+                fea {
+                  resident
+                  borrowingFacility
+                  balance
+                }
+              }
+              uploadedDocument {
+                name
+                url
+                type
+              }
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
+const caseResponse = gql`
+  query caseResponse($input: CaseResponseInput) {
+    caseResponse(input: $input) {
+      data {
+        result {
+          client {
+            name
+            status
+          }
+          response {
+            agent {
+              time
+              user
+              status
+            }
+            amla {
+              time
+              user
+              status
+            }
+            count
+            data {
+              question
+              questionId
+              description
+              answers
+              amlaRemark
+            }
+            questions {
+              question
+              questionId
+              description
+              amlaRemark {
+                type
+                title
+                hasDoc
+                hasRemark
+              }
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
+const previousResponse = gql`
+  query previousResponse($input: PreviousResponseInput) {
+    previousResponse(input: $input) {
+      data {
+        result {
+          questionId
+          answer
+        }
+      }
+      error {
+        errorCode
+        message
+        errorList
+      }
+    }
+  }
+`;
+
 export const GQL_QUERIES = {
+  caseResponse,
+  checkPassword,
+  clientProfile,
   dashboard,
+  etbAccountList,
+  eddCaseQuestions,
+  eddDashboard,
   etbCheck,
   getAgentProfile,
   getInbox,
   getOrderSummary,
   getReceiptSummaryList,
+  investorAccountDetails,
+  investorDashboard,
+  investorDetailsDashboard,
   listHardCopyDocuments,
   listPaymentRequired,
   listSoftCopyDocuments,
+  previousResponse,
   productList,
 };

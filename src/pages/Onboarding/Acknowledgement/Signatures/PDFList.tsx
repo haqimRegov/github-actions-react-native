@@ -5,13 +5,12 @@ import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ContentPage, CustomSpacer, PromptModal } from "../../../../components";
-import { PdfEditWithModal } from "../../../../components/PdfEdit";
-import { ONBOARDING_ROUTES } from "../../../../constants";
+import { ContentPage, CustomSpacer, PromptModal, SignatureUploadWithModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
+import { ERRORS } from "../../../../data/dictionary";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { centerVertical, fs12RegBlack2, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
+import { centerVertical, fs12RegGray6, px, sh24, sh8, sw24, sw452 } from "../../../../styles";
 import { formatAmount } from "../../../../utils";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
@@ -57,19 +56,28 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       const request: ISubmitPdfRequest = {
         clientId: clientId!,
         documents: documents,
+        initId: details?.initId!,
+        isConfirmed: true,
+        isEtb: false,
+        isForceUpdate: false,
       };
-      const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation);
+      const submitPdfResponse: ISubmitPdfResponse = await submitPdf(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
+      const submittedPdfKey = "submittedPdf";
       if (submitPdfResponse !== undefined) {
         const { data, error } = submitPdfResponse;
         if (error === null && data !== null) {
           setShowPrompt(true);
         }
         if (error !== null) {
-          setTimeout(() => {
-            Alert.alert(error.message);
-          }, 100);
+          if (error.message === ERRORS[submittedPdfKey].message) {
+            setShowPrompt(true);
+          } else {
+            setTimeout(() => {
+              Alert.alert(error.message);
+            }, 100);
+          }
         }
       }
     }
@@ -81,7 +89,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleContinue = () => {
-    handleNextStep(ONBOARDING_ROUTES.Payment);
+    handleNextStep("Payment");
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     updatedFinishedSteps.push("Acknowledgement");
     const newDisabledStep: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];
@@ -90,8 +98,8 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const getReceiptSummary = async () => {
     setLoading(true);
-    const request = { clientId: clientId! };
-    const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation);
+    const request: IGetReceiptSummaryListRequest = { clientId: clientId!, initId: details!.initId!, isForceUpdate: false };
+    const summary: IGetReceiptSummaryListResponse = await getReceiptSummaryList(request, navigation, setLoading);
     setLoading(false);
     if (summary !== undefined) {
       const { data, error } = summary;
@@ -111,8 +119,14 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request = { clientId: clientId!, orderNo: receipt.orderNumber! };
-      const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation);
+      const request: IGeneratePdfRequest = {
+        clientId: clientId!,
+        initId: details!.initId!,
+        isEtb: false,
+        isForceUpdate: false,
+        orderNo: receipt.orderNumber!,
+      };
+      const onboardingReceipt: IGeneratePdfResponse = await generatePdf(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (onboardingReceipt !== undefined) {
@@ -195,7 +209,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
                 };
                 updateReceipts(updatedReceipts);
               };
-
               const baseSignatureValid =
                 "adviserSignature" in receipt &&
                 receipt.adviserSignature !== undefined &&
@@ -210,12 +223,13 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
               const amountTitle = receipt
                 .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
                 .join(", ");
-              const epfTitle = receipt.isEpf === "true" ? "- EPF" : "";
+              const cashTitle = receipt.isEpf !== "true" && receipt.isScheduled !== "true" ? " Cash" : "";
+              const epfTitle = receipt.isEpf === "true" ? " - EPF" : cashTitle;
               const recurringTitle = receipt.isScheduled === "true" ? "- Recurring" : "";
               const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
               return (
                 <Fragment key={index}>
-                  <PdfEditWithModal
+                  <SignatureUploadWithModal
                     active={true}
                     completed={completed}
                     completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
@@ -249,9 +263,9 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
         <View style={centerVertical}>
           <CustomSpacer space={sh8} />
           <View style={{ width: sw452 }}>
-            <Text style={fs12RegBlack2}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
+            <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_1}</Text>
             <CustomSpacer space={sh8} />
-            <Text style={fs12RegBlack2}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
+            <Text style={fs12RegGray6}>{TERMS_AND_CONDITIONS.PROMPT_TEXT_2}</Text>
           </View>
         </View>
       </PromptModal>

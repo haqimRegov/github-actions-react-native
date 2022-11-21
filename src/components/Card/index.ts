@@ -1,4 +1,4 @@
-export * from "./Basic";
-export * from "./CardWrap";
 export * from "./Custom";
+export * from "./ColorCard";
+export * from "./CollectionBankCard";
 export * from "./TextCard";

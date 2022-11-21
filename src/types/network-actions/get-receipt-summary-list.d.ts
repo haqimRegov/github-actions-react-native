@@ -1,5 +1,7 @@
 declare interface IGetReceiptSummaryListRequest {
   clientId: string;
+  initId: string;
+  isForceUpdate: boolean;
 }
 
 declare interface IGetReceiptSummaryListResult {
@@ -20,5 +22,5 @@ declare interface IGetReceiptSummaryListResult {
 declare type IGetReceiptSummaryListResponse = IMutationResponse<IGetReceiptSummaryListResult> | undefined;
 
 declare interface IGetReceiptSummaryListMutation {
-  getReceiptSummaryList: IGetReceiptSummaryListResponse;
+  receiptSummary: IGetReceiptSummaryListResponse;
 }

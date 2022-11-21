@@ -10,7 +10,7 @@ export const PublicRoute: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <Navigator initialRouteName="Auth" headerMode="none">
+      <Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
         <Screen name="Auth" component={AuthPage} options={defaultOptions} />
       </Navigator>
     </Fragment>

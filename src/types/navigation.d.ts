@@ -2,12 +2,15 @@ declare type RootNavigatorType = {
   Auth: undefined;
   Dashboard: undefined;
   Logout: undefined;
+  NewSales: undefined;
   Onboarding: undefined;
 };
 
 declare type PrivateNavigatorType = {
   Dashboard: undefined;
+  ForceUpdate: undefined;
   Logout: undefined;
+  NewSales: undefined;
   Onboarding: undefined;
   Public: undefined;
 };

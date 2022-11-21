@@ -1,9 +1,17 @@
+import { camelCase } from "camel-case";
+
+export const camelCaseString = (value: string) => {
+  return camelCase(value);
+};
+
 export const parseAmount = (input: string) => {
-  return parseFloat(input.replace(/[,]/g, ""));
+  const defaultInput = input || "0";
+  return parseFloat(defaultInput.replace(/[,]/g, ""));
 };
 
 export const parseAmountToString = (input: string) => {
-  return parseFloat(input.replace(/[,]/g, "")).toString();
+  const defaultInput = input || "0";
+  return parseFloat(defaultInput.replace(/[,]/g, "")).toString();
 };
 
 export const formatAmount = (input: number | string) => {
@@ -74,4 +82,16 @@ export const splitString = (str: string, max: number) => {
     }
   });
   return newString;
+};
+
+export const isArrayNotEmpty = (value: unknown[] | null | undefined) => {
+  return value !== null && value !== undefined && value.length > 0;
+};
+
+export const isNotEmpty = (value: string | number | boolean | object | undefined | null) => {
+  return value !== null && value !== undefined;
+};
+
+export const isEmpty = (value: string | number | boolean | object | undefined | null) => {
+  return value === null || value === undefined;
 };

@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getSummaryReceipt = async (
   variables: ISummaryReceiptRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const getSummaryReceipt = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "summaryReceipt" in data === false) {

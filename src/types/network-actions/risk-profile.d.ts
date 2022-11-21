@@ -1,5 +1,9 @@
 declare interface IGetRiskProfileRequest {
   clientId: string;
+  id: string;
+  initId: string;
+  isEtb: boolean;
+  isForceUpdate: boolean;
   riskAssessment: {
     questionTwo: number;
     questionThree: number;
@@ -17,5 +21,5 @@ declare type IGetRiskProfileResult = IRiskScore;
 declare type IGetRiskProfileResponse = IMutationResponse<IGetRiskProfileResult> | undefined;
 
 declare interface IGetRiskProfileMutation {
-  riskAssessment: IGetRiskProfileResponse;
+  riskAssessmentV2: IGetRiskProfileResponse;
 }

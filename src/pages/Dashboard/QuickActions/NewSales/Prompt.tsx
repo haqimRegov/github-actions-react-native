@@ -4,7 +4,7 @@ import { Text } from "react-native";
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import { Prompt } from "../../../../components";
 import { Language } from "../../../../constants";
-import { fs12SemiBoldBlack2, fs16BoldBlack2, sw452 } from "../../../../styles";
+import { fs12RegGray6, sw452 } from "../../../../styles";
 
 const { ADD_CLIENT } = Language.PAGE;
 
@@ -24,8 +24,8 @@ export const NewSalesPrompt: FunctionComponent<NewSalesPromptProps> = ({ name, p
   const illustration = prompt === "bannedCountry" ? LocalAssets.illustration.clientError : LocalAssets.illustration.clientWarning;
 
   return (
-    <Prompt illustration={illustration} label={label} title={promptTitle} titleStyle={{ ...fs16BoldBlack2, width: sw452 }}>
-      <Fragment>{prompt === "bannedCountry" ? null : <Text style={fs12SemiBoldBlack2}>{ADD_CLIENT.PROMPT_SUBTITLE}</Text>}</Fragment>
+    <Prompt illustration={illustration} label={label} title={promptTitle} titleStyle={{ width: sw452 }}>
+      <Fragment>{prompt === "bannedCountry" ? null : <Text style={fs12RegGray6}>{ADD_CLIENT.PROMPT_SUBTITLE}</Text>}</Fragment>
     </Prompt>
   );
 };

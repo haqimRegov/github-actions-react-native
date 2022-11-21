@@ -41,6 +41,8 @@ declare type TypePrs = "selfSelect" | "prsDefault";
 
 declare interface IProduct {
   // performanceOverview: IProductPerformance;
+  annualTrusteeFee: string;
+  ampCategory: string;
   ampFee: string;
   annualManagementFee: string;
   docs: IProductDocument[];
@@ -156,6 +158,7 @@ declare interface IProductSalesCharge {
 }
 
 declare interface IProductListResult {
+  filters: IProductAvailableFilter;
   products: IProduct[];
   page: string;
   pages: string;

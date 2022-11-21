@@ -1,20 +1,20 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { AccountHeader, CustomSpacer, Dash, IconText, LabeledTitleProps, TextCard } from "../../../components";
+import { AccountHeader, CustomSpacer, Dash, IconText, TextCard } from "../../../components";
 import { Language } from "../../../constants";
 import { IcoMoon } from "../../../icons";
 import {
-  borderBottomBlack21,
-  borderBottomRed4,
+  borderBottomGray2,
+  borderBottomRed1,
   centerVertical,
   colorBlue,
   colorWhite,
   flexRow,
-  fs16BoldBlack2,
-  fs16BoldBlue2,
-  fs18BoldBlack2,
-  fs24BoldBlack2,
+  fs16BoldBlue1,
+  fs16BoldGray6,
+  fs18BoldGray6,
+  fs24BoldGray6,
   fsTransformNone,
   px,
   py,
@@ -22,10 +22,11 @@ import {
   sh24,
   sh64,
   sh8,
-  shadowBlack116,
-  shadowBlue204,
+  shadow12Black116,
+  shadow12Blue104,
   sw16,
   sw24,
+  sw4,
   sw8,
 } from "../../../styles";
 
@@ -40,7 +41,7 @@ interface SummaryDetailsProps {
   employmentDetails: LabeledTitleProps[];
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
   localBankDetails: LabeledTitleProps[][];
   mailingAddress: LabeledTitleProps[];
   name: string;
@@ -58,9 +59,9 @@ interface TitleIconProps {
 const TitleIcon = ({ onPress, title, titleStyle, viewStyle }: TitleIconProps) => {
   return (
     <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16), ...viewStyle }}>
-      <Text style={{ ...fs16BoldBlack2, ...titleStyle }}>{title}</Text>
+      <Text style={{ ...fs16BoldGray6, ...titleStyle }}>{title}</Text>
       <CustomSpacer isHorizontal={true} space={sw16} />
-      <IcoMoon color={colorBlue._1} name="edit" onPress={onPress} size={sh24} />
+      <IcoMoon color={colorBlue._8} name="edit" onPress={onPress} size={sh24} suppressHighlighting={true} />
     </View>
   );
 };
@@ -86,8 +87,8 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     ...centerVertical,
     ...flexRow,
     ...px(sw24),
-    ...borderBottomRed4,
-    ...shadowBlue204,
+    ...borderBottomRed1,
+    ...shadow12Blue104,
     backgroundColor: colorWhite._1,
     borderTopLeftRadius: sw8,
     borderTopRightRadius: sw8,
@@ -115,45 +116,45 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
-      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadowBlack116 }}>
+      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadow12Black116 }}>
         {accountType === "Individual" ? (
           <View style={headerStyle}>
-            <Text style={fs24BoldBlack2}>{name}</Text>
+            <Text style={fs24BoldGray6}>{name}</Text>
           </View>
         ) : (
           <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />
         )}
-        <View style={borderBottomBlack21}>
+        <View style={borderBottomGray2}>
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_PERSONAL} />
           <View style={px(sw24)}>
             <TextCard data={personalDetails} {...textCardProps} />
           </View>
         </View>
-        <View style={borderBottomBlack21}>
+        <View style={borderBottomGray2}>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_ADDITIONAL} />
           <View style={px(sw24)}>
             <TextCard data={additionalInfo} {...textCardProps} />
           </View>
         </View>
-        <View style={borderBottomBlack21}>
+        <View style={borderBottomGray2}>
           <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_CONTACT} />
           <View style={px(sw24)}>
             <TextCard data={contactDetails} {...textCardProps} />
           </View>
         </View>
-        <View style={borderBottomBlack21}>
+        <View style={borderBottomGray2}>
           <CustomSpacer space={sh16} />
           <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} viewStyle={py(0)} />
           <CustomSpacer space={sh16} />
           <View style={px(sw24)}>
             <TextCard data={permanentAddress} {...textCardProps} />
-            <Dash />
+            <Dash length={sw4} />
             <CustomSpacer space={sh8} />
             <TextCard data={mailingAddress} {...textCardProps} />
           </View>
         </View>
         {epfDetails !== undefined && epfDetails.length !== 0 ? (
-          <View style={borderBottomBlack21}>
+          <View style={borderBottomGray2}>
             <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_EPF} />
             <View style={px(sw24)}>
               <TextCard data={epfDetails} {...textCardProps} />
@@ -162,17 +163,17 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
         ) : null}
         {(accountType === "Joint" && accountHolder === "Joint") ||
         (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
-          <View style={borderBottomBlack21}>
-            <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldBlack2} />
+          <View style={borderBottomGray2}>
+            <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldGray6} />
             {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
-              const label = `${SUMMARY.SUBTITLE_LOCAL_BANK} ${index + 1}`;
+              const label = `${SUMMARY.SUBTITLE_LOCAL_BANK}`;
               return (
                 <Fragment key={index}>
                   {index === 0 ? null : <CustomSpacer space={sh8} />}
                   <View style={px(sw24)}>
-                    <IconText color={colorBlue._2} iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue2} />
+                    <IconText iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue1} />
                     <CustomSpacer space={sh8} />
-                    <Dash />
+                    <Dash length={sw4} />
                     <CustomSpacer space={sh8} />
                     <TextCard data={bank} {...textCardProps} />
                   </View>
@@ -185,9 +186,9 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
                 <Fragment key={index}>
                   <CustomSpacer space={sh8} />
                   <View style={px(sw24)}>
-                    <IconText color={colorBlue._2} iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue2} />
+                    <IconText iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue1} />
                     <CustomSpacer space={sh8} />
-                    <Dash />
+                    <Dash length={sw4} />
                     <CustomSpacer space={sh8} />
                     <TextCard data={bank} {...textCardProps} />
                   </View>
@@ -203,7 +204,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
             <CustomSpacer space={sh16} />
             <View style={px(sw24)}>
               <TextCard data={employmentDetails} {...textCardProps} />
-              <Dash />
+              <Dash length={sw4} />
               <CustomSpacer space={sh8} />
               <TextCard data={employmentAddress} {...textCardProps} />
             </View>

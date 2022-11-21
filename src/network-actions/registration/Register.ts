@@ -1,7 +1,7 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const register = async (variables: IVerifyAgentRequest) => {
+export const register = async (variables: IVerifyAgentRequest, handleLoading?: (loading: boolean) => void) => {
   try {
     const data = await responseHandler<IVerifyAgentMutation, IVerifyAgentRequest>(
       GQL_MUTATIONS.firstTimeSignUp,
@@ -9,6 +9,7 @@ export const register = async (variables: IVerifyAgentRequest) => {
       undefined,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

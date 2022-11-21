@@ -1,6 +1,7 @@
 export type RiskAssessmentState = {
   questionnaire: IRiskAssessmentState;
   riskScore: IRiskScoreState;
+  isRiskUpdated: boolean;
 };
 
 export const riskAssessmentInitialState: RiskAssessmentState = {
@@ -22,4 +23,5 @@ export const riskAssessmentInitialState: RiskAssessmentState = {
     netWorth: "",
     type: "",
   },
+  isRiskUpdated: false,
 };

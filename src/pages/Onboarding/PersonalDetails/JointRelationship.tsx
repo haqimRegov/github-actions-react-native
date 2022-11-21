@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AdvancedDropdown, CustomSpacer, CustomTextInput } from "../../../components";
+import { CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_RELATIONSHIP } from "../../../data/dictionary";
 import { px, sh32, sw24 } from "../../../styles";
@@ -33,7 +33,7 @@ export const JointRelationship: FunctionComponent<JointRelationshipProps> = ({
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh32} />
-      <AdvancedDropdown
+      <NewDropdown
         handleChange={handleRelationship}
         items={DICTIONARY_RELATIONSHIP}
         label={PERSONAL_DETAILS.LABEL_RELATIONSHIP}

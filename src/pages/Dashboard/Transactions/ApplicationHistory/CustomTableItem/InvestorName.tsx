@@ -1,44 +1,63 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View } from "react-native";
+import { Text, TextStyle, View, ViewStyle } from "react-native";
 
-import { CustomSpacer } from "../../../../../components";
+import { Badge, CustomSpacer } from "../../../../../components";
+import { NunitoBold } from "../../../../../constants";
 import { IcoMoon } from "../../../../../icons";
 import {
   centerHV,
   circle,
   colorBlue,
+  colorGray,
+  colorRed,
   flexRow,
-  fs10RegBlue38,
-  fs12BoldBlue2,
-  sh12,
-  sh14,
+  fs10RegBlue6,
+  fs12RegBlue1,
   sh4,
-  sw01,
   sw100,
+  sw12,
   sw14,
   sw24,
   sw8,
 } from "../../../../../styles";
 
-export interface InvestorNameProps extends ITableCustomItem {}
+interface InvestorNameProps extends ITableCustomItem {
+  sortedColumns?: TransactionsSortColumnType[];
+}
 
-export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item }: InvestorNameProps) => {
-  const { accountType, investorName } = item.rawData as IDashboardOrder;
-  const iconName = accountType === "Joint" ? "avatar-joint" : "avatar-2";
-  const titleStyle: TextStyle = { ...fs12BoldBlue2, letterSpacing: -sw01, lineHeight: sh14, width: sw100 };
-  const subtitleStyle: TextStyle = { ...fs10RegBlue38, lineHeight: sh12, width: sw100 };
+export const InvestorName: FunctionComponent<InvestorNameProps> = ({ item, sortedColumns }: InvestorNameProps) => {
+  const { accountType, investorName, isSeen } = item.rawData as unknown as IDashboardOrder;
+  const iconName = accountType === "Joint" ? "avatar-joint" : "avatar";
+  const updatedTextStyle: TextStyle = sortedColumns !== undefined && sortedColumns.includes("principal") ? { fontFamily: NunitoBold } : {};
+  const titleStyle: TextStyle = { ...fs12RegBlue1, ...updatedTextStyle, maxWidth: sw100 };
+  const subtitleStyle: TextStyle = { ...fs10RegBlue6, ...updatedTextStyle, maxWidth: sw100 };
+  const badgeStyle: ViewStyle = {
+    ...circle(sw8, colorRed._1),
+    top: 0,
+  };
 
   return (
     <View style={centerHV}>
       <View style={{ ...flexRow, ...centerHV }}>
-        <View style={{ ...circle(sw24, colorBlue._2_1), ...centerHV }}>
-          <IcoMoon color={colorBlue._2} name={iconName} size={sw14} />
+        <View style={{ ...circle(sw24, colorGray._1), ...centerHV }}>
+          <IcoMoon color={colorBlue._1} name={iconName} size={sw14} />
         </View>
         <CustomSpacer isHorizontal={true} space={sw8} />
         <View>
-          <Text style={titleStyle} numberOfLines={2}>
-            {investorName.principal}
-          </Text>
+          {isSeen === false ? (
+            <Badge style={badgeStyle} withoutIcon={false}>
+              <View style={flexRow}>
+                <Text style={titleStyle} numberOfLines={2}>
+                  {investorName.principal}
+                </Text>
+                <CustomSpacer isHorizontal space={sw12} />
+              </View>
+            </Badge>
+          ) : (
+            <Text style={titleStyle} numberOfLines={2}>
+              {investorName.principal}
+            </Text>
+          )}
           {accountType === "Joint" ? (
             <Fragment>
               <CustomSpacer space={sh4} />

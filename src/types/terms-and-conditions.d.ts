@@ -27,7 +27,7 @@ interface IBasicAccordionSection {
   termsList: ITermsList[];
 }
 
-interface ICustomAccordionSection {
+interface ITermsAccordionSection {
   title: string;
   custom?: JSX.Element;
   subsection?: IBasicAccordionSection[];

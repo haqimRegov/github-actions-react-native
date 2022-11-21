@@ -3,11 +3,11 @@ import { NativeSyntheticEvent, TextInputFocusEventData, View, ViewStyle } from "
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
-import { centerHorizontal, colorBlue, flexRow, fs12BoldBlue2, py, sh16, sh24, sh32, sh8, sw40 } from "../../styles";
-import { AdvancedDropdown } from "../Dropdown/Advance";
+import { centerHorizontal, colorBlue, DEVICE, flexRow, py, sh126, sh16, sh176, sh24, sh32, sh8, sw360, sw40, sw424 } from "../../styles";
+import { NewDropdown } from "../Dropdown/NewDropdown";
 import { CustomTextInput, TextInputMultiline } from "../Input";
 import { IconButton, OutlineButton } from "../Touchables";
-import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
+import { CustomSpacer } from "./Spacer";
 
 const { ADDRESS } = Language.PAGE;
 interface AddressFieldProps {
@@ -54,9 +54,10 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
   }, [addressType, inputCountry, inputState, setInputState]);
 
   const addressValues = Object.values(inputAddress);
+  const checkScaledDropdownHeight = DEVICE.SCREEN.WIDTH > 1080 || DEVICE.SCREEN.WIDTH < 1080 ? sh126 : sh176;
 
   return (
-    <Fragment>
+    <View>
       {addressValues.map((address: string | undefined, index: number) => {
         const handleAddress = (value?: string) => {
           setInputAddress({ ...inputAddress, [`line${index + 1}`]: value });
@@ -73,7 +74,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         const labelLine = index === 0 ? "" : ` - Line ${index + 1}`;
 
         return (
-          <View key={index}>
+          <View key={index} style={{ width: sw424 }}>
             {index === 0 ? null : <CustomSpacer space={sh16} />}
             {address !== undefined ? (
               <View style={flexRow}>
@@ -84,25 +85,20 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
                   onChangeText={handleAddress}
                   showLength={true}
                   value={address}
+                  viewStyle={{ width: sw360 }}
                 />
-                <CustomSpacer isHorizontal={true} space={sw40} />
                 {index === 0 ? null : (
-                  <View style={centerHorizontal}>
-                    <IconButton name="trash" color={colorBlue._2} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
-                  </View>
+                  <Fragment>
+                    <CustomSpacer isHorizontal={true} space={sw40} />
+                    <View style={{ ...centerHorizontal }}>
+                      <IconButton name="trash" color={colorBlue._1} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
+                    </View>
+                  </Fragment>
                 )}
-                <CustomFlexSpacer />
               </View>
             ) : null}
             {address === undefined && index === addressValues.indexOf(undefined) ? (
-              <OutlineButton
-                buttonType="dashed"
-                color={colorBlue._2}
-                icon="plus"
-                onPress={handleAddLine}
-                text={"Add Additional Line"}
-                textStyle={fs12BoldBlue2}
-              />
+              <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddLine} text={ADDRESS.BUTTON_ADD} />
             ) : null}
           </View>
         );
@@ -121,7 +117,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
       <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
       <CustomSpacer space={sh32} />
       {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[0].value ? (
-        <AdvancedDropdown
+        <NewDropdown
           items={DICTIONARY_MALAYSIA_STATES}
           handleChange={setInputState}
           label={ADDRESS.LABEL_STATE}
@@ -132,15 +128,16 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_STATE_PROVINCE} onChangeText={setInputState} value={inputState} />
       )}
       {setInputCountry !== undefined ? (
-        <AdvancedDropdown
+        <NewDropdown
           items={DICTIONARY_COUNTRIES}
           handleChange={setInputCountry}
           label={ADDRESS.LABEL_COUNTRY}
+          maxHeight={checkScaledDropdownHeight}
           spaceToTop={sh32}
           style={countryDropdownStyle}
           value={inputCountry || ""}
         />
       ) : null}
-    </Fragment>
+    </View>
   );
 };

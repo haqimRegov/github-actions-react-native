@@ -2,7 +2,6 @@ declare type TypeMobileCode =
   | "+61"
   | "+64"
   | "+852"
-  | "+1"
   | "+27"
   | "+44"
   | "+65"
@@ -52,15 +51,12 @@ declare type TypeMobileCode =
   | "+236"
   | "+235"
   | "+56"
-  | "+61"
-  | "+61"
   | "+57"
   | "+269"
   | "+682"
   | "+506"
   | "+385"
   | "+53"
-  | "+599"
   | "+357"
   | "+420"
   | "+243"
@@ -140,7 +136,6 @@ declare type TypeMobileCode =
   | "+692"
   | "+222"
   | "+230"
-  | "+262"
   | "+52"
   | "+691"
   | "+373"
@@ -173,7 +168,6 @@ declare type TypeMobileCode =
   | "+595"
   | "+51"
   | "+63"
-  | "+64"
   | "+48"
   | "+351"
   | "+1-787"
@@ -182,9 +176,7 @@ declare type TypeMobileCode =
   | "+242"
   | "+262"
   | "+40"
-  | "+7"
   | "+250"
-  | "+590"
   | "+290"
   | "+1-869"
   | "+1-758"
@@ -210,7 +202,6 @@ declare type TypeMobileCode =
   | "+94"
   | "+249"
   | "+597"
-  | "+47"
   | "+268"
   | "+46"
   | "+41"
@@ -238,7 +229,6 @@ declare type TypeMobileCode =
   | "+58"
   | "+84"
   | "+681"
-  | "+212"
   | "+967"
   | "+260"
   | "+263";
@@ -312,8 +302,6 @@ declare type TypeMobileCodeCountry =
   | "Denmark"
   | "Djibouti"
   | "Dominica"
-  | "Dominican Republic"
-  | "Dominican Republic"
   | "Dominican Republic"
   | "Timor Leste"
   | "Ecuador"
@@ -422,7 +410,6 @@ declare type TypeMobileCodeCountry =
   | "Poland"
   | "Portugal"
   | "Puerto Rico"
-  | "Puerto Rico"
   | "Qatar"
   | "Republic of the Congo"
   | "Reunion"
@@ -494,6 +481,7 @@ declare interface IMobileCountryCode {
 }
 
 declare interface IMobileCountryCodeFlag {
+  id: string;
   flag?: import("react-native").ImageSourcePropType;
   label: TypeMobileCodeCountry;
   value: TypeMobileCode;

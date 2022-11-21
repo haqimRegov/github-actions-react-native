@@ -10,7 +10,14 @@ export interface BadgeCountProps {
 }
 
 export const BadgeCount: FunctionComponent<BadgeCountProps> = ({ count, countStyle, style }: BadgeCountProps) => {
-  const badgeStyle: ViewStyle = { ...centerHV, backgroundColor: colorRed._1, borderRadius: sw4, height: sh16, width: sw24, ...style };
+  const badgeStyle: ViewStyle = {
+    ...centerHV,
+    backgroundColor: colorRed._1,
+    borderRadius: sw4,
+    height: sh16,
+    minWidth: sw24,
+    ...style,
+  };
   return count === 0 ? (
     <View />
   ) : (

@@ -2,7 +2,9 @@ declare interface IGetSoftCopyDocumentsRequest {
   orderNumber: string;
 }
 
-declare type ISoftCopyFile = DocumentFileBase64 | undefined;
+declare interface ISoftCopyFile extends DocumentFileBase64 {
+  isEditable: boolean;
+}
 
 declare interface ISoftCopyDocument {
   docs: ISoftCopyFile[];
@@ -17,5 +19,5 @@ declare interface IGetSoftCopyDocumentsResult {
 declare type IGetSoftCopyDocumentsResponse = IQueryResponse<IGetSoftCopyDocumentsResult> | undefined;
 
 declare interface IGetSoftCopyDocumentsQuery {
-  listSoftcopyDocuments: IGetSoftCopyDocumentsResponse;
+  listSoftcopyDocumentsV2: IGetSoftCopyDocumentsResponse;
 }

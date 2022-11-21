@@ -1,6 +1,12 @@
-export const FILTER_EPF_LABEL = ["Yes", "No"];
+export const FILTER_EPF_LABEL: ICheckBoxWithSubLabel[] = [
+  { label: "Yes", value: "Yes" },
+  { label: "No", value: "No" },
+];
 export const FILTER_PRODUCT_TYPE = ["Unit Trust (UT)", "Private Retirement Scheme (PRS)"];
-export const FILTER_TYPE = ["Conventional", "Shariah"];
+export const FILTER_TYPE: ICheckBoxWithSubLabel[] = [
+  { label: "Conventional", value: "Conventional" },
+  { label: "Shariah", value: "Shariah" },
+];
 export const FILTER_RISK = ["Low", "Medium", "High"];
 
 export const FILTER_FUND_CURRENCY = [
@@ -21,6 +27,20 @@ export const FILTER_FUND_TYPE = [
   { label: "Mixed Asset / Balanced", value: "Mixed Asset / Balanced" },
   { label: "Money Market", value: "Money Market" },
   { label: "Alternative", value: "Alternative" },
+];
+
+export const FILTER_FUND_TYPE_NEW = [
+  { label: "Balanced", value: "Balanced" },
+  { label: "Equity", value: "Equity" },
+  { label: "Fixed Income", value: "Fixed Income" },
+  { label: "Growth", value: "Growth" },
+  { label: "Mixed Asset", value: "Mixed Asset" },
+  { label: "Money Market", value: "Money Market" },
+];
+
+export const FILTER_FUND_TYPE_AMP = [
+  { label: "Conservative", value: "Conservative" },
+  { label: "Moderate", value: "Moderate" },
 ];
 
 export const FILTER_RISK_CATEGORY = [

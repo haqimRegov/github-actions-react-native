@@ -7,6 +7,7 @@ export const alignItemsEnd = { alignItems: "flex-end" } as const;
 export const alignItemsStart = { alignItems: "flex-start" } as const;
 export const alignSelfStart = { alignSelf: "flex-start" } as const;
 export const alignSelfCenter = { alignSelf: "center" } as const;
+export const alignSelfEnd = { alignSelf: "flex-end" } as const;
 export const centerHorizontal = { justifyContent: "center" } as const;
 export const centerVertical = { alignItems: "center" } as const;
 export const centerHV = { ...centerHorizontal, ...centerVertical } as const;
@@ -43,18 +44,29 @@ export const flexWrap = { flexWrap: "wrap" } as const;
 export const fullHeight = { height: "100%" } as const;
 export const fullWidth = { width: "100%" } as const;
 export const fullHW = { ...fullHeight, ...fullWidth } as const;
-export const borderBottomBlack1 = { borderBottomWidth: 1, borderBottomColor: colorBlack._1 } as const;
-export const borderBottomBlack21 = { borderBottomWidth: 1, borderBottomColor: colorBlack._2_1 } as const;
-export const borderBottomGray1 = { borderBottomWidth: 1, borderBottomColor: colorGray._1 } as const;
+export const autoWidth = { width: "auto" } as const;
+export const autoHeight = { height: "auto" } as const;
+export const borderBottomBlue2 = { borderBottomWidth: 1, borderBottomColor: colorBlue._2 } as const;
+export const borderBottomBlue3 = { borderBottomWidth: 1, borderBottomColor: colorBlue._3 } as const;
+export const borderBottomBlue4 = { borderBottomWidth: 1, borderBottomColor: colorBlue._4 } as const;
+export const borderBottomBlue5 = { borderBottomWidth: 1, borderBottomColor: colorBlue._5 } as const;
+export const borderBottomGray2 = { borderBottomWidth: 1, borderBottomColor: colorGray._2 } as const;
+export const borderBottomGray3 = { borderBottomWidth: 1, borderBottomColor: colorGray._3 } as const;
 export const borderBottomGray4 = { borderBottomWidth: 1, borderBottomColor: colorGray._4 } as const;
-export const borderBottomGray7 = { borderBottomWidth: 1, borderBottomColor: colorGray._7 } as const;
-export const borderBottomRed4 = { borderBottomWidth: 1, borderBottomColor: colorRed._4 } as const;
-export const borderLeftGray4 = { borderLeftWidth: 1, borderLeftColor: colorGray._4 } as const;
+export const borderBottomGray6 = { borderBottomWidth: 1, borderBottomColor: colorGray._6 } as const;
+export const borderBottomRed1 = { borderBottomWidth: 1, borderBottomColor: colorRed._1 } as const;
+export const borderLeftBlue2 = { borderLeftWidth: 1, borderLeftColor: colorBlue._2 } as const;
+export const borderLeftGray3 = { borderLeftWidth: 1, borderLeftColor: colorGray._3 } as const;
 export const noBorderBottom = { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } as const;
 export const borderDashed = { borderStyle: "dashed" } as const;
+export const noBorder = { borderWidth: 0 } as const;
 export const noMargin = { margin: 0 } as const;
 export const noPadding = { padding: 0 } as const;
 export const noBGColor = { backgroundColor: colorTransparent } as const;
+export const overflowHidden = { overflow: "hidden" } as const;
+export const zIndexTop = { zIndex: 1 } as const;
+
+export const rowCenterVertical = { ...centerVertical, ...flexRow } as const;
 
 export const border = (color: string, width: number, radius?: number, style?: "solid" | "dotted" | "dashed") => ({
   borderColor: color,
@@ -86,7 +98,9 @@ export const customShadow = (color: string, offsetY: number, offsetX: number, op
   shadowRadius: radius,
 });
 
-export const disabledOpacity = { opacity: 0.5 } as const;
+export const disabledOpacity4 = { opacity: 0.4 } as const;
+export const disabledOpacity5 = { opacity: 0.5 } as const;
+export const disabledOpacity6 = { opacity: 0.6 } as const;
 
 export const px = (points: number) =>
   ({
@@ -100,11 +114,11 @@ export const py = (points: number) =>
     paddingBottom: points,
   } as const);
 
-export const shadow5 = {
+export const shadow50Black115 = {
   // shadow for android
   // elevation: 5,
   // shadow for ios
-  shadowColor: "#000",
+  shadowColor: colorBlack._1,
   shadowOffset: {
     width: 0,
     height: 5,
@@ -113,7 +127,20 @@ export const shadow5 = {
   shadowRadius: 5,
 } as const;
 
-export const shadowBlack116 = {
+export const shadow12Black112 = {
+  // shadow for android
+  // elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlack._1,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.12,
+  shadowRadius: 12,
+} as const;
+
+export const shadow12Black116 = {
   // shadow for android
   // elevation: 1,
   // shadow for ios
@@ -126,24 +153,11 @@ export const shadowBlack116 = {
   shadowRadius: 12,
 } as const;
 
-export const shadowBlack5 = {
+export const shadow12Blue104 = {
   // shadow for android
   // elevation: 1,
   // shadow for ios
-  shadowColor: colorBlack._1,
-  shadowOffset: {
-    width: 0,
-    height: 0,
-  },
-  shadowOpacity: 0.12,
-  shadowRadius: 12,
-} as const;
-
-export const shadowBlue204 = {
-  // shadow for android
-  // elevation: 1,
-  // shadow for ios
-  shadowColor: colorBlue._2,
+  shadowColor: colorBlue._1,
   shadowOffset: {
     width: 0,
     height: 4,
@@ -152,17 +166,76 @@ export const shadowBlue204 = {
   shadowRadius: 12,
 } as const;
 
-export const shadowBlue5 = {
+export const shadow12Blue108 = {
   // shadow for android
   // elevation: 1,
   // shadow for ios
-  shadowColor: colorBlue._5,
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.08,
+  shadowRadius: 12,
+} as const;
+
+export const shadow16Blue112 = {
+  // shadow for android
+  // elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 4,
+    height: 4,
+  },
+  shadowOpacity: 0.16,
+  shadowRadius: 16,
+} as const;
+
+export const shadow4Blue116 = {
+  // shadow for android
+  // elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlue._1,
   shadowOffset: {
     width: 0,
     height: 0,
   },
-  shadowOpacity: 0.12,
+  shadowOpacity: 0.16,
+  shadowRadius: 4,
+} as const;
+
+export const shadow4Blue008 = {
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.08,
+  shadowRadius: 4,
+} as const;
+
+export const shadow12Blue110 = {
+  // shadow for android
+  // elevation: 1,
+  // shadow for ios
+  shadowColor: colorBlue._1,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.1,
   shadowRadius: 12,
+} as const;
+
+export const noShadow = {
+  shadowColor: colorTransparent,
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0,
+  shadowRadius: 0,
 } as const;
 
 export interface DeviceSizeType {

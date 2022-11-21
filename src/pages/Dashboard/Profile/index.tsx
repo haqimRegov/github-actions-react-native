@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, ScrollView, View, ViewStyle } from "react-native";
+import { Alert, ScrollView, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -7,7 +7,7 @@ import {
   CustomFlexSpacer,
   CustomSpacer,
   LabeledTitle,
-  LabeledTitleProps,
+  Loading,
   RoundedButton,
   Tab,
   TextCard,
@@ -17,19 +17,15 @@ import { Language } from "../../../constants";
 import { getAgentProfile } from "../../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../../store";
 import {
-  borderBottomBlack21,
-  centerHV,
-  colorBlue,
-  colorGray,
+  borderBottomGray2,
   colorWhite,
-  customShadow,
   flexChild,
   flexGrow,
   flexRow,
-  fs12BoldBlue2,
-  fs16BoldBlack2,
-  fs18BoldBlack2,
-  fs40BoldWhite1,
+  fs12BoldBlue1,
+  fs16BoldBlack1,
+  fs18BoldGray6,
+  fs36BoldWhite1,
   fsTransformNone,
   px,
   sh120,
@@ -37,14 +33,13 @@ import {
   sh24,
   sh32,
   sh48,
-  shadowBlue5,
+  shadow16Blue112,
   sw1,
   sw120,
   sw16,
   sw24,
   sw40,
   sw432,
-  sw5,
   sw64,
 } from "../../../styles";
 import { ChangePassword } from "./ChangePassword";
@@ -52,11 +47,11 @@ import { ChangePassword } from "./ChangePassword";
 const { PROFILE } = Language.PAGE;
 
 interface ProfileProps extends GlobalStoreProps {
-  navigation: IStackNavigationProp;
   handleRoute: (route: DashboardPageType) => void;
+  navigation: IStackNavigationProp;
 }
 
-const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }: ProfileProps) => {
+const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, global, navigation }: ProfileProps) => {
   const [agentProfile, setAgentProfile] = useState<IGetAgentProfileResult | undefined>(undefined);
   const [page, setPage] = useState<"profile" | "password">("profile");
 
@@ -82,7 +77,7 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
 
   const cardStyle: ViewStyle = {
     ...flexChild,
-    ...shadowBlue5,
+    ...shadow16Blue112,
     backgroundColor: colorWhite._1,
     borderRadius: sw24,
     marginHorizontal: sw24,
@@ -90,7 +85,9 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
   };
 
   useEffect(() => {
-    handleFetch();
+    if (global.isLogout === false) {
+      handleFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -144,23 +141,21 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
             <View style={flexRow}>
               <Tab selected={true} style={{ height: sh48 }} text={PROFILE.TAB_LABEL_PROFILE} />
             </View>
-            <View style={borderBottomBlack21} />
+            <View style={borderBottomGray2} />
             {agentProfile === undefined ? (
-              <View style={{ ...centerHV, ...flexChild }}>
-                <ActivityIndicator color={colorGray._7} size="small" />
-              </View>
+              <Loading />
             ) : (
               <View>
                 <CustomSpacer space={sh24} />
                 <View style={{ ...flexRow, ...px(sw24) }}>
-                  <View style={{ height: sh120, width: sw120, ...customShadow(colorBlue._5, 0, 0, 0.4, sw5) }}>
-                    <Avatar size={sw120} text={initials} textStyle={fs40BoldWhite1} type="agent" />
+                  <View style={{ height: sh120, width: sw120, ...shadow16Blue112 }}>
+                    <Avatar size={sw120} text={initials} textStyle={fs36BoldWhite1} type="agent" />
                   </View>
                   <CustomSpacer isHorizontal={true} space={sw40} />
                   <View>
-                    <LabeledTitle label={PROFILE.LABEL_NAME} title={agent!.name!} titleStyle={fs16BoldBlack2} style={{ maxWidth: sw432 }} />
+                    <LabeledTitle label={PROFILE.LABEL_NAME} title={agent!.name} titleStyle={fs16BoldBlack1} style={{ maxWidth: sw432 }} />
                     <CustomSpacer space={sh16} />
-                    <LabeledTitle label={PROFILE.LABEL_NRIC} title={agentProfile.nric} titleStyle={fs16BoldBlack2} />
+                    <LabeledTitle label={PROFILE.LABEL_NRIC} title={agentProfile.nric} titleStyle={fs16BoldBlack1} />
                   </View>
                   <CustomFlexSpacer />
                   <RoundedButton
@@ -168,25 +163,25 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, navigation }
                     onPress={handleChangePassword}
                     secondary={true}
                     text={PROFILE.LABEL_CHANGE_PASSWORD}
-                    textStyle={{ ...fs12BoldBlue2, lineHeight: sh16 }}
+                    textStyle={fs12BoldBlue1}
                   />
                 </View>
                 <CustomSpacer space={sh32} />
-                <View style={borderBottomBlack21} />
+                <View style={borderBottomGray2} />
                 <View style={px(sw24)}>
-                  <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={PROFILE.TITLE_ACCOUNT_SUMMARY} />
+                  <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldGray6} text={PROFILE.TITLE_ACCOUNT_SUMMARY} />
                   <TextCard data={accountSummary} spaceBetweenItem={sw64} />
                 </View>
                 <CustomSpacer space={sh16} />
-                <View style={borderBottomBlack21} />
+                <View style={borderBottomGray2} />
                 <View style={px(sw24)}>
-                  <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={PROFILE.TITLE_CONTACT_DETAILS} />
+                  <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldGray6} text={PROFILE.TITLE_CONTACT_DETAILS} />
                   <TextCard data={contactDetailsSummary} spaceBetweenItem={sw64} />
                 </View>
                 <CustomSpacer space={sh16} />
-                <View style={borderBottomBlack21} />
+                <View style={borderBottomGray2} />
                 <View style={px(sw24)}>
-                  <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldBlack2} text={PROFILE.TITLE_ADDRESS_INFO} />
+                  <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs18BoldGray6} text={PROFILE.TITLE_ADDRESS_INFO} />
                   <TextCard data={addressInfoSummary} spaceBetweenItem={sw64} />
                 </View>
                 <CustomSpacer space={sh16} />

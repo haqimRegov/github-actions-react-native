@@ -1,5 +1,6 @@
 declare interface IChangePasswordRequest {
   confirmPassword: string;
+  currentPassword: string;
   password: string;
 }
 
@@ -15,5 +16,5 @@ declare interface IChangePasswordHeader {
 declare type IChangePasswordResponse = IQueryResponse<IChangePasswordResult> | undefined;
 
 declare interface IChangePasswordQuery {
-  changePassword: IChangePasswordResponse;
+  changePasswordV2: IChangePasswordResponse;
 }

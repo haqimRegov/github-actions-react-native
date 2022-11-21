@@ -4,23 +4,22 @@ import { Image, ImageSourcePropType, ImageStyle, Text, TextStyle, View, ViewStyl
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   colorTransparent,
   colorWhite,
   DEVICE,
   flexRow,
-  fs12RegGray6,
+  fs12RegGray4,
   imageContain,
   px,
   sh16,
   sh24,
   sh40,
-  sh44,
-  sh56,
-  shadow5,
+  sh48,
+  shadow50Black115,
+  sw104,
   sw200,
   sw24,
-  sw94,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views";
 
@@ -41,7 +40,7 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
   spaceToBottom,
   spaceToContent,
 }: SideMenuProps) => {
-  const defaultLogoStyle: ImageStyle = { ...imageContain, width: sw94, height: sh40, ...logoStyle };
+  const defaultLogoStyle: ImageStyle = { ...imageContain, width: sw104, height: sh40, ...logoStyle };
   const container: ViewStyle = {
     ...flexRow,
     backgroundColor: colorTransparent,
@@ -53,26 +52,26 @@ export const SideMenu: FunctionComponent<SideMenuProps> = ({
     zIndex: 1,
   };
   const sideMenuV2Container: ViewStyle = {
-    ...shadow5,
+    ...shadow50Black115,
     backgroundColor: colorWhite._1,
     borderTopRightRadius: sw24,
     borderBottomRightRadius: sw24,
     width: sw200,
   };
 
-  const footerStyle: TextStyle = { ...fs12RegGray6, ...px(sw24) };
+  const footerStyle: TextStyle = { ...fs12RegGray4, ...px(sw24) };
 
   return (
     <View style={container}>
       <View style={sideMenuV2Container}>
         <View style={px(sw24)}>
-          <CustomSpacer space={sh44} />
+          <CustomSpacer space={sh40} />
           <Image source={image || LocalAssets.logo.kenangaBrand} style={defaultLogoStyle} />
-          <CustomSpacer space={spaceToContent || sh56} />
+          <CustomSpacer space={spaceToContent || sh48} />
         </View>
         {children}
         {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : <CustomFlexSpacer />}
-        <View style={borderBottomGray4} />
+        <View style={borderBottomGray2} />
         <View>
           <CustomSpacer space={sh16} />
           <Text style={footerStyle}>{SIDE_MENU.LABEL_FOOTER}</Text>

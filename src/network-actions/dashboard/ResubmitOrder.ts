@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const resubmitOrder = async (
   variables: IResubmitOrderRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,6 +14,7 @@ export const resubmitOrder = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
     if (data === undefined || "resubmitOrder" in data === false) {

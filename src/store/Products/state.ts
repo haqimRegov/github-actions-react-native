@@ -43,6 +43,7 @@ export type productsState = {
     sort: IProductSort[];
     totalCount: IProductTotalCount;
   };
+  availableFilters: IProductAvailableFilter;
   productType: ProductType;
 };
 
@@ -51,6 +52,23 @@ export const productsInitialFilter = {
   fundCurrency: [],
   fundType: [],
   issuingHouse: [],
+  riskCategory: [],
+  shariahApproved: [],
+  conventional: [],
+};
+
+export const initialAvailableFilters: IProductAvailableFilter = {
+  fundCurrency: [],
+  fundCategory: [],
+  issuingHouse: [],
+  riskCategory: [],
+};
+
+export const ampInitialFilter = {
+  epfApproved: [],
+  fundCurrency: [],
+  fundType: [],
+  issuingHouse: ["KENANGA INVESTORS BERHAD"],
   riskCategory: [],
   shariahApproved: [],
   conventional: [],
@@ -68,6 +86,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
@@ -85,6 +104,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
@@ -102,6 +122,7 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
@@ -109,7 +130,7 @@ export const productsInitialState: productsState = {
     },
   },
   amp: {
-    filters: productsInitialFilter,
+    filters: ampInitialFilter,
     search: "",
     showBy: "recommended",
     all: [],
@@ -119,11 +140,13 @@ export const productsInitialState: productsState = {
     sort: [
       { column: "fundAbbr", value: "" },
       { column: "fundName", value: "" },
+      { column: "riskCategory", value: "" },
     ],
     totalCount: {
       all: "",
       recommended: "",
     },
   },
+  availableFilters: initialAvailableFilters,
   productType: "ut",
 };

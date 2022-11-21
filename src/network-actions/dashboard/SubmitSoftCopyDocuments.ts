@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const submitSoftCopyDocuments = async (
   variables: ISubmitSoftCopyDocumentsRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,13 +14,14 @@ export const submitSoftCopyDocuments = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
-    if (data === undefined || "submitSoftcopyDocuments" in data === false) {
+    if (data === undefined || "submitSoftcopyDocumentsV2" in data === false) {
       throw data;
     }
 
-    return data.submitSoftcopyDocuments;
+    return data.submitSoftcopyDocumentsV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in submitSoftCopyDocuments at SubmitSoftCopyDocuments.ts", error);

@@ -4,6 +4,7 @@ import { responseHandler } from "../../utils";
 export const getOrderSummary = async (
   variables: IGetOrderSummaryRequest,
   navigation: IStackNavigationProp,
+  handleLoading?: (loading: boolean) => void,
   handleError?: ResponseErrorType,
 ) => {
   try {
@@ -13,13 +14,14 @@ export const getOrderSummary = async (
       undefined,
       navigation,
       handleError,
+      handleLoading,
     );
 
-    if (data === undefined || "getOrderSummary" in data === false) {
+    if (data === undefined || "getOrderSummaryV2" in data === false) {
       throw data;
     }
 
-    return data.getOrderSummary;
+    return data.getOrderSummaryV2;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in getGetOrderSummary at GetOrderSummary.ts", error);

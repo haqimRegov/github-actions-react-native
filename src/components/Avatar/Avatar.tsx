@@ -6,14 +6,14 @@ import {
   circle,
   circleBorder,
   colorBlue,
-  colorMagenta,
   colorOrange,
   colorPink,
+  colorPurple,
   colorWhite,
-  colorYellow,
   fs16BoldWhite1,
   fsUppercase,
-  shadowBlue5,
+  scaleWidth,
+  shadow16Blue112,
   sw2,
   sw24,
   sw46,
@@ -22,6 +22,7 @@ import {
 
 export interface AvatarProps {
   color?: string;
+  containerStyle?: ViewStyle;
   image?: ImageSourcePropType;
   size?: number;
   text?: string;
@@ -29,15 +30,19 @@ export interface AvatarProps {
   type?: AvatarType;
 }
 
-export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, text, textStyle, type }: AvatarProps) => {
+export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, text, textStyle, type, containerStyle }: AvatarProps) => {
   const defaultSize = size !== undefined ? size : sw48;
+
   const container: ViewStyle = {
     ...centerHV,
     ...circleBorder(defaultSize, sw2, colorWhite._1),
-    ...shadowBlue5,
+    ...shadow16Blue112,
+    ...containerStyle,
   };
 
-  let defaultColor = color !== undefined ? color : colorBlue._2;
+  const avatarSize = container.borderWidth !== undefined ? scaleWidth(defaultSize - container.borderWidth) : defaultSize;
+
+  let defaultColor = color !== undefined ? color : colorBlue._1;
   if (type !== undefined) {
     switch (type) {
       case "agent":
@@ -45,9 +50,9 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
         break;
 
       case "branch":
-        defaultColor = colorMagenta._1;
+        defaultColor = colorPurple._2;
         break;
-
+      case "system":
       case "hq":
         defaultColor = colorBlue._7;
         break;
@@ -56,15 +61,11 @@ export const Avatar: FunctionComponent<AvatarProps> = ({ color, image, size, tex
         defaultColor = colorOrange._1;
         break;
 
-      case "system":
-        defaultColor = colorYellow._2;
-        break;
-
       default:
         break;
     }
   }
-  const defaultAvatarStyle: ViewStyle = { ...centerHV, ...circle(defaultSize, defaultColor) };
+  const defaultAvatarStyle: ViewStyle = { ...centerHV, ...circle(avatarSize, defaultColor) };
 
   return (
     <View style={container}>

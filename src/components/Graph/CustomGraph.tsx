@@ -31,13 +31,13 @@ export const CustomGraph: FunctionComponent<CustomGraphProps> = ({
   };
 
   const navLine: Dataset = {
-    color: () => colorBlue._2,
+    color: () => colorBlue._1,
     data: performance || [],
     strokeWidth: sw2,
   };
 
   const benchmarkLine: Dataset = {
-    color: () => colorGray._6,
+    color: () => colorGray._2,
     data: benchmark || [],
     strokeWidth: sw2,
   };
@@ -60,7 +60,7 @@ export const CustomGraph: FunctionComponent<CustomGraphProps> = ({
     backgroundGradientToOpacity: 0,
     color: () => colorGray._2,
     decimalPlaces: 0,
-    labelColor: () => colorGray._6,
+    labelColor: () => colorGray._2,
     strokeWidth: 2,
     width: defaultLayout.width,
   };

@@ -7,7 +7,7 @@ import { CustomSpacer } from "../../../../../components";
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { colorWhite, flexChild, sh232, sh272, shadowBlack116, sw24 } from "../../../../../styles";
+import { colorWhite, flexChild, sh232, sh272, shadow12Black116, sw24 } from "../../../../../styles";
 import { ProductHeader } from "../Header";
 import { ProductListView } from "../Listing";
 
@@ -76,7 +76,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       showBy: showBy,
       search: search,
     };
-    const productListResponse: IProductListResponse = await getProductList(request, navigation);
+    const productListResponse: IProductListResponse = await getProductList(request, navigation, setLoading);
     setLoading(false);
     if (productListResponse !== undefined) {
       const { data, error } = productListResponse;
@@ -188,7 +188,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   }, [sort, search, filters, showBy]);
 
   return (
-    <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadowBlack116 }}>
+    <View style={{ ...flexChild, borderRadius: sw24, backgroundColor: colorWhite._1, margin: sw24, ...shadow12Black116 }}>
       <ProductHeader
         filter={filterTemp}
         filterVisible={filterVisible}

@@ -9,14 +9,18 @@ declare interface ISubmitPdfDocument {
 declare interface ISubmitPdfRequest {
   clientId: string;
   documents: ISubmitPdfDocument[];
+  initId: string;
+  isConfirmed: boolean;
+  isEtb: boolean;
+  isForceUpdate: boolean;
 }
 
-declare interface ISubmitPdfResult {
+declare interface ISubmitPdfResult extends ISubmissionSummaryOrder {
   message: string;
-  status: string;
 }
+
 declare type ISubmitPdfResponse = IMutationResponse<ISubmitPdfResult> | undefined;
 
 declare interface ISubmitPdfMutation {
-  SubmitPdf: ISubmitPdfResponse;
+  submitPdfV2: ISubmitPdfResponse;
 }

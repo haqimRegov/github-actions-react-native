@@ -1,26 +1,34 @@
 import React, { FunctionComponent } from "react";
-import { View } from "react-native";
 
+import { PendingActions } from "./Actions";
 import { CreatedOn } from "./CreatedOn";
 import { InvestorName } from "./InvestorName";
 import { LastUpdated } from "./LastUpdated";
 import { PendingStatus } from "./Status";
 import { TotalInvestments } from "./TotalInvestments";
 
-export interface CustomTableItemProps extends ITableCustomItem {}
-export const CustomTableItem: FunctionComponent<CustomTableItemProps> = (data: CustomTableItemProps) => {
-  switch (data.keyName.key) {
+declare interface CustomTableItemProps extends ITableCustomItem {
+  downloadInitiated?: boolean;
+  handleResubmitOrder?: (orderNumber: string) => void;
+  handleSelectOrder?: (order: IDashboardOrder) => void;
+  onClose?: () => void;
+  setCurrentOrder?: (order: IDashboardOrder) => void;
+  setScreen?: (route: TransactionsPageType) => void;
+  sortedColumns?: TransactionsSortColumnType[];
+}
+export const CustomTableItem: FunctionComponent<CustomTableItemProps> = ({ sortedColumns, ...rest }: CustomTableItemProps) => {
+  switch (rest.keyName.key) {
     case "investorName":
-      return <InvestorName {...data} />;
+      return <InvestorName sortedColumns={sortedColumns} {...rest} />;
     case "status":
-      return <PendingStatus {...data} />;
+      return <PendingStatus {...rest} />;
     case "totalInvestment":
-      return <TotalInvestments {...data} />;
+      return <TotalInvestments sortedColumns={sortedColumns} {...rest} />;
     case "createdOn":
-      return <CreatedOn {...data} />;
+      return <CreatedOn sortedColumns={sortedColumns} {...rest} />;
     case "lastUpdated":
-      return <LastUpdated {...data} />;
+      return <LastUpdated sortedColumns={sortedColumns} {...rest} />;
     default:
-      return <View />;
+      return <PendingActions sortedColumns={sortedColumns} {...rest} />;
   }
 };

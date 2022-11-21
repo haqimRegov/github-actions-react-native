@@ -1,43 +1,46 @@
 {
   "root": true,
-  "extends": [
-    "@react-native-community",
-    "airbnb-base",
-    "prettier"
-  ],
+  "extends": ["@react-native-community", "airbnb-base", "plugin:@typescript-eslint/recommended", "prettier"],
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "import",
-    "prettier",
-    "react",
-    "react-hooks",
-    "react-native"
-  ],
+  "plugins": ["@typescript-eslint", "import", "prettier", "react", "react-hooks", "react-native"],
   "rules": {
-    "import/extensions": 0,
-    "import/no-default-export": 1,
-    "import/no-unresolved": 0,
-    "import/prefer-default-export": 0,
-    "no-plusplus": 0,
-    "no-underscore-dangle": 0,
-    "no-use-before-define": 1,
-    "object-shorthand": 0,
-    "prettier/prettier": [
-      "error"
-    ],
-    "quotes": [
-      2,
-      "double"
-    ],
-    "react-hooks/exhaustive-deps": 1,
-    "react-hooks/rules-of-hooks": 2,
-    "react-native/no-color-literals": 1,
-    "react-native/no-inline-styles": 1,
-    "react-native/no-raw-text": 2,
-    "react-native/no-single-element-style-arrays": 2,
-    "react-native/no-unused-styles": 2,
-    "react-native/sort-styles": 1,
-    "react-native/split-platform-components": 0
-  }
+    "import/extensions": "off",
+    "import/no-default-export": "warn",
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "no-underscore-dangle": "off",
+    "no-use-before-define": "off", // conflict with typescript, use typescript rule instead
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "object-shorthand": "off",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "quotes": ["error", "double"],
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-native/no-color-literals": "warn",
+    "react-native/no-inline-styles": "warn",
+    "react-native/no-raw-text": "error",
+    "react-native/no-single-element-style-arrays": "error",
+    "react-native/no-unused-styles": "error",
+    "react-native/sort-styles": "warn",
+    "react-native/split-platform-components": "off",
+    "arrow-body-style": "off",
+    "no-undef": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-non-null-assertion": "off", // temporary
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off", // temporary
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+  },
+  "overrides": [
+    { "files": ["./src/store/**/*"], "rules": { "default-param-last": "off" } },
+    { "files": ["./sonar-project.js"], "rules": { "import/newline-after-import": "off" } },
+    {
+      "files": ["./jest.*.*"],
+      "rules": {
+        "import/no-default-export": "off",
+        "eslint-comments/no-unused-disable": "off",
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

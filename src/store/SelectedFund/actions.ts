@@ -16,10 +16,6 @@ export const addViewFund = (fund: IProduct | undefined) => {
   return typedAction("selectedFund/VIEW_FUND", fund);
 };
 
-export const resetViewFund = () => {
-  return typedAction("selectedFund/RESET_VIEW_FUND");
-};
-
 export const resetSelectedFund = () => {
   return typedAction("selectedFund/RESET_SELECTED_FUND");
 };
@@ -34,7 +30,6 @@ export type SelectedFundAction = ReturnType<
   | typeof resetInvestmentDetails
   | typeof resetSelectedFund
   | typeof addViewFund
-  | typeof resetViewFund
   | typeof updateOutsideRisk
 >;
 
@@ -44,7 +39,6 @@ export const SelectedFundActionProps = {
   resetInvestmentDetails,
   resetSelectedFund,
   addViewFund,
-  resetViewFund,
   updateOutsideRisk,
 };
 

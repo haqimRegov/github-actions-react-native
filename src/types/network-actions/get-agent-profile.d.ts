@@ -1,4 +1,4 @@
-declare interface IGetAgentProfileRequest {}
+declare type IGetAgentProfileRequest = Record<string, unknown>;
 
 declare interface IGetAgentProfileMessage {
   createdOn: string;

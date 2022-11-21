@@ -7,7 +7,7 @@ import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
-import { flexChild, flexCol, fs12BoldBlack2, fs16BoldBlack2, fs16SemiBoldBlack2, sh56 } from "../../../styles";
+import { flexChild, flexCol, fs16RegGray6, sh56 } from "../../../styles";
 import { ProductConfirmation } from "./Confirmation";
 import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
@@ -25,6 +25,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   details,
   handleNextStep,
   investmentDetails,
+  global,
   onboarding,
   resetProducts,
   resetSelectedFund,
@@ -35,6 +36,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   viewFund,
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
+  const { agent, isMultiUtmc } = global;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
@@ -94,7 +96,24 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
       return initialStateArray.push(newState);
     });
-    addInvestmentDetails(initialStateArray);
+    const kenangaArray = initialStateArray.filter(
+      (eachElement: IProductSales) => eachElement.fundDetails.issuingHouse === "KENANGA INVESTORS BERHAD",
+    );
+    const sortedWithoutKenanga: IProductSales[] = initialStateArray
+      .filter((eachInitialElement: IProductSales) => eachInitialElement.fundDetails.issuingHouse !== "KENANGA INVESTORS BERHAD")
+      .sort((firstElement: IProductSales, secondElement: IProductSales) => {
+        const { fundDetails: firstFundDetails } = firstElement;
+        const { fundDetails: secondFundDetails } = secondElement;
+        if (firstFundDetails.issuingHouse < secondFundDetails.issuingHouse) {
+          return -1;
+        }
+        if (firstFundDetails.issuingHouse > secondFundDetails.issuingHouse) {
+          return 1;
+        }
+        return 0;
+      });
+    const sortedInvestmentArray = [...kenangaArray, ...sortedWithoutKenanga];
+    addInvestmentDetails(sortedInvestmentArray);
     setPage(1);
   };
 
@@ -147,7 +166,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
     addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
-    const route: TypeOnboardingRoute = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
+    const route: TypeOnboardingKey = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
     handleNextStep(route);
     const updatedFinishedSteps: TypeOnboardingKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
@@ -200,6 +219,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         handleShareDocuments={handleShareDocuments}
         scrollEnabled={scrollEnabled}
         setScrollEnabled={setScrollEnabled}
+        withEpf={withEpf}
       />
     ),
     onPressCancel: handleCancelProducts,
@@ -213,7 +233,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       content: (
         <ProductConfirmation
           accountType={accountType}
+          agentCategory={agent!.category!}
           investmentDetails={investmentDetails!}
+          multiUtmc={isMultiUtmc}
           selectedFunds={selectedFunds}
           setFixedBottomShow={setFixedBottomShow}
           setInvestmentDetails={addInvestmentDetails}
@@ -272,7 +294,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
       (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
       investment.amountError !== undefined ||
-      investment.scheduledAmountError !== undefined
+      investment.scheduledAmountError !== undefined ||
+      investment.investmentSalesChargeError !== undefined ||
+      investment.scheduledSalesChargeError !== undefined
     );
   });
 
@@ -288,11 +312,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     if (finishedSteps.includes("Products")) {
       setPage(1);
     }
-    Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
-    Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
+    const keyboardWillHide = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
+    const keyboardWillShow = Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
     return () => {
-      Keyboard.removeListener("keyboardWillHide", handleKeyboardHide);
-      Keyboard.removeListener("keyboardWillShow", handleKeyboardShow);
+      keyboardWillHide.remove();
+      keyboardWillShow.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -311,7 +335,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         scrollEnabled === true ? (
           <View style={flexCol}>
             <SelectionBanner
-              bottomContent={<Text style={fs16SemiBoldBlack2}>{bannerText}</Text>}
+              bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
               cancelOnPress={screen.onPressCancel}
               continueDisabled={disableContinue !== undefined && page === 1}
               labelCancel={INVESTMENT.BUTTON_CANCEL}
@@ -330,7 +354,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         spaceToTitle={prompt === "cancel" ? undefined : sh56}
         title={promptTitle}
         visible={prompt !== undefined}>
-        <Text style={prompt === "cancel" ? fs16BoldBlack2 : fs12BoldBlack2}>{promptText}</Text>
+        <Text style={fs16RegGray6}>{promptText}</Text>
       </ConfirmationModal>
     </Fragment>
   );

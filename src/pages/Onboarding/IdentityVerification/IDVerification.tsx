@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomBlack21, px, sh24, sh48, sw24, sw48 } from "../../../styles";
+import { borderBottomGray2, px, sh24, sh48, sw24, sw48 } from "../../../styles";
 import { JointVerification } from "./Joint";
 import { PrincipalVerification } from "./Principal";
 
@@ -13,7 +13,7 @@ const { ID_VERIFICATION } = Language.PAGE;
 
 interface IDVerificationProps extends PersonalInfoStoreProps {
   handleBack: () => void;
-  handleNextStep: (route: TypeOnboardingRoute) => void;
+  handleNextStep: (route: TypeOnboardingKey) => void;
 }
 
 const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
@@ -43,7 +43,9 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   const validateDetails = (details: IHolderInfoState, rules: IIDVerificationValidations) => {
     const { addressInformation, personalDetails } = details;
     const checkPassport =
-      personalDetails!.idType === "Passport" ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined : true;
+      personalDetails!.idType === "Passport"
+        ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined && personalDetails!.countryOfBirth !== ""
+        : true;
 
     return (
       personalDetails!.idNumber !== "" &&
@@ -65,7 +67,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
 
   const handleSubmit = () => {
     addPersonalInfo({ principal: { ...principal, personalDetails: { ...principal?.personalDetails, riskProfile: riskScore.appetite } } });
-    const route: TypeOnboardingRoute = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "PersonalDetails";
+    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "PersonalDetails";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findPersonalDetails = updatedDisabledSteps.indexOf("PersonalDetails");
     if (findPersonalDetails !== -1) {
@@ -135,7 +137,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       {accountType === "Individual" ? null : (
         <Fragment>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <CustomSpacer space={sh48} />
           <JointVerification
             accountHolder="Joint"

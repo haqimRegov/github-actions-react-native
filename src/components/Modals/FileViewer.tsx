@@ -7,6 +7,7 @@ import {
   centerHV,
   centerVertical,
   colorBlack,
+  colorGray,
   colorTransparent,
   colorWhite,
   flexChild,
@@ -21,11 +22,11 @@ import {
   sh40,
   sh500,
   sh96,
-  shadow5,
+  shadow50Black115,
   sw40,
   sw750,
 } from "../../styles";
-import { BYTE_TO_MEGABYTE } from "../Upload/Upload";
+import { BYTE_TO_MEGABYTE } from "../Upload/UploadDocument";
 import { LabeledTitle } from "../Views/LabeledTitle";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 import { BasicModal } from "./Basic";
@@ -54,14 +55,15 @@ export const FileViewer: FunctionComponent<FileViewerModalProps> = ({
   };
 
   const headerBGColor = value.type === "application/pdf" ? { backgroundColor: colorWhite._1 } : {};
-  const headerTextColor = value.type === "application/pdf" ? colorBlack._2 : colorWhite._1;
+  const headerTextColor = value.type === "application/pdf" ? colorGray._6 : colorWhite._1;
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
-  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow5 };
+  const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow50Black115 };
   const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
 
   const modalAnimationInTiming = value.type === "application/pdf" ? 0 : 450;
 
-  const imageLink: ImageSourcePropType = value.url !== undefined ? { uri: value.url } : { uri: "" };
+  const checkBase64 = resourceType === "base64" ? { uri: `data:${value.type};base64,${value.base64}` } : { uri: "" };
+  const imageLink: ImageSourcePropType = value.url !== undefined ? { uri: value.url } : checkBase64;
   const imagePath: ImageSourcePropType | undefined =
     resourceType !== undefined && resourceType === "file" && value.path !== undefined ? { uri: value.path } : undefined;
 
@@ -94,7 +96,7 @@ export const FileViewer: FunctionComponent<FileViewerModalProps> = ({
               <View style={viewImageHeader}>
                 <LabeledTitle label={value.name} labelStyle={headerTextStyle} title={fileSize} titleStyle={headerTextStyle} />
                 <CustomFlexSpacer />
-                <IcoMoon color={headerTextColor} name="close" onPress={handleClose} size={sh24} />
+                <IcoMoon color={headerTextColor} name="close" onPress={handleClose} size={sh24} suppressHighlighting={true} />
               </View>
               <CustomSpacer space={sh24} />
             </View>
@@ -109,7 +111,7 @@ export const FileViewer: FunctionComponent<FileViewerModalProps> = ({
                 />
               </View>
             ) : (
-              <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_85 }}>
+              <View style={{ ...centerHV, ...fullHW, backgroundColor: colorBlack._1_7 }}>
                 <Image source={imagePath || imageLink} style={imageStyle} />
               </View>
             )}

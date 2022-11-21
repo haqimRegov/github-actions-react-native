@@ -1,11 +1,12 @@
 import gql from "graphql-tag";
 
 const changePassword = gql`
-  mutation ChangePassword($input: ChangePasswordInput) {
-    changePassword(input: $input) {
+  mutation changePasswordV2($input: ChangePasswordInputV2) {
+    changePasswordV2(input: $input) {
       data {
         result {
           status
+          message
         }
       }
       error {
@@ -19,22 +20,32 @@ const changePassword = gql`
 `;
 
 const clientRegister = gql`
-  mutation ClientRegister($input: register) {
-    clientRegister(input: $input) {
+  mutation register($input: ClientRegisterInput) {
+    clientRegisterV2(input: $input) {
       data {
         result {
           message
+          initId
           principalHolder {
+            name
             clientId
             dateOfBirth
             id
-            name
+            idType
           }
           jointHolder {
-            dateOfBirth
-            id
             name
+            id
+            dateOfBirth
             clientId
+            idType
+          }
+          riskInfo {
+            appetite
+            expectedRange
+            profile
+            type
+            hnwStatus
           }
         }
       }
@@ -49,8 +60,28 @@ const clientRegister = gql`
 `;
 
 const emailVerification = gql`
-  mutation emailVerification($input: email) {
-    emailVerification(input: $input) {
+  mutation emailVerification($input: EmailVerificationInput) {
+    emailVerificationV2(input: $input) {
+      data {
+        result {
+          message
+          status
+          otpSendTime
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const emailOtpVerification = gql`
+  mutation emailOtpVerification($input: EmailOtpVerificationInput) {
+    emailOtpVerificationV2(input: $input) {
       data {
         result {
           message
@@ -67,13 +98,13 @@ const emailVerification = gql`
   }
 `;
 
-const emailOtpVerification = gql`
-  mutation emailOtpVerification($input: verifyOtp) {
-    emailOtpVerification(input: $input) {
+const expiredPassword = gql`
+  mutation expiredChangePassword($input: ExpiredChangePasswordInput) {
+    expiredChangePassword(input: $input) {
       data {
         result {
-          message
           status
+          message
         }
       }
       error {
@@ -128,7 +159,7 @@ const forgotPassword = gql`
 
 const generatePdf = gql`
   mutation generatePdf($input: PdfInput) {
-    generatePdf(input: $input) {
+    generatePdfV2(input: $input) {
       data {
         result {
           message
@@ -153,13 +184,91 @@ const generatePdf = gql`
   }
 `;
 
-const submitPdf = gql`
-  mutation submitPdf($input: submitPdfInput) {
-    submitPdf(input: $input) {
+const generatePdfTransactions = gql`
+  mutation generatePdfTransactions($input: TransactionsPdfInput) {
+    generatePdfTransactions(input: $input) {
       data {
         result {
           message
           status
+          pdf {
+            url
+            base64
+            name
+            date
+            urlPageCount
+            type
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitPdf = gql`
+  mutation submitPdf($input: SubmitPdfInputV2) {
+    submitPdfV2(input: $input) {
+      data {
+        result {
+          message
+          status
+          orderNumber
+          remarks {
+            title
+            remarks
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitPdfTransactions = gql`
+  mutation submitPdfTransactions($input: submitPdfTransactionsInput) {
+    submitPdfTransactions(input: $input) {
+      data {
+        result {
+          message
+          status
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const orderTrackingSummary = gql`
+  mutation getOrderTrackingSummary($input: PdfInput) {
+    generateOrderTrackingSummary(input: $input) {
+      data {
+        result {
+          message
+          status
+          pdf {
+            url
+            type
+            date
+            name
+            base64
+            urlPageCount
+          }
         }
       }
       error {
@@ -249,13 +358,15 @@ const resubmitOrder = gql`
 `;
 
 const riskAssessment = gql`
-  mutation RiskAssessment($input: risk) {
-    riskAssessment(input: $input) {
+  mutation riskAssessmentV2($input: RiskAssessmentInput) {
+    riskAssessmentV2(input: $input) {
       data {
         result {
           appetite
+          status
           rangeOfReturn
           type
+          message
           fundSuggestion
           netWorth
           profile
@@ -271,12 +382,42 @@ const riskAssessment = gql`
   }
 `;
 
-const submitHardCopyDocuments = gql`
-  mutation submitHardcopyDocuments($input: HardcopyDocumentsInput) {
-    submitHardcopyDocuments(input: $input) {
+const submitChangeRequest = gql`
+  mutation submitCr($input: submitCrInput) {
+    submitCr(input: $input) {
       data {
         result {
-          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitHardCopyDocuments = gql`
+  mutation submitHardcopyDocumentsV2($input: HardcopyDocumentsInputV2) {
+    submitHardcopyDocumentsV2(input: $input) {
+      data {
+        result {
+          orders {
+            orderNumber
+            status
+            remarks
+            docList {
+              title
+              remarks {
+                principalHolder
+                jointHolder
+                hardcopy
+              }
+            }
+          }
           message
         }
       }
@@ -291,11 +432,23 @@ const submitHardCopyDocuments = gql`
 `;
 
 const submitSoftCopyDocuments = gql`
-  mutation submitSoftcopyDocuments($input: SoftcopyDocumentsInput) {
-    submitSoftcopyDocuments(input: $input) {
+  mutation submitSoftcopyDocumentsV2($input: SoftcopyDocumentsInputV2) {
+    submitSoftcopyDocumentsV2(input: $input) {
       data {
         result {
-          status
+          orders {
+            orderNumber
+            status
+            remarks
+            txRef
+            docList {
+              title
+              remarks {
+                principalHolder
+                jointHolder
+              }
+            }
+          }
           message
         }
       }
@@ -354,8 +507,8 @@ const verifyLockOtp = gql`
 `;
 
 const submitClientAccount = gql`
-  mutation SubmitClientAccount($input: SubmitClientAccountInput) {
-    submitClientAccount(input: $input) {
+  mutation submitClientAccount($input: SubmitClientAccountInput) {
+    submitClientAccountV2(input: $input) {
       data {
         result {
           grandTotal {
@@ -378,6 +531,7 @@ const submitClientAccount = gql`
             investments {
               distributionInstruction
               fundClass
+              fundCode
               fundCurrency
               fundingOption
               fundId
@@ -392,6 +546,7 @@ const submitClientAccount = gql`
               salesCharge
               scheduledInvestmentAmount
               scheduledSalesCharge
+              landingFund
             }
           }
         }
@@ -401,6 +556,62 @@ const submitClientAccount = gql`
         errorList
         message
         statusCode
+      }
+    }
+  }
+`;
+
+const submitClientAccountTransactions = gql`
+  mutation submitClientAccountTransaction($input: SubmitClientAccountTransactionsInput) {
+    submitClientAccountTransactions(input: $input) {
+      data {
+        result {
+          grandTotal {
+            currency
+            amount
+          }
+          grandTotalRecurring {
+            currency
+            amount
+          }
+          orders {
+            orderNumber
+            orderDate
+            allowedRecurringType
+            orderTotalAmount {
+              currency
+              amount
+            }
+            paymentType
+            investments {
+              fundingOption
+              distributionInstruction
+              fundCurrency
+              fundId
+              fundClass
+              fundIssuer
+              fundName
+              fundType
+              investmentAmount
+              isEpf
+              isSyariah
+              salesCharge
+              isScheduled
+              scheduledInvestmentAmount
+              scheduledSalesCharge
+              isFea
+              landingFund
+              fundCode
+              isTopup
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
       }
     }
   }
@@ -417,12 +628,30 @@ const submitProofOfPayments = gql`
           }
           orders {
             orderNumber
+            totalRecurring
             paymentType
             status
             remarks
+            totalPayment {
+              currency
+              amount
+            }
+            excessAmount {
+              currency
+              amount
+            }
+            docList {
+              title
+              remarks {
+                principalHolder
+                jointHolder
+              }
+            }
           }
           withFloating
           message
+          txRef
+          withHardcopy
         }
       }
       error {
@@ -479,6 +708,7 @@ const userLogin = gql`
       data {
         result {
           accessKeyId
+          agentCategory
           agentId
           branch
           email
@@ -491,6 +721,18 @@ const userLogin = gql`
           rank
           secretAccessKey
           sessionToken
+          isMultiUtmc
+          isTermsAgreed
+          events {
+            checkbox
+            description
+            eventName
+            header
+            headerDescription
+            primaryButton
+            s3Path
+            secondaryButton
+          }
         }
       }
       error {
@@ -504,8 +746,46 @@ const userLogin = gql`
 `;
 
 const updateInbox = gql`
-  mutation updateinbox($input: UpdateInboxInput) {
-    updateInbox(input: $input) {
+  mutation updateInbox {
+    updateInbox {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const submitEDDCase = gql`
+  mutation submitEdd($input: SubmitEddInput) {
+    submitEdd(input: $input) {
+      data {
+        result {
+          status
+          message
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
+const updateSeen = gql`
+  mutation updateSeen($input: SeenInput) {
+    updateSeen(input: $input) {
       data {
         result {
           status
@@ -527,21 +807,29 @@ export const GQL_MUTATIONS = {
   clientRegister,
   emailOtpVerification,
   emailVerification,
+  expiredPassword,
   firstTimeSignUp,
   forgotPassword,
   generatePdf,
+  generatePdfTransactions,
+  orderTrackingSummary,
   registerPassword,
   resendLockOtp,
   resetPassword,
   resubmitOrder,
   riskAssessment,
+  submitChangeRequest,
   submitClientAccount,
-  submitPdf,
-  submitProofOfPayments,
+  submitClientAccountTransactions,
+  submitEDDCase,
   submitHardCopyDocuments,
+  submitPdf,
+  submitPdfTransactions,
+  submitProofOfPayments,
   submitSoftCopyDocuments,
   summaryReceipt,
   updateInbox,
+  updateSeen,
   userLogin,
   verifyLockOtp,
   verifyOtp,

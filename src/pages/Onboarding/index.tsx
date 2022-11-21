@@ -1,10 +1,12 @@
 import { CommonActions } from "@react-navigation/native";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { OnboardingSteps } from "../../components";
+import { StepperBar } from "../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
+import { flexRow, fullHW } from "../../styles";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
@@ -34,7 +36,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
   {
     label: ONBOARDING.TITLE_PRODUCT_RECOMMENDATION,
-    route: ONBOARDING_ROUTES.ProductRecommendation,
+    route: ONBOARDING_ROUTES.Products,
     key: ONBOARDING_KEYS.Products,
   },
   {
@@ -68,7 +70,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
   },
   {
     content: [
-      { title: ONBOARDING.TITLE_ORDER_SUMMARY, route: ONBOARDING_ROUTES.OrderSummary, key: ONBOARDING_KEYS.OrderSummary },
+      { title: ONBOARDING.TITLE_ORDER_PREVIEW, route: ONBOARDING_ROUTES.OrderSummary, key: ONBOARDING_KEYS.OrderSummary },
       {
         title: ONBOARDING.TITLE_TERMS_CONDITIONS,
         route: ONBOARDING_ROUTES.TermsAndConditions,
@@ -98,21 +100,27 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     navigation,
     resetAcknowledgement,
     resetClientDetails,
+    resetOnboarding,
     resetPersonalInfo,
-    resetRiskAssessment,
-    resetViewFund,
-    resetSelectedFund,
     resetProducts,
-    resetSteps,
+    resetRiskAssessment,
+    resetSelectedFund,
     resetTransactions,
     updateFinishedSteps,
   } = props;
 
+  const stepperBarRef = useRef<IStepperBarRef<TypeOnboardingKey>>();
   const [cancelOnboarding, setCancelOnboarding] = useState<boolean>(false);
-  const [activeContent, setActiveContent] = useState<IContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);
+  const [activeContent, setActiveContent] = useState<IOnboardingContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
 
-  const handleContentChange = (item: IContentItem | IOnboarding) => {
+  const handleNextStep = (route: TypeOnboardingKey) => {
+    if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
+      stepperBarRef.current.handleNextStep(route);
+    }
+  };
+
+  const handleContentChange = (item: IOnboardingContentItem | IOnboarding) => {
     setActiveContent(item);
   };
 
@@ -126,10 +134,9 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetClientDetails();
     resetPersonalInfo();
     resetRiskAssessment();
-    resetViewFund();
     resetSelectedFund();
     resetProducts();
-    resetSteps();
+    resetOnboarding();
     resetTransactions();
     navigation.dispatch(
       CommonActions.reset({
@@ -145,35 +152,30 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     }
   }, []);
 
-  // TODO scroll position reseting when back to dashboard
-
   return (
-    <Fragment>
-      <OnboardingSteps
+    <View style={{ ...flexRow, ...fullHW }}>
+      <StepperBar<TypeOnboardingKey>
         activeContent={activeContent}
         activeSection={activeSection}
         disabledSteps={disabledSteps}
         finishedSteps={finishedSteps}
         handleContentChange={handleContentChange}
         handleBackToDashboard={handleCancelOnboarding}
-        RenderContent={({ handleNextStep }) => {
-          return (
-            <OnboardingContent
-              handleCancelOnboarding={handleCancelOnboarding}
-              handleResetOnboarding={handleResetOnboarding}
-              cancelOnboarding={cancelOnboarding}
-              handleNextStep={handleNextStep}
-              navigation={navigation}
-              route={activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskAssessment}
-            />
-          );
-        }}
+        ref={stepperBarRef}
         setActiveContent={setActiveContent}
         setActiveSection={setActiveSection}
         setFinishedStep={updateFinishedSteps}
         steps={ONBOARDING_DATA}
       />
-    </Fragment>
+      <OnboardingContent
+        handleCancelOnboarding={handleCancelOnboarding}
+        handleResetOnboarding={handleResetOnboarding}
+        cancelOnboarding={cancelOnboarding}
+        handleNextStep={handleNextStep}
+        navigation={navigation}
+        route={activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskAssessment}
+      />
+    </View>
   );
 };
 

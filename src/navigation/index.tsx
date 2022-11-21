@@ -12,7 +12,7 @@ export const RootNavigator: FunctionComponent = () => {
   const defaultOptions = { animationEnabled: false };
 
   return (
-    <Navigator initialRouteName="Public" headerMode="none">
+    <Navigator initialRouteName="Public" screenOptions={{ headerShown: false }}>
       <Screen name="Private" component={PrivateRoute} options={defaultOptions} />
       <Screen name="Public" component={PublicRoute} options={defaultOptions} />
     </Navigator>

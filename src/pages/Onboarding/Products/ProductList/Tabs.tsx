@@ -4,11 +4,11 @@ import { Text, View, ViewStyle } from "react-native";
 import { CustomSpacer, TabGroup } from "../../../../components";
 import { Language } from "../../../../constants";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   colorWhite,
   flexChild,
   flexRow,
-  fs24BoldBlue2,
+  fs24BoldBlue1,
   fullWidth,
   justifyContentEnd,
   px,
@@ -65,13 +65,13 @@ export const ProductTabs: FunctionComponent<ProductTabsProps> = ({
     <View style={container}>
       <View style={px(sw24)}>
         <CustomSpacer space={sh32} />
-        <Text style={fs24BoldBlue2}>{PRODUCT_LIST.HEADING}</Text>
+        <Text style={fs24BoldBlue1}>{PRODUCT_LIST.HEADING}</Text>
       </View>
       <CustomSpacer space={sh8} />
       <View style={{ ...flexRow, backgroundColor: colorWhite._1 }}>
-        <TabGroup activeTab={activeTab} setActiveTab={handleTabs} tabs={productTabs} />
+        <TabGroup activeTab={activeTab} containerStyle={borderBottomGray2} setActiveTab={handleTabs} tabs={productTabs} />
         <View style={{ ...flexChild, ...justifyContentEnd }}>
-          <View style={borderBottomGray4} />
+          <View style={borderBottomGray2} />
         </View>
       </View>
     </View>

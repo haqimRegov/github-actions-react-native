@@ -120,8 +120,39 @@ export const addAmpSearch = (value: string) => {
 export const updateProducts = (value: productsState) => {
   return typedAction("products/UPDATE_PRODUCTS", value);
 };
+export const resetUTFilter = () => {
+  return typedAction("products/RESET_UT_FILTER");
+};
+
+export const partialResetUTProducts = (filters?: IProductFilter) => {
+  return typedAction("products/PARTIAL_RESET_UT_PRODUCTS", filters);
+};
+
+export const resetPRSFilter = () => {
+  return typedAction("products/RESET_PRS_FILTER");
+};
+
+export const partialResetPRSProducts = (filters?: IProductFilter) => {
+  return typedAction("products/PARTIAL_RESET_PRS_PRODUCTS", filters);
+};
+
+export const resetPRSDefaultFilter = () => {
+  return typedAction("products/RESET_PRS_DEFAULT_FILTER");
+};
+
+export const partialResetPRSDefaultProducts = (filters?: IProductFilter) => {
+  return typedAction("products/PARTIAL_RESET_PRS_DEFAULT_PRODUCTS", filters);
+};
+
+export const resetAMPFilter = () => {
+  return typedAction("products/RESET_AMP_FILTER");
+};
+
 export const resetProducts = () => {
   return typedAction("products/RESET_PRODUCTS");
+};
+export const updateAvailableFilters = (availableFilters: IProductAvailableFilter) => {
+  return typedAction("products/UPDATE_AVAILABLE_FILTERS", availableFilters);
 };
 
 export type ProductsAction = ReturnType<
@@ -147,6 +178,13 @@ export type ProductsAction = ReturnType<
   | typeof updateAmpShowBy
   | typeof updateProducts
   | typeof resetProducts
+  | typeof resetUTFilter
+  | typeof partialResetUTProducts
+  | typeof resetPRSFilter
+  | typeof partialResetPRSProducts
+  | typeof resetPRSDefaultFilter
+  | typeof partialResetPRSDefaultProducts
+  | typeof resetAMPFilter
   | typeof addUtSort
   | typeof addPrsSort
   | typeof addPrsDefaultSort
@@ -156,6 +194,7 @@ export type ProductsAction = ReturnType<
   | typeof updatePrsDefaultPage
   | typeof updateAmpPage
   | typeof updateProductType
+  | typeof updateAvailableFilters
 >;
 
 export const ProductsActionProps = {
@@ -180,7 +219,15 @@ export const ProductsActionProps = {
   updatePrsDefaultShowBy,
   updateAmpShowBy,
   updateProducts,
+  partialResetUTProducts,
+  partialResetPRSProducts,
   resetProducts,
+  partialResetPRSDefaultProducts,
+  resetUTFilter,
+  resetPRSFilter,
+  resetPRSDefaultFilter,
+  resetAMPFilter,
+  updateAvailableFilters,
   addUtSort,
   addPrsSort,
   addPrsDefaultSort,

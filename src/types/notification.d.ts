@@ -2,6 +2,8 @@ declare interface INotificationItem {
   createdAt: string;
   id: string;
   isRead: boolean;
+  isSeen: boolean;
+  localIsRead: boolean;
   message: string;
   sender?: string;
   source?: string;

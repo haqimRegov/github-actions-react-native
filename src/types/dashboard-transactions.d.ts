@@ -1,25 +1,55 @@
+declare type ITransactionPills = "pending" | "rerouted" | "submitted";
+
 declare interface IDashboardRemark {
   label: string;
   remark: string[];
 }
 
+declare interface IItemWithCount {
+  count: number;
+  document: string;
+}
+
+declare interface IDashboardReason {
+  content: string[];
+  documents?: IItemWithCount[];
+  isSubmitted?: boolean;
+  isDisabled?: boolean;
+  title: string;
+}
+
+declare type TTransactionType = "Sales-AO" | "CR" | "Sales-NS" | "Sales";
+
 declare interface IDashboardOrder {
-  orderNumber: string;
   accountType: TypeAccountChoices;
+  canProceed: boolean;
+  clientId: string;
+  createdOn: string;
+  documents: IItemWithCount[];
+  dueDate: string | null;
+  highlightedText?: string;
   investorName: {
     principal: string;
     joint: string | null;
   };
-  transactionType: string;
   isScheduled: boolean;
-  canProceed: boolean;
-  withHardcopy: boolean;
-  totalInvestment: IOrderAmount[];
-  createdOn: string;
-  status: OrderStatusType;
-  dueDate: string;
+  isSeen: boolean;
+  jointId: string | null;
+  label?: string;
   lastUpdated: string;
-  remark: IDashboardRemark[];
+  orderNumber: string;
+  reason: IDashboardReason[];
+  remark: IDashboardRemark[] | null;
+  status: OrderStatusType;
+  totalInvestment: IOrderAmount[];
+  transactionType: TTransactionType;
+  withHardcopy: boolean;
+}
+
+declare interface ITransactionsAvailableFilter {
+  transactionType: string[];
+  accountType: string[];
+  orderStatus: string[];
 }
 
 declare interface ITransactionsTab {
@@ -27,16 +57,20 @@ declare interface ITransactionsTab {
   orders: IDashboardOrder[];
   page: number;
   pages: number;
+  pill?: ITransactionPills;
   sort: ITransactionsSort[];
 }
 
 declare interface ITransactionsDashboard {
-  pending: ITransactionsTab;
   approved: ITransactionsTab;
-  rejected: ITransactionsTab;
   approvedCount: number;
-  rejectedCount: number;
+  incomplete: ITransactionsTab;
+  incompleteCount: number;
   pendingCount: number;
+  rejected: ITransactionsTab;
+  rejectedCount: number;
+  reroutedCount: number;
+  submittedCount: number;
 }
 
 declare interface ITransactionsSort {
@@ -45,25 +79,52 @@ declare interface ITransactionsSort {
 }
 
 declare interface ITransactionsFilter {
+  accountType?: string[];
   dateSorting?: string;
-  startDate?: Date;
   endDate?: Date;
-  transactionsType?: string;
-  accountType?: string;
   orderStatus?: string[];
+  startDate?: Date;
+  transactionsType?: string[];
 }
 
 declare type TransactionsSortColumnType =
+  | "createdOn"
+  | "dueDate"
+  | "lastUpdated"
   | "orderNumber"
   | "principal"
-  | "transactionType"
   | "totalInvestment"
-  | "createdOn"
-  | "lastUpdated"
-  | "dueDate"
-  | "";
+  | "transactionType"
+  | "status";
+
+declare type TransactionsFilterType = "dateSorting" | "transactionsType" | "accountType" | "orderStatus" | "startDate" | "endDate";
+
+declare type TDateType = "Created On" | "Last Updated";
+
+declare interface IShowDateBy {
+  key: TSortType;
+  type: TDateType;
+}
 
 declare type TransactionsSortValueType = "ascending" | "descending";
-declare type TransactionsTabType = "pending" | "approved" | "rejected";
-declare type TransactionsPageType = "UploadDocuments" | "UploadHardCopy" | "Transactions" | "OrderSummary" | "DashboardPayment";
-declare type DashboardPageType = "Inbox" | "Transactions" | "Profile";
+declare type TransactionsTabType = "incomplete" | "approved" | "rejected";
+declare type TransactionsPageType =
+  | "UploadDocuments"
+  | "UploadHardCopy"
+  | "Transactions"
+  | "OrderSummary"
+  | "DashboardPayment"
+  | "InvestorProfile"
+  | "AccountInformation";
+declare type DashboardPageType = "Inbox" | "Transactions" | "Profile" | "EDD" | "Investors";
+declare interface IDashboardAll extends IDashboardOrder, IInvestorAccountsData {}
+
+declare interface ITransactionPageProps {
+  activeTab: boolean;
+  isFetching: boolean;
+  isNotFiltered: boolean;
+  navigation: IStackNavigationProp;
+  setIsFetching: (value: boolean) => void;
+  setOrderSummaryActiveTab: (tab: OrderSummaryTabType) => void;
+  setScreen: (route: TransactionsPageType) => void;
+}

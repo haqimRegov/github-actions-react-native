@@ -1,26 +1,26 @@
 declare interface ISubmitProofOfPayment {
-  currency?: TypeCurrency | "";
-  paymentMethod?: TypePaymentMethod;
   amount?: string;
-  kibBankAccountNumber?: string;
-  kibBankAccountName?: string;
-  kibBankName?: string;
-  transactionDate?: number;
-  transactionTime?: number;
-  proof?: FileBase64;
-  remark?: string;
+  bankAccountName?: string;
+  bankAccountNumber?: string;
+  bankName?: string;
   checkNumber?: string;
   clientName?: string;
   clientTrustAccountNumber?: string;
+  currency?: TypeCurrency | "";
   epfAccountNumber?: string;
   epfReferenceNumber?: string;
-  bankAccountName?: string;
-  bankAccountNumber?: string;
-  recurringType?: string;
-  recurringBank?: string;
   frequency?: string;
-  bankName?: string;
+  kibBankAccountName?: string;
+  kibBankAccountNumber?: string;
+  kibBankName?: string;
+  paymentMethod?: TypePaymentMethod;
+  proof?: FileBase64;
+  recurringBank?: string;
+  recurringType?: string;
   referenceNumber?: string;
+  remark?: string;
+  transactionDate?: number;
+  transactionTime?: number;
 }
 
 declare interface ISubmitProofOfPaymentOrder {
@@ -33,25 +33,32 @@ declare interface ISubmitProofOfPaymentsRequest {
   orders: ISubmitProofOfPaymentOrder[];
 }
 
-declare interface ISubmitProofOfPaymentResultOrder {
+declare interface ISubmitProofOfPaymentResultOrder extends ISubmissionSummaryResponse {
+  excessAmount: IOrderAmount[];
   orderNumber: string;
+  totalRecurring: string;
   paymentType: string;
-  status: string;
   remarks: string[];
+  status: string;
+  totalPayment: IOrderAmount[];
 }
 
 declare interface ISubmitProofOfPaymentResultAccount {
   status: string;
   remarks: string[];
 }
+
 declare interface ISubmitProofOfPaymentsResult {
-  account: ISubmitProofOfPaymentResultAccount;
-  orders: ISubmitProofOfPaymentResultOrder[];
+  account: ISubmitProofOfPaymentResultAccount[];
   message: string;
+  orders: ISubmitProofOfPaymentResultOrder[];
+  txRef: string;
   withFloating: boolean;
+  withHardcopy: boolean;
 }
+
 declare type ISubmitProofOfPaymentsResponse = IMutationResponse<ISubmitProofOfPaymentsResult> | undefined;
 
 declare interface ISubmitProofOfPaymentsMutation {
-  getReceiptSummaryList: ISubmitProofOfPaymentsResponse;
+  submitProofOfPayments: ISubmitProofOfPaymentsResponse;
 }

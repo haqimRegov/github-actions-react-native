@@ -6,9 +6,10 @@ import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
+import { CalculateTimeDifference } from "../../../helpers";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { fs16BoldBlack2 } from "../../../styles";
+import { fs16RegGray6 } from "../../../styles";
 import { EmailOTP } from "./EmailOTP";
 import { Verification } from "./Verification";
 
@@ -26,7 +27,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   updateOnboarding,
 }: EmailVerificationProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { emailOtpSent } = personalInfo;
+  const { emailOtpSent, emailTimestamp } = personalInfo;
   const fetching = useRef<boolean>(false);
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
@@ -34,6 +35,9 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const [prompt, setPrompt] = useState<"cancel" | undefined>(undefined);
   const [principalEmailError, setPrincipalEmailError] = useState<string | undefined>(undefined);
   const [jointEmailError, setJointEmailError] = useState<string | undefined>(undefined);
+  const checkTimeDifference = CalculateTimeDifference(emailTimestamp);
+
+  const [resendTimer, setResendTimer] = useState(checkTimeDifference);
 
   const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
@@ -59,20 +63,24 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       setPrincipalEmailError(undefined);
       setJointEmailError(undefined);
       const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
-      const request = {
+      const request: IEmailVerificationRequest = {
+        initId: details!.initId!,
+        isForceUpdate: false,
         clientId: principalClientId,
         principalHolder: { email: inputPrincipalEmail },
         jointHolder: jointRequest,
       };
       setLoading(true);
-      const response: IEmailVerificationResponse = await emailVerification(request, navigation);
+      const response: IEmailVerificationResponse = await emailVerification(request, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
+          const otpDifference = CalculateTimeDifference(data.result.otpSendTime);
+          setResendTimer(otpDifference);
           if (data.result.status === true) {
-            addPersonalInfo({ ...personalInfo, emailOtpSent: true });
+            addPersonalInfo({ ...personalInfo, emailOtpSent: true, emailTimestamp: response.data?.result.otpSendTime });
             setPage("otp");
           }
         }
@@ -87,7 +95,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 
   const handleBack = () => {
     setPrompt(undefined);
-    handleNextStep("ProductRecommendation");
+    handleNextStep("Products");
     addPersonalInfo({
       ...personalInfo,
       emailOtpSent: false,
@@ -115,6 +123,16 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    let otpTimer: ReturnType<typeof setTimeout>;
+    if (resendTimer > 0) {
+      otpTimer = setInterval(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(otpTimer);
+  }, [resendTimer]);
+
   return (
     <Fragment>
       {page === "verification" ? (
@@ -127,24 +145,30 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           jointError={jointEmailError}
           personalInfo={personalInfo}
           principalError={principalEmailError}
+          resendTimer={resendTimer}
           setJointError={setJointEmailError}
           setPrincipalError={setPrincipalEmailError}
         />
       ) : (
         <EmailOTP
           accountType={accountType}
+          addPersonalInfo={addPersonalInfo}
+          details={details}
           handleCancel={handleCancel}
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}
-          jointEmailCheck={jointEmailCheck}
           jointEmail={inputJointEmail}
+          jointEmailCheck={jointEmailCheck}
           jointOtp={jointOtp}
+          personalInfo={personalInfo}
           principalClientId={principalClientId}
           principalEmail={inputPrincipalEmail}
           principalOtp={principalOtp}
+          resendTimer={resendTimer}
           setJointOtp={setJointOtp}
           setPage={setPage}
           setPrincipalOtp={setPrincipalOtp}
+          setResendTimer={setResendTimer}
         />
       )}
       <ConfirmationModal
@@ -154,7 +178,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         labelContinue={EMAIL_VERIFICATION.BUTTON_YES}
         title={EMAIL_VERIFICATION.PROMPT_TITLE}
         visible={prompt !== undefined}>
-        <Text style={fs16BoldBlack2}>{EMAIL_VERIFICATION.PROMPT_LABEL}</Text>
+        <Text style={fs16RegGray6}>{EMAIL_VERIFICATION.PROMPT_LABEL}</Text>
       </ConfirmationModal>
     </Fragment>
   );

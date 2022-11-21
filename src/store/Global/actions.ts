@@ -25,6 +25,10 @@ export const resetAgent = () => {
   return typedAction("global/RESET_AGENT");
 };
 
+export const resetEvents = () => {
+  return typedAction("global/RESET_EVENTS");
+};
+
 export const resetConfig = () => {
   return typedAction("global/RESET_ORDERS");
 };
@@ -39,6 +43,7 @@ export type GlobalAction = ReturnType<
   | typeof addGlobal
   | typeof resetAgent
   | typeof resetConfig
+  | typeof resetEvents
   | typeof resetGlobal
   | typeof setLoading
   | typeof updatedUnreadMessages
@@ -49,6 +54,7 @@ export const GlobalActionProps = {
   addConfig,
   addGlobal,
   resetAgent,
+  resetEvents,
   resetConfig,
   resetGlobal,
   setLoading,

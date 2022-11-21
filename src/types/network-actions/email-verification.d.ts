@@ -1,20 +1,24 @@
 declare interface IEmailVerificationRequest {
+  clientId: string;
+  id?: string;
+  initId: string;
+  isForceUpdate: boolean;
   principalHolder: {
     email: string;
   };
   jointHolder?: {
     email: string;
   };
-  clientId: string;
 }
 
 declare interface IEmailVerificationResult {
   message: string;
   status: boolean;
+  otpSendTime: string;
 }
 
 declare interface IEmailVerificationMutation {
-  emailVerification: IEmailVerificationResponse;
+  emailVerificationV2: IEmailVerificationResponse;
 }
 
 declare type IEmailVerificationResponse = IMutationResponse<IEmailVerificationResult> | undefined;

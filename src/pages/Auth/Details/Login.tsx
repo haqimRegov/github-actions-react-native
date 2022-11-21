@@ -3,7 +3,25 @@ import { Text, View } from "react-native";
 
 import { CustomSpacer, CustomTextInput, LinkText, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
-import { fs24RegBlack2, fs40BoldBlack2, sh24, sh28, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import {
+  borderBottomBlue3,
+  flexRow,
+  fs12BoldBlue8,
+  fs12RegGray5,
+  fs24RegGray6,
+  fs40BoldGray6,
+  sh16,
+  sh24,
+  sh32,
+  sh4,
+  sh40,
+  sh72,
+  sw128,
+  sw360,
+  sw4,
+  sw68,
+  sw80,
+} from "../../../styles";
 import { isNumber } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -14,9 +32,11 @@ interface LoginDetailsProps {
   handleLogin: () => void;
   inputNRIC: string;
   inputPassword: string;
+  nricErrorMessage?: string;
   passwordRecovery?: boolean;
   setInputNRIC: (value: string) => void;
   setInputPassword: (value: string) => void;
+  setPage: (page: TypeLoginPages) => void;
 }
 
 export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
@@ -25,9 +45,11 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
   handleLogin,
   inputNRIC,
   inputPassword,
+  nricErrorMessage,
   passwordRecovery,
   setInputNRIC,
   setInputPassword,
+  setPage,
 }: LoginDetailsProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
 
@@ -43,15 +65,20 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
 
   const HEADING = passwordRecovery === true ? LOGIN.HEADING_DONE : LOGIN.HEADING_WELCOME;
 
+  const handleAgentOnboarding = () => {
+    setPage("FIRST_TIME_LOGIN");
+  };
+
   return (
     <Fragment>
       <View>
-        <CustomSpacer space={sh56} />
-        <Text style={fs40BoldBlack2}>{HEADING}</Text>
-        <CustomSpacer space={sh8} />
-        <Text style={{ width: sw360, ...fs24RegBlack2 }}>{LOGIN.SUBHEADING_LOGIN}</Text>
+        <CustomSpacer space={sh72} />
+        <Text style={fs40BoldGray6}>{HEADING}</Text>
+        <CustomSpacer space={sh4} />
+        <Text style={{ width: sw360, ...fs24RegGray6 }}>{LOGIN.SUBHEADING_LOGIN}</Text>
         <CustomSpacer space={sh40} />
         <CustomTextInput
+          error={nricErrorMessage}
           keyboardType="numeric"
           label={LOGIN.LABEL_NRIC}
           maxLength={12}
@@ -64,9 +91,7 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           keyboardType="default"
           label={LOGIN.LABEL_PASSWORD}
           onChangeText={setInputPassword}
-          rightIcon={showPassword ? "eye-show" : "eye-hide"}
-          rightIconPress={handleShowPassword}
-          rightIconSize={sh24}
+          rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
           secureTextEntry={showPassword}
           spaceToTop={sh24}
           value={inputPassword}
@@ -79,8 +104,18 @@ export const LoginDetails: FunctionComponent<LoginDetailsProps> = ({
           text={LOGIN.BUTTON_LOGIN}
           withDebounce={true}
         />
-        <CustomSpacer space={sh28} />
-        <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} />
+        <CustomSpacer space={sh32} />
+        <LinkText onPress={handleForgotPassword} text={LOGIN.FORGOT_PASSWORD} style={{ ...fs12BoldBlue8, marginLeft: sw128 }} />
+        {passwordRecovery === false ? (
+          <Fragment>
+            <View style={{ ...borderBottomBlue3, marginRight: sw68, marginTop: sh16, marginBottom: sh16 }} />
+            <View style={{ ...flexRow, marginLeft: sw80 }}>
+              <Text style={fs12RegGray5}>{LOGIN.LABEL_FIRST_TIME_HERE}</Text>
+              <CustomSpacer isHorizontal space={sw4} />
+              <LinkText style={fs12BoldBlue8} onPress={handleAgentOnboarding} text={LOGIN.LINK_AGENT_ONBOARDING} />
+            </View>
+          </Fragment>
+        ) : null}
       </View>
     </Fragment>
   );

@@ -13,6 +13,7 @@ import { OnboardingActionProps } from "./actions";
 export const OnboardingMapStateToProps = (state: RootState) => ({
   disabledSteps: state.onboarding.disabledSteps,
   finishedSteps: state.onboarding.finishedSteps,
+  transactions: state.transactions,
   // questionnaire: state.riskAssessment.questionnaire,
   // riskScore: state.riskAssessment.riskScore,
 });

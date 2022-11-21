@@ -1,15 +1,7 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 
-import {
-  AddressField,
-  AdvancedDropdown,
-  CheckBox,
-  CustomDatePicker,
-  CustomSpacer,
-  CustomTextInput,
-  TextSpaceArea,
-} from "../../../components";
+import { AddressField, CheckBox, CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import {
   DICTIONARY_COUNTRIES,
@@ -18,7 +10,7 @@ import {
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { colorBlue, colorTransparent, fs12BoldBlack2, sh136, sh143, sh176, sh24, sh32, sh8, sw48 } from "../../../styles";
+import { sh136, sh143, sh176, sh24, sh32, sh4 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
 
 const { ID_VERIFICATION } = Language.PAGE;
@@ -175,8 +167,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       <CustomTextInput
         disabled={true}
         label={ID_VERIFICATION.LABEL_DOB}
-        rightIcon="calendar"
-        rightIconColor={colorBlue._2}
+        rightIcon={{ name: "calendar" }}
         spaceToTop={sh32}
         value={formattedDOB}
       />
@@ -192,17 +183,16 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
       />
       {isPassport ? (
         <Fragment>
-          <AdvancedDropdown
+          <NewDropdown
             items={DICTIONARY_COUNTRIES}
             handleChange={setInputNationality}
             label={ID_VERIFICATION.LABEL_NATIONALITY}
             spaceToTop={sh32}
             value={inputNationality}
           />
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
-          <CustomDatePicker
+          <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
+          <NewDatePicker
             datePickerStyle={{ height: sh143 }}
-            dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
             mode="date"
             minimumDate={moment().toDate()}
             setValue={setExpiryDate}
@@ -210,7 +200,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
           />
         </Fragment>
       ) : null}
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_SALUTATION}
         handleChange={setInputSalutation}
         label={ID_VERIFICATION.LABEL_SALUTATION}
@@ -218,7 +208,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         value={inputSalutation}
       />
       <CustomSpacer space={sh32} />
-      <AdvancedDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
+      <NewDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
       <CustomSpacer space={sh32} />
       <CustomTextInput
         autoCapitalize="words"
@@ -226,7 +216,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         onChangeText={setInputPlaceOfBirth}
         value={inputPlaceOfBirth}
       />
-      <AdvancedDropdown
+      <NewDropdown
         items={DICTIONARY_COUNTRIES}
         handleChange={setInputCountryOfBirth}
         label={ID_VERIFICATION.LABEL_COB}
@@ -252,7 +242,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
         setInputState={setInputPermanentState}
       />
       <CustomSpacer space={sh32} />
-      <CheckBox label={labelSameMailing} labelStyle={fs12BoldBlack2} onPress={handleAddressToggle} toggle={sameAddressToggle} />
+      <CheckBox label={labelSameMailing} onPress={handleAddressToggle} toggle={sameAddressToggle} />
       {sameAddressToggle === true ? null : (
         <Fragment>
           <CustomSpacer space={sh32} />

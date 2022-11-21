@@ -2,19 +2,18 @@ import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Keyboard, Text, TextInput, View, ViewStyle } from "react-native";
 
 import {
-  colorBlack,
   colorGray,
   colorTransparent,
+  flexChild,
   flexRow,
-  fs12BoldBlack2,
-  fs12SemiBoldGray8,
+  fs12BoldGray6,
+  fs12RegGray5,
+  fullWidth,
   sh05,
-  sh24,
+  sh4,
   sh8,
-  sh80,
   sh88,
-  sw02,
-  sw360,
+  sh96,
   sw8,
 } from "../../styles";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
@@ -22,7 +21,7 @@ import { CustomTextInput, CustomTextInputProps } from "./Input";
 
 export interface TextInputMultilineProps extends CustomTextInputProps {
   showLength?: boolean;
-  width?: number;
+  style?: ViewStyle;
 }
 
 export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
@@ -34,14 +33,12 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   spaceToBottom,
   spaceToLabel,
   spaceToTop,
-  width,
+  viewStyle,
   ...rest
 }: TextInputMultilineProps) => {
   const [textAreaRef, setTextAreaRef] = useState<TextInput | null>(null);
   const [textInputDummy, setTextInputDummy] = useState<TextInput | null>(null);
   const [multilineFocus, setMultilineFocus] = useState(false);
-
-  const inputWidth = width !== undefined ? width : sw360;
 
   const handleMultilineFocus = () => {
     if (textInputDummy !== null) {
@@ -69,37 +66,39 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
   const dummyInputStyle: ViewStyle = { borderWidth: 0, backgroundColor: colorTransparent, height: sh05 };
 
   useEffect(() => {
-    Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+    const keyboardDidHide = Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
     return () => {
-      Keyboard.removeListener("keyboardDidHide", handleKeyboardHide);
+      keyboardDidHide.remove();
     };
   }, []);
 
-  const defaultLabelSpace = spaceToLabel === undefined ? 0 : spaceToLabel;
-  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${rest.value?.length}/${rest.maxLength}` : "";
+  const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
+  const defaultCharLength = rest.value !== undefined ? rest.value.length : 0;
+  const charRemaining = showLength === true && rest.maxLength !== undefined ? `${defaultCharLength} / ${rest.maxLength}` : "";
 
   return (
-    <View>
+    <View style={flexChild}>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       {label === undefined ? null : (
         <Fragment>
-          <Text onPress={onPressLabel} style={{ ...fs12BoldBlack2, ...labelStyle }}>
+          <Text onPress={onPressLabel} style={{ ...fs12BoldGray6, ...labelStyle }} suppressHighlighting={true}>
             {label}
           </Text>
           <CustomSpacer space={defaultLabelSpace} />
         </Fragment>
       )}
       <CustomTextInput
+        clearAll={false}
+        containerStyle={{ ...fullWidth, ...viewStyle }}
         multiline={true}
         onFocus={handleMultilineFocus}
         placeholder={placeholder}
-        placeholderTextColor={colorGray._7}
-        selectionColor={colorBlack._2}
+        selectionColor={colorGray._6}
         setRef={setTextAreaRef}
-        style={{ height: sh80, width: inputWidth, lineHeight: sh24, letterSpacing: sw02 }}
+        style={{ height: sh88 }}
         underlineColorAndroid={colorTransparent}
+        viewStyle={{ borderRadius: sw8, height: sh96, ...fullWidth, ...viewStyle }}
         {...rest}
-        viewStyle={{ borderRadius: sw8, height: sh88, ...rest.viewStyle }}
       />
       <CustomTextInput
         onFocus={handleDummyInputFocus}
@@ -110,9 +109,9 @@ export const TextInputMultiline: FunctionComponent<TextInputMultilineProps> = ({
         viewStyle={dummyInputStyle}
       />
       {showLength === true && rest.maxLength !== undefined ? (
-        <View style={{ ...flexRow, width: inputWidth }}>
+        <View style={{ ...flexRow, ...fullWidth, ...viewStyle }}>
           <CustomFlexSpacer />
-          <Text style={{ ...fs12SemiBoldGray8, paddingTop: sh8 }}>{charRemaining}</Text>
+          <Text style={{ ...fs12RegGray5, paddingTop: sh8 }}>{charRemaining}</Text>
         </View>
       ) : null}
       {spaceToBottom !== undefined ? <CustomSpacer space={spaceToBottom} /> : null}

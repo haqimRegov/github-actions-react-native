@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { AccountHeader, LabeledTitle } from "../../../components";
+import { AccountHeader, defaultContentProps, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { fs16SemiBoldBlack2, fs24BoldBlack2, px, sh8, sw24 } from "../../../styles";
+import { px, sw24 } from "../../../styles";
 import { IDDetails, IDDetailsProps } from "./Details";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
-interface JointVerificationProps extends IDDetailsProps {}
+type JointVerificationProps = IDDetailsProps;
 
 export const JointVerification: FunctionComponent<JointVerificationProps> = ({
   addressInfo,
@@ -26,10 +26,10 @@ export const JointVerification: FunctionComponent<JointVerificationProps> = ({
       <View style={px(sw24)}>
         <LabeledTitle
           label={ID_VERIFICATION.LABEL_ID_VERIFY}
-          labelStyle={fs24BoldBlack2}
-          spaceToLabel={sh8}
+          labelStyle={defaultContentProps.subheadingStyle}
+          spaceToLabel={defaultContentProps.spaceToTitle}
           title={ID_VERIFICATION.TITLE}
-          titleStyle={fs16SemiBoldBlack2}
+          titleStyle={defaultContentProps.subtitleStyle}
         />
         <IDDetails
           accountHolder="Joint"

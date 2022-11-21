@@ -1,11 +1,11 @@
 declare interface IOrderSummaryTransaction {
-  registrationDate: string;
-  servicingAdviserName: string;
-  servicingAdviserCode: string;
-  kibProcessingBranch: string;
+  accountNumber: string[] | string;
+  accountOperationMode: string | null;
   accountType: TypeAccountChoices;
-  accountNo: string;
-  accountOperationMode: string;
+  kibProcessingBranch: string;
+  registrationDate: string;
+  servicingAdviserCode: string;
+  servicingAdviserName: string;
 }
 
 declare interface IOrderSummaryInvestment {
@@ -19,7 +19,9 @@ declare interface IOrderSummaryInvestment {
   fundType: string;
   investmentAmount: string;
   investmentType: string;
+  landingFund?: string;
   isFea: string;
+  isTopup?: boolean;
   recurring: string;
   salesCharge: string;
   scheduledInvestmentAmount: string;
@@ -27,43 +29,47 @@ declare interface IOrderSummaryInvestment {
 }
 
 declare interface IOrderSummaryPayment {
-  fundCurrency?: TypeCurrency | "";
-  paymentMethod?: TypePaymentMethod;
-  investmentAmount?: string;
-  kibBankAccountNumber?: string;
-  kibBankAccountName?: string;
-  kibBankName?: string;
-  transactionDate?: number;
-  transactionTime?: number;
-  proofOfPayment?: FileBase64;
-  remark?: string;
+  bankAccountName?: string;
+  bankAccountNumber?: string;
   bankName?: string;
   checkNumber?: string;
   clientName?: string;
   clientTrustAccountNumber?: string;
   epfAccountNumber?: string;
   epfReferenceNo?: string;
-  bankAccountName?: string;
-  bankAccountNumber?: string;
-  recurringType?: string;
-  recurringBank?: string;
   frequency?: string;
+  fundCurrency?: TypeCurrency | "";
+  investmentAmount?: string;
+  isCombined?: boolean;
+  kibBankAccountName?: string;
+  kibBankAccountNumber?: string;
+  kibBankName?: string;
+  paymentMethod?: TypePaymentMethod;
+  proofOfPayment?: FileBase64;
+  recurringBank?: string;
+  recurringType?: string;
+  referenceNumber?: string;
+  remark?: string;
+  surplusNote?: string;
+  transactionDate?: number;
+  transactionTime?: number;
+  utmc?: string;
 }
 
 declare interface IOrderSummaryEmploymentDetails {
-  occupation: string;
-  natureOfBusiness: string;
-  monthlyHouseholdIncome: string;
-  annualIncome: string | null;
-  nameOfEmployer: string;
   address: IAddressState;
+  annualIncome: string | null;
+  monthlyHouseholdIncome: string | null;
+  nameOfEmployer: string;
+  natureOfBusiness: string;
+  occupation: string;
 }
 
 declare interface IOrderSummaryContactDetails {
   email: string;
-  mobileNumber: string;
   faxNumber: string | null;
   homeNumber: string | null;
+  mobileNumber: string;
   officeNumber: string | null;
 }
 
@@ -72,22 +78,19 @@ declare interface IOrderSummaryPersonalDetails {
   countryOfBirth: string;
   dateOfBirth: string;
   educationLevel: string;
-  otherEducationLevel?: string | null;
   expirationDate?: string | null;
   gender: string;
-  id: FileBase64;
-  idNumber: string;
-  idType: string;
   maritalStatus: string;
-  mothersMaidenName: string;
   monthlyHouseholdIncome: string;
-  name: string;
+  mothersMaidenName: string;
   nationality: string;
+  otherEducationLevel?: string | null;
+  otherRelationship?: string | null;
   placeOfBirth: string;
   race: string | null;
-  relationship: string;
-  otherRelationship?: string | null;
+  relationship: string | null;
   riskProfile: string;
+  riskProfileLastUpdated?: string | null;
   salutation: string;
 }
 
@@ -124,52 +127,82 @@ declare interface IOrderSummaryEpf {
   epfMemberNumber: string;
 }
 
-declare interface IOrderSummaryDeclaration {
-  fatca: {
-    usCitizen: "Yes" | "No" | null;
-    usBorn: "Yes" | "No" | null;
-    confirmAddress: "Yes" | "No" | null;
-    certificate: DocumentFileBase64 | null;
-    formW9: DocumentFileBase64 | null;
-    formW8Ben: DocumentFileBase64 | null;
-    reason: string | null;
-    correspondenceDeclaration: "Yes" | "No" | null;
-  };
-  crs: {
-    taxResident: string | null;
-    tin: { country: string | null; tinNumber: string | null; reason: string | null }[];
-  };
-  fea: {
-    resident: "Yes" | "No" | null;
-    borrowingFacility: "Yes" | "No" | null;
-    balance: string;
-  };
+declare interface IOrderSummaryTin {
+  country: string | null;
+  tinNumber: string | null;
+  reason: string | null;
 }
 
-declare interface IOrderSummaryProfile {
-  name: string;
+declare interface IOrderSummaryDeclaration {
+  crs: {
+    taxResident: string | null;
+    tin: IOrderSummaryTin[];
+  };
+  fatca: {
+    certificate: DocumentFileBase64 | null;
+    confirmAddress: "true" | "false" | null;
+    correspondenceDeclaration: "Yes" | "No" | null;
+    formW8Ben: DocumentFileBase64 | null;
+    formW9: DocumentFileBase64 | null;
+    reason: string | null;
+    usBorn: "true" | "false" | null;
+    usCitizen: "true" | "false" | null;
+  };
+  fea: {
+    balance: string;
+    borrowingFacility: "Yes" | "No" | null;
+    resident: "Yes" | "No" | null;
+  } | null;
+}
+
+declare interface IOrderSummaryProfile extends IAccountDetails {
+  addressInformation: IOrderSummaryAddressInfo;
+  bankInformation?: IOrderSummaryBankInfo;
+  clientId?: string | null;
+  contactDetails: IOrderSummaryContactDetails;
+  declaration: IOrderSummaryDeclaration;
+  employmentInformation: IOrderSummaryEmploymentDetails;
+  epfDetails: IOrderSummaryEpf | null;
   idNumber: string;
   idType: TypeClientID;
-
-  addressInformation: IOrderSummaryAddressInfo;
-  bankInformation: IOrderSummaryBankInfo;
-  contactDetails: IOrderSummaryContactDetails;
-  employmentInformation: IOrderSummaryEmploymentDetails;
+  name: string;
   personalDetails: IOrderSummaryPersonalDetails;
-  epfDetails: IOrderSummaryEpf | null;
-  uploadedDocument: FileBase64[];
-
-  declaration: IOrderSummaryDeclaration;
+  uploadedDocument?: FileBase64[];
 }
 
 declare interface IDashboardOrderSummary {
-  status: string;
+  documentSummary: IDocumentSummary;
+  isEtb: boolean;
+  extensionRemark: string | null;
+  investmentSummary: IOrderSummaryInvestment[] | null;
   orderNumber: string;
-  remark: string;
-  extensionRemark: string;
-  totalInvestment: IOrderAmount[];
-  transactionDetails: IOrderSummaryTransaction;
-  investmentSummary: IOrderSummaryInvestment[];
-  paymentSummary: IOrderSummaryPayment[];
+  paymentSummary: IOrderSummaryPayment[] | null;
   profile: IOrderSummaryProfile[];
+  remark: string | null;
+  riskInfo: IRiskProfile | null;
+  status: string;
+  totalInvestment: IOrderAmount[] | null;
+  trackingSummary: ITrackingSummary[];
+  transactionDetails: IOrderSummaryTransaction;
 }
+
+declare interface IStructuredData {
+  accountDocuments: LabeledTitleProps[];
+  accountSummaryDetails: LabeledTitleProps[];
+  contactDetails: LabeledTitleProps[];
+  employmentDetails: LabeledTitleProps[];
+  epfDetails: LabeledTitleProps[];
+  declarations: {
+    crs: LabeledTitleProps[];
+    fatca: LabeledTitleProps[];
+    fea: LabeledTitleProps[];
+  };
+  foreignBankDetails: LabeledTitleProps[][];
+  localBankDetails: LabeledTitleProps[][];
+  mailingAddress: LabeledTitleProps[];
+  permanentAddress: LabeledTitleProps[];
+  profilePic?: FileBase64;
+  showJointToggle?: boolean;
+}
+
+declare type OrderSummaryTabType = "order" | "profile" | "document" | "account" | "tracking";

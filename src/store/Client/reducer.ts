@@ -26,6 +26,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
       };
     case "client/RESET_DETAILS":
       return {
+        accountList: [],
         accountType: DICTIONARY_ACCOUNT_TYPE[0],
         details: {
           principalHolder: {
@@ -45,7 +46,42 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           },
           verified: false,
+          initId: undefined,
+          accountHolder: undefined,
         },
+        directToAccountOpening: false,
+        isForceUpdate: false,
+        isNewFundPurchase: false,
+        isNewSales: false,
+      };
+
+    case "client/ADD_CLIENT_FORCE_UPDATE":
+      return {
+        ...state,
+        isForceUpdate: action.payload,
+      };
+
+    case "client/ADD_CLIENT_NEW_FUND":
+      return {
+        ...state,
+        isNewFundPurchase: action.payload,
+      };
+
+    case "client/ADD_CLIENT_NEW_SALES":
+      return {
+        ...state,
+        isNewSales: action.payload,
+      };
+
+    case "client/ADD_CLIENT_DIRECT_TO_ACCOUNT_OPENING":
+      return {
+        ...state,
+        directToAccountOpening: action.payload,
+      };
+    case "client/UPDATE_CLIENT":
+      return {
+        ...state,
+        ...action.payload,
       };
 
     default:

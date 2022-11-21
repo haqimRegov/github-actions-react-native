@@ -16,12 +16,20 @@ export const MeasureTextSize = async (params: TSMeasureParams, textStyle?: TSFon
   return size;
 };
 
-export const CalculateCount = async (textArray: string[], width: number, remainingSpace: number, textStyle?: TSFontSpecs) => {
-  let count: number = 0;
-  let total: number = 0;
-  const promiseArray = textArray.map(async (text) => {
+export const CalculateCount = async (
+  textArray: string[],
+  width: number,
+  remainingSpace: number,
+  spaceBetween: number,
+  textStyle?: TSFontSpecs,
+) => {
+  let count = 0;
+  let total = 0;
+  const promiseArray = textArray.map(async (text, index) => {
+    const spaceToAdd = index === textArray.length - 1 ? 0 : spaceBetween;
+    const totalSpace = remainingSpace + spaceToAdd;
     const size = await MeasureTextSize({ text: text }, textStyle);
-    total += size.width + remainingSpace;
+    total += size.width + totalSpace;
     if (total > width) {
       count += 1;
     }

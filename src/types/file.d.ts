@@ -2,6 +2,7 @@ declare interface FileBase64 {
   base64?: string;
   date?: string;
   id?: string;
+  key?: string;
   name: string;
   path?: string;
   size?: number;
@@ -14,6 +15,7 @@ declare interface DocumentFileBase64 {
   base64?: string;
   date?: string;
   id?: string;
+  key?: string;
   name?: string;
   path?: string;
   size?: number;

@@ -1,6 +1,7 @@
 declare interface ILoginRequest {
-  username: string;
+  hideEvent: string | null;
   password: string;
+  username: string;
 }
 
 declare interface ILoginHeader {
@@ -10,12 +11,16 @@ declare interface ILoginHeader {
 
 declare interface ILoginResult {
   accessKeyId: string;
+  agentCategory: string;
   agentId: string;
   branch: string;
   email: string;
+  events: IEvent[];
   identityId: string;
   inboxCount: string;
   isExpired: boolean;
+  isTermsAgreed: boolean;
+  isMultiUtmc: boolean;
   licenseCode: string;
   licenseType: string[];
   name: string;

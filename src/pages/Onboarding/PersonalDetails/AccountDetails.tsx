@@ -4,20 +4,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { AccountHeader, CustomSpacer, RadioButtonGroup, TextSpaceArea } from "../../../components";
 import { Language } from "../../../constants";
-import {
-  borderBottomBlack21,
-  fs12SemiBoldGray8,
-  fs16SemiBoldBlack2,
-  fs24BoldBlack2,
-  px,
-  sh16,
-  sh24,
-  sh32,
-  sw02,
-  sw24,
-  sw48,
-  sw520,
-} from "../../../styles";
+import { borderBottomGray2, fs12RegGray5, fs24BoldGray6, px, sh16, sh24, sh32, sh8, sw24, sw48, sw520 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -69,13 +56,13 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
   return (
     <Fragment>
       <CustomSpacer space={sh32} />
-      <View style={borderBottomBlack21} />
+      <View style={borderBottomGray2} />
       <CustomSpacer space={spaceToAdditional} />
       <View style={px(sw24)}>
         {accountType === "Individual" ? null : <AccountHeader subtitle={subtitleLabel} title={names} />}
         <View style={padding}>
-          {accountType === "Joint" ? <Text style={fs24BoldBlack2}>{PERSONAL_DETAILS.LABEL_ADDITIONAL}</Text> : null}
-          <TextSpaceArea spaceToBottom={sh16} spaceToTop={space} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_DISTRIBUTION} />
+          {accountType === "Joint" ? <Text style={fs24BoldGray6}>{PERSONAL_DETAILS.LABEL_ADDITIONAL}</Text> : null}
+          <TextSpaceArea spaceToBottom={sh8} spaceToTop={space} text={PERSONAL_DETAILS.LABEL_DISTRIBUTION} />
           <RadioButtonGroup
             direction="row"
             options={distributionOptions}
@@ -83,14 +70,10 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
             setSelected={setInputDistribution}
             space={sw48}
           />
-          <TextSpaceArea
-            spaceToTop={sh16}
-            style={{ ...fs12SemiBoldGray8, letterSpacing: -sw02, maxWidth: sw520 }}
-            text={PERSONAL_DETAILS.HINT_DISTRIBUTION}
-          />
+          <TextSpaceArea spaceToTop={sh16} style={{ ...fs12RegGray5, maxWidth: sw520 }} text={PERSONAL_DETAILS.HINT_DISTRIBUTION} />
           {accountType === "Individual" ? null : (
             <Fragment>
-              <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh24} style={fs16SemiBoldBlack2} text={PERSONAL_DETAILS.LABEL_SIGN} />
+              <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} text={PERSONAL_DETAILS.LABEL_SIGN} />
               <RadioButtonGroup
                 direction="row"
                 options={operatingControl}

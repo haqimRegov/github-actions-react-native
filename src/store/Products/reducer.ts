@@ -201,6 +201,171 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
         ...state,
         productType: action.payload,
       };
+    case "products/PARTIAL_RESET_UT_PRODUCTS":
+      return {
+        ...state,
+        ut: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+            ...action.payload,
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "1",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
+          ],
+          totalCount: {
+            all: "",
+            recommended: "",
+          },
+        },
+      };
+    case "products/RESET_UT_FILTER":
+      return {
+        ...state,
+        ut: {
+          ...state.ut,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+        },
+      };
+    case "products/PARTIAL_RESET_PRS_PRODUCTS":
+      return {
+        ...state,
+        prs: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+            ...action.payload,
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "1",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
+          ],
+          totalCount: {
+            all: "",
+            recommended: "",
+          },
+        },
+      };
+    case "products/RESET_PRS_FILTER":
+      return {
+        ...state,
+        prs: {
+          ...state.prs,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+        },
+      };
+    case "products/PARTIAL_RESET_PRS_DEFAULT_PRODUCTS":
+      return {
+        ...state,
+        prsDefault: {
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+            ...action.payload,
+          },
+          search: "",
+          showBy: "recommended",
+          all: [],
+          recommended: [],
+          page: "1",
+          pages: "",
+          sort: [
+            { column: "fundAbbr", value: "" },
+            { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
+          ],
+          totalCount: {
+            all: "",
+            recommended: "",
+          },
+        },
+      };
+    case "products/RESET_PRS_DEFAULT_FILTER":
+      return {
+        ...state,
+        prsDefault: {
+          ...state.prsDefault,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: [],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+        },
+      };
+    case "products/RESET_AMP_FILTER":
+      return {
+        ...state,
+        amp: {
+          ...state.amp,
+          filters: {
+            epfApproved: [],
+            fundCurrency: [],
+            fundType: [],
+            issuingHouse: ["KENANGA INVESTORS BERHAD"],
+            riskCategory: [],
+            shariahApproved: [],
+            conventional: [],
+          },
+        },
+      };
+    case "products/UPDATE_AVAILABLE_FILTERS":
+      return {
+        ...state,
+        availableFilters: {
+          ...state.availableFilters,
+          ...action.payload,
+        },
+      };
     case "products/RESET_PRODUCTS":
       return {
         ut: {
@@ -222,6 +387,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
@@ -247,6 +413,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
@@ -272,6 +439,7 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
@@ -297,11 +465,18 @@ export function productsReducer(state = productsInitialState, action: ProductsAc
           sort: [
             { column: "fundAbbr", value: "" },
             { column: "fundName", value: "" },
+            { column: "riskCategory", value: "" },
           ],
           totalCount: {
             all: "",
             recommended: "",
           },
+        },
+        availableFilters: {
+          fundCurrency: [],
+          fundCategory: [],
+          issuingHouse: [],
+          riskCategory: [],
         },
         productType: "ut",
       };

@@ -1,7 +1,7 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const registerPassword = async (variables: ISignUpRequest, headers: ISignUpHeader) => {
+export const registerPassword = async (variables: ISignUpRequest, headers: ISignUpHeader, handleLoading?: (loading: boolean) => void) => {
   try {
     const data = await responseHandler<ISignUpMutation, ISignUpRequest>(
       GQL_MUTATIONS.registerPassword,
@@ -9,6 +9,7 @@ export const registerPassword = async (variables: ISignUpRequest, headers: ISign
       headers,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

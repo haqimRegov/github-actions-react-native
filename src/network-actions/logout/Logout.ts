@@ -4,9 +4,8 @@ import { Auth } from "aws-amplify";
 import { ERRORS } from "../../data/dictionary";
 import { ErrorHandler } from "../../utils";
 
-export const logout = async (navigation?: IStackNavigationProp) => {
+export const logout = async (navigation?: IStackNavigationProp, global?: boolean) => {
   try {
-    await Auth.signOut({ global: true });
     const handleNavigate = () => {
       if (navigation !== undefined) {
         navigation.dispatch(
@@ -20,6 +19,7 @@ export const logout = async (navigation?: IStackNavigationProp) => {
     if (navigation !== undefined) {
       handleNavigate();
     }
+    await Auth.signOut({ global: global !== undefined ? global : true });
     return undefined;
   } catch (error) {
     // eslint-disable-next-line no-console

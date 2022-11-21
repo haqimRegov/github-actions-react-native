@@ -21,7 +21,7 @@ export const BasicModal = ({
 
   return (
     <Modal
-      backdropOpacity={backdropOpacity || 0.4}
+      backdropOpacity={backdropOpacity || 0.7}
       hasBackdrop={hasBackdrop}
       backdropColor={backdropColor || colorBlack._1}
       animationIn={defaultAnimationIn}

@@ -1,9 +1,9 @@
 declare interface IPushNotification {
   data: {
     badge?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   messageId?: string;
-  notification: { body: string; title: string; [key: string]: any };
-  [key: string]: any;
+  notification: { body: string; title: string; [key: string]: unknown };
+  [key: string]: unknown;
 }

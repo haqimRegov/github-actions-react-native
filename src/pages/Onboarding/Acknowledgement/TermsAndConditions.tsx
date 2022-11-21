@@ -3,27 +3,25 @@ import { Text, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
-import { CheckBox, ContentPage, CustomAccordion, CustomFlexSpacer, CustomSpacer, CustomTooltip, LinkText } from "../../../components";
+import { CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, CustomTooltip, LinkText } from "../../../components";
 import { Language } from "../../../constants/language";
 import { CRS, DICTIONARY_LINK_FULL_TERMS, FATCA, PRS, UTAndAMP } from "../../../data/dictionary";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   alignItemsStart,
   alignSelfCenter,
-  borderBottomBlack21,
-  disabledOpacity,
+  borderBottomGray2,
+  disabledOpacity5,
   flexRow,
-  fs12BoldBlack2,
   fs12BoldWhite1,
-  fs12SemiBoldBlue2,
-  fs16SemiBoldBlack2,
+  fs12SemiBoldBlue1,
+  fs16SemiBoldGray6,
   justifyContentEnd,
   px,
   sh16,
   sh24,
   sh32,
   sh456,
-  sh5,
   sh8,
   sw12,
   sw24,
@@ -31,6 +29,7 @@ import {
   sw7,
   sw800,
 } from "../../../styles";
+import { TermsAccordion } from "../../../templates";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -83,7 +82,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
       ? orders.orders.map((order: IOrder) => order.investments.map((investment: IOrderInvestment) => investment.fundType)).flat()
       : [];
 
-  const TERMS_AND_CONDITION_LIST: ICustomAccordionSection[] = [FATCA, CRS];
+  const TERMS_AND_CONDITION_LIST: ITermsAccordionSection[] = [FATCA, CRS];
   if (fundTypeArray.includes("UTF") || fundTypeArray.includes("UT") || fundTypeArray.includes("AMP") || fundTypeArray.includes("WSF")) {
     TERMS_AND_CONDITION_LIST.push(UTAndAMP);
   }
@@ -92,7 +91,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
     TERMS_AND_CONDITION_LIST.push(PRS);
   }
 
-  const GENERAL: ICustomAccordionSection = {
+  const GENERAL: ITermsAccordionSection = {
     title: "General Terms and Conditions",
     custom: (
       <View>
@@ -127,7 +126,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
           <View style={px(sw24)}>
             <CustomSpacer space={sh8} />
             <View style={termsHeader}>
-              <Text style={fs16SemiBoldBlack2}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
+              <Text style={fs16SemiBoldGray6}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
               <CustomSpacer isHorizontal={true} space={sw12} />
               <CustomTooltip
                 arrowSize={{ width: sw12, height: sw7 }}
@@ -136,58 +135,42 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
               />
               <CustomFlexSpacer />
               <View style={justifyContentEnd}>
-                <LinkText onPress={handleExpandAll} style={{ ...fs12SemiBoldBlue2, lineHeight: sh16 }} text={headerText} />
+                <LinkText onPress={handleExpandAll} style={fs12SemiBoldBlue1} text={headerText} />
               </View>
             </View>
             <CustomSpacer space={sh24} />
-            <CustomAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
+            <TermsAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
             <CustomSpacer space={sh32} />
           </View>
-          <View style={borderBottomBlack21} />
+          <View style={borderBottomGray2} />
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
-            <CheckBox
-              label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1}
-              labelStyle={fs12BoldBlack2}
-              onPress={handleAgree1}
-              toggle={agreeTerms.agree1}
-            />
+            <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1} onPress={handleAgree1} toggle={agreeTerms.agree1} />
             <CustomSpacer space={sh16} />
             <CheckBox
-              checkboxStyle={{ paddingTop: sh5 }}
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_2}
-              labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+              style={{ ...alignItemsStart, width: sw800 }}
               onPress={handleAgree2}
               toggle={agreeTerms.agree2}
             />
             <CustomSpacer space={sh16} />
             <CheckBox
-              checkboxStyle={{ paddingTop: sh5 }}
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_3}
-              labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+              style={{ ...alignItemsStart, width: sw800 }}
               onPress={handleAgree3}
               toggle={agreeTerms.agree3}
             />
             <CustomSpacer space={sh16} />
             {outsideRisk === true ? (
               <Fragment>
-                <CheckBox
-                  checkboxStyle={disabledOpacity}
-                  label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4}
-                  labelStyle={fs12BoldBlack2}
-                  onPress={() => {}}
-                  toggle={true}
-                />
+                <CheckBox checkboxStyle={disabledOpacity5} label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4} onPress={() => {}} toggle={true} />
                 <CustomSpacer space={sh16} />
               </Fragment>
             ) : null}
             <CheckBox
-              checkboxStyle={{ ...disabledOpacity, paddingTop: sh5 }}
+              checkboxStyle={disabledOpacity5}
               label={TERMS_AND_CONDITIONS.LABEL_CONSENT}
-              labelStyle={fs12BoldBlack2}
-              style={{ ...fs12BoldBlack2, ...alignItemsStart, width: sw800 }}
+              style={{ ...alignItemsStart, width: sw800 }}
               onPress={() => {}}
               toggle={true}
             />

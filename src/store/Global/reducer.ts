@@ -23,10 +23,19 @@ export const globalReducer = (state = globalInitialState, action: GlobalAction):
         ...state,
         agent: undefined,
       };
+    case "global/RESET_EVENTS":
+      return {
+        ...state,
+        events: undefined,
+      };
     case "global/RESET_GLOBAL":
       return {
         agent: undefined,
         config: undefined,
+        events: undefined,
+        isLogout: undefined,
+        isMultiUtmc: undefined,
+        isTermsAgreed: false,
         loading: false,
         unreadMessages: "0",
       };

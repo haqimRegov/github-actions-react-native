@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import { CustomSpacer, CustomTextInput, PasswordValidation, RoundedButton } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_PASSWORD_MAX_LENGTH, ERROR } from "../../../data/dictionary";
-import { fs24RegBlack2, fs40BoldBlack2, sh24, sh32, sh40, sh56, sh8, sw360 } from "../../../styles";
+import { fs24RegGray6, fs40BoldGray6, sh32, sh4, sh40, sh72, sw360 } from "../../../styles";
 import { isPassword } from "../../../utils";
 
 const { LOGIN } = Language.PAGE;
@@ -52,10 +52,10 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
 
   return (
     <View>
-      <CustomSpacer space={sh56} />
-      <Text style={fs40BoldBlack2}>{heading || LOGIN.HEADING_PASSWORD}</Text>
-      <CustomSpacer space={sh8} />
-      <Text style={{ width: sw360, ...fs24RegBlack2 }}>{subheading || LOGIN.SUBHEADING_PASSWORD}</Text>
+      <CustomSpacer space={sh72} />
+      <Text style={fs40BoldGray6}>{heading || LOGIN.HEADING_PASSWORD}</Text>
+      <CustomSpacer space={sh4} />
+      <Text style={{ width: sw360, ...fs24RegGray6 }}>{subheading || LOGIN.SUBHEADING_PASSWORD}</Text>
       <CustomSpacer space={sh40} />
       <CustomTextInput
         error={error1}
@@ -64,9 +64,7 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
         maxLength={DICTIONARY_PASSWORD_MAX_LENGTH}
         onBlur={handleValidatePassword}
         onChangeText={setInputNewPassword}
-        rightIcon={showPassword ? "eye-show" : "eye-hide"}
-        rightIconPress={handleShowPassword}
-        rightIconSize={sh24}
+        rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
         secureTextEntry={showPassword}
         value={inputNewPassword}
       />
@@ -77,11 +75,9 @@ export const PasswordDetails: FunctionComponent<PasswordDetailsProps> = ({
         label={LOGIN.LABEL_RETYPE_PASSWORD}
         onBlur={handleValidatePassword}
         onChangeText={setInputRetypePassword}
-        rightIcon={showPassword ? "eye-show" : "eye-hide"}
-        rightIconPress={handleShowPassword}
-        rightIconSize={sh24}
+        rightIcon={{ name: showPassword ? "eye-show" : "eye-hide", onPress: handleShowPassword }}
         secureTextEntry={showPassword}
-        spaceToTop={sh24}
+        spaceToTop={sh32}
         value={inputRetypePassword}
       />
       <CustomSpacer space={sh32} />

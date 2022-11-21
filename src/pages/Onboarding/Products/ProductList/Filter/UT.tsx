@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CheckBoxDropdown, CheckBoxGroup, CustomSpacer, TextSpaceArea } from "../../../../../components";
+import { CheckBoxGroup, CustomSpacer, NewCheckBoxDropdown, TextSpaceArea } from "../../../../../components";
 import { Language } from "../../../../../constants";
 import {
   FILTER_EPF_LABEL,
@@ -12,7 +12,7 @@ import {
   FILTER_RISK_CATEGORY,
   FILTER_TYPE,
 } from "../../../../../data/dictionary";
-import { centerVertical, flexRow, fs16BoldBlack1, px, sh24, sh8, sw24, sw240, sw64 } from "../../../../../styles";
+import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sw24, sw240, sw64 } from "../../../../../styles";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface UTFilterProps {
@@ -64,11 +64,12 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ filter, setFilter }
 
   return (
     <View>
-      <View style={{ ...px(sw24) }}>
-        <View style={{ ...centerVertical, ...flexRow }}>
-          <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={fs16BoldBlack1} text={PRODUCT_FILTER.LABEL_FILTER_UT} />
-        </View>
-      </View>
+      <TextSpaceArea
+        spaceToBottom={sh16}
+        spaceToTop={sh32}
+        style={{ ...fs16BoldGray6, ...px(sw24) }}
+        text={PRODUCT_FILTER.LABEL_FILTER_UT}
+      />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View style={{ width: sw240 }}>
           <CheckBoxGroup
@@ -93,25 +94,41 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ filter, setFilter }
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_FUND_TYPE} />
-          <CheckBoxDropdown handleChange={handleFundType} items={FILTER_FUND_TYPE} value={fundType!} />
+          <NewCheckBoxDropdown
+            handleChange={handleFundType}
+            items={FILTER_FUND_TYPE}
+            label={PRODUCT_FILTER.LABEL_FUND_TYPE}
+            value={fundType!}
+          />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_FUND_CURRENCY} />
-          <CheckBoxDropdown handleChange={handleCurrency} items={FILTER_FUND_CURRENCY} value={fundCurrency!} />
+          <NewCheckBoxDropdown
+            handleChange={handleCurrency}
+            items={FILTER_FUND_CURRENCY}
+            label={PRODUCT_FILTER.LABEL_FUND_CURRENCY}
+            value={fundCurrency!}
+          />
         </View>
       </View>
       <CustomSpacer space={sh24} />
       <View style={{ ...flexRow, ...px(sw24) }}>
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_ISSUING} />
-          <CheckBoxDropdown handleChange={handleIssuingHouse} items={FILTER_ISSUING_HOUSE} value={issuingHouse!} />
+          <NewCheckBoxDropdown
+            handleChange={handleIssuingHouse}
+            items={FILTER_ISSUING_HOUSE}
+            label={PRODUCT_FILTER.LABEL_ISSUING}
+            value={issuingHouse!}
+          />
         </View>
         <CustomSpacer isHorizontal={true} space={sw64} />
         <View>
-          <TextSpaceArea spaceToBottom={sh8} text={PRODUCT_FILTER.LABEL_RISK} />
-          <CheckBoxDropdown handleChange={handleRiskCategory} items={FILTER_RISK_CATEGORY} value={riskCategory!} />
+          <NewCheckBoxDropdown
+            handleChange={handleRiskCategory}
+            items={FILTER_RISK_CATEGORY}
+            label={PRODUCT_FILTER.LABEL_RISK}
+            value={riskCategory!}
+          />
         </View>
       </View>
     </View>

@@ -2,7 +2,14 @@ declare interface IGetHardCopyDocumentsRequest {
   orderNumber: string;
 }
 
-declare type IHardCopyFile = DocumentFileBase64 | undefined;
+declare interface IHardCopyFile extends DocumentFileBase64 {
+  isEditable: boolean;
+}
+
+declare interface IHardCopyAccount {
+  joint?: IHardCopyDocument[];
+  principal: IHardCopyDocument[];
+}
 
 declare interface IHardCopyDocument {
   docs: IHardCopyFile[];
@@ -15,12 +22,13 @@ declare interface IHardCopyBranchList {
 }
 
 declare interface IGetHardCopyDocumentsResult {
-  documents: IHardCopyDocument[];
+  account: IHardCopyAccount;
   branchList: IHardCopyBranchList[];
+  documents: IHardCopyDocument[];
 }
 
 declare type IGetHardCopyDocumentsResponse = IQueryResponse<IGetHardCopyDocumentsResult> | undefined;
 
 declare interface IGetHardCopyDocumentsQuery {
-  listHardcopyDocuments: IGetHardCopyDocumentsResponse;
+  listHardcopyDocumentsV2: IGetHardCopyDocumentsResponse;
 }

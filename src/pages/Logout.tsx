@@ -11,16 +11,18 @@ interface LogoutPageProps extends GlobalStoreProps {
 const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPageProps) => {
   const { navigation } = props;
   useEffect(() => {
-    props.resetGlobal();
+    props.resetEDD();
+    props.resetForceUpdate();
     props.resetTransactions();
     props.resetAcknowledgement();
     props.resetClientDetails();
+    props.resetInvestors();
     props.resetPersonalInfo();
     props.resetRiskAssessment();
-    props.resetViewFund();
     props.resetSelectedFund();
     props.resetProducts();
-    props.resetSteps();
+    props.resetOnboarding();
+    props.resetGlobal();
     setTimeout(() => {
       navigation.dispatch(
         CommonActions.reset({

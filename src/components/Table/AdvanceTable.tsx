@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { flexChild, sh8 } from "../../styles";
@@ -12,12 +12,15 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
   data,
   disabledIndex,
   handleRowNavigation,
+  headerPopup,
   onRowSelect,
   RenderAccordion,
   RenderCustomHeader,
   RenderCustomItem,
+  RenderGroupByLabel,
   RenderEmptyState,
   RenderOptions,
+  rowContainerStyle,
   rowSelection,
   RowSelectionItem,
   rowSelectionKey,
@@ -29,6 +32,7 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
     <View style={flexChild}>
       <TableHeader
         columns={columns}
+        headerPopup={headerPopup}
         RenderCustomHeader={RenderCustomHeader}
         RowSelectionItem={RowSelectionItem}
         withActions={RenderOptions !== undefined}
@@ -38,22 +42,26 @@ export const AdvanceTable: FunctionComponent<AdvanceTableProps> = ({
         ? emptyState
         : data.map((row: ITableData, index: number) => {
             return (
-              <AdvanceTableRow
-                activeAccordion={activeAccordion}
-                columns={columns}
-                disabled={disabledIndex !== undefined && disabledIndex.includes(index)}
-                handleRowNavigation={handleRowNavigation}
-                index={index}
-                item={row}
-                key={index}
-                lastIndex={index === data.length - 1}
-                onRowSelect={onRowSelect}
-                RenderAccordion={RenderAccordion}
-                RenderCustomItem={RenderCustomItem}
-                RenderOptions={RenderOptions}
-                rowSelection={rowSelection}
-                rowSelectionKey={rowSelectionKey}
-              />
+              <Fragment key={index}>
+                {RenderGroupByLabel !== undefined ? <RenderGroupByLabel index={index} row={row} data={data} /> : null}
+                <AdvanceTableRow
+                  activeAccordion={activeAccordion}
+                  columns={columns}
+                  disabled={disabledIndex !== undefined && disabledIndex.includes(index)}
+                  handleRowNavigation={handleRowNavigation}
+                  index={index}
+                  item={row}
+                  key={index}
+                  lastIndex={index === data.length - 1}
+                  onRowSelect={onRowSelect}
+                  RenderAccordion={RenderAccordion}
+                  RenderCustomItem={RenderCustomItem}
+                  RenderOptions={RenderOptions}
+                  rowContainerStyle={rowContainerStyle}
+                  rowSelection={rowSelection}
+                  rowSelectionKey={rowSelectionKey}
+                />
+              </Fragment>
             );
           })}
     </View>

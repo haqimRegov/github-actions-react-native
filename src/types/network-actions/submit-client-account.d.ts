@@ -8,6 +8,7 @@ declare interface ISubmitInvestment {
   salesCharge: string;
 
   isScheduled?: string;
+  isTopup?: boolean;
   fundClass?: string;
   scheduledInvestmentAmount?: string;
   scheduledSalesCharge?: string;
@@ -69,17 +70,17 @@ declare interface ISubmitAddressInformation {
 }
 
 declare interface ISubmitPersonalDetails {
-  countryOfBirth: string;
-  educationLevel: string;
-  gender: string;
+  countryOfBirth?: string;
+  educationLevel?: string;
+  gender?: string;
   id: FileBase64[];
-  maritalStatus: string;
-  monthlyHouseholdIncome: string;
-  mothersMaidenName: string;
+  maritalStatus?: string;
+  monthlyHouseholdIncome?: string;
+  mothersMaidenName?: string;
   name: string; // to be added in schema
-  nationality: string;
-  placeOfBirth: string;
-  salutation: string;
+  nationality?: string;
+  placeOfBirth?: string;
+  salutation?: string;
 
   bumiputera?: string;
   expirationDate?: number;
@@ -127,38 +128,38 @@ declare interface ISubmitDeclaration {
   fea?: ISubmitFea;
 }
 
+declare interface ISubmitClientAccountHolderBase {
+  clientId: string;
+  addressInformation?: ISubmitAddressInformation;
+  contactDetails?: ISubmitContactDetails;
+  declaration?: ISubmitDeclaration;
+  personalDetails: ISubmitPersonalDetails;
+}
+
+declare interface ISubmitClientAccountJoint extends ISubmitClientAccountHolderBase {
+  employmentDetails?: ISubmitEmploymentJoint;
+}
+
+declare interface ISubmitClientAccountPrincipal extends ISubmitClientAccountHolderBase {
+  bankSummary?: ISubmitBankSummary;
+  epfDetails?: ISubmitEpfDetails;
+  employmentDetails?: ISubmitEmploymentBase;
+}
+
 declare interface ISubmitClientAccountRequest {
+  initId: string;
   incomeDistribution: string;
   signatory?: string;
-  principal: {
-    clientId: string;
-    addressInformation: ISubmitAddressInformation;
-    bankSummary?: ISubmitBankSummary;
-    contactDetails: ISubmitContactDetails;
-    declaration: {
-      crs: ISubmitCrs;
-      fatca: ISubmitFatca;
-      fea?: ISubmitFea;
-    };
-    epfDetails?: ISubmitEpfDetails;
-    employmentDetails: ISubmitEmploymentBase;
-    personalDetails: ISubmitPersonalDetails;
-  };
-  joint?: {
-    clientId: string;
-    addressInformation: ISubmitAddressInformation;
-    contactDetails?: ISubmitContactDetails;
-    declaration?: ISubmitDeclaration;
-    employmentDetails?: ISubmitEmploymentJoint;
-    personalDetails: ISubmitPersonalDetails;
-  };
+  isEtb: boolean;
+  principal: ISubmitClientAccountPrincipal;
+  joint?: ISubmitClientAccountJoint;
   investments: ISubmitInvestment[];
 }
 
-declare interface ISubmitClientAccountResult extends IInvestmentSummary {}
+type ISubmitClientAccountResult = IInvestmentSummary;
 
 declare interface ISubmitClientAccountMutation {
-  submitClientAccount: ISubmitClientAccountResponse;
+  submitClientAccountV2: ISubmitClientAccountResponse;
 }
 
 declare type ISubmitClientAccountResponse = IMutationResponse<ISubmitClientAccountResult> | undefined;

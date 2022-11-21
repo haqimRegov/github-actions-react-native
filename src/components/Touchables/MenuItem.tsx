@@ -8,8 +8,8 @@ import {
   colorRed,
   colorWhite,
   flexRow,
-  fs10RegBlue38,
-  fs16BoldBlue2,
+  fs10RegBlue6,
+  fs14BoldGray6,
   px,
   sh32,
   sh56,
@@ -51,7 +51,7 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
   const badgeColor: ViewStyle = active === true ? { backgroundColor: colorWhite._1 } : { backgroundColor: colorRed._1 };
   const badgeCountColor: TextStyle = active === true ? { color: colorRed._1 } : { color: colorWhite._1 };
   const bgColor: ViewStyle = active === true ? { backgroundColor: colorRed._1 } : { backgroundColor: colorWhite._1 };
-  const selectedColor = active === true ? colorWhite._1 : colorBlue._2;
+  const selectedColor = active === true ? colorWhite._1 : colorBlue._1;
   const defaultButtonStyle: ViewStyle = {
     ...bgColor,
     ...centerVertical,
@@ -62,14 +62,14 @@ export const MenuItem: FunctionComponent<MenuItemProps> = ({
   };
   const textColor = color ? { color: color } : {};
   const defaultTitleStyle: TextStyle = {
-    ...fs16BoldBlue2,
+    ...fs14BoldGray6,
     color: selectedColor,
     ...textColor,
     ...titleStyle,
   };
 
   const defaultSubtitleStyle: TextStyle = {
-    ...fs10RegBlue38,
+    ...fs10RegBlue6,
     color: selectedColor,
     ...textColor,
     ...subtitleStyle,

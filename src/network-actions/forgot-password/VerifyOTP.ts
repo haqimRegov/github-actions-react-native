@@ -1,7 +1,7 @@
 import { GQL_MUTATIONS } from "../../integrations";
 import { responseHandler } from "../../utils";
 
-export const verifyOtp = async (variables: IVerifyOTPRequest) => {
+export const verifyOtp = async (variables: IVerifyOTPRequest, handleLoading?: (loading: boolean) => void) => {
   try {
     const data = await responseHandler<IVerifyOTPMutation, IVerifyOTPRequest>(
       GQL_MUTATIONS.verifyOtp,
@@ -9,6 +9,7 @@ export const verifyOtp = async (variables: IVerifyOTPRequest) => {
       undefined,
       undefined,
       undefined,
+      handleLoading,
       false,
     );
 

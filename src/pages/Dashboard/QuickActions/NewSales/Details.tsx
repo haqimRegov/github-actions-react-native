@@ -1,9 +1,9 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { View, ViewStyle } from "react-native";
+import { TextStyle, View, ViewStyle } from "react-native";
 
-import { AdvancedDropdown, CustomDatePicker, CustomSpacer, CustomTextInput, RadioButtonGroup, TextSpaceArea } from "../../../../components";
-import { DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
+import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../../components";
+import { DEFAULT_DATE_FORMAT, Language, NRIC_AGE_FORMAT } from "../../../../constants";
 import {
   DICTIONARY_ACCOUNT_TYPE,
   DICTIONARY_COUNTRIES,
@@ -11,7 +11,8 @@ import {
   DICTIONARY_ID_TYPE,
   ERROR,
 } from "../../../../data/dictionary";
-import { colorTransparent, fs16RegBlack2, fs24BoldBlack2, sh136, sh140, sh24, sh8, sw48, sw56, sw74 } from "../../../../styles";
+import { findDOBFromNric } from "../../../../helpers";
+import { disabledOpacity5, fs20BoldGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56, sw74 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -20,30 +21,39 @@ interface NewSalesDetailsProps {
   accountType: TypeAccountChoices;
   clientInfo: IClientBasicInfo;
   clientType: TypeClient | "";
+  ageErrorMessage?: string;
   errorMessage: string | undefined;
   holderToFill: "jointHolder" | "principalHolder";
   inputError1: string | undefined;
-  setAccountType: (value: string) => void;
+  setAccountType?: (value: string) => void;
   setClientInfo: (value: IClientBasicInfo) => void;
+  setAgeErrorMessage: (value: string | undefined) => void;
   setErrorMessage: (value: string | undefined) => void;
   setInputError1: (value: string | undefined) => void;
+  subHeading?: string;
+  subHeadingStyle?: TextStyle;
 }
 
 export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   accountType,
   clientInfo,
   clientType,
+  ageErrorMessage,
   errorMessage,
   holderToFill,
   inputError1,
   setAccountType,
   setClientInfo,
+  setAgeErrorMessage,
   setErrorMessage,
   setInputError1,
+  subHeading,
+  subHeadingStyle,
 }: NewSalesDetailsProps) => {
   const { country, dateOfBirth, id, idType, otherIdType, name } = clientInfo;
   const title = holderToFill === "principalHolder" ? ADD_CLIENT.SUBHEADING : ADD_CLIENT.SUBHEADING_JOINT;
-  const subheading = clientType !== "" ? title : ADD_CLIENT.SUBHEADING;
+  const checkSubheading = clientType !== "" ? title : ADD_CLIENT.SUBHEADING;
+  const subheading = subHeading !== undefined ? subHeading : checkSubheading;
   const keyboardType = idType === "NRIC" ? "numeric" : "default";
   const idMaxLength = idType === "NRIC" ? 12 : undefined;
   const LABEL_ID_DYNAMIC = idType !== "Other" ? idType : `${otherIdType} ${ADD_CLIENT.LABEL_ID}`;
@@ -51,9 +61,10 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   const LABEL_ID = `${LABEL_ID_DYNAMIC} ${ADD_CLIENT.LABEL_NUMBER}`;
 
   const setInputIdType = (value: TypeIDChoices) => {
+    setAgeErrorMessage(undefined);
     setErrorMessage(undefined);
     setInputError1(undefined);
-    setClientInfo({ ...[holderToFill], idType: value, name: "", id: "" });
+    setClientInfo({ ...[holderToFill], idType: value, name: "", id: "", country: "", dateOfBirth: "" });
   };
   const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
   const setInputCountry = (value: string) => setClientInfo({ ...[holderToFill], country: value });
@@ -61,6 +72,14 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
 
   const setInputIdNumber = (value: string) => {
     if ((idType === "NRIC" && isNumber(value)) || idType !== "NRIC" || value === "") {
+      if (idType === "NRIC") {
+        const checkYears = moment().diff(moment(findDOBFromNric(value), NRIC_AGE_FORMAT).format(DEFAULT_DATE_FORMAT), "years");
+        if (checkYears < 18 && holderToFill === "principalHolder") {
+          setErrorMessage(ADD_CLIENT.LABEL_PRINCIPAL_UNDER_18);
+        } else {
+          setErrorMessage(undefined);
+        }
+      }
       setClientInfo({ ...[holderToFill], id: value.toUpperCase() });
     }
   };
@@ -82,13 +101,14 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   };
 
   const hideInput = clientType !== "" && holderToFill === "principalHolder";
-  const disabledStyle: ViewStyle = hideInput ? { opacity: 0.5 } : {};
+  const disabledStyle: ViewStyle = hideInput ? disabledOpacity5 : {};
   const dateValue = dateOfBirth !== "" ? moment(dateOfBirth, DEFAULT_DATE_FORMAT).toDate() : undefined;
+  const maximumPrincipalDob = holderToFill === "principalHolder" ? moment().subtract(18, "years").toDate() : new Date();
 
   return (
     <View>
       <Fragment>
-        <TextSpaceArea style={fs24BoldBlack2} text={subheading} />
+        <TextSpaceArea style={{ ...fs20BoldGray5, ...subHeadingStyle }} text={subheading} />
         {hideInput ? null : (
           <Fragment>
             <TextSpaceArea spaceToTop={sh24} spaceToBottom={sh8} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />
@@ -98,11 +118,12 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
         {idType !== "Other" || hideInput ? null : (
           <Fragment>
             <CustomSpacer space={sh24} />
-            <AdvancedDropdown
+            <NewDropdown
               handleChange={handleOtherIdType}
               items={DICTIONARY_ID_OTHER_TYPE}
               label={ADD_CLIENT.LABEL_ID_TYPE}
               value={otherIdType!}
+              viewStyle={{ width: sw440 }}
             />
           </Fragment>
         )}
@@ -116,6 +137,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           spaceToBottom={sh24}
           spaceToTop={sh24}
           value={name}
+          viewStyle={{ width: sw440 }}
         />
         <CustomTextInput
           autoCapitalize="characters"
@@ -126,23 +148,26 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           maxLength={idMaxLength}
           onChangeText={setInputIdNumber}
           value={id}
+          viewStyle={{ width: sw440 }}
         />
         {idType === "NRIC" ? null : (
           <Fragment>
-            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
-            <CustomDatePicker
+            <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh24} style={disabledStyle} text={ADD_CLIENT.LABEL_DOB} />
+            <NewDatePicker
+              buttonStyle={{ width: sw440 }}
               disabled={clientType !== "" && holderToFill === "principalHolder"}
-              placeholder={ADD_CLIENT.PLACEHOLDER_DATE}
-              datePickerStyle={{ height: sh140 }}
-              dropdownStyle={{ borderBottomLeftRadius: sw48, borderBottomRightRadius: sw48, borderBottomColor: colorTransparent }}
+              error={ageErrorMessage}
+              datePickerStyle={{ height: sh120 }}
+              maximumDate={maximumPrincipalDob}
               mode="date"
               setValue={setInputDateOfBirth}
               value={dateValue}
+              viewStyle={{ width: sw440 }}
             />
           </Fragment>
         )}
         {idType === "Passport" ? (
-          <AdvancedDropdown
+          <NewDropdown
             disabled={clientType !== "" && holderToFill === "principalHolder"}
             items={DICTIONARY_COUNTRIES}
             handleChange={setInputCountry}
@@ -150,21 +175,17 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             spaceToTop={sh24}
             style={{ height: sh136 }}
             value={country || ""}
+            viewStyle={{ width: sw440 }}
           />
         ) : null}
         {clientType === "NTB" && holderToFill === "principalHolder" ? (
           <Fragment>
-            <TextSpaceArea
-              spaceToBottom={sh8}
-              spaceToTop={sh24}
-              style={{ ...fs16RegBlack2, lineHeight: sh24 }}
-              text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE}
-            />
+            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE} />
             <RadioButtonGroup
               direction="row"
               options={DICTIONARY_ACCOUNT_TYPE}
               selected={accountType}
-              setSelected={setAccountType}
+              setSelected={setAccountType!}
               space={sw74}
             />
           </Fragment>

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerVertical, colorBlack, flexRow, fs12SemiBoldBlack2, sh16, sw8 } from "../../styles";
+import { centerVertical, colorBlue, flexRow, fs12BoldBlue1, sh16, sw8 } from "../../styles";
 import { CustomSpacer } from "../Views/Spacer";
 
 interface IconTextProps {
@@ -17,7 +17,17 @@ interface IconTextProps {
   textStyle?: TextStyle;
 }
 
-export const IconText = ({ color, iconPosition, iconSize, name, onPress, spaceBetween, style, text, textStyle }: IconTextProps) => {
+export const IconText: FunctionComponent<IconTextProps> = ({
+  color,
+  iconPosition,
+  iconSize,
+  name,
+  onPress,
+  spaceBetween,
+  style,
+  text,
+  textStyle,
+}: IconTextProps) => {
   const flexDirection: ViewStyle = iconPosition === "right" ? { flexDirection: "row-reverse" } : flexRow;
 
   const defaultButtonStyle: ViewStyle = {
@@ -27,14 +37,14 @@ export const IconText = ({ color, iconPosition, iconSize, name, onPress, spaceBe
   };
   const textColor = color ? { color: color } : {};
   const defaultTextStyle: TextStyle = {
-    ...fs12SemiBoldBlack2,
+    ...fs12BoldBlue1,
     ...textColor,
     ...textStyle,
   };
 
   const defaultSpaceBetween = spaceBetween !== undefined ? spaceBetween : sw8;
   const defaultSize = iconSize !== undefined ? iconSize : sh16;
-  const defaultColor = color !== undefined ? color : colorBlack._2;
+  const defaultColor = color !== undefined ? color : colorBlue._1;
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>

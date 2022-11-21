@@ -47,6 +47,12 @@ export function riskAssessmentReducer(state = riskAssessmentInitialState, action
           netWorth: "",
           type: "",
         },
+        isRiskUpdated: false,
+      };
+    case "riskAssessment/UPDATE_IS_RISK_UPDATED":
+      return {
+        ...state,
+        isRiskUpdated: action.payload,
       };
 
     default:

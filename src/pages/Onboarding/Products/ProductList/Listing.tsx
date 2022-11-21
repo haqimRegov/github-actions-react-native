@@ -1,32 +1,26 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, LinkText, MenuPopup, Pagination, Tag } from "../../../../components";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../../../components";
 import { Language } from "../../../../constants";
-import { IcoMoon } from "../../../../icons";
 import {
-  borderBottomGray4,
+  borderBottomGray2,
   centerHV,
   centerVertical,
   colorRed,
   colorWhite,
   flexChild,
   flexRow,
-  fs10RegBlue38,
-  fs12BoldBlack2,
-  fs12BoldBlue2,
+  fs12BoldBlue1,
   fsUppercase,
-  px,
-  py,
   sh16,
   sh2,
   sh32,
-  sh4,
   sh8,
   sw1,
-  sw120,
   sw136,
   sw16,
+  sw18,
   sw20,
   sw24,
   sw323,
@@ -36,6 +30,7 @@ import {
   sw90,
   sw96,
 } from "../../../../styles";
+import { isNotEmpty } from "../../../../utils";
 import { ProductOptions } from "./Actions";
 
 const { EMPTY_STATE, PRODUCT_LIST } = Language.PAGE;
@@ -63,6 +58,7 @@ interface ProductListViewProps {
   totalCount: IProductTotalCount;
   updateFilter: (filter: IProductFilter) => void;
   updateSort: (sort: IProductSort[]) => void;
+  withEpf?: boolean;
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
@@ -88,6 +84,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   totalCount,
   updateFilter,
   updateSort,
+  withEpf,
 }: ProductListViewProps) => {
   // const performanceColumn = {
   //   icon: {
@@ -141,45 +138,33 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     {
       icon: { name: sortAbbr === "desc" ? "arrow-up" : "arrow-down" },
       key: [{ key: "fundAbbr", textStyle: fsUppercase }],
-      viewStyle: {
-        width: sw136,
-      },
+      viewStyle: { width: sw136 },
       onPressHeader: handleSortAbbr,
       title: PRODUCT_LIST.LABEL_COLUMN_FUND_CODE,
     },
     {
       key: [{ key: "fundName", textStyle: fsUppercase }],
       icon: { name: sortName === "desc" ? "arrow-up" : "arrow-down" },
-      viewStyle: {
-        width: sw323,
-      },
+      viewStyle: { width: sw323 },
       onPressHeader: handleSortName,
       title: productType === "amp" ? PRODUCT_LIST.LABEL_COLUMN_PORTFOLIO : PRODUCT_LIST.LABEL_COLUMN_NAME,
     },
     {
-      icon: {
-        name: "caret-down",
-      },
+      icon: { name: "caret-down", size: sw16 },
       key: [{ key: "riskCategory" }],
-      viewStyle: {
-        width: sw96,
-      },
+      viewStyle: { width: sw96 },
       customHeader: true,
       title: PRODUCT_LIST.LABEL_COLUMN_RISK,
     },
     {
       key: [{ key: "isEpf" }],
-      viewStyle: {
-        width: sw56,
-      },
+      viewStyle: { width: sw56 },
       title: PRODUCT_LIST.LABEL_COLUMN_EPF,
     },
     {
       customItem: true,
       key: [{ key: "isSyariah" }],
-      viewStyle: {
-        width: sw90,
-      },
+      viewStyle: { width: sw90 },
       title: PRODUCT_LIST.LABEL_COLUMN_SHARIAH,
     },
   ];
@@ -202,13 +187,21 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     // setActiveAccordion(newSections);
   };
 
+  const checkEpf =
+    isNotEmpty(withEpf) && withEpf === false
+      ? list
+          .map((eachRow: ITableData, index) => (eachRow.isEpf === "Yes" ? index : null))
+          .filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null)
+          .map((eachIndex) => eachIndex!)
+      : [];
+
   const onRowSelect = (data: ITableData) => {
     handleSelectProduct(data as IProduct);
   };
 
   const tableContainer: ViewStyle = {
     ...flexChild,
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomRightRadius: sw24,
     borderBottomLeftRadius: sw24,
   };
@@ -231,72 +224,38 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
         }}>
         <View style={{ ...flexRow, ...centerVertical }}>
           <CustomSpacer isHorizontal={true} space={sw20} />
-          <Tag color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
+          <StatusBadge color={showBy === "all" ? "secondary" : "primary"} onPress={handleRecommendedFunds} text={recommendedLabel} />
           <CustomSpacer isHorizontal={true} space={sw8} />
           {productType === "prsDefault" ? null : (
-            <Tag color={showBy === "all" ? "primary" : "secondary"} onPress={handleAllFunds} text={allFundsLabel} />
+            <StatusBadge color={showBy === "all" ? "primary" : "secondary"} onPress={handleAllFunds} text={allFundsLabel} />
           )}
           <CustomFlexSpacer />
           <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
           <CustomSpacer isHorizontal={true} space={sw24} />
         </View>
         <CustomSpacer space={sh8} />
-        <View style={borderBottomGray4} />
+        <View style={borderBottomGray2} />
         <CustomSpacer space={sh16} />
         <View style={tableContainer}>
           <AdvanceTable
             // activeAccordion={activeAccordion}
             columns={columns}
             data={list}
-            rowSelection={selectedFunds}
-            rowSelectionKey="fundCode"
-            onRowSelect={onRowSelect}
-            // RenderAccordion={renderAccordion}
-            RenderCustomHeader={({ item }) => {
-              return (
-                <MenuPopup
-                  RenderButton={({ show }) => {
-                    const headerStyle: ViewStyle = { ...flexRow, ...centerVertical, ...px(sw8), width: sw96 };
-
-                    return (
-                      <TouchableWithoutFeedback onPress={productType === "prsDefault" ? undefined : show}>
-                        <View style={headerStyle}>
-                          <Text style={fs10RegBlue38}>{item.title}</Text>
-                          {productType !== "prsDefault" ? (
-                            <Fragment>
-                              {item.icon === undefined ? null : (
-                                <Fragment>
-                                  <CustomSpacer isHorizontal={true} space={sw4} />
-                                  <IcoMoon {...item.icon} />
-                                </Fragment>
-                              )}
-                            </Fragment>
-                          ) : null}
-                        </View>
-                      </TouchableWithoutFeedback>
-                    );
-                  }}
-                  RenderContent={({ hide }) => {
-                    return (
-                      <View style={{ width: sw120, ...px(sw16), ...py(sh8) }}>
-                        {riskCategory.map((risk, index) => {
-                          const handleRisk = () => {
-                            updateFilter({ ...filter, riskCategory: [risk] });
-                            hide();
-                          };
-                          return <LinkText key={index} onPress={handleRisk} style={{ ...fs12BoldBlue2, ...py(sh4) }} text={risk} />;
-                        })}
-                      </View>
-                    );
-                  }}
-                />
-              );
+            disabledIndex={checkEpf}
+            headerPopup={{
+              content: riskCategory.map((contentRisk) => ({ text: contentRisk })),
+              onPressContent: ({ hide, text }) => {
+                updateFilter({ ...filter, riskCategory: [text] });
+                hide();
+              },
+              selectedIndex: riskCategory.map((contentRisk, index) => (filter.riskCategory!.includes(contentRisk) ? index : -1)),
             }}
+            onRowSelect={onRowSelect}
             RenderCustomItem={(customItem: ITableCustomItem) => {
               const type = customItem.item.rawData.isSyariah === "Yes" ? "Shariah" : "Conventional";
               return (
                 <View style={centerHV}>
-                  <Text style={fs12BoldBlack2}>{type}</Text>
+                  <Text style={fs12BoldBlue1}>{type}</Text>
                 </View>
               );
             }}
@@ -321,8 +280,8 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                         ...centerHV,
                         backgroundColor: colorRed._1,
                         borderRadius: sw4,
-                        height: sw16,
-                        width: sw16,
+                        height: sw18,
+                        width: sw18,
                       }}>
                       <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
                     </View>
@@ -330,6 +289,9 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                 </View>
               </TouchableWithoutFeedback>
             )}
+            // RenderAccordion={renderAccordion}
+            rowSelection={selectedFunds}
+            rowSelectionKey="fundCode"
           />
           <CustomSpacer space={sh32} />
         </View>

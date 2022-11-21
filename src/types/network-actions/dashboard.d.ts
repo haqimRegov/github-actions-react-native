@@ -1,22 +1,39 @@
+declare interface IDashboardFilter {
+  column: string;
+  value: string;
+}
+
+declare interface ITransactionsAvailableFilterResponse {
+  transactionType: string[];
+  accountType: string[];
+  agentStatus: string[];
+}
+
 declare interface IDashboardRequest {
-  tab: "pending" | "approved" | "rejected";
+  isTermsAgreed?: boolean;
+  filter: IDashboardFilter[];
+  hardcopyFilter?: boolean;
   page: number;
   search: string;
-  filter: any[];
   sort: ITransactionsSort[];
+  tab: "pending" | "approved" | "rejected" | "rerouted" | "submitted";
 }
 
 declare interface IDashboardResult {
-  orders: IDashboardOrder[];
   approvedCount: number;
-  rejectedCount: number;
-  pendingCount: number;
+  filters: ITransactionsAvailableFilterResponse;
+  incompleteCount: number;
+  orders: IDashboardOrder[];
   page: number;
   pages: number;
+  pendingCount: number;
+  rejectedCount: number;
+  rerouteCount: number;
+  submittedCount: number;
 }
 
 declare type IDashboardResponse = IQueryResponse<IDashboardResult> | undefined;
 
 declare interface IDashboardQuery {
-  dashboard: IDashboardResponse;
+  agentDashboardV2: IDashboardResponse;
 }

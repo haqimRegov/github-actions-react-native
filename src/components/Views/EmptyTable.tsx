@@ -1,25 +1,16 @@
-import React, { Fragment, FunctionComponent } from "react";
-import { ActivityIndicator, Image, ImageSourcePropType, Text, TextStyle, View } from "react-native";
+import React, { Fragment, FunctionComponent, ReactNode } from "react";
+import { Image, ImageSourcePropType, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Language } from "../../constants";
-import {
-  centerHV,
-  centerVertical,
-  colorGray,
-  flexChild,
-  fs12RegBlue2,
-  fs16BoldBlue2,
-  imageContain,
-  sh16,
-  sh32,
-  sh56,
-  sw176,
-} from "../../styles";
+import { centerVertical, flexChild, fs12RegBlue6, fs16BoldBlue1, imageContain, sh16, sh20, sh56, sw136 } from "../../styles";
+import { Loading } from "./Loading";
 import { CustomSpacer } from "./Spacer";
 
 const { EMPTY_STATE } = Language.PAGE;
 interface EmptyTableProps {
+  children?: ReactNode;
+  hintContainerStyle?: ViewStyle;
   hintText?: string;
   hintTextStyle?: TextStyle;
   illustration?: ImageSourcePropType;
@@ -31,6 +22,8 @@ interface EmptyTableProps {
 }
 
 export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
+  children,
+  hintContainerStyle,
   hintText,
   hintTextStyle,
   illustration,
@@ -46,22 +39,23 @@ export const EmptyTable: FunctionComponent<EmptyTableProps> = ({
   return (
     <View style={{ ...centerVertical, ...flexChild }}>
       {loading === true ? (
-        <View style={{ ...centerHV, ...flexChild }}>
-          <ActivityIndicator color={colorGray._7} size="small" />
-        </View>
+        <Loading />
       ) : (
         <Fragment>
           <CustomSpacer space={sh56} />
-          <Image source={defaultIllustration} style={{ ...imageContain, height: sw176, width: sw176 }} />
+          <Image source={defaultIllustration} style={{ ...imageContain, height: sw136, width: sw136 }} />
           <CustomSpacer space={sh16} />
-          <Text style={{ ...fs16BoldBlue2, ...titleStyle }}>{defaultTitle}</Text>
-          {subtitle !== undefined ? <Text style={{ ...fs12RegBlue2, ...subtitleStyle }}>{subtitle}</Text> : null}
+          <Text style={{ ...fs16BoldBlue1, ...titleStyle }}>{defaultTitle}</Text>
+          {subtitle !== undefined ? <Text style={{ ...fs12RegBlue6, ...subtitleStyle }}>{subtitle}</Text> : null}
           {hintText !== undefined ? (
             <Fragment>
-              <CustomSpacer space={sh32} />
-              <Text style={{ ...fs12RegBlue2, ...hintTextStyle }}>{hintText}</Text>
+              <CustomSpacer space={sh20} />
+              <View style={{ ...centerVertical, ...hintContainerStyle }}>
+                <Text style={{ ...fs12RegBlue6, ...hintTextStyle }}>{hintText}</Text>
+              </View>
             </Fragment>
           ) : null}
+          {children}
         </Fragment>
       )}
     </View>

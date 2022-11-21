@@ -6,7 +6,7 @@ import {
   colorGray,
   colorWhite,
   flexRowCC,
-  fs24BoldBlack1,
+  fs24BoldBlue1,
   fullHW,
   px,
   sh32,
@@ -53,7 +53,7 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
   const defaultSpaceToButton = spaceToButton === undefined ? sh56 : spaceToButton;
 
   const modalContainer: ViewStyle = {
-    backgroundColor: colorGray._5,
+    backgroundColor: colorGray._1,
     borderRadius: sw5,
     width: sw565,
     ...modalContainerStyle,
@@ -87,7 +87,7 @@ export const ConfirmationModal: FunctionComponent<ConfirmationModalProps> = ({
             {title !== undefined ? (
               <Fragment>
                 <CustomSpacer space={defaultSpaceToTitle} />
-                <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{title}</Text>
+                <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{title}</Text>
               </Fragment>
             ) : null}
             <CustomSpacer space={defaultSpaceToContent} />

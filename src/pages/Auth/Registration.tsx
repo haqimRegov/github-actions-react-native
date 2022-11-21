@@ -51,6 +51,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
           confirmPassword: encryptedRetypePassword,
         },
         { encryptionKey: credentials.sessionToken },
+        setLoading,
       );
       fetching.current = false;
       setLoading(false);
@@ -74,7 +75,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
       fetching.current = true;
       setLoading(true);
       setInput1Error(undefined);
-      const response: IVerifyAgentResponse = await register({ nric: inputNRIC });
+      const response: IVerifyAgentResponse = await register({ nric: inputNRIC }, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response === undefined) {
@@ -98,7 +99,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
       fetching.current = true;
       setLoading(true);
       setInput1Error(undefined);
-      const response: IVerifySignUpResponse = await verifySignUp({ nric: inputNRIC, code: inputOTP });
+      const response: IVerifySignUpResponse = await verifySignUp({ nric: inputNRIC, code: inputOTP }, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response === undefined) {
@@ -131,6 +132,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
           inputNRIC={inputNRIC}
           setError={setInput1Error}
           setInputNRIC={setInputNRIC}
+          setPage={setRootPage}
         />
       );
       break;
@@ -146,6 +148,7 @@ const RegistrationComponent: FunctionComponent<RegistrationProps> = ({
           setError={setInput1Error}
           setInputOTP={setInputOTP}
           setResendTimer={setResendTimer}
+          setPage={setRootPage}
         />
       );
       break;

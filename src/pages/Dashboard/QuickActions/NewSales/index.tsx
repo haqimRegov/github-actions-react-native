@@ -1,10 +1,11 @@
 import moment from "moment";
 import React, { Fragment, useRef, useState } from "react";
-import { Alert, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 
-import { ActionButtons, CustomSpacer, RNModal } from "../../../../components";
+import { LocalAssets } from "../../../../assets/images/LocalAssets";
+import { ActionButtons, CustomSpacer, LabeledTitle, RNModal } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_COUNTRIES,
@@ -17,18 +18,26 @@ import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
 import {
   centerHV,
+  centerVertical,
+  colorBlue,
   colorWhite,
   flexGrow,
   flexRowCC,
-  fs24BoldBlack1,
-  fs40BoldBlack2,
+  fs16RegGray6,
+  fs24BoldBlue1,
+  fs36BoldBlack2,
+  fsAlignCenter,
   fullHW,
+  imageContain,
   px,
+  sh16,
+  sh24,
   sh40,
   sh48,
   sh56,
   sh96,
   sw10,
+  sw136,
   sw218,
   sw5,
   sw56,
@@ -42,6 +51,7 @@ const { ADD_CLIENT } = Language.PAGE;
 
 interface NewSalesProps extends ClientStoreProps {
   navigation: IStackNavigationProp;
+  setPage?: (page: DashboardPageType) => void;
   setVisible: (visibility: boolean) => void;
   visible: boolean;
 }
@@ -50,40 +60,51 @@ const NewSalesComponent = ({
   accountType,
   addAccountType,
   addClientDetails,
+  addClientForceUpdate,
   addJointInfo,
   addPersonalInfo,
   addPrincipalInfo,
-  agent,
+  client,
   details,
   navigation,
   personalInfo,
   resetClientDetails,
+  setPage,
   setVisible,
+  showOpenAccount,
+  updateClient,
+  updateShowOpenAccount,
+  updateTransactionType,
   visible,
 }: NewSalesProps) => {
   const fetching = useRef<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [clientType, setClientType] = useState<TypeClient | "">("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [ageErrorMessage, setAgeErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
   const [registered, setRegistered] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
+  const [salesNewPrompt, setSalesNewPrompt] = useState<boolean>(false);
   const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
   const { jointHolder, principalHolder } = details!;
   const { dateOfBirth, id, idType, name, country } = details![holderToFill]!;
 
-  const BUTTON_LABEL_UNREGISTERED = clientType !== "" ? ADD_CLIENT.BUTTON_PROCEED : ADD_CLIENT.BUTTON_STARTED;
+  const BUTTON_LABEL_NEW_SALES = salesNewPrompt === true ? ADD_CLIENT.BUTTON_OPEN_ACCOUNT : ADD_CLIENT.BUTTON_CONTINUE;
+  const BUTTON_LABEL_UNREGISTERED =
+    clientType !== "" && holderToFill === "principalHolder" ? ADD_CLIENT.BUTTON_STARTED : BUTTON_LABEL_NEW_SALES;
   const BUTTON_CONTINUE_PROMPT = prompt === "bannedCountry" ? ADD_CLIENT.BUTTON_BACK : ADD_CLIENT.BUTTON_ADD;
   const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_UNREGISTERED;
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
-  const titleStyle: TextStyle = registered === true ? {} : { ...fs40BoldBlack2, lineHeight: sh40 };
+  const titleStyle: TextStyle = registered === true ? {} : fs36BoldBlack2;
 
   const setClientInfo = (info: IClientBasicInfo) =>
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
   const setAccountType = (type: string) => addAccountType(type as TypeAccountChoices);
 
-  let continueDisabled: boolean = true;
+  let continueDisabled = true;
 
   switch (idType) {
     case "NRIC":
@@ -104,8 +125,12 @@ const NewSalesComponent = ({
     setClientType("");
     setHolderToFill("principalHolder");
     setInputError1(undefined);
+    setAgeErrorMessage(undefined);
     setErrorMessage(undefined);
     resetClientDetails();
+    if (showOpenAccount === true) {
+      updateShowOpenAccount(false);
+    }
     setPrompt(undefined);
   };
 
@@ -119,6 +144,9 @@ const NewSalesComponent = ({
       handleCancelNewSales();
     } else if (registered === true) {
       setRegistered(false);
+    } else if (salesNewPrompt === true) {
+      setPrompt(undefined);
+      setSalesNewPrompt(false);
     } else if (clientType !== "" && holderToFill === "jointHolder") {
       setHolderToFill("principalHolder");
     } else if (clientType !== "" && holderToFill === "principalHolder") {
@@ -150,7 +178,7 @@ const NewSalesComponent = ({
               expirationDate: undefined,
               idNumber: jointHolder?.id,
               idType: jointClientIdType,
-              name: jointHolder?.name,
+              name: jointHolder?.name!.trim(),
               nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
               placeOfBirth: jointPlaceOfBirth,
             },
@@ -180,31 +208,73 @@ const NewSalesComponent = ({
   const handleCheckClient = async () => {
     if (fetching.current === false) {
       fetching.current = true;
-      const request = {
-        agentId: agent?.id!,
-        principalHolder: {
-          country: principalHolder?.country,
-          dateOfBirth: principalHolder?.dateOfBirth
+      setLoading(true);
+      const request: IEtbCheckRequest = {
+        country: principalHolder?.country,
+        dateOfBirth:
+          principalHolder?.dateOfBirth && principalHolder.idType !== "NRIC"
             ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
             : "",
-          id: principalHolder?.id,
-          idType: principalIdType,
-          name: principalHolder?.name,
-        },
+        id: principalHolder?.id,
+        idType: principalIdType,
+        name: principalHolder?.name?.trim(),
       };
-      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation);
+      const clientCheck: IEtbCheckResponse = await checkClient(request, navigation, setLoading);
+      setLoading(false);
       fetching.current = false;
       if (clientCheck !== undefined) {
         const { data, error } = clientCheck;
         if (error === null && data !== null) {
+          setAgeErrorMessage(undefined);
           setErrorMessage(undefined);
           setInputError1(undefined);
           if (data.result.message === "NTB") {
-            return setClientType("NTB");
+            if (client.isNewFundPurchase === true) {
+              setSalesNewPrompt(true);
+            } else {
+              setClientType("NTB");
+            }
           }
-          setTimeout(() => {
-            return Alert.alert("Client is ETB");
-          }, 100);
+          if (data.result.message === "ETB" && setPage !== undefined) {
+            setClientType("ETB");
+            setVisible(false);
+            if (data.result.forceUpdate === false) {
+              updateClient({
+                ...client,
+                accountList: data.result.accounts!,
+                details: {
+                  ...client.details,
+                  // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
+                  principalHolder: {
+                    ...client.details?.principalHolder,
+                    name: principalHolder!.name!.trim(),
+                    id: principalHolder?.id,
+                  },
+                },
+              });
+              if (client.isNewFundPurchase === true) {
+                // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
+                addPersonalInfo({
+                  ...personalInfo,
+                  principal: {
+                    ...personalInfo.principal,
+                    contactDetails: {
+                      ...personalInfo.principal?.contactDetails,
+                      emailAddress: data.result.emailAddress,
+                    },
+                  },
+                });
+                updateTransactionType("Sales-NS");
+                return navigation.navigate("NewSales");
+              }
+              updateTransactionType("Sales-AO");
+              return setPage("Investors");
+            }
+            if (data.result.forceUpdate === true) {
+              addClientForceUpdate(true);
+              return setPage("Investors");
+            }
+          }
         }
         if (error !== null) {
           if (error?.errorCode === ERROR_CODE.clientAgeMinimum) {
@@ -224,36 +294,44 @@ const NewSalesComponent = ({
   };
 
   const handleClientRegister = async () => {
+    // This is used only if NTB Investor was used in Sales
     if (fetching.current === false) {
       fetching.current = true;
+      setLoading(true);
+      const principalDob =
+        principalHolder?.dateOfBirth && principalHolder.idType !== "NRIC"
+          ? { dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
+      const jointDob =
+        jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+          ? { dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT) }
+          : {};
       const jointInfo =
         accountType === "Individual"
           ? undefined
           : {
-              dateOfBirth: jointHolder?.dateOfBirth
-                ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-                : "",
+              ...jointDob,
               id: jointHolder?.id!,
               idType: jointIdType,
               name: jointHolder?.name!,
             };
       const request: IClientRegisterRequest = {
-        agentId: agent?.id!,
         accountType: accountType,
+        isEtb: false,
+        isNewFundPurchased: false,
         principalHolder: {
-          dateOfBirth: principalHolder?.dateOfBirth
-            ? moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
-            : "",
+          ...principalDob,
           id: principalHolder?.id!,
           idType: principalIdType,
           name: principalHolder?.name!,
         },
         jointHolder: jointInfo,
       };
-      const client: IClientRegisterResponse = await clientRegister(request, navigation);
+      const clientResponse: IClientRegisterResponse = await clientRegister(request, navigation, setLoading);
+      setLoading(false);
       fetching.current = false;
-      if (client !== undefined) {
-        const { data, error } = client;
+      if (clientResponse !== undefined) {
+        const { data, error } = clientResponse;
         if (error === null && data !== null) {
           const resetJointInfo =
             accountType === "Individual" &&
@@ -269,24 +347,36 @@ const NewSalesComponent = ({
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
-                  dateOfBirth: moment(data.result.jointHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
                   clientId: data.result.jointHolder.clientId,
+                  dateOfBirth: data.result.jointHolder.dateOfBirth,
+                  id: data.result.jointHolder.id,
+                  name: data.result.jointHolder.name,
                 }
               : {};
+          setAgeErrorMessage(undefined);
           setErrorMessage(undefined);
           setInputError1(undefined);
           addClientDetails({
             ...details,
             principalHolder: {
               ...principalHolder,
-              dateOfBirth: moment(data.result.principalHolder.dateOfBirth, DATE_OF_BIRTH_FORMAT).format(DEFAULT_DATE_FORMAT),
+              dateOfBirth: data.result.principalHolder.dateOfBirth,
               clientId: data.result.principalHolder.clientId,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+            initId: `${data.result.initId}`,
           });
           return setRegistered(true);
         }
-        setErrorMessage(error?.message);
+        if (
+          error !== null &&
+          principalIdType !== "NRIC" &&
+          (error.errorCode === ERROR_CODE.clientAgeMinimum || error.errorCode === ERROR_CODE.clientAgeMaximum)
+        ) {
+          setAgeErrorMessage(error?.message);
+        } else {
+          setErrorMessage(error?.message);
+        }
       }
     }
     return undefined;
@@ -303,6 +393,11 @@ const NewSalesComponent = ({
       return handleNavigation();
     }
 
+    if (salesNewPrompt === true) {
+      setSalesNewPrompt(false);
+      return setClientType("NTB");
+    }
+
     if (clientType === "NTB") {
       if (accountType === "Joint" && holderToFill === "principalHolder") {
         return setHolderToFill("jointHolder");
@@ -313,7 +408,7 @@ const NewSalesComponent = ({
   };
 
   const modalContainer: ViewStyle = {
-    backgroundColor: colorWhite._4,
+    backgroundColor: colorBlue._2,
     borderRadius: sw5,
     width: sw565,
   };
@@ -321,15 +416,20 @@ const NewSalesComponent = ({
   const buttonContainer: ViewStyle = {
     ...flexRowCC,
     ...px(sw56),
-    backgroundColor: colorWhite._2,
+    backgroundColor: colorWhite._1,
     borderBottomLeftRadius: sw10,
     borderBottomRightRadius: sw10,
     height: sh96,
   };
+  const illustrationStyle: ImageStyle = { ...imageContain, height: sw136, width: sw136 };
+
+  const newSalesPromptTitle = `${principalHolder?.name} ${ADD_CLIENT.SALES_PROMPT_TITLE}`;
+  const checkSalesPrompt = salesNewPrompt === true ? sh40 : sh56;
+  const checkCancelLabel = salesNewPrompt === true ? ADD_CLIENT.BUTTON_GO_BACK : ADD_CLIENT.BUTTON_CANCEL;
 
   return (
     <RNModal animationType="fade" visible={visible}>
-      <KeyboardAwareScrollView bounces={false} extraHeight={8} contentContainerStyle={flexGrow}>
+      <KeyboardAwareScrollView bounces={false} extraHeight={8} contentContainerStyle={flexGrow} keyboardShouldPersistTaps="handled">
         <View style={{ ...centerHV, ...fullHW }}>
           <View style={modalContainer}>
             {prompt !== undefined ? (
@@ -339,34 +439,54 @@ const NewSalesComponent = ({
                 <CustomSpacer space={registered === true ? sh56 : sh48} />
                 {registered === false ? (
                   <Fragment>
-                    <Text style={{ ...fs24BoldBlack1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
-                    <NewSalesDetails
-                      accountType={accountType}
-                      clientInfo={details![holderToFill]!}
-                      clientType={clientType}
-                      errorMessage={errorMessage}
-                      holderToFill={holderToFill}
-                      inputError1={inputError1}
-                      setAccountType={setAccountType}
-                      setClientInfo={setClientInfo}
-                      setErrorMessage={setErrorMessage}
-                      setInputError1={setInputError1}
-                    />
+                    {salesNewPrompt === true ? (
+                      <View style={centerVertical}>
+                        <Image source={LocalAssets.illustration.investorWarning} style={illustrationStyle} />
+                        <CustomSpacer space={sh24} />
+                        <LabeledTitle
+                          label={newSalesPromptTitle}
+                          labelStyle={{ ...fs24BoldBlue1, ...fsAlignCenter }}
+                          spaceToLabel={sh16}
+                          title={ADD_CLIENT.SALES_PROMPT_SUBTITLE}
+                          titleStyle={{ ...fs16RegGray6, ...fsAlignCenter }}
+                        />
+                      </View>
+                    ) : (
+                      <Fragment>
+                        <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
+                        <NewSalesDetails
+                          accountType={accountType}
+                          clientInfo={details![holderToFill]!}
+                          clientType={clientType}
+                          ageErrorMessage={ageErrorMessage}
+                          errorMessage={errorMessage}
+                          holderToFill={holderToFill}
+                          inputError1={inputError1}
+                          setAccountType={setAccountType}
+                          setClientInfo={setClientInfo}
+                          setAgeErrorMessage={setAgeErrorMessage}
+                          setErrorMessage={setErrorMessage}
+                          setInputError1={setInputError1}
+                        />
+                      </Fragment>
+                    )}
                   </Fragment>
                 ) : (
                   <NewSalesSummary accountType={accountType} jointHolder={jointHolder} principalHolder={principalHolder!} />
                 )}
-                <CustomSpacer space={sh56} />
+                <CustomSpacer space={checkSalesPrompt} />
               </View>
             )}
             <ActionButtons
               buttonContainerStyle={buttonContainer}
               cancelButtonStyle={{ width: sw218 }}
               continueButtonStyle={{ width: sw218 }}
+              continueLoading={loading}
               continueDisabled={continueDisabled}
               handleCancel={prompt === "bannedCountry" ? undefined : handleCancel}
               handleContinue={handleContinue}
               labelContinue={BUTTON_LABEL}
+              labelCancel={checkCancelLabel}
             />
           </View>
         </View>

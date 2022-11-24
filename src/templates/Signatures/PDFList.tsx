@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 
 import { ContentPage, CustomSpacer, IconText, SignatureUploadWithModal } from "../../components";
 import { Language } from "../../constants";
-import { updateReceipts } from "../../store";
 import {
   borderBottomBlue5,
   colorBlue,
@@ -35,6 +34,7 @@ interface IPDFTemplateProps {
   receipts?: IOnboardingReceiptState[];
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
   transactionType: TTransactionType;
+  updateReceipts: (receipts: IOnboardingReceiptState[]) => void;
 }
 
 export const PDFListTemplate: FunctionComponent<IPDFTemplateProps> = ({
@@ -49,6 +49,7 @@ export const PDFListTemplate: FunctionComponent<IPDFTemplateProps> = ({
   receipts,
   setEditReceipt,
   transactionType,
+  updateReceipts,
 }: IPDFTemplateProps) => {
   const checkSignatory = () => {
     switch (authorisedSignatory) {

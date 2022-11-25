@@ -138,6 +138,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   const handleTabs = (index: number) => {
+    setLoading(true);
     if (downloadInitiated === true && activeTab === "incomplete") {
       setTempTab(tabs[index]);
       setCancelPrompt(true);

@@ -310,10 +310,8 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
   };
 
   const handleSeen = async () => {
-    setIsFetching(true);
     const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: ["rejected"] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
-    setIsFetching(false);
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
       if (error !== null) {
@@ -362,9 +360,12 @@ const RejectedOrdersComponent: FunctionComponent<RejectedOrdersProps> = ({
           onPressContent: ({ hide, text, key }) => {
             handleShowDateBy(text as TDateType, key as TSortType);
             AnimationUtils.layout({ duration: 400 });
-            setTimeout(() => {
-              hide();
-            }, 1000);
+            hide();
+          },
+          onPressTitle: ({ show }) => {
+            if (isFetching === false) {
+              show();
+            }
           },
           selectedIndex: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? [0] : [1],
           title: showDateBy.type,

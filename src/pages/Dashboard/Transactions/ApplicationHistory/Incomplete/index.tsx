@@ -87,7 +87,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
 }: PendingOrdersProps) => {
   const { filter, orders, page, pill, sort } = incomplete;
   const { pendingCount, reroutedCount, submittedCount } = transactions;
-  const fetching = useRef<boolean>(false);
+  const pillRef = useRef<ITransactionPills>(pill!);
+  const [loader, setLoader] = useState<boolean>(false);
   const [activeAccordion, setActiveAccordion] = useState<number[]>([]);
   const [showDateBy, setShowDateBy] = useState<IShowDateBy>({ type: "Last Updated", key: "descending" });
 
@@ -184,7 +185,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const checkLoading = (functionToBeCalled: () => void) => {
-    if (isFetching === false) {
+    if (loader === false) {
       functionToBeCalled();
     }
   };
@@ -297,7 +298,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const renderAccordion = orders.length !== 0 ? tableAccordion : undefined;
 
   const handleFetch = async () => {
-    setIsFetching(true);
+    setLoader(true);
     const filterStatus = filter.orderStatus!.map((value) => ({ column: "status", value: value }));
     const filterAccountType = filter.accountType!.map((value) => ({ column: "accountType", value: value }));
     const filterTransactionsType = filter.transactionsType!.map((value) => ({ column: "transactionType", value: value }));
@@ -331,7 +332,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
-      if (error === null && data !== null) {
+      if (error === null && data !== null && pill === pillRef.current) {
         // delay showing of New Sales modal only after response because of Modal Issue
         handleShowOpenAccount();
         updateTransactions({
@@ -354,7 +355,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           reroutedCount: data.result.rerouteCount,
           pendingCount: data.result.pendingCount,
         });
-        setIsFetching(false);
+        setLoader(false);
       }
       if (error !== null) {
         setIsFetching(false);
@@ -366,11 +367,11 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleResubmitOrder = async (orderNumber: string) => {
-    if (fetching.current === false) {
-      fetching.current = true;
+    if (loader === false) {
+      setLoader(true);
       const request: IResubmitOrderRequest = { orderNumber: orderNumber };
       const response: IResubmitOrderResponse = await resubmitOrder(request, navigation, setIsFetching);
-      fetching.current = false;
+      setLoader(false);
       if (response !== undefined) {
         const { error } = response;
         if (error === null && response.data !== null) {
@@ -388,10 +389,8 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   };
 
   const handleSeen = async () => {
-    fetching.current = true;
     const request: IUpdateSeenRequest = { dashboard: "agentDashboardV2", tab: [incomplete.pill!] };
     const updateSeenResponse: IUpdateSeenResponse = await updateSeen(request, navigation);
-    fetching.current = false;
     if (updateSeenResponse !== undefined) {
       const { error } = updateSeenResponse;
       if (error !== null) {
@@ -414,6 +413,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       default:
         updatedPill = "pending";
     }
+    pillRef.current = updatedPill;
     handleSeen();
     setActiveAccordion([]);
     updateTransactions({ ...transactions, incomplete: { ...transactions.incomplete, page: 1, pages: 1, pill: updatedPill } });
@@ -433,7 +433,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   }, [global.isLogout]);
 
   useEffect(() => {
-    if (global.isLogout === false) {
+    if (global.isLogout === false && activeTab === true) {
       handleFetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -465,7 +465,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
             {pills.map((currentPill: ITagData, index: number) => {
               const { text, pillCount } = currentPill;
               const handlePress = () => {
-                if (isFetching === false) {
+                if (loader === false) {
                   handlePill(index);
                 }
               };
@@ -493,7 +493,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         <AdvanceTable
           activeAccordion={activeAccordion}
           columns={columns}
-          data={isFetching === true ? [] : (orders as unknown as ITableData[])}
+          data={loader === true ? [] : (orders as unknown as ITableData[])}
           disabledIndex={disabledOrders}
           handleRowNavigation={handleOrderDetails}
           headerPopup={{
@@ -509,9 +509,12 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
             onPressContent: ({ hide, text, key }) => {
               handleShowDateBy(text as TDateType, key as TSortType);
               AnimationUtils.layout({ duration: 400 });
-              setTimeout(() => {
-                hide();
-              }, 1000);
+              hide();
+            },
+            onPressTitle: ({ show }) => {
+              if (loader === false) {
+                show();
+              }
             },
             selectedIndex: showDateBy.type === DASHBOARD_HOME.LABEL_CREATED_ON ? [0] : [1],
             title: showDateBy.type,
@@ -529,7 +532,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
           RenderEmptyState={() => (
             <EmptyStateTable
               handleClearFilter={handleClearFilter}
-              isFetching={isFetching}
+              isFetching={loader}
               isNotFiltered={isNotFiltered}
               noTransactionsYet={noTransactionsYet}
               search={search}

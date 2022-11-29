@@ -11,7 +11,7 @@ const errorHandler = (error: Error) => {
 };
 
 export const ErrorFallback = ({ resetError }) => {
-  const errorCode = "R0005";
+  const errorCode = "R005";
   const errorLabel = "Error Code: ";
   const link = "Back To Login";
   const title = "Something went wrong";
@@ -39,7 +39,7 @@ export const ErrorFallback = ({ resetError }) => {
     paddingVertical: 4,
     marginTop: 16,
   };
-  const linkTextStyle: TextStyle = { color: "#0089EC", fontFamily: "NunitoSans-Bold", fontSize: 12, marginRight: 4 };
+  const linkTextStyle: TextStyle = { color: "#0089EC", fontFamily: "NunitoSans-Bold", fontSize: 12, marginLeft: 4 };
 
   return (
     <Fragment>
@@ -53,8 +53,8 @@ export const ErrorFallback = ({ resetError }) => {
           <Text style={errorCodeStyle}>{errorCode}</Text>
         </Text>
         <Pressable onPress={resetError} style={linkStyle}>
+          <IcoMoon color="#0089EC" name="arrow-left" size={12} />
           <Text style={linkTextStyle}>{link}</Text>
-          <IcoMoon color="#0089EC" name="login" size={12} />
         </Pressable>
       </View>
     </Fragment>

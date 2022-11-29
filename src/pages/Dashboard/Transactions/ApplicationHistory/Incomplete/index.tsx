@@ -67,7 +67,6 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   global,
   handleShowOpenAccount,
   incomplete,
-  isFetching,
   isTermsAgreed,
   isNotFiltered,
   navigation,
@@ -127,8 +126,13 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     } else if (sectionIndex > -1) {
       newSelectedOrders.splice(sectionIndex, 1);
     }
-    updatedSelectedOrder(newSelectedOrders);
-    setDownloadInitiated(true);
+    if (downloadInitiated === false) {
+      updateTransactions({ ...transactions, selectedOrders: newSelectedOrders, incomplete: { ...incomplete, page: 1 } });
+      setDownloadInitiated(true);
+    } else {
+      updatedSelectedOrder(newSelectedOrders);
+    }
+
     setActiveAccordion([]);
   };
 
@@ -329,7 +333,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
       filter: updatedFilter,
       ...hardCopyFilter,
     };
-    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
+    const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setLoader);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null && pill === pillRef.current) {
@@ -358,7 +362,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
         setLoader(false);
       }
       if (error !== null) {
-        setIsFetching(false);
+        setLoader(false);
         setTimeout(() => {
           Alert.alert(error.message);
         }, 100);
@@ -370,7 +374,7 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
     if (loader === false) {
       setLoader(true);
       const request: IResubmitOrderRequest = { orderNumber: orderNumber };
-      const response: IResubmitOrderResponse = await resubmitOrder(request, navigation, setIsFetching);
+      const response: IResubmitOrderResponse = await resubmitOrder(request, navigation, setLoader);
       setLoader(false);
       if (response !== undefined) {
         const { error } = response;
@@ -422,6 +426,11 @@ const PendingOrdersComponent: FunctionComponent<PendingOrdersProps> = ({
   const handleClearFilter = () => {
     resetPendingFilter(pill);
   };
+
+  useEffect(() => {
+    setIsFetching(loader);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loader]);
 
   useEffect(() => {
     return () => {

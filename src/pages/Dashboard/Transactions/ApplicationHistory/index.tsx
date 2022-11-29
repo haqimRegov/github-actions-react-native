@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
@@ -286,6 +286,10 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
   };
 
   useEffect(() => {
+    setTempTab(undefined);
+  }, [activeTab]);
+
+  useEffect(() => {
     if (downloadToast === false) {
       setDownloadToastCount(0);
     }
@@ -359,7 +363,6 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           <ApplicationHistoryHeader
             activeTab={activeTab}
             availableFilters={availableFilters}
-            tempFilter={filterTemp}
             currentFilter={filter}
             filterVisible={filterVisible}
             handleCancel={handleCancelFilter}
@@ -368,10 +371,12 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
             handleSearch={handleSearch}
             handleShowFilter={handleShowFilter}
             inputSearch={inputSearch}
+            isLoading={loading}
             isNotFiltered={isNotFiltered}
             prevSearch={search}
             setFilter={setFilterTemp}
             setInputSearch={setInputSearch}
+            tempFilter={filterTemp}
           />
           <CustomSpacer space={sh24} />
           <View
@@ -399,7 +404,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
               />
               <View style={{ ...flexRow, ...flexChild, ...borderBottomGray2 }}>
                 <CustomFlexSpacer />
-                <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
+                <Pagination isLoading={loading} onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
                 <CustomSpacer isHorizontal={true} space={sw24} />
               </View>
             </View>
@@ -408,23 +413,28 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
           </View>
         </View>
         <CustomSpacer space={sh24} />
-        {selectedOrders.length !== 0 && activeTab === "incomplete" ? <CustomSpacer space={sh112} /> : null}
+        {downloadInitiated === true ? <CustomSpacer space={sh112} /> : null}
       </DashboardLayout>
       {downloadInitiated === true && activeTab === "incomplete" ? (
         <SelectionBanner
           bottomContent={
             <View style={{ ...flexRow, ...centerVertical }}>
               <Text style={fs16RegGray6}>{bannerText}</Text>
-              <CustomSpacer isHorizontal={true} space={sw16} />
-              <TouchableWithoutFeedback onPress={handleClear}>
-                <View style={{ borderBottomColor: colorBlue._8, borderBottomWidth: sh1 }}>
-                  <Text style={fs12BoldBlue8}>{DASHBOARD_HOME.LABEL_CLEAR_ALL}</Text>
-                </View>
-              </TouchableWithoutFeedback>
+              {selectedOrders.length !== 0 ? (
+                <Fragment>
+                  <CustomSpacer isHorizontal={true} space={sw16} />
+                  <TouchableWithoutFeedback onPress={handleClear}>
+                    <View style={{ borderBottomColor: colorBlue._8, borderBottomWidth: sh1 }}>
+                      <Text style={fs12BoldBlue8}>{DASHBOARD_HOME.LABEL_CLEAR_ALL}</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </Fragment>
+              ) : null}
             </View>
           }
           cancelOnPress={handleCancel}
           continueLoading={buttonLoading}
+          continueDisabled={selectedOrders.length === 0}
           label={DASHBOARD_HOME.LABEL_SUBMISSION_SUMMARY}
           labelCancel={DASHBOARD_HOME.BUTTON_CANCEL}
           labelSubmit={DASHBOARD_HOME.BUTTON_DOWNLOAD}

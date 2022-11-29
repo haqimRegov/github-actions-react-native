@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { LayoutChangeEvent, View } from "react-native";
 import { connect } from "react-redux";
 

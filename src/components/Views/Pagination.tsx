@@ -21,13 +21,20 @@ import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "./Spacer";
 
 interface PaginationProps {
+  isLoading: boolean;
   onPressNext: () => void;
   onPressPrev: () => void;
   page: number;
   totalPages: number;
 }
 
-export const Pagination: FunctionComponent<PaginationProps> = ({ onPressNext, onPressPrev, page, totalPages }: PaginationProps) => {
+export const Pagination: FunctionComponent<PaginationProps> = ({
+  isLoading,
+  onPressNext,
+  onPressPrev,
+  page,
+  totalPages,
+}: PaginationProps) => {
   const buttonStyle: ViewStyle = circleBorder(sw40, sw1, colorBlue._4);
 
   const totalPage = `of ${totalPages}`;
@@ -49,6 +56,8 @@ export const Pagination: FunctionComponent<PaginationProps> = ({ onPressNext, on
     }
   };
 
+  const disabledStyle = isLoading === true ? disabledOpacity4 : {};
+
   return (
     <View style={{ ...centerVertical, ...flexRow, height: sh40 }}>
       <View style={{ ...centerVertical, ...flexRow }}>
@@ -64,7 +73,7 @@ export const Pagination: FunctionComponent<PaginationProps> = ({ onPressNext, on
             name="caret-left"
             onPress={handlePrev}
             size={sw24}
-            style={{ ...buttonStyle, ...prevStyle }}
+            style={{ ...buttonStyle, ...prevStyle, ...disabledStyle }}
             withDebounce={true}
           />
           <CustomSpacer isHorizontal={true} space={sw8} />
@@ -73,7 +82,7 @@ export const Pagination: FunctionComponent<PaginationProps> = ({ onPressNext, on
             name="caret-right"
             onPress={handleNext}
             size={sw24}
-            style={{ ...buttonStyle, ...nextStyle }}
+            style={{ ...buttonStyle, ...nextStyle, ...disabledStyle }}
             withDebounce={true}
           />
         </View>

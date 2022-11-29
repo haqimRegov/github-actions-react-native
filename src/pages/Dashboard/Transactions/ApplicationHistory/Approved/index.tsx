@@ -271,7 +271,6 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
       filter: updatedFilter,
     };
     const dashboardResponse: IDashboardResponse = await getDashboard(request, navigation, setIsFetching);
-    setIsFetching(false);
     if (dashboardResponse !== undefined) {
       const { data, error } = dashboardResponse;
       if (error === null && data !== null) {
@@ -292,6 +291,7 @@ const ApprovedOrdersComponent: FunctionComponent<ApprovedOrdersProps> = ({
           approvedCount: data.result.approvedCount,
           rejectedCount: data.result.rejectedCount,
         });
+        setIsFetching(false);
       }
       if (error !== null) {
         setTimeout(() => {

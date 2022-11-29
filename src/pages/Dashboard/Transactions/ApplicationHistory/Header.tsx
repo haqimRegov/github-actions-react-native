@@ -15,6 +15,7 @@ import {
   colorBlue,
   colorTransparent,
   colorWhite,
+  disabledOpacity6,
   flexChild,
   flexRow,
   flexWrap,
@@ -64,6 +65,7 @@ interface ApplicationHistoryHeaderProps {
   handleShowFilter: () => void;
   inputSearch: string;
   isNotFiltered: boolean;
+  isLoading: boolean;
   prevSearch: string;
   setFilter: (value: ITransactionsFilter) => void;
   setInputSearch: (value: string) => void;
@@ -82,6 +84,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   handleShowFilter,
   inputSearch,
   isNotFiltered,
+  isLoading,
   prevSearch,
   setFilter,
   setInputSearch,
@@ -211,6 +214,8 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
   const filterContainer: ViewStyle = { ...centerHV, ...circleBorder(sw48, sw1, filterBorderColor), backgroundColor: filterBGColor };
   const tooltipStyle: ImageStyle = { height: sh34, width: sw84, position: "absolute", zIndex: 1, bottom: sh36 };
   const showAllText = showAll === false ? DASHBOARD_HOME.LABEL_SHOW_ALL : DASHBOARD_HOME.LABEL_HIDE;
+  const checkAction = isLoading === true ? "none" : "auto";
+  const disabledStyle: ViewStyle = isLoading === true ? disabledOpacity6 : {};
 
   // const showLabel = showMorePills ? PRODUCT_FILTER.LABEL_SHOW_LESS : PRODUCT_FILTER.LABEL_SHOW_ALL;
 
@@ -227,7 +232,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
               <CustomTextInput
                 autoCorrect={false}
                 containerStyle={flexChild}
-                disabled={filterVisible}
+                disabled={filterVisible || isLoading}
                 leftIcon={{ name: "search" }}
                 onChangeText={setInputSearch}
                 onSubmitEditing={handleSearchFunction}
@@ -237,7 +242,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
                 value={inputSearch}
                 viewStyle={{ width: sw692 }}
               />
-              <View style={{ width: sw80 }}>
+              <View style={{ width: sw80, ...disabledStyle }} pointerEvents={checkAction}>
                 {filterVisible ? null : <Image source={LocalAssets.tooltip.filter} style={tooltipStyle} />}
                 <View style={centerVertical}>
                   <IconButton
@@ -251,7 +256,7 @@ export const ApplicationHistoryHeader: FunctionComponent<ApplicationHistoryHeade
               </View>
             </View>
             {pillList.length > 0 && filterVisible === false ? (
-              <View style={{ ...flexChild, ...flexRow }}>
+              <View style={{ ...flexChild, ...flexRow, ...disabledStyle }} pointerEvents={checkAction}>
                 <View style={pillsContainer} onLayout={handleLayout}>
                   {pillList.map((pill, index: number) => {
                     const handlePress = () => {

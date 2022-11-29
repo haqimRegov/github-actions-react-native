@@ -1,13 +1,13 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useRef, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AccountHeader, ContentPage, CustomSpacer } from "../../../components";
+import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh24, sh56, sw24 } from "../../../styles";
+import { fs16BoldBlack2, px, rowCenterVertical, sh24, sh56, sw24 } from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -251,6 +251,17 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     handleNextStep("Products");
   };
 
+  const checkJointIdType = principalIdType === "Other" ? `${jointClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : jointIdType;
+  const jointCardHeader =
+    accountType === "Joint"
+      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER}'s ${checkJointIdType}`
+      : `${IDENTITY_CONFIRMATION.LABEL_UPLOAD_YOUR} ${checkJointIdType}`;
+  const checkPrincipalIdType = principalIdType === "Other" ? `${principalClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : principalIdType;
+  const principalCardHeader =
+    accountType === "Joint"
+      ? `${IDENTITY_CONFIRMATION.LABEL_UPLOAD} ${IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER}'s ${checkPrincipalIdType}`
+      : `${IDENTITY_CONFIRMATION.LABEL_UPLOAD_YOUR} ${checkPrincipalIdType}`;
+
   return (
     <Fragment>
       {page === 0 ? (
@@ -266,17 +277,27 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             {accountType === "Joint" ? (
               <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} title={principalHolder!.name!} />
             ) : null}
-            <UploadID
-              backError={principalBackError}
-              backPage={principalBackPage}
-              frontError={principalFrontError}
-              frontPage={principalFrontPage}
-              idType={principalClientIdType!}
-              onPressCamera={handleCameraPrincipal}
-              onPressPicker={handlePickerPrincipal}
-              setBackPage={handlePrincipalBackPage}
-              setFrontPage={handlePrincipalFrontPage}
-              uploadRef={principalUploadRef}
+            <ColorCard
+              header="custom"
+              customHeader={
+                <View style={rowCenterVertical}>
+                  <Text style={fs16BoldBlack2}>{principalCardHeader}</Text>
+                </View>
+              }
+              content={
+                <UploadID
+                  backError={principalBackError}
+                  backPage={principalBackPage}
+                  frontError={principalFrontError}
+                  frontPage={principalFrontPage}
+                  idType={principalClientIdType!}
+                  onPressCamera={handleCameraPrincipal}
+                  onPressPicker={handlePickerPrincipal}
+                  setBackPage={handlePrincipalBackPage}
+                  setFrontPage={handlePrincipalFrontPage}
+                  uploadRef={principalUploadRef}
+                />
+              }
             />
           </View>
           {accountType === "Individual" ? null : (
@@ -284,17 +305,27 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
               <CustomSpacer space={sh56} />
               <View style={px(sw24)}>
                 {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_JOINT} title={jointHolder!.name!} /> : null}
-                <UploadID
-                  backError={jointBackError}
-                  backPage={jointSecondPage}
-                  frontError={jointFrontError}
-                  frontPage={jointFrontPage}
-                  idType={jointClientIdType!}
-                  onPressCamera={handleCameraJoint}
-                  onPressPicker={handlePickerJoint}
-                  setBackPage={handleJointBackPage}
-                  setFrontPage={handleJointFrontPage}
-                  uploadRef={jointUploadRef}
+                <ColorCard
+                  header="custom"
+                  customHeader={
+                    <View style={rowCenterVertical}>
+                      <Text style={fs16BoldBlack2}>{jointCardHeader}</Text>
+                    </View>
+                  }
+                  content={
+                    <UploadID
+                      backError={jointBackError}
+                      backPage={jointSecondPage}
+                      frontError={jointFrontError}
+                      frontPage={jointFrontPage}
+                      idType={jointClientIdType!}
+                      onPressCamera={handleCameraJoint}
+                      onPressPicker={handlePickerJoint}
+                      setBackPage={handleJointBackPage}
+                      setFrontPage={handleJointFrontPage}
+                      uploadRef={jointUploadRef}
+                    />
+                  }
                 />
               </View>
             </Fragment>

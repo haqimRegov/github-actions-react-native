@@ -4,6 +4,7 @@ import PDFView from "react-native-view-pdf";
 
 import { IcoMoon } from "../../icons";
 import {
+  border,
   centerHV,
   centerVertical,
   colorBlack,
@@ -17,7 +18,9 @@ import {
   fullWidth,
   imageContain,
   px,
+  py,
   sh140,
+  sh16,
   sh236,
   sh24,
   sh32,
@@ -25,10 +28,13 @@ import {
   sh500,
   sh96,
   shadow12Blue108,
+  shadow4Blue116,
+  sw1,
   sw10,
   sw204,
   sw40,
   sw750,
+  sw8,
 } from "../../styles";
 import { BasicModal } from "../Modals";
 import { CustomFlexSpacer, CustomSpacer, LabeledTitle } from "../Views";
@@ -111,25 +117,34 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
     imageValue = { uri: value.url };
     pdfResourceType = "url";
   }
+  const imageContainerStyle: ViewStyle = {
+    ...flexChild,
+    ...px(sw40),
+    ...py(sh16),
+  };
 
   return (
     <Fragment>
-      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw10 }}>
-        <UploadDocument onPress={handleViewFile} ref={ref} value={value} {...uploadProps} />
-        {value !== undefined && value.type !== "application/pdf" && withPreview === true ? (
+      {value !== undefined && value.type !== "application/pdf" && withPreview === true ? (
+        <View style={{ backgroundColor: colorWhite._1, ...border(colorGray._2, sw1, sw8), ...shadow4Blue116 }}>
+          <UploadDocument onPress={handleViewFile} ref={ref} value={value} {...uploadProps} />
           <View style={{ height: sh236 }}>
             {isFileValid === false ? null : (
-              <View style={{ ...flexChild, ...flexRow, ...centerVertical }}>
-                <CustomSpacer isHorizontal={true} space={sw40} />
-                <TouchableWithoutFeedback onPress={handleViewFile}>
-                  <Image source={imageValue} style={previewStyle} />
-                </TouchableWithoutFeedback>
-              </View>
+              <TouchableWithoutFeedback onPress={handleViewFile}>
+                <View style={imageContainerStyle}>
+                  <View style={border(colorGray._2, sw1)}>
+                    <Image source={imageValue} style={{ ...imageContain, ...fullHW }} />
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
             )}
           </View>
-        ) : null}
-      </View>
-
+        </View>
+      ) : (
+        <View style={{ backgroundColor: colorWhite._1, borderRadius: sw10 }}>
+          <UploadDocument onPress={handleViewFile} ref={ref} value={value} {...uploadProps} />
+        </View>
+      )}
       <BasicModal animationInTiming={modalAnimationInTiming} hasBackdrop={false} visible={viewFile}>
         <Fragment>
           {value !== undefined ? (

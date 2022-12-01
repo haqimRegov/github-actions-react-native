@@ -3,11 +3,26 @@ import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
+import { ColorCard, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { fs16BoldBlack2, px, rowCenterVertical, sh24, sh56, sw24 } from "../../../styles";
+import {
+  centerVertical,
+  colorRed,
+  flexRow,
+  fs10RegGray6,
+  fs12BoldBlack2,
+  fs16BoldBlack2,
+  px,
+  rowCenterVertical,
+  sh24,
+  sh4,
+  sh56,
+  sw1,
+  sw12,
+  sw24,
+} from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -275,7 +290,17 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           <View style={px(sw24)}>
             <CustomSpacer space={sh24} />
             {accountType === "Joint" ? (
-              <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL} title={principalHolder!.name!} />
+              <Fragment>
+                <View style={{ borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
+                  <View style={{ ...flexRow, ...centerVertical }}>
+                    <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw12} />
+                    <Text style={fs12BoldBlack2}>{principalHolder?.name}</Text>
+                  </View>
+                  <CustomSpacer space={sh4} />
+                </View>
+                <CustomSpacer space={sh24} />
+              </Fragment>
             ) : null}
             <ColorCard
               header="custom"
@@ -304,7 +329,19 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
             <Fragment>
               <CustomSpacer space={sh56} />
               <View style={px(sw24)}>
-                {accountType === "Joint" ? <AccountHeader subtitle={IDENTITY_CONFIRMATION.LABEL_JOINT} title={jointHolder!.name!} /> : null}
+                {accountType === "Joint" ? (
+                  <Fragment>
+                    <View style={{ borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
+                      <View style={{ ...flexRow, ...centerVertical }}>
+                        <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw12} />
+                        <Text style={fs12BoldBlack2}>{jointHolder?.name}</Text>
+                      </View>
+                      <CustomSpacer space={sh4} />
+                    </View>
+                    <CustomSpacer space={sh24} />
+                  </Fragment>
+                ) : null}
                 <ColorCard
                   header="custom"
                   customHeader={

@@ -725,7 +725,13 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
         {transactionType !== "Sales-AO" && transactionType !== "Sales-NS" && transactionType !== "Sales" ? (
           <Fragment>
             <SummaryColorCard data={contactDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CONTACT} spaceToTop={sh32} />
-            <SummaryColorCard data={riskAssessmentDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
+            {isNotEmpty(riskInfo) ? (
+              <SummaryColorCard
+                data={riskAssessmentDetails}
+                headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT}
+                spaceToTop={sh32}
+              />
+            ) : null}
             {declaration !== null && declaration.fatca !== null ? (
               <SummaryColorCard data={fatca} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_FATCA} spaceToTop={sh32} />
             ) : null}

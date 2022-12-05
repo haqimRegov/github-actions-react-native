@@ -126,7 +126,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     { label: DASHBOARD_ORDER_DETAILS.LABEL_PROCESSING, title: transactionDetails.kibProcessingBranch, titleStyle: fsTransformNone },
   ];
 
-  if (transactionType === "Sales-AO" || transactionType === "Sales-NS" || transactionType === "Sales") {
+  if (transactionType === "Sales-AO" || transactionType === "Sales") {
     orderDetails.push({ label: DASHBOARD_ORDER_DETAILS.LABEL_CONSENT, title: "Yes", titleStyle: fsTransformNone });
   }
 
@@ -160,7 +160,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
 
   let totalAmountLabel = DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_INVESTMENT;
 
-  if (transactionType === "Sales" || transactionType === "Sales-NS") {
+  if (transactionType === "Sales") {
     totalAmountLabel = DASHBOARD_ORDER_DETAILS.LABEL_TOTAL_SALES;
   }
 
@@ -722,7 +722,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
           <SummaryColorCard data={riskAssessmentDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_RISK_ASSESSMENT} spaceToTop={sh32} />
         ) : null}
 
-        {transactionType !== "Sales-AO" && transactionType !== "Sales-NS" && transactionType !== "Sales" ? (
+        {transactionType !== "Sales-AO" && transactionType !== "Sales" ? (
           <Fragment>
             <SummaryColorCard data={contactDetails} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CONTACT} spaceToTop={sh32} />
             {isNotEmpty(riskInfo) ? (

@@ -90,12 +90,9 @@ export const EditPdf: FunctionComponent<EditPdfProps> = ({
           textPosition.x = signPosition.principal.x;
           textPosition.y = signPosition.principal.y;
         } else if (
-          (accountType === "Joint" &&
-            jointSignature === "" &&
-            updatedTransactionType !== "Sales" &&
-            updatedTransactionType !== "Sales-NS") ||
+          (accountType === "Joint" && jointSignature === "" && updatedTransactionType !== "Sales") ||
           (jointSignature === "" &&
-            (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+            updatedTransactionType === "Sales" &&
             accountType === "Joint" &&
             updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL &&
             updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW)
@@ -108,12 +105,9 @@ export const EditPdf: FunctionComponent<EditPdfProps> = ({
           textPosition.x = signPosition.adviser.x;
           textPosition.y = signPosition.adviser.y;
         } else if (
-          (accountType === "Joint" &&
-            jointSignature === "" &&
-            updatedTransactionType !== "Sales" &&
-            updatedTransactionType !== "Sales-NS") ||
+          (accountType === "Joint" && jointSignature === "" && updatedTransactionType !== "Sales") ||
           (jointSignature === "" &&
-            (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+            updatedTransactionType === "Sales" &&
             accountType === "Joint" &&
             updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL &&
             updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW)
@@ -225,13 +219,9 @@ export const EditPdf: FunctionComponent<EditPdfProps> = ({
           if (principalSignature === "") {
             setSigner("principal");
           } else if (
-            (accountType === "Joint" &&
-              jointSignature === "" &&
-              updatedTransactionType !== "Sales" &&
-              updatedTransactionType !== "Sales-NS" &&
-              principalSignature !== "") ||
+            (accountType === "Joint" && jointSignature === "" && updatedTransactionType !== "Sales" && principalSignature !== "") ||
             (jointSignature === "" &&
-              (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+              updatedTransactionType === "Sales" &&
               accountType === "Joint" &&
               (updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL ||
                 updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW) &&
@@ -245,13 +235,9 @@ export const EditPdf: FunctionComponent<EditPdfProps> = ({
           if (adviserSignature === "") {
             setSigner("adviser");
           } else if (
-            (accountType === "Joint" &&
-              jointSignature === "" &&
-              updatedTransactionType !== "Sales" &&
-              updatedTransactionType !== "Sales-NS" &&
-              adviserSignature !== "") ||
+            (accountType === "Joint" && jointSignature === "" && updatedTransactionType !== "Sales" && adviserSignature !== "") ||
             (jointSignature === "" &&
-              (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+              updatedTransactionType === "Sales" &&
               accountType === "Joint" &&
               updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL &&
               updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW &&

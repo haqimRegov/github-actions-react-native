@@ -65,10 +65,7 @@ export const FundOverview: FunctionComponent<FundOverviewProps> = ({
   const tagColor = completed === true ? "complete" : "warning";
   const tagLabel = completed === true ? "Completed" : "Pending";
 
-  const investmentAmountLabel =
-    transactionType === "Sales-NS" || transactionType === "Sales"
-      ? PAYMENT.LABEL_TOTAL_SALES_AMOUNT
-      : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
+  const investmentAmountLabel = transactionType === "Sales" ? PAYMENT.LABEL_TOTAL_SALES_AMOUNT : PAYMENT.LABEL_TOTAL_INVESTMENT_AMOUNT;
   const totalAmountLabel = paymentType === "Recurring" ? PAYMENT.LABEL_TOTAL_RECURRING_AMOUNT : investmentAmountLabel;
 
   return (

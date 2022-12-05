@@ -264,7 +264,7 @@ const NewSalesComponent = ({
                     },
                   },
                 });
-                updateTransactionType("Sales-NS");
+                updateTransactionType("Sales");
                 return navigation.navigate("NewSales");
               }
               updateTransactionType("Sales-AO");

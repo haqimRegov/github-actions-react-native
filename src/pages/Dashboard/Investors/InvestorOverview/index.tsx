@@ -695,7 +695,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       }
       updateProductType(getProductTabType(item.fundType));
       if (check === true) {
-        updateTransactionType("Sales-NS");
+        updateTransactionType("Sales");
         updateInvestors({ ...investors, backToInvestorOverview: true });
         navigation.navigate("NewSales");
       }

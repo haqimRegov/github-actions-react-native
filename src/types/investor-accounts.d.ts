@@ -48,7 +48,7 @@ declare interface IInvestorAccountsData {
   name: string;
   paymentMethod: string;
   riskTolerance: string;
-  status: string;
+  status: OrderStatusType;
 }
 
 declare interface ICurrentAccount {

@@ -19,7 +19,6 @@ import {
   imageContain,
   px,
   py,
-  sh140,
   sh16,
   sh236,
   sh24,
@@ -31,7 +30,6 @@ import {
   shadow4Blue116,
   sw1,
   sw10,
-  sw204,
   sw40,
   sw750,
   sw8,
@@ -80,7 +78,6 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
   const headerTextStyle: TextStyle = { ...fs12BoldWhite1, color: headerTextColor };
   const headerStyle: ViewStyle = { ...fullWidth, ...headerBGColor, position: "absolute", zIndex: 1, ...shadow12Blue108 };
   const imageStyle: ImageStyle = { ...imageContain, height: sh500, width: sw750 };
-  const previewStyle: ImageStyle = { ...imageContain, height: sh140, width: sw204 };
 
   const modalAnimationInTiming = value !== undefined && value.type === "application/pdf" ? 0 : 450;
 

@@ -5,20 +5,13 @@ import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import {
-  BasicModal,
-  ContentPage,
-  CustomSpacer,
-  NewPrompt,
-  SignatureUploadWithModal,
-  SubmissionSummaryPrompt,
-} from "../../../../components";
+import { BasicModal, CustomSpacer, NewPrompt, SubmissionSummaryPrompt } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { generatePdf, getReceiptSummaryList, submitPdf } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { centerHV, fsAlignLeft, fullHW, px, sh16, sh24, sh8, sw24 } from "../../../../styles";
+import { centerHV, fsAlignLeft, fullHW, sh16 } from "../../../../styles";
 import { SubmissionSummaryCollapsible } from "../../../../templates";
-import { isArrayNotEmpty } from "../../../../utils";
+import { PDFListTemplate } from "../../../../templates/Signatures";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -31,6 +24,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   forceUpdate,
   handleNextStep,
   handleResetForceUpdate,
+  personalInfo,
   receipts,
   setEditReceipt,
   setLoading,
@@ -211,79 +205,22 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const incompleteIndex = receipts !== undefined ? receipts.findIndex((receipt) => receipt.completed !== true) : 0;
-  const buttonDisabled = incompleteIndex !== -1;
-  const fullOpacity = { opacity: 1 };
-
   return (
     <Fragment>
-      <ContentPage
-        continueDisabled={buttonDisabled}
-        handleCancel={handleBack}
-        handleContinue={handleSubmit}
-        labelContinue={TERMS_AND_CONDITIONS.BUTTON_SUBMIT}
-        subheading={TERMS_AND_CONDITIONS.HEADING}
-        subtitle={TERMS_AND_CONDITIONS.SUBTITLE}>
-        <CustomSpacer space={sh24} />
-        <View style={px(sw24)}>
-          {receipts !== undefined &&
-            receipts.map((receipt: IOnboardingReceiptState, index: number) => {
-              const handleEdit = () => {
-                if (receipt.pdf === undefined) {
-                  handleGetPDF(receipt, index);
-                } else {
-                  setEditReceipt(receipt);
-                }
-              };
-              const handleRemove = () => {
-                const updatedReceipts = [...receipts];
-                updatedReceipts[index] = {
-                  ...updatedReceipts[index],
-                  signedPdf: updatedReceipts[index].pdf,
-                  adviserSignature: undefined,
-                  principalSignature: undefined,
-                  completed: false,
-                };
-                updateReceipts(updatedReceipts);
-              };
-              const baseSignatureValid =
-                "adviserSignature" in receipt &&
-                receipt.adviserSignature !== undefined &&
-                "principalSignature" in receipt &&
-                receipt.principalSignature !== undefined;
-              const completed = baseSignatureValid;
-
-              const checkSubtitleRisk = accountHolder === "Joint" ? "" : `, ${"Risk Assessment"}`;
-              const checkSubtitleDeclaration = isArrayNotEmpty(declarations) ? `, ${"Declarations"}` : "";
-              const checkSubtitle = `${TERMS_AND_CONDITIONS.UPLOAD_CARD_SUBTITLE}${checkSubtitleRisk}${checkSubtitleDeclaration}`;
-
-              // const disable = receipt.completed !== true;
-              // const disabled = index === 0 ? false : disabledCondition;
-              return (
-                <Fragment key={index}>
-                  <SignatureUploadWithModal
-                    active={true}
-                    completed={completed}
-                    completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
-                    containerStyle={fullOpacity}
-                    disabled={false}
-                    label={receipt.name}
-                    onPressEdit={handleEdit}
-                    onPressRemove={handleRemove}
-                    onSuccess={() => {}}
-                    resourceType="base64"
-                    setValue={() => {}}
-                    tooltip={incompleteIndex === index}
-                    title={checkSubtitle}
-                    onPress={handleEdit}
-                    value={receipt.signedPdf}
-                  />
-                  <CustomSpacer space={sh8} />
-                </Fragment>
-              );
-            })}
-        </View>
-      </ContentPage>
+      <PDFListTemplate
+        accountHolder={accountHolder}
+        accountType={"Individual"}
+        authorisedSignatory={personalInfo.signatory!}
+        declarations={declarations}
+        details={details}
+        handleBack={handleBack}
+        handleSubmit={handleSubmit}
+        handleGetPDF={handleGetPDF}
+        receipts={receipts}
+        setEditReceipt={setEditReceipt}
+        transactionType={"CR"}
+        updateReceipts={updateReceipts}
+      />
       <BasicModal backdropOpacity={0.65} visible={submissionSummary !== undefined}>
         <View style={{ ...centerHV, ...fullHW }}>
           {promptType === "summary" ? (

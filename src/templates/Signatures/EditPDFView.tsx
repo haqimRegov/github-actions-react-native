@@ -13,10 +13,10 @@ import {
 import PDFView from "react-native-view-pdf";
 import WebView from "react-native-webview";
 
-import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../../../components";
-import { Language } from "../../../../constants/language";
-import { IcoMoon } from "../../../../icons";
+import { LocalAssets } from "../../assets/images/LocalAssets";
+import { CustomSpacer, IconButton, RoundedButton, SignatureModal } from "../../components";
+import { Language } from "../../constants";
+import { IcoMoon } from "../../icons";
 import {
   absolutePosition,
   centerVertical,
@@ -42,21 +42,20 @@ import {
   sw24,
   sw32,
   sw8,
-} from "../../../../styles";
+} from "../../styles";
 
 const { TERMS_AND_CONDITIONS } = Language.PAGE;
 
 export type Signer = "adviser" | "principal" | "joint" | undefined;
 
-declare interface PDFViewProps {
+interface PDFViewProps {
   accountType: TypeAccountChoices;
   adviserSignature: string;
   completed: boolean;
   editReceipt: IOnboardingReceiptState | undefined;
   principalSignature: string;
   jointAge?: number;
-  jointSignature: string;
-  pageWidth: number;
+  jointSignature?: string;
   showSignPdf: boolean;
   signer: Signer;
   handleScroll: () => void;
@@ -67,10 +66,12 @@ declare interface PDFViewProps {
   handleConfirm: () => void;
   handlePosition: (e: GestureResponderEvent) => void;
   pageLoading: boolean;
+  pageWidth: number;
   setScrollRef: (ref: ScrollView) => void;
+  transactionType?: TTransactionType;
 }
 
-export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
+export const PdfViewTemplate: FunctionComponent<PDFViewProps> = ({
   accountType,
   adviserSignature,
   editReceipt,
@@ -78,7 +79,6 @@ export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
   principalSignature,
   jointAge,
   jointSignature,
-  pageWidth,
   showSignPdf,
   signer,
   handleScroll,
@@ -89,7 +89,9 @@ export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
   handleConfirm,
   handlePosition,
   pageLoading,
+  pageWidth,
   setScrollRef,
+  transactionType,
 }: PDFViewProps) => {
   const { urlPageCount } = editReceipt!;
   let signerLabel = "";
@@ -106,13 +108,15 @@ export const PdfViewOnboarding: FunctionComponent<PDFViewProps> = ({
           accountType === "Joint" ? TERMS_AND_CONDITIONS.LABEL_PRINCIPAL_SIGNATURE : TERMS_AND_CONDITIONS.LABEL_INVESTORS_SIGNATURE;
         signatureToDisplay = principalSignature;
         break;
-      case "joint":
-        signerLabel =
+      case "joint": {
+        const checkJoint =
           jointAge !== undefined && jointAge > 18
             ? TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE
             : TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE_OPTIONAL;
-        signatureToDisplay = jointSignature;
+        signerLabel = transactionType !== "Sales-AO" ? TERMS_AND_CONDITIONS.LABEL_JOINT_SIGNATURE : checkJoint;
+        signatureToDisplay = jointSignature || "";
         break;
+      }
       default:
         signerLabel = TERMS_AND_CONDITIONS.LABEL_ADVISER_SIGNATURE;
         break;

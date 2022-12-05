@@ -5,35 +5,15 @@ import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { CollectionBankCard, ContentPage, CustomSpacer, IconText, NewPromptModal, SignatureUploadWithModal } from "../../../../components";
+import { CollectionBankCard, CustomSpacer, NewPromptModal } from "../../../../components";
 import { Language } from "../../../../constants/language";
 import { generatePdf, generatePdfTransactions, getReceiptSummaryList, submitPdf, submitPdfTransactions } from "../../../../network-actions";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import {
-  borderBottomBlue5,
-  colorBlue,
-  flexChild,
-  flexRow,
-  fs10BoldGray6,
-  fs10RegGray6,
-  fs14BoldBlack2,
-  fs14RegBlack2,
-  px,
-  rowCenterVertical,
-  sh16,
-  sh24,
-  sh8,
-  sw10,
-  sw16,
-  sw212,
-  sw24,
-  sw3,
-  sw440,
-  sw80,
-} from "../../../../styles";
-import { formatAmount, isArrayNotEmpty, isNotEmpty } from "../../../../utils";
+import { flexRow, fs10BoldGray6, fs10RegGray6, sh16, sh8, sw10, sw212, sw3, sw440 } from "../../../../styles";
+import { PDFListTemplate } from "../../../../templates/Signatures";
+import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 
-const { TERMS_AND_CONDITIONS, NEW_SALES_PROMPT } = Language.PAGE;
+const { NEW_SALES_PROMPT } = Language.PAGE;
 
 export interface PDFListProps extends AcknowledgementStoreProps, NewSalesContentProps {
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
@@ -113,19 +93,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const handleBack = () => {
     handleNextStep("TermsAndConditions");
-  };
-
-  const checkSignatory = () => {
-    switch (authorisedSignatory) {
-      case "Principal Applicant":
-        return `${details!.principalHolder!.name} `;
-      case "Both Applicants":
-        return `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
-      case "Either Applicant":
-        return `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_OR} ${details!.jointHolder!.name} `;
-      default:
-        return `${details!.principalHolder!.name} `;
-    }
   };
 
   const handleContinue = () => {
@@ -230,18 +197,6 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const incompleteIndex = receipts !== undefined ? receipts.findIndex((receipt) => receipt.completed !== true) : 0;
-  const buttonDisabled = incompleteIndex !== -1;
-
-  const checkSignLabel =
-    accountType === "Individual"
-      ? `${details!.principalHolder!.name} `
-      : `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
-
-  const toSignLabel = transactionType === "Sales" || transactionType === "Sales-NS" ? checkSignatory() : checkSignLabel;
-
-  const signIcon = accountType === "Individual" ? "account" : "account-joint";
-
   const orderNumberLabel = isArrayNotEmpty(receipts)
     ? receipts!.map(({ orderNumber }, index) => (index === 0 ? orderNumber : ` and ${orderNumber}`)).join("")
     : "";
@@ -252,89 +207,18 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   return (
     <Fragment>
-      <ContentPage
-        continueDisabled={buttonDisabled}
-        handleCancel={handleBack}
-        handleContinue={handleSubmit}
-        labelContinue={TERMS_AND_CONDITIONS.BUTTON_CREATE}
-        subheading={TERMS_AND_CONDITIONS.HEADING_SIGNATURE}
-        subtitle={TERMS_AND_CONDITIONS.SUBTITLE_SIGNATURE}>
-        <CustomSpacer space={sh24} />
-        <View style={px(sw24)}>
-          <View style={rowCenterVertical}>
-            <IconText color={colorBlue._1} name={signIcon} text={toSignLabel} textStyle={fs14BoldBlack2} />
-            <Text style={fs14RegBlack2}>{TERMS_AND_CONDITIONS.LABEL_TO_SIGN}</Text>
-            <CustomSpacer isHorizontal={true} space={sw16} />
-            <View style={{ ...borderBottomBlue5, ...flexChild }} />
-          </View>
-          <CustomSpacer space={sh16} />
-          {receipts !== undefined &&
-            receipts.map((receipt: IOnboardingReceiptState, index: number) => {
-              const handleEdit = () => {
-                if (receipt.pdf === undefined) {
-                  handleGetPDF(receipt, index);
-                } else {
-                  setEditReceipt(receipt);
-                }
-              };
-              const handleRemove = () => {
-                const updatedReceipts = [...receipts];
-                updatedReceipts[index] = {
-                  ...updatedReceipts[index],
-                  signedPdf: updatedReceipts[index].pdf,
-                  adviserSignature: undefined,
-                  principalSignature: undefined,
-                  jointSignature: undefined,
-                  completed: false,
-                };
-                updateReceipts(updatedReceipts);
-              };
-              const baseSignatureValid =
-                "adviserSignature" in receipt &&
-                receipt.adviserSignature !== undefined &&
-                "principalSignature" in receipt &&
-                receipt.principalSignature !== undefined;
-              const completed =
-                accountType === "Individual"
-                  ? baseSignatureValid
-                  : baseSignatureValid && "jointSignature" in receipt && receipt.jointSignature !== undefined;
-              // const disable = receipt.completed !== true;
-              // const disabled = index === 0 ? false : disabledCondition;
-              const amountTitle = receipt
-                .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
-                .join(" + ");
-              const cashTitle = receipt.isEpf !== "true" && receipt.isScheduled !== "true" ? " Cash" : "";
-              const epfTitle = receipt.isEpf === "true" ? " - EPF" : cashTitle;
-              const recurringTitle = receipt.isScheduled === "true" ? " - Recurring" : "";
-              const title = `${receipt.fundCount} ${receipt.fundType}${epfTitle}${recurringTitle} - ${amountTitle}`;
-              const fullOpacity = { opacity: 1 };
-
-              return (
-                <Fragment key={index}>
-                  <SignatureUploadWithModal
-                    active={true}
-                    buttonContainerStyle={completed === true ? undefined : { width: sw80 }}
-                    completed={completed}
-                    completedText={TERMS_AND_CONDITIONS.LABEL_COMPLETED}
-                    disabled={false}
-                    label={receipt.name}
-                    onPressEdit={handleEdit}
-                    onPressRemove={handleRemove}
-                    onSuccess={() => {}}
-                    resourceType="base64"
-                    setValue={() => {}}
-                    title={title}
-                    tooltip={false}
-                    onPress={handleEdit}
-                    value={receipt.signedPdf}
-                    containerStyle={fullOpacity}
-                  />
-                  <CustomSpacer space={sh8} />
-                </Fragment>
-              );
-            })}
-        </View>
-      </ContentPage>
+      <PDFListTemplate
+        accountType={accountType}
+        authorisedSignatory={authorisedSignatory}
+        details={details}
+        handleBack={handleBack}
+        handleSubmit={handleSubmit}
+        handleGetPDF={handleGetPDF}
+        receipts={receipts}
+        setEditReceipt={setEditReceipt}
+        transactionType={transactionType!}
+        updateReceipts={updateReceipts}
+      />
       <NewPromptModal
         illustration={LocalAssets.illustration.orderReceived}
         primary={{ onPress: handleContinue, buttonStyle: { width: sw212 }, text: NEW_SALES_PROMPT.BUTTON_PAY_NOW }}

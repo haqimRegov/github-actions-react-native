@@ -4,17 +4,15 @@ import moment from "moment";
 import { PDFDocument, rgb } from "pdf-lib/cjs";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Dimensions, GestureResponderEvent, Platform, ScrollView } from "react-native";
-import { connect } from "react-redux";
 
-import { Base64 } from "../../../../constants";
-import { Language } from "../../../../constants/language";
-import { ReactFileSystem } from "../../../../integrations/file-system/functions";
-import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../../store";
-import { sh180, sh460, sw400 } from "../../../../styles";
-import { GetEmbeddedBase64 } from "../../../../utils";
-import { PdfViewForceUpdate, Signer } from "./EditPDFView";
+import { Base64, Language } from "../../constants";
+import { ReactFileSystem } from "../../integrations";
+import { NewSalesState } from "../../store";
+import { sh180, sh460, sh740, sw400 } from "../../styles";
+import { GetEmbeddedBase64 } from "../../utils";
+import { PdfViewTemplate, Signer } from "./EditPDFView";
 
-const { TERMS_AND_CONDITIONS } = Language.PAGE;
+const { PERSONAL_DETAILS, TERMS_AND_CONDITIONS } = Language.PAGE;
 
 const signPosition = {
   adviser: { x: 20, y: 225 },
@@ -22,15 +20,25 @@ const signPosition = {
   joint: { x: 20, y: 445 },
 };
 
-interface EditPdfProps extends AcknowledgementStoreProps {
+interface EditPdfProps {
+  accountType: TypeAccountChoices;
+  currentTransactionType?: TTransactionType;
   editReceipt: IOnboardingReceiptState | undefined;
+  newSales: NewSalesState;
   pageWidth: number;
+  personalInfo: IPersonalInfoState;
+  receipts?: IOnboardingReceiptState[];
   setEditReceipt: (pdf: IOnboardingReceiptState | undefined) => void;
+  updateReceipts: (receipts: IOnboardingReceiptState[]) => void;
 }
 
-const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
+export const EditPdf: FunctionComponent<EditPdfProps> = ({
+  accountType,
+  currentTransactionType,
   editReceipt,
+  newSales,
   pageWidth,
+  personalInfo,
   receipts,
   setEditReceipt,
   updateReceipts,
@@ -41,10 +49,19 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   const [principalSignature, setPrincipalSignature] = useState<string>(
     editReceipt!.principalSignature !== undefined ? editReceipt!.principalSignature.base64! : "",
   );
+  const [jointSignature, setJointSignature] = useState<string>(
+    editReceipt!.jointSignature !== undefined ? editReceipt!.jointSignature.base64! : "",
+  );
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [showSignPdf, setShowSignPdf] = useState<boolean>(false);
   const [signer, setSigner] = useState<Signer>(undefined);
   const [scrollRef, setScrollRef] = useState<ScrollView | null>(null);
+  const { signatory } = personalInfo;
+  const { accountDetails, transactionType } = newSales;
+  const { accountNo, authorisedSignatory } = accountDetails;
+
+  const updatedSignatory = accountNo !== "" ? authorisedSignatory : signatory;
+  const updatedTransactionType = transactionType !== undefined ? transactionType : currentTransactionType;
 
   const modifyPdf = async (value: string) => {
     if (editReceipt !== undefined && signer !== undefined) {
@@ -72,11 +89,45 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         if (principalSignature === "") {
           textPosition.x = signPosition.principal.x;
           textPosition.y = signPosition.principal.y;
+        } else if (
+          (accountType === "Joint" &&
+            jointSignature === "" &&
+            updatedTransactionType !== "Sales" &&
+            updatedTransactionType !== "Sales-NS") ||
+          (jointSignature === "" &&
+            (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+            accountType === "Joint" &&
+            updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL &&
+            updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW)
+        ) {
+          textPosition.x = signPosition.joint.x;
+          textPosition.y = signPosition.joint.y;
         }
       } else if (signer === "principal") {
         if (adviserSignature === "") {
           textPosition.x = signPosition.adviser.x;
           textPosition.y = signPosition.adviser.y;
+        } else if (
+          (accountType === "Joint" &&
+            jointSignature === "" &&
+            updatedTransactionType !== "Sales" &&
+            updatedTransactionType !== "Sales-NS") ||
+          (jointSignature === "" &&
+            (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+            accountType === "Joint" &&
+            updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL &&
+            updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW)
+        ) {
+          textPosition.x = signPosition.joint.x;
+          textPosition.y = signPosition.joint.y;
+        }
+      } else if (signer === "joint") {
+        if (adviserSignature === "") {
+          textPosition.x = signPosition.adviser.x;
+          textPosition.y = signPosition.adviser.y;
+        } else if (principalSignature === "") {
+          textPosition.x = signPosition.principal.x;
+          textPosition.y = signPosition.principal.y;
         }
       }
 
@@ -145,6 +196,16 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         setSigner("principal");
       }
       setShowSignPdf(true);
+    } else if (coordinateX <= sw400 && coordinateY > sh460 && coordinateY < sh740 && accountType === "Joint") {
+      if (
+        updatedSignatory === PERSONAL_DETAILS.OPTION_CONTROL_EITHER ||
+        updatedSignatory === PERSONAL_DETAILS.OPTION_CONTROL_EITHER_NEW ||
+        updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_BOTH ||
+        updatedSignatory === PERSONAL_DETAILS.OPTION_CONTROL_BOTH_NEW
+      ) {
+        setSigner("joint");
+        setShowSignPdf(true);
+      }
     }
   };
 
@@ -163,12 +224,48 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         if (signer === "adviser") {
           if (principalSignature === "") {
             setSigner("principal");
+          } else if (
+            (accountType === "Joint" &&
+              jointSignature === "" &&
+              updatedTransactionType !== "Sales" &&
+              updatedTransactionType !== "Sales-NS" &&
+              principalSignature !== "") ||
+            (jointSignature === "" &&
+              (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+              accountType === "Joint" &&
+              (updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL ||
+                updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW) &&
+              principalSignature !== "")
+          ) {
+            setSigner("joint");
           } else {
             setShowSignPdf(false);
           }
         } else if (signer === "principal") {
           if (adviserSignature === "") {
             setSigner("adviser");
+          } else if (
+            (accountType === "Joint" &&
+              jointSignature === "" &&
+              updatedTransactionType !== "Sales" &&
+              updatedTransactionType !== "Sales-NS" &&
+              adviserSignature !== "") ||
+            (jointSignature === "" &&
+              (updatedTransactionType === "Sales" || updatedTransactionType === "Sales-NS") &&
+              accountType === "Joint" &&
+              updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL &&
+              updatedSignatory !== PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW &&
+              adviserSignature !== "")
+          ) {
+            setSigner("joint");
+          } else {
+            setShowSignPdf(false);
+          }
+        } else if (signer === "joint") {
+          if (adviserSignature === "") {
+            setSigner("adviser");
+          } else if (principalSignature === "") {
+            setSigner("principal");
           } else {
             setShowSignPdf(false);
           }
@@ -188,6 +285,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       setAdviserSignature(value);
     } else if (signer === "principal") {
       setPrincipalSignature(value);
+    } else if (signer === "joint") {
+      setJointSignature(value);
     }
     modifyPdf(value);
   };
@@ -200,6 +299,8 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
           setSigner("adviser");
         } else if (principalSignature === "") {
           setSigner("principal");
+        } else {
+          setSigner("joint");
         }
       } else {
         setTimeout(() => {
@@ -226,12 +327,21 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         name: "PrincipalSignature.png",
         type: "image/png",
       };
+      const joint =
+        accountType === "Individual"
+          ? undefined
+          : {
+              base64: jointSignature,
+              date: `${moment().valueOf()}`,
+              name: "JointSignature.png",
+              type: "image/png",
+            };
       updatedReceipts[receiptIndex] = {
         ...updatedReceipts[receiptIndex],
         signedPdf: editReceipt!.signedPdf,
         adviserSignature: adviser,
         principalSignature: principal,
-        jointSignature: undefined,
+        jointSignature: joint,
         completed: true,
       };
       updateReceipts(updatedReceipts);
@@ -240,7 +350,35 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
     }, 500);
   };
 
-  const completed = adviserSignature !== "" && principalSignature !== "";
+  const jointAge = accountType === "Joint" ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") : undefined;
+  const checkJointSignature = jointAge !== undefined && jointAge >= 18 ? jointSignature !== "" : true;
+  const checkSignatory = () => {
+    switch (updatedSignatory) {
+      case PERSONAL_DETAILS.OPTION_CONTROL_BOTH_NEW:
+      case PERSONAL_DETAILS.OPTION_CONTROL_BOTH:
+        return adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+
+      case PERSONAL_DETAILS.OPTION_CONTROL_EITHER_NEW:
+      case PERSONAL_DETAILS.OPTION_CONTROL_EITHER:
+        return accountNo !== ""
+          ? adviserSignature !== "" && (principalSignature !== "" || checkJointSignature === true)
+          : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+
+      case PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW:
+      case PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL: {
+        const checkSign =
+          accountNo !== ""
+            ? adviserSignature !== "" && principalSignature !== ""
+            : adviserSignature !== "" && principalSignature !== "" && checkJointSignature === true;
+        return accountType === "Individual" ? adviserSignature !== "" && principalSignature !== "" : checkSign;
+      }
+
+      default:
+        return adviserSignature !== "" && principalSignature !== "";
+    }
+  };
+
+  const completed = checkSignatory();
 
   useEffect(() => {
     if (signer !== undefined) {
@@ -249,6 +387,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
         setShowSignPdf(true);
       }, 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
 
   useEffect(() => {
@@ -261,12 +400,15 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
   }, [completed]);
 
   return (
-    <PdfViewForceUpdate
+    <PdfViewTemplate
+      accountType={accountType}
       adviserSignature={adviserSignature}
       completed={completed}
       editReceipt={editReceipt}
       pageWidth={pageWidth}
       principalSignature={principalSignature}
+      jointAge={jointAge}
+      jointSignature={jointSignature}
       showSignPdf={showSignPdf}
       signer={signer}
       handleScroll={handleScroll}
@@ -278,8 +420,7 @@ const NewEditPdfComponent: FunctionComponent<EditPdfProps> = ({
       handlePosition={handlePosition}
       pageLoading={pageLoading}
       setScrollRef={setScrollRef}
+      transactionType={updatedTransactionType}
     />
   );
 };
-
-export const EditPdf = connect(AcknowledgementMapStateToProps, AcknowledgementMapDispatchToProps)(NewEditPdfComponent);

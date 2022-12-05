@@ -132,7 +132,7 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   };
 
   const handleResetFilter = () => {
-    const prsDefaultType = transactionType === "Sales-NS" && accountDetails.fundType === "prsDefault";
+    const prsDefaultType = transactionType === "Sales" && accountDetails.fundType === "prsDefault";
     if (prsDefaultType === true) {
       const syariahConventional = accountDetails.isSyariah === true ? { shariahApproved: ["Yes"] } : { conventional: ["Yes"] };
 

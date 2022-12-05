@@ -109,7 +109,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   const sortRisk = findRisk.length > 0 ? findRisk[0].value : "ascending";
   const sortedColumns = sort.filter((eachSort) => eachSort.value !== "").map((currentSortType) => currentSortType.column);
 
-  const singleUtmcOnly = isMultiUtmc === false && transactionType === "Sales-NS" && isEpf === true;
+  const singleUtmcOnly = isMultiUtmc === false && transactionType === "Sales" && isEpf === true;
   const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
   const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
   const checkUtmcIndex =

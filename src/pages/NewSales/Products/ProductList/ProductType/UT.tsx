@@ -165,7 +165,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   };
 
   const handleResetFilter = () => {
-    const epfAccountType = transactionType === "Sales-NS" && accountDetails.fundType === "ut" && accountDetails.isEpf === true;
+    const epfAccountType = transactionType === "Sales" && accountDetails.fundType === "ut" && accountDetails.isEpf === true;
     if (epfAccountType === true) {
       addUtFilters({
         fundCurrency: [],

@@ -272,7 +272,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
   const checkUtmc =
     isMultiUtmc === false &&
-    transactionType === "Sales-NS" &&
+    transactionType === "Sales" &&
     isArrayNotEmpty(selectedFunds) &&
     selectedUtmc !== undefined &&
     viewFund !== undefined

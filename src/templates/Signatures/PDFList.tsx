@@ -75,7 +75,7 @@ export const PDFListTemplate: FunctionComponent<IPDFTemplateProps> = ({
       ? `${details!.principalHolder!.name} `
       : `${details!.principalHolder!.name} ${TERMS_AND_CONDITIONS.LABEL_AND} ${details!.jointHolder!.name} `;
 
-  const toSignLabel = transactionType === "Sales" || transactionType === "Sales-NS" ? checkSignatory() : checkSignLabel;
+  const toSignLabel = transactionType === "Sales" ? checkSignatory() : checkSignLabel;
 
   const signIcon = accountType === "Individual" ? "account" : "account-joint";
 

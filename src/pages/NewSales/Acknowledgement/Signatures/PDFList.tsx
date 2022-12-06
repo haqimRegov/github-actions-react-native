@@ -70,7 +70,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       };
 
       const submitPdfResponse: ISubmitPdfTransactionsResponse | ISubmitPdfResponse =
-        transactionType === "Sales-NS"
+        transactionType === "Sales"
           ? await submitPdfTransactions(request, navigation, setLoading)
           : await submitPdf(request, navigation, setLoading);
 
@@ -146,7 +146,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
       };
 
       const accountOpeningReceipt: IGeneratePdfTransactionsResponse | IGeneratePdfResponse =
-        transactionType === "Sales-NS"
+        transactionType === "Sales"
           ? await generatePdfTransactions(transactionsRequest, navigation, setLoading)
           : await generatePdf(accountOpeningRequest, navigation, setLoading);
 
@@ -203,7 +203,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
 
   const ofLabel = receipts !== undefined && receipts.length > 1 ? " of" : "";
   const promptTitle =
-    transactionType === "Sales-NS" ? `${NEW_SALES_PROMPT.SUBHEADING_SALES}${ofLabel}\n${orderNumberLabel}.` : NEW_SALES_PROMPT.SUBHEADING;
+    transactionType === "Sales" ? `${NEW_SALES_PROMPT.SUBHEADING_SALES}${ofLabel}\n${orderNumberLabel}.` : NEW_SALES_PROMPT.SUBHEADING;
 
   return (
     <Fragment>

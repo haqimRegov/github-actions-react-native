@@ -405,6 +405,13 @@ export const fs16RegGray6: TextStyle = {
   lineHeight: scaleHeight(16 * 1.48),
 };
 
+export const fs16RegWhite1: TextStyle = {
+  color: colorWhite._1,
+  fontFamily: NunitoRegular,
+  fontSize: sh16,
+  lineHeight: scaleHeight(16 * 1.48),
+};
+
 export const fs16SemiBoldBlack1: TextStyle = {
   color: colorBlack._1,
   fontFamily: NunitoSemiBold,

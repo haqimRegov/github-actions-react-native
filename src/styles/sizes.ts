@@ -242,3 +242,4 @@ export const sw760 = scaleWidth(760);
 export const sw784 = scaleWidth(784);
 export const sw800 = scaleWidth(800);
 export const sw832 = scaleWidth(832);
+export const sw1080 = scaleWidth(1080);

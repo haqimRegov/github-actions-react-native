@@ -75,7 +75,8 @@ export const NewDatePicker: FunctionComponent<NewDatePickerProps> = ({
   const [collapsibleModal, setCollapsibleModal] = useState<boolean>(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
 
-  const defaultInitialDate = initialDate !== undefined ? initialDate : new Date();
+  const maxDate: Date = maximumDate !== undefined ? maximumDate : new Date();
+  const defaultInitialDate = initialDate !== undefined ? initialDate : maxDate;
   const defaultDate = isDate(value) ? value : defaultInitialDate;
   const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
 

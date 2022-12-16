@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 
 import { Avatar, CustomSpacer, LabeledTitle } from "../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
+import { getInitials } from "../../helpers";
 import {
   flexRow,
   fs12BoldGray5,
@@ -44,15 +45,7 @@ export const ProfileTab: FunctionComponent<ProfileTabProps> = ({ data }: Profile
     data: [employmentAddress],
   };
 
-  const initials =
-    name !== "" && isNotEmpty(name)
-      ? name
-          .split(" ")
-          .filter((text) => text !== "")
-          .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-          .join("")
-      : "";
-
+  const initials = name ? getInitials(name) : "";
   const riskProfileLastUpdated = isNotEmpty(lastUpdated) ? moment(lastUpdated, "x").format(DEFAULT_DATE_FORMAT) : "-";
 
   return (

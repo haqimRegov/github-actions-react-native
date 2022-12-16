@@ -8,6 +8,7 @@ import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
 import { DAY_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
+import { getInitials } from "../../helpers";
 import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
 import { RNInAppBrowser } from "../../integrations";
@@ -158,15 +159,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
     { name: "logout-new", onPress: handleLogout, title: DASHBOARD.MENU_LOGOUT },
   ];
 
-  const initials =
-    agent !== undefined
-      ? agent
-          .name!.split(" ")
-          .filter((text) => text !== "")
-          .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-          .join("")
-      : "";
-
+  const initials = getInitials(agent?.name);
   const logoAimsStyle: ImageStyle = { ...imageContain, height: sh32, width: sw66 };
 
   useEffect(() => {

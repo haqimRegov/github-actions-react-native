@@ -6,10 +6,11 @@ import { centerHV, colorRed, fs10BoldWhite1, sh16, sw24, sw4 } from "../../style
 export interface BadgeCountProps {
   count: number;
   countStyle?: ViewStyle;
+  maxCount?: number;
   style?: ViewStyle;
 }
 
-export const BadgeCount: FunctionComponent<BadgeCountProps> = ({ count, countStyle, style }: BadgeCountProps) => {
+export const BadgeCount: FunctionComponent<BadgeCountProps> = ({ count, countStyle, maxCount, style }: BadgeCountProps) => {
   const badgeStyle: ViewStyle = {
     ...centerHV,
     backgroundColor: colorRed._1,
@@ -18,11 +19,14 @@ export const BadgeCount: FunctionComponent<BadgeCountProps> = ({ count, countSty
     minWidth: sw24,
     ...style,
   };
+  const defaultMaxCount = maxCount !== undefined ? maxCount : 9999;
+  const formattedCount: string | number = count <= defaultMaxCount ? count : `${defaultMaxCount}+`;
+
   return count === 0 ? (
     <View />
   ) : (
     <View style={badgeStyle}>
-      <Text style={{ ...fs10BoldWhite1, ...countStyle }}>{count}</Text>
+      <Text style={{ ...fs10BoldWhite1, ...countStyle }}>{formattedCount}</Text>
     </View>
   );
 };

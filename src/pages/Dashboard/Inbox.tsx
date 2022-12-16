@@ -17,6 +17,7 @@ import {
 } from "../../components";
 import { FULL_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_KIB_BRANCHES } from "../../data/dictionary";
+import { getInitials } from "../../helpers";
 import { getInbox, updateInbox } from "../../network-actions";
 import { updateSeen } from "../../network-actions/dashboard/UpdateSeen";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../store";
@@ -203,13 +204,7 @@ const InboxPageComponent: FunctionComponent<InboxPageProps> = ({
   };
 
   const handleAvatar = ({ sender, source }: INotificationItem) => {
-    const customSender = sender
-      ? sender
-          .split(" ")
-          .filter((text) => text !== "")
-          .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-          .join("")
-      : "-";
+    const customSender = sender ? getInitials(sender) : "-";
     const initials = sender && sender in DICTIONARY_KIB_BRANCHES ? DICTIONARY_KIB_BRANCHES[sender].code : customSender;
     const defaultInitials = sender === "system" ? "HQ" : initials;
     const avatar: AvatarProps = { text: defaultInitials, type: source as AvatarType };

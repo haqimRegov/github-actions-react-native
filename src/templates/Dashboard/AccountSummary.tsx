@@ -3,6 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { Avatar, CustomFlexSpacer, CustomSpacer, LabeledTitle, RoundedButton, TextCard, TextSpaceArea } from "../../components";
 import { Language } from "../../constants";
+import { getInitials } from "../../helpers";
 import { IcoMoon } from "../../icons";
 import {
   borderBottomBlue5,
@@ -72,12 +73,7 @@ export const AccountSummary: FunctionComponent<AccountSummaryProps> = ({
 
   const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: "auto" };
   const holder = accountHolder === "Principal" ? DASHBOARD_PROFILE.LABEL_JOINT_ACCOUNT : DASHBOARD_PROFILE.LABEL_PRINCIPAL_ACCOUNT;
-  const initials = name
-    .split(" ")
-    .filter((text) => text !== "")
-    .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-    .join("");
-
+  const initials = getInitials(name);
   const labelOtherId = idType !== "Passport" ? `${idType} ID` : idType;
   const labelId = idType !== "NRIC" ? `${labelOtherId} Number` : idType;
   const handleAccountHolder = () => {

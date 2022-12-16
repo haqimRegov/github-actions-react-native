@@ -14,6 +14,7 @@ import {
   TextSpaceArea,
 } from "../../../components";
 import { Language } from "../../../constants";
+import { getInitials } from "../../../helpers";
 import { getAgentProfile } from "../../../network-actions";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../../../store";
 import {
@@ -91,12 +92,7 @@ const ProfileComponent: FunctionComponent<ProfileProps> = ({ agent, global, navi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initials = agent!
-    .name!.split(" ")
-    .filter((text) => text !== "")
-    .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-    .join("");
-
+  const initials = getInitials(agent!.name);
   const buttonStyle: ViewStyle = { ...px(sw16), borderWidth: sw1, height: sh24, width: "auto" };
 
   const accountSummary: LabeledTitleProps[] =

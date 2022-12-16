@@ -3,6 +3,7 @@ import { Text, View, ViewStyle } from "react-native";
 
 import { Avatar, CustomFlexSpacer, CustomSpacer, IconButton, OutlineButton } from "../../../../components";
 import { Language } from "../../../../constants";
+import { getInitials } from "../../../../helpers";
 import { IcoMoon } from "../../../../icons";
 import {
   border,
@@ -74,15 +75,7 @@ export const InvestorAccountsHeader: FunctionComponent<IInvestorAccountHeaderPro
     borderRadius: sw24,
   };
 
-  const initials =
-    name !== undefined && name !== "" && isNotEmpty(name)
-      ? name
-          .split(" ")
-          .filter((text) => text !== "")
-          .map((text, index) => (index < 2 ? text.substr(0, 1) : ""))
-          .join("")
-      : "";
-
+  const initials = getInitials(name);
   const iconContainer: ViewStyle = {
     ...border(colorBlue._1, sw1, sw24),
     ...px(sw8),

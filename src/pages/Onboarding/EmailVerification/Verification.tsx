@@ -30,6 +30,7 @@ declare interface VerificationProps {
   addPersonalInfo: (state: IPersonalInfoState) => void;
   handleCancel?: () => void;
   handleContinue: () => void;
+  jointAgeCheck: boolean;
   jointEmailCheck: boolean;
   jointError: string | undefined;
   personalInfo: IPersonalInfoState;
@@ -44,6 +45,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   addPersonalInfo,
   handleCancel,
   handleContinue,
+  jointAgeCheck,
   jointEmailCheck,
   jointError,
   personalInfo,
@@ -104,6 +106,10 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   const resendMinutes = Math.floor(resendTimer / 60);
   const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
+  const jointLabel =
+    accountType === "Joint" && jointAgeCheck === false
+      ? `${INVESTOR_INFORMATION.LABEL_EMAIL} ${EMAIL_VERIFICATION.LABEL_OPTIONAL}`
+      : INVESTOR_INFORMATION.LABEL_EMAIL;
 
   return (
     <ContentPage
@@ -168,7 +174,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                       autoCapitalize="none"
                       error={jointError}
                       keyboardType="email-address"
-                      label={INVESTOR_INFORMATION.LABEL_EMAIL}
+                      label={jointLabel}
                       onBlur={checkJointEmail}
                       onChangeText={setInputJointEmail}
                       value={inputJointEmail}

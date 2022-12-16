@@ -829,6 +829,7 @@ export const english = {
       LABEL_EMAIL_VERIFIED: "Email verified",
       LABEL_EMAIL: "Email",
       LABEL_GET_OTP: "Get OTP",
+      LABEL_OPTIONAL: "(optional)",
       LABEL_OTP_JOINT: "Joint Holder's OTP",
       LABEL_OTP_PLACEHOLDER: "Enter the 6 digit code",
       LABEL_OTP_PRINCIPAL: "Principal Holder's OTP",

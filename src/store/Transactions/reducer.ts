@@ -92,6 +92,25 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           sort: [{ value: "descending", column: "lastUpdated" }],
         },
       };
+    case "transactions/RESET_APPROVED_TAB":
+      return {
+        ...state,
+        approved: {
+          filter: {
+            dateSorting: "",
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: [],
+            accountType: [],
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [{ value: "descending", column: "lastUpdated" }],
+        },
+        search: "",
+      };
     case "transactions/RESET_REJECTED_FILTER":
       return {
         ...state,
@@ -109,6 +128,25 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           pages: 1,
           sort: [],
         },
+      };
+    case "transactions/RESET_REJECTED_TAB":
+      return {
+        ...state,
+        rejected: {
+          filter: {
+            dateSorting: "",
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: [],
+            accountType: [],
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          sort: [{ value: "descending", column: "lastUpdated" }],
+        },
+        search: "",
       };
     case "transactions/RESET_PENDING_FILTER":
       return {
@@ -128,6 +166,26 @@ export function transactionsReducer(state = transactionsInitialState, action: Tr
           pill: action.payload !== undefined ? action.payload : "pending",
           sort: [],
         },
+      };
+    case "transactions/RESET_PENDING_TAB":
+      return {
+        ...state,
+        incomplete: {
+          filter: {
+            dateSorting: "",
+            startDate: undefined,
+            endDate: new Date(),
+            transactionsType: [],
+            accountType: [],
+            orderStatus: [],
+          },
+          orders: [],
+          page: 1,
+          pages: 1,
+          pill: "pending",
+          sort: [{ value: "descending", column: "lastUpdated" }],
+        },
+        search: "",
       };
     case "transactions/UPDATE_SELECTED_ORDER":
       return {

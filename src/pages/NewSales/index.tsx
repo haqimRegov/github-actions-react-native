@@ -1,14 +1,14 @@
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import cloneDeep from "lodash.clonedeep";
-import React, { FunctionComponent, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomToast, PromptModal } from "../../components";
+import { BrowserWebView, CustomToast, PromptModal } from "../../components";
 import { StepperBar } from "../../components/Steps/StepperBar";
 import { Language } from "../../constants";
 import { NEW_SALES_KEYS, NEW_SALES_ROUTES } from "../../constants/routes/new-sales";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../data/dictionary";
+import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
 import { alignFlexStart, flexRow, fs14BoldGray6, fsAlignLeft, fullHW } from "../../styles";
 import { NewSalesContent } from "./Content";
@@ -139,6 +139,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   const stepperBarRef = useRef<IStepperBarRef<TypeNewSalesKey>>();
   const [unsavedPrompt, setUnsavedPrompt] = useState<boolean>(false);
   const [cancelNewSales, setCancelNewSales] = useState<boolean>(false);
+  const [aimsOpen, setAimsOpen] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<INewSalesContentItem | INewSales | undefined>(updatedNewSalesSteps[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
   const [cancelBackToInvestor, setCancelBackToInvestor] = useState<boolean>(false);
@@ -232,6 +233,10 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     return true;
   };
 
+  const handleCloseWebView = () => {
+    setAimsOpen(false);
+  };
+
   const handleResetNewSales = () => {
     setCancelNewSales(false);
     resetAcknowledgement();
@@ -266,29 +271,37 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   return (
     <View style={{ ...flexRow, ...fullHW }}>
-      <StepperBar<TypeNewSalesKey>
-        activeContent={activeContent}
-        activeSection={activeSection}
-        activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskSummary" ? fs14BoldGray6 : {}}
-        disabledSteps={disabledSteps}
-        finishedSteps={finishedSteps}
-        handleCheckRoute={handleCheckRoute}
-        handleContentChange={handleContentChange}
-        handleBackToDashboard={handleCancelNewSales}
-        ref={stepperBarRef}
-        setActiveContent={setActiveContent}
-        setActiveSection={setActiveSection}
-        setFinishedStep={updateNewSalesFinishedSteps}
-        steps={updatedNewSalesSteps}
-      />
-      <NewSalesContent
-        handleCancelNewSales={handleCancelNewSales}
-        handleResetNewSales={handleResetNewSales}
-        cancelNewSales={cancelNewSales}
-        handleNextStep={handleNextStep}
-        navigation={navigation}
-        route={activeContent !== undefined ? activeContentRoute : initialRoute}
-      />
+      {aimsOpen === false ? (
+        <Fragment>
+          <StepperBar<TypeNewSalesKey>
+            activeContent={activeContent}
+            activeSection={activeSection}
+            activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskSummary" ? fs14BoldGray6 : {}}
+            disabledSteps={disabledSteps}
+            finishedSteps={finishedSteps}
+            handleCheckRoute={handleCheckRoute}
+            handleContentChange={handleContentChange}
+            handleBackToDashboard={handleCancelNewSales}
+            ref={stepperBarRef}
+            setActiveContent={setActiveContent}
+            setActiveSection={setActiveSection}
+            setFinishedStep={updateNewSalesFinishedSteps}
+            steps={updatedNewSalesSteps}
+          />
+          <NewSalesContent
+            aimsOpen={aimsOpen}
+            handleCancelNewSales={handleCancelNewSales}
+            handleResetNewSales={handleResetNewSales}
+            cancelNewSales={cancelNewSales}
+            handleNextStep={handleNextStep}
+            navigation={navigation}
+            route={activeContent !== undefined ? activeContentRoute : initialRoute}
+            setAimsOpen={setAimsOpen}
+          />
+        </Fragment>
+      ) : (
+        <BrowserWebView baseUrl={DICTIONARY_LINK_AIMS} handleClose={handleCloseWebView} />
+      )}
       <PromptModal
         backdropOpacity={0.4}
         contentStyle={alignFlexStart}

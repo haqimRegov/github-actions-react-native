@@ -17,11 +17,9 @@ import {
   TextSpaceArea,
 } from "../../components";
 import { Language } from "../../constants";
-import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { getProductTagType } from "../../helpers";
 import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
-import { RNInAppBrowser } from "../../integrations";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   autoWidth,
@@ -87,7 +85,10 @@ import { NewSalesOrderSummary } from "./OrderSummary";
 
 const { RISK_ASSESSMENT, NEW_SALES_SUMMARY } = Language.PAGE;
 
-declare interface IRiskSummaryProps extends RiskStoreProps, NewSalesContentProps {}
+declare interface IRiskSummaryProps extends RiskStoreProps, NewSalesContentProps {
+  aimsOpen: boolean;
+  setAimsOpen: (toggle: boolean) => void;
+}
 
 const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   addInvestmentDetails,
@@ -99,6 +100,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   isRiskUpdated,
   newSales,
   riskScore,
+  setAimsOpen,
   updateNewSales,
 }: IRiskSummaryProps) => {
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
@@ -296,7 +298,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   };
 
   const handleAims = () => {
-    RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
+    setAimsOpen(true);
   };
   const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_NEXT;
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;

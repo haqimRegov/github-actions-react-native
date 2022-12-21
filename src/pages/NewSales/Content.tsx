@@ -19,8 +19,10 @@ import { NewSalesRiskSummary } from "./RiskProfile";
 
 const { NEW_SALES } = Language.PAGE;
 interface NewSalesProps extends NewSalesContentProps, NewSalesStoreProps {
+  aimsOpen: boolean;
   navigation: IStackNavigationProp;
   route: string;
+  setAimsOpen: (toggle: boolean) => void;
 }
 
 const NewSalesContentComponent = ({ handleCancelNewSales, handleResetNewSales, cancelNewSales, ...props }: NewSalesProps) => {

@@ -9,5 +9,6 @@ export * from "./OrderPreview";
 export * from "./OrderSubmission";
 export * from "./OrderSummary";
 export * from "./Payment";
+export * from "./Prompts";
 export * from "./RiskAssessment";
 export * from "./Signatures";

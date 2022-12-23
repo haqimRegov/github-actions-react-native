@@ -1,11 +1,12 @@
 import moment from "moment";
-import React, { forwardRef, Fragment, useImperativeHandle, useState } from "react";
+import React, { forwardRef, Fragment, useContext, useEffect, useImperativeHandle, useState } from "react";
 import { Platform, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 import { Image } from "react-native-image-crop-picker";
 import { Bar } from "react-native-progress";
 
 import { CALENDAR_FORMAT, Language, TIME_SECONDS_FORMAT } from "../../constants";
+import { ModalContext } from "../../context";
 import { IcoMoon } from "../../icons";
 import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem } from "../../integrations";
 import {
@@ -52,6 +53,7 @@ export const BYTE_TO_KILOBYTE = 1024;
 const DEFAULT_MAX_SIZE_MB = BYTE_TO_MEGABYTE * 5;
 
 export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadProps>((props, ref) => {
+  const { expiryModal, duplicateModal } = useContext(ModalContext);
   const {
     badgeOffset,
     completed,
@@ -196,6 +198,10 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     }
     imageOpenPicker(handleImageResult, { cropping: defaultCropping });
   };
+
+  useEffect(() => {
+    handleRemove();
+  }, [expiryModal, duplicateModal]);
 
   useImperativeHandle(ref, () => ({ handleOpenCamera, handleOpenPicker, handleOpenDocument }));
 

@@ -1,3 +1,5 @@
+declare type TGlobalModalTypes = "duplicate" | "expiry";
+
 declare interface IBasicModalProps {
   animationIn?: TypeModalAnimation;
   animationInTiming?: number;
@@ -8,6 +10,7 @@ declare interface IBasicModalProps {
   children: JSX.Element;
   hasBackdrop?: boolean;
   onClose?: () => void;
+  setVisible?: (toggle: boolean) => void;
   style?: import("react-native").ViewStyle;
   visible: boolean;
 }

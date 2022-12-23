@@ -9,6 +9,7 @@ import { name as appName } from "./app.json";
 import config from "./aws-exports";
 import { App } from "./src/App";
 import { cognitoConfig, storageConfig } from "./src/constants";
+import { ModalProvider } from "./src/context/modalContext";
 import { RNPushNotification } from "./src/integrations";
 import { store } from "./src/store";
 
@@ -26,7 +27,9 @@ RNPushNotification.configure();
 
 const RootApp = () => (
   <Provider store={store}>
-    <App />
+    <ModalProvider>
+      <App />
+    </ModalProvider>
   </Provider>
 );
 

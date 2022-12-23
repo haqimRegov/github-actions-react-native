@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
-import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useContext, useRef, useState } from "react";
 import { Alert, Keyboard, Text, View, ViewStyle } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { WebView, WebViewNavigation } from "react-native-webview";
@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { CheckBox, CustomSpacer, Loading, Prompt, RNModal } from "../../components";
 import { Language, OTP_CONFIG } from "../../constants";
+import { ModalContext } from "../../context";
 import { ERROR_CODE, ERRORS } from "../../data/dictionary";
 import { getStorageData, removeStorageData, RNFirebase, RNPushNotification, S3_URL, updateStorageData } from "../../integrations";
 import { expiredPassword, login, resendLockOtp, resetPassword, verifyLockOtp } from "../../network-actions";
@@ -43,6 +44,7 @@ interface LoginProps extends GlobalStoreProps {
 }
 
 const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passwordRecovery, setRootPage, ...props }: LoginProps) => {
+  const { contextState, setContextState } = useContext(ModalContext);
   const fetching = useRef<boolean>(false);
   const webViewRef = useRef<WebView | null>(null);
   const [inputNRIC, setInputNRIC] = useState<string>("");
@@ -172,7 +174,7 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                 if (hideEvent) {
                   await removeStorageData("hideEvent");
                 }
-
+                setContextState({ ...contextState, expired: false, expiryModal: false, duplicateModal: false, loggedOut: false });
                 navigation.dispatch(
                   CommonActions.reset({
                     index: 0,

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { FunctionComponent, useContext } from "react";
 import Modal from "react-native-modal";
 
+import { ModalContext } from "../../context";
 import { colorBlack, noMargin } from "../../styles";
+import { DuplicatePrompt, ExpiryPrompt } from "../../templates";
 
-export const BasicModal = ({
+export const BasicModal: FunctionComponent<IBasicModalProps> = ({
   animationIn,
   animationInTiming,
   animationOut,
@@ -16,9 +18,17 @@ export const BasicModal = ({
   style,
   visible,
 }: IBasicModalProps) => {
+  const { duplicateModal, expiryModal, loggedOut } = useContext(ModalContext);
   const defaultAnimationIn = animationIn !== undefined ? animationIn : "fadeIn";
   const defaultAnimationOut = animationOut !== undefined ? animationOut : "fadeOut";
 
+  const handleClose = () => {
+    if (onClose !== undefined) {
+      onClose();
+    }
+  };
+
+  const checkExpiryModal = expiryModal === true && duplicateModal !== true ? <ExpiryPrompt /> : children;
   return (
     <Modal
       backdropOpacity={backdropOpacity || 0.7}
@@ -28,10 +38,10 @@ export const BasicModal = ({
       animationInTiming={animationInTiming}
       animationOut={defaultAnimationOut}
       animationOutTiming={animationOutTiming}
-      isVisible={visible}
-      onModalHide={onClose}
+      isVisible={visible && loggedOut !== true}
+      onModalHide={handleClose}
       style={{ ...noMargin, ...style }}>
-      {children}
+      {duplicateModal === true ? <DuplicatePrompt /> : checkExpiryModal}
     </Modal>
   );
 };

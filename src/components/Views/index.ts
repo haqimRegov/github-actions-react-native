@@ -2,6 +2,7 @@ export * from "./AccountHeader";
 export * from "./ActionButtons";
 export * from "./AddressField";
 export * from "./AddressInfo";
+export * from "./BrowserWebView";
 export * from "./EmptyTable";
 export * from "./EventPrompt";
 export * from "./LabeledTitle";

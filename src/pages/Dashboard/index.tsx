@@ -1,17 +1,16 @@
 import moment from "moment";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Image, ImageStyle, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
-import { Avatar, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
+import { Avatar, BrowserWebView, CustomFlexSpacer, CustomSpacer, MenuItemProps, MenuList, SideMenu } from "../../components";
 import { DAY_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { getInitials } from "../../helpers";
 import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
-import { RNInAppBrowser } from "../../integrations";
 import { logout } from "../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../store";
 import {
@@ -62,6 +61,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
 }: DashboardPageProps) => {
   const { top } = useSafeAreaInsets();
   const [activeMenu, setActiveMenu] = useState<number>(0);
+  const [webView, setWebView] = useState<boolean>(false);
   const [page, setPage] = useState<DashboardPageType>(investors.backToInvestorOverview === true ? "Investors" : "Transactions");
   const prevPage = usePrevious(page);
 
@@ -93,7 +93,7 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   };
 
   const handleAims = () => {
-    RNInAppBrowser.openLink(DICTIONARY_LINK_AIMS);
+    setWebView(true);
   };
 
   const handleInbox = () => {
@@ -112,6 +112,10 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   const handleInvestors = () => {
     handleDataReset("Investors");
     setPage("Investors");
+  };
+
+  const handleCloseWebView = () => {
+    setWebView(false);
   };
 
   // const handleEDD = () => {
@@ -175,49 +179,55 @@ const DashboardPageComponent: FunctionComponent<DashboardPageProps> = ({
   }, [page]);
 
   return (
-    <View style={{ ...flexRow, ...fullHW }}>
-      <SideMenu spaceToBottom={0} spaceToContent={sh16}>
-        <View>
-          <View style={borderBottomGray2} />
-          <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-            <Avatar text={initials} type="agent" />
-            <CustomSpacer isHorizontal={true} space={sw16} />
-            <View style={{ width: sw96 }}>
-              <Text numberOfLines={2} style={fs18BoldBlue1}>
-                {agent?.name}
-              </Text>
+    <Fragment>
+      {webView === false ? (
+        <View style={{ ...flexRow, ...fullHW }}>
+          <SideMenu spaceToBottom={0} spaceToContent={sh16}>
+            <View>
+              <View style={borderBottomGray2} />
+              <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
+                <Avatar text={initials} type="agent" />
+                <CustomSpacer isHorizontal={true} space={sw16} />
+                <View style={{ width: sw96 }}>
+                  <Text numberOfLines={2} style={fs18BoldBlue1}>
+                    {agent?.name}
+                  </Text>
+                </View>
+              </View>
+              <View style={borderBottomGray2} />
+              <View style={{ ...flexRow, ...py(sh16) }}>
+                <CustomSpacer isHorizontal={true} space={sw24} />
+                <View style={{ width: sw160 }}>
+                  <Text style={fs12BoldGray6}>{agent?.rank}</Text>
+                  <Text style={fs12RegGray5}>{agent?.branch}</Text>
+                  <Text style={fs12RegGray5}>{`${moment().format(DAY_DATE_FORMAT)}`}</Text>
+                </View>
+                <CustomSpacer isHorizontal={true} space={sw16} />
+              </View>
+              <View style={borderBottomGray2} />
+              <MenuList activeIndex={activeMenu} items={MENU_ITEMS} />
             </View>
-          </View>
-          <View style={borderBottomGray2} />
-          <View style={{ ...flexRow, ...py(sh16) }}>
-            <CustomSpacer isHorizontal={true} space={sw24} />
-            <View style={{ width: sw160 }}>
-              <Text style={fs12BoldGray6}>{agent?.rank}</Text>
-              <Text style={fs12RegGray5}>{agent?.branch}</Text>
-              <Text style={fs12RegGray5}>{`${moment().format(DAY_DATE_FORMAT)}`}</Text>
-            </View>
-            <CustomSpacer isHorizontal={true} space={sw16} />
-          </View>
-          <View style={borderBottomGray2} />
-          <MenuList activeIndex={activeMenu} items={MENU_ITEMS} />
-        </View>
-        <CustomFlexSpacer />
-        <View style={borderBottomGray2} />
-        <TouchableWithoutFeedback onPress={handleAims}>
-          <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
-            <Image source={LocalAssets.logo.aims} style={logoAimsStyle} />
             <CustomFlexSpacer />
-            <IcoMoon color={colorBlue._1} name="external" size={sh24} />
+            <View style={borderBottomGray2} />
+            <TouchableWithoutFeedback onPress={handleAims}>
+              <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16) }}>
+                <Image source={LocalAssets.logo.aims} style={logoAimsStyle} />
+                <CustomFlexSpacer />
+                <IcoMoon color={colorBlue._1} name="external" size={sh24} />
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={borderBottomGray2} />
+          </SideMenu>
+          <CustomSpacer isHorizontal={true} space={sw200} />
+          <View style={{ ...flexChild, backgroundColor: colorBlue._2 }}>
+            <CustomSpacer space={top} />
+            {content}
           </View>
-        </TouchableWithoutFeedback>
-        <View style={borderBottomGray2} />
-      </SideMenu>
-      <CustomSpacer isHorizontal={true} space={sw200} />
-      <View style={{ ...flexChild, backgroundColor: colorBlue._2 }}>
-        <CustomSpacer space={top} />
-        {content}
-      </View>
-    </View>
+        </View>
+      ) : (
+        <BrowserWebView baseUrl={DICTIONARY_LINK_AIMS} handleClose={handleCloseWebView} />
+      )}
+    </Fragment>
   );
 };
 

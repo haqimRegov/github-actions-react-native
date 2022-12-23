@@ -1,8 +1,10 @@
 import { CommonActions } from "@react-navigation/native";
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useContext, useEffect } from "react";
 import { connect } from "react-redux";
 
 import { Splash } from "../components";
+import { ModalContext } from "../context";
+import { removeStorageData } from "../integrations";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../store";
 
 interface LogoutPageProps extends GlobalStoreProps {
@@ -10,7 +12,14 @@ interface LogoutPageProps extends GlobalStoreProps {
 }
 const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPageProps) => {
   const { navigation } = props;
+  const { handleContextState } = useContext(ModalContext);
+
+  const handleRemoveStorage = async () => {
+    await removeStorageData("logout");
+  };
   useEffect(() => {
+    handleContextState({ expiryModal: false, expired: false, duplicateModal: false });
+    handleRemoveStorage();
     props.resetEDD();
     props.resetForceUpdate();
     props.resetTransactions();

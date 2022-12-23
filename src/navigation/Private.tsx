@@ -3,7 +3,7 @@ import "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useContext, useEffect, useRef, useState } from "react";
 import { AppState, AppStateStatus } from "react-native";
 import UserInactivity from "react-native-user-inactivity";
 import { connect } from "react-redux";
@@ -11,13 +11,10 @@ import { connect } from "react-redux";
 import { LocalAssets } from "../assets/images/LocalAssets";
 import { EventModal, PromptModal } from "../components";
 import { Language } from "../constants";
-import {
-  DICTIONARY_INACTIVITY_COUNTDOWN,
-  DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS,
-  DICTIONARY_INACTIVITY_TIMER,
-  ERRORS,
-} from "../data/dictionary";
-import { updateStorageData, WEB_SOCKET_CONFIG } from "../integrations";
+import { ModalContext } from "../context";
+import { DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER, ERRORS } from "../data/dictionary";
+import { useExpiryCountdown } from "../hooks/useExpiryCountdown";
+import { getStorageData, updateStorageData, WEB_SOCKET_CONFIG } from "../integrations";
 import { logout } from "../network-actions";
 import { DashboardPage, ForceUpdatePage, LogoutPage, NewSalesPage, OnboardingPage } from "../pages";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../store";
@@ -29,31 +26,17 @@ const { INACTIVITY, SESSION } = Language.PAGE;
 const { Navigator, Screen } = createStackNavigator();
 
 const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: GlobalStoreProps) => {
+  const { duplicateModal, expired, expiryModal, handleContextState, setExpired, setExpiryModal, setLoggedOut } = useContext(ModalContext);
   const navigation = useNavigation<IStackNavigationProp>();
-  const expired = useRef<boolean>(false);
+  const [countdown, setCountdown] = useExpiryCountdown();
   const lastActive = useRef<number | undefined>(undefined);
-  const [inactivityStatus, setInactivityStatus] = useState<boolean>(true);
   const [dontShowEpf, setDontShowEpf] = useState<boolean>(false);
   const [eventPrompt, setEventPrompt] = useState<boolean>(false);
-  const [duplicateLoginPrompt, setDuplicateLoginPrompt] = useState<boolean>(false);
-  const [countdown, setCountdown] = useState(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
 
   const ws = useRef<WebSocket | null>(null);
 
-  const handleExtend = () => {
-    setInactivityStatus(true);
-    setTimeout(() => {
-      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
-    }, 150);
-  };
-
   const handleLogout = (globalLogout?: boolean) => {
-    if (duplicateLoginPrompt === true) {
-      setDuplicateLoginPrompt(false);
-    }
-    if (inactivityStatus === false) {
-      setInactivityStatus(true);
-    }
+    setLoggedOut(true);
     logout(navigation, globalLogout);
   };
 
@@ -73,17 +56,31 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     setDontShowEpf(!dontShowEpf);
   };
 
-  const handleInactivity = (isActive: boolean) => {
-    expired.current = moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER;
-    setInactivityStatus(isActive);
+  const handleInactivity = async (isActive: boolean) => {
+    if (expiryModal === false) {
+      const checkLogout = await getStorageData("logout");
+      if (checkLogout !== true && expired !== true) {
+        setExpired(moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER);
+      }
+      if (isActive === false && checkLogout !== true) {
+        setExpiryModal(true);
+      }
+    }
   };
 
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     if (nextAppState === "inactive" || nextAppState === "background") {
       lastActive.current = parseInt(moment().format("x"), 10);
-    } else if (expired.current === false) {
+    } else if (expired === false) {
       lastActive.current = undefined;
     }
+  };
+
+  const handleExtend = () => {
+    handleContextState({ expiryModal: false, expired: false });
+    setTimeout(() => {
+      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
+    }, 150);
   };
 
   useEffect(() => {
@@ -114,14 +111,15 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
       ws.current.onerror = () => {
         // an error occurred
       };
-      ws.current.onmessage = (e) => {
+      ws.current.onmessage = async (e) => {
         // a message was received
         if (isNotEmpty(e) && isNotEmpty(e?.data) && e?.data !== "PONG") {
           const response = JSON.parse(e?.data) as IResponseError;
           if (response.errorCode === ERRORS.duplicateLogin.errorCode) {
             props.addGlobal({ ...props.global, isLogout: true });
             clearInterval(webSocketInterval);
-            setDuplicateLoginPrompt(true);
+            await updateStorageData("logout", true);
+            handleContextState({ duplicateModal: true });
           }
         }
       };
@@ -138,6 +136,12 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   }, []);
 
   useEffect(() => {
+    if (expired === true) {
+      setExpiryModal(true);
+    }
+  }, [expired]);
+
+  useEffect(() => {
     AppState.addEventListener("change", handleAppStateChange);
     return () => {
       AppState.removeEventListener("change", handleAppStateChange);
@@ -145,29 +149,24 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   }, []);
 
   useEffect(() => {
-    let clockDrift: ReturnType<typeof setTimeout>;
-    if (countdown > 0 && inactivityStatus === false && expired.current === false) {
-      clockDrift = setInterval(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
+    if (expiryModal === false) {
+      setTimeout(() => {
+        setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
+      }, 150);
     }
-    return () => {
-      clearInterval(clockDrift);
-    };
-  }, [countdown, inactivityStatus, expired]);
+  }, [expiryModal]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (inactivityStatus === false) {
-        props.addGlobal({ ...props.global, isLogout: true });
+    if (countdown === 1) {
+      const countTimeout = setTimeout(() => {
         handleLogout();
-      }
-    }, DICTIONARY_INACTIVITY_COUNTDOWN);
-    return () => {
-      clearTimeout(timeout);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inactivityStatus]);
+      }, 1000);
+      return () => {
+        clearTimeout(countTimeout);
+      };
+    }
+    return undefined;
+  }, [countdown]);
 
   useEffect(() => {
     if (props.events !== undefined && props.events.findIndex(({ eventName }) => eventName === "isMultiUtmc") !== -1) {
@@ -176,10 +175,6 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
   }, [props.events]);
 
   const defaultOptions = { animationEnabled: false };
-  const subtitle =
-    expired.current === true
-      ? INACTIVITY.LABEL_SIGN_IN
-      : `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
 
   const isMultiUtmcEvent = props.events !== undefined ? props.events.findIndex(({ eventName }) => eventName === "isMultiUtmc") : -1;
 
@@ -198,9 +193,14 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     event = props.events![isMultiUtmcEvent];
   }
 
+  const subtitle =
+    expired === true
+      ? INACTIVITY.LABEL_SIGN_IN
+      : `${INACTIVITY.LABEL_LOGGED_OUT} ${countdown} ${INACTIVITY.LABEL_SECONDS}. ${INACTIVITY.LABEL_STAY}`;
+
   return (
     <Fragment>
-      <UserInactivity isActive={inactivityStatus} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
+      <UserInactivity isActive={!expiryModal} onAction={handleInactivity} timeForInactivity={DICTIONARY_INACTIVITY_TIMER}>
         <Navigator initialRouteName="Dashboard" screenOptions={{ headerShown: false }}>
           <Screen name="Dashboard" component={DashboardPage} options={defaultOptions} />
           <Screen name="Logout" component={LogoutPage} options={defaultOptions} />
@@ -210,22 +210,22 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
         </Navigator>
       </UserInactivity>
       <PromptModal
-        handleCancel={expired.current === true ? undefined : handleLogout}
-        handleContinue={expired.current === true ? handleLogout : handleExtend}
-        illustration={LocalAssets.illustration.sessionExpired}
-        label={expired.current === true ? INACTIVITY.TITLE_EXPIRED : INACTIVITY.TITLE}
-        labelCancel={INACTIVITY.BUTTON_NO}
-        labelContinue={expired.current === true ? INACTIVITY.BUTTON_PROCEED : INACTIVITY.BUTTON_YES}
-        title={subtitle}
-        visible={inactivityStatus === false}
-      />
-      <PromptModal
         handleContinue={handleDuplicateLogout}
         illustration={LocalAssets.illustration.clientWarning}
         label={SESSION.PROMPT_LOGOUT}
         labelContinue={SESSION.BUTTON_LOGIN}
         title={ERRORS.duplicateLogin.message}
-        visible={duplicateLoginPrompt}
+        visible={duplicateModal}
+      />
+      <PromptModal
+        handleCancel={handleLogout}
+        handleContinue={expired === true ? handleLogout : handleExtend}
+        illustration={LocalAssets.illustration.sessionExpired}
+        label={expired === true ? INACTIVITY.TITLE_EXPIRED : INACTIVITY.TITLE}
+        labelCancel={INACTIVITY.BUTTON_NO}
+        labelContinue={expired === true ? INACTIVITY.BUTTON_PROCEED : INACTIVITY.BUTTON_YES}
+        title={subtitle}
+        visible={expiryModal}
       />
       <EventModal
         checkboxLabel={event.checkbox}

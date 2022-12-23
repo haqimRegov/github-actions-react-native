@@ -21,12 +21,24 @@ export const resetApprovedFilter = () => {
   return typedAction("transactions/RESET_APPROVED_FILTER");
 };
 
+export const resetApprovedTab = () => {
+  return typedAction("transactions/RESET_APPROVED_TAB");
+};
+
 export const resetRejectedFilter = () => {
   return typedAction("transactions/RESET_REJECTED_FILTER");
 };
 
+export const resetRejectedTab = () => {
+  return typedAction("transactions/RESET_REJECTED_TAB");
+};
+
 export const resetPendingFilter = (pill?: ITransactionPills) => {
   return typedAction("transactions/RESET_PENDING_FILTER", pill);
+};
+
+export const resetPendingTab = () => {
+  return typedAction("transactions/RESET_PENDING_TAB");
 };
 
 export const resetSelectedOrder = () => {
@@ -90,8 +102,11 @@ export type TransactionsAction = ReturnType<
   | typeof addPendingOrders
   | typeof addRejectedOrders
   | typeof resetApprovedFilter
+  | typeof resetApprovedTab
   | typeof resetPendingFilter
+  | typeof resetPendingTab
   | typeof resetRejectedFilter
+  | typeof resetRejectedTab
   | typeof resetSelectedOrder
   | typeof resetTransactions
   | typeof updateApprovedFilter
@@ -114,8 +129,11 @@ export const TransactionsActionProps = {
   addPendingOrders,
   addRejectedOrders,
   resetApprovedFilter,
+  resetApprovedTab,
   resetPendingFilter,
+  resetPendingTab,
   resetRejectedFilter,
+  resetRejectedTab,
   resetSelectedOrder,
   resetTransactions,
   updateApprovedFilter,

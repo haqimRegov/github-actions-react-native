@@ -58,8 +58,11 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     incomplete,
     navigation,
     resetApprovedFilter,
+    resetApprovedTab,
     resetPendingFilter,
+    resetPendingTab,
     resetRejectedFilter,
+    resetRejectedTab,
     search,
     selectedOrders,
     setActiveTab,
@@ -110,22 +113,20 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
     filter.orderStatus!.length === 0 &&
     moment().diff(moment(filter.endDate), "days") === 0;
 
-  const resetFilter = () => {
-    if (isNotFiltered === false) {
-      switch (activeTab) {
-        case "incomplete":
-          resetPendingFilter();
-          break;
-        case "rejected":
-          resetRejectedFilter();
-          break;
-        case "approved":
-          resetApprovedFilter();
-          break;
+  const resetTab = () => {
+    switch (activeTab) {
+      case "incomplete":
+        resetPendingTab();
+        break;
+      case "rejected":
+        resetRejectedTab();
+        break;
+      case "approved":
+        resetApprovedTab();
+        break;
 
-        default:
-          break;
-      }
+      default:
+        break;
     }
   };
 
@@ -144,10 +145,9 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
       setCancelPrompt(true);
     } else {
       // reset current tab filter before moving to another tab
-      resetFilter();
-      updateSearch("");
-      setInputSearch("");
+      resetTab();
       setActiveTab(tabs[index]);
+      setInputSearch("");
     }
   };
 

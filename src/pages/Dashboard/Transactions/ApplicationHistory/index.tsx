@@ -193,7 +193,7 @@ export const ApplicationHistoryComponent: FunctionComponent<ApplicationHistoryPr
         if (error === null && data !== null) {
           const documents = data.result.pdf.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
           if (data.result.pdf.length > 0) {
-            const share = await RNShareApi.filesBase64(documents);
+            const share = await RNShareApi.modalCheckFilesBase64(documents);
             if (share !== undefined) {
               setDownloadToastCount(selectedOrders.length);
               updatedSelectedOrder([]);

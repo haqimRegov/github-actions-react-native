@@ -1,14 +1,13 @@
 import moment from "moment";
-import React, { forwardRef, Fragment, useContext, useEffect, useImperativeHandle, useState } from "react";
+import React, { forwardRef, Fragment, useImperativeHandle, useState } from "react";
 import { Platform, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 import { Image } from "react-native-image-crop-picker";
 import { Bar } from "react-native-progress";
 
 import { CALENDAR_FORMAT, Language, TIME_SECONDS_FORMAT } from "../../constants";
-import { ModalContext } from "../../context";
 import { IcoMoon } from "../../icons";
-import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem } from "../../integrations";
+import { documentPicker, imageOpenCamera, imageOpenPicker, ReactFileSystem, updateStorageData } from "../../integrations";
 import {
   centerHV,
   centerVertical,
@@ -53,7 +52,6 @@ export const BYTE_TO_KILOBYTE = 1024;
 const DEFAULT_MAX_SIZE_MB = BYTE_TO_MEGABYTE * 5;
 
 export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadProps>((props, ref) => {
-  const { expiryModal, duplicateModal } = useContext(ModalContext);
   const {
     badgeOffset,
     completed,
@@ -119,6 +117,7 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
   };
 
   const handleDocumentResult = async (results: DocumentPickerResponse) => {
+    await updateStorageData("thirdPartyModal", false);
     if (!Array.isArray(results)) {
       const { fileCopyUri, uri, name, size, type } = results;
       if (size === null || type === null) {
@@ -147,7 +146,8 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     return false;
   };
 
-  const handleImageResult = (results: Image | Image[]) => {
+  const handleImageResult = async (results: Image | Image[]) => {
+    await updateStorageData("thirdPartyModal", false);
     if (!Array.isArray(results)) {
       const { data, filename, size, mime, path } = results;
 
@@ -178,30 +178,29 @@ export const UploadDocument = forwardRef<IUploadDocumentRef | undefined, UploadP
     setValue(undefined);
   };
 
-  const handleOpenCamera = () => {
+  const handleOpenCamera = async () => {
+    await updateStorageData("thirdPartyModal", true);
     if (onPressCamera) {
       onPressCamera();
     }
     imageOpenCamera(handleImageResult, { cropping: defaultCropping });
   };
 
-  const handleOpenDocument = () => {
+  const handleOpenDocument = async () => {
+    await updateStorageData("thirdPartyModal", true);
     if (onPressCamera) {
       onPressCamera();
     }
     documentPicker(handleDocumentResult);
   };
 
-  const handleOpenPicker = () => {
+  const handleOpenPicker = async () => {
+    await updateStorageData("thirdPartyModal", true);
     if (onPressPicker) {
       onPressPicker();
     }
     imageOpenPicker(handleImageResult, { cropping: defaultCropping });
   };
-
-  useEffect(() => {
-    handleRemove();
-  }, [expiryModal, duplicateModal]);
 
   useImperativeHandle(ref, () => ({ handleOpenCamera, handleOpenPicker, handleOpenDocument }));
 

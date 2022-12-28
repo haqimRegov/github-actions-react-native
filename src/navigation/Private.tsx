@@ -14,7 +14,7 @@ import { Language } from "../constants";
 import { ModalContext } from "../context";
 import { DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER, ERRORS } from "../data/dictionary";
 import { useExpiryCountdown } from "../hooks/useExpiryCountdown";
-import { getStorageData, updateStorageData, WEB_SOCKET_CONFIG } from "../integrations";
+import { getStorageData, RNInAppBrowser, updateStorageData, WEB_SOCKET_CONFIG } from "../integrations";
 import { logout } from "../network-actions";
 import { DashboardPage, ForceUpdatePage, LogoutPage, NewSalesPage, OnboardingPage } from "../pages";
 import { GlobalMapDispatchToProps, GlobalMapStateToProps, GlobalStoreProps } from "../store";
@@ -63,7 +63,12 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
         setExpired(moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER);
       }
       if (isActive === false && checkLogout !== true) {
-        setExpiryModal(true);
+        const checkThirdParty = await getStorageData("thirdPartyModal");
+        if (checkThirdParty === true) {
+          RNInAppBrowser.closeBrowser();
+          await updateStorageData("thirdPartyModal", false);
+        }
+        handleContextState({ expiryModal: true });
       }
     }
   };
@@ -119,6 +124,11 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
             props.addGlobal({ ...props.global, isLogout: true });
             clearInterval(webSocketInterval);
             await updateStorageData("logout", true);
+            const checkThirdParty = await getStorageData("thirdPartyModal");
+            if (checkThirdParty === true) {
+              RNInAppBrowser.closeBrowser();
+              await updateStorageData("thirdPartyModal", false);
+            }
             handleContextState({ duplicateModal: true });
           }
         }

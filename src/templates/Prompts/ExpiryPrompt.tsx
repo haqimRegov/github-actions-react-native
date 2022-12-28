@@ -6,7 +6,7 @@ import { LocalAssets } from "../../assets/images/LocalAssets";
 import { Prompt } from "../../components";
 import { Language } from "../../constants";
 import { ModalContext } from "../../context";
-import { DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV } from "../../data/dictionary";
+import { DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS } from "../../data/dictionary";
 import { useExpiryCountdown } from "../../hooks/useExpiryCountdown";
 import { logout } from "../../network-actions";
 import { centerHV, fullHW } from "../../styles";
@@ -21,7 +21,7 @@ export const ExpiryPrompt: FunctionComponent = () => {
   const handleExtend = () => {
     handleContextState({ expiryModal: false, expired: false });
     setTimeout(() => {
-      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS_DEV);
+      setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
     }, 150);
   };
 

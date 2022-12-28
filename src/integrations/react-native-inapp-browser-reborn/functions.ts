@@ -45,6 +45,11 @@ export const openLink = async (url: string) => {
   }
 };
 
+export const closeBrowser = () => {
+  InAppBrowser.close();
+};
+
 export const RNInAppBrowser = {
+  closeBrowser,
   openLink,
 };

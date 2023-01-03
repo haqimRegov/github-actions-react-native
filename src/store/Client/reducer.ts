@@ -1,4 +1,4 @@
-import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
+import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 import { ClientAction } from "./actions";
 import { clientInitialState, ClientState } from "./state";
 
@@ -27,7 +27,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
     case "client/RESET_DETAILS":
       return {
         accountList: [],
-        accountType: DICTIONARY_ACCOUNT_TYPE[0],
+        accountType: undefined,
         details: {
           principalHolder: {
             name: "",

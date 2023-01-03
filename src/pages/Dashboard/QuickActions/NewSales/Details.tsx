@@ -4,21 +4,14 @@ import { TextStyle, View, ViewStyle } from "react-native";
 
 import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, Language, NRIC_AGE_FORMAT } from "../../../../constants";
-import {
-  DICTIONARY_ACCOUNT_TYPE,
-  DICTIONARY_COUNTRIES,
-  DICTIONARY_ID_OTHER_TYPE,
-  DICTIONARY_ID_TYPE,
-  ERROR,
-} from "../../../../data/dictionary";
+import { DICTIONARY_COUNTRIES, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE, ERROR } from "../../../../data/dictionary";
 import { findDOBFromNric } from "../../../../helpers";
-import { disabledOpacity5, fs20BoldGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56, sw74 } from "../../../../styles";
+import { disabledOpacity5, fs20BoldGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
 
 interface NewSalesDetailsProps {
-  accountType: TypeAccountChoices;
   clientInfo: IClientBasicInfo;
   clientType: TypeClient | "";
   ageErrorMessage?: string;
@@ -35,14 +28,12 @@ interface NewSalesDetailsProps {
 }
 
 export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
-  accountType,
   clientInfo,
   clientType,
   ageErrorMessage,
   errorMessage,
   holderToFill,
   inputError1,
-  setAccountType,
   setClientInfo,
   setAgeErrorMessage,
   setErrorMessage,
@@ -177,18 +168,6 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
             value={country || ""}
             viewStyle={{ width: sw440 }}
           />
-        ) : null}
-        {clientType === "NTB" && holderToFill === "principalHolder" ? (
-          <Fragment>
-            <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh24} text={ADD_CLIENT.LABEL_SELECT_ACCOUNT_TYPE} />
-            <RadioButtonGroup
-              direction="row"
-              options={DICTIONARY_ACCOUNT_TYPE}
-              selected={accountType}
-              setSelected={setAccountType!}
-              space={sw74}
-            />
-          </Fragment>
         ) : null}
       </Fragment>
     </View>

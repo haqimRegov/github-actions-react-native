@@ -14,6 +14,7 @@ import {
   centerVertical,
   circle,
   colorBlue,
+  colorGray,
   colorRed,
   colorTransparent,
   colorWhite,
@@ -72,6 +73,7 @@ const InvestorSalesPromptComponent = ({
   accountType,
   addJointInfo,
   addPersonalInfo,
+  agent,
   ageErrorMessage,
   details,
   errorMessage,
@@ -256,28 +258,34 @@ const InvestorSalesPromptComponent = ({
           const handlePress = () => {
             setAccountType(index);
           };
+          const checkOnlyPRS = agent?.licenseType.length === 1 && agent.licenseType[0] === "PRS";
+          const disabledStyle: ViewStyle = checkOnlyPRS === true && index === 1 ? { opacity: 0.6 } : {};
+          const disabledIconStyle: ViewStyle = checkOnlyPRS === true && index === 1 ? { backgroundColor: colorGray._4, opacity: 0.6 } : {};
+          const disabledEvents = checkOnlyPRS === true && index === 1 ? "none" : "auto";
           const containerStyle: ViewStyle = {
             ...px(sw24),
             ...py(sh16),
             ...centerHV,
-            backgroundColor: accountType !== undefined && newAccountType === index ? colorBlue._3 : colorWhite._1,
-            borderColor: accountType !== undefined && newAccountType === index ? colorBlue._1 : colorWhite._1,
+            backgroundColor: newAccountType === index ? colorBlue._3 : colorWhite._1,
+            borderColor: newAccountType === index ? colorBlue._1 : colorWhite._1,
             borderWidth: sw2,
             height: sh72,
             borderRadius: sw8,
+            ...disabledStyle,
           };
           const iconStyle: ViewStyle = {
             ...circle(sw26, colorTransparent),
             ...border(colorBlue._1, sw1, sw100),
             ...centerHV,
-            backgroundColor: accountType !== undefined && newAccountType === index ? colorRed._1 : colorTransparent,
-            borderColor: accountType !== undefined && newAccountType === index ? colorRed._1 : colorBlue._1,
+            backgroundColor: newAccountType === index ? colorRed._1 : colorTransparent,
+            borderColor: newAccountType === index ? colorRed._1 : colorBlue._1,
+            ...disabledIconStyle,
           };
-          const iconColor = accountType !== undefined && newAccountType === index ? colorWhite._1 : colorBlue._1;
+          const iconColor = newAccountType === index ? colorWhite._1 : colorBlue._1;
           return (
             <Fragment key={index}>
               <CustomSpacer space={sh16} />
-              <Pressable onPress={handlePress} style={containerStyle}>
+              <Pressable onPress={handlePress} pointerEvents={disabledEvents} style={containerStyle}>
                 <View style={{ ...flexRow, ...centerVertical }}>
                   <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
                   <CustomFlexSpacer />
@@ -316,7 +324,6 @@ const InvestorSalesPromptComponent = ({
             <Text style={fs24BoldGray6}>{INVESTOR_ACCOUNTS.NEW_SALES_JOINT_TITLE}</Text>
             <CustomSpacer space={sh4} />
             <NewSalesDetails
-              accountType={accountType}
               ageErrorMessage={ageErrorMessage}
               clientInfo={details!.jointHolder!}
               clientType={"ETB"}

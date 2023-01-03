@@ -1,8 +1,8 @@
-import { DICTIONARY_ACCOUNT_TYPE, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
+import { DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE } from "../../data/dictionary";
 
 export type ClientState = {
   accountList: IAccountList[];
-  accountType: TypeAccountChoices;
+  accountType?: TypeAccountChoices;
   details?: IClientDetailsState;
   directToAccountOpening: boolean;
   isForceUpdate?: boolean;
@@ -12,7 +12,7 @@ export type ClientState = {
 
 export const clientInitialState: ClientState = {
   accountList: [],
-  accountType: DICTIONARY_ACCOUNT_TYPE[0],
+  accountType: undefined,
   details: {
     accountHolder: undefined,
     principalHolder: {

@@ -1,11 +1,11 @@
 import moment from "moment";
-import React, { Fragment, useRef, useState } from "react";
-import { Image, ImageStyle, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
+import { Image, ImageStyle, Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomSpacer, LabeledTitle, RNModal } from "../../../../components";
+import { ActionButtons, CustomFlexSpacer, CustomSpacer, IconButton, LabeledTitle, RNModal } from "../../../../components";
 import { DATE_OF_BIRTH_FORMAT, DEFAULT_DATE_FORMAT, Language } from "../../../../constants";
 import {
   DICTIONARY_COUNTRIES,
@@ -17,37 +17,59 @@ import {
 import { checkClient, clientRegister } from "../../../../network-actions";
 import { ClientMapDispatchToProps, ClientMapStateToProps, ClientStoreProps } from "../../../../store";
 import {
+  border,
   centerHV,
   centerVertical,
+  circle,
   colorBlue,
+  colorGray,
+  colorRed,
+  colorTransparent,
   colorWhite,
   flexGrow,
+  flexRow,
   flexRowCC,
+  fs12RegBlue5,
+  fs16BoldBlue1,
+  fs16RegGray5,
   fs16RegGray6,
   fs24BoldBlue1,
+  fs24BoldGray6,
   fs36BoldBlack2,
   fsAlignCenter,
   fullHW,
+  fullWidth,
   imageContain,
   px,
+  py,
   sh16,
   sh24,
+  sh4,
   sh40,
   sh48,
   sh56,
+  sh72,
+  sh8,
   sh96,
+  sw1,
   sw10,
+  sw100,
   sw136,
+  sw2,
+  sw20,
   sw218,
+  sw24,
+  sw26,
   sw5,
   sw56,
   sw565,
+  sw8,
 } from "../../../../styles";
 import { NewSalesDetails } from "./Details";
 import { NewSalesPrompt } from "./Prompt";
 import { NewSalesSummary } from "./Summary";
 
-const { ADD_CLIENT } = Language.PAGE;
+const { ADD_CLIENT, INVESTOR_ACCOUNTS } = Language.PAGE;
 
 interface NewSalesProps extends ClientStoreProps {
   navigation: IStackNavigationProp;
@@ -56,7 +78,8 @@ interface NewSalesProps extends ClientStoreProps {
   visible: boolean;
 }
 
-const NewSalesComponent = ({
+const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
+  agent,
   accountType,
   addAccountType,
   addClientDetails,
@@ -86,6 +109,7 @@ const NewSalesComponent = ({
   const [registered, setRegistered] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<TypeNewSalesPrompt>(undefined);
   const [salesNewPrompt, setSalesNewPrompt] = useState<boolean>(false);
+  const [accountTypePrompt, setAccountTypePrompt] = useState<boolean>(false);
   const [holderToFill, setHolderToFill] = useState<"principalHolder" | "jointHolder">("principalHolder");
   const { jointHolder, principalHolder } = details!;
   const { dateOfBirth, id, idType, name, country } = details![holderToFill]!;
@@ -108,16 +132,27 @@ const NewSalesComponent = ({
 
   switch (idType) {
     case "NRIC":
-      continueDisabled = name === "" || id === "" || inputError1 !== undefined;
+      continueDisabled = name === "" || id === "" || inputError1 !== undefined || (accountTypePrompt === true && accountType === undefined);
       break;
     case "Passport":
-      continueDisabled = name === "" || id === "" || dateOfBirth === "" || inputError1 !== undefined || country === "";
+      continueDisabled =
+        name === "" ||
+        id === "" ||
+        dateOfBirth === "" ||
+        inputError1 !== undefined ||
+        country === "" ||
+        (accountTypePrompt === true && accountType === undefined);
       break;
     case "Other":
-      continueDisabled = name === "" || id === "" || inputError1 !== undefined || dateOfBirth === "";
+      continueDisabled =
+        name === "" ||
+        id === "" ||
+        inputError1 !== undefined ||
+        dateOfBirth === "" ||
+        (accountTypePrompt === true && accountType === undefined);
       break;
     default:
-      continueDisabled = name === "" || id === "" || inputError1 !== undefined;
+      continueDisabled = name === "" || id === "" || inputError1 !== undefined || (accountTypePrompt === true && accountType === undefined);
       break;
   }
 
@@ -144,11 +179,20 @@ const NewSalesComponent = ({
       handleCancelNewSales();
     } else if (registered === true) {
       setRegistered(false);
+      if (accountType === "Joint") {
+        setHolderToFill("jointHolder");
+      } else {
+        setAccountTypePrompt(true);
+      }
     } else if (salesNewPrompt === true) {
       setPrompt(undefined);
       setSalesNewPrompt(false);
-    } else if (clientType !== "" && holderToFill === "jointHolder") {
+    } else if (clientType !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
+      setAccountTypePrompt(true);
+    } else if (accountTypePrompt === true) {
       setHolderToFill("principalHolder");
+      setAccountTypePrompt(false);
+      setClientType("");
     } else if (clientType !== "" && holderToFill === "principalHolder") {
       setClientType("");
       addAccountType("Individual");
@@ -233,6 +277,7 @@ const NewSalesComponent = ({
               setSalesNewPrompt(true);
             } else {
               setClientType("NTB");
+              setAccountTypePrompt(true);
             }
           }
           if (data.result.message === "ETB" && setPage !== undefined) {
@@ -316,7 +361,7 @@ const NewSalesComponent = ({
               name: jointHolder?.name!,
             };
       const request: IClientRegisterRequest = {
-        accountType: accountType,
+        accountType: accountType!,
         isEtb: false,
         isNewFundPurchased: false,
         principalHolder: {
@@ -356,6 +401,7 @@ const NewSalesComponent = ({
           setAgeErrorMessage(undefined);
           setErrorMessage(undefined);
           setInputError1(undefined);
+          setAccountTypePrompt(false);
           addClientDetails({
             ...details,
             principalHolder: {
@@ -398,10 +444,16 @@ const NewSalesComponent = ({
       return setClientType("NTB");
     }
 
-    if (clientType === "NTB") {
+    if (accountTypePrompt === true) {
       if (accountType === "Joint" && holderToFill === "principalHolder") {
+        setAccountTypePrompt(false);
         return setHolderToFill("jointHolder");
       }
+      setHolderToFill("principalHolder");
+      return handleClientRegister();
+    }
+
+    if (clientType === "NTB" && accountType === "Joint" && holderToFill === "jointHolder") {
       return handleClientRegister();
     }
     return handleCheckClient();
@@ -426,6 +478,83 @@ const NewSalesComponent = ({
   const newSalesPromptTitle = `${principalHolder?.name} ${ADD_CLIENT.SALES_PROMPT_TITLE}`;
   const checkSalesPrompt = salesNewPrompt === true ? sh40 : sh56;
   const checkCancelLabel = salesNewPrompt === true ? ADD_CLIENT.BUTTON_GO_BACK : ADD_CLIENT.BUTTON_CANCEL;
+  const modalData: LabeledTitleProps[] = [
+    {
+      label: INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT,
+      title: INVESTOR_ACCOUNTS.LABEL_INDIVIDUAL_ACCOUNT_SUB,
+    },
+    {
+      label: INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT,
+      title: INVESTOR_ACCOUNTS.LABEL_JOINT_ACCOUNT_SUB,
+    },
+  ];
+  const content = (
+    <View style={fullWidth}>
+      <View>
+        <Text style={fs24BoldGray6}>{INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_TITLE}</Text>
+        <CustomSpacer space={sh4} />
+        <Text style={fs16RegGray5}>{INVESTOR_ACCOUNTS.NEW_SALES_PROMPT_SUBTITLE}</Text>
+        <CustomSpacer space={sh8} />
+        {modalData.map((eachCard: LabeledTitleProps, index: number) => {
+          const { label, title } = eachCard;
+          const handlePress = () => {
+            const checkAccountType = index === 0 ? "Individual" : "Joint";
+            setAccountType(checkAccountType);
+          };
+          let accountTypeIndex = -1;
+          switch (accountType) {
+            case "Individual":
+              accountTypeIndex = 0;
+              break;
+            case "Joint":
+              accountTypeIndex = 1;
+              break;
+            default:
+              accountTypeIndex = -1;
+              break;
+          }
+          const checkOnlyPRS = agent?.licenseType.length === 1 && agent.licenseType[0] === "PRS";
+          const disabledStyle: ViewStyle = checkOnlyPRS === true && index === 1 ? { opacity: 0.6 } : {};
+          const disabledIconStyle: ViewStyle = checkOnlyPRS === true && index === 1 ? { backgroundColor: colorGray._4, opacity: 0.6 } : {};
+          const disabledEvents = checkOnlyPRS === true && index === 1 ? "none" : "auto";
+          const containerStyle: ViewStyle = {
+            ...px(sw24),
+            ...py(sh16),
+            ...centerHV,
+            backgroundColor: accountType !== undefined && accountTypeIndex === index ? colorBlue._3 : colorWhite._1,
+            borderColor: accountType !== undefined && accountTypeIndex === index ? colorBlue._1 : colorWhite._1,
+            borderWidth: sw2,
+            height: sh72,
+            borderRadius: sw8,
+            ...disabledStyle,
+          };
+          const iconStyle: ViewStyle = {
+            ...circle(sw26, colorTransparent),
+            ...border(colorBlue._1, sw1, sw100),
+            ...centerHV,
+            backgroundColor: accountType !== undefined && accountTypeIndex === index ? colorRed._1 : colorTransparent,
+            borderColor: accountType !== undefined && accountTypeIndex === index ? colorRed._1 : colorBlue._1,
+            ...disabledIconStyle,
+          };
+          const iconColor = accountType !== undefined && accountTypeIndex === index ? colorWhite._1 : colorBlue._1;
+          return (
+            <Fragment key={index}>
+              <CustomSpacer space={sh16} />
+              <Pressable onPress={handlePress} pointerEvents={disabledEvents} style={containerStyle}>
+                <View style={{ ...flexRow, ...centerVertical }}>
+                  <LabeledTitle label={label} labelStyle={fs16BoldBlue1} title={title} titleStyle={fs12RegBlue5} />
+                  <CustomFlexSpacer />
+                  <View style={iconStyle}>
+                    <IconButton color={iconColor} name="check" onPress={handlePress} size={sw20} />
+                  </View>
+                </View>
+              </Pressable>
+            </Fragment>
+          );
+        })}
+      </View>
+    </View>
+  );
 
   return (
     <RNModal animationType="fade" visible={visible}>
@@ -437,42 +566,46 @@ const NewSalesComponent = ({
             ) : (
               <View style={px(sw56)}>
                 <CustomSpacer space={registered === true ? sh56 : sh48} />
-                {registered === false ? (
+                {accountTypePrompt === true ? (
+                  content
+                ) : (
                   <Fragment>
-                    {salesNewPrompt === true ? (
-                      <View style={centerVertical}>
-                        <Image source={LocalAssets.illustration.investorWarning} style={illustrationStyle} />
-                        <CustomSpacer space={sh24} />
-                        <LabeledTitle
-                          label={newSalesPromptTitle}
-                          labelStyle={{ ...fs24BoldBlue1, ...fsAlignCenter }}
-                          spaceToLabel={sh16}
-                          title={ADD_CLIENT.SALES_PROMPT_SUBTITLE}
-                          titleStyle={{ ...fs16RegGray6, ...fsAlignCenter }}
-                        />
-                      </View>
-                    ) : (
+                    {registered === false ? (
                       <Fragment>
-                        <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
-                        <NewSalesDetails
-                          accountType={accountType}
-                          clientInfo={details![holderToFill]!}
-                          clientType={clientType}
-                          ageErrorMessage={ageErrorMessage}
-                          errorMessage={errorMessage}
-                          holderToFill={holderToFill}
-                          inputError1={inputError1}
-                          setAccountType={setAccountType}
-                          setClientInfo={setClientInfo}
-                          setAgeErrorMessage={setAgeErrorMessage}
-                          setErrorMessage={setErrorMessage}
-                          setInputError1={setInputError1}
-                        />
+                        {salesNewPrompt === true ? (
+                          <View style={centerVertical}>
+                            <Image source={LocalAssets.illustration.investorWarning} style={illustrationStyle} />
+                            <CustomSpacer space={sh24} />
+                            <LabeledTitle
+                              label={newSalesPromptTitle}
+                              labelStyle={{ ...fs24BoldBlue1, ...fsAlignCenter }}
+                              spaceToLabel={sh16}
+                              title={ADD_CLIENT.SALES_PROMPT_SUBTITLE}
+                              titleStyle={{ ...fs16RegGray6, ...fsAlignCenter }}
+                            />
+                          </View>
+                        ) : (
+                          <Fragment>
+                            <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
+                            <NewSalesDetails
+                              clientInfo={details![holderToFill]!}
+                              clientType={clientType}
+                              ageErrorMessage={ageErrorMessage}
+                              errorMessage={errorMessage}
+                              holderToFill={holderToFill}
+                              inputError1={inputError1}
+                              setClientInfo={setClientInfo}
+                              setAgeErrorMessage={setAgeErrorMessage}
+                              setErrorMessage={setErrorMessage}
+                              setInputError1={setInputError1}
+                            />
+                          </Fragment>
+                        )}
                       </Fragment>
+                    ) : (
+                      <NewSalesSummary accountType={accountType!} jointHolder={jointHolder} principalHolder={principalHolder!} />
                     )}
                   </Fragment>
-                ) : (
-                  <NewSalesSummary accountType={accountType} jointHolder={jointHolder} principalHolder={principalHolder!} />
                 )}
                 <CustomSpacer space={checkSalesPrompt} />
               </View>

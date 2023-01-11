@@ -1898,6 +1898,7 @@ export const english = {
       TITLE_PAYMENT: "Total Payment",
       TITLE_RECURRING: "Total Recurring",
       TITLE_SOFTCOPY: "Softcopy Documents",
+      TITLE_HARDCOPY: "Hardcopy Documents",
     },
     SUMMARY: {
       HEADING: "Summary",

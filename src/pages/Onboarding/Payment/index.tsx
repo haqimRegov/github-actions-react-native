@@ -118,9 +118,8 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
         if (error === null && data !== null) {
           if (confirmed === true) {
             setPromptType("success");
-          } else {
-            setPaymentResult(data.result);
           }
+          setPaymentResult(data.result);
         }
         if (error !== null) {
           throw error;

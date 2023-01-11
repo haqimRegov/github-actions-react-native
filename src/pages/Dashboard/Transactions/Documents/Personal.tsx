@@ -81,6 +81,32 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     setBackPrompt(false);
   };
 
+  const checkNonPendingOrder =
+    submissionResult !== undefined &&
+    submissionResult.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
+
+  const allOrdersSubmitted =
+    submissionResult !== undefined &&
+    submissionResult.findIndex((order) => order.status !== "Completed" && order.status !== "Submitted") === -1;
+
+  let message = "";
+
+  if (checkNonPendingOrder === true) {
+    if (allOrdersSubmitted === true) {
+      message =
+        submissionResult !== undefined && submissionResult.length === 1
+          ? `${submissionResult[0].orderNumber} ${PAYMENT.PROMPT_TITLE_SUBMITTED_SINGLE}`
+          : PAYMENT.PROMPT_TITLE_SUBMITTED;
+    } else {
+      message = PAYMENT.PROMPT_TITLE_ORDER;
+    }
+  } else {
+    message =
+      submissionResult !== undefined && submissionResult.length === 1
+        ? `${submissionResult[0].orderNumber} ${PAYMENT.PROMPT_TITLE_SAVED_SINGLE}`
+        : PAYMENT.PROMPT_TITLE_SAVED;
+  }
+
   const pendingDocumentsPrincipal = documentList && documentList.principal ? documentList.principal : [];
 
   const documentsPrincipal =
@@ -241,57 +267,56 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         if (error === null && data !== null) {
           if (confirmed === true) {
             setPromptType("success");
-          } else {
-            const structuredRemarks: ISubmissionSummaryOrder[] = data.result.orders.map((eachOrder) => {
-              const findSoftcopy = eachOrder.docList.findIndex((eachDocList) => eachDocList.title === "Softcopy Documents");
-
-              const softcopyDocList = findSoftcopy !== -1 ? eachOrder.docList[findSoftcopy] : undefined;
-              let softcopyDocs: string[] = [];
-
-              if (softcopyDocList !== undefined) {
-                const principalSoftcopy: string[] = [];
-                const jointSoftcopy: string[] = [];
-                const bothSoftcopy: string[] = [];
-
-                softcopyDocList.remarks.principalHolder.forEach((eachPrincipalDoc) => {
-                  if (softcopyDocList.remarks.jointHolder.includes(eachPrincipalDoc)) {
-                    // softcopy is for both
-                    bothSoftcopy.push(eachPrincipalDoc);
-                  } else {
-                    // softcopy is for principal
-                    principalSoftcopy.push(eachPrincipalDoc);
-                  }
-                });
-
-                softcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
-                  if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothSoftcopy.includes(eachJointDoc) === false) {
-                    // softcopy is for both
-                    bothSoftcopy.push(eachJointDoc);
-                  } else {
-                    // softcopy is for joint
-                    jointSoftcopy.push(eachJointDoc);
-                  }
-                });
-
-                const principalDocList = principalSoftcopy.map((eachDoc) =>
-                  isArrayNotEmpty(jointSoftcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
-                );
-                const jointDocList = jointSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
-                const bothDocList = bothSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);
-
-                softcopyDocs = principalDocList.concat(jointDocList).concat(bothDocList);
-              }
-
-              const softcopyDocuments: ISubmissionSummaryRemarks[] = isArrayNotEmpty(softcopyDocs)
-                ? [{ title: SUBMISSION_SUMMARY.TITLE_SOFTCOPY, remarks: softcopyDocs }]
-                : [];
-
-              const remarks: ISubmissionSummaryRemarks[] = softcopyDocuments;
-              return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
-            });
-
-            setSubmissionResult(structuredRemarks);
           }
+          const structuredRemarks: ISubmissionSummaryOrder[] = data.result.orders.map((eachOrder) => {
+            const findSoftcopy = eachOrder.docList.findIndex((eachDocList) => eachDocList.title === "Softcopy Documents");
+
+            const softcopyDocList = findSoftcopy !== -1 ? eachOrder.docList[findSoftcopy] : undefined;
+            let softcopyDocs: string[] = [];
+
+            if (softcopyDocList !== undefined) {
+              const principalSoftcopy: string[] = [];
+              const jointSoftcopy: string[] = [];
+              const bothSoftcopy: string[] = [];
+
+              softcopyDocList.remarks.principalHolder.forEach((eachPrincipalDoc) => {
+                if (softcopyDocList.remarks.jointHolder.includes(eachPrincipalDoc)) {
+                  // softcopy is for both
+                  bothSoftcopy.push(eachPrincipalDoc);
+                } else {
+                  // softcopy is for principal
+                  principalSoftcopy.push(eachPrincipalDoc);
+                }
+              });
+
+              softcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
+                if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothSoftcopy.includes(eachJointDoc) === false) {
+                  // softcopy is for both
+                  bothSoftcopy.push(eachJointDoc);
+                } else {
+                  // softcopy is for joint
+                  jointSoftcopy.push(eachJointDoc);
+                }
+              });
+
+              const principalDocList = principalSoftcopy.map((eachDoc) =>
+                isArrayNotEmpty(jointSoftcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
+              );
+              const jointDocList = jointSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
+              const bothDocList = bothSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);
+
+              softcopyDocs = principalDocList.concat(jointDocList).concat(bothDocList);
+            }
+
+            const softcopyDocuments: ISubmissionSummaryRemarks[] = isArrayNotEmpty(softcopyDocs)
+              ? [{ title: SUBMISSION_SUMMARY.TITLE_SOFTCOPY, remarks: softcopyDocs }]
+              : [];
+
+            const remarks: ISubmissionSummaryRemarks[] = softcopyDocuments;
+            return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
+          });
+
+          setSubmissionResult(structuredRemarks);
         }
         if (error !== null) {
           setPromptType("summary");
@@ -306,6 +331,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   };
 
   const handleCancelPopup = () => {
+    setShowPopup(false);
     if (loading === false) {
       if (toggle === true) {
         setToggle(false);
@@ -413,10 +439,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
           illustration: LocalAssets.illustration.orderReceived,
           primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
           subtitleStyle: fs16RegGray6,
-          title:
-            submissionResult !== undefined
-              ? `${submissionResult[0].orderNumber} ${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HAS_BEEN_SUBMITTED_SUCCESSFULLY}`
-              : "",
+          title: message,
         }}
         promptType={promptType}
         summary={{

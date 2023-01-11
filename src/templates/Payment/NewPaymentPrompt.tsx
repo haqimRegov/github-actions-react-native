@@ -124,7 +124,7 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             : [];
 
           const remarks: ISubmissionSummaryRemarks[] = softcopyDocuments.concat(
-            eachOrder.paymentType === "Recurring"
+            eachOrder.paymentType === "Recurring" && isNotEmpty(eachOrder.totalRecurring)
               ? [{ title: SUBMISSION_SUMMARY.TITLE_RECURRING, remarks: [eachOrder.totalRecurring] }]
               : totalPayment,
           );

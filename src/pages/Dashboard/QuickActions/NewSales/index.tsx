@@ -174,33 +174,6 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     handleReset();
   };
 
-  const handleCancel = () => {
-    if (prompt !== undefined) {
-      handleCancelNewSales();
-    } else if (registered === true) {
-      setRegistered(false);
-      if (accountType === "Joint") {
-        setHolderToFill("jointHolder");
-      } else {
-        setAccountTypePrompt(true);
-      }
-    } else if (salesNewPrompt === true) {
-      setPrompt(undefined);
-      setSalesNewPrompt(false);
-    } else if (clientType !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
-      setAccountTypePrompt(true);
-    } else if (accountTypePrompt === true) {
-      setHolderToFill("principalHolder");
-      setAccountTypePrompt(false);
-      setClientType("");
-    } else if (clientType !== "" && holderToFill === "principalHolder") {
-      setClientType("");
-      addAccountType("Individual");
-    } else {
-      handleCancelNewSales();
-    }
-  };
-
   const handleNavigation = () => {
     const principalClientIdType = principalHolder?.idType === "Other" ? principalHolder.otherIdType : principalIdType;
     const jointClientIdType = jointHolder?.idType === "Other" ? jointHolder.otherIdType : jointIdType;
@@ -428,6 +401,34 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     return undefined;
   };
 
+  const handleCancel = () => {
+    if (prompt !== undefined) {
+      handleCancelNewSales();
+    } else if (registered === true) {
+      setRegistered(false);
+      if (accountType === "Joint") {
+        setHolderToFill("jointHolder");
+      } else {
+        setAccountTypePrompt(true);
+      }
+    } else if (salesNewPrompt === true) {
+      setSalesNewPrompt(false);
+      setHolderToFill("principalHolder");
+      setClientType("");
+    } else if (clientType !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
+      setAccountTypePrompt(true);
+    } else if (accountTypePrompt === true) {
+      setHolderToFill("principalHolder");
+      setAccountTypePrompt(false);
+      setClientType("");
+    } else if (clientType !== "" && holderToFill === "principalHolder") {
+      setClientType("");
+      addAccountType("Individual");
+    } else {
+      handleCancelNewSales();
+    }
+  };
+
   const handleContinue = () => {
     if (prompt === "bannedCountry") {
       return handleCancelNewSales();
@@ -441,6 +442,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
 
     if (salesNewPrompt === true) {
       setSalesNewPrompt(false);
+      setAccountTypePrompt(true);
       return setClientType("NTB");
     }
 

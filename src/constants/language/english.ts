@@ -105,6 +105,9 @@ export const english = {
       SUBHEADING_JOINT: "Add joint account holder details",
       SUBHEADING: "Enter details to get started.",
     },
+    BROWSER_WEB_VIEW: {
+      LABEL_DONE: "Done",
+    },
     PERSONAL_DETAILS: {
       BUTTON_ADD_CURRENCY: "Add Currency",
       BUTTON_ADD_FOREIGN: "Add Foreign Bank",

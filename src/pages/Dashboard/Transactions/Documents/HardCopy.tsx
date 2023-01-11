@@ -240,58 +240,57 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
           if (error === null && data !== null) {
             if (confirmed === true) {
               setPromptType("success");
-            } else {
-              const structuredRemarks: ISubmissionSummaryOrder[] = data.result.orders.map((eachOrder) => {
-                const findHardcopy = eachOrder.docList.findIndex((eachDocList) => eachDocList.title === "Hardcopy Documents");
-
-                const hardcopyDocList = findHardcopy !== -1 ? eachOrder.docList[findHardcopy] : undefined;
-                let hardcopyDocs: string[] = [];
-
-                if (hardcopyDocList !== undefined) {
-                  const principalHardcopy: string[] = [];
-                  const jointHardcopy: string[] = [];
-                  const bothHardcopy: string[] = [];
-
-                  hardcopyDocList.remarks.principalHolder.forEach((eachPrincipalDoc) => {
-                    if (hardcopyDocList.remarks.jointHolder.includes(eachPrincipalDoc)) {
-                      // hardcopy is for both
-                      bothHardcopy.push(eachPrincipalDoc);
-                    } else {
-                      // hardcopy is for principal
-                      principalHardcopy.push(eachPrincipalDoc);
-                    }
-                  });
-
-                  hardcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
-                    if (hardcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothHardcopy.includes(eachJointDoc) === false) {
-                      // hardcopy is for both
-                      bothHardcopy.push(eachJointDoc);
-                    } else {
-                      // hardcopy is for joint
-                      jointHardcopy.push(eachJointDoc);
-                    }
-                  });
-
-                  const principalDocList = principalHardcopy.map((eachDoc) =>
-                    isArrayNotEmpty(jointHardcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
-                  );
-                  const jointDocList = jointHardcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
-                  const bothDocList = bothHardcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);
-                  const utmcDocList = isArrayNotEmpty(hardcopyDocList.remarks.hardcopy) ? hardcopyDocList.remarks.hardcopy! : [];
-
-                  hardcopyDocs = principalDocList.concat(jointDocList).concat(bothDocList).concat(utmcDocList);
-                }
-
-                const hardcopyDocuments: ISubmissionSummaryRemarks[] = isArrayNotEmpty(hardcopyDocs)
-                  ? [{ title: SUBMISSION_SUMMARY.TITLE_SOFTCOPY, remarks: hardcopyDocs }]
-                  : [];
-
-                const remarks: ISubmissionSummaryRemarks[] = hardcopyDocuments;
-                return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
-              });
-
-              setSubmissionSummary(structuredRemarks);
             }
+            const structuredRemarks: ISubmissionSummaryOrder[] = data.result.orders.map((eachOrder) => {
+              const findHardcopy = eachOrder.docList.findIndex((eachDocList) => eachDocList.title === "Hardcopy Documents");
+
+              const hardcopyDocList = findHardcopy !== -1 ? eachOrder.docList[findHardcopy] : undefined;
+              let hardcopyDocs: string[] = [];
+
+              if (hardcopyDocList !== undefined) {
+                const principalHardcopy: string[] = [];
+                const jointHardcopy: string[] = [];
+                const bothHardcopy: string[] = [];
+
+                hardcopyDocList.remarks.principalHolder.forEach((eachPrincipalDoc) => {
+                  if (hardcopyDocList.remarks.jointHolder.includes(eachPrincipalDoc)) {
+                    // hardcopy is for both
+                    bothHardcopy.push(eachPrincipalDoc);
+                  } else {
+                    // hardcopy is for principal
+                    principalHardcopy.push(eachPrincipalDoc);
+                  }
+                });
+
+                hardcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
+                  if (hardcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothHardcopy.includes(eachJointDoc) === false) {
+                    // hardcopy is for both
+                    bothHardcopy.push(eachJointDoc);
+                  } else {
+                    // hardcopy is for joint
+                    jointHardcopy.push(eachJointDoc);
+                  }
+                });
+
+                const principalDocList = principalHardcopy.map((eachDoc) =>
+                  isArrayNotEmpty(jointHardcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
+                );
+                const jointDocList = jointHardcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
+                const bothDocList = bothHardcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);
+                const utmcDocList = isArrayNotEmpty(hardcopyDocList.remarks.hardcopy) ? hardcopyDocList.remarks.hardcopy! : [];
+
+                hardcopyDocs = principalDocList.concat(jointDocList).concat(bothDocList).concat(utmcDocList);
+              }
+
+              const hardcopyDocuments: ISubmissionSummaryRemarks[] = isArrayNotEmpty(hardcopyDocs)
+                ? [{ title: SUBMISSION_SUMMARY.TITLE_HARDCOPY, remarks: hardcopyDocs }]
+                : [];
+
+              const remarks: ISubmissionSummaryRemarks[] = hardcopyDocuments;
+              return { orderNumber: eachOrder.orderNumber, status: eachOrder.status, remarks: remarks };
+            });
+
+            setSubmissionSummary(structuredRemarks);
           } else {
             setPromptType("summary");
             setTimeout(() => {
@@ -358,6 +357,31 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const checkNonPendingOrder =
+    submissionSummary !== undefined &&
+    submissionSummary.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
+  const allOrdersSubmitted =
+    submissionSummary !== undefined &&
+    submissionSummary.findIndex((order) => order.status !== "Completed" && order.status !== "Submitted") === -1;
+
+  let message = "";
+
+  if (checkNonPendingOrder === true) {
+    if (allOrdersSubmitted === true) {
+      message =
+        submissionSummary !== undefined && submissionSummary.length === 1
+          ? `${submissionSummary[0].orderNumber} ${PAYMENT.PROMPT_TITLE_SUBMITTED_SINGLE}`
+          : PAYMENT.PROMPT_TITLE_SUBMITTED;
+    } else {
+      message = PAYMENT.PROMPT_TITLE_ORDER;
+    }
+  } else {
+    message =
+      submissionSummary !== undefined && submissionSummary.length === 1
+        ? `${submissionSummary[0].orderNumber} ${PAYMENT.PROMPT_TITLE_SAVED_SINGLE}`
+        : PAYMENT.PROMPT_TITLE_SAVED;
+  }
 
   const pendingDocumentsPrincipal = documentList && isNotEmpty(documentList.account) ? documentList.account.principal : [];
   const pendingDocumentsJoint =
@@ -484,10 +508,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
           primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
           subtitle: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD,
           subtitleStyle: fs16RegGray6,
-          title:
-            submissionSummary !== undefined
-              ? `${submissionSummary[0].orderNumber} ${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_HAS_BEEN_SUBMITTED_SUCCESSFULLY}`
-              : "",
+          title: message,
         }}
         promptType={promptType}
         summary={{

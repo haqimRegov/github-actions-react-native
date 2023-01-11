@@ -18,7 +18,7 @@ import {
   sw24,
   sw80,
 } from "../../styles";
-import { formatAmount, isArrayNotEmpty } from "../../utils";
+import { formatAmount, isArrayNotEmpty, isNotEmpty } from "../../utils";
 
 const { PERSONAL_DETAILS, TERMS_AND_CONDITIONS } = Language.PAGE;
 
@@ -96,8 +96,8 @@ export const PDFListTemplate: FunctionComponent<IPDFTemplateProps> = ({
           <View style={{ ...borderBottomBlue5, ...flexChild }} />
         </View>
         <CustomSpacer space={sh16} />
-        {receipts !== undefined &&
-          receipts.map((receipt: IOnboardingReceiptState, index: number) => {
+        {isNotEmpty(receipts) &&
+          receipts!.map((receipt: IOnboardingReceiptState, index: number) => {
             const handleEdit = () => {
               if (receipt.pdf === undefined) {
                 handleGetPDF(receipt, index);
@@ -106,7 +106,7 @@ export const PDFListTemplate: FunctionComponent<IPDFTemplateProps> = ({
               }
             };
             const handleRemove = () => {
-              const updatedReceipts = [...receipts];
+              const updatedReceipts = [...receipts!];
               updatedReceipts[index] = {
                 ...updatedReceipts[index],
                 signedPdf: updatedReceipts[index].pdf,
@@ -128,9 +128,10 @@ export const PDFListTemplate: FunctionComponent<IPDFTemplateProps> = ({
                 : baseSignatureValid && "jointSignature" in receipt && receipt.jointSignature !== undefined;
             // const disable = receipt.completed !== true;
             // const disabled = index === 0 ? false : disabledCondition;
-            const amountTitle = receipt
-              .orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`)
-              .join(" + ");
+            const amountTitle =
+              isNotEmpty(receipt) && isNotEmpty(receipt.orderTotalAmount)
+                ? receipt.orderTotalAmount!.map((totalAmount) => `${totalAmount.currency} ${formatAmount(totalAmount.amount)}`).join(" + ")
+                : "";
             const cashTitle = receipt.isEpf !== "true" && receipt.isScheduled !== "true" ? " Cash" : "";
             const epfTitle = receipt.isEpf === "true" ? " - EPF" : cashTitle;
             const recurringTitle = receipt.isScheduled === "true" ? " - Recurring" : "";

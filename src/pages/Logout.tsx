@@ -18,8 +18,8 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
     await removeStorageData("logout");
   };
   useEffect(() => {
-    handleContextState({ expiryModal: false, expired: false, duplicateModal: false });
     handleRemoveStorage();
+    handleContextState({ expiryModal: false, expired: false, duplicateModal: false, loggedOut: false });
     props.resetEDD();
     props.resetForceUpdate();
     props.resetTransactions();

@@ -12,7 +12,12 @@ import { LocalAssets } from "../assets/images/LocalAssets";
 import { EventModal, PromptModal } from "../components";
 import { Language } from "../constants";
 import { ModalContext } from "../context";
-import { DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS, DICTIONARY_INACTIVITY_TIMER, ERRORS } from "../data/dictionary";
+import {
+  DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS,
+  DICTIONARY_INACTIVITY_EXPIRY,
+  DICTIONARY_INACTIVITY_TIMER,
+  ERRORS,
+} from "../data/dictionary";
 import { useExpiryCountdown } from "../hooks/useExpiryCountdown";
 import { getStorageData, RNInAppBrowser, updateStorageData, WEB_SOCKET_CONFIG } from "../integrations";
 import { logout } from "../network-actions";
@@ -26,7 +31,8 @@ const { INACTIVITY, SESSION } = Language.PAGE;
 const { Navigator, Screen } = createStackNavigator();
 
 const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: GlobalStoreProps) => {
-  const { duplicateModal, expired, expiryModal, handleContextState, setExpired, setExpiryModal, setLoggedOut } = useContext(ModalContext);
+  const { contextState, duplicateModal, expired, expiryModal, handleContextState, setExpired, setExpiryModal, setLoggedOut } =
+    useContext(ModalContext);
   const navigation = useNavigation<IStackNavigationProp>();
   const [countdown, setCountdown] = useExpiryCountdown();
   const lastActive = useRef<number | undefined>(undefined);
@@ -58,9 +64,11 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
 
   const handleInactivity = async (isActive: boolean) => {
     if (expiryModal === false) {
+      const updatedContextState: IContextState = { ...contextState };
       const checkLogout = await getStorageData("logout");
       if (checkLogout !== true && expired !== true) {
-        setExpired(moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_TIMER);
+        const updatedExpired = moment().diff(lastActive.current, "milliseconds") > DICTIONARY_INACTIVITY_EXPIRY;
+        updatedContextState.expired = updatedExpired;
       }
       if (isActive === false && checkLogout !== true) {
         const checkThirdParty = await getStorageData("thirdPartyModal");
@@ -68,7 +76,10 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
           RNInAppBrowser.closeBrowser();
           await updateStorageData("thirdPartyModal", false);
         }
-        handleContextState({ expiryModal: true });
+        updatedContextState.expiryModal = true;
+      }
+      if ((checkLogout !== true && expired !== true) || (isActive === false && checkLogout !== true)) {
+        handleContextState(updatedContextState);
       }
     }
   };

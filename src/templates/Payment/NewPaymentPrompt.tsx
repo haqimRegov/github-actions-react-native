@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { BasicModal, CustomSpacer, Loading, NewPrompt, SubmissionSummaryPrompt } from "../../components";
 import { Language } from "../../constants";
+import { DICTIONARY_ORDER_STATUS } from "../../data/dictionary";
 import { centerHV, colorWhite, fsAlignLeft, fullHeight, fullHW, sh16 } from "../../styles";
 import { formatAmount, isArrayNotEmpty, isNotEmpty } from "../../utils";
 import { SubmissionSummaryCollapsible } from "../OrderSubmission";
@@ -63,8 +64,24 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
         : PAYMENT.PROMPT_TITLE_SAVED;
   }
 
-  const subtitles =
-    result !== undefined && result.withFloating === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_EXCESS : PAYMENT.PROMPT_SUBTITLE_PENDING;
+  const checkRerouted =
+    result !== undefined &&
+    result.orders.filter(
+      (eachResult: ISubmitProofOfPaymentResultOrder) =>
+        eachResult.status === DICTIONARY_ORDER_STATUS.reroutedBr || eachResult.status === DICTIONARY_ORDER_STATUS.reroutedHq,
+    ).length > 0;
+  const checkExcessRerouted =
+    checkRerouted === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_EXCESS_REROUTED : PAYMENT.PROMPT_SUBTITLE_PENDING_EXCESS;
+  const checkPendingRerouted = checkRerouted === true ? PAYMENT.PROMPT_SUBTITLE_PENDING_REROUTED : PAYMENT.PROMPT_SUBTITLE_PENDING;
+  const subtitles = result !== undefined && result.withFloating === true ? checkExcessRerouted : checkPendingRerouted;
+
+  const checkSubtitles =
+    (result !== undefined && result.withFloating === true) ||
+    (result !== undefined && result.withHardcopy === true) ||
+    allOrdersSubmitted === false
+      ? subtitles
+      : undefined;
+  const checkAllOrdersSubmitted = allOrdersSubmitted === true ? PAYMENT.PROMPT_SUBTITLE_SUCCESS : checkSubtitles;
 
   const submissionSummary: ISubmissionSummaryOrder[] =
     result !== undefined
@@ -157,13 +174,7 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
               <NewPrompt
                 illustration={illustration}
                 primary={{ onPress: handleConfirm, text: PAYMENT.BUTTON_DASHBOARD }}
-                subtitle={
-                  (result !== undefined && result.withFloating === true) ||
-                  (result !== undefined && result.withHardcopy === true) ||
-                  allOrdersSubmitted === false
-                    ? subtitles
-                    : undefined
-                }
+                subtitle={checkAllOrdersSubmitted}
                 subtitleStyle={fsAlignLeft}
                 title={message}
               />

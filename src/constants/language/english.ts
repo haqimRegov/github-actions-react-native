@@ -1546,8 +1546,14 @@ export const english = {
         "Click ‘Continue editing’ to continue to update payment info.\n\nIf you close without saving, everything you changed will reset to its previous state.",
       PROMPT_SUBTITLE_PENDING:
         "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.",
+      PROMPT_SUBTITLE_PENDING_REROUTED:
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 5 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.",
       PROMPT_SUBTITLE_PENDING_EXCESS:
         "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.\n4. Your investor has an excess amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_PENDING_EXCESS_REROUTED:
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 5 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.\n4. Your investor has an excess amount in their account. This amount will be refunded.",
+      PROMPT_SUBTITLE_SUCCESS:
+        "Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).",
       PROMPT_SUBTITLE_DUPLICATE_SURPLUS:
         "This use of surplus matches the other proof of payment info in this order. Continuing will merge the proof of payments.\n\nDo you want to continue?",
       PROMPT_SUBTITLE_CLIENT_NAME: "with client name",
@@ -2084,6 +2090,12 @@ export const english = {
       LABEL_BACK_PROMPT_SUBTITLE:
         "Click ‘Continue uploading’ to continue to upload documents.\n\nIf you close without saving, everything you changed will reset to its previous state.",
       LABEL_BACK_PROMPT_CONTINUE: "Continue Uploading",
+      LABEL_PROMPT_SUBTITLE_SUCCESS:
+        "Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).",
+      LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS:
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.",
+      LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS_REROUTED:
+        "1. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n2. Please also ensure that the supporting documents are submitted within 5 working days to prevent your application from lapsing.\n3. You can continue to update the order from the dashboard to complete the submission.",
     },
     UPLOAD_HARD_COPY_DOCUMENTS: {
       BUTTON_BACK_TO_DASHBOARD: "Back to Dashboard",
@@ -2105,6 +2117,12 @@ export const english = {
       LABEL_SUBMIT_PHYSICAL_DOCUMENTS: "Submit Physical Documents",
       LABEL_UPLOAD_HARDCOPY_SUBTITLE: "Please upload all proof of physical documents and select the processing branch.",
       PROMPT_TITLE_STATUS: "Order & Submission Summary",
+      LABEL_PROMPT_SUBTITLE_SUCCESS:
+        "1. You can proceed to download the Summary Submission Receipt from the dashboard.\n2. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).",
+      LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS:
+        "1. You can proceed to download the Summary Submission Receipt from the dashboard.\n2. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n3. Please also ensure that the supporting documents are submitted within 10 working days to prevent your application from lapsing.\n4. You can continue to update the order from the dashboard to complete the submission.",
+      LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS_REROUTED:
+        "1. You can proceed to download the Summary Submission Receipt from the dashboard.\n2. Please note that the investment will be processed once we have received proof of payment and supporting documents (if any).\n3. Please also ensure that the supporting documents are submitted within 5 working days to prevent your application from lapsing.\n4. You can continue to update the order from the dashboard to complete the submission.",
     },
   },
 };

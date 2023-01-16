@@ -22,14 +22,16 @@ import {
 import { IconButton, IconButtonProps } from "../Touchables";
 import { CustomFlexSpacer, LabeledTitle } from "../Views";
 
-interface ColorCardProps {
+export interface BaseColorCardProps {
   containerStyle?: ViewStyle;
   content?: ReactNode;
   contentStyle?: ViewStyle;
   customHeader?: ReactNode;
-  header: LabeledTitleProps | "custom";
   headerIcon?: IconButtonProps;
   headerStyle?: ViewStyle;
+}
+export interface ColorCardProps extends BaseColorCardProps {
+  header: LabeledTitleProps | "custom";
 }
 
 export const ColorCard: FunctionComponent<ColorCardProps> = ({

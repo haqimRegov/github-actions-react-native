@@ -40,7 +40,7 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
           ) : null}
           {title !== undefined ? (
             <Text style={{ ...fs16BoldBlack1, ...titleStyle }} numberOfLines={titleNumberOfLines}>
-              {title}
+              {title !== "" ? title : "-"}
             </Text>
           ) : null}
           {titleIcon !== undefined ? (

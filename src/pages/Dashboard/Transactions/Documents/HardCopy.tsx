@@ -14,7 +14,7 @@ import {
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
-import { ERRORS } from "../../../../data/dictionary";
+import { DICTIONARY_ORDER_STATUS, ERRORS } from "../../../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getHardCopyDocuments, submitHardCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
@@ -27,7 +27,6 @@ import {
   fs12BoldBlack2,
   fs12BoldGray6,
   fs16RegGray5,
-  fs16RegGray6,
   fs20BoldBlack2,
   fsAlignLeft,
   px,
@@ -358,6 +357,13 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const checkRerouted =
+    submissionSummary !== undefined &&
+    submissionSummary!.filter(
+      (eachResult: ISubmissionSummaryOrder) =>
+        eachResult.status === DICTIONARY_ORDER_STATUS.reroutedBr || eachResult.status === DICTIONARY_ORDER_STATUS.reroutedHq,
+    ).length > 0;
+
   const checkNonPendingOrder =
     submissionSummary !== undefined &&
     submissionSummary.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
@@ -365,7 +371,12 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
     submissionSummary !== undefined &&
     submissionSummary.findIndex((order) => order.status !== "Completed" && order.status !== "Submitted") === -1;
 
+  const illustration = checkNonPendingOrder === true ? LocalAssets.illustration.orderReceived : LocalAssets.illustration.orderSaved;
   let message = "";
+  let subtitle =
+    checkRerouted === true
+      ? UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS_REROUTED
+      : UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS;
 
   if (checkNonPendingOrder === true) {
     if (allOrdersSubmitted === true) {
@@ -373,6 +384,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
         submissionSummary !== undefined && submissionSummary.length === 1
           ? `${submissionSummary[0].orderNumber} ${PAYMENT.PROMPT_TITLE_SUBMITTED_SINGLE}`
           : PAYMENT.PROMPT_TITLE_SUBMITTED;
+      subtitle = UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROMPT_SUBTITLE_SUCCESS;
     } else {
       message = PAYMENT.PROMPT_TITLE_ORDER;
     }
@@ -504,10 +516,10 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
       <SubmissionSummaryModal
         data={submissionSummary}
         prompt={{
-          illustration: LocalAssets.illustration.orderReceived,
+          illustration: illustration,
           primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
-          subtitle: UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PROCEED_TO_DOWNLOAD,
-          subtitleStyle: fs16RegGray6,
+          subtitle: subtitle,
+          subtitleStyle: fsAlignLeft,
           title: message,
         }}
         promptType={promptType}

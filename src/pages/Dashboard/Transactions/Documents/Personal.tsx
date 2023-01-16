@@ -13,7 +13,7 @@ import {
   TextSpaceArea,
 } from "../../../../components";
 import { Language } from "../../../../constants";
-import { ERRORS } from "../../../../data/dictionary";
+import { DICTIONARY_ORDER_STATUS, ERRORS } from "../../../../data/dictionary";
 import { S3UrlGenerator, StorageUtil } from "../../../../integrations";
 import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
@@ -23,7 +23,6 @@ import {
   fs10RegGray6,
   fs12BoldBlack2,
   fs16RegGray5,
-  fs16RegGray6,
   fsAlignLeft,
   px,
   sh16,
@@ -81,6 +80,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     setBackPrompt(false);
   };
 
+  const checkRerouted =
+    submissionResult !== undefined &&
+    submissionResult!.filter(
+      (eachResult: ISubmissionSummaryOrder) =>
+        eachResult.status === DICTIONARY_ORDER_STATUS.reroutedBr || eachResult.status === DICTIONARY_ORDER_STATUS.reroutedHq,
+    ).length > 0;
+
   const checkNonPendingOrder =
     submissionResult !== undefined &&
     submissionResult.findIndex((order) => order.status === "Completed" || order.status === "Submitted") !== -1;
@@ -89,7 +95,13 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
     submissionResult !== undefined &&
     submissionResult.findIndex((order) => order.status !== "Completed" && order.status !== "Submitted") === -1;
 
+  const illustration = checkNonPendingOrder === true ? LocalAssets.illustration.orderReceived : LocalAssets.illustration.orderSaved;
+
   let message = "";
+  let subtitle =
+    checkRerouted === true
+      ? UPLOAD_DOCUMENTS.LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS_REROUTED
+      : UPLOAD_DOCUMENTS.LABEL_PROMPT_SUBTITLE_PARTLY_SUCCESS;
 
   if (checkNonPendingOrder === true) {
     if (allOrdersSubmitted === true) {
@@ -97,6 +109,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
         submissionResult !== undefined && submissionResult.length === 1
           ? `${submissionResult[0].orderNumber} ${PAYMENT.PROMPT_TITLE_SUBMITTED_SINGLE}`
           : PAYMENT.PROMPT_TITLE_SUBMITTED;
+      subtitle = UPLOAD_DOCUMENTS.LABEL_PROMPT_SUBTITLE_SUCCESS;
     } else {
       message = PAYMENT.PROMPT_TITLE_ORDER;
     }
@@ -436,9 +449,10 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
       <SubmissionSummaryModal
         data={submissionResult}
         prompt={{
-          illustration: LocalAssets.illustration.orderReceived,
+          illustration: illustration,
           primary: { onPress: handleConfirmPopup, text: UPLOAD_HARD_COPY_DOCUMENTS.BUTTON_BACK_TO_DASHBOARD },
-          subtitleStyle: fs16RegGray6,
+          subtitle: subtitle,
+          subtitleStyle: fsAlignLeft,
           title: message,
         }}
         promptType={promptType}

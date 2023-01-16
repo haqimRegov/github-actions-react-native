@@ -5,6 +5,7 @@ export * from "./countries";
 export * from "./currency";
 export * from "./declaration";
 export * from "./education-level";
+export * from "./employment-exemptions";
 export * from "./epf";
 export * from "./errors";
 export * from "./gross-income";

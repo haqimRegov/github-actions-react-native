@@ -140,7 +140,10 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
 
   let employmentAddress: LabeledTitleProps[] = [];
   if (employmentInformation !== null && employmentInformation !== undefined) {
-    const employeeAddress = employmentInformation.address ? Object.values(employmentInformation.address.address!).join(" ") : "";
+    const employeeAddress =
+      isNotEmpty(employmentInformation) && isNotEmpty(employmentInformation.address) && isNotEmpty(employmentInformation.address.address)
+        ? Object.values(employmentInformation.address.address!).join(" ")
+        : "";
 
     employmentAddress = [
       { label: INVESTOR_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employeeAddress, titleStyle: fsTransformNone },

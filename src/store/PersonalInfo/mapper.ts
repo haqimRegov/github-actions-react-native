@@ -10,8 +10,8 @@ import { RootState } from "../rootReducer";
 import { PersonalInfoActionProps } from "./actions";
 
 export const PersonalInfoMapStateToProps = (state: RootState) => ({
-  accountType: state.client.accountType,
   accountHolder: state.client.details?.accountHolder,
+  accountType: state.client.accountType,
   client: state.client,
   details: state.client.details,
   finishedSteps: state.onboarding.finishedSteps,
@@ -20,8 +20,9 @@ export const PersonalInfoMapStateToProps = (state: RootState) => ({
   newSales: state.newSales,
   onboarding: state.onboarding,
   personalInfo: state.personalInfo,
-  riskScore: state.riskAssessment.riskScore,
   productSales: state.selectedFund.investmentDetails,
+  questionnaire: state.riskAssessment.questionnaire,
+  riskScore: state.riskAssessment.riskScore,
 });
 
 export const PersonalInfoMapDispatchToProps = (dispatch: Dispatch) => {

@@ -736,7 +736,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
               <SummaryColorCard data={fatca} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_FATCA} spaceToTop={sh32} />
             ) : null}
             {declaration !== null && declaration.crs !== null ? (
-              <SummaryColorCard data={crs} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CRS} spaceToTop={sh32} section={crsSection} />
+              <SummaryColorCard data={crs} headerTitle={DASHBOARD_ORDER_DETAILS.TITLE_CRS} spaceToTop={sh32} section={[crsSection]} />
             ) : null}
           </Fragment>
         ) : null}

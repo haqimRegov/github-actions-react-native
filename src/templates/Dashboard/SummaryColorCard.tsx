@@ -1,13 +1,14 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
+import { BaseColorCardProps, BaseTextCardProps, ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
 import {
   border,
   borderBottomBlue4,
   colorGray,
   flexChild,
   fs16BoldBlack2,
+  fs16BoldBlue1,
   fs18BoldBlack2,
   px,
   rowCenterVertical,
@@ -21,10 +22,12 @@ import {
 } from "../../styles";
 
 interface SummaryColorCardProps {
+  colorCardProps?: BaseColorCardProps;
   data: LabeledTitleProps[];
-  section?: ISummaryColorCardSection;
   headerTitle: string;
+  section?: ISummaryColorCardSection[];
   spaceToTop?: number;
+  textCardProps?: BaseTextCardProps;
 }
 
 export const summaryColorCardStyleProps = {
@@ -35,44 +38,60 @@ export const summaryColorCardStyleProps = {
 };
 
 export const SummaryColorCard: FunctionComponent<SummaryColorCardProps> = ({
+  colorCardProps,
   data,
-  section,
   headerTitle,
+  section,
   spaceToTop,
+  textCardProps,
 }: SummaryColorCardProps) => {
+  const headerProps =
+    colorCardProps !== undefined
+      ? { labelStyle: fs16BoldBlue1, label: headerTitle }
+      : { ...summaryColorCardStyleProps.header, label: headerTitle };
+
   return (
     <Fragment>
       {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
       <ColorCard
         {...summaryColorCardStyleProps}
+        {...colorCardProps}
         content={
           <View>
-            <TextCard data={data} itemStyle={{ width: sw328 }} showEmptyDash={true} />
-            {section !== undefined && section.data.length > 0 ? (
+            <TextCard data={data} itemStyle={{ width: sw328 }} showEmptyDash={true} {...textCardProps} />
+            {section !== undefined && section.length > 0 ? (
               <Fragment>
-                {section.data.map((textCardData: LabeledTitleProps[], index: number) => {
-                  const iconTitle =
-                    section.textWithCount === true && section.data.length > 1 ? `${section.text} ${index + 1}` : section.text;
-
+                {section.map((sectionItem: ISummaryColorCardSection, indexItem: number) => {
                   return (
-                    <View key={index}>
-                      <CustomSpacer space={sh8} />
-                      <View style={rowCenterVertical}>
-                        <IconText name={section.iconName} iconSize={sw24} text={iconTitle} textStyle={fs16BoldBlack2} />
-                        <CustomSpacer isHorizontal={true} space={sw16} />
-                        <View style={{ ...borderBottomBlue4, ...flexChild }} />
-                        <CustomSpacer isHorizontal={true} space={sw24} />
-                      </View>
-                      <CustomSpacer space={sh12} />
-                      <TextCard data={textCardData} itemStyle={{ width: sw328 }} showEmptyDash={true} />
-                    </View>
+                    <Fragment key={indexItem}>
+                      {sectionItem.data.map((textCardData: LabeledTitleProps[], index: number) => {
+                        const iconTitle =
+                          sectionItem.textWithCount === true && sectionItem.data.length > 1
+                            ? `${sectionItem.text} ${index + 1}`
+                            : sectionItem.text;
+
+                        return (
+                          <View key={index}>
+                            <CustomSpacer space={sh8} />
+                            <View style={rowCenterVertical}>
+                              <IconText name={sectionItem.iconName} iconSize={sw24} text={iconTitle} textStyle={fs16BoldBlack2} />
+                              <CustomSpacer isHorizontal={true} space={sw16} />
+                              <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                              <CustomSpacer isHorizontal={true} space={sw24} />
+                            </View>
+                            <CustomSpacer space={sh12} />
+                            <TextCard data={textCardData} itemStyle={{ width: sw328 }} showEmptyDash={true} {...textCardProps} />
+                          </View>
+                        );
+                      })}
+                    </Fragment>
                   );
                 })}
               </Fragment>
             ) : null}
           </View>
         }
-        header={{ ...summaryColorCardStyleProps.header, label: headerTitle }}
+        header={headerProps}
       />
     </Fragment>
   );

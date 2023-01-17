@@ -3,6 +3,7 @@ import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
+import { EMPLOYMENT_EXEMPTIONS, Q8_OPTIONS } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomGray2, px, sh40, sw24, sw48 } from "../../../styles";
 import { JointEmploymentDetails } from "./Joint";
@@ -16,6 +17,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   handleNextStep,
   onboarding,
   personalInfo,
+  questionnaire,
   updateOnboarding,
 }: EmploymentDetailsProps) => {
   const [validations, setValidations] = useState<IEmploymentDetailsPageValidation>({
@@ -24,11 +26,12 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   });
 
   const { joint, principal } = personalInfo;
+  const annualIncomePrincipal = { annualIncomePrincipal: Q8_OPTIONS[questionnaire.questionEight].label };
 
-  const checkJointGross = accountType === "Joint" && joint!.employmentDetails!.grossIncome !== "";
   const validateDetails = (details: IHolderInfoState, rules: IEmploymentDetailsValidations) => {
-    const { employmentDetails } = details;
-    return (
+    const { employmentDetails, personalDetails } = details;
+    const isRelationship = personalDetails?.relationship;
+    const validationResult =
       employmentDetails!.occupation !== "" &&
       employmentDetails!.businessNature !== "" &&
       employmentDetails!.employerName !== "" &&
@@ -39,10 +42,47 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       Object.values(employmentDetails!.address!).includes("") === false &&
       Object.values(rules)
         .map((value) => typeof value)
-        .includes(typeof "string") === false
-    );
+        .includes(typeof "string") === false;
+
+    if (employmentDetails?.occupation !== undefined && EMPLOYMENT_EXEMPTIONS.includes(employmentDetails.occupation)) {
+      if (isRelationship !== undefined) {
+        if (employmentDetails.isOptional === true) {
+          return validationResult;
+        }
+        const principalFalse = true;
+        return principalFalse;
+      }
+
+      if (employmentDetails.isOptional === true) {
+        return validationResult;
+      }
+      const jointFalse = true;
+      return jointFalse;
+    }
+
+    if (employmentDetails?.occupation === "Others") {
+      return (
+        employmentDetails!.othersOccupation !== "" &&
+        employmentDetails!.businessNature !== "" &&
+        employmentDetails!.employerName !== "" &&
+        employmentDetails!.postCode !== "" &&
+        employmentDetails!.city !== "" &&
+        employmentDetails!.state !== "" &&
+        employmentDetails!.country !== "" &&
+        Object.values(employmentDetails!.address!).includes("") === false &&
+        Object.values(rules)
+          .map((value) => typeof value)
+          .includes(typeof "string") === false
+      );
+    }
+
+    return validationResult;
   };
 
+  const checkJointGross =
+    joint?.employmentDetails !== undefined && joint.employmentDetails.isOptional === true
+      ? accountType === "Joint" && joint!.employmentDetails!.grossIncome !== ""
+      : true;
   const buttonDisabled =
     accountType === "Individual" || joint?.employmentDetails?.isEnabled === false
       ? validateDetails(principal!, validations.principal) === false
@@ -69,6 +109,17 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     addPersonalInfo({ ...personalInfo, joint: { ...joint, employmentDetails: { ...joint?.employmentDetails, ...value } } });
   };
 
+  const handlePrincipalPersonalInfo = (value: IPersonalDetailsState) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: { ...principal, personalDetails: { ...principal?.personalDetails, ...value } },
+    });
+  };
+
+  const handleJointPersonalInfo = (value: IPersonalDetailsState) => {
+    addPersonalInfo({ ...personalInfo, joint: { ...joint, personalDetails: { ...joint?.personalDetails, ...value } } });
+  };
+
   const handleBack = () => {
     handleNextStep("PersonalDetails");
   };
@@ -87,9 +138,10 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     <ContentPage buttonContainerStyle={padding} continueDisabled={buttonDisabled} handleCancel={handleBack} handleContinue={handleSubmit}>
       <PrincipalEmploymentDetails
         accountType={accountType}
-        personalDetails={principal!.personalDetails!}
         employmentDetails={principal!.employmentDetails!}
+        personalDetails={{ ...principal!.personalDetails!, ...annualIncomePrincipal }}
         setEmploymentDetails={handlePrincipalEmployment}
+        setPersonalInfoDetails={handlePrincipalPersonalInfo}
         setValidations={handlePrincipalValidation}
         validations={validations.principal}
       />
@@ -100,9 +152,10 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
           <CustomSpacer space={sh40} />
           <JointEmploymentDetails
             accountType={accountType}
-            personalDetails={joint!.personalDetails!}
             employmentDetails={joint!.employmentDetails!}
+            personalDetails={{ ...joint!.personalDetails! }}
             setEmploymentDetails={handleJointEmployment}
+            setPersonalInfoDetails={handleJointPersonalInfo}
             setValidations={handleJointValidation}
             validations={validations.joint}
           />

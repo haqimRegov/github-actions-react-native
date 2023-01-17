@@ -6,8 +6,7 @@ import { isNotEmpty } from "../../utils";
 import { LabeledTitle } from "../Views/LabeledTitle";
 import { CustomCard } from "./Custom";
 
-export interface TextCardProps {
-  data: LabeledTitleProps[];
+export interface BaseTextCardProps {
   itemStyle?: ViewStyle;
   labelStyle?: TextStyle;
   spaceToLabel?: number;
@@ -19,6 +18,9 @@ export interface TextCardProps {
   spaceBetweenGroup?: number;
   spaceBetweenItem?: number;
   noLastIndexSpace?: boolean;
+}
+export interface TextCardProps extends BaseTextCardProps {
+  data: LabeledTitleProps[];
 }
 export const TextCard: FunctionComponent<TextCardProps> = ({
   data,

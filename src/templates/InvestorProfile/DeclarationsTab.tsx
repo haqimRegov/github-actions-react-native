@@ -85,7 +85,7 @@ export const DeclarationsTab: FunctionComponent<DeclarationsTabProps> = ({ data 
   return (
     <View style={px(sw24)}>
       <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_FATCA} data={fatca} spaceToTop={sh24} />
-      <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_CRS} data={crs} section={crsSection} spaceToTop={sh24} />
+      <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_CRS} data={crs} section={[crsSection]} spaceToTop={sh24} />
     </View>
   );
 };

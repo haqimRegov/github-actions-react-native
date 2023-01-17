@@ -26,6 +26,7 @@ declare interface IPersonalDetailsState {
   otherRelationship?: string;
   riskProfile?: string;
   salutation?: string;
+  annualIncomePrincipal?: string;
 }
 
 declare interface IBaseAddress {
@@ -91,7 +92,9 @@ declare interface IEmploymentDetailsState extends IAddressState {
   employerName?: string;
   grossIncome?: string;
   occupation?: string;
+  othersOccupation?: string;
   isEnabled?: boolean;
+  isOptional?: boolean;
 }
 
 declare interface IFatcaState {
@@ -143,6 +146,8 @@ declare interface IDeclarationState {
 
 declare interface IHolderInfoState {
   addressInformation?: IAddressInfoState;
+  annualIncome?: string;
+  incomeDistribution?: string;
   bankSummary?: IBankSummaryState;
   contactDetails?: IContactDetailsState;
   declaration?: IDeclarationState;

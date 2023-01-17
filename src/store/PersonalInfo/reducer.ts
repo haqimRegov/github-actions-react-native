@@ -121,7 +121,9 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
           employmentDetails: {
             businessNature: "",
             employerName: "",
+            isOptional: false,
             occupation: "",
+            othersOccupation: "",
             address: {
               line1: "",
               line2: undefined,
@@ -255,8 +257,10 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             businessNature: "",
             employerName: "",
             isEnabled: true,
+            isOptional: false,
             grossIncome: "",
             occupation: "",
+            othersOccupation: "",
             address: {
               line1: "",
               line2: undefined,

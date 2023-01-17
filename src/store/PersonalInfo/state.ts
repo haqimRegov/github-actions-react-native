@@ -111,7 +111,9 @@ export const personalInfoInitialState: PersonalInfoState = {
     employmentDetails: {
       businessNature: "",
       employerName: "",
+      isOptional: false,
       occupation: "",
+      othersOccupation: "",
       address: {
         line1: "",
         line2: undefined,
@@ -245,8 +247,10 @@ export const personalInfoInitialState: PersonalInfoState = {
       businessNature: "",
       employerName: "",
       isEnabled: true,
+      isOptional: false,
       grossIncome: "",
       occupation: "",
+      othersOccupation: "",
       address: {
         line1: "",
         line2: undefined,

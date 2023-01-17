@@ -70,7 +70,7 @@ export const ProfileTab: FunctionComponent<ProfileTabProps> = ({ data }: Profile
       <SummaryColorCard
         headerTitle={INVESTOR_PROFILE.CARD_TITLE_IDENTIFICATION}
         data={identificationDetails}
-        section={identificationSection}
+        section={[identificationSection]}
         spaceToTop={sh24}
       />
       <SummaryColorCard data={contactDetails} headerTitle={INVESTOR_PROFILE.CARD_TITLE_CONTACT} spaceToTop={sh24} />
@@ -78,7 +78,7 @@ export const ProfileTab: FunctionComponent<ProfileTabProps> = ({ data }: Profile
       <SummaryColorCard
         headerTitle={INVESTOR_PROFILE.CARD_TITLE_EMPLOYMENT}
         data={employmentDetails}
-        section={employmentSection}
+        section={[employmentSection]}
         spaceToTop={sh24}
       />
     </View>

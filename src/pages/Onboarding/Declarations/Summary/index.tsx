@@ -10,7 +10,7 @@ import { getAddress, getFatcaRequest } from "../../../../helpers";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
 import { borderBottomGray2, sh24 } from "../../../../styles";
-import { isNotEmpty, parseAmountToString } from "../../../../utils";
+import { deleteKey, isNotEmpty, parseAmountToString } from "../../../../utils";
 import { DeclarationDetails } from "./Details";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
@@ -202,7 +202,18 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   const principalAddress = { ...principal!.addressInformation! };
   delete principalAddress.sameAddress;
-  const jointEmploymentDetails = jointDetails !== undefined ? { ...jointDetails.employmentDetails } : undefined;
+  const defaultJointOccupation = jointDetails !== undefined ? { ...jointDetails!.employmentDetails! } : undefined;
+  const othersJointOccupation =
+    jointDetails !== undefined && jointDetails.employmentDetails !== undefined && jointDetails!.employmentDetails!.occupation === "Others"
+      ? {
+          ...jointDetails!.employmentDetails!,
+          occupation: jointDetails!.employmentDetails!.othersOccupation,
+        }
+      : defaultJointOccupation;
+  let jointEmploymentDetails = jointDetails !== undefined ? { ...othersJointOccupation } : undefined;
+  if (jointEmploymentDetails !== undefined) {
+    jointEmploymentDetails = deleteKey(jointEmploymentDetails, ["othersOccupation", "isEnabled", "isOptional"]);
+  }
 
   const jointContactDetails =
     jointDetails !== undefined
@@ -215,8 +226,12 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           .filter((contactNumber) => contactNumber.value !== "")
       : [];
 
-  if (jointEmploymentDetails !== undefined) {
-    delete jointEmploymentDetails.isEnabled;
+  let principalEmploymentDetails: IEmploymentDetailsState | ISubmitEmploymentBase =
+    principal!.employmentDetails!.occupation! !== "Others"
+      ? { ...principal!.employmentDetails! }
+      : { ...principal!.employmentDetails!, occupation: principal!.employmentDetails!.othersOccupation };
+  if (principalEmploymentDetails!.othersOccupation! !== undefined || principalEmploymentDetails!.isOptional! !== undefined) {
+    principalEmploymentDetails = deleteKey(principalEmploymentDetails, ["othersOccupation", "isOptional"]);
   }
 
   const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
@@ -261,7 +276,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         // },
       },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
-      employmentDetails: principal!.employmentDetails! as ISubmitEmploymentBase,
+      employmentDetails: principalEmploymentDetails as ISubmitEmploymentBase,
       personalDetails: {
         countryOfBirth: principal!.personalDetails!.countryOfBirth!,
         educationLevel:

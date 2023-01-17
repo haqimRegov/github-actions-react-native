@@ -120,7 +120,7 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
         <SummaryColorCard
           headerTitle={INVESTOR_PROFILE.CARD_TITLE_IDENTIFICATION}
           data={identificationDetails}
-          section={identificationSection}
+          section={[identificationSection]}
           spaceToTop={sh24}
         />
       ) : null}
@@ -136,7 +136,7 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
         <SummaryColorCard
           headerTitle={INVESTOR_PROFILE.CARD_TITLE_EMPLOYMENT}
           data={employmentDetails}
-          section={employmentSection}
+          section={[employmentSection]}
           spaceToTop={sh24}
         />
       ) : null}
@@ -145,7 +145,7 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
         <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_FATCA} data={fatca} spaceToTop={sh24} />
       ) : null}
       {declaration !== null && declaration.crs !== null ? (
-        <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_CRS} data={crs} section={crsSection} spaceToTop={sh24} />
+        <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_CRS} data={crs} section={[crsSection]} spaceToTop={sh24} />
       ) : null}
     </View>
   );

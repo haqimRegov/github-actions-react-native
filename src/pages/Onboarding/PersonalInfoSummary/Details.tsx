@@ -1,34 +1,29 @@
-import React, { Fragment, FunctionComponent } from "react";
-import { Dimensions, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { FunctionComponent, useEffect } from "react";
+import { Dimensions, Text, View } from "react-native";
 
-import { AccountHeader, CustomSpacer, Dash, IconText, TextCard } from "../../../components";
+import { BaseColorCardProps, BaseTextCardProps, CustomSpacer, Dash } from "../../../components";
 import { Language } from "../../../constants";
-import { IcoMoon } from "../../../icons";
 import {
-  borderBottomGray2,
-  borderBottomRed1,
-  centerVertical,
-  colorBlue,
+  border,
+  colorGray,
+  colorRed,
   colorWhite,
   flexRow,
-  fs16BoldBlue1,
-  fs16BoldGray6,
-  fs18BoldGray6,
-  fs24BoldGray6,
+  fs10RegGray6,
+  fs12BoldBlack2,
   fsTransformNone,
   px,
-  py,
-  sh16,
+  sh1,
   sh24,
-  sh64,
+  sh26,
+  sh4,
   sh8,
-  shadow12Black116,
-  shadow12Blue104,
+  shadow12Blue110,
+  sw1,
   sw16,
   sw24,
-  sw4,
-  sw8,
 } from "../../../styles";
+import { SummaryColorCard } from "../../../templates";
 
 const { SUMMARY } = Language.PAGE;
 
@@ -49,23 +44,6 @@ interface SummaryDetailsProps {
   personalDetails: LabeledTitleProps[];
 }
 
-interface TitleIconProps {
-  title: string;
-  titleStyle?: TextStyle;
-  onPress?: () => void;
-  viewStyle?: ViewStyle;
-}
-
-const TitleIcon = ({ onPress, title, titleStyle, viewStyle }: TitleIconProps) => {
-  return (
-    <View style={{ ...centerVertical, ...flexRow, ...px(sw24), ...py(sh16), ...viewStyle }}>
-      <Text style={{ ...fs16BoldGray6, ...titleStyle }}>{title}</Text>
-      <CustomSpacer isHorizontal={true} space={sw16} />
-      <IcoMoon color={colorBlue._8} name="edit" onPress={onPress} size={sh24} suppressHighlighting={true} />
-    </View>
-  );
-};
-
 export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   accountHolder,
   accountType,
@@ -83,19 +61,6 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   personalDetails,
 }: SummaryDetailsProps) => {
   const { width } = Dimensions.get("window");
-  const headerStyle: ViewStyle = {
-    ...centerVertical,
-    ...flexRow,
-    ...px(sw24),
-    ...borderBottomRed1,
-    ...shadow12Blue104,
-    backgroundColor: colorWhite._1,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
-    height: sh64,
-    position: "relative",
-    zIndex: 1,
-  };
 
   const headerTitle = accountHolder === "Principal" ? SUMMARY.TITLE_PRINCIPAL : SUMMARY.TITLE_JOINT;
 
@@ -111,106 +76,112 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: width < 1080 ? 30 : 32, titleStyle: fsTransformNone };
+  const personalDetailsItem: LabeledTitleProps[] = [...personalDetails.slice(3)];
+  const personalDetailsSection = {
+    iconName: "account",
+    text: SUMMARY.TITLE_PERSONAL,
+    data: [personalDetailsItem],
+  };
+  const employmentDetailsSection = {
+    iconName: "location",
+    text: SUMMARY.LABEL_EMPLOYMENT_ADDRESS,
+    data: [employmentAddress],
+  };
+  const accountDetailsBank = {
+    iconName: "bank-new",
+    text: SUMMARY.SUBTITLE_LOCAL_BANK,
+    data: [...localBankDetails],
+  };
+  const accountDetailsForeignBank = {
+    iconName: "bank-new",
+    text: SUMMARY.SUBTITLE_FOREIGN_BANK,
+    data: [...foreignBankDetails],
+  };
+
+  const textCardProps: BaseTextCardProps = {
+    itemsPerGroup: 3,
+    spaceBetweenItem: width < 1080 ? 28 : 30,
+    titleStyle: fsTransformNone,
+    itemStyle: {},
+  };
+  const colorCardProps: BaseColorCardProps = {
+    containerStyle: shadow12Blue110,
+    contentStyle: { ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 },
+    headerStyle: { backgroundColor: colorWhite._1, ...shadow12Blue110, ...px(sw24) },
+  };
 
   return (
     <View style={px(sw24)}>
-      <CustomSpacer space={sh24} />
-      <View style={{ backgroundColor: colorWhite._1, borderRadius: sw8, ...shadow12Black116 }}>
-        {accountType === "Individual" ? (
-          <View style={headerStyle}>
-            <Text style={fs24BoldGray6}>{name}</Text>
+      {accountType === "Individual" ? null : (
+        <View style={{ marginTop: sh26 }}>
+          <View style={{ ...flexRow, paddingBottom: sh4, borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
+            <Text style={fs10RegGray6}>{headerTitle}</Text>
+            <CustomSpacer space={sw16} isHorizontal={true} />
+            <Text style={fs12BoldBlack2}>{name}</Text>
           </View>
-        ) : (
-          <AccountHeader headerStyle={{ height: sh64 }} spaceToBottom={0} subtitle={headerTitle} title={name} />
-        )}
-        <View style={borderBottomGray2}>
-          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_PERSONAL} />
-          <View style={px(sw24)}>
-            <TextCard data={personalDetails} {...textCardProps} />
-          </View>
+          <Dash color={colorRed._2} thickness={sh1} gap={0} />
         </View>
-        <View style={borderBottomGray2}>
-          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_ADDITIONAL} />
-          <View style={px(sw24)}>
-            <TextCard data={additionalInfo} {...textCardProps} />
-          </View>
-        </View>
-        <View style={borderBottomGray2}>
-          <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_CONTACT} />
-          <View style={px(sw24)}>
-            <TextCard data={contactDetails} {...textCardProps} />
-          </View>
-        </View>
-        <View style={borderBottomGray2}>
-          <CustomSpacer space={sh16} />
-          <TitleIcon onPress={handleEditPersonalDetails} title={SUMMARY.TITLE_ADDRESS} viewStyle={py(0)} />
-          <CustomSpacer space={sh16} />
-          <View style={px(sw24)}>
-            <TextCard data={permanentAddress} {...textCardProps} />
-            <Dash length={sw4} />
-            <CustomSpacer space={sh8} />
-            <TextCard data={mailingAddress} {...textCardProps} />
-          </View>
-        </View>
-        {epfDetails !== undefined && epfDetails.length !== 0 ? (
-          <View style={borderBottomGray2}>
-            <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_EPF} />
-            <View style={px(sw24)}>
-              <TextCard data={epfDetails} {...textCardProps} />
-            </View>
-          </View>
-        ) : null}
-        {(accountType === "Joint" && accountHolder === "Joint") ||
-        (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
-          <View style={borderBottomGray2}>
-            <TitleIcon onPress={handleEditOtherDetails} title={SUMMARY.TITLE_BANK} titleStyle={fs18BoldGray6} />
-            {localBankDetails.map((bank: LabeledTitleProps[], index: number) => {
-              const label = `${SUMMARY.SUBTITLE_LOCAL_BANK}`;
-              return (
-                <Fragment key={index}>
-                  {index === 0 ? null : <CustomSpacer space={sh8} />}
-                  <View style={px(sw24)}>
-                    <IconText iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue1} />
-                    <CustomSpacer space={sh8} />
-                    <Dash length={sw4} />
-                    <CustomSpacer space={sh8} />
-                    <TextCard data={bank} {...textCardProps} />
-                  </View>
-                </Fragment>
-              );
-            })}
-            {foreignBankDetails.map((bank: LabeledTitleProps[], index: number) => {
-              const label = `${SUMMARY.SUBTITLE_FOREIGN_BANK} ${index + 1}`;
-              return (
-                <Fragment key={index}>
-                  <CustomSpacer space={sh8} />
-                  <View style={px(sw24)}>
-                    <IconText iconSize={sh24} name="bank" text={label} textStyle={fs16BoldBlue1} />
-                    <CustomSpacer space={sh8} />
-                    <Dash length={sw4} />
-                    <CustomSpacer space={sh8} />
-                    <TextCard data={bank} {...textCardProps} />
-                  </View>
-                </Fragment>
-              );
-            })}
-          </View>
-        )}
-        {employmentDetails.length > 0 ? (
-          <View>
-            <CustomSpacer space={sh16} />
-            <TitleIcon onPress={handleEditEmploymentDetails} title={SUMMARY.TITLE_EMPLOYMENT} viewStyle={py(0)} />
-            <CustomSpacer space={sh16} />
-            <View style={px(sw24)}>
-              <TextCard data={employmentDetails} {...textCardProps} />
-              <Dash length={sw4} />
-              <CustomSpacer space={sh8} />
-              <TextCard data={employmentAddress} {...textCardProps} />
-            </View>
-          </View>
-        ) : null}
-      </View>
+      )}
+      <SummaryColorCard
+        headerTitle={SUMMARY.TITLE_IDENTIFICATION}
+        data={[...personalDetails.slice(0, 3)]}
+        spaceToTop={sh24}
+        section={[personalDetailsSection]}
+        textCardProps={textCardProps}
+        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
+      />
+      <SummaryColorCard
+        headerTitle={SUMMARY.TITLE_CONTACT}
+        data={contactDetails}
+        spaceToTop={sh24}
+        textCardProps={textCardProps}
+        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
+      />
+      <SummaryColorCard
+        headerTitle={SUMMARY.LABEL_PERMANENT_ADDRESS}
+        data={permanentAddress}
+        spaceToTop={sh24}
+        textCardProps={textCardProps}
+        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
+      />
+      <SummaryColorCard
+        headerTitle={SUMMARY.LABEL_MAILING_ADDRESS}
+        data={mailingAddress}
+        spaceToTop={sh24}
+        textCardProps={textCardProps}
+        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
+      />
+      {epfDetails !== undefined && epfDetails.length !== 0 ? (
+        <SummaryColorCard
+          headerTitle={SUMMARY.TITLE_EPF}
+          data={epfDetails}
+          spaceToTop={sh24}
+          textCardProps={textCardProps}
+          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
+        />
+      ) : null}
+      {(accountType === "Joint" && accountHolder === "Joint") ||
+      (accountType === "Joint" && accountHolder === "Principal") ||
+      (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
+        <SummaryColorCard
+          headerTitle={SUMMARY.TITLE_ACCOUNT}
+          data={[additionalInfo[2]]}
+          section={[accountDetailsBank, accountDetailsForeignBank]}
+          spaceToTop={sh24}
+          textCardProps={textCardProps}
+          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
+        />
+      )}
+      {employmentDetails.length > 0 ? (
+        <SummaryColorCard
+          headerTitle={SUMMARY.TITLE_EMPLOYMENT}
+          data={employmentDetails}
+          section={[employmentDetailsSection]}
+          spaceToTop={sh24}
+          textCardProps={textCardProps}
+          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditEmploymentDetails } }}
+        />
+      ) : null}
     </View>
   );
 };

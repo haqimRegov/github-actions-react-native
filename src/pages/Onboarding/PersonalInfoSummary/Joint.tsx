@@ -22,13 +22,18 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(idType as TypeClientID) !== 1;
 
   const personalDetailsSummary: LabeledTitleProps[] = [
+    { label: SUMMARY.LABEL_FULL_NAME, title: personalDetails!.name! },
     { label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`, title: personalDetails!.idNumber!, titleStyle: fsUppercase },
     { label: SUMMARY.LABEL_DATE_OF_BIRTH, title: dateOfBirth },
     { label: SUMMARY.LABEL_SALUTATION, title: personalDetails!.salutation! },
     { label: SUMMARY.LABEL_GENDER, title: personalDetails!.gender! },
-    { label: SUMMARY.LABEL_NATIONALITY, title: personalDetails!.nationality! },
     { label: SUMMARY.LABEL_PLACE_OF_BIRTH, title: personalDetails!.placeOfBirth!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_COUNTRY_OF_BIRTH, title: personalDetails!.countryOfBirth! },
+    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
+    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
+    { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
+    { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
+    { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel! },
   ];
 
   let additionalInfoSummary: LabeledTitleProps[] = [
@@ -150,11 +155,15 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
         })
       : [];
 
+  const occupationTitle =
+    employmentDetails!.occupation! !== "Others" ? employmentDetails!.occupation! : employmentDetails!.othersOccupation!;
   const employmentDetailsSummary: LabeledTitleProps[] =
     employmentDetails?.isEnabled === true
       ? [
-          { label: SUMMARY.LABEL_OCCUPATION, title: employmentDetails.occupation! },
+          { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
           { label: SUMMARY.LABEL_NATURE, title: employmentDetails.businessNature! },
+          { label: SUMMARY.LABEL_GROSS, title: employmentDetails.grossIncome!, titleStyle: fsTransformNone },
+          { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
           { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails.employerName!, titleStyle: fsTransformNone },
         ]
       : [];

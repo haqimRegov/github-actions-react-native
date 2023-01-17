@@ -16,7 +16,16 @@ interface PrincipalProps {
 }
 
 export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, handleNextStep, isAllEpf, summary }: PrincipalProps) => {
-  const { addressInformation, bankSummary, contactDetails, employmentDetails, epfDetails, personalDetails } = summary;
+  const {
+    addressInformation,
+    annualIncome,
+    bankSummary,
+    contactDetails,
+    employmentDetails,
+    epfDetails,
+    incomeDistribution,
+    personalDetails,
+  } = summary;
 
   const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
   const expirationDate = moment(personalDetails!.expirationDate).format(DEFAULT_DATE_FORMAT);
@@ -24,22 +33,21 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(idType as TypeClientID) !== 1;
 
   const personalDetailsSummary: LabeledTitleProps[] = [
+    { label: SUMMARY.LABEL_FULL_NAME, title: personalDetails!.name! },
     { label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`, title: personalDetails!.idNumber!, titleStyle: fsUppercase },
     { label: SUMMARY.LABEL_DATE_OF_BIRTH, title: dateOfBirth },
     { label: SUMMARY.LABEL_SALUTATION, title: personalDetails!.salutation! },
     { label: SUMMARY.LABEL_GENDER, title: personalDetails!.gender! },
-    { label: SUMMARY.LABEL_NATIONALITY, title: personalDetails!.nationality! },
     { label: SUMMARY.LABEL_PLACE_OF_BIRTH, title: personalDetails!.placeOfBirth!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_COUNTRY_OF_BIRTH, title: personalDetails!.countryOfBirth! },
-    { label: SUMMARY.LABEL_RISK_PROFILE, title: personalDetails!.riskProfile! },
-  ];
-
-  let additionalInfoSummary: LabeledTitleProps[] = [
+    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
+    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
-    { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel!, titleStyle: fsTransformNone },
-    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel! },
   ];
+
+  let additionalInfoSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_INCOME_DISTRIBUTION, title: incomeDistribution }];
 
   const jointInfoSummary = [{ label: SUMMARY.LABEL_RELATIONSHIP, title: personalDetails!.relationship! }];
 
@@ -146,8 +154,8 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
       { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
-      { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
       { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
+      { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
     ] as LabeledTitleProps[];
   });
 
@@ -164,15 +172,19 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
             { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
             { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
             { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
-            { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
             { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
+            { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
           ] as LabeledTitleProps[];
         })
       : [];
 
+  const occupationTitle =
+    employmentDetails!.occupation! !== "Others" ? employmentDetails!.occupation! : employmentDetails!.othersOccupation!;
   const employmentDetailsSummary: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_OCCUPATION, title: employmentDetails!.occupation! },
+    { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
     { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
+    { label: SUMMARY.LABEL_GROSS, title: annualIncome, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
   ];
 

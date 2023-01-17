@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
 import { Language } from "../../../constants";
+import { Q8_OPTIONS } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { Joint } from "./Joint";
 import { SummaryJointDetails } from "./JointDetails";
@@ -15,8 +16,9 @@ interface PersonalInfoSummaryProps extends PersonalInfoStoreProps, OnboardingCon
 const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> = ({
   accountType,
   handleNextStep,
-  personalInfo,
   onboarding,
+  personalInfo,
+  questionnaire,
   updateOnboarding,
 }: PersonalInfoSummaryProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
@@ -37,8 +39,13 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
+  const relationship =
+    personalInfo.principal?.personalDetails?.relationship !== "Others"
+      ? personalInfo.principal?.personalDetails?.relationship
+      : personalInfo.principal?.personalDetails?.otherRelationship;
   const jointDetails: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_DISTRIBUTION, title: personalInfo.incomeDistribution! },
+    { label: SUMMARY.LABEL_RELATIONSHIP, title: relationship },
     { label: SUMMARY.LABEL_SIGNATORY, title: personalInfo.signatory! },
   ];
 
@@ -47,6 +54,8 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   };
 
   const isAllEpf = personalInfo.isAllEpf !== undefined ? personalInfo.isAllEpf : false;
+  const annualIncome = { annualIncome: Q8_OPTIONS[questionnaire.questionEight].label };
+  const incomeDistribution = { incomeDistribution: personalInfo.incomeDistribution };
 
   return (
     <ContentPage
@@ -55,14 +64,20 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
       noBounce={true}
       subheading={SUMMARY.HEADING}
       subtitle={SUMMARY.SUBHEADING}>
-      <Principal accountType={accountType} handleNextStep={handleNextStep} isAllEpf={isAllEpf} summary={personalInfo.principal!} />
-      {accountType === "Individual" ? null : <Joint handleNextStep={handleNextStep} summary={personalInfo.joint!} />}
+      <Principal
+        accountType={accountType}
+        handleNextStep={handleNextStep}
+        isAllEpf={isAllEpf}
+        summary={{ ...personalInfo.principal!, ...annualIncome, ...incomeDistribution }}
+      />
+      {accountType === "Individual" ? null : <Joint handleNextStep={handleNextStep} summary={{ ...personalInfo.joint! }} />}
       {accountType === "Individual" ? null : (
         <SummaryJointDetails
           handleNextStep={handleNextStep}
           jointDetails={jointDetails}
           jointName={joint!.personalDetails!.name!}
           principalName={principal!.personalDetails!.name!}
+          summary={{ ...personalInfo.principal! }}
         />
       )}
     </ContentPage>

@@ -35,6 +35,17 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const { principal, joint } = personalInfo;
 
   const fetching = useRef<boolean>(false);
+  const deletedProperty: TEmploymentDetailsState[] = [
+    "address",
+    "businessNature",
+    "city",
+    "country",
+    "employerName",
+    "isOptional",
+    "othersOccupation",
+    "postCode",
+    "state",
+  ];
 
   // TODO handle if FEA
   const isFea = 100 < 500;
@@ -211,8 +222,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         }
       : defaultJointOccupation;
   let jointEmploymentDetails = jointDetails !== undefined ? { ...othersJointOccupation } : undefined;
-  if (jointEmploymentDetails !== undefined) {
-    jointEmploymentDetails = deleteKey(jointEmploymentDetails, ["othersOccupation", "isEnabled", "isOptional"]);
+  if (jointEmploymentDetails !== undefined && jointEmploymentDetails.isOptional === false) {
+    jointEmploymentDetails = deleteKey(jointEmploymentDetails, [...deletedProperty, "grossIncome", "isEnabled"]);
   }
 
   const jointContactDetails =
@@ -230,10 +241,9 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     principal!.employmentDetails!.occupation! !== "Others"
       ? { ...principal!.employmentDetails! }
       : { ...principal!.employmentDetails!, occupation: principal!.employmentDetails!.othersOccupation };
-  if (principalEmploymentDetails!.othersOccupation! !== undefined || principalEmploymentDetails!.isOptional! !== undefined) {
-    principalEmploymentDetails = deleteKey(principalEmploymentDetails, ["othersOccupation", "isOptional"]);
+  if (principalEmploymentDetails!.othersOccupation! !== undefined && principalEmploymentDetails!.isOptional! === false) {
+    principalEmploymentDetails = deleteKey(principalEmploymentDetails, deletedProperty);
   }
-
   const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
 
   const request: ISubmitClientAccountRequest = {

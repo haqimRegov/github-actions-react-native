@@ -1,3 +1,13 @@
+declare type TEmploymentDetailsState =
+  | "address"
+  | "businessNature"
+  | "city"
+  | "country"
+  | "employerName"
+  | "isOptional"
+  | "othersOccupation"
+  | "postCode"
+  | "state";
 declare interface IClientIDState {
   frontPage?: FileBase64;
   secondPage?: FileBase64;

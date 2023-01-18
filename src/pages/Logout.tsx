@@ -19,7 +19,6 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
   };
   useEffect(() => {
     handleRemoveStorage();
-    handleContextState({ expiryModal: false, expired: false, duplicateModal: false, loggedOut: false });
     props.resetEDD();
     props.resetForceUpdate();
     props.resetTransactions();
@@ -33,6 +32,7 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
     props.resetOnboarding();
     props.resetGlobal();
     setTimeout(() => {
+      handleContextState({ expiryModal: false, expired: false, duplicateModal: false, loggedOut: false });
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

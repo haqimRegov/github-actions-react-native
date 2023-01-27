@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { Dimensions, Text, View } from "react-native";
 
-import { BaseColorCardProps, BaseTextCardProps, CustomSpacer, Dash } from "../../../components";
+import { BaseColorCardProps, BaseTextCardProps, CustomSpacer, Dash, FileViewer } from "../../../components";
 import { Language } from "../../../constants";
 import {
   border,
@@ -36,29 +36,33 @@ interface SummaryDetailsProps {
   employmentDetails: LabeledTitleProps[];
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
+  handleCloseViewer?: () => void;
   handleNextStep: (route: TypeOnboardingKey) => void;
   localBankDetails: LabeledTitleProps[][];
   mailingAddress: LabeledTitleProps[];
   name: string;
   permanentAddress: LabeledTitleProps[];
   personalDetails: LabeledTitleProps[];
+  viewFile?: FileBase64 | undefined;
 }
 
 export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   accountHolder,
   accountType,
   additionalInfo,
-  employmentAddress,
   contactDetails,
+  employmentAddress,
   employmentDetails,
   epfDetails,
   foreignBankDetails,
+  handleCloseViewer,
   handleNextStep,
   localBankDetails,
   mailingAddress,
   name,
   permanentAddress,
   personalDetails,
+  viewFile,
 }: SummaryDetailsProps) => {
   const { width } = Dimensions.get("window");
 
@@ -76,7 +80,10 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const personalDetailsItem: LabeledTitleProps[] = [...personalDetails.slice(3)];
+  const personalDetailsInfo: LabeledTitleProps[] =
+    personalDetails.length > 12 ? [...personalDetails.slice(0, 5)] : [...personalDetails.slice(0, 3)];
+  const personalDetailsItem: LabeledTitleProps[] =
+    personalDetails.length > 12 ? [...personalDetails.slice(5)] : [...personalDetails.slice(3)];
   const personalDetailsSection = {
     iconName: "account",
     text: SUMMARY.TITLE_PERSONAL,
@@ -124,7 +131,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
       )}
       <SummaryColorCard
         headerTitle={SUMMARY.TITLE_IDENTIFICATION}
-        data={[...personalDetails.slice(0, 3)]}
+        data={personalDetailsInfo}
         spaceToTop={sh24}
         section={[personalDetailsSection]}
         textCardProps={textCardProps}
@@ -165,7 +172,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
       (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
         <SummaryColorCard
           headerTitle={SUMMARY.TITLE_ACCOUNT}
-          data={[additionalInfo[2]]}
+          data={additionalInfo}
           section={[accountDetailsBank, accountDetailsForeignBank]}
           spaceToTop={sh24}
           textCardProps={textCardProps}
@@ -181,6 +188,9 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           textCardProps={textCardProps}
           colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditEmploymentDetails } }}
         />
+      ) : null}
+      {viewFile !== undefined && handleCloseViewer !== undefined ? (
+        <FileViewer handleClose={handleCloseViewer} resourceType="base64" value={viewFile} visible={viewFile !== undefined} />
       ) : null}
     </View>
   );

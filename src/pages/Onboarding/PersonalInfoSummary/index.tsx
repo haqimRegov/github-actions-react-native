@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
@@ -23,6 +23,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
 }: PersonalInfoSummaryProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
   const { principal, joint } = personalInfo;
+  const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
   const handleContinue = () => {
     handleNextStep("FATCADeclaration");
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
@@ -37,6 +38,10 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
       updatedDisabledSteps.splice(findFATCA, 1);
     }
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+  };
+
+  const handleCloseViewer = () => {
+    setViewFile(undefined);
   };
 
   const relationship =
@@ -66,11 +71,22 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
       subtitle={SUMMARY.SUBHEADING}>
       <Principal
         accountType={accountType}
+        handleCloseViewer={handleCloseViewer}
         handleNextStep={handleNextStep}
         isAllEpf={isAllEpf}
+        setViewFile={setViewFile}
         summary={{ ...personalInfo.principal!, ...annualIncome, ...incomeDistribution }}
+        viewFile={viewFile}
       />
-      {accountType === "Individual" ? null : <Joint handleNextStep={handleNextStep} summary={{ ...personalInfo.joint! }} />}
+      {accountType === "Individual" ? null : (
+        <Joint
+          handleCloseViewer={handleCloseViewer}
+          handleNextStep={handleNextStep}
+          setViewFile={setViewFile}
+          summary={{ ...personalInfo.joint! }}
+          viewFile={viewFile}
+        />
+      )}
       {accountType === "Individual" ? null : (
         <SummaryJointDetails
           handleNextStep={handleNextStep}

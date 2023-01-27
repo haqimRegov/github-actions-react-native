@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer, Switch } from "../../../components";

@@ -9,11 +9,14 @@ import { SummaryDetails } from "./Details";
 const { SUMMARY } = Language.PAGE;
 
 interface JointProps {
+  handleCloseViewer?: () => void;
   handleNextStep: (route: TypeOnboardingKey) => void;
+  setViewFile?: (value: FileBase64) => void;
   summary: IHolderInfoState;
+  viewFile?: FileBase64 | undefined;
 }
 
-export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }: JointProps) => {
+export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, viewFile, setViewFile, handleCloseViewer }: JointProps) => {
   const { addressInformation, bankSummary, contactDetails, employmentDetails, epfDetails, personalDetails } = summary;
 
   const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
@@ -21,9 +24,23 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
   const idType = typeof personalDetails!.idType! === "string" ? personalDetails!.idType : DICTIONARY_ALL_ID_TYPE[personalDetails!.idType!];
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(idType as TypeClientID) !== 1;
 
+  const handleOpenViewer = () => {
+    if (setViewFile !== undefined) {
+      setViewFile(personalDetails!.id!.frontPage!);
+    }
+  };
+
+  const jointEducation =
+    personalDetails!.educationLevel! !== "Others" ? personalDetails!.educationLevel! : personalDetails!.otherEducationLevel!;
   const personalDetailsSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_FULL_NAME, title: personalDetails!.name! },
-    { label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`, title: personalDetails!.idNumber!, titleStyle: fsUppercase },
+    {
+      label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`,
+      onPress: handleOpenViewer,
+      title: personalDetails!.idNumber!,
+      titleIcon: "tax-card",
+      titleStyle: fsUppercase,
+    },
     { label: SUMMARY.LABEL_DATE_OF_BIRTH, title: dateOfBirth },
     { label: SUMMARY.LABEL_SALUTATION, title: personalDetails!.salutation! },
     { label: SUMMARY.LABEL_GENDER, title: personalDetails!.gender! },
@@ -33,26 +50,23 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
     { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
-    { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel! },
+    { label: SUMMARY.LABEL_EDUCATION, title: jointEducation },
   ];
 
-  let additionalInfoSummary: LabeledTitleProps[] = [
+  const additionalInfoSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
     { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
   ];
 
-  const nonMalaysianDetails = [{ label: SUMMARY.LABEL_EXPIRATION, title: expirationDate }];
-  const malaysianDetails: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
-    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
+  const nonMalaysianDetails = [
+    { label: SUMMARY.LABEL_COUNTRY, title: personalDetails!.nationality },
+    { label: SUMMARY.LABEL_EXPIRATION, title: expirationDate },
   ];
 
-  if (isMalaysian) {
-    additionalInfoSummary = [...malaysianDetails, ...additionalInfoSummary];
-  } else {
-    personalDetailsSummary.splice(5, 0, nonMalaysianDetails[0]);
+  if (!isMalaysian) {
+    personalDetailsSummary.splice(3, 0, nonMalaysianDetails[0], nonMalaysianDetails[1]);
   }
 
   const permanentAddressLabel =
@@ -208,12 +222,14 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary }
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
       foreignBankDetails={foreignBank}
+      handleCloseViewer={handleCloseViewer}
       handleNextStep={handleNextStep}
       localBankDetails={localBank}
       mailingAddress={mailingAddressSummary}
       name={personalDetails!.name!}
       permanentAddress={permanentAddressSummary}
       personalDetails={personalDetailsSummary}
+      viewFile={viewFile}
     />
   );
 };

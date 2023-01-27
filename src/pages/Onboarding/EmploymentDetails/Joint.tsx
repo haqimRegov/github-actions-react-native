@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer, Switch } from "../../../components";
@@ -23,7 +23,7 @@ interface JointEmploymentDetails {
 const initialJointEmploymentDetails: IEmploymentDetailsState = {
   businessNature: "",
   employerName: "",
-  isEnabled: true,
+  isEnabled: false,
   isOptional: false,
   grossIncome: "",
   occupation: "",
@@ -58,28 +58,32 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
     if (employmentDetails.isOptional === false && EMPLOYMENT_EXEMPTIONS.indexOf(occupation) !== -1) {
       setEmploymentDetails({
         ...initialJointEmploymentDetails,
-        occupation: occupation,
         country: "",
+        isEnabled: employmentDetails.isEnabled,
         isOptional: employmentDetails.isOptional,
+        occupation: occupation,
       });
     } else if (employmentDetails.isOptional === true && EMPLOYMENT_EXEMPTIONS.indexOf(occupation) !== -1) {
       setEmploymentDetails({
         ...initialJointEmploymentDetails,
-        occupation: occupation,
+        isEnabled: employmentDetails.isEnabled,
         isOptional: employmentDetails.isOptional,
+        occupation: occupation,
       });
     } else if (occupation === "Others") {
       setEmploymentDetails({
         ...initialJointEmploymentDetails,
+        isEnabled: employmentDetails.isEnabled,
+        isOptional: employmentDetails.isOptional,
         occupation: occupation,
         othersOccupation: "",
-        isOptional: employmentDetails.isOptional,
       });
     } else {
       setEmploymentDetails({
         ...initialJointEmploymentDetails,
-        occupation: occupation,
+        isEnabled: employmentDetails.isEnabled,
         isOptional: employmentDetails.isOptional,
+        occupation: occupation,
       });
     }
   };
@@ -88,17 +92,19 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
     if (value === true) {
       setEmploymentDetails({
         ...initialJointEmploymentDetails,
-        occupation: employmentDetails.occupation,
+        isEnabled: employmentDetails.isEnabled,
         isOptional: value,
+        occupation: employmentDetails.occupation,
       });
     }
 
     if (value === false) {
       setEmploymentDetails({
         ...initialJointEmploymentDetails,
-        occupation: employmentDetails.occupation,
         country: "",
+        isEnabled: employmentDetails.isEnabled,
         isOptional: value,
+        occupation: employmentDetails.occupation,
       });
     }
   };

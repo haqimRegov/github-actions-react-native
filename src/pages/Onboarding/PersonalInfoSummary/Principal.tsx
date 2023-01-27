@@ -10,12 +10,23 @@ const { SUMMARY } = Language.PAGE;
 
 interface PrincipalProps {
   accountType: TypeAccountChoices;
+  handleCloseViewer?: () => void;
   handleNextStep: (route: TypeOnboardingKey) => void;
   isAllEpf: boolean;
+  setViewFile?: (value: FileBase64) => void;
   summary: IHolderInfoState;
+  viewFile?: FileBase64 | undefined;
 }
 
-export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, handleNextStep, isAllEpf, summary }: PrincipalProps) => {
+export const Principal: FunctionComponent<PrincipalProps> = ({
+  accountType,
+  handleCloseViewer,
+  handleNextStep,
+  isAllEpf,
+  setViewFile,
+  summary,
+  viewFile,
+}: PrincipalProps) => {
   const {
     addressInformation,
     annualIncome,
@@ -32,9 +43,23 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
   const idType = typeof personalDetails!.idType! === "string" ? personalDetails!.idType : DICTIONARY_ALL_ID_TYPE[personalDetails!.idType!];
   const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(idType as TypeClientID) !== 1;
 
+  const handleOpenViewer = () => {
+    if (setViewFile !== undefined) {
+      setViewFile(personalDetails!.id!.frontPage!);
+    }
+  };
+
+  const principalEducation =
+    personalDetails!.educationLevel! !== "Others" ? personalDetails!.educationLevel! : personalDetails!.otherEducationLevel!;
   const personalDetailsSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_FULL_NAME, title: personalDetails!.name! },
-    { label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`, title: personalDetails!.idNumber!, titleStyle: fsUppercase },
+    {
+      label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`,
+      onPress: handleOpenViewer,
+      title: personalDetails!.idNumber!,
+      titleIcon: "tax-card",
+      titleStyle: fsUppercase,
+    },
     { label: SUMMARY.LABEL_DATE_OF_BIRTH, title: dateOfBirth },
     { label: SUMMARY.LABEL_SALUTATION, title: personalDetails!.salutation! },
     { label: SUMMARY.LABEL_GENDER, title: personalDetails!.gender! },
@@ -44,27 +69,16 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
     { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
-    { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel! },
+    { label: SUMMARY.LABEL_EDUCATION, title: principalEducation },
   ];
 
-  let additionalInfoSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_INCOME_DISTRIBUTION, title: incomeDistribution }];
-
-  const jointInfoSummary = [{ label: SUMMARY.LABEL_RELATIONSHIP, title: personalDetails!.relationship! }];
-
-  const nonMalaysianDetails = [{ label: SUMMARY.LABEL_EXPIRATION, title: expirationDate }];
-  const malaysianDetails: LabeledTitleProps[] = [
-    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
-    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
+  const nonMalaysianDetails = [
+    { label: SUMMARY.LABEL_COUNTRY, title: personalDetails!.nationality },
+    { label: SUMMARY.LABEL_EXPIRATION, title: expirationDate },
   ];
 
-  if (isMalaysian) {
-    additionalInfoSummary = [...malaysianDetails, ...additionalInfoSummary];
-  } else {
-    personalDetailsSummary.splice(5, 0, nonMalaysianDetails[0]);
-  }
-
-  if (accountType === "Joint") {
-    additionalInfoSummary.push(jointInfoSummary[0]);
+  if (!isMalaysian) {
+    personalDetailsSummary.splice(3, 0, nonMalaysianDetails[0], nonMalaysianDetails[1]);
   }
 
   const permanentAddressLabel =
@@ -142,6 +156,8 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
           { label: SUMMARY.LABEL_EPF_ACCOUNT, title: epfDetails.epfAccountType! },
         ]
       : [];
+
+  const additionalInfoSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_INCOME_DISTRIBUTION, title: incomeDistribution }];
 
   const localBank: LabeledTitleProps[][] = bankSummary!.localBank!.map((bank: IBankDetailsState) => {
     const bankAccountName =
@@ -228,12 +244,14 @@ export const Principal: FunctionComponent<PrincipalProps> = ({ accountType, hand
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
       foreignBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : foreignBank}
+      handleCloseViewer={handleCloseViewer}
       handleNextStep={handleNextStep}
       localBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : localBank}
       mailingAddress={mailingAddressSummary}
       name={personalDetails!.name!}
       permanentAddress={permanentAddressSummary}
       personalDetails={personalDetailsSummary}
+      viewFile={viewFile}
     />
   );
 };

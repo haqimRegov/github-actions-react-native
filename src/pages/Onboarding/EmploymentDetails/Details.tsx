@@ -118,17 +118,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const principalAnnualIncome = personalDetails?.annualIncomePrincipal !== undefined ? personalDetails?.annualIncomePrincipal : "-";
   const headerTitle = accountHolder === "Joint" ? SUMMARY.TITLE_JOINT : SUMMARY.TITLE_PRINCIPAL;
 
-  // useEffect(() => {
-  //   const unSubscribe = () => {
-  //     if (inputOccupation === "Others") {
-  //       setInputOthersOccupation("");
-  //     }
-  //   };
-
-  //   unSubscribe();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [inputOccupation]);
-
   const handleSwitchOptional = () => {
     handleUpdateOptional(!employmentDetails.isOptional);
   };

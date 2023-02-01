@@ -5,7 +5,12 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../../components";
 import { Language } from "../../../../constants";
-import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
+import {
+  EMPLOYMENT_EXEMPTIONS,
+  OPTION_CRS_NO_TIN_REQUIRED,
+  OPTIONS_CRS_TAX_RESIDENCY,
+  OPTIONS_CRS_TIN_REASONS,
+} from "../../../../data/dictionary";
 import { getAddress, getFatcaRequest } from "../../../../helpers";
 import { submitClientAccount } from "../../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
@@ -35,14 +40,13 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const { principal, joint } = personalInfo;
 
   const fetching = useRef<boolean>(false);
-  const deletedProperty: TEmploymentDetailsState[] = [
+  const baseDeletedProperty: TEmploymentDetailsState[] = ["isEnabled", "isOptional", "othersOccupation"];
+  const deletedExemptionProperty: TEmploymentDetailsState[] = [
     "address",
     "businessNature",
     "city",
     "country",
     "employerName",
-    "isOptional",
-    "othersOccupation",
     "postCode",
     "state",
   ];
@@ -189,7 +193,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             },
             fatca: { ...jointFatcaRequest },
           },
-          employmentDetails: joint!.employmentDetails,
+          // check if employment details is enabled and filled
+          employmentDetails: joint!.employmentDetails!.isEnabled === true ? { ...joint!.employmentDetails } : undefined,
           personalDetails: {
             countryOfBirth: joint!.personalDetails!.countryOfBirth!,
             educationLevel:
@@ -211,19 +216,27 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         }
       : undefined;
 
-  const principalAddress = { ...principal!.addressInformation! };
-  delete principalAddress.sameAddress;
-  const defaultJointOccupation = jointDetails !== undefined ? { ...jointDetails!.employmentDetails! } : undefined;
-  const othersJointOccupation =
-    jointDetails !== undefined && jointDetails.employmentDetails !== undefined && jointDetails!.employmentDetails!.occupation === "Others"
-      ? {
-          ...jointDetails!.employmentDetails!,
-          occupation: jointDetails!.employmentDetails!.othersOccupation,
-        }
-      : defaultJointOccupation;
-  let jointEmploymentDetails = jointDetails !== undefined ? { ...othersJointOccupation } : undefined;
-  if (jointEmploymentDetails !== undefined && jointEmploymentDetails.isOptional === false) {
-    jointEmploymentDetails = deleteKey(jointEmploymentDetails, [...deletedProperty, "grossIncome", "isEnabled"]);
+  // JOINT
+  // check if employment details is existing
+  if (
+    jointDetails !== undefined &&
+    jointDetails.employmentDetails !== undefined &&
+    jointDetails.employmentDetails.occupation !== undefined
+  ) {
+    // check if occupation is others
+    if (jointDetails!.employmentDetails!.occupation === "Others") {
+      jointDetails.employmentDetails.occupation = jointDetails.employmentDetails.othersOccupation;
+    }
+
+    // check if occupation is exempted for other details
+    if (
+      EMPLOYMENT_EXEMPTIONS.indexOf(jointDetails!.employmentDetails.occupation!) !== -1 &&
+      jointDetails!.employmentDetails!.isOptional === false
+    ) {
+      jointDetails!.employmentDetails = { ...deleteKey(jointDetails!.employmentDetails!, [...deletedExemptionProperty, "grossIncome"]) };
+    }
+    // delete keys that are not used for submitting request
+    jointDetails!.employmentDetails = { ...deleteKey(jointDetails!.employmentDetails!, [...baseDeletedProperty]) };
   }
 
   const jointContactDetails =
@@ -237,14 +250,28 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           .filter((contactNumber) => contactNumber.value !== "")
       : [];
 
-  let principalEmploymentDetails: IEmploymentDetailsState | ISubmitEmploymentBase =
-    principal!.employmentDetails!.occupation! !== "Others"
-      ? { ...principal!.employmentDetails! }
-      : { ...principal!.employmentDetails!, occupation: principal!.employmentDetails!.othersOccupation };
-  if (principalEmploymentDetails!.othersOccupation! !== undefined && principalEmploymentDetails!.isOptional! === false) {
-    principalEmploymentDetails = deleteKey(principalEmploymentDetails, deletedProperty);
+  let principalEmploymentDetails: IEmploymentDetailsState | ISubmitEmploymentBase = { ...principal!.employmentDetails! };
+
+  // PRINCIPAL
+  // check if employment details is existing
+  if (principalEmploymentDetails !== undefined && principalEmploymentDetails.occupation !== undefined) {
+    // check if occupation is others
+    if (principalEmploymentDetails.occupation === "Others") {
+      principalEmploymentDetails.occupation = principalEmploymentDetails.othersOccupation;
+    }
+
+    // check if occupation is exempted for other details
+    if (EMPLOYMENT_EXEMPTIONS.indexOf(principalEmploymentDetails.occupation!) !== -1 && principalEmploymentDetails!.isOptional === false) {
+      principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...deletedExemptionProperty]) };
+    }
+    // delete keys that are not used for submitting request
+    principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...baseDeletedProperty]) };
   }
+
   const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);
+
+  const principalAddress = { ...principal!.addressInformation! };
+  delete principalAddress.sameAddress;
 
   const request: ISubmitClientAccountRequest = {
     initId: details!.initId!,
@@ -317,8 +344,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               emailAddress: jointDetails.contactDetails!.emailAddress! !== "" ? jointDetails.contactDetails!.emailAddress! : undefined,
             },
             declaration: jointDetails.declaration as ISubmitDeclaration,
-            employmentDetails:
-              jointDetails.employmentDetails?.isEnabled === true ? (jointEmploymentDetails as ISubmitEmploymentJoint) : undefined,
+            employmentDetails: jointDetails.employmentDetails as ISubmitEmploymentJoint,
             personalDetails: jointDetails.personalDetails as ISubmitPersonalDetails,
           }
         : undefined,

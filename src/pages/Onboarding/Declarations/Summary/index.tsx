@@ -265,7 +265,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...deletedExemptionProperty]) };
     }
     // delete keys that are not used for submitting request
-    principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...baseDeletedProperty]) };
+    principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...baseDeletedProperty, "grossIncome"]) };
   }
 
   const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);

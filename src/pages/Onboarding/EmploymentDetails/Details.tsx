@@ -1,10 +1,11 @@
-import React, { Fragment, FunctionComponent, useEffect } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
 import { AddressField, ColorCard, CustomSpacer, CustomTextInput, NewDropdown, Switch } from "../../../components";
 import { Language } from "../../../constants";
 import {
   DICTIONARY_BUSINESS_NATURE,
+  DICTIONARY_COUNTRIES,
   DICTIONARY_GROSS_INCOME,
   DICTIONARY_HOUSEHOLD_INCOME,
   DICTIONARY_MALAYSIA_STATES_LIST,
@@ -43,21 +44,40 @@ interface EmploymentInfoProps {
   accountType: TypeAccountChoices;
   employmentDetails: IEmploymentDetailsState;
   personalDetails: IPersonalDetailsState;
-  handleOccupation?: (occupation: string) => void;
-  handleToggle?: (value: boolean) => void;
   setEmploymentDetails: (value: IEmploymentDetailsState) => void;
   setPersonalInfoDetails: (value: IPersonalDetailsState) => void;
   setValidations: (value: IEmploymentDetailsValidations) => void;
   validations: IEmploymentDetailsValidations;
 }
 
+const initialBaseEmploymentDetails: IEmploymentDetailsState = {
+  businessNature: "",
+  employerName: "",
+  occupation: "",
+  isOptional: false,
+  othersOccupation: "",
+  address: {
+    line1: "",
+    line2: undefined,
+    line3: undefined,
+  },
+  city: "",
+  country: DICTIONARY_COUNTRIES[0].value,
+  postCode: "",
+  state: "",
+};
+
+export const initialJointEmploymentDetails: IEmploymentDetailsState = {
+  ...initialBaseEmploymentDetails,
+  isEnabled: false,
+  grossIncome: "",
+};
+
 export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   accountHolder,
   accountType,
   employmentDetails,
   personalDetails,
-  handleOccupation,
-  handleToggle,
   setEmploymentDetails,
   setPersonalInfoDetails,
   setValidations,
@@ -80,13 +100,37 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputEmployerName = (value: string) => setEmploymentDetails({ employerName: value });
   const setInputGross = (value: string) => setEmploymentDetails({ grossIncome: value });
   const setInputMonthlyHousehold = (value: string) => setPersonalInfoDetails({ monthlyHouseholdIncome: value });
-  const setInputOccupation = (value: string) =>
-    handleOccupation !== undefined ? handleOccupation(value) : setEmploymentDetails({ occupation: value });
+  const setInputOccupation = (value: string) => {
+    if (value !== employmentDetails.occupation) {
+      const initialEmploymentDetails =
+        accountHolder === "Principal" ? { ...initialBaseEmploymentDetails } : { ...initialJointEmploymentDetails };
+
+      const updatedEmploymentDetails = { ...initialEmploymentDetails, occupation: value, isOptional: employmentDetails.isOptional };
+
+      setEmploymentDetails({
+        ...updatedEmploymentDetails,
+        country: employmentDetails.isOptional === false && EMPLOYMENT_EXEMPTIONS.indexOf(value) !== -1 ? "" : employmentDetails.country,
+        isEnabled: employmentDetails.isEnabled === true ? true : employmentDetails.isEnabled,
+        othersOccupation: value !== "Others" ? "" : employmentDetails.othersOccupation,
+      });
+    }
+  };
   const setInputOthersOccupation = (value: string) => setEmploymentDetails({ othersOccupation: value });
   const setInputPostCode = (value: string) => setEmploymentDetails({ postCode: value });
   const setInputState = (value: string) => setEmploymentDetails({ state: value });
-  const handleUpdateOptional = (value: boolean) =>
-    handleToggle !== undefined ? handleToggle(value) : setEmploymentDetails({ isOptional: value });
+
+  const handleUpdateOptional = (value: boolean) => {
+    const baseEmployment = {
+      country: value === false ? "" : employmentDetails.country,
+      isEnabled: employmentDetails.isEnabled,
+      isOptional: value,
+      occupation: employmentDetails.occupation,
+    };
+    const initialEmploymentDetails =
+      accountHolder === "Principal" ? { ...initialBaseEmploymentDetails } : { ...initialJointEmploymentDetails };
+
+    setEmploymentDetails({ ...initialEmploymentDetails, ...baseEmployment });
+  };
 
   const checkPermanentPostCode = () => {
     setValidations({
@@ -144,7 +188,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
           </View>
         </View>
       )}
-
       <CustomSpacer space={sh24} />
       <ColorCard
         header={{ labelStyle: fs16BoldBlue1, label: occupationTitle }}

@@ -3,7 +3,6 @@ import { View } from "react-native";
 
 import { defaultContentProps, LabeledTitle } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, EMPLOYMENT_EXEMPTIONS } from "../../../data/dictionary";
 import { px, sw24 } from "../../../styles";
 import { EmploymentInfo } from "./Details";
 
@@ -19,23 +18,6 @@ interface PrincipalEmploymentDetails {
   validations: IEmploymentDetailsValidations;
 }
 
-const initialPrincipalEmploymentDetails: IEmploymentDetailsState = {
-  businessNature: "",
-  employerName: "",
-  occupation: "",
-  isOptional: false,
-  othersOccupation: "",
-  address: {
-    line1: "",
-    line2: undefined,
-    line3: undefined,
-  },
-  city: "",
-  country: DICTIONARY_COUNTRIES[0].value,
-  postCode: "",
-  state: "",
-};
-
 export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDetails> = ({
   accountType,
   employmentDetails,
@@ -46,55 +28,6 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
   validations,
 }: PrincipalEmploymentDetails) => {
   const padding = accountType === "Joint" ? px(sw24) : {};
-
-  const handleOccupation = (occupation: string) => {
-    if (employmentDetails.isOptional === false && EMPLOYMENT_EXEMPTIONS.indexOf(occupation) !== -1) {
-      setEmploymentDetails({
-        ...initialPrincipalEmploymentDetails,
-        occupation: occupation,
-        country: "",
-        isOptional: employmentDetails.isOptional,
-      });
-    } else if (employmentDetails.isOptional === true && EMPLOYMENT_EXEMPTIONS.indexOf(occupation) !== -1) {
-      setEmploymentDetails({
-        ...initialPrincipalEmploymentDetails,
-        occupation: occupation,
-        isOptional: employmentDetails.isOptional,
-      });
-    } else if (occupation === "Others") {
-      setEmploymentDetails({
-        ...initialPrincipalEmploymentDetails,
-        occupation: occupation,
-        othersOccupation: "",
-        isOptional: employmentDetails.isOptional,
-      });
-    } else {
-      setEmploymentDetails({
-        ...initialPrincipalEmploymentDetails,
-        occupation: occupation,
-        isOptional: employmentDetails.isOptional,
-      });
-    }
-  };
-
-  const handleToggle = (value: boolean) => {
-    if (value === true) {
-      setEmploymentDetails({
-        ...initialPrincipalEmploymentDetails,
-        occupation: employmentDetails.occupation,
-        isOptional: value,
-      });
-    }
-
-    if (value === false) {
-      setEmploymentDetails({
-        ...initialPrincipalEmploymentDetails,
-        occupation: employmentDetails.occupation,
-        country: "",
-        isOptional: value,
-      });
-    }
-  };
 
   return (
     <View>
@@ -112,8 +45,6 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
         <EmploymentInfo
           accountType={accountType}
           employmentDetails={employmentDetails}
-          handleOccupation={handleOccupation}
-          handleToggle={handleToggle}
           personalDetails={personalDetails}
           setEmploymentDetails={setEmploymentDetails}
           setPersonalInfoDetails={setPersonalInfoDetails}

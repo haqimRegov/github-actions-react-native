@@ -4,6 +4,7 @@ declare type TEmploymentDetailsState =
   | "city"
   | "country"
   | "employerName"
+  | "isEnabled"
   | "isOptional"
   | "othersOccupation"
   | "postCode"

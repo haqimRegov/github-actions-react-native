@@ -149,7 +149,6 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
         <Fragment>
           <CustomSpacer space={sh40} />
           <View style={borderBottomGray2} />
-          <CustomSpacer space={sh40} />
           <JointEmploymentDetails
             accountType={accountType}
             employmentDetails={joint!.employmentDetails!}

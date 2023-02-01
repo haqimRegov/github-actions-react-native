@@ -103,7 +103,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputOccupation = (value: string) => {
     if (value !== employmentDetails.occupation) {
       const initialEmploymentDetails =
-        accountHolder === "Principal" ? { ...initialBaseEmploymentDetails } : { ...initialJointEmploymentDetails };
+        accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails };
 
       const updatedEmploymentDetails = { ...initialEmploymentDetails, occupation: value, isOptional: employmentDetails.isOptional };
 
@@ -126,8 +126,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       isOptional: value,
       occupation: employmentDetails.occupation,
     };
-    const initialEmploymentDetails =
-      accountHolder === "Principal" ? { ...initialBaseEmploymentDetails } : { ...initialJointEmploymentDetails };
+    const initialEmploymentDetails = accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails };
 
     setEmploymentDetails({ ...initialEmploymentDetails, ...baseEmployment });
   };

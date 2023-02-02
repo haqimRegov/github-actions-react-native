@@ -152,9 +152,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       setEmploymentDetails({ country: input });
     }
   };
-
-  const labelAddress = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_ADDRESS : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS;
-  const labelEmployer = inputOccupation === "Student" ? EMPLOYMENT_DETAILS.LABEL_SCHOOL_NAME : EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME;
   const addressType = inputCountry !== "Malaysia" ? "Other" : "Malaysia";
   const countryHeight = accountType === "Joint" && accountHolder !== "Joint" ? sh176 : sh136;
   const toggleValue = employmentDetails.isOptional !== undefined ? employmentDetails.isOptional : true;
@@ -241,7 +238,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                 <CustomSpacer space={sh32} />
                 <CustomTextInput
                   autoCapitalize="words"
-                  label={labelEmployer}
+                  label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME}
                   onChangeText={setInputEmployerName}
                   value={inputEmployerName}
                 />
@@ -295,7 +292,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                   inputCountry={inputCountry}
                   inputPostCode={inputPostCode}
                   inputState={inputState}
-                  labelAddress={labelAddress}
+                  labelAddress={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_ADDRESS}
                   onBlurPostCode={checkPermanentPostCode}
                   postCodeError={validations.postCode}
                   setInputAddress={setInputAddress}

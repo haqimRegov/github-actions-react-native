@@ -1,1 +1,1 @@
-export const EMPLOYMENT_EXEMPTIONS = ["Pensioner", "Unemployed", "Student"];
+export const EMPLOYMENT_EXEMPTIONS = ["Housewife", "Pensioner", "Unemployed", "Student"];

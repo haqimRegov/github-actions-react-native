@@ -31,8 +31,7 @@ const { INACTIVITY, SESSION } = Language.PAGE;
 const { Navigator, Screen } = createStackNavigator();
 
 const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: GlobalStoreProps) => {
-  const { contextState, duplicateModal, expired, expiryModal, handleContextState, setExpired, setExpiryModal, setLoggedOut } =
-    useContext(ModalContext);
+  const { contextState, duplicateModal, expired, expiryModal, handleContextState, setExpiryModal, setLoggedOut } = useContext(ModalContext);
   const navigation = useNavigation<IStackNavigationProp>();
   const [countdown, setCountdown] = useExpiryCountdown();
   const lastActive = useRef<number | undefined>(undefined);
@@ -160,6 +159,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     if (expired === true) {
       setExpiryModal(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expired]);
 
   useEffect(() => {
@@ -167,6 +167,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
     return () => {
       AppState.removeEventListener("change", handleAppStateChange);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -175,6 +176,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
         setCountdown(DICTIONARY_INACTIVITY_COUNTDOWN_SECONDS);
       }, 150);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expiryModal]);
 
   useEffect(() => {
@@ -187,6 +189,7 @@ const PrivateRouteComponent: FunctionComponent<GlobalStoreProps> = (props: Globa
       };
     }
     return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   useEffect(() => {

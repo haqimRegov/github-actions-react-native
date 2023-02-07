@@ -40,6 +40,7 @@ export const ExpiryPrompt: FunctionComponent = () => {
       };
     }
     return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   const subtitle =

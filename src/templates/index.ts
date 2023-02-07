@@ -3,6 +3,7 @@ export * from "./Cards";
 export * from "./Cards";
 export * from "./CustomItems";
 export * from "./Dashboard";
+export * from "./Declarations";
 export * from "./EDD";
 export * from "./InvestorProfile";
 export * from "./Onboarding";

@@ -318,7 +318,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
           setLocalBankDetails={handleLocalBank}
         />
         <AccountDetails
-          accountType={accountType}
+          accountType={accountType!}
           investmentDetails={investmentDetails!}
           personalInfo={personalInfo}
           setPersonalInfo={handlePersonalInfo}

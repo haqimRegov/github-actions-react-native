@@ -45,6 +45,7 @@ declare interface OnboardingStepsProps {
 
 declare interface IOnboardingRoutes {
   Acknowledgement: TypeOnboardingRoute;
+  AdditionalDetails: TypeOnboardingRoute;
   CRSDeclaration: TypeOnboardingRoute;
   Declarations: TypeOnboardingRoute;
   DeclarationSummary: TypeOnboardingRoute;
@@ -66,6 +67,7 @@ declare interface IOnboardingRoutes {
 
 declare interface IOnboardingKeys {
   Acknowledgement: TypeOnboardingKey;
+  AdditionalDetails: TypeOnboardingKey;
   CRSDeclaration: TypeOnboardingKey;
   Declarations: TypeOnboardingKey;
   DeclarationSummary: TypeOnboardingKey;

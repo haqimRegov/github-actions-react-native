@@ -39,6 +39,7 @@ declare interface IClientBasicInfo {
   country?: string;
   dateOfBirth?: string;
   id?: string;
+  isEtb: boolean;
   idType?: TypeIDChoices;
   otherIdType?: TypeIDOther;
   name?: string;

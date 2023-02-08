@@ -247,7 +247,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
           })}
         </View>
       ) : null}
-      {showTerms && taxResident ? (
+      {showTerms && taxResident !== undefined && taxResident !== -1 ? (
         <CRSTerms
           acceptCrs={acceptCrs!}
           handleAcceptCrs={handleAcceptCrs}

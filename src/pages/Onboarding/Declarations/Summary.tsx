@@ -14,7 +14,19 @@ import {
 import { getAddress, getFatcaRequest } from "../../../helpers";
 import { submitClientAccount } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomRed1, fs10RegGray6, fs12BoldBlack2, px, rowCenterVertical, sh16, sh20, sh24, sw16, sw24 } from "../../../styles";
+import {
+  borderBottomRed1,
+  flexChild,
+  fs10RegGray6,
+  fs12BoldBlack2,
+  px,
+  rowCenterVertical,
+  sh16,
+  sh20,
+  sh24,
+  sw16,
+  sw24,
+} from "../../../styles";
 import { DeclarationDetails } from "../../../templates";
 import { deleteKey, isNotEmpty, parseAmountToString } from "../../../utils";
 
@@ -432,7 +444,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       : undefined;
 
   return (
-    <View>
+    <View style={flexChild}>
       <ContentPage subheading={DECLARATION_SUMMARY.HEADING} subtitle={DECLARATION_SUMMARY.LABEL_SUBHEADER}>
         <View style={px(sw24)}>
           {accountType === "Joint" ? (

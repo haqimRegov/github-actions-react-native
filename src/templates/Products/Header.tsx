@@ -5,7 +5,6 @@ import Collapsible from "react-native-collapsible";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, StatusBadge } from "../../components";
 import { Language } from "../../constants";
-import { ProductFilter, ProductFilterProps } from "../../pages/NewSales/Products/ProductList/Filter";
 import {
   absolutePosition,
   centerHorizontal,
@@ -45,6 +44,7 @@ import {
   sw84,
 } from "../../styles";
 import { isNotEmpty } from "../../utils";
+import { ProductFilter, ProductFilterProps } from "./Filters";
 
 const { PRODUCT_LIST, PRODUCT_FILTER } = Language.PAGE;
 interface ProductHeaderProps extends ProductFilterProps {
@@ -91,7 +91,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
       case "shariahApproved":
         return `${PRODUCT_FILTER.LABEL_TYPE}: ${value === "Yes" ? "Shariah" : "Conventional"}`;
       case "fundType":
-        return `${PRODUCT_FILTER.LABEL_FUND_TYPE}: ${value}`;
+        return `${PRODUCT_FILTER.LABEL_FUND_CATEGORY}: ${value}`;
       case "fundCurrency":
         return `${PRODUCT_FILTER.LABEL_FUND_CURRENCY}: ${value}`;
       case "issuingHouse":

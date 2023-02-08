@@ -3,7 +3,6 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../components";
 import { Language, NunitoBold, NunitoRegular } from "../../constants";
-import { GroupBy } from "../../pages/NewSales/Products/ProductList/GroupBy";
 import {
   borderBottomGray2,
   centerHV,
@@ -23,7 +22,6 @@ import {
   sh12,
   sh16,
   sh2,
-  sh32,
   sw1,
   sw12,
   sw18,
@@ -39,6 +37,7 @@ import {
   sw96,
 } from "../../styles";
 import { isArrayNotEmpty, isNotEmpty, titleCaseString } from "../../utils";
+import { ProductsGroupBy } from "./GroupBy";
 
 const { EMPTY_STATE, PRODUCT_LIST, DASHBOARD_EDD } = Language.PAGE;
 
@@ -62,7 +61,6 @@ interface ProductListViewProps {
   search: string;
   selectedFunds: ITableData[];
   setViewFund: (fund: IProduct) => void;
-  shareSuccess?: boolean;
   showBy?: ProductListShowByType;
   sort: IProductSort[];
   totalCount: IProductTotalCount;
@@ -109,7 +107,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   const sortedColumns = sort.filter((eachSort) => eachSort.value !== "").map((currentSortType) => currentSortType.column);
 
   const singleUtmcOnly =
-    isMultiUtmc === false && transactionType === "Sales-NS" && isNotEmpty(accountDetails) && accountDetails!.isEpf === true;
+    isMultiUtmc === false && transactionType === "Sales" && isNotEmpty(accountDetails) && accountDetails!.isEpf === true;
   const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
   const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
   const checkUtmcIndex =
@@ -393,7 +391,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               <EmptyTable hintText={EMPTY_STATE.SUBTITLE} loading={loading} title={EMPTY_STATE.LABEL_NO_RESULTS} subtitle={subtitle} />
             )}
             RenderGroupByLabel={(props: ITableGroupBy) => {
-              return <GroupBy {...props} />;
+              return <ProductsGroupBy {...props} />;
             }}
             RowSelectionItem={() => {
               const disabledCheckbox = checkboxDisabled === true ? disabledOpacity5 : {};
@@ -429,7 +427,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             rowSelection={selectedFunds}
             rowSelectionKey="fundCode"
           />
-          <CustomSpacer space={sh32} />
+          <CustomSpacer space={sh16} />
         </View>
       </View>
     </View>

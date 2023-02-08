@@ -5,16 +5,14 @@ import { connect } from "react-redux";
 import { CustomSpacer, SafeAreaPage } from "../../../../components";
 import { usePrevious } from "../../../../hooks";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../store";
-import { flexChild, flexGrow, sh104, sh810 } from "../../../../styles";
+import { flexChild, flexGrow, sh810, sh96 } from "../../../../styles";
 import { ProductTabs } from "../../../../templates";
 import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 
 interface ProductListProps extends ProductsStoreProps {
   handleCancelProducts: () => void;
-  handleShareDocuments?: (fund: IProduct) => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   withEpf: boolean;
 }
 
@@ -42,7 +40,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   };
 
   const tabsContent = (
-    <ProductTabs accountType={accountType} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
+    <ProductTabs accountType={accountType!} licenseType={licenseType} productType={productType} setProductType={handleProductType} />
   );
 
   const productTypeProps = { scrollEnabled: scrollEnabled, setScrollEnabled: setScrollEnabled, tabsContent };
@@ -104,7 +102,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
         showsVerticalScrollIndicator={false}>
         <View style={flexChild}>
           <View style={{ minHeight: sh810 }}>{content}</View>
-          <CustomSpacer space={sh104} />
+          <CustomSpacer space={sh96} />
         </View>
       </ScrollView>
     </SafeAreaPage>

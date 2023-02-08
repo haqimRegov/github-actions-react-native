@@ -1,8 +1,8 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
-import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../../../components";
-import { Language, NunitoBold, NunitoRegular } from "../../../../constants";
+import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../components";
+import { Language, NunitoBold, NunitoRegular } from "../../constants";
 import {
   borderBottomGray2,
   centerHV,
@@ -22,7 +22,6 @@ import {
   sh12,
   sh16,
   sh2,
-  sh32,
   sw1,
   sw12,
   sw18,
@@ -36,14 +35,14 @@ import {
   sw8,
   sw88,
   sw96,
-} from "../../../../styles";
-import { isArrayNotEmpty, isNotEmpty, titleCaseString } from "../../../../utils";
-import { GroupBy } from "./GroupBy";
+} from "../../styles";
+import { isArrayNotEmpty, isNotEmpty, titleCaseString } from "../../utils";
+import { ProductsGroupBy } from "./GroupBy";
 
 const { EMPTY_STATE, PRODUCT_LIST, DASHBOARD_EDD } = Language.PAGE;
 
 interface ProductListViewProps {
-  accountDetails: INewSalesAccountDetails;
+  accountDetails?: INewSalesAccountDetails;
   addFunds: (data: IProduct[]) => void;
   filter: IProductFilter;
   handleAllFunds?: () => void;
@@ -62,7 +61,6 @@ interface ProductListViewProps {
   search: string;
   selectedFunds: ITableData[];
   setViewFund: (fund: IProduct) => void;
-  shareSuccess?: boolean;
   showBy?: ProductListShowByType;
   sort: IProductSort[];
   totalCount: IProductTotalCount;
@@ -100,7 +98,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   updateSort,
   withEpf,
 }: ProductListViewProps) => {
-  const { accountNo, isEpf } = accountDetails;
   const findAbbr = sort.filter((sortType) => sortType.column === "fundAbbr" && sortType.value !== "");
   const findName = sort.filter((sortType) => sortType.column === "fundName" && sortType.value !== "");
   const findRisk = sort.filter((sortType) => sortType.column === "riskCategory" && sortType.value !== "");
@@ -109,7 +106,8 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   const sortRisk = findRisk.length > 0 ? findRisk[0].value : "ascending";
   const sortedColumns = sort.filter((eachSort) => eachSort.value !== "").map((currentSortType) => currentSortType.column);
 
-  const singleUtmcOnly = isMultiUtmc === false && transactionType === "Sales" && isEpf === true;
+  const singleUtmcOnly =
+    isMultiUtmc === false && transactionType === "Sales" && isNotEmpty(accountDetails) && accountDetails!.isEpf === true;
   const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
   const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
   const checkUtmcIndex =
@@ -329,7 +327,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               textStyle={{ fontFamily: NunitoBold }}
             />
           )}
-          {accountNo !== "" && accountNo !== undefined && accountNo !== null ? (
+          {isNotEmpty(accountDetails) && isNotEmpty(accountDetails?.accountNo) && accountDetails!.accountNo !== "" ? (
             <Fragment>
               <CustomFlexSpacer />
               <Pagination onPressNext={handleNext} onPressPrev={handlePrev} page={page} totalPages={pages} />
@@ -393,7 +391,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               <EmptyTable hintText={EMPTY_STATE.SUBTITLE} loading={loading} title={EMPTY_STATE.LABEL_NO_RESULTS} subtitle={subtitle} />
             )}
             RenderGroupByLabel={(props: ITableGroupBy) => {
-              return <GroupBy {...props} />;
+              return <ProductsGroupBy {...props} />;
             }}
             RowSelectionItem={() => {
               const disabledCheckbox = checkboxDisabled === true ? disabledOpacity5 : {};
@@ -429,7 +427,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             rowSelection={selectedFunds}
             rowSelectionKey="fundCode"
           />
-          <CustomSpacer space={sh32} />
+          <CustomSpacer space={sh16} />
         </View>
       </View>
     </View>

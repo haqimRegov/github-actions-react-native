@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
-import { Language } from "../../../../../constants";
+import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../components";
+import { Language } from "../../../constants";
 import {
   FILTER_EPF_LABEL,
   FILTER_FUND_CURRENCY,
@@ -10,13 +10,13 @@ import {
   FILTER_ISSUING_HOUSE,
   FILTER_RISK_CATEGORY,
   FILTER_TYPE,
-} from "../../../../../data/dictionary";
-import { borderBottomGray2, flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
-import { isNotEmpty } from "../../../../../utils";
+} from "../../../data/dictionary";
+import { borderBottomGray2, flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../styles";
+import { isNotEmpty } from "../../../utils";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface UTFilterProps {
-  accountDetails: INewSalesAccountDetails;
+  accountDetails?: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   productType: ProductType;
@@ -24,7 +24,6 @@ interface UTFilterProps {
 }
 
 export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: UTFilterProps) => {
-  const { isEpf } = accountDetails;
   const { fundType, epfApproved, fundCurrency, riskCategory, shariahApproved, issuingHouse } = filter;
 
   const handleEpf = (value: string) => {
@@ -65,8 +64,6 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
     return { label: eachRisk.label };
   });
 
-  // TODO Change to not includes
-
   const disabledFundTypes: string[] = FILTER_FUND_TYPE_NEW.map((eachFundType) => eachFundType.value).filter(
     (eachValue: string) =>
       !availableFilters.fundCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
@@ -87,7 +84,6 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
   const conventionalSelected = shariahApproved![0] === "No" ? "Conventional" : "";
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
   const checkEpfValue = isNotEmpty(epfApproved) && epfApproved!.length > 0 ? epfApproved![0] : "";
-
   return (
     <View style={px(sw24)}>
       <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16BoldGray6} text={PRODUCT_FILTER.LABEL_FILTER_PRODUCT_SERVICE_BY} />
@@ -97,7 +93,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
             items={FILTER_FUND_TYPE_NEW}
-            label={PRODUCT_FILTER.LABEL_FUND_TYPE}
+            label={PRODUCT_FILTER.LABEL_FUND_CATEGORY}
             value={fundType!}
           />
         </View>
@@ -148,7 +144,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
         <View style={{ width: sw360 }}>
           <SingleSelectPills
             direction="row"
-            disabled={isEpf === true}
+            disabled={isNotEmpty(accountDetails) && accountDetails!.isEpf === true}
             header={PRODUCT_FILTER.LABEL_EPF}
             labels={FILTER_EPF_LABEL}
             labelStyle={{ lineHeight: sh24 }}

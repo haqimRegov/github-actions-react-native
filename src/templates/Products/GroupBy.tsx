@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { CustomSpacer } from "../../../../components";
-import { colorGray, fs10RegBlack2, py, rowCenterVertical, sh6, sh8, sw56 } from "../../../../styles";
+import { CustomSpacer } from "../../components";
+import { colorGray, fs10RegBlack2, py, rowCenterVertical, sh6, sh8, sw56 } from "../../styles";
 
-export const GroupBy: FunctionComponent<ITableGroupBy> = ({ row, index, data }: ITableGroupBy) => {
+export const ProductsGroupBy: FunctionComponent<ITableGroupBy> = ({ row, index, data }: ITableGroupBy) => {
   const uniqueUtmc = data.map((eachData: ITableData) => eachData.issuingHouse).filter((_, utmcIndex: number) => utmcIndex <= index);
 
   return (

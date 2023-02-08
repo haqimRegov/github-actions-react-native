@@ -27,8 +27,8 @@ import {
   fs18BoldGray6,
   fs24BoldGray6,
   px,
+  sh120,
   sh16,
-  sh176,
   sh24,
   sh32,
   sh4,
@@ -165,7 +165,7 @@ export const ProductConfirmation: FunctionComponent<ProductConfirmationProps> = 
               </View>
             </Fragment>
           }
-          ListFooterComponent={<CustomSpacer space={sh176} />}
+          ListFooterComponent={<CustomSpacer space={sh120} />}
           ref={flatListRef}
           renderItem={({ item, index }) => {
             const { fundType, fundName, issuingHouse, prsType } = item.fundDetails;

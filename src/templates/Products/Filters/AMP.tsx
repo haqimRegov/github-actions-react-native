@@ -1,17 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
-import { Language } from "../../../../../constants";
-import {
-  FILTER_EPF_LABEL,
-  FILTER_FUND_TYPE_AMP,
-  FILTER_ISSUING_HOUSE,
-  FILTER_RISK_CATEGORY,
-  FILTER_TYPE,
-} from "../../../../../data/dictionary";
-import { borderBottomGray2, flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
-import { isNotEmpty } from "../../../../../utils";
+import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../components";
+import { Language } from "../../../constants";
+import { FILTER_EPF_LABEL, FILTER_FUND_TYPE_AMP, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../data/dictionary";
+import { borderBottomGray2, flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../styles";
+import { isNotEmpty } from "../../../utils";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface AMPFilterProps {
@@ -69,7 +63,6 @@ export const AMPFilter: FunctionComponent<AMPFilterProps> = ({ availableFilters,
   const conventionalSelected = shariahApproved![0] === "No" ? "Conventional" : "";
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
   const checkEpfValue = isNotEmpty(epfApproved) && epfApproved!.length > 0 ? epfApproved![0] : "";
-
   return (
     <View style={px(sw24)}>
       <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16BoldGray6} text={PRODUCT_FILTER.LABEL_FILTER_AMP} />

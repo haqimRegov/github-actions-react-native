@@ -1,10 +1,10 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, ImageStyle, TextInput, View, ViewStyle } from "react-native";
+import { Image, ImageStyle, Text, TextInput, View, ViewStyle } from "react-native";
 import Collapsible from "react-native-collapsible";
 
-import { LocalAssets } from "../../../../assets/images/LocalAssets";
-import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, StatusBadge } from "../../../../components";
-import { Language } from "../../../../constants";
+import { LocalAssets } from "../../assets/images/LocalAssets";
+import { ActionButtons, CustomSpacer, CustomTextInput, IconButton, LinkText, StatusBadge } from "../../components";
+import { Language } from "../../constants";
 import {
   absolutePosition,
   centerHorizontal,
@@ -17,17 +17,18 @@ import {
   flexRow,
   flexWrap,
   fs12BoldBlue1,
+  fs24BoldBlue1,
   fullWidth,
   justifyContentEnd,
   px,
   sh118,
-  sh120,
   sh16,
   sh2,
   sh24,
   sh34,
   sh36,
   sh40,
+  sh8,
   shadow12Black112,
   sw1,
   sw218,
@@ -41,37 +42,47 @@ import {
   sw8,
   sw80,
   sw84,
-} from "../../../../styles";
-import { ProductFilter, ProductFilterProps } from "./Filter";
+} from "../../styles";
+import { isNotEmpty } from "../../utils";
+import { ProductFilter, ProductFilterProps } from "./Filters";
 
 const { PRODUCT_LIST, PRODUCT_FILTER } = Language.PAGE;
 interface ProductHeaderProps extends ProductFilterProps {
+  accountDetails?: INewSalesAccountDetails;
+  availableFilters: IProductAvailableFilter;
+  currentFilter: IProductFilter;
   filterVisible: boolean;
   handleCancel: () => void;
   handleConfirm: () => void;
+  handleResetFilter: () => void;
   handleSearch: () => void;
   handleShowFilter: () => void;
   handleUpdateFilter: (value: IProductFilter) => void;
   inputSearch: string;
+  isNotFiltered: boolean;
+  prevSearch: string;
   setInputSearch: (value: string) => void;
 }
 
 export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
+  accountDetails,
+  currentFilter,
   handleShowFilter,
   filterVisible,
-  handleCancel,
+  // handleCancel,
   handleConfirm,
+  handleResetFilter,
   handleUpdateFilter,
   handleSearch,
   inputSearch,
+  isNotFiltered,
+  prevSearch,
   setInputSearch,
   ...filterProps
 }: ProductHeaderProps) => {
-  const { filter } = filterProps;
   const [searchInputRef, setSearchInputRef] = useState<TextInput | null>(null);
   const [showMorePills, setShowMorePills] = useState<boolean>(false);
-
-  const filterKeys = Object.keys(filter);
+  const filterKeys = isNotEmpty(currentFilter) ? Object.keys(currentFilter) : [];
 
   const generatePillLabel = (filterKey: string, value: string) => {
     switch (filterKey as ProductFilterType) {
@@ -80,7 +91,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
       case "shariahApproved":
         return `${PRODUCT_FILTER.LABEL_TYPE}: ${value === "Yes" ? "Shariah" : "Conventional"}`;
       case "fundType":
-        return `${PRODUCT_FILTER.LABEL_FUND_TYPE}: ${value}`;
+        return `${PRODUCT_FILTER.LABEL_FUND_CATEGORY}: ${value}`;
       case "fundCurrency":
         return `${PRODUCT_FILTER.LABEL_FUND_CURRENCY}: ${value}`;
       case "issuingHouse":
@@ -96,7 +107,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   };
 
   const newPills = filterKeys.map((key) => {
-    const filtered = filter[key].filter((value) => value !== "");
+    const filtered = currentFilter[key].filter((value) => value !== "");
     const pillValues = filtered.map((value) => generatePillLabel(key, value));
     return { key: key, values: filtered, pillValues: pillValues };
   });
@@ -110,7 +121,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   };
 
   const handleCancelFilter = () => {
-    handleCancel();
+    handleResetFilter();
     handleShowFilter();
   };
 
@@ -127,11 +138,33 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
   const handleRemoveFilter = (pill: string) => {
     const findPill = newPills.findIndex((pills) => pills.pillValues.includes(pill));
     const { key, pillValues, values } = newPills[findPill];
-    const filterClone: IProductFilter = { ...filter };
+    const filterClone: IProductFilter = { ...currentFilter };
     const updatedFilter = filterClone[key].filter((filterValue: string) => filterValue !== values[pillValues.indexOf(pill)]);
     filterClone[key] = updatedFilter;
     handleUpdateFilter(filterClone);
   };
+
+  const handleSearchFunction = () => {
+    if (prevSearch !== "" && inputSearch !== "" && prevSearch !== inputSearch && isNotFiltered === false) {
+      handleResetFilter();
+    }
+    handleSearch();
+  };
+
+  const handleHeader = () => {
+    switch (filterProps.productType) {
+      case "ut":
+        return PRODUCT_LIST.LABEL_HEADER_UNIT_TRUST;
+      case "prs":
+        return PRODUCT_LIST.LABEL_HEADER_PRS_SELF;
+      case "prsDefault":
+        return PRODUCT_LIST.LABEL_HEADER_PRS_DEFAULT;
+      default:
+        return PRODUCT_LIST.LABEL_HEADER_UNIT_TRUST;
+    }
+  };
+
+  const headerLabel = isNotEmpty(accountDetails) && accountDetails!.accountNo !== "" ? handleHeader() : PRODUCT_LIST.HEADING_NEW;
 
   const overflow: ViewStyle = showMorePills ? {} : { height: sh40, overflow: "hidden" };
 
@@ -140,10 +173,8 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     ...shadow12Black112,
     ...fullWidth,
     backgroundColor: colorWhite._1,
-    borderBottomLeftRadius: sw24,
-    borderBottomRightRadius: sw24,
+    borderRadius: sw24,
     marginBottom: sh24,
-    top: sh120,
     zIndex: 1,
   };
 
@@ -170,16 +201,21 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
     <Fragment>
       <View style={shadowFix} />
       <View style={container}>
-        <CustomSpacer space={sh24} />
+        <View style={{ ...px(sw24), marginTop: sh24 }}>
+          <Text style={fs24BoldBlue1}>{headerLabel}</Text>
+        </View>
+        <CustomSpacer space={sh8} />
         <View style={{ ...centerVertical, ...flexRow }}>
           <CustomSpacer isHorizontal={true} space={sw24} />
           <CustomTextInput
             autoCorrect={false}
             containerStyle={flexChild}
+            disabled={filterVisible}
             leftIcon={{ name: "search" }}
             onChangeText={setInputSearch}
-            onSubmitEditing={handleSearch}
+            onSubmitEditing={handleSearchFunction}
             placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
+            placeholderTextColor={colorBlue._5}
             returnKeyType="search"
             setRef={setSearchInputRef}
             value={inputSearch}
@@ -201,10 +237,34 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
                   const handlePress = () => {
                     handleRemoveFilter(pill);
                   };
+                  const checkDisabled = () => {
+                    switch (pill) {
+                      case "Fund House: KENANGA INVESTORS BERHAD":
+                        if (filterProps.productType === "amp") {
+                          return true;
+                        }
+                        return false;
+                      case "EPF Approved: Yes":
+                      case "EPF Approved: No":
+                        if (isNotEmpty(accountDetails) && accountDetails!.accountNo !== "" && accountDetails!.isEpf === true) {
+                          return true;
+                        }
+                        return false;
+                      case "Type: Conventional":
+                      case "Type: Shariah":
+                        if (isNotEmpty(accountDetails) && accountDetails?.accountNo !== "" && accountDetails!.fundType === "prsDefault") {
+                          return true;
+                        }
+                        return false;
+                      default:
+                        return false;
+                    }
+                  };
                   return (
                     <Fragment key={index}>
                       {index === 0 ? null : <CustomSpacer isHorizontal={true} space={sw8} />}
                       <StatusBadge
+                        disabled={checkDisabled()}
                         color="secondary"
                         icon="close"
                         onPress={handlePress}
@@ -223,13 +283,14 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
           </View>
         )}
         <Collapsible collapsed={!filterVisible} duration={300}>
-          <ProductFilter {...filterProps} />
+          <ProductFilter accountDetails={accountDetails} {...filterProps} />
           <CustomSpacer space={sh40} />
           <ActionButtons
             buttonContainerStyle={centerHorizontal}
             cancelButtonStyle={{ width: sw218 }}
             continueButtonStyle={{ width: sw218 }}
             labelContinue={PRODUCT_FILTER.BUTTON_APPLY}
+            labelCancel={PRODUCT_FILTER.LABEL_RESET}
             handleCancel={handleCancelFilter}
             handleContinue={handleApplyFilter}
           />

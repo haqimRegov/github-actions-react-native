@@ -5,7 +5,7 @@ import { PRSFilter } from "./PRS";
 import { UTFilter } from "./UT";
 
 export interface ProductFilterProps {
-  accountDetails: INewSalesAccountDetails;
+  accountDetails?: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   setFilter: (filter: IProductFilter) => void;

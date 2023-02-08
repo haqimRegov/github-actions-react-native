@@ -1,14 +1,15 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../../../components";
-import { Language } from "../../../../../constants";
-import { FILTER_FUND_TYPE_NEW, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../../../data/dictionary";
-import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../../../styles";
+import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../components";
+import { Language } from "../../../constants";
+import { FILTER_FUND_TYPE_NEW, FILTER_ISSUING_HOUSE, FILTER_RISK_CATEGORY, FILTER_TYPE } from "../../../data/dictionary";
+import { flexRow, fs16BoldGray6, px, sh16, sh24, sh32, sh4, sw24, sw360, sw64, sw8 } from "../../../styles";
+import { isNotEmpty } from "../../../utils";
 
 const { PRODUCT_FILTER } = Language.PAGE;
 interface PRSFilterProps {
-  accountDetails: INewSalesAccountDetails;
+  accountDetails?: INewSalesAccountDetails;
   availableFilters: IProductAvailableFilter;
   filter: IProductFilter;
   productType: ProductType;
@@ -16,8 +17,7 @@ interface PRSFilterProps {
 }
 
 export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, availableFilters, filter, setFilter }: PRSFilterProps) => {
-  const { fundType: accountFundType } = accountDetails;
-  const { fundType, shariahApproved, issuingHouse, riskCategory } = filter;
+  const { fundType, issuingHouse, riskCategory, shariahApproved } = filter;
 
   const handleShariah = (value: string) => {
     const filterClone = { ...filter };
@@ -43,8 +43,6 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
     return { label: eachRisk.label };
   });
 
-  // TODO Change to not includes
-
   const disabledFundTypes: string[] = FILTER_FUND_TYPE_NEW.map((eachFundType) => eachFundType.value).filter(
     (eachValue: string) =>
       !availableFilters.fundCategory!.some((eachContent: string) => eachContent.toLowerCase() === eachValue.toLowerCase()),
@@ -60,7 +58,6 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
 
   const conventionalSelected = shariahApproved![0] === "No" ? "Conventional" : "";
   const shariahSelected = shariahApproved![0] === "Yes" ? "Shariah" : conventionalSelected;
-
   return (
     <View style={px(sw24)}>
       <TextSpaceArea spaceToBottom={sh16} spaceToTop={sh32} style={fs16BoldGray6} text={PRODUCT_FILTER.LABEL_FILTER_PRS} />
@@ -70,7 +67,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
             items={FILTER_FUND_TYPE_NEW}
-            label={PRODUCT_FILTER.LABEL_FUND_TYPE}
+            label={PRODUCT_FILTER.LABEL_FUND_CATEGORY}
             value={fundType!}
           />
         </View>
@@ -102,7 +99,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
         <View>
           <SingleSelectPills
             direction="row"
-            disabled={accountFundType === "prsDefault"}
+            disabled={isNotEmpty(accountDetails) && accountDetails!.fundType === "prsDefault"}
             header={PRODUCT_FILTER.LABEL_TYPE}
             labels={FILTER_TYPE}
             labelStyle={{ lineHeight: sh24 }}

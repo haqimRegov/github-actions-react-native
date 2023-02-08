@@ -11,11 +11,11 @@ import {
   SafeAreaPage,
   TextCard,
   TextSpaceArea,
-} from "../../../components";
-import { Language } from "../../../constants";
-import { getProductType } from "../../../helpers";
-import { IcoMoon } from "../../../icons";
-import { RNInAppBrowser } from "../../../integrations";
+} from "../../components";
+import { Language } from "../../constants";
+import { getProductType } from "../../helpers";
+import { IcoMoon } from "../../icons";
+import { RNInAppBrowser } from "../../integrations";
 import {
   borderBottomBlue4,
   centerHV,
@@ -50,8 +50,8 @@ import {
   sw240,
   sw64,
   sw8,
-} from "../../../styles";
-import { formatAmount, isNotEmpty } from "../../../utils";
+} from "../../styles";
+import { formatAmount, isNotEmpty } from "../../utils";
 
 const { PRODUCT_DETAILS } = Language.PAGE;
 
@@ -59,7 +59,6 @@ interface ProductDetailsProps {
   disabled?: boolean;
   fund: IProduct;
   handleBack: () => void;
-  handleShareDocuments: () => void;
   selectedFunds: IProduct[];
   setSelectedFund: (data: IProduct[]) => void;
   setViewFund: (data: IProduct | undefined) => void;

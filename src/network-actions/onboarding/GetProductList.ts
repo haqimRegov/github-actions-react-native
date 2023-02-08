@@ -22,7 +22,8 @@ export const getProductList = async (
     }
 
     return data.productList;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     // eslint-disable-next-line no-console
     console.warn("Error in getProductList at ProductList.ts", error);
     return error;

@@ -1,5 +1,6 @@
 export * from "./AccountInformation";
 export * from "./Cards";
+export * from "./Cards";
 export * from "./CustomItems";
 export * from "./Dashboard";
 export * from "./EDD";
@@ -9,6 +10,7 @@ export * from "./OrderPreview";
 export * from "./OrderSubmission";
 export * from "./OrderSummary";
 export * from "./Payment";
+export * from "./Products";
 export * from "./Prompts";
 export * from "./RiskAssessment";
 export * from "./Signatures";

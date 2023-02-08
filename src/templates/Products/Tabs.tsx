@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { TabGroup } from "../../../../components";
-import { Language } from "../../../../constants";
-import { borderBottomGray2, colorWhite, flexRow, noBorder } from "../../../../styles";
+import { TabGroup } from "../../components";
+import { Language } from "../../constants";
+import { borderBottomGray2, colorWhite, flexRow, noBorder } from "../../styles";
 
 const { PRODUCT_LIST } = Language.PAGE;
 export interface ProductTabsProps {

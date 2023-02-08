@@ -21,7 +21,7 @@ import { IconButton } from "../Touchables/Icon";
 import { CustomSpacer } from "./Spacer";
 
 interface PaginationProps {
-  isLoading: boolean;
+  isLoading?: boolean;
   onPressNext: () => void;
   onPressPrev: () => void;
   page: number;

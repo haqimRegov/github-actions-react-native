@@ -53,7 +53,7 @@ import {
   rowCenterVertical,
   sh11,
   sh12,
-  sh124,
+  sh120,
   sh16,
   sh20,
   sh24,
@@ -515,7 +515,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                     </View>
                   </Fragment>
                 ) : null}
-                <CustomSpacer space={sh124} />
+                <CustomSpacer space={sh120} />
               </Fragment>
             }
             ref={flatListRef}
@@ -618,7 +618,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                     <CustomSpacer space={sh16} />
                     <Investment
                       accountDetails={accountDetails}
-                      accountType={accountType}
+                      accountType={accountType!}
                       agentCategory={agentCategory!.category!}
                       data={item}
                       handleScrollToFund={handleScrollToFund}

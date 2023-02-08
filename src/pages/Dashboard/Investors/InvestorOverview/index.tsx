@@ -492,12 +492,14 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                       principalHolder: {
                         ...principalHolder,
                         name: investorData!.name.trim(),
+                        isEtb: true,
                       },
                     }
                   : {
                       jointHolder: {
                         ...jointHolder,
                         name: jointHolder!.name!.trim(),
+                        isEtb: true,
                       },
                     };
               if (isAccountOpening === true) {

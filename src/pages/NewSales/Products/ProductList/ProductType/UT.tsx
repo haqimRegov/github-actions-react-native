@@ -12,7 +12,6 @@ import { isNotEmpty } from "../../../../../utils";
 interface UnitTrustProps extends ProductsStoreProps {
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
 }
 
@@ -35,7 +34,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updateUtShowBy,
   updateAvailableFilters,
@@ -147,7 +145,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       scrollEnabled={scrollEnabled}
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
-      shareSuccess={shareSuccess}
       tabsContent={tabsContent}
       updateUtShowBy={updateUtShowBy}
     />

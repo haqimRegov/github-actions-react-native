@@ -14,7 +14,6 @@ interface PRSDefaultProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
 }
 
@@ -35,7 +34,6 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updatePrsDefaultShowBy,
   updateAvailableFilters,
@@ -118,7 +116,6 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       scrollEnabled={scrollEnabled}
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
-      shareSuccess={shareSuccess}
       tabsContent={tabsContent}
       updatePrsDefaultShowBy={updatePrsDefaultShowBy}
     />

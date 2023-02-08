@@ -13,7 +13,6 @@ interface PRSProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
 }
 
@@ -34,7 +33,6 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   selectedFunds,
   setScrollEnabled,
   resetPRSFilter,
-  shareSuccess,
   updateAvailableFilters,
   updatePrsShowBy,
   tabsContent,
@@ -141,7 +139,6 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       scrollEnabled={scrollEnabled}
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
-      shareSuccess={shareSuccess}
       tabsContent={tabsContent}
       updatePrsShowBy={updatePrsShowBy}
     />

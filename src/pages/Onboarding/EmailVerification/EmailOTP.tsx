@@ -5,7 +5,6 @@ import { ScrollView, Text, View } from "react-native";
 
 import { LocalAssets } from "../../../assets/images/LocalAssets";
 import {
-  ActionButtons,
   ColorCard,
   CustomFlexSpacer,
   CustomSpacer,
@@ -13,6 +12,7 @@ import {
   defaultContentProps,
   LinkText,
   PromptModal,
+  RoundedButton,
   SafeAreaPage,
   TextSpaceArea,
 } from "../../../components";
@@ -21,6 +21,7 @@ import { ERROR, ERROR_CODE } from "../../../data/dictionary";
 import { IcoMoon } from "../../../icons";
 import { emailOtpVerification } from "../../../network-actions";
 import {
+  borderBottomBlue2,
   colorBlue,
   flexGrow,
   flexRow,
@@ -33,10 +34,10 @@ import {
   px,
   sh16,
   sh24,
-  sh32,
   sh4,
   sh56,
   sw24,
+  sw264,
   sw32,
   sw4,
   sw8,
@@ -54,6 +55,8 @@ declare interface EmailOTPProps {
   jointEmail: string;
   jointEmailCheck: boolean;
   jointOtp: string;
+  isEtbJoint: boolean;
+  isEtbPrincipal: boolean;
   personalInfo: IPersonalInfoState;
   principalClientId: string;
   principalEmail: string;
@@ -66,11 +69,14 @@ declare interface EmailOTPProps {
 }
 
 export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
+  accountType,
   addPersonalInfo,
   details,
   handleCancel,
   handleNavigate,
   handleResend,
+  isEtbJoint,
+  isEtbPrincipal,
   jointEmail,
   jointEmailCheck,
   jointOtp,
@@ -185,7 +191,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
             <IcoMoon name="arrow-left" onPress={handleBack} size={sw24} suppressHighlighting={true} />
             <CustomSpacer isHorizontal={true} space={sw8} />
             <View>
-              <Text style={fs18BoldGray6}>{EMAIL_VERIFICATION.HEADING}</Text>
+              <Text style={fs18BoldGray6}>{EMAIL_VERIFICATION.HEADING_OTP}</Text>
             </View>
           </View>
           <View style={flexRow}>
@@ -208,19 +214,23 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
               }
               content={
                 <View>
-                  <CustomTextInput
-                    keyboardType="numeric"
-                    error={principalError}
-                    label={principalOtpLabel}
-                    maxLength={OTP_CONFIG.LENGTH}
-                    onBlur={checkPrincipalOtp}
-                    onChangeText={setPrincipalOtp}
-                    placeholder={INVESTOR_INFORMATION.LABEL_OTP_PLACEHOLDER}
-                    value={principalOtp}
-                  />
+                  {isEtbPrincipal === false ? (
+                    <CustomTextInput
+                      keyboardType="numeric"
+                      error={principalError}
+                      label={principalOtpLabel}
+                      maxLength={OTP_CONFIG.LENGTH}
+                      onBlur={checkPrincipalOtp}
+                      onChangeText={setPrincipalOtp}
+                      placeholder={INVESTOR_INFORMATION.LABEL_OTP_PLACEHOLDER}
+                      value={principalOtp}
+                    />
+                  ) : null}
                   {jointEmailCheck === true || jointEmail !== "" ? (
                     <Fragment>
-                      <CustomSpacer space={sh24} />
+                      <CustomSpacer space={sh16} />
+                      <View style={borderBottomBlue2} />
+                      <CustomSpacer space={sh16} />
                       <CustomTextInput
                         keyboardType="numeric"
                         error={jointError}
@@ -233,6 +243,8 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
                       />
                     </Fragment>
                   ) : null}
+                  <CustomSpacer space={sh16} />
+                  <View style={borderBottomBlue2} />
                   <CustomSpacer space={sh16} />
                   <View style={flexRow}>
                     <Text style={fs12RegGray5}>{INVESTOR_INFORMATION.LABEL_RESEND}</Text>
@@ -252,17 +264,15 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
                 </View>
               }
             />
-            <CustomSpacer space={sh32} />
           </View>
         </View>
-
         <CustomFlexSpacer />
         <CustomSpacer space={sh56} />
-        <ActionButtons
-          continueDisabled={disabled}
-          labelContinue={EMAIL_VERIFICATION.LABEL_VERIFY}
-          handleCancel={handleCancel}
-          handleContinue={handleVerifyOTP}
+        <RoundedButton
+          buttonStyle={{ width: sw264 }}
+          disabled={disabled}
+          text={EMAIL_VERIFICATION.LABEL_VERIFY}
+          onPress={handleVerifyOTP}
         />
         <CustomSpacer space={sh56} />
       </ScrollView>

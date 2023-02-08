@@ -28,6 +28,9 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 }: EmailVerificationProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const { emailOtpSent, emailTimestamp } = personalInfo;
+  const { jointHolder, principalHolder } = details!;
+  const { isEtb: isEtbJoint } = jointHolder!;
+  const { isEtb: isEtbPrincipal } = principalHolder!;
   const fetching = useRef<boolean>(false);
   const [page, setPage] = useState<"verification" | "otp">("verification");
   const [principalOtp, setPrincipalOtp] = useState<string>("");
@@ -136,10 +139,12 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     <Fragment>
       {page === "verification" ? (
         <Verification
-          accountType={accountType}
+          accountType={accountType!}
           addPersonalInfo={addPersonalInfo}
           handleCancel={handleCancel}
           handleContinue={handleContinue}
+          isEtbJoint={isEtbJoint}
+          isEtbPrincipal={isEtbPrincipal}
           jointAgeCheck={jointAgeCheck}
           jointEmailCheck={jointEmailCheck}
           jointError={jointEmailError}
@@ -151,12 +156,14 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         />
       ) : (
         <EmailOTP
-          accountType={accountType}
+          accountType={accountType!}
           addPersonalInfo={addPersonalInfo}
           details={details}
           handleCancel={handleCancel}
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}
+          isEtbJoint={isEtbJoint}
+          isEtbPrincipal={isEtbPrincipal}
           jointEmail={inputJointEmail}
           jointEmailCheck={jointEmailCheck}
           jointOtp={jointOtp}

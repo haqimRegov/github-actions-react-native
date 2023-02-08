@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer, MultiSelectPills, NewCheckBoxDropdown, SingleSelectPills, TextSpaceArea } from "../../../components";
@@ -67,7 +67,7 @@ export const PRSFilter: FunctionComponent<PRSFilterProps> = ({ accountDetails, a
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
             items={FILTER_FUND_TYPE_NEW}
-            label={PRODUCT_FILTER.LABEL_FUND_TYPE}
+            label={PRODUCT_FILTER.LABEL_FUND_CATEGORY}
             value={fundType!}
           />
         </View>

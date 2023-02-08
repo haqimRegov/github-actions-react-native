@@ -93,7 +93,7 @@ export const UTFilter: FunctionComponent<UTFilterProps> = ({ accountDetails, ava
             disabledValues={disabledFundTypes}
             handleChange={handleFundType}
             items={FILTER_FUND_TYPE_NEW}
-            label={PRODUCT_FILTER.LABEL_FUND_TYPE}
+            label={PRODUCT_FILTER.LABEL_FUND_CATEGORY}
             value={fundType!}
           />
         </View>

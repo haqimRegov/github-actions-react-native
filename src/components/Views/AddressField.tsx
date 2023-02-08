@@ -3,7 +3,22 @@ import { NativeSyntheticEvent, TextInputFocusEventData, View, ViewStyle } from "
 
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_MALAYSIA_STATES } from "../../data/dictionary";
-import { centerHorizontal, colorBlue, DEVICE, flexRow, py, sh126, sh16, sh176, sh24, sh32, sh8, sw360, sw40, sw424 } from "../../styles";
+import {
+  borderBottomGray2,
+  centerHorizontal,
+  colorBlue,
+  DEVICE,
+  flexRow,
+  py,
+  sh126,
+  sh16,
+  sh176,
+  sh24,
+  sh8,
+  sw360,
+  sw40,
+  sw424,
+} from "../../styles";
 import { NewDropdown } from "../Dropdown/NewDropdown";
 import { CustomTextInput, TextInputMultiline } from "../Input";
 import { IconButton, OutlineButton } from "../Touchables";
@@ -71,11 +86,11 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           handleAddress();
         };
 
-        const labelLine = index === 0 ? "" : ` - Line ${index + 1}`;
+        const filteredAddressValues = addressValues.filter((eachAddress) => eachAddress !== undefined);
+        const labelLine = index === 0 && filteredAddressValues.length === 1 ? "" : ` ${index + 1}`;
 
         return (
           <View key={index} style={{ width: sw424 }}>
-            {index === 0 ? null : <CustomSpacer space={sh16} />}
             {address !== undefined ? (
               <View style={flexRow}>
                 <TextInputMultiline
@@ -100,9 +115,11 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
             {address === undefined && index === addressValues.indexOf(undefined) ? (
               <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddLine} text={ADDRESS.BUTTON_ADD} />
             ) : null}
+            <CustomSpacer space={sh16} />
           </View>
         );
       })}
+      <View style={borderBottomGray2} />
       <CustomTextInput
         autoCapitalize="words"
         error={postCodeError}
@@ -111,11 +128,11 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         maxLength={15}
         onBlur={onBlurPostCode}
         onChangeText={setInputPostCode}
-        spaceToTop={sh24}
+        spaceToTop={sh16}
         value={inputPostCode}
       />
-      <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh32} value={inputCity} />
-      <CustomSpacer space={sh32} />
+      <CustomTextInput autoCapitalize="words" label={ADDRESS.LABEL_CITY} onChangeText={setInputCity} spaceToTop={sh16} value={inputCity} />
+      <CustomSpacer space={sh16} />
       {addressType !== "Other" || inputCountry === DICTIONARY_COUNTRIES[0].value ? (
         <NewDropdown
           items={DICTIONARY_MALAYSIA_STATES}
@@ -133,7 +150,7 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
           handleChange={setInputCountry}
           label={ADDRESS.LABEL_COUNTRY}
           maxHeight={checkScaledDropdownHeight}
-          spaceToTop={sh32}
+          spaceToTop={sh16}
           style={countryDropdownStyle}
           value={inputCountry || ""}
         />

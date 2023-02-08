@@ -12,6 +12,7 @@ export const onboardingInitialState: OnboardingState = {
     "IdentityVerification",
     "PersonalDetails",
     "EmploymentDetails",
+    "AdditionalDetails",
     "PersonalInfoSummary",
     "Declarations",
     "CRSDeclaration",

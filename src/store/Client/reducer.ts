@@ -35,6 +35,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
             dateOfBirth: "",
             id: "",
             idType: DICTIONARY_ID_TYPE[0],
+            isEtb: false,
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           },
           jointHolder: {
@@ -43,6 +44,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
             dateOfBirth: "",
             id: "",
             idType: DICTIONARY_ID_TYPE[0],
+            isEtb: false,
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           },
           verified: false,

@@ -1,7 +1,7 @@
 import { Language } from "../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_MOBILE_CODE } from "../../data/dictionary";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { ADDITIONAL_DETAILS, PERSONAL_DETAILS } = Language.PAGE;
 
 export type PersonalInfoState = IPersonalInfoState;
 
@@ -14,9 +14,9 @@ export const personalInfoInitialState: PersonalInfoState = {
   emailTimestamp: undefined,
   epfInvestment: false,
   epfShariah: false,
-  incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
+  incomeDistribution: ADDITIONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
   isAllEpf: false,
-  signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
+  signatory: ADDITIONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
   principal: {
     addressInformation: {
       mailingAddress: {

@@ -15,7 +15,7 @@ interface AMPTemplateProps {
   addAmpRecommendedFunds: (funds: IProductListResult) => void;
   addAmpSearch: (value: string) => void;
   addAmpSort: (sort: IProductSort[]) => void;
-  addViewFund?: (fund: IProduct) => void;
+  addViewFund: (fund: IProduct) => void;
   handleCancelOnboarding?: () => void;
   handleFetchAMP: (page: string) => Promise<void>;
   isMultiUtmc?: boolean;
@@ -28,7 +28,6 @@ interface AMPTemplateProps {
   scrollEnabled: boolean;
   selectedFunds: IProduct[];
   setScrollEnabled: (toggle: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
   updateAmpShowBy: (show: ProductListShowByType) => void;
   withEpf?: boolean;
@@ -53,7 +52,6 @@ export const AMPTemplate: FunctionComponent<AMPTemplateProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updateAmpShowBy,
   withEpf,
@@ -104,10 +102,7 @@ export const AMPTemplate: FunctionComponent<AMPTemplateProps> = ({
 
   const handleResetFilter = () => {
     const epfAccountType =
-      (transactionType === "Sales-NS" || transactionType === "Sales") &&
-      isNotEmpty(accountDetails) &&
-      accountDetails!.fundType === "amp" &&
-      accountDetails!.isEpf === true;
+      transactionType === "Sales" && isNotEmpty(accountDetails) && accountDetails!.fundType === "amp" && accountDetails!.isEpf === true;
     if (epfAccountType === true) {
       addAmpFilters({
         fundCurrency: [],
@@ -222,7 +217,6 @@ export const AMPTemplate: FunctionComponent<AMPTemplateProps> = ({
         search={search}
         selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
-        shareSuccess={shareSuccess}
         showBy={showBy}
         sort={sort}
         totalCount={totalCount}

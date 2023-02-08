@@ -15,7 +15,7 @@ interface PRSDefaultTemplateProps {
   addPrsDefaultSearch: (value: string) => void;
   addPrsDefaultSort: (sort: IProductSort[]) => void;
   addSelectedFund: (fund: IProduct[]) => void;
-  addViewFund?: (fund: IProduct) => void;
+  addViewFund: (fund: IProduct) => void;
   handleCancelOnboarding?: () => void;
   handleFetchPrsDefault: (page: string) => Promise<void>;
   loading: boolean;
@@ -26,7 +26,6 @@ interface PRSDefaultTemplateProps {
   scrollEnabled: boolean;
   selectedFunds: IProduct[];
   setScrollEnabled: (toggle: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
   updatePrsDefaultShowBy: (show: ProductListShowByType) => void;
 }
@@ -48,7 +47,6 @@ export const PRSDefaultTemplate: FunctionComponent<PRSDefaultTemplateProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updatePrsDefaultShowBy,
 }: PRSDefaultTemplateProps) => {
@@ -191,7 +189,6 @@ export const PRSDefaultTemplate: FunctionComponent<PRSDefaultTemplateProps> = ({
         productType={productType}
         selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
-        shareSuccess={shareSuccess}
         showBy={showBy}
         sort={sort}
         totalCount={totalCount}

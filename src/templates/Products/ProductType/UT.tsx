@@ -15,7 +15,7 @@ interface UnitTrustTemplateProps {
   addUtRecommendedFunds: (funds: IProductListResult) => void;
   addUtSearch: (value: string) => void;
   addUtSort: (sort: IProductSort[]) => void;
-  addViewFund?: (fund: IProduct) => void;
+  addViewFund: (fund: IProduct) => void;
   handleCancelOnboarding?: () => void;
   handleFetchUT: (page: string) => Promise<void>;
   isMultiUtmc?: boolean;
@@ -28,7 +28,6 @@ interface UnitTrustTemplateProps {
   scrollEnabled: boolean;
   selectedFunds: IProduct[];
   setScrollEnabled: (toggle: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
   updateUtShowBy: (show: ProductListShowByType) => void;
 }
@@ -52,7 +51,6 @@ export const UnitTrustTemplate: FunctionComponent<UnitTrustTemplateProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updateUtShowBy,
 }: UnitTrustTemplateProps) => {
@@ -102,10 +100,7 @@ export const UnitTrustTemplate: FunctionComponent<UnitTrustTemplateProps> = ({
 
   const handleResetFilter = () => {
     const epfAccountType =
-      (transactionType === "Sales-NS" || transactionType === "Sales") &&
-      isNotEmpty(accountDetails) &&
-      accountDetails!.fundType === "ut" &&
-      accountDetails!.isEpf === true;
+      transactionType === "Sales" && isNotEmpty(accountDetails) && accountDetails!.fundType === "ut" && accountDetails!.isEpf === true;
     if (epfAccountType === true) {
       addUtFilters({
         fundCurrency: [],
@@ -220,7 +215,6 @@ export const UnitTrustTemplate: FunctionComponent<UnitTrustTemplateProps> = ({
         search={search}
         selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
-        shareSuccess={shareSuccess}
         showBy={showBy}
         sort={sort}
         totalCount={totalCount}

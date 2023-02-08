@@ -15,7 +15,7 @@ interface PRSTemplateProps {
   addPrsSearch: (value: string) => void;
   addPrsSort: (sort: IProductSort[]) => void;
   addSelectedFund: (fund: IProduct[]) => void;
-  addViewFund?: (fund: IProduct) => void;
+  addViewFund: (fund: IProduct) => void;
   handleCancelOnboarding?: () => void;
   handleFetchPrs: (page: string) => Promise<void>;
   loading: boolean;
@@ -26,7 +26,6 @@ interface PRSTemplateProps {
   scrollEnabled: boolean;
   selectedFunds: IProduct[];
   setScrollEnabled: (toggle: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
   updatePrsShowBy: (show: ProductListShowByType) => void;
 }
@@ -48,7 +47,6 @@ export const PRSTemplate: FunctionComponent<PRSTemplateProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updatePrsShowBy,
 }: PRSTemplateProps) => {
@@ -191,7 +189,6 @@ export const PRSTemplate: FunctionComponent<PRSTemplateProps> = ({
         productType={productType}
         selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
-        shareSuccess={shareSuccess}
         showBy={showBy}
         sort={sort}
         totalCount={totalCount}

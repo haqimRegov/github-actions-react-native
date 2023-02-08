@@ -3,26 +3,11 @@ import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ColorCard, ContentPage, CustomSpacer } from "../../../components";
+import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, ERROR_CODE } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import {
-  centerVertical,
-  colorRed,
-  flexRow,
-  fs10RegGray6,
-  fs12BoldBlack2,
-  fs16BoldBlack2,
-  px,
-  rowCenterVertical,
-  sh24,
-  sh4,
-  sh56,
-  sw1,
-  sw12,
-  sw24,
-} from "../../../styles";
+import { fs16BoldBlack2, px, rowCenterVertical, sh24, sw24 } from "../../../styles";
 import { OCRUtils, splitString } from "../../../utils";
 import { IDVerification } from "./IDVerification";
 import { ImageReview } from "./ImageReview";
@@ -63,13 +48,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const jointIdType = jointHolder!.idType!;
   const principalClientIdType = principalIdType === "Other" ? principalHolder!.otherIdType : principalIdType;
   const jointClientIdType = jointIdType === "Other" ? jointHolder!.otherIdType : jointIdType;
-
-  const principalTitle =
-    principalIdType !== "Passport" && principalIdType !== "NRIC"
-      ? `${principalIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}`
-      : `${principalIdType}`;
-  const defaultPrincipalTitle = `${IDENTITY_CONFIRMATION.SUBHEADING} ${principalTitle}`;
-  const defaultSubtitle = accountType === "Joint" ? IDENTITY_CONFIRMATION.JOINT_SUBHEADING : defaultPrincipalTitle;
 
   const individualNRIC =
     principalFrontPage?.path !== undefined &&
@@ -284,23 +262,12 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           continueDisabled={buttonDisabled}
           handleCancel={handleBack}
           handleContinue={handleContinue}
-          labelCancel={IDENTITY_CONFIRMATION.BUTTON_BACK}
           subheading={IDENTITY_CONFIRMATION.HEADING}
-          subtitle={defaultSubtitle}>
+          subtitle={IDENTITY_CONFIRMATION.SUBHEADING}>
           <View style={px(sw24)}>
             <CustomSpacer space={sh24} />
             {accountType === "Joint" ? (
-              <Fragment>
-                <View style={{ borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
-                  <View style={{ ...flexRow, ...centerVertical }}>
-                    <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw12} />
-                    <Text style={fs12BoldBlack2}>{principalHolder?.name}</Text>
-                  </View>
-                  <CustomSpacer space={sh4} />
-                </View>
-                <CustomSpacer space={sh24} />
-              </Fragment>
+              <AccountHeader title={IDENTITY_CONFIRMATION.LABEL_PRINCIPAL_HOLDER} subtitle={principalHolder?.name!} />
             ) : null}
             <ColorCard
               header="custom"
@@ -327,21 +294,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
           </View>
           {accountType === "Individual" ? null : (
             <Fragment>
-              <CustomSpacer space={sh56} />
+              <CustomSpacer space={sh24} />
               <View style={px(sw24)}>
-                {accountType === "Joint" ? (
-                  <Fragment>
-                    <View style={{ borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
-                      <View style={{ ...flexRow, ...centerVertical }}>
-                        <Text style={fs10RegGray6}>{IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER}</Text>
-                        <CustomSpacer isHorizontal={true} space={sw12} />
-                        <Text style={fs12BoldBlack2}>{jointHolder?.name}</Text>
-                      </View>
-                      <CustomSpacer space={sh4} />
-                    </View>
-                    <CustomSpacer space={sh24} />
-                  </Fragment>
-                ) : null}
+                <AccountHeader title={IDENTITY_CONFIRMATION.LABEL_JOINT_HOLDER} subtitle={jointHolder?.name!} />
                 <ColorCard
                   header="custom"
                   customHeader={

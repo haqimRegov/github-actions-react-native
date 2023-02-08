@@ -1,11 +1,13 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
+import { ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { borderBottomGray2, px, sh24, sh48, sw24, sw48 } from "../../../styles";
+import { px, sh24, sh4, sw24 } from "../../../styles";
+import { isNumber } from "../../../utils";
+import { EPFDetails } from "./EPFDetails";
 import { JointVerification } from "./Joint";
 import { PrincipalVerification } from "./Principal";
 
@@ -19,23 +21,34 @@ interface IDVerificationProps extends PersonalInfoStoreProps {
 const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   accountType,
   addPersonalInfo,
+  client,
   handleBack,
   handleNextStep,
   onboarding,
   personalInfo,
   updateOnboarding,
 }: IDVerificationProps) => {
-  const { principal, joint } = personalInfo;
+  const { epfInvestment, epfShariah, principal, joint } = personalInfo;
+  const { epfDetails } = principal!;
+  const inputEpfType = epfDetails!.epfAccountType!;
+  const inputEpfNumber = epfDetails!.epfMemberNumber!;
+  const { details: clientDetails } = client;
+  const { principalHolder: principalClient, jointHolder: jointClient } = clientDetails!;
+  const { isEtb: isPrincipalEtb } = principalClient!;
+  const { isEtb: isJointEtb } = jointClient!;
   const [validations, setValidations] = useState<IIDVerificationPageValidation>({
     principal: {
       name: undefined,
       permanentPostCode: undefined,
       mailingPostCode: undefined,
+      mothersName: undefined,
+      epfNumber: undefined,
     },
     joint: {
       name: undefined,
       permanentPostCode: undefined,
       mailingPostCode: undefined,
+      mothersName: undefined,
     },
   });
 
@@ -45,6 +58,13 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       personalDetails!.idType === "Passport"
         ? personalDetails!.nationality !== "" && personalDetails!.expirationDate !== undefined && personalDetails!.countryOfBirth !== ""
         : true;
+    const checkEducation =
+      (personalDetails!.educationLevel !== "Others" && personalDetails!.educationLevel !== "") ||
+      (personalDetails!.educationLevel !== "" &&
+        personalDetails!.educationLevel === "Others" &&
+        personalDetails!.otherEducationLevel !== "");
+    const checkMalaysianDetails =
+      personalDetails?.idType !== "Passport" ? personalDetails!.race !== "" && personalDetails!.bumiputera !== undefined : true;
 
     return (
       personalDetails!.idNumber !== "" &&
@@ -53,6 +73,11 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       personalDetails!.salutation !== "" &&
       personalDetails!.gender !== "" &&
       personalDetails!.placeOfBirth !== "" &&
+      personalDetails!.countryOfBirth !== "" &&
+      personalDetails?.mothersMaidenName !== "" &&
+      personalDetails?.maritalStatus !== "" &&
+      checkMalaysianDetails === true &&
+      checkEducation === true &&
       Object.values(addressInformation!.permanentAddress!).includes("") === false &&
       Object.values(addressInformation!.permanentAddress!.address!).includes("") === false &&
       Object.values(addressInformation!.mailingAddress!).includes("") === false &&
@@ -74,11 +99,6 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);
   };
-
-  const continueDisabled =
-    accountType === "Individual"
-      ? validateDetails(principal!, validations.principal) === false
-      : validateDetails(principal!, validations.principal) === false || validateDetails(joint!, validations.joint) === false;
 
   const handlePrincipalDetails = (value: IPersonalDetailsState) => {
     addPersonalInfo({ principal: { personalDetails: { ...principal!.personalDetails, ...value } } });
@@ -112,34 +132,88 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
     setValidations({ ...validations, joint: { ...validations.joint, ...value } });
   };
 
-  const padding: ViewStyle = accountType === "Joint" ? px(sw48) : px(sw24);
+  const handleInputEpfType = (value: string) =>
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        epfDetails: {
+          ...personalInfo.principal?.epfDetails,
+          epfAccountType: value,
+        },
+      },
+    });
+
+  const handleInputEpfNumber = (value: string) =>
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        epfDetails: {
+          ...personalInfo.principal?.epfDetails,
+          epfMemberNumber: value,
+        },
+      },
+    });
+
+  const handleEpfNumber = () => {
+    const checkEpfNumber = isNumber(inputEpfNumber) === false || inputEpfNumber === "" ? ERROR.INVALID_NUMBER : undefined;
+    setValidations({
+      ...validations,
+      principal: {
+        ...validations.principal,
+        epfNumber: checkEpfNumber,
+      },
+    });
+  };
+
+  const checkEpf =
+    epfInvestment === true
+      ? principal!.epfDetails!.epfMemberNumber !== "" &&
+        principal?.epfDetails!.epfAccountType !== "" &&
+        validations.principal.epfNumber === undefined
+      : true;
+
+  // const principalEpfCheck = personalInfo.isAllEpf === true ? principal?.personalDetails?.enableBankDetails === true : true;
+
+  const continueDisabled =
+    accountType === "Individual"
+      ? checkEpf === false || validateDetails(principal!, validations.principal) === false
+      : (isPrincipalEtb === false && validateDetails(principal!, validations.principal) === false) ||
+        (isJointEtb === false && validateDetails(joint!, validations.joint) === false);
 
   return (
     <ContentPage
-      buttonContainerStyle={padding}
+      buttonContainerStyle={px(sw24)}
       continueDisabled={continueDisabled}
       handleCancel={handleBack}
       handleContinue={handleSubmit}
-      labelCancel={ID_VERIFICATION.BUTTON_BACK}
-      labelContinue={ID_VERIFICATION.BUTTON_VERIFY}>
-      <PrincipalVerification
-        accountType={accountType!}
-        accountHolder="Principal"
-        addressInfo={principal!.addressInformation!}
-        personalDetails={principal!.personalDetails!}
-        setAddressInfo={handlePrincipalAddress}
-        setPersonalDetails={handlePrincipalDetails}
-        setValidations={handlePrincipalValidation}
-        validations={validations.principal}
-      />
-      {accountType === "Individual" ? null : (
+      subheading={ID_VERIFICATION.LABEL_HEADING}
+      spaceToTitle={sh4}
+      subtitle={ID_VERIFICATION.LABEL_SUB_HEADING}>
+      {isPrincipalEtb === false ? (
         <Fragment>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomGray2} />
-          <CustomSpacer space={sh48} />
+          <PrincipalVerification
+            accountType={accountType!}
+            accountHolder="Principal"
+            addressInfo={principal!.addressInformation!}
+            clientDetails={client.details?.principalHolder!}
+            personalDetails={principal!.personalDetails!}
+            setAddressInfo={handlePrincipalAddress}
+            setPersonalDetails={handlePrincipalDetails}
+            setValidations={handlePrincipalValidation}
+            validations={validations.principal}
+          />
+        </Fragment>
+      ) : null}
+      {accountType === "Individual" || isJointEtb === true ? null : (
+        <Fragment>
+          <CustomSpacer space={sh24} />
           <JointVerification
             accountHolder="Joint"
             addressInfo={joint!.addressInformation!}
+            clientDetails={client.details?.jointHolder!}
             personalDetails={joint!.personalDetails!}
             setAddressInfo={handleJointAddress}
             setPersonalDetails={handleJointDetails}
@@ -148,6 +222,20 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
           />
         </Fragment>
       )}
+      {epfInvestment === true ? (
+        <Fragment>
+          <CustomSpacer space={sh24} />
+          <EPFDetails
+            epfNumberError={validations.principal.epfNumber}
+            epfShariah={epfShariah!}
+            inputEpfNumber={inputEpfNumber}
+            inputEpfType={inputEpfType}
+            onBlurEpfNumber={handleEpfNumber}
+            setInputEpfNumber={handleInputEpfNumber}
+            setInputEpfType={handleInputEpfType}
+          />
+        </Fragment>
+      ) : null}
     </ContentPage>
   );
 };

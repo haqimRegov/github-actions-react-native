@@ -1,5 +1,6 @@
 export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   Acknowledgement: "Acknowledgement",
+  AdditionalDetails: "AdditionalDetails",
   CRSDeclaration: "CRSDeclaration",
   Declarations: "Declarations",
   DeclarationSummary: "DeclarationSummary",
@@ -28,6 +29,7 @@ export const ONBOARDING_KEYS: IOnboardingKeys = {
   IdentityVerification: "IdentityVerification",
   PersonalDetails: "PersonalDetails",
   EmploymentDetails: "EmploymentDetails",
+  AdditionalDetails: "AdditionalDetails",
   PersonalInfoSummary: "PersonalInfoSummary",
   Declarations: "Declarations",
   FATCADeclaration: "FATCADeclaration",

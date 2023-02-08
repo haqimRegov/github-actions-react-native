@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import { CustomSpacer, Switch } from "../../../components";
 import { Language } from "../../../constants";
-import { px, sh16, sh40, sw24 } from "../../../styles";
+import { sh40 } from "../../../styles";
 import { EmploymentInfo, initialJointEmploymentDetails } from "./Details";
 
 const { EMPLOYMENT_DETAILS } = Language.PAGE;
@@ -36,31 +36,28 @@ export const JointEmploymentDetails: FunctionComponent<JointEmploymentDetails> =
 
   return (
     <View>
-      <View style={px(sw24)}>
-        {jointAgeCheck === true ? (
-          <Fragment>
-            <CustomSpacer space={sh40} />
-            <Switch label={EMPLOYMENT_DETAILS.LABEL_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
-            <CustomSpacer space={sh16} />
-          </Fragment>
-        ) : null}
-        {employmentDetails.isEnabled === true ? (
-          <Fragment>
-            <View>
-              <EmploymentInfo
-                accountHolder="Joint"
-                accountType={accountType}
-                employmentDetails={employmentDetails}
-                personalDetails={personalDetails}
-                setEmploymentDetails={setEmploymentDetails}
-                setPersonalInfoDetails={setPersonalInfoDetails}
-                setValidations={setValidations}
-                validations={validations}
-              />
-            </View>
-          </Fragment>
-        ) : null}
-      </View>
+      {jointAgeCheck === true ? (
+        <Fragment>
+          <Switch label={EMPLOYMENT_DETAILS.LABEL_DETAILS_OPTIONAL} onPress={handleEnable} toggle={enabled} />
+          <CustomSpacer space={sh40} />
+        </Fragment>
+      ) : null}
+      {employmentDetails.isEnabled === true || jointAgeCheck === false ? (
+        <Fragment>
+          <View>
+            <EmploymentInfo
+              accountHolder="Joint"
+              accountType={accountType}
+              employmentDetails={employmentDetails}
+              personalDetails={personalDetails}
+              setEmploymentDetails={setEmploymentDetails}
+              setPersonalInfoDetails={setPersonalInfoDetails}
+              setValidations={setValidations}
+              validations={validations}
+            />
+          </View>
+        </Fragment>
+      ) : null}
     </View>
   );
 };

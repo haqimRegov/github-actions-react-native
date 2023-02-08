@@ -55,7 +55,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   ];
 
   const handleBack = () => {
-    handleNextStep("EmploymentDetails");
+    handleNextStep("AdditionalDetails");
   };
 
   const isAllEpf = personalInfo.isAllEpf !== undefined ? personalInfo.isAllEpf : false;
@@ -70,7 +70,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
       subheading={SUMMARY.HEADING}
       subtitle={SUMMARY.SUBHEADING}>
       <Principal
-        accountType={accountType}
+        accountType={accountType!}
         handleCloseViewer={handleCloseViewer}
         handleNextStep={handleNextStep}
         isAllEpf={isAllEpf}

@@ -44,15 +44,20 @@ export const ONBOARDING_DATA: IOnboarding[] = [
         key: ONBOARDING_KEYS.EmailVerification,
       },
       {
-        title: ONBOARDING.TITLE_ID_VERIFICATION,
+        title: ONBOARDING.TITLE_IDENTIFICATION,
         route: ONBOARDING_ROUTES.IdentityVerification,
         key: ONBOARDING_KEYS.IdentityVerification,
       },
-      { title: ONBOARDING.TITLE_PERSONAL_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails, key: ONBOARDING_KEYS.PersonalDetails },
+      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails, key: ONBOARDING_KEYS.PersonalDetails },
       {
         title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS,
         route: ONBOARDING_ROUTES.EmploymentDetails,
         key: ONBOARDING_KEYS.EmploymentDetails,
+      },
+      {
+        title: ONBOARDING.TITLE_ADDITIONAL_DETAILS,
+        route: ONBOARDING_ROUTES.AdditionalDetails,
+        key: ONBOARDING_KEYS.AdditionalDetails,
       },
       { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.PersonalInfoSummary, key: ONBOARDING_KEYS.PersonalInfoSummary },
     ],

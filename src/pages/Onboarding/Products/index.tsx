@@ -26,6 +26,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   handleNextStep,
   investmentDetails,
   onboarding,
+  personalInfo,
   resetProducts,
   resetSelectedFund,
   selectedFunds,
@@ -35,6 +36,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
   const { agent, isMultiUtmc } = global;
+  const { joint } = personalInfo;
+  const jointDOB = joint?.personalDetails?.dateOfBirth;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
@@ -176,6 +179,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
             "IdentityVerification",
             "PersonalDetails",
             "EmploymentDetails",
+            "AdditionalDetails",
             "PersonalInfoSummary",
             "Declarations",
             "FATCADeclaration",
@@ -196,6 +200,25 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     if (findPersonalInfo !== -1) {
       updatedDisabledSteps.splice(findPersonalInfo, 1);
     }
+
+    const checkJoint =
+      accountType === "Joint" && moment().diff(moment(jointDOB), "years") < 18
+        ? {
+            ...joint,
+            employmentDetails: {
+              ...joint?.employmentDetails,
+              isEnabled: false,
+            },
+          }
+        : { ...joint };
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        employmentDetails: { ...personalInfo.principal?.employmentDetails },
+      },
+      joint: checkJoint,
+    });
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 

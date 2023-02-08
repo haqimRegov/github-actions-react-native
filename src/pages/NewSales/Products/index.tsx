@@ -1,18 +1,17 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Keyboard, Text, View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ConfirmationModal, CustomSpacer, SelectionBanner } from "../../../components";
-import { DEFAULT_DATE_FORMAT, Language, NunitoRegular } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
-import { flexChild, flexCol, flexRow, fs16BoldGray6, fs16RegGray6, sh56, sw4 } from "../../../styles";
+import { flexChild } from "../../../styles";
+import { ProductDetails, ProductsBanner, ProductsPrompt } from "../../../templates";
 import { isArrayNotEmpty } from "../../../utils";
-import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
 
-const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
+const { PRODUCT_LIST } = Language.PAGE;
 
 interface ProductsProps extends ProductsStoreProps, NewSalesContentProps {
   handleNextStep: (step: TypeNewSalesRoute) => void;
@@ -26,13 +25,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addViewFund,
   client,
   details,
-  handleNextStep,
   global,
+  handleNextStep,
   investmentDetails,
   newSales,
-  partialResetUTProducts,
   partialResetPRSDefaultProducts,
   partialResetPRSProducts,
+  partialResetUTProducts,
   products,
   resetProducts,
   resetSelectedFund,
@@ -48,7 +47,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const { accountNo, fundType, isEpf } = accountDetails;
   const { ut, prsDefault } = products;
   const [page] = useState<number>(0);
-  const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
@@ -233,26 +231,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     return handleInvest();
   };
 
-  // const handleBackToListing = () => {
-  //   return page === 1 ? setPage(0) : addSelectedFund([]);
-  // };
-
   const handleCancelProducts = () => {
     setPrompt("cancel");
   };
 
   const handleBack = () => {
     addViewFund(undefined);
-  };
-
-  const handleShareDocuments = async () => {
-    // TODO integration
-    // const response = [];
-    // const documents = response.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
-    // const share = await RNShareApi.filesBase64(documents);
-    // if (share !== undefined) {
-    //   setShareSuccess(true);
-    // }
   };
 
   const continueDisabledInvestment = investmentDetails?.find(({ investment }) => {
@@ -284,7 +268,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     content: (
       <ProductList
         handleCancelProducts={handleCancelProducts}
-        handleShareDocuments={handleShareDocuments}
         scrollEnabled={scrollEnabled}
         setScrollEnabled={setScrollEnabled}
         withEpf={withEpf}
@@ -304,7 +287,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           disabled={selectViewFundDisabled}
           fund={viewFund}
           handleBack={handleBack}
-          handleShareDocuments={handleShareDocuments}
           selectedFunds={selectedFunds}
           setSelectedFund={addSelectedFund}
           setViewFund={addViewFund}
@@ -313,35 +295,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       continueDisabled: continueDisabledInvestment !== undefined && page === 1,
     };
   }
-
-  useEffect(() => {
-    setShareSuccess(false);
-  }, [shareSuccess]);
-
-  let utCount = 0;
-  let prsCount = 0;
-  let ampCount = 0;
-  selectedFunds.forEach((fund: IProduct) => {
-    if (fund.fundType === "UT" || fund.fundType === "UTF" || fund.fundType === "WSF") {
-      utCount += 1;
-    } else if (fund.fundType === "PRS") {
-      prsCount += 1;
-    } else if (fund.fundType === "AMP") {
-      ampCount += 1;
-    }
-  });
-
-  const utSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ", " : "";
-  const prsSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const prsPrefix = prsCount > 0 && utCount > 0 && ampCount === 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const ampPrefix =
-    (ampCount > 0 && utCount > 0 && prsCount === 0) || (ampCount > 0 && prsCount > 0 && utCount === 0) ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const utLabel = utCount > 0 ? `${utCount} ${INVESTMENT.LABEL_UT}` : "";
-  const prsLabel = prsCount > 0 ? `${prsCount} ${INVESTMENT.LABEL_PRS}` : "";
-  const ampLabel = ampCount > 0 ? `${ampCount} ${INVESTMENT.LABEL_AMP}` : "";
-
-  const bannerText =
-    selectedFunds.length !== 0 ? `${utLabel}${utSuffix}${prsPrefix}${prsLabel}${prsSuffix}${ampPrefix}${ampLabel}` : INVESTMENT.LABEL_NONE;
 
   const handleKeyboardShow = () => {
     setKeyboardIsShowing(true);
@@ -359,45 +312,22 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       keyboardWillShow.remove();
     };
   }, []);
-  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
-  const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE_NEW;
-  const promptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : riskPromptText;
-  const checkSelected = selectedFunds.length === 0 ? { fontFamily: NunitoRegular } : {};
 
   return (
     <Fragment>
       <View style={flexChild}>
         {screen.content}
         {viewFund === undefined && scrollEnabled === true && keyboardIsShowing === false ? (
-          <View style={flexCol}>
-            <SelectionBanner
-              bottomContent={
-                <View style={flexRow}>
-                  <Text style={{ ...fs16BoldGray6, ...checkSelected }}>{bannerText}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={fs16RegGray6}>{INVESTMENT.LABEL_SELECTED}</Text>
-                </View>
-              }
-              cancelOnPress={screen.onPressCancel}
-              continueDisabled={screen.continueDisabled}
-              labelCancel={INVESTMENT.BUTTON_CANCEL}
-              labelSubmit={screen.labelSubmit}
-              submitOnPress={screen.onPressSubmit}
-              label={PRODUCT_LIST.LABEL_NEW_SALES_PRODUCT_SERVICE_SUMMARY}
-            />
-          </View>
+          <ProductsBanner
+            cancelOnPress={screen.onPressCancel}
+            continueDisabled={screen.continueDisabled}
+            selectedFunds={selectedFunds}
+            labelSubmit={screen.labelSubmit}
+            submitOnPress={screen.onPressSubmit}
+          />
         ) : null}
       </View>
-      <ConfirmationModal
-        handleCancel={handleCancel}
-        handleContinue={handlePrompt}
-        labelCancel={prompt === "risk" ? undefined : PRODUCT_LIST.BUTTON_NO}
-        labelContinue={PRODUCT_LIST.BUTTON_YES}
-        spaceToTitle={prompt === "cancel" ? undefined : sh56}
-        title={promptTitle}
-        visible={prompt !== undefined}>
-        <Text style={fs16RegGray6}>{promptText}</Text>
-      </ConfirmationModal>
+      <ProductsPrompt handleCancel={handleCancel} handleContinue={handlePrompt} prompt={prompt} />
     </Fragment>
   );
 };

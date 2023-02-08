@@ -1,15 +1,14 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Keyboard, Text, View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ConfirmationModal, SelectionBanner } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
-import { flexChild, flexCol, fs16RegGray6, sh56 } from "../../../styles";
+import { flexChild } from "../../../styles";
+import { ProductDetails, ProductsBanner, ProductsPrompt } from "../../../templates";
 import { ProductConfirmation } from "./Confirmation";
-import { ProductDetails } from "./Details";
 import { ProductList } from "./ProductList";
 
 const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
@@ -23,9 +22,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addSelectedFund,
   addViewFund,
   details,
+  global,
   handleNextStep,
   investmentDetails,
-  global,
   onboarding,
   resetProducts,
   resetSelectedFund,
@@ -39,7 +38,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const { agent, isMultiUtmc } = global;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
-  const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
@@ -202,21 +200,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
 
-  const handleShareDocuments = async () => {
-    // TODO integration
-    // const response = [];
-    // const documents = response.map((file: FileBase64) => `data:${file.type};base64,${file.base64}`);
-    // const share = await RNShareApi.filesBase64(documents);
-    // if (share !== undefined) {
-    //   setShareSuccess(true);
-    // }
-  };
-
   let screen = {
     content: (
       <ProductList
         handleCancelProducts={handleCancelProducts}
-        handleShareDocuments={handleShareDocuments}
         scrollEnabled={scrollEnabled}
         setScrollEnabled={setScrollEnabled}
         withEpf={withEpf}
@@ -224,7 +211,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     ),
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
-    labelSubmit: INVESTMENT.BUTTON_START_INVESTING,
+    labelSubmit: PRODUCT_LIST.BUTTON_START_INVESTING,
   };
 
   if (page === 1 && selectedFunds.length > 0) {
@@ -232,7 +219,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       ...screen,
       content: (
         <ProductConfirmation
-          accountType={accountType}
+          accountType={accountType!}
           agentCategory={agent!.category!}
           investmentDetails={investmentDetails!}
           multiUtmc={isMultiUtmc}
@@ -253,41 +240,21 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   if (viewFund !== undefined) {
     screen = {
       ...screen,
-      content: <ProductDetails fund={viewFund} handleBack={handleBack} handleShareDocuments={handleShareDocuments} />,
+      content: (
+        <ProductDetails
+          fund={viewFund}
+          handleBack={handleBack}
+          selectedFunds={selectedFunds}
+          setSelectedFund={addSelectedFund}
+          setViewFund={addViewFund}
+        />
+      ),
       onPressSubmit: handleConfirmIdentity,
       labelSubmit: INVESTMENT.BUTTON_CONFIRM,
     };
   }
 
-  useEffect(() => {
-    setShareSuccess(false);
-  }, [shareSuccess]);
-
-  let utCount = 0;
-  let prsCount = 0;
-  let ampCount = 0;
-  selectedFunds.forEach((fund: IProduct) => {
-    if (fund.fundType === "UT" || fund.fundType === "UTF" || fund.fundType === "WSF") {
-      utCount += 1;
-    } else if (fund.fundType === "PRS") {
-      prsCount += 1;
-    } else if (fund.fundType === "AMP") {
-      ampCount += 1;
-    }
-  });
-
-  const utSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ", " : "";
-  const prsSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const prsPrefix = prsCount > 0 && utCount > 0 && ampCount === 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const ampPrefix =
-    (ampCount > 0 && utCount > 0 && prsCount === 0) || (ampCount > 0 && prsCount > 0 && utCount === 0) ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const utLabel = utCount > 0 ? `${utCount} ${INVESTMENT.LABEL_UT}` : "";
-  const prsLabel = prsCount > 0 ? `${prsCount} ${INVESTMENT.LABEL_PRS}` : "";
-  const ampLabel = ampCount > 0 ? `${ampCount} ${INVESTMENT.LABEL_AMP}` : "";
-
-  const bannerText = `${utLabel}${utSuffix}${prsPrefix}${prsLabel}${prsSuffix}${ampPrefix}${ampLabel} ${INVESTMENT.LABEL_SELECTED}`;
-
-  const disableContinue = investmentDetails?.find(({ investment }) => {
+  const disableContinueInvestment = investmentDetails?.find(({ investment }) => {
     return (
       investment.investmentAmount === "" ||
       investment.investmentSalesCharge === "" ||
@@ -299,6 +266,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       investment.scheduledSalesChargeError !== undefined
     );
   });
+
+  const disableContinue = page === 1 ? disableContinueInvestment !== undefined : selectedFunds.length === 0;
 
   const handleKeyboardShow = () => {
     setKeyboardIsShowing(true);
@@ -320,42 +289,22 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const promptTitle = prompt === "cancel" ? PRODUCT_LIST.PROMPT_TITLE_CANCEL : PRODUCT_LIST.PROMPT_TITLE_RISK;
-  const riskPromptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : PRODUCT_LIST.PROMPT_LABEL_OUTSIDE;
-  const promptText = prompt === "cancel" ? PRODUCT_LIST.PROMPT_LABEL_CANCEL : riskPromptText;
 
   return (
     <Fragment>
       <View style={flexChild}>
         {screen.content}
-        {fixedBottomShow === true &&
-        selectedFunds.length !== 0 &&
-        viewFund === undefined &&
-        keyboardIsShowing === false &&
-        scrollEnabled === true ? (
-          <View style={flexCol}>
-            <SelectionBanner
-              bottomContent={<Text style={fs16RegGray6}>{bannerText}</Text>}
-              cancelOnPress={screen.onPressCancel}
-              continueDisabled={disableContinue !== undefined && page === 1}
-              labelCancel={INVESTMENT.BUTTON_CANCEL}
-              labelSubmit={screen.labelSubmit}
-              submitOnPress={screen.onPressSubmit}
-              label={INVESTMENT.LABEL_FUND_SUMMARY}
-            />
-          </View>
+        {fixedBottomShow === true && viewFund === undefined && keyboardIsShowing === false && scrollEnabled === true ? (
+          <ProductsBanner
+            cancelOnPress={screen.onPressCancel}
+            continueDisabled={disableContinue}
+            selectedFunds={selectedFunds}
+            labelSubmit={screen.labelSubmit}
+            submitOnPress={screen.onPressSubmit}
+          />
         ) : null}
       </View>
-      <ConfirmationModal
-        handleCancel={handleCancel}
-        handleContinue={handlePrompt}
-        labelCancel={PRODUCT_LIST.BUTTON_NO}
-        labelContinue={PRODUCT_LIST.BUTTON_YES}
-        spaceToTitle={prompt === "cancel" ? undefined : sh56}
-        title={promptTitle}
-        visible={prompt !== undefined}>
-        <Text style={fs16RegGray6}>{promptText}</Text>
-      </ConfirmationModal>
+      <ProductsPrompt handleCancel={handleCancel} handleContinue={handlePrompt} prompt={prompt} />
     </Fragment>
   );
 };

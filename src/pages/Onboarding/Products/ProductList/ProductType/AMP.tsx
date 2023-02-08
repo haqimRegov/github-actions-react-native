@@ -13,7 +13,6 @@ interface AMPProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
   withEpf: boolean;
 }
@@ -37,7 +36,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updateAvailableFilters,
   updateAmpShowBy,
@@ -57,7 +55,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const handleFetch = async (newPage: string) => {
     setLoading(true);
     const request: IProductListRequest = {
-      accountType: accountType.toLowerCase(),
+      accountType: accountType!.toLowerCase(),
       fundCurrency: filters.fundCurrency || [],
       fundType: filters.fundType![0] || "",
       // isConventional: filters.conventional![0], // Not used in BE
@@ -137,7 +135,6 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       scrollEnabled={scrollEnabled}
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
-      shareSuccess={shareSuccess}
       tabsContent={tabsContent}
       updateAmpShowBy={updateAmpShowBy}
       withEpf={withEpf}

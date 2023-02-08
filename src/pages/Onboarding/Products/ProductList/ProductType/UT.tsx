@@ -6,19 +6,17 @@ import { connect } from "react-redux";
 import { FILTER_RISK } from "../../../../../data/dictionary";
 import { getProductList } from "../../../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../../../store";
-import { UnitTrustTemplate } from "../../../../../templates/Products/ProductType/UT";
+import { UnitTrustTemplate } from "../../../../../templates";
 import { isNotEmpty } from "../../../../../utils";
 
 interface UnitTrustProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
 }
 
 const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
-  accountDetails,
   addSelectedFund,
   addUtAllFunds,
   addUtFilters,
@@ -27,7 +25,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   addUtSort,
   addViewFund,
   // details,
-  global,
   newSales,
   products,
   productType,
@@ -37,7 +34,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updateUtShowBy,
   updateAvailableFilters,
@@ -128,7 +124,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   return (
     <UnitTrustTemplate
       // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
-      accountDetails={accountDetails}
       addSelectedFund={addSelectedFund}
       addUtAllFunds={addUtAllFunds}
       addUtFilters={addUtFilters}
@@ -147,7 +142,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       scrollEnabled={scrollEnabled}
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
-      shareSuccess={shareSuccess}
       tabsContent={tabsContent}
       updateUtShowBy={updateUtShowBy}
     />

@@ -14,12 +14,10 @@ interface PRSDefaultProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  shareSuccess?: boolean;
   tabsContent?: ReactNode;
 }
 
 const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
-  accountDetails,
   addPrsDefaultAllFunds,
   addPrsDefaultFilters,
   addPrsDefaultRecommendedFunds,
@@ -35,13 +33,12 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
-  shareSuccess,
   tabsContent,
   updateAvailableFilters,
   updatePrsDefaultShowBy,
 }: PRSDefaultProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { filters, page, pages, search, sort } = products.prsDefault;
+  const { filters, page, search, sort } = products.prsDefault;
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleFetch = async (newPage: string) => {
@@ -101,7 +98,6 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
 
   return (
     <PRSDefaultTemplate
-      accountDetails={accountDetails}
       addPrsDefaultAllFunds={addPrsDefaultAllFunds}
       addPrsDefaultFilters={addPrsDefaultFilters}
       addPrsDefaultRecommendedFunds={addPrsDefaultRecommendedFunds}
@@ -118,7 +114,6 @@ const PRSDefaultComponent: FunctionComponent<PRSDefaultProps> = ({
       scrollEnabled={scrollEnabled}
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
-      shareSuccess={shareSuccess}
       tabsContent={tabsContent}
       updatePrsDefaultShowBy={updatePrsDefaultShowBy}
     />

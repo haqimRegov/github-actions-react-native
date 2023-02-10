@@ -28,13 +28,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   onboarding,
   resetProducts,
   resetSelectedFund,
-  riskScore,
   selectedFunds,
   updateOnboarding,
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
-  const { disabledSteps, finishedSteps } = onboarding;
+  const { disabledSteps, finishedSteps, riskInfo } = onboarding;
   const { agent, isMultiUtmc } = global;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
@@ -47,7 +46,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const handleBackToAssessment = () => {
     setPrompt(undefined);
-    handleNextStep("RiskAssessment");
+    handleNextStep("RiskSummary");
     resetProducts();
     resetSelectedFund();
   };
@@ -126,10 +125,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
   const checkOutsideRiskFactor = () => {
     const fundsRisk = selectedFunds.map((item) => (item.prsType === "prsDefault" ? "" : item.riskCategory.toLowerCase()));
-    if (riskScore.appetite.toLowerCase() === "medium") {
+    if (riskInfo.appetite.toLowerCase() === "medium") {
       return fundsRisk.includes("high");
     }
-    if (riskScore.appetite.toLowerCase() === "low") {
+    if (riskInfo.appetite.toLowerCase() === "low") {
       return fundsRisk.includes("high") || fundsRisk.includes("medium");
     }
 
@@ -168,11 +167,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     handleNextStep(route);
     const updatedFinishedSteps: TypeOnboardingKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
-        ? ["RiskAssessment", "Products"]
+        ? ["RiskSummary", "RiskAssessment", "Products"]
         : [...finishedSteps, "Products"];
     const updatedDisabledSteps: TypeOnboardingKey[] =
       epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
         ? [
+            "RiskAssessment",
             "IdentityVerification",
             "PersonalDetails",
             "EmploymentDetails",
@@ -180,7 +180,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
             "Declarations",
             "FATCADeclaration",
             "CRSDeclaration",
-            "FEADeclaration",
             "DeclarationSummary",
             "OrderSummary",
             "Acknowledgement",
@@ -278,16 +277,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   useEffect(() => {
-    if (finishedSteps.includes("Products")) {
-      setPage(1);
-    }
     const keyboardWillHide = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
     const keyboardWillShow = Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
     return () => {
       keyboardWillHide.remove();
       keyboardWillShow.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

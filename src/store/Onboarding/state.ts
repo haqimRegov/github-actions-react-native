@@ -1,10 +1,12 @@
 export type OnboardingState = {
   disabledSteps: TypeOnboardingKey[];
   finishedSteps: TypeOnboardingKey[];
+  riskInfo: IRiskProfile;
 };
 
 export const onboardingInitialState: OnboardingState = {
   disabledSteps: [
+    "RiskAssessment",
     "Products",
     "PersonalInformation",
     "IdentityVerification",
@@ -12,7 +14,6 @@ export const onboardingInitialState: OnboardingState = {
     "EmploymentDetails",
     "PersonalInfoSummary",
     "Declarations",
-    "FEADeclaration",
     "CRSDeclaration",
     "DeclarationSummary",
     "Acknowledgement",
@@ -21,4 +22,11 @@ export const onboardingInitialState: OnboardingState = {
     "Payment",
   ],
   finishedSteps: [],
+  riskInfo: {
+    appetite: "",
+    expectedRange: "",
+    hnwStatus: "",
+    profile: "",
+    type: "",
+  },
 };

@@ -5,6 +5,7 @@ export * from "./AddressInfo";
 export * from "./BrowserWebView";
 export * from "./EmptyTable";
 export * from "./EventPrompt";
+export * from "./InfoStack";
 export * from "./LabeledTitle";
 export * from "./Loading";
 export * from "./NewActionButtons";

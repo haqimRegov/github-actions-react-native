@@ -46,8 +46,6 @@ import {
   sh24,
   sh4,
   sh40,
-  sh48,
-  sh56,
   sh72,
   sh8,
   sh96,
@@ -478,7 +476,6 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   const illustrationStyle: ImageStyle = { ...imageContain, height: sw136, width: sw136 };
 
   const newSalesPromptTitle = `${principalHolder?.name} ${ADD_CLIENT.SALES_PROMPT_TITLE}`;
-  const checkSalesPrompt = salesNewPrompt === true ? sh40 : sh56;
   const checkCancelLabel = salesNewPrompt === true ? ADD_CLIENT.BUTTON_GO_BACK : ADD_CLIENT.BUTTON_CANCEL;
   const modalData: LabeledTitleProps[] = [
     {
@@ -567,7 +564,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
               <NewSalesPrompt id={id!} idType={principalIdType} name={name!} prompt={prompt} />
             ) : (
               <View style={px(sw56)}>
-                <CustomSpacer space={registered === true ? sh56 : sh48} />
+                <CustomSpacer space={sh40} />
                 {accountTypePrompt === true ? (
                   content
                 ) : (
@@ -609,7 +606,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
                     )}
                   </Fragment>
                 )}
-                <CustomSpacer space={checkSalesPrompt} />
+                <CustomSpacer space={sh40} />
               </View>
             )}
             <ActionButtons

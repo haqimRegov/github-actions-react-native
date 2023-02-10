@@ -27,8 +27,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   addSelectedFund,
   addViewFund,
   newSales,
+  onboarding,
   // details,
-  riskScore,
   products,
   productType,
   resetSelectedFund,
@@ -42,10 +42,11 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   withEpf,
 }: AMPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const { riskInfo } = onboarding;
   const { filters, page, search, showBy, sort, totalCount } = products.amp;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore!.appetite);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo!.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -63,7 +64,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       issuingHouse: filters.issuingHouse || [],
       isSyariah: isNotEmpty(filters.shariahApproved) && filters.shariahApproved!.length > 0 ? filters.shariahApproved![0] : "",
       page: newPage,
-      recommendedRisk: riskScore.appetite,
+      recommendedRisk: riskInfo.appetite,
       riskCategory: riskCategory || [],
       search: search,
       showBy: showBy,

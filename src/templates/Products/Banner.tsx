@@ -11,6 +11,8 @@ interface ProductsBannerProps {
   cancelOnPress: () => void;
   continueDisabled: boolean;
   selectedFunds: IProduct[];
+  label?: string;
+  labelCancel?: string;
   labelSubmit: string;
   submitOnPress: () => void;
 }
@@ -19,6 +21,8 @@ export const ProductsBanner: FunctionComponent<ProductsBannerProps> = ({
   cancelOnPress,
   continueDisabled,
   selectedFunds,
+  label,
+  labelCancel,
   labelSubmit,
   submitOnPress,
 }: ProductsBannerProps) => {
@@ -58,8 +62,8 @@ export const ProductsBanner: FunctionComponent<ProductsBannerProps> = ({
             </View>
           ) : undefined
         }
-        labelCancel={INVESTMENT.BUTTON_CANCEL}
-        label={INVESTMENT.LABEL_FUND_SUMMARY}
+        labelCancel={labelCancel !== undefined ? labelCancel : INVESTMENT.BUTTON_CANCEL}
+        label={label !== undefined ? label : INVESTMENT.LABEL_FUND_SUMMARY}
         cancelOnPress={cancelOnPress}
         continueDisabled={continueDisabled}
         labelSubmit={labelSubmit}

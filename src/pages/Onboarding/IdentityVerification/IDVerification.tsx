@@ -23,7 +23,6 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   handleNextStep,
   onboarding,
   personalInfo,
-  riskScore,
   updateOnboarding,
 }: IDVerificationProps) => {
   const { principal, joint } = personalInfo;
@@ -66,7 +65,6 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   };
 
   const handleSubmit = () => {
-    addPersonalInfo({ principal: { ...principal, personalDetails: { ...principal?.personalDetails, riskProfile: riskScore.appetite } } });
     const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "PersonalDetails";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findPersonalDetails = updatedDisabledSteps.indexOf("PersonalDetails");
@@ -125,7 +123,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
       labelCancel={ID_VERIFICATION.BUTTON_BACK}
       labelContinue={ID_VERIFICATION.BUTTON_VERIFY}>
       <PrincipalVerification
-        accountType={accountType}
+        accountType={accountType!}
         accountHolder="Principal"
         addressInfo={principal!.addressInformation!}
         personalDetails={principal!.personalDetails!}

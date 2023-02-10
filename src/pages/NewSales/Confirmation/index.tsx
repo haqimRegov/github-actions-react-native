@@ -13,7 +13,6 @@ import {
   Loading,
   NewPrompt,
   SafeAreaPage,
-  SelectionBanner,
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_EPF_AGE } from "../../../data/dictionary";
@@ -33,7 +32,6 @@ import {
   colorTransparent,
   colorWhite,
   flexChild,
-  flexCol,
   flexGrow,
   flexRow,
   fs10RegGray5,
@@ -41,7 +39,6 @@ import {
   fs14BoldBlack2,
   fs14BoldBlue1,
   fs14RegGray5,
-  fs16BoldGray6,
   fs16RegGray5,
   fs16RegGray6,
   fs18BoldGray6,
@@ -73,6 +70,7 @@ import {
   sw8,
   sw96,
 } from "../../../styles";
+import { ProductsBanner } from "../../../templates";
 import { isNotEmpty, parseAmountToString } from "../../../utils";
 import { Investment } from "./Investment";
 
@@ -364,29 +362,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     }
   };
 
-  let utCount = 0;
-  let prsCount = 0;
-  let ampCount = 0;
-  selectedFunds.forEach((fund: IProduct) => {
-    if (fund.fundType === "UT" || fund.fundType === "UTF" || fund.fundType === "WSF") {
-      utCount += 1;
-    } else if (fund.fundType === "PRS") {
-      prsCount += 1;
-    } else if (fund.fundType === "AMP") {
-      ampCount += 1;
-    }
-  });
-
-  const utSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ", " : "";
-  const prsSuffix = utCount > 0 && prsCount > 0 && ampCount > 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const prsPrefix = prsCount > 0 && utCount > 0 && ampCount === 0 ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const ampPrefix =
-    (ampCount > 0 && utCount > 0 && prsCount === 0) || (ampCount > 0 && prsCount > 0 && utCount === 0) ? ` ${INVESTMENT.LABEL_AND} ` : "";
-  const utLabel = utCount > 0 ? `${utCount} ${INVESTMENT.LABEL_UT}` : "";
-  const prsLabel = prsCount > 0 ? `${prsCount} ${INVESTMENT.LABEL_PRS}` : "";
-  const ampLabel = ampCount > 0 ? `${ampCount} ${INVESTMENT.LABEL_AMP}` : "";
-
-  const bannerText = `${utLabel}${utSuffix}${prsPrefix}${prsLabel}${prsSuffix}${ampPrefix}${ampLabel}`;
   const recurringContentOptions = [INVESTMENT.LABEL_RECURRING_CONTENT_1, INVESTMENT.LABEL_RECURRING_CONTENT_2];
 
   const disableContinue = investmentDetails?.find(({ investment, isNewFund }) => {
@@ -634,23 +609,15 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         </View>
         <CustomToast count={deleteCount} isDeleteToast={true} onPress={handleUndoDelete} setCount={setDeleteCount} />
         {fixedBottomShow === true && selectedFunds.length !== 0 ? (
-          <View style={flexCol}>
-            <SelectionBanner
-              bottomContent={
-                <View style={flexRow}>
-                  <Text style={fs16BoldGray6}>{bannerText}</Text>
-                  <CustomSpacer isHorizontal={true} space={sw4} />
-                  <Text style={fs16RegGray6}>{INVESTMENT.LABEL_SELECTED}</Text>
-                </View>
-              }
-              cancelOnPress={handleBackToListing}
-              continueDisabled={disableContinue !== undefined}
-              labelCancel={INVESTMENT.BUTTON_CANCEL}
-              labelSubmit={INVESTMENT.BUTTON_NEXT}
-              submitOnPress={handleConfirmIdentity}
-              label={INVESTMENT.HEADING}
-            />
-          </View>
+          <ProductsBanner
+            cancelOnPress={handleBackToListing}
+            continueDisabled={disableContinue !== undefined}
+            selectedFunds={selectedFunds}
+            labelCancel={INVESTMENT.BUTTON_CANCEL}
+            labelSubmit={INVESTMENT.BUTTON_NEXT}
+            submitOnPress={handleConfirmIdentity}
+            label={INVESTMENT.HEADING}
+          />
         ) : null}
       </SafeAreaPage>
       <ConfirmationModal

@@ -1,18 +1,15 @@
 import { CommonActions } from "@react-navigation/native";
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { StepperBar } from "../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
-import { flexRow, fullHW } from "../../styles";
+import { flexRow, fs14BoldGray6, fullHW } from "../../styles";
 import { OnboardingContent } from "./Content";
 
 const { ONBOARDING } = Language.PAGE;
-
-// TODO handle if FEA
-// const isFea = true;
 
 const DECLARATION_CONTENT = [
   { title: ONBOARDING.TITLE_FATCA_DECLARATION, route: ONBOARDING_ROUTES.FATCADeclaration, key: ONBOARDING_KEYS.FATCADeclaration },
@@ -20,22 +17,22 @@ const DECLARATION_CONTENT = [
   { title: ONBOARDING.TITLE_SUMMARY, route: ONBOARDING_ROUTES.DeclarationSummary, key: ONBOARDING_KEYS.DeclarationSummary },
 ];
 
-// if (isFea === true) {
-//   DECLARATION_CONTENT.splice(2, 0, {
-//     title: ONBOARDING.TITLE_FEA_DECLARATION,
-//     route: ONBOARDING_ROUTES.FEADeclarations,
-//     key: ONBOARDING_KEYS.FEADeclaration,
-//   });
-// }
-
 export const ONBOARDING_DATA: IOnboarding[] = [
   {
-    label: ONBOARDING.TITLE_RISK_ASSESSMENT,
-    route: ONBOARDING_ROUTES.RiskAssessment,
-    key: ONBOARDING_KEYS.RiskAssessment,
+    content: [
+      {
+        title: ONBOARDING.TITLE_RISK_ASSESSMENT,
+        route: ONBOARDING_ROUTES.RiskAssessment,
+        key: ONBOARDING_KEYS.RiskAssessment,
+      },
+    ],
+
+    label: ONBOARDING.TITLE_ACCOUNT_OPENING,
+    route: ONBOARDING_ROUTES.RiskSummary,
+    key: ONBOARDING_KEYS.RiskSummary,
   },
   {
-    label: ONBOARDING.TITLE_PRODUCT_RECOMMENDATION,
+    label: ONBOARDING.TITLE_PRODUCTS_AND_SERVICE,
     route: ONBOARDING_ROUTES.Products,
     key: ONBOARDING_KEYS.Products,
   },
@@ -146,17 +143,12 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     );
   };
 
-  useEffect(() => {
-    if (ONBOARDING_DATA[0].content !== undefined) {
-      setActiveContent(ONBOARDING_DATA[0].content[0]);
-    }
-  }, []);
-
   return (
     <View style={{ ...flexRow, ...fullHW }}>
       <StepperBar<TypeOnboardingKey>
         activeContent={activeContent}
         activeSection={activeSection}
+        activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskSummary" ? fs14BoldGray6 : {}}
         disabledSteps={disabledSteps}
         finishedSteps={finishedSteps}
         handleContentChange={handleContentChange}
@@ -173,7 +165,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
         cancelOnboarding={cancelOnboarding}
         handleNextStep={handleNextStep}
         navigation={navigation}
-        route={activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskAssessment}
+        route={activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskSummary}
       />
     </View>
   );

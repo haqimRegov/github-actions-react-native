@@ -113,7 +113,6 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
           </View>
         </Fragment>
       ) : null}
-
       <CrsDeclarationDetails
         crs={principal?.declaration?.crs!}
         handleCrsDeclaration={handlePrincipalCrs}

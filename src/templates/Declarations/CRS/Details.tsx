@@ -18,7 +18,6 @@ import {
   alignSelfStart,
   borderBottomGray2,
   centerHV,
-  flexChild,
   flexRow,
   fs12BoldGray6,
   fs16RegBlack2,
@@ -96,7 +95,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
   };
 
   return (
-    <View style={{ ...flexChild, ...px(sw24) }}>
+    <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
       <ColorCard
         header={{ label: DECLARATIONS.CRS_ARE_YOU }}

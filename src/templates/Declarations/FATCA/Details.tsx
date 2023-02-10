@@ -15,7 +15,6 @@ import { Language } from "../../../constants";
 import {
   borderBottomGray2,
   centerHV,
-  flexChild,
   flexRow,
   fs12BoldWhite1,
   fs16BoldBlack2,
@@ -152,7 +151,7 @@ export const FatcaDeclarationDetails: FunctionComponent<FatcaDeclarationDetailsP
   };
 
   return (
-    <View style={{ ...flexChild, ...px(sw24) }}>
+    <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
       <ColorCard
         header="custom"

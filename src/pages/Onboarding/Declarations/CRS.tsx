@@ -6,7 +6,7 @@ import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomRed1, flexRow, fs10RegGray6, fs12BoldBlack2, fs18BoldGray6, px, sh16, sh24, sw16, sw24 } from "../../../styles";
-import { CrsDeclarationDetails, CRSDefinition } from "../../../templates";
+import { CrsDeclarationDetails } from "../../../templates";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -20,7 +20,6 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   personalInfo,
   updateOnboarding,
 }: CrsDeclarationProps) => {
-  const [crsDefinition, setCRSDefinition] = useState<boolean>(false);
   const { principal, joint } = personalInfo;
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
@@ -132,7 +131,6 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
           <CrsDeclarationDetails crs={joint?.declaration?.crs!} handleCrsDeclaration={handleJointCrs} validations={validationsJoint} />
         </View>
       ) : null}
-      {crsDefinition ? <CRSDefinition setVisible={setCRSDefinition} visible={crsDefinition} /> : null}
     </ContentPage>
   );
 };

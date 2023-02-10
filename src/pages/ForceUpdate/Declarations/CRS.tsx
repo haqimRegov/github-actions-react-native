@@ -1,12 +1,10 @@
 import React, { FunctionComponent, useState } from "react";
-import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, LinkText } from "../../../components";
+import { ContentPage } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../styles";
-import { CrsDeclarationDetails, CRSDefinition } from "../../../templates";
+import { CrsDeclarationDetails } from "../../../templates";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -21,7 +19,6 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
 }: CrsDeclarationProps) => {
   const { principal } = personalInfo;
   const { declarations } = forceUpdate;
-  const [crsDefinition, setCRSDefinition] = useState<boolean>(false);
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
     addPersonalInfo({
@@ -67,10 +64,6 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
     handleNextStep(route);
   };
 
-  const handleRead = () => {
-    setCRSDefinition(true);
-  };
-
   const isTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 0;
   const validateTin = (multipleTin: ITinMultiple[]) =>
     multipleTin
@@ -105,16 +98,11 @@ export const CRSContentComponent: FunctionComponent<CrsDeclarationProps> = ({
       handleContinue={showButtonContinuePrincipal}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT_SAVE}
       subheading={DECLARATIONS.CRS_HEADING}>
-      <CustomSpacer space={sh8} />
-      <View style={px(sw24)}>
-        <LinkText onPress={handleRead} text={DECLARATIONS.READ_DECLARATION} style={fs12SemiBoldBlue1} />
-      </View>
       <CrsDeclarationDetails
         crs={principal?.declaration?.crs!}
         handleCrsDeclaration={handlePrincipalCrs}
         validations={validationsPrincipal}
       />
-      {crsDefinition ? <CRSDefinition setVisible={setCRSDefinition} visible={crsDefinition} /> : null}
     </ContentPage>
   );
 };

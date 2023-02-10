@@ -6,7 +6,7 @@ import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomRed1, flexRow, fs10RegGray6, fs12BoldBlack2, fs18BoldGray6, px, sh16, sh24, sw16, sw24 } from "../../../styles";
-import { FatcaDeclarationDetails, FatcaDefinition } from "../../../templates";
+import { FatcaDeclarationDetails } from "../../../templates";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -20,7 +20,6 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   personalInfo,
   updateOnboarding,
 }: FatcaDeclarationProps) => {
-  const [fatcaDefinition, setFatcaDefinition] = useState<boolean>(false);
   const { principal, joint } = personalInfo;
   const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
     principal?.addressInformation?.permanentAddress?.postCode
@@ -187,7 +186,6 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
           />
         </View>
       ) : null}
-      {fatcaDefinition ? <FatcaDefinition setVisible={setFatcaDefinition} visible={fatcaDefinition} /> : null}
     </ContentPage>
   );
 };

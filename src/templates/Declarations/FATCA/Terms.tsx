@@ -1,8 +1,8 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { CheckBox, ColorCard, CustomSpacer } from "../../../../components";
-import { Language } from "../../../../constants";
+import { CheckBox, ColorCard, CustomSpacer } from "../../../components";
+import { Language } from "../../../constants";
 import {
   border,
   colorBlue,
@@ -19,7 +19,7 @@ import {
   sw16,
   sw32,
   sw8,
-} from "../../../../styles";
+} from "../../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 

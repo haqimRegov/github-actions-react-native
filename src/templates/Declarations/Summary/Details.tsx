@@ -1,18 +1,9 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Dimensions, Text, View } from "react-native";
 
-import {
-  ColorCard,
-  CustomFlexSpacer,
-  CustomSpacer,
-  FileViewer,
-  IconButton,
-  IconText,
-  TextCard,
-  TextCardProps,
-} from "../../../../components";
-import { Language } from "../../../../constants";
-import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../../data/dictionary";
+import { ColorCard, CustomFlexSpacer, CustomSpacer, FileViewer, IconButton, IconText, TextCard, TextCardProps } from "../../../components";
+import { Language } from "../../../constants";
+import { OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS } from "../../../data/dictionary";
 import {
   border,
   borderBottomBlue4,
@@ -30,7 +21,6 @@ import {
   sh12,
   sh16,
   sh2,
-  sh24,
   sh8,
   sw1,
   sw16,
@@ -39,7 +29,7 @@ import {
   sw24,
   sw40,
   sw8,
-} from "../../../../styles";
+} from "../../../styles";
 
 const { DECLARATIONS, DECLARATION_SUMMARY } = Language.PAGE;
 
@@ -162,7 +152,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
       ) : null}
       {declarations.includes("crs") ? (
         <Fragment>
-          <CustomSpacer space={sh24} />
+          <CustomSpacer space={sh12} />
           <ColorCard
             containerStyle={noBorder}
             header="custom"

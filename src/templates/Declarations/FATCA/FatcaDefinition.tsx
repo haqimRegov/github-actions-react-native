@@ -1,9 +1,9 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View } from "react-native";
 
-import { CustomSpacer, PromptModal } from "../../../../components";
-import { Language } from "../../../../constants/language";
-import { fs10RegGray6, fs14BoldGray6, fsAlignLeft, sh16, sh8, sw16, sw452 } from "../../../../styles";
+import { CustomSpacer, PromptModal } from "../../../components";
+import { Language } from "../../../constants";
+import { fs10RegGray6, fs14BoldGray6, fsAlignLeft, sh16, sh8, sw16, sw452 } from "../../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 

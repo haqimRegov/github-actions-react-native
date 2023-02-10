@@ -2,10 +2,10 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-import { CustomSpacer, PromptModal } from "../../../../components";
-import { Language } from "../../../../constants/language";
-import { RNInAppBrowser } from "../../../../integrations";
-import { fs10RegGray6, fs12SemiBoldGray6, fs14BoldGray6, fsAlignLeft, sh16, sh8, sw16, sw452 } from "../../../../styles";
+import { CustomSpacer, PromptModal } from "../../../components";
+import { Language } from "../../../constants/language";
+import { RNInAppBrowser } from "../../../integrations";
+import { fs10RegGray6, fs12SemiBoldGray6, fs14BoldGray6, fsAlignLeft, sh16, sh8, sw16, sw452 } from "../../../styles";
 
 const { DECLARATIONS } = Language.PAGE;
 

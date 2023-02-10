@@ -2,14 +2,14 @@ import React, { Fragment, FunctionComponent, useRef } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomFlexSpacer, CustomSpacer, defaultContentProps, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../../components";
-import { Language } from "../../../../constants";
-import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS_NEW } from "../../../../data/dictionary";
-import { getFatcaRequest } from "../../../../helpers";
-import { submitChangeRequest } from "../../../../network-actions";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh124, sh24, sh4, sw24 } from "../../../../styles";
-import { DeclarationDetails } from "./Details";
+import { CustomFlexSpacer, CustomSpacer, defaultContentProps, LabeledTitle, SafeAreaPage, SelectionBanner } from "../../../components";
+import { Language } from "../../../constants";
+import { OPTION_CRS_NO_TIN_REQUIRED, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS_NEW } from "../../../data/dictionary";
+import { getFatcaRequest } from "../../../helpers";
+import { submitChangeRequest } from "../../../network-actions";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { colorBlue, flexGrow, fs16RegGray5, fs18BoldGray6, px, sh124, sh24, sh4, sw24 } from "../../../styles";
+import { DeclarationDetails } from "../../../templates";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
 
@@ -184,7 +184,7 @@ export const DeclarationSummaryContentComponent: FunctionComponent<DeclarationSu
         <SelectionBanner
           label={DECLARATION_SUMMARY.BANNER_TITLE}
           submitOnPress={handleContinue}
-          labelSubmit={DECLARATION_SUMMARY.BUTTON_CONFIRM}
+          labelSubmit={DECLARATION_SUMMARY.BUTTON_NEXT}
         />
       </SafeAreaPage>
     </Fragment>

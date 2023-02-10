@@ -2,12 +2,11 @@ import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
-import { Language } from "../../../../constants";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../../styles";
-import { CRSDefinition } from "../../../Onboarding/Declarations/CRS/CRSDefinition";
-import { CrsDeclarationDetails } from "./Details";
+import { ContentPage, CustomSpacer, LinkText } from "../../../components";
+import { Language } from "../../../constants";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../styles";
+import { CrsDeclarationDetails, CRSDefinition } from "../../../templates";
 
 const { DECLARATIONS } = Language.PAGE;
 

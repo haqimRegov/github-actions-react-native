@@ -2,12 +2,11 @@ import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
-import { Language } from "../../../../constants";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../../styles";
-import { FatcaDefinition } from "../../../Onboarding/Declarations/FATCA/FatcaDefinition";
-import { FatcaDeclarationDetails } from "./Details";
+import { ContentPage, CustomSpacer, LinkText } from "../../../components";
+import { Language } from "../../../constants";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { fs12SemiBoldBlue1, px, sh8, sw24 } from "../../../styles";
+import { FatcaDeclarationDetails, FatcaDefinition } from "../../../templates";
 
 const { DECLARATIONS } = Language.PAGE;
 

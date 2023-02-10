@@ -17,6 +17,7 @@ export const useExpiryCountdown = (): [number, (seconds: number) => void] => {
     return () => {
       clearInterval(clockDrift);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   return [countdown, setCountdown];

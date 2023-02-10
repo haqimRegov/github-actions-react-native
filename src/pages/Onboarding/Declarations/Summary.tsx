@@ -1,28 +1,53 @@
 import moment from "moment";
-import React, { FunctionComponent, useRef } from "react";
-import { Alert, View } from "react-native";
+import React, { Fragment, FunctionComponent, useRef } from "react";
+import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer } from "../../../../components";
-import { Language } from "../../../../constants";
+import { ContentPage, CustomSpacer, SelectionBanner } from "../../../components";
+import { Language } from "../../../constants";
 import {
   EMPLOYMENT_EXEMPTIONS,
   OPTION_CRS_NO_TIN_REQUIRED,
   OPTIONS_CRS_TAX_RESIDENCY,
   OPTIONS_CRS_TIN_REASONS,
-} from "../../../../data/dictionary";
-import { getAddress, getFatcaRequest } from "../../../../helpers";
-import { submitClientAccount } from "../../../../network-actions";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { borderBottomGray2, sh24 } from "../../../../styles";
-import { deleteKey, isNotEmpty, parseAmountToString } from "../../../../utils";
-import { DeclarationDetails } from "./Details";
+} from "../../../data/dictionary";
+import { getAddress, getFatcaRequest } from "../../../helpers";
+import { submitClientAccount } from "../../../network-actions";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import {
+  borderBottomRed1,
+  flexChild,
+  fs10RegGray6,
+  fs12BoldBlack2,
+  px,
+  rowCenterVertical,
+  sh16,
+  sh20,
+  sh24,
+  sw16,
+  sw24,
+} from "../../../styles";
+import { DeclarationDetails } from "../../../templates";
+import { deleteKey, isNotEmpty, parseAmountToString } from "../../../utils";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
 
 interface DeclarationSummaryProps extends PersonalInfoStoreProps, OnboardingContentProps {
   navigation: IStackNavigationProp;
 }
+
+const DISABLED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = [
+  // "RiskAssessment",
+  // "Products",
+  // "PersonalInformation",
+  "DeclarationSummary",
+  "Acknowledgement",
+  "TermsAndConditions",
+  "Signatures",
+  "Payment",
+];
+
+const FINISHED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation"];
 
 export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryProps> = ({
   accountType,
@@ -50,9 +75,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     "postCode",
     "state",
   ];
-
-  // TODO handle if FEA
-  const isFea = 100 < 500;
 
   const jointIdType = details?.jointHolder?.idType === "Other" ? details?.jointHolder?.otherIdType : details?.jointHolder?.idType;
   const principalIdType =
@@ -216,7 +238,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         }
       : undefined;
 
-  // JOINT
+  // for joint holder
   // check if employment details is existing
   if (
     jointDetails !== undefined &&
@@ -252,7 +274,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
 
   let principalEmploymentDetails: IEmploymentDetailsState | ISubmitEmploymentBase = { ...principal!.employmentDetails! };
 
-  // PRINCIPAL
+  // for principal holder or individual
   // check if employment details is existing
   if (principalEmploymentDetails !== undefined && principalEmploymentDetails.occupation !== undefined) {
     // check if occupation is others
@@ -306,11 +328,6 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
           tin: principalTin,
         },
         fatca: { ...principalFatcaRequest },
-        // fea: {
-        //   balance: parseAmountToString(principal!.declaration!.fea!.balance!),
-        //   borrowingFacility: principal!.declaration!.fea!.facility! === 0 ? "true" : "false",
-        //   resident: principal!.declaration!.fea!.resident! === 0 ? "true" : "false",
-        // },
       },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
       employmentDetails: principalEmploymentDetails as ISubmitEmploymentBase,
@@ -393,12 +410,28 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   };
 
   const handleBack = () => {
-    handleNextStep("FEADeclaration");
+    handleNextStep("CRSDeclaration");
   };
 
-  // const principalSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_FEA : DECLARATION_SUMMARY.SUBHEADING;
-  // const jointSubtitle = isFea ? DECLARATION_SUMMARY.SUBHEADING_JOINT_FEA : DECLARATION_SUMMARY.SUBHEADING_JOINT;
-  const subtitle = accountType === "Joint" ? DECLARATION_SUMMARY.SUBHEADING_JOINT : DECLARATION_SUMMARY.SUBHEADING;
+  const handleEditFatca = () => {
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...DISABLED_STEPS_WHILE_EDITING];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...FINISHED_STEPS_WHILE_EDITING];
+    updatedDisabledSteps.push("CRSDeclaration");
+    updatedFinishedSteps.push("CRSDeclaration");
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    handleNextStep("FATCADeclaration");
+  };
+
+  const handleEditCrs = () => {
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...DISABLED_STEPS_WHILE_EDITING];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...FINISHED_STEPS_WHILE_EDITING];
+    updatedDisabledSteps.push("FATCADeclaration");
+    updatedFinishedSteps.push("FATCADeclaration");
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    handleNextStep("CRSDeclaration");
+  };
 
   const principalFatcaAddress =
     isNotEmpty(principal!.addressInformation) && isNotEmpty(principal!.addressInformation!.mailingAddress)
@@ -411,39 +444,62 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       : undefined;
 
   return (
-    <ContentPage
-      handleCancel={handleBack}
-      handleContinue={handleContinue}
-      labelContinue={DECLARATION_SUMMARY.BUTTON_CONFIRM}
-      subheading={DECLARATION_SUMMARY.HEADING}
-      subtitle={subtitle}>
-      <CustomSpacer space={sh24} />
-      <DeclarationDetails
-        address={principalFatcaAddress}
-        accountHolder="Principal"
-        accountType={accountType}
-        handleNextStep={handleNextStep}
-        isFea={isFea}
-        name={principal?.personalDetails!.name!}
-        summary={personalInfo.principal?.declaration!}
-      />
-      {accountType === "Joint" ? (
-        <View>
-          <CustomSpacer space={sh24} />
-          <View style={borderBottomGray2} />
-          <CustomSpacer space={sh24} />
+    <View style={flexChild}>
+      <ContentPage subheading={DECLARATION_SUMMARY.HEADING} subtitle={DECLARATION_SUMMARY.LABEL_SUBHEADER}>
+        <View style={px(sw24)}>
+          {accountType === "Joint" ? (
+            <Fragment>
+              <CustomSpacer space={sh16} />
+              <View>
+                <View style={{ ...rowCenterVertical, height: sh20 }}>
+                  <Text style={fs10RegGray6}>{DECLARATION_SUMMARY.LABEL_PRINCIPAL_HOLDER}</Text>
+                  <CustomSpacer isHorizontal space={sw16} />
+                  <Text style={fs12BoldBlack2}>{principal?.personalDetails?.name}</Text>
+                </View>
+                <View style={borderBottomRed1} />
+              </View>
+            </Fragment>
+          ) : null}
+          <CustomSpacer space={sh16} />
           <DeclarationDetails
-            address={jointFatcaAddress}
-            accountHolder="Joint"
-            accountType="Joint"
-            handleNextStep={handleNextStep}
-            isFea={isFea}
-            name={joint!.personalDetails!.name!}
-            summary={joint!.declaration!}
+            address={principalFatcaAddress}
+            declarations={["fatca", "crs"]}
+            handleEditCrs={handleEditCrs}
+            handleEditFatca={handleEditFatca}
+            summary={personalInfo.principal?.declaration!}
           />
+          {accountType === "Joint" ? (
+            <View>
+              <CustomSpacer space={sh24} />
+              <View>
+                <View style={{ ...rowCenterVertical, height: sh20 }}>
+                  <Text style={fs10RegGray6}>{DECLARATION_SUMMARY.LABEL_JOINT_HOLDER}</Text>
+                  <CustomSpacer isHorizontal space={sw16} />
+                  <Text style={fs12BoldBlack2}>{joint?.personalDetails?.name}</Text>
+                </View>
+                <View style={borderBottomRed1} />
+              </View>
+              <CustomSpacer space={sh16} />
+              <DeclarationDetails
+                address={jointFatcaAddress}
+                declarations={["fatca", "crs"]}
+                handleEditCrs={handleEditCrs}
+                handleEditFatca={handleEditFatca}
+                summary={personalInfo.joint?.declaration!}
+              />
+            </View>
+          ) : null}
         </View>
-      ) : null}
-    </ContentPage>
+      </ContentPage>
+      <CustomSpacer space={sh24} />
+      <SelectionBanner
+        cancelOnPress={handleBack}
+        label={DECLARATION_SUMMARY.BANNER_TITLE}
+        labelCancel={DECLARATION_SUMMARY.BUTTON_BACK}
+        labelSubmit={DECLARATION_SUMMARY.BUTTON_NEXT}
+        submitOnPress={handleContinue}
+      />
+    </View>
   );
 };
 

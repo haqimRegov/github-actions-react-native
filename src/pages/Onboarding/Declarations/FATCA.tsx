@@ -1,13 +1,12 @@
-import React, { FunctionComponent, useState } from "react";
-import { View } from "react-native";
+import React, { Fragment, FunctionComponent, useState } from "react";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 
-import { ContentPage, CustomSpacer, LinkText } from "../../../../components";
-import { Language } from "../../../../constants";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../../store";
-import { borderBottomGray2, fs12SemiBoldBlue1, px, sh24, sh8, sw24 } from "../../../../styles";
-import { FatcaDeclarationDetails } from "./Details";
-import { FatcaDefinition } from "./FatcaDefinition";
+import { ContentPage, CustomSpacer } from "../../../components";
+import { Language } from "../../../constants";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { borderBottomRed1, flexRow, fs10RegGray6, fs12BoldBlack2, fs18BoldGray6, px, sh16, sh24, sw16, sw24 } from "../../../styles";
+import { FatcaDeclarationDetails, FatcaDefinition } from "../../../templates";
 
 const { DECLARATIONS } = Language.PAGE;
 
@@ -57,10 +56,6 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
     }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep(route);
-  };
-
-  const handleRead = () => {
-    setFatcaDefinition(true);
   };
 
   const citizenNoBornNoPrincipal = principal?.declaration!.fatca!.usCitizen === 1 && principal?.declaration!.fatca!.usBorn === 1;
@@ -152,30 +147,41 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
       handleCancel={handleBack}
       handleContinue={showButtonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
-      subheading={DECLARATIONS.FATCA_HEADING}>
-      <CustomSpacer space={sh8} />
-      <View style={px(sw24)}>
-        <LinkText onPress={handleRead} text={DECLARATIONS.READ_FATCA} style={fs12SemiBoldBlue1} />
-      </View>
+      subheading={DECLARATIONS.FATCA_HEADING}
+      subheadingStyle={fs18BoldGray6}>
+      {accountType === "Joint" ? (
+        <Fragment>
+          <CustomSpacer space={sh16} />
+          <View style={px(sw24)}>
+            <View style={flexRow}>
+              <Text style={fs10RegGray6}>{DECLARATIONS.LABEL_PRINCIPAL_HOLDER}</Text>
+              <CustomSpacer isHorizontal space={sw16} />
+              <Text style={fs12BoldBlack2}>{principal?.personalDetails?.name}</Text>
+            </View>
+            <View style={borderBottomRed1} />
+          </View>
+        </Fragment>
+      ) : null}
       <FatcaDeclarationDetails
-        accountHolder="Principal"
-        accountType={accountType}
         address={principalAddress}
         fatca={principal?.declaration?.fatca!}
         handleFatcaDeclaration={handlePrincipalFatca}
-        name={principal?.personalDetails?.name!}
         validations={validationsPrincipal}
       />
       {accountType === "Joint" ? (
         <View>
           <CustomSpacer space={sh24} />
-          <View style={borderBottomGray2} />
+          <View style={px(sw24)}>
+            <View style={flexRow}>
+              <Text style={fs10RegGray6}>{DECLARATIONS.LABEL_JOINT_HOLDER}</Text>
+              <CustomSpacer isHorizontal space={sw16} />
+              <Text style={fs12BoldBlack2}>{joint?.personalDetails?.name}</Text>
+            </View>
+            <View style={borderBottomRed1} />
+          </View>
           <FatcaDeclarationDetails
-            accountHolder="Joint"
-            accountType="Joint"
             address={jointAddress}
             fatca={joint?.declaration?.fatca!}
-            name={joint?.personalDetails?.name!}
             handleFatcaDeclaration={handleJointFatca}
             validations={validationsJoint}
           />

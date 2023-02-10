@@ -11,14 +11,13 @@ import {
   NewDropdown,
   OutlineButton,
   TextInputMultiline,
-} from "../../../../components";
-import { Language } from "../../../../constants";
-import { DICTIONARY_COUNTRIES, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS_NEW } from "../../../../data/dictionary";
+} from "../../../components";
+import { Language } from "../../../constants";
+import { DICTIONARY_COUNTRIES, OPTIONS_CRS_TAX_RESIDENCY, OPTIONS_CRS_TIN_REASONS_NEW } from "../../../data/dictionary";
 import {
   alignSelfStart,
   borderBottomGray2,
   centerHV,
-  flexChild,
   flexRow,
   fs12BoldGray6,
   fs16RegBlack2,
@@ -30,7 +29,7 @@ import {
   sw20,
   sw24,
   sw729,
-} from "../../../../styles";
+} from "../../../styles";
 import { CRSTerms } from "./Terms";
 
 const { DECLARATIONS } = Language.PAGE;
@@ -96,7 +95,7 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
   };
 
   return (
-    <View style={{ ...flexChild, ...px(sw24) }}>
+    <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
       <ColorCard
         header={{ label: DECLARATIONS.CRS_ARE_YOU }}
@@ -247,7 +246,14 @@ export const CrsDeclarationDetails: FunctionComponent<CrsDeclarationProps> = ({
           })}
         </View>
       ) : null}
-      {showTerms ? <CRSTerms acceptCrs={acceptCrs!} handleAcceptCrs={handleAcceptCrs} /> : null}
+      {showTerms && taxResident !== undefined && taxResident !== -1 ? (
+        <CRSTerms
+          acceptCrs={acceptCrs!}
+          handleAcceptCrs={handleAcceptCrs}
+          taxResident={OPTIONS_CRS_TAX_RESIDENCY[taxResident].label}
+          tin={tin}
+        />
+      ) : null}
     </View>
   );
 };

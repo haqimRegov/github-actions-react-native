@@ -6,7 +6,6 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   EmailVerification: "EmailVerification",
   EmploymentDetails: "EmploymentDetails",
   FATCADeclaration: "FATCADeclaration",
-  FEADeclaration: "FEADeclaration",
   IdentityVerification: "IdentityVerification",
   OrderSummary: "OrderSummary",
   Payment: "Payment",
@@ -15,12 +14,14 @@ export const ONBOARDING_ROUTES: IOnboardingRoutes = {
   PersonalInfoSummary: "PersonalInfoSummary",
   Products: "Products",
   RiskAssessment: "RiskAssessment",
+  RiskSummary: "RiskSummary",
   Signatures: "Signatures",
   TermsAndConditions: "TermsAndConditions",
 };
 
 export const ONBOARDING_KEYS: IOnboardingKeys = {
   RiskAssessment: "RiskAssessment",
+  RiskSummary: "RiskSummary",
   Products: "Products",
   PersonalInformation: "PersonalInformation",
   EmailVerification: "EmailVerification",
@@ -30,7 +31,6 @@ export const ONBOARDING_KEYS: IOnboardingKeys = {
   PersonalInfoSummary: "PersonalInfoSummary",
   Declarations: "Declarations",
   FATCADeclaration: "FATCADeclaration",
-  FEADeclaration: "FEADeclaration",
   CRSDeclaration: "CRSDeclaration",
   DeclarationSummary: "DeclarationSummary",
   Acknowledgement: "Acknowledgement",

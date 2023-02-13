@@ -7,7 +7,7 @@ import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
 import { fs16RegGray6 } from "../../styles";
 import { OrderSummary, Signatures, TermsAndConditions } from "./Acknowledgement";
-import { CrsDeclaration, DeclarationSummary, FatcaDeclaration, FeaDeclaration } from "./Declarations";
+import { CrsDeclaration, DeclarationSummary, FatcaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
 import { IdentityConfirmation } from "./IdentityVerification";
@@ -16,6 +16,7 @@ import { PersonalDetails } from "./PersonalDetails";
 import { PersonalInfoSummary } from "./PersonalInfoSummary";
 import { Products } from "./Products";
 import { QuestionnaireContent } from "./Questionnaire";
+import { OnboardingRiskSummary } from "./RiskProfile";
 
 const { ONBOARDING } = Language.PAGE;
 interface OnboardingProps extends OnboardingContentProps, OnboardingStoreProps {
@@ -34,6 +35,9 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
   let backToDashboardLabel = ONBOARDING.LABEL_BACK_ONBOARDING;
 
   switch (newProps.route) {
+    case ONBOARDING_ROUTES.RiskSummary:
+      content = <OnboardingRiskSummary {...newProps} />;
+      break;
     case ONBOARDING_ROUTES.RiskAssessment:
       content = <QuestionnaireContent {...newProps} />;
       break;
@@ -57,9 +61,6 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
       break;
     case ONBOARDING_ROUTES.CRSDeclaration:
       content = <CrsDeclaration {...newProps} />;
-      break;
-    case ONBOARDING_ROUTES.FEADeclaration:
-      content = <FeaDeclaration {...newProps} />;
       break;
     case ONBOARDING_ROUTES.DeclarationSummary:
       content = <DeclarationSummary {...newProps} />;

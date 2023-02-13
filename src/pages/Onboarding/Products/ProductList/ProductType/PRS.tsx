@@ -24,10 +24,10 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   addPrsSort,
   addSelectedFund,
   addViewFund,
+  onboarding,
   products,
   productType,
   resetSelectedFund,
-  riskScore,
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
@@ -37,10 +37,11 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
   tabsContent,
 }: PRSProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const { riskInfo } = onboarding;
   const { filters, page, search, showBy, sort, totalCount } = products.prs;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskScore.appetite);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"
@@ -55,7 +56,7 @@ const PRSComponent: FunctionComponent<PRSProps> = ({
       fundCurrency: filters.fundCurrency || [],
       isEpf: filters.epfApproved![0] || "",
       isSyariah: isNotEmpty(filters.shariahApproved) && filters.shariahApproved!.length > 0 ? filters.shariahApproved![0] : "",
-      recommendedRisk: riskScore.appetite,
+      recommendedRisk: riskInfo.appetite,
       riskCategory: riskCategory || [],
       issuingHouse: filters.issuingHouse || [],
       // isConventional: filters.conventional![0], // Not used in BE

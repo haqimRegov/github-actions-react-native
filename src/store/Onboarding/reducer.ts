@@ -3,6 +3,12 @@ import { onboardingInitialState, OnboardingState } from "./state";
 
 export function onboardingReducer(state = onboardingInitialState, action: OnboardingAction): OnboardingState {
   switch (action.type) {
+    case "onboarding/ADD_RISK_INFO":
+      return {
+        ...state,
+        riskInfo: { ...action.payload },
+      };
+
     case "onboarding/UPDATE_STEPS":
       return {
         ...state,
@@ -22,6 +28,7 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
     case "onboarding/RESET_ONBOARDING":
       return {
         disabledSteps: [
+          "RiskAssessment",
           "Products",
           "PersonalInformation",
           "IdentityVerification",
@@ -29,7 +36,6 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
           "EmploymentDetails",
           "PersonalInfoSummary",
           "Declarations",
-          "FEADeclaration",
           "CRSDeclaration",
           "DeclarationSummary",
           "Acknowledgement",
@@ -38,6 +44,14 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
           "Payment",
         ],
         finishedSteps: [],
+        riskInfo: {
+          appetite: "",
+          profile: "",
+          expectedRange: "",
+          fundSuggestion: "",
+          hnwStatus: "",
+          type: "",
+        },
       };
 
     default:

@@ -1,10 +1,10 @@
 import moment from "moment";
-import React, { FunctionComponent } from "react";
-import { View } from "react-native";
+import React, { Fragment, FunctionComponent } from "react";
 
-import { CustomSpacer, LabeledTitle, TextSpaceArea } from "../../../../components";
+import { CustomSpacer, IInfoStackData, InfoStack, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, FULL_DATE_FORMAT, Language } from "../../../../constants";
-import { flexRow, fs12BoldGray5, fs16BoldBlack2, fs24BoldBlue1, sh16, sh24, sw208, sw32 } from "../../../../styles";
+import { fs24BoldGray6, sh24, sh8 } from "../../../../styles";
+import { isNotEmpty, titleCaseString } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
 
@@ -20,37 +20,61 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
   jointHolder,
 }: NewSalesSummaryProps) => {
   const subheading = accountType === "Individual" ? ADD_CLIENT.LABEL_VERIFY_INDIVIDUAL : ADD_CLIENT.LABEL_VERIFY_JOINT;
-  const principalLabelName = accountType === "Individual" ? ADD_CLIENT.DETAILS_LABEL_NAME : ADD_CLIENT.DETAILS_LABEL_NAME_PRINCIPAL;
+  const checkIdType = (data: IClientBasicInfo) => {
+    const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
+    const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
 
-  const infoStyles = { labelStyle: fs12BoldGray5, spaceToBottom: sh16, titleStyle: fs16BoldBlack2 };
+    return data.idType === "Other"
+      ? `${otherIdType} ${ADD_CLIENT.LABEL_ID} ${ADD_CLIENT.LABEL_NUMBER}`
+      : `${idType} ${ADD_CLIENT.LABEL_NUMBER}`;
+  };
+
+  const principalSummary = [
+    { label: ADD_CLIENT.LABEL_NAME, value: principalHolder.name! },
+    { label: checkIdType(principalHolder), value: principalHolder.id! },
+    { label: ADD_CLIENT.DETAILS_LABEL_DOB, value: moment(principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT) },
+  ];
+
+  if (principalHolder.idType! === "Passport") {
+    principalSummary.push({
+      label: ADD_CLIENT.LABEL_COUNTRY,
+      value: principalHolder.country!,
+    });
+  }
+
+  let jointSummary: IInfoStackData[] = [];
+
+  if (accountType === "Joint" && jointHolder !== undefined) {
+    jointSummary = [
+      { label: ADD_CLIENT.LABEL_NAME, value: jointHolder.name! },
+      { label: checkIdType(jointHolder), value: jointHolder.id! },
+      { label: ADD_CLIENT.DETAILS_LABEL_DOB, value: moment(jointHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT) },
+    ];
+
+    if (jointHolder.idType! === "Passport") {
+      jointSummary.push({
+        label: ADD_CLIENT.LABEL_COUNTRY,
+        value: jointHolder.country!,
+      });
+    }
+  }
+
+  const principalTitle = `${ADD_CLIENT.DETAILS_LABEL_NAME_PRINCIPAL} ${ADD_CLIENT.LABEL_HOLDER}`;
+  const jointTitle = accountType === "Joint" ? `${ADD_CLIENT.DETAILS_LABEL_NAME_JOINT} ${ADD_CLIENT.LABEL_HOLDER}` : undefined;
+
+  const principalBadge = "New Investor"; // TODO isEtb check
+  const jointBadge = "New Investor"; // TODO isEtb check
 
   return (
-    <View>
-      <TextSpaceArea spaceToBottom={sh24} style={fs24BoldBlue1} text={subheading} />
-      <View style={flexRow}>
-        <View style={{ width: sw208 }}>
-          <LabeledTitle label={principalLabelName} title={principalHolder.name} {...infoStyles} />
-          <LabeledTitle label={principalHolder.idType!} title={principalHolder.id} {...infoStyles} />
-          <LabeledTitle
-            label={ADD_CLIENT.DETAILS_LABEL_DOB}
-            title={moment(principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
-            {...infoStyles}
-          />
-        </View>
-        <CustomSpacer isHorizontal={true} space={sw32} />
-        {jointHolder !== undefined && accountType === "Joint" ? (
-          <View style={{ width: sw208 }}>
-            <LabeledTitle label={ADD_CLIENT.DETAILS_LABEL_NAME_JOINT} title={jointHolder.name} {...infoStyles} />
-            <LabeledTitle label={jointHolder.idType!} title={jointHolder.id} {...infoStyles} />
-            <LabeledTitle
-              label={ADD_CLIENT.DETAILS_LABEL_DOB}
-              title={moment(jointHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT)}
-              {...infoStyles}
-            />
-          </View>
-        ) : null}
-      </View>
-      <LabeledTitle label={ADD_CLIENT.LABEL_ACCOUNT_TYPE} title={accountType} {...infoStyles} spaceToBottom={undefined} />
-    </View>
+    <Fragment>
+      <TextSpaceArea spaceToBottom={sh24} style={fs24BoldGray6} text={subheading} />
+      <InfoStack data={principalSummary} title={principalTitle} titleBadge={principalBadge} />
+      {accountType === "Joint" ? (
+        <Fragment>
+          <CustomSpacer space={sh8} />
+          <InfoStack data={jointSummary} title={jointTitle} titleBadge={jointBadge} />
+        </Fragment>
+      ) : null}
+    </Fragment>
   );
 };

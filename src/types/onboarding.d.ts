@@ -51,7 +51,6 @@ declare interface IOnboardingRoutes {
   EmailVerification: TypeOnboardingRoute;
   EmploymentDetails: TypeOnboardingRoute;
   FATCADeclaration: TypeOnboardingRoute;
-  FEADeclaration: TypeOnboardingRoute;
   IdentityVerification: TypeOnboardingRoute;
   OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
@@ -60,6 +59,7 @@ declare interface IOnboardingRoutes {
   PersonalInfoSummary: TypeOnboardingRoute;
   Products: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
+  RiskSummary: TypeOnboardingRoute;
   Signatures: TypeOnboardingRoute;
   TermsAndConditions: TypeOnboardingRoute;
 }
@@ -72,7 +72,6 @@ declare interface IOnboardingKeys {
   EmailVerification: TypeOnboardingKey;
   EmploymentDetails: TypeOnboardingKey;
   FATCADeclaration: TypeOnboardingKey;
-  FEADeclaration: TypeOnboardingKey;
   IdentityVerification: TypeOnboardingKey;
   OrderSummary: TypeOnboardingKey;
   Payment: TypeOnboardingKey;
@@ -81,6 +80,7 @@ declare interface IOnboardingKeys {
   PersonalInfoSummary: TypeOnboardingKey;
   Products: TypeOnboardingKey;
   RiskAssessment: TypeOnboardingKey;
+  RiskSummary: TypeOnboardingRoute;
   Signatures: TypeOnboardingKey;
   TermsAndConditions: TypeOnboardingKey;
 }

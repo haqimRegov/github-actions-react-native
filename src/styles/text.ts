@@ -7,6 +7,7 @@ import { sh10, sh12, sh14, sh16, sh18, sh20, sh24, sh32, sh36, sh40, sh48 } from
 
 export const fsAlignCenter: TextStyle = { textAlign: "center" };
 export const fsAlignLeft: TextStyle = { textAlign: "left" };
+export const fsAlignRight: TextStyle = { textAlign: "right" };
 
 export const fsCapitalize: TextStyle = {
   textTransform: "capitalize",

@@ -216,6 +216,7 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
 
   return (
     <RiskAssessmentTemplate
+      accountType="Individual"
       addAssessmentQuestions={addAssessmentQuestions}
       confirmModal={confirmModal}
       continueLoader={continueLoader}

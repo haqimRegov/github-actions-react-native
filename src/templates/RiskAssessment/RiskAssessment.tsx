@@ -4,6 +4,7 @@ import { Image, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } fro
 import { QuestionContent, QuestionHeader } from "..";
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import {
+  AccountHeader,
   ColorCard,
   ConfirmationModal,
   ContentPage,
@@ -54,12 +55,14 @@ import {
 const { RISK_ASSESSMENT } = Language.PAGE;
 
 interface RiskAssessmentTemplateProps {
+  accountType: TypeAccountChoices;
   addAssessmentQuestions: (answers: IRiskAssessmentQuestions) => void;
   cancelDisabled?: boolean;
   confirmModal: TypeRiskAssessmentModal;
   continueLoader?: boolean;
   currentRiskScore: IRiskScoreState;
   dateOfBirth: string;
+  details?: IClientDetailsState;
   handleCancelAssessment: () => void;
   handleCancelEdit: () => void;
   handleConfirmAssessment: () => void;
@@ -70,12 +73,14 @@ interface RiskAssessmentTemplateProps {
 }
 
 export const RiskAssessmentTemplate: FunctionComponent<RiskAssessmentTemplateProps> = ({
+  accountType,
   addAssessmentQuestions,
   cancelDisabled,
   confirmModal,
   continueLoader,
   currentRiskScore,
   dateOfBirth,
+  details,
   handleCancelAssessment,
   handleCancelEdit,
   handleConfirmAssessment,
@@ -134,6 +139,9 @@ export const RiskAssessmentTemplate: FunctionComponent<RiskAssessmentTemplatePro
         <View style={px(sw24)}>
           <CustomSpacer isHorizontal={true} space={sw24} />
           <View>
+            {accountType === "Joint" ? (
+              <AccountHeader title={RISK_ASSESSMENT.LABEL_PRINCIPAL_HOLDER} subtitle={details?.principalHolder!.name!} />
+            ) : null}
             <View onStartShouldSetResponderCapture={() => true}>
               <ColorCard
                 header="custom"

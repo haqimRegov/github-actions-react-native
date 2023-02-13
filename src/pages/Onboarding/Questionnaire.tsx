@@ -14,6 +14,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   addAssessmentQuestions,
   addOnboardingRiskInfo,
   agent,
+  client,
   details,
   handleNextStep,
   navigation,
@@ -151,11 +152,13 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   return (
     <RiskAssessmentTemplate
+      accountType={client.accountType!} // new
       addAssessmentQuestions={addAssessmentQuestions} // same
       cancelDisabled={isEditConfirmed} // same // currently not doing since functionality is commented in useEffect
       confirmModal={confirmModal} // same // currently not doing since functionality is commented in useEffect
       currentRiskScore={currentRiskScore} // same
       dateOfBirth={dateOfBirth!} // same
+      details={details} // new
       handleCancelAssessment={handleCancelAssessment} // same
       handleCancelEdit={handleCancelEdit} // same
       handleConfirmAssessment={handleConfirmAssessment} // TODO not same

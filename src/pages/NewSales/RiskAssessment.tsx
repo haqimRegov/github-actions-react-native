@@ -16,6 +16,7 @@ interface RiskAssessmentContentProps extends RiskStoreProps, NewSalesContentProp
 const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentProps> = ({
   addAssessmentQuestions,
   addRiskInfo,
+  client,
   details,
   handleNextStep,
   navigation,
@@ -143,11 +144,13 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
 
   return (
     <RiskAssessmentTemplate
+      accountType={client.accountType!}
       addAssessmentQuestions={addAssessmentQuestions}
       cancelDisabled={isEditConfirmed}
       confirmModal={confirmModal}
       currentRiskScore={currentRiskScore}
       dateOfBirth={dateOfBirth!}
+      details={details}
       handleCancelAssessment={handleCancelAssessment}
       handleCancelEdit={handleCancelEdit}
       handleConfirmAssessment={handleConfirmAssessment}

@@ -55,11 +55,11 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
     setAgeErrorMessage(undefined);
     setErrorMessage(undefined);
     setInputError1(undefined);
-    setClientInfo({ ...[holderToFill], idType: value, name: "", id: "", country: "", dateOfBirth: "" });
+    setClientInfo({ ...clientInfo, idType: value, name: "", id: "", country: "", dateOfBirth: "", isEtb: false });
   };
-  const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...[holderToFill], otherIdType: value });
-  const setInputCountry = (value: string) => setClientInfo({ ...[holderToFill], country: value });
-  const setInputName = (value: string) => setClientInfo({ ...[holderToFill], name: value });
+  const setInputOtherIdType = (value: TypeIDOther) => setClientInfo({ ...clientInfo, otherIdType: value });
+  const setInputCountry = (value: string) => setClientInfo({ ...clientInfo, country: value });
+  const setInputName = (value: string) => setClientInfo({ ...clientInfo, name: value });
 
   const setInputIdNumber = (value: string) => {
     if ((idType === "NRIC" && isNumber(value)) || idType !== "NRIC" || value === "") {
@@ -71,12 +71,12 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
           setErrorMessage(undefined);
         }
       }
-      setClientInfo({ ...[holderToFill], id: value.toUpperCase() });
+      setClientInfo({ ...clientInfo, id: value.toUpperCase() });
     }
   };
 
   const setInputDateOfBirth = (value?: Date) => {
-    setClientInfo({ ...[holderToFill], dateOfBirth: moment(value).format(DEFAULT_DATE_FORMAT) });
+    setClientInfo({ ...clientInfo, dateOfBirth: moment(value).format(DEFAULT_DATE_FORMAT) });
   };
 
   const handleOtherIdType = (value: string) => {

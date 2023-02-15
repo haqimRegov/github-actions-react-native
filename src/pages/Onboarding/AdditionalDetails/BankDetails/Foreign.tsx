@@ -30,7 +30,7 @@ import {
 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { ADDITIONAL_DETAILS } = Language.PAGE;
 
 interface IForeignBankDetailsProps {
   bankingDetails: IBankDetailsState[];
@@ -140,7 +140,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
           setBankingDetails(updatedDetails);
         };
 
-        const foreignBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}`;
+        const foreignBankLabel = `${ADDITIONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}`;
         const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => {
           return filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value);
         });
@@ -171,7 +171,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                   setBankingDetails(updatedBankingDetails);
                 };
 
-                const label = currencyIndex === 0 ? PERSONAL_DETAILS.LABEL_CURRENCY : PERSONAL_DETAILS.LABEL_OTHER_CURRENCY;
+                const label = currencyIndex === 0 ? ADDITIONAL_DETAILS.LABEL_CURRENCY : ADDITIONAL_DETAILS.LABEL_OTHER_CURRENCY;
 
                 return (
                   <Fragment key={currencyIndex}>
@@ -190,7 +190,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 );
               })}
               <CustomTextInput
-                label={PERSONAL_DETAILS.LABEL_BANK_NAME}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_NAME}
                 onChangeText={handleBankName}
                 spaceToTop={sh32}
                 value={item.bankName}
@@ -198,7 +198,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
               <NewDropdown
                 handleChange={handleAccountName}
                 items={bankNames}
-                label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                 spaceToTop={sh32}
                 value={item.bankAccountName!}
               />
@@ -206,7 +206,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                 <CustomTextInput
                   autoCapitalize="words"
                   error={item.bankAccountNameError}
-                  label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                  label={ADDITIONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                   onBlur={checkAccountBankName}
                   onChangeText={handleCombinedName}
                   spaceToTop={sh32}
@@ -216,7 +216,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
               <CustomTextInput
                 error={item.bankAccountNumberError}
                 keyboardType="numeric"
-                label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
                 onBlur={checkNumber}
                 onChangeText={handleAccountNumber}
                 spaceToTop={sh32}
@@ -225,21 +225,26 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
               <NewDropdown
                 items={DICTIONARY_COUNTRIES}
                 handleChange={handleBankLocation}
-                label={PERSONAL_DETAILS.LABEL_BANK_LOCATION}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_LOCATION}
                 spaceToTop={sh32}
                 value={item.bankLocation || ""}
               />
               <CustomTextInput
-                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
                 onChangeText={handleSwiftCode}
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}
               />
-              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={ADDITIONAL_DETAILS.HINT_SWIFT_CODE} />
               {item.currency!.length === currencyExtractor.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
-                  <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
+                  <OutlineButton
+                    buttonType="dashed"
+                    icon="plus"
+                    onPress={handleAddCurrency}
+                    text={ADDITIONAL_DETAILS.BUTTON_ADD_CURRENCY}
+                  />
                 </Fragment>
               )}
             </View>
@@ -250,7 +255,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
       {noForeignBank === true ? null : (
         <View style={px(sw24)}>
           <CustomSpacer space={sh24} />
-          <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddForeignBank} text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN} />
+          <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddForeignBank} text={ADDITIONAL_DETAILS.BUTTON_ADD_FOREIGN} />
         </View>
       )}
     </View>

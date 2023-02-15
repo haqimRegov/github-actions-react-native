@@ -50,7 +50,6 @@ interface IBasicInvestorData {
 }
 
 const AccountListComponent: FunctionComponent<IAccountListProps> = ({
-  addRiskScore,
   addClientDetails,
   addPersonalInfo,
   addPrsDefaultFilters,
@@ -141,6 +140,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           clientId: otherInvestorDataRef.current.clientId,
           id: otherInvestorDataRef.current.id,
           name: otherInvestorDataRef.current.name,
+          isEtb: false,
         },
         initId: otherInvestorDataRef.current.initId,
         accountHolder: otherInvestorDataRef.current.accountHolder,
@@ -168,7 +168,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
         : [];
       const declarationToUse = isArrayNotEmpty(checkDeclarations) ? checkDeclarations : checkInvestorDeclarations;
 
-      let fatcaAddress = isNotEmpty(otherInvestorDataRef.current.address) ? getAddress(otherInvestorDataRef.current.address) : undefined;
+      let fatcaAddress = isNotEmpty(otherInvestorDataRef.current.address) ? getAddress(otherInvestorDataRef.current.address!) : undefined;
       if (isNotEmpty(otherInvestorDataRef.current.address)) {
         fatcaAddress = getAddress(otherInvestorDataRef.current.address!);
       }
@@ -255,18 +255,16 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
       if (clientResponse !== undefined) {
         const { data, error } = clientResponse;
         if (error === null && data !== null) {
-          let riskInfo: IRiskProfile | undefined;
+          let riskInfo: IRiskProfile;
           if (data.result.riskInfo !== undefined && data.result.riskInfo !== null) {
-            riskInfo = data.result.riskInfo;
-            addRiskScore({
+            riskInfo = {
               ...riskScore,
               appetite: data.result.riskInfo.appetite,
-              rangeOfReturn: data.result.riskInfo.expectedRange,
+              expectedRange: data.result.riskInfo.expectedRange,
               profile: data.result.riskInfo.profile,
               type: data.result.riskInfo.type,
-              fundSuggestion: "",
-              netWorth: "",
-            });
+              hnwStatus: data.result.riskInfo.hnwStatus,
+            };
           }
           const resetJointInfo = eachAccount.jointName === null;
           let dataJointIdType = {};
@@ -282,13 +280,14 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               ? { idType: "Other", otherIdType: data.result.principalHolder.idType as TypeIDOther }
               : { idType: data.result.principalHolder.idType };
 
-          const initialJointInfo = {
+          const initialJointInfo: IClientBasicInfo = {
             name: "",
             country: "",
             dateOfBirth: "",
             id: "",
             idType: DICTIONARY_ID_TYPE[0],
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+            isEtb: false,
           };
 
           const moreJointInfo = isNotEmpty(data.result.jointHolder)
@@ -297,6 +296,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                 dateOfBirth: data.result.jointHolder!.dateOfBirth,
                 id: data.result.jointHolder!.id,
                 name: data.result.jointHolder!.name,
+                isEtb: false,
               }
             : {};
 
@@ -311,8 +311,9 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
                 dateOfBirth: data.result.principalHolder.dateOfBirth,
                 id: data.result.principalHolder.id,
                 name: data.result.principalHolder.name,
+                isEtb: false,
               },
-              jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+              jointHolder: resetJointInfo === true ? { ...initialJointInfo } : ({ ...jointHolder, ...moreJointInfo } as IClientBasicInfo),
               initId: `${data.result.initId}`,
               accountHolder: eachAccount.accountHolder,
             },
@@ -406,7 +407,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               principalClientId: data.result.principalHolder.clientId,
               jointClientId: data.result.jointHolder !== null ? data.result.jointHolder!.clientId : undefined,
             },
-            riskInfo: riskInfo,
+            riskInfo: { ...riskInfo! },
             accountDetails: {
               ...newSales.accountDetails,
               accountNo: eachAccount.accountNo,

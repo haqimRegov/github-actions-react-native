@@ -1,28 +1,9 @@
 import React, { FunctionComponent } from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, View } from "react-native";
 
-import { BaseColorCardProps, BaseTextCardProps, CustomSpacer, Dash, FileViewer } from "../../../components";
+import { AccountHeader, BaseColorCardProps, BaseTextCardProps, CustomSpacer, FileViewer } from "../../../components";
 import { Language } from "../../../constants";
-import {
-  border,
-  colorGray,
-  colorRed,
-  colorWhite,
-  flexRow,
-  fs10RegGray6,
-  fs12BoldBlack2,
-  fsTransformNone,
-  px,
-  sh1,
-  sh24,
-  sh26,
-  sh4,
-  sh8,
-  shadow12Blue110,
-  sw1,
-  sw16,
-  sw24,
-} from "../../../styles";
+import { border, colorGray, colorWhite, fsTransformNone, px, sh16, sh24, sh8, shadow12Blue110, sw1, sw24 } from "../../../styles";
 import { SummaryColorCard } from "../../../templates";
 
 const { SUMMARY } = Language.PAGE;
@@ -32,12 +13,14 @@ interface SummaryDetailsProps {
   accountType: TypeAccountChoices;
   additionalInfo: LabeledTitleProps[];
   contactDetails: LabeledTitleProps[];
+  emailSection: LabeledTitleProps[];
   employmentAddress: LabeledTitleProps[];
   employmentDetails: LabeledTitleProps[];
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
   handleCloseViewer?: () => void;
   handleNextStep: (route: TypeOnboardingKey) => void;
+  isMalaysian: boolean;
   localBankDetails: LabeledTitleProps[][];
   mailingAddress: LabeledTitleProps[];
   name: string;
@@ -51,12 +34,14 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   accountType,
   additionalInfo,
   contactDetails,
+  emailSection,
   employmentAddress,
   employmentDetails,
   epfDetails,
   foreignBankDetails,
   handleCloseViewer,
   handleNextStep,
+  isMalaysian,
   localBankDetails,
   mailingAddress,
   name,
@@ -72,33 +57,39 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleNextStep("IdentityVerification");
   };
 
-  const handleEditOtherDetails = () => {
+  const handleEditContact = () => {
     handleNextStep("PersonalDetails");
+  };
+
+  const handleEditOtherDetails = () => {
+    handleNextStep("AdditionalDetails");
   };
 
   const handleEditEmploymentDetails = () => {
     handleNextStep("EmploymentDetails");
   };
 
-  const personalDetailsInfo: LabeledTitleProps[] =
-    personalDetails.length > 12 ? [...personalDetails.slice(0, 5)] : [...personalDetails.slice(0, 3)];
-  const personalDetailsItem: LabeledTitleProps[] =
-    personalDetails.length > 12 ? [...personalDetails.slice(5)] : [...personalDetails.slice(3)];
+  const personalDetailsInfo: LabeledTitleProps[] = personalDetails.slice(0, isMalaysian === true ? 3 : 5);
+  const personalDetailsItem: LabeledTitleProps[] = personalDetails.slice(isMalaysian === true ? -9 : -8);
+
   const personalDetailsSection = {
     iconName: "account",
     text: SUMMARY.TITLE_PERSONAL,
     data: [personalDetailsItem],
   };
+
   const employmentDetailsSection = {
     iconName: "location",
     text: SUMMARY.LABEL_EMPLOYMENT_ADDRESS,
     data: [employmentAddress],
   };
+
   const accountDetailsBank = {
     iconName: "bank-new",
     text: SUMMARY.SUBTITLE_LOCAL_BANK,
     data: [...localBankDetails],
   };
+
   const accountDetailsForeignBank = {
     iconName: "bank-new",
     text: SUMMARY.SUBTITLE_FOREIGN_BANK,
@@ -119,42 +110,40 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
 
   return (
     <View style={px(sw24)}>
-      {accountType === "Individual" ? null : (
-        <View style={{ marginTop: sh26 }}>
-          <View style={{ ...flexRow, paddingBottom: sh4, borderBottomColor: colorRed._1, borderBottomWidth: sw1 }}>
-            <Text style={fs10RegGray6}>{headerTitle}</Text>
-            <CustomSpacer space={sw16} isHorizontal={true} />
-            <Text style={fs12BoldBlack2}>{name}</Text>
-          </View>
-          <Dash color={colorRed._2} thickness={sh1} gap={0} />
-        </View>
-      )}
+      <CustomSpacer space={sh24} />
+      {accountType === "Individual" ? null : <AccountHeader title={headerTitle} subtitle={name} />}
       <SummaryColorCard
         headerTitle={SUMMARY.TITLE_IDENTIFICATION}
         data={personalDetailsInfo}
-        spaceToTop={sh24}
         section={[personalDetailsSection]}
         textCardProps={textCardProps}
         colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
       />
       <SummaryColorCard
+        headerTitle={SUMMARY.TITLE_EMAIL}
+        data={emailSection}
+        spaceToTop={sh16}
+        textCardProps={textCardProps}
+        colorCardProps={{ ...colorCardProps, headerIcon: { disabled: true, name: "pencil", onPress: () => {} } }}
+      />
+      <SummaryColorCard
         headerTitle={SUMMARY.TITLE_CONTACT}
         data={contactDetails}
-        spaceToTop={sh24}
+        spaceToTop={sh16}
         textCardProps={textCardProps}
-        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
+        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditContact } }}
       />
       <SummaryColorCard
         headerTitle={SUMMARY.LABEL_PERMANENT_ADDRESS}
         data={permanentAddress}
-        spaceToTop={sh24}
+        spaceToTop={sh16}
         textCardProps={textCardProps}
         colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
       />
       <SummaryColorCard
         headerTitle={SUMMARY.LABEL_MAILING_ADDRESS}
         data={mailingAddress}
-        spaceToTop={sh24}
+        spaceToTop={sh16}
         textCardProps={textCardProps}
         colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
       />
@@ -162,9 +151,19 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
         <SummaryColorCard
           headerTitle={SUMMARY.TITLE_EPF}
           data={epfDetails}
-          spaceToTop={sh24}
+          spaceToTop={sh16}
           textCardProps={textCardProps}
-          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
+          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditPersonalDetails } }}
+        />
+      ) : null}
+      {employmentDetails.length > 0 ? (
+        <SummaryColorCard
+          headerTitle={SUMMARY.TITLE_EMPLOYMENT}
+          data={employmentDetails}
+          section={[employmentDetailsSection]}
+          spaceToTop={sh16}
+          textCardProps={textCardProps}
+          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditEmploymentDetails } }}
         />
       ) : null}
       {(accountType === "Joint" && accountHolder === "Joint") ||
@@ -174,21 +173,11 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           headerTitle={SUMMARY.TITLE_ACCOUNT}
           data={additionalInfo}
           section={[accountDetailsBank, accountDetailsForeignBank]}
-          spaceToTop={sh24}
+          spaceToTop={sh16}
           textCardProps={textCardProps}
           colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
         />
       )}
-      {employmentDetails.length > 0 ? (
-        <SummaryColorCard
-          headerTitle={SUMMARY.TITLE_EMPLOYMENT}
-          data={employmentDetails}
-          section={[employmentDetailsSection]}
-          spaceToTop={sh24}
-          textCardProps={textCardProps}
-          colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditEmploymentDetails } }}
-        />
-      ) : null}
       {viewFile !== undefined && handleCloseViewer !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="base64" value={viewFile} visible={viewFile !== undefined} />
       ) : null}

@@ -1,17 +1,30 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
+import { View } from "react-native";
 
-import { AddressField, CheckBox, CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, TextSpaceArea } from "../../../components";
+import {
+  AddressField,
+  CheckBox,
+  ColorCard,
+  CustomSpacer,
+  CustomTextInput,
+  NewDatePicker,
+  NewDropdown,
+  TextSpaceArea,
+} from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import {
+  DICTIONARY_ALL_ID_TYPE,
   DICTIONARY_COUNTRIES,
   DICTIONARY_GENDER,
   DICTIONARY_MALAYSIA_STATES_LIST,
   DICTIONARY_SALUTATION,
   ERROR,
 } from "../../../data/dictionary";
-import { sh136, sh143, sh176, sh24, sh32, sh4 } from "../../../styles";
+import { borderBottomGray2, fs16BoldBlack2, sh136, sh143, sh16, sh176, sh24, sh4 } from "../../../styles";
 import { formatNumber, isNonNumber, isNumber } from "../../../utils";
+import { MalaysianDetails } from "./MalaysianDetails";
+import { PRSDetails } from "./PRSDetails";
 
 const { ID_VERIFICATION } = Language.PAGE;
 
@@ -19,6 +32,7 @@ export interface IDDetailsProps {
   accountType?: TypeAccountChoices;
   accountHolder: TypeAccountHolder;
   addressInfo: IAddressInfoState;
+  clientDetails: IClientBasicInfo;
   personalDetails: IPersonalDetailsState;
   setAddressInfo: (value: IAddressInfoState) => void;
   setPersonalDetails: (value: IPersonalDetailsState) => void;
@@ -40,11 +54,12 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const idType = personalDetails.idType!;
   const dateOfBirth = personalDetails.dateOfBirth!;
   const formattedDOB = moment(dateOfBirth).format(DEFAULT_DATE_FORMAT);
-  const labelOtherId = idType !== "Passport" ? `${idType} ID` : idType;
-  const labelId = idType !== "NRIC" ? `${labelOtherId} Number` : idType;
+  const checkNameLabel = idType !== "NRIC" && idType !== "Passport" ? `${idType} ID` : idType;
+  const idLabel = idType !== "NRIC" && idType !== "Passport" ? `${idType} ID Number` : `${idType} Number`;
   const isPassport = idType === "Passport";
   const addressType = isPassport ? "Other" : "Malaysia";
 
+  const inputCountryIssuance = personalDetails.countryOfIssuance!;
   const inputCountryOfBirth = personalDetails.countryOfBirth!;
   const inputExpiryDate = personalDetails.expirationDate!;
   const inputGender = personalDetails.gender!;
@@ -63,6 +78,12 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const inputPlaceOfBirth = personalDetails.placeOfBirth!;
   const inputSalutation = personalDetails.salutation!;
   const sameAddressToggle = addressInfo.sameAddress!;
+  const inputRace = personalDetails.race!;
+  const inputBumiputera = personalDetails.bumiputera!;
+  const inputEducation = personalDetails.educationLevel!;
+  const inputOtherEducation = personalDetails.otherEducationLevel!;
+  const inputMaritalStatus = personalDetails.maritalStatus!;
+  const inputMotherName = personalDetails.mothersMaidenName!;
 
   const setPermanentInfo = (value: IAddressState) => {
     const sameMailingAddress =
@@ -73,6 +94,8 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
     setAddressInfo({ ...addressInfo, mailingAddress: { ...addressInfo.mailingAddress, ...value } });
   };
 
+  const setInputRace = (value: string) => setPersonalDetails({ race: value });
+  const setInputBumiputera = (value: string) => setPersonalDetails({ bumiputera: value });
   const setExpiryDate = (value: Date) => setPersonalDetails({ expirationDate: value });
   const setInputCountryOfBirth = (value: string) => setPersonalDetails({ countryOfBirth: value });
   const setInputGender = (value: string) => setPersonalDetails({ gender: value });
@@ -88,6 +111,11 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const setInputPermanentState = (value: string) => setPermanentInfo({ state: value });
   const setInputPlaceOfBirth = (value: string) => setPersonalDetails({ placeOfBirth: value });
   const setInputSalutation = (value: string) => setPersonalDetails({ salutation: value });
+  const setInputMotherName = (value: string) => setPersonalDetails({ mothersMaidenName: value });
+  const setInputMaritalStatus = (value: string) => setPersonalDetails({ maritalStatus: value });
+  const setInputEducation = (value: string) =>
+    setPersonalDetails({ educationLevel: value, otherEducationLevel: value !== "Others" ? "" : inputOtherEducation });
+  const setInputOtherEducation = (value: string) => setPersonalDetails({ otherEducationLevel: value });
 
   const handleAddressToggle = () => {
     const mailingAddress = sameAddressToggle
@@ -157,111 +185,211 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
     setValidations({ ...validations, name: isNonNumber(inputName) === false ? ERROR.INVALID_NAME : undefined });
   };
 
+  const checkMothersName = () => {
+    setValidations({
+      ...validations,
+      mothersName: isNonNumber(inputMotherName) === false || inputMotherName === "" ? ERROR.INVALID_NAME : undefined,
+    });
+  };
+
   const labelSameMailing = accountHolder === "Joint" ? ID_VERIFICATION.LABEL_MAILING_SAME_PRINCIPAL : ID_VERIFICATION.LABEL_MAILING_SAME;
-  const nameLabel = `${ID_VERIFICATION.LABEL_NAME} (as per ${labelOtherId})`;
+  const checkReviewLabelPrincipal =
+    accountType === "Individual"
+      ? ID_VERIFICATION.LABEL_REVIEW_PRINCIPAL_HOLDER_DETAILS_INDIVIDUAL
+      : ID_VERIFICATION.LABEL_REVIEW_PRINCIPAL_HOLDER_DETAILS;
+  const checkReviewLabel = accountHolder === "Principal" ? checkReviewLabelPrincipal : ID_VERIFICATION.LABEL_REVIEW_JOINT_HOLDER_DETAILS;
+  const checkPersonalDetailsLabelPrincipal =
+    accountType === "Individual"
+      ? ID_VERIFICATION.LABEL_ADD_PRINCIPAL_HOLDER_PERSONAL_DETAILS_INDIVIDUAL
+      : ID_VERIFICATION.LABEL_ADD_PRINCIPAL_HOLDER_PERSONAL_DETAILS;
+  const checkPersonalDetailsLabel =
+    accountHolder === "Principal" ? checkPersonalDetailsLabelPrincipal : ID_VERIFICATION.LABEL_ADD_JOINT_HOLDER_PERSONAL_DETAILS;
+  const checkPermanentAddressLabelPrincipal =
+    accountType === "Individual"
+      ? ID_VERIFICATION.LABEL_ADD_PRINCIPAL_HOLDER_PERMANENT_ADDRESS_INDIVIDUAL
+      : ID_VERIFICATION.LABEL_ADD_PRINCIPAL_HOLDER_PERMANENT_ADDRESS;
+  const checkPermanentAddressLabel =
+    accountHolder === "Principal" ? checkPermanentAddressLabelPrincipal : ID_VERIFICATION.LABEL_ADD_JOINT_HOLDER_PERMANENT_ADDRESS;
+  const checkCorrespondingAddressLabelPrincipal =
+    accountType === "Individual"
+      ? ID_VERIFICATION.LABEL_ADD_PRINCIPAL_HOLDER_CORRESPONDING_ADDRESS_INDIVIDUAL
+      : ID_VERIFICATION.LABEL_ADD_PRINCIPAL_HOLDER_CORRESPONDING_ADDRESS;
+  const checkCorrespondingAddressLabel =
+    accountHolder === "Principal" ? checkCorrespondingAddressLabelPrincipal : ID_VERIFICATION.LABEL_ADD_JOINT_HOLDER_CORRESPONDING_ADDRESS;
+  const nameLabel = `${ID_VERIFICATION.LABEL_NAME} as per ${checkNameLabel}`;
   const countryHeight = accountType === "Joint" && accountHolder !== "Joint" ? sh176 : sh136;
+  const isMalaysian = DICTIONARY_ALL_ID_TYPE.indexOf(personalDetails.idType! as TypeClientID) !== 1;
 
   return (
     <Fragment>
-      <CustomTextInput disabled={true} label={labelId} spaceToTop={sh24} value={idNumber} />
-      <CustomTextInput
-        disabled={true}
-        label={ID_VERIFICATION.LABEL_DOB}
-        rightIcon={{ name: "calendar" }}
-        spaceToTop={sh32}
-        value={formattedDOB}
+      <ColorCard
+        header={{ label: checkReviewLabel }}
+        content={
+          <Fragment>
+            <CustomTextInput
+              autoCapitalize="words"
+              disabled={true}
+              error={validations.name}
+              label={nameLabel}
+              onBlur={checkName}
+              onChangeText={setInputName}
+              value={inputName}
+            />
+            <CustomTextInput disabled={true} label={idLabel} spaceToTop={sh16} value={idNumber} />
+            <CustomTextInput
+              disabled={true}
+              label={ID_VERIFICATION.LABEL_DOB}
+              rightIcon={{ name: "calendar" }}
+              spaceToTop={sh16}
+              value={formattedDOB}
+            />
+            {isPassport ? (
+              <Fragment>
+                <NewDropdown
+                  disabled={true}
+                  items={DICTIONARY_COUNTRIES}
+                  handleChange={() => {}}
+                  label={ID_VERIFICATION.LABEL_COUNTRY_ISSUANCE}
+                  spaceToTop={sh16}
+                  value={inputCountryIssuance!}
+                />
+                <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh16} text={ID_VERIFICATION.LABEL_EXPIRY} />
+                <NewDatePicker
+                  datePickerStyle={{ height: sh143 }}
+                  mode="date"
+                  minimumDate={moment().toDate()}
+                  setValue={setExpiryDate}
+                  value={inputExpiryDate}
+                />
+              </Fragment>
+            ) : null}
+          </Fragment>
+        }
       />
-      <CustomTextInput
-        autoCapitalize="words"
-        disabled={true}
-        error={validations.name}
-        label={nameLabel}
-        onBlur={checkName}
-        onChangeText={setInputName}
-        spaceToTop={sh32}
-        value={inputName}
+      <CustomSpacer space={sh24} />
+      <ColorCard
+        content={
+          <Fragment>
+            <NewDropdown
+              items={DICTIONARY_SALUTATION}
+              handleChange={setInputSalutation}
+              label={ID_VERIFICATION.LABEL_SALUTATION}
+              value={inputSalutation}
+            />
+            <CustomSpacer space={sh16} />
+            <NewDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
+            <CustomSpacer space={sh16} />
+            <CustomTextInput
+              autoCapitalize="words"
+              label={ID_VERIFICATION.LABEL_POB}
+              onChangeText={setInputPlaceOfBirth}
+              value={inputPlaceOfBirth}
+            />
+            <NewDropdown
+              items={DICTIONARY_COUNTRIES}
+              handleChange={setInputCountryOfBirth}
+              label={ID_VERIFICATION.LABEL_COB}
+              spaceToTop={sh16}
+              value={inputCountryOfBirth}
+            />
+            <CustomSpacer space={sh16} />
+            <View style={borderBottomGray2} />
+            {isPassport ? (
+              <Fragment>
+                <NewDropdown
+                  items={DICTIONARY_COUNTRIES}
+                  handleChange={setInputNationality}
+                  label={ID_VERIFICATION.LABEL_NATIONALITY}
+                  spaceToTop={sh16}
+                  value={inputNationality!}
+                />
+                <CustomSpacer space={sh16} />
+                <View style={borderBottomGray2} />
+              </Fragment>
+            ) : null}
+            {isMalaysian ? (
+              <Fragment>
+                <MalaysianDetails
+                  inputBumiputera={inputBumiputera}
+                  inputRace={inputRace}
+                  setInputBumiputera={setInputBumiputera}
+                  setInputRace={setInputRace}
+                />
+                <CustomSpacer space={sh16} />
+                <View style={borderBottomGray2} />
+              </Fragment>
+            ) : null}
+            <PRSDetails
+              inputEducation={inputEducation}
+              inputMaritalStatus={inputMaritalStatus}
+              inputMotherName={inputMotherName}
+              inputOtherEducation={inputOtherEducation}
+              onBlurMothersName={checkMothersName}
+              mothersNameError={validations.mothersName}
+              setInputEducation={setInputEducation}
+              setInputMaritalStatus={setInputMaritalStatus}
+              setInputMotherName={setInputMotherName}
+              setInputOtherEducation={setInputOtherEducation}
+            />
+          </Fragment>
+        }
+        header={{ label: checkPersonalDetailsLabel }}
       />
-      {isPassport ? (
-        <Fragment>
-          <NewDropdown
-            items={DICTIONARY_COUNTRIES}
-            handleChange={setInputNationality}
-            label={ID_VERIFICATION.LABEL_NATIONALITY}
-            spaceToTop={sh32}
-            value={inputNationality}
-          />
-          <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh32} text={ID_VERIFICATION.LABEL_EXPIRY} />
-          <NewDatePicker
-            datePickerStyle={{ height: sh143 }}
-            mode="date"
-            minimumDate={moment().toDate()}
-            setValue={setExpiryDate}
-            value={inputExpiryDate}
-          />
-        </Fragment>
-      ) : null}
-      <NewDropdown
-        items={DICTIONARY_SALUTATION}
-        handleChange={setInputSalutation}
-        label={ID_VERIFICATION.LABEL_SALUTATION}
-        spaceToTop={sh32}
-        value={inputSalutation}
+      <CustomSpacer space={sh24} />
+      <ColorCard
+        content={
+          <Fragment>
+            <AddressField
+              addressType={addressType}
+              countryDropdownStyle={{ height: countryHeight }}
+              inputAddress={inputPermanentAddress}
+              inputCity={inputPermanentCity}
+              inputCountry={isPassport ? inputPermanentCountry : undefined}
+              inputPostCode={inputPermanentPostCode}
+              inputState={inputPermanentState}
+              labelAddress={ID_VERIFICATION.LABEL_PERMANENT}
+              onBlurPostCode={checkPermanentPostCode}
+              postCodeError={validations.permanentPostCode}
+              setInputAddress={setInputPermanentAddress}
+              setInputCity={setInputPermanentCity}
+              setInputCountry={isPassport ? setInputPermanentCountry : undefined}
+              setInputPostCode={setInputPermanentPostCode}
+              setInputState={setInputPermanentState}
+            />
+            <CustomSpacer space={sh16} />
+            <View style={borderBottomGray2} />
+            <CustomSpacer space={sh16} />
+            <CheckBox label={labelSameMailing} labelStyle={fs16BoldBlack2} onPress={handleAddressToggle} toggle={sameAddressToggle} />
+          </Fragment>
+        }
+        header={{ label: checkPermanentAddressLabel }}
       />
-      <CustomSpacer space={sh32} />
-      <NewDropdown items={DICTIONARY_GENDER} handleChange={setInputGender} label={ID_VERIFICATION.LABEL_GENDER} value={inputGender} />
-      <CustomSpacer space={sh32} />
-      <CustomTextInput
-        autoCapitalize="words"
-        label={ID_VERIFICATION.LABEL_POB}
-        onChangeText={setInputPlaceOfBirth}
-        value={inputPlaceOfBirth}
-      />
-      <NewDropdown
-        items={DICTIONARY_COUNTRIES}
-        handleChange={setInputCountryOfBirth}
-        label={ID_VERIFICATION.LABEL_COB}
-        spaceToTop={sh32}
-        value={inputCountryOfBirth}
-      />
-      <CustomSpacer space={sh32} />
-      <AddressField
-        addressType={addressType}
-        countryDropdownStyle={{ height: countryHeight }}
-        inputAddress={inputPermanentAddress}
-        inputCity={inputPermanentCity}
-        inputCountry={isPassport ? inputPermanentCountry : undefined}
-        inputPostCode={inputPermanentPostCode}
-        inputState={inputPermanentState}
-        labelAddress={ID_VERIFICATION.LABEL_PERMANENT}
-        onBlurPostCode={checkPermanentPostCode}
-        postCodeError={validations.permanentPostCode}
-        setInputAddress={setInputPermanentAddress}
-        setInputCity={setInputPermanentCity}
-        setInputCountry={isPassport ? setInputPermanentCountry : undefined}
-        setInputPostCode={setInputPermanentPostCode}
-        setInputState={setInputPermanentState}
-      />
-      <CustomSpacer space={sh32} />
-      <CheckBox label={labelSameMailing} onPress={handleAddressToggle} toggle={sameAddressToggle} />
       {sameAddressToggle === true ? null : (
         <Fragment>
-          <CustomSpacer space={sh32} />
-          <AddressField
-            addressType="Other"
-            countryDropdownStyle={{ height: countryHeight }}
-            inputAddress={inputMailingAddress}
-            inputCity={inputMailingCity}
-            inputCountry={inputMailingCountry}
-            inputPostCode={inputMailingPostCode}
-            inputState={inputMailingState}
-            labelAddress={ID_VERIFICATION.LABEL_MAILING}
-            onBlurPostCode={checkMailingPostCode}
-            postCodeError={validations.mailingPostCode}
-            setInputAddress={setInputMailingAddress}
-            setInputCity={setInputMailingCity}
-            setInputCountry={setInputMailingCountry}
-            setInputPostCode={setInputMailingPostCode}
-            setInputState={setInputMailingState}
+          <CustomSpacer space={sh24} />
+          <ColorCard
+            header={{ label: checkCorrespondingAddressLabel }}
+            content={
+              <Fragment>
+                <AddressField
+                  addressType="Other"
+                  countryDropdownStyle={{ height: countryHeight }}
+                  inputAddress={inputMailingAddress}
+                  inputCity={inputMailingCity}
+                  inputCountry={inputMailingCountry}
+                  inputPostCode={inputMailingPostCode}
+                  inputState={inputMailingState}
+                  labelAddress={ID_VERIFICATION.LABEL_MAILING}
+                  onBlurPostCode={checkMailingPostCode}
+                  postCodeError={validations.mailingPostCode}
+                  setInputAddress={setInputMailingAddress}
+                  setInputCity={setInputMailingCity}
+                  setInputCountry={setInputMailingCountry}
+                  setInputPostCode={setInputMailingPostCode}
+                  setInputState={setInputMailingState}
+                />
+              </Fragment>
+            }
           />
         </Fragment>
       )}

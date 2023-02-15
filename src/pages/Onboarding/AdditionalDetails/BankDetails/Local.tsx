@@ -29,7 +29,7 @@ import {
 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { ADDITIONAL_DETAILS } = Language.PAGE;
 
 interface ILocalBankDetailsProps {
   bankingDetails: IBankDetailsState[];
@@ -120,7 +120,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
           setBankingDetails(updatedDetails);
         };
 
-        const localBankLabel = `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} `;
+        const localBankLabel = `${ADDITIONAL_DETAILS.LABEL_BANK_LOCAL} `;
         const currencyExtractor = DICTIONARY_CURRENCY.filter(
           (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
         );
@@ -134,7 +134,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
             </View>
             <CustomSpacer space={sh24} />
             <View style={px(sw24)}>
-              <CustomTextInput disabled={true} label={PERSONAL_DETAILS.LABEL_CURRENCY} value={item.currency![0]} />
+              <CustomTextInput disabled={true} label={ADDITIONAL_DETAILS.LABEL_CURRENCY} value={item.currency![0]} />
               {item
                 .currency!.filter((thisCurrency) => thisCurrency !== item.currency![0])
                 .map((value: string, currencyIndex: number) => {
@@ -159,7 +159,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                       <NewDropdown
                         handleChange={handleOtherCurrency}
                         items={currencyExtractor}
-                        label={PERSONAL_DETAILS.LABEL_OTHER_CURRENCY}
+                        label={ADDITIONAL_DETAILS.LABEL_OTHER_CURRENCY}
                         spaceToTop={sh32}
                         value={value}
                       />
@@ -175,13 +175,13 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
               <NewDropdown
                 handleChange={handleOtherBank}
                 items={DICTIONARY_MALAYSIA_BANK}
-                label={PERSONAL_DETAILS.LABEL_BANK_NAME}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_NAME}
                 spaceToTop={sh32}
                 value={item.bankName!}
               />
               {item.bankName === "Others" ? (
                 <CustomTextInput
-                  label={PERSONAL_DETAILS.LABEL_BANK_OTHER_NAME}
+                  label={ADDITIONAL_DETAILS.LABEL_BANK_OTHER_NAME}
                   onChangeText={handleOtherBankName}
                   spaceToTop={sh32}
                   value={item.otherBankName}
@@ -190,7 +190,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
               <NewDropdown
                 handleChange={handleAccountName}
                 items={bankNames}
-                label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                 spaceToTop={sh32}
                 value={item.bankAccountName!}
               />
@@ -198,7 +198,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
                 <CustomTextInput
                   autoCapitalize="words"
                   error={item.bankAccountNameError}
-                  label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                  label={ADDITIONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                   onBlur={checkAccountBankName}
                   onChangeText={handleCombinedName}
                   spaceToTop={sh32}
@@ -208,23 +208,28 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
               <CustomTextInput
                 error={item.bankAccountNumberError}
                 keyboardType="numeric"
-                label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
                 onBlur={checkNumber}
                 onChangeText={handleAccountNumber}
                 spaceToTop={sh32}
                 value={item.bankAccountNumber}
               />
               <CustomTextInput
-                label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
+                label={ADDITIONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
                 onChangeText={handleSwiftCode}
                 spaceToTop={sh32}
                 value={item.bankSwiftCode}
               />
-              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
+              <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={ADDITIONAL_DETAILS.HINT_SWIFT_CODE} />
               {item.currency!.length === investmentCurrencies.length ? null : (
                 <Fragment>
                   <CustomSpacer space={sh32} />
-                  <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddCurrency} text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY} />
+                  <OutlineButton
+                    buttonType="dashed"
+                    icon="plus"
+                    onPress={handleAddCurrency}
+                    text={ADDITIONAL_DETAILS.BUTTON_ADD_CURRENCY}
+                  />
                 </Fragment>
               )}
             </View>

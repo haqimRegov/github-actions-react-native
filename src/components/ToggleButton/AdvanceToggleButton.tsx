@@ -40,6 +40,7 @@ export interface AdvanceToggleButtonProps {
   onSelect: (index: TypeAdvanceToggleButtonValue) => void;
   sideElement?: ReactNode;
   space?: number;
+  style?: ViewStyle;
   subLabelStyle?: TextStyle;
   textContainer?: ViewStyle;
   value: TypeAdvanceToggleButtonValue;
@@ -59,6 +60,7 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
   sideElement,
   space,
   subLabelStyle: mainSubLabelStyle,
+  style,
   textContainer,
   value,
 }: AdvanceToggleButtonProps) => {
@@ -107,7 +109,7 @@ export const AdvanceToggleButton: FunctionComponent<AdvanceToggleButtonProps> = 
                 {CustomContent !== undefined ? (
                   <CustomContent {...customContentProps} />
                 ) : (
-                  <View style={{ ...centerVertical, ...flexRow, ...disabledStyle }}>
+                  <View style={{ ...centerVertical, ...flexRow, ...disabledStyle, ...style }}>
                     <View style={{ ...alignSelfStart, ...buttonContainerStyle }}>
                       <View style={{ ...centerHV, ...circleStyle, ...disabledBackground, ...buttonStyle }}>
                         <IcoMoon name="success" size={iconSize || sw12} color={iconColor} />

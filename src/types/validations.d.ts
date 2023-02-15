@@ -1,8 +1,11 @@
 declare interface IIDVerificationValidations {
-  name: string | undefined;
-  permanentPostCode: string | undefined;
-  mailingPostCode: string | undefined;
+  name?: string;
+  permanentPostCode?: string;
+  mailingPostCode?: string;
+  mothersName?: string;
+  epfNumber?: string;
 }
+
 declare interface IIDVerificationPageValidation {
   principal: IIDVerificationValidations;
   joint: IIDVerificationValidations;

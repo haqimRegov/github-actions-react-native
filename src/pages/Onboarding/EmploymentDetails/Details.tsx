@@ -25,6 +25,7 @@ import {
   px,
   py,
   sh136,
+  sh16,
   sh176,
   sh20,
   sh24,
@@ -53,6 +54,7 @@ interface EmploymentInfoProps {
 const initialBaseEmploymentDetails: IEmploymentDetailsState = {
   businessNature: "",
   employerName: "",
+  grossIncome: "",
   occupation: "",
   isOptional: false,
   othersOccupation: "",
@@ -70,7 +72,6 @@ const initialBaseEmploymentDetails: IEmploymentDetailsState = {
 export const initialJointEmploymentDetails: IEmploymentDetailsState = {
   ...initialBaseEmploymentDetails,
   isEnabled: false,
-  grossIncome: "",
 };
 
 export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
@@ -103,7 +104,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputOccupation = (value: string) => {
     if (value !== employmentDetails.occupation) {
       const initialEmploymentDetails =
-        accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails };
+        accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails, grossIncome: inputGross };
 
       const updatedEmploymentDetails = { ...initialEmploymentDetails, occupation: value, isOptional: employmentDetails.isOptional };
 
@@ -126,7 +127,8 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       isOptional: value,
       occupation: employmentDetails.occupation,
     };
-    const initialEmploymentDetails = accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails };
+    const initialEmploymentDetails =
+      accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails, grossIncome: inputGross };
 
     setEmploymentDetails({ ...initialEmploymentDetails, ...baseEmployment });
   };
@@ -155,7 +157,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const addressType = inputCountry !== "Malaysia" ? "Other" : "Malaysia";
   const countryHeight = accountType === "Joint" && accountHolder !== "Joint" ? sh176 : sh136;
   const toggleValue = employmentDetails.isOptional !== undefined ? employmentDetails.isOptional : true;
-  const principalAnnualIncome = personalDetails?.annualIncomePrincipal !== undefined ? personalDetails?.annualIncomePrincipal : "-";
   const headerTitle = accountHolder === "Joint" ? SUMMARY.TITLE_JOINT : SUMMARY.TITLE_PRINCIPAL;
 
   const handleSwitchOptional = () => {
@@ -163,15 +164,17 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   };
 
   const occupationTitle =
-    accountType === "Individual" ? EMPLOYMENT_DETAILS.TITLE_YOUR_OCCUPATION : `${headerTitle}'s ${EMPLOYMENT_DETAILS.LABEL_OCCUPATION}`;
+    accountType === "Individual"
+      ? EMPLOYMENT_DETAILS.TITLE_YOUR_OCCUPATION
+      : `${EMPLOYMENT_DETAILS.LABEL_ADD} ${headerTitle}'s ${EMPLOYMENT_DETAILS.LABEL_OCCUPATION}`;
   const employmentTitle =
     accountType === "Individual"
       ? EMPLOYMENT_DETAILS.TITLE_YOUR_EMPLOYMENT_DETAILS
-      : `${headerTitle}'s ${EMPLOYMENT_DETAILS.TITLE_EMPLOYMENT_DETAILS}`;
+      : `${EMPLOYMENT_DETAILS.LABEL_ADD} ${headerTitle}'s ${EMPLOYMENT_DETAILS.TITLE_EMPLOYMENT_DETAILS}`;
   const employmentAddressTitle =
     accountType === "Individual"
       ? EMPLOYMENT_DETAILS.TITLE_YOUR_EMPLOYMENT_ADDRESS
-      : `${headerTitle}'s ${EMPLOYMENT_DETAILS.TITLE_EMPLOYMENT_ADDRESS}`;
+      : `${EMPLOYMENT_DETAILS.LABEL_ADD} ${headerTitle}'s ${EMPLOYMENT_DETAILS.TITLE_EMPLOYMENT_ADDRESS}`;
 
   return (
     <View style={px(sw24)}>
@@ -224,7 +227,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       {(employmentDetails.isOptional !== undefined && employmentDetails.isOptional === true) ||
       (EMPLOYMENT_EXEMPTIONS.indexOf(inputOccupation) === -1 && inputOccupation !== "") ? (
         <View>
-          <CustomSpacer space={sh32} />
+          <CustomSpacer space={sh24} />
           <ColorCard
             header={{ labelStyle: fs16BoldBlue1, label: employmentTitle }}
             content={
@@ -235,7 +238,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                   label={EMPLOYMENT_DETAILS.LABEL_NATURE_BUSINESS}
                   value={inputBusinessNature}
                 />
-                <CustomSpacer space={sh32} />
+                <CustomSpacer space={sh16} />
                 <CustomTextInput
                   autoCapitalize="words"
                   label={EMPLOYMENT_DETAILS.LABEL_EMPLOYER_NAME}
@@ -244,7 +247,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                 />
                 {accountType === "Joint" && accountHolder === "Joint" ? (
                   <Fragment>
-                    <CustomSpacer space={sh32} />
+                    <CustomSpacer space={sh16} />
                     <NewDropdown
                       items={DICTIONARY_GROSS_INCOME}
                       handleChange={setInputGross}
@@ -254,12 +257,12 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                   </Fragment>
                 ) : (
                   <Fragment>
-                    <CustomSpacer space={sh32} />
+                    <CustomSpacer space={sh16} />
                     <NewDropdown
                       items={DICTIONARY_GROSS_INCOME}
                       handleChange={setInputGross}
                       label={EMPLOYMENT_DETAILS.LABEL_GROSS}
-                      value={principalAnnualIncome}
+                      value={inputGross}
                       disabled={true}
                     />
                     <Text style={{ ...flexWrap, ...fs12RegGray5, ...py(sh4) }}>{EMPLOYMENT_DETAILS.SUB_LABEL_GROSS}</Text>
@@ -267,19 +270,20 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                 )}
 
                 <Fragment>
-                  <CustomSpacer space={sh32} />
+                  <CustomSpacer space={sh16} />
                   <NewDropdown
                     items={DICTIONARY_HOUSEHOLD_INCOME}
                     handleChange={setInputMonthlyHousehold}
                     label={EMPLOYMENT_DETAILS.LABEL_HOUSEHOLD}
                     value={inputMonthlyHousehold}
                   />
+                  <CustomSpacer space={sh4} />
                   <Text style={{ ...flexWrap, ...fs12RegGray5 }}>{EMPLOYMENT_DETAILS.SUB_LABEL_HOUSEHOLD}</Text>
                 </Fragment>
               </View>
             }
           />
-          <CustomSpacer space={sh32} />
+          <CustomSpacer space={sh24} />
           <ColorCard
             header={{ labelStyle: fs16BoldBlue1, label: employmentAddressTitle }}
             content={

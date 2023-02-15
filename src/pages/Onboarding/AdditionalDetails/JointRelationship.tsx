@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
+import { CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_RELATIONSHIP } from "../../../data/dictionary";
-import { px, sh32, sw24 } from "../../../styles";
+import { sh32 } from "../../../styles";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { ADDITIONAL_DETAILS } = Language.PAGE;
 
 interface JointRelationshipProps {
   personalDetails: IPersonalDetailsState;
@@ -31,17 +31,16 @@ export const JointRelationship: FunctionComponent<JointRelationshipProps> = ({
   };
 
   return (
-    <View style={px(sw24)}>
-      <CustomSpacer space={sh32} />
+    <View>
       <NewDropdown
         handleChange={handleRelationship}
         items={DICTIONARY_RELATIONSHIP}
-        label={PERSONAL_DETAILS.LABEL_RELATIONSHIP}
+        label={ADDITIONAL_DETAILS.LABEL_RELATIONSHIP}
         value={inputRelationship}
       />
       {personalDetails.relationship! === "Others" ? (
         <CustomTextInput
-          label={PERSONAL_DETAILS.LABEL_RELATIONSHIP_OTHER}
+          label={ADDITIONAL_DETAILS.LABEL_RELATIONSHIP_OTHER}
           onChangeText={setInputOtherRelationship}
           spaceToTop={sh32}
           value={inputOtherRelationship}

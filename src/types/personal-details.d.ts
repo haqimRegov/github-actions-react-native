@@ -17,6 +17,7 @@ declare interface IClientIDState {
 declare interface IPersonalDetailsState {
   bumiputera?: string;
   countryOfBirth?: string;
+  countryOfIssuance?: string;
   dateOfBirth?: Date;
   educationLevel?: string;
   enableBankDetails?: boolean;

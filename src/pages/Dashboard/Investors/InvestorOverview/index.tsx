@@ -54,13 +54,14 @@ declare interface IEtbCheckData extends IEtbCheckResult {
   dateOfBirth?: string;
 }
 
-const initialJointInfo = {
+const initialJointInfo: IClientBasicInfo = {
   name: "",
   country: "",
   dateOfBirth: "",
   id: "",
   idType: DICTIONARY_ID_TYPE[0],
   otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+  isEtb: false,
 };
 
 const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
@@ -159,6 +160,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
       id: "",
       idType: DICTIONARY_ID_TYPE[0],
       otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
+      isEtb: false,
     });
     setRegistered(false);
     if (investorData?.accountHolder === "Joint" && investorData.isMinor === true) {
@@ -369,8 +371,9 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               id: data.result.principalHolder.id,
               name: data.result.principalHolder.name,
               ...storePrincipalIdType,
+              isEtb: false,
             },
-            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : ({ ...jointHolder, ...moreJointInfo } as IClientBasicInfo),
             initId: data.result.initId.toString(),
             accountHolder: accountType === 1 ? "Joint" : "Principal",
           });
@@ -492,12 +495,14 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                       principalHolder: {
                         ...principalHolder,
                         name: investorData!.name.trim(),
+                        isEtb: true,
                       },
                     }
                   : {
                       jointHolder: {
                         ...jointHolder,
                         name: jointHolder!.name!.trim(),
+                        isEtb: true,
                       },
                     };
               if (isAccountOpening === true) {
@@ -578,6 +583,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
           clientId: otherInvestorData !== undefined ? otherInvestorData.clientId : investorData.clientId,
           id: otherInvestorData !== undefined ? otherInvestorData?.id : investorData.idNumber,
           name: otherInvestorData !== undefined ? otherInvestorData?.name : investorData.name,
+          isEtb: false,
         },
         initId: otherInvestorData !== undefined ? otherInvestorData?.initId : investorData.initId,
         accountHolder: investorData.accountHolder,

@@ -62,7 +62,7 @@ export const ProductsBanner: FunctionComponent<ProductsBannerProps> = ({
             </View>
           ) : undefined
         }
-        labelCancel={labelCancel !== undefined ? labelCancel : INVESTMENT.BUTTON_CANCEL}
+        labelCancel={labelCancel !== undefined ? labelCancel : INVESTMENT.BUTTON_BACK}
         label={label !== undefined ? label : INVESTMENT.LABEL_FUND_SUMMARY}
         cancelOnPress={cancelOnPress}
         continueDisabled={continueDisabled}

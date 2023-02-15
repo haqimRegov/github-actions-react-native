@@ -5,7 +5,6 @@ import { IcoMoon } from "../../icons";
 import {
   border,
   centerVertical,
-  colorBlack,
   colorBlue,
   colorRed,
   colorTransparent,
@@ -70,17 +69,19 @@ export const OutlineButton: FunctionComponent<OutlineButtonProps> = ({
     ...buttonStyle,
   };
 
+  const defaultColor = color || colorBlue._1;
+
   return (
     <View style={flexRow}>
       <TouchableWithoutFeedback onPress={disabled === true ? undefined : onPress}>
         <View style={roundedButtonStyle}>
           {icon === undefined ? null : (
             <Fragment>
-              <IcoMoon color={color || colorBlack._1} name={icon} size={sh16} />
+              <IcoMoon color={defaultColor} name={icon} size={sh16} />
               <CustomSpacer isHorizontal={true} space={spaceToIcon || sw8} />
             </Fragment>
           )}
-          <Text style={{ ...fs12BoldBlue1, color: color, ...textStyle }}>{text}</Text>
+          <Text style={{ ...fs12BoldBlue1, color: defaultColor, ...textStyle }}>{text}</Text>
           {badgeCount !== undefined ? (
             <Fragment>
               <CustomSpacer isHorizontal={true} space={sw16} />

@@ -1,21 +1,21 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
+import ParsedText from "react-native-parsed-text";
 
 import {
   borderBottomRed1,
   centerVertical,
-  colorWhite,
   flexRow,
-  fs12RegGray6,
-  fs24BoldGray6,
-  px,
-  sh24,
-  sh56,
+  fs10RegGray6,
+  fs12BoldBlack2,
+  fs12RegBlack2,
+  sh16,
+  sh20,
   shadow12Blue104,
-  sw24,
+  sw16,
   sw8,
 } from "../../styles";
-import { CustomFlexSpacer, CustomSpacer } from "./Spacer";
+import { CustomSpacer } from "./Spacer";
 
 interface AccountHeaderProps {
   headerStyle?: ViewStyle;
@@ -39,9 +39,7 @@ export const AccountHeader: FunctionComponent<AccountHeaderProps> = ({
     ...borderBottomRed1,
     ...flexRow,
     ...shadow12Blue104,
-    ...px(sw24),
-    height: sh56,
-    backgroundColor: colorWhite._1,
+    height: sh20,
     borderTopRightRadius: sw8,
     borderTopLeftRadius: sw8,
     position: "relative",
@@ -49,14 +47,23 @@ export const AccountHeader: FunctionComponent<AccountHeaderProps> = ({
     ...headerStyle,
   };
 
-  const defaultBottomSpace = spaceToBottom !== undefined ? spaceToBottom : sh24;
+  const defaultBottomSpace = spaceToBottom !== undefined ? spaceToBottom : sh16;
 
   return (
     <Fragment>
       <View style={container}>
-        <Text style={{ ...fs24BoldGray6, ...titleStyle }}>{title}</Text>
-        <CustomFlexSpacer />
-        <Text style={{ ...fs12RegGray6, ...subtitleStyle }}>{subtitle}</Text>
+        <Text style={{ ...fs10RegGray6, ...titleStyle }}>{title}</Text>
+        <CustomSpacer isHorizontal={true} space={sw16} />
+        <ParsedText
+          style={{ ...fs12BoldBlack2, ...subtitleStyle }}
+          parse={[
+            {
+              pattern: /(?:and|&)/,
+              style: fs12RegBlack2,
+            },
+          ]}>
+          {subtitle}
+        </ParsedText>
       </View>
       <CustomSpacer space={defaultBottomSpace} />
     </Fragment>

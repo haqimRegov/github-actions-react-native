@@ -116,7 +116,7 @@ export const UploadWithModal = forwardRef<IUploadDocumentRef | undefined, Upload
   }
   const imageContainerStyle: ViewStyle = {
     ...flexChild,
-    ...px(sw40),
+    ...px(sw8),
     ...py(sh16),
   };
 

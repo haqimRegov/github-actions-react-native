@@ -189,12 +189,13 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
             personalDetails: {
               ...personalInfo.joint?.personalDetails,
               countryOfBirth: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+              countryOfIssuance: jointHolder?.idType === "Passport" ? jointHolder?.country : "",
               dateOfBirth: moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
               expirationDate: undefined,
               idNumber: jointHolder?.id,
               idType: jointClientIdType,
               name: jointHolder?.name!.trim(),
-              nationality: jointHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+              nationality: jointHolder?.idType === "Passport" ? jointHolder?.country : DICTIONARY_COUNTRIES[0].value,
               placeOfBirth: jointPlaceOfBirth,
             },
           };
@@ -205,12 +206,13 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
         personalDetails: {
           ...personalInfo.principal?.personalDetails,
           countryOfBirth: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+          countryOfIssuance: principalHolder?.idType === "Passport" ? principalHolder?.country : "",
           dateOfBirth: moment(principalHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
           expirationDate: undefined,
           idNumber: principalHolder?.id,
           idType: principalClientIdType,
           name: principalHolder?.name,
-          nationality: principalHolder?.idType === "Passport" ? "" : DICTIONARY_COUNTRIES[0].value,
+          nationality: principalHolder?.idType === "Passport" ? principalHolder?.country : DICTIONARY_COUNTRIES[0].value,
           placeOfBirth: principalPlaceOfBirth,
         },
       },
@@ -265,6 +267,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
                     ...client.details?.principalHolder,
                     name: principalHolder!.name!.trim(),
                     id: principalHolder?.id,
+                    isEtb: true,
                   },
                 },
               });
@@ -358,6 +361,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
             dateOfBirth: "",
             id: "",
             idType: DICTIONARY_ID_TYPE[0],
+            isEtb: false,
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           };
           const moreJointInfo =
@@ -376,11 +380,11 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
           addClientDetails({
             ...details,
             principalHolder: {
-              ...principalHolder,
+              ...principalHolder!,
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               clientId: data.result.principalHolder.clientId,
             },
-            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder, ...moreJointInfo },
+            jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder!, ...moreJointInfo },
             initId: `${data.result.initId}`,
           });
           return setRegistered(true);

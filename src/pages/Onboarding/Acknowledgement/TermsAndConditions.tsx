@@ -145,10 +145,16 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
           <View style={borderBottomGray2} />
           <CustomSpacer space={sh32} />
           <View style={px(sw24)}>
-            <CheckBox label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1} onPress={handleAgree1} toggle={agreeTerms.agree1} />
+            <CheckBox
+              label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1}
+              labelStyle={{ fontSize: sh16 }}
+              onPress={handleAgree1}
+              toggle={agreeTerms.agree1}
+            />
             <CustomSpacer space={sh16} />
             <CheckBox
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_2}
+              labelStyle={{ fontSize: sh16 }}
               style={{ ...alignItemsStart, width: sw800 }}
               onPress={handleAgree2}
               toggle={agreeTerms.agree2}
@@ -156,6 +162,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             <CustomSpacer space={sh16} />
             <CheckBox
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_3}
+              labelStyle={{ fontSize: sh16 }}
               style={{ ...alignItemsStart, width: sw800 }}
               onPress={handleAgree3}
               toggle={agreeTerms.agree3}
@@ -163,13 +170,20 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
             <CustomSpacer space={sh16} />
             {outsideRisk === true ? (
               <Fragment>
-                <CheckBox checkboxStyle={disabledOpacity5} label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4} onPress={() => {}} toggle={true} />
+                <CheckBox
+                  checkboxStyle={disabledOpacity5}
+                  label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_4}
+                  labelStyle={{ fontSize: sh16 }}
+                  onPress={() => {}}
+                  toggle={true}
+                />
                 <CustomSpacer space={sh16} />
               </Fragment>
             ) : null}
             <CheckBox
               checkboxStyle={disabledOpacity5}
               label={TERMS_AND_CONDITIONS.LABEL_CONSENT}
+              labelStyle={{ fontSize: sh16 }}
               style={{ ...alignItemsStart, width: sw800 }}
               onPress={() => {}}
               toggle={true}

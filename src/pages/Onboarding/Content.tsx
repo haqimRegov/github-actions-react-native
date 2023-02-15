@@ -7,12 +7,13 @@ import { Language, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
 import { fs16RegGray6 } from "../../styles";
 import { OrderSummary, Signatures, TermsAndConditions } from "./Acknowledgement";
+import { AdditionalDetails } from "./AdditionalDetails";
+import { PersonalDetails } from "./ContactInfo";
 import { CrsDeclaration, DeclarationSummary, FatcaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
 import { IdentityConfirmation } from "./IdentityVerification";
 import { Payment } from "./Payment";
-import { PersonalDetails } from "./PersonalDetails";
 import { PersonalInfoSummary } from "./PersonalInfoSummary";
 import { Products } from "./Products";
 import { QuestionnaireContent } from "./Questionnaire";
@@ -55,6 +56,9 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
       break;
     case ONBOARDING_ROUTES.EmploymentDetails:
       content = <EmploymentDetails {...newProps} />;
+      break;
+    case ONBOARDING_ROUTES.AdditionalDetails:
+      content = <AdditionalDetails {...newProps} />;
       break;
     case ONBOARDING_ROUTES.FATCADeclaration:
       content = <FatcaDeclaration {...newProps} />;

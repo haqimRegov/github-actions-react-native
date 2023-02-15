@@ -287,6 +287,13 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       spaceToTop={sh16}
                       value={item.bankAccountNumber}
                     />
+                    <CustomTextInput
+                      label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
+                      onChangeText={handleSwiftCode}
+                      spaceToTop={sh16}
+                      value={item.bankSwiftCode}
+                    />
+                    <TextSpaceArea spaceToTop={sh4} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
                     <NewDropdown
                       items={DICTIONARY_COUNTRIES}
                       handleChange={handleBankLocation}
@@ -294,13 +301,6 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       spaceToTop={sh16}
                       value={item.bankLocation || ""}
                     />
-                    <CustomTextInput
-                      label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE}
-                      onChangeText={handleSwiftCode}
-                      spaceToTop={sh16}
-                      value={item.bankSwiftCode}
-                    />
-                    <TextSpaceArea spaceToTop={sh4} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
                     {remainingCurrencies.length === 0 ? null : (
                       <View>
                         <CustomSpacer space={sh16} />

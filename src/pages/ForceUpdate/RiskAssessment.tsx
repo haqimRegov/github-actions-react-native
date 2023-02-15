@@ -2,8 +2,9 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
+import { Q8_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile, submitChangeRequest } from "../../network-actions";
-import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
+import { addPersonalInfo, RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import { RiskAssessmentTemplate } from "../../templates";
 import { isObjectEqual } from "../../utils";
 
@@ -160,6 +161,16 @@ const RiskAssessmentContentComponent: FunctionComponent<RiskAssessmentContentPro
         if (error === null && data !== null) {
           const riskAssessment = { ...data.result };
           addRiskScore(riskAssessment);
+          addPersonalInfo({
+            ...personalInfo,
+            principal: {
+              ...personalInfo.principal,
+              employmentDetails: {
+                ...personalInfo.principal!.employmentDetails,
+                grossIncome: Q8_OPTIONS[questionnaire.questionEight].label,
+              },
+            },
+          });
           setTimeout(() => {
             setConfirmModal("assessment");
           }, 300);

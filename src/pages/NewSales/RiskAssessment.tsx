@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import { connect } from "react-redux";
 
 import { Language } from "../../constants";
+import { Q8_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import { RiskAssessmentTemplate } from "../../templates";
@@ -15,12 +16,13 @@ interface RiskAssessmentContentProps extends RiskStoreProps, NewSalesContentProp
 
 const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentProps> = ({
   addAssessmentQuestions,
-  addRiskInfo,
+  addPersonalInfo,
   client,
   details,
   handleNextStep,
   navigation,
   newSales,
+  personalInfo,
   principalHolder,
   questionnaire,
   resetQuestionnaire,
@@ -56,17 +58,24 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
       ...newSales,
       finishedSteps: newFinishedSteps,
       disabledSteps: updatedDisabledSteps,
+      riskInfo: {
+        appetite: currentRiskScore.appetite,
+        hnwStatus: currentRiskScore.netWorth,
+        profile: currentRiskScore.profile,
+        expectedRange: currentRiskScore.rangeOfReturn,
+        type: currentRiskScore.type,
+      },
       toast: {
         toastText: RISK_ASSESSMENT.TOAST_CHANGES,
         toastVisible: true,
       },
     });
-    addRiskInfo({
-      appetite: currentRiskScore.appetite,
-      hnwStatus: currentRiskScore.netWorth,
-      profile: currentRiskScore.profile,
-      expectedRange: currentRiskScore.rangeOfReturn,
-      type: currentRiskScore.type,
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        employmentDetails: { ...personalInfo.principal!.employmentDetails, grossIncome: Q8_OPTIONS[questionnaire.questionEight].label },
+      },
     });
     resetQuestionnaire();
     updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });

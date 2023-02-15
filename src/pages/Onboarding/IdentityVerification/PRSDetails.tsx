@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_EDUCATION, DICTIONARY_MARITAL_STATUS } from "../../../data/dictionary";
-import { px, sh32, sw24 } from "../../../styles";
+import { sh16 } from "../../../styles";
 
 const { PRS } = Language.PAGE;
 
@@ -34,15 +34,15 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
   setInputOtherEducation,
 }: PRSDetailsProps) => {
   return (
-    <View style={px(sw24)}>
-      <CustomSpacer space={sh32} />
+    <View>
+      <CustomSpacer space={sh16} />
       <CustomTextInput
         autoCapitalize="words"
         error={mothersNameError}
         label={PRS.LABEL_MOTHER_NAME}
         onBlur={onBlurMothersName}
         onChangeText={setInputMotherName}
-        spaceToBottom={sh32}
+        spaceToBottom={sh16}
         value={inputMotherName}
       />
       <NewDropdown
@@ -51,12 +51,11 @@ export const PRSDetails: FunctionComponent<PRSDetailsProps> = ({
         label={PRS.LABEL_MARITAL}
         value={inputMaritalStatus}
       />
-      <CustomSpacer space={sh32} />
+      <CustomSpacer space={sh16} />
       <NewDropdown handleChange={setInputEducation} items={DICTIONARY_EDUCATION} label={PRS.LABEL_EDUCATION} value={inputEducation} />
       {inputEducation === "Others" ? (
-        <CustomTextInput label={PRS.LABEL_OTHERS} onChangeText={setInputOtherEducation} spaceToTop={sh32} value={inputOtherEducation} />
+        <CustomTextInput label={PRS.LABEL_OTHERS} onChangeText={setInputOtherEducation} spaceToTop={sh16} value={inputOtherEducation} />
       ) : null}
-      <CustomSpacer space={sh32} />
     </View>
   );
 };

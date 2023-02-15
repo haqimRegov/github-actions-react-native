@@ -165,7 +165,6 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const allEpf = epfInvestments.length === investmentDetails!.length;
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
-    addPersonalInfo({ ...epfObject, editPersonal: false, isAllEpf: allEpf });
     const route: TypeOnboardingKey = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
     handleNextStep(route);
     const updatedFinishedSteps: TypeOnboardingKey[] =
@@ -218,6 +217,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         employmentDetails: { ...personalInfo.principal?.employmentDetails },
       },
       joint: checkJoint,
+      ...epfObject,
+      editPersonal: false,
+      isAllEpf: allEpf,
     });
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
   };
@@ -233,6 +235,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     ),
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
+    labelCancel: PRODUCT_LIST.BUTTON_BACK,
     labelSubmit: PRODUCT_LIST.BUTTON_START_INVESTING,
   };
 

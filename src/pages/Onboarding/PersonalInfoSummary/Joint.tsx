@@ -46,8 +46,6 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, 
     { label: SUMMARY.LABEL_GENDER, title: personalDetails!.gender! },
     { label: SUMMARY.LABEL_PLACE_OF_BIRTH, title: personalDetails!.placeOfBirth!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_COUNTRY_OF_BIRTH, title: personalDetails!.countryOfBirth! },
-    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
-    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
     { label: SUMMARY.LABEL_EDUCATION, title: jointEducation },
@@ -60,13 +58,21 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, 
     { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
   ];
 
+  const malaysianDetails = [
+    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
+    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
+  ];
+
   const nonMalaysianDetails = [
-    { label: SUMMARY.LABEL_COUNTRY, title: personalDetails!.nationality },
+    { label: SUMMARY.LABEL_COUNTRY_ISSUANCE, title: personalDetails!.countryOfIssuance },
     { label: SUMMARY.LABEL_EXPIRATION, title: expirationDate },
   ];
 
   if (!isMalaysian) {
-    personalDetailsSummary.splice(3, 0, nonMalaysianDetails[0], nonMalaysianDetails[1]);
+    personalDetailsSummary.splice(3, 0, ...nonMalaysianDetails);
+    personalDetailsSummary.splice(-3, 0, { label: SUMMARY.LABEL_NATIONALITY, title: personalDetails!.nationality });
+  } else {
+    personalDetailsSummary.splice(7, 0, ...malaysianDetails);
   }
 
   const permanentAddressLabel =
@@ -129,13 +135,11 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, 
     });
   }
 
-  let contactDetailsSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! || "-" }];
-
-  const otherContactDetails: LabeledTitleProps[] = contactDetails?.contactNumber!.map((contactNumber: IContactNumberState) => {
+  const contactDetailsSummary: LabeledTitleProps[] = contactDetails?.contactNumber!.map((contactNumber: IContactNumberState) => {
     return { label: contactNumber.label, title: contactNumber.value !== "" ? `${contactNumber.code} ${contactNumber.value}` : "-" };
   })!;
 
-  contactDetailsSummary = contactDetailsSummary.concat(otherContactDetails);
+  const emailSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! || "-" }];
 
   const epfDetailsSummary: LabeledTitleProps[] =
     epfDetails !== undefined && epfDetails.epfAccountType !== "" && epfDetails.epfMemberNumber !== ""
@@ -218,12 +222,14 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, 
       accountType="Joint"
       additionalInfo={additionalInfoSummary}
       contactDetails={contactDetailsSummary}
+      emailSection={emailSummary}
       employmentAddress={employmentAddressSummary}
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
       foreignBankDetails={foreignBank}
       handleCloseViewer={handleCloseViewer}
       handleNextStep={handleNextStep}
+      isMalaysian={isMalaysian}
       localBankDetails={localBank}
       mailingAddress={mailingAddressSummary}
       name={personalDetails!.name!}

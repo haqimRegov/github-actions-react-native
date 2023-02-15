@@ -27,16 +27,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
   summary,
   viewFile,
 }: PrincipalProps) => {
-  const {
-    addressInformation,
-    annualIncome,
-    bankSummary,
-    contactDetails,
-    employmentDetails,
-    epfDetails,
-    incomeDistribution,
-    personalDetails,
-  } = summary;
+  const { addressInformation, bankSummary, contactDetails, employmentDetails, epfDetails, incomeDistribution, personalDetails } = summary;
 
   const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
   const expirationDate = moment(personalDetails!.expirationDate).format(DEFAULT_DATE_FORMAT);
@@ -65,20 +56,26 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
     { label: SUMMARY.LABEL_GENDER, title: personalDetails!.gender! },
     { label: SUMMARY.LABEL_PLACE_OF_BIRTH, title: personalDetails!.placeOfBirth!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_COUNTRY_OF_BIRTH, title: personalDetails!.countryOfBirth! },
-    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
-    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
     { label: SUMMARY.LABEL_EDUCATION, title: principalEducation },
   ];
 
+  const malaysianDetails = [
+    { label: SUMMARY.LABEL_RACE, title: personalDetails!.race! },
+    { label: SUMMARY.LABEL_BUMIPUTERA, title: personalDetails!.bumiputera! },
+  ];
+
   const nonMalaysianDetails = [
-    { label: SUMMARY.LABEL_COUNTRY, title: personalDetails!.nationality },
+    { label: SUMMARY.LABEL_COUNTRY_ISSUANCE, title: personalDetails!.countryOfIssuance },
     { label: SUMMARY.LABEL_EXPIRATION, title: expirationDate },
   ];
 
   if (!isMalaysian) {
-    personalDetailsSummary.splice(3, 0, nonMalaysianDetails[0], nonMalaysianDetails[1]);
+    personalDetailsSummary.splice(3, 0, ...nonMalaysianDetails);
+    personalDetailsSummary.splice(-3, 0, { label: SUMMARY.LABEL_NATIONALITY, title: personalDetails!.nationality });
+  } else {
+    personalDetailsSummary.splice(7, 0, ...malaysianDetails);
   }
 
   const permanentAddressLabel =
@@ -141,13 +138,11 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
     });
   }
 
-  let contactDetailsSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! }];
-
-  const otherContactDetails: LabeledTitleProps[] = contactDetails?.contactNumber!.map((contactNumber: IContactNumberState) => {
-    return { label: contactNumber.label, title: `${contactNumber.code} ${contactNumber.value}` };
+  const contactDetailsSummary: LabeledTitleProps[] = contactDetails?.contactNumber!.map((contactNumber: IContactNumberState) => {
+    return { label: contactNumber.label, title: contactNumber.value !== "" ? `${contactNumber.code} ${contactNumber.value}` : "-" };
   })!;
 
-  contactDetailsSummary = contactDetailsSummary.concat(otherContactDetails);
+  const emailSummary: LabeledTitleProps[] = [{ label: SUMMARY.LABEL_EMAIL, title: contactDetails!.emailAddress! || "-" }];
 
   const epfDetailsSummary: LabeledTitleProps[] =
     epfDetails !== undefined && epfDetails.epfAccountType !== "" && epfDetails.epfMemberNumber !== ""
@@ -199,7 +194,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
   const employmentDetailsSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
     { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
-    { label: SUMMARY.LABEL_GROSS, title: annualIncome, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_GROSS, title: employmentDetails!.grossIncome, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
   ];
@@ -240,12 +235,14 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
       accountType={accountType}
       additionalInfo={additionalInfoSummary}
       contactDetails={contactDetailsSummary}
+      emailSection={emailSummary}
       employmentAddress={employmentAddressSummary}
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
       foreignBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : foreignBank}
       handleCloseViewer={handleCloseViewer}
       handleNextStep={handleNextStep}
+      isMalaysian={isMalaysian}
       localBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : localBank}
       mailingAddress={mailingAddressSummary}
       name={personalDetails!.name!}

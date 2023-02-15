@@ -1,52 +1,28 @@
 import React, { FunctionComponent } from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, View } from "react-native";
 
-import { CustomSpacer, Dash } from "../../../components";
+import { AccountHeader, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
-import {
-  border,
-  colorGray,
-  colorRed,
-  colorWhite,
-  flexRow,
-  fs10RegGray6,
-  fs12BoldBlack2,
-  fsTransformNone,
-  fsUppercase,
-  px,
-  sh1,
-  sh24,
-  sh6,
-  sh8,
-  shadow12Blue110,
-  sw1,
-  sw16,
-  sw24,
-} from "../../../styles";
+import { border, colorGray, colorWhite, fsTransformNone, fsUppercase, px, sh24, sh8, shadow12Blue110, sw1, sw24 } from "../../../styles";
 import { SummaryColorCard } from "../../../templates";
 
 const { SUMMARY } = Language.PAGE;
 
 interface SummaryJointDetailsProps {
   handleNextStep: (route: TypeOnboardingKey) => void;
-  jointDetails: LabeledTitleProps[];
-  jointName: string;
-  principalName: string;
-  summary?: IHolderInfoState;
+  personalInfo?: IPersonalInfoState;
 }
 
 export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = ({
   handleNextStep,
-  principalName,
-  jointName,
-  jointDetails,
-  summary,
+  personalInfo,
 }: SummaryJointDetailsProps) => {
+  const { incomeDistribution, joint, principal, signatory } = personalInfo!;
+  const { bankSummary } = principal!;
+
   const handleEditOtherDetails = () => {
     handleNextStep("PersonalDetails");
   };
-
-  const { bankSummary } = summary;
 
   const { width } = Dimensions.get("window");
   const textCardProps = { itemsPerGroup: 3, spaceBetweenItem: width < 1080 ? 20 : 22, titleStyle: fsTransformNone, itemStyle: {} };
@@ -102,20 +78,28 @@ export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = 
     data: [...foreignBank],
   };
 
+  const relationship =
+    principal?.personalDetails?.relationship !== "Others"
+      ? principal?.personalDetails?.relationship
+      : principal?.personalDetails?.otherRelationship;
+
+  const jointDetails: LabeledTitleProps[] = [
+    { label: SUMMARY.LABEL_DISTRIBUTION, title: incomeDistribution! },
+    { label: SUMMARY.LABEL_RELATIONSHIP, title: relationship },
+    { label: SUMMARY.LABEL_SIGNATORY, title: signatory! },
+  ];
+
+  const names = `${principal!.personalDetails!.name!} ${SUMMARY.LABEL_AND} ${joint!.personalDetails!.name!}`;
+  const subtitleLabel = `${SUMMARY.LABEL_PRINCIPAL} ${SUMMARY.LABEL_AND} ${SUMMARY.LABEL_JOINT}`;
+
   return (
     <View style={px(sw24)}>
       <CustomSpacer space={sh24} />
-      <View style={{ ...flexRow, marginBottom: sh6 }}>
-        <Text style={fs10RegGray6}>{SUMMARY.TITLE_JOINT_ACCOUNT}</Text>
-        <CustomSpacer space={sw16} isHorizontal={true} />
-        <Text style={fs12BoldBlack2}>{`${principalName} & ${jointName}`}</Text>
-      </View>
-      <Dash color={colorRed._2} thickness={sh1} gap={0} />
+      <AccountHeader title={subtitleLabel} subtitle={names} />
       <SummaryColorCard
         headerTitle={SUMMARY.TITLE_ACCOUNT}
         data={jointDetails}
         section={[accountDetailsBank, accountDetailsForeignBank]}
-        spaceToTop={sh24}
         textCardProps={textCardProps}
         colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditOtherDetails } }}
       />

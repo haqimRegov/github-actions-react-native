@@ -1,9 +1,9 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";
 import { Language } from "../../../constants";
-import { EMPLOYMENT_EXEMPTIONS, Q8_OPTIONS } from "../../../data/dictionary";
+import { EMPLOYMENT_EXEMPTIONS } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { JointEmploymentDetails } from "./Joint";
 import { PrincipalEmploymentDetails } from "./Principal";
@@ -19,7 +19,6 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   handleNextStep,
   onboarding,
   personalInfo,
-  questionnaire,
   updateOnboarding,
 }: EmploymentDetailsProps) => {
   const [validations, setValidations] = useState<IEmploymentDetailsPageValidation>({
@@ -32,7 +31,6 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   const { principalHolder: principalClient, jointHolder: jointClient } = clientDetails!;
   const { isEtb: isPrincipalEtb } = principalClient!;
   const { isEtb: isJointEtb } = jointClient!;
-  const annualIncomePrincipal = { annualIncomePrincipal: Q8_OPTIONS[questionnaire.questionEight].label };
 
   const validateDetails = (details: IHolderInfoState, rules: IEmploymentDetailsValidations) => {
     const { employmentDetails } = details;
@@ -74,14 +72,15 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
         (isJointEtb === false && (validateDetails(joint!, validations.joint) === false || checkJointGross === false));
 
   const handleSubmit = () => {
-    addPersonalInfo({ ...personalInfo, editPersonal: true });
+    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "AdditionalDetails";
+    // addPersonalInfo({ ...personalInfo, editPersonal: true });
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
     const findAdditionalDetails = updatedDisabledSteps.indexOf("AdditionalDetails");
     if (findAdditionalDetails !== -1) {
       updatedDisabledSteps.splice(findAdditionalDetails, 1);
     }
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
-    handleNextStep("AdditionalDetails");
+    handleNextStep(route);
   };
 
   const handlePrincipalEmployment = (value: IEmploymentDetailsState) => {
@@ -126,7 +125,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
         <PrincipalEmploymentDetails
           accountType={accountType!}
           employmentDetails={principal!.employmentDetails!}
-          personalDetails={{ ...principal!.personalDetails!, ...annualIncomePrincipal }}
+          personalDetails={principal!.personalDetails!}
           setEmploymentDetails={handlePrincipalEmployment}
           setPersonalInfoDetails={handlePrincipalPersonalInfo}
           setValidations={handlePrincipalValidation}
@@ -134,17 +133,15 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
         />
       ) : null}
       {accountType === "Individual" || isJointEtb === true ? null : (
-        <Fragment>
-          <JointEmploymentDetails
-            accountType={accountType!}
-            employmentDetails={joint!.employmentDetails!}
-            personalDetails={{ ...joint!.personalDetails! }}
-            setEmploymentDetails={handleJointEmployment}
-            setPersonalInfoDetails={handleJointPersonalInfo}
-            setValidations={handleJointValidation}
-            validations={validations.joint}
-          />
-        </Fragment>
+        <JointEmploymentDetails
+          accountType={accountType!}
+          employmentDetails={joint!.employmentDetails!}
+          personalDetails={joint!.personalDetails!}
+          setEmploymentDetails={handleJointEmployment}
+          setPersonalInfoDetails={handleJointPersonalInfo}
+          setValidations={handleJointValidation}
+          validations={validations.joint}
+        />
       )}
     </ContentPage>
   );

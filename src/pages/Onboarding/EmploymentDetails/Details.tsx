@@ -54,6 +54,7 @@ interface EmploymentInfoProps {
 const initialBaseEmploymentDetails: IEmploymentDetailsState = {
   businessNature: "",
   employerName: "",
+  grossIncome: "",
   occupation: "",
   isOptional: false,
   othersOccupation: "",
@@ -71,7 +72,6 @@ const initialBaseEmploymentDetails: IEmploymentDetailsState = {
 export const initialJointEmploymentDetails: IEmploymentDetailsState = {
   ...initialBaseEmploymentDetails,
   isEnabled: false,
-  grossIncome: "",
 };
 
 export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
@@ -104,7 +104,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputOccupation = (value: string) => {
     if (value !== employmentDetails.occupation) {
       const initialEmploymentDetails =
-        accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails };
+        accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails, grossIncome: inputGross };
 
       const updatedEmploymentDetails = { ...initialEmploymentDetails, occupation: value, isOptional: employmentDetails.isOptional };
 
@@ -127,7 +127,8 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       isOptional: value,
       occupation: employmentDetails.occupation,
     };
-    const initialEmploymentDetails = accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails };
+    const initialEmploymentDetails =
+      accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails, grossIncome: inputGross };
 
     setEmploymentDetails({ ...initialEmploymentDetails, ...baseEmployment });
   };
@@ -156,7 +157,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const addressType = inputCountry !== "Malaysia" ? "Other" : "Malaysia";
   const countryHeight = accountType === "Joint" && accountHolder !== "Joint" ? sh176 : sh136;
   const toggleValue = employmentDetails.isOptional !== undefined ? employmentDetails.isOptional : true;
-  const principalAnnualIncome = personalDetails?.annualIncomePrincipal !== undefined ? personalDetails?.annualIncomePrincipal : "-";
   const headerTitle = accountHolder === "Joint" ? SUMMARY.TITLE_JOINT : SUMMARY.TITLE_PRINCIPAL;
 
   const handleSwitchOptional = () => {
@@ -262,7 +262,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
                       items={DICTIONARY_GROSS_INCOME}
                       handleChange={setInputGross}
                       label={EMPLOYMENT_DETAILS.LABEL_GROSS}
-                      value={principalAnnualIncome}
+                      value={inputGross}
                       disabled={true}
                     />
                     <Text style={{ ...flexWrap, ...fs12RegGray5, ...py(sh4) }}>{EMPLOYMENT_DETAILS.SUB_LABEL_GROSS}</Text>

@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react";
-import { View } from "react-native";
 
 import { EmploymentInfo } from "./Details";
 
@@ -23,16 +22,14 @@ export const PrincipalEmploymentDetails: FunctionComponent<PrincipalEmploymentDe
   validations,
 }: PrincipalEmploymentDetails) => {
   return (
-    <View>
-      <EmploymentInfo
-        accountType={accountType}
-        employmentDetails={employmentDetails}
-        personalDetails={personalDetails}
-        setEmploymentDetails={setEmploymentDetails}
-        setPersonalInfoDetails={setPersonalInfoDetails}
-        setValidations={setValidations}
-        validations={validations}
-      />
-    </View>
+    <EmploymentInfo
+      accountType={accountType}
+      employmentDetails={employmentDetails}
+      personalDetails={personalDetails}
+      setEmploymentDetails={setEmploymentDetails}
+      setPersonalInfoDetails={setPersonalInfoDetails}
+      setValidations={setValidations}
+      validations={validations}
+    />
   );
 };

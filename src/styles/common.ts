@@ -98,9 +98,9 @@ export const customShadow = (color: string, offsetY: number, offsetX: number, op
   shadowRadius: radius,
 });
 
-export const disabledOpacity4 = { opacity: 0.4 } as const;
-export const disabledOpacity5 = { opacity: 0.5 } as const;
-export const disabledOpacity6 = { opacity: 0.6 } as const;
+export const disabledOpacity4 = { opacity: 0.4 } as const; // 24px and above
+export const disabledOpacity5 = { opacity: 0.5 } as const; // TODO change all 0.5 opacity
+export const disabledOpacity6 = { opacity: 0.6 } as const; // less than 24px
 
 export const px = (points: number) =>
   ({

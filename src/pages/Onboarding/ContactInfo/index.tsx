@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
@@ -49,16 +49,16 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
 
   const validateJoint = (info: IHolderInfoState) => {
     const { contactDetails } = info;
-    return (
-      Object.values(contactDetails!.contactNumber!)
-        .map((contact) => typeof contact.error)
-        .includes("string") === false &&
-      jointContactCheck === false &&
-      Object.values(contactDetails!.contactNumber!)
-        .map((contact) => contact.value)
-        .flat()
-        .includes("") === false
-    );
+
+    return jointContactCheck === true && contactDetails?.contactNumber?.length === 1
+      ? true
+      : Object.values(contactDetails!.contactNumber!)
+          .map((contact) => typeof contact.error)
+          .includes("string") === false &&
+          Object.values(contactDetails!.contactNumber!)
+            .map((contact) => contact.value)
+            .flat()
+            .includes("") === false;
   };
 
   const buttonDisabled =
@@ -69,8 +69,8 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   const handleSubmit = () => {
     const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
-    addPersonalInfo({ ...personalInfo, editPersonal: findInfoSummary === -1 });
+    // const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+    // addPersonalInfo({ ...personalInfo, editPersonal: findInfoSummary === -1 });
     const findEmploymentDetails = updatedDisabledSteps.indexOf("EmploymentDetails");
     if (findEmploymentDetails !== -1) {
       updatedDisabledSteps.splice(findEmploymentDetails, 1);
@@ -127,7 +127,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
                 <ContactDetails
                   contactNumber={principalContactDetails?.contactNumber!}
                   setContactNumber={handlePrincipalContactDetails}
-                  optional={isContactOptional}
+                  optional={false}
                 />
               }
             />

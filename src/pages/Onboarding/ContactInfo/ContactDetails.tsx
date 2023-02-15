@@ -100,7 +100,6 @@ export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({
       <CustomSpacer space={sh16} />
       <View style={flexRow}>
         {allLabels.map((item: IContactNumberLabel, labelIndex: number) => {
-          console.log("item", item);
           const buttonText = `${PERSONAL_DETAILS.BUTTON_ADD} ${item.label}`;
           const checkName = (element: IContactNumber) => element.label === item.label;
 

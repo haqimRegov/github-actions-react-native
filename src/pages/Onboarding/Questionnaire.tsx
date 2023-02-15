@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
+import { Q8_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import { RiskAssessmentTemplate } from "../../templates";
@@ -12,13 +13,14 @@ interface QuestionnaireContentProps extends OnboardingContentProps, RiskStorePro
 
 const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps> = ({
   addAssessmentQuestions,
-  addOnboardingRiskInfo,
+  addPersonalInfo,
   agent,
   client,
   details,
   handleNextStep,
   navigation,
   onboarding,
+  personalInfo,
   principalHolder,
   questionnaire,
   resetQuestionnaire,
@@ -54,13 +56,24 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       newFinishedSteps.push("RiskAssessment");
     }
     // TODO toast object
-    updateOnboarding({ ...onboarding, finishedSteps: newFinishedSteps, disabledSteps: updatedDisabledSteps });
-    addOnboardingRiskInfo({
-      appetite: currentRiskScore.appetite,
-      hnwStatus: currentRiskScore.netWorth,
-      profile: currentRiskScore.profile,
-      expectedRange: currentRiskScore.rangeOfReturn,
-      type: currentRiskScore.type,
+    updateOnboarding({
+      ...onboarding,
+      finishedSteps: newFinishedSteps,
+      disabledSteps: updatedDisabledSteps,
+      riskInfo: {
+        appetite: currentRiskScore.appetite,
+        hnwStatus: currentRiskScore.netWorth,
+        profile: currentRiskScore.profile,
+        expectedRange: currentRiskScore.rangeOfReturn,
+        type: currentRiskScore.type,
+      },
+    });
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        employmentDetails: { ...personalInfo.principal!.employmentDetails, grossIncome: Q8_OPTIONS[questionnaire.questionEight].label },
+      },
     });
     resetQuestionnaire();
     // TODO updateToast is principal is isEtb true

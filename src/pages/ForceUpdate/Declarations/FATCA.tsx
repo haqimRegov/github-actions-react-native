@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { connect } from "react-redux";
 
 import { ContentPage } from "../../../components";

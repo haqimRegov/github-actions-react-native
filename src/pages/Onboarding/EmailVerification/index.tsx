@@ -5,7 +5,7 @@ import { Alert, Text } from "react-native";
 import { connect } from "react-redux";
 
 import { ConfirmationModal } from "../../../components";
-import { Language } from "../../../constants";
+import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { CalculateTimeDifference } from "../../../helpers";
 import { emailVerification } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
@@ -45,7 +45,8 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
   const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
   const principalClientId = details?.principalHolder?.clientId!;
-  const jointAgeCheck = moment().diff(moment(details!.jointHolder!.dateOfBirth), "years") >= 18;
+  // dateOfBirth saved in PersonalInfo is in Date type while DEFAULT_DATE_FORMAT string in ClientDetails
+  const jointAgeCheck = moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18;
   const jointEmailCheck = accountType === "Joint" && (inputJointEmail !== "" || jointAgeCheck);
 
   const handleNavigate = () => {

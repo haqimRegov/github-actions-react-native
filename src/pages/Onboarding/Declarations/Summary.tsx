@@ -11,7 +11,7 @@ import {
   OPTIONS_CRS_TAX_RESIDENCY,
   OPTIONS_CRS_TIN_REASONS,
 } from "../../../data/dictionary";
-import { getAddress, getFatcaRequest } from "../../../helpers";
+import { getAddress, getFatcaRequest, handleSignatory } from "../../../helpers";
 import { submitClientAccount } from "../../../network-actions";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
@@ -37,7 +37,7 @@ interface DeclarationSummaryProps extends PersonalInfoStoreProps, OnboardingCont
 }
 
 const DISABLED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = [
-  // "RiskAssessment",
+  // "RiskSummary",
   // "Products",
   // "PersonalInformation",
   "DeclarationSummary",
@@ -47,7 +47,7 @@ const DISABLED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = [
   "Payment",
 ];
 
-const FINISHED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation"];
+const FINISHED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation"];
 
 export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryProps> = ({
   accountType,
@@ -299,7 +299,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     initId: details!.initId!,
     isEtb: false,
     incomeDistribution: personalInfo.incomeDistribution!,
-    signatory: accountType === "Joint" ? personalInfo.signatory! : undefined,
+    signatory: accountType === "Joint" ? handleSignatory(personalInfo.signatory!) : undefined,
     principal: {
       clientId: details!.principalHolder!.clientId!,
       addressInformation: principalAddress as ISubmitAddressInformation,

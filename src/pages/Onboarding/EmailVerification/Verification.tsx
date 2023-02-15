@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
-import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomTextInput, TextSpaceArea } from "../../../components";
+import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomTextInput } from "../../../components";
 import { Language } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
 import {
@@ -16,8 +16,6 @@ import {
   sh1,
   sh16,
   sh24,
-  sh4,
-  sh8,
   sw24,
   sw4,
 } from "../../../styles";
@@ -104,10 +102,8 @@ export const Verification: FunctionComponent<VerificationProps> = ({
         validateEmail(inputPrincipalEmail) !== undefined ||
         validateEmail(inputJointEmail) !== undefined ||
         resendTimer !== 0;
-  const subtitle = jointEmailCheck === true ? EMAIL_VERIFICATION.SUBHEADING_JOINT : EMAIL_VERIFICATION.SUBHEADING;
 
   const principalLabel = accountType !== "Joint" ? EMAIL_VERIFICATION.ADD_EMAIL : EMAIL_VERIFICATION.ADD_EMAIL_PRINCIPAL;
-  const otpLabel = resendTimer === 0 ? EMAIL_VERIFICATION.NOTE_LINK : EMAIL_VERIFICATION.LABEL_OTP_REQUEST;
   const resendMinutes = Math.floor(resendTimer / 60);
   const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
@@ -125,7 +121,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       noBounce={false}
       subheading={EMAIL_VERIFICATION.HEADING}
       subheadingStyle={fs18BoldGray6}
-      subtitle={subtitle}
+      subtitle={EMAIL_VERIFICATION.SUBHEADING}
       subtitleStyle={fs16RegGray5}
       spaceToTitle={sh1}
       continueDisabled={disabled}>
@@ -154,7 +150,6 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                       onChangeText={setInputPrincipalEmail}
                       value={inputPrincipalEmail}
                     />
-                    <TextSpaceArea spaceToTop={sh4} style={fs12RegGray5} text={otpLabel} />
                     {resendTimer !== 0 ? (
                       <Fragment>
                         <CustomSpacer space={sh16} />
@@ -191,7 +186,6 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                       onChangeText={setInputJointEmail}
                       value={inputJointEmail}
                     />
-                    <TextSpaceArea spaceToTop={sh8} style={{ ...fs12RegGray5 }} text={otpLabel} />
                     {resendTimer !== 0 ? (
                       <Fragment>
                         <CustomSpacer space={sh16} />

@@ -69,13 +69,10 @@ declare interface EmailOTPProps {
 }
 
 export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
-  accountType,
   addPersonalInfo,
   details,
-  handleCancel,
   handleNavigate,
   handleResend,
-  isEtbJoint,
   isEtbPrincipal,
   jointEmail,
   jointEmailCheck,
@@ -163,7 +160,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   const disabled = jointEmailCheck === false ? principalOtp === "" : principalOtp === "" || jointOtp === "";
   const principalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
 
-  const otpEmail = jointEmailCheck === true ? ` ${principalEmail} & ${jointEmail}` : `${principalEmail}`;
+  const otpEmail = jointEmailCheck === true ? `${principalEmail} & ${jointEmail}` : principalEmail;
 
   useEffect(() => {
     let redirectTimer: ReturnType<typeof setTimeout>;
@@ -241,10 +238,10 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
                         placeholder={EMAIL_VERIFICATION.LABEL_OTP_PLACEHOLDER}
                         value={jointOtp}
                       />
+                      <CustomSpacer space={sh16} />
+                      <View style={borderBottomBlue2} />
                     </Fragment>
                   ) : null}
-                  <CustomSpacer space={sh16} />
-                  <View style={borderBottomBlue2} />
                   <CustomSpacer space={sh16} />
                   <View style={flexRow}>
                     <Text style={fs12RegGray5}>{INVESTOR_INFORMATION.LABEL_RESEND}</Text>

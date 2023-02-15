@@ -166,7 +166,6 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
     handleNextStep("RiskAssessment");
   };
 
-  const checkCancelLabel = isAssessmentCompleted ? RISK_ASSESSMENT.BUTTON_CANCEL : RISK_ASSESSMENT.BUTTON_BACK;
   const headerStyle: TextStyle = {
     ...fs24BoldGray6,
     maxWidth: sw638,
@@ -262,7 +261,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
           continueDisabled={isAssessmentCompleted}
           label={RISK_ASSESSMENT.NEW_SALES_ACCOUNT_SUMMARY}
           labelStyle={fs20BoldBlack2}
-          labelCancel={checkCancelLabel}
+          labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
           labelSubmit={RISK_ASSESSMENT.BUTTON_NEXT}
           submitOnPress={handlePageContinue}
           bottomContent={

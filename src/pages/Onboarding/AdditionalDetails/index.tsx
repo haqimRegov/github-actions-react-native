@@ -6,7 +6,7 @@ import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../co
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { px, sh24, sw24, sw48 } from "../../../styles";
+import { px, sh24, sw24 } from "../../../styles";
 import { isNotEmpty } from "../../../utils";
 import { BankDetails } from "../../NewSales/AdditionalDetails/BankDetails";
 import { AccountDetails } from "./AccountDetails";
@@ -81,12 +81,10 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       : checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true || checkRelationship === false;
 
   const handleSubmit = () => {
-    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
-    addPersonalInfo({ ...personalInfo, editPersonal: findInfoSummary === -1 });
+    addPersonalInfo({ ...personalInfo, editPersonal: true });
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
-    handleNextStep(route);
+    handleNextStep("PersonalInfoSummary");
   };
 
   const handlePrincipalBankDetails = (value: IBankSummaryState) => {
@@ -120,7 +118,6 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
-  const padding = accountType === "Joint" ? px(sw48) : px(sw24);
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
   if (accountType === "Joint") {
@@ -158,7 +155,6 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
 
   return (
     <ContentPage
-      buttonContainerStyle={padding}
       continueDisabled={buttonDisabled}
       handleCancel={handleBack}
       handleContinue={handleSubmit}

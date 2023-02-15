@@ -305,7 +305,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleContinue}
-        labelCancel={IDENTITY_CONFIRMATION.BUTTON_CANCEL}
         labelContinue={IDENTITY_CONFIRMATION.BUTTON_SAVE_CONTINUE}
         subheading={IDENTITY_CONFIRMATION.NEW_SALES_HEADING}
         subtitle={IDENTITY_CONFIRMATION.NEW_SALES_SUBHEADING}>

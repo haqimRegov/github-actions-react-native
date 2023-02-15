@@ -44,7 +44,6 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   accountType,
   accountHolder,
   addressInfo,
-  clientDetails,
   personalDetails,
   setAddressInfo,
   setPersonalDetails,
@@ -60,7 +59,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
   const isPassport = idType === "Passport";
   const addressType = isPassport ? "Other" : "Malaysia";
 
-  const inputCountry = isPassport ? clientDetails.country : "";
+  const inputCountryIssuance = personalDetails.countryOfIssuance!;
   const inputCountryOfBirth = personalDetails.countryOfBirth!;
   const inputExpiryDate = personalDetails.expirationDate!;
   const inputGender = personalDetails.gender!;
@@ -250,9 +249,9 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
                   disabled={true}
                   items={DICTIONARY_COUNTRIES}
                   handleChange={() => {}}
-                  label={ID_VERIFICATION.LABEL_COUNTRY}
+                  label={ID_VERIFICATION.LABEL_COUNTRY_ISSUANCE}
                   spaceToTop={sh16}
-                  value={inputCountry!}
+                  value={inputCountryIssuance!}
                 />
                 <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh16} text={ID_VERIFICATION.LABEL_EXPIRY} />
                 <NewDatePicker

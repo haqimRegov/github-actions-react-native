@@ -11,10 +11,10 @@ import {
   circle,
   colorBlack,
   colorBlue,
+  colorGray,
   colorGreen,
   colorTransparent,
   colorWhite,
-  disabledOpacity5,
   flexRow,
   fs12BoldGray6,
   fs16BoldBlue1,
@@ -85,8 +85,6 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
 
   const defaultLabelSpace = spaceToLabel === undefined ? sh4 : spaceToLabel;
   const labelExtractor = items.map((item) => item.label);
-
-  const disabledStyle = disabled === true ? disabledOpacity5 : {};
 
   // TODO
   /**
@@ -166,7 +164,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
         {spaceToTop !== undefined ? <CustomSpacer space={spaceToTop} /> : null}
         {label === undefined ? null : (
           <Fragment>
-            <Text style={{ ...fs12BoldGray6, ...disabledStyle, ...labelStyle }}>{label}</Text>
+            <Text style={{ ...fs12BoldGray6, ...labelStyle }}>{label}</Text>
             <CustomSpacer space={defaultLabelSpace} />
           </Fragment>
         )}
@@ -178,7 +176,7 @@ export const NewDropdown: FunctionComponent<NewDropdownProps> = ({
                 error={error}
                 editable={false}
                 placeholder={placeholderLabel}
-                placeholderTextColor={colorBlack._2}
+                placeholderTextColor={colorGray._4}
                 rightIcon={{ name: "caret-down" }}
                 viewStyle={{ ...inputStyle, ...viewStyle }}
                 value={value}

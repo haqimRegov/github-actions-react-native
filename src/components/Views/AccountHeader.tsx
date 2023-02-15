@@ -1,5 +1,6 @@
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
+import ParsedText from "react-native-parsed-text";
 
 import {
   borderBottomRed1,
@@ -7,6 +8,7 @@ import {
   flexRow,
   fs10RegGray6,
   fs12BoldBlack2,
+  fs12RegBlack2,
   sh16,
   sh20,
   shadow12Blue104,
@@ -52,7 +54,16 @@ export const AccountHeader: FunctionComponent<AccountHeaderProps> = ({
       <View style={container}>
         <Text style={{ ...fs10RegGray6, ...titleStyle }}>{title}</Text>
         <CustomSpacer isHorizontal={true} space={sw16} />
-        <Text style={{ ...fs12BoldBlack2, ...subtitleStyle }}>{subtitle}</Text>
+        <ParsedText
+          style={{ ...fs12BoldBlack2, ...subtitleStyle }}
+          parse={[
+            {
+              pattern: /(?:and|&)/,
+              style: fs12RegBlack2,
+            },
+          ]}>
+          {subtitle}
+        </ParsedText>
       </View>
       <CustomSpacer space={defaultBottomSpace} />
     </Fragment>

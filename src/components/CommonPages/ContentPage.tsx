@@ -2,9 +2,11 @@ import React, { FunctionComponent, ReactNode } from "react";
 import { ScrollView, Text, TextStyle, View } from "react-native";
 
 import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
+import { Language } from "../../constants";
 import { colorBlue, flexGrow, flexRow, fs14RegGray5, fs18BoldGray6, fs24BoldGray6, px, sh20, sh4, sh48, sw24 } from "../../styles";
 import { SafeAreaPage } from "../CommonPages/SafeAreaPage";
 
+const { CONTENT_PAGE } = Language.PAGE;
 export interface ContentPageProps extends ActionButtonsProps {
   children: ReactNode;
   heading?: string;
@@ -88,7 +90,7 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
         {children}
         <CustomFlexSpacer />
         <CustomSpacer space={spaceToButton || defaultContentProps.spaceToButton!} />
-        <ActionButtons continueDebounce={true} {...actionButtonProps} />
+        <ActionButtons continueDebounce={true} labelCancel={CONTENT_PAGE.BUTTON_BACK} {...actionButtonProps} />
         <CustomSpacer space={spaceToBottom !== undefined ? spaceToBottom : defaultContentProps.spaceToBottom!} />
       </ScrollView>
     </SafeAreaPage>

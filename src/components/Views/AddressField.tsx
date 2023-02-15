@@ -92,33 +92,36 @@ export const AddressField: FunctionComponent<AddressFieldProps> = ({
         return (
           <View key={index} style={{ width: sw424 }}>
             {address !== undefined ? (
-              <View style={flexRow}>
-                <TextInputMultiline
-                  autoCapitalize="words"
-                  label={`${labelAddress}${labelLine}`}
-                  maxLength={100}
-                  onChangeText={handleAddress}
-                  showLength={true}
-                  value={address}
-                  viewStyle={{ width: sw360 }}
-                />
-                {index === 0 ? null : (
-                  <Fragment>
-                    <CustomSpacer isHorizontal={true} space={sw40} />
-                    <View style={{ ...centerHorizontal }}>
-                      <IconButton name="trash" color={colorBlue._1} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
-                    </View>
-                  </Fragment>
-                )}
-              </View>
+              <Fragment>
+                <View style={flexRow}>
+                  <TextInputMultiline
+                    autoCapitalize="words"
+                    label={`${labelAddress}${labelLine}`}
+                    maxLength={100}
+                    onChangeText={handleAddress}
+                    showLength={true}
+                    value={address}
+                    viewStyle={{ width: sw360 }}
+                  />
+                  {index === 0 ? null : (
+                    <Fragment>
+                      <CustomSpacer isHorizontal={true} space={sw40} />
+                      <View style={{ ...centerHorizontal }}>
+                        <IconButton name="trash" color={colorBlue._1} onPress={handleRemoveLine} size={sh24} style={py(sh8)} />
+                      </View>
+                    </Fragment>
+                  )}
+                </View>
+                {index !== addressValues.length - 1 ? <CustomSpacer space={sh16} /> : null}
+              </Fragment>
             ) : null}
             {address === undefined && index === addressValues.indexOf(undefined) ? (
               <OutlineButton buttonType="dashed" icon="plus" onPress={handleAddLine} text={ADDRESS.BUTTON_ADD} />
             ) : null}
-            <CustomSpacer space={sh16} />
           </View>
         );
       })}
+      <CustomSpacer space={sh16} />
       <View style={borderBottomGray2} />
       <CustomTextInput
         autoCapitalize="words"

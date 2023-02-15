@@ -111,6 +111,7 @@ export const personalInfoInitialState: PersonalInfoState = {
     employmentDetails: {
       businessNature: "",
       employerName: "",
+      grossIncome: "",
       isOptional: false,
       occupation: "",
       othersOccupation: "",
@@ -127,6 +128,7 @@ export const personalInfoInitialState: PersonalInfoState = {
     personalDetails: {
       bumiputera: PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO,
       countryOfBirth: "",
+      countryOfIssuance: undefined,
       dateOfBirth: undefined,
       educationLevel: "",
       enableBankDetails: false,
@@ -264,6 +266,7 @@ export const personalInfoInitialState: PersonalInfoState = {
     personalDetails: {
       bumiputera: PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO,
       countryOfBirth: "",
+      countryOfIssuance: undefined,
       dateOfBirth: undefined,
       educationLevel: "",
       expirationDate: undefined,

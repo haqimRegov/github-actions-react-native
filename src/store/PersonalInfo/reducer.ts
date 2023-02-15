@@ -121,6 +121,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
           employmentDetails: {
             businessNature: "",
             employerName: "",
+            grossIncome: "",
             isOptional: false,
             occupation: "",
             othersOccupation: "",
@@ -137,6 +138,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
           personalDetails: {
             bumiputera: PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO,
             countryOfBirth: "",
+            countryOfIssuance: undefined,
             dateOfBirth: undefined,
             educationLevel: "",
             enableBankDetails: false,
@@ -274,6 +276,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
           personalDetails: {
             bumiputera: PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO,
             countryOfBirth: "",
+            countryOfIssuance: undefined,
             dateOfBirth: undefined,
             educationLevel: "",
             expirationDate: undefined,

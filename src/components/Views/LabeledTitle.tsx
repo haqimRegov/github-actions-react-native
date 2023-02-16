@@ -2,12 +2,30 @@ import React, { Fragment, FunctionComponent } from "react";
 import { Text, View } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerVertical, colorBlue, flexRow, fs12BoldGray6, fs14RegBlack1, fs16BoldBlack1, fs16RegGray6, sw12, sw4 } from "../../styles";
+import {
+  border,
+  centerVertical,
+  colorBlue,
+  flexRow,
+  fs10RegBlue9,
+  fs12BoldGray6,
+  fs14RegBlack1,
+  fs16BoldBlack1,
+  fs16RegGray6,
+  px,
+  rowCenterVertical,
+  sw05,
+  sw12,
+  sw4,
+  sw8,
+} from "../../styles";
 import { TouchableWrapper } from "../Touchables/TouchableWrapper";
 import { CustomSpacer } from "./Spacer";
 
 export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   iconSize,
+  headerSideContent,
+  headerSideText,
   label,
   labelStyle,
   onPress,
@@ -29,7 +47,23 @@ export const LabeledTitle: FunctionComponent<LabeledTitleProps> = ({
   return (
     <TouchableWrapper onPress={onPress}>
       <View style={style}>
-        <Text style={{ ...fs12BoldGray6, ...labelStyle }}>{label}</Text>
+        <View style={rowCenterVertical}>
+          <Text style={{ ...fs12BoldGray6, ...labelStyle }}>{label}</Text>
+          {headerSideContent !== undefined ? (
+            { headerSideContent }
+          ) : (
+            <Fragment>
+              {headerSideText !== undefined ? (
+                <Fragment>
+                  <CustomSpacer isHorizontal={true} space={sw8} />
+                  <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
+                    <Text style={fs10RegBlue9}>{headerSideText}</Text>
+                  </View>
+                </Fragment>
+              ) : null}
+            </Fragment>
+          )}
+        </View>
         {spaceToLabel === undefined ? null : <CustomSpacer space={spaceToLabel} />}
         <View style={flexRow}>
           {titlePrefix !== undefined ? (

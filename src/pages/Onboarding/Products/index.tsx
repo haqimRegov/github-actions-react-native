@@ -165,36 +165,28 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const allEpf = epfInvestments.length === investmentDetails!.length;
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
-    const route: TypeOnboardingKey = disabledSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
-    handleNextStep(route);
-    const updatedFinishedSteps: TypeOnboardingKey[] =
-      epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
-        ? ["RiskSummary", "RiskAssessment", "Products"]
-        : [...finishedSteps, "Products"];
-    const updatedDisabledSteps: TypeOnboardingKey[] =
-      epfInvestments.length === 0 || disabledSteps.includes("EmailVerification")
-        ? [
-            "RiskAssessment",
-            "IdentityVerification",
-            "PersonalDetails",
-            "EmploymentDetails",
-            "AdditionalDetails",
-            "PersonalInfoSummary",
-            "Declarations",
-            "FATCADeclaration",
-            "CRSDeclaration",
-            "DeclarationSummary",
-            "OrderSummary",
-            "Acknowledgement",
-            "TermsAndConditions",
-            "Signatures",
-            "Payment",
-          ]
-        : [...disabledSteps];
-    if (disabledSteps.includes("EmailVerification")) {
-      updatedFinishedSteps.push("EmailVerification");
-      updatedDisabledSteps.push("EmailVerification");
+
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to disabledSteps
+    // currently, whenever they confirm their investment again, they will be forced to go through each Personal Information step, we also disabled PersonalInfoSummary
+    if (updatedDisabledSteps.includes("PersonalInfoSummary") === false) {
+      updatedDisabledSteps.push("PersonalInfoSummary");
     }
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("Products") === false) {
+      updatedFinishedSteps.push("Products");
+    }
+
+    // remove from disabledSteps
+    const findProducts = updatedDisabledSteps.indexOf("Products");
+    if (findProducts !== -1) {
+      updatedDisabledSteps.splice(findProducts, 1);
+    }
+
+    // remove from disabledSteps (next step)
     const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
     if (findPersonalInfo !== -1) {
       updatedDisabledSteps.splice(findPersonalInfo, 1);
@@ -210,6 +202,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
             },
           }
         : { ...joint };
+
     addPersonalInfo({
       ...personalInfo,
       ...epfObject,
@@ -221,8 +214,14 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       ...epfObject,
       editPersonal: false,
       isAllEpf: allEpf,
+      editMode: false,
     });
+
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+
+    // TODO dynamic change for EPF and Bank Currency
+    const route: TypeOnboardingKey = finishedSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
+    handleNextStep(route);
   };
 
   let screen = {
@@ -302,6 +301,15 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const handleKeyboardHide = () => {
     setKeyboardIsShowing(false);
   };
+
+  useEffect(() => {
+    // this will not allow the user to press other steps when personal information is already filled up but they decided to deselect their funds
+    // TODO remove product as finished step when they go back to risk assessment by pressing "Back"
+    if (disabledSteps.includes("PersonalInformation") === false && selectedFunds.length === 0) {
+      addPersonalInfo({ ...personalInfo, editMode: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFunds]);
 
   useEffect(() => {
     const keyboardWillHide = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);

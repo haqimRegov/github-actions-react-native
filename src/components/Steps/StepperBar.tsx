@@ -2,6 +2,7 @@ import React, { forwardRef, Fragment, MutableRefObject, ReactElement, Ref, useIm
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
 
+import { IcoMoon } from "../../icons";
 import {
   borderBottomGray2,
   circle,
@@ -24,12 +25,14 @@ import {
   sh20,
   sh24,
   sh32,
+  sh8,
   sw112,
   sw124,
   sw16,
+  sw2,
+  sw20,
   sw200,
   sw24,
-  sw32,
   sw4,
   sw8,
   zIndexTop,
@@ -45,6 +48,7 @@ interface StepperBarProps<TKeys> {
   activeStepHeaderTextStyle?: TextStyle;
   disabledSteps?: TKeys[];
   disableNextSteps?: boolean;
+  editMode?: boolean;
   finishedSteps?: TKeys[];
   handleBackToDashboard: () => void;
   handleContentChange: (item: IStepperBarContentItem<TKeys> | IStep<TKeys>) => void;
@@ -62,6 +66,7 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
     activeSection,
     disabledSteps,
     disableNextSteps,
+    editMode,
     finishedSteps,
     handleBackToDashboard,
     handleCheckRoute,
@@ -92,13 +97,11 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
     const textStyle: TextStyle = isActive ? { ...activeTextStyle, ...activeStepHeaderTextStyle } : { ...fs14RegGray4, ...disabledOpacity6 };
 
     const handleChange = () => {
-      if (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) {
-        return null;
+      if (editMode === false) {
+        if (disabledSteps !== undefined && disabledSteps.includes(step.key) === false) {
+          setSections([stepIndex]);
+        }
       }
-      if (finishedSteps !== undefined && finishedSteps.indexOf(step.key) !== -1) {
-        return setSections([stepIndex]);
-      }
-      return null;
     };
 
     const pointerEvents =
@@ -128,7 +131,7 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
 
     return (
       <View style={flexRow}>
-        <CustomSpacer isHorizontal={true} space={sw32} />
+        <CustomSpacer isHorizontal={true} space={sw20} />
         <View style={activeContainer}>
           {step.content.map((item: IStepperBarContentItem<TKeys>, index: number) => {
             const handleNavigateToContent = () => {
@@ -139,6 +142,7 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
             const defaultTextStyle = disabledContent === true ? fs12RegGray4 : fs12RegGray6;
             const textStyle: TextStyle = item.key === activeKey ? fs12BoldGray6 : defaultTextStyle;
             const onPress = disabledContent === true ? undefined : handleNavigateToContent;
+            const isFinished = finishedSteps !== undefined && finishedSteps.some((visitedStep) => visitedStep === item.key);
 
             return (
               <TouchableWithoutFeedback key={index} onPress={onPress}>
@@ -147,11 +151,19 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
                   <View style={rowCenterVertical}>
                     {item.key === activeKey ? (
                       <Fragment>
-                        <View style={circle(sw4, colorRed._1)} />
-                        <CustomSpacer isHorizontal={true} space={sw4} />
+                        <CustomSpacer isHorizontal={true} space={sw2} />
+                        <View style={{ width: sw8 }}>
+                          <View style={circle(sw4, colorRed._1)} />
+                        </View>
+                        <CustomSpacer isHorizontal={true} space={sw2} />
                       </Fragment>
                     ) : (
-                      <CustomSpacer isHorizontal={true} space={sw8} />
+                      <Fragment>
+                        <View style={{ width: sw8 }}>
+                          {isFinished === true ? <IcoMoon color={textStyle.color} name="check" size={sh8} /> : null}
+                        </View>
+                        <CustomSpacer isHorizontal={true} space={sw4} />
+                      </Fragment>
                     )}
                     <Text style={textStyle}>{item.title}</Text>
                   </View>

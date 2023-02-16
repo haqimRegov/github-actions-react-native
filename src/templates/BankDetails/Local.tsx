@@ -171,18 +171,14 @@ ILocalBankDetailsProps) => {
           const checkHeader = isAllEpf === true ? `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} (optional)` : PERSONAL_DETAILS.LABEL_BANK_LOCAL;
           const checkSwiftCodeDisabled =
             existingDetails !== undefined && existingDetails.length > 0 ? existingDetails[index].bankSwiftCode !== "" : false;
+          const checkSubtitle = isAllEpf === true ? PERSONAL_DETAILS.LABEL_BANK_SUBTITLE_EPF : PERSONAL_DETAILS.LABEL_BANK_SUBTITLE;
 
           return (
             <Fragment key={index}>
               <ColorCard
                 header="custom"
                 customHeader={
-                  <LabeledTitle
-                    label={checkHeader}
-                    labelStyle={fs16BoldBlack2}
-                    title={PERSONAL_DETAILS.LABEL_BANK_SUBTITLE}
-                    titleStyle={fs12RegGray5}
-                  />
+                  <LabeledTitle label={checkHeader} labelStyle={fs16BoldBlack2} title={checkSubtitle} titleStyle={fs12RegGray5} />
                 }
                 content={
                   <View>
@@ -287,7 +283,7 @@ ILocalBankDetailsProps) => {
                       <CustomTextInput
                         autoCapitalize="words"
                         error={item.bankAccountNameError}
-                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME_COMBINED}
                         onBlur={checkAccountBankName}
                         onChangeText={handleCombinedName}
                         spaceToTop={sh16}

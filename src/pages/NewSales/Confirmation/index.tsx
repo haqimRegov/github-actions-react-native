@@ -1,3 +1,4 @@
+import cloneDeep from "lodash.clonedeep";
 import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert, FlatList, Keyboard, ScrollView, Text, View, ViewStyle } from "react-native";
@@ -18,7 +19,7 @@ import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
-import { getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
+import { getAllBanksInAccount, getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import {
   alignSelfStart,
@@ -85,6 +86,7 @@ export interface ProductConfirmationProps extends ProductsStoreProps, NewSalesCo
 export const ProductConfirmationComponent: FunctionComponent<ProductConfirmationProps> = ({
   accountDetails,
   accountType,
+  addBankDetails,
   addOrders,
   addInvestmentDetails: setInvestmentDetails,
   addPersonalInfo,
@@ -103,9 +105,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
   const { accountNo, ampDetails, isEpf } = accountDetails;
   const { details } = client;
+  const { transactionType } = newSales;
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
   const flatListRef = useRef<FlatList | null>(null);
+  const [loader, setLoader] = useState<boolean>(false);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [duplicatePrompt, setDuplicatePrompt] = useState<boolean>(false);
   const [accountListLoader, setAccountListLoader] = useState<boolean>(false);
@@ -166,11 +170,12 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     handleNextStep(checkAMP);
   };
 
-  const handleNavigation = () => {
+  const handleNavigation = (allBanks?: IGetAllBanksResult) => {
     const epfInvestments = investmentDetails!.filter(({ investment }) => investment.fundPaymentMethod === "EPF");
     const epfInvestmentsShariah = epfInvestments.map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
     const epfShariah = epfInvestmentsShariah.includes("Yes");
     const allEpf = epfInvestments.length === investmentDetails!.length;
+    const isNewFundPurchase = client.isNewFundPurchase === true || accountNo !== "";
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
 
@@ -185,26 +190,59 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
           }
         : {};
 
-    const investmentCurrencies = investmentDetails!.map(({ investment }) => investment.fundCurrency!);
+    let investmentCurrencies: string[] = [];
+    investmentCurrencies = investmentDetails!.map(({ investment }) => investment.fundCurrency!);
+    let currentCurrencies: string[] = [];
+    let foreignBank: IBankDetailsState[] = [];
+    let localBank: IBankDetailsState[] = [];
+    if (allBanks !== undefined) {
+      localBank = allBanks.localBank;
+      foreignBank = allBanks.foreignBank!;
+      currentCurrencies = [
+        ...foreignBank!
+          .map((eachBank: IBankDetailsState) => eachBank.currency)
+          .map((currency) => {
+            return currency;
+          })
+          .flat(),
+        ...localBank!
+          .map((eachBank: IBankDetailsState) => eachBank.currency)
+          .map((currency) => {
+            return currency;
+          })
+          .flat(),
+      ] as string[];
+    }
+    const remainingCurrencies = investmentCurrencies.filter(
+      (eachInvestmentCurrency: string) => !currentCurrencies.includes(eachInvestmentCurrency),
+    );
+    const checkSalesWithBank = remainingCurrencies.length > 0;
 
-    // dynamically reset local bank details when the selectedFunds was changed
-    const filterLocalBankDetails = personalInfo
-      .principal!.bankSummary!.localBank!.map((eachBank) => ({
-        ...eachBank,
-        currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
-      }))
-      .filter((eachLocalBank) => eachLocalBank.currency.length > 0);
+    let filterLocalBankDetails: IBankDetailsState[] = [];
+    let filterForeignBankDetails: IBankDetailsState[] = [];
+    if (transactionType === "Sales-AO") {
+      // dynamically reset local bank details when the selectedFunds was changed
+      filterLocalBankDetails = personalInfo
+        .principal!.bankSummary!.localBank!.map((eachBank) => ({
+          ...eachBank,
+          currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+        }))
+        .filter((eachLocalBank) => eachLocalBank.currency.length > 0);
 
-    // dynamically reset foreign bank details when the selectedFunds was changed
-    const filterForeignBankDetails =
-      personalInfo.principal!.bankSummary!.foreignBank!.length > 0
-        ? personalInfo
-            .principal!.bankSummary!.foreignBank!.map((eachBank) => ({
-              ...eachBank,
-              currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
-            }))
-            .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
-        : [];
+      // dynamically reset foreign bank details when the selectedFunds was changed
+      filterForeignBankDetails =
+        personalInfo.principal!.bankSummary!.foreignBank!.length > 0
+          ? personalInfo
+              .principal!.bankSummary!.foreignBank!.map((eachBank) => ({
+                ...eachBank,
+                currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+              }))
+              .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
+          : [];
+    } else if (isNewFundPurchase === true && checkSalesWithBank === true) {
+      filterLocalBankDetails = localBank;
+      filterForeignBankDetails = foreignBank !== undefined ? foreignBank : [];
+    }
 
     const initialLocalBank =
       filterLocalBankDetails.length > 0
@@ -246,8 +284,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       },
     });
 
-    const isNewFundPurchase = client.isNewFundPurchase === true || accountNo !== "";
-    const checkNextStep: TypeNewSalesRoute = isNewFundPurchase ? "OrderPreview" : "IdentityVerification";
+    const checkNextStepForSales: TypeNewSalesRoute = checkSalesWithBank === true ? "AdditionalDetails" : "OrderPreview";
+    const checkNextStep: TypeNewSalesRoute = isNewFundPurchase === true ? checkNextStepForSales : "IdentityVerification";
 
     // combined New Fund and AO
     const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "Products", "ProductsList", "ProductsConfirmation"];
@@ -256,28 +294,46 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       updatedFinishedSteps.push("RiskAssessment");
     }
 
-    const updatedDisabledSteps: TypeNewSalesKey[] = isNewFundPurchase
-      ? ["AccountList", "RiskSummary", "Products", "AccountInformation", "TermsAndConditions", "Signatures", "Payment"]
-      : // set to initial disabled steps without Products and ProductsList
-        // not using reducer initial state because of redux mutating issue
-        [
-          "RiskAssessment",
-          // "Products",
-          // "ProductsList",
-          "ProductsConfirmation",
-          "AccountInformation",
-          "IdentityVerification",
-          "AdditionalDetails",
-          "Summary",
-          "Acknowledgement",
-          "OrderPreview",
-          "TermsAndConditions",
-          "Signatures",
-          "Payment",
-        ];
-
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
-
+    const updatedDisabledStepsSalesWithBank: TypeNewSalesKey[] =
+      checkSalesWithBank === true
+        ? [
+            // "RiskAssessment",
+            // "Products",
+            // "ProductsList",
+            // "ProductsConfirmation",
+            // "AccountInformation",
+            "Summary",
+            "Acknowledgement",
+            "OrderPreview",
+            "TermsAndConditions",
+            "Signatures",
+          ]
+        : [
+            // set to initial disabled steps without Products and ProductsList
+            // not using reducer initial state because of redux mutating issue
+            "RiskAssessment",
+            // "Products",
+            // "ProductsList",
+            "ProductsConfirmation",
+            "AccountInformation",
+            "IdentityVerification",
+            "AdditionalDetails",
+            "Summary",
+            "Acknowledgement",
+            "OrderPreview",
+            "TermsAndConditions",
+            "Signatures",
+          ];
+    const updatedDisabledSteps: TypeNewSalesKey[] =
+      isNewFundPurchase === true && checkSalesWithBank === false
+        ? ["AccountList", "RiskSummary", "Products", "AccountInformation", "TermsAndConditions", "Signatures", "Payment"]
+        : updatedDisabledStepsSalesWithBank;
+    updateNewSales({
+      ...newSales,
+      finishedSteps: updatedFinishedSteps,
+      disabledSteps: updatedDisabledSteps,
+      accountDetails: { ...newSales.accountDetails, isBankDetailsRequired: checkSalesWithBank, bankDetails: cloneDeep(allBanks) },
+    });
     handleNextStep(checkNextStep);
   };
 
@@ -340,6 +396,27 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     }
   };
 
+  const handleCheckBanks = async () => {
+    const request: IGetAllBanksRequest = {
+      accountNo: accountNo,
+    };
+    const response: IGetAllBanksResponse = await getAllBanksInAccount(request, navigation);
+    if (response !== undefined) {
+      const { data, error } = response;
+      if (error === null && data !== null) {
+        addBankDetails(response?.data?.result!);
+        return response.data?.result;
+      }
+      if (error !== null) {
+        const errorList = error.errorList?.join("\n");
+        setTimeout(() => {
+          Alert.alert(error.message, errorList);
+        }, 150);
+      }
+    }
+    return undefined;
+  };
+
   const handleCancelPrompt = () => {
     setDuplicatePrompt(false);
     setAccountListLoader(false);
@@ -352,10 +429,13 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleConfirmIdentity = async () => {
-    if (client.isNewFundPurchase === true || accountNo !== "") {
+    if (transactionType === "Sales") {
+      setLoader(true);
+      const allBanks: IGetAllBanksResult | undefined = await handleCheckBanks();
       const submitTransactionResponse = await handleSetupClient();
+      setLoader(false);
       if (submitTransactionResponse === undefined) {
-        handleNavigation();
+        handleNavigation(allBanks);
       }
     } else {
       await handleCheckAccounts();
@@ -635,55 +715,54 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       </ConfirmationModal>
       <BasicModal backdropOpacity={0.65} visible={duplicatePrompt}>
         <View style={{ ...centerHV, ...fullHW }}>
-          {accountListLoader === false ? (
-            <NewPrompt
-              primary={{ buttonStyle: { width: sw212 }, onPress: handleConfirmPrompt, text: INVESTMENT.BUTTON_CONFIRM }}
-              secondary={{ buttonStyle: { width: sw212 }, onPress: handleCancelPrompt }}
-              spaceToTitle={sh4}
-              subtitle={INVESTMENT.LABEL_DUPLICATE_PROMPT_SUBTITLE}
-              subtitleStyle={{ ...fs16RegGray5, ...alignSelfStart }}
-              title={INVESTMENT.LABEL_DUPLICATE_PROMPT_TITLE}
-              titleStyle={{ ...fs24BoldGray6, ...alignSelfStart }}>
-              <View style={fullWidth}>
-                <CustomSpacer space={sh24} />
-                <View style={{ maxHeight: sh240 }}>
-                  <ScrollView bounces={false} contentContainerStyle={flexGrow} showsVerticalScrollIndicator={false}>
-                    <View style={border(colorBlue._3, sw1, sw8)}>
-                      {etbAccountList
-                        .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
-                        .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
-                          const containerStyle: ViewStyle = {
-                            ...px(sw24),
-                            ...py(sh12),
-                            ...rowCenterVertical,
-                            backgroundColor: colorWhite._1,
-                            borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
-                            borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
-                            borderTopLeftRadius: index === 0 ? sw8 : 0,
-                            borderTopRightRadius: index === 0 ? sw8 : 0,
-                            borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
-                            borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
-                          };
-                          return (
-                            <View key={index} style={containerStyle}>
-                              <IcoMoon color={colorBlue._1} name="duplicate-account" size={sw16} />
-                              <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Text style={{ ...fs14BoldBlue1, width: sw96 }}>{eachDuplicateAccount.accountNumber}</Text>
-                              <CustomSpacer isHorizontal={true} space={sw8} />
-                              <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
-                            </View>
-                          );
-                        })}
-                    </View>
-                  </ScrollView>
-                </View>
+          <NewPrompt
+            primary={{ buttonStyle: { width: sw212 }, onPress: handleConfirmPrompt, text: INVESTMENT.BUTTON_CONFIRM }}
+            secondary={{ buttonStyle: { width: sw212 }, onPress: handleCancelPrompt }}
+            spaceToTitle={sh4}
+            subtitle={INVESTMENT.LABEL_DUPLICATE_PROMPT_SUBTITLE}
+            subtitleStyle={{ ...fs16RegGray5, ...alignSelfStart }}
+            title={INVESTMENT.LABEL_DUPLICATE_PROMPT_TITLE}
+            titleStyle={{ ...fs24BoldGray6, ...alignSelfStart }}>
+            <View style={fullWidth}>
+              <CustomSpacer space={sh24} />
+              <View style={{ maxHeight: sh240 }}>
+                <ScrollView bounces={false} contentContainerStyle={flexGrow} showsVerticalScrollIndicator={false}>
+                  <View style={border(colorBlue._3, sw1, sw8)}>
+                    {etbAccountList
+                      .filter((eachAccount: IEtbAccountDescription) => eachAccount.accountNumber !== null)
+                      .map((eachDuplicateAccount: IEtbAccountDescription, index: number) => {
+                        const containerStyle: ViewStyle = {
+                          ...px(sw24),
+                          ...py(sh12),
+                          ...rowCenterVertical,
+                          backgroundColor: colorWhite._1,
+                          borderBottomColor: index === etbAccountList.length - 1 ? colorTransparent : colorBlue._3,
+                          borderBottomWidth: index === etbAccountList.length - 1 ? 0 : sw1,
+                          borderTopLeftRadius: index === 0 ? sw8 : 0,
+                          borderTopRightRadius: index === 0 ? sw8 : 0,
+                          borderBottomLeftRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                          borderBottomRightRadius: index === etbAccountList.length - 1 ? sw8 : 0,
+                        };
+                        return (
+                          <View key={index} style={containerStyle}>
+                            <IcoMoon color={colorBlue._1} name="duplicate-account" size={sw16} />
+                            <CustomSpacer isHorizontal={true} space={sw8} />
+                            <Text style={{ ...fs14BoldBlue1, width: sw96 }}>{eachDuplicateAccount.accountNumber}</Text>
+                            <CustomSpacer isHorizontal={true} space={sw8} />
+                            <Text style={fs10RegGray5}>{eachDuplicateAccount.description}</Text>
+                          </View>
+                        );
+                      })}
+                  </View>
+                </ScrollView>
               </View>
-            </NewPrompt>
-          ) : (
-            <View style={{ ...centerHV, ...fullHW }}>
-              <Loading color={colorWhite._1} />
             </View>
-          )}
+          </NewPrompt>
+        </View>
+      </BasicModal>
+      <BasicModal backdropOpacity={0.65} visible={loader}>
+        <View style={{ ...centerHV, ...fullHW }}>
+          <Loading color={colorWhite._1} />
         </View>
       </BasicModal>
     </Fragment>

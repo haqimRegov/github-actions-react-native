@@ -8,7 +8,7 @@ import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStor
 import { fs16RegGray6 } from "../../styles";
 import { OrderSummary, Signatures, TermsAndConditions } from "./Acknowledgement";
 import { AdditionalDetails } from "./AdditionalDetails";
-import { PersonalDetails } from "./ContactInfo";
+import { ContactDetails } from "./ContactDetails";
 import { CrsDeclaration, DeclarationSummary, FatcaDeclaration } from "./Declarations";
 import { EmailVerification } from "./EmailVerification";
 import { EmploymentDetails } from "./EmploymentDetails";
@@ -51,8 +51,8 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.IdentityVerification:
       content = <IdentityConfirmation {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.PersonalDetails:
-      content = <PersonalDetails {...newProps} />;
+    case ONBOARDING_ROUTES.ContactDetails:
+      content = <ContactDetails {...newProps} />;
       break;
     case ONBOARDING_ROUTES.EmploymentDetails:
       content = <EmploymentDetails {...newProps} />;

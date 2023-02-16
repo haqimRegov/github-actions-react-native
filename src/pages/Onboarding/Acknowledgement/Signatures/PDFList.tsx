@@ -22,7 +22,6 @@ export interface PDFListProps extends AcknowledgementStoreProps, OnboardingConte
 const PDFListComponent: FunctionComponent<PDFListProps> = ({
   accountType,
   details,
-  finishedSteps,
   handleNextStep,
   handleResetOnboarding,
   onboarding,
@@ -90,11 +89,13 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   };
 
   const handleContinue = () => {
+    // do not allow to click finished steps
+    const newFinishedSteps: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];
+    const newDisabledStep: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];
+
+    updateOnboarding({ ...onboarding, disabledSteps: newDisabledStep, finishedSteps: newFinishedSteps });
+
     handleNextStep("Payment");
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    updatedFinishedSteps.push("Acknowledgement");
-    const newDisabledStep: TypeOnboardingKey[] = ["RiskAssessment", "Products", "PersonalInformation", "Declarations", "Acknowledgement"];
-    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
   };
 
   const getReceiptSummary = async () => {
@@ -178,7 +179,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   return (
     <Fragment>
       <PDFListTemplate
-        accountType={accountType}
+        accountType={accountType!}
         authorisedSignatory={personalInfo.signatory!}
         details={details}
         handleBack={handleBack}

@@ -145,14 +145,22 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   ];
 
   const handlePageContinue = () => {
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...new Set(finishedSteps)];
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
-    updatedFinishedSteps.push("RiskSummary");
-    const findRiskProfile = disabledSteps.indexOf("RiskSummary");
-    if (findRiskProfile !== -1) {
-      updatedDisabledSteps.splice(findRiskProfile, 1);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("RiskSummary") === false) {
+      updatedFinishedSteps.push("RiskSummary");
     }
-    const findProducts = disabledSteps.indexOf("Products");
+
+    // remove from disabledSteps
+    const findRiskSummary = updatedDisabledSteps.indexOf("RiskSummary");
+    if (findRiskSummary !== -1) {
+      updatedDisabledSteps.splice(findRiskSummary, 1);
+    }
+
+    // remove from disabledSteps (next step)
+    const findProducts = updatedDisabledSteps.indexOf("Products");
     if (findProducts !== -1) {
       updatedDisabledSteps.splice(findProducts, 1);
     }

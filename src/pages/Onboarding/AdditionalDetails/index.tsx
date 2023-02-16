@@ -37,8 +37,8 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
 }: AdditionalDetailsProps) => {
   const [deleteToast, setDeleteToast] = useState<boolean>(false);
   const [currentCurrency, setCurrentCurrency] = useState<string>("");
-  // const [deleteCount, setEpfNumberValidation] = useState<string | undefined>(undefined);
-  const { principal, isAllEpf } = personalInfo;
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, principal, isAllEpf } = personalInfo;
   const { bankSummary } = principal!;
   const { localBank, foreignBank } = bankSummary!;
   const personalDetails = principal?.personalDetails;
@@ -88,9 +88,31 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       : [true];
 
   const handleSubmit = () => {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    addPersonalInfo({ ...personalInfo, editPersonal: true });
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("EmploymentDetails") === false) {
+      updatedFinishedSteps.push("EmploymentDetails");
+    }
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("AdditionalDetails") === false) {
+      updatedFinishedSteps.push("AdditionalDetails");
+    }
+
+    // remove from disabledSteps (next step)
+    const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+    if (findPersonalInfoSummary !== -1) {
+      updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
+    }
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
     handleNextStep("PersonalInfoSummary");
   };
 

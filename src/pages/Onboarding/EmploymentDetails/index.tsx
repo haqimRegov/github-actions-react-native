@@ -26,7 +26,8 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     joint: { postCode: undefined },
   });
 
-  const { joint, principal } = personalInfo;
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, joint, principal } = personalInfo;
   const { details: clientDetails } = client;
   const { principalHolder: principalClient, jointHolder: jointClient } = clientDetails!;
   const { isEtb: isPrincipalEtb } = principalClient!;
@@ -72,14 +73,26 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
         (isJointEtb === false && (validateDetails(joint!, validations.joint) === false || checkJointGross === false));
 
   const handleSubmit = () => {
-    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "AdditionalDetails";
-    // addPersonalInfo({ ...personalInfo, editPersonal: true });
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findAdditionalDetails = updatedDisabledSteps.indexOf("AdditionalDetails");
-    if (findAdditionalDetails !== -1) {
-      updatedDisabledSteps.splice(findAdditionalDetails, 1);
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("EmploymentDetails") === false) {
+      updatedFinishedSteps.push("EmploymentDetails");
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+
+      if (findPersonalInfoSummary !== -1) {
+        updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
+      }
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    const route: TypeOnboardingKey = editMode === true ? "PersonalInfoSummary" : "AdditionalDetails";
     handleNextStep(route);
   };
 
@@ -103,7 +116,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   };
 
   const handleBack = () => {
-    handleNextStep("PersonalDetails");
+    handleNextStep("ContactDetails");
   };
 
   const handlePrincipalValidation = (value: IEmploymentDetailsValidations) => {
@@ -116,6 +129,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
 
   return (
     <ContentPage
+      cancelDisabled={editMode === true}
       continueDisabled={buttonDisabled}
       subheading={EMPLOYMENT_DETAILS.HEADING}
       subtitle={EMPLOYMENT_DETAILS.SUBHEADING}

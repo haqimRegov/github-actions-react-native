@@ -20,7 +20,8 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   personalInfo,
   updateOnboarding,
 }: CrsDeclarationProps) => {
-  const { principal, joint } = personalInfo;
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, principal, joint } = personalInfo;
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
     addPersonalInfo({
@@ -37,18 +38,27 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
   };
 
   const handleContinue = () => {
-    // const defaultRoute: TypeOnboardingKey = "DeclarationSummary";
-    const route: TypeOnboardingKey = "DeclarationSummary";
-    if (personalInfo.editDeclaration === false) {
-      addPersonalInfo({ ...personalInfo, editDeclaration: true });
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("CRSDeclaration") === false) {
+      updatedFinishedSteps.push("CRSDeclaration");
     }
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findDeclarationSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
-    if (findDeclarationSummary !== -1) {
-      updatedDisabledSteps.splice(findDeclarationSummary, 1);
+
+    // remove from disabledSteps (next step)
+    const findDeclarationsSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+    if (findDeclarationsSummary !== -1) {
+      updatedDisabledSteps.splice(findDeclarationsSummary, 1);
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
-    handleNextStep(route);
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    handleNextStep("DeclarationSummary");
   };
 
   const isTaxResidentPrincipal = principal?.declaration!.crs!.taxResident! === 0;
@@ -93,6 +103,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
 
   return (
     <ContentPage
+      cancelDisabled={editMode === true}
       continueDisabled={!continueEnabled}
       handleCancel={handleBack}
       handleContinue={showButtonContinue}

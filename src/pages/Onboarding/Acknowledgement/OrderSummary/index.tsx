@@ -42,13 +42,17 @@ const OrderSummaryComponent: FunctionComponent<OrderSummaryProps> = ({
   onboarding,
   updateOnboarding,
 }: OrderSummaryProps) => {
+  const { finishedSteps } = onboarding;
   const handleConfirm = () => {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findTermsAndConditions = updatedDisabledSteps.indexOf("TermsAndConditions");
-    if (findTermsAndConditions !== -1) {
-      updatedDisabledSteps.splice(findTermsAndConditions, 1);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("OrderSummary") === false) {
+      updatedFinishedSteps.push("OrderSummary");
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps });
+
     handleNextStep("TermsAndConditions");
   };
 

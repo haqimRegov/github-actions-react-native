@@ -31,7 +31,7 @@ export const SignaturesComponent: FunctionComponent<SignaturesProps> = ({
         <PDFList handleNextStep={handleNextStep} handleResetOnboarding={handleResetOnboarding} setEditReceipt={setEditReceipt} />
       ) : (
         <EditPdf
-          accountType={accountType}
+          accountType={accountType!}
           currentTransactionType={"Sales-AO"}
           editReceipt={editReceipt}
           newSales={newSales}

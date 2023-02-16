@@ -196,6 +196,23 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     });
   };
 
+  const handleSkip = () => {
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+    updatedFinishedSteps.push("Summary", "AccountInformation", "AdditionalDetails");
+    const newDisabledStep: TypeNewSalesKey[] = [
+      "RiskSummary",
+      "Products",
+      "AccountInformation",
+      "AdditionalDetails",
+      "Summary",
+      "Signatures",
+      "TermsAndConditions",
+      "Payment",
+    ];
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+    handleNextStep("OrderPreview");
+  };
+
   // TODO change account name check to !== for both local and foreign
 
   const checkLocalBank = bankSummary!.localBank!.map(
@@ -275,11 +292,13 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
         continueDisabled={continueDisabled}
         handleCancel={handleCancel}
         handleContinue={handleContinue}
+        handleSkip={handleSkip}
+        skippable={isEpf === true}
         subheading={PERSONAL_DETAILS.HEADING_ADD_ADDITIONAL}
         subtitle={checkSubHeading}>
         <CustomSpacer space={sh24} />
         <View style={px(sw24)}>
-          {accountType === "Joint" ? (
+          {accountType === "Joint" && transactionType === "Sales-AO" ? (
             <Fragment>
               <ColorCard
                 header={{ label: PERSONAL_DETAILS.LABEL_HEADER_JOINT_RELATIONSHIP }}
@@ -333,7 +352,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
             existingBankSummary={existingBankDetails}
             foreignBankDetails={foreignBank!}
             investmentCurrencies={investmentCurrencies}
-            isAllEpf={isAllEpf || false}
+            isAllEpf={isAllEpf || (transactionType === "Sales" && isEpf === true) || false}
             handleBankSummary={handleBankSummary}
             handleEnableLocalBank={handleEnableLocalBank}
             localBankDetails={localBank!}

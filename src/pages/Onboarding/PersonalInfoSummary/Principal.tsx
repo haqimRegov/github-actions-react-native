@@ -11,7 +11,7 @@ const { SUMMARY } = Language.PAGE;
 interface PrincipalProps {
   accountType: TypeAccountChoices;
   handleCloseViewer?: () => void;
-  handleNextStep: (route: TypeOnboardingKey) => void;
+  handleEdit: (route: TypeOnboardingKey) => void;
   isAllEpf: boolean;
   setViewFile?: (value: FileBase64) => void;
   summary: IHolderInfoState;
@@ -21,7 +21,7 @@ interface PrincipalProps {
 export const Principal: FunctionComponent<PrincipalProps> = ({
   accountType,
   handleCloseViewer,
-  handleNextStep,
+  handleEdit,
   isAllEpf,
   setViewFile,
   summary,
@@ -241,7 +241,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
       epfDetails={epfDetailsSummary}
       foreignBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : foreignBank}
       handleCloseViewer={handleCloseViewer}
-      handleNextStep={handleNextStep}
+      handleEdit={handleEdit}
       isMalaysian={isMalaysian}
       localBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : localBank}
       mailingAddress={mailingAddressSummary}

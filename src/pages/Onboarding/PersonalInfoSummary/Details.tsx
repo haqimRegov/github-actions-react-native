@@ -19,7 +19,7 @@ interface SummaryDetailsProps {
   epfDetails?: LabeledTitleProps[];
   foreignBankDetails: LabeledTitleProps[][];
   handleCloseViewer?: () => void;
-  handleNextStep: (route: TypeOnboardingKey) => void;
+  handleEdit: (route: TypeOnboardingKey) => void;
   isMalaysian: boolean;
   localBankDetails: LabeledTitleProps[][];
   mailingAddress: LabeledTitleProps[];
@@ -40,7 +40,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   epfDetails,
   foreignBankDetails,
   handleCloseViewer,
-  handleNextStep,
+  handleEdit,
   isMalaysian,
   localBankDetails,
   mailingAddress,
@@ -54,19 +54,19 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
   const headerTitle = accountHolder === "Principal" ? SUMMARY.TITLE_PRINCIPAL : SUMMARY.TITLE_JOINT;
 
   const handleEditPersonalDetails = () => {
-    handleNextStep("IdentityVerification");
+    handleEdit("IdentityVerification");
   };
 
   const handleEditContact = () => {
-    handleNextStep("PersonalDetails");
+    handleEdit("ContactDetails");
   };
 
   const handleEditOtherDetails = () => {
-    handleNextStep("AdditionalDetails");
+    handleEdit("AdditionalDetails");
   };
 
   const handleEditEmploymentDetails = () => {
-    handleNextStep("EmploymentDetails");
+    handleEdit("EmploymentDetails");
   };
 
   const personalDetailsInfo: LabeledTitleProps[] = personalDetails.slice(0, isMalaysian === true ? 3 : 5);

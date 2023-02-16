@@ -11,6 +11,16 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           ...action.payload,
         },
       };
+    case "newSales/ADD_BANK_DETAILS":
+      return {
+        ...state,
+        accountDetails: {
+          ...state.accountDetails,
+          bankDetails: {
+            ...action.payload,
+          },
+        },
+      };
     case "newSales/ADD_RISK_INFO":
       return {
         ...state,
@@ -38,7 +48,9 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           accountNo: "",
           authorisedSignatory: "",
           ampDetails: undefined,
+          bankDetails: undefined,
           fundType: "ut",
+          isBankDetailsRequired: false,
           isEpf: undefined,
           isRecurring: undefined,
           isSyariah: false,

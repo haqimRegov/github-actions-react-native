@@ -5,6 +5,10 @@ export const addAccountDetails = (accountDetails: INewSalesAccountDetails) => {
   return typedAction("newSales/ADD_ACCOUNT_DETAILS", accountDetails);
 };
 
+export const addBankDetails = (bankDetails: IGetAllBanksResult) => {
+  return typedAction("newSales/ADD_BANK_DETAILS", bankDetails);
+};
+
 export const addRiskInfo = (riskInfo: IRiskProfile) => {
   return typedAction("newSales/ADD_RISK_INFO", riskInfo);
 };
@@ -39,6 +43,7 @@ export const updateTransactionType = (type: TTransactionType) => {
 
 export type NewSalesAction = ReturnType<
   | typeof addAccountDetails
+  | typeof addBankDetails
   | typeof addRiskInfo
   | typeof resetNewSales
   | typeof updateNewSales
@@ -51,6 +56,7 @@ export type NewSalesAction = ReturnType<
 
 export const NewSalesActionProps = {
   addAccountDetails,
+  addBankDetails,
   addRiskInfo,
   resetNewSales,
   updateNewSales,

@@ -2,7 +2,9 @@ declare interface INewSalesAccountDetails {
   accountNo: string;
   authorisedSignatory: string;
   ampDetails?: IProduct;
+  bankDetails?: IBankSummaryState;
   fundType: ProductType;
+  isBankDetailsRequired?: boolean;
   isEpf?: boolean;
   isSyariah: boolean;
   riskScore: string;

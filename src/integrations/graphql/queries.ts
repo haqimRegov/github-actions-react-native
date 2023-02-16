@@ -676,6 +676,40 @@ const getAgentProfile = gql`
   }
 `;
 
+const getAllBanks = gql`
+  query getAllBanksInAccount($input: BankInfoInput) {
+    getAllBanksInAccount(input: $input) {
+      data {
+        result {
+          foreignBank {
+            bankAccountName
+            bankAccountNumber
+            bankLocation
+            bankName
+            bankSwiftCode
+            currency
+            id
+          }
+          localBank {
+            bankAccountName
+            bankAccountNumber
+            bankLocation
+            bankName
+            bankSwiftCode
+            currency
+            id
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+      }
+    }
+  }
+`;
+
 const getInbox = gql`
   query getInbox($input: InboxInput) {
     getInbox(input: $input) {
@@ -1777,6 +1811,7 @@ export const GQL_QUERIES = {
   eddDashboard,
   etbCheck,
   getAgentProfile,
+  getAllBanks,
   getInbox,
   getOrderSummary,
   getReceiptSummaryList,

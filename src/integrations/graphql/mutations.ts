@@ -1,5 +1,40 @@
 import gql from "graphql-tag";
 
+const addBankSummary = gql`
+  mutation addBankSummaryInApplication($input: addBankSummaryInApplicationInput) {
+    addBankSummaryInApplication(input: $input) {
+      data {
+        result {
+          initId
+          message
+          banks {
+            localBank {
+              bankAccountName
+              bankAccountNumber
+              bankLocation
+              bankName
+              currency
+            }
+            foreignBank {
+              bankAccountName
+              bankAccountNumber
+              bankLocation
+              bankName
+              currency
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        message
+        statusCode
+        errorList
+      }
+    }
+  }
+`;
+
 const changePassword = gql`
   mutation changePasswordV2($input: ChangePasswordInputV2) {
     changePasswordV2(input: $input) {
@@ -803,6 +838,7 @@ const updateSeen = gql`
 `;
 
 export const GQL_MUTATIONS = {
+  addBankSummary,
   changePassword,
   clientRegister,
   emailOtpVerification,

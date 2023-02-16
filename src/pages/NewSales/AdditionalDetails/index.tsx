@@ -23,9 +23,9 @@ const initialBankDetails: IBankDetailsState = {
   otherBankName: "",
 };
 
-interface PersonalDetailsProps extends PersonalInfoStoreProps, NewSalesContentProps {}
+interface AdditionalDetailsProps extends PersonalInfoStoreProps, NewSalesContentProps {}
 
-const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
+const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
   accountType,
   addPersonalInfo,
   details,
@@ -36,7 +36,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   productSales,
   updateNewSales,
   updateToastVisible,
-}: PersonalDetailsProps) => {
+}: AdditionalDetailsProps) => {
   const [currentCurrency, setCurrentCurrency] = useState<string>("");
   const [deleteToast, setDeleteToast] = useState<boolean>(false);
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);

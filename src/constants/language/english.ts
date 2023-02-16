@@ -166,6 +166,7 @@ export const english = {
     },
     CONTENT_PAGE: {
       BUTTON_BACK: "Back",
+      BUTTON_SKIP: "Skip for now",
     },
     PERSONAL_DETAILS: {
       BUTTON_ADD_CURRENCY: "Add Currency",
@@ -193,6 +194,7 @@ export const english = {
       LABEL_BANK_OTHER_NAME: "Other Bank Name",
       LABEL_ADD_BANK_DETAILS_OPTIONAL: "Add banking details",
       LABEL_BANK_SUBTITLE: "This is your withdrawal bank account for the allocated currency. Please make sure your information is correct.",
+      LABEL_BANK_SUBTITLE_EPF: "Please make sure your information is correct.",
       LABEL_BANK_SWIFT_CODE_OPTIONAL: "Bank Swift Code (optional)",
       LABEL_BANK_SWIFT_CODE: "Bank Swift Code",
       LABEL_BUMIPUTERA: "Are you a Bumiputera?",

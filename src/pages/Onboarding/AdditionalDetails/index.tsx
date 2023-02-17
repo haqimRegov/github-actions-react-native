@@ -205,6 +205,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   return (
     <Fragment>
       <ContentPage
+        cancelDisabled={editMode === true}
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleSubmit}

@@ -105,6 +105,14 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     delete newBank.otherBankName;
     return newBank;
   });
+  const checkLocalBankEmpty = principal!.bankSummary!.localBank!.map(
+    (bank) =>
+      bank.bankName === "" &&
+      bank.bankAccountNumber === "" &&
+      bank.bankAccountName === "" &&
+      bank.bankAccountNameError === undefined &&
+      bank.bankAccountNumberError === undefined,
+  );
 
   const foreignBank: IBankDetailsState[] = principal!.bankSummary!.foreignBank!.map((bank) => {
     const bankAccountName =
@@ -149,7 +157,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     principal: {
       clientId: details!.principalHolder!.clientId!,
       bankSummary:
-        (principal?.personalDetails?.enableBankDetails === true && personalInfo.isAllEpf === true) || personalInfo.isAllEpf === false
+        principal!.bankSummary!.localBank!.length > 0 && checkLocalBankEmpty.includes(false) === true
           ? { localBank: localBank as ISubmitBank[], foreignBank: foreignBank as ISubmitBank[] }
           : { localBank: [], foreignBank: [] },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,

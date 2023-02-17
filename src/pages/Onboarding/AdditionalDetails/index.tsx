@@ -69,7 +69,6 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,
   );
-  console.log("check", checkLocalBankEmpty);
   const checkLocalBankEpf =
     isAllEpf === true
       ? checkLocalBank.includes(false) === true && checkLocalBankEmpty.includes(false) === true

@@ -16,7 +16,7 @@ import {
   SafeAreaPage,
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_EPF_AGE } from "../../../data/dictionary";
+import { DICTIONARY_CURRENCY, DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { useDelete } from "../../../hooks";
 import { IcoMoon } from "../../../icons";
 import { getAllBanksInAccount, getEtbAccountList, submitClientAccountTransactions } from "../../../network-actions";
@@ -244,14 +244,14 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       filterForeignBankDetails = foreignBank !== undefined ? foreignBank : [];
     }
 
+    const checkSalesLocalBank = filterLocalBankDetails.length > 0 ? filterLocalBankDetails : [];
     const initialLocalBank =
-      filterLocalBankDetails.length > 0
-        ? filterLocalBankDetails
+      transactionType === "Sales"
+        ? checkSalesLocalBank
         : [
             {
               bankAccountName: "",
               bankAccountNumber: "",
-              bankLocation: DICTIONARY_COUNTRIES[0].value,
               bankName: "",
               bankSwiftCode: "",
               currency: [DICTIONARY_CURRENCY[0].value],

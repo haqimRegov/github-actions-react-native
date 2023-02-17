@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, CustomToast, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_CURRENCY, DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
 import { BankDetails } from "../../../templates";
@@ -17,7 +17,6 @@ const { ADDITIONAL_DETAILS, PERSONAL_DETAILS } = Language.PAGE;
 const initialBankDetails: IBankDetailsState = {
   bankAccountName: "",
   bankAccountNumber: "",
-  bankLocation: DICTIONARY_COUNTRIES[0].value,
   bankName: "",
   bankSwiftCode: "",
   currency: [DICTIONARY_CURRENCY[0].value],
@@ -227,6 +226,15 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       bank.bankAccountNumberError === undefined,
   );
 
+  // TODO Make a util function for the bank validation
+  const checkLocalBankEmpty = principal!.bankSummary!.localBank!.map(
+    (bank) =>
+      bank.bankName === "" &&
+      bank.bankAccountNumber === "" &&
+      bank.bankAccountName === "" &&
+      bank.bankAccountNameError === undefined &&
+      bank.bankAccountNumberError === undefined,
+  );
   const checkForeignBank =
     bankSummary!.foreignBank!.length > 0
       ? bankSummary!.foreignBank!.map(
@@ -271,11 +279,14 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       ? relationship === "" || (relationship === "Others" && otherRelationship === "")
       : false;
   const accountNames = [{ label: details?.principalHolder!.name, value: details?.principalHolder!.name }];
-  const principalEpfCheck = personalInfo.isAllEpf === true ? principal?.personalDetails?.enableBankDetails === true : true;
+  const checkLocalBankEpf =
+    isAllEpf === true
+      ? checkLocalBank.includes(false) === true && checkLocalBankEmpty.includes(false) === true
+      : checkLocalBank.includes(false) === true;
   const checkTransactionType = transactionType === "Sales-AO" ? checkEpf === true || signatory === "" || incomeDistribution === "" : false;
   const continueDisabled =
-    (checkLocalBank.includes(false) === true && principalEpfCheck === true) ||
-    (checkForeignBank.includes(false) === true && principalEpfCheck === true) ||
+    checkLocalBankEpf === true ||
+    checkForeignBank.includes(false) === true ||
     checkCurrencyRemaining.length !== 0 ||
     checkTransactionType ||
     checkJoint;

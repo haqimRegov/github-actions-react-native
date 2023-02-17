@@ -29,12 +29,13 @@ import { SummaryColorCard, summaryColorCardStyleProps } from "./SummaryColorCard
 
 interface AccountTabProps {
   data: IDashboardOrderSummary;
+  transactionType?: string | undefined;
   // setFile: (value?: FileBase64) => void;
 }
 
 const { DASHBOARD_ACCOUNT_TAB, DASHBOARD_PROFILE } = Language.PAGE;
 
-export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: AccountTabProps) => {
+export const AccountTab: FunctionComponent<AccountTabProps> = ({ data, transactionType }: AccountTabProps) => {
   const { profile, investmentSummary, transactionDetails } = data;
   const principal = profile[0];
   const { addressInformation } = principal;
@@ -127,7 +128,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
   return (
     <Fragment>
       <View style={px(sw24)}>
-        {isArrayNotEmpty(correspondenceAddressSummary) ? (
+        {transactionType !== "Sales" && isArrayNotEmpty(correspondenceAddressSummary) ? (
           <SummaryColorCard
             data={correspondenceAddressSummary}
             headerTitle={DASHBOARD_ACCOUNT_TAB.CARD_TITLE_CORRESPONDENCE_ADDRESS}
@@ -259,7 +260,7 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data }: Account
             />
           </Fragment>
         ) : null}
-        {investmentSummary !== null && investmentSummary[0] !== null ? (
+        {transactionType !== "Sales" && investmentSummary !== null && investmentSummary[0] !== null ? (
           <SummaryColorCard data={accountSettings} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_ACCOUNT_DETAILS} spaceToTop={sh32} />
         ) : null}
       </View>

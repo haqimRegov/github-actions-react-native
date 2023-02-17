@@ -514,7 +514,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                   <CustomSpacer space={sh8} />
                 </Fragment>
               ) : null}
-              {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : (
+              {bankSummary?.localBank?.length === 0 ? null : (
                 <Fragment>
                   {localBankDetails.map((bank, numberIndex) => {
                     const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;

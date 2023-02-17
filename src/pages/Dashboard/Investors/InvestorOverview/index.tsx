@@ -317,6 +317,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               jointClientId: jointClientId.current,
             },
             riskInfo: { ...newSales.riskInfo, ...riskInfo },
+            transactionType: isAccountOpening ? "Sales-AO" : "Sales",
           };
 
           if (isAccountOpening === false && item !== undefined) {

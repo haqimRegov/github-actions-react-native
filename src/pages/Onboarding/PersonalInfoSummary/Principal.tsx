@@ -165,7 +165,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
       { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
-      { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
+      // { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
       { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
     ] as LabeledTitleProps[];
   });

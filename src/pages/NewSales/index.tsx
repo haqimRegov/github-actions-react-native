@@ -8,7 +8,7 @@ import { BrowserWebView, CustomToast, PromptModal } from "../../components";
 import { StepperBar } from "../../components/Steps/StepperBar";
 import { Language } from "../../constants";
 import { NEW_SALES_KEYS, NEW_SALES_ROUTES } from "../../constants/routes/new-sales";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_LINK_AIMS } from "../../data/dictionary";
+import { DICTIONARY_CURRENCY, DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
 import { alignFlexStart, flexRow, fs14BoldGray6, fsAlignLeft, fullHW } from "../../styles";
 import { NewSalesContent } from "./Content";
@@ -185,7 +185,6 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
             {
               bankAccountName: "",
               bankAccountNumber: "",
-              bankLocation: DICTIONARY_COUNTRIES[0].value,
               bankName: "",
               bankSwiftCode: "",
               currency: [DICTIONARY_CURRENCY[0].value],

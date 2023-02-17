@@ -232,7 +232,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       bank.bankName === "" &&
       bank.bankAccountNumber === "" &&
       bank.bankAccountName === "" &&
-      (transactionType === "Sales" ? bank.currency?.includes("") === true : false) &&
+      (transactionType === "Sales" ? bank.currency?.includes("") === true : true) &&
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,
   );

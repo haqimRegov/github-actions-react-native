@@ -170,7 +170,10 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const buttonDisabled =
     accountType === "Individual"
       ? checkLocalBankEpf || checkForeignBank.includes(false) === true || checkCurrencyRemaining.length > 0
-      : checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true || checkRelationship === false;
+      : checkLocalBank.includes(false) === true ||
+        checkForeignBank.includes(false) === true ||
+        checkRelationship === false ||
+        checkCurrencyRemaining.length > 0;
   const names =
     accountType === "Joint"
       ? `${personalInfo.principal!.personalDetails!.name!} ${ADDITIONAL_DETAILS.LABEL_AND} ${personalInfo.joint!.personalDetails!.name!}`

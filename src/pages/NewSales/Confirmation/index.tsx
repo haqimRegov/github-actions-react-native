@@ -72,7 +72,7 @@ import {
   sw96,
 } from "../../../styles";
 import { ProductsBanner } from "../../../templates";
-import { isNotEmpty, parseAmountToString } from "../../../utils";
+import { isArrayNotEmpty, isNotEmpty, parseAmountToString } from "../../../utils";
 import { Investment } from "./Investment";
 
 const { ACTION_BUTTONS, INVESTMENT, PERSONAL_DETAILS } = Language.PAGE;
@@ -195,8 +195,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     let foreignBank: IBankDetailsState[] = [];
     let localBank: IBankDetailsState[] = [];
     if (allBanks !== undefined) {
-      localBank = allBanks.localBank;
-      foreignBank = allBanks.foreignBank!;
+      localBank = [...allBanks.localBank];
+      foreignBank = isArrayNotEmpty(allBanks.foreignBank) ? [...allBanks.foreignBank!] : [];
       currentCurrencies = [
         ...foreignBank!
           .map((eachBank: IBankDetailsState) => eachBank.currency)
@@ -238,15 +238,14 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               }))
               .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
           : [];
-    } else if (isNewFundPurchase === true && checkSalesWithBank === true) {
+    } else if (transactionType === "Sales" && checkSalesWithBank === true) {
       filterLocalBankDetails = localBank;
-      filterForeignBankDetails = foreignBank !== undefined ? foreignBank : [];
+      filterForeignBankDetails = isArrayNotEmpty(foreignBank) ? [...foreignBank] : [];
     }
 
-    const checkSalesLocalBank = filterLocalBankDetails.length > 0 ? filterLocalBankDetails : [];
     const initialLocalBank =
-      transactionType === "Sales"
-        ? checkSalesLocalBank
+      filterLocalBankDetails.length > 0
+        ? filterLocalBankDetails
         : [
             {
               bankAccountName: "",
@@ -331,7 +330,11 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       ...newSales,
       finishedSteps: updatedFinishedSteps,
       disabledSteps: updatedDisabledSteps,
-      accountDetails: { ...newSales.accountDetails, isBankDetailsRequired: checkSalesWithBank, bankDetails: cloneDeep(allBanks) },
+      accountDetails: {
+        ...newSales.accountDetails,
+        isBankDetailsRequired: checkSalesWithBank,
+        bankDetails: cloneDeep(allBanks),
+      },
     });
     handleNextStep(checkNextStep);
   };

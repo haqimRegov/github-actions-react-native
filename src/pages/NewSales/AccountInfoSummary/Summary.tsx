@@ -298,6 +298,16 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     },
   ];
 
+  const checkLocalBank = bankSummary!.localBank!.map(
+    (bank) =>
+      bank.bankName !== "" &&
+      bank.bankAccountNumber !== "" &&
+      bank.bankAccountName !== "" &&
+      bank.currency?.includes("") === false &&
+      bank.bankAccountNameError === undefined &&
+      bank.bankAccountNumberError === undefined,
+  );
+
   if (client.accountType === "Joint") {
     accountSettings.push(
       {
@@ -477,7 +487,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           </Fragment>
         ) : null}
 
-        {epfDetailsSummary.length > 0 ? (
+        {epfDetailsSummary.length > 0 && transactionType === "Sales-AO" ? (
           <Fragment>
             <CustomSpacer space={sh24} />
             <ColorCard
@@ -514,7 +524,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                   <CustomSpacer space={sh8} />
                 </Fragment>
               ) : null}
-              {bankSummary?.localBank?.length === 0 ? null : (
+              {bankSummary?.localBank?.length === 0 || checkLocalBank.includes(false) === true ? null : (
                 <Fragment>
                   {localBankDetails.map((bank, numberIndex) => {
                     const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;

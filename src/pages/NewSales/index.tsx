@@ -106,7 +106,8 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     updateNewSalesFinishedSteps,
     updateToastVisible,
   } = props;
-  const { disabledSteps, finishedSteps, toast } = newSales;
+  const { accountDetails, disabledSteps, finishedSteps, toast, transactionType } = newSales;
+  const { isBankDetailsRequired } = accountDetails;
   const navigation = useNavigation<IStackNavigationProp>();
 
   const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.AccountInformation);
@@ -126,9 +127,18 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     updatedNewSalesSteps[findProducts].label = NEW_SALES.TITLE_PRODUCTS_AND_SERVICE_NEW;
   }
 
-  if ((client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") && findAdditionalInfo !== -1) {
+  if ((client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") && isBankDetailsRequired === false) {
     const checkIndex = client.isNewFundPurchase === true ? 3 : 2;
     updatedNewSalesSteps.splice(checkIndex, 1);
+  }
+  if (isBankDetailsRequired === true && transactionType === "Sales") {
+    updatedNewSalesSteps[findAdditionalInfo].content?.splice(0, 1);
+    updatedNewSalesSteps[findAdditionalInfo] = {
+      ...updatedNewSalesSteps[findAdditionalInfo],
+      content: updatedNewSalesSteps[findAdditionalInfo].content,
+      route: "AdditionalDetails",
+      key: "AdditionalDetails",
+    };
   }
   if (newSales.accountDetails.ampDetails !== undefined && findProducts !== -1) {
     const productsContent = updatedNewSalesSteps[findProducts].content!;

@@ -2,17 +2,17 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
+import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, CustomToast, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
+import { BankDetails } from "../../../templates";
 import { isNotEmpty, isNumber } from "../../../utils";
 import { AccountDetails } from "./AccountDetails";
-import { BankDetails } from "./BankDetails";
 import { EPFDetails } from "./EPFDetails";
 
-const { PERSONAL_DETAILS } = Language.PAGE;
+const { ADDITIONAL_DETAILS, PERSONAL_DETAILS } = Language.PAGE;
 
 const initialBankDetails: IBankDetailsState = {
   bankAccountName: "",
@@ -36,10 +36,14 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   personalInfo,
   productSales,
   updateNewSales,
+  updateToastVisible,
 }: PersonalDetailsProps) => {
+  const [currentCurrency, setCurrentCurrency] = useState<string>("");
+  const [deleteToast, setDeleteToast] = useState<boolean>(false);
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
   const { epfInvestment, epfShariah, signatory, incomeDistribution, isAllEpf, principal } = personalInfo;
-  const { disabledSteps, finishedSteps } = newSales;
+  const { accountDetails, disabledSteps, finishedSteps, transactionType } = newSales;
+  const { bankDetails: existingBankDetails, isEpf } = accountDetails;
   const { bankSummary, epfDetails, personalDetails } = personalInfo.principal!;
   const { localBank, foreignBank } = bankSummary!;
   const { enableBankDetails, otherRelationship, relationship } = personalDetails!;
@@ -79,7 +83,21 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     }
 
     updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    updateToastVisible(true);
     handleNextStep("Summary");
+  };
+
+  const handleBankSummary = (updatedBankSummary: IBankSummaryState) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        bankSummary: {
+          ...bankSummary,
+          ...updatedBankSummary,
+        },
+      },
+    });
   };
 
   const handleForeignBank = (updatedForeignBank: IBankDetailsState[]) => {
@@ -180,6 +198,23 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     });
   };
 
+  const handleSkip = () => {
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+    updatedFinishedSteps.push("Summary", "AccountInformation", "AdditionalDetails");
+    const newDisabledStep: TypeNewSalesKey[] = [
+      "RiskSummary",
+      "Products",
+      "AccountInformation",
+      "AdditionalDetails",
+      "Summary",
+      "Signatures",
+      "TermsAndConditions",
+      "Payment",
+    ];
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+    handleNextStep("OrderPreview");
+  };
+
   // TODO change account name check to !== for both local and foreign
 
   const checkLocalBank = bankSummary!.localBank!.map(
@@ -201,7 +236,6 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
             bank.bankAccountName !== "" &&
             bank.currency?.includes("") === false &&
             bank.bankLocation !== "" &&
-            bank.bankSwiftCode !== "" &&
             bank.bankAccountNameError === undefined &&
             bank.bankAccountNumberError === undefined,
         )
@@ -232,16 +266,18 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     : [];
   const checkCurrencyRemaining = nonMyrCurrencies.filter((eachCurrency: string) => !selectedNonMyrCurrencies.includes(eachCurrency));
   const checkEpf = epfInvestment === true ? epfNumberValidation !== undefined || inputEpfNumber === "" || inputEpfType === "" : false;
-  const checkJoint = accountType === "Joint" ? relationship === "" || (relationship === "Others" && otherRelationship === "") : false;
-  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
+  const checkJoint =
+    accountType === "Joint" && transactionType === "Sales-AO"
+      ? relationship === "" || (relationship === "Others" && otherRelationship === "")
+      : false;
+  const accountNames = [{ label: details?.principalHolder!.name, value: details?.principalHolder!.name }];
   const principalEpfCheck = personalInfo.isAllEpf === true ? principal?.personalDetails?.enableBankDetails === true : true;
+  const checkTransactionType = transactionType === "Sales-AO" ? checkEpf === true || signatory === "" || incomeDistribution === "" : false;
   const continueDisabled =
     (checkLocalBank.includes(false) === true && principalEpfCheck === true) ||
     (checkForeignBank.includes(false) === true && principalEpfCheck === true) ||
     checkCurrencyRemaining.length !== 0 ||
-    checkEpf === true ||
-    signatory === "" ||
-    incomeDistribution === "" ||
+    checkTransactionType ||
     checkJoint;
   if (accountType === "Joint") {
     accountNames.push(
@@ -249,82 +285,101 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
       { label: PERSONAL_DETAILS.OPTION_COMBINED, value: PERSONAL_DETAILS.OPTION_COMBINED },
     );
   }
+  const checkSales = isEpf === true ? undefined : PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS_SALES;
+  const checkSubHeading = transactionType === "Sales-AO" ? PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS : checkSales;
 
   return (
-    <ContentPage
-      continueDisabled={continueDisabled}
-      handleCancel={handleCancel}
-      handleContinue={handleContinue}
-      subheading={PERSONAL_DETAILS.HEADING_ADD_ADDITIONAL}
-      subtitle={PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS}>
-      <CustomSpacer space={sh24} />
-      <View style={px(sw24)}>
-        {accountType === "Joint" ? (
-          <Fragment>
-            <ColorCard
-              header={{ label: PERSONAL_DETAILS.LABEL_HEADER_JOINT_RELATIONSHIP }}
-              content={
-                <Fragment>
-                  <NewDropdown
-                    handleChange={handleRelationship}
-                    items={DICTIONARY_RELATIONSHIP}
-                    label={PERSONAL_DETAILS.LABEL_RELATIONSHIP}
-                    value={relationship!}
-                  />
-                  {relationship! === "Others" ? (
-                    <CustomTextInput
-                      label={PERSONAL_DETAILS.LABEL_RELATIONSHIP_OTHER}
-                      onChangeText={handleOtherRelationship}
-                      spaceToTop={sh16}
-                      value={otherRelationship}
+    <Fragment>
+      <ContentPage
+        continueDisabled={continueDisabled}
+        handleCancel={handleCancel}
+        handleContinue={handleContinue}
+        handleSkip={handleSkip}
+        skippable={isEpf === true}
+        subheading={PERSONAL_DETAILS.HEADING_ADD_ADDITIONAL}
+        subtitle={checkSubHeading}>
+        <CustomSpacer space={sh24} />
+        <View style={px(sw24)}>
+          {accountType === "Joint" && transactionType === "Sales-AO" ? (
+            <Fragment>
+              <ColorCard
+                header={{ label: PERSONAL_DETAILS.LABEL_HEADER_JOINT_RELATIONSHIP }}
+                content={
+                  <Fragment>
+                    <NewDropdown
+                      handleChange={handleRelationship}
+                      items={DICTIONARY_RELATIONSHIP}
+                      label={PERSONAL_DETAILS.LABEL_RELATIONSHIP}
+                      value={relationship!}
                     />
-                  ) : null}
-                </Fragment>
-              }
+                    {relationship! === "Others" ? (
+                      <CustomTextInput
+                        label={PERSONAL_DETAILS.LABEL_RELATIONSHIP_OTHER}
+                        onChangeText={handleOtherRelationship}
+                        spaceToTop={sh16}
+                        value={otherRelationship}
+                      />
+                    ) : null}
+                  </Fragment>
+                }
+              />
+              <CustomSpacer space={sh24} />
+            </Fragment>
+          ) : null}
+          {epfInvestment === true && transactionType === "Sales-AO" ? (
+            <Fragment>
+              <ColorCard
+                header={{ label: PERSONAL_DETAILS.LABEL_EPF_DETAILS }}
+                content={
+                  <EPFDetails
+                    epfNumberError={epfNumberValidation}
+                    epfShariah={epfShariah!}
+                    inputEpfNumber={inputEpfNumber}
+                    inputEpfType={inputEpfType}
+                    onBlurEpfNumber={handleEpfNumber}
+                    setInputEpfNumber={handleInputEpfNumber}
+                    setInputEpfType={handleInputEpfType}
+                  />
+                }
+              />
+              <CustomSpacer space={sh24} />
+            </Fragment>
+          ) : null}
+          <BankDetails
+            accountType={accountType!}
+            bankSummary={bankSummary!}
+            currentCurrency={currentCurrency}
+            details={details!}
+            enableBank={enableBankDetails!}
+            existingBankSummary={existingBankDetails}
+            foreignBankDetails={foreignBank!}
+            investmentCurrencies={investmentCurrencies}
+            isAllEpf={isAllEpf || (transactionType === "Sales" && isEpf === true) || false}
+            handleBankSummary={handleBankSummary}
+            handleEnableLocalBank={handleEnableLocalBank}
+            localBankDetails={localBank!}
+            // remainingCurrencies={checkCurrencyRemaining}
+            setCurrentCurrency={setCurrentCurrency}
+            setDeleteToast={setDeleteToast}
+            setForeignBankDetails={handleForeignBank}
+            setLocalBankDetails={handleLocalBank}
+          />
+          {transactionType === "Sales-AO" ? (
+            <AccountDetails
+              accountType={accountType!}
+              investmentDetails={investmentDetails!}
+              personalInfo={personalInfo}
+              setPersonalInfo={handlePersonalInfo}
             />
-            <CustomSpacer space={sh24} />
-          </Fragment>
-        ) : null}
-        {epfInvestment === true ? (
-          <Fragment>
-            <ColorCard
-              header={{ label: PERSONAL_DETAILS.LABEL_EPF_DETAILS }}
-              content={
-                <EPFDetails
-                  epfNumberError={epfNumberValidation}
-                  epfShariah={epfShariah!}
-                  inputEpfNumber={inputEpfNumber}
-                  inputEpfType={inputEpfType}
-                  onBlurEpfNumber={handleEpfNumber}
-                  setInputEpfNumber={handleInputEpfNumber}
-                  setInputEpfType={handleInputEpfType}
-                />
-              }
-            />
-            <CustomSpacer space={sh24} />
-          </Fragment>
-        ) : null}
-        <BankDetails
-          bankNames={accountNames}
-          bankSummary={bankSummary!}
-          enableBank={enableBankDetails!}
-          foreignBankDetails={foreignBank!}
-          investmentCurrencies={investmentCurrencies}
-          isAllEpf={isAllEpf || false}
-          handleEnableLocalBank={handleEnableLocalBank}
-          localBankDetails={localBank!}
-          remainingCurrencies={checkCurrencyRemaining}
-          setForeignBankDetails={handleForeignBank}
-          setLocalBankDetails={handleLocalBank}
-        />
-        <AccountDetails
-          accountType={accountType!}
-          investmentDetails={investmentDetails!}
-          personalInfo={personalInfo}
-          setPersonalInfo={handlePersonalInfo}
-        />
-      </View>
-    </ContentPage>
+          ) : null}
+        </View>
+      </ContentPage>
+      <CustomToast
+        parentVisible={deleteToast}
+        deleteText={`${currentCurrency} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`}
+        setParentVisible={setDeleteToast}
+      />
+    </Fragment>
   );
 };
 

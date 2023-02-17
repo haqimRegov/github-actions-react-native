@@ -3,106 +3,96 @@ import { View } from "react-native";
 
 import {
   ColorCard,
+  CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
   IconButton,
   LabeledTitle,
   NewDropdown,
   OutlineButton,
-  PromptModal,
   TextSpaceArea,
-} from "../../../../components";
-import { Language } from "../../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY, ERROR } from "../../../../data/dictionary";
+} from "../../components";
+import { Language } from "../../constants";
+import { DICTIONARY_CURRENCY, DICTIONARY_MALAYSIA_BANK, ERROR } from "../../data/dictionary";
 import {
-  alignFlexStart,
   borderBottomGray2,
+  centerVertical,
   colorBlack,
+  flexRow,
   fs12RegGray5,
   fs16BoldBlack2,
-  fsAlignLeft,
   py,
-  rowCenterVertical,
   sh16,
-  sh20,
   sh24,
   sh4,
   sh8,
   sw16,
   sw360,
-} from "../../../../styles";
-import { isNonNumber, isNumber } from "../../../../utils";
+} from "../../styles";
+import { isNonNumber, isNumber } from "../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
-interface IForeignBankDetailsProps {
+interface ILocalBankDetailsProps {
+  addCurrencyDisabled: boolean;
   addDisabled: boolean;
   bankingDetails: IBankDetailsState[];
+  bankSummary: IBankSummaryState;
   bankNames: TypeLabelValue[];
   currentCurrency: string;
+  // deleteCount: number;
+  enableBank: boolean;
+  existingDetails?: IBankDetailsState[];
+  handleEnableLocalBank: (enable: boolean) => void;
   initialForeignBankState: IBankDetailsState;
   investmentCurrencies: string[];
+  isAllEpf: boolean;
   remainingCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
   setCurrentCurrency: (current: string) => void;
+  setDeleteToast: (toggle: boolean) => void;
+  // setDeleteCount: (count: number) => void;
+  setForeignBankDetails: (input: IBankDetailsState[]) => void;
+  // setTempData: (updatedBankSummary: IBankSummaryState) => void;
 }
 
-interface IPromptText {
-  title: string;
-  subtitle: string;
-}
-
-export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = ({
+export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
+  addCurrencyDisabled,
   addDisabled,
   bankingDetails,
+  bankSummary,
   bankNames,
   currentCurrency,
+  // deleteCount,
+  enableBank,
+  existingDetails,
+  handleEnableLocalBank,
   initialForeignBankState,
   investmentCurrencies,
+  isAllEpf,
   remainingCurrencies,
   setBankingDetails,
   setCurrentCurrency,
-}: IForeignBankDetailsProps) => {
-  const [promptModal, setPromptModal] = useState<boolean>(false);
-  const [promptText, setPromptText] = useState<IPromptText>({ title: "", subtitle: "" });
+  setDeleteToast,
+  // setDeleteCount,
+  setForeignBankDetails,
+}: // setTempData,
+ILocalBankDetailsProps) => {
+  const { foreignBank } = bankSummary;
+
   const handleAddForeignBank = () => {
-    const bankingDetailsClone = [...bankingDetails];
+    const bankingDetailsClone = [...foreignBank!];
     const addCurrency = remainingCurrencies.length === 1 ? { currency: [remainingCurrencies[0]] } : {};
     bankingDetailsClone.push({ ...initialForeignBankState, ...addCurrency });
-    setBankingDetails(bankingDetailsClone);
-  };
-
-  const handleDelete = () => {
-    const updatedBankingDetails = [...bankingDetails];
-    const findIndex = updatedBankingDetails.findIndex((eachDetail: IBankDetailsState) => eachDetail.currency?.includes(currentCurrency));
-    if (findIndex !== -1) {
-      let updatedData: IBankDetailsState = { ...updatedBankingDetails[findIndex] };
-      const { currency: updatedCurrency } = updatedData;
-      const currencyIndex = updatedCurrency?.indexOf(currentCurrency);
-      updatedCurrency!.splice(currencyIndex!, 1);
-      if (updatedCurrency!.length === 0) {
-        updatedBankingDetails.splice(findIndex, 1);
-      } else {
-        updatedData = { ...updatedData, currency: updatedCurrency };
-        updatedBankingDetails[findIndex] = updatedData;
-      }
-    }
-    setBankingDetails(updatedBankingDetails);
-  };
-
-  const handleCancel = () => {
-    setPromptModal(false);
-  };
-
-  const handleRemove = () => {
-    setPromptModal(false);
-    handleDelete();
+    // setTempData({ ...bankSummary, foreignBank: bankingDetailsClone });
+    setForeignBankDetails(bankingDetailsClone);
   };
 
   return (
     <Fragment>
       <View>
         {bankingDetails.map((item: IBankDetailsState, index: number) => {
+          const { id } = item;
           const handleAddCurrency = () => {
             const updatedDetails = [...bankingDetails];
             if (remainingCurrencies.length === 1) {
@@ -125,10 +115,17 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
             setBankingDetails(updatedDetails);
           };
 
-          const handleBankLocation = (input: string) => {
+          const handleOtherBankName = (input: string) => {
             const updatedDetails = [...bankingDetails];
-            updatedDetails[index].bankLocation = input;
+            updatedDetails[index].otherBankName = input;
             setBankingDetails(updatedDetails);
+          };
+
+          const handleOtherBank = (input: string) => {
+            if (input !== "Others") {
+              handleOtherBankName("");
+            }
+            handleBankName(input);
           };
 
           const handleAccountName = (input: string) => {
@@ -145,7 +142,6 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
             updatedDetails[index].combinedBankAccountName = input;
             setBankingDetails(updatedDetails);
           };
-
           const handleAccountNumber = (input: string) => {
             const updatedDetails = [...bankingDetails];
             if (isNumber(input) === true || input === "") {
@@ -168,84 +164,89 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
             setBankingDetails(updatedDetails);
           };
 
-          const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => {
-            return filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value);
-          });
-          const header =
-            bankingDetails.length > 1 ? `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}` : PERSONAL_DETAILS.LABEL_BANK_FOREIGN;
+          const currencyExtractor = DICTIONARY_CURRENCY.filter(
+            (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
+          );
+          const checkCurrencyLabel = item.currency!.length > 1 ? `${PERSONAL_DETAILS.LABEL_CURRENCY} 1` : PERSONAL_DETAILS.LABEL_CURRENCY;
+          const checkHeader = isAllEpf === true ? `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} (optional)` : PERSONAL_DETAILS.LABEL_BANK_LOCAL;
+          const checkSwiftCodeDisabled =
+            existingDetails !== undefined && existingDetails.length > 0 ? existingDetails[index].bankSwiftCode !== "" : false;
+          const checkSubtitle = isAllEpf === true ? PERSONAL_DETAILS.LABEL_BANK_SUBTITLE_EPF : PERSONAL_DETAILS.LABEL_BANK_SUBTITLE;
 
           return (
             <Fragment key={index}>
-              {index !== 0 ? <CustomSpacer space={sh24} /> : null}
               <ColorCard
                 header="custom"
                 customHeader={
-                  <LabeledTitle
-                    label={header}
-                    labelStyle={fs16BoldBlack2}
-                    title={PERSONAL_DETAILS.LABEL_BANK_SUBTITLE}
-                    titleStyle={fs12RegGray5}
-                  />
+                  <LabeledTitle label={checkHeader} labelStyle={fs16BoldBlack2} title={checkSubtitle} titleStyle={fs12RegGray5} />
                 }
                 content={
-                  <Fragment>
-                    {item.currency!.map((value: string, currencyIndex: number) => {
-                      const handleOtherCurrency = (input: string) => {
-                        const updatedCurrency = [...bankingDetails[index].currency!];
-                        updatedCurrency[currencyIndex] = input as TypeBankCurrency;
-                        const updatedBankingDetails = [...bankingDetails];
-                        updatedBankingDetails[index].currency = updatedCurrency;
-                        setBankingDetails(updatedBankingDetails);
-                      };
+                  <View>
+                    <CustomTextInput disabled={true} label={checkCurrencyLabel} value={item.currency![0]} />
+                    {item
+                      .currency!.filter((thisCurrency) => thisCurrency !== item.currency![0])
+                      .map((value: string, currencyIndex: number) => {
+                        const handleRemoveCurrency = () => {
+                          setCurrentCurrency(value);
+                          const updatedCurrency = [...item.currency!];
+                          updatedCurrency!.splice(currencyIndex! + 1, 1);
+                          const updatedData = { ...item, currency: updatedCurrency };
+                          setBankingDetails([updatedData]);
+                          setDeleteToast(true);
+                          // setTempData({ ...bankSummary, localBank: [updatedData] });
+                          // setDeleteCount(deleteCount + 1);
+                        };
 
-                      const handleRemoveCurrency = () => {
-                        let modalText: IPromptText;
-                        if (item.currency!.length === 1) {
-                          modalText = {
-                            title: `${PERSONAL_DETAILS.LABEL_REMOVE} ${value} ${PERSONAL_DETAILS.LABEL_AND_FOREIGN_BANK_ACCOUNT}`,
-                            subtitle: PERSONAL_DETAILS.LABEL_REMOVE_CURRENCY_ACCOUNT,
-                          };
-                        } else {
-                          modalText = {
-                            title: `${PERSONAL_DETAILS.LABEL_REMOVE} ${value} ${PERSONAL_DETAILS.LABEL_CURRENCY_SALES}?`,
-                            subtitle: PERSONAL_DETAILS.LABEL_REMOVE_CURRENCY_SUBTITLE,
-                          };
-                        }
-                        setCurrentCurrency(value);
-                        setPromptText(modalText);
-                        setPromptModal(true);
-                      };
+                        const handleOtherCurrency = (input: string) => {
+                          const updatedDetails = [...bankingDetails];
+                          const updatedCurrency = [...bankingDetails[index].currency!];
+                          updatedCurrency[currencyIndex + 1] = input as TypeBankCurrency;
+                          updatedDetails[index].currency = updatedCurrency;
+                          setBankingDetails(updatedDetails);
+                        };
+                        const label =
+                          item.currency!.length === 1
+                            ? PERSONAL_DETAILS.LABEL_CURRENCY
+                            : `${PERSONAL_DETAILS.LABEL_CURRENCY} ${currencyIndex + 2}`;
+                        const checkCurrencyDisabled =
+                          existingDetails !== undefined && existingDetails.length > 0
+                            ? existingDetails[index].currency?.includes(value)
+                            : false;
 
-                      const label =
-                        item.currency!.length === 1
-                          ? PERSONAL_DETAILS.LABEL_CURRENCY
-                          : `${PERSONAL_DETAILS.LABEL_CURRENCY} ${currencyIndex + 1}`;
-
-                      return (
-                        <Fragment key={currencyIndex}>
-                          {currencyIndex === 0 ? null : <CustomSpacer space={sh16} />}
-                          <View style={rowCenterVertical}>
+                        return (
+                          <View key={currencyIndex} style={{ ...centerVertical, ...flexRow }}>
                             <NewDropdown
-                              disabled={value !== ""}
+                              disabled={remainingCurrencies.length === 0 || checkCurrencyDisabled}
                               handleChange={handleOtherCurrency}
                               items={currencyExtractor}
                               label={label}
+                              spaceToTop={sh16}
                               value={value}
                             />
-                            <CustomSpacer isHorizontal={true} space={sw16} />
-                            <View style={{ marginTop: sh20 }}>
-                              <IconButton name="trash" color={colorBlack._1} onPress={handleRemoveCurrency} size={sh24} style={py(sh8)} />
-                            </View>
+                            {value !== "" && checkCurrencyDisabled === false ? (
+                              <Fragment>
+                                <CustomSpacer isHorizontal={true} space={sw16} />
+                                <View>
+                                  <CustomFlexSpacer />
+                                  <IconButton
+                                    name="trash"
+                                    color={colorBlack._1}
+                                    onPress={handleRemoveCurrency}
+                                    size={sh24}
+                                    style={py(sh8)}
+                                  />
+                                </View>
+                              </Fragment>
+                            ) : null}
                           </View>
-                        </Fragment>
-                      );
-                    })}
+                        );
+                      })}
                     {remainingCurrencies.length === 0 ? null : (
                       <Fragment>
                         <CustomSpacer space={sh16} />
                         <OutlineButton
                           buttonType="dashed"
-                          disabled={addDisabled}
+                          disabled={addCurrencyDisabled || item.currency?.some((eachValue) => eachValue === "")}
                           icon="plus"
                           onPress={handleAddCurrency}
                           text={PERSONAL_DETAILS.BUTTON_ADD_CURRENCY}
@@ -254,13 +255,24 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                         <View style={borderBottomGray2} />
                       </Fragment>
                     )}
-                    <CustomTextInput
-                      label={PERSONAL_DETAILS.LABEL_BANK_NAME}
-                      onChangeText={handleBankName}
-                      spaceToTop={sh16}
-                      value={item.bankName}
-                    />
                     <NewDropdown
+                      disabled={id !== undefined}
+                      handleChange={handleOtherBank}
+                      items={DICTIONARY_MALAYSIA_BANK}
+                      label={PERSONAL_DETAILS.LABEL_BANK_NAME}
+                      spaceToTop={sh16}
+                      value={item.bankName!}
+                    />
+                    {item.bankName === "Others" ? (
+                      <CustomTextInput
+                        label={PERSONAL_DETAILS.LABEL_BANK_OTHER_NAME}
+                        onChangeText={handleOtherBankName}
+                        spaceToTop={sh16}
+                        value={item.otherBankName}
+                      />
+                    ) : null}
+                    <NewDropdown
+                      disabled={id !== undefined}
                       handleChange={handleAccountName}
                       items={bankNames}
                       label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
@@ -271,7 +283,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       <CustomTextInput
                         autoCapitalize="words"
                         error={item.bankAccountNameError}
-                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME_COMBINED}
                         onBlur={checkAccountBankName}
                         onChangeText={handleCombinedName}
                         spaceToTop={sh16}
@@ -279,6 +291,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       />
                     ) : null}
                     <CustomTextInput
+                      disabled={id !== undefined}
                       error={item.bankAccountNumberError}
                       keyboardType="numeric"
                       label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NUMBER}
@@ -288,21 +301,15 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                       value={item.bankAccountNumber}
                     />
                     <CustomTextInput
+                      disabled={checkSwiftCodeDisabled}
                       label={PERSONAL_DETAILS.LABEL_BANK_SWIFT_CODE_OPTIONAL}
                       onChangeText={handleSwiftCode}
                       spaceToTop={sh16}
                       value={item.bankSwiftCode}
                     />
                     <TextSpaceArea spaceToTop={sh4} style={{ ...fs12RegGray5, maxWidth: sw360 }} text={PERSONAL_DETAILS.HINT_SWIFT_CODE} />
-                    <NewDropdown
-                      items={DICTIONARY_COUNTRIES}
-                      handleChange={handleBankLocation}
-                      label={PERSONAL_DETAILS.LABEL_BANK_LOCATION}
-                      spaceToTop={sh16}
-                      value={item.bankLocation || ""}
-                    />
-                    {remainingCurrencies.length === 0 ? null : (
-                      <View>
+                    {remainingCurrencies.length === 0 || foreignBank!.length > 0 ? null : (
+                      <Fragment>
                         <CustomSpacer space={sh16} />
                         <View style={borderBottomGray2} />
                         <CustomSpacer space={sh16} />
@@ -313,28 +320,15 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
                           onPress={handleAddForeignBank}
                           text={PERSONAL_DETAILS.BUTTON_ADD_FOREIGN}
                         />
-                      </View>
+                      </Fragment>
                     )}
-                  </Fragment>
+                  </View>
                 }
               />
             </Fragment>
           );
         })}
       </View>
-      <PromptModal
-        backdropOpacity={0.4}
-        contentStyle={alignFlexStart}
-        handleCancel={handleCancel}
-        handleContinue={handleRemove}
-        label={promptText.title}
-        labelCancel={PERSONAL_DETAILS.BUTTON_CANCEL}
-        labelContinue={PERSONAL_DETAILS.LABEL_REMOVE}
-        labelStyle={fsAlignLeft}
-        title={promptText.subtitle}
-        titleStyle={fsAlignLeft}
-        visible={promptModal}
-      />
     </Fragment>
   );
 };

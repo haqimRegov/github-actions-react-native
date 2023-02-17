@@ -1,5 +1,7 @@
 declare interface LabeledTitleProps {
   iconSize?: number;
+  headerSideContent?: import("react").ReactNode;
+  headerSideText?: string;
   label: string;
   labelStyle?: import("react-native").TextStyle;
   onPress?: () => void;

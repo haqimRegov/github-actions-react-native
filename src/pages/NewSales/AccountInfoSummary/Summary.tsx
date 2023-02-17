@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Dimensions, Text, View, ViewStyle } from "react-native";
+import { Dimensions, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import {
@@ -13,6 +13,7 @@ import {
   TextCard,
 } from "../../../components";
 import { Language } from "../../../constants";
+import { getProductTagType } from "../../../helpers";
 import { IcoMoon } from "../../../icons";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
@@ -28,7 +29,10 @@ import {
   flexChild,
   flexRow,
   fs10BoldBlue1,
+  fs10RegBlue9,
+  fs10RegGray5,
   fs10RegGray6,
+  fs12BoldBlack2,
   fs12BoldGray5,
   fs16BoldBlack2,
   fs16BoldBlue1,
@@ -36,13 +40,17 @@ import {
   fsUppercase,
   noBorder,
   px,
+  py,
   rowCenterVertical,
   sh12,
   sh16,
+  sh2,
   sh24,
   sh72,
   sh8,
+  sw05,
   sw1,
+  sw14,
   sw16,
   sw20,
   sw216,
@@ -51,18 +59,19 @@ import {
   sw24,
   sw30,
   sw32,
+  sw4,
   sw40,
   sw8,
 } from "../../../styles";
 import { isNotEmpty } from "../../../utils";
 
-const { NEW_SALES_SUMMARY } = Language.PAGE;
+const { NEW_SALES_SUMMARY, RISK_ASSESSMENT } = Language.PAGE;
 
 interface NewSalesSummaryProps extends PersonalInfoStoreProps {
   handleNextStep: (route: TypeNewSalesRoute) => void;
   setCurrentProfile: (holder: TypeAccountHolder) => void;
   setFile: (file: FileBase64 | undefined) => void;
-  setPage: (index: number) => void;
+  setPage: (index: TRiskProfilePages) => void;
 }
 
 const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> = ({
@@ -70,6 +79,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   client,
   details,
   handleNextStep,
+  newSales,
   personalInfo,
   riskScore,
   setCurrentProfile,
@@ -78,6 +88,8 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 }: NewSalesSummaryProps) => {
   const { width } = Dimensions.get("window");
   const { principalHolder, jointHolder } = details!;
+  const { accountDetails: currentAccountDetails, transactionType } = newSales;
+  const { accountNo, bankDetails, fundType, isEpf } = currentAccountDetails;
   const { incomeDistribution, isAllEpf, principal, signatory } = personalInfo;
   const { bankSummary, epfDetails, personalDetails } = principal!;
   const { enableBankDetails } = personalDetails!;
@@ -146,12 +158,16 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   const handlePrincipalProfile = () => {
     setCurrentProfile("Principal");
-    setPage(1);
+    setPage("profile");
   };
 
   const handleJointProfile = () => {
     setCurrentProfile("Joint");
-    setPage(1);
+    setPage("profile");
+  };
+
+  const handleAccountDetails = () => {
+    setPage("accountDetails");
   };
 
   const idVerificationPrincipal: LabeledTitleProps[] = [
@@ -198,16 +214,33 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   const localBankDetails: LabeledTitleProps[][] = [];
   if (bankSummary !== null && bankSummary !== undefined && bankSummary.localBank !== null) {
-    bankSummary.localBank!.forEach((bank) => {
+    bankSummary.localBank!.forEach((bank: IBankDetailsState, bankIndex: number) => {
+      const checkNewCurrency =
+        bankDetails !== undefined && bankDetails.localBank!.length - 1 >= bankIndex
+          ? bankDetails.localBank![bankIndex].currency?.length !== bank.currency?.length
+          : false;
+      const checkNewSwift =
+        bankDetails !== undefined && bankDetails.localBank!.length - 1 >= bankIndex
+          ? bankDetails.localBank![bankIndex].bankSwiftCode !== bank.bankSwiftCode
+          : false;
+      const checkCurrencyUpdated: Partial<LabeledTitleProps> =
+        checkNewCurrency === true ? { headerSideText: NEW_SALES_SUMMARY.LABEL_UPDATED } : {};
+      const checkSwiftUpdated: Partial<LabeledTitleProps> =
+        checkNewSwift === true ? { headerSideText: NEW_SALES_SUMMARY.LABEL_UPDATED } : {};
       const newData: LabeledTitleProps[] = [
-        { label: NEW_SALES_SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase },
+        { label: NEW_SALES_SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase, ...checkCurrencyUpdated },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
       ];
 
       if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({ label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
+        newData.push({
+          label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT,
+          title: bank.bankSwiftCode,
+          titleStyle: fsTransformNone,
+          ...checkSwiftUpdated,
+        });
       }
       return localBankDetails.push(newData);
     });
@@ -215,9 +248,21 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
 
   const foreignBankDetails: LabeledTitleProps[][] = [];
   if (bankSummary !== null && bankSummary !== undefined && bankSummary.foreignBank !== null) {
-    bankSummary.foreignBank!.forEach((bank) => {
+    bankSummary.foreignBank!.forEach((bank: IBankDetailsState, bankIndex: number) => {
+      const checkNewCurrency =
+        bankDetails !== undefined && bankDetails.foreignBank!.length - 1 >= bankIndex
+          ? bankDetails.foreignBank![bankIndex].currency?.length !== bank.currency?.length
+          : false;
+      const checkNewSwift =
+        bankDetails !== undefined && bankDetails.foreignBank!.length - 1 >= bankIndex
+          ? bankDetails.foreignBank![bankIndex].bankSwiftCode !== bank.bankSwiftCode
+          : false;
+      const checkCurrencyUpdated: Partial<LabeledTitleProps> =
+        checkNewCurrency === true ? { headerSideText: NEW_SALES_SUMMARY.LABEL_UPDATED } : {};
+      const checkSwiftUpdated: Partial<LabeledTitleProps> =
+        checkNewSwift === true ? { headerSideText: NEW_SALES_SUMMARY.LABEL_UPDATED } : {};
       const newData: LabeledTitleProps[] = [
-        { label: NEW_SALES_SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase },
+        { label: NEW_SALES_SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase, ...checkCurrencyUpdated },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName, titleStyle: fsTransformNone },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
@@ -227,7 +272,12 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
         newData.push({ label: NEW_SALES_SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation });
       }
       if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({ label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
+        newData.push({
+          label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT,
+          title: bank.bankSwiftCode,
+          titleStyle: fsTransformNone,
+          ...checkSwiftUpdated,
+        });
       }
       return foreignBankDetails.push(newData);
     });
@@ -262,6 +312,10 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   }
 
   const checkLabel = client.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
+  const checkEpf = isEpf === true ? "EPF" : "Cash";
+  const tags = accountNo !== "" ? [getProductTagType(fundType), checkEpf] : [];
+  const checkAccountNo = accountNo !== "" ? accountNo : null;
+  const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
 
   const containerStyle: ViewStyle = {
     ...flexRow,
@@ -281,6 +335,9 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     spaceBetweenItem: width < 1080 || width > 1080 ? sw30 : sw32,
     titleStyle: fs16BoldBlack2,
   };
+
+  const checkAccountDetailsHeader =
+    transactionType === "Sales-AO" ? NEW_SALES_SUMMARY.LABEL_ACCOUNT_DETAILS : NEW_SALES_SUMMARY.LABEL_BANK_DETAILS;
 
   return (
     <ContentPage
@@ -320,74 +377,105 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           content={<TextCard data={accountDetails} {...textCardProps} />}
           contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
           customHeader={
-            <View style={rowCenterVertical}>
-              <CustomSpacer isHorizontal={true} space={sw24} />
-              <View style={flexRow}>
-                <Text style={fs10RegGray6}>{`${accountType} ${NEW_SALES_SUMMARY.LABEL_ACCOUNT}`}</Text>
-                <CustomSpacer isHorizontal={true} space={sw16} />
-                {/* TOMS ID  */}
-                {/* <Text style={fs12BoldBlack2}>-</Text> */}
-              </View>
+            <View style={{ ...rowCenterVertical, ...px(sw24) }}>
+              <Text style={fs10RegGray6}>{accountTitle}</Text>
+              <CustomSpacer isHorizontal={true} space={sw16} />
+              <Text style={fs12BoldBlack2}>{checkAccountNo}</Text>
+              {accountNo !== "" ? (
+                <TouchableWithoutFeedback onPress={handleAccountDetails}>
+                  <View style={rowCenterVertical}>
+                    <CustomSpacer isHorizontal={true} space={sw16} />
+                    <Text style={fs12BoldBlack2}>{RISK_ASSESSMENT.LABEL_VIEW_ACCOUNT_DETAILS}</Text>
+                    <CustomSpacer isHorizontal={true} space={sw4} />
+                    <IcoMoon color={colorBlue._1} name="arrow-right" size={sw14} />
+                  </View>
+                </TouchableWithoutFeedback>
+              ) : null}
+              <CustomFlexSpacer />
+              {tags.length > 0
+                ? tags.map((eachTag: string, tagIndex: number) => {
+                    const tagStyle: ViewStyle = {
+                      ...px(sw4),
+                      ...py(sh2),
+                      backgroundColor: colorGray._1,
+                      borderColor: colorGray._5,
+                      borderWidth: sw05,
+                      borderRadius: sw4,
+                    };
+                    return (
+                      <Fragment key={tagIndex}>
+                        {tagIndex !== 0 ? <CustomSpacer isHorizontal={true} space={sw8} /> : null}
+                        <View key={tagIndex} style={tagStyle}>
+                          <Text style={fs10RegGray5}>{eachTag}</Text>
+                        </View>
+                      </Fragment>
+                    );
+                  })
+                : null}
             </View>
           }
           header="custom"
           headerStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(0), borderBottomColor: colorRed._1 }}
         />
-        <CustomSpacer space={sh24} />
-        <ColorCard
-          containerStyle={noBorder}
-          content={
-            <Fragment>
-              {client.accountType === "Joint" ? (
+        {transactionType === "Sales-AO" ? (
+          <Fragment>
+            <CustomSpacer space={sh24} />
+            <ColorCard
+              containerStyle={noBorder}
+              content={
                 <Fragment>
-                  <View style={rowCenterVertical}>
-                    <IcoMoon name="account" size={sw20} color={colorBlue._1} />
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_PRINCIPAL_HOLDER}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <View style={flexChild}>
-                      <View style={borderBottomBlue4} />
-                    </View>
-                  </View>
-                  <CustomSpacer space={sh12} />
-                  <TextCard data={idVerificationPrincipal} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
-                  <CustomSpacer space={sh24} />
-                  <View style={rowCenterVertical}>
-                    <IcoMoon name="account-joint" size={sw20} color={colorBlue._1} />
-                    <CustomSpacer isHorizontal={true} space={sw8} />
-                    <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_JOINT_HOLDER}</Text>
-                    <CustomSpacer isHorizontal={true} space={sw16} />
-                    <View style={flexChild}>
-                      <View style={borderBottomBlue4} />
-                    </View>
-                  </View>
-                  <CustomSpacer space={sh12} />
+                  {client.accountType === "Joint" ? (
+                    <Fragment>
+                      <View style={rowCenterVertical}>
+                        <IcoMoon name="account" size={sw20} color={colorBlue._1} />
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                        <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_PRINCIPAL_HOLDER}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                        <View style={flexChild}>
+                          <View style={borderBottomBlue4} />
+                        </View>
+                      </View>
+                      <CustomSpacer space={sh12} />
+                      <TextCard data={idVerificationPrincipal} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
+                      <CustomSpacer space={sh24} />
+                      <View style={rowCenterVertical}>
+                        <IcoMoon name="account-joint" size={sw20} color={colorBlue._1} />
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                        <Text style={fs16BoldBlack2}>{NEW_SALES_SUMMARY.LABEL_JOINT_HOLDER}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                        <View style={flexChild}>
+                          <View style={borderBottomBlue4} />
+                        </View>
+                      </View>
+                      <CustomSpacer space={sh12} />
 
-                  <TextCard data={idVerificationJoint} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
+                      <TextCard data={idVerificationJoint} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
+                    </Fragment>
+                  ) : (
+                    <TextCard data={idVerificationPrincipal} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
+                  )}
                 </Fragment>
-              ) : (
-                <TextCard data={idVerificationPrincipal} spaceBetweenItem={sw32} titleStyle={{ maxWidth: sw216 }} />
-              )}
-            </Fragment>
-          }
-          contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 }}
-          customHeader={
-            <View style={{ ...rowCenterVertical, ...px(sw24) }}>
-              <Text style={fs16BoldBlue1}>{NEW_SALES_SUMMARY.LABEL_IDENTIFICATION}</Text>
-              <CustomFlexSpacer />
-              <IconButton
-                color={colorBlue._1}
-                name="pencil"
-                onPress={handleEditIdentification}
-                size={sw20}
-                style={{ ...circle(sw40, colorWhite._1) }}
-                withHover={{ color: colorBlue._2 }}
-              />
-            </View>
-          }
-          headerStyle={{ ...border(colorGray._2, sw1), backgroundColor: colorWhite._1, ...px(0) }}
-          header="custom"
-        />
+              }
+              contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8 }}
+              customHeader={
+                <View style={{ ...rowCenterVertical, ...px(sw24) }}>
+                  <Text style={fs16BoldBlue1}>{NEW_SALES_SUMMARY.LABEL_IDENTIFICATION}</Text>
+                  <CustomFlexSpacer />
+                  <IconButton
+                    color={colorBlue._1}
+                    name="pencil"
+                    onPress={handleEditIdentification}
+                    size={sw20}
+                    style={{ ...circle(sw40, colorWhite._1) }}
+                    withHover={{ color: colorBlue._2 }}
+                  />
+                </View>
+              }
+              headerStyle={{ ...border(colorGray._2, sw1), backgroundColor: colorWhite._1, ...px(0) }}
+              header="custom"
+            />
+          </Fragment>
+        ) : null}
 
         {epfDetailsSummary.length > 0 ? (
           <Fragment>
@@ -420,8 +508,12 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           containerStyle={noBorder}
           content={
             <Fragment>
-              <TextCard data={accountSettings} {...textCardProps} />
-              <CustomSpacer space={sh8} />
+              {transactionType === "Sales-AO" ? (
+                <Fragment>
+                  <TextCard data={accountSettings} {...textCardProps} />
+                  <CustomSpacer space={sh8} />
+                </Fragment>
+              ) : null}
               {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : (
                 <Fragment>
                   {localBankDetails.map((bank, numberIndex) => {
@@ -450,6 +542,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
               )}
               {foreignBankDetails.map((bank, numberIndex) => {
                 const label = `${NEW_SALES_SUMMARY.LABEL_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;
+                const checkNewForeignBank = bankDetails !== undefined && bankDetails!.foreignBank!.length - 1 < numberIndex;
                 return (
                   <Fragment key={numberIndex}>
                     {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}
@@ -459,6 +552,14 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                       <View style={flexChild}>
                         <View style={rowCenterVertical}>
                           <Text style={fs16BoldBlue1}>{label}</Text>
+                          {checkNewForeignBank === true ? (
+                            <Fragment>
+                              <CustomSpacer isHorizontal={true} space={sw8} />
+                              <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
+                                <Text style={fs10RegBlue9}>{NEW_SALES_SUMMARY.LABEL_UPDATED}</Text>
+                              </View>
+                            </Fragment>
+                          ) : null}
                           <CustomSpacer isHorizontal={true} space={sw16} />
                           <View style={flexChild}>
                             <View style={borderBottomBlue4} />
@@ -477,7 +578,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
           contentStyle={{ ...border(colorGray._2, sw1), ...px(sw24), paddingBottom: sh8, paddingTop: sh24 }}
           customHeader={
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
-              <Text style={fs16BoldBlue1}>{NEW_SALES_SUMMARY.LABEL_ACCOUNT_DETAILS}</Text>
+              <Text style={fs16BoldBlue1}>{checkAccountDetailsHeader}</Text>
               <CustomFlexSpacer />
               <IconButton
                 color={colorBlue._1}

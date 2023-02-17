@@ -1,4 +1,5 @@
 export * from "./AccountInformation";
+export * from "./BankDetails";
 export * from "./Cards";
 export * from "./Cards";
 export * from "./CustomItems";

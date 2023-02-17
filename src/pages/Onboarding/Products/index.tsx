@@ -212,6 +212,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         : { ...joint };
     addPersonalInfo({
       ...personalInfo,
+      ...epfObject,
       principal: {
         ...personalInfo.principal,
         employmentDetails: { ...personalInfo.principal?.employmentDetails },

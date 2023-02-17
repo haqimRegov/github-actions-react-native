@@ -1,14 +1,14 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
+import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomToast } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
+import { BankDetails } from "../../../templates";
 import { isNotEmpty } from "../../../utils";
-import { BankDetails } from "../../NewSales/AdditionalDetails/BankDetails";
 import { AccountDetails } from "./AccountDetails";
 import { JointRelationship } from "./JointRelationship";
 
@@ -36,7 +36,9 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   productSales,
   updateOnboarding,
 }: AdditionalDetailsProps) => {
-  // const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
+  const [deleteToast, setDeleteToast] = useState<boolean>(false);
+  const [currentCurrency, setCurrentCurrency] = useState<string>("");
+  // const [deleteCount, setEpfNumberValidation] = useState<string | undefined>(undefined);
   const { principal, isAllEpf } = personalInfo;
   const { bankSummary } = principal!;
   const { localBank, foreignBank } = bankSummary!;
@@ -60,7 +62,19 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,
   );
+  const checkLocalBankEmpty = principal!.bankSummary!.localBank!.map(
+    (bank) =>
+      bank.bankName === "" &&
+      bank.bankAccountNumber === "" &&
+      bank.bankAccountName === "" &&
+      bank.bankAccountNameError === undefined &&
+      bank.bankAccountNumberError === undefined,
+  );
 
+  const checkLocalBankEpf =
+    isAllEpf === true
+      ? checkLocalBank.includes(false) === true && checkLocalBankEmpty.includes(false) === true
+      : checkLocalBank.includes(false) === true;
   const checkForeignBank =
     principal!.bankSummary!.foreignBank!.length > 0
       ? principal!.bankSummary!.foreignBank!.map(
@@ -74,11 +88,6 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
             bank.bankAccountNumberError === undefined,
         )
       : [true];
-
-  const buttonDisabled =
-    accountType === "Individual"
-      ? checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true
-      : checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true || checkRelationship === false;
 
   const handleSubmit = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
@@ -118,6 +127,19 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
+  const handleBankSummary = (updatedBankSummary: IBankSummaryState) => {
+    addPersonalInfo({
+      ...personalInfo,
+      principal: {
+        ...personalInfo.principal,
+        bankSummary: {
+          ...bankSummary,
+          ...updatedBankSummary,
+        },
+      },
+    });
+  };
+
   const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
 
   if (accountType === "Joint") {
@@ -147,6 +169,10 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       ]
     : [];
   const checkCurrencyRemaining = nonMyrCurrencies.filter((eachCurrency: string) => !selectedNonMyrCurrencies.includes(eachCurrency));
+  const buttonDisabled =
+    accountType === "Individual"
+      ? checkLocalBankEpf || checkForeignBank.includes(false) === true || checkCurrencyRemaining.length > 0
+      : checkLocalBank.includes(false) === true || checkForeignBank.includes(false) === true || checkRelationship === false;
   const names =
     accountType === "Joint"
       ? `${personalInfo.principal!.personalDetails!.name!} ${ADDITIONAL_DETAILS.LABEL_AND} ${personalInfo.joint!.personalDetails!.name!}`
@@ -154,51 +180,62 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const subtitleLabel = `${ADDITIONAL_DETAILS.LABEL_PRINCIPAL} ${ADDITIONAL_DETAILS.LABEL_AND} ${ADDITIONAL_DETAILS.LABEL_JOINT}`;
 
   return (
-    <ContentPage
-      continueDisabled={buttonDisabled}
-      handleCancel={handleBack}
-      handleContinue={handleSubmit}
-      subheading={ADDITIONAL_DETAILS.HEADING_ADDITIONAL_DETAILS}
-      subtitle={ADDITIONAL_DETAILS.SUBHEADING_ADDITIONAL_DETAILS}
-      spaceToTitle={0}>
-      <View style={px(sw24)}>
-        <CustomSpacer space={sh24} />
-        {accountType === "Individual" ? null : <AccountHeader title={subtitleLabel} subtitle={names} />}
-        <AccountDetails
-          accountType={accountType!}
-          investmentDetails={investmentDetails!}
-          personalInfo={personalInfo}
-          setPersonalInfo={handlePersonalInfo}
-        />
-        {accountType === "Joint" ? (
-          <Fragment>
-            <CustomSpacer space={sh24} />
-            <ColorCard
-              content={
-                <Fragment>
-                  <JointRelationship personalDetails={personalDetails!} setPersonalDetails={handlePrincipalPersonalDetails} />
-                </Fragment>
-              }
-              header={{ label: ADDITIONAL_DETAILS.LABEL_HEADER_JOINT_RELATIONSHIP }}
-            />
-          </Fragment>
-        ) : null}
-        <CustomSpacer space={sh24} />
-        <BankDetails
-          bankNames={accountNames}
-          bankSummary={bankSummary!}
-          enableBank={enableBankDetails!}
-          foreignBankDetails={foreignBank!}
-          investmentCurrencies={investmentCurrencies}
-          isAllEpf={isAllEpf || false}
-          handleEnableLocalBank={handleEnable}
-          localBankDetails={localBank!}
-          remainingCurrencies={checkCurrencyRemaining}
-          setForeignBankDetails={setForeignBank}
-          setLocalBankDetails={setLocalBank}
-        />
-      </View>
-    </ContentPage>
+    <Fragment>
+      <ContentPage
+        continueDisabled={buttonDisabled}
+        handleCancel={handleBack}
+        handleContinue={handleSubmit}
+        subheading={ADDITIONAL_DETAILS.HEADING_ADDITIONAL_DETAILS}
+        subtitle={ADDITIONAL_DETAILS.SUBHEADING_ADDITIONAL_DETAILS}
+        spaceToTitle={0}>
+        <View style={px(sw24)}>
+          <CustomSpacer space={sh24} />
+          {accountType === "Individual" ? null : <AccountHeader title={subtitleLabel} subtitle={names} />}
+          <AccountDetails
+            accountType={accountType!}
+            investmentDetails={investmentDetails!}
+            personalInfo={personalInfo}
+            setPersonalInfo={handlePersonalInfo}
+          />
+          {accountType === "Joint" ? (
+            <Fragment>
+              <CustomSpacer space={sh24} />
+              <ColorCard
+                content={
+                  <Fragment>
+                    <JointRelationship personalDetails={personalDetails!} setPersonalDetails={handlePrincipalPersonalDetails} />
+                  </Fragment>
+                }
+                header={{ label: ADDITIONAL_DETAILS.LABEL_HEADER_JOINT_RELATIONSHIP }}
+              />
+            </Fragment>
+          ) : null}
+          <CustomSpacer space={sh24} />
+          <BankDetails
+            accountType={accountType!}
+            bankSummary={bankSummary!}
+            currentCurrency={currentCurrency}
+            details={details!}
+            enableBank={enableBankDetails!}
+            foreignBankDetails={foreignBank!}
+            handleBankSummary={handleBankSummary}
+            investmentCurrencies={investmentCurrencies}
+            isAllEpf={isAllEpf || false}
+            handleEnableLocalBank={handleEnable}
+            localBankDetails={localBank!}
+            setCurrentCurrency={setCurrentCurrency}
+            setDeleteToast={setDeleteToast}
+            setForeignBankDetails={setForeignBank}
+            setLocalBankDetails={setLocalBank}
+          />
+        </View>
+      </ContentPage>
+      <CustomToast
+        parentVisible={deleteToast}
+        deleteText={`${currentCurrency} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`}
+        setParentVisible={setDeleteToast}
+      />
+    </Fragment>
   );
 };
 

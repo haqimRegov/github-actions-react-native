@@ -4,13 +4,17 @@ import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Alert, View } from "react-native";
 import { connect } from "react-redux";
 
-import { FileViewer, SelectionBanner } from "../../../components";
+import { CustomSpacer, FileViewer, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
 import { handleSignatory } from "../../../helpers";
+import { usePrevious } from "../../../hooks";
 import { submitClientAccount } from "../../../network-actions";
+import { addBankSummary } from "../../../network-actions/new-sales/AddBankSummary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { flexChild } from "../../../styles";
+import { flexChild, sh24 } from "../../../styles";
 import { parseAmountToString } from "../../../utils";
+import { NewSalesAccountInformation } from "../AccountInformation";
+import { NewSalesOrderSummary } from "../OrderSummary";
 import { InvestorProfilePage } from "./Profile";
 import { NewSalesAccountSummary } from "./Summary";
 
@@ -30,8 +34,14 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
   updateNewSales,
 }: AccountInfoSummaryProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const { accountDetails, transactionType } = newSales;
+  const { accountNo, bankDetails } = accountDetails;
+  const [page, setPage] = useState<TRiskProfilePages>("accountSummary");
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
-  const [page, setPage] = useState<number>(0);
+  const [currentClientId, setCurrentClientId] = useState<string>("");
+  const [currentOrder, setCurrentOrder] = useState<IDashboardOrder | undefined>(undefined);
+  const prevPage = usePrevious<TRiskProfilePages>(page);
+  // const [page, setPage] = useState<number>(0);
   const [file, setFile] = useState<FileBase64 | undefined>(undefined);
 
   const handleCloseViewer = () => {
@@ -80,7 +90,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     };
   });
 
-  const localBank = principal!.bankSummary!.localBank!.map((bank) => {
+  const localBank: IBankDetailsState[] = principal!.bankSummary!.localBank!.map((bank) => {
     const bankAccountName =
       bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
         ? bank.combinedBankAccountName
@@ -96,7 +106,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     return newBank;
   });
 
-  const foreignBank = principal!.bankSummary!.foreignBank!.map((bank) => {
+  const foreignBank: IBankDetailsState[] = principal!.bankSummary!.foreignBank!.map((bank) => {
     const bankAccountName =
       bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
         ? bank.combinedBankAccountName
@@ -131,7 +141,7 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
         }
       : undefined;
 
-  const request: ISubmitClientAccountRequest = {
+  const setupClientRequest: ISubmitClientAccountRequest = {
     initId: details!.initId!,
     isEtb: true,
     incomeDistribution: personalInfo.incomeDistribution!,
@@ -157,32 +167,95 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     investments: investments,
   };
 
+  const filteredLocalBank =
+    bankDetails !== undefined
+      ? localBank.filter((eachLocalBank: IBankDetailsState, localIndex: number) => {
+          if (bankDetails.localBank!.length - 1 >= localIndex) {
+            return (
+              eachLocalBank.currency!.length !== bankDetails.localBank![localIndex].currency!.length ||
+              eachLocalBank.bankSwiftCode !== bankDetails.localBank![localIndex].bankSwiftCode
+            );
+          }
+          return true;
+        })
+      : localBank;
+
+  const filteredForeignBank =
+    bankDetails !== undefined
+      ? foreignBank.filter((eachForeignBank: IBankDetailsState, foreignIndex: number) => {
+          if (bankDetails.foreignBank!.length - 1 >= foreignIndex) {
+            return (
+              eachForeignBank.currency!.length !== bankDetails.foreignBank![foreignIndex].currency!.length ||
+              eachForeignBank.bankSwiftCode !== bankDetails.foreignBank![foreignIndex].bankSwiftCode
+            );
+          }
+          return true;
+        })
+      : foreignBank;
+  const addBankSummaryRequest: IBankSummaryRequest = {
+    accountNo: accountNo,
+    initId: details!.initId!,
+    clientId: details?.principalHolder?.clientId!,
+    banks: {
+      localBank: filteredLocalBank,
+      foreignBank: filteredForeignBank,
+    },
+  };
+
+  const handleNavigation = () => {
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+    updatedFinishedSteps.push("Summary", "AccountInformation");
+    const newDisabledStep: TypeNewSalesKey[] = [
+      "RiskSummary",
+      "Products",
+      "AccountInformation",
+      "IdentityVerification",
+      "AdditionalDetails",
+      "Summary",
+      "Signatures",
+      "TermsAndConditions",
+      "Payment",
+    ];
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+    handleNextStep("OrderPreview");
+  };
+
+  const handleAddBankSummary = async () => {
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const response: IBankSummaryResponse = await addBankSummary(addBankSummaryRequest, navigation, setLoading);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          handleNavigation();
+        }
+
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
+      }
+    }
+    return null;
+  };
+
   const handleSetupClient = async () => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const response: ISubmitClientAccountResponse = await submitClientAccount(request, navigation, setLoading);
+      const response: ISubmitClientAccountResponse = await submitClientAccount(setupClientRequest, navigation, setLoading);
       fetching.current = false;
       setLoading(false);
       if (response !== undefined) {
         const { data, error } = response;
         if (error === null && data !== null) {
           addOrders(data.result);
-          const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-          updatedFinishedSteps.push("Summary", "AccountInformation");
-          const newDisabledStep: TypeNewSalesKey[] = [
-            "RiskSummary",
-            "Products",
-            "AccountInformation",
-            "IdentityVerification",
-            "AdditionalDetails",
-            "Summary",
-            "Signatures",
-            "TermsAndConditions",
-            "Payment",
-          ];
-          updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
-          return handleNextStep("OrderPreview");
+          handleNavigation();
         }
 
         if (error !== null) {
@@ -197,16 +270,73 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
   };
 
   const handleContinue = () => {
-    handleSetupClient();
+    if (transactionType === "Sales-AO") {
+      handleSetupClient();
+    } else {
+      handleAddBankSummary();
+    }
   };
 
-  const clientId = currentProfile === "Principal" ? newSales.investorProfile.principalClientId! : newSales.investorProfile.jointClientId!;
+  const handleProfilePage = () => {
+    setPage("accountSummary");
+  };
+
+  const handleInvestorProfileBack = () => {
+    let nextPage: TRiskProfilePages = "accountSummary";
+
+    if (prevPage === "accountDetails") {
+      nextPage = "accountDetails";
+    }
+    if (prevPage === "orderSummary") {
+      nextPage = "orderSummary";
+    }
+    if (nextPage === "accountSummary") {
+      setCurrentClientId("");
+    }
+
+    setPage(nextPage);
+  };
+
+  const checkPrincipalId =
+    accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
+  const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
+  const checkCurrentProfile = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
+  const clientId = currentClientId !== "" ? currentClientId : checkCurrentProfile;
 
   let content = (
     <NewSalesAccountSummary handleNextStep={handleNextStep} setCurrentProfile={setCurrentProfile} setFile={setFile} setPage={setPage} />
   );
-  if (page === 1) {
-    content = <InvestorProfilePage clientId={clientId} setPage={setPage} />;
+  if (page === "profile") {
+    content = <InvestorProfilePage clientId={clientId!} handleBack={handleInvestorProfileBack} setPage={handleProfilePage} />;
+  }
+  if (page === "accountDetails") {
+    content = (
+      <View style={flexChild}>
+        <CustomSpacer space={sh24} />
+        <NewSalesAccountInformation
+          accountNo={accountNo}
+          clientId={clientId!}
+          setClientId={setCurrentClientId}
+          setCurrentOrder={setCurrentOrder}
+          setScreen={setPage}
+        />
+      </View>
+    );
+  }
+  if (page === "orderSummary") {
+    content = (
+      <View style={flexChild}>
+        <CustomSpacer space={sh24} />
+        <NewSalesOrderSummary
+          accountNo={accountNo}
+          clientId={clientId!}
+          order={currentOrder!}
+          setClientId={setCurrentClientId}
+          setCurrentOrder={setCurrentOrder}
+          setScreen={setPage}
+        />
+      </View>
+    );
   }
   const checkAccountType =
     accountType === "Individual" ? NEW_SALES_SUMMARY.LABEL_ACCOUNT_SUMMARY_INDIVIDUAL : NEW_SALES_SUMMARY.LABEL_ACCOUNT_SUMMARY_JOINT;
@@ -214,9 +344,9 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     <Fragment>
       <View style={flexChild}>
         {content}
-        {page === 1 ? null : (
+        {page === "accountSummary" ? (
           <SelectionBanner label={checkAccountType} submitOnPress={handleContinue} labelSubmit={NEW_SALES_SUMMARY.BUTTON_CONTINUE} />
-        )}
+        ) : null}
       </View>
       {file !== undefined ? (
         <FileViewer handleClose={handleCloseViewer} resourceType="base64" value={file} visible={file !== undefined} />

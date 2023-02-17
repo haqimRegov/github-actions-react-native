@@ -81,7 +81,7 @@ export const DeclarationDetails: FunctionComponent<DeclarationDetailsProps> = ({
         });
       } else {
         fatcaSummary.push(
-          { label: DECLARATION_SUMMARY.LABEL_CERTIFICATE, title: DECLARATION_SUMMARY.LABEL_CANT_UPLOAD, titleStyle: fsTransformNone },
+          { label: DECLARATION_SUMMARY.LABEL_CERTIFICATE, title: "No", titleStyle: fsTransformNone },
           {
             label: DECLARATION_SUMMARY.LABEL_CERTIFICATE_REASON_NEW,
             title: fatca!.reason === 1 ? fatca!.explanation! : DECLARATIONS.LABEL_REASON_LOST,

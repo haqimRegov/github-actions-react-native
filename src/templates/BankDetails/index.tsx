@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import { CustomSpacer } from "../../components";
@@ -38,10 +38,10 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   enableBank,
   existingBankSummary,
   foreignBankDetails,
-  localBankDetails,
+  // localBankDetails,
   investmentCurrencies,
   isAllEpf,
-  handleBankSummary,
+  // handleBankSummary,
   setDeleteToast,
   handleEnableLocalBank,
   setForeignBankDetails,

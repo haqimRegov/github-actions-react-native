@@ -112,7 +112,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   const [loader, setLoader] = useState<boolean>(false);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [duplicatePrompt, setDuplicatePrompt] = useState<boolean>(false);
-  const [accountListLoader, setAccountListLoader] = useState<boolean>(false);
   const [etbAccountList, setEtbAccountList] = useState<IEtbAccountDescription[]>([]);
   const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IProductSales[]>(investmentDetails!, setInvestmentDetails);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -420,12 +419,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 
   const handleCancelPrompt = () => {
     setDuplicatePrompt(false);
-    setAccountListLoader(false);
   };
 
   const handleConfirmPrompt = () => {
     setDuplicatePrompt(false);
-    setAccountListLoader(false);
     handleNavigation();
   };
 

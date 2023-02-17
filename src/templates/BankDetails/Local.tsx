@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 
 import {
@@ -62,11 +62,11 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
   bankingDetails,
   bankSummary,
   bankNames,
-  currentCurrency,
+  // currentCurrency,
   // deleteCount,
-  enableBank,
+  // enableBank,
   existingDetails,
-  handleEnableLocalBank,
+  // handleEnableLocalBank,
   initialForeignBankState,
   investmentCurrencies,
   isAllEpf,

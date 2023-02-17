@@ -78,7 +78,16 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_DOCUMENT });
   }
 
-  if (currentOrder !== undefined && currentOrder.transactionType === "Sales-AO") {
+  const checkBankIfUpdatedInSales =
+    isNotEmpty(currentOrder) &&
+    currentOrder!.transactionType === "Sales" &&
+    isNotEmpty(orderSummary) &&
+    isArrayNotEmpty(orderSummary!.profile) &&
+    isNotEmpty(orderSummary!.profile[0].bankInformation) &&
+    (isArrayNotEmpty(orderSummary!.profile[0].bankInformation!.localBank) ||
+      isArrayNotEmpty(orderSummary!.profile[0].bankInformation!.foreignBank));
+
+  if (currentOrder !== undefined && (currentOrder.transactionType === "Sales-AO" || checkBankIfUpdatedInSales === true)) {
     tabs.splice(1, 0, "account");
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
@@ -114,7 +123,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   }
 
   if (activeTab === "account") {
-    content = <AccountTab {...contentProps} />;
+    content = <AccountTab transactionType={currentOrder!.transactionType} {...contentProps} />;
   }
 
   if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true && activeTab === "profile") {

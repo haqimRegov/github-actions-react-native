@@ -197,8 +197,8 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     initId: details!.initId!,
     clientId: details?.principalHolder?.clientId!,
     banks: {
-      localBank: localBank,
-      foreignBank: foreignBank,
+      localBank: filteredLocalBank,
+      foreignBank: filteredForeignBank,
     },
   };
 

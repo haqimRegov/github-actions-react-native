@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomToast } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_COUNTRIES, DICTIONARY_CURRENCY } from "../../../data/dictionary";
+import { DICTIONARY_CURRENCY } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
 import { BankDetails } from "../../../templates";
@@ -18,7 +18,6 @@ interface AdditionalDetailsProps extends PersonalInfoStoreProps, OnboardingConte
 const initialBankDetails: IBankDetailsState = {
   bankAccountName: "",
   bankAccountNumber: "",
-  bankLocation: DICTIONARY_COUNTRIES[0].value,
   bankName: "",
   bankSwiftCode: "",
   currency: [DICTIONARY_CURRENCY[0].value],
@@ -70,7 +69,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,
   );
-
+  console.log("check", checkLocalBankEmpty);
   const checkLocalBankEpf =
     isAllEpf === true
       ? checkLocalBank.includes(false) === true && checkLocalBankEmpty.includes(false) === true

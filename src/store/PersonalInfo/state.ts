@@ -48,7 +48,7 @@ export const personalInfoInitialState: PersonalInfoState = {
         {
           bankAccountName: "",
           bankAccountNumber: "",
-          bankLocation: DICTIONARY_COUNTRIES[0].value,
+          // bankLocation: DICTIONARY_COUNTRIES[0].value,
           bankName: "",
           bankSwiftCode: "",
           currency: [DICTIONARY_CURRENCY[0].value],

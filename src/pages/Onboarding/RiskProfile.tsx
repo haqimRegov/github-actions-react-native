@@ -95,8 +95,8 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
     {
       label:
         accountType === "Joint"
-          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
-          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
+          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)} ${RISK_ASSESSMENT.LABEL_NUMBER}`
+          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${checkIdType(principalHolder!)} ${RISK_ASSESSMENT.LABEL_NUMBER}`,
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
@@ -114,7 +114,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
         titleStyle: fsTransformNone,
       },
       {
-        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
+        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${checkIdType(jointHolder!)} ${RISK_ASSESSMENT.LABEL_NUMBER}`,
         title: jointHolder!.id,
         titleStyle: fsTransformNone,
       },

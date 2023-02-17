@@ -188,9 +188,7 @@ IForeignBankDetailsProps) => {
           const header =
             bankingDetails.length > 1 ? `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}` : PERSONAL_DETAILS.LABEL_BANK_FOREIGN;
           const checkSwiftCodeDisabled =
-            existingDetails !== undefined && existingDetails.length - 1 === bankingDetails.length
-              ? existingDetails[index].bankSwiftCode !== ""
-              : false;
+            existingDetails !== undefined && existingDetails.length - 1 >= index ? existingDetails[index].bankSwiftCode !== "" : false;
 
           return (
             <Fragment key={index}>
@@ -245,7 +243,7 @@ IForeignBankDetailsProps) => {
                           ? PERSONAL_DETAILS.LABEL_CURRENCY
                           : `${PERSONAL_DETAILS.LABEL_CURRENCY} ${currencyIndex + 1}`;
                       const checkCurrencyDisabled =
-                        existingDetails !== undefined && existingDetails.length - 1 === index
+                        existingDetails !== undefined && existingDetails.length - 1 >= index
                           ? existingDetails[index].currency?.includes(value)
                           : false;
 

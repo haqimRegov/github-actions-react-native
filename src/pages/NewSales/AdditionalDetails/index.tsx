@@ -36,6 +36,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
   personalInfo,
   productSales,
   updateNewSales,
+  updateToastVisible,
 }: PersonalDetailsProps) => {
   const [currentCurrency, setCurrentCurrency] = useState<string>("");
   const [deleteToast, setDeleteToast] = useState<boolean>(false);
@@ -82,6 +83,7 @@ const AdditionalInfoComponent: FunctionComponent<PersonalDetailsProps> = ({
     }
 
     updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    updateToastVisible(true);
     handleNextStep("Summary");
   };
 

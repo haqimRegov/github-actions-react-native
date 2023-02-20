@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 
 import { CustomSpacer, SelectionBanner } from "../../components";
 import { Language } from "../../constants";
-import { flexCol, fs16BoldGray6, fs16RegGray6, rowCenterVertical, sw4 } from "../../styles";
+import { flexCol, fs16BoldGray6, fs16RegGray6, fs20BoldBlack2, rowCenterVertical, sw4 } from "../../styles";
 
 const { INVESTMENT } = Language.PAGE;
 
@@ -64,6 +64,7 @@ export const ProductsBanner: FunctionComponent<ProductsBannerProps> = ({
         }
         labelCancel={labelCancel !== undefined ? labelCancel : INVESTMENT.BUTTON_BACK}
         label={label !== undefined ? label : INVESTMENT.LABEL_FUND_SUMMARY}
+        labelStyle={fs20BoldBlack2}
         cancelOnPress={cancelOnPress}
         continueDisabled={continueDisabled}
         labelSubmit={labelSubmit}

@@ -236,7 +236,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
     labelCancel: PRODUCT_LIST.BUTTON_BACK,
-    labelSubmit: PRODUCT_LIST.BUTTON_START_INVESTING,
+    labelSubmit: PRODUCT_LIST.BUTTON_CONTINUE,
   };
 
   if (page === 1 && selectedFunds.length > 0) {
@@ -330,6 +330,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
             continueDisabled={disableContinue}
             selectedFunds={selectedFunds}
             labelSubmit={screen.labelSubmit}
+            label={page === 1 && selectedFunds.length > 0 ? INVESTMENT.LABEL_SUMMARY : undefined}
             submitOnPress={screen.onPressSubmit}
           />
         ) : null}

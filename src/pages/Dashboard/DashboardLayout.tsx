@@ -22,6 +22,7 @@ import {
   sw24,
   sw8,
 } from "../../styles";
+import { isNotEmpty } from "../../utils";
 import { NewSales } from "./QuickActions";
 
 const { QUICK_ACTIONS } = Language.PAGE;
@@ -46,6 +47,7 @@ interface DashboardLayoutProps {
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
+  documentSummary?: IDocumentSummary;
 }
 
 export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, DashboardLayoutProps>((props, ref) => {
@@ -63,6 +65,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     title,
     titleIcon,
     titleIconOnPress,
+    documentSummary,
   } = props;
 
   const [addClient, setAddClient] = useState<boolean>(false);
@@ -111,6 +114,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     statusColor = "warning";
   }
   const defaultSideElement = sideElement !== undefined ? sideElement : null;
+  const iconName = status === "Submitted" && documentSummary !== undefined && isNotEmpty(documentSummary) ? "receipt-new" : undefined;
 
   useImperativeHandle(ref, () => ({ addClient, setAddClient }));
 
@@ -146,7 +150,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
               </View>
               {status !== undefined ? (
                 <View style={{ ...px(sw16), ...centerVertical }}>
-                  <StatusBadge color={statusColor} text={status} />
+                  <StatusBadge color={statusColor} text={status} icon={iconName} />
                 </View>
               ) : null}
               <CustomFlexSpacer />

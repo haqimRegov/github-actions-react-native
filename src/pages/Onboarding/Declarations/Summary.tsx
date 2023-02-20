@@ -20,6 +20,7 @@ import {
   flexChild,
   fs10RegGray6,
   fs12BoldBlack2,
+  fs20BoldBlack2,
   px,
   rowCenterVertical,
   sh16,
@@ -565,6 +566,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       <CustomSpacer space={sh24} />
       <SelectionBanner
         label={DECLARATION_SUMMARY.BANNER_TITLE}
+        labelStyle={fs20BoldBlack2}
         labelSubmit={DECLARATION_SUMMARY.BUTTON_NEXT}
         submitOnPress={handleContinue}
       />

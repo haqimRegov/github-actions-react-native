@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { ContentPage, CustomSpacer, SelectionBanner } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
-import { flexChild, fsTransformNone, sh24 } from "../../../styles";
+import { flexChild, fs20BoldBlack2, fsTransformNone, sh24 } from "../../../styles";
 import { isNotEmpty, titleCaseString } from "../../../utils";
 import { Joint } from "./Joint";
 import { SummaryJointDetails } from "./JointDetails";
@@ -155,7 +155,12 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
         {accountType === "Individual" ? null : <SummaryJointDetails handleNextStep={handleNextStep} personalInfo={personalInfo} />}
       </ContentPage>
       <CustomSpacer space={sh24} />
-      <SelectionBanner label={SUMMARY.BANNER_TITLE} labelSubmit={SUMMARY.BUTTON_NEXT} submitOnPress={handleContinue} />
+      <SelectionBanner
+        label={SUMMARY.BANNER_TITLE}
+        labelStyle={fs20BoldBlack2}
+        labelSubmit={SUMMARY.BUTTON_NEXT}
+        submitOnPress={handleContinue}
+      />
     </View>
   );
 };

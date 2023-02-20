@@ -1188,6 +1188,7 @@ export const english = {
       LABEL_SALES_CHARGE: "Sales Charge (%)",
       LABEL_SALES_CHARGE_NEW: "Sales Charge",
       LABEL_SELECTED: "selected",
+      LABEL_SUMMARY: "Summary",
       LABEL_UT: "UT",
       LABEL_RECURRING_CONTENT_TITLE: "Recurring will be set up for this account",
       LABEL_RECURRING_CONTENT_1: "FPX is available above MYR 100.00. DDA is available with Public Bank only.",
@@ -1776,6 +1777,7 @@ export const english = {
       BUTTON_AGREE: "Agree",
       BUTTON_BACK: "Back",
       BUTTON_CANCEL: "Cancel",
+      BUTTON_CONTINUE: "Continue",
       BUTTON_NO: "No",
       BUTTON_START_INVESTING: "Start Investing",
       BUTTON_YES: "Yes",
@@ -2026,6 +2028,7 @@ export const english = {
       LABEL_BANK_LOCATION: "Bank Location",
       LABEL_BANK_NAME: "Bank Name",
       LABEL_BANK_SWIFT: "Bank Swift Code",
+      LABEL_BANNER_HEADING: "Personal Information Summary",
       LABEL_BUMIPUTERA: "Bumiputera",
       LABEL_CERTIFICATE_REASON: "Reason for Certificate Not Available",
       LABEL_CERTIFICATE: "Certificate of Loss of Nationality",
@@ -2064,6 +2067,7 @@ export const english = {
       LABEL_MOTHER: "Mother's Maiden Name",
       LABEL_NATIONALITY: "Nationality",
       LABEL_NATURE: "Business Field",
+      LABEL_NEXT: "Next",
       LABEL_OCCUPATION: "Occupation",
       LABEL_OFFICE_NUMBER: "Office Number",
       LABEL_OPERATING: "Account Operating Mode",
@@ -2096,6 +2100,7 @@ export const english = {
       TITLE_EMPLOYMENT: "Employment",
       TITLE_EPF: "EPF Details",
       TITLE_FATCA: "FATCA & CRS",
+      TITLE_ID_VERIFICATION: "ID Verification",
       TITLE_IDENTIFICATION: "Identification",
       TITLE_JOINT_ACCOUNT: "Principal and Joint Holder",
       TITLE_JOINT: "Joint Holder",
@@ -2112,6 +2117,7 @@ export const english = {
       BUTTON_SUBMIT: "Submit",
       CHECKBOX_CHANGE_REQUEST: "Your change request will be processed once we've received your complete supporting documents (if any)",
       HEADING: "Acknowledgement",
+      HEADING_NEW: "Acknowledgement - Terms & Conditions",
       HEADING_SIGNATURE: "Acknowledgement - Signatures",
       HEADING_TERMS: "Acknowledgement - Terms & Conditions",
       LABEL_ADD_SIGN: "Add Signature",
@@ -2126,9 +2132,9 @@ export const english = {
       LABEL_PRINCIPAL_SIGNATURE: "Principal Holder's Signature",
       LABEL_CHECKBOX_1: "I/We have read, understood and accepted the Terms and Conditions above.",
       LABEL_CHECKBOX_2:
-        "The authorized distributor has explained and I have understood the features and the risks of the recommended investment.\nAll information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
+        "The authorized distributor has explained and I have understood the features and the risks of the recommended investment. All information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
       LABEL_CHECKBOX_3:
-        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time.\nI/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
+        "I/We hereby consent for Kenanga Group to deal and process my/our personal data in accordance with the Personal Data Protection Notice as specified in the General Terms and Conditions, as may be amended from time to time. I/We confirm that I/we have read and understood the Personal Data Protection Notice and accept the terms and conditions.",
       LABEL_CHECKBOX_2_NEW_SALES:
         "The authorized distributor has explained and I have understood the features and the risks of the recommended investment. All information disclosed herein is true, complete and accurate.\nI acknowledged that the Product Highlights Sheet and relevant Disclosure Document (e.g. Prospectus, Information Memorandum, etc.) have been disclosed to me.",
       LABEL_CHECKBOX_3_NEW_SALES:
@@ -2167,6 +2173,7 @@ export const english = {
       SUBTITLE_SIGNATURE:
         "Tap the signature button to view order details and apply the required signatures.\nClick submit once all orders are complete.",
       SUBHEADING: "Acknowledgement - Terms & Conditions",
+      SUBHEADING_NEW: "Terms & Conditions",
       TERMS_HEADING_1: "Suitability Assessment",
       TERMS_HEADING_2: "PDPA Consent",
       TERMS_HEADING_3: "FATCA Declaration & Definition",

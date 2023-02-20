@@ -3,29 +3,30 @@ import { Text, View, ViewStyle } from "react-native";
 import PDFView from "react-native-view-pdf";
 import { connect } from "react-redux";
 
-import { CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, CustomTooltip, LinkText } from "../../../components";
+import { CheckBox, ContentPage, CustomFlexSpacer, CustomSpacer, CustomTooltip, IconText } from "../../../components";
 import { Language } from "../../../constants/language";
 import { CRS, DICTIONARY_LINK_FULL_TERMS, FATCA, PRS, UTAndAMP } from "../../../data/dictionary";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import {
   alignItemsStart,
   alignSelfCenter,
-  borderBottomGray2,
+  borderBottomBlue4,
+  centerVertical,
   disabledOpacity5,
   flexRow,
   fs12BoldWhite1,
-  fs12SemiBoldBlue1,
-  fs16SemiBoldGray6,
+  fs14RegGray5,
   justifyContentEnd,
   px,
   sh16,
   sh24,
   sh32,
+  sh4,
   sh456,
-  sh8,
   sw12,
   sw24,
   sw265,
+  sw5,
   sw7,
   sw800,
 } from "../../../styles";
@@ -107,8 +108,8 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   TERMS_AND_CONDITION_LIST.push(GENERAL);
 
   const headerText = expandAll === true ? TERMS_AND_CONDITIONS.LABEL_COLLAPSE_ALL : TERMS_AND_CONDITIONS.LABEL_EXPAND_ALL;
-
-  const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
+  const headerIcon = expandAll === true ? "collapse" : "expand";
+  const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, ...centerVertical, zIndex: 2 };
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
 
   return (
@@ -117,31 +118,32 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
       handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={TERMS_AND_CONDITIONS.BUTTON_AGREE}
-      subheading={TERMS_AND_CONDITIONS.HEADING}
+      subheading={TERMS_AND_CONDITIONS.HEADING_NEW}
       spaceToHeading={0}>
       {TERMS_AND_CONDITION_LIST.length === 0 ? null : (
         <Fragment>
           <View style={px(sw24)}>
-            <CustomSpacer space={sh8} />
+            <CustomSpacer space={sh4} />
             <View style={termsHeader}>
-              <Text style={fs16SemiBoldGray6}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
-              <CustomSpacer isHorizontal={true} space={sw12} />
+              <Text style={fs14RegGray5}>{TERMS_AND_CONDITIONS.SUBHEADING_NEW}</Text>
+              <CustomSpacer isHorizontal={true} space={sw5} />
               <CustomTooltip
                 arrowSize={{ width: sw12, height: sw7 }}
                 content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}
                 contentStyle={{ width: sw265 }}
+                theme="dark"
               />
               <CustomFlexSpacer />
               <View style={justifyContentEnd}>
-                <LinkText onPress={handleExpandAll} style={fs12SemiBoldBlue1} text={headerText} />
+                <IconText name={headerIcon} text={headerText} onPress={handleExpandAll} />
               </View>
             </View>
             <CustomSpacer space={sh24} />
             <TermsAccordion expandAll={expandAll} expandMultiple={true} sections={TERMS_AND_CONDITION_LIST} />
             <CustomSpacer space={sh32} />
           </View>
-          <View style={borderBottomGray2} />
-          <CustomSpacer space={sh32} />
+          <View style={borderBottomBlue4} />
+          <CustomSpacer space={sh24} />
           <View style={px(sw24)}>
             <CheckBox
               label={TERMS_AND_CONDITIONS.LABEL_CHECKBOX_1}

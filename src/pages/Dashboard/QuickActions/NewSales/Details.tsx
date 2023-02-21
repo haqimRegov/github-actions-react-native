@@ -13,7 +13,7 @@ const { ADD_CLIENT } = Language.PAGE;
 
 interface NewSalesDetailsProps {
   clientInfo: IClientBasicInfo;
-  clientType: TypeClient | "";
+  clientType?: TypeClient | "";
   ageErrorMessage?: string;
   errorMessage: string | undefined;
   holderToFill: "jointHolder" | "principalHolder";

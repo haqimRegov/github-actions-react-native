@@ -14,6 +14,7 @@ interface FatcaDeclarationProps extends PersonalInfoStoreProps, OnboardingConten
 
 const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   accountType,
+  client,
   addPersonalInfo,
   handleNextStep,
   onboarding,
@@ -22,6 +23,10 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
 }: FatcaDeclarationProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
   const { editMode, principal, joint } = personalInfo;
+  const { details } = client;
+  const { principalHolder: principalClient, jointHolder: jointClient } = details!;
+  const { isEtb: isPrincipalEtb } = principalClient!;
+  const { isEtb: isJointEtb } = jointClient!;
   const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
     principal?.addressInformation?.permanentAddress?.postCode
   }, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${
@@ -102,30 +107,35 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   const uploadNoLostNoAddressNoJoint = uploadNoLostNoJoint && joint?.declaration!.fatca!.confirmAddress === 1;
 
   const showTermsPrincipal =
-    (principal?.declaration!.fatca!.usCitizen === 0 && principal?.declaration!.fatca!.formW9) ||
-    citizenNoBornNoPrincipal ||
-    (citizenNoBornYesPrincipal && uploadYesAddressNoPrincipal) ||
-    (citizenNoBornYesPrincipal && uploadYesAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben) ||
-    (citizenNoBornYesPrincipal && uploadNoLostYesAddressNoPrincipal) ||
-    (citizenNoBornYesPrincipal && uploadNoLostYesAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben) ||
-    (citizenNoBornYesPrincipal && uploadNoLostNoAddressNoPrincipal) ||
-    (citizenNoBornYesPrincipal && uploadNoLostNoAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben);
+    isPrincipalEtb === false
+      ? (principal?.declaration!.fatca!.usCitizen === 0 && principal?.declaration!.fatca!.formW9) ||
+        citizenNoBornNoPrincipal ||
+        (citizenNoBornYesPrincipal && uploadYesAddressNoPrincipal) ||
+        (citizenNoBornYesPrincipal && uploadYesAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben) ||
+        (citizenNoBornYesPrincipal && uploadNoLostYesAddressNoPrincipal) ||
+        (citizenNoBornYesPrincipal && uploadNoLostYesAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben) ||
+        (citizenNoBornYesPrincipal && uploadNoLostNoAddressNoPrincipal) ||
+        (citizenNoBornYesPrincipal && uploadNoLostNoAddressYesPrincipal && principal?.declaration!.fatca!.formW8Ben)
+      : true;
 
   const showTermsJoint =
-    (joint?.declaration!.fatca!.usCitizen === 0 && joint?.declaration!.fatca!.formW9) ||
-    citizenNoBornNoJoint ||
-    (citizenNoBornYesJoint && uploadYesAddressNoJoint) ||
-    (citizenNoBornYesJoint && uploadYesAddressYesJoint && joint?.declaration!.fatca!.formW8Ben) ||
-    (citizenNoBornYesJoint && uploadNoLostYesAddressNoJoint) ||
-    (citizenNoBornYesJoint && uploadNoLostYesAddressYesJoint && joint?.declaration!.fatca!.formW8Ben) ||
-    (citizenNoBornYesJoint && uploadNoLostNoAddressNoJoint) ||
-    (citizenNoBornYesJoint && uploadNoLostNoAddressYesJoint && joint?.declaration!.fatca!.formW8Ben);
+    isJointEtb === false
+      ? (joint?.declaration!.fatca!.usCitizen === 0 && joint?.declaration!.fatca!.formW9) ||
+        citizenNoBornNoJoint ||
+        (citizenNoBornYesJoint && uploadYesAddressNoJoint) ||
+        (citizenNoBornYesJoint && uploadYesAddressYesJoint && joint?.declaration!.fatca!.formW8Ben) ||
+        (citizenNoBornYesJoint && uploadNoLostYesAddressNoJoint) ||
+        (citizenNoBornYesJoint && uploadNoLostYesAddressYesJoint && joint?.declaration!.fatca!.formW8Ben) ||
+        (citizenNoBornYesJoint && uploadNoLostNoAddressNoJoint) ||
+        (citizenNoBornYesJoint && uploadNoLostNoAddressYesJoint && joint?.declaration!.fatca!.formW8Ben)
+      : true;
 
-  const showButtonContinuePrincipal = showTermsPrincipal ? handleContinue : undefined;
   const continueEnabledPrincipal =
-    showTermsPrincipal && principal?.declaration!.fatca!.acceptFatca && principal?.declaration!.fatca!.explanationSaved;
-  const showButtonContinueJoint = showTermsJoint ? handleContinue : undefined;
-  const continueEnabledJoint = showTermsJoint && joint?.declaration!.fatca!.acceptFatca && joint?.declaration!.fatca!.explanationSaved;
+    isPrincipalEtb === false
+      ? showTermsPrincipal && principal?.declaration!.fatca!.acceptFatca && principal?.declaration!.fatca!.explanationSaved
+      : true;
+  const continueEnabledJoint =
+    isJointEtb === false ? showTermsJoint && joint?.declaration!.fatca!.acceptFatca && joint?.declaration!.fatca!.explanationSaved : true;
 
   const validationsPrincipal = {
     citizenNoBornYes: citizenNoBornYesPrincipal,
@@ -147,7 +157,8 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
     uploadYesAddressYes: uploadYesAddressYesJoint,
   };
 
-  const showButtonContinue = accountType === "Joint" ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
+  const checkButtonContinue = accountType === "Joint" ? showTermsPrincipal && showTermsJoint : showTermsPrincipal;
+  const buttonContinue = checkButtonContinue === true ? handleContinue : undefined;
   const continueEnabled = accountType === "Joint" ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
 
   const handleBack = () => {
@@ -159,11 +170,11 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
       cancelDisabled={editMode === true}
       continueDisabled={!continueEnabled}
       handleCancel={handleBack}
-      handleContinue={showButtonContinue}
+      handleContinue={buttonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.FATCA_HEADING}
       subheadingStyle={fs18BoldGray6}>
-      {accountType === "Joint" ? (
+      {accountType === "Joint" && isPrincipalEtb === false ? (
         <Fragment>
           <CustomSpacer space={sh16} />
           <View style={px(sw24)}>
@@ -176,13 +187,15 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
           </View>
         </Fragment>
       ) : null}
-      <FatcaDeclarationDetails
-        address={principalAddress}
-        fatca={principal?.declaration?.fatca!}
-        handleFatcaDeclaration={handlePrincipalFatca}
-        validations={validationsPrincipal}
-      />
-      {accountType === "Joint" ? (
+      {isPrincipalEtb === false ? (
+        <FatcaDeclarationDetails
+          address={principalAddress}
+          fatca={principal?.declaration?.fatca!}
+          handleFatcaDeclaration={handlePrincipalFatca}
+          validations={validationsPrincipal}
+        />
+      ) : null}
+      {accountType === "Joint" && isJointEtb === false ? (
         <View>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>

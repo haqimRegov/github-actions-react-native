@@ -35,6 +35,11 @@ declare type TypeAccountChoices = "Individual" | "Joint";
 declare type TypeAccountHolder = "Principal" | "Joint";
 declare type TypeClient = "NTB" | "ETB";
 
+declare interface ITypeClient {
+  principal?: TypeClient | "";
+  joint?: TypeClient | "";
+}
+
 declare interface IClientBasicInfo {
   country?: string;
   dateOfBirth?: string;

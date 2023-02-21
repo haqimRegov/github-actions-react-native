@@ -49,7 +49,7 @@ interface InvestorSalesProps extends ClientStoreProps {
   errorMessage?: string;
   fetching: boolean;
   handleCheckClient: (req?: IEtbCheckRequest) => Promise<boolean | string>;
-  handleClientRegister: () => Promise<boolean | void>;
+  handleClientRegister: (req?: IClientRegisterRequest, item?: IInvestorAccountsData, ntb?: boolean) => Promise<boolean | void>;
   inputError1?: string;
   investorData: IInvestor;
   isNtb?: boolean;
@@ -233,7 +233,7 @@ const InvestorSalesPromptComponent = ({
         // This checks if Joint Holder of AO is an ETB or not
         const checkETB = await handleCheckClient();
         if (checkETB === true) {
-          handleClientRegister();
+          handleClientRegister(undefined, undefined, false);
         }
         if (checkETB === "Minor") {
           setPrompt("accountType");

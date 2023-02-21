@@ -26,6 +26,8 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   updateOnboarding,
 }: PersonalInfoSummaryProps) => {
   const { jointHolder, principalHolder } = details!;
+  const { isEtb: isPrincipalEtb } = principalHolder!;
+  const { isEtb: isJointEtb } = jointHolder!;
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
 
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
@@ -79,7 +81,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
     setViewFile(undefined);
   };
 
-  const isAllEpf = personalInfo.isAllEpf !== undefined ? personalInfo.isAllEpf : false;
+  // const isAllEpf = personalInfo.isAllEpf !== undefined ? personalInfo.isAllEpf : false;
   const incomeDistribution = { incomeDistribution: personalInfo.incomeDistribution };
 
   // TODO templates (same with Risk Summary)
@@ -131,39 +133,17 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   return (
     <View style={flexChild}>
       <ContentPage noBounce={true} subheading={SUMMARY.HEADING} subtitle={SUMMARY.SUBHEADING}>
-        {/* {accountType === "Individual" ? null : (
-        <View style={px(sw24)}>
-          <CustomSpacer space={sh24} />
-          <ColorCard
-            containerStyle={noBorder}
-            content={<TextCard data={accountDetailsArray} itemsPerGroup={3} spaceBetweenItem={scaledSpace} itemStyle={{ width: sw239 }} />}
-            contentStyle={{ ...border(colorBlue._3, sw1), backgroundColor: colorBlue._3, ...px(sw24), paddingBottom: sh8 }}
-            customHeader={
-              <View style={{ ...rowCenterVertical, ...px(sw24) }}>
-                <Text style={fs10RegGray6}>{accountTitle}</Text>
-              </View>
-            }
-            header="custom"
-            headerStyle={{
-              ...border(colorBlue._3, sw1),
-              ...px(0),
-              ...py(sh8),
-              backgroundColor: colorBlue._3,
-              borderBottomColor: colorRed._1,
-            }}
+        {isPrincipalEtb === false ? (
+          <Principal
+            accountType={accountType!}
+            handleCloseViewer={handleCloseViewer}
+            handleEdit={handleEdit}
+            setViewFile={setViewFile}
+            summary={{ ...personalInfo.principal!, ...incomeDistribution }}
+            viewFile={viewFile}
           />
-        </View>
-      )} */}
-        <Principal
-          accountType={accountType!}
-          handleCloseViewer={handleCloseViewer}
-          handleEdit={handleEdit}
-          isAllEpf={isAllEpf}
-          setViewFile={setViewFile}
-          summary={{ ...personalInfo.principal!, ...incomeDistribution }}
-          viewFile={viewFile}
-        />
-        {accountType === "Individual" ? null : (
+        ) : null}
+        {accountType === "Individual" || isJointEtb === true ? null : (
           <Joint
             handleCloseViewer={handleCloseViewer}
             handleEdit={handleEdit}

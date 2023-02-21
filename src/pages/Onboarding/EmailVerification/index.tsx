@@ -49,7 +49,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const principalClientId = details?.principalHolder?.clientId!;
   // dateOfBirth saved in PersonalInfo is in Date type while DEFAULT_DATE_FORMAT string in ClientDetails
   const jointAgeCheck = moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18;
-  const jointEmailCheck = accountType === "Joint" && (inputJointEmail !== "" || jointAgeCheck);
+  const jointEmailCheck = accountType === "Joint" && (inputJointEmail !== "" || jointAgeCheck) && isEtbJoint === false;
 
   const handleNavigate = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
@@ -80,13 +80,14 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       fetching.current = true;
       setPrincipalEmailError(undefined);
       setJointEmailError(undefined);
-      const jointRequest = jointEmailCheck === true || inputJointEmail !== "" ? { email: inputJointEmail } : undefined;
+      const checkPrincipalHolder = isEtbPrincipal === true ? {} : { principalHolder: { email: inputPrincipalEmail } };
+      const checkJointHolder = jointEmailCheck === true || inputJointEmail !== "" ? { jointHolder: { email: inputJointEmail } } : undefined;
       const request: IEmailVerificationRequest = {
         initId: details!.initId!,
         isForceUpdate: false,
         clientId: principalClientId,
-        principalHolder: { email: inputPrincipalEmail },
-        jointHolder: jointRequest,
+        ...checkPrincipalHolder,
+        ...checkJointHolder,
       };
       setLoading(true);
       const response: IEmailVerificationResponse = await emailVerification(request, navigation, setLoading);

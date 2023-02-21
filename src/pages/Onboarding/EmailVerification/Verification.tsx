@@ -95,11 +95,10 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   const disabled =
     jointEmailCheck === false
       ? inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined || resendTimer !== 0
-      : inputPrincipalEmail === "" ||
+      : (isEtbPrincipal === false &&
+          (inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined)) ||
         inputJointEmail === "" ||
-        principalError !== undefined ||
         jointError !== undefined ||
-        validateEmail(inputPrincipalEmail) !== undefined ||
         validateEmail(inputJointEmail) !== undefined ||
         resendTimer !== 0;
 

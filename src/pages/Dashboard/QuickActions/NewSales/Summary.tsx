@@ -63,8 +63,9 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
     accountType === "Joint" ? `${ADD_CLIENT.DETAILS_LABEL_NAME_PRINCIPAL} ${ADD_CLIENT.LABEL_HOLDER}` : ADD_CLIENT.SUMMARY_INDIVIDUAL;
   const jointTitle = accountType === "Joint" ? `${ADD_CLIENT.DETAILS_LABEL_NAME_JOINT} ${ADD_CLIENT.LABEL_HOLDER}` : undefined;
 
-  const principalBadge = "New Investor"; // TODO isEtb check
-  const jointBadge = "New Investor"; // TODO isEtb check
+  const principalBadge = principalHolder.isEtb === true ? ADD_CLIENT.LABEL_EXISTING_INVESTOR : ADD_CLIENT.LABEL_NEW_INVESTOR;
+  const jointBadge =
+    jointHolder !== undefined && jointHolder.isEtb === true ? ADD_CLIENT.LABEL_EXISTING_INVESTOR : ADD_CLIENT.LABEL_NEW_INVESTOR;
 
   return (
     <Fragment>

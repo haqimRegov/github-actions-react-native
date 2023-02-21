@@ -3,7 +3,7 @@ declare interface IEmailOtpVerificationRequest {
   id?: string;
   initId: string;
   isForceUpdate: boolean;
-  principalHolder: {
+  principalHolder?: {
     email: string;
     code: string;
   };

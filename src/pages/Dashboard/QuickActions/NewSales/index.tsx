@@ -100,7 +100,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
 }: NewSalesProps) => {
   const fetching = useRef<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [clientType, setClientType] = useState<TypeClient | "">("");
+  const [clientType, setClientType] = useState<ITypeClient>({ principal: "", joint: "" });
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [ageErrorMessage, setAgeErrorMessage] = useState<string | undefined>(undefined);
   const [inputError1, setInputError1] = useState<string | undefined>(undefined);
@@ -114,13 +114,15 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
 
   const BUTTON_LABEL_NEW_SALES = salesNewPrompt === true ? ADD_CLIENT.BUTTON_OPEN_ACCOUNT : ADD_CLIENT.BUTTON_CONTINUE;
   const BUTTON_LABEL_UNREGISTERED =
-    clientType !== "" && holderToFill === "principalHolder" ? ADD_CLIENT.BUTTON_STARTED : BUTTON_LABEL_NEW_SALES;
+    clientType.principal !== "" && holderToFill === "principalHolder" ? ADD_CLIENT.BUTTON_STARTED : BUTTON_LABEL_NEW_SALES;
   const BUTTON_CONTINUE_PROMPT = prompt === "bannedCountry" ? ADD_CLIENT.BUTTON_BACK : ADD_CLIENT.BUTTON_ADD;
   const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_UNREGISTERED;
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
   const titleStyle: TextStyle = registered === true ? {} : fs36BoldBlack2;
+  const clientTypeDetail = holderToFill === "principalHolder" ? clientType.principal : clientType.joint;
+  const clientTypeInitialValue: ITypeClient = { principal: "", joint: "" };
 
   const setClientInfo = (info: IClientBasicInfo) =>
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
@@ -155,7 +157,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   }
 
   const handleReset = () => {
-    setClientType("");
+    setClientType(clientTypeInitialValue);
     setHolderToFill("principalHolder");
     setInputError1(undefined);
     setAgeErrorMessage(undefined);
@@ -222,11 +224,16 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     navigation.navigate("Onboarding");
   };
 
+  const handleUpdateClientType = (value: TypeClient) => {
+    const updatedState = holderToFill === "principalHolder" ? { principal: value } : { joint: value };
+    setClientType({ ...clientType, ...updatedState });
+  };
+
   const handleCheckClient = async () => {
     if (fetching.current === false) {
       fetching.current = true;
       setLoading(true);
-      const request: IEtbCheckRequest = {
+      const requestPrincipal: IEtbCheckRequest = {
         country: principalHolder?.country,
         dateOfBirth:
           principalHolder?.dateOfBirth && principalHolder.idType !== "NRIC"
@@ -236,6 +243,19 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
         idType: principalIdType,
         name: principalHolder?.name?.trim(),
       };
+
+      const requestJoint: IEtbCheckRequest = {
+        country: jointHolder?.country,
+        dateOfBirth:
+          jointHolder?.dateOfBirth && jointHolder.idType !== "NRIC"
+            ? moment(jointHolder?.dateOfBirth, DEFAULT_DATE_FORMAT).format(DATE_OF_BIRTH_FORMAT)
+            : "",
+        id: jointHolder?.id,
+        idType: jointIdType,
+        name: jointHolder?.name?.trim(),
+      };
+      const request = holderToFill === "principalHolder" ? requestPrincipal : requestJoint;
+
       const clientCheck: IEtbCheckResponse = await checkClient(request, navigation, setLoading);
       setLoading(false);
       fetching.current = false;
@@ -248,30 +268,55 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
           if (data.result.message === "NTB") {
             if (client.isNewFundPurchase === true) {
               setSalesNewPrompt(true);
-            } else {
-              setClientType("NTB");
+            }
+            handleUpdateClientType("NTB");
+            if (holderToFill === "principalHolder") {
               setAccountTypePrompt(true);
             }
           }
+
           if (data.result.message === "ETB" && setPage !== undefined) {
-            setClientType("ETB");
-            setVisible(false);
+            handleUpdateClientType("ETB");
+            if (holderToFill === "principalHolder") {
+              setVisible(false);
+            }
             if (data.result.forceUpdate === false) {
+              const newClientData =
+                holderToFill === "principalHolder"
+                  ? {
+                      ...client,
+                      accountList: data.result.accounts!,
+                      details: {
+                        ...client.details,
+                        // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
+                        principalHolder: {
+                          ...client.details?.principalHolder,
+                          name: principalHolder!.name!.trim(),
+                          id: principalHolder?.id,
+                          isEtb: true,
+                        },
+                      },
+                    }
+                  : {
+                      ...client,
+                      accountList: data.result.accounts!,
+                      details: {
+                        ...client.details,
+                        // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
+                        jointHolder: {
+                          ...client.details?.jointHolder,
+                          name: jointHolder!.name!.trim(),
+                          id: jointHolder?.id,
+                          isEtb: true,
+                        },
+                      },
+                    };
+
               updateClient({
-                ...client,
-                accountList: data.result.accounts!,
-                details: {
-                  ...client.details,
-                  // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
-                  principalHolder: {
-                    ...client.details?.principalHolder,
-                    name: principalHolder!.name!.trim(),
-                    id: principalHolder?.id,
-                    isEtb: true,
-                  },
-                },
+                ...newClientData,
               });
-              if (client.isNewFundPurchase === true) {
+
+              if (holderToFill === "principalHolder" && client.isNewFundPurchase === true) {
                 // Note: We will initially save the current investor as Principal Holder then we will change it accordingly based on the Account Holders during Sales
                 addPersonalInfo({
                   ...personalInfo,
@@ -286,8 +331,11 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
                 updateTransactionType("Sales");
                 return navigation.navigate("NewSales");
               }
-              updateTransactionType("Sales-AO");
-              return setPage("Investors");
+              if (holderToFill === "principalHolder") {
+                updateTransactionType("Sales-AO");
+                return setPage("Investors");
+              }
+              return "ETB";
             }
             if (data.result.forceUpdate === true) {
               addClientForceUpdate(true);
@@ -312,7 +360,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     return undefined;
   };
 
-  const handleClientRegister = async () => {
+  const handleClientRegister = async (value?: string) => {
     // This is used only if NTB Investor was used in Sales
     if (fetching.current === false) {
       fetching.current = true;
@@ -364,6 +412,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
             isEtb: false,
             otherIdType: DICTIONARY_ID_OTHER_TYPE[0].value,
           };
+          const jointIsEtb = value !== undefined && value === "ETB";
           const moreJointInfo =
             data.result.jointHolder !== undefined && data.result.jointHolder !== null
               ? {
@@ -371,18 +420,22 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
                   dateOfBirth: data.result.jointHolder.dateOfBirth,
                   id: data.result.jointHolder.id,
                   name: data.result.jointHolder.name,
+                  isEtb: jointIsEtb,
                 }
               : {};
           setAgeErrorMessage(undefined);
           setErrorMessage(undefined);
           setInputError1(undefined);
           setAccountTypePrompt(false);
+
+          const principalIsEtb = clientType.principal === "ETB";
           addClientDetails({
             ...details,
             principalHolder: {
               ...principalHolder!,
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               clientId: data.result.principalHolder.clientId,
+              isEtb: principalIsEtb,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : { ...jointHolder!, ...moreJointInfo },
             initId: `${data.result.initId}`,
@@ -416,22 +469,22 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     } else if (salesNewPrompt === true) {
       setSalesNewPrompt(false);
       setHolderToFill("principalHolder");
-      setClientType("");
-    } else if (clientType !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
+      setClientType(clientTypeInitialValue);
+    } else if (clientType.joint !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
       setAccountTypePrompt(true);
     } else if (accountTypePrompt === true) {
       setHolderToFill("principalHolder");
       setAccountTypePrompt(false);
-      setClientType("");
-    } else if (clientType !== "" && holderToFill === "principalHolder") {
-      setClientType("");
+      setClientType(clientTypeInitialValue);
+    } else if (clientType.principal !== "" && holderToFill === "principalHolder") {
+      setClientType(clientTypeInitialValue);
       addAccountType("Individual");
     } else {
       handleCancelNewSales();
     }
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (prompt === "bannedCountry") {
       return handleCancelNewSales();
     }
@@ -445,7 +498,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     if (salesNewPrompt === true) {
       setSalesNewPrompt(false);
       setAccountTypePrompt(true);
-      return setClientType("NTB");
+      return handleUpdateClientType("NTB");
     }
 
     if (accountTypePrompt === true) {
@@ -457,8 +510,9 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
       return handleClientRegister();
     }
 
-    if (clientType === "NTB" && accountType === "Joint" && holderToFill === "jointHolder") {
-      return handleClientRegister();
+    if (accountType === "Joint" && holderToFill === "jointHolder") {
+      const jointResult = (await handleCheckClient()) as string;
+      return handleClientRegister(jointResult);
     }
     return handleCheckClient();
   };
@@ -592,7 +646,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
                             <Text style={{ ...fs24BoldBlue1, ...titleStyle }}>{ADD_CLIENT.HEADING}</Text>
                             <NewSalesDetails
                               clientInfo={details![holderToFill]!}
-                              clientType={clientType}
+                              clientType={clientTypeDetail}
                               ageErrorMessage={ageErrorMessage}
                               errorMessage={errorMessage}
                               holderToFill={holderToFill}

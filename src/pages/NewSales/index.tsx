@@ -107,39 +107,44 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     updateToastVisible,
   } = props;
   const { accountDetails, disabledSteps, finishedSteps, toast, transactionType } = newSales;
+  const { editMode, principal } = personalInfo;
   const { isBankDetailsRequired } = accountDetails;
   const navigation = useNavigation<IStackNavigationProp>();
 
-  const findAdditionalInfo = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.AccountInformation);
-  const findProducts = NEW_SALES_DATA.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.Products);
-
   const updatedNewSalesSteps = cloneDeep(NEW_SALES_DATA);
+
+  // sales from quick actions
   if (client.isNewFundPurchase === true) {
     updatedNewSalesSteps.splice(0, 0, ACCOUNT_LIST);
   }
+
+  // account opening
   if (newSales.accountDetails.accountNo === "" && client.isNewFundPurchase === false) {
     updatedNewSalesSteps[0] = {
       ...updatedNewSalesSteps[0],
       label: NEW_SALES.TITLE_ACCOUNT_OPENING,
     };
   }
-  if (newSales.accountDetails.accountNo !== "" && client.isNewFundPurchase === false && findProducts !== -1) {
-    updatedNewSalesSteps[findProducts].label = NEW_SALES.TITLE_PRODUCTS_AND_SERVICE_NEW;
-  }
 
+  // remove account information section
   if ((client.isNewFundPurchase === true || newSales.accountDetails.accountNo !== "") && isBankDetailsRequired === false) {
     const checkIndex = client.isNewFundPurchase === true ? 3 : 2;
     updatedNewSalesSteps.splice(checkIndex, 1);
   }
+
+  // remove identity verification
   if (isBankDetailsRequired === true && transactionType === "Sales") {
+    const findAdditionalInfo = updatedNewSalesSteps.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.AccountInformation);
     updatedNewSalesSteps[findAdditionalInfo].content?.splice(0, 1);
-    updatedNewSalesSteps[findAdditionalInfo] = {
-      ...updatedNewSalesSteps[findAdditionalInfo],
-      content: updatedNewSalesSteps[findAdditionalInfo].content,
-      route: "AdditionalDetails",
-      key: "AdditionalDetails",
-    };
   }
+
+  const findProducts = updatedNewSalesSteps.findIndex((step: INewSales) => step.key === NEW_SALES_ROUTES.Products);
+  // rename products label
+  if (newSales.accountDetails.accountNo !== "" && client.isNewFundPurchase === false && findProducts !== -1) {
+    updatedNewSalesSteps[findProducts].label = NEW_SALES.TITLE_PRODUCTS_AND_SERVICE_NEW;
+  }
+
+  // remove product list
   if (newSales.accountDetails.ampDetails !== undefined && findProducts !== -1) {
     const productsContent = updatedNewSalesSteps[findProducts].content!;
     productsContent.splice(0, 1);
@@ -155,9 +160,16 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   const [cancelBackToInvestor, setCancelBackToInvestor] = useState<boolean>(false);
 
   const handleNextStep = (route: TypeNewSalesRoute) => {
+    if (route === "ProductsConfirmation" && finishedSteps.includes("ProductsConfirmation") && unsavedPrompt === false) {
+      setUnsavedPrompt(true);
+      return false;
+    }
+
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
       stepperBarRef.current.handleNextStep(route);
     }
+
+    return true;
   };
 
   const handleContentChange = (item: INewSalesContentItem | INewSales) => {
@@ -173,13 +185,12 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
   const handleOpenProducts = () => {
     setUnsavedPrompt(false);
-    handleNextStep("ProductsConfirmation");
     addPersonalInfo({
       ...personalInfo,
       incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
       signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
       principal: {
-        ...personalInfo.principal,
+        ...principal,
         bankSummary: {
           localBank: [
             {
@@ -197,12 +208,12 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
           epfAccountType: "",
           epfMemberNumber: "",
         },
-        personalDetails: { ...personalInfo.principal!.personalDetails, relationship: "", otherRelationship: "" },
+        personalDetails: { ...principal!.personalDetails, relationship: "", otherRelationship: "" },
       },
     });
 
     // combined New Fund and AO
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "ProductsList"];
 
     if (riskAssessment.isRiskUpdated === true) {
       updatedFinishedSteps.push("RiskAssessment");
@@ -210,11 +221,13 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
 
     // set to initial disabled steps without Products and ProductsList
     // not using reducer initial state because of redux mutating issue
-    const updatedDisabledSteps: TypeNewSalesKey[] = [
+    const newDisabledSteps: TypeNewSalesKey[] = [
+      // "AccountList",
+      // "RiskSummary",
       "RiskAssessment",
       // "Products",
-      // "ProductsList",
-      "ProductsConfirmation",
+      "ProductsList",
+      // "ProductsConfirmation",
       "AccountInformation",
       "IdentityVerification",
       "AdditionalDetails",
@@ -226,7 +239,9 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       "Payment",
     ];
 
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
+    updateNewSales({ ...newSales, disabledSteps: newDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    handleNextStep("ProductsConfirmation");
   };
 
   const handleContinue = () => {
@@ -287,6 +302,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
             activeSection={activeSection}
             activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskSummary" ? fs14BoldGray6 : {}}
             disabledSteps={disabledSteps}
+            editMode={editMode}
             finishedSteps={finishedSteps}
             handleCheckRoute={handleCheckRoute}
             handleContentChange={handleContentChange}

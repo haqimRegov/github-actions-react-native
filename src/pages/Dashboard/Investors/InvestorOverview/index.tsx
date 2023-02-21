@@ -390,6 +390,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   },
                   personalDetails: {
                     ...personalInfo.joint?.personalDetails,
+                    countryOfIssuance: jointHolder?.idType === "Passport" ? jointHolder?.country : "",
                     dateOfBirth: moment(data.result.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT).toDate(),
                     idNumber: data.result.jointHolder!.id,
                     name: data.result.jointHolder!.name,

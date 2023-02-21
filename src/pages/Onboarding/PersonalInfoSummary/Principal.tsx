@@ -12,7 +12,6 @@ interface PrincipalProps {
   accountType: TypeAccountChoices;
   handleCloseViewer?: () => void;
   handleEdit: (route: TypeOnboardingKey) => void;
-  isAllEpf: boolean;
   setViewFile?: (value: FileBase64) => void;
   summary: IHolderInfoState;
   viewFile?: FileBase64 | undefined;
@@ -22,7 +21,6 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
   accountType,
   handleCloseViewer,
   handleEdit,
-  isAllEpf,
   setViewFile,
   summary,
   viewFile,
@@ -239,11 +237,11 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
       employmentAddress={employmentAddressSummary}
       employmentDetails={employmentDetailsSummary}
       epfDetails={epfDetailsSummary}
-      foreignBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : foreignBank}
+      foreignBankDetails={foreignBank}
       handleCloseViewer={handleCloseViewer}
       handleEdit={handleEdit}
       isMalaysian={isMalaysian}
-      localBankDetails={personalDetails?.enableBankDetails === false && isAllEpf === true ? [] : localBank}
+      localBankDetails={localBank}
       mailingAddress={mailingAddressSummary}
       name={personalDetails!.name!}
       permanentAddress={permanentAddressSummary}

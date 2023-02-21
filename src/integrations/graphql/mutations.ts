@@ -596,6 +596,61 @@ const submitClientAccount = gql`
   }
 `;
 
+const submitClientAccountHybrid = gql`
+  mutation submitClientAccountHybrid($input: SubmitClientAccountInput) {
+    submitClientAccountHybrid(input: $input) {
+      data {
+        result {
+          grandTotal {
+            currency
+            amount
+          }
+          grandTotalRecurring {
+            currency
+            amount
+          }
+          orders {
+            allowedRecurringType
+            orderNumber
+            orderDate
+            orderTotalAmount {
+              currency
+              amount
+            }
+            paymentType
+            investments {
+              distributionInstruction
+              fundClass
+              fundCode
+              fundCurrency
+              fundingOption
+              fundId
+              fundIssuer
+              fundName
+              fundType
+              investmentAmount
+              isEpf
+              isFea
+              isScheduled
+              isSyariah
+              salesCharge
+              scheduledInvestmentAmount
+              scheduledSalesCharge
+              landingFund
+            }
+          }
+        }
+      }
+      error {
+        errorCode
+        errorList
+        message
+        statusCode
+      }
+    }
+  }
+`;
+
 const submitClientAccountTransactions = gql`
   mutation submitClientAccountTransaction($input: SubmitClientAccountTransactionsInput) {
     submitClientAccountTransactions(input: $input) {
@@ -856,6 +911,7 @@ export const GQL_MUTATIONS = {
   riskAssessment,
   submitChangeRequest,
   submitClientAccount,
+  submitClientAccountHybrid,
   submitClientAccountTransactions,
   submitEDDCase,
   submitHardCopyDocuments,

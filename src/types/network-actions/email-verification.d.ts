@@ -3,7 +3,7 @@ declare interface IEmailVerificationRequest {
   id?: string;
   initId: string;
   isForceUpdate: boolean;
-  principalHolder: {
+  principalHolder?: {
     email: string;
   };
   jointHolder?: {

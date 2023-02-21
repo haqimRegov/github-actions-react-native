@@ -148,15 +148,6 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
             handleCloseViewer={handleCloseViewer}
             handleEdit={handleEdit}
             setViewFile={setViewFile}
-            summary={{ ...personalInfo.principal!, ...incomeDistribution }}
-            viewFile={viewFile}
-          />
-        )}
-        {accountType === "Individual" ? null : (
-          <Joint
-            handleCloseViewer={handleCloseViewer}
-            handleEdit={handleEdit}
-            setViewFile={setViewFile}
             summary={{ ...personalInfo.joint! }}
             viewFile={viewFile}
           />

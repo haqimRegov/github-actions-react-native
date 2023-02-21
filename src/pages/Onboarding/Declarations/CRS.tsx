@@ -14,6 +14,7 @@ interface CrsDeclarationProps extends PersonalInfoStoreProps, OnboardingContentP
 
 export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = ({
   accountType,
+  client,
   addPersonalInfo,
   handleNextStep,
   onboarding,
@@ -22,6 +23,10 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
 }: CrsDeclarationProps) => {
   const { disabledSteps, finishedSteps } = onboarding;
   const { editMode, principal, joint } = personalInfo;
+  const { details } = client;
+  const { principalHolder: principalClient, jointHolder: jointClient } = details!;
+  const { isEtb: isPrincipalEtb } = principalClient!;
+  const { isEtb: isJointEtb } = jointClient!;
 
   const handlePrincipalCrs = (crsDeclaration: ICrsState) => {
     addPersonalInfo({
@@ -74,27 +79,29 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
 
   const isTaxResidentJoint = joint?.declaration!.crs!.taxResident! === 0;
 
-  const showTermsPrincipal = isTaxResidentPrincipal || validateTin(principal!.declaration!.crs!.tin!);
+  const showTermsPrincipal = isPrincipalEtb === false ? isTaxResidentPrincipal || validateTin(principal!.declaration!.crs!.tin!) : true;
 
-  const showTermsJoint = isTaxResidentJoint || validateTin(joint?.declaration!.crs!.tin!);
+  const showTermsJoint = isJointEtb === false ? isTaxResidentJoint || validateTin(joint?.declaration!.crs!.tin!) : true;
 
   const validationsPrincipal = { showTerms: showTermsPrincipal };
   const validationsJoint = { showTerms: showTermsJoint };
 
-  const showButtonContinuePrincipal = showTermsPrincipal ? handleContinue : undefined;
-  const showButtonContinueJoint = showTermsJoint ? handleContinue : undefined;
-
   const continueEnabledPrincipal =
-    showTermsPrincipal &&
-    principal?.declaration!.crs!.acceptCrs &&
-    principal?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false;
+    isPrincipalEtb === false
+      ? showTermsPrincipal &&
+        principal?.declaration!.crs!.acceptCrs &&
+        principal?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false
+      : true;
 
   const continueEnabledJoint =
-    showTermsJoint &&
-    joint?.declaration!.crs!.acceptCrs &&
-    joint?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false;
+    isJointEtb === false
+      ? showTermsJoint &&
+        joint?.declaration!.crs!.acceptCrs &&
+        joint?.declaration!.crs!.tin!.map((tin) => tin.explanationSaved === true).includes(false) === false
+      : true;
 
-  const showButtonContinue = accountType === "Joint" ? showButtonContinuePrincipal && showButtonContinueJoint : showButtonContinuePrincipal;
+  const checkButtonContinue = accountType === "Joint" ? showTermsPrincipal && showTermsJoint : showTermsPrincipal;
+  const buttonContinue = checkButtonContinue === true ? handleContinue : undefined;
   const continueEnabled = accountType === "Joint" ? continueEnabledPrincipal && continueEnabledJoint : continueEnabledPrincipal;
 
   const handleBack = () => {
@@ -106,11 +113,11 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
       cancelDisabled={editMode === true}
       continueDisabled={!continueEnabled}
       handleCancel={handleBack}
-      handleContinue={showButtonContinue}
+      handleContinue={buttonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.CRS_HEADING}
       subheadingStyle={fs18BoldGray6}>
-      {accountType === "Joint" ? (
+      {accountType === "Joint" && isPrincipalEtb === false ? (
         <Fragment>
           <CustomSpacer space={sh16} />
           <View style={px(sw24)}>
@@ -123,12 +130,14 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
           </View>
         </Fragment>
       ) : null}
-      <CrsDeclarationDetails
-        crs={principal?.declaration?.crs!}
-        handleCrsDeclaration={handlePrincipalCrs}
-        validations={validationsPrincipal}
-      />
-      {accountType === "Joint" ? (
+      {isPrincipalEtb === false ? (
+        <CrsDeclarationDetails
+          crs={principal?.declaration?.crs!}
+          handleCrsDeclaration={handlePrincipalCrs}
+          validations={validationsPrincipal}
+        />
+      ) : null}
+      {accountType === "Joint" && isJointEtb === false ? (
         <View>
           <CustomSpacer space={sh24} />
           <View style={px(sw24)}>

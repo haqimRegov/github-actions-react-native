@@ -346,6 +346,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         ? [...disabledStepsInAcknowledgement]
         : updatedDisabledStepsSalesWithBank;
 
+    // TODO update "AdditionalDetails" steps when bank resets
     updateNewSales({
       ...newSales,
       disabledSteps: updatedDisabledSteps,

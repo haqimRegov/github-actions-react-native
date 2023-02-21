@@ -287,7 +287,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleBack = () => {
-    handleNextStep("ProductsList");
+    handleNextStep("ProductsConfirmation");
   };
 
   const checkJointIdType = principalIdType === "Other" ? `${jointClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : jointIdType;
@@ -304,6 +304,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   return (
     <Fragment>
       <ContentPage
+        cancelDisabled={editMode === true}
         continueDisabled={buttonDisabled}
         handleCancel={handleBack}
         handleContinue={handleContinue}

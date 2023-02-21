@@ -74,6 +74,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   handleNavigate,
   handleResend,
   isEtbPrincipal,
+  isEtbJoint,
   jointEmail,
   jointEmailCheck,
   jointOtp,
@@ -116,13 +117,14 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
     if (fetching.current === false) {
       fetching.current = true;
       setPrincipalError(undefined);
-      const jointRequest = jointEmailCheck === true ? { email: jointEmail, code: jointOtp } : undefined;
+      const checkJoint = jointEmailCheck === true ? { jointHolder: { email: jointEmail, code: jointOtp } } : {};
+      const checkPrincipal = isEtbPrincipal === false ? { principalHolder: { email: principalEmail, code: principalOtp } } : {};
       const request: IEmailOtpVerificationRequest = {
         initId: details!.initId!,
         isForceUpdate: false,
         clientId: principalClientId,
-        principalHolder: { email: principalEmail, code: principalOtp },
-        jointHolder: jointRequest,
+        ...checkPrincipal,
+        ...checkJoint,
       };
       const response: IEmailOtpVerificationResponse = await emailOtpVerification(request, navigation, handleFetching);
       fetching.current = false;
@@ -157,10 +159,14 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   const resendMinutes = Math.floor(resendTimer / 60);
   const resendSeconds = resendTimer % 60 === 0 ? 0 : resendTimer % 60;
   const formattedResendSeconds = resendSeconds < 10 ? `0${resendSeconds}` : resendSeconds;
-  const disabled = jointEmailCheck === false ? principalOtp === "" : principalOtp === "" || jointOtp === "";
+  const disabled =
+    jointEmailCheck === false
+      ? isEtbPrincipal === false && principalOtp === ""
+      : (isEtbPrincipal === false && principalOtp === "") || (isEtbJoint === false && jointOtp === "");
   const principalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
 
-  const otpEmail = jointEmailCheck === true ? `${principalEmail} & ${jointEmail}` : principalEmail;
+  const checkPrincipal = isEtbPrincipal === false ? ` ${principalEmail} & ${jointEmail}` : jointEmail;
+  const otpEmail = jointEmailCheck === true ? checkPrincipal : `${principalEmail}`;
 
   useEffect(() => {
     let redirectTimer: ReturnType<typeof setTimeout>;
@@ -225,9 +231,13 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
                   ) : null}
                   {jointEmailCheck === true || jointEmail !== "" ? (
                     <Fragment>
-                      <CustomSpacer space={sh16} />
-                      <View style={borderBottomBlue2} />
-                      <CustomSpacer space={sh16} />
+                      {isEtbPrincipal === false ? (
+                        <Fragment>
+                          <CustomSpacer space={sh16} />
+                          <View style={borderBottomBlue2} />
+                          <CustomSpacer space={sh16} />
+                        </Fragment>
+                      ) : null}
                       <CustomTextInput
                         keyboardType="numeric"
                         error={jointError}

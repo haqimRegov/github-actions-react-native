@@ -29,13 +29,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   handleNextStep,
   investmentDetails,
   newSales,
-  partialResetPRSDefaultProducts,
-  partialResetPRSProducts,
-  partialResetUTProducts,
-  products,
-  resetProducts,
-  resetSelectedFund,
-  riskAssessment,
+  // partialResetPRSDefaultProducts,
+  // partialResetPRSProducts,
+  // partialResetUTProducts,
+  // products,
+  // resetProducts,
+  // resetSelectedFund,
+  // riskAssessment,
   selectedFunds,
   updateNewSales,
   updateOutsideRisk,
@@ -43,9 +43,9 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 }: ProductsProps) => {
   const { accountType } = client;
   const { isMultiUtmc } = global;
-  const { accountDetails, disabledSteps, riskInfo, transactionType } = newSales;
-  const { accountNo, fundType, isEpf } = accountDetails;
-  const { ut, prsDefault } = products;
+  const { disabledSteps, finishedSteps, riskInfo, transactionType } = newSales;
+  // const { fundType, isEpf } = accountDetails;
+  // const { ut, prsDefault } = products;
   const [page] = useState<number>(0);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
@@ -54,66 +54,70 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
 
-  const handleProductReset = () => {
-    switch (fundType) {
-      case "ut": {
-        const checkUtFilter = isEpf === true ? { epfApproved: ut.filters.epfApproved } : undefined;
-        partialResetUTProducts(checkUtFilter);
-        break;
-      }
-      case "prs":
-        partialResetPRSProducts();
-        break;
-      case "prsDefault":
-        partialResetPRSDefaultProducts({
-          shariahApproved: prsDefault.filters.shariahApproved,
-          conventional: prsDefault.filters.conventional,
-        });
-        break;
-      case "amp":
-        break;
-      default: {
-        const checkUt = isEpf === true ? { epfApproved: ut.filters.epfApproved } : undefined;
-        partialResetUTProducts(checkUt);
-        break;
-      }
-    }
-  };
+  // const handleProductReset = () => {
+  //   switch (fundType) {
+  //     case "ut": {
+  //       const checkUtFilter = isEpf === true ? { epfApproved: ut.filters.epfApproved } : undefined;
+  //       partialResetUTProducts(checkUtFilter);
+  //       break;
+  //     }
+  //     case "prs":
+  //       partialResetPRSProducts();
+  //       break;
+  //     case "prsDefault":
+  //       partialResetPRSDefaultProducts({
+  //         shariahApproved: prsDefault.filters.shariahApproved,
+  //         conventional: prsDefault.filters.conventional,
+  //       });
+  //       break;
+  //     case "amp":
+  //       break;
+  //     default: {
+  //       const checkUt = isEpf === true ? { epfApproved: ut.filters.epfApproved } : undefined;
+  //       partialResetUTProducts(checkUt);
+  //       break;
+  //     }
+  //   }
+  // };
 
   const handleBackToAssessment = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskSummary"];
+    // const updatedFinishedSteps: TypeNewSalesKey[] = ["RiskSummary"];
 
-    if (riskAssessment.isRiskUpdated === true) {
-      updatedFinishedSteps.push("RiskAssessment");
-    }
+    // if (isNewFundPurchase === true) {
+    //   updatedFinishedSteps.push("AccountList");
+    // }
+
+    // if (riskAssessment.isRiskUpdated === true) {
+    //   updatedFinishedSteps.push("RiskAssessment");
+    // }
 
     // not using reducer initial state because of redux mutating issue
-    const initialDisabledSteps: TypeNewSalesKey[] = [
-      "RiskAssessment",
-      "Products",
-      "ProductsList",
-      "ProductsConfirmation",
-      "AccountInformation",
-      "IdentityVerification",
-      "AdditionalDetails",
-      "Summary",
-      "Acknowledgement",
-      "OrderPreview",
-      "TermsAndConditions",
-      "Signatures",
-      "Payment",
-    ];
+    // const initialDisabledSteps: TypeNewSalesKey[] = [
+    //   "RiskAssessment",
+    //   "Products",
+    //   "ProductsList",
+    //   "ProductsConfirmation",
+    //   "AccountInformation",
+    //   "IdentityVerification",
+    //   "AdditionalDetails",
+    //   "Summary",
+    //   "Acknowledgement",
+    //   "OrderPreview",
+    //   "TermsAndConditions",
+    //   "Signatures",
+    //   "Payment",
+    // ];
 
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: initialDisabledSteps });
+    // updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: initialDisabledSteps });
 
-    setPrompt(undefined);
+    // setPrompt(undefined);
     handleNextStep("RiskSummary");
-    if (accountNo === "") {
-      resetProducts();
-    } else {
-      handleProductReset();
-    }
-    resetSelectedFund();
+    // if (accountNo === "") {
+    //   resetProducts();
+    // } else {
+    //   handleProductReset();
+    // }
+    // resetSelectedFund();
   };
 
   const handleCancel = () => {
@@ -194,12 +198,21 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     addInvestmentDetails(sortedInvestmentArray);
 
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
-    const findProductList = updatedDisabledSteps.indexOf("ProductsList");
-    if (findProductList !== -1) {
-      updatedDisabledSteps.splice(findProductList, 1);
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("ProductsList") === false) {
+      updatedFinishedSteps.push("ProductsList");
     }
 
-    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
+    // remove from disabledSteps
+    const findConfirmation = updatedDisabledSteps.indexOf("ProductsConfirmation");
+    if (findConfirmation !== -1) {
+      updatedDisabledSteps.splice(findConfirmation, 1);
+    }
+
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
     handleNextStep("ProductsConfirmation");
   };
 
@@ -232,7 +245,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   };
 
   const handleCancelProducts = () => {
-    setPrompt("cancel");
+    // setPrompt("cancel");
+    handleBackToAssessment();
   };
 
   const handleBack = () => {
@@ -303,6 +317,27 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const handleKeyboardHide = () => {
     setKeyboardIsShowing(false);
   };
+
+  useEffect(() => {
+    // remove "ProductList" from finishedSteps if no selected funds
+    // TODO remove product as finished step when they go back to risk assessment by pressing "Back"
+    if (finishedSteps.includes("ProductsList") === true && selectedFunds.length === 0) {
+      const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+      // remove from finishedSteps
+      const findProductList = updatedFinishedSteps.indexOf("ProductsList");
+      if (findProductList !== -1) {
+        updatedFinishedSteps.splice(findProductList, 1);
+      }
+      const findConfirmation = updatedFinishedSteps.indexOf("ProductsConfirmation");
+      if (findConfirmation !== -1) {
+        updatedFinishedSteps.splice(findConfirmation, 1);
+      }
+
+      updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFunds]);
 
   useEffect(() => {
     const keyboardWillHide = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);

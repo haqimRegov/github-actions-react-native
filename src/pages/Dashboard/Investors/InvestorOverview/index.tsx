@@ -356,6 +356,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   dateOfBirth: data.result.jointHolder.dateOfBirth,
                   id: data.result.jointHolder.id,
                   name: data.result.jointHolder.name,
+                  isEtb: !ntb,
                   ...storeJointIdType,
                 }
               : {};
@@ -372,7 +373,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               id: data.result.principalHolder.id,
               name: data.result.principalHolder.name,
               ...storePrincipalIdType,
-              isEtb: false,
+              isEtb: true,
             },
             jointHolder: resetJointInfo === true ? { ...initialJointInfo } : ({ ...jointHolder, ...moreJointInfo } as IClientBasicInfo),
             initId: data.result.initId.toString(),

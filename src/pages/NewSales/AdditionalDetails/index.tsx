@@ -35,15 +35,14 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
   personalInfo,
   productSales,
   updateNewSales,
-  updateToastVisible,
 }: AdditionalDetailsProps) => {
+  const { editMode, epfInvestment, epfShariah, isAllEpf, incomeDistribution, principal, signatory } = personalInfo;
+  const { accountDetails, disabledSteps, finishedSteps, transactionType } = newSales;
   const [currentCurrency, setCurrentCurrency] = useState<string>("");
   const [deleteToast, setDeleteToast] = useState<boolean>(false);
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
-  const { epfInvestment, epfShariah, signatory, incomeDistribution, isAllEpf, principal } = personalInfo;
-  const { accountDetails, disabledSteps, finishedSteps, transactionType } = newSales;
   const { bankDetails: existingBankDetails, isEpf } = accountDetails;
-  const { bankSummary, epfDetails, personalDetails } = personalInfo.principal!;
+  const { bankSummary, epfDetails, personalDetails } = principal!;
   const { localBank, foreignBank } = bankSummary!;
   const { enableBankDetails, otherRelationship, relationship } = personalDetails!;
   const inputEpfType = epfDetails!.epfAccountType!;
@@ -58,31 +57,32 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
   };
 
   const handleContinue = () => {
-    const updatedDisabledSteps = [...disabledSteps];
-    const updatedFinishedSteps = [...finishedSteps];
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
 
-    const findFinishedId = updatedFinishedSteps.indexOf("IdentityVerification");
-    if (findFinishedId === -1) {
-      updatedFinishedSteps.push("IdentityVerification");
-    }
-
-    const findDisabledId = updatedDisabledSteps.indexOf("IdentityVerification");
-    if (findDisabledId === -1) {
-      updatedDisabledSteps.push("IdentityVerification");
-    }
-
-    const findDisabledDetails = updatedDisabledSteps.indexOf("AdditionalDetails");
-    if (findDisabledDetails === -1) {
-      updatedDisabledSteps.push("AdditionalDetails");
-    }
-
-    const findFinishedDetails = updatedFinishedSteps.indexOf("AdditionalDetails");
-    if (findFinishedDetails === -1) {
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("AdditionalDetails") === false) {
       updatedFinishedSteps.push("AdditionalDetails");
     }
 
-    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
-    updateToastVisible(true);
+    // remove from disabledSteps (next step)
+    const findSummary = updatedDisabledSteps.indexOf("Summary");
+    if (findSummary !== -1) {
+      updatedDisabledSteps.splice(findSummary, 1);
+    }
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateNewSales({
+      ...newSales,
+      disabledSteps: updatedDisabledSteps,
+      finishedSteps: updatedFinishedSteps,
+      toast: { ...newSales.toast, toastVisible: true },
+    });
+
     handleNextStep("Summary");
   };
 
@@ -303,6 +303,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
   return (
     <Fragment>
       <ContentPage
+        cancelDisabled={editMode === true}
         continueDisabled={continueDisabled}
         handleCancel={handleCancel}
         handleContinue={handleContinue}

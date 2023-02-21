@@ -98,14 +98,13 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   navigation,
   newSales,
   personalInfo,
-  riskAssessment,
   selectedFunds,
   updateNewSales,
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
+  const { disabledSteps, finishedSteps, transactionType } = newSales;
   const { accountNo, ampDetails, isEpf } = accountDetails;
   const { details } = client;
-  const { transactionType } = newSales;
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
   const flatListRef = useRef<FlatList | null>(null);
@@ -166,6 +165,17 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
   };
 
   const handleBackToListing = () => {
+    if (checkAMP === "ProductsList") {
+      const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
+
+      // add to disabledSteps
+      if (updatedDisabledSteps.includes("ProductsConfirmation") === false) {
+        updatedDisabledSteps.push("ProductsConfirmation");
+      }
+
+      updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
+    }
+
     handleNextStep(checkAMP);
   };
 
@@ -174,7 +184,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const epfInvestmentsShariah = epfInvestments.map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
     const epfShariah = epfInvestmentsShariah.includes("Yes");
     const allEpf = epfInvestments.length === investmentDetails!.length;
-    const isNewFundPurchase = client.isNewFundPurchase === true || accountNo !== "";
+    const isSalesFromQuickActions = client.isNewFundPurchase === true || accountNo !== "";
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
 
@@ -215,7 +225,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const remainingCurrencies = investmentCurrencies.filter(
       (eachInvestmentCurrency: string) => !currentCurrencies.includes(eachInvestmentCurrency),
     );
-    const checkSalesWithBank = remainingCurrencies.length > 0;
+    const isNeedAdditionalBankCurrency = remainingCurrencies.length > 0;
 
     let filterLocalBankDetails: IBankDetailsState[] = [];
     let filterForeignBankDetails: IBankDetailsState[] = [];
@@ -238,7 +248,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               }))
               .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
           : [];
-    } else if (transactionType === "Sales" && checkSalesWithBank === true) {
+    } else if (transactionType === "Sales" && isNeedAdditionalBankCurrency === true) {
       filterLocalBankDetails = localBank;
       filterForeignBankDetails = isArrayNotEmpty(foreignBank) ? [...foreignBank] : [];
     }
@@ -282,38 +292,44 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       },
     });
 
-    const checkNextStepForSales: TypeNewSalesRoute = checkSalesWithBank === true ? "AdditionalDetails" : "OrderPreview";
-    const checkNextStep: TypeNewSalesRoute = isNewFundPurchase === true ? checkNextStepForSales : "IdentityVerification";
-
     // combined New Fund and AO
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "Products", "ProductsList", "ProductsConfirmation"];
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
 
-    if (riskAssessment.isRiskUpdated === true) {
-      updatedFinishedSteps.push("RiskAssessment");
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("Products") === false) {
+      updatedFinishedSteps.push("Products");
+    }
+    if (updatedFinishedSteps.includes("ProductsConfirmation") === false) {
+      updatedFinishedSteps.push("ProductsConfirmation");
     }
 
+    // if (riskAssessment.isRiskUpdated === true) {
+    //   updatedFinishedSteps.push("RiskAssessment");
+    // }
+
+    // route to Acknowledgement
+    const disabledStepsInAcknowledgement: TypeNewSalesKey[] = [
+      "AccountList",
+      "RiskSummary",
+      "Products",
+      "AccountInformation",
+      "Acknowledgement",
+      "OrderPreview",
+      "TermsAndConditions",
+      "Signatures",
+      "Payment",
+    ];
+
     const updatedDisabledStepsSalesWithBank: TypeNewSalesKey[] =
-      checkSalesWithBank === true
+      isNeedAdditionalBankCurrency === true
         ? [
-            // "RiskAssessment",
-            // "Products",
-            // "ProductsList",
-            // "ProductsConfirmation",
-            // "AccountInformation",
-            "Summary",
-            "Acknowledgement",
-            "OrderPreview",
-            "TermsAndConditions",
-            "Signatures",
-          ]
-        : [
-            // set to initial disabled steps without Products and ProductsList
-            // not using reducer initial state because of redux mutating issue
+            // "AccountList",
+            // "RiskSummary",
             "RiskAssessment",
             // "Products",
-            // "ProductsList",
-            "ProductsConfirmation",
-            "AccountInformation",
+            "ProductsList",
+            // "ProductsConfirmation",
+            // "AccountInformation",
             "IdentityVerification",
             "AdditionalDetails",
             "Summary",
@@ -321,21 +337,30 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             "OrderPreview",
             "TermsAndConditions",
             "Signatures",
-          ];
+            "Payment",
+          ]
+        : [...disabledStepsInAcknowledgement];
+
     const updatedDisabledSteps: TypeNewSalesKey[] =
-      isNewFundPurchase === true && checkSalesWithBank === false
-        ? ["AccountList", "RiskSummary", "Products", "AccountInformation", "TermsAndConditions", "Signatures", "Payment"]
+      isSalesFromQuickActions === true && isNeedAdditionalBankCurrency === false
+        ? [...disabledStepsInAcknowledgement]
         : updatedDisabledStepsSalesWithBank;
+
+    // TODO update "AdditionalDetails" steps when bank resets
     updateNewSales({
       ...newSales,
-      finishedSteps: updatedFinishedSteps,
       disabledSteps: updatedDisabledSteps,
+      finishedSteps: updatedFinishedSteps,
       accountDetails: {
         ...newSales.accountDetails,
-        isBankDetailsRequired: checkSalesWithBank,
+        isBankDetailsRequired: isNeedAdditionalBankCurrency,
         bankDetails: cloneDeep(allBanks),
       },
     });
+
+    const checkNextStepForSales: TypeNewSalesKey = isNeedAdditionalBankCurrency === true ? "AdditionalDetails" : "OrderPreview";
+    const checkNextStep: TypeNewSalesKey = isSalesFromQuickActions === true ? checkNextStepForSales : "IdentityVerification";
+
     handleNextStep(checkNextStep);
   };
 

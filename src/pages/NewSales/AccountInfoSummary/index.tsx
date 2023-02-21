@@ -33,8 +33,9 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
   setLoading,
   updateNewSales,
 }: AccountInfoSummaryProps) => {
-  const navigation = useNavigation<IStackNavigationProp>();
   const { accountDetails, transactionType } = newSales;
+  const { principal, joint } = personalInfo;
+  const navigation = useNavigation<IStackNavigationProp>();
   const { accountNo, bankDetails } = accountDetails;
   const [page, setPage] = useState<TRiskProfilePages>("accountSummary");
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
@@ -47,9 +48,6 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
   const handleCloseViewer = () => {
     setFile(undefined);
   };
-
-  const { finishedSteps } = newSales;
-  const { principal, joint } = personalInfo;
 
   const fetching = useRef<boolean>(false);
 
@@ -211,20 +209,23 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
   };
 
   const handleNavigation = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-    updatedFinishedSteps.push("Summary", "AccountInformation");
+    // do not allow to click finished steps
+    const newFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "Products", "AccountInformation"];
+
     const newDisabledStep: TypeNewSalesKey[] = [
+      "AccountList",
       "RiskSummary",
       "Products",
       "AccountInformation",
-      "IdentityVerification",
-      "AdditionalDetails",
-      "Summary",
-      "Signatures",
+      "Acknowledgement",
+      "OrderPreview",
       "TermsAndConditions",
+      "Signatures",
       "Payment",
     ];
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+
+    updateNewSales({ ...newSales, disabledSteps: newDisabledStep, finishedSteps: newFinishedSteps });
+
     handleNextStep("OrderPreview");
   };
 

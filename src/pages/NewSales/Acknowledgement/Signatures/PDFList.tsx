@@ -208,7 +208,7 @@ const PDFListComponent: FunctionComponent<PDFListProps> = ({
   return (
     <Fragment>
       <PDFListTemplate
-        accountType={accountType}
+        accountType={accountType!}
         authorisedSignatory={authorisedSignatory}
         details={details}
         handleBack={handleBack}

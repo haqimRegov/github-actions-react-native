@@ -10,13 +10,13 @@ const { SUMMARY } = Language.PAGE;
 
 interface JointProps {
   handleCloseViewer?: () => void;
-  handleNextStep: (route: TypeOnboardingKey) => void;
+  handleEdit: (route: TypeOnboardingKey) => void;
   setViewFile?: (value: FileBase64) => void;
   summary: IHolderInfoState;
   viewFile?: FileBase64 | undefined;
 }
 
-export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, viewFile, setViewFile, handleCloseViewer }: JointProps) => {
+export const Joint: FunctionComponent<JointProps> = ({ handleEdit, summary, viewFile, setViewFile, handleCloseViewer }: JointProps) => {
   const { addressInformation, bankSummary, contactDetails, employmentDetails, epfDetails, personalDetails } = summary;
 
   const dateOfBirth = moment(personalDetails!.dateOfBirth).format(DEFAULT_DATE_FORMAT);
@@ -228,7 +228,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleNextStep, summary, 
       epfDetails={epfDetailsSummary}
       foreignBankDetails={foreignBank}
       handleCloseViewer={handleCloseViewer}
-      handleNextStep={handleNextStep}
+      handleEdit={handleEdit}
       isMalaysian={isMalaysian}
       localBankDetails={localBank}
       mailingAddress={mailingAddressSummary}

@@ -9,7 +9,7 @@ import { isNumber } from "../../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
-interface ContactDetailsProps {
+interface ContactInfoProps {
   contactNumber: IContactNumberState[];
   optional: boolean;
   setContactNumber: (input: IContactNumberState[]) => void;
@@ -39,11 +39,7 @@ const allLabels: IContactNumberLabel[] = [
   },
 ];
 
-export const ContactDetails: FunctionComponent<ContactDetailsProps> = ({
-  contactNumber,
-  optional,
-  setContactNumber,
-}: ContactDetailsProps) => {
+export const ContactInfo: FunctionComponent<ContactInfoProps> = ({ contactNumber, optional, setContactNumber }: ContactInfoProps) => {
   return (
     <View>
       {contactNumber.map((item: IContactNumber, index: number) => {

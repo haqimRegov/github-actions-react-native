@@ -26,8 +26,10 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   handleNextStep,
   personalInfo,
 }: IdentityConfirmationProps) => {
+  const { principalHolder, jointHolder } = details!;
+  const { editMode, joint, principal } = personalInfo;
   // TODO issue in dropdown and keyboard avoiding view
-  const defaultPage = personalInfo.editPersonal === true ? 1 : 0;
+  const defaultPage = editMode === true ? 1 : 0;
   const [page, setPage] = useState<number>(defaultPage);
   const [uploadType, setUploadType] = useState<TypeUploader | undefined>(undefined);
   const [reviewImage, setReviewImage] = useState<FileBase64 | undefined>(undefined);
@@ -38,8 +40,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const principalUploadRef = useRef<IUploadDocumentRef>();
   const jointUploadRef = useRef<IUploadDocumentRef>();
 
-  const { principalHolder, jointHolder } = details!;
-  const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
   const principalBackPage = principal!.personalDetails!.id!.secondPage;
   const jointFrontPage = joint!.personalDetails!.id!.frontPage;
@@ -63,9 +63,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const jointPass = jointFrontPage?.path !== undefined && jointFrontError === undefined;
 
   const jointMyKad =
-    accountType === "Joint" && jointClientIdType === "NRIC"
-      ? moment().diff(personalInfo.joint!.personalDetails!.dateOfBirth, "years") >= 12
-      : true;
+    accountType === "Joint" && jointClientIdType === "NRIC" ? moment().diff(joint!.personalDetails!.dateOfBirth, "years") >= 12 : true;
 
   let buttonDisabled = false;
   if (accountType === "Individual" || accountType === "Joint") {
@@ -125,7 +123,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const handleContinue = () => {
     const principalMailingAddress =
       joint?.addressInformation?.sameAddress === true
-        ? personalInfo.principal!.addressInformation?.mailingAddress!
+        ? principal!.addressInformation?.mailingAddress!
         : joint?.addressInformation?.mailingAddress;
     setPage(1);
     if (accountType === "Joint") {
@@ -259,6 +257,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
     <Fragment>
       {page === 0 ? (
         <ContentPage
+          cancelDisabled={editMode === true}
           continueDisabled={buttonDisabled}
           handleCancel={handleBack}
           handleContinue={handleContinue}

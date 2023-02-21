@@ -20,7 +20,8 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   personalInfo,
   updateOnboarding,
 }: FatcaDeclarationProps) => {
-  const { principal, joint } = personalInfo;
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, principal, joint } = personalInfo;
   const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
     principal?.addressInformation?.permanentAddress?.postCode
   }, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${
@@ -47,13 +48,26 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   };
 
   const handleContinue = () => {
-    const route: TypeOnboardingKey = personalInfo.editDeclaration === true ? "DeclarationSummary" : "CRSDeclaration";
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findCrs = updatedDisabledSteps.indexOf("CRSDeclaration");
-    if (findCrs !== -1) {
-      updatedDisabledSteps.splice(findCrs, 1);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("FATCADeclaration") === false) {
+      updatedFinishedSteps.push("FATCADeclaration");
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      const findDeclarationsSummary = updatedDisabledSteps.indexOf("DeclarationSummary");
+
+      if (findDeclarationsSummary !== -1) {
+        updatedDisabledSteps.splice(findDeclarationsSummary, 1);
+      }
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps });
+
+    const route: TypeOnboardingKey = editMode === true ? "DeclarationSummary" : "CRSDeclaration";
     handleNextStep(route);
   };
 
@@ -142,6 +156,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
 
   return (
     <ContentPage
+      cancelDisabled={editMode === true}
       continueDisabled={!continueEnabled}
       handleCancel={handleBack}
       handleContinue={showButtonContinue}

@@ -7,12 +7,12 @@ import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../co
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
-import { ContactDetails } from "./ContactDetails";
+import { ContactInfo } from "./Details";
 
 const { CONTACT_DETAILS, ID_VERIFICATION, PERSONAL_DETAILS } = Language.PAGE;
-interface PersonalDetailsProps extends PersonalInfoStoreProps, OnboardingContentProps {}
+interface ContactDetailsProps extends PersonalInfoStoreProps, OnboardingContentProps {}
 
-const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
+const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
   accountType,
   addPersonalInfo,
   client,
@@ -21,8 +21,9 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   onboarding,
   personalInfo,
   updateOnboarding,
-}: PersonalDetailsProps) => {
-  const { principal, joint } = personalInfo;
+}: ContactDetailsProps) => {
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, principal, joint } = personalInfo;
   const { details: clientDetails } = client;
   const { principalHolder: principalClient, jointHolder: jointClient } = clientDetails!;
   const { isEtb: isPrincipalEtb } = principalClient!;
@@ -67,15 +68,27 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
       : (isPrincipalEtb === false && validatePrincipal(principal!) === false) || (isJointEtb === false && validateJoint(joint!) === false);
 
   const handleSubmit = () => {
-    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "EmploymentDetails";
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    // const findInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
-    // addPersonalInfo({ ...personalInfo, editPersonal: findInfoSummary === -1 });
-    const findEmploymentDetails = updatedDisabledSteps.indexOf("EmploymentDetails");
-    if (findEmploymentDetails !== -1) {
-      updatedDisabledSteps.splice(findEmploymentDetails, 1);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("ContactDetails") === false) {
+      updatedFinishedSteps.push("ContactDetails");
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+
+      if (findPersonalInfoSummary !== -1) {
+        updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
+      }
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    const route: TypeOnboardingKey = editMode === true ? "PersonalInfoSummary" : "EmploymentDetails";
     handleNextStep(route);
   };
 
@@ -108,6 +121,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   return (
     <ContentPage
       buttonContainerStyle={px(sw24)}
+      cancelDisabled={editMode === true}
       continueDisabled={buttonDisabled}
       handleCancel={handleBack}
       handleContinue={handleSubmit}
@@ -124,7 +138,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
             <ColorCard
               header={{ label: checkContactDetailsLabel }}
               content={
-                <ContactDetails
+                <ContactInfo
                   contactNumber={principalContactDetails?.contactNumber!}
                   setContactNumber={handlePrincipalContactDetails}
                   optional={false}
@@ -140,7 +154,7 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
             <ColorCard
               header={{ label: PERSONAL_DETAILS.LABEL_ADD_JOINT_HOLDER_CONTACT }}
               content={
-                <ContactDetails
+                <ContactInfo
                   contactNumber={jointContactDetails?.contactNumber!}
                   setContactNumber={handleJointContactDetails}
                   optional={isContactOptional}
@@ -154,4 +168,4 @@ const PersonalDetailsComponent: FunctionComponent<PersonalDetailsProps> = ({
   );
 };
 
-export const PersonalDetails = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(PersonalDetailsComponent);
+export const ContactDetails = connect(PersonalInfoMapStateToProps, PersonalInfoMapDispatchToProps)(ContactDetailsComponent);

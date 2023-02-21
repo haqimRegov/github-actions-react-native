@@ -48,7 +48,7 @@ export const ONBOARDING_DATA: IOnboarding[] = [
         route: ONBOARDING_ROUTES.IdentityVerification,
         key: ONBOARDING_KEYS.IdentityVerification,
       },
-      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.PersonalDetails, key: ONBOARDING_KEYS.PersonalDetails },
+      { title: ONBOARDING.TITLE_CONTACT_DETAILS, route: ONBOARDING_ROUTES.ContactDetails, key: ONBOARDING_KEYS.ContactDetails },
       {
         title: ONBOARDING.TITLE_EMPLOYMENT_DETAILS,
         route: ONBOARDING_ROUTES.EmploymentDetails,
@@ -100,6 +100,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     disabledSteps,
     finishedSteps,
     navigation,
+    personalInfo,
     resetAcknowledgement,
     resetClientDetails,
     resetOnboarding,
@@ -110,6 +111,8 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetTransactions,
     updateFinishedSteps,
   } = props;
+
+  const { editMode } = personalInfo;
 
   const stepperBarRef = useRef<IStepperBarRef<TypeOnboardingKey>>();
   const [cancelOnboarding, setCancelOnboarding] = useState<boolean>(false);
@@ -155,6 +158,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
         activeSection={activeSection}
         activeStepHeaderTextStyle={activeContent !== undefined && activeContent.route === "RiskSummary" ? fs14BoldGray6 : {}}
         disabledSteps={disabledSteps}
+        editMode={editMode}
         finishedSteps={finishedSteps}
         handleContentChange={handleContentChange}
         handleBackToDashboard={handleCancelOnboarding}

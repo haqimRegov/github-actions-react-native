@@ -27,7 +27,9 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   updateOnboarding,
 }: EmailVerificationProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
-  const { emailOtpSent, emailTimestamp } = personalInfo;
+
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, emailOtpSent, emailTimestamp } = personalInfo;
   const { jointHolder, principalHolder } = details!;
   const { isEtb: isEtbJoint } = jointHolder!;
   const { isEtb: isEtbPrincipal } = principalHolder!;
@@ -50,14 +52,27 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const jointEmailCheck = accountType === "Joint" && (inputJointEmail !== "" || jointAgeCheck);
 
   const handleNavigate = () => {
-    handleNextStep("IdentityVerification");
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findIdVerification = updatedDisabledSteps.indexOf("IdentityVerification");
-    if (findIdVerification !== -1) {
-      updatedDisabledSteps.splice(findIdVerification, 1);
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("EmailVerification") === false) {
+      updatedFinishedSteps.push("EmailVerification");
     }
-    updatedDisabledSteps.push("EmailVerification");
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+
+      if (findPersonalInfoSummary !== -1) {
+        updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
+      }
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    handleNextStep("IdentityVerification");
   };
 
   const handleEmailVerification = async () => {

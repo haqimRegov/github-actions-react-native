@@ -21,7 +21,7 @@ export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = 
   const { bankSummary } = principal!;
 
   const handleEditOtherDetails = () => {
-    handleNextStep("PersonalDetails");
+    handleNextStep("AdditionalDetails");
   };
 
   const { width } = Dimensions.get("window");

@@ -44,7 +44,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   updateAgree,
   updateOnboarding,
 }: TermsAndConditionsProps) => {
-  const { disabledSteps } = onboarding;
+  const { finishedSteps } = onboarding;
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
   const handleAgree1 = () => {
@@ -64,12 +64,15 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   };
 
   const handleContinue = () => {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findSignatures = updatedDisabledSteps.indexOf("Signatures");
-    if (findSignatures !== -1) {
-      updatedDisabledSteps.splice(findSignatures, 1);
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("TermsAndConditions") === false) {
+      updatedFinishedSteps.push("TermsAndConditions");
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
+    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps });
+
     handleNextStep("Signatures");
   };
 
@@ -107,11 +110,6 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
 
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
-
-  if (!disabledSteps.includes("Signatures") && disabled === true) {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps, "Signatures"];
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
-  }
 
   return (
     <ContentPage

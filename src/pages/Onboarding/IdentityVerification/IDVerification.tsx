@@ -28,7 +28,8 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   personalInfo,
   updateOnboarding,
 }: IDVerificationProps) => {
-  const { epfInvestment, epfShariah, principal, joint } = personalInfo;
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { editMode, epfInvestment, epfShariah, principal, joint } = personalInfo;
   const { epfDetails } = principal!;
   const inputEpfType = epfDetails!.epfAccountType!;
   const inputEpfNumber = epfDetails!.epfMemberNumber!;
@@ -90,13 +91,27 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   };
 
   const handleSubmit = () => {
-    const route: TypeOnboardingKey = personalInfo.editPersonal === true ? "PersonalInfoSummary" : "PersonalDetails";
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...onboarding.disabledSteps];
-    const findPersonalDetails = updatedDisabledSteps.indexOf("PersonalDetails");
-    if (findPersonalDetails !== -1) {
-      updatedDisabledSteps.splice(findPersonalDetails, 1);
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("IdentityVerification") === false) {
+      updatedFinishedSteps.push("IdentityVerification");
     }
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+
+      if (findPersonalInfoSummary !== -1) {
+        updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
+      }
+      addPersonalInfo({ ...personalInfo, editMode: false });
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    const route: TypeOnboardingKey = editMode === true ? "PersonalInfoSummary" : "ContactDetails";
     handleNextStep(route);
   };
 

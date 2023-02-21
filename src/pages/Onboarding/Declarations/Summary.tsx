@@ -36,22 +36,10 @@ interface DeclarationSummaryProps extends PersonalInfoStoreProps, OnboardingCont
   navigation: IStackNavigationProp;
 }
 
-const DISABLED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = [
-  // "RiskSummary",
-  // "Products",
-  // "PersonalInformation",
-  "DeclarationSummary",
-  "Acknowledgement",
-  "TermsAndConditions",
-  "Signatures",
-  "Payment",
-];
-
-const FINISHED_STEPS_WHILE_EDITING: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation"];
-
 export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryProps> = ({
   accountType,
   addOrders,
+  addPersonalInfo,
   details,
   handleNextStep,
   investmentDetails,
@@ -61,8 +49,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   setLoading,
   updateOnboarding,
 }: DeclarationSummaryProps) => {
-  const { finishedSteps } = onboarding;
-  const { principal, joint } = personalInfo;
+  const { joint, principal } = personalInfo;
+  const { disabledSteps } = onboarding;
 
   const fetching = useRef<boolean>(false);
   const baseDeletedProperty: TEmploymentDetailsState[] = ["isEnabled", "isOptional", "othersOccupation"];
@@ -379,18 +367,23 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         const { data, error } = response;
         if (error === null && data !== null) {
           addOrders(data.result);
-          const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-          updatedFinishedSteps.push("Declarations");
+
+          // do not allow to click finished steps
+          const newFinishedSteps: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation", "Declarations"];
           const newDisabledStep: TypeOnboardingKey[] = [
-            "RiskAssessment",
+            "RiskSummary",
             "Products",
             "PersonalInformation",
             "Declarations",
+            "Acknowledgement",
+            "OrderSummary",
             "TermsAndConditions",
             "Signatures",
             "Payment",
           ];
-          updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+
+          updateOnboarding({ ...onboarding, disabledSteps: newDisabledStep, finishedSteps: newFinishedSteps });
+
           return handleNextStep("OrderSummary");
         }
 
@@ -409,27 +402,34 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     handleSetupClient();
   };
 
-  const handleBack = () => {
-    handleNextStep("CRSDeclaration");
-  };
-
   const handleEditFatca = () => {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...DISABLED_STEPS_WHILE_EDITING];
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...FINISHED_STEPS_WHILE_EDITING];
-    updatedDisabledSteps.push("CRSDeclaration");
-    updatedFinishedSteps.push("CRSDeclaration");
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
 
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    // add to disabledSteps when editing
+    if (updatedDisabledSteps.includes("DeclarationSummary") === false) {
+      updatedDisabledSteps.push("DeclarationSummary");
+    }
+
+    // enable edit mode
+    addPersonalInfo({ ...personalInfo, editMode: true });
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
     handleNextStep("FATCADeclaration");
   };
 
   const handleEditCrs = () => {
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...DISABLED_STEPS_WHILE_EDITING];
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...FINISHED_STEPS_WHILE_EDITING];
-    updatedDisabledSteps.push("FATCADeclaration");
-    updatedFinishedSteps.push("FATCADeclaration");
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
 
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    // add to disabledSteps when editing
+    if (updatedDisabledSteps.includes("DeclarationSummary") === false) {
+      updatedDisabledSteps.push("DeclarationSummary");
+    }
+
+    // enable edit mode
+    addPersonalInfo({ ...personalInfo, editMode: true });
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
     handleNextStep("CRSDeclaration");
   };
 
@@ -493,9 +493,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       </ContentPage>
       <CustomSpacer space={sh24} />
       <SelectionBanner
-        cancelOnPress={handleBack}
         label={DECLARATION_SUMMARY.BANNER_TITLE}
-        labelCancel={DECLARATION_SUMMARY.BUTTON_BACK}
         labelSubmit={DECLARATION_SUMMARY.BUTTON_NEXT}
         submitOnPress={handleContinue}
       />

@@ -46,6 +46,7 @@ declare interface OnboardingStepsProps {
 declare interface IOnboardingRoutes {
   Acknowledgement: TypeOnboardingRoute;
   AdditionalDetails: TypeOnboardingRoute;
+  ContactDetails: TypeOnboardingRoute;
   CRSDeclaration: TypeOnboardingRoute;
   Declarations: TypeOnboardingRoute;
   DeclarationSummary: TypeOnboardingRoute;
@@ -55,7 +56,6 @@ declare interface IOnboardingRoutes {
   IdentityVerification: TypeOnboardingRoute;
   OrderSummary: TypeOnboardingRoute;
   Payment: TypeOnboardingRoute;
-  PersonalDetails: TypeOnboardingRoute;
   PersonalInformation: TypeOnboardingRoute;
   PersonalInfoSummary: TypeOnboardingRoute;
   Products: TypeOnboardingRoute;
@@ -68,6 +68,7 @@ declare interface IOnboardingRoutes {
 declare interface IOnboardingKeys {
   Acknowledgement: TypeOnboardingKey;
   AdditionalDetails: TypeOnboardingKey;
+  ContactDetails: TypeOnboardingKey;
   CRSDeclaration: TypeOnboardingKey;
   Declarations: TypeOnboardingKey;
   DeclarationSummary: TypeOnboardingKey;
@@ -77,7 +78,6 @@ declare interface IOnboardingKeys {
   IdentityVerification: TypeOnboardingKey;
   OrderSummary: TypeOnboardingKey;
   Payment: TypeOnboardingKey;
-  PersonalDetails: TypeOnboardingKey;
   PersonalInformation: TypeOnboardingKey;
   PersonalInfoSummary: TypeOnboardingKey;
   Products: TypeOnboardingKey;

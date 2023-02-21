@@ -97,20 +97,17 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
     const textStyle: TextStyle = isActive ? { ...activeTextStyle, ...activeStepHeaderTextStyle } : { ...fs14RegGray4, ...disabledOpacity6 };
 
     const handleChange = () => {
-      if (editMode === false) {
+      if (editMode !== true) {
         if (disabledSteps !== undefined && disabledSteps.includes(step.key) === false) {
           setSections([stepIndex]);
         }
       }
     };
 
-    const pointerEvents =
-      disableNextSteps === true || (disabledSteps !== undefined && disabledSteps.includes(step.key) === true) ? undefined : "none";
-
     return (
       <View>
         <TouchableWithoutFeedback onPress={handleChange}>
-          <View pointerEvents={pointerEvents}>
+          <View>
             {stepIndex === 0 ? null : <CustomSpacer space={sh32} />}
             <View style={flexRow}>
               <Step active={isActive} step={currentStep} visited={visited} />
@@ -209,7 +206,7 @@ const StepperBarBase = <TKeys extends string>(props: StepperBarProps<TKeys>, ref
     setActiveContent(newRoute);
   };
 
-  const touchablePress = disableNextSteps === true ? { onPress: undefined } : {};
+  const touchablePress = disableNextSteps === true || editMode === true ? { onPress: undefined } : {};
 
   useImperativeHandle(ref, () => ({ handleNextStep }));
 

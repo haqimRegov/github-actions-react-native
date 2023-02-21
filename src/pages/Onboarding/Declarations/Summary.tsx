@@ -50,7 +50,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   setLoading,
   updateOnboarding,
 }: DeclarationSummaryProps) => {
-  const { disabledSteps, finishedSteps } = onboarding;
+  const { disabledSteps } = onboarding;
   const { jointHolder, principalHolder } = details!;
   const { isEtb: isEtbPrincipal } = principalHolder!;
   const { isEtb: isEtbJoint } = jointHolder!;

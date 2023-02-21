@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { Image, ImageStyle, Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";

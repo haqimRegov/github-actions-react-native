@@ -51,7 +51,7 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   updateAgree,
   updateNewSales,
 }: TermsAndConditionsProps) => {
-  const { disabledSteps } = newSales;
+  const { finishedSteps } = newSales;
   const [activeSections, setActiveSections] = useState<number[]>([]);
   const [expandAll, setExpandAll] = useState<boolean>(false);
 
@@ -67,13 +67,20 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
     updateAgree({ agreeTerms: { ...agreeTerms, agree3: !agreeTerms.agree3 } });
   };
 
+  const handleBack = () => {
+    handleNextStep("OrderPreview");
+  };
+
   const handleContinue = () => {
-    const updatedDisabledSteps: TypeNewSalesKey[] = [...newSales.disabledSteps];
-    const findSignatures = updatedDisabledSteps.indexOf("Signatures");
-    if (findSignatures !== -1) {
-      updatedDisabledSteps.splice(findSignatures, 1);
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("TermsAndConditions") === false) {
+      updatedFinishedSteps.push("TermsAndConditions");
     }
-    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
+
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps });
+
     handleNextStep("Signatures");
   };
 
@@ -126,14 +133,10 @@ const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsProps> = 
   const termsHeader: ViewStyle = { ...flexRow, ...alignSelfCenter, zIndex: 2 };
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
 
-  if (!disabledSteps.includes("Signatures") && disabled === true) {
-    const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps, "Signatures"];
-    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
-  }
-
   return (
     <ContentPage
       continueDisabled={disabled}
+      handleCancel={handleBack}
       handleContinue={handleContinue}
       labelContinue={TERMS_AND_CONDITIONS.BUTTON_AGREE}
       subheading={TERMS_AND_CONDITIONS.HEADING_TERMS}>

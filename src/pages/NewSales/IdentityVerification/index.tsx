@@ -44,6 +44,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   personalInfo,
   updateNewSales,
 }: IdentityConfirmationProps) => {
+  const { disabledSteps, finishedSteps } = newSales;
+  const { principalHolder, jointHolder } = details!;
+  const { editMode, principal, joint } = personalInfo;
   // TODO issue in dropdown and keyboard avoiding view
   const [uploadType, setUploadType] = useState<TypeUploader | undefined>(undefined);
   const [reviewImage, setReviewImage] = useState<FileBase64 | undefined>(undefined);
@@ -53,9 +56,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   const [jointBackError, setJointBackError] = useState<string | undefined>(undefined);
   const principalUploadRef = useRef<IUploadDocumentRef>();
   const jointUploadRef = useRef<IUploadDocumentRef>();
-  const { principalHolder, jointHolder } = details!;
-  const { disabledSteps, finishedSteps } = newSales;
-  const { principal, joint } = personalInfo;
   const principalFrontPage = principal!.personalDetails!.id!.frontPage;
   const principalBackPage = principal!.personalDetails!.id!.secondPage;
   const jointFrontPage = joint!.personalDetails!.id!.frontPage;
@@ -152,31 +152,33 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         joint: { ...joint, addressInformation: { ...joint!.addressInformation, mailingAddress: { ...principalMailingAddress } } },
       });
     }
-    const updatedDisabledSteps = [...disabledSteps];
-    const updatedFinishedStep = [...finishedSteps];
-    let route: TypeNewSalesRoute = "AdditionalDetails";
-    const findFinishedId = finishedSteps.indexOf("IdentityVerification");
-    const findFinishedDetails = finishedSteps.indexOf("AdditionalDetails");
-    if (findFinishedId !== -1 && findFinishedDetails !== -1) {
-      route = "Summary";
-    } else if (findFinishedId === -1) {
-      updatedFinishedStep.push("IdentityVerification");
+
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("IdentityVerification") === false) {
+      updatedFinishedSteps.push("IdentityVerification");
     }
-    const findDisabledId = updatedDisabledSteps.indexOf("IdentityVerification");
-    if (findDisabledId !== -1 && findFinishedId === -1) {
-      updatedDisabledSteps.splice(findDisabledId, 1);
-    }
-    const findDisabledDetails = updatedDisabledSteps.indexOf("AdditionalDetails");
-    if (findDisabledDetails !== -1 && route === "AdditionalDetails") {
-      updatedDisabledSteps.splice(findDisabledDetails, 1);
+
+    // remove in disabledSteps if edit mode
+    if (editMode === true) {
+      const findSummary = updatedDisabledSteps.indexOf("Summary");
+
+      if (findSummary !== -1) {
+        updatedDisabledSteps.splice(findSummary, 1);
+      }
+      addPersonalInfo({ ...personalInfo, editMode: false });
     }
 
     updateNewSales({
       ...newSales,
       disabledSteps: updatedDisabledSteps,
-      finishedSteps: updatedFinishedStep,
+      finishedSteps: updatedFinishedSteps,
       toast: { ...newSales.toast, toastVisible: true },
     });
+
+    const route: TypeNewSalesKey = editMode === true ? "Summary" : "AdditionalDetails";
     handleNextStep(route);
   };
 

@@ -39,13 +39,18 @@ export const OrderSummaryComponent: FunctionComponent<IOrderPreviewProps> = ({
   orders,
   updateNewSales,
 }: IOrderPreviewProps) => {
+  const { finishedSteps } = newSales;
+
   const handleConfirm = () => {
-    const updatedDisabledSteps: TypeNewSalesKey[] = [...newSales.disabledSteps];
-    const findTermsAndConditions = updatedDisabledSteps.indexOf("TermsAndConditions");
-    if (findTermsAndConditions !== -1) {
-      updatedDisabledSteps.splice(findTermsAndConditions, 1);
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("OrderPreview") === false) {
+      updatedFinishedSteps.push("OrderPreview");
     }
-    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
+
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps });
+
     handleNextStep("TermsAndConditions");
   };
 

@@ -360,17 +360,6 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
             joint: updatedJointInfo,
           });
 
-          const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-          const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
-          updatedFinishedSteps.push("AccountList");
-          const findAccountList = disabledSteps.indexOf("AccountList");
-          if (findAccountList !== -1) {
-            updatedDisabledSteps.splice(findAccountList, 1);
-          }
-          const findRisk = disabledSteps.indexOf("RiskSummary");
-          if (findRisk !== -1) {
-            updatedDisabledSteps.splice(findRisk, 1);
-          }
           if (eachAccount.fundType === "UT" && eachAccount.paymentMethod === "EPF") {
             const epfFilterArray: string[] = eachAccount.paymentMethod === "EPF" ? ["Yes"] : [];
             addUtFilters({
@@ -398,6 +387,27 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           const fundType = getProductTabType(eachAccount.fundType);
           const checkAmp = eachAccount.fundType === "AMP" ? { ampDetails: eachAccount.ampDetails } : {};
           updateProductType(fundType);
+
+          const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
+          const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+          // add to finishedSteps
+          if (updatedFinishedSteps.includes("AccountList") === false) {
+            updatedFinishedSteps.push("AccountList");
+          }
+
+          // remove from disabledSteps
+          const findAccountList = disabledSteps.indexOf("AccountList");
+          if (findAccountList !== -1) {
+            updatedDisabledSteps.splice(findAccountList, 1);
+          }
+
+          // remove from disabledSteps (next step)
+          const findRisk = disabledSteps.indexOf("RiskSummary");
+          if (findRisk !== -1) {
+            updatedDisabledSteps.splice(findRisk, 1);
+          }
+
           updateNewSales({
             ...newSales,
             finishedSteps: updatedFinishedSteps,
@@ -420,6 +430,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
               ...checkAmp,
             },
           });
+
           handleNextStep("RiskSummary");
         } else if (error !== undefined) {
           Alert.alert(error?.message);
@@ -439,7 +450,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
       : "";
 
   return (
-    <View>
+    <Fragment>
       <ContentPage subheading={ACCOUNT_LIST.LABEL_WELCOME_BACK}>
         <Fragment>
           <CustomSpacer space={sh24} />
@@ -495,7 +506,7 @@ const AccountListComponent: FunctionComponent<IAccountListProps> = ({
           <Loading color={colorWhite._1} />
         </View>
       </RNModal>
-    </View>
+    </Fragment>
   );
 };
 

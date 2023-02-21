@@ -215,28 +215,44 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   };
 
   const handlePageContinue = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = [...new Set(finishedSteps)];
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
-    const nextStep: TypeNewSalesRoute = accountDetails.ampDetails !== undefined ? "ProductsConfirmation" : "ProductsList";
-    updatedFinishedSteps.push("RiskSummary");
-    const findRiskProfile = disabledSteps.indexOf("RiskSummary");
-    if (findRiskProfile !== -1) {
-      updatedDisabledSteps.splice(findRiskProfile, 1);
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("RiskSummary") === false) {
+      updatedFinishedSteps.push("RiskSummary");
     }
-    const findProducts = disabledSteps.indexOf("Products");
-    const findProductsConfirmation = disabledSteps.indexOf("ProductsConfirmation");
+
+    // remove from disabledSteps
+    const findRiskSummary = updatedDisabledSteps.indexOf("RiskSummary");
+    if (findRiskSummary !== -1) {
+      updatedDisabledSteps.splice(findRiskSummary, 1);
+    }
+
+    // remove from disabledSteps (next step)
+    const findProducts = updatedDisabledSteps.indexOf("Products");
     if (findProducts !== -1) {
       updatedDisabledSteps.splice(findProducts, 1);
     }
+
+    // for AMP only
+    const findProductsConfirmation = disabledSteps.indexOf("ProductsConfirmation");
     if (findProductsConfirmation !== -1 && accountDetails.ampDetails !== undefined) {
       updatedDisabledSteps.splice(findProductsConfirmation, 1);
     }
+
     if (accountDetails.ampDetails !== undefined) {
       handleInvest();
     }
 
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
-    handleNextStep(nextStep);
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    const route: TypeNewSalesRoute =
+      accountDetails.ampDetails !== undefined || updatedFinishedSteps.includes("ProductsList") === true
+        ? "ProductsConfirmation"
+        : "ProductsList";
+
+    handleNextStep(route);
   };
 
   const handleEdit = () => {

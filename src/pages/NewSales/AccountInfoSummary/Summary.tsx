@@ -76,6 +76,7 @@ interface NewSalesSummaryProps extends PersonalInfoStoreProps {
 
 const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> = ({
   accountType,
+  addPersonalInfo,
   client,
   details,
   handleNextStep,
@@ -85,10 +86,11 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   setCurrentProfile,
   setFile,
   setPage,
+  updateNewSales,
 }: NewSalesSummaryProps) => {
   const { width } = Dimensions.get("window");
   const { principalHolder, jointHolder } = details!;
-  const { accountDetails: currentAccountDetails, transactionType } = newSales;
+  const { accountDetails: currentAccountDetails, disabledSteps, transactionType } = newSales;
   const { accountNo, bankDetails, fundType, isEpf } = currentAccountDetails;
   const { incomeDistribution, isAllEpf, principal, signatory } = personalInfo;
   const { bankSummary, epfDetails, personalDetails } = principal!;
@@ -148,12 +150,28 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     }
   };
 
+  const handleEdit = (value: TypeNewSalesKey) => {
+    const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
+
+    // add to disabledSteps when editing
+    if (updatedDisabledSteps.includes("Summary") === false) {
+      updatedDisabledSteps.push("Summary");
+    }
+
+    // enable edit mode
+    addPersonalInfo({ ...personalInfo, editMode: true });
+
+    updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps });
+
+    handleNextStep(value);
+  };
+
   const handleEditIdentification = () => {
-    handleNextStep("IdentityVerification");
+    handleEdit("IdentityVerification");
   };
 
   const handleEditInfo = () => {
-    handleNextStep("AdditionalDetails");
+    handleEdit("AdditionalDetails");
   };
 
   const handlePrincipalProfile = () => {

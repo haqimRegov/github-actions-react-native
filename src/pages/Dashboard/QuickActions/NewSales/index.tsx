@@ -155,7 +155,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   }
 
   const handleReset = () => {
-    setClientType(clientTypeInitialValue);
+    setClientType({ ...clientTypeInitialValue });
     setHolderToFill("principalHolder");
     setInputError1(undefined);
     setAgeErrorMessage(undefined);
@@ -467,15 +467,15 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     } else if (salesNewPrompt === true) {
       setSalesNewPrompt(false);
       setHolderToFill("principalHolder");
-      setClientType(clientTypeInitialValue);
+      setClientType({ ...clientTypeInitialValue });
     } else if (clientType.joint !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
       setAccountTypePrompt(true);
     } else if (accountTypePrompt === true) {
       setHolderToFill("principalHolder");
       setAccountTypePrompt(false);
-      setClientType(clientTypeInitialValue);
+      setClientType({ ...clientTypeInitialValue });
     } else if (clientType.principal !== "" && holderToFill === "principalHolder") {
-      setClientType(clientTypeInitialValue);
+      setClientType({ ...clientTypeInitialValue });
       addAccountType("Individual");
     } else {
       handleCancelNewSales();

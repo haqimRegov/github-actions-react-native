@@ -27,12 +27,12 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   const { principalHolder: principalClient, jointHolder: jointClient } = details!;
   const { isEtb: isPrincipalEtb } = principalClient!;
   const { isEtb: isJointEtb } = jointClient!;
-  const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join("")}, ${
+  const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join(" ")}, ${
     principal?.addressInformation?.permanentAddress?.postCode
   }, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${
     principal?.addressInformation?.permanentAddress?.country
   }`;
-  const jointAddress = `${Object.values(joint?.addressInformation?.permanentAddress?.address!).join("")}, ${
+  const jointAddress = `${Object.values(joint?.addressInformation?.permanentAddress?.address!).join(" ")}, ${
     joint?.addressInformation?.permanentAddress?.postCode
   }, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${
     joint?.addressInformation?.permanentAddress?.country

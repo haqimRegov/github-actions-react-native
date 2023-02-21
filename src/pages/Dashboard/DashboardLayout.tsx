@@ -46,6 +46,7 @@ interface DashboardLayoutProps {
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
+  statusIcon?: boolean;
 }
 
 export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, DashboardLayoutProps>((props, ref) => {
@@ -63,6 +64,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     title,
     titleIcon,
     titleIconOnPress,
+    statusIcon,
   } = props;
 
   const [addClient, setAddClient] = useState<boolean>(false);
@@ -111,6 +113,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     statusColor = "warning";
   }
   const defaultSideElement = sideElement !== undefined ? sideElement : null;
+  const iconName = statusIcon !== undefined && statusIcon === true ? "receipt-new" : undefined;
 
   useImperativeHandle(ref, () => ({ addClient, setAddClient }));
 
@@ -146,7 +149,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
               </View>
               {status !== undefined ? (
                 <View style={{ ...px(sw16), ...centerVertical }}>
-                  <StatusBadge color={statusColor} text={status} />
+                  <StatusBadge color={statusColor} text={status} icon={iconName} />
                 </View>
               ) : null}
               <CustomFlexSpacer />

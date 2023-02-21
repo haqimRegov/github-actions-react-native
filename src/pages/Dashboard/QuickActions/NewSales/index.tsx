@@ -113,10 +113,8 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   const { dateOfBirth, id, idType, name, country } = details![holderToFill]!;
 
   const BUTTON_LABEL_NEW_SALES = salesNewPrompt === true ? ADD_CLIENT.BUTTON_OPEN_ACCOUNT : ADD_CLIENT.BUTTON_CONTINUE;
-  const BUTTON_LABEL_UNREGISTERED =
-    clientType.principal !== "" && holderToFill === "principalHolder" ? ADD_CLIENT.BUTTON_STARTED : BUTTON_LABEL_NEW_SALES;
   const BUTTON_CONTINUE_PROMPT = prompt === "bannedCountry" ? ADD_CLIENT.BUTTON_BACK : ADD_CLIENT.BUTTON_ADD;
-  const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_UNREGISTERED;
+  const BUTTON_LABEL_PROMPT = prompt !== undefined ? BUTTON_CONTINUE_PROMPT : BUTTON_LABEL_NEW_SALES;
   const BUTTON_LABEL = registered === true ? ADD_CLIENT.BUTTON_CONFIRM : BUTTON_LABEL_PROMPT;
   const jointIdType = jointHolder?.idType === "Other" ? jointHolder?.otherIdType : jointHolder?.idType;
   const principalIdType = principalHolder?.idType === "Other" ? principalHolder?.otherIdType : principalHolder?.idType;
@@ -157,7 +155,7 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   }
 
   const handleReset = () => {
-    setClientType(clientTypeInitialValue);
+    setClientType({ ...clientTypeInitialValue });
     setHolderToFill("principalHolder");
     setInputError1(undefined);
     setAgeErrorMessage(undefined);
@@ -469,15 +467,15 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
     } else if (salesNewPrompt === true) {
       setSalesNewPrompt(false);
       setHolderToFill("principalHolder");
-      setClientType(clientTypeInitialValue);
+      setClientType({ ...clientTypeInitialValue });
     } else if (clientType.joint !== "" && holderToFill === "jointHolder" && accountTypePrompt === false) {
       setAccountTypePrompt(true);
     } else if (accountTypePrompt === true) {
       setHolderToFill("principalHolder");
       setAccountTypePrompt(false);
-      setClientType(clientTypeInitialValue);
+      setClientType({ ...clientTypeInitialValue });
     } else if (clientType.principal !== "" && holderToFill === "principalHolder") {
-      setClientType(clientTypeInitialValue);
+      setClientType({ ...clientTypeInitialValue });
       addAccountType("Individual");
     } else {
       handleCancelNewSales();

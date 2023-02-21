@@ -16,6 +16,7 @@ import {
   sh24,
   sw1,
   sw120,
+  sw16,
   sw24,
   sw8,
 } from "../../styles";
@@ -149,8 +150,8 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
 
   const backgroundStyle: ViewStyle = {
     backgroundColor: colorRed._1,
-    borderTopLeftRadius: sw8,
-    borderTopRightRadius: sw8,
+    borderTopLeftRadius: sw16,
+    borderTopRightRadius: sw16,
   };
 
   const buttonStyle: ViewStyle = {
@@ -211,16 +212,23 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
 
   const isEtb = currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb === true;
 
+  const showStatusIcon =
+    currentOrder!.status === "Submitted" &&
+    orderSummary?.documentSummary !== undefined &&
+    orderSummary.documentSummary.hardcopy.required === true;
+
   return (
     <Fragment>
       <DashboardLayout
-        navigation={navigation}
         hideQuickActions={true}
+        navigation={navigation}
         sideElement={isEtb ? investorProfileButton : null}
         status={currentOrder!.status}
+        statusIcon={showStatusIcon}
         title={DASHBOARD_ORDER_SUMMARY.HEADING}
         titleIcon="arrow-left"
-        titleIconOnPress={handleBackToTransactions}>
+        titleIconOnPress={handleBackToTransactions}
+        documentSummary={orderSummary?.documentSummary}>
         <View style={orderSummary !== undefined ? undefined : flexChild}>
           <View style={cardStyle}>
             <View style={flexRow}>

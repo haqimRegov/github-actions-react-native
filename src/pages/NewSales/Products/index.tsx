@@ -290,7 +290,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     continueDisabled: selectedFunds.length === 0,
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
-    labelSubmit: PRODUCT_LIST.BUTTON_START_INVESTING,
+    labelSubmit: PRODUCT_LIST.BUTTON_CONTINUE,
   };
 
   if (viewFund !== undefined) {

@@ -6,7 +6,7 @@ import { CustomSpacer, CustomTextInput, NewDatePicker, NewDropdown, RadioButtonG
 import { DEFAULT_DATE_FORMAT, Language, NRIC_AGE_FORMAT } from "../../../../constants";
 import { DICTIONARY_COUNTRIES, DICTIONARY_ID_OTHER_TYPE, DICTIONARY_ID_TYPE, ERROR } from "../../../../data/dictionary";
 import { findDOBFromNric } from "../../../../helpers";
-import { disabledOpacity5, fs20BoldGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56 } from "../../../../styles";
+import { disabledOpacity5, fs16RegGray5, sh120, sh136, sh24, sh4, sh8, sw440, sw56 } from "../../../../styles";
 import { isNonNumber, isNumber } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
@@ -99,7 +99,7 @@ export const NewSalesDetails: FunctionComponent<NewSalesDetailsProps> = ({
   return (
     <View>
       <Fragment>
-        <TextSpaceArea style={{ ...fs20BoldGray5, ...subHeadingStyle }} text={subheading} />
+        <TextSpaceArea style={{ ...fs16RegGray5, ...subHeadingStyle }} text={subheading} />
         {hideInput ? null : (
           <Fragment>
             <TextSpaceArea spaceToTop={sh24} spaceToBottom={sh8} text={ADD_CLIENT.LABEL_SELECT_ID_TYPE} />

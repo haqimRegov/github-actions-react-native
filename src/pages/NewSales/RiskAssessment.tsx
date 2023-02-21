@@ -30,7 +30,6 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
   setLoading,
   updateIsRiskUpdated,
   updateNewSales,
-  updateToast,
 }: RiskAssessmentContentProps) => {
   const { clientId, dateOfBirth, id } = principalHolder!;
   const { disabledSteps, finishedSteps } = newSales;
@@ -46,14 +45,35 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     updateIsRiskUpdated(true);
     const updatedDisabledSteps: TypeNewSalesKey[] = [...disabledSteps];
     const newFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-    const findProducts = updatedDisabledSteps.indexOf("Products");
-    if (findProducts === -1) {
-      updatedDisabledSteps.push("Products");
-    }
+
+    // add to finishedSteps
     const findRiskAssessment = newFinishedSteps.indexOf("RiskAssessment");
     if (findRiskAssessment === -1) {
       newFinishedSteps.push("RiskAssessment");
     }
+
+    // add to disabledSteps
+    if (updatedDisabledSteps.includes("Products") === false) {
+      updatedDisabledSteps.push("Products");
+    }
+    if (updatedDisabledSteps.includes("ProductsConfirmation") === false) {
+      updatedDisabledSteps.push("ProductsConfirmation");
+    }
+    if (updatedDisabledSteps.includes("AccountInformation") === false) {
+      updatedDisabledSteps.push("AccountInformation");
+    }
+
+    // remove from finishedSteps
+    const findProductsList = newFinishedSteps.indexOf("ProductsList");
+    if (findProductsList !== -1) {
+      newFinishedSteps.splice(findProductsList, 1);
+    }
+
+    const findProductsConfirmation = newFinishedSteps.indexOf("ProductsConfirmation");
+    if (findProductsConfirmation !== -1) {
+      newFinishedSteps.splice(findProductsConfirmation, 1);
+    }
+
     updateNewSales({
       ...newSales,
       finishedSteps: newFinishedSteps,
@@ -78,7 +98,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
       },
     });
     resetQuestionnaire();
-    updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
+
     handleNextStep("RiskSummary");
   };
 

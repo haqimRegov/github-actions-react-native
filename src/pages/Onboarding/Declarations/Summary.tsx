@@ -13,6 +13,7 @@ import {
 } from "../../../data/dictionary";
 import { getAddress, getFatcaRequest, handleSignatory } from "../../../helpers";
 import { submitClientAccount } from "../../../network-actions";
+import { submitClientAccountHybrid } from "../../../network-actions/onboarding/SubmitClientAccountHybrid";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
   borderBottomRed1,
@@ -49,8 +50,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   setLoading,
   updateOnboarding,
 }: DeclarationSummaryProps) => {
-  const { joint, principal } = personalInfo;
-  const { disabledSteps } = onboarding;
+  const { disabledSteps, finishedSteps } = onboarding;
+  const { jointHolder, principalHolder } = details!;
+  const { isEtb: isEtbPrincipal } = principalHolder!;
+  const { isEtb: isEtbJoint } = jointHolder!;
+  const { principal, joint } = personalInfo;
 
   const fetching = useRef<boolean>(false);
   const baseDeletedProperty: TEmploymentDetailsState[] = ["isEnabled", "isOptional", "othersOccupation"];
@@ -189,6 +193,10 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   delete jointAddress.sameAddress;
 
   const jointFatcaRequest = accountType === "Joint" ? getFatcaRequest(joint!.declaration!.fatca!) : {};
+  const checkPrincipalCountryOfIssuance =
+    principalIdType === "Passport" ? { issuanceCountry: principal?.personalDetails?.countryOfIssuance } : {};
+  const checkJointCountryOfIssuance =
+    accountType === "Joint" && jointIdType === "Passport" ? { issuanceCountry: joint?.personalDetails?.countryOfIssuance } : {};
 
   const jointDetails =
     accountType === "Joint"
@@ -222,6 +230,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             salutation: joint!.personalDetails!.salutation!,
             ...jointMalaysianDetails,
             expirationDate: jointExpirationDate,
+            ...checkJointCountryOfIssuance,
           },
         }
       : undefined;
@@ -283,7 +292,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   const principalAddress = { ...principal!.addressInformation! };
   delete principalAddress.sameAddress;
 
-  const request: ISubmitClientAccountRequest = {
+  const request: ISubmitClientAccountRequest | ISubmitClientAccountHybridRequest = {
     initId: details!.initId!,
     isEtb: false,
     incomeDistribution: personalInfo.incomeDistribution!,
@@ -337,6 +346,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         ...principalMalaysianDetails,
         relationship: jointRelationship,
         expirationDate: principalExpirationDate,
+        ...checkPrincipalCountryOfIssuance,
       },
     },
     joint:
@@ -356,6 +366,51 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     investments: investments,
   };
 
+  const checkRelationship = accountType === "Joint" ? { relationship: jointRelationship } : {};
+  if (isEtbPrincipal === true) {
+    request.principal = {
+      clientId: details!.principalHolder!.clientId!,
+      bankSummary: request.principal.bankSummary,
+      personalDetails: {
+        id: request.principal.personalDetails.id,
+        ...checkRelationship,
+      },
+      contactDetails: {
+        emailAddress: principal!.contactDetails!.emailAddress!,
+      },
+    };
+  } else if (isEtbJoint === true) {
+    request.joint = {
+      clientId: jointDetails!.clientId,
+      personalDetails: {
+        id: request.joint!.personalDetails.id,
+      },
+      contactDetails: {
+        emailAddress: principal!.contactDetails!.emailAddress!,
+      },
+    };
+  }
+
+  const handleNavigation = () => {
+    // do not allow to click finished steps
+    const newFinishedSteps: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation", "Declarations"];
+    const newDisabledStep: TypeOnboardingKey[] = [
+      "RiskSummary",
+      "Products",
+      "PersonalInformation",
+      "Declarations",
+      "Acknowledgement",
+      "OrderSummary",
+      "TermsAndConditions",
+      "Signatures",
+      "Payment",
+    ];
+
+    updateOnboarding({ ...onboarding, disabledSteps: newDisabledStep, finishedSteps: newFinishedSteps });
+
+    handleNextStep("OrderSummary");
+  };
+
   const handleSetupClient = async () => {
     if (fetching.current === false) {
       fetching.current = true;
@@ -367,24 +422,32 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         const { data, error } = response;
         if (error === null && data !== null) {
           addOrders(data.result);
+          handleNavigation();
+        }
 
-          // do not allow to click finished steps
-          const newFinishedSteps: TypeOnboardingKey[] = ["RiskSummary", "Products", "PersonalInformation", "Declarations"];
-          const newDisabledStep: TypeOnboardingKey[] = [
-            "RiskSummary",
-            "Products",
-            "PersonalInformation",
-            "Declarations",
-            "Acknowledgement",
-            "OrderSummary",
-            "TermsAndConditions",
-            "Signatures",
-            "Payment",
-          ];
+        if (error !== null) {
+          const errorList = error.errorList?.join("\n");
+          setTimeout(() => {
+            Alert.alert(error.message, errorList);
+          }, 150);
+        }
+      }
+    }
+    return null;
+  };
 
-          updateOnboarding({ ...onboarding, disabledSteps: newDisabledStep, finishedSteps: newFinishedSteps });
-
-          return handleNextStep("OrderSummary");
+  const handleSetupClientHybrid = async () => {
+    if (fetching.current === false) {
+      fetching.current = true;
+      setLoading(true);
+      const response: ISubmitClientAccountHybridResponse = await submitClientAccountHybrid(request, navigation, setLoading);
+      fetching.current = false;
+      setLoading(false);
+      if (response !== undefined) {
+        const { data, error } = response;
+        if (error === null && data !== null) {
+          addOrders(data.result);
+          handleNavigation();
         }
 
         if (error !== null) {
@@ -399,7 +462,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
   };
 
   const handleContinue = () => {
-    handleSetupClient();
+    if (isEtbPrincipal === true || isEtbJoint === true) {
+      handleSetupClientHybrid();
+    } else {
+      handleSetupClient();
+    }
   };
 
   const handleEditFatca = () => {
@@ -447,7 +514,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     <View style={flexChild}>
       <ContentPage subheading={DECLARATION_SUMMARY.HEADING} subtitle={DECLARATION_SUMMARY.LABEL_SUBHEADER}>
         <View style={px(sw24)}>
-          {accountType === "Joint" ? (
+          {accountType === "Joint" && isEtbPrincipal === false ? (
             <Fragment>
               <CustomSpacer space={sh16} />
               <View>
@@ -460,15 +527,19 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               </View>
             </Fragment>
           ) : null}
-          <CustomSpacer space={sh16} />
-          <DeclarationDetails
-            address={principalFatcaAddress}
-            declarations={["fatca", "crs"]}
-            handleEditCrs={handleEditCrs}
-            handleEditFatca={handleEditFatca}
-            summary={personalInfo.principal?.declaration!}
-          />
-          {accountType === "Joint" ? (
+          {isEtbPrincipal === false ? (
+            <Fragment>
+              <CustomSpacer space={sh16} />
+              <DeclarationDetails
+                address={principalFatcaAddress}
+                declarations={["fatca", "crs"]}
+                handleEditCrs={handleEditCrs}
+                handleEditFatca={handleEditFatca}
+                summary={personalInfo.principal?.declaration!}
+              />
+            </Fragment>
+          ) : null}
+          {accountType === "Joint" && isEtbJoint === false ? (
             <View>
               <CustomSpacer space={sh24} />
               <View>

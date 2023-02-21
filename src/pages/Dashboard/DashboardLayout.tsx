@@ -22,7 +22,6 @@ import {
   sw24,
   sw8,
 } from "../../styles";
-import { isNotEmpty } from "../../utils";
 import { NewSales } from "./QuickActions";
 
 const { QUICK_ACTIONS } = Language.PAGE;
@@ -47,7 +46,7 @@ interface DashboardLayoutProps {
   title?: string;
   titleIcon?: string;
   titleIconOnPress?: () => void;
-  documentSummary?: IDocumentSummary;
+  statusIcon?: boolean;
 }
 
 export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, DashboardLayoutProps>((props, ref) => {
@@ -65,7 +64,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     title,
     titleIcon,
     titleIconOnPress,
-    documentSummary,
+    statusIcon,
   } = props;
 
   const [addClient, setAddClient] = useState<boolean>(false);
@@ -114,7 +113,7 @@ export const DashboardLayout = forwardRef<IDashboardLayoutRef | undefined, Dashb
     statusColor = "warning";
   }
   const defaultSideElement = sideElement !== undefined ? sideElement : null;
-  const iconName = status === "Submitted" && documentSummary !== undefined && isNotEmpty(documentSummary) ? "receipt-new" : undefined;
+  const iconName = statusIcon !== undefined && statusIcon === true ? "receipt-new" : undefined;
 
   useImperativeHandle(ref, () => ({ addClient, setAddClient }));
 

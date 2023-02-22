@@ -259,7 +259,7 @@ export const personalInfoInitialState: PersonalInfoState = {
         line3: undefined,
       },
       city: "",
-      country: DICTIONARY_COUNTRIES[0].value,
+      country: "",
       postCode: "",
       state: "",
     },

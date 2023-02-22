@@ -28,6 +28,7 @@ declare interface VerificationProps {
   addPersonalInfo: (state: IPersonalInfoState) => void;
   handleCancel?: () => void;
   handleContinue: () => void;
+  handleNavigate: () => void;
   jointAgeCheck: boolean;
   jointEmailCheck: boolean;
   jointError: string | undefined;
@@ -45,6 +46,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   addPersonalInfo,
   handleCancel,
   handleContinue,
+  handleNavigate,
   isEtbJoint,
   isEtbPrincipal,
   jointAgeCheck,
@@ -92,8 +94,10 @@ export const Verification: FunctionComponent<VerificationProps> = ({
     }
   };
 
+  const checkSkippable = isEtbPrincipal === true && jointAgeCheck === false;
+  const checkMinor = jointAgeCheck === false && isEtbPrincipal === true;
   const disabled =
-    jointEmailCheck === false
+    jointEmailCheck === false && checkMinor === false
       ? inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined || resendTimer !== 0
       : (isEtbPrincipal === false &&
           (inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined)) ||
@@ -116,6 +120,8 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       continueTextStyle={fsTransformNone}
       handleCancel={handleCancel}
       handleContinue={handleContinue}
+      handleSkip={handleNavigate}
+      skippable={checkSkippable}
       labelContinue={EMAIL_VERIFICATION.LABEL_GET_OTP}
       noBounce={false}
       subheading={EMAIL_VERIFICATION.HEADING}

@@ -938,6 +938,7 @@ export const english = {
       LABEL_JOINT: "Joint Account Holder",
       LABEL_NATURE_BUSINESS: "Business Field",
       LABEL_OCCUPATION: "Occupation",
+      LABEL_OCCUPATION_OPTIONAL: "Occupation (optional)",
       LABEL_OPTIONAL: "Add employment details & address",
       LABEL_OTHER_OCCUPATION: "Other Occupation",
       LABEL_POSTCODE: "Postcode",

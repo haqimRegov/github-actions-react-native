@@ -44,6 +44,7 @@ interface EmploymentInfoProps {
   accountHolder?: TypeAccountHolder;
   accountType: TypeAccountChoices;
   employmentDetails: IEmploymentDetailsState;
+  isOptional?: boolean;
   personalDetails: IPersonalDetailsState;
   setEmploymentDetails: (value: IEmploymentDetailsState) => void;
   setPersonalInfoDetails: (value: IPersonalDetailsState) => void;
@@ -78,6 +79,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   accountHolder,
   accountType,
   employmentDetails,
+  isOptional,
   personalDetails,
   setEmploymentDetails,
   setPersonalInfoDetails,
@@ -175,6 +177,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
     accountType === "Individual"
       ? EMPLOYMENT_DETAILS.TITLE_YOUR_EMPLOYMENT_ADDRESS
       : `${EMPLOYMENT_DETAILS.LABEL_ADD} ${headerTitle}'s ${EMPLOYMENT_DETAILS.TITLE_EMPLOYMENT_ADDRESS}`;
+  const checkOptional = isOptional === true ? EMPLOYMENT_DETAILS.LABEL_OCCUPATION_OPTIONAL : EMPLOYMENT_DETAILS.LABEL_OCCUPATION;
 
   return (
     <View style={px(sw24)}>
@@ -192,12 +195,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
         header={{ labelStyle: fs16BoldBlue1, label: occupationTitle }}
         content={
           <View>
-            <NewDropdown
-              items={DICTIONARY_OCCUPATION}
-              handleChange={setInputOccupation}
-              label={EMPLOYMENT_DETAILS.LABEL_OCCUPATION}
-              value={inputOccupation}
-            />
+            <NewDropdown items={DICTIONARY_OCCUPATION} handleChange={setInputOccupation} label={checkOptional} value={inputOccupation} />
             {EMPLOYMENT_EXEMPTIONS.indexOf(inputOccupation) !== -1 ? (
               <View style={{ marginTop: sh20 }}>
                 <Switch

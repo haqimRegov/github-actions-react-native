@@ -160,6 +160,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           addPersonalInfo={addPersonalInfo}
           handleCancel={handleCancel}
           handleContinue={handleContinue}
+          handleNavigate={handleNavigate}
           isEtbJoint={isEtbJoint}
           isEtbPrincipal={isEtbPrincipal}
           jointAgeCheck={jointAgeCheck}

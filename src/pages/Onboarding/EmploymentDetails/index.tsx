@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
 
@@ -33,6 +34,8 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
   const { isEtb: isPrincipalEtb } = principalClient!;
   const { isEtb: isJointEtb } = jointClient!;
 
+  const jointAgeCheck = accountType === "Joint" && moment().diff(moment(joint?.personalDetails?.dateOfBirth), "years") < 18;
+
   const validateDetails = (details: IHolderInfoState, rules: IEmploymentDetailsValidations) => {
     const { employmentDetails } = details;
     const validationResult =
@@ -62,10 +65,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     return validationResult;
   };
 
-  const checkJointGross =
-    joint?.employmentDetails !== undefined && joint.employmentDetails.isOptional === true
-      ? accountType === "Joint" && joint!.employmentDetails!.grossIncome !== ""
-      : true;
+  const checkJointGross = joint?.employmentDetails !== undefined && joint.employmentDetails.isOptional === true;
   const buttonDisabled =
     accountType === "Individual" || joint?.employmentDetails?.isEnabled === false
       ? validateDetails(principal!, validations.principal) === false
@@ -127,10 +127,14 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     setValidations({ ...validations, joint: { ...validations.joint, ...value } });
   };
 
+  const checkSkippable = isPrincipalEtb === true && jointAgeCheck === true;
+
   return (
     <ContentPage
       cancelDisabled={editMode === true}
       continueDisabled={buttonDisabled}
+      handleSkip={handleSubmit}
+      skippable={checkSkippable}
       subheading={EMPLOYMENT_DETAILS.HEADING}
       subtitle={EMPLOYMENT_DETAILS.SUBHEADING}
       handleCancel={handleBack}

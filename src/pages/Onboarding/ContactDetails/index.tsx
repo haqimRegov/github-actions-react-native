@@ -51,15 +51,15 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
   const validateJoint = (info: IHolderInfoState) => {
     const { contactDetails } = info;
 
-    return jointContactCheck === true && contactDetails?.contactNumber?.length === 1
-      ? true
-      : Object.values(contactDetails!.contactNumber!)
-          .map((contact) => typeof contact.error)
-          .includes("string") === false &&
-          Object.values(contactDetails!.contactNumber!)
-            .map((contact) => contact.value)
-            .flat()
-            .includes("") === false;
+    return (
+      Object.values(contactDetails!.contactNumber!)
+        .map((contact) => typeof contact.error)
+        .includes("string") === false &&
+      Object.values(contactDetails!.contactNumber!)
+        .map((contact) => contact.value)
+        .flat()
+        .includes("") === false
+    );
   };
 
   const buttonDisabled =
@@ -117,6 +117,7 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
     accountType === "Individual"
       ? PERSONAL_DETAILS.LABEL_ADD_PRINCIPAL_HOLDER_CONTACT_INDIVIDUAL
       : PERSONAL_DETAILS.LABEL_ADD_PRINCIPAL_HOLDER_CONTACT;
+  const checkSkippable = isPrincipalEtb === true && jointContactCheck === true;
 
   return (
     <ContentPage
@@ -125,6 +126,8 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
       continueDisabled={buttonDisabled}
       handleCancel={handleBack}
       handleContinue={handleSubmit}
+      handleSkip={handleSubmit}
+      skippable={checkSkippable}
       subheading={CONTACT_DETAILS.HEADING_CONTACT_DETAILS}
       subtitle={CONTACT_DETAILS.SUB_HEADING_CONTACT_DETAILS}
       spaceToTitle={0}>

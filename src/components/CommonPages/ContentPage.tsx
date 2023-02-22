@@ -4,11 +4,12 @@ import { Pressable, ScrollView, Text, TextStyle, View } from "react-native";
 import { ActionButtons, ActionButtonsProps, CustomFlexSpacer, CustomSpacer, TextSpaceArea } from "../../components/Views";
 import { Language } from "../../constants";
 import {
+  borderBottomBlue8,
   colorBlue,
   flexGrow,
   flexRow,
+  fs12BoldBlue8,
   fs14RegGray5,
-  fs16SemiBoldBlue8,
   fs18BoldGray6,
   fs24BoldGray6,
   px,
@@ -114,7 +115,9 @@ export const ContentPage: FunctionComponent<ContentPageProps> = ({
             <ActionButtons continueDebounce={true} labelCancel={CONTENT_PAGE.BUTTON_BACK} {...actionButtonProps} />
             <CustomFlexSpacer />
             <Pressable onPress={handleSkip}>
-              <Text style={fs16SemiBoldBlue8}>{CONTENT_PAGE.BUTTON_SKIP}</Text>
+              <View style={borderBottomBlue8}>
+                <Text style={fs12BoldBlue8}>{CONTENT_PAGE.BUTTON_SKIP}</Text>
+              </View>
             </Pressable>
             <CustomSpacer isHorizontal={true} space={sw30} />
           </View>

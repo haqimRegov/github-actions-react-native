@@ -175,16 +175,13 @@ export const Joint: FunctionComponent<JointProps> = ({ handleEdit, summary, view
 
   const occupationTitle =
     employmentDetails!.occupation! !== "Others" ? employmentDetails!.occupation! : employmentDetails!.othersOccupation!;
-  const employmentDetailsSummary: LabeledTitleProps[] =
-    employmentDetails?.isEnabled === true
-      ? [
-          { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
-          { label: SUMMARY.LABEL_NATURE, title: employmentDetails.businessNature! },
-          { label: SUMMARY.LABEL_GROSS, title: employmentDetails.grossIncome!, titleStyle: fsTransformNone },
-          { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
-          { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails.employerName!, titleStyle: fsTransformNone },
-        ]
-      : [];
+  const employmentDetailsSummary: LabeledTitleProps[] = [
+    { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
+    { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
+    { label: SUMMARY.LABEL_GROSS, title: employmentDetails!.grossIncome!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
+  ];
 
   const employmentAddressLabel =
     employmentDetails!.address!.line2 !== undefined || employmentDetails!.address!.line3 !== undefined

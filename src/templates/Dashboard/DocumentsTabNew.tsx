@@ -77,6 +77,7 @@ export const DocumentsTabNew: FunctionComponent<DocumentsTabNewProps> = ({ docum
                           </Fragment>
                         ) : null}
                         <TextCard data={updatedData} itemStyle={{ width: sw328 }} />
+                        {documentSummary.accountType !== "Individual" ? <CustomSpacer space={sh8} /> : null}
                       </Fragment>
                     );
                   })}

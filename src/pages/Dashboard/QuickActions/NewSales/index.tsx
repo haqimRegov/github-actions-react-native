@@ -123,6 +123,8 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   const titleStyle: TextStyle = registered === true ? {} : fs36BoldBlack2;
   const clientTypeDetail = holderToFill === "principalHolder" ? clientType.principal : clientType.joint;
   const clientTypeInitialValue: ITypeClient = { principal: "", joint: "" };
+  const subheadingTitle = holderToFill === "principalHolder" ? ADD_CLIENT.SUBHEADING : ADD_CLIENT.SUBHEADING_JOINT;
+  const checkSubheading = clientType !== "" ? subheadingTitle : ADD_CLIENT.SUBHEADING;
 
   const setClientInfo = (info: IClientBasicInfo) =>
     holderToFill === "principalHolder" ? addPrincipalInfo({ ...principalHolder, ...info }) : addJointInfo({ ...jointHolder, ...info });
@@ -658,6 +660,8 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
                               setAgeErrorMessage={setAgeErrorMessage}
                               setErrorMessage={setErrorMessage}
                               setInputError1={setInputError1}
+                              subHeading={checkSubheading}
+                              subHeadingStyle={fs16RegGray5}
                             />
                           </Fragment>
                         )}

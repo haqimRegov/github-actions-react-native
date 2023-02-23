@@ -85,8 +85,8 @@ export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = 
 
   const jointDetails: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_DISTRIBUTION, title: incomeDistribution! },
-    { label: SUMMARY.LABEL_RELATIONSHIP, title: relationship },
     { label: SUMMARY.LABEL_SIGNATORY, title: signatory! },
+    { label: SUMMARY.LABEL_RELATIONSHIP, title: relationship },
   ];
 
   const names = `${principal!.personalDetails!.name!} ${SUMMARY.LABEL_AND} ${joint!.personalDetails!.name!}`;

@@ -1,11 +1,11 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import {
-  AccountHeader,
   CustomSpacer,
+  IconText,
   Loading,
   NewDropdown,
   PromptModal,
@@ -23,20 +23,21 @@ import {
   borderBottomBlue4,
   colorBlue,
   flexChild,
-  fs10RegGray6,
-  fs12BoldBlack2,
-  fs12BoldGray6,
+  fs10RegGray5,
+  fs14BoldBlack2,
   fs16RegGray5,
   fs20BoldBlack2,
   fsAlignLeft,
   px,
+  rowCenterVertical,
   sh12,
   sh200,
   sh24,
   sh32,
-  sh8,
+  sw16,
   sw24,
   sw56,
+  sw8,
 } from "../../../../styles";
 import { AlertDialog, isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -419,6 +420,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
   const completedLabel = pendingDocCount === 0 ? `All (${totalCount}) completed` : checkCompleted;
   const pendingLabel = pendingDocCount === totalCount ? `All (${pendingDocCount}) pending` : checkAllCompleted;
   const footer = `${UPLOAD_HARD_COPY_DOCUMENTS.LABEL_PHYSICAL_DOC_SUMMARY}: ${pendingLabel}${completedLabel}`;
+  const checkIsIndividual = isNotEmpty(documentList?.documents);
 
   return (
     <Fragment>
@@ -435,21 +437,28 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
             <View style={px(sw24)}>
               {isNotEmpty(documentList.account) ? (
                 <Fragment>
-                  <TextSpaceArea spaceToBottom={sh12} style={fs12BoldGray6} text={UPLOAD_HARD_COPY_DOCUMENTS.LABEL_ACCOUNT} />
                   {isNotEmpty(documentList.account.principal) ? (
                     <Fragment>
                       <DocumentList
                         data={documentList.account.principal}
                         header={
-                          isNotEmpty(documentList.account.joint) ? (
-                            <AccountHeader
-                              headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                              spaceToBottom={sh8}
-                              subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
-                              subtitleStyle={fs10RegGray6}
-                              title={currentOrder?.investorName.principal!}
-                              titleStyle={fs12BoldBlack2}
-                            />
+                          isNotEmpty(documentList.account.principal) ? (
+                            <Fragment>
+                              <View style={rowCenterVertical}>
+                                <IconText
+                                  color={colorBlue._1}
+                                  iconSize={sw16}
+                                  name={"account"}
+                                  text={currentOrder?.investorName.principal!}
+                                  textStyle={fs14BoldBlack2}
+                                />
+                                <CustomSpacer isHorizontal={true} space={sw8} />
+                                <Text style={fs10RegGray5}>{checkIsIndividual ? "" : UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}</Text>
+                                <CustomSpacer isHorizontal={true} space={sw16} />
+                                <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                              </View>
+                              <CustomSpacer space={sh12} />
+                            </Fragment>
                           ) : (
                             <View />
                           )
@@ -466,14 +475,22 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                         data={documentList.account.joint!}
                         setData={handleSetJointDocument}
                         header={
-                          <AccountHeader
-                            headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                            spaceToBottom={sh8}
-                            subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
-                            subtitleStyle={fs10RegGray6}
-                            title={currentOrder?.investorName.joint!}
-                            titleStyle={fs12BoldBlack2}
-                          />
+                          <Fragment>
+                            <View style={rowCenterVertical}>
+                              <IconText
+                                color={colorBlue._1}
+                                iconSize={sw16}
+                                name={"account-joint"}
+                                text={currentOrder?.investorName.joint!}
+                                textStyle={fs14BoldBlack2}
+                              />
+                              <CustomSpacer isHorizontal={true} space={sw8} />
+                              <Text style={fs10RegGray5}>{UPLOAD_DOCUMENTS.LABEL_JOINT}</Text>
+                              <CustomSpacer isHorizontal={true} space={sw16} />
+                              <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                            </View>
+                            <CustomSpacer space={sh12} />
+                          </Fragment>
                         }
                       />
                     </Fragment>

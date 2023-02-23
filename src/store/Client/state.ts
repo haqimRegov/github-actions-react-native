@@ -16,6 +16,7 @@ export const clientInitialState: ClientState = {
   details: {
     accountHolder: undefined,
     principalHolder: {
+      address: undefined,
       clientId: undefined,
       name: "",
       country: "",

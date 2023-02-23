@@ -35,7 +35,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   const inputEpfNumber = epfDetails!.epfMemberNumber!;
   const { details: clientDetails } = client;
   const { principalHolder: principalClient, jointHolder: jointClient } = clientDetails!;
-  const { isEtb: isPrincipalEtb } = principalClient!;
+  const { address: principalAddress, isEtb: isPrincipalEtb } = principalClient!;
   const { isEtb: isJointEtb } = jointClient!;
   const [validations, setValidations] = useState<IIDVerificationPageValidation>({
     principal: {
@@ -132,9 +132,10 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
   };
 
   const handleJointAddress = (value: IAddressInfoState) => {
+    const checkEtbPrincipalAddress = principalAddress !== undefined ? principalAddress : principal?.addressInformation?.mailingAddress;
     const jointMailingAddress =
       value.sameAddress === true && accountType === "Joint"
-        ? { mailingAddress: { ...principal!.addressInformation!.mailingAddress } }
+        ? { mailingAddress: { ...checkEtbPrincipalAddress } }
         : { mailingAddress: { ...value.mailingAddress } };
     addPersonalInfo({ joint: { addressInformation: { ...joint!.addressInformation, ...value, ...jointMailingAddress } } });
   };

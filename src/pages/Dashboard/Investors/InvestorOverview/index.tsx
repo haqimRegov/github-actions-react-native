@@ -308,7 +308,13 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               netWorth: data.result.riskInfo!.hnwStatus,
             });
           }
-
+          const updatedAddress = isNotEmpty(investorData!.address)
+            ? {
+                ...investorData?.address,
+                // Remove the empty string keys from the object
+                address: Object.fromEntries(Object.entries(investorData?.address!.address!).filter((value) => value[1])),
+              }
+            : undefined;
           const updatedNewSales: NewSalesState = {
             ...newSales,
             investorProfile: {
@@ -368,6 +374,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             ...details,
             principalHolder: {
               ...details!.principalHolder,
+              address: updatedAddress !== undefined ? updatedAddress : undefined,
               clientId: data.result.principalHolder.clientId,
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               id: data.result.principalHolder.id,
@@ -396,6 +403,10 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                     name: data.result.jointHolder!.name,
                     ...storeJointIdType,
                   },
+                  addressInformation: {
+                    ...personalInfo.joint?.addressInformation,
+                    mailingAddress: updatedAddress !== undefined ? { ...updatedAddress } : undefined,
+                  },
                 }
               : { ...personalInfo.joint };
 
@@ -418,6 +429,11 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                 idNumber: data.result.principalHolder.id,
                 name: data.result.principalHolder.name,
                 ...storePrincipalIdType,
+              },
+              addressInformation: {
+                ...personalInfo.joint?.addressInformation,
+                mailingAddress:
+                  updatedAddress !== undefined ? { ...updatedAddress } : { ...personalInfo.joint?.addressInformation?.mailingAddress },
               },
               ...checkEpf,
             },

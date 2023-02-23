@@ -88,8 +88,8 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
   const [page, setPage] = useState<"profileSummary" | "profile">("profileSummary");
   const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
-  const updatedRisk = riskScore.appetite !== "" ? riskScore : riskInfo;
-  const checkRangeOfReturn = riskScore.rangeOfReturn !== "" ? riskScore.rangeOfReturn : riskInfo.expectedRange;
+  const updatedRisk = riskInfo.appetite !== "" ? riskInfo : riskScore;
+  const checkRangeOfReturn = riskInfo.expectedRange !== "" ? riskInfo.expectedRange : riskScore.rangeOfReturn;
   const isAssessmentCompleted = isNotEmpty(updatedRisk) && updatedRisk.appetite === "";
 
   const checkIdType = (data: IClientBasicInfo) => {

@@ -112,8 +112,8 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const { accountType } = client;
   const { accountDetails, disabledSteps, finishedSteps, riskInfo } = newSales;
   const { accountNo, ampDetails, fundType, isEpf } = accountDetails;
-  const updatedRisk = riskScore.appetite !== "" ? riskScore : riskInfo;
-  const checkRangeOfReturn = riskScore.rangeOfReturn !== "" ? riskScore.rangeOfReturn : riskInfo.expectedRange;
+  const updatedRisk = riskInfo.appetite !== "" ? riskInfo : riskScore;
+  const checkRangeOfReturn = riskInfo.expectedRange !== "" ? riskInfo.expectedRange : riskScore.rangeOfReturn;
 
   const checkIdType = (data: IClientBasicInfo) => {
     const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;

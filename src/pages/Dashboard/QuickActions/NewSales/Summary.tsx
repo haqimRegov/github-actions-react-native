@@ -35,7 +35,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
     { label: ADD_CLIENT.DETAILS_LABEL_DOB, value: moment(principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT) },
   ];
 
-  if (principalHolder.idType! === "Passport") {
+  if (principalHolder.idType! === "Passport" && isNotEmpty(principalHolder.country) && principalHolder.country !== "") {
     principalSummary.push({
       label: ADD_CLIENT.LABEL_COUNTRY,
       value: principalHolder.country!,

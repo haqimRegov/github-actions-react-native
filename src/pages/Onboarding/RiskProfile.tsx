@@ -179,7 +179,10 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
     }
 
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
-    handleNextStep("Products");
+
+    const route: TypeNewSalesRoute = updatedFinishedSteps.includes("ProductsList") === true ? "ProductsConfirmation" : "ProductsList";
+
+    handleNextStep(route);
   };
 
   const handleEdit = () => {

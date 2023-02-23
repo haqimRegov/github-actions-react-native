@@ -239,7 +239,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleBack = () => {
-    handleNextStep("Products");
+    handleNextStep("ProductsConfirmation");
   };
 
   const checkJointIdType = principalIdType === "Other" ? `${jointClientIdType} ${IDENTITY_CONFIRMATION.LABEL_ID}` : jointIdType;

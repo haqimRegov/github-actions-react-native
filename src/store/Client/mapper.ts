@@ -17,6 +17,7 @@ export const ClientMapStateToProps = (state: RootState) => ({
   details: state.client.details,
   forceUpdate: state.client.isForceUpdate,
   investors: state.investors,
+  newSales: state.newSales,
   risk: state.riskAssessment,
   showOpenAccount: state.forceUpdate.showOpenAccount,
   isNewFundPurchase: state.client.isNewFundPurchase,

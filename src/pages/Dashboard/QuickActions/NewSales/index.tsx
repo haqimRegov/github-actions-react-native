@@ -88,12 +88,14 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
   client,
   details,
   navigation,
+  newSales,
   personalInfo,
   resetClientDetails,
   setPage,
   setVisible,
   showOpenAccount,
   updateClient,
+  updateNewSales,
   updateShowOpenAccount,
   updateTransactionType,
   visible,
@@ -277,6 +279,9 @@ const NewSalesComponent: FunctionComponent<NewSalesProps> = ({
             handleUpdateClientType("ETB");
             if (holderToFill === "principalHolder") {
               setVisible(false);
+            }
+            if (holderToFill === "jointHolder") {
+              updateNewSales({ ...newSales, investorProfile: { ...newSales.investorProfile, jointClientId: data.result.clientId } });
             }
             if (data.result.forceUpdate === false) {
               const newClientData =

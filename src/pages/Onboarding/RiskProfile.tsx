@@ -1,11 +1,12 @@
-import React, { Fragment, FunctionComponent } from "react";
-import { Image, Text, TextStyle, View } from "react-native";
+import React, { Fragment, FunctionComponent, useState } from "react";
+import { Image, Text, TextStyle, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";
 import {
   ColorCard,
   ContentPage,
+  CustomButton,
   CustomFlexSpacer,
   CustomSpacer,
   defaultContentProps,
@@ -17,15 +18,18 @@ import {
 import { Language } from "../../constants";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
+  autoWidth,
   border,
   circle,
   colorBlue,
   colorRed,
+  colorTransparent,
   colorWhite,
   colorYellow,
   DEVICE,
   flexChild,
   flexRow,
+  fs10BoldBlue1,
   fs10RegBlue9,
   fs10RegGray6,
   fs12RegBlack2,
@@ -46,6 +50,7 @@ import {
   sw1,
   sw16,
   sw20,
+  sw228,
   sw239,
   sw24,
   sw32,
@@ -56,8 +61,9 @@ import {
 } from "../../styles";
 import { scaledSpaceBetween } from "../../templates";
 import { isEmpty, isNotEmpty, titleCaseString } from "../../utils";
+import { InvestorProfilePage } from "../NewSales/AccountInfoSummary/Profile";
 
-const { RISK_ASSESSMENT } = Language.PAGE;
+const { NEW_SALES_SUMMARY, RISK_ASSESSMENT } = Language.PAGE;
 
 declare interface IOnboardingRiskSummaryProps extends RiskStoreProps, OnboardingContentProps {
   navigation?: IStackNavigationProp;
@@ -68,6 +74,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   details,
   handleNextStep,
   handleCancelOnboarding,
+  newSales,
   resetRiskAssessment,
   isRiskUpdated,
   riskScore,
@@ -75,8 +82,13 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   updateOnboarding,
 }: IOnboardingRiskSummaryProps) => {
   const { jointHolder, principalHolder } = details!;
+  const { accountDetails } = newSales;
+  const { isEtb: isPrincipalEtb } = principalHolder!;
+  const { isEtb: isJointEtb } = jointHolder!;
   const { accountType } = client;
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
+  const [page, setPage] = useState<"profileSummary" | "profile">("profileSummary");
+  const [currentProfile, setCurrentProfile] = useState<TypeAccountHolder>("Principal");
   const updatedRisk = riskScore.appetite !== "" ? riskScore : riskInfo;
   const checkRangeOfReturn = riskScore.rangeOfReturn !== "" ? riskScore.rangeOfReturn : riskInfo.expectedRange;
   const isAssessmentCompleted = isNotEmpty(updatedRisk) && updatedRisk.appetite === "";
@@ -176,12 +188,50 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
     handleNextStep("RiskAssessment");
   };
 
+  const handleInvestorProfileBack = () => {
+    setPage("profileSummary");
+  };
+  const handleProfilePage = () => {
+    setPage("profileSummary");
+  };
+
+  const handlePrincipalProfile = () => {
+    setCurrentProfile("Principal");
+    setPage("profile");
+  };
+
+  const handleJointProfile = () => {
+    setCurrentProfile("Joint");
+    setPage("profile");
+  };
+
   const headerStyle: TextStyle = {
     ...fs24BoldGray6,
     maxWidth: sw638,
   };
   const scaledSpace = DEVICE.SCREEN.WIDTH > 1080 ? scaledSpaceBetween() : sw32;
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
+  const containerStyle: ViewStyle = {
+    ...flexRow,
+    borderRadius: sw24,
+    borderWidth: sw1,
+    borderColor: colorBlue._1,
+    height: sh24,
+    maxWidth: sw228,
+  };
+
+  const profileButtonStyle: ViewStyle = {
+    ...px(sw16),
+    ...autoWidth,
+    backgroundColor: colorTransparent,
+    height: sh24,
+    borderWidth: 0,
+  };
+  const checkLabel = client.accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_PROFILE : NEW_SALES_SUMMARY.LABEL_INVESTOR_PROFILE;
+  const checkPrincipalId =
+    accountDetails.accountNo !== "" ? details?.principalHolder?.clientId : newSales.investorProfile.principalClientId;
+  const checkJointId = accountDetails.accountNo !== "" ? details?.jointHolder?.clientId : newSales.investorProfile.jointClientId;
+  const checkClientId = currentProfile === "Principal" ? checkPrincipalId : checkJointId;
 
   const profileContent = (
     <ContentPage headingStyle={headerStyle}>
@@ -189,6 +239,31 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
         <View style={flexRow}>
           <TextSpaceArea style={defaultContentProps.subheadingStyle} text={RISK_ASSESSMENT.HEADING} />
           <CustomFlexSpacer />
+          {isPrincipalEtb || isJointEtb === true ? (
+            <View style={containerStyle}>
+              {isPrincipalEtb === true ? (
+                <CustomButton
+                  secondary={true}
+                  buttonStyle={profileButtonStyle}
+                  onPress={handlePrincipalProfile}
+                  text={checkLabel}
+                  textStyle={fs10BoldBlue1}
+                />
+              ) : null}
+              {client.accountType === "Joint" && isJointEtb === true ? (
+                <Fragment>
+                  {isPrincipalEtb === true ? <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} /> : null}
+                  <CustomButton
+                    secondary={true}
+                    buttonStyle={profileButtonStyle}
+                    onPress={handleJointProfile}
+                    text={NEW_SALES_SUMMARY.LABEL_JOINT_PROFILE}
+                    textStyle={fs10BoldBlue1}
+                  />
+                </Fragment>
+              ) : null}
+            </View>
+          ) : null}
         </View>
         <TextSpaceArea
           spaceToTop={defaultContentProps.spaceToTitle}
@@ -260,33 +335,43 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
       </View>
     </ContentPage>
   );
+  let content: JSX.Element = <View />;
+  if (page === "profile") {
+    content = <InvestorProfilePage clientId={checkClientId!} handleBack={handleInvestorProfileBack} setPage={handleProfilePage} />;
+  }
 
   return (
     <View style={flexChild}>
-      {profileContent}
-      <Fragment>
-        <CustomSpacer space={sh24} />
-        <SelectionBanner
-          cancelOnPress={handleCancelOnboarding}
-          continueDisabled={isAssessmentCompleted}
-          label={RISK_ASSESSMENT.NEW_SALES_ACCOUNT_SUMMARY}
-          labelStyle={fs20BoldBlack2}
-          labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
-          labelSubmit={RISK_ASSESSMENT.BUTTON_NEXT}
-          submitOnPress={handlePageContinue}
-          bottomContent={
-            isRiskUpdated === true ? (
-              <Fragment>
-                <View style={flexRow}>
-                  <Text style={fs16BoldGray6}>{RISK_ASSESSMENT.BANNER_RISK_ASSESSMENT}</Text>
-                  <CustomSpacer isHorizontal space={sw4} />
-                  <Text style={fs16RegGray6}>{RISK_ASSESSMENT.BANNER_UPDATED}</Text>
-                </View>
-              </Fragment>
-            ) : null
-          }
-        />
-      </Fragment>
+      {page === "profile" ? (
+        content
+      ) : (
+        <Fragment>
+          {profileContent}
+          <Fragment>
+            <CustomSpacer space={sh24} />
+            <SelectionBanner
+              cancelOnPress={handleCancelOnboarding}
+              continueDisabled={isAssessmentCompleted}
+              label={RISK_ASSESSMENT.NEW_SALES_ACCOUNT_SUMMARY}
+              labelStyle={fs20BoldBlack2}
+              labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
+              labelSubmit={RISK_ASSESSMENT.BUTTON_NEXT}
+              submitOnPress={handlePageContinue}
+              bottomContent={
+                isRiskUpdated === true ? (
+                  <Fragment>
+                    <View style={flexRow}>
+                      <Text style={fs16BoldGray6}>{RISK_ASSESSMENT.BANNER_RISK_ASSESSMENT}</Text>
+                      <CustomSpacer isHorizontal space={sw4} />
+                      <Text style={fs16RegGray6}>{RISK_ASSESSMENT.BANNER_UPDATED}</Text>
+                    </View>
+                  </Fragment>
+                ) : null
+              }
+            />
+          </Fragment>
+        </Fragment>
+      )}
     </View>
   );
 };

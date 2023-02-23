@@ -127,6 +127,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     if (findProducts !== -1) {
       updatedDisabledSteps.splice(findProducts, 1);
     }
+    const findConfirmation = updatedDisabledSteps.indexOf("ProductsConfirmation");
+    if (findConfirmation !== -1) {
+      updatedDisabledSteps.splice(findConfirmation, 1);
+    }
 
     // remove from disabledSteps (next step)
     const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
@@ -226,6 +230,9 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const updatedProducts = investmentDetails!.map((eachInvestment: IProductSales) => eachInvestment.fundDetails);
     setSelectedFund(updatedProducts);
     setTempData(investmentDetails!);
+    if (investmentDetails?.length === 0) {
+      handleNextStep("ProductsList");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [investmentDetails]);
 

@@ -112,6 +112,8 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const { accountType } = client;
   const { accountDetails, disabledSteps, finishedSteps, riskInfo } = newSales;
   const { accountNo, ampDetails, fundType, isEpf } = accountDetails;
+  const updatedRisk = riskScore.appetite !== "" ? riskScore : riskInfo;
+  const checkRangeOfReturn = riskScore.rangeOfReturn !== "" ? riskScore.rangeOfReturn : riskInfo.expectedRange;
 
   const checkIdType = (data: IClientBasicInfo) => {
     const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
@@ -158,22 +160,22 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const riskProfileData: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.PROFILE_APPETITE,
-      title: isNotEmpty(riskInfo) ? riskInfo.appetite : "-",
+      title: isNotEmpty(updatedRisk) ? updatedRisk.appetite : "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN,
-      title: isNotEmpty(riskInfo) ? riskInfo.expectedRange : "-",
+      title: isNotEmpty(updatedRisk) ? checkRangeOfReturn : "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE,
-      title: isNotEmpty(riskInfo) ? riskInfo.type : "-",
+      title: isNotEmpty(updatedRisk) ? updatedRisk.type : "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE,
-      title: isNotEmpty(riskInfo) ? riskInfo.profile : "-",
+      title: isNotEmpty(updatedRisk) ? updatedRisk.profile : "-",
       titleStyle: fsTransformNone,
     },
   ];
@@ -511,7 +513,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
               <View>
                 <Text style={fs16BoldBlue1}>{RISK_ASSESSMENT.HEADING_RISK}</Text>
-                {isEmpty(riskInfo) || (isNotEmpty(riskInfo) && riskInfo.appetite === "") ? (
+                {isEmpty(updatedRisk) || (isNotEmpty(updatedRisk) && updatedRisk.appetite === "") ? (
                   <Fragment>
                     <View style={rowCenterVertical}>
                       <Image source={LocalAssets.icon.iconWarning} style={{ width: sw16, height: sh16 }} />
@@ -590,7 +592,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
           <CustomSpacer space={sh24} />
           <SelectionBanner
             cancelOnPress={handleBackToInvestor}
-            continueDisabled={isEmpty(riskInfo) || (isNotEmpty(riskInfo) && riskInfo.appetite === "")}
+            continueDisabled={isEmpty(updatedRisk) || (isNotEmpty(updatedRisk) && updatedRisk.appetite === "")}
             label={RISK_ASSESSMENT.NEW_SALES_ACCOUNT_SUMMARY}
             labelStyle={fs20BoldBlack2}
             labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}

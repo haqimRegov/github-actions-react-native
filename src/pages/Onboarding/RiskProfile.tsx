@@ -77,7 +77,9 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   const { jointHolder, principalHolder } = details!;
   const { accountType } = client;
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
-  const isAssessmentCompleted = isNotEmpty(riskInfo) && riskInfo.appetite === "";
+  const updatedRisk = riskScore.appetite !== "" ? riskScore : riskInfo;
+  const checkRangeOfReturn = riskScore.rangeOfReturn !== "" ? riskScore.rangeOfReturn : riskInfo.expectedRange;
+  const isAssessmentCompleted = isNotEmpty(updatedRisk) && updatedRisk.appetite === "";
 
   const checkIdType = (data: IClientBasicInfo) => {
     const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
@@ -124,22 +126,22 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   const riskProfileData: LabeledTitleProps[] = [
     {
       label: RISK_ASSESSMENT.PROFILE_APPETITE,
-      title: isNotEmpty(riskInfo) && riskInfo.appetite !== "" ? riskInfo.appetite : "-",
+      title: isNotEmpty(updatedRisk) && updatedRisk.appetite !== "" ? updatedRisk.appetite : "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_RETURN,
-      title: isNotEmpty(riskInfo) && riskInfo.expectedRange !== "" ? riskInfo.expectedRange : "-",
+      title: isNotEmpty(updatedRisk) && checkRangeOfReturn !== "" ? checkRangeOfReturn : "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_TYPE,
-      title: isNotEmpty(riskInfo) && riskInfo.type !== "" ? riskInfo.type : "-",
+      title: isNotEmpty(updatedRisk) && updatedRisk.type !== "" ? updatedRisk.type : "-",
       titleStyle: fsTransformNone,
     },
     {
       label: RISK_ASSESSMENT.PROFILE_LABEL_PROFILE,
-      title: isNotEmpty(riskInfo) && riskInfo.profile !== "" ? riskInfo.profile : "-",
+      title: isNotEmpty(updatedRisk) && updatedRisk.profile !== "" ? updatedRisk.profile : "-",
       titleStyle: fsTransformNone,
     },
   ];
@@ -170,7 +172,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   };
 
   const handleEdit = () => {
-    resetRiskAssessment();
+    // resetRiskAssessment();
     handleNextStep("RiskAssessment");
   };
 
@@ -223,7 +225,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
             <View style={{ ...rowCenterVertical, ...px(sw24) }}>
               <View>
                 <Text style={fs16BoldBlue1}>{RISK_ASSESSMENT.HEADING_RISK}</Text>
-                {isEmpty(riskInfo) || isAssessmentCompleted ? (
+                {isEmpty(updatedRisk) || isAssessmentCompleted ? (
                   <Fragment>
                     <View style={rowCenterVertical}>
                       <Image source={LocalAssets.icon.iconWarning} style={{ width: sw16, height: sh16 }} />

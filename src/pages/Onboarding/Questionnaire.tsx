@@ -30,6 +30,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   setLoading,
   updateOnboarding,
   updateProductType,
+  updateIsRiskUpdated,
 }: QuestionnaireContentProps) => {
   const { clientId, dateOfBirth, id } = principalHolder!;
   const { disabledSteps, finishedSteps } = onboarding;
@@ -43,7 +44,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
 
   const handleConfirmAssessment = () => {
     // TODO updateIsRiskUpdated is principal is isEtb true
-    // updateIsRiskUpdated(true);
+    updateIsRiskUpdated(true);
     resetProducts(); // was in NTB
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const newFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];

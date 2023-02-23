@@ -8,6 +8,8 @@ export const onboardingInitialState: OnboardingState = {
   disabledSteps: [
     "RiskAssessment",
     "Products",
+    "ProductsList",
+    "ProductsConfirmation",
     "PersonalInformation",
     "EmailVerification",
     "IdentityVerification",

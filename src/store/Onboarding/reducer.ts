@@ -30,6 +30,8 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
         disabledSteps: [
           "RiskAssessment",
           "Products",
+          "ProductsList",
+          "ProductsConfirmation",
           "PersonalInformation",
           "EmailVerification",
           "IdentityVerification",

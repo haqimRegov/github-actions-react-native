@@ -154,7 +154,7 @@ export const english = {
       SALES_PROMPT_SUBTITLE:
         "Create a Kenanga Reach App account for easy access to order history. Click “Open Account” to continue with the onboarding process.",
       SUBHEADING_JOINT: "Add joint account holder details",
-      SUBHEADING: "Enter details to get started.",
+      SUBHEADING: "Enter your details to get started",
       SUMMARY_INDIVIDUAL: "Individual Account",
     },
     BROWSER_WEB_VIEW: {
@@ -1004,7 +1004,7 @@ export const english = {
       LABEL_SALES: "Sales",
       LABEL_STATUS: "Status",
       LABEL_VIEW_DETAILS: "View Details",
-      NEW_SALES_JOINT_TITLE: "Select a joint account holder",
+      NEW_SALES_JOINT_TITLE: "Hello!",
       NEW_SALES_PROMPT_GET_STARTED: "Get Started",
       NEW_SALES_PROMPT_SUBTITLE: "What type of account would you like to open?",
       NEW_SALES_PROMPT_TITLE: "Create an account",
@@ -1014,7 +1014,7 @@ export const english = {
       MINOR_PROMPT_TITLE:
         "You may proceed with transactions if your Principal account holder has completed investor update.\n\nPlease contact your respective BDM/ RM for more details.",
       PROMPT_TITLE: "Tap on continue to proceed with the update.",
-      NEW_SALES_JOINT_SUBTITLE: "Who would you like to open a joint account with?",
+      NEW_SALES_JOINT_SUBTITLE: "Add joint account holder details",
     },
     PRODUCT_FILTER: {
       BUTTON_APPLY: "Apply",

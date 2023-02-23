@@ -41,6 +41,7 @@ declare interface ITypeClient {
 }
 
 declare interface IClientBasicInfo {
+  address?: IAddressState;
   country?: string;
   dateOfBirth?: string;
   id?: string;

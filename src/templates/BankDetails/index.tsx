@@ -56,7 +56,7 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   const { localBank, foreignBank } = bankSummary;
   const spaceToButton = foreignBankDetails.length !== 0 ? sh24 : 0;
   const initialLocalBankState: IBankDetailsState = {
-    bankAccountName: "",
+    bankAccountName: accountType === "Individual" ? details.principalHolder?.name : "",
     bankAccountNumber: "",
     bankName: "",
     bankSwiftCode: "",
@@ -134,6 +134,7 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   return (
     <View>
       <LocalBankDetails
+        accountType={accountType}
         addCurrencyDisabled={checkLocalCurrencyDisabled}
         addDisabled={checkDisabled}
         bankingDetails={localBank!}
@@ -159,6 +160,7 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
         <Fragment>
           <CustomSpacer space={spaceToButton} />
           <ForeignBankDetails
+            accountType={accountType}
             addCurrencyDisabled={checkForeignCurrencyDisabled}
             addDisabled={checkDisabled}
             bankingDetails={foreignBank!}

@@ -30,6 +30,7 @@ export function clientReducer(state = clientInitialState, action: ClientAction):
         accountType: undefined,
         details: {
           principalHolder: {
+            address: undefined,
             name: "",
             country: "",
             dateOfBirth: "",

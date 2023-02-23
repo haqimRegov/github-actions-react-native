@@ -27,6 +27,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   personalInfo,
 }: IdentityConfirmationProps) => {
   const { principalHolder, jointHolder } = details!;
+  const { address: principalAddress } = principalHolder!;
   const { editMode, joint, principal } = personalInfo;
   // TODO issue in dropdown and keyboard avoiding view
   const defaultPage = editMode === true ? 1 : 0;
@@ -121,10 +122,9 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
   };
 
   const handleContinue = () => {
+    const checkEtbPrincipalAddress = principalAddress !== undefined ? principalAddress : principal?.addressInformation?.mailingAddress;
     const principalMailingAddress =
-      joint?.addressInformation?.sameAddress === true
-        ? principal!.addressInformation?.mailingAddress!
-        : joint?.addressInformation?.mailingAddress;
+      joint?.addressInformation?.sameAddress === true ? checkEtbPrincipalAddress : joint?.addressInformation?.mailingAddress;
     setPage(1);
     if (accountType === "Joint") {
       addPersonalInfo({

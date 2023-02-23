@@ -248,6 +248,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               }))
               .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
           : [];
+      filterLocalBankDetails[0].bankAccountName = accountType === "Individual" ? details?.principalHolder!.name : "";
     } else if (transactionType === "Sales" && isNeedAdditionalBankCurrency === true) {
       filterLocalBankDetails = localBank;
       filterForeignBankDetails = isArrayNotEmpty(foreignBank) ? [...foreignBank] : [];
@@ -258,7 +259,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         ? filterLocalBankDetails
         : [
             {
-              bankAccountName: "",
+              bankAccountName: accountType === "Individual" ? details?.principalHolder?.name : "",
               bankAccountNumber: "",
               bankName: "",
               bankSwiftCode: "",

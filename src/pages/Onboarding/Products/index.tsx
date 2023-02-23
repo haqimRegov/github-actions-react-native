@@ -36,7 +36,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
   const { agent, isMultiUtmc } = global;
-  const { joint } = personalInfo;
+  const { principal, joint } = personalInfo;
   const jointDOB = joint?.personalDetails?.dateOfBirth;
   const [page, setPage] = useState<number>(0);
   const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
@@ -165,6 +165,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     const allEpf = epfInvestments.length === investmentDetails!.length;
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
+    const updatedLocalBankDetails =
+      principal!.bankSummary!.localBank !== undefined
+        ? [...principal!.bankSummary!.localBank].map((eachLocalBank: IBankDetailsState) => {
+            const checkAccountName = accountType === "Individual" ? principal?.personalDetails?.name : eachLocalBank.bankAccountName;
+            return { ...eachLocalBank, bankAccountName: checkAccountName };
+          })
+        : [];
 
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
@@ -209,6 +216,10 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       principal: {
         ...personalInfo.principal,
         employmentDetails: { ...personalInfo.principal?.employmentDetails },
+        bankSummary: {
+          ...personalInfo.principal?.bankSummary,
+          localBank: updatedLocalBankDetails,
+        },
       },
       joint: checkJoint,
       ...epfObject,

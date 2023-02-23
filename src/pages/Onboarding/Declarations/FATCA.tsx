@@ -27,15 +27,15 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   const { principalHolder: principalClient, jointHolder: jointClient } = details!;
   const { isEtb: isPrincipalEtb } = principalClient!;
   const { isEtb: isJointEtb } = jointClient!;
-  const principalAddress = `${Object.values(principal?.addressInformation?.permanentAddress?.address!).join(" ")}, ${
-    principal?.addressInformation?.permanentAddress?.postCode
-  }, ${principal?.addressInformation?.permanentAddress?.city}, ${principal?.addressInformation?.permanentAddress?.state}, ${
-    principal?.addressInformation?.permanentAddress?.country
+  const principalAddress = `${Object.values(principal?.addressInformation?.mailingAddress?.address!).join(", ")}, ${
+    principal?.addressInformation?.mailingAddress?.postCode
+  }, ${principal?.addressInformation?.mailingAddress?.city}, ${principal?.addressInformation?.mailingAddress?.state}, ${
+    principal?.addressInformation?.mailingAddress?.country
   }`;
-  const jointAddress = `${Object.values(joint?.addressInformation?.permanentAddress?.address!).join(" ")}, ${
-    joint?.addressInformation?.permanentAddress?.postCode
-  }, ${joint?.addressInformation?.permanentAddress?.city}, ${joint?.addressInformation?.permanentAddress?.state}, ${
-    joint?.addressInformation?.permanentAddress?.country
+  const jointAddress = `${Object.values(joint?.addressInformation?.mailingAddress?.address!).join(", ")}, ${
+    joint?.addressInformation?.mailingAddress?.postCode
+  }, ${joint?.addressInformation?.mailingAddress?.city}, ${joint?.addressInformation?.mailingAddress?.state}, ${
+    joint?.addressInformation?.mailingAddress?.country
   }`;
 
   const handlePrincipalFatca = (fatcaDeclaration: IFatcaState) => {

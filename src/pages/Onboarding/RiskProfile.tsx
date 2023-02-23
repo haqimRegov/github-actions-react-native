@@ -75,7 +75,6 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   handleNextStep,
   handleCancelOnboarding,
   newSales,
-  resetRiskAssessment,
   isRiskUpdated,
   riskScore,
   onboarding,

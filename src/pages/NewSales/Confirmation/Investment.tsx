@@ -52,12 +52,13 @@ import { AnimationUtils, formatAmount, isAmount, parseAmount } from "../../../ut
 const { INVESTMENT } = Language.PAGE;
 
 interface InvestmentProps {
-  accountDetails: INewSalesAccountDetails;
+  accountDetails?: INewSalesAccountDetails;
   accountType: TypeAccountChoices;
   agentCategory: TypeAgentCategory;
   data: IProductSales;
   handleScrollToFund?: () => void;
   setData: (data: IProductSales) => void;
+  transactionType?: TTransactionType;
   withEpf: boolean;
 }
 
@@ -68,10 +69,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   data,
   handleScrollToFund,
   setData,
+  transactionType,
   withEpf,
 }: InvestmentProps) => {
   const { allowEpf, investment, fundDetails, isNewFund, masterClassList } = data;
-  const { accountNo, fundType, isRecurring: isExistingAccountRecurring } = accountDetails;
   const {
     amountError,
     fundClass,
@@ -96,7 +97,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const fundingOption =
-    fundDetails.isEpfOnly === "Yes" || (accountDetails.isEpf !== undefined && accountDetails.isEpf === true)
+    fundDetails.isEpfOnly === "Yes" || (accountDetails !== undefined && accountDetails.isEpf !== undefined && accountDetails.isEpf === true)
       ? [INVESTMENT.QUESTION_1_OPTION_2]
       : [INVESTMENT.QUESTION_1_OPTION_1];
   if (
@@ -104,7 +105,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     withEpf === true &&
     accountType === "Individual" &&
     fundDetails.isEpfOnly !== "Yes" &&
-    accountDetails.accountNo === ""
+    (transactionType === undefined || (transactionType !== undefined && accountDetails !== undefined && accountDetails.accountNo === ""))
   ) {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
@@ -403,7 +404,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   return (
     <Fragment>
       <View style={px(sw32)}>
-        {accountNo !== "" && fundType !== "amp" ? (
+        {accountDetails !== undefined && accountDetails.accountNo !== "" && accountDetails.fundType !== "amp" ? (
           <Fragment>
             <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh4} text={INVESTMENT.LABEL_CURRENT_ACCOUNT} />
             <RadioButtonGroup
@@ -565,7 +566,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
             <CustomSpacer space={sh16} />
             <View style={borderBottomGray2} />
             <CustomSpacer space={sh16} />
-            {isExistingAccountRecurring === true ? (
+            {accountDetails !== undefined && accountDetails.isRecurring === true ? (
               <View style={{ width: sw120 }}>
                 <CustomTooltip
                   content={

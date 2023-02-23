@@ -38,6 +38,7 @@ import { isNonNumber, isNumber } from "../../utils";
 const { PERSONAL_DETAILS } = Language.PAGE;
 
 interface IForeignBankDetailsProps {
+  accountType: TypeAccountChoices;
   addCurrencyDisabled: boolean;
   addDisabled: boolean;
   bankingDetails: IBankDetailsState[];
@@ -62,6 +63,7 @@ interface IPromptDetails {
 }
 
 export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = ({
+  accountType,
   addCurrencyDisabled,
   addDisabled,
   bankingDetails,
@@ -289,14 +291,23 @@ IForeignBankDetailsProps) => {
                       spaceToTop={sh16}
                       value={item.bankName}
                     />
-                    <NewDropdown
-                      disabled={id !== undefined}
-                      handleChange={handleAccountName}
-                      items={bankNames}
-                      label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
-                      spaceToTop={sh16}
-                      value={item.bankAccountName!}
-                    />
+                    {accountType === "Individual" ? (
+                      <CustomTextInput
+                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                        onChangeText={handleAccountName}
+                        spaceToTop={sh16}
+                        value={item.bankAccountName}
+                      />
+                    ) : (
+                      <NewDropdown
+                        disabled={id !== undefined}
+                        handleChange={handleAccountName}
+                        items={bankNames}
+                        label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
+                        spaceToTop={sh16}
+                        value={item.bankAccountName!}
+                      />
+                    )}
                     {item.bankAccountName === "Combined" ? (
                       <CustomTextInput
                         autoCapitalize="words"

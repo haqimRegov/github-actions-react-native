@@ -1173,7 +1173,7 @@ export const english = {
       LABEL_FIXED_SALES_CHARGE: "Sales charge for this fund is fixed at",
       LABEL_MAX_SALES_CHARGE: "Up to",
       LABEL_MINIMUM: "Minimum",
-      LABEL_MULTIPLE_UTMC: "Note: For EPF funding option, you can only select ONE fund house per application.",
+      LABEL_MULTIPLE_UTMC: "For EPF funding option, you can only select ONE fund house per application.",
       LABEL_MYR: "MYR",
       LABEL_NONE: "None",
       LABEL_PRS: "PRS",

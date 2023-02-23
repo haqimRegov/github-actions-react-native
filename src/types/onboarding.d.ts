@@ -59,6 +59,8 @@ declare interface IOnboardingRoutes {
   PersonalInformation: TypeOnboardingRoute;
   PersonalInfoSummary: TypeOnboardingRoute;
   Products: TypeOnboardingRoute;
+  ProductsList: TypeOnboardingRoute;
+  ProductsConfirmation: TypeOnboardingRoute;
   RiskAssessment: TypeOnboardingRoute;
   RiskSummary: TypeOnboardingRoute;
   Signatures: TypeOnboardingRoute;
@@ -81,6 +83,8 @@ declare interface IOnboardingKeys {
   PersonalInformation: TypeOnboardingKey;
   PersonalInfoSummary: TypeOnboardingKey;
   Products: TypeOnboardingKey;
+  ProductsList: TypeOnboardingKey;
+  ProductsConfirmation: TypeOnboardingKey;
   RiskAssessment: TypeOnboardingKey;
   RiskSummary: TypeOnboardingRoute;
   Signatures: TypeOnboardingKey;

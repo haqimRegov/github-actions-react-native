@@ -1,11 +1,11 @@
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../../assets/images/LocalAssets";
 import {
-  AccountHeader,
   CustomSpacer,
+  IconText,
   Loading,
   PromptModal,
   SelectionBanner,
@@ -19,18 +19,22 @@ import { getSoftCopyDocuments, submitSoftCopyDocuments } from "../../../../netwo
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import {
   alignFlexStart,
+  borderBottomBlue4,
   colorBlue,
-  fs10RegGray6,
-  fs12BoldBlack2,
+  flexChild,
+  fs10RegGray5,
+  fs14BoldBlack2,
   fs16RegGray5,
   fsAlignLeft,
   px,
-  sh16,
+  rowCenterVertical,
+  sh12,
   sh176,
   sh24,
-  sh32,
+  sw16,
   sw24,
   sw56,
+  sw8,
 } from "../../../../styles";
 import { AlertDialog, isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
@@ -54,6 +58,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
   const [promptType, setPromptType] = useState<"summary" | "success">("summary");
   const [toggle, setToggle] = useState<boolean>(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
+  const checkIsJoint = documentList !== undefined && documentList.joint !== undefined && isNotEmpty(documentList.joint);
 
   const handleBackToTransactions = () => {
     setScreen("Transactions");
@@ -401,14 +406,22 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 <CustomSpacer space={sh24} />
 
                 {documentList.joint && documentsPrincipal.length > 0 ? (
-                  <AccountHeader
-                    headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                    spaceToBottom={sh16}
-                    subtitle={UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}
-                    subtitleStyle={fs10RegGray6}
-                    title={currentOrder?.investorName.principal!}
-                    titleStyle={fs12BoldBlack2}
-                  />
+                  <Fragment>
+                    <View style={rowCenterVertical}>
+                      <IconText
+                        color={colorBlue._1}
+                        iconSize={sw16}
+                        name={"account"}
+                        text={currentOrder?.investorName.principal!}
+                        textStyle={fs14BoldBlack2}
+                      />
+                      <CustomSpacer isHorizontal={true} space={sw8} />
+                      <Text style={fs10RegGray5}>{!checkIsJoint ? "" : UPLOAD_DOCUMENTS.LABEL_PRINCIPAL}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw16} />
+                      <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                    </View>
+                    <CustomSpacer space={sh12} />
+                  </Fragment>
                 ) : null}
                 <DocumentList data={documentsPrincipal} setData={handlePrincipalData} />
               </View>
@@ -418,14 +431,22 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
                 <CustomSpacer space={sh24} />
                 <View style={px(sw24)}>
                   {documentList.joint && documentsJoint.length > 0 ? (
-                    <AccountHeader
-                      headerStyle={{ height: sh32, backgroundColor: colorBlue._3 }}
-                      spaceToBottom={sh16}
-                      subtitle={UPLOAD_DOCUMENTS.LABEL_JOINT}
-                      subtitleStyle={fs10RegGray6}
-                      title={currentOrder?.investorName.joint!}
-                      titleStyle={fs12BoldBlack2}
-                    />
+                    <Fragment>
+                      <View style={rowCenterVertical}>
+                        <IconText
+                          color={colorBlue._1}
+                          iconSize={sw16}
+                          name={"account-joint"}
+                          text={currentOrder?.investorName.joint!}
+                          textStyle={fs14BoldBlack2}
+                        />
+                        <CustomSpacer isHorizontal={true} space={sw8} />
+                        <Text style={fs10RegGray5}>{UPLOAD_DOCUMENTS.LABEL_JOINT}</Text>
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                        <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                      </View>
+                      <CustomSpacer space={sh12} />
+                    </Fragment>
                   ) : null}
                   <DocumentList data={documentsJoint} setData={handleJointData} />
                 </View>

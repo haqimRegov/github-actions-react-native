@@ -114,7 +114,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 
   const handleBack = () => {
     setPrompt(undefined);
-    handleNextStep("Products");
+    handleNextStep("ProductsConfirmation");
     addPersonalInfo({
       ...personalInfo,
       emailOtpSent: false,

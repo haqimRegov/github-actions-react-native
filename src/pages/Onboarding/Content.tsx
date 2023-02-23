@@ -16,6 +16,7 @@ import { IdentityConfirmation } from "./IdentityVerification";
 import { Payment } from "./Payment";
 import { PersonalInfoSummary } from "./PersonalInfoSummary";
 import { Products } from "./Products";
+import { ProductConfirmation } from "./Products/Confirmation";
 import { QuestionnaireContent } from "./Questionnaire";
 import { OnboardingRiskSummary } from "./RiskProfile";
 
@@ -42,8 +43,11 @@ const OnboardingContentComponent = ({ handleCancelOnboarding, handleResetOnboard
     case ONBOARDING_ROUTES.RiskAssessment:
       content = <QuestionnaireContent {...newProps} />;
       break;
-    case ONBOARDING_ROUTES.Products:
+    case ONBOARDING_ROUTES.ProductsList:
       content = <Products {...newProps} />;
+      break;
+    case ONBOARDING_ROUTES.ProductsConfirmation:
+      content = <ProductConfirmation {...newProps} />;
       break;
     case ONBOARDING_ROUTES.EmailVerification:
       content = <EmailVerification {...newProps} />;

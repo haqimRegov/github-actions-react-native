@@ -32,8 +32,19 @@ export const ONBOARDING_DATA: IOnboarding[] = [
     key: ONBOARDING_KEYS.RiskSummary,
   },
   {
+    content: [
+      {
+        title: ONBOARDING.SUBTITLE_SELECTION,
+        route: ONBOARDING_ROUTES.ProductsList,
+        key: ONBOARDING_KEYS.ProductsList,
+      },
+      {
+        title: ONBOARDING.SUBTITLE_CONFIRMATION,
+        route: ONBOARDING_ROUTES.ProductsConfirmation,
+        key: ONBOARDING_KEYS.ProductsConfirmation,
+      },
+    ],
     label: ONBOARDING.TITLE_PRODUCTS_AND_SERVICE,
-    route: ONBOARDING_ROUTES.Products,
     key: ONBOARDING_KEYS.Products,
   },
   {

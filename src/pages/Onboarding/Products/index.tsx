@@ -8,10 +8,9 @@ import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
 import { ProductDetails, ProductsBanner, ProductsPrompt } from "../../../templates";
-import { ProductConfirmation } from "./Confirmation";
 import { ProductList } from "./ProductList";
 
-const { INVESTMENT, PRODUCT_LIST } = Language.PAGE;
+const { PRODUCT_LIST } = Language.PAGE;
 
 interface ProductsProps extends ProductsStoreProps, OnboardingContentProps {}
 
@@ -22,24 +21,16 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addSelectedFund,
   addViewFund,
   details,
-  global,
   handleNextStep,
   investmentDetails,
   onboarding,
   personalInfo,
-  resetProducts,
-  resetSelectedFund,
   selectedFunds,
   updateOnboarding,
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
   const { disabledSteps, finishedSteps, riskInfo } = onboarding;
-  const { agent, isMultiUtmc } = global;
-  const { principal, joint } = personalInfo;
-  const jointDOB = joint?.personalDetails?.dateOfBirth;
-  const [page, setPage] = useState<number>(0);
-  const [fixedBottomShow, setFixedBottomShow] = useState<boolean>(true);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
@@ -48,13 +39,27 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
 
   const handleBackToAssessment = () => {
-    setPrompt(undefined);
+    // setPrompt(undefined);
     handleNextStep("RiskSummary");
-    resetProducts();
-    resetSelectedFund();
+    // resetProducts();
+    // resetSelectedFund();
   };
 
   const handleCancel = () => {
+    if (prompt === "risk") {
+      const temp = [...selectedFunds];
+      const updatedFunds: IProduct[] = [];
+      temp.forEach((eachFund: IProduct) => {
+        if (
+          (riskInfo.appetite.toLowerCase() === "medium" &&
+            (eachFund.riskCategory.toLowerCase() === "low" || eachFund.riskCategory.toLowerCase() === "medium")) ||
+          (riskInfo.appetite.toLowerCase() === "low" && eachFund.riskCategory.toLowerCase() === "low")
+        ) {
+          updatedFunds.push(eachFund);
+        }
+      });
+      addSelectedFund(updatedFunds);
+    }
     setPrompt(undefined);
   };
 
@@ -88,10 +93,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           fundClass: item.masterList[0].class !== null ? item.masterList[0].class : "No Class",
           scheduledInvestment: false,
           prsType: item.prsType,
+          isTopup: false,
           ...existingInvestmentDetails,
         },
         fundDetails: { ...item },
         masterClassList: newMasterClassList,
+        isNewFund: true,
       };
 
       return initialStateArray.push(newState);
@@ -114,7 +121,24 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       });
     const sortedInvestmentArray = [...kenangaArray, ...sortedWithoutKenanga];
     addInvestmentDetails(sortedInvestmentArray);
-    setPage(1);
+
+    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+    // add to finishedSteps
+    if (updatedFinishedSteps.includes("ProductsList") === false) {
+      updatedFinishedSteps.push("ProductsList");
+    }
+
+    // remove from disabledSteps
+    const findConfirmation = updatedDisabledSteps.indexOf("ProductsConfirmation");
+    if (findConfirmation !== -1) {
+      updatedDisabledSteps.splice(findConfirmation, 1);
+    }
+
+    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+
+    handleNextStep("ProductsConfirmation");
   };
 
   const handlePrompt = () => {
@@ -145,94 +169,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     return handleInvest();
   };
 
-  const handleBackToListing = () => {
-    return page === 1 ? setPage(0) : addSelectedFund([]);
-  };
-
   const handleCancelProducts = () => {
-    setPrompt("cancel");
+    // setPrompt("cancel");
+    handleBackToAssessment();
   };
 
   const handleBack = () => {
     addViewFund(undefined);
-  };
-
-  const handleConfirmIdentity = () => {
-    const epfInvestments = investmentDetails!
-      .filter(({ investment }) => investment.fundPaymentMethod === "EPF")
-      .map((epfInvestment) => epfInvestment.fundDetails.isSyariah);
-    const epfShariah = epfInvestments.includes("Yes");
-    const allEpf = epfInvestments.length === investmentDetails!.length;
-    const epfObject =
-      epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
-    const updatedLocalBankDetails =
-      principal!.bankSummary!.localBank !== undefined
-        ? [...principal!.bankSummary!.localBank].map((eachLocalBank: IBankDetailsState) => {
-            const checkAccountName = accountType === "Individual" ? principal?.personalDetails?.name : eachLocalBank.bankAccountName;
-            return { ...eachLocalBank, bankAccountName: checkAccountName };
-          })
-        : [];
-
-    const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
-    const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-
-    // add to disabledSteps
-    // currently, whenever they confirm their investment again, they will be forced to go through each Personal Information step, we also disabled PersonalInfoSummary
-    if (updatedDisabledSteps.includes("PersonalInfoSummary") === false) {
-      updatedDisabledSteps.push("PersonalInfoSummary");
-    }
-
-    // add to finishedSteps
-    if (updatedFinishedSteps.includes("Products") === false) {
-      updatedFinishedSteps.push("Products");
-    }
-
-    // remove from disabledSteps
-    const findProducts = updatedDisabledSteps.indexOf("Products");
-    if (findProducts !== -1) {
-      updatedDisabledSteps.splice(findProducts, 1);
-    }
-
-    // remove from disabledSteps (next step)
-    const findPersonalInfo = updatedDisabledSteps.indexOf("PersonalInformation");
-    if (findPersonalInfo !== -1) {
-      updatedDisabledSteps.splice(findPersonalInfo, 1);
-    }
-
-    const checkJoint =
-      accountType === "Joint" && moment().diff(moment(jointDOB), "years") < 18
-        ? {
-            ...joint,
-            employmentDetails: {
-              ...joint?.employmentDetails,
-              isEnabled: false,
-            },
-          }
-        : { ...joint };
-
-    addPersonalInfo({
-      ...personalInfo,
-      ...epfObject,
-      principal: {
-        ...personalInfo.principal,
-        employmentDetails: { ...personalInfo.principal?.employmentDetails },
-        bankSummary: {
-          ...personalInfo.principal?.bankSummary,
-          localBank: updatedLocalBankDetails,
-        },
-      },
-      joint: checkJoint,
-      ...epfObject,
-      editPersonal: false,
-      isAllEpf: allEpf,
-      editMode: false,
-    });
-
-    updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
-
-    // TODO dynamic change for EPF and Bank Currency
-    const route: TypeOnboardingKey = finishedSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
-    handleNextStep(route);
   };
 
   let screen = {
@@ -244,40 +187,18 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         withEpf={withEpf}
       />
     ),
+    continueDisabled: selectedFunds.length === 0,
     onPressCancel: handleCancelProducts,
     onPressSubmit: handleStartInvesting,
-    labelCancel: PRODUCT_LIST.BUTTON_BACK,
     labelSubmit: PRODUCT_LIST.BUTTON_CONTINUE,
   };
-
-  if (page === 1 && selectedFunds.length > 0) {
-    screen = {
-      ...screen,
-      content: (
-        <ProductConfirmation
-          accountType={accountType!}
-          agentCategory={agent!.category!}
-          investmentDetails={investmentDetails!}
-          multiUtmc={isMultiUtmc}
-          selectedFunds={selectedFunds}
-          setFixedBottomShow={setFixedBottomShow}
-          setInvestmentDetails={addInvestmentDetails}
-          setPage={setPage}
-          setSelectedFund={addSelectedFund}
-          withEpf={withEpf}
-        />
-      ),
-      onPressCancel: handleBackToListing,
-      onPressSubmit: handleConfirmIdentity,
-      labelSubmit: INVESTMENT.BUTTON_CONFIRM,
-    };
-  }
 
   if (viewFund !== undefined) {
     screen = {
       ...screen,
       content: (
         <ProductDetails
+          disabled={withEpf === false}
           fund={viewFund}
           handleBack={handleBack}
           selectedFunds={selectedFunds}
@@ -285,25 +206,8 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
           setViewFund={addViewFund}
         />
       ),
-      onPressSubmit: handleConfirmIdentity,
-      labelSubmit: INVESTMENT.BUTTON_CONFIRM,
     };
   }
-
-  const disableContinueInvestment = investmentDetails?.find(({ investment }) => {
-    return (
-      investment.investmentAmount === "" ||
-      investment.investmentSalesCharge === "" ||
-      (investment.scheduledInvestment === true && investment.scheduledInvestmentAmount === "") ||
-      (investment.scheduledInvestment === true && investment.scheduledSalesCharge === "") ||
-      investment.amountError !== undefined ||
-      investment.scheduledAmountError !== undefined ||
-      investment.investmentSalesChargeError !== undefined ||
-      investment.scheduledSalesChargeError !== undefined
-    );
-  });
-
-  const disableContinue = page === 1 ? disableContinueInvestment !== undefined : selectedFunds.length === 0;
 
   const handleKeyboardShow = () => {
     setKeyboardIsShowing(true);
@@ -316,6 +220,21 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   useEffect(() => {
     // this will not allow the user to press other steps when personal information is already filled up but they decided to deselect their funds
     // TODO remove product as finished step when they go back to risk assessment by pressing "Back"
+    if (finishedSteps.includes("ProductsList") === true && selectedFunds.length === 0) {
+      const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+
+      // remove from finishedSteps
+      const findProductList = updatedFinishedSteps.indexOf("ProductsList");
+      if (findProductList !== -1) {
+        updatedFinishedSteps.splice(findProductList, 1);
+      }
+      const findConfirmation = updatedFinishedSteps.indexOf("ProductsConfirmation");
+      if (findConfirmation !== -1) {
+        updatedFinishedSteps.splice(findConfirmation, 1);
+      }
+
+      updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps });
+    }
     if (disabledSteps.includes("PersonalInformation") === false && selectedFunds.length === 0) {
       addPersonalInfo({ ...personalInfo, editMode: true });
     }
@@ -335,13 +254,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     <Fragment>
       <View style={flexChild}>
         {screen.content}
-        {fixedBottomShow === true && viewFund === undefined && keyboardIsShowing === false && scrollEnabled === true ? (
+        {viewFund === undefined && scrollEnabled === true && keyboardIsShowing === false ? (
           <ProductsBanner
             cancelOnPress={screen.onPressCancel}
-            continueDisabled={disableContinue}
+            continueDisabled={screen.continueDisabled}
             selectedFunds={selectedFunds}
             labelSubmit={screen.labelSubmit}
-            label={page === 1 && selectedFunds.length > 0 ? INVESTMENT.LABEL_SUMMARY : undefined}
             submitOnPress={screen.onPressSubmit}
           />
         ) : null}

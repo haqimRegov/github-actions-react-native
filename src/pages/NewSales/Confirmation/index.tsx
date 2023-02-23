@@ -10,10 +10,11 @@ import {
   CustomFlexSpacer,
   CustomSpacer,
   CustomToast,
-  LabeledTitle,
+  CustomTooltip,
   Loading,
   NewPrompt,
   SafeAreaPage,
+  TextSpaceArea,
 } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_CURRENCY, DICTIONARY_EPF_AGE } from "../../../data/dictionary";
@@ -37,6 +38,7 @@ import {
   flexRow,
   fs10RegGray5,
   fs12RegGray5,
+  fs12RegWhite1,
   fs14BoldBlack2,
   fs14BoldBlue1,
   fs14RegGray5,
@@ -58,22 +60,24 @@ import {
   sh240,
   sh4,
   sh40,
+  sh6,
   shadow4Blue008,
   sw1,
+  sw10,
   sw100,
   sw14,
   sw16,
   sw212,
   sw24,
+  sw240,
   sw32,
   sw4,
   sw760,
   sw8,
   sw96,
 } from "../../../styles";
-import { ProductsBanner } from "../../../templates";
+import { Investment, ProductsBanner } from "../../../templates";
 import { isArrayNotEmpty, isNotEmpty, parseAmountToString } from "../../../utils";
-import { Investment } from "./Investment";
 
 const { ACTION_BUTTONS, INVESTMENT, PERSONAL_DETAILS } = Language.PAGE;
 
@@ -555,15 +559,19 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             keyExtractor={(item: IProductSales) => item.fundDetails.fundCode}
             ListHeaderComponent={
               <View style={px(sw8)}>
-                <CustomSpacer space={sh40} />
-                <LabeledTitle
-                  label={checkHeading}
-                  labelStyle={fs18BoldGray6}
-                  spaceToLabel={sh4}
-                  title={checkSubHeading}
-                  titleStyle={fs14RegGray5}
-                />
-                {multiUtmc === false && accountNo === "" ? <Text style={fs14RegGray5}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text> : null}
+                <TextSpaceArea text={checkHeading} style={fs18BoldGray6} spaceToBottom={sh4} spaceToTop={sh40} />
+                <View style={rowCenterVertical}>
+                  <TextSpaceArea text={checkSubHeading} style={fs14RegGray5} />
+                  <CustomSpacer isHorizontal={true} space={sw4} />
+                  {multiUtmc === false ? (
+                    <CustomTooltip
+                      arrowSize={{ width: sw10, height: sh6 }}
+                      content={<Text style={fs12RegWhite1}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text>}
+                      contentStyle={{ width: sw240 }}
+                      theme="dark"
+                    />
+                  ) : null}
+                </View>
                 <CustomSpacer space={sh24} />
               </View>
             }
@@ -705,6 +713,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                       data={item}
                       handleScrollToFund={handleScrollToFund}
                       setData={updateData}
+                      transactionType={transactionType}
                       withEpf={withEpf}
                     />
                   </View>

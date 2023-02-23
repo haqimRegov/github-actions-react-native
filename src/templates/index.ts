@@ -7,6 +7,7 @@ export * from "./Dashboard";
 export * from "./Declarations";
 export * from "./EDD";
 export * from "./InvestorProfile";
+export * from "./Investment";
 export * from "./Onboarding";
 export * from "./OrderPreview";
 export * from "./OrderSubmission";

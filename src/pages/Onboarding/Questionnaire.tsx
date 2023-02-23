@@ -25,12 +25,11 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   questionnaire,
   resetQuestionnaire,
   resetSelectedFund,
-  resetProducts,
   riskScore,
   setLoading,
+  updateIsRiskUpdated,
   updateOnboarding,
   updateProductType,
-  updateIsRiskUpdated,
 }: QuestionnaireContentProps) => {
   const { clientId, dateOfBirth, id } = principalHolder!;
   const { disabledSteps, finishedSteps } = onboarding;
@@ -43,19 +42,41 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   const [currentRiskScore, setCurrentRiskScore] = useState<IRiskScore>(riskScore);
 
   const handleConfirmAssessment = () => {
-    // TODO updateIsRiskUpdated is principal is isEtb true
     updateIsRiskUpdated(true);
-    resetProducts(); // was in NTB
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const newFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    const findProducts = updatedDisabledSteps.indexOf("Products");
-    if (findProducts === -1) {
-      updatedDisabledSteps.push("Products");
-    }
+
+    // add to finishedSteps
     const findRiskAssessment = newFinishedSteps.indexOf("RiskAssessment");
     if (findRiskAssessment === -1) {
       newFinishedSteps.push("RiskAssessment");
     }
+
+    // add to disabledSteps
+    if (updatedDisabledSteps.includes("Products") === false) {
+      updatedDisabledSteps.push("Products");
+    }
+    if (updatedDisabledSteps.includes("ProductsConfirmation") === false) {
+      updatedDisabledSteps.push("ProductsConfirmation");
+    }
+    if (updatedDisabledSteps.includes("PersonalInformation") === false) {
+      updatedDisabledSteps.push("PersonalInformation");
+    }
+    if (updatedDisabledSteps.includes("Declarations") === false) {
+      updatedDisabledSteps.push("Declarations");
+    }
+
+    // remove from finishedSteps
+    const findProductsList = newFinishedSteps.indexOf("ProductsList");
+    if (findProductsList !== -1) {
+      newFinishedSteps.splice(findProductsList, 1);
+    }
+
+    const findProductsConfirmation = newFinishedSteps.indexOf("ProductsConfirmation");
+    if (findProductsConfirmation !== -1) {
+      newFinishedSteps.splice(findProductsConfirmation, 1);
+    }
+
     // TODO toast object
     updateOnboarding({
       ...onboarding,
@@ -68,6 +89,10 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         expectedRange: currentRiskScore.rangeOfReturn,
         type: currentRiskScore.type,
       },
+      // toast: {
+      //   toastText: RISK_ASSESSMENT.TOAST_CHANGES,
+      //   toastVisible: true,
+      // },
     });
     addPersonalInfo({
       ...personalInfo,
@@ -77,13 +102,11 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       },
     });
     resetQuestionnaire();
-    // TODO updateToast is principal is isEtb true
-    // updateToast({ toastText: RISK_ASSESSMENT.TOAST_CHANGES, toastVisible: true });
 
-    // setConfirmModal(undefined); // was in NTB
     if (agent!.licenseType.includes("UT") === false) {
       updateProductType("prs");
     }
+
     handleNextStep("RiskSummary");
   };
 

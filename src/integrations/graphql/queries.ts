@@ -504,6 +504,7 @@ const investorDetailsDashboard = gql`
           mobileNo
           clientId
           dateOfBirth
+          issuanceCountry
           address {
             address {
               line1

@@ -13,6 +13,7 @@ declare interface IInvestor {
   initId: string;
   investorDetails: IInvestorAccountsData[];
   isForceUpdate?: boolean;
+  issuanceCountry?: string;
   isMinor: boolean;
   mobileNo: string;
   mobileNoLastUpdated: string;

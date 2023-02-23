@@ -379,6 +379,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               id: data.result.principalHolder.id,
               name: data.result.principalHolder.name,
+              country: isNotEmpty(investorData?.issuanceCountry) ? investorData?.issuanceCountry : "",
               ...storePrincipalIdType,
               isEtb: true,
             },

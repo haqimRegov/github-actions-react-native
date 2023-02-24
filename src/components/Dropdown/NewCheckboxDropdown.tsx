@@ -20,7 +20,7 @@ import {
   fs12BoldBlue1,
   fs12BoldGray6,
   fs12RegRed2,
-  fs16RegGray6,
+  fs16RegGray4,
   fullHW,
   noBGColor,
   overflowHidden,
@@ -270,7 +270,7 @@ export const NewCheckBoxDropdown: FunctionComponent<NewCheckBoxDropdownProps> = 
             })}
           </Fragment>
         ) : (
-          <Text style={fs16RegGray6}>{placeholderLabel}</Text>
+          <Text style={fs16RegGray4}>{placeholderLabel}</Text>
         )}
       </View>
       <View>

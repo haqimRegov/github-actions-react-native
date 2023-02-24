@@ -106,6 +106,9 @@ export const TermsAccordionNew: FunctionComponent<TermsAccordionNewProps> = ({
           }
           setActiveSections(newSections);
         };
+
+        // todo All New Sales/Topup/Switching/Transfer/Redemption without opening a new account, will only display these two TC&s:
+        // todo Transactions Terms and Conditions General Terms and Conditions */
         return (
           <Fragment key={index}>
             {index === 0 ? null : <CustomSpacer space={defaultSpaceInBetween} />}

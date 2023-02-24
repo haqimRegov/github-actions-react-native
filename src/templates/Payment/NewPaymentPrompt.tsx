@@ -118,9 +118,11 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             });
 
             softcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
-              if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothSoftcopy.includes(eachJointDoc) === false) {
-                // softcopy is for both
-                bothSoftcopy.push(eachJointDoc);
+              if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc)) {
+                if (bothSoftcopy.includes(eachJointDoc) === false) {
+                  // softcopy is for both
+                  bothSoftcopy.push(eachJointDoc);
+                }
               } else {
                 // softcopy is for joint
                 jointSoftcopy.push(eachJointDoc);

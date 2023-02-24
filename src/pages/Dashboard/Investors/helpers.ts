@@ -102,11 +102,13 @@ export const getStructuredAccountInformation = (account: IInvestorAccount) => {
         { label: ACCOUNT_INFORMATION.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
         { label: ACCOUNT_INFORMATION.LABEL_BANK_NAME, title: bank.bankName },
         { label: ACCOUNT_INFORMATION.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
+        {
+          label: ACCOUNT_INFORMATION.LABEL_BANK_SWIFT,
+          title: isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "" ? (bank.bankSwiftCode as string | undefined) : "-",
+          titleStyle: fsTransformNone,
+        },
       ];
 
-      if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({ label: ACCOUNT_INFORMATION.LABEL_BANK_SWIFT_OPTIONAL, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
-      }
       return localBankDetails.push(newData);
     });
   }
@@ -119,14 +121,13 @@ export const getStructuredAccountInformation = (account: IInvestorAccount) => {
         { label: ACCOUNT_INFORMATION.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName, titleStyle: fsTransformNone },
         { label: ACCOUNT_INFORMATION.LABEL_BANK_NAME, title: bank.bankName },
         { label: ACCOUNT_INFORMATION.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
+        {
+          label: ACCOUNT_INFORMATION.LABEL_BANK_SWIFT,
+          title: isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "" ? (bank.bankSwiftCode as string | undefined) : "-",
+          titleStyle: fsTransformNone,
+        },
+        { label: ACCOUNT_INFORMATION.LABEL_BANK_LOCATION, title: bank.bankLocation! },
       ];
-
-      if (bank.bankLocation !== null) {
-        newData.push({ label: ACCOUNT_INFORMATION.LABEL_BANK_LOCATION, title: bank.bankLocation });
-      }
-      if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({ label: ACCOUNT_INFORMATION.LABEL_BANK_SWIFT, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
-      }
       return foreignBankDetails.push(newData);
     });
   }

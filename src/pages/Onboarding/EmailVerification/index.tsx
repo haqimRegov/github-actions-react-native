@@ -80,7 +80,16 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       updatedPersonalInfo = { ...updatedPersonalInfo, editMode: false };
     }
     addPersonalInfo(updatedPersonalInfo);
-    updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
+    updateOnboarding({
+      ...onboarding,
+      disabledSteps: updatedDisabledSteps,
+      finishedSteps: updatedFinishedSteps,
+      toast: {
+        ...onboarding.toast,
+        toastVisible: true,
+        toastText: `${EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED} ${onboarding.toast.toastText}`,
+      },
+    });
 
     handleNextStep(editMode === true ? "PersonalInfoSummary" : "IdentityVerification");
   };

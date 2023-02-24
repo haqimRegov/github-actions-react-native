@@ -563,7 +563,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
                 <View style={rowCenterVertical}>
                   <TextSpaceArea text={checkSubHeading} style={fs14RegGray5} />
                   <CustomSpacer isHorizontal={true} space={sw4} />
-                  {multiUtmc === false ? (
+                  {multiUtmc === false && transactionType === "Sales-AO" ? (
                     <CustomTooltip
                       arrowSize={{ width: sw10, height: sh6 }}
                       content={<Text style={fs12RegWhite1}>{INVESTMENT.LABEL_MULTIPLE_UTMC}</Text>}

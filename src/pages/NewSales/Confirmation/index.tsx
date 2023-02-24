@@ -547,7 +547,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     ?.map((eachInvestment: IProductSales) => eachInvestment.investment.scheduledInvestment)
     .includes(true);
   const checkHeading = accountNo !== "" ? INVESTMENT.HEADING_NEW_SALES : INVESTMENT.HEADING;
-  const checkSubHeading = accountNo !== "" ? INVESTMENT.SUBHEADING_NEW_SALES : INVESTMENT.SUBHEADING;
 
   return (
     <Fragment>
@@ -561,7 +560,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               <View style={px(sw8)}>
                 <TextSpaceArea text={checkHeading} style={fs18BoldGray6} spaceToBottom={sh4} spaceToTop={sh40} />
                 <View style={rowCenterVertical}>
-                  <TextSpaceArea text={checkSubHeading} style={fs14RegGray5} />
+                  <TextSpaceArea text={INVESTMENT.SUBHEADING} style={fs14RegGray5} />
                   <CustomSpacer isHorizontal={true} space={sw4} />
                   {multiUtmc === false && transactionType === "Sales-AO" ? (
                     <CustomTooltip

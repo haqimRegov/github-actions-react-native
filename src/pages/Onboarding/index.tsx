@@ -3,7 +3,7 @@ import React, { FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { StepperBar } from "../../components";
+import { CustomToast, StepperBar } from "../../components";
 import { Language, ONBOARDING_KEYS, ONBOARDING_ROUTES } from "../../constants";
 import { OnboardingMapDispatchToProps, OnboardingMapStateToProps, OnboardingStoreProps } from "../../store";
 import { flexRow, fs14BoldGray6, fullHW } from "../../styles";
@@ -120,7 +120,9 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetRiskAssessment,
     resetSelectedFund,
     resetTransactions,
+    toast,
     updateFinishedSteps,
+    updateOnboardingToast,
   } = props;
 
   const { editMode } = personalInfo;
@@ -187,6 +189,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
         navigation={navigation}
         route={activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskSummary}
       />
+      <CustomToast parentVisible={toast.toastVisible} setParentVisible={updateOnboardingToast} />
     </View>
   );
 };

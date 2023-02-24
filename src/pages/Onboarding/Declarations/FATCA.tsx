@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
+import { getAddress } from "../../../helpers";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { borderBottomRed1, flexRow, fs10RegGray6, fs12BoldBlack2, fs18BoldGray6, px, sh16, sh24, sw16, sw24 } from "../../../styles";
 import { FatcaDeclarationDetails } from "../../../templates";
@@ -27,16 +28,8 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
   const { principalHolder: principalClient, jointHolder: jointClient } = details!;
   const { isEtb: isPrincipalEtb } = principalClient!;
   const { isEtb: isJointEtb } = jointClient!;
-  const principalAddress = `${Object.values(principal?.addressInformation?.mailingAddress?.address!).join(", ")}, ${
-    principal?.addressInformation?.mailingAddress?.postCode
-  }, ${principal?.addressInformation?.mailingAddress?.city}, ${principal?.addressInformation?.mailingAddress?.state}, ${
-    principal?.addressInformation?.mailingAddress?.country
-  }`;
-  const jointAddress = `${Object.values(joint?.addressInformation?.mailingAddress?.address!).join(", ")}, ${
-    joint?.addressInformation?.mailingAddress?.postCode
-  }, ${joint?.addressInformation?.mailingAddress?.city}, ${joint?.addressInformation?.mailingAddress?.state}, ${
-    joint?.addressInformation?.mailingAddress?.country
-  }`;
+  const principalAddress = getAddress(principal?.addressInformation?.mailingAddress!);
+  const jointAddress = getAddress(joint?.addressInformation?.mailingAddress!);
 
   const handlePrincipalFatca = (fatcaDeclaration: IFatcaState) => {
     addPersonalInfo({

@@ -312,7 +312,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
                   </Fragment>
                 ) : null}
               </View>
-              {isRiskUpdated === true ? (
+              {isPrincipalEtb === true && isRiskUpdated === true ? (
                 <Fragment>
                   <CustomSpacer isHorizontal={true} space={sw8} />
                   <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
@@ -360,7 +360,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
               labelSubmit={RISK_ASSESSMENT.BUTTON_NEXT}
               submitOnPress={handlePageContinue}
               bottomContent={
-                isRiskUpdated === true ? (
+                isPrincipalEtb === true && isRiskUpdated === true ? (
                   <Fragment>
                     <View style={flexRow}>
                       <Text style={fs16BoldGray6}>{RISK_ASSESSMENT.BANNER_RISK_ASSESSMENT}</Text>

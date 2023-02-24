@@ -15,6 +15,7 @@ export const OnboardingMapStateToProps = (state: RootState) => ({
   finishedSteps: state.onboarding.finishedSteps,
   personalInfo: state.personalInfo,
   riskInfo: state.onboarding.riskInfo,
+  toast: state.onboarding.toast,
   transactions: state.transactions,
 });
 

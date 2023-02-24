@@ -58,6 +58,19 @@ export function onboardingReducer(state = onboardingInitialState, action: Onboar
           hnwStatus: "",
           type: "",
         },
+        toast: {
+          toastVisible: false,
+          toastText: "All changes saved",
+        },
+      };
+
+    case "onboarding/UPDATE_ONBOARDING_TOAST":
+      return {
+        ...state,
+        toast: {
+          ...state.toast,
+          toastVisible: action.payload,
+        },
       };
 
     default:

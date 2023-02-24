@@ -123,6 +123,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             employerName: "",
             grossIncome: "",
             isOptional: false,
+            monthlyHouseholdIncome: "",
             occupation: "",
             othersOccupation: "",
             address: {
@@ -152,7 +153,6 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             idType: "",
             maritalStatus: "",
             mothersMaidenName: "",
-            monthlyHouseholdIncome: "",
             name: "",
             nationality: "",
             otherEducationLevel: "",
@@ -261,6 +261,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             isEnabled: true,
             isOptional: false,
             grossIncome: "",
+            monthlyHouseholdIncome: "",
             occupation: "",
             othersOccupation: "",
             address: {
@@ -289,7 +290,6 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             idType: "",
             maritalStatus: "",
             mothersMaidenName: "",
-            monthlyHouseholdIncome: "",
             name: "",
             nationality: "",
             otherEducationLevel: "",

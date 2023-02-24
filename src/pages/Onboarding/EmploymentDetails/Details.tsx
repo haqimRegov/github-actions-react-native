@@ -56,6 +56,7 @@ const initialBaseEmploymentDetails: IEmploymentDetailsState = {
   businessNature: "",
   employerName: "",
   grossIncome: "",
+  monthlyHouseholdIncome: "",
   occupation: "",
   isOptional: false,
   othersOccupation: "",
@@ -82,7 +83,6 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   isOptional,
   personalDetails,
   setEmploymentDetails,
-  setPersonalInfoDetails,
   setValidations,
   validations,
 }: EmploymentInfoProps) => {
@@ -92,7 +92,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const inputCountry = employmentDetails.country!;
   const inputEmployerName = employmentDetails.employerName!;
   const inputGross = employmentDetails.grossIncome!;
-  const inputMonthlyHousehold = personalDetails?.monthlyHouseholdIncome!;
+  const inputMonthlyHousehold = employmentDetails?.monthlyHouseholdIncome!;
   const inputOccupation = employmentDetails.occupation!;
   const inputOthersOccupation = employmentDetails.othersOccupation!;
   const inputPostCode = employmentDetails.postCode!;
@@ -102,7 +102,7 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
   const setInputCity = (value: string) => setEmploymentDetails({ city: value });
   const setInputEmployerName = (value: string) => setEmploymentDetails({ employerName: value });
   const setInputGross = (value: string) => setEmploymentDetails({ grossIncome: value });
-  const setInputMonthlyHousehold = (value: string) => setPersonalInfoDetails({ monthlyHouseholdIncome: value });
+  const setInputMonthlyHousehold = (value: string) => setEmploymentDetails({ monthlyHouseholdIncome: value });
   const setInputOccupation = (value: string) => {
     if (value !== employmentDetails.occupation) {
       const initialEmploymentDetails =

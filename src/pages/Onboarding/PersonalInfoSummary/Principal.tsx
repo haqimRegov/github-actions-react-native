@@ -193,7 +193,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
     { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
     { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
     { label: SUMMARY.LABEL_GROSS, title: employmentDetails!.grossIncome, titleStyle: fsTransformNone },
-    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: employmentDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
   ];
 

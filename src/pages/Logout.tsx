@@ -30,6 +30,7 @@ const LogoutPageComponent: FunctionComponent<LogoutPageProps> = (props: LogoutPa
     props.resetSelectedFund();
     props.resetProducts();
     props.resetOnboarding();
+    props.resetNewSales();
     props.resetGlobal();
     setTimeout(() => {
       handleContextState({ expiryModal: false, expired: false, duplicateModal: false, loggedOut: false });

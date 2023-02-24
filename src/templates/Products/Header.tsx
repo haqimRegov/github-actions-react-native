@@ -12,6 +12,7 @@ import {
   centerVertical,
   circleBorder,
   colorBlue,
+  colorGray,
   colorWhite,
   flexChild,
   flexRow,
@@ -215,7 +216,7 @@ export const ProductHeader: FunctionComponent<ProductHeaderProps> = ({
             onChangeText={setInputSearch}
             onSubmitEditing={handleSearchFunction}
             placeholder={PRODUCT_LIST.INPUT_SEARCH_PLACEHOLDER}
-            placeholderTextColor={colorBlue._5}
+            placeholderTextColor={colorGray._4}
             returnKeyType="search"
             setRef={setSearchInputRef}
             value={inputSearch}

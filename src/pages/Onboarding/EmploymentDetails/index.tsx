@@ -72,12 +72,14 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     (joint.employmentDetails.isOptional === true || !EMPLOYMENT_EXEMPTIONS.includes(joint.employmentDetails.occupation!))
       ? accountType === "Joint" && joint!.employmentDetails!.grossIncome !== ""
       : true;
-
+  const checkMinor =
+    jointAgeCheck === true && joint?.employmentDetails?.occupation === ""
+      ? false
+      : validateDetails(joint!, validations.joint) === false || checkJointGross === false;
   const buttonDisabled =
     accountType === "Individual"
       ? validateDetails(principal!, validations.principal) === false
-      : (isPrincipalEtb === false && validateDetails(principal!, validations.principal) === false) ||
-        (isJointEtb === false && (validateDetails(joint!, validations.joint) === false || checkJointGross === false));
+      : (isPrincipalEtb === false && validateDetails(principal!, validations.principal) === false) || (isJointEtb === false && checkMinor);
 
   const handleSubmit = (resetJoint?: boolean) => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];

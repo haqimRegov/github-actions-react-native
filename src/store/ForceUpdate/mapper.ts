@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { AcknowledgementActionProps } from "../Acknowledgement/actions";
 import { ClientActionProps } from "../Client/actions";
+import { NewSalesActionProps } from "../NewSales";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
 import { RootState } from "../rootReducer";
@@ -24,6 +25,7 @@ export const ForceUpdateMapDispatchToProps = (dispatch: Dispatch) => {
       ...PersonalInfoActionProps,
       ...RiskAssessmentActionProps,
       ...TransactionsActionProps,
+      ...NewSalesActionProps,
     },
     dispatch,
   );

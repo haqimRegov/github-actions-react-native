@@ -2,10 +2,13 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { connect } from "react-redux";
 
+import { Language } from "../../constants";
 import { Q8_OPTIONS } from "../../data/dictionary";
 import { getRiskProfile } from "../../network-actions";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import { RiskAssessmentTemplate } from "../../templates";
+
+const { RISK_ASSESSMENT } = Language.PAGE;
 
 interface QuestionnaireContentProps extends OnboardingContentProps, RiskStoreProps {
   navigation: IStackNavigationProp;
@@ -31,7 +34,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   updateOnboarding,
   updateProductType,
 }: QuestionnaireContentProps) => {
-  const { clientId, dateOfBirth, id } = principalHolder!;
+  const { clientId, dateOfBirth, id, isEtb } = principalHolder!;
   const { disabledSteps, finishedSteps } = onboarding;
 
   const fetching = useRef<boolean>(false);
@@ -77,7 +80,16 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       newFinishedSteps.splice(findProductsConfirmation, 1);
     }
 
-    // TODO toast object
+    const toastObject =
+      isEtb === true
+        ? {
+            toast: {
+              toastText: RISK_ASSESSMENT.TOAST_CHANGES,
+              toastVisible: true,
+            },
+          }
+        : {};
+
     updateOnboarding({
       ...onboarding,
       finishedSteps: newFinishedSteps,
@@ -89,11 +101,9 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         expectedRange: currentRiskScore.rangeOfReturn,
         type: currentRiskScore.type,
       },
-      // toast: {
-      //   toastText: RISK_ASSESSMENT.TOAST_CHANGES,
-      //   toastVisible: true,
-      // },
+      ...toastObject,
     });
+
     addPersonalInfo({
       ...personalInfo,
       principal: {

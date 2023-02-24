@@ -118,9 +118,11 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             });
 
             softcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
-              if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothSoftcopy.includes(eachJointDoc) === false) {
-                // softcopy is for both
-                bothSoftcopy.push(eachJointDoc);
+              if (softcopyDocList.remarks.principalHolder.includes(eachJointDoc)) {
+                if (bothSoftcopy.includes(eachJointDoc) === false) {
+                  // softcopy is for both
+                  bothSoftcopy.push(eachJointDoc);
+                }
               } else {
                 // softcopy is for joint
                 jointSoftcopy.push(eachJointDoc);
@@ -128,7 +130,9 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             });
 
             const principalDocs = principalSoftcopy.map((eachDoc) =>
-              isArrayNotEmpty(jointSoftcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
+              isArrayNotEmpty(jointSoftcopy) || isArrayNotEmpty(bothSoftcopy)
+                ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}`
+                : eachDoc,
             );
             const jointDocs = jointSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
             const bothDocs = bothSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);

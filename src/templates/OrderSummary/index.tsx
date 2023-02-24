@@ -95,22 +95,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
 
-  // if (
-  //   currentOrder !== undefined &&
-  //   orderSummary !== undefined &&
-  //   isNotEmpty(orderSummary.documentSummary) && // todo check the condition here. it shows profile tab if investor etb
-  //   ((orderSummary.documentSummary.accountType === "Individual" &&
-  //     isNotEmpty(isEtbInvestor.principal) &&
-  //     isEtbInvestor.principal === false) ||
-  //     (orderSummary.documentSummary.accountType === "Joint" &&
-  //       (isNotEmpty(isEtbInvestor.principal) || isNotEmpty(isEtbInvestor.joint)) &&
-  //       (isEtbInvestor.principal === false || isEtbInvestor.joint === false)))
-  // ) {
-  if (
-    currentOrder !== undefined &&
-    orderSummary !== undefined &&
-    (orderSummary.isEtb === false || (orderSummary.isEtb === true && (isEtbInvestor.principal === true || isEtbInvestor.joint === true)))
-  ) {
+  if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true) {
     tabs.splice(1, 0, "profile");
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
   }
@@ -143,7 +128,6 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   if (activeTab === "account") {
     content = <AccountTab transactionType={currentOrder!.transactionType} {...contentProps} />;
   }
-
   if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true && activeTab === "profile") {
     content = <ProfileTabNew {...contentProps} />;
   }

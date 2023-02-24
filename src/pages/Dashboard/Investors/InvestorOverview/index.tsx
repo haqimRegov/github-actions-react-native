@@ -316,16 +316,18 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             isNotEmpty(investorData?.address.address!.line4)
               ? { line3: `${investorData?.address.address!.line3}, ${investorData?.address.address!.line4} ` }
               : {};
-          const updatedAddress: IAddressState | undefined = isNotEmpty(investorData!.address)
-            ? {
-                ...investorData?.address,
-                // Remove the empty string keys from the object
-                address: {
-                  ...Object.fromEntries(Object.entries(investorData?.address!.address!).filter((value) => value[1])),
-                  ...updateLine3,
-                },
-              }
-            : undefined;
+          // TODO Principal address should only be used during Account Opening with ETB Principal
+          const updatedAddress: IAddressState | undefined =
+            isNotEmpty(investorData!.address) && isNotEmpty(investorData!.address.address)
+              ? {
+                  ...investorData?.address,
+                  // Remove the empty string keys from the object
+                  address: {
+                    ...Object.fromEntries(Object.entries(investorData?.address!.address!).filter((value) => value[1])),
+                    ...updateLine3,
+                  },
+                }
+              : undefined;
           const filteredAddress: IAddressState =
             isNotEmpty(updatedAddress) && isNotEmpty(updatedAddress!.address?.line4)
               ? { ...updatedAddress, address: { ...deleteKey(updatedAddress!.address!, ["line4"]) } }

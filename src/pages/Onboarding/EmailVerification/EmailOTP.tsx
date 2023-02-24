@@ -3,15 +3,14 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
-import { LocalAssets } from "../../../assets/images/LocalAssets";
 import {
   ColorCard,
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
+  CustomToast,
   defaultContentProps,
   LinkText,
-  PromptModal,
   RoundedButton,
   SafeAreaPage,
   TextSpaceArea,
@@ -92,7 +91,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
 }: EmailOTPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const fetching = useRef<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [emailToast, setEmailToast] = useState<boolean>(false);
   const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
   const [jointError, setJointError] = useState<string | undefined>(undefined);
 
@@ -134,7 +133,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         const { data, error } = response;
         if (error === null && data !== null) {
           if (data.result.status === true) {
-            setShowModal(true);
+            handleNavigate();
           }
         }
         if (error !== null) {
@@ -171,17 +170,8 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   const otpEmail = jointEmailCheck === true ? checkPrincipal : `${principalEmail}`;
 
   useEffect(() => {
-    let redirectTimer: ReturnType<typeof setTimeout>;
-    if (showModal === true) {
-      redirectTimer = setTimeout(() => {
-        handleNavigate();
-      }, 5000);
-    }
-    return () => {
-      return clearTimeout(redirectTimer);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showModal]);
+    setEmailToast(true);
+  }, []);
 
   const { editMode } = personalInfo;
 
@@ -296,13 +286,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         />
         <CustomSpacer space={sh56} />
       </ScrollView>
-      <PromptModal
-        handleContinue={handleNavigate}
-        illustration={LocalAssets.illustration.emailVerified}
-        label={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED}
-        title={EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED_TITLE}
-        visible={showModal}
-      />
+      <CustomToast parentVisible={emailToast} deleteText={EMAIL_VERIFICATION.TOAST_SEND} setParentVisible={setEmailToast} />
     </SafeAreaPage>
   );
 };

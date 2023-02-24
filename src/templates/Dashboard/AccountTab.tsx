@@ -24,7 +24,7 @@ import {
   sw64,
   sw8,
 } from "../../styles";
-import { isArrayNotEmpty, isNotEmpty } from "../../utils";
+import { generateCorrespondingAddress, isArrayNotEmpty, isNotEmpty } from "../../utils";
 import { SummaryColorCard, summaryColorCardStyleProps } from "./SummaryColorCard";
 
 interface AccountTabProps {
@@ -37,8 +37,7 @@ const { DASHBOARD_ACCOUNT_TAB, DASHBOARD_PROFILE } = Language.PAGE;
 
 export const AccountTab: FunctionComponent<AccountTabProps> = ({ data, transactionType }: AccountTabProps) => {
   const { profile, investmentSummary, transactionDetails } = data;
-  const principal = profile[0];
-  const { addressInformation } = principal;
+  const [principal, joint] = profile;
 
   const accountSettings: LabeledTitleProps[] = [];
   // TODO. double check on the if statement
@@ -53,94 +52,66 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data, transacti
   if (transactionDetails.accountType === "Joint") {
     accountSettings.push(
       {
-        label: DASHBOARD_ACCOUNT_TAB.LABEL_RELATIONSHIP,
-        title: principal?.personalDetails?.relationship || "-",
+        label: DASHBOARD_ACCOUNT_TAB.LABEL_AUTHORISED_SIGNATORY,
+        title: isNotEmpty(transactionDetails.accountOperationMode) ? handleSignatoryFromBE(transactionDetails.accountOperationMode!) : "-",
         titleStyle: fsTransformNone,
       },
       {
-        label: DASHBOARD_ACCOUNT_TAB.LABEL_AUTHORISED_SIGNATORY,
-        title: isNotEmpty(transactionDetails.accountOperationMode) ? handleSignatoryFromBE(transactionDetails.accountOperationMode!) : "-",
+        label: DASHBOARD_ACCOUNT_TAB.LABEL_RELATIONSHIP,
+        title: principal?.personalDetails?.relationship || "-",
         titleStyle: fsTransformNone,
       },
     );
   }
 
-  // const riskDetails: LabeledTitleProps[] = [];
-  // if (riskInfo !== null) {
-  //   riskDetails.push(
-  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_RISK_APPETITE, title: riskInfo.appetite, titleStyle: fsTransformNone },
-  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_EXPECTED_RANGE_OF_RETURN, title: riskInfo.expectedRange, titleStyle: fsTransformNone },
-  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_TYPE, title: riskInfo.type, titleStyle: fsTransformNone },
-  //     { label: DASHBOARD_ACCOUNT_TAB.LABEL_RISK_PROFILE, title: riskInfo.profile, titleStyle: fsTransformNone },
-  //   );
-  // }
+  const principalMailingAddress = isNotEmpty(principal?.addressInformation)
+    ? generateCorrespondingAddress(principal.addressInformation)
+    : [];
+  const jointMailingAddress = isNotEmpty(joint?.addressInformation) ? generateCorrespondingAddress(joint.addressInformation) : [];
 
-  const correspondenceAddressSummary: LabeledTitleProps[] = [];
-  if (isNotEmpty(addressInformation)) {
-    if (isNotEmpty(addressInformation.mailingAddress)) {
-      if (isNotEmpty(addressInformation.mailingAddress.address)) {
-        const mailingAddressLabel =
-          isNotEmpty(addressInformation.mailingAddress.address.line2) ||
-          isNotEmpty(addressInformation.mailingAddress.address.line3) ||
-          isNotEmpty(addressInformation.mailingAddress.address.line4)
-            ? `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 1`
-            : DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS;
-
-        correspondenceAddressSummary.push({
-          label: mailingAddressLabel,
-          title: addressInformation.mailingAddress.address.line1 || "-",
-          titleStyle: fsTransformNone,
-        });
-
-        if (isNotEmpty(addressInformation.mailingAddress.address.line2)) {
-          correspondenceAddressSummary.push({
-            label: `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 2`,
-            title: addressInformation.mailingAddress.address.line2 || "-",
-            titleStyle: fsTransformNone,
-          });
-        }
-
-        if (isNotEmpty(addressInformation.mailingAddress.address.line3)) {
-          correspondenceAddressSummary.push({
-            label: `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 3`,
-            title: addressInformation.mailingAddress.address.line3! || "-",
-            titleStyle: fsTransformNone,
-          });
-        }
-
-        if (isNotEmpty(addressInformation.mailingAddress.address.line4)) {
-          correspondenceAddressSummary.push({
-            label: `${DASHBOARD_ACCOUNT_TAB.LABEL_CORRESPONDENCE_ADDRESS} 4`,
-            title: addressInformation.mailingAddress.address.line4! || "-",
-            titleStyle: fsTransformNone,
-          });
-        }
-      }
-      correspondenceAddressSummary.push(
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_POSTCODE, title: addressInformation.mailingAddress.postCode },
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_CITY, title: addressInformation.mailingAddress.city },
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_STATE, title: addressInformation.mailingAddress.state },
-        { label: DASHBOARD_ACCOUNT_TAB.LABEL_COUNTRY, title: addressInformation.mailingAddress.country },
-      );
-    }
+  const sectionData: ISummaryColorCardSection[] = [];
+  if (joint !== undefined && isNotEmpty(principal.isEtb) && principal.isEtb === false) {
+    sectionData.push({
+      iconName: "account",
+      text: DASHBOARD_ACCOUNT_TAB.LABEL_PRINCIPAL_HOLDER,
+      subtitle: principal.name,
+      data: [principalMailingAddress],
+    });
   }
+  if (joint !== undefined && isNotEmpty(joint.isEtb) && joint.isEtb === false) {
+    sectionData.push({
+      iconName: "account-joint",
+      text: DASHBOARD_ACCOUNT_TAB.LABEL_JOINT_HOLDER,
+      subtitle: joint.name,
+      data: [jointMailingAddress],
+    });
+  }
+
+  const correspondenceAddressSummary: LabeledTitleProps[] = isNotEmpty(joint) ? [] : principalMailingAddress;
+  const correspondenceAddressSection = isNotEmpty(joint) ? sectionData : undefined;
 
   return (
     <Fragment>
       <View style={px(sw24)}>
-        {transactionType !== "Sales" && isArrayNotEmpty(correspondenceAddressSummary) ? (
+        {transactionType !== "Sales" &&
+        (isArrayNotEmpty(correspondenceAddressSummary) || correspondenceAddressSection !== undefined) &&
+        (isNotEmpty(principal.isEtb) || (joint !== undefined && isNotEmpty(joint.isEtb))) &&
+        (principal.isEtb === false || (joint !== undefined && joint.isEtb === false)) ? (
           <SummaryColorCard
             data={correspondenceAddressSummary}
+            section={correspondenceAddressSection}
             headerTitle={DASHBOARD_ACCOUNT_TAB.CARD_TITLE_CORRESPONDENCE_ADDRESS}
             spaceToTop={sh24}
           />
+        ) : null}
+        {investmentSummary !== null && isArrayNotEmpty(investmentSummary) && investmentSummary[0] !== null ? (
+          <SummaryColorCard data={accountSettings} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_ACCOUNT_SETTINGS} spaceToTop={sh32} />
         ) : null}
         {isNotEmpty(principal.bankInformation) &&
         (isNotEmpty(principal.bankInformation?.localBank) || isNotEmpty(principal.bankInformation?.foreignBank)) &&
         (isArrayNotEmpty(principal.bankInformation?.localBank) || isArrayNotEmpty(principal.bankInformation?.foreignBank)) ? (
           <Fragment>
-            <CustomSpacer space={sh24} />
-
+            <CustomSpacer space={sh32} />
             <ColorCard
               {...summaryColorCardStyleProps}
               content={
@@ -213,23 +184,18 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data, transacti
                               title: bank.bankAccountNumber,
                               titleStyle: fsTransformNone,
                             },
-                          ];
-                          // bank location
-                          if (bank.bankLocation !== null && isNotEmpty(bank.bankLocation)) {
-                            foreignBankDetails.push({
-                              label: DASHBOARD_ACCOUNT_TAB.LABEL_LOCATION,
-                              title: bank.bankLocation,
-                              titleStyle: fsTransformNone,
-                            });
-                          }
-                          // swift code
-                          if (bank.bankSwiftCode !== null && isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "") {
-                            foreignBankDetails.push({
+                            {
                               label: DASHBOARD_ACCOUNT_TAB.LABEL_BANK_SWIFT_CODE,
-                              title: bank.bankSwiftCode,
+                              title: bank.bankSwiftCode || "-",
                               titleStyle: fsUppercase,
-                            });
-                          }
+                            },
+                            {
+                              label: DASHBOARD_ACCOUNT_TAB.LABEL_LOCATION,
+                              title: bank.bankLocation || "-",
+                              titleStyle: fsTransformNone,
+                            },
+                          ];
+
                           return (
                             <Fragment key={numberIndex}>
                               {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}
@@ -259,9 +225,6 @@ export const AccountTab: FunctionComponent<AccountTabProps> = ({ data, transacti
               header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_ACCOUNT_TAB.TITLE_BANKING_DETAILS }}
             />
           </Fragment>
-        ) : null}
-        {transactionType !== "Sales" && investmentSummary !== null && investmentSummary[0] !== null ? (
-          <SummaryColorCard data={accountSettings} headerTitle={DASHBOARD_ACCOUNT_TAB.TITLE_ACCOUNT_DETAILS} spaceToTop={sh32} />
         ) : null}
       </View>
     </Fragment>

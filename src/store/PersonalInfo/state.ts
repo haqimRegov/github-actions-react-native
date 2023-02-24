@@ -113,6 +113,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       employerName: "",
       grossIncome: "",
       isOptional: false,
+      monthlyHouseholdIncome: "",
       occupation: "",
       othersOccupation: "",
       address: {
@@ -142,7 +143,6 @@ export const personalInfoInitialState: PersonalInfoState = {
       idType: "",
       maritalStatus: "",
       mothersMaidenName: "",
-      monthlyHouseholdIncome: "",
       name: "",
       nationality: "",
       otherEducationLevel: "",
@@ -251,6 +251,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       isEnabled: true,
       isOptional: false,
       grossIncome: "",
+      monthlyHouseholdIncome: "",
       occupation: "",
       othersOccupation: "",
       address: {
@@ -279,7 +280,6 @@ export const personalInfoInitialState: PersonalInfoState = {
       idType: "",
       maritalStatus: "",
       mothersMaidenName: "",
-      monthlyHouseholdIncome: "",
       name: "",
       nationality: "",
       otherEducationLevel: "",

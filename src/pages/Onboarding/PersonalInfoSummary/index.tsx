@@ -202,29 +202,31 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
             sideElement={
               <View>
                 <CustomSpacer space={defaultContentProps.spaceToTop!} />
-                <View style={containerStyle}>
-                  {isPrincipalEtb === true ? (
-                    <CustomButton
-                      secondary={true}
-                      buttonStyle={profileButtonStyle}
-                      onPress={handlePrincipalProfile}
-                      text={checkLabel}
-                      textStyle={fs10BoldBlue1}
-                    />
-                  ) : null}
-                  {client.accountType === "Joint" && isJointEtb === true ? (
-                    <Fragment>
-                      {isPrincipalEtb === true ? <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} /> : null}
+                {isPrincipalEtb === false && isJointEtb === false ? null : (
+                  <View style={containerStyle}>
+                    {isPrincipalEtb === true ? (
                       <CustomButton
                         secondary={true}
                         buttonStyle={profileButtonStyle}
-                        onPress={handleJointProfile}
-                        text={NEW_SALES_SUMMARY.LABEL_JOINT_PROFILE}
+                        onPress={handlePrincipalProfile}
+                        text={checkLabel}
                         textStyle={fs10BoldBlue1}
                       />
-                    </Fragment>
-                  ) : null}
-                </View>
+                    ) : null}
+                    {client.accountType === "Joint" && isJointEtb === true ? (
+                      <Fragment>
+                        {isPrincipalEtb === true ? <View style={{ borderLeftWidth: sw1, borderColor: colorBlue._1 }} /> : null}
+                        <CustomButton
+                          secondary={true}
+                          buttonStyle={profileButtonStyle}
+                          onPress={handleJointProfile}
+                          text={NEW_SALES_SUMMARY.LABEL_JOINT_PROFILE}
+                          textStyle={fs10BoldBlue1}
+                        />
+                      </Fragment>
+                    ) : null}
+                  </View>
+                )}
               </View>
             }>
             {isPrincipalEtb === false ? (

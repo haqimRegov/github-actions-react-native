@@ -731,7 +731,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             labelCancel={INVESTMENT.BUTTON_CANCEL}
             labelSubmit={INVESTMENT.BUTTON_NEXT}
             submitOnPress={handleConfirmIdentity}
-            label={INVESTMENT.HEADING}
+            label={INVESTMENT.LABEL_SUMMARY}
           />
         ) : null}
       </SafeAreaPage>

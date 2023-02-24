@@ -318,7 +318,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const handleAims = () => {
     setAimsOpen(true);
   };
-  const checkContinueLabel = isRiskUpdated === true ? RISK_ASSESSMENT.BUTTON_CONTINUE : RISK_ASSESSMENT.BUTTON_NEXT;
+
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
 
   const buttonStyle: ViewStyle = {
@@ -596,7 +596,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
             label={RISK_ASSESSMENT.NEW_SALES_ACCOUNT_SUMMARY}
             labelStyle={fs20BoldBlack2}
             labelCancel={RISK_ASSESSMENT.BUTTON_CANCEL}
-            labelSubmit={checkContinueLabel}
+            labelSubmit={RISK_ASSESSMENT.BUTTON_NEXT}
             submitOnPress={handlePageContinue}
             bottomContent={
               isRiskUpdated === true ? (

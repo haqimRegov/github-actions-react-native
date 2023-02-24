@@ -270,7 +270,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
               line3: undefined,
             },
             city: "",
-            country: DICTIONARY_COUNTRIES[0].value,
+            country: "",
             postCode: "",
             state: "",
           },

@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import { BaseColorCardProps, BaseTextCardProps, ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
 import {
@@ -7,6 +7,7 @@ import {
   borderBottomBlue4,
   colorGray,
   flexChild,
+  fs12RegGray5,
   fs16BoldBlack2,
   fs16BoldBlue1,
   fs18BoldBlack2,
@@ -19,6 +20,7 @@ import {
   sw16,
   sw24,
   sw328,
+  sw8,
 } from "../../styles";
 
 interface SummaryColorCardProps {
@@ -75,6 +77,12 @@ export const SummaryColorCard: FunctionComponent<SummaryColorCardProps> = ({
                             <CustomSpacer space={sh8} />
                             <View style={rowCenterVertical}>
                               <IconText name={sectionItem.iconName} iconSize={sw24} text={iconTitle} textStyle={fs16BoldBlack2} />
+                              {sectionItem.subtitle !== undefined ? (
+                                <Fragment>
+                                  <CustomSpacer isHorizontal={true} space={sw8} />
+                                  <Text style={fs12RegGray5}>{sectionItem.subtitle}</Text>
+                                </Fragment>
+                              ) : null}
                               <CustomSpacer isHorizontal={true} space={sw16} />
                               <View style={{ ...borderBottomBlue4, ...flexChild }} />
                               <CustomSpacer isHorizontal={true} space={sw24} />

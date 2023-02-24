@@ -82,7 +82,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     addPersonalInfo(updatedPersonalInfo);
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
 
-    handleNextStep("IdentityVerification");
+    handleNextStep(editMode === true ? "PersonalInfoSummary" : "IdentityVerification");
   };
 
   const handleEmailVerification = async () => {

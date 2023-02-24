@@ -141,11 +141,12 @@ export const structureEddProfile = (
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
         { label: DASHBOARD_PROFILE.LABEL_BANK_NAME, title: bank.bankName },
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
+        {
+          label: DASHBOARD_PROFILE.LABEL_BANK_SWIFT,
+          title: isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "" ? (bank.bankSwiftCode as string | undefined) : "-",
+          titleStyle: fsTransformNone,
+        },
       ];
-
-      if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({ label: DASHBOARD_PROFILE.LABEL_BANK_SWIFT, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
-      }
       return localBankDetails.push(newData);
     });
   }
@@ -158,14 +159,14 @@ export const structureEddProfile = (
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName, titleStyle: fsTransformNone },
         { label: DASHBOARD_PROFILE.LABEL_BANK_NAME, title: bank.bankName },
         { label: DASHBOARD_PROFILE.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
+        {
+          label: DASHBOARD_PROFILE.LABEL_BANK_SWIFT,
+          title: isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "" ? (bank.bankSwiftCode as string | undefined) : "-",
+          titleStyle: fsTransformNone,
+        },
+        { label: DASHBOARD_PROFILE.LABEL_BANK_LOCATION, title: bank.bankLocation! },
       ];
 
-      if (bank.bankLocation !== null) {
-        newData.push({ label: DASHBOARD_PROFILE.LABEL_BANK_LOCATION, title: bank.bankLocation });
-      }
-      if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({ label: DASHBOARD_PROFILE.LABEL_BANK_SWIFT, title: bank.bankSwiftCode, titleStyle: fsTransformNone });
-      }
       return foreignBankDetails.push(newData);
     });
   }

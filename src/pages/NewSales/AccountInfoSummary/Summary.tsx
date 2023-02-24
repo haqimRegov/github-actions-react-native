@@ -250,16 +250,14 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
         { label: NEW_SALES_SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
-      ];
-
-      if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({
+        {
           label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT,
-          title: bank.bankSwiftCode,
+          title: isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "" ? bank.bankSwiftCode : "-",
           titleStyle: fsTransformNone,
           ...checkSwiftUpdated,
-        });
-      }
+        },
+      ];
+
       return localBankDetails.push(newData);
     });
   }
@@ -284,19 +282,15 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
         { label: NEW_SALES_SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName, titleStyle: fsTransformNone },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
-      ];
-
-      if (bank.bankLocation !== null) {
-        newData.push({ label: NEW_SALES_SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation });
-      }
-      if (bank.bankSwiftCode !== null && bank.bankSwiftCode !== "") {
-        newData.push({
+        {
           label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT,
-          title: bank.bankSwiftCode,
+          title: isNotEmpty(bank.bankSwiftCode) && bank.bankSwiftCode !== "" ? bank.bankSwiftCode : "-",
           titleStyle: fsTransformNone,
           ...checkSwiftUpdated,
-        });
-      }
+        },
+        { label: NEW_SALES_SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
+      ];
+
       return foreignBankDetails.push(newData);
     });
   }

@@ -26,54 +26,52 @@ const { EMAIL_VERIFICATION, INVESTOR_INFORMATION } = Language.PAGE;
 declare interface VerificationProps {
   accountType: TypeAccountChoices;
   addPersonalInfo: (state: IPersonalInfoState) => void;
+  checkIsEdit?: boolean;
   handleCancel?: () => void;
   handleContinue: () => void;
   handleNavigate: () => void;
-  jointAgeCheck: boolean;
-  jointEmailCheck: boolean;
-  jointError: string | undefined;
   isEtbJoint: boolean;
   isEtbPrincipal: boolean;
+  jointAgeCheck: boolean;
+  jointEmail: string;
+  jointEmailCheck: boolean;
+  jointError: string | undefined;
   personalInfo: IPersonalInfoState;
+  principalEmail: string;
   principalError: string | undefined;
   resendTimer: number;
+  setJointEmail: (value: string) => void;
   setJointError: (value: string | undefined) => void;
+  setPrincipalEmail: (value: string) => void;
   setPrincipalError: (value: string | undefined) => void;
 }
 
 export const Verification: FunctionComponent<VerificationProps> = ({
   accountType,
-  addPersonalInfo,
+  checkIsEdit,
   handleCancel,
   handleContinue,
   handleNavigate,
   isEtbJoint,
   isEtbPrincipal,
   jointAgeCheck,
+  jointEmail,
   jointEmailCheck,
   jointError,
   personalInfo,
+  principalEmail,
   principalError,
   resendTimer,
+  setJointEmail,
   setJointError,
+  setPrincipalEmail,
   setPrincipalError,
 }: VerificationProps) => {
-  const { joint, principal } = personalInfo;
+  const { joint, principal, editMode } = personalInfo;
 
-  const inputPrincipalEmail = principal!.contactDetails!.emailAddress!;
-  const inputJointEmail = joint!.contactDetails!.emailAddress!;
+  const setInputPrincipalEmail = (value: string) => setPrincipalEmail(value);
 
-  const setInputPrincipalEmail = (value: string) =>
-    addPersonalInfo({
-      ...personalInfo,
-      principal: { ...principal, contactDetails: { ...principal?.contactDetails, emailAddress: value } },
-    });
-
-  const setInputJointEmail = (value: string) =>
-    addPersonalInfo({
-      ...personalInfo,
-      joint: { ...joint, contactDetails: { ...joint?.contactDetails, emailAddress: value } },
-    });
+  const setInputJointEmail = (value: string) => setJointEmail(value);
 
   const validateEmail = (value: string) => {
     if (isEmail(value) === false) {
@@ -83,12 +81,12 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   };
 
   const checkPrincipalEmail = () => {
-    setPrincipalError(validateEmail(inputPrincipalEmail));
+    setPrincipalError(validateEmail(principalEmail));
   };
 
   const checkJointEmail = () => {
-    if (inputJointEmail !== "" || jointEmailCheck === true) {
-      setJointError(validateEmail(inputJointEmail));
+    if (jointEmail !== "" || jointEmailCheck === true) {
+      setJointError(validateEmail(jointEmail));
     } else {
       setJointError(undefined);
     }
@@ -98,12 +96,12 @@ export const Verification: FunctionComponent<VerificationProps> = ({
   const checkMinor = jointAgeCheck === false && isEtbPrincipal === true;
   const disabled =
     jointEmailCheck === false && checkMinor === false
-      ? inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined || resendTimer !== 0
+      ? principalEmail === "" || principalError !== undefined || validateEmail(principalEmail) !== undefined || resendTimer !== 0
       : (isEtbPrincipal === false &&
-          (inputPrincipalEmail === "" || principalError !== undefined || validateEmail(inputPrincipalEmail) !== undefined)) ||
-        inputJointEmail === "" ||
+          (principalEmail === "" || principalError !== undefined || validateEmail(principalEmail) !== undefined)) ||
+        jointEmail === "" ||
         jointError !== undefined ||
-        validateEmail(inputJointEmail) !== undefined ||
+        validateEmail(jointEmail) !== undefined ||
         resendTimer !== 0;
 
   const principalLabel = accountType !== "Joint" ? EMAIL_VERIFICATION.ADD_EMAIL : EMAIL_VERIFICATION.ADD_EMAIL_PRINCIPAL;
@@ -115,6 +113,9 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       ? `${INVESTOR_INFORMATION.LABEL_EMAIL} ${EMAIL_VERIFICATION.LABEL_OPTIONAL}`
       : INVESTOR_INFORMATION.LABEL_EMAIL;
 
+  const checkContinueLabel =
+    editMode === true && checkIsEdit !== undefined && checkIsEdit ? EMAIL_VERIFICATION.LABEL_CONTINUE : EMAIL_VERIFICATION.LABEL_GET_OTP;
+
   return (
     <ContentPage
       continueTextStyle={fsTransformNone}
@@ -122,7 +123,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
       handleContinue={handleContinue}
       handleSkip={handleNavigate}
       skippable={checkSkippable}
-      labelContinue={EMAIL_VERIFICATION.LABEL_GET_OTP}
+      labelContinue={checkContinueLabel}
       noBounce={false}
       subheading={EMAIL_VERIFICATION.HEADING}
       subheadingStyle={fs18BoldGray6}
@@ -153,7 +154,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                       label={INVESTOR_INFORMATION.LABEL_EMAIL}
                       onBlur={checkPrincipalEmail}
                       onChangeText={setInputPrincipalEmail}
-                      value={inputPrincipalEmail}
+                      value={principalEmail}
                     />
                     {resendTimer !== 0 ? (
                       <Fragment>
@@ -189,7 +190,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
                       label={jointLabel}
                       onBlur={checkJointEmail}
                       onChangeText={setInputJointEmail}
-                      value={inputJointEmail}
+                      value={jointEmail}
                     />
                     {resendTimer !== 0 ? (
                       <Fragment>

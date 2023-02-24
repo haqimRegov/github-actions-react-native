@@ -69,6 +69,10 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
     handleEdit("EmploymentDetails");
   };
 
+  const handleEditEmailVerification = () => {
+    handleEdit("EmailVerification");
+  };
+
   const personalDetailsInfo: LabeledTitleProps[] = personalDetails.slice(0, isMalaysian === true ? 3 : 5);
   const personalDetailsItem: LabeledTitleProps[] = personalDetails.slice(isMalaysian === true ? -9 : -8);
 
@@ -124,7 +128,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
         data={emailSection}
         spaceToTop={sh16}
         textCardProps={textCardProps}
-        colorCardProps={{ ...colorCardProps, headerIcon: { disabled: true, name: "pencil", onPress: () => {} } }}
+        colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditEmailVerification } }}
       />
       <SummaryColorCard
         headerTitle={SUMMARY.TITLE_CONTACT}

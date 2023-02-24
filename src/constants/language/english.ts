@@ -892,6 +892,7 @@ export const english = {
         "Please provide your frequently used personal email address as confidential investment documents will be sent to this email.",
       HEADING: "Investor Email Verification",
       HEADING_OTP: "Email Validation",
+      LABEL_CONTINUE: "Continue",
       LABEL_PRINCIPAL_HOLDER: "Principal Holder",
       LABEL_JOINT_HOLDER: "Joint Holder",
       LABEL_EMAIL_JOINT: "Joint Account Holder Email Address",

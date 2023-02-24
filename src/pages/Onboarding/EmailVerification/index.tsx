@@ -29,7 +29,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const navigation = useNavigation<IStackNavigationProp>();
 
   const { disabledSteps, finishedSteps } = onboarding;
-  const { editMode, emailOtpSent, emailTimestamp } = personalInfo;
+  const { editMode, emailOtpSent, emailTimestamp, principal, joint } = personalInfo;
   const { jointHolder, principalHolder } = details!;
   const { isEtb: isEtbJoint } = jointHolder!;
   const { isEtb: isEtbPrincipal } = principalHolder!;
@@ -38,22 +38,32 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const [principalOtp, setPrincipalOtp] = useState<string>("");
   const [jointOtp, setJointOtp] = useState<string>("");
   const [prompt, setPrompt] = useState<"cancel" | undefined>(undefined);
+  const [principalEmail, setPrincipalEmail] = useState<string>(
+    principal?.contactDetails?.emailAddress !== undefined ? principal?.contactDetails?.emailAddress : "",
+  );
+  const [jointEmail, setJointEmail] = useState<string>(
+    joint?.contactDetails?.emailAddress !== undefined ? joint?.contactDetails?.emailAddress : "",
+  );
   const [principalEmailError, setPrincipalEmailError] = useState<string | undefined>(undefined);
   const [jointEmailError, setJointEmailError] = useState<string | undefined>(undefined);
   const checkTimeDifference = CalculateTimeDifference(emailTimestamp);
 
   const [resendTimer, setResendTimer] = useState(checkTimeDifference);
 
-  const inputPrincipalEmail = personalInfo.principal!.contactDetails!.emailAddress!;
-  const inputJointEmail = personalInfo.joint!.contactDetails!.emailAddress!;
   const principalClientId = details?.principalHolder?.clientId!;
   // dateOfBirth saved in PersonalInfo is in Date type while DEFAULT_DATE_FORMAT string in ClientDetails
   const jointAgeCheck = moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18;
-  const jointEmailCheck = accountType === "Joint" && (inputJointEmail !== "" || jointAgeCheck) && isEtbJoint === false;
+  const jointEmailCheck = accountType === "Joint" && (jointEmail !== "" || jointAgeCheck) && isEtbJoint === false;
 
   const handleNavigate = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
+    let updatedPersonalInfo = {
+      ...personalInfo,
+      emailOtpSent: false,
+      principal: { ...principal, contactDetails: { ...principal?.contactDetails, emailAddress: principalEmail } },
+      joint: { ...joint, contactDetails: { ...joint?.contactDetails, emailAddress: jointEmail } },
+    };
 
     // add to finishedSteps
     if (updatedFinishedSteps.includes("EmailVerification") === false) {
@@ -67,9 +77,9 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       if (findPersonalInfoSummary !== -1) {
         updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
       }
-      addPersonalInfo({ ...personalInfo, editMode: false });
+      updatedPersonalInfo = { ...updatedPersonalInfo, editMode: false };
     }
-
+    addPersonalInfo(updatedPersonalInfo);
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
 
     handleNextStep("IdentityVerification");
@@ -80,8 +90,8 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       fetching.current = true;
       setPrincipalEmailError(undefined);
       setJointEmailError(undefined);
-      const checkPrincipalHolder = isEtbPrincipal === true ? {} : { principalHolder: { email: inputPrincipalEmail } };
-      const checkJointHolder = jointEmailCheck === true || inputJointEmail !== "" ? { jointHolder: { email: inputJointEmail } } : undefined;
+      const checkPrincipalHolder = isEtbPrincipal === true ? {} : { principalHolder: { email: principalEmail } };
+      const checkJointHolder = jointEmailCheck === true || jointEmail !== "" ? { jointHolder: { email: jointEmail } } : undefined;
       const request: IEmailVerificationRequest = {
         initId: details!.initId!,
         isForceUpdate: false,
@@ -131,8 +141,25 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     setPrompt(undefined);
   };
 
+  const checkIsEditJoint =
+    editMode === true && jointEmailCheck === true
+      ? principalEmail === principal!.contactDetails!.emailAddress! && jointEmail === joint!.contactDetails!.emailAddress!
+      : principalEmail === principal!.contactDetails!.emailAddress! ||
+        (jointEmail !== "" && jointEmail === joint!.contactDetails!.emailAddress!);
+
+  const checkIsEditPrincipal = editMode === true ? principalEmail === principal!.contactDetails!.emailAddress! : false;
+  const checkIsEdit = accountType === "Individual" ? checkIsEditPrincipal : checkIsEditJoint;
+
   const handleContinue = () => {
-    handleEmailVerification();
+    if (editMode === true) {
+      if (checkIsEdit) {
+        handleNextStep("PersonalInfoSummary");
+      } else {
+        handleEmailVerification(); // run if new email inputted
+      }
+    } else {
+      handleEmailVerification();
+    }
   };
 
   useEffect(() => {
@@ -158,18 +185,23 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
         <Verification
           accountType={accountType!}
           addPersonalInfo={addPersonalInfo}
+          checkIsEdit={checkIsEdit}
           handleCancel={handleCancel}
           handleContinue={handleContinue}
           handleNavigate={handleNavigate}
           isEtbJoint={isEtbJoint}
           isEtbPrincipal={isEtbPrincipal}
           jointAgeCheck={jointAgeCheck}
+          jointEmail={jointEmail}
           jointEmailCheck={jointEmailCheck}
           jointError={jointEmailError}
           personalInfo={personalInfo}
+          principalEmail={principalEmail}
           principalError={principalEmailError}
           resendTimer={resendTimer}
+          setJointEmail={setJointEmail}
           setJointError={setJointEmailError}
+          setPrincipalEmail={setPrincipalEmail}
           setPrincipalError={setPrincipalEmailError}
         />
       ) : (
@@ -177,17 +209,18 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           accountType={accountType!}
           addPersonalInfo={addPersonalInfo}
           details={details}
+          disabledSteps={onboarding.disabledSteps}
           handleCancel={handleCancel}
           handleNavigate={handleNavigate}
           handleResend={handleEmailVerification}
           isEtbJoint={isEtbJoint}
           isEtbPrincipal={isEtbPrincipal}
-          jointEmail={inputJointEmail}
+          jointEmail={jointEmail}
           jointEmailCheck={jointEmailCheck}
           jointOtp={jointOtp}
           personalInfo={personalInfo}
           principalClientId={principalClientId}
-          principalEmail={inputPrincipalEmail}
+          principalEmail={principalEmail}
           principalOtp={principalOtp}
           resendTimer={resendTimer}
           setJointOtp={setJointOtp}

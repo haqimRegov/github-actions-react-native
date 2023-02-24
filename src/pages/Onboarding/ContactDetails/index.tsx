@@ -51,17 +51,16 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
   const validateJoint = (info: IHolderInfoState) => {
     const { contactDetails } = info;
 
-    return (
-      Object.values(contactDetails!.contactNumber!)
-        .map((contact) => typeof contact.error)
-        .includes("string") === false &&
-      Object.values(contactDetails!.contactNumber!)
-        .map((contact) => contact.value)
-        .flat()
-        .includes("") === false
-    );
+    return jointContactCheck === true && contactDetails?.contactNumber?.length === 1
+      ? true
+      : Object.values(contactDetails!.contactNumber!)
+          .map((contact) => typeof contact.error)
+          .includes("string") === false &&
+          Object.values(contactDetails!.contactNumber!)
+            .map((contact) => contact.value)
+            .flat()
+            .includes("") === false;
   };
-
   const buttonDisabled =
     accountType === "Individual"
       ? validatePrincipal(principal!) === false

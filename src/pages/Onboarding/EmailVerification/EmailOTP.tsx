@@ -57,6 +57,7 @@ declare interface EmailOTPProps {
   jointOtp: string;
   isEtbJoint: boolean;
   isEtbPrincipal: boolean;
+  disabledSteps?: TypeOnboardingKey[];
   personalInfo: IPersonalInfoState;
   principalClientId: string;
   principalEmail: string;
@@ -78,6 +79,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   jointEmail,
   jointEmailCheck,
   jointOtp,
+  disabledSteps,
   personalInfo,
   principalClientId,
   principalEmail,
@@ -181,6 +183,17 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showModal]);
 
+  const { editMode } = personalInfo;
+
+  useEffect(() => {
+    if (disabledSteps !== undefined && resendTimer <= 0) {
+      const findEmailVerification = disabledSteps.indexOf("EmailVerification");
+      if (findEmailVerification !== -1 && editMode === true) {
+        setPage("verification");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <SafeAreaPage>
       <ScrollView

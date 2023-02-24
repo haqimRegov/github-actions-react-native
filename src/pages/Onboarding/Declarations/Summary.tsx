@@ -213,7 +213,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             fatca: { ...jointFatcaRequest },
           },
           // check if employment details is enabled and filled
-          employmentDetails: joint!.employmentDetails!.isEnabled === true ? { ...joint!.employmentDetails } : undefined,
+          employmentDetails: joint!.employmentDetails!.isEnabled === true ? joint!.employmentDetails! : undefined,
           personalDetails: {
             countryOfBirth: joint!.personalDetails!.countryOfBirth!,
             educationLevel:
@@ -223,7 +223,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             gender: joint!.personalDetails!.gender!,
             id: jointId,
             maritalStatus: joint!.personalDetails!.maritalStatus!,
-            monthlyHouseholdIncome: joint!.personalDetails!.monthlyHouseholdIncome!,
+            monthlyHouseholdIncome: joint!.employmentDetails?.monthlyHouseholdIncome!,
             mothersMaidenName: joint!.personalDetails!.mothersMaidenName!,
             name: joint!.personalDetails!.name!,
             nationality: joint!.personalDetails!.nationality!,
@@ -328,7 +328,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         fatca: { ...principalFatcaRequest },
       },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,
-      employmentDetails: principalEmploymentDetails as ISubmitEmploymentBase,
+      employmentDetails: { ...deleteKey(principalEmploymentDetails, ["monthlyHouseholdIncome"]) } as ISubmitEmploymentBase,
       personalDetails: {
         countryOfBirth: principal!.personalDetails!.countryOfBirth!,
         educationLevel:
@@ -338,7 +338,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
         gender: principal!.personalDetails!.gender!,
         id: principalId,
         maritalStatus: principal!.personalDetails!.maritalStatus!,
-        monthlyHouseholdIncome: principal!.personalDetails!.monthlyHouseholdIncome!,
+        monthlyHouseholdIncome: principal!.employmentDetails!.monthlyHouseholdIncome!,
         mothersMaidenName: principal!.personalDetails!.mothersMaidenName!,
         name: principal!.personalDetails!.name!,
         nationality: principal!.personalDetails!.nationality!,
@@ -360,8 +360,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
               emailAddress: jointDetails.contactDetails!.emailAddress! !== "" ? jointDetails.contactDetails!.emailAddress! : undefined,
             },
             declaration: jointDetails.declaration as ISubmitDeclaration,
-            employmentDetails: jointDetails.employmentDetails as ISubmitEmploymentJoint,
-            personalDetails: jointDetails.personalDetails as ISubmitPersonalDetails,
+            employmentDetails: { ...deleteKey(jointDetails.employmentDetails!, ["monthlyHouseholdIncome"]) } as ISubmitEmploymentJoint,
+            personalDetails: {
+              ...jointDetails.personalDetails,
+              monthlyHouseholdIncome: jointDetails.employmentDetails?.monthlyHouseholdIncome,
+            } as ISubmitPersonalDetails,
           }
         : undefined,
     investments: investments,

@@ -55,7 +55,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleEdit, summary, view
     { label: SUMMARY.LABEL_MOTHER, title: personalDetails!.mothersMaidenName! },
     { label: SUMMARY.LABEL_MARITAL, title: personalDetails!.maritalStatus! },
     { label: SUMMARY.LABEL_EDUCATION, title: personalDetails!.educationLevel!, titleStyle: fsTransformNone },
-    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: employmentDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
   ];
 
   const malaysianDetails = [
@@ -179,7 +179,7 @@ export const Joint: FunctionComponent<JointProps> = ({ handleEdit, summary, view
     { label: SUMMARY.LABEL_OCCUPATION, title: occupationTitle },
     { label: SUMMARY.LABEL_NATURE, title: employmentDetails!.businessNature! },
     { label: SUMMARY.LABEL_GROSS, title: employmentDetails!.grossIncome!, titleStyle: fsTransformNone },
-    { label: SUMMARY.LABEL_MONTHLY, title: personalDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
+    { label: SUMMARY.LABEL_MONTHLY, title: employmentDetails!.monthlyHouseholdIncome!, titleStyle: fsTransformNone },
     { label: SUMMARY.LABEL_EMPLOYER_NAME, title: employmentDetails!.employerName!, titleStyle: fsTransformNone },
   ];
 

@@ -27,7 +27,7 @@ import {
   sw24,
   sw536,
 } from "../../../../styles";
-import { isArrayNotEmpty, isNotEmpty } from "../../../../utils";
+import { deleteKey, isArrayNotEmpty, isNotEmpty } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 import { AccountListing } from "./AccountListing";
 import { IInvestorAccountHeaderProps, InvestorAccountsHeader } from "./Header";
@@ -308,13 +308,28 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               netWorth: data.result.riskInfo!.hnwStatus,
             });
           }
-          const updatedAddress = isNotEmpty(investorData!.address)
+          const updateLine3 =
+            isNotEmpty(investorData) &&
+            isNotEmpty(investorData!.address) &&
+            isNotEmpty(investorData!.address.address) &&
+            isNotEmpty(investorData!.address!.address!.line3) &&
+            isNotEmpty(investorData?.address.address!.line4)
+              ? { line3: `${investorData?.address.address!.line3}, ${investorData?.address.address!.line4} ` }
+              : {};
+          const updatedAddress: IAddressState | undefined = isNotEmpty(investorData!.address)
             ? {
                 ...investorData?.address,
                 // Remove the empty string keys from the object
-                address: Object.fromEntries(Object.entries(investorData?.address!.address!).filter((value) => value[1])),
+                address: {
+                  ...Object.fromEntries(Object.entries(investorData?.address!.address!).filter((value) => value[1])),
+                  ...updateLine3,
+                },
               }
             : undefined;
+          const filteredAddress: IAddressState =
+            isNotEmpty(updatedAddress) && isNotEmpty(updatedAddress!.address?.line4)
+              ? { ...updatedAddress, address: { ...deleteKey(updatedAddress!.address!, ["line4"]) } }
+              : { ...updatedAddress };
           const updatedNewSales: NewSalesState = {
             ...newSales,
             investorProfile: {
@@ -374,7 +389,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             ...details,
             principalHolder: {
               ...details!.principalHolder,
-              address: updatedAddress !== undefined ? updatedAddress : undefined,
+              address: filteredAddress !== undefined ? filteredAddress : undefined,
               clientId: data.result.principalHolder.clientId,
               dateOfBirth: data.result.principalHolder.dateOfBirth,
               id: data.result.principalHolder.id,
@@ -406,7 +421,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
                   },
                   addressInformation: {
                     ...personalInfo.joint?.addressInformation,
-                    mailingAddress: updatedAddress !== undefined ? { ...updatedAddress } : undefined,
+                    mailingAddress: filteredAddress !== undefined ? { ...filteredAddress } : undefined,
                   },
                 }
               : { ...personalInfo.joint };
@@ -434,7 +449,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
               addressInformation: {
                 ...personalInfo.joint?.addressInformation,
                 mailingAddress:
-                  updatedAddress !== undefined ? { ...updatedAddress } : { ...personalInfo.joint?.addressInformation?.mailingAddress },
+                  filteredAddress !== undefined ? { ...filteredAddress } : { ...personalInfo.joint?.addressInformation?.mailingAddress },
               },
               ...checkEpf,
             },

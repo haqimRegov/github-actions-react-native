@@ -58,7 +58,7 @@ declare interface IOrderSummaryPayment {
 
 declare interface IOrderSummaryEmploymentDetails {
   address: IAddressState;
-  annualIncome: string | null;
+  annualIncome: string;
   monthlyHouseholdIncome: string | null;
   nameOfEmployer: string;
   natureOfBusiness: string;
@@ -165,6 +165,7 @@ declare interface IOrderSummaryProfile extends IAccountDetails {
   epfDetails: IOrderSummaryEpf | null;
   idNumber: string;
   idType: TypeClientID;
+  isEtb: boolean;
   name: string;
   personalDetails: IOrderSummaryPersonalDetails;
   uploadedDocument?: FileBase64[];

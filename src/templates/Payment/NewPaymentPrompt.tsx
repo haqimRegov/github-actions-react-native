@@ -130,7 +130,9 @@ export const NewPaymentPrompt: FunctionComponent<NewPaymentPromptProps> = ({
             });
 
             const principalDocs = principalSoftcopy.map((eachDoc) =>
-              isArrayNotEmpty(jointSoftcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
+              isArrayNotEmpty(jointSoftcopy) || isArrayNotEmpty(bothSoftcopy)
+                ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}`
+                : eachDoc,
             );
             const jointDocs = jointSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
             const bothDocs = bothSoftcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);

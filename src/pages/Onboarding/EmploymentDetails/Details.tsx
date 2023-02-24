@@ -66,7 +66,7 @@ const initialBaseEmploymentDetails: IEmploymentDetailsState = {
     line3: undefined,
   },
   city: "",
-  country: DICTIONARY_COUNTRIES[0].value,
+  country: "",
   postCode: "",
   state: "",
 };
@@ -108,11 +108,11 @@ export const EmploymentInfo: FunctionComponent<EmploymentInfoProps> = ({
       const initialEmploymentDetails =
         accountHolder === "Joint" ? { ...initialJointEmploymentDetails } : { ...initialBaseEmploymentDetails, grossIncome: inputGross };
 
-      const updatedEmploymentDetails = { ...initialEmploymentDetails, occupation: value, isOptional: employmentDetails.isOptional };
+      const updatedEmploymentDetails = { ...initialEmploymentDetails, occupation: value, isOptional: false };
 
       setEmploymentDetails({
         ...updatedEmploymentDetails,
-        country: employmentDetails.isOptional === false && EMPLOYMENT_EXEMPTIONS.indexOf(value) !== -1 ? "" : employmentDetails.country,
+        country: employmentDetails.isOptional === false && EMPLOYMENT_EXEMPTIONS.indexOf(value) !== -1 ? "" : DICTIONARY_COUNTRIES[0].value,
         isEnabled: employmentDetails.isEnabled === true ? true : employmentDetails.isEnabled,
         othersOccupation: value !== "Others" ? "" : employmentDetails.othersOccupation,
       });

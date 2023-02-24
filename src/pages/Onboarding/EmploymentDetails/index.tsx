@@ -6,6 +6,7 @@ import { ContentPage } from "../../../components";
 import { Language } from "../../../constants";
 import { EMPLOYMENT_EXEMPTIONS } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { initialJointEmploymentDetails } from "./Details";
 import { JointEmploymentDetails } from "./Joint";
 import { PrincipalEmploymentDetails } from "./Principal";
 
@@ -65,14 +66,20 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     return validationResult;
   };
 
-  const checkJointGross = joint?.employmentDetails !== undefined && joint.employmentDetails.isOptional === true;
+  const checkJointGross =
+    joint?.employmentDetails !== undefined &&
+    joint.employmentDetails.occupation !== "" &&
+    (joint.employmentDetails.isOptional === true || !EMPLOYMENT_EXEMPTIONS.includes(joint.employmentDetails.occupation!))
+      ? accountType === "Joint" && joint!.employmentDetails!.grossIncome !== ""
+      : true;
+
   const buttonDisabled =
-    accountType === "Individual" || joint?.employmentDetails?.isEnabled === false
+    accountType === "Individual"
       ? validateDetails(principal!, validations.principal) === false
       : (isPrincipalEtb === false && validateDetails(principal!, validations.principal) === false) ||
         (isJointEtb === false && (validateDetails(joint!, validations.joint) === false || checkJointGross === false));
 
-  const handleSubmit = () => {
+  const handleSubmit = (resetJoint?: boolean) => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     // add to finishedSteps
@@ -87,7 +94,8 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       if (findPersonalInfoSummary !== -1) {
         updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
       }
-      addPersonalInfo({ ...personalInfo, editMode: false });
+      const checkResetJoint = resetJoint === true ? { joint: { ...joint, employmentDetails: { ...initialJointEmploymentDetails } } } : {};
+      addPersonalInfo({ ...personalInfo, editMode: false, ...checkResetJoint });
     }
 
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
@@ -127,13 +135,20 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     setValidations({ ...validations, joint: { ...validations.joint, ...value } });
   };
 
+  const handleSkip = () => {
+    if (editMode === false) {
+      addPersonalInfo({ ...personalInfo, joint: { ...joint, employmentDetails: { ...initialJointEmploymentDetails } } });
+    }
+    handleSubmit(true);
+  };
+
   const checkSkippable = isPrincipalEtb === true && jointAgeCheck === true;
 
   return (
     <ContentPage
       cancelDisabled={editMode === true}
       continueDisabled={buttonDisabled}
-      handleSkip={handleSubmit}
+      handleSkip={handleSkip}
       skippable={checkSkippable}
       subheading={EMPLOYMENT_DETAILS.HEADING}
       subtitle={EMPLOYMENT_DETAILS.SUBHEADING}

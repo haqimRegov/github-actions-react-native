@@ -899,7 +899,7 @@ export const english = {
       LABEL_EMAIL_PRINCIPAL: "Principle Account Holder Email Address",
       LABEL_EMAIL_VERIFIED_TITLE:
         "You will be redirected to continue this process in 5 seconds. If you are not redirected, please click on the button below.",
-      LABEL_EMAIL_VERIFIED: "Email verified",
+      LABEL_EMAIL_VERIFIED: "Email verified.",
       LABEL_EMAIL: "Email",
       LABEL_GET_OTP: "Get OTP",
       LABEL_OPTIONAL: "(optional)",
@@ -920,6 +920,7 @@ export const english = {
       PROMPT_TITLE: "Are you sure you want to cancel?",
       SUBHEADING_JOINT: "We need your email address to open your account.",
       SUBHEADING: "We need your email address to open your account. An OTP will be sent.",
+      TOAST_SEND: "One time password sent!",
       ADD_EMAIL_PRINCIPAL: "Add Principal Holder's Email",
       ADD_EMAIL_JOINT: "Add Joint Holder's Email",
       ADD_EMAIL: "Add Your Email",

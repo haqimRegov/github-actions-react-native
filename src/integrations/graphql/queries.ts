@@ -854,6 +854,7 @@ const getOrderSummary = gql`
             name
             idNumber
             idType
+            isEtb
             clientId
             personalDetails {
               dateOfBirth

@@ -10,6 +10,60 @@ import { isNotEmpty } from "./Value";
 
 const { INVESTOR_PROFILE } = Language.PAGE;
 
+export const generateCorrespondingAddress = (addressInformation: IOrderSummaryAddressInfo) => {
+  const mailingAddressSummary: LabeledTitleProps[] = [];
+  if (isNotEmpty(addressInformation)) {
+    if (isNotEmpty(addressInformation.mailingAddress)) {
+      if (isNotEmpty(addressInformation.mailingAddress.address)) {
+        const permanentAddressLabel =
+          isNotEmpty(addressInformation.mailingAddress.address.line2) ||
+          isNotEmpty(addressInformation.mailingAddress.address.line3) ||
+          isNotEmpty(addressInformation.mailingAddress.address.line4)
+            ? `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 1`
+            : INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS;
+
+        mailingAddressSummary.push({
+          label: permanentAddressLabel,
+          title: addressInformation.mailingAddress.address.line1 || "-",
+          titleStyle: fsTransformNone,
+        });
+
+        if (isNotEmpty(addressInformation.mailingAddress.address.line2)) {
+          mailingAddressSummary.push({
+            label: `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 2`,
+            title: addressInformation.mailingAddress.address.line2 || "-",
+            titleStyle: fsTransformNone,
+          });
+        }
+
+        if (isNotEmpty(addressInformation.mailingAddress.address.line3)) {
+          mailingAddressSummary.push({
+            label: `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 3`,
+            title: addressInformation.mailingAddress.address.line3! || "-",
+            titleStyle: fsTransformNone,
+          });
+        }
+
+        if (isNotEmpty(addressInformation.mailingAddress.address.line4)) {
+          mailingAddressSummary.push({
+            label: `${INVESTOR_PROFILE.LABEL_CORRESPONDENCE_ADDRESS} 4`,
+            title: addressInformation.mailingAddress.address.line4! || "-",
+            titleStyle: fsTransformNone,
+          });
+        }
+      }
+      mailingAddressSummary.push(
+        { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: addressInformation.mailingAddress.postCode },
+        { label: INVESTOR_PROFILE.LABEL_CITY, title: addressInformation.mailingAddress.city },
+        { label: INVESTOR_PROFILE.LABEL_STATE, title: addressInformation.mailingAddress.state },
+        { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: addressInformation.mailingAddress.country },
+      );
+    }
+  }
+
+  return mailingAddressSummary;
+};
+
 // being used in Investor Profile ProfileTab, DeclarationsTab, and Order Summary contactDetails, declarations
 export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   const { addressInformation, contactDetails, declaration, employmentInformation, epfDetails, personalDetails, investorOverview } = data;
@@ -39,10 +93,13 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       label: INVESTOR_PROFILE.LABEL_COUNTRY_OF_BIRTH,
       title: personalDetails !== null && personalDetails.countryOfBirth ? personalDetails.countryOfBirth : "-",
     },
+    { label: INVESTOR_PROFILE.LABEL_RACE, title: personalDetails !== null && personalDetails.race ? personalDetails.race : "-" },
     {
-      label: INVESTOR_PROFILE.LABEL_EDUCATION,
-      title: personalDetails !== null && personalDetails.educationLevel ? personalDetails.educationLevel : "-",
-      titleStyle: fsTransformNone,
+      label: INVESTOR_PROFILE.LABEL_BUMIPUTERA,
+      title:
+        personalDetails !== null && personalDetails.bumiputera && isNotEmpty(personalDetails.bumiputera)
+          ? booleanTextChange(personalDetails.bumiputera)
+          : "-",
     },
     {
       label: INVESTOR_PROFILE.LABEL_MOTHER,
@@ -51,6 +108,11 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     {
       label: INVESTOR_PROFILE.LABEL_MARITAL,
       title: personalDetails !== null && personalDetails.maritalStatus ? personalDetails.maritalStatus : "-",
+    },
+    {
+      label: INVESTOR_PROFILE.LABEL_EDUCATION,
+      title: personalDetails !== null && personalDetails.educationLevel ? personalDetails.educationLevel : "-",
+      titleStyle: fsTransformNone,
     },
   ];
 
@@ -68,22 +130,10 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
             : "-",
       },
     );
-    personalDetailsSummary.splice(2, 0, {
+    personalDetailsSummary.splice(4, 2, {
       label: INVESTOR_PROFILE.LABEL_NATIONALITY,
       title: personalDetails !== null && personalDetails.nationality ? personalDetails.nationality : "-",
     });
-  }
-
-  if (personalDetails !== null && personalDetails.race !== null && personalDetails.bumiputera !== null && idType !== "Passport") {
-    personalDetailsSummary.splice(
-      2,
-      0,
-      {
-        label: INVESTOR_PROFILE.LABEL_BUMIPUTERA,
-        title: isNotEmpty(personalDetails.bumiputera) ? booleanTextChange(personalDetails.bumiputera) : "-",
-      },
-      { label: INVESTOR_PROFILE.LABEL_RACE, title: personalDetails.race },
-    );
   }
 
   if (epfDetails !== null) {
@@ -114,48 +164,34 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   }
 
   let employmentDetails: LabeledTitleProps[] = [];
-  if (employmentInformation !== null) {
-    employmentDetails = [
-      { label: INVESTOR_PROFILE.LABEL_OCCUPATION, title: employmentInformation.occupation, titleStyle: fsTransformNone },
-      { label: INVESTOR_PROFILE.LABEL_BUSINESS_FIELD, title: employmentInformation.natureOfBusiness, titleStyle: fsTransformNone },
-      { label: INVESTOR_PROFILE.LABEL_EMPLOYER_NAME, title: employmentInformation.nameOfEmployer, titleStyle: fsTransformNone },
-    ];
-
-    if (employmentInformation.annualIncome) {
-      employmentDetails.splice(2, 0, {
-        label: INVESTOR_PROFILE.LABEL_GROSS,
-        title: employmentInformation.annualIncome,
-        titleStyle: fsTransformNone,
-      });
-    }
-
-    if (personalDetails !== null && personalDetails.monthlyHouseholdIncome !== null) {
-      employmentDetails.splice(2, 0, {
-        label: INVESTOR_PROFILE.LABEL_MONTHLY,
-        title: personalDetails.monthlyHouseholdIncome,
-        titleStyle: fsTransformNone,
-      });
-    }
-  }
+  employmentDetails = [
+    { label: INVESTOR_PROFILE.LABEL_OCCUPATION, title: employmentInformation?.occupation, titleStyle: fsTransformNone },
+    { label: INVESTOR_PROFILE.LABEL_BUSINESS_FIELD, title: employmentInformation?.natureOfBusiness, titleStyle: fsTransformNone },
+    { label: INVESTOR_PROFILE.LABEL_GROSS, title: employmentInformation?.annualIncome, titleStyle: fsTransformNone },
+    {
+      label: INVESTOR_PROFILE.LABEL_MONTHLY,
+      title: employmentInformation !== null ? personalDetails?.monthlyHouseholdIncome : "-",
+      titleStyle: fsTransformNone,
+    },
+    { label: INVESTOR_PROFILE.LABEL_EMPLOYER_NAME, title: employmentInformation?.nameOfEmployer, titleStyle: fsTransformNone },
+  ];
 
   let employmentAddress: LabeledTitleProps[] = [];
-  if (employmentInformation !== null && employmentInformation !== undefined) {
-    const employeeAddress =
-      isNotEmpty(employmentInformation) &&
-      isNotEmpty(employmentInformation.address) &&
-      isNotEmpty(employmentInformation.address.address) &&
-      employmentInformation.address.address?.line1 !== ""
-        ? Object.values(employmentInformation.address.address!).join(" ")
-        : "";
+  const employeeAddress =
+    isNotEmpty(employmentInformation) &&
+    isNotEmpty(employmentInformation?.address) &&
+    isNotEmpty(employmentInformation?.address.address) &&
+    employmentInformation?.address.address?.line1 !== ""
+      ? Object.values(employmentInformation?.address.address!).join(" ")
+      : "";
 
-    employmentAddress = [
-      { label: INVESTOR_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employeeAddress, titleStyle: fsTransformNone },
-      { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: employmentInformation.address.postCode! },
-      { label: INVESTOR_PROFILE.LABEL_CITY, title: employmentInformation.address.city! },
-      { label: INVESTOR_PROFILE.LABEL_STATE, title: employmentInformation.address.state! },
-      { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: employmentInformation.address.country! },
-    ];
-  }
+  employmentAddress = [
+    { label: INVESTOR_PROFILE.LABEL_EMPLOYER_ADDRESS, title: employeeAddress, titleStyle: fsTransformNone },
+    { label: INVESTOR_PROFILE.LABEL_POSTCODE, title: employmentInformation?.address.postCode! },
+    { label: INVESTOR_PROFILE.LABEL_CITY, title: employmentInformation?.address.city! },
+    { label: INVESTOR_PROFILE.LABEL_STATE, title: employmentInformation?.address.state! },
+    { label: INVESTOR_PROFILE.LABEL_COUNTRY, title: employmentInformation?.address.country! },
+  ];
 
   const isTaxResident = crs !== null && crs.taxResident === OPTIONS_CRS_TAX_RESIDENCY[0].label;
 
@@ -298,6 +334,8 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
     }
   }
 
+  const mailingAddressSummary: LabeledTitleProps[] = generateCorrespondingAddress(addressInformation);
+
   const structuredData: IStructuredInvestorProfile = {
     identificationDetails: identificationDetails,
     personalDetails: personalDetailsSummary,
@@ -307,8 +345,9 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
       crsTin: crsTinSummary,
       fatca: fatcaSummary,
     },
-    employmentDetails: employmentDetails,
     employmentAddress: employmentAddress,
+    employmentDetails: employmentDetails,
+    mailingAddress: mailingAddressSummary,
     permanentAddress: permanentAddressSummary,
   };
 

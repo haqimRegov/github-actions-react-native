@@ -60,6 +60,8 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
 
   const tabs: OrderSummaryTabType[] = ["order", "tracking"];
 
+  const isEtbInvestor = { principal: orderSummary?.profile[0].isEtb, joint: orderSummary?.profile[1]?.isEtb };
+
   const headerTabs = [
     {
       text: DASHBOARD_ORDER_SUMMARY.TAB_ORDER_DETAILS,
@@ -93,7 +95,22 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
 
-  if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true) {
+  // if (
+  //   currentOrder !== undefined &&
+  //   orderSummary !== undefined &&
+  //   isNotEmpty(orderSummary.documentSummary) && // todo check the condition here. it shows profile tab if investor etb
+  //   ((orderSummary.documentSummary.accountType === "Individual" &&
+  //     isNotEmpty(isEtbInvestor.principal) &&
+  //     isEtbInvestor.principal === false) ||
+  //     (orderSummary.documentSummary.accountType === "Joint" &&
+  //       (isNotEmpty(isEtbInvestor.principal) || isNotEmpty(isEtbInvestor.joint)) &&
+  //       (isEtbInvestor.principal === false || isEtbInvestor.joint === false)))
+  // ) {
+  if (
+    currentOrder !== undefined &&
+    orderSummary !== undefined &&
+    (orderSummary.isEtb === false || (orderSummary.isEtb === true && (isEtbInvestor.principal === true || isEtbInvestor.joint === true)))
+  ) {
     tabs.splice(1, 0, "profile");
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
   }
@@ -160,20 +177,16 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     height: sh24,
     width: sw120,
   };
+
   const buttonPrincipalStyle: ViewStyle = {
-    borderColor: colorBlue._1,
-    borderWidth: sw1,
-    height: sh24,
-    width: sw120,
+    ...buttonStyle,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
   };
+
   const buttonJointStyle: ViewStyle = {
-    borderColor: colorBlue._1,
-    borderWidth: sw1,
+    ...buttonStyle,
     borderLeftWidth: 0,
-    height: sh24,
-    width: sw120,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
   };
@@ -185,20 +198,24 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   const investorProfileButton =
     currentOrder?.accountType === "Joint" ? (
       <View style={flexRow}>
-        <RoundedButton
-          buttonStyle={buttonPrincipalStyle}
-          text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PRINCIPAL_PROFILE}
-          onPress={handleViewPrincipalInvestorProfile}
-          secondary={true}
-          textStyle={fs10BoldBlue1}
-        />
-        <RoundedButton
-          buttonStyle={buttonJointStyle}
-          text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_JOINT_PROFILE}
-          onPress={handleViewJointInvestorProfile}
-          secondary={true}
-          textStyle={fs10BoldBlue1}
-        />
+        {isEtbInvestor.principal === true || isEtbInvestor.principal === null ? (
+          <RoundedButton
+            buttonStyle={isEtbInvestor.joint === true || isEtbInvestor.joint === null ? buttonPrincipalStyle : buttonStyle}
+            text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_PRINCIPAL_PROFILE}
+            onPress={handleViewPrincipalInvestorProfile}
+            secondary={true}
+            textStyle={fs10BoldBlue1}
+          />
+        ) : null}
+        {isEtbInvestor.joint === true || isEtbInvestor.joint === null ? (
+          <RoundedButton
+            buttonStyle={isEtbInvestor.principal === true || isEtbInvestor.principal === null ? buttonJointStyle : buttonStyle}
+            text={DASHBOARD_ORDER_SUMMARY.BUTTON_INVESTOR_JOINT_PROFILE}
+            onPress={handleViewJointInvestorProfile}
+            secondary={true}
+            textStyle={fs10BoldBlue1}
+          />
+        ) : null}
       </View>
     ) : (
       <RoundedButton
@@ -210,7 +227,10 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
       />
     );
 
-  const isEtb = currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb === true;
+  const isEtb =
+    (currentOrder !== undefined && orderSummary !== undefined && (isEtbInvestor.principal === true || isEtbInvestor.joint === true)) ||
+    (isEtbInvestor.principal === null && isEtbInvestor.joint === null) ||
+    currentOrder?.transactionType === "CR";
 
   const showStatusIcon =
     currentOrder!.status === "Submitted" &&
@@ -227,8 +247,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
         statusIcon={showStatusIcon}
         title={DASHBOARD_ORDER_SUMMARY.HEADING}
         titleIcon="arrow-left"
-        titleIconOnPress={handleBackToTransactions}
-        documentSummary={orderSummary?.documentSummary}>
+        titleIconOnPress={handleBackToTransactions}>
         <View style={orderSummary !== undefined ? undefined : flexChild}>
           <View style={cardStyle}>
             <View style={flexRow}>

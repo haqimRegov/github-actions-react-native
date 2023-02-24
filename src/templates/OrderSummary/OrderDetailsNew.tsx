@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
 import { Text, View, ViewStyle } from "react-native";
 
-import { ColorCard, CustomSpacer, IconText, TextCard } from "../../components";
+import { ColorCard, CustomSpacer, IconText, TableBadge, TextCard } from "../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
 import { getDocumentFile, getProductType } from "../../helpers";
 import { IcoMoon } from "../../icons";
@@ -35,8 +35,10 @@ import {
   sh32,
   sh8,
   sw05,
+  sw12,
   sw16,
   sw170,
+  sw20,
   sw24,
   sw32,
   sw328,
@@ -67,6 +69,7 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
 }: OrderDetailsProps) => {
   const { documentSummary, transactionDetails, investmentSummary, paymentSummary, orderNumber, totalInvestment, profile, riskInfo } = data;
   const investor = profile[0];
+  const jointInvestor = profile.length > 1 ? profile[1] : undefined;
   const { declaration } = investor;
 
   const profileToStructure: IInvestorAccount = {
@@ -112,11 +115,11 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
 
   const orderDetails: LabeledTitleProps[] = [
     { label: DASHBOARD_ORDER_DETAILS.LABEL_ORDER_NUMBER, title: orderNumber, titleStyle: fsTransformNone },
-    { label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_TYPE, title: transactionType, titleStyle: fsTransformNone },
     {
       label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_DATE,
       title: moment(transactionDetails.registrationDate, "x").format(DEFAULT_DATE_FORMAT),
     },
+    { label: DASHBOARD_ORDER_DETAILS.LABEL_TRANSACTION_TYPE, title: transactionType, titleStyle: fsTransformNone },
     {
       label: DASHBOARD_ORDER_DETAILS.LABEL_SERVICING,
       title: transactionDetails.servicingAdviserName,
@@ -185,65 +188,99 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
     <Fragment>
       <View style={px(sw24)}>
         <CustomSpacer space={sh24} />
-        <ColorCard
-          {...summaryColorCardStyleProps}
-          content={
-            <Fragment>
-              {profile.map((details, profileIndex: number) => {
-                const id = getDocumentFile(documentSummary, "id", profileIndex === 0 ? "Principal" : "Joint");
+        {(isNotEmpty(investor.isEtb) || isNotEmpty(jointInvestor?.isEtb)) && (investor.isEtb === true || jointInvestor?.isEtb) ? (
+          <Fragment>
+            <ColorCard
+              {...summaryColorCardStyleProps}
+              content={
+                <Fragment>
+                  {profile.map((details, profileIndex: number) => {
+                    const id = getDocumentFile(documentSummary, "id", profileIndex === 0 ? "Principal" : "Joint");
 
-                const handleViewId = () => {
-                  if (id !== undefined) {
-                    setFile(id);
-                  }
-                };
+                    const handleViewId = () => {
+                      if (id !== undefined) {
+                        setFile(id);
+                      }
+                    };
 
-                const investorOverview: LabeledTitleProps[] = [
-                  { label: DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR_NAME, title: details.name, titleStyle: fsTransformNone },
-                  {
-                    label: `${DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR} ${details.idType}`,
-                    onPress: handleViewId,
-                    title: details.idNumber,
-                    titleStyle: fsTransformNone,
-                    titleIcon: id !== undefined ? "profile-card" : undefined,
-                  },
-                ];
+                    const investorOverview: LabeledTitleProps[] = [
+                      { label: DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR_NAME, title: details.name, titleStyle: fsTransformNone },
+                      {
+                        label: `${DASHBOARD_ORDER_DETAILS.LABEL_INVESTOR} ${details.idType}`,
+                        onPress: handleViewId,
+                        title: details.idNumber,
+                        titleStyle: fsTransformNone,
+                        titleIcon: id !== undefined ? "profile-card" : undefined,
+                      },
+                    ];
 
-                if (isNotEmpty(details.personalDetails.riskProfile)) {
-                  investorOverview.push({
-                    label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_PROFILE,
-                    title: details.personalDetails.riskProfile,
-                    titleStyle: fsTransformNone,
-                  });
-                }
-                return (
-                  <Fragment key={profileIndex}>
-                    {transactionDetails.accountType === "Joint" ? (
-                      <Fragment>
-                        <View style={flexChild}>
-                          <View style={rowCenterVertical}>
-                            <IcoMoon name={profileIndex !== 0 ? "account-joint" : "account"} size={sh24} color={colorBlue._1} />
-                            <CustomSpacer isHorizontal={true} space={sw8} />
-                            <Text style={fs16BoldBlack2}>
-                              {profileIndex === 0 ? DASHBOARD_ORDER_DETAILS.SECTION_PRINCIPAL : DASHBOARD_ORDER_DETAILS.SECTION_JOINT}
-                            </Text>
-                            <CustomSpacer isHorizontal={true} space={sw16} />
-                            <View style={{ ...borderBottomBlue4, ...flexChild }} />
-                          </View>
-                        </View>
-                        <CustomSpacer space={sh8} />
+                    if (isNotEmpty(details.personalDetails.riskProfile)) {
+                      investorOverview.push({
+                        label: DASHBOARD_ORDER_DETAILS.LABEL_RISK_PROFILE,
+                        title: details.personalDetails.riskProfile,
+                        titleStyle: fsTransformNone,
+                      });
+                    }
+
+                    const pillPrincipal =
+                      investor.isEtb === false ? (
+                        <Fragment>
+                          <CustomSpacer isHorizontal={true} space={sw12} />
+                          <TableBadge
+                            text={DASHBOARD_ORDER_DETAILS.LABEL_NEW_INVESTOR}
+                            color="primary"
+                            textStyle={{ ...fs10RegBlue9, lineHeight: sh12 }}
+                          />
+                          <CustomSpacer isHorizontal={true} space={sw20} />
+                        </Fragment>
+                      ) : (
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                      );
+                    const pillJoint =
+                      jointInvestor !== undefined && jointInvestor.isEtb === false ? (
+                        <Fragment>
+                          <CustomSpacer isHorizontal={true} space={sw12} />
+                          <TableBadge
+                            text={DASHBOARD_ORDER_DETAILS.LABEL_NEW_INVESTOR}
+                            color="primary"
+                            textStyle={{ ...fs10RegBlue9, lineHeight: sh12 }}
+                          />
+                          <CustomSpacer isHorizontal={true} space={sw20} />
+                        </Fragment>
+                      ) : (
+                        <CustomSpacer isHorizontal={true} space={sw16} />
+                      );
+
+                    return (
+                      <Fragment key={profileIndex}>
+                        {transactionDetails.accountType === "Joint" ? (
+                          <Fragment>
+                            <View style={flexChild}>
+                              <View style={rowCenterVertical}>
+                                <IcoMoon name={profileIndex !== 0 ? "account-joint" : "account"} size={sh24} color={colorBlue._1} />
+                                <CustomSpacer isHorizontal={true} space={sw8} />
+                                <Text style={fs16BoldBlack2}>
+                                  {profileIndex === 0 ? DASHBOARD_ORDER_DETAILS.SECTION_PRINCIPAL : DASHBOARD_ORDER_DETAILS.SECTION_JOINT}
+                                </Text>
+                                {profileIndex !== 0 ? pillJoint : pillPrincipal}
+                                <View style={{ ...borderBottomBlue4, ...flexChild }} />
+                              </View>
+                            </View>
+                            <CustomSpacer space={sh8} />
+                          </Fragment>
+                        ) : null}
+                        <TextCard data={investorOverview} itemStyle={{ width: sw328 }} />
+                        {transactionDetails.accountType === "Joint" ? <CustomSpacer space={sh16} /> : null}
                       </Fragment>
-                    ) : null}
-                    <TextCard data={investorOverview} itemStyle={{ width: sw328 }} />
-                    {transactionDetails.accountType === "Joint" ? <CustomSpacer space={sh16} /> : null}
-                  </Fragment>
-                );
-              })}
-            </Fragment>
-          }
-          header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_ORDER_DETAILS.TITLE_INVESTOR_OVERVIEW }}
-        />
-        <CustomSpacer space={sh32} />
+                    );
+                  })}
+                </Fragment>
+              }
+              header={{ ...summaryColorCardStyleProps.header, label: DASHBOARD_ORDER_DETAILS.TITLE_INVESTOR_OVERVIEW }}
+            />
+            <CustomSpacer space={sh32} />
+          </Fragment>
+        ) : null}
 
         <ColorCard
           {...summaryColorCardStyleProps}

@@ -1,11 +1,34 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 
-import { CustomSpacer, RoundedButton } from "../../components";
+import { AccountHeader, ColorCard, CustomSpacer, RoundedButton, TextCard } from "../../components";
 import { Language } from "../../constants";
-import { colorBlue, colorTransparent, flexRow, fs10BoldBlue1, fs10BoldWhite1, px, sh24, sw1, sw120, sw24 } from "../../styles";
+import { IcoMoon } from "../../icons";
+import {
+  borderBottomBlue4,
+  colorBlue,
+  colorTransparent,
+  flexChild,
+  flexRow,
+  fs10BoldBlue1,
+  fs10BoldWhite1,
+  fs16BoldBlue1,
+  px,
+  rowCenterVertical,
+  sh16,
+  sh20,
+  sh24,
+  sh32,
+  sw1,
+  sw120,
+  sw16,
+  sw24,
+  sw328,
+  sw64,
+  sw8,
+} from "../../styles";
 import { getStructuredInvestorProfile, isArrayNotEmpty, isNotEmpty } from "../../utils";
-import { SummaryColorCard } from "./SummaryColorCard";
+import { SummaryColorCard, summaryColorCardStyleProps } from "./SummaryColorCard";
 
 const { INVESTOR_PROFILE } = Language.PAGE;
 declare interface ProfileTabProps {
@@ -14,7 +37,9 @@ declare interface ProfileTabProps {
 
 export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: ProfileTabProps) => {
   const { profile, documentSummary } = data;
-  const [toggle, setToggle] = useState<number>(0);
+  const [principal, joint] = profile;
+  const isEtbInvestor = { principal: principal?.isEtb || false, joint: joint?.isEtb || false };
+  const [toggle, setToggle] = useState<number>(isEtbInvestor.joint === false && isEtbInvestor.principal === true ? 1 : 0);
   const investor = profile[toggle];
   const { declaration } = investor;
   const { accountType } = documentSummary;
@@ -48,35 +73,36 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
     ],
   };
 
-  const { contactDetails, declarations, personalDetails, employmentAddress, identificationDetails, permanentAddress, employmentDetails } =
+  const { contactDetails, declarations, employmentAddress, identificationDetails, personalDetails, permanentAddress, employmentDetails } =
     getStructuredInvestorProfile(profileToStructure);
+
+  const identificationDetailsSummary: LabeledTitleProps[] = [
+    { label: INVESTOR_PROFILE.LABEL_NAME, title: investor!.name! },
+    ...identificationDetails,
+  ];
 
   const { crs, crsTin, fatca } = declarations;
 
-  const buttonPrincipalStyle: ViewStyle = {
+  const buttonStyle: ViewStyle = {
     borderColor: colorBlue._1,
     borderWidth: sw1,
     height: sh24,
     width: sw120,
+  };
+
+  const buttonPrincipalStyle: ViewStyle = {
+    ...buttonStyle,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
     backgroundColor: toggle === 0 ? colorBlue._1 : colorTransparent,
   };
+
   const buttonJointStyle: ViewStyle = {
-    borderColor: colorBlue._1,
-    borderWidth: sw1,
+    ...buttonStyle,
     borderLeftWidth: 0,
-    height: sh24,
-    width: sw120,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
     backgroundColor: toggle === 1 ? colorBlue._1 : colorTransparent,
-  };
-
-  const identificationSection: ISummaryColorCardSection = {
-    iconName: "account",
-    text: INVESTOR_PROFILE.SECTION_PERSONAL_DETAILS,
-    data: [personalDetails],
   };
 
   const employmentSection: ISummaryColorCardSection = {
@@ -93,6 +119,7 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
   };
 
   const buttonContainerStyle: ViewStyle = { ...flexRow, marginLeft: "auto" };
+  const investorHolder = toggle === 0 ? INVESTOR_PROFILE.LABEL_PRINCIPAL_HOLDER : INVESTOR_PROFILE.LABEL_JOINT_HOLDER;
 
   return (
     <View style={px(sw24)}>
@@ -100,52 +127,92 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
         <Fragment>
           <CustomSpacer space={sh24} />
           <View style={buttonContainerStyle}>
-            <RoundedButton
-              buttonStyle={buttonPrincipalStyle}
-              text={INVESTOR_PROFILE.BUTTON_PRINCIPAL}
-              onPress={handleTogglePrincipal}
-              textStyle={toggle === 0 ? fs10BoldWhite1 : fs10BoldBlue1}
-            />
-            <RoundedButton
-              buttonStyle={buttonJointStyle}
-              text={INVESTOR_PROFILE.BUTTON_JOINT}
-              onPress={handleToggleJoint}
-              textStyle={toggle === 1 ? fs10BoldWhite1 : fs10BoldBlue1}
-            />
+            {isEtbInvestor.principal === false && isEtbInvestor.joint === false ? (
+              <Fragment>
+                <RoundedButton
+                  buttonStyle={buttonPrincipalStyle}
+                  text={INVESTOR_PROFILE.BUTTON_PRINCIPAL}
+                  onPress={handleTogglePrincipal}
+                  textStyle={toggle === 0 ? fs10BoldWhite1 : fs10BoldBlue1}
+                />
+                <RoundedButton
+                  buttonStyle={buttonJointStyle}
+                  text={INVESTOR_PROFILE.BUTTON_JOINT}
+                  onPress={handleToggleJoint}
+                  textStyle={toggle === 1 ? fs10BoldWhite1 : fs10BoldBlue1}
+                />
+              </Fragment>
+            ) : null}
           </View>
         </Fragment>
       ) : null}
 
+      {accountType === "Joint" && (isEtbInvestor.principal === true || isEtbInvestor.joint === true) ? (
+        <AccountHeader title={investorHolder} subtitle={investor!.name!} spaceToBottom={0} />
+      ) : null}
+
       {isNotEmpty(identificationDetails) ? (
-        <SummaryColorCard
-          headerTitle={INVESTOR_PROFILE.CARD_TITLE_IDENTIFICATION}
-          data={identificationDetails}
-          section={[identificationSection]}
-          spaceToTop={sh24}
-        />
+        <Fragment>
+          <CustomSpacer space={sh20} />
+          <ColorCard
+            {...summaryColorCardStyleProps}
+            content={
+              <Fragment>
+                <TextCard data={identificationDetailsSummary} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                <View style={flexRow}>
+                  <IcoMoon color={colorBlue._1} name="account" size={sw24} />
+                  <CustomSpacer isHorizontal={true} space={sw8} />
+                  <View style={flexChild}>
+                    <View style={rowCenterVertical}>
+                      <Text style={fs16BoldBlue1}>{INVESTOR_PROFILE.SECTION_PERSONAL_DETAILS}</Text>
+                      <CustomSpacer isHorizontal={true} space={sw16} />
+                      <View style={flexChild}>
+                        <View style={borderBottomBlue4} />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <CustomSpacer space={sh16} />
+                <TextCard data={personalDetails} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                {investor.epfDetails !== null ? (
+                  <Fragment>
+                    <View style={flexRow}>
+                      <View style={flexChild}>
+                        <View style={borderBottomBlue4} />
+                      </View>
+                    </View>
+                    <CustomSpacer space={sh16} />
+                    <TextCard data={personalDetails.splice(-2, 2)} itemStyle={{ width: sw328 }} spaceBetweenItem={sw64} />
+                  </Fragment>
+                ) : null}
+              </Fragment>
+            }
+            header={{ ...summaryColorCardStyleProps.header, label: INVESTOR_PROFILE.CARD_TITLE_IDENTIFICATION }}
+          />
+        </Fragment>
       ) : null}
 
       {isArrayNotEmpty(contactDetails) ? (
-        <SummaryColorCard data={contactDetails} headerTitle={INVESTOR_PROFILE.CARD_TITLE_CONTACT} spaceToTop={sh24} />
+        <SummaryColorCard data={contactDetails} headerTitle={INVESTOR_PROFILE.CARD_TITLE_CONTACT} spaceToTop={sh32} />
       ) : null}
 
       {isArrayNotEmpty(permanentAddress) ? (
-        <SummaryColorCard data={permanentAddress} headerTitle={INVESTOR_PROFILE.CARD_TITLE_PERMANENT_ADDRESS} spaceToTop={sh24} />
+        <SummaryColorCard data={permanentAddress} headerTitle={INVESTOR_PROFILE.CARD_TITLE_PERMANENT_ADDRESS} spaceToTop={sh32} />
       ) : null}
       {isArrayNotEmpty(employmentAddress) ? (
         <SummaryColorCard
           headerTitle={INVESTOR_PROFILE.CARD_TITLE_EMPLOYMENT}
           data={employmentDetails}
           section={[employmentSection]}
-          spaceToTop={sh24}
+          spaceToTop={sh32}
         />
       ) : null}
 
       {declaration !== null && declaration.fatca !== null ? (
-        <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_FATCA} data={fatca} spaceToTop={sh24} />
+        <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_FATCA} data={fatca} spaceToTop={sh32} />
       ) : null}
       {declaration !== null && declaration.crs !== null ? (
-        <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_CRS} data={crs} section={[crsSection]} spaceToTop={sh24} />
+        <SummaryColorCard headerTitle={INVESTOR_PROFILE.CARD_TITLE_CRS} data={crs} section={[crsSection]} spaceToTop={sh32} />
       ) : null}
     </View>
   );

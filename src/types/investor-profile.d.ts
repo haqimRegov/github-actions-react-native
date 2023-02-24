@@ -30,6 +30,7 @@ declare interface IStructuredInvestorProfile {
   personalDetails: LabeledTitleProps[]; // required in Investor Profile ProfileTab
   contactDetails: LabeledTitleProps[]; // required in OrderSummary, Investor Profile ProfileTab
   permanentAddress: LabeledTitleProps[]; // required in Investor Profile ProfileTab
+  mailingAddress: LabeledTitleProps[]; // required in OrderSummary Investor Account AccountTab
   employmentDetails: LabeledTitleProps[]; // required in Investor Profile ProfileTab
   employmentAddress: LabeledTitleProps[]; // required in Investor Profile ProfileTab
   declarations: {

@@ -162,6 +162,17 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const handleContinue = () => {
     if (editMode === true) {
       if (checkIsEdit) {
+        const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+
+        // remove from disabledSteps
+        const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
+        if (findPersonalInfoSummary !== -1) {
+          updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
+        }
+
+        addPersonalInfo({ ...personalInfo, editMode: false });
+        updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps });
+
         handleNextStep("PersonalInfoSummary");
       } else {
         handleEmailVerification(); // run if new email inputted

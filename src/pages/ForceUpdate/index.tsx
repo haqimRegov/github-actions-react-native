@@ -70,6 +70,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     resetAcknowledgement,
     resetClientDetails,
     resetForceUpdate,
+    resetNewSales,
     resetPersonalInfo,
     resetRiskAssessment,
     resetTransactions,
@@ -125,6 +126,7 @@ export const ForceUpdatePageComponent: FunctionComponent<ForceUpdatePageProps> =
     resetAcknowledgement();
     resetClientDetails();
     resetForceUpdate();
+    resetNewSales();
     resetPersonalInfo();
     resetRiskAssessment();
     resetTransactions();

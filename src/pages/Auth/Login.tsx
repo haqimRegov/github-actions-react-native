@@ -1,6 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
-import React, { Fragment, FunctionComponent, useContext, useRef, useState } from "react";
+import React, { Fragment, FunctionComponent, useContext, useEffect, useRef, useState } from "react";
 import { Alert, Keyboard, Text, View, ViewStyle } from "react-native";
 import { isEmulator } from "react-native-device-info";
 import { WebView, WebViewNavigation } from "react-native-webview";
@@ -169,7 +169,6 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
                 if (checkEmulator === false) {
                   RNPushNotification.requestPermission();
                 }
-                props.resetTransactions();
 
                 if (hideEvent) {
                   await removeStorageData("hideEvent");
@@ -430,6 +429,24 @@ const LoginComponent: FunctionComponent<LoginProps> = ({ navigation, page, passw
       </View>
     );
   }
+
+  useEffect(() => {
+    props.resetAcknowledgement();
+    props.resetClientDetails();
+    props.resetEDD();
+    props.resetForceUpdate();
+    props.resetGlobal();
+    props.resetInvestors();
+    props.resetNewSales();
+    props.resetOnboarding();
+    props.resetPersonalInfo();
+    props.resetProducts();
+    props.resetRiskAssessment();
+    props.resetSelectedFund();
+    props.resetTransactions();
+    props.resetTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Fragment>

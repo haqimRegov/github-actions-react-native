@@ -5,6 +5,7 @@ import { ClientActionProps } from "../Client";
 import { EDDActionProps } from "../EDD";
 import { ForceUpdateActionProps } from "../ForceUpdate";
 import { InvestorsActionProps } from "../Investors";
+import { NewSalesActionProps } from "../NewSales";
 import { OnboardingActionProps } from "../Onboarding";
 import { PersonalInfoActionProps } from "../PersonalInfo";
 import { ProductsActionProps } from "../Products";
@@ -32,6 +33,7 @@ export const GlobalMapDispatchToProps = (dispatch: Dispatch) => {
       ...ForceUpdateActionProps,
       ...GlobalActionProps,
       ...InvestorsActionProps,
+      ...NewSalesActionProps,
       ...OnboardingActionProps,
       ...PersonalInfoActionProps,
       ...ProductsActionProps,

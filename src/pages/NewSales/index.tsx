@@ -94,6 +94,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     partialResetInvestors,
     resetAcknowledgement,
     resetClientDetails,
+    resetForceUpdate,
     resetInvestors,
     resetNewSales,
     resetPersonalInfo,
@@ -275,6 +276,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     resetSelectedFund();
     resetProducts();
     resetNewSales();
+    resetForceUpdate();
     resetTransactions();
     navigation.dispatch(
       CommonActions.reset({

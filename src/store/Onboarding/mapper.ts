@@ -2,6 +2,7 @@ import { bindActionCreators, Dispatch } from "redux";
 
 import { AcknowledgementActionProps } from "../Acknowledgement/actions";
 import { ClientActionProps } from "../Client/actions";
+import { NewSalesActionProps } from "../NewSales";
 import { PersonalInfoActionProps } from "../PersonalInfo/actions";
 import { ProductsActionProps } from "../Products/actions";
 import { RiskAssessmentActionProps } from "../RiskAssessment/actions";
@@ -30,6 +31,7 @@ export const OnboardingMapDispatchToProps = (dispatch: Dispatch) => {
       ...PersonalInfoActionProps,
       ...AcknowledgementActionProps,
       ...TransactionsActionProps,
+      ...NewSalesActionProps,
     },
     dispatch,
   );

@@ -502,6 +502,7 @@ export const english = {
       TITLE_ACCOUNT_DETAILS: "Account Details",
       TITLE_ACCOUNT_SETTINGS: "Account Settings",
       TITLE_BANKING_DETAILS: "Banking Details",
+      TITLE_EPF_DETAILS: "EPF Details",
       TITLE_RISK_ASSESSMENT: "Risk Assessment",
     },
     DASHBOARD_ORDER_DETAILS: {

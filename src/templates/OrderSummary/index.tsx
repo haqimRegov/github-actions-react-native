@@ -21,7 +21,7 @@ import {
   sw8,
 } from "../../styles";
 import { isArrayNotEmpty, isNotEmpty } from "../../utils";
-import { AccountTab, DocumentsTabNew, ProfileTabNew } from "../Dashboard";
+import { AccountTab, DocumentsTabNew, EPFProfileTab, ProfileTabNew } from "../Dashboard";
 import { OrderDetailsNew } from "./OrderDetailsNew";
 import { Tracking } from "./Tracking";
 
@@ -95,8 +95,24 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_ACCOUNT });
   }
 
-  if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true) {
+  const showProfileTab = currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true;
+
+  // ETB AO EPF
+  const showEpfProfileTab =
+    currentOrder !== undefined &&
+    orderSummary !== undefined &&
+    orderSummary.isEtb === true &&
+    currentOrder.transactionType === "Sales-AO" &&
+    isArrayNotEmpty(orderSummary.investmentSummary) &&
+    orderSummary.investmentSummary![0].fundingOption === "EPF";
+
+  if (showProfileTab) {
     tabs.splice(1, 0, "profile");
+    headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
+  }
+
+  if (showEpfProfileTab) {
+    tabs.splice(1, 0, "profile-epf");
     headerTabs.splice(1, 0, { text: DASHBOARD_ORDER_SUMMARY.TAB_PROFILE });
   }
 
@@ -128,8 +144,13 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
   if (activeTab === "account") {
     content = <AccountTab transactionType={currentOrder!.transactionType} {...contentProps} />;
   }
-  if (currentOrder !== undefined && orderSummary !== undefined && orderSummary.isEtb !== true && activeTab === "profile") {
+
+  if (showProfileTab === true && activeTab === "profile") {
     content = <ProfileTabNew {...contentProps} />;
+  }
+
+  if (showEpfProfileTab === true && activeTab === "profile-epf") {
+    content = <EPFProfileTab {...contentProps} />;
   }
 
   if (activeTab === "tracking") {

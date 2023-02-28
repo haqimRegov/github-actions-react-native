@@ -92,6 +92,7 @@ declare interface IRiskSummaryProps extends RiskStoreProps, NewSalesContentProps
 
 const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   addInvestmentDetails,
+  addPersonalInfo,
   client,
   details,
   handleNextStep,
@@ -99,6 +100,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   investors,
   isRiskUpdated,
   newSales,
+  personalInfo,
   riskScore,
   setAimsOpen,
   updateNewSales,
@@ -249,15 +251,14 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
 
     updateNewSales({ ...newSales, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
 
-    const route: TypeNewSalesRoute =
-      accountDetails.ampDetails !== undefined || updatedFinishedSteps.includes("ProductsList") === true
-        ? "ProductsConfirmation"
-        : "ProductsList";
+    const route: TypeNewSalesRoute = accountDetails.ampDetails !== undefined ? "ProductsConfirmation" : "ProductsList";
 
     handleNextStep(route);
   };
 
   const handleEdit = () => {
+    addPersonalInfo({ ...personalInfo, editMode: true });
+
     handleNextStep("RiskAssessment");
   };
 

@@ -70,14 +70,16 @@ declare interface IOnboardingRiskSummaryProps extends RiskStoreProps, Onboarding
 }
 
 const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryProps> = ({
+  addPersonalInfo,
   client,
   details,
-  handleNextStep,
   handleCancelOnboarding,
-  newSales,
+  handleNextStep,
   isRiskUpdated,
-  riskScore,
+  newSales,
   onboarding,
+  personalInfo,
+  riskScore,
   updateOnboarding,
 }: IOnboardingRiskSummaryProps) => {
   const { jointHolder, principalHolder } = details!;
@@ -180,12 +182,12 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
 
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
 
-    const route: TypeNewSalesRoute = updatedFinishedSteps.includes("ProductsList") === true ? "ProductsConfirmation" : "ProductsList";
-
-    handleNextStep(route);
+    handleNextStep("ProductsList");
   };
 
   const handleEdit = () => {
+    addPersonalInfo({ ...personalInfo, editMode: true });
+
     // resetRiskAssessment();
     handleNextStep("RiskAssessment");
   };

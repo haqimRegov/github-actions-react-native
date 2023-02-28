@@ -4,16 +4,16 @@ import React, { Fragment, FunctionComponent, useRef, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { BrowserWebView, CustomToast, PromptModal } from "../../components";
+import { BrowserWebView, CustomToast } from "../../components";
 import { StepperBar } from "../../components/Steps/StepperBar";
 import { Language } from "../../constants";
 import { NEW_SALES_KEYS, NEW_SALES_ROUTES } from "../../constants/routes/new-sales";
-import { DICTIONARY_CURRENCY, DICTIONARY_LINK_AIMS } from "../../data/dictionary";
+import { DICTIONARY_LINK_AIMS } from "../../data/dictionary";
 import { NewSalesMapDispatchToProps, NewSalesMapStateToProps, NewSalesStoreProps } from "../../store/NewSales";
-import { alignFlexStart, flexRow, fs14BoldGray6, fsAlignLeft, fullHW } from "../../styles";
+import { flexRow, fs14BoldGray6, fullHW } from "../../styles";
 import { NewSalesContent } from "./Content";
 
-const { NEW_SALES, PERSONAL_DETAILS } = Language.PAGE;
+const { NEW_SALES } = Language.PAGE;
 
 const ACCOUNT_LIST: INewSales = {
   label: NEW_SALES.TITLE_ACCOUNT_SELECTION,
@@ -87,7 +87,6 @@ type NewSalesPageProps = NewSalesStoreProps;
 
 export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (props: NewSalesPageProps) => {
   const {
-    addPersonalInfo,
     client,
     newSales,
     personalInfo,
@@ -102,13 +101,11 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     resetRiskAssessment,
     resetSelectedFund,
     resetTransactions,
-    riskAssessment,
-    updateNewSales,
     updateNewSalesFinishedSteps,
     updateToastVisible,
   } = props;
   const { accountDetails, disabledSteps, finishedSteps, toast, transactionType } = newSales;
-  const { editMode, principal } = personalInfo;
+  const { editMode } = personalInfo;
   const { isBankDetailsRequired } = accountDetails;
   const navigation = useNavigation<IStackNavigationProp>();
 
@@ -153,7 +150,6 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   }
 
   const stepperBarRef = useRef<IStepperBarRef<TypeNewSalesKey>>();
-  const [unsavedPrompt, setUnsavedPrompt] = useState<boolean>(false);
   const [cancelNewSales, setCancelNewSales] = useState<boolean>(false);
   const [aimsOpen, setAimsOpen] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<INewSalesContentItem | INewSales | undefined>(updatedNewSalesSteps[0]);
@@ -161,16 +157,9 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
   const [cancelBackToInvestor, setCancelBackToInvestor] = useState<boolean>(false);
 
   const handleNextStep = (route: TypeNewSalesRoute) => {
-    if (route === "ProductsConfirmation" && finishedSteps.includes("ProductsConfirmation") && unsavedPrompt === false) {
-      setUnsavedPrompt(true);
-      return false;
-    }
-
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
       stepperBarRef.current.handleNextStep(route);
     }
-
-    return true;
   };
 
   const handleContentChange = (item: INewSalesContentItem | INewSales) => {
@@ -182,80 +171,6 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       setCancelBackToInvestor(backToInvestor);
     }
     setCancelNewSales(!cancelNewSales);
-  };
-
-  const handleOpenProducts = () => {
-    setUnsavedPrompt(false);
-    addPersonalInfo({
-      ...personalInfo,
-      incomeDistribution: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST,
-      signatory: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL,
-      principal: {
-        ...principal,
-        bankSummary: {
-          localBank: [
-            {
-              bankAccountName: "",
-              bankAccountNumber: "",
-              bankName: "",
-              bankSwiftCode: "",
-              currency: [DICTIONARY_CURRENCY[0].value],
-              otherBankName: "",
-            },
-          ],
-          foreignBank: [],
-        },
-        epfDetails: {
-          epfAccountType: "",
-          epfMemberNumber: "",
-        },
-        personalDetails: { ...principal!.personalDetails, relationship: "", otherRelationship: "" },
-      },
-    });
-
-    // combined New Fund and AO
-    const updatedFinishedSteps: TypeNewSalesKey[] = ["AccountList", "RiskSummary", "ProductsList"];
-
-    if (riskAssessment.isRiskUpdated === true) {
-      updatedFinishedSteps.push("RiskAssessment");
-    }
-
-    // set to initial disabled steps without Products and ProductsList
-    // not using reducer initial state because of redux mutating issue
-    const newDisabledSteps: TypeNewSalesKey[] = [
-      // "AccountList",
-      // "RiskSummary",
-      "RiskAssessment",
-      // "Products",
-      "ProductsList",
-      // "ProductsConfirmation",
-      "AccountInformation",
-      "IdentityVerification",
-      "AdditionalDetails",
-      "Summary",
-      "Acknowledgement",
-      "OrderPreview",
-      "TermsAndConditions",
-      "Signatures",
-      "Payment",
-    ];
-
-    updateNewSales({ ...newSales, disabledSteps: newDisabledSteps, finishedSteps: updatedFinishedSteps });
-
-    handleNextStep("ProductsConfirmation");
-  };
-
-  const handleContinue = () => {
-    setUnsavedPrompt(false);
-  };
-
-  const handleCheckRoute = (item: INewSales, _section: number): boolean => {
-    // TODO improvement to more dynamic step
-    if (item.key === "Products" && finishedSteps.includes("Products")) {
-      setUnsavedPrompt(true);
-      return false;
-    }
-    return true;
   };
 
   const handleCloseWebView = () => {
@@ -306,7 +221,6 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
             disabledSteps={disabledSteps}
             editMode={editMode}
             finishedSteps={finishedSteps}
-            handleCheckRoute={handleCheckRoute}
             handleContentChange={handleContentChange}
             handleBackToDashboard={handleCancelNewSales}
             ref={stepperBarRef}
@@ -329,19 +243,6 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       ) : (
         <BrowserWebView baseUrl={DICTIONARY_LINK_AIMS} handleClose={handleCloseWebView} />
       )}
-      <PromptModal
-        backdropOpacity={0.4}
-        contentStyle={alignFlexStart}
-        handleCancel={handleOpenProducts}
-        handleContinue={handleContinue}
-        label={NEW_SALES.LABEL_PROMPT_TITLE}
-        labelCancel={NEW_SALES.LABEL_PROMPT_CLOSE_WITHOUT_SAVING}
-        labelContinue={NEW_SALES.LABEL_CONTINUE_EDITING}
-        labelStyle={fsAlignLeft}
-        title={NEW_SALES.LABEL_PROMPT_SUBTITLE}
-        titleStyle={fsAlignLeft}
-        visible={unsavedPrompt}
-      />
       <CustomToast parentVisible={toast.toastVisible} setParentVisible={updateToastVisible} />
     </View>
   );

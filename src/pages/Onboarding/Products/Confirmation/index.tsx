@@ -454,7 +454,6 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             cancelOnPress={handleBackToListing}
             continueDisabled={disableContinue !== undefined}
             selectedFunds={selectedFunds}
-            labelCancel={INVESTMENT.BUTTON_BACK}
             labelSubmit={INVESTMENT.BUTTON_NEXT}
             submitOnPress={handleConfirmIdentity}
             label={INVESTMENT.LABEL_SUMMARY}

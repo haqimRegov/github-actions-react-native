@@ -213,7 +213,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
             fatca: { ...jointFatcaRequest },
           },
           // check if employment details is enabled and filled
-          employmentDetails: joint!.employmentDetails!.isEnabled === true ? joint!.employmentDetails! : undefined,
+          employmentDetails: joint!.employmentDetails!.occupation !== "" ? joint!.employmentDetails! : undefined,
           personalDetails: {
             countryOfBirth: joint!.personalDetails!.countryOfBirth!,
             educationLevel:
@@ -302,7 +302,7 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       clientId: details!.principalHolder!.clientId!,
       addressInformation: principalAddress as ISubmitAddressInformation,
       bankSummary:
-        (principal?.personalDetails?.enableBankDetails === true && personalInfo.isAllEpf === true) || personalInfo.isAllEpf === false
+        personalInfo.isAllEpf === false
           ? {
               localBank: localBank as ISubmitBank[],
               foreignBank: foreignBank as ISubmitBank[],

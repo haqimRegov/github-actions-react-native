@@ -92,6 +92,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
     });
     addPersonalInfo({
       ...personalInfo,
+      editMode: false,
       principal: {
         ...personalInfo.principal,
         employmentDetails: { ...personalInfo.principal!.employmentDetails, grossIncome: Q8_OPTIONS[questionnaire.questionEight].label },

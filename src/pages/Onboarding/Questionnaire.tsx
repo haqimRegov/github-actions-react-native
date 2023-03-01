@@ -21,6 +21,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
   client,
   details,
   handleNextStep,
+  isRiskUpdated,
   navigation,
   onboarding,
   personalInfo,
@@ -80,16 +81,6 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
       newFinishedSteps.splice(findProductsConfirmation, 1);
     }
 
-    const toastObject =
-      isEtb === true
-        ? {
-            toast: {
-              toastText: RISK_ASSESSMENT.TOAST_CHANGES,
-              toastVisible: true,
-            },
-          }
-        : {};
-
     updateOnboarding({
       ...onboarding,
       finishedSteps: newFinishedSteps,
@@ -101,7 +92,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         expectedRange: currentRiskScore.rangeOfReturn,
         type: currentRiskScore.type,
       },
-      ...toastObject,
+      toast: isEtb === true || isRiskUpdated === true ? RISK_ASSESSMENT.TOAST_CHANGES : undefined,
     });
 
     addPersonalInfo({

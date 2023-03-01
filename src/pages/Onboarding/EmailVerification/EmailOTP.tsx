@@ -8,7 +8,6 @@ import {
   CustomFlexSpacer,
   CustomSpacer,
   CustomTextInput,
-  CustomToast,
   defaultContentProps,
   LinkText,
   RoundedButton,
@@ -91,7 +90,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
 }: EmailOTPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
   const fetching = useRef<boolean>(false);
-  const [emailToast, setEmailToast] = useState<boolean>(false);
   const [principalError, setPrincipalError] = useState<string | undefined>(undefined);
   const [jointError, setJointError] = useState<string | undefined>(undefined);
 
@@ -168,11 +166,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
 
   const checkPrincipal = isEtbPrincipal === false ? ` ${principalEmail} & ${jointEmail}` : jointEmail;
   const otpEmail = jointEmailCheck === true ? checkPrincipal : `${principalEmail}`;
-
-  useEffect(() => {
-    setEmailToast(true);
-  }, []);
-
   const { editMode } = personalInfo;
 
   useEffect(() => {
@@ -184,6 +177,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <SafeAreaPage>
       <ScrollView
@@ -286,7 +280,6 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
         />
         <CustomSpacer space={sh56} />
       </ScrollView>
-      <CustomToast parentVisible={emailToast} deleteText={EMAIL_VERIFICATION.TOAST_SEND} setParentVisible={setEmailToast} />
     </SafeAreaPage>
   );
 };

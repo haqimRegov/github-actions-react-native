@@ -21,15 +21,20 @@ export const resetOnboarding = () => {
   return typedAction("onboarding/RESET_ONBOARDING");
 };
 
-export const updateOnboardingToast = (toggle: boolean) => {
-  return typedAction("onboarding/UPDATE_ONBOARDING_TOAST", toggle);
+export const updateOnboardingToast = (toast: string) => {
+  return typedAction("onboarding/UPDATE_ONBOARDING_TOAST", toast);
+};
+
+export const resetOnboardingToast = () => {
+  return typedAction("onboarding/RESET_ONBOARDING_TOAST");
 };
 
 export type OnboardingAction = ReturnType<
   | typeof addOnboardingRiskInfo
   | typeof resetOnboarding
-  | typeof updateFinishedSteps
+  | typeof resetOnboardingToast
   | typeof updateDisabledSteps
+  | typeof updateFinishedSteps
   | typeof updateOnboarding
   | typeof updateOnboardingToast
 >;
@@ -37,6 +42,7 @@ export type OnboardingAction = ReturnType<
 export const OnboardingActionProps = {
   addOnboardingRiskInfo,
   resetOnboarding,
+  resetOnboardingToast,
   updateDisabledSteps,
   updateFinishedSteps,
   updateOnboarding,

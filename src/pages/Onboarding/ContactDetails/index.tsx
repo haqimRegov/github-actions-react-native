@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 
 import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
-import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
+import { DICTIONARY_MOBILE_CODE } from "../../../data/dictionary";
+import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoState, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
 import { ContactInfo } from "./Details";
 
@@ -66,9 +67,10 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
       ? validatePrincipal(principal!) === false
       : (isPrincipalEtb === false && validatePrincipal(principal!) === false) || (isJointEtb === false && validateJoint(joint!) === false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (skip?: boolean) => {
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
+    const updatedPersonalInfo: PersonalInfoState = { ...personalInfo };
 
     // add to finishedSteps
     if (updatedFinishedSteps.includes("ContactDetails") === false) {
@@ -82,13 +84,30 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
       if (findPersonalInfoSummary !== -1) {
         updatedDisabledSteps.splice(findPersonalInfoSummary, 1);
       }
-      addPersonalInfo({ ...personalInfo, editMode: false });
+      updatedPersonalInfo.editMode = false;
     }
+
+    if (skip === true) {
+      updatedPersonalInfo.joint!.contactDetails!.contactNumber = [
+        {
+          code: DICTIONARY_MOBILE_CODE[0].value,
+          id: DICTIONARY_MOBILE_CODE[0].id,
+          label: PERSONAL_DETAILS.LABEL_MOBILE_NUMBER,
+          value: "",
+        },
+      ];
+    }
+
+    addPersonalInfo(updatedPersonalInfo);
 
     updateOnboarding({ ...onboarding, disabledSteps: updatedDisabledSteps, finishedSteps: updatedFinishedSteps });
 
     const route: TypeOnboardingKey = editMode === true ? "PersonalInfoSummary" : "EmploymentDetails";
     handleNextStep(route);
+  };
+
+  const handleSkip = () => {
+    handleSubmit(true);
   };
 
   const handlePrincipalContactDetails = (value: IContactNumberState[]) => {
@@ -125,7 +144,7 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
       continueDisabled={buttonDisabled}
       handleCancel={handleBack}
       handleContinue={handleSubmit}
-      handleSkip={handleSubmit}
+      handleSkip={handleSkip}
       skippable={checkSkippable}
       subheading={CONTACT_DETAILS.HEADING_CONTACT_DETAILS}
       subtitle={CONTACT_DETAILS.SUB_HEADING_CONTACT_DETAILS}

@@ -237,10 +237,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
     (isEtbInvestor.principal === null && isEmpty(isEtbInvestor.joint)) ||
     currentOrder?.transactionType === "CR";
 
-  const showStatusIcon =
-    currentOrder!.status === "Submitted" &&
-    orderSummary?.documentSummary !== undefined &&
-    orderSummary.documentSummary.hardcopy.required === true;
+  const showStatusIcon = currentOrder!.status === "Submitted" && currentOrder?.withHardcopy === true;
 
   return (
     <Fragment>

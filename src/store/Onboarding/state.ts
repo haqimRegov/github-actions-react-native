@@ -1,13 +1,8 @@
-export interface IOnboardingToast {
-  toastText: string;
-  toastVisible: boolean;
-}
-
 export type OnboardingState = {
   disabledSteps: TypeOnboardingKey[];
   finishedSteps: TypeOnboardingKey[];
   riskInfo: IRiskProfile;
-  toast: IOnboardingToast;
+  toast: string | undefined;
 };
 
 export const onboardingInitialState: OnboardingState = {
@@ -41,8 +36,5 @@ export const onboardingInitialState: OnboardingState = {
     profile: "",
     type: "",
   },
-  toast: {
-    toastVisible: false,
-    toastText: "All changes saved",
-  },
+  toast: undefined,
 };

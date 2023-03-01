@@ -25,6 +25,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   personalInfo,
   setLoading,
   updateOnboarding,
+  updateOnboardingToast,
 }: EmailVerificationProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
 
@@ -55,7 +56,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const jointAgeCheck = moment().diff(moment(details!.jointHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "years") >= 18;
   const jointEmailCheck = accountType === "Joint" && (jointEmail !== "" || jointAgeCheck) && isEtbJoint === false;
 
-  const handleNavigate = () => {
+  const handleNavigate = (skip?: boolean) => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
     let updatedPersonalInfo = {
@@ -84,11 +85,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       ...onboarding,
       disabledSteps: updatedDisabledSteps,
       finishedSteps: updatedFinishedSteps,
-      toast: {
-        ...onboarding.toast,
-        toastVisible: true,
-        toastText: `${EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED} ${onboarding.toast.toastText}`,
-      },
+      toast: skip !== undefined && skip === true ? undefined : EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED,
     });
 
     handleNextStep(editMode === true ? "PersonalInfoSummary" : "IdentityVerification");
@@ -119,6 +116,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           setResendTimer(otpDifference);
           if (data.result.status === true) {
             addPersonalInfo({ ...personalInfo, emailOtpSent: true, emailTimestamp: response.data?.result.otpSendTime });
+            updateOnboardingToast(EMAIL_VERIFICATION.TOAST_SEND);
             setPage("otp");
           }
         }
@@ -148,6 +146,10 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
 
   const handlePromptCancel = () => {
     setPrompt(undefined);
+  };
+
+  const handleSkip = () => {
+    handleNavigate(true);
   };
 
   const checkIsEditJoint =
@@ -208,7 +210,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           checkIsEdit={checkIsEdit}
           handleCancel={handleCancel}
           handleContinue={handleContinue}
-          handleNavigate={handleNavigate}
+          handleNavigate={handleSkip}
           isEtbJoint={isEtbJoint}
           isEtbPrincipal={isEtbPrincipal}
           jointAgeCheck={jointAgeCheck}

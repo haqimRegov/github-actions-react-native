@@ -59,12 +59,16 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   const handleNavigate = (skip?: boolean) => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
-    let updatedPersonalInfo = {
-      ...personalInfo,
-      emailOtpSent: false,
-      principal: { ...principal, contactDetails: { ...principal?.contactDetails, emailAddress: principalEmail } },
-      joint: { ...joint, contactDetails: { ...joint?.contactDetails, emailAddress: jointEmail } },
-    };
+
+    let updatedPersonalInfo = { ...personalInfo, emailOtpSent: false };
+
+    if (skip !== true) {
+      updatedPersonalInfo = {
+        ...updatedPersonalInfo,
+        principal: { ...principal, contactDetails: { ...principal?.contactDetails, emailAddress: principalEmail } },
+        joint: { ...joint, contactDetails: { ...joint?.contactDetails, emailAddress: jointEmail } },
+      };
+    }
 
     // add to finishedSteps
     if (updatedFinishedSteps.includes("EmailVerification") === false) {
@@ -85,7 +89,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       ...onboarding,
       disabledSteps: updatedDisabledSteps,
       finishedSteps: updatedFinishedSteps,
-      toast: skip !== undefined && skip === true ? undefined : EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED,
+      toast: skip === true ? undefined : EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED,
     });
 
     handleNextStep(editMode === true ? "PersonalInfoSummary" : "IdentityVerification");

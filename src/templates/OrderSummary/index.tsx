@@ -20,7 +20,7 @@ import {
   sw24,
   sw8,
 } from "../../styles";
-import { isArrayNotEmpty, isNotEmpty } from "../../utils";
+import { isArrayNotEmpty, isEmpty, isNotEmpty } from "../../utils";
 import { AccountTab, DocumentsTabNew, EPFProfileTab, ProfileTabNew } from "../Dashboard";
 import { OrderDetailsNew } from "./OrderDetailsNew";
 import { Tracking } from "./Tracking";
@@ -234,7 +234,7 @@ export const OrderSummary: FunctionComponent<OrderDetailsProps> = (props: OrderD
 
   const isEtb =
     (currentOrder !== undefined && orderSummary !== undefined && (isEtbInvestor.principal === true || isEtbInvestor.joint === true)) ||
-    (isEtbInvestor.principal === null && isEtbInvestor.joint === null) ||
+    (isEtbInvestor.principal === null && isEmpty(isEtbInvestor.joint)) ||
     currentOrder?.transactionType === "CR";
 
   const showStatusIcon =

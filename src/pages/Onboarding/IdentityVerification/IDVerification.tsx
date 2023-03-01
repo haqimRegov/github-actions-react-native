@@ -190,8 +190,6 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
         validations.principal.epfNumber === undefined
       : true;
 
-  // const principalEpfCheck = personalInfo.isAllEpf === true ? principal?.personalDetails?.enableBankDetails === true : true;
-
   const continueDisabled =
     accountType === "Individual"
       ? checkEpf === false || validateDetails(principal!, validations.principal) === false

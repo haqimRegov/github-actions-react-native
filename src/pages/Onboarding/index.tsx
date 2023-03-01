@@ -123,7 +123,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
     resetTransactions,
     toast,
     updateFinishedSteps,
-    updateOnboardingToast,
+    resetOnboardingToast,
   } = props;
 
   const { editMode } = personalInfo;
@@ -132,8 +132,6 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
   const [cancelOnboarding, setCancelOnboarding] = useState<boolean>(false);
   const [activeContent, setActiveContent] = useState<IOnboardingContentItem | IOnboarding | undefined>(ONBOARDING_DATA[0]);
   const [activeSection, setActiveSection] = useState<number>(0);
-  const isEditEmail =
-    activeContent !== undefined && activeContent.route! === ONBOARDING_ROUTES.IdentityVerification ? toast.toastText : undefined;
 
   const handleNextStep = (route: TypeOnboardingKey) => {
     if (stepperBarRef.current !== null && stepperBarRef.current !== undefined) {
@@ -193,7 +191,7 @@ const OnboardingPageComponent: FunctionComponent<OnboardingPageProps> = (props: 
         navigation={navigation}
         route={activeContent !== undefined ? activeContent.route! : ONBOARDING_ROUTES.RiskSummary}
       />
-      <CustomToast deleteText={isEditEmail} parentVisible={toast.toastVisible} setParentVisible={updateOnboardingToast} />
+      <CustomToast deleteText={toast} parentVisible={toast !== undefined} setParentVisible={resetOnboardingToast} />
     </View>
   );
 };

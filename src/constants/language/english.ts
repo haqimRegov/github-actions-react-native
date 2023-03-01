@@ -900,7 +900,7 @@ export const english = {
       LABEL_EMAIL_PRINCIPAL: "Principle Account Holder Email Address",
       LABEL_EMAIL_VERIFIED_TITLE:
         "You will be redirected to continue this process in 5 seconds. If you are not redirected, please click on the button below.",
-      LABEL_EMAIL_VERIFIED: "Email verified.",
+      LABEL_EMAIL_VERIFIED: "Email verified. All changes saved.",
       LABEL_EMAIL: "Email",
       LABEL_GET_OTP: "Get OTP",
       LABEL_OPTIONAL: "(optional)",

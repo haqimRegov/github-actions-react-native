@@ -71,7 +71,13 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
   const { fatca, crs } = declaration !== null ? declaration : { fatca: null, crs: null };
 
   const identificationDetails: LabeledTitleProps[] = [
-    { label: `${idType} ${INVESTOR_PROFILE.LABEL_ID_NUMBER}`, title: idNumber || "-", titleStyle: fsUppercase },
+    {
+      label: `${idType}${idType === "Army" || idType === "Police" ? ` ${INVESTOR_PROFILE.LABEL_ID}` : ""} ${
+        INVESTOR_PROFILE.LABEL_ID_NUMBER
+      }`,
+      title: idNumber || "-",
+      titleStyle: fsUppercase,
+    },
     {
       label: INVESTOR_PROFILE.LABEL_DATE_OF_BIRTH,
       title: personalDetails !== null && personalDetails.dateOfBirth ? personalDetails.dateOfBirth : "-",

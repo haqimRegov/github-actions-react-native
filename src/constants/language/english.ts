@@ -1267,6 +1267,7 @@ export const english = {
       LABEL_EXPIRATION: "Passport Expiration Date",
       LABEL_GENDER: "Gender",
       LABEL_GROSS: "Annual Income (MYR)",
+      LABEL_ID: "ID",
       LABEL_ID_NUMBER: "Number",
       LABEL_JOINT_HOLDER: "Joint Holder",
       LABEL_JURISDICTION: "Country / Jurisdiction of Residence Declaration of Birth",

@@ -148,6 +148,12 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             },
           }
         : { ...joint };
+    const updatedLocalBankDetails = personalInfo.principal?.bankSummary?.localBank!.map((eachLocalBank: IBankDetailsState) => {
+      return {
+        ...eachLocalBank,
+        bankAccountName: accountType === "Individual" ? details?.principalHolder?.name : "",
+      };
+    });
 
     addPersonalInfo({
       ...personalInfo,
@@ -155,6 +161,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       principal: {
         ...personalInfo.principal,
         employmentDetails: { ...personalInfo.principal?.employmentDetails },
+        bankSummary: {
+          ...personalInfo.principal?.bankSummary,
+          localBank: updatedLocalBankDetails,
+        },
       },
       joint: checkJoint,
       ...epfObject,

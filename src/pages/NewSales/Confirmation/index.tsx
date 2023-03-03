@@ -239,6 +239,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         .principal!.bankSummary!.localBank!.map((eachBank) => ({
           ...eachBank,
           currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+          bankAccountName: accountType === "Individual" ? details?.principalHolder!.name : "",
         }))
         .filter((eachLocalBank) => eachLocalBank.currency.length > 0);
 
@@ -249,6 +250,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
               .principal!.bankSummary!.foreignBank!.map((eachBank) => ({
                 ...eachBank,
                 currency: eachBank.currency!.filter((eachCurrency) => investmentCurrencies.includes(eachCurrency)),
+                bankAccountName: accountType === "Individual" ? details?.principalHolder!.name : "",
               }))
               .filter((eachForeignBank) => eachForeignBank.currency.length > 0)
           : [];

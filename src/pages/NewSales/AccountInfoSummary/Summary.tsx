@@ -63,7 +63,7 @@ import {
   sw40,
   sw8,
 } from "../../../styles";
-import { isNotEmpty } from "../../../utils";
+import { isArrayNotEmpty, isNotEmpty } from "../../../utils";
 
 const { NEW_SALES_SUMMARY, RISK_ASSESSMENT } = Language.PAGE;
 
@@ -233,6 +233,10 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   const localBankDetails: LabeledTitleProps[][] = [];
   if (bankSummary !== null && bankSummary !== undefined && bankSummary.localBank !== null) {
     bankSummary.localBank!.forEach((bank: IBankDetailsState, bankIndex: number) => {
+      const bankAccountName =
+        bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
+          ? bank.combinedBankAccountName
+          : bank.bankAccountName;
       const checkNewCurrency =
         bankDetails !== undefined && bankDetails.localBank!.length - 1 >= bankIndex
           ? bankDetails.localBank![bankIndex].currency?.length !== bank.currency?.length
@@ -245,10 +249,12 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
         checkNewCurrency === true ? { headerSideText: NEW_SALES_SUMMARY.LABEL_UPDATED } : {};
       const checkSwiftUpdated: Partial<LabeledTitleProps> =
         checkNewSwift === true ? { headerSideText: NEW_SALES_SUMMARY.LABEL_UPDATED } : {};
+      const updatedAccountName = bank.bankName !== "" ? bankAccountName : "-";
+      const bankCurrency = bank.bankName !== "" ? bank.currency!.join(", ") : "-";
       const newData: LabeledTitleProps[] = [
-        { label: NEW_SALES_SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase, ...checkCurrencyUpdated },
+        { label: NEW_SALES_SUMMARY.LABEL_CURRENCY, title: bankCurrency, titleStyle: fsUppercase, ...checkCurrencyUpdated },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
-        { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bank.bankAccountName },
+        { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: updatedAccountName },
         { label: NEW_SALES_SUMMARY.LABEL_BANK_ACCOUNT_NO, title: bank.bankAccountNumber },
         {
           label: NEW_SALES_SUMMARY.LABEL_BANK_SWIFT,
@@ -309,16 +315,6 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
       title: incomeDistribution,
     },
   ];
-
-  const checkLocalBank = bankSummary!.localBank!.map(
-    (bank) =>
-      bank.bankName !== "" &&
-      bank.bankAccountNumber !== "" &&
-      bank.bankAccountName !== "" &&
-      bank.currency?.includes("") === false &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
 
   if (client.accountType === "Joint") {
     accountSettings.push(
@@ -536,7 +532,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                   <CustomSpacer space={sh8} />
                 </Fragment>
               ) : null}
-              {bankSummary?.localBank?.length === 0 || checkLocalBank.includes(false) === true ? null : (
+              {isArrayNotEmpty(localBankDetails) ? null : (
                 <Fragment>
                   {localBankDetails.map((bank, numberIndex) => {
                     const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;
@@ -562,38 +558,40 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                   })}
                 </Fragment>
               )}
-              {foreignBankDetails.map((bank, numberIndex) => {
-                const label = `${NEW_SALES_SUMMARY.LABEL_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;
-                const checkNewForeignBank = bankDetails !== undefined && bankDetails!.foreignBank!.length - 1 < numberIndex;
-                return (
-                  <Fragment key={numberIndex}>
-                    {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}
-                    <View style={flexRow}>
-                      <IcoMoon color={colorBlue._1} name="bank-new" size={sw24} />
-                      <CustomSpacer isHorizontal={true} space={sw8} />
-                      <View style={flexChild}>
-                        <View style={rowCenterVertical}>
-                          <Text style={fs16BoldBlue1}>{label}</Text>
-                          {checkNewForeignBank === true ? (
-                            <Fragment>
-                              <CustomSpacer isHorizontal={true} space={sw8} />
-                              <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
-                                <Text style={fs10RegBlue9}>{NEW_SALES_SUMMARY.LABEL_UPDATED}</Text>
-                              </View>
-                            </Fragment>
-                          ) : null}
-                          <CustomSpacer isHorizontal={true} space={sw16} />
+              {isArrayNotEmpty(foreignBankDetails)
+                ? foreignBankDetails.map((bank, numberIndex) => {
+                    const label = `${NEW_SALES_SUMMARY.LABEL_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;
+                    const checkNewForeignBank = bankDetails !== undefined && bankDetails!.foreignBank!.length - 1 < numberIndex;
+                    return (
+                      <Fragment key={numberIndex}>
+                        {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}
+                        <View style={flexRow}>
+                          <IcoMoon color={colorBlue._1} name="bank-new" size={sw24} />
+                          <CustomSpacer isHorizontal={true} space={sw8} />
                           <View style={flexChild}>
-                            <View style={borderBottomBlue4} />
+                            <View style={rowCenterVertical}>
+                              <Text style={fs16BoldBlue1}>{label}</Text>
+                              {checkNewForeignBank === true ? (
+                                <Fragment>
+                                  <CustomSpacer isHorizontal={true} space={sw8} />
+                                  <View style={{ ...border(colorBlue._9, sw05, sw4), ...px(sw4) }}>
+                                    <Text style={fs10RegBlue9}>{NEW_SALES_SUMMARY.LABEL_UPDATED}</Text>
+                                  </View>
+                                </Fragment>
+                              ) : null}
+                              <CustomSpacer isHorizontal={true} space={sw16} />
+                              <View style={flexChild}>
+                                <View style={borderBottomBlue4} />
+                              </View>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                    </View>
-                    <CustomSpacer space={sh16} />
-                    <TextCard data={bank} {...textCardProps} />
-                  </Fragment>
-                );
-              })}
+                        <CustomSpacer space={sh16} />
+                        <TextCard data={bank} {...textCardProps} />
+                      </Fragment>
+                    );
+                  })
+                : null}
               {isAllEpf === true && isNotEmpty(enableBankDetails) && enableBankDetails === false ? null : <CustomSpacer space={sh8} />}
             </Fragment>
           }

@@ -159,11 +159,11 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
         : bank.bankAccountName;
 
     // TODO use bank check util once ready
-    const updatedAccountName = bank.bankName ? bankAccountName : "-";
-    const bankCurrency = bank.currency!.join(", ");
+    const updatedAccountName = bank.bankName !== "" ? bankAccountName : "-";
+    const bankCurrency = bank.bankName !== "" ? bank.currency!.join(", ") : "-";
 
     return [
-      { label: SUMMARY.LABEL_CURRENCY, title: bankCurrency || "-", titleStyle: fsUppercase },
+      { label: SUMMARY.LABEL_CURRENCY, title: bankCurrency, titleStyle: fsUppercase },
       { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: updatedAccountName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
@@ -181,11 +181,11 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
               : bank.bankAccountName;
 
           // TODO use bank check util once ready
-          const updatedAccountName = bank.bankName ? bankAccountName : "-";
-          const bankCurrency = bank.currency!.join(", ");
+          const updatedAccountName = bank.bankName !== "" ? bankAccountName : "-";
+          const bankCurrency = bank.bankName !== "" ? bank.currency!.join(", ") : "-";
 
           return [
-            { label: SUMMARY.LABEL_CURRENCY, title: bankCurrency || "-", titleStyle: fsUppercase },
+            { label: SUMMARY.LABEL_CURRENCY, title: bankCurrency, titleStyle: fsUppercase },
             { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
             { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: updatedAccountName },
             { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },

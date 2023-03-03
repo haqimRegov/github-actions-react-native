@@ -1,5 +1,5 @@
 import { typedAction } from "../actionCreator";
-import { INewSalesToast, NewSalesState } from "./state";
+import { NewSalesState } from "./state";
 
 export const addAccountDetails = (accountDetails: INewSalesAccountDetails) => {
   return typedAction("newSales/ADD_ACCOUNT_DETAILS", accountDetails);
@@ -29,12 +29,12 @@ export const resetNewSales = () => {
   return typedAction("newSales/RESET_NEW_SALES");
 };
 
-export const updateToastVisible = (toggle: boolean) => {
-  return typedAction("newSales/UPDATE_TOAST_VISIBLE", toggle);
+export const updateToastText = (value: string) => {
+  return typedAction("newSales/UPDATE_TOAST_TEXT", value);
 };
 
-export const updateToast = (toast: INewSalesToast) => {
-  return typedAction("newSales/UPDATE_TOAST_TEXT", toast);
+export const resetNewSalesToast = () => {
+  return typedAction("newSales/RESET_TOAST_TEXT");
 };
 
 export const updateTransactionType = (type: TTransactionType) => {
@@ -46,11 +46,11 @@ export type NewSalesAction = ReturnType<
   | typeof addBankDetails
   | typeof addRiskInfo
   | typeof resetNewSales
+  | typeof resetNewSalesToast
   | typeof updateNewSales
   | typeof updateNewSalesDisabledSteps
   | typeof updateNewSalesFinishedSteps
-  | typeof updateToast
-  | typeof updateToastVisible
+  | typeof updateToastText
   | typeof updateTransactionType
 >;
 
@@ -59,11 +59,11 @@ export const NewSalesActionProps = {
   addBankDetails,
   addRiskInfo,
   resetNewSales,
+  resetNewSalesToast,
   updateNewSales,
   updateNewSalesDisabledSteps,
   updateNewSalesFinishedSteps,
-  updateToast,
-  updateToastVisible,
+  updateToastText,
   updateTransactionType,
 };
 

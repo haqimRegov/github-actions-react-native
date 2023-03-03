@@ -85,27 +85,18 @@ export function newSalesReducer(state = newSalesInitialState, action: NewSalesAc
           hnwStatus: "",
           type: "",
         },
-        toast: {
-          toastVisible: false,
-          toastText: "All changes saved",
-        },
+        toast: undefined,
         transactionType: undefined,
       };
     case "newSales/UPDATE_TOAST_TEXT":
       return {
         ...state,
-        toast: {
-          ...state.toast,
-          ...action.payload,
-        },
+        toast: action.payload,
       };
-    case "newSales/UPDATE_TOAST_VISIBLE":
+    case "newSales/RESET_TOAST_TEXT":
       return {
         ...state,
-        toast: {
-          ...state.toast,
-          toastVisible: action.payload,
-        },
+        toast: undefined,
       };
     case "newSales/UPDATE_TRANSACTION_TYPE":
       return {

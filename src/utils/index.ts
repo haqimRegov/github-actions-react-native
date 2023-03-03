@@ -1,5 +1,6 @@
 export * from "./Alert";
 export * from "./Animation";
+export * from "./Bank";
 export * from "./EDDProfileStructuring";
 export * from "./Encryption";
 export * from "./ErrorHandler";

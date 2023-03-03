@@ -293,6 +293,7 @@ IForeignBankDetailsProps) => {
                     />
                     {accountType === "Individual" ? (
                       <CustomTextInput
+                        disabled={true}
                         label={PERSONAL_DETAILS.LABEL_BANK_ACCOUNT_NAME}
                         onChangeText={handleAccountName}
                         spaceToTop={sh16}

@@ -4,25 +4,15 @@ import { connect } from "react-redux";
 
 import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomToast } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_CURRENCY } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
 import { BankDetails } from "../../../templates";
-import { isNotEmpty } from "../../../utils";
+import { getInitialBankState, isNotEmpty } from "../../../utils";
 import { AccountDetails } from "./AccountDetails";
 import { JointRelationship } from "./JointRelationship";
 
 const { ADDITIONAL_DETAILS } = Language.PAGE;
 interface AdditionalDetailsProps extends PersonalInfoStoreProps, OnboardingContentProps {}
-
-const initialBankDetails: IBankDetailsState = {
-  bankAccountName: "",
-  bankAccountNumber: "",
-  bankName: "",
-  bankSwiftCode: "",
-  currency: [DICTIONARY_CURRENCY[0].value],
-  otherBankName: "",
-};
 
 const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   accountType,
@@ -65,7 +55,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
     (bank) =>
       bank.bankName === "" &&
       bank.bankAccountNumber === "" &&
-      bank.bankAccountName === "" &&
+      // bank.bankAccountName === "" &&
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,
   );
@@ -126,7 +116,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const handleEnable = (toggle: boolean | undefined) => {
     handlePrincipalPersonalDetails({ ...personalDetails, enableBankDetails: toggle });
     const bankSummaryState: IBankSummaryState = {
-      localBank: [{ ...initialBankDetails }],
+      localBank: [{ ...getInitialBankState(details?.principalHolder!.name) }],
       foreignBank: [],
     };
     handlePrincipalBankDetails(bankSummaryState);

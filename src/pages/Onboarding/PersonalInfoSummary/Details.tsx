@@ -170,9 +170,7 @@ export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({
           colorCardProps={{ ...colorCardProps, headerIcon: { name: "pencil", onPress: handleEditEmploymentDetails } }}
         />
       ) : null}
-      {(accountType === "Joint" && accountHolder === "Joint") ||
-      (accountType === "Joint" && accountHolder === "Principal") ||
-      (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
+      {accountType === "Joint" || (localBankDetails.length === 0 && foreignBankDetails.length === 0) ? null : (
         <SummaryColorCard
           headerTitle={SUMMARY.TITLE_ACCOUNT}
           data={additionalInfo}

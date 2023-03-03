@@ -122,14 +122,6 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
     handleNextStep("IdentityVerification");
   };
 
-  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
-
-  if (accountType === "Joint") {
-    accountNames.push(
-      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
-      { label: PERSONAL_DETAILS.OPTION_COMBINED, value: PERSONAL_DETAILS.OPTION_COMBINED },
-    );
-  }
   const isContactOptional = jointContactCheck !== undefined ? jointContactCheck : false;
   const checkContactDetailsLabel =
     accountType === "Individual"

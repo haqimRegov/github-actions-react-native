@@ -14,7 +14,6 @@ const { PERSONAL_DETAILS } = Language.PAGE;
 interface IBankDetailsProps {
   accountType: TypeAccountChoices;
   bankSummary: IBankSummaryState;
-  currentCurrency: string;
   details: IClientDetailsState;
   enableBank: boolean;
   existingBankSummary?: IBankSummaryState;
@@ -23,17 +22,15 @@ interface IBankDetailsProps {
   investmentCurrencies: string[];
   isAllEpf: boolean;
   handleBankSummary: (bankSummary: IBankSummaryState) => void;
-  setDeleteToast: (toggle: boolean) => void;
+  handleToast: (value?: string) => void;
   handleEnableLocalBank: (enable: boolean) => void;
   setForeignBankDetails: (input: IBankDetailsState[]) => void;
-  setCurrentCurrency: (currency: string) => void;
   setLocalBankDetails: (input: IBankDetailsState[]) => void;
 }
 
 export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   accountType,
   bankSummary,
-  currentCurrency,
   details,
   enableBank,
   existingBankSummary,
@@ -42,10 +39,9 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   investmentCurrencies,
   isAllEpf,
   // handleBankSummary,
-  setDeleteToast,
+  handleToast,
   handleEnableLocalBank,
   setForeignBankDetails,
-  setCurrentCurrency,
   setLocalBankDetails,
 }: IBankDetailsProps) => {
   // TODO Undo delete functionality
@@ -140,7 +136,6 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
         bankingDetails={localBank!}
         bankNames={accountNames}
         bankSummary={bankSummary}
-        currentCurrency={currentCurrency}
         // deleteCount={deleteCount}
         enableBank={enableBank}
         existingDetails={existingLocalBank}
@@ -150,8 +145,7 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
         isAllEpf={isAllEpf}
         remainingCurrencies={checkCurrencyRemaining}
         setBankingDetails={setLocalBankDetails}
-        setDeleteToast={setDeleteToast}
-        setCurrentCurrency={setCurrentCurrency}
+        handleToast={handleToast}
         // setDeleteCount={setDeleteCount}
         setForeignBankDetails={setForeignBankDetails}
         // setTempData={setTempData}
@@ -166,15 +160,13 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
             bankingDetails={foreignBank!}
             bankNames={accountNames}
             bankSummary={bankSummary}
-            currentCurrency={currentCurrency}
             // deleteCount={deleteCount}
             existingDetails={existingForeignBank}
             initialForeignBankState={initialForeignBankState}
             investmentCurrencies={investmentCurrencies}
             remainingCurrencies={checkCurrencyRemaining}
             setBankingDetails={setForeignBankDetails}
-            setDeleteToast={setDeleteToast}
-            setCurrentCurrency={setCurrentCurrency}
+            handleToast={handleToast}
             // setDeleteCount={setDeleteCount}
             // setTempData={setTempData}
           />

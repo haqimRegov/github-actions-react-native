@@ -4,24 +4,15 @@ import { connect } from "react-redux";
 
 import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, CustomToast, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
-import { DICTIONARY_CURRENCY, DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
+import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
 import { BankDetails } from "../../../templates";
-import { isNotEmpty, isNumber } from "../../../utils";
+import { getInitialBankState, isNotEmpty, isNumber } from "../../../utils";
 import { AccountDetails } from "./AccountDetails";
 import { EPFDetails } from "./EPFDetails";
 
 const { ADDITIONAL_DETAILS, PERSONAL_DETAILS } = Language.PAGE;
-
-const initialBankDetails: IBankDetailsState = {
-  bankAccountName: "",
-  bankAccountNumber: "",
-  bankName: "",
-  bankSwiftCode: "",
-  currency: [DICTIONARY_CURRENCY[0].value],
-  otherBankName: "",
-};
 
 interface AdditionalDetailsProps extends PersonalInfoStoreProps, NewSalesContentProps {}
 
@@ -135,7 +126,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
           enableBankDetails: enable,
         },
         bankSummary: {
-          localBank: [{ ...initialBankDetails }],
+          localBank: [{ ...getInitialBankState(details?.principalHolder!.name) }],
           foreignBank: [],
         },
       },
@@ -231,7 +222,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     (bank) =>
       bank.bankName === "" &&
       bank.bankAccountNumber === "" &&
-      bank.bankAccountName === "" &&
+      // bank.bankAccountName === "" &&
       (transactionType === "Sales" ? bank.currency?.includes("") === true : true) &&
       bank.bankAccountNameError === undefined &&
       bank.bankAccountNumberError === undefined,

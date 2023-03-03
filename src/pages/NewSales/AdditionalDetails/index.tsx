@@ -2,7 +2,7 @@ import React, { Fragment, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, CustomToast, NewDropdown } from "../../../components";
+import { ColorCard, ContentPage, CustomSpacer, CustomTextInput, NewDropdown } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
@@ -29,8 +29,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
 }: AdditionalDetailsProps) => {
   const { editMode, epfInvestment, epfShariah, isAllEpf, incomeDistribution, principal, signatory } = personalInfo;
   const { accountDetails, disabledSteps, finishedSteps, transactionType } = newSales;
-  const [currentCurrency, setCurrentCurrency] = useState<string>("");
-  const [deleteToast, setDeleteToast] = useState<boolean>(false);
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
   const { bankDetails: existingBankDetails, isEpf } = accountDetails;
   const { bankSummary, epfDetails, personalDetails } = principal!;
@@ -71,7 +69,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
       ...newSales,
       disabledSteps: updatedDisabledSteps,
       finishedSteps: updatedFinishedSteps,
-      toast: { ...newSales.toast, toastVisible: true },
     });
 
     handleNextStep("Summary");
@@ -203,6 +200,13 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     ];
     updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
     handleNextStep("OrderPreview");
+  };
+
+  const handleToast = (value?: string) => {
+    updateNewSales({
+      ...newSales,
+      toast: `${value} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`,
+    });
   };
 
   // TODO change account name check to !== for both local and foreign
@@ -352,7 +356,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
           <BankDetails
             accountType={accountType!}
             bankSummary={bankSummary!}
-            currentCurrency={currentCurrency}
             details={details!}
             enableBank={enableBankDetails!}
             existingBankSummary={existingBankDetails}
@@ -363,8 +366,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
             handleEnableLocalBank={handleEnableLocalBank}
             localBankDetails={localBank!}
             // remainingCurrencies={checkCurrencyRemaining}
-            setCurrentCurrency={setCurrentCurrency}
-            setDeleteToast={setDeleteToast}
+            handleToast={handleToast}
             setForeignBankDetails={handleForeignBank}
             setLocalBankDetails={handleLocalBank}
           />
@@ -378,11 +380,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
           ) : null}
         </View>
       </ContentPage>
-      <CustomToast
-        parentVisible={deleteToast}
-        deleteText={`${currentCurrency} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`}
-        setParentVisible={setDeleteToast}
-      />
     </Fragment>
   );
 };

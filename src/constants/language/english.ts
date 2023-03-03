@@ -1815,6 +1815,7 @@ export const english = {
       LABEL_RECOMMENDED: "Recommended",
       LABEL_NEW_SALES_PRODUCT_SERVICE_SUMMARY: "Product and Service Summary",
       LABEL_TYPES: "Types:",
+      LABEL_FUND_REMOVED: "funds removed",
       PROMPT_LABEL_CANCEL: "All progress in the Product & Service Recommendation will be lost.",
       PROMPT_LABEL_OUTSIDE:
         "Yes, I wish to purchase unlisted capital market product(s) outside the authorised distributor's recommendation",

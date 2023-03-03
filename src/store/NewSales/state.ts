@@ -1,7 +1,3 @@
-export interface INewSalesToast {
-  toastText: string;
-  toastVisible: boolean;
-}
 export type NewSalesState = {
   accountDetails: INewSalesAccountDetails;
   disabledSteps: TypeNewSalesKey[];
@@ -11,7 +7,7 @@ export type NewSalesState = {
     principalClientId?: string;
     jointClientId?: string;
   };
-  toast: INewSalesToast;
+  toast: string | undefined;
   transactionType: TTransactionType | undefined;
   riskInfo: IRiskProfile;
 };
@@ -52,10 +48,7 @@ export const newSalesInitialState: NewSalesState = {
     principalClientId: undefined,
     jointClientId: undefined,
   },
-  toast: {
-    toastVisible: false,
-    toastText: "All changes saved",
-  },
+  toast: undefined,
   transactionType: undefined,
   riskInfo: {
     appetite: "",

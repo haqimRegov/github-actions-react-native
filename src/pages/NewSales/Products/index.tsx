@@ -134,6 +134,11 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
         }
       });
       addSelectedFund(updatedFunds);
+      const deletedFundCount = temp.length - updatedFunds.length;
+      updateNewSales({
+        ...newSales,
+        toast: `${deletedFundCount} ${PRODUCT_LIST.LABEL_FUND_REMOVED}`,
+      });
     }
     setPrompt(undefined);
   };

@@ -175,7 +175,6 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
       ...newSales,
       disabledSteps: updatedDisabledSteps,
       finishedSteps: updatedFinishedSteps,
-      toast: { ...newSales.toast, toastVisible: true },
     });
 
     const route: TypeNewSalesKey = editMode === true ? "Summary" : "AdditionalDetails";

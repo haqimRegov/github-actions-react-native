@@ -44,15 +44,13 @@ interface IForeignBankDetailsProps {
   bankingDetails: IBankDetailsState[];
   bankNames: TypeLabelValue[];
   bankSummary: IBankSummaryState;
-  currentCurrency: string;
   // deleteCount: number;
   existingDetails?: IBankDetailsState[];
   initialForeignBankState: IBankDetailsState;
   investmentCurrencies: string[];
   remainingCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
-  setCurrentCurrency: (current: string) => void;
-  setDeleteToast: (toggle: boolean) => void;
+  handleToast: (value?: string) => void;
   // setDeleteCount: (count: number) => void;
   // setTempData: (updatedDetails: IBankSummaryState) => void;
 }
@@ -76,8 +74,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
   investmentCurrencies,
   remainingCurrencies,
   setBankingDetails,
-  setCurrentCurrency,
-  setDeleteToast,
+  handleToast,
 }: // setDeleteCount,
 // setTempData,
 IForeignBankDetailsProps) => {
@@ -223,7 +220,6 @@ IForeignBankDetailsProps) => {
                       };
 
                       const handleRemoveCurrency = () => {
-                        setCurrentCurrency(value);
                         const updatedBankingDetails = [...bankingDetails];
                         let updatedData: IBankDetailsState = { ...item };
                         const { currency: updatedCurrency } = updatedData;
@@ -236,7 +232,7 @@ IForeignBankDetailsProps) => {
                         }
                         // setDeleteCount(deleteCount + 1);
                         setBankingDetails(updatedBankingDetails);
-                        setDeleteToast(true);
+                        handleToast(value);
                         // setTempData({ ...bankSummary, foreignBank: updatedBankingDetails });
                       };
 

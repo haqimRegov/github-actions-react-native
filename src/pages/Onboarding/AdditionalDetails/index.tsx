@@ -1,8 +1,8 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import { AccountHeader, ColorCard, ContentPage, CustomSpacer, CustomToast } from "../../../components";
+import { AccountHeader, ColorCard, ContentPage, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
@@ -24,9 +24,8 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   personalInfo,
   productSales,
   updateOnboarding,
+  updateOnboardingToast,
 }: AdditionalDetailsProps) => {
-  const [deleteToast, setDeleteToast] = useState<boolean>(false);
-  const [currentCurrency, setCurrentCurrency] = useState<string>("");
   const { disabledSteps, finishedSteps } = onboarding;
   const { editMode, principal, isAllEpf } = personalInfo;
   const { bankSummary } = principal!;
@@ -137,6 +136,10 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
     handleNextStep("EmploymentDetails");
   };
 
+  const handleToast = (value?: string) => {
+    updateOnboardingToast(`${value} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`);
+  };
+
   const handleBankSummary = (updatedBankSummary: IBankSummaryState) => {
     addPersonalInfo({
       ...personalInfo,
@@ -228,7 +231,6 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
           <BankDetails
             accountType={accountType!}
             bankSummary={bankSummary!}
-            currentCurrency={currentCurrency}
             details={details!}
             enableBank={enableBankDetails!}
             foreignBankDetails={foreignBank!}
@@ -237,18 +239,12 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
             isAllEpf={isAllEpf || false}
             handleEnableLocalBank={handleEnable}
             localBankDetails={localBank!}
-            setCurrentCurrency={setCurrentCurrency}
-            setDeleteToast={setDeleteToast}
+            handleToast={handleToast}
             setForeignBankDetails={setForeignBank}
             setLocalBankDetails={setLocalBank}
           />
         </View>
       </ContentPage>
-      <CustomToast
-        parentVisible={deleteToast}
-        deleteText={`${currentCurrency} ${ADDITIONAL_DETAILS.LABEL_CURRENCY_DELETED}`}
-        setParentVisible={setDeleteToast}
-      />
     </Fragment>
   );
 };

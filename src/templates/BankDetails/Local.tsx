@@ -40,7 +40,6 @@ interface ILocalBankDetailsProps {
   bankingDetails: IBankDetailsState[];
   bankSummary: IBankSummaryState;
   bankNames: TypeLabelValue[];
-  currentCurrency: string;
   // deleteCount: number;
   enableBank: boolean;
   existingDetails?: IBankDetailsState[];
@@ -50,8 +49,7 @@ interface ILocalBankDetailsProps {
   isAllEpf: boolean;
   remainingCurrencies: string[];
   setBankingDetails: (input: IBankDetailsState[]) => void;
-  setCurrentCurrency: (current: string) => void;
-  setDeleteToast: (toggle: boolean) => void;
+  handleToast: (value?: string) => void;
   // setDeleteCount: (count: number) => void;
   setForeignBankDetails: (input: IBankDetailsState[]) => void;
   // setTempData: (updatedBankSummary: IBankSummaryState) => void;
@@ -74,8 +72,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
   isAllEpf,
   remainingCurrencies,
   setBankingDetails,
-  setCurrentCurrency,
-  setDeleteToast,
+  handleToast,
   // setDeleteCount,
   setForeignBankDetails,
 }: // setTempData,
@@ -189,12 +186,11 @@ ILocalBankDetailsProps) => {
                       .currency!.filter((thisCurrency) => thisCurrency !== item.currency![0])
                       .map((value: string, currencyIndex: number) => {
                         const handleRemoveCurrency = () => {
-                          setCurrentCurrency(value);
                           const updatedCurrency = [...item.currency!];
                           updatedCurrency!.splice(currencyIndex! + 1, 1);
                           const updatedData = { ...item, currency: updatedCurrency };
                           setBankingDetails([updatedData]);
-                          setDeleteToast(true);
+                          handleToast(value);
                           // setTempData({ ...bankSummary, localBank: [updatedData] });
                           // setDeleteCount(deleteCount + 1);
                         };

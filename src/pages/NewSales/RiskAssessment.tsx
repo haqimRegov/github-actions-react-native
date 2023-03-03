@@ -85,10 +85,7 @@ const NewSalesRiskAssessmentComponent: FunctionComponent<RiskAssessmentContentPr
         expectedRange: currentRiskScore.rangeOfReturn,
         type: currentRiskScore.type,
       },
-      toast: {
-        toastText: RISK_ASSESSMENT.TOAST_CHANGES,
-        toastVisible: true,
-      },
+      toast: RISK_ASSESSMENT.TOAST_CHANGES,
     });
     addPersonalInfo({
       ...personalInfo,

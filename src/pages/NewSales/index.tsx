@@ -102,7 +102,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
     resetSelectedFund,
     resetTransactions,
     updateNewSalesFinishedSteps,
-    updateToastVisible,
+    resetNewSalesToast,
   } = props;
   const { accountDetails, disabledSteps, finishedSteps, toast, transactionType } = newSales;
   const { editMode } = personalInfo;
@@ -243,7 +243,7 @@ export const NewSalesPageComponent: FunctionComponent<NewSalesPageProps> = (prop
       ) : (
         <BrowserWebView baseUrl={DICTIONARY_LINK_AIMS} handleClose={handleCloseWebView} />
       )}
-      <CustomToast parentVisible={toast.toastVisible} setParentVisible={updateToastVisible} />
+      <CustomToast deleteText={toast} parentVisible={toast !== undefined} setParentVisible={resetNewSalesToast} />
     </View>
   );
 };

@@ -158,10 +158,14 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
         ? bank.combinedBankAccountName
         : bank.bankAccountName;
 
+    // TODO use bank check util once ready
+    const updatedAccountName = bank.bankName ? bankAccountName : "-";
+    const bankCurrency = bank.currency!.join(", ");
+
     return [
-      { label: SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase },
+      { label: SUMMARY.LABEL_CURRENCY, title: bankCurrency || "-", titleStyle: fsUppercase },
       { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
-      { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
+      { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: updatedAccountName },
       { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
       // { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
       { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
@@ -176,13 +180,17 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
               ? bank.combinedBankAccountName
               : bank.bankAccountName;
 
+          // TODO use bank check util once ready
+          const updatedAccountName = bank.bankName ? bankAccountName : "-";
+          const bankCurrency = bank.currency!.join(", ");
+
           return [
-            { label: SUMMARY.LABEL_CURRENCY, title: bank.currency!.join(", "), titleStyle: fsUppercase },
+            { label: SUMMARY.LABEL_CURRENCY, title: bankCurrency || "-", titleStyle: fsUppercase },
             { label: SUMMARY.LABEL_BANK_NAME, title: bank.bankName },
-            { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: bankAccountName },
+            { label: SUMMARY.LABEL_BANK_ACCOUNT_NAME, title: updatedAccountName },
             { label: SUMMARY.LABEL_BANK_ACCOUNT_NUMBER, title: bank.bankAccountNumber },
-            { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
             { label: SUMMARY.LABEL_BANK_SWIFT, title: bank.bankSwiftCode ? bank.bankSwiftCode : "-" },
+            { label: SUMMARY.LABEL_BANK_LOCATION, title: bank.bankLocation },
           ] as LabeledTitleProps[];
         })
       : [];

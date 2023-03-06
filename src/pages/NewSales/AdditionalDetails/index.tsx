@@ -333,6 +333,14 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
               <CustomSpacer space={sh24} />
             </Fragment>
           ) : null}
+          {transactionType === "Sales-AO" ? (
+            <AccountDetails
+              accountType={accountType!}
+              investmentDetails={investmentDetails!}
+              personalInfo={personalInfo}
+              setPersonalInfo={handlePersonalInfo}
+            />
+          ) : null}
           <BankDetails
             accountType={accountType!}
             bankSummary={bankSummary!}
@@ -363,14 +371,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
                 setInputEpfType={handleInputEpfType}
               />
             </Fragment>
-          ) : null}
-          {transactionType === "Sales-AO" ? (
-            <AccountDetails
-              accountType={accountType!}
-              investmentDetails={investmentDetails!}
-              personalInfo={personalInfo}
-              setPersonalInfo={handlePersonalInfo}
-            />
           ) : null}
         </View>
       </ContentPage>

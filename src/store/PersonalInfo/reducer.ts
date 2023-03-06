@@ -115,7 +115,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             },
           },
           epfDetails: {
-            epfAccountType: "",
+            epfAccountType: "Conventional",
             epfMemberNumber: "",
           },
           employmentDetails: {
@@ -252,7 +252,7 @@ export function personalInfoReducer(state = personalInfoInitialState, action: Pe
             },
           },
           epfDetails: {
-            epfAccountType: "",
+            epfAccountType: "Conventional",
             epfMemberNumber: "",
           },
           employmentDetails: {

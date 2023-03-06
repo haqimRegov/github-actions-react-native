@@ -105,7 +105,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       },
     },
     epfDetails: {
-      epfAccountType: "",
+      epfAccountType: "Conventional",
       epfMemberNumber: "",
     },
     employmentDetails: {
@@ -242,7 +242,7 @@ export const personalInfoInitialState: PersonalInfoState = {
       },
     },
     epfDetails: {
-      epfAccountType: "",
+      epfAccountType: "Conventional",
       epfMemberNumber: "",
     },
     employmentDetails: {

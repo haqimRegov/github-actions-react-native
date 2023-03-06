@@ -16,7 +16,6 @@ import {
 import { Language } from "../../constants/language";
 import { DICTIONARY_RECURRING_CURRENCY, ERROR } from "../../data/dictionary";
 import {
-  autoWidth,
   borderBottomBlue5,
   borderBottomGray2,
   centerVertical,
@@ -37,7 +36,6 @@ import {
   sh24,
   sh4,
   sh64,
-  sw116,
   sw12,
   sw120,
   sw148,
@@ -406,13 +404,10 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
       <View style={px(sw32)}>
         {accountDetails !== undefined && accountDetails.accountNo !== "" && accountDetails.fundType !== "amp" ? (
           <Fragment>
-            <TextSpaceArea style={{ width: sw360 }} spaceToBottom={sh4} text={INVESTMENT.LABEL_CURRENT_ACCOUNT} />
             <RadioButtonGroup
               direction="row"
-              labelStyle={autoWidth}
+              label={INVESTMENT.LABEL_CURRENT_ACCOUNT}
               options={fundSelectedOptions}
-              optionStyle={{ width: sw116 }}
-              space={sw64}
               selected={fundStatusString}
               setSelected={handleFundStatus}
             />
@@ -429,10 +424,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
                 direction="row"
                 disabledIndex={disableEpf}
                 disabledTooltip={true}
-                labelStyle={autoWidth}
                 options={fundingOption}
-                optionStyle={{ width: sw116 }}
-                space={sw64}
                 selected={fundPaymentMethod}
                 setSelected={handleFundingMethod}
                 tooltipContent={

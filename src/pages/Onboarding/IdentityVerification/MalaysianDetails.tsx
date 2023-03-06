@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 
-import { NewDropdown, RadioButtonGroup, TextSpaceArea } from "../../../components";
+import { NewDropdown, RadioButtonGroup } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_MALAYSIA_RACE } from "../../../data/dictionary";
-import { sh16, sh8, sw44 } from "../../../styles";
+import { sh16 } from "../../../styles";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -30,13 +30,13 @@ export const MalaysianDetails: FunctionComponent<MalaysianDetailsProps> = ({
         value={inputRace}
         spaceToTop={sh16}
       />
-      <TextSpaceArea spaceToBottom={sh8} spaceToTop={sh16} text={PERSONAL_DETAILS.LABEL_BUMIPUTERA} />
       <RadioButtonGroup
         direction="row"
+        label={PERSONAL_DETAILS.LABEL_BUMIPUTERA}
         options={[PERSONAL_DETAILS.OPTION_BUMIPUTERA_YES, PERSONAL_DETAILS.OPTION_BUMIPUTERA_NO]}
         selected={inputBumiputera}
         setSelected={setInputBumiputera}
-        space={sw44}
+        spaceToTop={sh16}
       />
     </View>
   );

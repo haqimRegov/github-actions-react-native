@@ -69,7 +69,7 @@ export const EPFDetails: FunctionComponent<EPFDetailsProps> = ({
               spaceToTop={sh16}
               tooltipContent={
                 <View>
-                  <Text style={fs12RegWhite1}>{"Incompatible with selected fund(s)."}</Text>
+                  <Text style={fs12RegWhite1}>{PERSONAL_DETAILS.TOOLTIP_EPF}</Text>
                 </View>
               }
               tooltipContentStyle={{ width: sw148 }}

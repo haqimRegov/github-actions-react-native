@@ -250,6 +250,7 @@ export const english = {
       SUBTITLE_ADDITIONAL_DETAILS: "These additional details are required to set up an account.",
       SUBTITLE_ADDITIONAL_DETAILS_SALES: "These additional details are required to continue.",
       SUBTITLE_REACH: "How can we reach you?",
+      TOOLTIP_EPF: "Incompatible with selected fund(s).",
       BANK_REMOVE_PROMPT_TITLE: "Delete Foreign Bank",
       BANK_REMOVE_PROMPT_SUBTITLE: "This will delete any currencies and banking details filled in.",
     },

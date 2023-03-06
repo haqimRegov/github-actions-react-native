@@ -1,4 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 import { ContentPage, CustomSpacer } from "../../../components";
@@ -6,8 +7,8 @@ import { Language } from "../../../constants";
 import { ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sh4, sw24 } from "../../../styles";
+import { EPFDetails } from "../../../templates";
 import { isNumber } from "../../../utils";
-import { EPFDetails } from "./EPFDetails";
 import { JointVerification } from "./Joint";
 import { PrincipalVerification } from "./Principal";
 
@@ -237,7 +238,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
         </Fragment>
       )}
       {epfInvestment === true ? (
-        <Fragment>
+        <View style={px(sw24)}>
           <CustomSpacer space={sh24} />
           <EPFDetails
             epfNumberError={validations.principal.epfNumber}
@@ -248,7 +249,7 @@ const IDVerificationComponent: FunctionComponent<IDVerificationProps> = ({
             setInputEpfNumber={handleInputEpfNumber}
             setInputEpfType={handleInputEpfType}
           />
-        </Fragment>
+        </View>
       ) : null}
     </ContentPage>
   );

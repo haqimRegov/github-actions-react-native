@@ -6,6 +6,7 @@ export * from "./CustomItems";
 export * from "./Dashboard";
 export * from "./Declarations";
 export * from "./EDD";
+export * from "./EPFDetails";
 export * from "./InvestorProfile";
 export * from "./Investment";
 export * from "./Onboarding";

@@ -197,7 +197,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       epfInvestments.length === 0
         ? {
             epfDetails: {
-              epfAccountType: "",
+              epfAccountType: "Conventional",
               epfMemberNumber: "",
             },
           }

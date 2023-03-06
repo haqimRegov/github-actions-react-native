@@ -105,6 +105,17 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
     const epfObject =
       epfInvestments.length > 0 ? { epfInvestment: true, epfShariah: epfShariah } : { epfInvestment: false, epfShariah: epfShariah };
 
+    // dynamically reset EPF details when the Funding Option was changed
+    const resetEpfDetails =
+      epfInvestments.length === 0
+        ? {
+            epfDetails: {
+              epfAccountType: "Conventional",
+              epfMemberNumber: "",
+            },
+          }
+        : {};
+
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
 
@@ -160,7 +171,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       ...epfObject,
       principal: {
         ...personalInfo.principal,
-        employmentDetails: { ...personalInfo.principal?.employmentDetails },
+        // employmentDetails: { ...personalInfo.principal?.employmentDetails },
+        ...resetEpfDetails,
         bankSummary: {
           ...personalInfo.principal?.bankSummary,
           localBank: updatedLocalBankDetails,

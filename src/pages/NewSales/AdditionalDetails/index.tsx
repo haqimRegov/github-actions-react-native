@@ -299,7 +299,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
       <ContentPage
         cancelDisabled={editMode === true}
         continueDisabled={continueDisabled}
-        handleCancel={handleCancel}
+        handleCancel={editMode === true ? undefined : handleCancel}
         handleContinue={handleContinue}
         handleSkip={handleSkip}
         skippable={isEpf === true}

@@ -20,7 +20,6 @@ import {
   sw24,
   sw336,
   sw4,
-  sw64,
 } from "../../styles";
 
 const { ACCOUNT_INFORMATION } = Language.PAGE;
@@ -85,7 +84,7 @@ InvestorOverviewCardProps) => {
             spaceBetween={sw4}
           />
         </View>
-        <CustomSpacer isHorizontal={true} space={sw64} />
+        <CustomSpacer isHorizontal={true} space={sw24} />
         <LabeledTitle
           {...labeledTitleProps}
           label={`${ACCOUNT_INFORMATION.LABEL_INVESTOR} ${info.idType || "-"}`}

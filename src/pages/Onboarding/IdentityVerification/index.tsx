@@ -259,7 +259,7 @@ const IdentityConfirmationComponent: FunctionComponent<IdentityConfirmationProps
         <ContentPage
           cancelDisabled={editMode === true}
           continueDisabled={buttonDisabled}
-          handleCancel={handleBack}
+          handleCancel={editMode === true ? undefined : handleBack}
           handleContinue={handleContinue}
           subheading={IDENTITY_CONFIRMATION.HEADING}
           subtitle={IDENTITY_CONFIRMATION.SUBHEADING}>

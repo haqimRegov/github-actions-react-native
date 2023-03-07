@@ -120,7 +120,7 @@ export const Verification: FunctionComponent<VerificationProps> = ({
     <ContentPage
       continueTextStyle={fsTransformNone}
       cancelDisabled={editMode === true}
-      handleCancel={handleCancel}
+      handleCancel={editMode === true ? undefined : handleCancel}
       handleContinue={handleContinue}
       handleSkip={handleNavigate}
       skippable={checkSkippable}

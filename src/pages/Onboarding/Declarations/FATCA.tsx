@@ -162,7 +162,7 @@ const FatcaDeclarationComponent: FunctionComponent<FatcaDeclarationProps> = ({
     <ContentPage
       cancelDisabled={editMode === true}
       continueDisabled={!continueEnabled}
-      handleCancel={handleBack}
+      handleCancel={editMode === true ? undefined : handleBack}
       handleContinue={buttonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.FATCA_HEADING}

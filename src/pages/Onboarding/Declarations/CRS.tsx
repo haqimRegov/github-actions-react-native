@@ -112,7 +112,7 @@ export const CrsDeclarationComponent: FunctionComponent<CrsDeclarationProps> = (
     <ContentPage
       cancelDisabled={editMode === true}
       continueDisabled={!continueEnabled}
-      handleCancel={handleBack}
+      handleCancel={editMode === true ? undefined : handleBack}
       handleContinue={buttonContinue}
       labelContinue={DECLARATIONS.BUTTON_ACCEPT}
       subheading={DECLARATIONS.CRS_HEADING}

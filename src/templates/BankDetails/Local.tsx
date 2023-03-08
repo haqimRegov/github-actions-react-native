@@ -29,7 +29,7 @@ import {
   sw16,
   sw360,
 } from "../../styles";
-import { isNonNumber, isNumber } from "../../utils";
+import { checkLocalBankPartial, getInitialBankState, isNonNumber, isNumber } from "../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -163,6 +163,13 @@ ILocalBankDetailsProps) => {
             setBankingDetails(updatedDetails);
           };
 
+          const handleReset = () => {
+            const updatedDetails = [...bankingDetails];
+            const checkAccountName = accountType === "Individual" ? updatedDetails[index].bankAccountName : undefined;
+            updatedDetails[index] = { ...getInitialBankState("local", checkAccountName) };
+            setBankingDetails(updatedDetails);
+          };
+
           const currencyExtractor = DICTIONARY_CURRENCY.filter(
             (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
           );
@@ -171,13 +178,25 @@ ILocalBankDetailsProps) => {
           const checkSwiftCodeDisabled =
             existingDetails !== undefined && existingDetails.length > 0 ? existingDetails[index].bankSwiftCode !== "" : false;
           const checkSubtitle = isAllEpf === true ? PERSONAL_DETAILS.LABEL_BANK_SUBTITLE_EPF : PERSONAL_DETAILS.LABEL_BANK_SUBTITLE;
+          const checkDisabled = !checkLocalBankPartial(bankingDetails);
 
           return (
             <Fragment key={index}>
               <ColorCard
                 header="custom"
                 customHeader={
-                  <LabeledTitle label={checkHeader} labelStyle={fs16BoldBlack2} title={checkSubtitle} titleStyle={fs12RegGray5} />
+                  <View style={flexRow}>
+                    <LabeledTitle label={checkHeader} labelStyle={fs16BoldBlack2} title={checkSubtitle} titleStyle={fs12RegGray5} />
+                    <CustomFlexSpacer />
+                    <IconButton
+                      disabled={checkDisabled}
+                      name="refresh"
+                      color={colorBlack._1}
+                      onPress={handleReset}
+                      size={sh24}
+                      style={py(sh8)}
+                    />
+                  </View>
                 }
                 content={
                   <View>

@@ -7,7 +7,7 @@ import { Language } from "../../../constants";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh24, sw24 } from "../../../styles";
 import { BankDetails } from "../../../templates";
-import { getInitialBankState, isNotEmpty } from "../../../utils";
+import { checkBankValidation, checkLocalBankPartial, getInitialBankState, isNotEmpty } from "../../../utils";
 import { AccountDetails } from "./AccountDetails";
 import { JointRelationship } from "./JointRelationship";
 
@@ -41,40 +41,11 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       ? principal!.personalDetails?.otherRelationship !== ""
       : principal!.personalDetails?.relationship !== "";
   const checkRelationship = accountType === "Individual" ? true : checkOtherRelationship;
-  const checkLocalBank = principal!.bankSummary!.localBank!.map(
-    (bank) =>
-      bank.bankName !== "" &&
-      bank.bankAccountNumber !== "" &&
-      bank.bankAccountName !== "" &&
-      bank.currency?.includes("") === false &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
-  const checkLocalBankEmpty = principal!.bankSummary!.localBank!.map(
-    (bank) =>
-      bank.bankName === "" &&
-      bank.bankAccountNumber === "" &&
-      // bank.bankAccountName === "" &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
+
   const checkLocalBankEpf =
     isAllEpf === true
-      ? checkLocalBank.includes(false) === true && checkLocalBankEmpty.includes(false) === true
-      : checkLocalBank.includes(false) === true;
-  const checkForeignBank =
-    principal!.bankSummary!.foreignBank!.length > 0
-      ? principal!.bankSummary!.foreignBank!.map(
-          (bank: IBankDetailsState) =>
-            bank.bankName !== "" &&
-            bank.bankAccountNumber !== "" &&
-            bank.bankAccountName !== "" &&
-            bank.currency?.includes("") === false &&
-            bank.bankLocation !== "" &&
-            bank.bankAccountNameError === undefined &&
-            bank.bankAccountNumberError === undefined,
-        )
-      : [true];
+      ? checkBankValidation(localBank!, "local") === true && checkLocalBankPartial(localBank!)
+      : checkBankValidation(localBank!, "local") === true;
 
   const handleSubmit = () => {
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
@@ -115,7 +86,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const handleEnable = (toggle: boolean | undefined) => {
     handlePrincipalPersonalDetails({ ...personalDetails, enableBankDetails: toggle });
     const bankSummaryState: IBankSummaryState = {
-      localBank: [{ ...getInitialBankState(details?.principalHolder!.name) }],
+      localBank: [{ ...getInitialBankState("local", details?.principalHolder!.name) }],
       foreignBank: [],
     };
     handlePrincipalBankDetails(bankSummaryState);
@@ -184,9 +155,9 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const checkCurrencyRemaining = nonMyrCurrencies.filter((eachCurrency: string) => !selectedNonMyrCurrencies.includes(eachCurrency));
   const buttonDisabled =
     accountType === "Individual"
-      ? checkLocalBankEpf || checkForeignBank.includes(false) === true || checkCurrencyRemaining.length > 0
-      : checkLocalBank.includes(false) === true ||
-        checkForeignBank.includes(false) === true ||
+      ? checkLocalBankEpf || checkBankValidation(foreignBank!, "foreign") === true || checkCurrencyRemaining.length > 0
+      : checkBankValidation(localBank!, "local") === true ||
+        checkBankValidation(foreignBank!, "foreign") === true ||
         checkRelationship === false ||
         checkCurrencyRemaining.length > 0;
   const names =

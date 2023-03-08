@@ -30,7 +30,7 @@ import {
   sw24,
 } from "../../../styles";
 import { DeclarationDetails } from "../../../templates";
-import { deleteKey, isNotEmpty, parseAmountToString } from "../../../utils";
+import { checkBankValidation, deleteKey, isArrayNotEmpty, isNotEmpty, parseAmountToString } from "../../../utils";
 
 const { DECLARATION_SUMMARY } = Language.PAGE;
 
@@ -302,7 +302,8 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
       clientId: details!.principalHolder!.clientId!,
       addressInformation: principalAddress as ISubmitAddressInformation,
       bankSummary:
-        personalInfo.isAllEpf === false
+        checkBankValidation(localBank, "local") === false &&
+        ((isArrayNotEmpty(foreignBank) && checkBankValidation(foreignBank, "foreign") === false) || foreignBank.length === 0)
           ? {
               localBank: localBank as ISubmitBank[],
               foreignBank: foreignBank as ISubmitBank[],

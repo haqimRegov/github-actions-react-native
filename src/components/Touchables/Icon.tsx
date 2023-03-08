@@ -3,7 +3,7 @@ import React, { FunctionComponent, useCallback, useState } from "react";
 import { ColorValue, Pressable, ViewStyle } from "react-native";
 
 import { IcoMoon } from "../../icons";
-import { centerHV, colorTransparent, colorWhite, disabledOpacity6, sh20 } from "../../styles";
+import { centerHV, colorTransparent, colorWhite, disabledOpacity5, sh20 } from "../../styles";
 
 export interface IconButtonProps {
   color?: string;
@@ -51,7 +51,7 @@ export const IconButton: FunctionComponent<IconButtonProps> = ({
   const defaultBgColor = style !== undefined && style.backgroundColor !== undefined ? style.backgroundColor : colorTransparent;
   const defaultColor = color !== undefined ? color : colorWhite._1;
   const bgColor = withHover !== undefined && hover === true ? withHover.color : defaultBgColor;
-  const disabledOpacity = disabled === true ? disabledOpacity6 : {};
+  const disabledOpacity = disabled === true ? disabledOpacity5 : {};
 
   return (
     <Pressable

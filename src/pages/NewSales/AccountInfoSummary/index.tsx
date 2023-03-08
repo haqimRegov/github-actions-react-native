@@ -12,7 +12,7 @@ import { submitClientAccount } from "../../../network-actions";
 import { addBankSummary } from "../../../network-actions/new-sales/AddBankSummary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { flexChild, sh24 } from "../../../styles";
-import { parseAmountToString } from "../../../utils";
+import { checkBankValidation, isArrayNotEmpty, parseAmountToString } from "../../../utils";
 import { NewSalesAccountInformation } from "../AccountInformation";
 import { NewSalesOrderSummary } from "../OrderSummary";
 import { InvestorProfilePage } from "./Profile";
@@ -103,15 +103,6 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     delete newBank.otherBankName;
     return newBank;
   });
-  const checkLocalBankEmpty = principal!.bankSummary!.localBank!.map(
-    (bank) =>
-      bank.bankName === "" &&
-      bank.bankAccountNumber === "" &&
-      bank.bankAccountName === "" &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
-
   const foreignBank: IBankDetailsState[] = principal!.bankSummary!.foreignBank!.map((bank) => {
     const bankAccountName =
       bank.combinedBankAccountName !== "" && bank.combinedBankAccountName !== undefined
@@ -155,7 +146,8 @@ const AccountInfoSummaryComponent: FunctionComponent<AccountInfoSummaryProps> = 
     principal: {
       clientId: details!.principalHolder!.clientId!,
       bankSummary:
-        principal!.bankSummary!.localBank!.length > 0 && checkLocalBankEmpty.includes(false) === true
+        checkBankValidation(localBank, "local") === false &&
+        ((isArrayNotEmpty(foreignBank) && checkBankValidation(foreignBank, "foreign") === false) || foreignBank.length === 0)
           ? { localBank: localBank as ISubmitBank[], foreignBank: foreignBank as ISubmitBank[] }
           : { localBank: [], foreignBank: [] },
       epfDetails: isInvestmentEpf ? principal!.epfDetails : undefined,

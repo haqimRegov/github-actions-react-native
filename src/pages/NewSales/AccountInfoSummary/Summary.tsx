@@ -532,7 +532,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                   <CustomSpacer space={sh8} />
                 </Fragment>
               ) : null}
-              {isArrayNotEmpty(localBankDetails) ? null : (
+              {isArrayNotEmpty(localBankDetails) ? (
                 <Fragment>
                   {localBankDetails.map((bank, numberIndex) => {
                     const label = `${NEW_SALES_SUMMARY.LABEL_LOCAL_BANK}`;
@@ -557,7 +557,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
                     );
                   })}
                 </Fragment>
-              )}
+              ) : null}
               {isArrayNotEmpty(foreignBankDetails)
                 ? foreignBankDetails.map((bank, numberIndex) => {
                     const label = `${NEW_SALES_SUMMARY.LABEL_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;

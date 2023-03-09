@@ -567,11 +567,6 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           titleStyle: fsTransformNone,
                         },
                         { label: DASHBOARD_ORDER_DETAILS.LABEL_FREQUENCY, title: `${payment.frequency}`, titleStyle: fsTransformNone },
-                        {
-                          label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                          title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
-                          titleStyle: fsTransformNone,
-                        },
                       );
                     }
 
@@ -613,11 +608,6 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           titleStyle: fsTransformNone,
                           onPress: handleFile,
                           titleIcon: "file",
-                        },
-                        {
-                          label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                          title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
-                          titleStyle: fsTransformNone,
                         },
                       );
                     }
@@ -662,11 +652,6 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           onPress: handleFile,
                           titleIcon: "file",
                         },
-                        {
-                          label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                          title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
-                          titleStyle: fsTransformNone,
-                        },
                       );
                     }
 
@@ -691,12 +676,15 @@ export const OrderDetailsNew: FunctionComponent<OrderDetailsProps> = ({
                           onPress: handleFile,
                           titleIcon: "file",
                         },
-                        {
-                          label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
-                          title: payment.remark !== null && payment.remark !== undefined ? payment.remark : "-",
-                          titleStyle: fsTransformNone,
-                        },
                       );
+                    }
+
+                    if (isNotEmpty(payment?.remark)) {
+                      paymentDetails.push({
+                        label: DASHBOARD_ORDER_DETAILS.LABEL_REMARKS,
+                        title: payment.remark,
+                        titleStyle: fsTransformNone,
+                      });
                     }
 
                     return (

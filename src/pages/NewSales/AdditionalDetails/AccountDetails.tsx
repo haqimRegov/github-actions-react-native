@@ -3,6 +3,7 @@ import React, { Fragment, FunctionComponent } from "react";
 import { AdvanceToggleButton, ColorCard, CustomSpacer } from "../../../components";
 import { Language } from "../../../constants";
 import { fs16RegBlack2, sh24, sw12, sw16, sw200, sw24, sw36 } from "../../../styles";
+import { IncomeDistribution } from "../../../templates";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -21,19 +22,13 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
 }: AccountDetailsProps) => {
   const inputDistribution = personalInfo.incomeDistribution!;
   const inputSignatory = personalInfo.signatory!;
-  const distributionOptions = [
-    {
-      label: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,
-      value: PERSONAL_DETAILS.OPTION_DISTRIBUTION_PAYOUT,
-    },
-    { label: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST, value: PERSONAL_DETAILS.OPTION_DISTRIBUTION_REINVEST },
-  ];
+
   const operatingControl = [{ label: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW, value: PERSONAL_DETAILS.OPTION_CONTROL_PRINCIPAL_NEW }];
 
-  const setInputDistribution = (index: number) => {
-    const checkIndex = index !== -1 ? distributionOptions[index].value : "";
-    setPersonalInfo({ incomeDistribution: checkIndex });
+  const setInputDistribution = (value: string) => {
+    setPersonalInfo({ incomeDistribution: value });
   };
+
   const setInputSignatory = (signatoryIndex: number) => {
     const checkSignatoryIndex = signatoryIndex !== -1 ? operatingControl[signatoryIndex].value : "";
     setPersonalInfo({ signatory: checkSignatoryIndex });
@@ -53,31 +48,14 @@ export const AccountDetails: FunctionComponent<AccountDetailsProps> = ({
     );
   });
 
-  const distributionDisabled: number[] = [];
-  if (fundsWithPayout.length === 0) {
-    distributionDisabled.push(0);
-  }
-
   return (
     <Fragment>
-      <CustomSpacer space={sh24} />
-      <ColorCard
-        header={{ label: PERSONAL_DETAILS.LABEL_DISTRIBUTION, title: PERSONAL_DETAILS.HINT_DISTRIBUTION }}
-        content={
-          <AdvanceToggleButton
-            buttonStyle={{ borderRadius: sw12, height: sw24, width: sw24 }}
-            direction="row"
-            disabledIndex={distributionDisabled}
-            iconSize={sw16}
-            labels={distributionOptions}
-            labelStyle={fs16RegBlack2}
-            space={sw36}
-            textContainer={{ width: sw200 }}
-            value={distributionOptions.findIndex((eachIndex) => eachIndex.value === inputDistribution)}
-            onSelect={setInputDistribution}
-          />
-        }
+      <IncomeDistribution
+        inputDistribution={inputDistribution}
+        setInputDistribution={setInputDistribution}
+        withPayout={fundsWithPayout.length > 0}
       />
+      <CustomSpacer space={sh24} />
       {accountType === "Individual" ? null : (
         <Fragment>
           <CustomSpacer space={sh24} />

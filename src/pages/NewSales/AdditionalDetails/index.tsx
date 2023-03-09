@@ -7,10 +7,9 @@ import { Language } from "../../../constants";
 import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
-import { BankDetails } from "../../../templates";
+import { BankDetails, EPFDetails } from "../../../templates";
 import { getInitialBankState, isNotEmpty, isNumber } from "../../../utils";
 import { AccountDetails } from "./AccountDetails";
-import { EPFDetails } from "./EPFDetails";
 
 const { ADDITIONAL_DETAILS, PERSONAL_DETAILS } = Language.PAGE;
 
@@ -334,24 +333,13 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
               <CustomSpacer space={sh24} />
             </Fragment>
           ) : null}
-          {epfInvestment === true && transactionType === "Sales-AO" ? (
-            <Fragment>
-              <ColorCard
-                header={{ label: PERSONAL_DETAILS.LABEL_EPF_DETAILS }}
-                content={
-                  <EPFDetails
-                    epfNumberError={epfNumberValidation}
-                    epfShariah={epfShariah!}
-                    inputEpfNumber={inputEpfNumber}
-                    inputEpfType={inputEpfType}
-                    onBlurEpfNumber={handleEpfNumber}
-                    setInputEpfNumber={handleInputEpfNumber}
-                    setInputEpfType={handleInputEpfType}
-                  />
-                }
-              />
-              <CustomSpacer space={sh24} />
-            </Fragment>
+          {transactionType === "Sales-AO" ? (
+            <AccountDetails
+              accountType={accountType!}
+              investmentDetails={investmentDetails!}
+              personalInfo={personalInfo}
+              setPersonalInfo={handlePersonalInfo}
+            />
           ) : null}
           <BankDetails
             accountType={accountType!}
@@ -370,13 +358,19 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
             setForeignBankDetails={handleForeignBank}
             setLocalBankDetails={handleLocalBank}
           />
-          {transactionType === "Sales-AO" ? (
-            <AccountDetails
-              accountType={accountType!}
-              investmentDetails={investmentDetails!}
-              personalInfo={personalInfo}
-              setPersonalInfo={handlePersonalInfo}
-            />
+          {epfInvestment === true && transactionType === "Sales-AO" ? (
+            <Fragment>
+              <CustomSpacer space={sh24} />
+              <EPFDetails
+                epfNumberError={epfNumberValidation}
+                epfShariah={epfShariah!}
+                inputEpfNumber={inputEpfNumber}
+                inputEpfType={inputEpfType}
+                onBlurEpfNumber={handleEpfNumber}
+                setInputEpfNumber={handleInputEpfNumber}
+                setInputEpfType={handleInputEpfType}
+              />
+            </Fragment>
           ) : null}
         </View>
       </ContentPage>

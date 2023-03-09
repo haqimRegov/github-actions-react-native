@@ -1,20 +1,10 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { View } from "react-native";
 
-import {
-  CustomCard,
-  CustomSpacer,
-  CustomTextInput,
-  Dash,
-  LabeledTitle,
-  NewDropdown,
-  RadioButtonGroup,
-  Switch,
-  TextSpaceArea,
-} from "../../../components";
+import { CustomCard, CustomSpacer, CustomTextInput, Dash, LabeledTitle, NewDropdown, RadioButtonGroup, Switch } from "../../../components";
 import { Language } from "../../../constants";
 import { DICTIONARY_DDA_BANK, DICTIONARY_FPX_BANK, DICTIONARY_RECURRING_FREQUENCY } from "../../../data/dictionary";
-import { DEVICE, fs12BoldGray5, fs16RegBlack2, px, sh16, sh2, sh24, sh4, sh8, sw119, sw24, sw360, sw64 } from "../../../styles";
+import { DEVICE, fs12BoldGray5, fs16RegBlack2, px, sh2, sh24, sh4, sw24, sw360, sw64 } from "../../../styles";
 import { deleteKey, isObjectEqual } from "../../../utils";
 import { scaledSpaceBetween } from "../helpers";
 
@@ -117,14 +107,12 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
   const frequencyList = DICTIONARY_RECURRING_FREQUENCY.map((eachFrequency: TypeLabelValue) => eachFrequency.value);
   const optionItems = [
     <View style={{ width: sw360 }}>
-      <TextSpaceArea spaceToBottom={sh8} text={PAYMENT.LABEL_RECURRING_TYPE} />
       <RadioButtonGroup
         direction="row"
-        optionStyle={{ width: sw119 }}
+        label={PAYMENT.LABEL_RECURRING_TYPE}
         options={recurringOptions}
         selected={recurringType}
         setSelected={handleRecurringType}
-        space={sw64}
       />
     </View>,
   ];
@@ -170,7 +158,6 @@ export const NewRecurring: FunctionComponent<NewRecurringProps> = ({
       options={frequencyList}
       selected={frequency}
       setSelected={handleFrequency}
-      space={sh16}
     />,
   ];
 

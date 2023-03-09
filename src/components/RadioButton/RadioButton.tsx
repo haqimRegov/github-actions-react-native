@@ -3,6 +3,7 @@ import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "reac
 
 import { NunitoBold, NunitoRegular } from "../../constants";
 import {
+  centerHV,
   centerVertical,
   circle,
   circleBorder,
@@ -19,27 +20,33 @@ import {
   sw12,
   sw16,
   sw18,
+  sw24,
   sw240,
   sw4,
-  sw48,
+  sw64,
+  sw8,
 } from "../../styles";
 import { CustomTooltip } from "../Tooltip";
 import { CustomFlexSpacer, CustomSpacer } from "../Views/Spacer";
 
-interface RadioButtonProps {
-  disabled?: boolean;
+export interface RadioButtonTooltipProps {
   disabledTooltip?: boolean;
+  onCloseTooltip?: () => void;
+  setShowTooltip?: () => void;
+  showTooltip?: boolean;
+  tooltipContent?: ReactElement;
+  tooltipContentStyle?: ViewStyle;
+}
+
+interface RadioButtonProps extends RadioButtonTooltipProps {
+  disabled?: boolean;
   label: string;
   labelStyle?: TextStyle;
-  onCloseTooltip?: () => void;
   radioStyle?: ViewStyle;
   right?: ReactNode;
   selected: boolean;
   selectedColor?: string;
   setSelected: () => void;
-  setShowTooltip?: () => void;
-  showTooltip?: boolean;
-  tooltipContent?: ReactElement;
 }
 
 export const RadioButton: FunctionComponent<RadioButtonProps> = ({
@@ -55,6 +62,7 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   setSelected,
   showTooltip,
   tooltipContent,
+  tooltipContentStyle,
 }: RadioButtonProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const tooltipVisible = showTooltip !== undefined ? showTooltip : visible;
@@ -82,13 +90,13 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
   const content = (
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={{ ...centerVertical, ...flexRow, ...disabledStyle }}>
-        <View style={{ ...radioStyle }}>
+        <View style={{ ...centerHV, width: sw24, ...radioStyle }}>
           <View style={circleBorder(sw18, borderWidth, borderColor, colorWhite._1)}>
             <View style={{ ...circle(circleSize), ...disabledColor }} />
           </View>
         </View>
-        <CustomSpacer space={sw12} isHorizontal={true} />
-        <Text style={{ ...fs16BoldBlack2, fontFamily: fontFamily, minWidth: sw48, ...labelStyle, ...checkTooltip }}>{label}</Text>
+        <CustomSpacer space={sw8} isHorizontal={true} />
+        <Text style={{ ...fs16BoldBlack2, fontFamily: fontFamily, minWidth: sw64, ...labelStyle, ...checkTooltip }}>{label}</Text>
         {disabled === true && disabledTooltip === true ? <CustomFlexSpacer /> : null}
         {right}
       </View>
@@ -97,14 +105,15 @@ export const RadioButton: FunctionComponent<RadioButtonProps> = ({
 
   return (
     <Fragment>
-      {disabled === true && disabledTooltip === true ? (
+      {disabled === true && disabledTooltip === true && tooltipContent !== undefined ? (
         <CustomTooltip
           arrowSize={{ height: sh7, width: sw12 }}
           content={tooltipContent}
-          contentStyle={{ width: sw240 }}
+          contentStyle={{ width: sw240, ...tooltipContentStyle }}
           isVisible={tooltipVisible}
           onClose={handlePress}
-          onPress={handlePress}>
+          onPress={handlePress}
+          spacing={sw4}>
           {content}
         </CustomTooltip>
       ) : (

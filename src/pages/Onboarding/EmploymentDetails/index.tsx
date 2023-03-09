@@ -154,7 +154,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
       skippable={checkSkippable}
       subheading={EMPLOYMENT_DETAILS.HEADING}
       subtitle={EMPLOYMENT_DETAILS.SUBHEADING}
-      handleCancel={handleBack}
+      handleCancel={editMode === true ? undefined : handleBack}
       handleContinue={handleSubmit}>
       {isPrincipalEtb === false ? (
         <PrincipalEmploymentDetails

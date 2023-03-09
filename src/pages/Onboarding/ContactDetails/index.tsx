@@ -134,7 +134,7 @@ const ContactDetailsComponent: FunctionComponent<ContactDetailsProps> = ({
       buttonContainerStyle={px(sw24)}
       cancelDisabled={editMode === true}
       continueDisabled={buttonDisabled}
-      handleCancel={handleBack}
+      handleCancel={editMode === true ? undefined : handleBack}
       handleContinue={handleSubmit}
       handleSkip={handleSkip}
       skippable={checkSkippable}

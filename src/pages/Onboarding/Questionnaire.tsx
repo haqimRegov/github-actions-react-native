@@ -92,7 +92,7 @@ const QuestionnaireContentComponent: FunctionComponent<QuestionnaireContentProps
         expectedRange: currentRiskScore.rangeOfReturn,
         type: currentRiskScore.type,
       },
-      toast: isEtb === true || isRiskUpdated === true ? RISK_ASSESSMENT.TOAST_CHANGES : undefined,
+      toast: isEtb === true && isRiskUpdated === true ? RISK_ASSESSMENT.TOAST_CHANGES : undefined,
     });
 
     addPersonalInfo({

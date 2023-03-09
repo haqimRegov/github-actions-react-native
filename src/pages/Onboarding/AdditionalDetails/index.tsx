@@ -200,7 +200,7 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
       <ContentPage
         cancelDisabled={editMode === true}
         continueDisabled={buttonDisabled}
-        handleCancel={handleBack}
+        handleCancel={editMode === true ? undefined : handleBack}
         handleContinue={handleSubmit}
         subheading={ADDITIONAL_DETAILS.HEADING_ADDITIONAL_DETAILS}
         subtitle={ADDITIONAL_DETAILS.SUBHEADING_ADDITIONAL_DETAILS}

@@ -147,7 +147,6 @@ export const TermsAccordionNew: FunctionComponent<TermsAccordionNewProps> = ({
                                       <View>
                                         {term.label === undefined ? null : (
                                           <Fragment>
-                                            <CustomSpacer space={sh8} />
                                             <Text style={fs12BoldGray6}>{term.label}</Text>
                                           </Fragment>
                                         )}
@@ -175,7 +174,8 @@ export const TermsAccordionNew: FunctionComponent<TermsAccordionNewProps> = ({
                                                 ) : null}
                                                 <Text style={{ ...fs12RegGray6, ...flexWrap, ...flexShrink }}>{line.text}</Text>
                                               </View>
-                                              <CustomSpacer space={sh8} />
+
+                                              {term.content.length - 1 === contentIndex ? null : <CustomSpacer space={sh8} />}
                                             </Fragment>
                                           );
                                         })}

@@ -263,9 +263,11 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                 });
 
                 hardcopyDocList.remarks.jointHolder.forEach((eachJointDoc) => {
-                  if (hardcopyDocList.remarks.principalHolder.includes(eachJointDoc) && bothHardcopy.includes(eachJointDoc) === false) {
-                    // hardcopy is for both
-                    bothHardcopy.push(eachJointDoc);
+                  if (hardcopyDocList.remarks.principalHolder.includes(eachJointDoc)) {
+                    if (bothHardcopy.includes(eachJointDoc) === false) {
+                      // hardcopy is for both
+                      bothHardcopy.push(eachJointDoc);
+                    }
                   } else {
                     // hardcopy is for joint
                     jointHardcopy.push(eachJointDoc);
@@ -273,7 +275,9 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
                 });
 
                 const principalDocList = principalHardcopy.map((eachDoc) =>
-                  isArrayNotEmpty(jointHardcopy) ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}` : eachDoc,
+                  isArrayNotEmpty(jointHardcopy) || isArrayNotEmpty(bothHardcopy)
+                    ? `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL} ${eachDoc}`
+                    : eachDoc,
                 );
                 const jointDocList = jointHardcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_JOINT} ${eachDoc}`);
                 const bothDocList = bothHardcopy.map((eachDoc) => `${SUBMISSION_SUMMARY.LABEL_PRINCIPAL_JOINT} ${eachDoc}`);

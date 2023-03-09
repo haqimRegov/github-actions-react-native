@@ -53,13 +53,13 @@ import {
   sw228,
   sw239,
   sw24,
+  sw30,
   sw32,
   sw4,
   sw40,
   sw638,
   sw8,
 } from "../../styles";
-import { scaledSpaceBetween } from "../../templates";
 import { isEmpty, isNotEmpty, titleCaseString } from "../../utils";
 import { InvestorProfilePage } from "../NewSales/AccountInfoSummary/Profile";
 
@@ -213,7 +213,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
     ...fs24BoldGray6,
     maxWidth: sw638,
   };
-  const scaledSpace = DEVICE.SCREEN.WIDTH > 1080 ? scaledSpaceBetween() : sw32;
+  const scaledSpace = DEVICE.SCREEN.WIDTH > 1080 ? sw30 : sw32;
   const accountTitle = `${client.accountType} ${RISK_ASSESSMENT.LABEL_ACCOUNT}`;
   const containerStyle: ViewStyle = {
     ...flexRow,

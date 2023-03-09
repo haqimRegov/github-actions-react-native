@@ -136,7 +136,7 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
             <CustomSpacer space={sh4} />
             <View style={termsHeader}>
               <View style={rowCenterVertical}>
-                <Text style={fs14RegGray5}>{TERMS_AND_CONDITIONS.SUBHEADING}</Text>
+                <Text style={fs14RegGray5}>{TERMS_AND_CONDITIONS.SUBHEADING_NEW}</Text>
                 <CustomTooltip
                   arrowSize={{ width: sw10, height: sh6 }}
                   content={<Text style={fs12BoldWhite1}>{TERMS_AND_CONDITIONS.POPUP_TERMS}</Text>}

@@ -364,6 +364,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       },
     });
 
+    if (deleteCount !== 0 && tempData !== undefined && tempData.length > 1) {
+      setInvestmentDetails(tempData);
+    }
+
     const checkNextStepForSales: TypeNewSalesKey = isNeedAdditionalBankCurrency === true ? "AdditionalDetails" : "OrderPreview";
     const checkNextStep: TypeNewSalesKey = isSalesFromQuickActions === true ? checkNextStepForSales : "IdentityVerification";
 

@@ -198,6 +198,10 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 
     updateOnboarding({ ...onboarding, finishedSteps: updatedFinishedSteps, disabledSteps: updatedDisabledSteps });
 
+    if (deleteCount !== 0 && tempData !== undefined && tempData.length > 1) {
+      setInvestmentDetails(tempData);
+    }
+
     // TODO dynamic change for EP and Bank Currency
     const route: TypeOnboardingKey = finishedSteps.includes("EmailVerification") ? "IdentityVerification" : "EmailVerification";
     handleNextStep(route);

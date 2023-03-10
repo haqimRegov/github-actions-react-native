@@ -8,7 +8,7 @@ import { DICTIONARY_RELATIONSHIP, ERROR } from "../../../data/dictionary";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import { px, sh16, sh24, sw24 } from "../../../styles";
 import { BankDetails, EPFDetails } from "../../../templates";
-import { getInitialBankState, isNotEmpty, isNumber } from "../../../utils";
+import { checkBankValidation, checkLocalBankPartial, getInitialBankState, isNotEmpty, isNumber } from "../../../utils";
 import { AccountDetails } from "./AccountDetails";
 
 const { ADDITIONAL_DETAILS, PERSONAL_DETAILS } = Language.PAGE;
@@ -122,7 +122,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
           enableBankDetails: enable,
         },
         bankSummary: {
-          localBank: [{ ...getInitialBankState(details?.principalHolder!.name) }],
+          localBank: [{ ...getInitialBankState("local", details?.principalHolder!.name) }],
           foreignBank: [],
         },
       },
@@ -208,42 +208,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     });
   };
 
-  // TODO change account name check to !== for both local and foreign
-
-  const checkLocalBank = bankSummary!.localBank!.map(
-    (bank) =>
-      bank.bankName !== "" &&
-      bank.bankAccountNumber !== "" &&
-      bank.bankAccountName !== "" &&
-      bank.currency?.includes("") === false &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
-
-  // TODO Make a util function for the bank validation
-  const checkLocalBankEmpty = principal!.bankSummary!.localBank!.map(
-    (bank) =>
-      bank.bankName === "" &&
-      bank.bankAccountNumber === "" &&
-      // bank.bankAccountName === "" &&
-      (transactionType === "Sales" ? bank.currency?.includes("") === true : true) &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
-  const checkForeignBank =
-    bankSummary!.foreignBank!.length > 0
-      ? bankSummary!.foreignBank!.map(
-          (bank: IBankDetailsState) =>
-            bank.bankName !== "" &&
-            bank.bankAccountNumber !== "" &&
-            bank.bankAccountName !== "" &&
-            bank.currency?.includes("") === false &&
-            bank.bankLocation !== "" &&
-            bank.bankAccountNameError === undefined &&
-            bank.bankAccountNumberError === undefined,
-        )
-      : [true];
-
   const investmentCurrencies = productSales!.map(({ investment }) =>
     investment.fundCurrency !== undefined ? investment.fundCurrency : "",
   );
@@ -276,12 +240,12 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const accountNames = [{ label: details?.principalHolder!.name, value: details?.principalHolder!.name }];
   const checkLocalBankEpf =
     isAllEpf === true
-      ? checkLocalBank.includes(false) === true && checkLocalBankEmpty.includes(false) === true
-      : checkLocalBank.includes(false) === true;
+      ? checkBankValidation(localBank!, "local") === true && checkLocalBankPartial(localBank!)
+      : checkBankValidation(localBank!, "local") === true;
   const checkTransactionType = transactionType === "Sales-AO" ? checkEpf === true || signatory === "" || incomeDistribution === "" : false;
   const continueDisabled =
     checkLocalBankEpf === true ||
-    checkForeignBank.includes(false) === true ||
+    checkBankValidation(foreignBank!, "foreign") === true ||
     checkCurrencyRemaining.length !== 0 ||
     checkTransactionType ||
     checkJoint;

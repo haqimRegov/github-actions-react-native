@@ -60,7 +60,7 @@ import {
   sw8,
 } from "../../../../styles";
 import { Investment, ProductsBanner } from "../../../../templates";
-import { isNotEmpty } from "../../../../utils";
+import { checkBankValidation, checkLocalBankPartial, getInitialBankState, isNotEmpty } from "../../../../utils";
 
 const { ACTION_BUTTONS, INVESTMENT } = Language.PAGE;
 
@@ -159,12 +159,22 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
             },
           }
         : { ...joint };
-    const updatedLocalBankDetails = personalInfo.principal?.bankSummary?.localBank!.map((eachLocalBank: IBankDetailsState) => {
-      return {
-        ...eachLocalBank,
-        bankAccountName: accountType === "Individual" ? details?.principalHolder?.name : "",
-      };
-    });
+    const updatedLocalBankDetails: IBankDetailsState[] =
+      personalInfo.principal!.bankSummary!.localBank!.length > 0
+        ? personalInfo.principal!.bankSummary!.localBank!.map((eachLocalBank: IBankDetailsState) => {
+            return {
+              ...eachLocalBank,
+              bankAccountName: accountType === "Individual" ? details?.principalHolder?.name : "",
+            };
+          })
+        : [];
+    const updateEpfLocalBankDetails: IBankDetailsState[] =
+      allEpf === true &&
+      checkLocalBankPartial(personalInfo.principal?.bankSummary?.localBank!) &&
+      checkBankValidation(personalInfo.principal?.bankSummary?.localBank!, "local") === true
+        ? ([getInitialBankState("local", details?.principalHolder!.name)] as IBankDetailsState[])
+        : updatedLocalBankDetails;
+    const updateForeignBankDetails = allEpf === true ? [] : personalInfo.principal?.bankSummary?.foreignBank;
 
     addPersonalInfo({
       ...personalInfo,
@@ -175,7 +185,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
         ...resetEpfDetails,
         bankSummary: {
           ...personalInfo.principal?.bankSummary,
-          localBank: updatedLocalBankDetails,
+          localBank: updateEpfLocalBankDetails,
+          foreignBank: updateForeignBankDetails,
         },
       },
       joint: checkJoint,

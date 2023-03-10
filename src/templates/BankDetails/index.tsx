@@ -5,7 +5,7 @@ import { CustomSpacer } from "../../components";
 import { Language } from "../../constants";
 import { DICTIONARY_CURRENCY } from "../../data/dictionary";
 import { sh24 } from "../../styles";
-import { isNotEmpty } from "../../utils";
+import { checkBankValidation, isNotEmpty } from "../../utils";
 import { ForeignBankDetails } from "./Foreign";
 import { LocalBankDetails } from "./Local";
 
@@ -70,32 +70,9 @@ export const BankDetails: FunctionComponent<IBankDetailsProps> = ({
   //   setTempData(bankSummary);
   // };
 
-  const checkLocalBank = localBank!.map(
-    (bank) =>
-      bank.bankName !== "" &&
-      bank.bankAccountNumber !== "" &&
-      bank.bankAccountName !== "" &&
-      bank.currency?.includes("") === false &&
-      bank.bankAccountNameError === undefined &&
-      bank.bankAccountNumberError === undefined,
-  );
-
-  const checkForeignBank =
-    foreignBank!.length > 0
-      ? foreignBank!.map(
-          (bank: IBankDetailsState) =>
-            bank.bankName !== "" &&
-            bank.bankAccountNumber !== "" &&
-            bank.bankAccountName !== "" &&
-            bank.currency?.includes("") === false &&
-            bank.bankLocation !== "" &&
-            bank.bankAccountNameError === undefined &&
-            bank.bankAccountNumberError === undefined,
-        )
-      : [true];
-  const checkDisabled = checkLocalBank.includes(false) || checkForeignBank.includes(false);
-  const checkLocalCurrencyDisabled = checkForeignBank.includes(false);
-  const checkForeignCurrencyDisabled = checkLocalBank.includes(false);
+  const checkDisabled = checkBankValidation(localBank!, "local") || checkBankValidation(foreignBank!, "foreign");
+  const checkLocalCurrencyDisabled = checkBankValidation(foreignBank!, "foreign");
+  const checkForeignCurrencyDisabled = checkBankValidation(localBank!, "local");
 
   const nonMyrCurrencies = investmentCurrencies.filter((currency) => currency !== "MYR");
   const selectedNonMyrCurrencies = isNotEmpty(foreignBank)

@@ -152,6 +152,7 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
   };
 
   const handleBack = () => {
+    addPersonalInfo({ ...personalInfo, editMode: false });
     setPage("verification");
   };
 

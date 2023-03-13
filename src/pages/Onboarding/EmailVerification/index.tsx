@@ -60,7 +60,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     const updatedDisabledSteps: TypeOnboardingKey[] = [...disabledSteps];
     const updatedFinishedSteps: TypeOnboardingKey[] = [...finishedSteps];
 
-    let updatedPersonalInfo = { ...personalInfo, emailOtpSent: false };
+    let updatedPersonalInfo = { ...personalInfo, emailOtpSent: false, editMode: false };
 
     if (skip !== true) {
       updatedPersonalInfo = {
@@ -76,7 +76,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
     }
 
     // remove in disabledSteps if edit mode
-    if (editMode === true) {
+    if (editMode === true && finishedSteps.includes("EmailVerification")) {
       const findPersonalInfoSummary = updatedDisabledSteps.indexOf("PersonalInfoSummary");
 
       if (findPersonalInfoSummary !== -1) {
@@ -119,7 +119,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
           const otpDifference = CalculateTimeDifference(data.result.otpSendTime);
           setResendTimer(otpDifference);
           if (data.result.status === true) {
-            addPersonalInfo({ ...personalInfo, emailOtpSent: true, emailTimestamp: response.data?.result.otpSendTime });
+            addPersonalInfo({ ...personalInfo, emailOtpSent: true, emailTimestamp: response.data?.result.otpSendTime, editMode: true });
             updateOnboardingToast(EMAIL_VERIFICATION.TOAST_SEND);
             setPage("otp");
           }
@@ -189,7 +189,11 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
   };
 
   useEffect(() => {
-    if (emailOtpSent === true) {
+    if (
+      emailOtpSent === true &&
+      resendTimer > 0 &&
+      ((isEtbPrincipal === false && principalEmail !== "") || (isEtbJoint === false && jointEmail !== ""))
+    ) {
       setPage("otp");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

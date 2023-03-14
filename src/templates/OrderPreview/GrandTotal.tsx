@@ -24,7 +24,7 @@ import {
   sw24,
   sw4,
 } from "../../styles";
-import { formatAmount } from "../../utils";
+import { formatAmount, isArrayNotEmpty } from "../../utils";
 
 const { ORDER_SUMMARY } = english.PAGE;
 
@@ -57,7 +57,7 @@ export const GrandTotal: FunctionComponent<GrandTotalProps> = ({ grandTotal, gra
           <Text style={fs12BoldGray6}>{ORDER_SUMMARY.LABEL_GRAND_TOTAL}</Text>
           <CustomSpacer isHorizontal={true} space={sw4} />
           <View style={{ ...rowCenterVertical, ...flexWrap, maxWidth: grandTotalWidth }}>
-            {grandTotal ? (
+            {isArrayNotEmpty(grandTotal) ? (
               <Fragment>
                 {grandTotal.map((totalAmount: IOrderAmount, index: number) => {
                   return (

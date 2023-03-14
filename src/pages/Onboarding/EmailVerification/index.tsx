@@ -92,7 +92,7 @@ const EmailVerificationComponent: FunctionComponent<EmailVerificationProps> = ({
       toast: skip === true ? undefined : EMAIL_VERIFICATION.LABEL_EMAIL_VERIFIED,
     });
 
-    handleNextStep(editMode === true ? "PersonalInfoSummary" : "IdentityVerification");
+    handleNextStep(editMode === true && finishedSteps.includes("EmailVerification") ? "PersonalInfoSummary" : "IdentityVerification");
   };
 
   const handleEmailVerification = async () => {

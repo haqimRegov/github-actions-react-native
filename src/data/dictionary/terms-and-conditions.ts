@@ -785,4 +785,228 @@ export const PRS: ITermsAndConditions = {
   ],
 };
 
+export const TermsTransactions: ITermsAccordionSection = {
+  title: "Transactions Terms and Conditions",
+  subsection: [
+    {
+      heading: "Terms and Conditions for Transactions",
+      termsList: [
+        {
+          content: [
+            {
+              text: "Please read these notes before completing the Transaction E-Form as you are bound by them. You must read and understand the contents of the relevant Product Highlights Sheet(s), Disclosure Document(s), Prospectus(es), Replacement / Supplementary Prospectus(es) (if any), Information Memorandum(s), Replacement / Supplementary Information Memorandum (if any), before completing the Transaction E-Form. A copy of the Deed will be made available to you upon request. Please check that the Unit Trust Consultant and/or PRS Consultant servicing you has a valid authorisation and registration card. This form should not be circulated unless accompanied by the Prospectus / Disclosure Document",
+            },
+          ],
+        },
+        {
+          label: "Units Pricing",
+          content: [
+            {
+              text: "Units will be transacted based on forward pricing prevailing at the time the request is received by Kenanga Investors Berhad. Units will be credited on the closing Net Asset Value (NAV) price of the day.",
+            },
+          ],
+        },
+        {
+          label: "Switching, Transfer, Redemption, Withdrawal",
+          content: [
+            {
+              text: "Please refer to the relevant Product Highlights Sheet(s), Disclosure Document(s), Prospectus(es), Replacement / Supplementary Prospectus(es) (if any), Information Memorandum(s), Replacement / Supplementary Information Memorandum (if any) for switching, redemption and transfer.",
+            },
+          ],
+        },
+        {
+          label: "Rights of Kenanga Investors Berhad",
+          content: [
+            {
+              text: "Kenanga Investors Berhad reserves the right to accept and reject any application in whole or in part thereof without assigning any reason in respect thereof, without compensation to the investor/member and the duly completed Transaction Form received by Kenanga Investors Berhad are deemed irrevocable by the unit holder/member.",
+            },
+          ],
+        },
+        {
+          label: "Loan Financing Statement",
+          content: [
+            {
+              text: "Investing in an investment scheme with borrowed money is more risky than investing with your own savings. You should assess if loan financing is suitable for you in line of your objectives, attitude to risk and financial circumstances. You should be aware of the risks which would include the following:",
+            },
+            {
+              prefix: "1.",
+              text: "The higher the margin of financing (that is, the amount of money you borrow for every Ringgit of your own money that you put in as deposit or down payment) the greater the potential for loses as well as gains.",
+            },
+            {
+              prefix: "2.",
+              text: "You should assess whether you have the ability to service the repayments on the proposed loan. If your loan is a variable rate loan and if interest rate rises, your total repayment amount will be increased.",
+            },
+            {
+              prefix: "3.",
+              text: "If unit prices fall beyond a certain level, you may be asked to provide additional acceptable collateral or pay additional amount on top of your normal instalments. If you fail to comply within the prescribed time, your units may be sold towards the settlement of your loan.",
+            },
+            {
+              prefix: "4.",
+              text: "Returns on investment are not guaranteed and may not be earned evenly over time. This means that there may be some years where returns are high and other years where losses incurred instead. Whether you eventually realise a gain or incur loss may be affected by the timing of the sale of your units. The value of units may fall just when you want your money back even though the investment may have done well in the past.",
+            },
+            {
+              text: "This brief statement cannot disclose all the risks and other aspects of loan financing. You should therefore study the terms and conditions before you decide to take the loan. If you have doubts in respect of any aspect of this Risk Disclosure Statement or the terms of the loan financing, you should consult the institution offering the loan.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "Declarations and Signatures",
+      subHeading: "(Transactions through the OMNI channel (E-Services))",
+      termsList: [
+        {
+          content: [
+            {
+              prefix: "•",
+              text: "This transaction is based solely on my/our instructions. Kenanga Investors Berhad (KIB) may approve or reject my/our request at its sole discretion. I/We acknowledge the receipt of and agree to abide by the terms and conditions of KIB’s General Terms and Conditions Governing Fund Investments (“General Terms and Conditions”), a copy of which was provided to me/us upon the opening of my/our account with KIB.",
+            },
+            {
+              prefix: "•",
+              text: "I/We acknowledge that I/we have received, read and understood the relevant Product Highlights Sheet(s), Disclosure Document(s), Prospectus(es) / Information Memorandum(s) for the fund(s) recommended to me/us for my/our investment, I/we undertake to be bound by them for my/our initial and subsequent transactions with KIB.",
+            },
+            {
+              prefix: "•",
+              text: "I/We undertake to be bound by the provisions of the documents constituting the fund(s) subscribed to as if I was/we were a party thereto.",
+            },
+            {
+              prefix: "•",
+              text: "I am/We are 18 years and above as the date of this transaction. Copy/copies of my/our NRIC/passport/Other ID is/are enclosed or have been provided to KIB through its representative.",
+            },
+            {
+              prefix: "•",
+              text: "I/We do declare and represent that as the date hereof, I/we am/are not an undischarged bankrupt nor has any petition for bankruptcy been filed against me/us.",
+            },
+            {
+              prefix: "•",
+              text: "I/We declare that I am/we are neither engaged in any unlawful activity nor are my/our monies obtained from any illegal source or related to any illegal activity.",
+            },
+            {
+              prefix: "•",
+              text: "I/We undertake that I am/we are aware of the fees and charges that I/we will incur directly or indirectly when investing in the fund(s).",
+            },
+            {
+              prefix: "•",
+              text: "I/We declare that I am/we are in compliance and undertake that I/we will comply with all applicable laws and regulations.",
+            },
+            {
+              prefix: "•",
+              text: "I/We undertake to provide such information and documents as KIB may reasonably require for the purpose of due diligence/enhanced due diligence as required under the Anti-Money Laundering, Anti-Terrorism Financing and Proceeds of Unlawful Activities Act 2001 (“AMLATPUAA”).",
+            },
+            {
+              prefix: "•",
+              text: "I/We hereby declare and acknowledge that I/we have sole legal and proprietary right over all monies accompanying this application.",
+            },
+            {
+              prefix: "•",
+              text: "I/We understand that KIB may at its absolute discretion approve or reject my/our application without assigning any reason whatever.",
+            },
+            {
+              prefix: "•",
+              text: "I/We hereby agree to indemnify KIB against all actions, suits, proceedings, claims, damages and losses which may be suffered by KIB as a result of any inaccuracy of the declarations herein.",
+            },
+            {
+              prefix: "•",
+              text: "I/We acknowledge that all fees and charges payable to KIB and the Fund Trustee ( as defined in the Disclosure Documents) are subject to goods and services tax as may be imposed by the government or other authorities from time to time.",
+            },
+            {
+              prefix: "•",
+              text: "I/We agree that my/our information and/or documents relating to me/us may be made available, without limitation to KIB’s employees, third party service providers, agents, advisers, custodian/ subcustodian’s agents or advisers, Kenanga Group of Companies (consists of Kenanga Investment Bank Berhad and its group of companies including subsidiaries, branches and related companies), Bursa Malaysia Securities Berhad, Bursa Derivatives, Bursa Depository, Bursa Clearing, Securities Commission, foreign exchanges and/or all relevant and applicable authorities/regulators including, but not limited to, for the purpose of information for credit, reference and marketing purposes and to facilitate the provision of services by KIB to me/us.",
+            },
+            {
+              prefix: "•",
+              text: "I/We agree that my/our personal data and information shall be governed by the Terms and Conditions set out in the Kenanga Group of Companies's Personal Data Protection Notice highlighted in the General Terms and Conditions, as may be amended or supplemented from time to time. I/We hereby acknowledge that I/we have been notified and that I/we have read and understood such Personal Data Protection Notice and accepts the terms and conditions herein.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "For KENANGA AMP Plus Service",
+      termsList: [
+        {
+          content: [
+            {
+              text: "I/We acknowledge that I/we have read and understood the Terms and Conditions of the Kenanga AMP Plus service  provided in the General Terms and Conditions and I/we undertake to abide with the provisions of the same. I/We confirm that I/we aware of the fees and charges that I/we will incur directly or indirectly when investing in Kenanga AMP Plus service.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "For KIB-IUTA Platform",
+      termsList: [
+        {
+          content: [
+            {
+              text: "I/We acknowledge that I/we have read and understood the Terms and Conditions Relating To The Third Party Funds  provided in the General Terms and Conditions and I/we undertake to abide with the provisions of the same. I/We confirm that I/we aware of the fees and charges that I/we will incur directly or indirectly for when investing in Unit Trust products offered by KIB.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      heading: "For any issuance and delivery of documents by way of electronic means (e-statement):",
+      termsList: [
+        {
+          content: [
+            {
+              prefix: "1.",
+              text: "I/We consent and authorize Kenanga Group and its authorized officer to issue and deliver documents (including statements and correspondences) and any other notices by way of electronic means or online devices to me/we from time to time through email when the service is made available. I/We hereby confirm that this consent shall be valid for an indefinite period until revoked by me/us in writing or via electronic means and received and acknowledged by me. I/We hereby acknowledge that Kenanga Group may cancel the email delivery service without providing any reasons and/or prior notices to me/us.",
+            },
+            {
+              prefix: "2.",
+              text: "I/We acknowledge, accept and assume the risk associated with the transfer of documents/information by way of electronic means or online devices and/or delivery, including but not limited to delays or failure in the transmission due to breakdown or failure of transmission or traffic congestion of communications or any other cause(s) beyond Kenanga Group’s control or anticipation and/or inherent risks in receiving such documents by way of electronic means or online devices. I/We will not dispute or challenge the validity, enforceability or admissibility of any documents issued and delivered by way of electronic means.",
+            },
+            {
+              prefix: "3.",
+              text: "I understand that if I agree to receive statements, i.e. confirmation advice, statement of accounts, interim/annual report and any other statement by email, I understand that no such statements will be generated and sent to me if there are no transactions in my account during the defined issuance period of these statements.",
+            },
+            {
+              prefix: "4.",
+              text: "Kenanga Group shall not be liable for any direct, indirect, special, incidental or consequential loss or damage that may arise in respect of the disclosure and/or delivery of this e-statement through your email address provided to Kenanga Group.",
+            },
+            {
+              prefix: "5.",
+              text: "The e-statement is free of charge. Kenanga Group reserves the right at its sole discretion to impose charges for e-statements in the future.",
+            },
+            {
+              prefix: "6.",
+              text: "Kenanga Group does not warrant the timelines, security, confidentiality or availability in the transmission of the e-statements to the designated email address.",
+            },
+            {
+              prefix: "7.",
+              text: "You may terminate this e-statement at any time by contacting Kenanga Group at 1-800-88-3737 or email to investorservices@kenanga.com.my",
+            },
+            {
+              prefix: "8.",
+              text: "Kenanga Group may advertise its products and services through estatement from time to time.",
+            },
+            {
+              prefix: "9.",
+              text: "Kenanga Group will use its best endeavours to ensure the security of the e-statement services. Kenanga Group shall not be liable in any manner for any disruption, unavailability of this service, communication, electrical or network failure that may result in the e-statements being incomplete, unavailable, for delayed in transmission.",
+            },
+            {
+              prefix: "10.",
+              text: "I acknowledge that the use of and the transmission of information via email and/or the internet may not be secured. I also acknowledge that the information transmitted may be liable to error, viruses, interruption, delay, interception, modification or amendment by unauthorized persons. I further acknowledge that the transmission may be disrupted, interrupted, delayed or incorrect. Therefore, I will not hold Kenanga Group responsible for any errors, viruses, delays, inaccuracies, losses and damages whatsoever arising from or in connection with the use of e-statement service (including but not limited to any interception, modification or amendment, disruption, interruption, delay or inaccuracy of email or internet transmission or other communication equipment or facilities). For the avoidance of doubt, Kenanga Group shall not be responsible for any losses suffered, whether direct, indirect, consequential or special loss, even if Kenanga Group had been advised of the same.",
+            },
+            {
+              prefix: "11.",
+              text: "In the event of systems failure, I/we consent to receive documents via post, fax or such other means as Kenanga Group deems fit and appropriate.",
+            },
+            {
+              prefix: "12.",
+              text: "I/We acknowledge that any documents sent to my/our email address provided to Kenanga Group herein by way of electronic means shall be deemed to be duly served on me/us on the day such communication by email was made.",
+            },
+            {
+              prefix: "13.",
+              text: "I/We shall assume all responsibilities or liabilities whatsoever for any direct or consequential losses arising from or in connection with Kenanga Group acting in accordance with my/our authorisation. I/We further agree to indemnify Kenanga Group against all actions, claims, demands, damages costs, charges and expenses which Kenanga Group may sustain, incur and be liable for as a result of or in consequence of or in connection with Kenanga Group acting in accordance with this authorisation.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 export const TermsAndConditionsList = [FATCA, CRS, UTAndAMP, PRS];

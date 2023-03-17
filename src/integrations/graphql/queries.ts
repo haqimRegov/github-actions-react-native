@@ -1373,7 +1373,6 @@ const productList = gql`
             fundCategory
             issuingHouse
             riskCategory
-            isEpf
             isEpfOnly
             isSyariah
             isWholesale
@@ -1386,6 +1385,7 @@ const productList = gql`
               fundId
               class
               currency
+              isEpf
               salesCharge {
                 epf {
                   min

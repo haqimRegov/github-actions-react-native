@@ -68,7 +68,7 @@ export const LocalBankDetails: FunctionComponent<ILocalBankDetailsProps> = ({
   existingDetails,
   // handleEnableLocalBank,
   initialForeignBankState,
-  investmentCurrencies,
+  // investmentCurrencies,
   isAllEpf,
   remainingCurrencies,
   setBankingDetails,
@@ -81,7 +81,7 @@ ILocalBankDetailsProps) => {
 
   const handleAddForeignBank = () => {
     const bankingDetailsClone = [...foreignBank!];
-    const addCurrency = remainingCurrencies.length === 1 ? { currency: [remainingCurrencies[0]] } : {};
+    const addCurrency = remainingCurrencies.length === 1 ? { currency: [...remainingCurrencies] } : {};
     bankingDetailsClone.push({ ...initialForeignBankState, ...addCurrency });
     // setTempData({ ...bankSummary, foreignBank: bankingDetailsClone });
     setForeignBankDetails(bankingDetailsClone);
@@ -171,7 +171,7 @@ ILocalBankDetailsProps) => {
           };
 
           const currencyExtractor = DICTIONARY_CURRENCY.filter(
-            (filteredCurrency) => filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value),
+            (filteredCurrency) => filteredCurrency.value !== "MYR" && remainingCurrencies.includes(filteredCurrency.value),
           );
           const checkCurrencyLabel = item.currency!.length > 1 ? `${PERSONAL_DETAILS.LABEL_CURRENCY} 1` : PERSONAL_DETAILS.LABEL_CURRENCY;
           const checkHeader = isAllEpf === true ? `${PERSONAL_DETAILS.LABEL_BANK_LOCAL} (optional)` : PERSONAL_DETAILS.LABEL_BANK_LOCAL;

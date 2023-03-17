@@ -71,7 +71,7 @@ export const ForeignBankDetails: FunctionComponent<IForeignBankDetailsProps> = (
   // deleteCount,
   existingDetails,
   initialForeignBankState,
-  investmentCurrencies,
+  // investmentCurrencies,
   remainingCurrencies,
   setBankingDetails,
   handleToast,
@@ -82,7 +82,7 @@ IForeignBankDetailsProps) => {
   const [promptDetails, setPromptDetails] = useState<IPromptDetails>({ title: "", index: 0 });
   const handleAddForeignBank = () => {
     const bankingDetailsClone = [...bankingDetails];
-    const addCurrency = remainingCurrencies.length === 1 ? { currency: [remainingCurrencies[0]] } : {};
+    const addCurrency = remainingCurrencies.length === 1 ? { currency: [...remainingCurrencies] } : {};
     bankingDetailsClone.push({ ...initialForeignBankState, ...addCurrency });
     // setTempData({ ...bankSummary, foreignBank: bankingDetailsClone });
     setBankingDetails(bankingDetailsClone);
@@ -182,7 +182,7 @@ IForeignBankDetailsProps) => {
           };
 
           const currencyExtractor = DICTIONARY_CURRENCY.filter((filteredCurrency) => {
-            return filteredCurrency.value !== "MYR" && investmentCurrencies.includes(filteredCurrency.value);
+            return filteredCurrency.value !== "MYR" && remainingCurrencies.includes(filteredCurrency.value);
           });
           const header =
             bankingDetails.length > 1 ? `${PERSONAL_DETAILS.LABEL_BANK_FOREIGN} ${index + 1}` : PERSONAL_DETAILS.LABEL_BANK_FOREIGN;

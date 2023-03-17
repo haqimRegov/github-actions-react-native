@@ -29,7 +29,7 @@ import {
   sw16,
   sw360,
 } from "../../styles";
-import { checkLocalBankPartial, getInitialBankState, isNonNumber, isNumber } from "../../utils";
+import { checkLocalBankPartial, getInitialBankState, isNonNumber, isNotEmpty, isNumber } from "../../utils";
 
 const { PERSONAL_DETAILS } = Language.PAGE;
 
@@ -188,14 +188,19 @@ ILocalBankDetailsProps) => {
                   <View style={flexRow}>
                     <LabeledTitle label={checkHeader} labelStyle={fs16BoldBlack2} title={checkSubtitle} titleStyle={fs12RegGray5} />
                     <CustomFlexSpacer />
-                    <IconButton
-                      disabled={checkDisabled}
-                      name="refresh"
-                      color={colorBlack._1}
-                      onPress={handleReset}
-                      size={sh24}
-                      style={py(sh8)}
-                    />
+                    {isNotEmpty(id) ? null : (
+                      <Fragment>
+                        <CustomFlexSpacer />
+                        <IconButton
+                          disabled={checkDisabled}
+                          name="refresh"
+                          color={colorBlack._1}
+                          onPress={handleReset}
+                          size={sh24}
+                          style={py(sh8)}
+                        />
+                      </Fragment>
+                    )}
                   </View>
                 }
                 content={

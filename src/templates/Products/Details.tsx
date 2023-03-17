@@ -146,7 +146,7 @@ export const ProductDetails: FunctionComponent<ProductDetailsProps> = ({
     },
     { label: PRODUCT_DETAILS.LABEL_RISK, title: fund.riskCategory },
     { label: PRODUCT_DETAILS.LABEL_SHARIAH_COMPLAINT, title: fund.isSyariah },
-    { label: PRODUCT_DETAILS.LABEL_EPF, title: fund.isEpf },
+    { label: PRODUCT_DETAILS.LABEL_EPF, title: filteredCurrency.isEpf },
   ];
 
   const minAmountCash = `${filteredCurrency.currency} ${formatAmount(newSalesAmount.cash.min)}`;

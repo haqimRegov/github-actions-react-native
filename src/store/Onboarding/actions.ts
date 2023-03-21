@@ -21,7 +21,7 @@ export const resetOnboarding = () => {
   return typedAction("onboarding/RESET_ONBOARDING");
 };
 
-export const updateOnboardingToast = (toast: string) => {
+export const updateOnboardingToast = (toast: string | undefined) => {
   return typedAction("onboarding/UPDATE_ONBOARDING_TOAST", toast);
 };
 

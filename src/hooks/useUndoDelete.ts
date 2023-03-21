@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 export interface IData<P> {
   deletedData: P;
   index: number;
+  parentIndex?: number | undefined;
 }
 export const useUndoDelete = <T>(
   setData: (currentData: IData<T>[] | undefined) => void,

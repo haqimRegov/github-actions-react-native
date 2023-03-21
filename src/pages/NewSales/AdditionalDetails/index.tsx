@@ -237,7 +237,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     accountType === "Joint" && transactionType === "Sales-AO"
       ? relationship === "" || (relationship === "Others" && otherRelationship === "")
       : false;
-  const accountNames = [{ label: details?.principalHolder!.name, value: details?.principalHolder!.name }];
   const checkLocalBankEpf =
     isAllEpf === true
       ? checkBankValidation(localBank!, "local") === true && checkLocalBankPartial(localBank!)
@@ -249,12 +248,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     checkCurrencyRemaining.length !== 0 ||
     checkTransactionType ||
     checkJoint;
-  if (accountType === "Joint") {
-    accountNames.push(
-      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
-      { label: PERSONAL_DETAILS.OPTION_COMBINED, value: PERSONAL_DETAILS.OPTION_COMBINED },
-    );
-  }
   const checkSales = isEpf === true ? undefined : PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS_SALES;
   const checkSubHeading = transactionType === "Sales-AO" ? PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS : checkSales;
 

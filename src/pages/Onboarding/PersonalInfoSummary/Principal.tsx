@@ -14,7 +14,7 @@ interface PrincipalProps {
   handleEdit: (route: TypeOnboardingKey) => void;
   setViewFile?: (value: FileBase64) => void;
   summary: IHolderInfoState;
-  viewFile?: FileBase64 | undefined;
+  viewFile: FileBase64 | undefined;
 }
 
 export const Principal: FunctionComponent<PrincipalProps> = ({

@@ -26,7 +26,7 @@ interface SummaryDetailsProps {
   name: string;
   permanentAddress: LabeledTitleProps[];
   personalDetails: LabeledTitleProps[];
-  viewFile?: FileBase64 | undefined;
+  viewFile: FileBase64 | undefined;
 }
 
 export const SummaryDetails: FunctionComponent<SummaryDetailsProps> = ({

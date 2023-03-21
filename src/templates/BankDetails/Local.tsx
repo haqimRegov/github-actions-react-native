@@ -211,7 +211,7 @@ ILocalBankDetailsProps) => {
                       .map((value: string, currencyIndex: number) => {
                         const handleRemoveCurrency = () => {
                           const updatedCurrency = [...item.currency!];
-                          updatedCurrency!.splice(currencyIndex! + 1, 1);
+                          updatedCurrency.splice(currencyIndex + 1, 1);
                           const updatedData = { ...item, currency: updatedCurrency };
                           setBankingDetails([updatedData]);
                           handleToast(value);

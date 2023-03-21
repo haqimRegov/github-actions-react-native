@@ -244,19 +244,19 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     jointDetails.employmentDetails.occupation !== undefined
   ) {
     // check if occupation is others
-    if (jointDetails!.employmentDetails!.occupation === "Others") {
+    if (jointDetails.employmentDetails.occupation === "Others") {
       jointDetails.employmentDetails.occupation = jointDetails.employmentDetails.othersOccupation;
     }
 
     // check if occupation is exempted for other details
     if (
-      EMPLOYMENT_EXEMPTIONS.indexOf(jointDetails!.employmentDetails.occupation!) !== -1 &&
-      jointDetails!.employmentDetails!.isOptional === false
+      EMPLOYMENT_EXEMPTIONS.indexOf(jointDetails.employmentDetails.occupation!) !== -1 &&
+      jointDetails.employmentDetails.isOptional === false
     ) {
-      jointDetails!.employmentDetails = { ...deleteKey(jointDetails!.employmentDetails!, [...deletedExemptionProperty, "grossIncome"]) };
+      jointDetails.employmentDetails = { ...deleteKey(jointDetails.employmentDetails, [...deletedExemptionProperty, "grossIncome"]) };
     }
     // delete keys that are not used for submitting request
-    jointDetails!.employmentDetails = { ...deleteKey(jointDetails!.employmentDetails!, [...baseDeletedProperty]) };
+    jointDetails.employmentDetails = { ...deleteKey(jointDetails.employmentDetails, [...baseDeletedProperty]) };
   }
 
   const jointContactDetails =
@@ -281,11 +281,11 @@ export const DeclarationSummaryComponent: FunctionComponent<DeclarationSummaryPr
     }
 
     // check if occupation is exempted for other details
-    if (EMPLOYMENT_EXEMPTIONS.indexOf(principalEmploymentDetails.occupation!) !== -1 && principalEmploymentDetails!.isOptional === false) {
-      principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...deletedExemptionProperty]) };
+    if (EMPLOYMENT_EXEMPTIONS.indexOf(principalEmploymentDetails.occupation!) !== -1 && principalEmploymentDetails.isOptional === false) {
+      principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails, [...deletedExemptionProperty]) };
     }
     // delete keys that are not used for submitting request
-    principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails!, [...baseDeletedProperty, "grossIncome"]) };
+    principalEmploymentDetails = { ...deleteKey(principalEmploymentDetails, [...baseDeletedProperty, "grossIncome"]) };
   }
 
   const principalFatcaRequest = getFatcaRequest(principal!.declaration!.fatca!);

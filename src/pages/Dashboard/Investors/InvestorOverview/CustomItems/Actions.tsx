@@ -36,8 +36,8 @@ export const InvestorOverviewActions: FunctionComponent<IInvestorOverviewActions
             <Fragment>
               {(isNotEmpty(investorData) &&
                 investorData?.isForceUpdate === true &&
-                investorData!.accountHolder === "Joint" &&
-                investorData!.isMinor === true) ||
+                investorData.accountHolder === "Joint" &&
+                investorData.isMinor === true) ||
               item.rawData.status === INVESTOR_ACCOUNTS.LABEL_INACTIVE ? (
                 <IcoMoon color={colorGray._6} name="eye-show" onPress={handleView} size={sh24} />
               ) : (

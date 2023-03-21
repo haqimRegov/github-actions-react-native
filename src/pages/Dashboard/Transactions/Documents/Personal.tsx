@@ -87,7 +87,7 @@ const UploadDocumentsComponent: FunctionComponent<UploadDocumentsProps> = (props
 
   const checkRerouted =
     submissionResult !== undefined &&
-    submissionResult!.filter(
+    submissionResult.filter(
       (eachResult: ISubmissionSummaryOrder) =>
         eachResult.status === DICTIONARY_ORDER_STATUS.reroutedBr || eachResult.status === DICTIONARY_ORDER_STATUS.reroutedHq,
     ).length > 0;

@@ -62,7 +62,7 @@ export const structureEddProfile = (
   if (accountType === "Joint") {
     accountSummaryDetails.splice(-1, 0, {
       label: DASHBOARD_PROFILE.LABEL_SIGNATURE,
-      title: accountOperationMode!,
+      title: accountOperationMode,
     });
   }
 

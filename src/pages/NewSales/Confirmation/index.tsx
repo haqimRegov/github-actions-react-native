@@ -212,13 +212,13 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       localBank = [...allBanks.localBank];
       foreignBank = isArrayNotEmpty(allBanks.foreignBank) ? [...allBanks.foreignBank!] : [];
       currentCurrencies = [
-        ...foreignBank!
+        ...foreignBank
           .map((eachBank: IBankDetailsState) => eachBank.currency)
           .map((currency) => {
             return currency;
           })
           .flat(),
-        ...localBank!
+        ...localBank
           .map((eachBank: IBankDetailsState) => eachBank.currency)
           .map((currency) => {
             return currency;

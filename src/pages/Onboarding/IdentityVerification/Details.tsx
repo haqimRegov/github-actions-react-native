@@ -251,7 +251,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
                   handleChange={() => {}}
                   label={ID_VERIFICATION.LABEL_COUNTRY_ISSUANCE}
                   spaceToTop={sh16}
-                  value={inputCountryIssuance!}
+                  value={inputCountryIssuance}
                 />
                 <TextSpaceArea spaceToBottom={sh4} spaceToTop={sh16} text={ID_VERIFICATION.LABEL_EXPIRY} />
                 <NewDatePicker
@@ -301,7 +301,7 @@ export const IDDetails: FunctionComponent<IDDetailsProps> = ({
                   handleChange={setInputNationality}
                   label={ID_VERIFICATION.LABEL_NATIONALITY}
                   spaceToTop={sh16}
-                  value={inputNationality!}
+                  value={inputNationality}
                 />
                 <CustomSpacer space={sh16} />
                 <View style={borderBottomGray2} />

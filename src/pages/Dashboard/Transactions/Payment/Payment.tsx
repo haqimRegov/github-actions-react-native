@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 
 import { CustomSpacer, CustomToast, Loading, SafeAreaPage, SelectionBanner } from "../../../../components";
 import { Language } from "../../../../constants";
-import { useDelete } from "../../../../hooks";
+import { IData, useUndoDelete } from "../../../../hooks";
 import { getPaymentRequired, submitProofOfPayments } from "../../../../network-actions";
 import { TransactionsMapDispatchToProps, TransactionsMapStateToProps, TransactionsStoreProps } from "../../../../store";
 import { flexChild, px, py, sh152, sh24, sw24 } from "../../../../styles";
@@ -19,7 +19,7 @@ import {
 } from "../../../../templates/Payment/helpers";
 import { NewPaymentPrompt } from "../../../../templates/Payment/NewPaymentPrompt";
 import { PaymentBannerContent } from "../../../../templates/Payment/PaymentBanner";
-import { AlertDialog, formatAmount, parseAmount } from "../../../../utils";
+import { AlertDialog, formatAmount, isArrayNotEmpty, isNotEmpty, parseAmount } from "../../../../utils";
 import { DashboardLayout } from "../../DashboardLayout";
 
 const { DASHBOARD_PAYMENT, PAYMENT, TOAST } = Language.PAGE;
@@ -46,7 +46,29 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const [paymentResult, setPaymentResult] = useState<ISubmitProofOfPaymentsResult | undefined>(undefined);
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
   const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
-  const [deleteCount, setDeleteCount, tempData, setTempData] = useDelete<IPaymentRequired | undefined>(proofOfPayment, setProofOfPayment);
+
+  const handleUpdateProofOfPayment = (value: IData<IPaymentInfo>[] | undefined) => {
+    if (value !== undefined) {
+      const updatedPayments = isNotEmpty(proofOfPayment) && isArrayNotEmpty(proofOfPayment?.payments) ? proofOfPayment?.payments : [];
+
+      // todo  can i return null or undefined here ?? or do i need to return updatedPayments ??
+      value.reverse().map((item) => {
+        return updatedPayments !== undefined && isNotEmpty(updatedPayments)
+          ? updatedPayments.splice(item.index, 0, item.deletedData)
+          : null;
+      });
+
+      const updatedProofOfPayments: IPaymentRequired = {
+        ...proofOfPayment,
+        payments: updatedPayments!,
+      };
+
+      setProofOfPayment(updatedProofOfPayments);
+    }
+  };
+
+  const [deleteCount, setDeleteCount, tempData, setTempData, handleUndoDeleteHook] =
+    useUndoDelete<IPaymentInfo>(handleUpdateProofOfPayment);
 
   const handleBack = () => {
     updateCurrentOrder(undefined);
@@ -77,7 +99,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           ...data.result,
           payments: savedPayments,
         };
-        setTempData(state);
+        setProofOfPayment(state);
         setGrandTotal(data.result.totalInvestment);
         if (data.result.surplusBalance) {
           setTempApplicationBalance(data.result.surplusBalance);
@@ -107,18 +129,18 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       if (tempDeletedPayment.length > 0) {
         paymentWithDeleted.push(...tempDeletedPayment);
       }
-      paymentWithDeleted.push(...tempData!.payments);
+      paymentWithDeleted.push(...proofOfPayment!.payments);
 
       const updatedPayments: IPaymentInfo[] = handleEPFStructuring(paymentWithDeleted);
       const payment = await generatePaymentWithKeys(
         updatedPayments,
-        tempData!.paymentType,
+        proofOfPayment!.paymentType,
         currentOrder!.orderNumber,
         currentOrder!.clientId,
         "Dashboard",
       );
       const paymentOrders: ISubmitProofOfPaymentOrder[] = [
-        { orderNumber: tempData!.orderNumber, paymentType: tempData!.paymentType, payments: payment },
+        { orderNumber: proofOfPayment!.orderNumber, paymentType: proofOfPayment!.paymentType, payments: payment },
       ];
 
       const request = { orders: paymentOrders, isConfirmed: confirmed === true };
@@ -185,8 +207,8 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   };
 
   const handleUndoDelete = () => {
-    if (tempData !== undefined) {
-      setTempData(proofOfPayment);
+    if (proofOfPayment !== undefined) {
+      handleUndoDeleteHook();
       setTempApplicationBalance(applicationBalance);
     }
   };
@@ -197,7 +219,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     deleted?: boolean,
     setActiveInfo?: (index: number) => void,
   ) => {
-    const updatedProofOfPayments: IPaymentRequired = { ...tempData, ...value };
+    const updatedProofOfPayments: IPaymentRequired = { ...proofOfPayment, ...value };
     if (action !== undefined && action.paymentId !== undefined && action.mode !== undefined && action.mode === "cta") {
       const filteredPayments = updatedProofOfPayments.payments.filter((eachPOP) => {
         const deleteCondition =
@@ -227,10 +249,8 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
     ) {
       setActiveInfo(updatedProofOfPayments.payments.length - 1);
     }
-    setTempData(updatedProofOfPayments);
-    if (deleted === false) {
-      setProofOfPayment(updatedProofOfPayments);
-    }
+    // will always update proof of payment
+    setProofOfPayment(updatedProofOfPayments);
   };
 
   const handleApplicationBalance = (currentData: IPaymentInfo[], deleted?: boolean) => {
@@ -250,40 +270,40 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   }
 
   const continueDisabled =
-    tempData !== undefined
-      ? tempData.payments.some((findPayment) => findPayment.saved === true) === false && tempDeletedPayment.length === 0
+    proofOfPayment !== undefined
+      ? proofOfPayment.payments.some((findPayment) => findPayment.saved === true) === false && tempDeletedPayment.length === 0
       : false;
 
-  const checkRerouted = tempData !== undefined && tempData.status.toLowerCase().includes("rerouted");
+  const checkRerouted = proofOfPayment !== undefined && proofOfPayment.status.toLowerCase().includes("rerouted");
 
   const bannerText =
-    tempData !== undefined
-      ? `${PAYMENT.BANNER_LABEL}: 1 ${checkRerouted === true ? "pending" : tempData?.status.toLowerCase()}`
+    proofOfPayment !== undefined
+      ? `${PAYMENT.BANNER_LABEL}: 1 ${checkRerouted === true ? "pending" : proofOfPayment?.status.toLowerCase()}`
       : `${PAYMENT.LABEL_PENDING_SUMMARY}: `;
   // To show the available balance and also the excess
-  const balancePayments: IOrderAmount[] = tempData !== undefined ? calculateExcess(tempApplicationBalance) : [];
+  const balancePayments: IOrderAmount[] = proofOfPayment !== undefined ? calculateExcess(tempApplicationBalance) : [];
   const updatedBalancePayments =
-    tempData !== undefined
+    proofOfPayment !== undefined
       ? balancePayments.filter(
           (eachBalance: IOrderAmount) =>
             eachBalance.currency === "MYR" &&
             parseAmount(eachBalance.amount) !== 0 &&
-            ((tempData?.status !== "Completed" && checkCurrencyCompleted(tempData, eachBalance.currency) === false) ||
-              tempData?.isLastOrder !== true ||
-              (tempData.isLastOrder === true && checkCurrencyCompleted(tempData, eachBalance.currency) === false)),
+            ((proofOfPayment?.status !== "Completed" && checkCurrencyCompleted(proofOfPayment, eachBalance.currency) === false) ||
+              proofOfPayment?.isLastOrder !== true ||
+              (proofOfPayment.isLastOrder === true && checkCurrencyCompleted(proofOfPayment, eachBalance.currency) === false)),
         )
       : [];
   const completedCurrencies =
-    tempData !== undefined
+    proofOfPayment !== undefined
       ? balancePayments.filter(
           (eachSurplus: IOrderAmount) =>
-            (tempData.isLastOrder === true || eachSurplus.currency !== "MYR") &&
+            (proofOfPayment.isLastOrder === true || eachSurplus.currency !== "MYR") &&
             parseAmount(eachSurplus.amount) !== 0 &&
-            (eachSurplus.currency !== "MYR" || checkCurrencyCompleted(tempData, eachSurplus.currency)),
+            (eachSurplus.currency !== "MYR" || checkCurrencyCompleted(proofOfPayment, eachSurplus.currency)),
         )
       : [];
-  const checkGrandTotal = tempData !== undefined && tempData.paymentType !== "Recurring" ? grandTotal : [];
-  const checkGrandTotalRecurring = tempData !== undefined && tempData.paymentType === "Recurring" ? grandTotal[0] : undefined;
+  const checkGrandTotal = proofOfPayment !== undefined && proofOfPayment.paymentType !== "Recurring" ? grandTotal : [];
+  const checkGrandTotalRecurring = proofOfPayment !== undefined && proofOfPayment.paymentType === "Recurring" ? grandTotal[0] : undefined;
 
   useEffect(() => {
     if (deleteCount === 0) {
@@ -307,7 +327,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
         titleIconOnPress={handleBack}>
         <SafeAreaPage>
           <View style={flexChild}>
-            {tempData !== undefined ? (
+            {proofOfPayment !== undefined ? (
               <View>
                 <View style={px(sw24)}>
                   <OrderPayment
@@ -317,7 +337,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     deleteCount={deleteCount}
                     deletedPayment={tempDeletedPayment}
                     localCtaDetails={localCtaDetails}
-                    proofOfPayment={tempData}
+                    proofOfPayment={proofOfPayment}
                     setActiveOrder={setActiveOrder}
                     setApplicationBalance={handleApplicationBalance}
                     setDeleteCount={setDeleteCount}
@@ -325,6 +345,8 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     setLocalCtaDetails={setLocalCtaDetails}
                     setProofOfPayment={handleSetPayment}
                     setSavedChangesToast={setSavedChangesToast}
+                    setTempData={setTempData}
+                    tempData={tempData}
                     transactionType={currentOrder!.transactionType}
                   />
                 </View>
@@ -336,19 +358,19 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
           </View>
         </SafeAreaPage>
       </DashboardLayout>
-      {activeOrder.order !== "" || tempData === undefined ? null : (
+      {activeOrder.order !== "" || proofOfPayment === undefined ? null : (
         <Fragment>
           {updatedBalancePayments.length > 0 ? <CustomSpacer space={sh24} /> : null}
           {completedCurrencies.length > 0 ? <CustomSpacer space={sh24} /> : null}
           <SelectionBanner
             bottomContent={
-              tempData !== undefined ? (
+              proofOfPayment !== undefined ? (
                 <PaymentBannerContent
                   balancePayments={updatedBalancePayments}
                   excessPayments={completedCurrencies}
                   grandTotal={checkGrandTotal}
                   grandTotalRecurring={checkGrandTotalRecurring}
-                  paymentType={tempData.paymentType}
+                  paymentType={proofOfPayment.paymentType}
                 />
               ) : null
             }

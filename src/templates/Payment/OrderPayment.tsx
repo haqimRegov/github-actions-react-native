@@ -7,6 +7,7 @@ import { v1 as uuidv1 } from "uuid";
 import { CustomFlexSpacer, CustomSpacer, IconButton, PromptModal, TableBadge } from "../../components";
 import { DEFAULT_DATE_FORMAT, Language } from "../../constants";
 import { DICTIONARY_PAYMENT_METHOD } from "../../data/dictionary/payment-method";
+import { IData } from "../../hooks";
 import { IcoMoon } from "../../icons";
 import {
   borderBottomBlue5,
@@ -56,6 +57,7 @@ export interface OrderPaymentProps {
   deletedPayment: IPaymentInfo[];
   localCtaDetails: TypeCTADetails[];
   localRecurringDetails?: IRecurringDetails;
+  parentIndex?: number;
   proofOfPayment: IPaymentRequired;
   setActiveOrder: (value: { order: string; fund: string }) => void;
   setApplicationBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
@@ -70,6 +72,8 @@ export interface OrderPaymentProps {
     setActiveInfo?: (index: number) => void,
   ) => void;
   setSavedChangesToast: (toggle: boolean) => void;
+  setTempData: (newData: IData<IPaymentInfo>[] | undefined) => void;
+  tempData: IData<IPaymentInfo>[] | undefined;
   transactionType?: TTransactionType;
 }
 
@@ -88,6 +92,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   deletedPayment,
   localCtaDetails,
   localRecurringDetails,
+  parentIndex,
   proofOfPayment,
   setActiveOrder,
   setApplicationBalance,
@@ -97,6 +102,8 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   setLocalRecurringDetails,
   setProofOfPayment,
   setSavedChangesToast,
+  setTempData,
+  tempData,
   transactionType,
 }: OrderPaymentProps) => {
   const {
@@ -241,7 +248,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     setBalance(checkBalance);
     setPendingBalance(checkPendingBalance);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payments]);
+  }, [payments, deleteCount]);
 
   const completePaymentCount = DICTIONARY_PAYMENT_METHOD.map((method) => {
     const count = payments.reduce(
@@ -427,6 +434,18 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
               const handleRemove = () => {
                 const updatedPayments = [...payments];
                 const newAvailableBalance = [...applicationBalance];
+
+                // save in tempData
+                const updatedTempData = tempData !== undefined ? tempData : [];
+                setTempData([
+                  ...updatedTempData,
+                  {
+                    index: index,
+                    deletedData: [...payments][index],
+                    parentIndex: parentIndex !== undefined ? parentIndex : undefined,
+                  },
+                ]);
+
                 // delete in surplus balance
                 if (updatedPayments[index].parent !== undefined) {
                   const findExistingSurplusParent = newAvailableBalance.findIndex((bal) => bal.parent === updatedPayments[index].parent);
@@ -915,7 +934,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                       ctaDetails={localCtaDetails}
                       currencies={currencies}
                       currentPayments={payments}
-                      deletedPayment={deletedPayment}
+                      // deletedPayment={deletedPayment}
                       epfAccountNumber={epfAccountNumber || "-"}
                       existingPaidAmount={existingPaidAmount}
                       funds={funds}

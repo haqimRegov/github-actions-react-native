@@ -165,8 +165,8 @@ export const EmailOTP: FunctionComponent<EmailOTPProps> = ({
       : (isEtbPrincipal === false && principalOtp === "") || (isEtbJoint === false && jointOtp === "");
   const principalOtpLabel = jointEmailCheck === true ? EMAIL_VERIFICATION.LABEL_OTP_PRINCIPAL : EMAIL_VERIFICATION.LABEL_OTP;
 
-  const checkPrincipal = isEtbPrincipal === false ? ` ${principalEmail} & ${jointEmail}` : jointEmail;
-  const otpEmail = jointEmailCheck === true ? checkPrincipal : `${principalEmail}`;
+  const checkPrincipalLabel = isEtbPrincipal === false ? ` ${principalEmail} & ${jointEmail}` : jointEmail;
+  const otpEmail = jointEmailCheck === true ? checkPrincipalLabel : `${principalEmail}`;
   const { editMode } = personalInfo;
 
   useEffect(() => {

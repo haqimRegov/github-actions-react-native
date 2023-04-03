@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { connect } from "react-redux";
 
-import { CRS_NEW, FATCA_NEW, INVESTOR_UPDATE } from "../../../data/dictionary";
 import { AcknowledgementMapDispatchToProps, AcknowledgementMapStateToProps, AcknowledgementStoreProps } from "../../../store";
 import { TermsAndConditionsTemplate } from "../../../templates/Acknowledgement";
 
@@ -16,8 +15,6 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
   updateAgree,
   updateForceUpdate,
 }: TermsAndConditionsProps) => {
-  const { declarations } = forceUpdate;
-
   const handleContinue = () => {
     const updatedDisabledSteps: TypeForceUpdateKey[] = [...forceUpdate.disabledSteps];
     const findSignatures = updatedDisabledSteps.indexOf("Signatures");
@@ -27,15 +24,6 @@ export const TermsAndConditionsComponent: FunctionComponent<TermsAndConditionsPr
     updateForceUpdate({ ...forceUpdate, disabledSteps: updatedDisabledSteps });
     handleNextStep("Signatures");
   };
-
-  const TERMS_AND_CONDITION_LIST: ITermsAccordionSection[] = [FATCA_NEW, CRS_NEW, INVESTOR_UPDATE];
-  if (!declarations.includes("fatca")) {
-    TERMS_AND_CONDITION_LIST.splice(0, 1);
-  }
-  if (!declarations.includes("crs")) {
-    const checkIndex = !declarations.includes("fatca") ? 0 : 1;
-    TERMS_AND_CONDITION_LIST.splice(checkIndex, 1);
-  }
 
   const disabled = !(agreeTerms.agree1 === true && agreeTerms.agree2 === true && agreeTerms.agree3 === true);
 

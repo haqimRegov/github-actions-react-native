@@ -47,7 +47,7 @@ export const responseHandler = async <
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn("Error in ResponseHandler", error);
-    let err = error;
+    let err;
 
     if (
       JSON.stringify(error).includes("No current user") ||

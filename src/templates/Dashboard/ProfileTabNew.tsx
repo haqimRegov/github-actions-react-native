@@ -77,7 +77,7 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
     getStructuredInvestorProfile(profileToStructure);
 
   const identificationDetailsSummary: LabeledTitleProps[] = [
-    { label: INVESTOR_PROFILE.LABEL_NAME, title: investor!.name! },
+    { label: INVESTOR_PROFILE.LABEL_NAME, title: investor.name },
     ...identificationDetails,
   ];
 
@@ -148,7 +148,7 @@ export const ProfileTabNew: FunctionComponent<ProfileTabProps> = ({ data }: Prof
       ) : null}
 
       {accountType === "Joint" && (isEtbInvestor.principal === true || isEtbInvestor.joint === true) ? (
-        <AccountHeader title={investorHolder} subtitle={investor!.name!} spaceToBottom={0} />
+        <AccountHeader title={investorHolder} subtitle={investor.name} spaceToBottom={0} />
       ) : null}
 
       {isNotEmpty(identificationDetails) ? (

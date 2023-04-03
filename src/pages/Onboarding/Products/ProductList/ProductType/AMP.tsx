@@ -46,7 +46,7 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   const { filters, page, search, showBy, sort, totalCount } = products.amp;
   const [loading, setLoading] = useState<boolean>(false);
 
-  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo!.appetite);
+  const riskIndex = FILTER_RISK.findIndex((risk) => risk === riskInfo.appetite);
   const recommendedRisk = FILTER_RISK.slice(0, riskIndex + 1);
   const riskCategory =
     filters.riskCategory !== undefined && filters.riskCategory.length === 0 && showBy === "recommended"

@@ -13,7 +13,6 @@ import {
   flexRow,
   fs10BoldBlue1,
   fs20BoldBlack2,
-  fsTransformNone,
   px,
   sh24,
   sw1,
@@ -21,7 +20,6 @@ import {
   sw228,
   sw24,
 } from "../../../styles";
-import { isNotEmpty, titleCaseString } from "../../../utils";
 import { InvestorProfilePage } from "../../NewSales/AccountInfoSummary/Profile";
 import { Joint } from "./Joint";
 import { SummaryJointDetails } from "./JointDetails";
@@ -46,7 +44,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   const { accountDetails } = newSales;
   const { isEtb: isPrincipalEtb } = principalHolder!;
   const { isEtb: isJointEtb } = jointHolder!;
-  const { disabledSteps, finishedSteps, riskInfo } = onboarding;
+  const { disabledSteps, finishedSteps } = onboarding;
 
   const [viewFile, setViewFile] = useState<FileBase64 | undefined>(undefined);
   const [page, setPage] = useState<"summary" | "profile">("summary");
@@ -121,48 +119,48 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   // const isAllEpf = personalInfo.isAllEpf !== undefined ? personalInfo.isAllEpf : false;
   const incomeDistribution = { incomeDistribution: personalInfo.incomeDistribution };
 
-  // TODO templates (same with Risk Summary)
-  const checkIdType = (data: IClientBasicInfo) => {
-    const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
-    const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
+  // // TODO templates (same with Risk Summary)
+  // const checkIdType = (data: IClientBasicInfo) => {
+  //   const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
+  //   const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
 
-    return data.idType === "Other" ? `${otherIdType} ${SUMMARY.LABEL_ID}` : idType;
-  };
+  //   return data.idType === "Other" ? `${otherIdType} ${SUMMARY.LABEL_ID}` : idType;
+  // };
 
-  const accountDetailsArray: LabeledTitleProps[] = [
-    {
-      label: accountType === "Joint" ? SUMMARY.LABEL_PRINCIPAL_NAME : SUMMARY.LABEL_INVESTOR_NAME,
-      title: principalHolder!.name,
-      titleStyle: fsTransformNone,
-    },
-    {
-      label:
-        accountType === "Joint"
-          ? `${SUMMARY.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
-          : `${SUMMARY.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
-      title: principalHolder!.id,
-      titleStyle: fsTransformNone,
-    },
-    {
-      label: SUMMARY.LABEL_RISK_CATEGORY,
-      title: isNotEmpty(riskInfo) && riskInfo.appetite !== "" ? riskInfo.appetite : "-",
-      titleStyle: fsTransformNone,
-    },
-  ];
-  if (client.accountType === "Joint") {
-    accountDetailsArray.push(
-      {
-        label: SUMMARY.LABEL_JOINT_NAME,
-        title: jointHolder!.name,
-        titleStyle: fsTransformNone,
-      },
-      {
-        label: `${SUMMARY.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
-        title: jointHolder!.id,
-        titleStyle: fsTransformNone,
-      },
-    );
-  }
+  // const accountDetailsArray: LabeledTitleProps[] = [
+  //   {
+  //     label: accountType === "Joint" ? SUMMARY.LABEL_PRINCIPAL_NAME : SUMMARY.LABEL_INVESTOR_NAME,
+  //     title: principalHolder!.name,
+  //     titleStyle: fsTransformNone,
+  //   },
+  //   {
+  //     label:
+  //       accountType === "Joint"
+  //         ? `${SUMMARY.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
+  //         : `${SUMMARY.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
+  //     title: principalHolder!.id,
+  //     titleStyle: fsTransformNone,
+  //   },
+  //   {
+  //     label: SUMMARY.LABEL_RISK_CATEGORY,
+  //     title: isNotEmpty(riskInfo) && riskInfo.appetite !== "" ? riskInfo.appetite : "-",
+  //     titleStyle: fsTransformNone,
+  //   },
+  // ];
+  // if (client.accountType === "Joint") {
+  //   accountDetailsArray.push(
+  //     {
+  //       label: SUMMARY.LABEL_JOINT_NAME,
+  //       title: jointHolder!.name,
+  //       titleStyle: fsTransformNone,
+  //     },
+  //     {
+  //       label: `${SUMMARY.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
+  //       title: jointHolder!.id,
+  //       titleStyle: fsTransformNone,
+  //     },
+  //   );
+  // }
 
   const containerStyle: ViewStyle = {
     ...flexRow,

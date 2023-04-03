@@ -312,7 +312,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
             isNotEmpty(investorData) &&
             isNotEmpty(investorData!.address) &&
             isNotEmpty(investorData!.address.address) &&
-            isNotEmpty(investorData!.address!.address!.line3) &&
+            isNotEmpty(investorData!.address.address!.line3) &&
             isNotEmpty(investorData?.address.address!.line4)
               ? { line3: `${investorData?.address.address!.line3}, ${investorData?.address.address!.line4} ` }
               : {};
@@ -800,7 +800,7 @@ const InvestorOverviewComponent: FunctionComponent<InvestorOverviewProps> = ({
     emailVerified: investorData !== undefined ? investorData.isForceUpdate === false : undefined,
     handleAccountOpening: handleAccountOpening,
     handleViewProfile: handleViewProfile,
-    accountDetails: investorData !== undefined ? investorData!.investorDetails : undefined,
+    accountDetails: investorData !== undefined ? investorData.investorDetails : undefined,
     mobileNo: investorData !== undefined ? investorData.mobileNo : undefined,
     name: investorData !== undefined ? investorData.name : undefined,
     setScreen: dashboardProps.setScreen,

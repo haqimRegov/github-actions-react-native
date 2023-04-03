@@ -60,7 +60,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     }
 
     if (employmentDetails?.occupation === "Others") {
-      return employmentDetails!.othersOccupation !== "" && validationResult;
+      return employmentDetails.othersOccupation !== "" && validationResult;
     }
 
     return validationResult;
@@ -70,7 +70,7 @@ const EmploymentDetailsComponent: FunctionComponent<EmploymentDetailsProps> = ({
     joint?.employmentDetails !== undefined &&
     joint.employmentDetails.occupation !== "" &&
     (joint.employmentDetails.isOptional === true || !EMPLOYMENT_EXEMPTIONS.includes(joint.employmentDetails.occupation!))
-      ? accountType === "Joint" && joint!.employmentDetails!.grossIncome !== ""
+      ? accountType === "Joint" && joint.employmentDetails.grossIncome !== ""
       : true;
   const checkMinor =
     jointAgeCheck === true && joint?.employmentDetails?.occupation === ""

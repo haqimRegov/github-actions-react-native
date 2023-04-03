@@ -561,7 +561,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
               {isArrayNotEmpty(foreignBankDetails)
                 ? foreignBankDetails.map((bank, numberIndex) => {
                     const label = `${NEW_SALES_SUMMARY.LABEL_FOREIGN_BANK} ${foreignBankDetails.length > 1 ? numberIndex + 1 : ""}`;
-                    const checkNewForeignBank = bankDetails !== undefined && bankDetails!.foreignBank!.length - 1 < numberIndex;
+                    const checkNewForeignBank = bankDetails !== undefined && bankDetails.foreignBank!.length - 1 < numberIndex;
                     return (
                       <Fragment key={numberIndex}>
                         {numberIndex === 0 ? <CustomSpacer space={sh16} /> : null}

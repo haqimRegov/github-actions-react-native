@@ -29,7 +29,7 @@ import { SummaryColorCard, summaryColorCardStyleProps } from "./SummaryColorCard
 
 interface AccountTabProps {
   data: IDashboardOrderSummary;
-  transactionType?: string | undefined;
+  transactionType?: string;
   // setFile: (value?: FileBase64) => void;
 }
 

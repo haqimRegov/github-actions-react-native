@@ -124,15 +124,6 @@ const AdditionalDetailsComponent: FunctionComponent<AdditionalDetailsProps> = ({
     });
   };
 
-  const accountNames = [{ label: details!.principalHolder!.name!, value: details!.principalHolder!.name! }];
-
-  if (accountType === "Joint") {
-    accountNames.push(
-      { label: details!.jointHolder!.name!, value: details!.jointHolder!.name! },
-      { label: ADDITIONAL_DETAILS.OPTION_COMBINED, value: ADDITIONAL_DETAILS.OPTION_COMBINED },
-    );
-  }
-
   const nonMyrCurrencies = investmentCurrencies.filter((currency) => currency !== "MYR");
   const selectedNonMyrCurrencies = isNotEmpty(foreignBank)
     ? [

@@ -364,7 +364,7 @@ const UploadHardCopyComponent: FunctionComponent<UploadHardCopyProps> = (props: 
 
   const checkRerouted =
     submissionSummary !== undefined &&
-    submissionSummary!.filter(
+    submissionSummary.filter(
       (eachResult: ISubmissionSummaryOrder) =>
         eachResult.status === DICTIONARY_ORDER_STATUS.reroutedBr || eachResult.status === DICTIONARY_ORDER_STATUS.reroutedHq,
     ).length > 0;

@@ -226,7 +226,7 @@ IForeignBankDetailsProps) => {
                         if (updatedCurrency!.length === 1) {
                           updatedCurrency![currencyIndex] = "";
                         } else {
-                          updatedCurrency!.splice(currencyIndex!, 1);
+                          updatedCurrency!.splice(currencyIndex, 1);
                           updatedData = { ...updatedData, currency: updatedCurrency };
                           updatedBankingDetails[index] = updatedData;
                         }

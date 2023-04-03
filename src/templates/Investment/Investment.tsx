@@ -87,7 +87,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
     isTopup,
   } = investment;
 
-  const { isEpf, isScheduled } = fundDetails;
+  const { isEpfOnly, isScheduled } = fundDetails;
 
   const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
   const [recurringTooltipVisible, setRecurringTooltipVisible] = useState<boolean>(false);
@@ -95,21 +95,23 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const isRecurring = isScheduled === "Yes" && fundPaymentMethod === "Cash" && fundCurrency === "MYR";
   const fundingMethod = fundPaymentMethod === "Cash" ? "cash" : "epf";
   const fundingOption =
-    fundDetails.isEpfOnly === "Yes" || (accountDetails !== undefined && accountDetails.isEpf !== undefined && accountDetails.isEpf === true)
+    isEpfOnly === "Yes" || (accountDetails !== undefined && accountDetails.isEpf !== undefined && accountDetails.isEpf === true)
       ? [INVESTMENT.QUESTION_1_OPTION_2]
       : [INVESTMENT.QUESTION_1_OPTION_1];
+
+  const classCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === fundCurrency);
+  const { newSalesAmount, salesCharge, topUpAmount, isEpf } = masterClassList[fundClass!][classCurrencyIndex];
+
   if (
     isEpf === "Yes" &&
     withEpf === true &&
     accountType === "Individual" &&
-    fundDetails.isEpfOnly !== "Yes" &&
+    isEpfOnly !== "Yes" &&
     (transactionType === undefined || (transactionType !== undefined && accountDetails !== undefined && accountDetails.accountNo === ""))
   ) {
     fundingOption.push(INVESTMENT.QUESTION_1_OPTION_2);
   }
   const fundSelectedOptions = [INVESTMENT.LABEL_NEW_FUND, INVESTMENT.LABEL_EXISTING_FUND];
-  const classCurrencyIndex = masterClassList[fundClass!].findIndex((test) => test.currency === fundCurrency);
-  const { newSalesAmount, salesCharge, topUpAmount } = masterClassList[fundClass!][classCurrencyIndex];
 
   const minSalesCharge = classCurrencyIndex !== -1 ? parseFloat(salesCharge[fundPaymentMethod.toLowerCase()].min) : parseFloat("NaN");
   const maxSalesCharge = classCurrencyIndex !== -1 ? parseFloat(salesCharge[fundPaymentMethod.toLowerCase()].max) : parseFloat("NaN");
@@ -242,6 +244,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
   const handleClass = (value: string) => {
     const newCurrency = masterClassList[value][0].currency;
     const newFundId = masterClassList[value][0].fundId;
+    const newFundPayment = isEpfOnly === "Yes" ? "EPF" : "Cash";
     setData({
       ...data,
       investment: {
@@ -249,6 +252,7 @@ export const Investment: FunctionComponent<InvestmentProps> = ({
         amountError: undefined,
         fundClass: value,
         fundCurrency: newCurrency,
+        fundPaymentMethod: newFundPayment,
         fundId: newFundId,
         investmentAmount: "",
         investmentSalesCharge: "",

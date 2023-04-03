@@ -231,6 +231,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
       title: PRODUCT_LIST.LABEL_COLUMN_RISK_NEW,
     },
     {
+      customItem: true,
       key: [
         {
           key: "isEpf",
@@ -354,11 +355,20 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
             }}
             onRowSelect={onRowSelect}
             RenderCustomItem={(customItem: ITableCustomItem) => {
-              const type = customItem.item.rawData.isSyariah === "Yes" ? "Shariah" : "Conventional";
+              const { isSyariah, masterList } = customItem.item.rawData as unknown as IProduct;
+              const fundEpf = masterList.map((eachMasterList) => eachMasterList.isEpf);
+              const updatedFundEpf = fundEpf.filter((item, index) => fundEpf.indexOf(item) === index);
+              const type = isSyariah === "Yes" ? "Shariah" : "Conventional";
               const sortFontFamily: TextStyle = sortedColumns.includes("riskCategory")
                 ? { fontFamily: NunitoBold }
                 : { fontFamily: NunitoRegular };
               switch (customItem.keyName.key) {
+                case "isEpf":
+                  return (
+                    <View style={centerHV}>
+                      <Text style={fs12RegBlue1}>{updatedFundEpf.join(", ")}</Text>
+                    </View>
+                  );
                 case "isSyariah":
                   return (
                     <View style={centerHV}>

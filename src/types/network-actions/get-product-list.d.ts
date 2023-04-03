@@ -55,7 +55,6 @@ declare interface IProduct {
   fundName: string;
   fundObjective: string;
   fundType: string;
-  isEpf: string;
   isEpfOnly: string;
   prsType: TypePrs;
   isScheduled: string;
@@ -89,6 +88,7 @@ declare interface IProductMasterList {
   class: string;
   currency: string;
   fundId: string;
+  isEpf: string;
   newSalesAmount: IProductNewSalesAmount;
   salesCharge: IProductSalesCharge;
   topUpAmount: IProductTopUpAmount;

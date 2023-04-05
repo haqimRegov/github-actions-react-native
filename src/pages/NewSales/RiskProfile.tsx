@@ -1,6 +1,5 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
-import { Image, Pressable, Text, TextStyle, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Image, Pressable, Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../assets/images/LocalAssets";

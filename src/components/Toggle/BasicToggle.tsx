@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
   alignFlexStart,

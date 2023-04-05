@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
-import { Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, Text, View } from "react-native";
 
 import {
   ActionButtons,

@@ -9,19 +9,19 @@ import { SummaryColorCard } from "../../../templates";
 const { SUMMARY } = Language.PAGE;
 
 interface SummaryJointDetailsProps {
-  handleNextStep: (route: TypeOnboardingKey) => void;
+  handleEdit: (route: TypeOnboardingKey) => void;
   personalInfo?: IPersonalInfoState;
 }
 
 export const SummaryJointDetails: FunctionComponent<SummaryJointDetailsProps> = ({
-  handleNextStep,
+  handleEdit,
   personalInfo,
 }: SummaryJointDetailsProps) => {
   const { incomeDistribution, joint, principal, signatory } = personalInfo!;
   const { bankSummary } = principal!;
 
   const handleEditOtherDetails = () => {
-    handleNextStep("AdditionalDetails");
+    handleEdit("AdditionalDetails");
   };
 
   const { width } = Dimensions.get("window");

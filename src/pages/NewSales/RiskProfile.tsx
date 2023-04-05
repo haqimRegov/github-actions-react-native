@@ -16,7 +16,7 @@ import {
   TextSpaceArea,
 } from "../../components";
 import { Language } from "../../constants";
-import { getProductTagType } from "../../helpers";
+import { extractActualIdType, getProductTagType } from "../../helpers";
 import { usePrevious } from "../../hooks";
 import { IcoMoon } from "../../icons";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
@@ -76,7 +76,7 @@ import {
   sw638,
   sw8,
 } from "../../styles";
-import { isEmpty, isNotEmpty, titleCaseString } from "../../utils";
+import { isEmpty, isNotEmpty } from "../../utils";
 import { NewSalesAccountInformation } from "./AccountInformation";
 import { InvestorProfilePage } from "./AccountInfoSummary/Profile";
 import { scaledSpaceBetween } from "./helper";
@@ -116,12 +116,6 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
   const updatedRisk = riskInfo.appetite !== "" ? riskInfo : riskScore;
   const checkRangeOfReturn = riskInfo.expectedRange !== "" ? riskInfo.expectedRange : riskScore.rangeOfReturn;
 
-  const checkIdType = (data: IClientBasicInfo) => {
-    const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
-    const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
-
-    return data.idType === "Other" ? `${otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : idType;
-  };
   const accountDetailsArray: LabeledTitleProps[] = [
     {
       label: accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_PRINCIPAL_NAME : RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
@@ -131,8 +125,8 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
     {
       label:
         accountType === "Joint"
-          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
-          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
+          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${extractActualIdType(principalHolder!)}`
+          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${extractActualIdType(principalHolder!)}`,
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
@@ -151,7 +145,7 @@ const NewSalesRiskSummaryComponent: FunctionComponent<IRiskSummaryProps> = ({
         titleStyle: fsTransformNone,
       },
       {
-        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
+        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${extractActualIdType(jointHolder!)}`,
         title: jointHolder!.id,
         titleStyle: fsTransformNone,
       },

@@ -120,7 +120,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   const incomeDistribution = { incomeDistribution: personalInfo.incomeDistribution };
 
   // // TODO templates (same with Risk Summary)
-  // const checkIdType = (data: IClientBasicInfo) => {
+  // const extractActualIdType = (data: IClientBasicInfo) => {
   //   const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
   //   const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
 
@@ -136,8 +136,8 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   //   {
   //     label:
   //       accountType === "Joint"
-  //         ? `${SUMMARY.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
-  //         : `${SUMMARY.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
+  //         ? `${SUMMARY.LABEL_PRINCIPAL} ${extractActualIdType(principalHolder!)}`
+  //         : `${SUMMARY.LABEL_INVESTOR} ${extractActualIdType(principalHolder!)}`,
   //     title: principalHolder!.id,
   //     titleStyle: fsTransformNone,
   //   },
@@ -155,7 +155,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
   //       titleStyle: fsTransformNone,
   //     },
   //     {
-  //       label: `${SUMMARY.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
+  //       label: `${SUMMARY.LABEL_JOINT} ${extractActualIdType(jointHolder!)}`,
   //       title: jointHolder!.id,
   //       titleStyle: fsTransformNone,
   //     },
@@ -246,7 +246,7 @@ const PersonalInfoSummaryComponent: FunctionComponent<PersonalInfoSummaryProps> 
                 viewFile={viewFile}
               />
             )}
-            {accountType === "Individual" ? null : <SummaryJointDetails handleNextStep={handleNextStep} personalInfo={personalInfo} />}
+            {accountType === "Individual" ? null : <SummaryJointDetails handleEdit={handleEdit} personalInfo={personalInfo} />}
           </ContentPage>
           <CustomSpacer space={sh24} />
           <SelectionBanner

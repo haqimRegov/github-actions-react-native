@@ -16,6 +16,7 @@ import {
   TextSpaceArea,
 } from "../../components";
 import { Language } from "../../constants";
+import { extractActualIdType } from "../../helpers";
 import { RiskMapDispatchToProps, RiskMapStateToProps, RiskStoreProps } from "../../store";
 import {
   autoWidth,
@@ -60,7 +61,7 @@ import {
   sw638,
   sw8,
 } from "../../styles";
-import { isEmpty, isNotEmpty, titleCaseString } from "../../utils";
+import { isEmpty, isNotEmpty } from "../../utils";
 import { InvestorProfilePage } from "../NewSales/AccountInfoSummary/Profile";
 
 const { NEW_SALES_SUMMARY, RISK_ASSESSMENT } = Language.PAGE;
@@ -94,13 +95,6 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
   const checkRangeOfReturn = riskInfo.expectedRange !== "" ? riskInfo.expectedRange : riskScore.rangeOfReturn;
   const isAssessmentCompleted = isNotEmpty(updatedRisk) && updatedRisk.appetite === "";
 
-  const checkIdType = (data: IClientBasicInfo) => {
-    const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
-    const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
-
-    return data.idType === "Other" ? `${otherIdType} ${RISK_ASSESSMENT.LABEL_ID}` : idType;
-  };
-
   const accountDetailsArray: LabeledTitleProps[] = [
     {
       label: accountType === "Joint" ? RISK_ASSESSMENT.NEW_SALES_PRINCIPAL_NAME : RISK_ASSESSMENT.NEW_SALES_INVESTOR_NAME,
@@ -110,8 +104,8 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
     {
       label:
         accountType === "Joint"
-          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)} ${RISK_ASSESSMENT.LABEL_NUMBER}`
-          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${checkIdType(principalHolder!)} ${RISK_ASSESSMENT.LABEL_NUMBER}`,
+          ? `${RISK_ASSESSMENT.LABEL_PRINCIPAL} ${extractActualIdType(principalHolder!)}`
+          : `${RISK_ASSESSMENT.LABEL_INVESTOR} ${extractActualIdType(principalHolder!)}`,
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
@@ -129,7 +123,7 @@ const OnboardingRiskSummaryComponent: FunctionComponent<IOnboardingRiskSummaryPr
         titleStyle: fsTransformNone,
       },
       {
-        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${checkIdType(jointHolder!)} ${RISK_ASSESSMENT.LABEL_NUMBER}`,
+        label: `${RISK_ASSESSMENT.LABEL_JOINT} ${extractActualIdType(jointHolder!)}`,
         title: jointHolder!.id,
         titleStyle: fsTransformNone,
       },

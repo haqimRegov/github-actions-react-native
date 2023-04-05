@@ -13,7 +13,7 @@ import {
   TextCard,
 } from "../../../components";
 import { Language } from "../../../constants";
-import { getProductTagType } from "../../../helpers";
+import { extractActualIdType, getProductTagType } from "../../../helpers";
 import { IcoMoon } from "../../../icons";
 import { PersonalInfoMapDispatchToProps, PersonalInfoMapStateToProps, PersonalInfoStoreProps } from "../../../store";
 import {
@@ -96,9 +96,6 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
   const { bankSummary, epfDetails, personalDetails } = principal!;
   const { enableBankDetails } = personalDetails!;
 
-  const checkIdType = (data: IClientBasicInfo) => {
-    return data.idType === "Other" ? `${data.otherIdType} ${NEW_SALES_SUMMARY.LABEL_ID}` : data.idType;
-  };
   const accountDetails: LabeledTitleProps[] = [
     {
       label: accountType === "Joint" ? NEW_SALES_SUMMARY.LABEL_PRINCIPAL_NAME : NEW_SALES_SUMMARY.LABEL_INVESTOR_NAME,
@@ -108,8 +105,8 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
     {
       label:
         accountType === "Joint"
-          ? `${NEW_SALES_SUMMARY.LABEL_PRINCIPAL} ${checkIdType(principalHolder!)}`
-          : `${NEW_SALES_SUMMARY.LABEL_INVESTOR} ${checkIdType(principalHolder!)}`,
+          ? `${NEW_SALES_SUMMARY.LABEL_PRINCIPAL} ${extractActualIdType(principalHolder!)}`
+          : `${NEW_SALES_SUMMARY.LABEL_INVESTOR} ${extractActualIdType(principalHolder!)}`,
       title: principalHolder!.id,
       titleStyle: fsTransformNone,
     },
@@ -128,7 +125,7 @@ const NewSalesAccountSummaryComponent: FunctionComponent<NewSalesSummaryProps> =
         titleStyle: fsTransformNone,
       },
       {
-        label: `${NEW_SALES_SUMMARY.LABEL_JOINT} ${checkIdType(jointHolder!)}`,
+        label: `${NEW_SALES_SUMMARY.LABEL_JOINT} ${extractActualIdType(jointHolder!)}`,
         title: jointHolder!.id,
         titleStyle: fsTransformNone,
       },

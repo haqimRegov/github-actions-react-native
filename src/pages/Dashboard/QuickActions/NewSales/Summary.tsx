@@ -3,8 +3,9 @@ import React, { Fragment, FunctionComponent } from "react";
 
 import { CustomSpacer, IInfoStackData, InfoStack, TextSpaceArea } from "../../../../components";
 import { DEFAULT_DATE_FORMAT, FULL_DATE_FORMAT, Language } from "../../../../constants";
+import { extractActualIdType } from "../../../../helpers";
 import { fs24BoldGray6, sh24, sh8 } from "../../../../styles";
-import { isNotEmpty, titleCaseString } from "../../../../utils";
+import { isNotEmpty } from "../../../../utils";
 
 const { ADD_CLIENT } = Language.PAGE;
 
@@ -20,18 +21,10 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
   jointHolder,
 }: NewSalesSummaryProps) => {
   const subheading = accountType === "Individual" ? ADD_CLIENT.LABEL_VERIFY_INDIVIDUAL : ADD_CLIENT.LABEL_VERIFY_JOINT;
-  const checkIdType = (data: IClientBasicInfo) => {
-    const otherIdType = isNotEmpty(data.otherIdType) ? titleCaseString(data.otherIdType!) : data.otherIdType;
-    const idType = isNotEmpty(data.idType) && data.idType !== "NRIC" ? titleCaseString(data.idType!) : data.idType;
-
-    return data.idType === "Other"
-      ? `${otherIdType} ${ADD_CLIENT.LABEL_ID} ${ADD_CLIENT.LABEL_NUMBER}`
-      : `${idType} ${ADD_CLIENT.LABEL_NUMBER}`;
-  };
 
   const principalSummary = [
     { label: ADD_CLIENT.LABEL_NAME, value: principalHolder.name! },
-    { label: checkIdType(principalHolder), value: principalHolder.id! },
+    { label: extractActualIdType(principalHolder), value: principalHolder.id! },
     { label: ADD_CLIENT.DETAILS_LABEL_DOB, value: moment(principalHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT) },
   ];
 
@@ -47,7 +40,7 @@ export const NewSalesSummary: FunctionComponent<NewSalesSummaryProps> = ({
   if (accountType === "Joint" && jointHolder !== undefined) {
     jointSummary = [
       { label: ADD_CLIENT.LABEL_NAME, value: jointHolder.name! },
-      { label: checkIdType(jointHolder), value: jointHolder.id! },
+      { label: extractActualIdType(jointHolder), value: jointHolder.id! },
       { label: ADD_CLIENT.DETAILS_LABEL_DOB, value: moment(jointHolder.dateOfBirth, DEFAULT_DATE_FORMAT).format(FULL_DATE_FORMAT) },
     ];
 

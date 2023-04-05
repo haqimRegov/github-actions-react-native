@@ -1,6 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Pressable, Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Pressable, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import {
   CustomSpacer,

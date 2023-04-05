@@ -1,6 +1,5 @@
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, TextStyle, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Text, TextStyle, TouchableWithoutFeedback, View } from "react-native";
 
 import { CustomSpacer, PromptModal } from "../../../components";
 import { Language } from "../../../constants/language";

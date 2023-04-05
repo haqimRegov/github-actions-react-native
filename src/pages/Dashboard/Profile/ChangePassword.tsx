@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 
 import { LocalAssets } from "../../../assets/images/LocalAssets";

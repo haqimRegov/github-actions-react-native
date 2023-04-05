@@ -1,7 +1,6 @@
 import moment from "moment";
 import React, { Fragment, FunctionComponent } from "react";
-import { Text, View, ViewStyle } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { DEFAULT_TIME_FORMAT } from "../../constants";
 import { Language } from "../../constants/language";

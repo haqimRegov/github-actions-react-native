@@ -3,6 +3,7 @@ import React, { FunctionComponent } from "react";
 
 import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
 import { DICTIONARY_ALL_ID_TYPE } from "../../../data/dictionary";
+import { extractIdType } from "../../../helpers";
 import { fsTransformNone, fsUppercase } from "../../../styles";
 import { SummaryDetails } from "./Details";
 
@@ -43,7 +44,7 @@ export const Principal: FunctionComponent<PrincipalProps> = ({
   const personalDetailsSummary: LabeledTitleProps[] = [
     { label: SUMMARY.LABEL_FULL_NAME, title: personalDetails!.name! },
     {
-      label: `${idType} ${SUMMARY.LABEL_ID_NUMBER}`,
+      label: extractIdType(idType),
       onPress: handleOpenViewer,
       title: personalDetails!.idNumber!,
       titleIcon: "tax-card",

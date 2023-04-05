@@ -3,7 +3,7 @@ import moment from "moment";
 import { DEFAULT_DATE_FORMAT } from "../constants";
 import { Language } from "../constants/language";
 import { OPTIONS_CRS_TAX_RESIDENCY } from "../data/dictionary";
-import { getAddress } from "../helpers";
+import { extractIdType, getAddress } from "../helpers";
 import { fsTransformNone, fsUppercase, sh4, sw328 } from "../styles";
 import { booleanTextChange } from "./Validator";
 import { isNotEmpty } from "./Value";
@@ -72,9 +72,7 @@ export const getStructuredInvestorProfile = (data: IInvestorAccount) => {
 
   const identificationDetails: LabeledTitleProps[] = [
     {
-      label: `${idType}${idType === "Army" || idType === "Police" ? ` ${INVESTOR_PROFILE.LABEL_ID}` : ""} ${
-        INVESTOR_PROFILE.LABEL_ID_NUMBER
-      }`,
+      label: extractIdType(idType),
       title: idNumber || "-",
       titleStyle: fsUppercase,
     },

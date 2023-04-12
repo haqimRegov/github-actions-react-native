@@ -11,10 +11,10 @@ import { isNotEmpty } from "../../../../../utils";
 
 interface AMPProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
+  handleDisabledFundIdRef: (value: string[] | undefined) => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   tabsContent?: ReactNode;
-  withEpf: boolean;
 }
 
 const AMPComponent: FunctionComponent<AMPProps> = ({
@@ -26,22 +26,23 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
   addAmpSort,
   addSelectedFund,
   addViewFund,
-  newSales,
+  global,
+  handleDisabledFundIdRef,
+  investmentDetails,
   onboarding,
-  // details,
   products,
   productType,
-  resetSelectedFund,
   resetAMPFilter,
+  resetSelectedFund,
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
   tabsContent,
-  updateAvailableFilters,
   updateAmpShowBy,
-  withEpf,
+  updateAvailableFilters,
 }: AMPProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const { isMultiUtmc } = global;
   const { riskInfo } = onboarding;
   const { filters, page, search, showBy, sort, totalCount } = products.amp;
   const [loading, setLoading] = useState<boolean>(false);
@@ -126,9 +127,11 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       addAmpSort={addAmpSort}
       addSelectedFund={addSelectedFund}
       addViewFund={addViewFund}
+      handleDisabledFundIdRef={handleDisabledFundIdRef}
       handleFetchAMP={handleFetchAMP}
+      investmentDetails={investmentDetails!}
+      isMultiUtmc={isMultiUtmc === true}
       loading={loading}
-      newSales={newSales}
       products={products}
       productType={productType}
       resetAMPFilter={resetAMPFilter}
@@ -137,8 +140,8 @@ const AMPComponent: FunctionComponent<AMPProps> = ({
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
       tabsContent={tabsContent}
+      transactionType="Sales-AO"
       updateAmpShowBy={updateAmpShowBy}
-      withEpf={withEpf}
     />
   );
 };

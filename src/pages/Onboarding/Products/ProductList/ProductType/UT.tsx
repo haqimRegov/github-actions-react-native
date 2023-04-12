@@ -11,6 +11,7 @@ import { isNotEmpty } from "../../../../../utils";
 
 interface UnitTrustProps extends ProductsStoreProps {
   handleCancelOnboarding?: () => void;
+  handleDisabledFundIdRef: (value: string[] | undefined) => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   tabsContent?: ReactNode;
@@ -24,8 +25,9 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   addUtSearch,
   addUtSort,
   addViewFund,
-  // details,
-  newSales,
+  global,
+  handleDisabledFundIdRef,
+  investmentDetails,
   onboarding,
   products,
   productType,
@@ -35,10 +37,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   selectedFunds,
   setScrollEnabled,
   tabsContent,
-  updateUtShowBy,
   updateAvailableFilters,
+  updateUtShowBy,
 }: UnitTrustProps) => {
   const navigation = useNavigation<IStackNavigationProp>();
+  const { isMultiUtmc } = global;
   const { riskInfo } = onboarding;
   const { filters, page, search, showBy, sort, totalCount } = products.ut;
   const [loading, setLoading] = useState<boolean>(false);
@@ -124,7 +127,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
 
   return (
     <UnitTrustTemplate
-      // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
       addSelectedFund={addSelectedFund}
       addUtAllFunds={addUtAllFunds}
       addUtFilters={addUtFilters}
@@ -132,10 +134,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       addUtSearch={addUtSearch}
       addUtSort={addUtSort}
       addViewFund={addViewFund}
+      handleDisabledFundIdRef={handleDisabledFundIdRef}
       handleFetchUT={handleFetchUT}
-      isMultiUtmc={undefined}
+      investmentDetails={investmentDetails!}
+      isMultiUtmc={isMultiUtmc === true}
       loading={loading}
-      newSales={newSales}
       products={products}
       productType={productType}
       resetSelectedFund={resetSelectedFund}
@@ -144,6 +147,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
       tabsContent={tabsContent}
+      transactionType="Sales-AO"
       updateUtShowBy={updateUtShowBy}
     />
   );

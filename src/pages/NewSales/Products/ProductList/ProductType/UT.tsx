@@ -10,6 +10,7 @@ import { UnitTrustTemplate } from "../../../../../templates/Products/ProductType
 import { isNotEmpty } from "../../../../../utils";
 
 interface UnitTrustProps extends ProductsStoreProps {
+  handleDisabledFundIdRef: (value: string[] | undefined) => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
   tabsContent?: ReactNode;
@@ -24,8 +25,9 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   addUtSearch,
   addUtSort,
   addViewFund,
-  // details,
   global,
+  handleDisabledFundIdRef,
+  investmentDetails,
   newSales,
   products,
   productType,
@@ -35,8 +37,8 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
   selectedFunds,
   setScrollEnabled,
   tabsContent,
-  updateUtShowBy,
   updateAvailableFilters,
+  updateUtShowBy,
 }: UnitTrustProps) => {
   const { isMultiUtmc } = global;
   const { riskInfo } = newSales;
@@ -125,7 +127,6 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
 
   return (
     <UnitTrustTemplate
-      // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
       accountDetails={accountDetails}
       addSelectedFund={addSelectedFund}
       addUtAllFunds={addUtAllFunds}
@@ -134,10 +135,11 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       addUtSearch={addUtSearch}
       addUtSort={addUtSort}
       addViewFund={addViewFund}
+      handleDisabledFundIdRef={handleDisabledFundIdRef}
       handleFetchUT={handleFetchUT}
-      isMultiUtmc={isMultiUtmc}
+      investmentDetails={investmentDetails!}
+      isMultiUtmc={isMultiUtmc === true}
       loading={loading}
-      newSales={newSales}
       products={products}
       productType={productType}
       resetSelectedFund={resetSelectedFund}
@@ -146,6 +148,7 @@ const UnitTrustComponent: FunctionComponent<UnitTrustProps> = ({
       selectedFunds={selectedFunds as unknown as IProduct[]}
       setScrollEnabled={setScrollEnabled}
       tabsContent={tabsContent}
+      transactionType={newSales.transactionType}
       updateUtShowBy={updateUtShowBy}
     />
   );

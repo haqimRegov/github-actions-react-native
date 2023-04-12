@@ -3,60 +3,60 @@ import { View } from "react-native";
 
 import { ProductHeader, ProductListView } from "..";
 import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../components";
-import { NewSalesState, productsState } from "../../../store";
+import { productsState } from "../../../store";
 import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../styles";
 import { isNotEmpty } from "../../../utils";
 
 interface AMPTemplateProps {
   accountDetails?: INewSalesAccountDetails;
-  addSelectedFund: (fund: IProduct[]) => void;
   addAmpAllFunds: (funds: IProductListResult) => void;
   addAmpFilters: (filters: IProductFilter) => void;
   addAmpRecommendedFunds: (funds: IProductListResult) => void;
   addAmpSearch: (value: string) => void;
   addAmpSort: (sort: IProductSort[]) => void;
+  addSelectedFund: (fund: IProduct[]) => void;
   addViewFund: (fund: IProduct) => void;
   handleCancelOnboarding?: () => void;
+  handleDisabledFundIdRef: (value: string[] | undefined) => void;
   handleFetchAMP: (page: string) => Promise<void>;
-  isMultiUtmc?: boolean;
+  investmentDetails: IProductSales[];
+  isMultiUtmc: boolean;
   loading: boolean;
-  newSales: NewSalesState;
   products: productsState;
   productType: ProductType;
-  resetSelectedFund: () => void;
   resetAMPFilter: () => void;
+  resetSelectedFund: () => void;
   scrollEnabled: boolean;
   selectedFunds: IProduct[];
   setScrollEnabled: (toggle: boolean) => void;
   tabsContent?: ReactNode;
+  transactionType: TTransactionType | undefined;
   updateAmpShowBy: (show: ProductListShowByType) => void;
-  withEpf?: boolean;
 }
 
 export const AMPTemplate: FunctionComponent<AMPTemplateProps> = ({
   accountDetails,
-  addSelectedFund,
   addAmpFilters,
   addAmpSearch,
   addAmpSort,
+  addSelectedFund,
   addViewFund,
-  // details,
+  handleDisabledFundIdRef,
   handleFetchAMP,
+  investmentDetails,
   isMultiUtmc,
   loading,
-  newSales,
   products,
   productType,
-  resetSelectedFund,
   resetAMPFilter,
+  resetSelectedFund,
   scrollEnabled,
   selectedFunds,
   setScrollEnabled,
   tabsContent,
+  transactionType,
   updateAmpShowBy,
-  withEpf,
 }: AMPTemplateProps) => {
-  const { transactionType } = newSales;
   const { availableFilters } = products;
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.amp;
   const list = showBy === "recommended" ? recommended : all;
@@ -202,18 +202,19 @@ export const AMPTemplate: FunctionComponent<AMPTemplateProps> = ({
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
+        handleDisabledFundIdRef={handleDisabledFundIdRef}
         handleNext={handleNext}
         handlePrev={handlePrev}
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
+        investmentDetails={investmentDetails}
         isMultiUtmc={isMultiUtmc}
-        loading={loading}
         list={loading === true ? [] : (list as unknown as ITableData[])}
+        loading={loading}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
-        // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}
@@ -223,7 +224,6 @@ export const AMPTemplate: FunctionComponent<AMPTemplateProps> = ({
         transactionType={transactionType}
         updateFilter={handleUpdateFilter}
         updateSort={addAmpSort}
-        withEpf={withEpf}
       />
     </View>
   );

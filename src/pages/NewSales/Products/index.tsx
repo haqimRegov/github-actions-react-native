@@ -1,10 +1,8 @@
-import moment from "moment";
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useRef, useState } from "react";
 import { Keyboard, View } from "react-native";
 import { connect } from "react-redux";
 
-import { DEFAULT_DATE_FORMAT, Language } from "../../../constants";
-import { DICTIONARY_EPF_AGE } from "../../../data/dictionary";
+import { Language } from "../../../constants";
 import { ProductsMapDispatchToProps, ProductsMapStateToProps, ProductsStoreProps } from "../../../store";
 import { flexChild } from "../../../styles";
 import { ProductDetails, ProductsBanner, ProductsPrompt } from "../../../templates";
@@ -23,36 +21,25 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
   addInvestmentDetails,
   addSelectedFund,
   addViewFund,
-  client,
-  details,
-  global,
   handleNextStep,
   investmentDetails,
   newSales,
-  // partialResetPRSDefaultProducts,
-  // partialResetPRSProducts,
-  // partialResetUTProducts,
-  // products,
-  // resetProducts,
-  // resetSelectedFund,
-  // riskAssessment,
   selectedFunds,
   updateNewSales,
   updateOutsideRisk,
   viewFund,
 }: ProductsProps) => {
-  const { accountType } = client;
-  const { isMultiUtmc } = global;
-  const { disabledSteps, finishedSteps, riskInfo, transactionType } = newSales;
-  // const { fundType, isEpf } = accountDetails;
-  // const { ut, prsDefault } = products;
+  const { disabledSteps, finishedSteps, riskInfo } = newSales;
+
   const [page] = useState<number>(0);
   const [prompt, setPrompt] = useState<"risk" | "cancel" | undefined>(undefined);
   const [keyboardIsShowing, setKeyboardIsShowing] = useState<boolean>(false);
   const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const disabledFundIdRef = useRef<string[] | undefined>(undefined);
 
-  const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
-  const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
+  const handleDisabledFundIdRef = (value: string[] | undefined) => {
+    disabledFundIdRef.current = value;
+  };
 
   // const handleProductReset = () => {
   //   switch (fundType) {
@@ -271,25 +258,13 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
     );
   });
 
-  const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
-  const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
-  const checkUtmc =
-    isMultiUtmc === false &&
-    transactionType === "Sales" &&
-    isArrayNotEmpty(selectedFunds) &&
-    selectedUtmc !== undefined &&
-    viewFund !== undefined
-      ? viewFund.issuingHouse !== selectedUtmc
-      : false;
-  const selectViewFundDisabled = withEpf === false ? true : checkUtmc;
-
   let screen = {
     content: (
       <ProductList
         handleCancelProducts={handleCancelProducts}
+        handleDisabledFundIdRef={handleDisabledFundIdRef}
         scrollEnabled={scrollEnabled}
         setScrollEnabled={setScrollEnabled}
-        withEpf={withEpf}
       />
     ),
     continueDisabled: selectedFunds.length === 0,
@@ -303,7 +278,7 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
       ...screen,
       content: (
         <ProductDetails
-          disabled={selectViewFundDisabled}
+          disabled={disabledFundIdRef.current !== undefined && disabledFundIdRef.current.includes(viewFund.fundId)}
           fund={viewFund}
           handleBack={handleBack}
           selectedFunds={selectedFunds}
@@ -341,6 +316,12 @@ export const ProductComponent: FunctionComponent<ProductsProps> = ({
 
       updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps });
     }
+
+    // wipe investment if selectedFunds is empty
+    if (selectedFunds.length === 0 && isArrayNotEmpty(investmentDetails)) {
+      addInvestmentDetails([]);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFunds]);
 

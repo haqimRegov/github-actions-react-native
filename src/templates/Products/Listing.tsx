@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useEffect } from "react";
 import { Text, TextStyle, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 
 import { AdvanceTable, CustomFlexSpacer, CustomSpacer, EmptyTable, Pagination, StatusBadge } from "../../components";
@@ -8,10 +8,8 @@ import {
   centerHV,
   centerVertical,
   colorBlue,
-  colorGray,
   colorRed,
   colorWhite,
-  disabledOpacity5,
   flexChild,
   flexRow,
   fs12RegBlue1,
@@ -46,11 +44,13 @@ interface ProductListViewProps {
   addFunds: (data: IProduct[]) => void;
   filter: IProductFilter;
   handleAllFunds?: () => void;
+  handleDisabledFundIdRef?: (value: string[] | undefined) => void;
   handleNext: () => void;
   handlePrev: () => void;
   handleRecommendedFunds?: () => void;
   handleResetSelected: () => void;
   handleSelectProduct: (product: IProduct) => void;
+  investmentDetails?: IProductSales[];
   isMultiUtmc?: boolean;
   list: ITableData[];
   loading: boolean;
@@ -67,7 +67,6 @@ interface ProductListViewProps {
   transactionType?: TTransactionType;
   updateFilter: (filter: IProductFilter) => void;
   updateSort: (sort: IProductSort[]) => void;
-  withEpf?: boolean;
 }
 
 export const ProductListView: FunctionComponent<ProductListViewProps> = ({
@@ -75,11 +74,13 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   addFunds,
   filter,
   handleAllFunds,
+  handleDisabledFundIdRef,
   handleNext,
   handlePrev,
   handleRecommendedFunds,
   handleResetSelected,
   handleSelectProduct,
+  investmentDetails,
   isMultiUtmc,
   list,
   loading,
@@ -96,7 +97,6 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   transactionType,
   updateFilter,
   updateSort,
-  withEpf,
 }: ProductListViewProps) => {
   const findAbbr = sort.filter((sortType) => sortType.column === "fundAbbr" && sortType.value !== "");
   const findName = sort.filter((sortType) => sortType.column === "fundName" && sortType.value !== "");
@@ -106,26 +106,48 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
   const sortRisk = findRisk.length > 0 ? findRisk[0].value : "ascending";
   const sortedColumns = sort.filter((eachSort) => eachSort.value !== "").map((currentSortType) => currentSortType.column);
 
-  const singleUtmcOnly =
-    isMultiUtmc === false && transactionType === "Sales" && isNotEmpty(accountDetails) && accountDetails!.isEpf === true;
-  const findSelectedEpfFund = selectedFunds.findIndex((eachFund) => eachFund.isEpf === "Yes");
-  const selectedUtmc = findSelectedEpfFund !== -1 ? selectedFunds[findSelectedEpfFund].issuingHouse : undefined;
-  const checkUtmcIndex =
-    singleUtmcOnly === true && isArrayNotEmpty(selectedFunds) && selectedUtmc !== undefined
-      ? list.map((eachRow, index) => (eachRow.issuingHouse !== selectedUtmc ? index : null))
+  // TODO make the table data generic type
+  const typedList = list as unknown as IProduct[];
+  const typedSelectedFunds = selectedFunds as unknown as IProduct[];
+
+  const aoAvailableUtmc =
+    isMultiUtmc === false && transactionType === "Sales-AO" && isArrayNotEmpty(selectedFunds) && isArrayNotEmpty(investmentDetails)
+      ? investmentDetails!
+          .filter((findEpfFund) => {
+            return findEpfFund.investment.fundPaymentMethod === "EPF";
+          })
+          .map((eachFund) => eachFund.fundDetails.issuingHouse)
+      : [];
+
+  const salesAvailableUtmc =
+    isMultiUtmc === false && transactionType === "Sales" && isArrayNotEmpty(selectedFunds)
+      ? typedSelectedFunds
+          .filter((findEpfFund) => {
+            const findEpfInMasterList = findEpfFund.masterList.map((findMaster) => {
+              return findMaster.isEpf === "Yes";
+            });
+            return findEpfInMasterList.includes(true);
+          })
+          .map((eachFund) => eachFund.issuingHouse)
+      : [];
+
+  const aoDisabledIndex: number[] | undefined =
+    isArrayNotEmpty(aoAvailableUtmc) && isArrayNotEmpty(typedList)
+      ? typedList
+          .map((eachList, index) =>
+            aoAvailableUtmc.includes(eachList.issuingHouse) === false && eachList.isEpfOnly === "Yes" ? index : -1,
+          )
+          .filter((eachAvailableList) => eachAvailableList !== -1)
       : undefined;
 
-  const checkEpf =
-    isNotEmpty(withEpf) && withEpf === false
-      ? list
-          .map((eachRow: ITableData, index) => (eachRow.isEpf === "Yes" ? index : null))
-          .filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null)
-          .map((eachIndex) => eachIndex!)
-      : [];
-  const disabledIndex: number[] | undefined =
-    checkUtmcIndex !== undefined
-      ? checkUtmcIndex.filter((eachUtmcIndex: number | null) => eachUtmcIndex !== null).map((eachIndex) => eachIndex!)
-      : checkEpf;
+  const salesDisabledIndex: number[] | undefined =
+    isArrayNotEmpty(salesAvailableUtmc) && isArrayNotEmpty(typedList)
+      ? typedList
+          .map((eachList, index) => (salesAvailableUtmc.includes(eachList.issuingHouse) === false ? index : -1))
+          .filter((eachAvailableList) => eachAvailableList !== -1)
+      : undefined;
+
+  const disabledIndex = transactionType === "Sales" && accountDetails?.isEpf === true ? salesDisabledIndex : aoDisabledIndex;
 
   const handleSortAbbr = async () => {
     const updatedAbbrSort: IProductSort[] = sort.map((abbrSort) =>
@@ -271,17 +293,22 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
     handleSelectProduct(data as unknown as IProduct);
   };
 
-  const checkboxDisabled = singleUtmcOnly === true && isArrayNotEmpty(selectedFunds) === false;
-
   const handleRowSelectionHeader = () => {
-    if (checkboxDisabled === false) {
-      if (selectedFunds.length > 0) {
-        handleResetSelected();
-      } else {
-        addFunds(list as unknown as IProduct[]);
-      }
+    if (selectedFunds.length > 0) {
+      handleResetSelected();
+    } else {
+      addFunds(list as unknown as IProduct[]);
     }
   };
+
+  useEffect(() => {
+    if (handleDisabledFundIdRef !== undefined) {
+      const fundDisabledIndex: string[] | undefined =
+        disabledIndex !== undefined ? disabledIndex.map((eachDisabledIndex) => typedList[eachDisabledIndex].fundId) : undefined;
+      handleDisabledFundIdRef(fundDisabledIndex);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disabledIndex]);
 
   const tableContainer: ViewStyle = {
     ...flexChild,
@@ -404,14 +431,14 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
               return <ProductsGroupBy {...props} />;
             }}
             RowSelectionItem={() => {
-              const disabledCheckbox = checkboxDisabled === true ? disabledOpacity5 : {};
-              const disabledBackground = checkboxDisabled === true ? { backgroundColor: colorGray._4 } : {};
+              // const disabledCheckbox = checkboxDisabled === true ? disabledOpacity5 : {};
+              // const disabledBackground = checkboxDisabled === true ? { backgroundColor: colorGray._4 } : {};
               const checkBoxStyle: ViewStyle = {
                 backgroundColor: selectedFunds.length > 0 ? colorRed._1 : colorWhite._1,
                 borderWidth: sw1,
                 borderColor: selectedFunds.length > 0 ? colorRed._1 : colorBlue._1,
-                ...disabledBackground,
-                ...disabledCheckbox,
+                // ...disabledBackground,
+                // ...disabledCheckbox,
               };
               return (
                 <TouchableWithoutFeedback onPress={handleRowSelectionHeader}>
@@ -425,9 +452,7 @@ export const ProductListView: FunctionComponent<ProductListViewProps> = ({
                         width: sw18,
                         ...checkBoxStyle,
                       }}>
-                      {checkboxDisabled === true ? null : (
-                        <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
-                      )}
+                      <View style={{ backgroundColor: colorWhite._1, height: sh2, width: sw8, borderRadius: sw1 }} />
                     </View>
                   </View>
                 </TouchableWithoutFeedback>

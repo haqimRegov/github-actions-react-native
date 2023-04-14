@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { ProductHeader, ProductListView } from "..";
 import { CustomFlexSpacer, CustomSpacer, Pagination } from "../../../components";
-import { NewSalesState, productsState } from "../../../store";
+import { productsState } from "../../../store";
 import { borderBottomGray2, colorWhite, flexChild, flexRow, sh152, sh192, shadow12Black116, sw24 } from "../../../styles";
 import { isNotEmpty } from "../../../utils";
 
@@ -17,10 +17,11 @@ interface UnitTrustTemplateProps {
   addUtSort: (sort: IProductSort[]) => void;
   addViewFund: (fund: IProduct) => void;
   handleCancelOnboarding?: () => void;
+  handleDisabledFundIdRef: (value: string[] | undefined) => void;
   handleFetchUT: (page: string) => Promise<void>;
-  isMultiUtmc?: boolean;
+  investmentDetails: IProductSales[];
+  isMultiUtmc: boolean;
   loading: boolean;
-  newSales: NewSalesState;
   products: productsState;
   productType: ProductType;
   resetSelectedFund: () => void;
@@ -29,6 +30,7 @@ interface UnitTrustTemplateProps {
   selectedFunds: IProduct[];
   setScrollEnabled: (toggle: boolean) => void;
   tabsContent?: ReactNode;
+  transactionType: TTransactionType | undefined;
   updateUtShowBy: (show: ProductListShowByType) => void;
 }
 
@@ -39,11 +41,11 @@ export const UnitTrustTemplate: FunctionComponent<UnitTrustTemplateProps> = ({
   addUtSearch,
   addUtSort,
   addViewFund,
-  // details,
+  handleDisabledFundIdRef,
   handleFetchUT,
+  investmentDetails,
   isMultiUtmc,
   loading,
-  newSales,
   products,
   productType,
   resetSelectedFund,
@@ -52,9 +54,9 @@ export const UnitTrustTemplate: FunctionComponent<UnitTrustTemplateProps> = ({
   selectedFunds,
   setScrollEnabled,
   tabsContent,
+  transactionType,
   updateUtShowBy,
 }: UnitTrustTemplateProps) => {
-  const { transactionType } = newSales;
   const { availableFilters } = products;
   const { all, filters, page, pages, recommended, search, showBy, sort, totalCount } = products.ut;
   const list = showBy === "recommended" ? recommended : all;
@@ -200,18 +202,19 @@ export const UnitTrustTemplate: FunctionComponent<UnitTrustTemplateProps> = ({
         addFunds={addSelectedFund}
         filter={filterTemp}
         handleAllFunds={handleAllFunds}
+        handleDisabledFundIdRef={handleDisabledFundIdRef}
         handleNext={handleNext}
         handlePrev={handlePrev}
         handleRecommendedFunds={handleRecommendedFunds}
         handleResetSelected={resetSelectedFund}
         handleSelectProduct={handleSelectProduct}
+        investmentDetails={investmentDetails}
         isMultiUtmc={isMultiUtmc}
-        loading={loading}
         list={loading === true ? [] : (list as unknown as ITableData[])}
+        loading={loading}
         page={defaultPage}
         pages={defaultPages}
         productType={productType}
-        // recommendedRisk={showBy === "recommended" ? recommendedRisk : undefined}
         search={search}
         selectedFunds={selectedFunds as unknown as ITableData[]}
         setViewFund={addViewFund}

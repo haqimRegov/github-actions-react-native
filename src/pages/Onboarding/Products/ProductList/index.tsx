@@ -11,13 +11,14 @@ import { AMP, PRS, PRSDefault, UnitTrust } from "./ProductType";
 
 interface ProductListProps extends ProductsStoreProps {
   handleCancelProducts: () => void;
+  handleDisabledFundIdRef: (value: string[] | undefined) => void;
   scrollEnabled: boolean;
   setScrollEnabled: (value: boolean) => void;
-  withEpf: boolean;
 }
 
 const ProductListComponent: FunctionComponent<ProductListProps> = ({
   accountType,
+  handleDisabledFundIdRef,
   licenseType,
   productType,
   resetAMPFilter,
@@ -27,7 +28,6 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   scrollEnabled,
   setScrollEnabled,
   updateProductType,
-  withEpf,
 }: ProductListProps) => {
   const previousType = usePrevious<ProductType>(productType, true);
   const handleProductType = (type: ProductType) => {
@@ -46,9 +46,9 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   } else if (productType === "prsDefault") {
     content = <PRSDefault {...productTypeProps} />;
   } else if (productType === "amp") {
-    content = <AMP withEpf={withEpf} {...productTypeProps} />;
+    content = <AMP {...productTypeProps} handleDisabledFundIdRef={handleDisabledFundIdRef} />;
   } else {
-    content = <UnitTrust {...productTypeProps} />;
+    content = <UnitTrust {...productTypeProps} handleDisabledFundIdRef={handleDisabledFundIdRef} />;
   }
 
   const handleResetFilter = () => {

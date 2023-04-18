@@ -31,7 +31,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
 }: PaymentProps) => {
   const [proofOfPayments, setProofOfPayments] = useState<IPaymentRequired[] | undefined>(undefined);
   const [applicationBalance, setApplicationBalance] = useState<IPaymentInfo[]>([]);
-  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
+  // const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [tempApplicationBalance, setTempApplicationBalance] = useState<IPaymentInfo[]>(applicationBalance);
   const [grandTotal, setGrandTotal] = useState<IGrandTotal | undefined>(undefined);
   const [localRecurringDetails, setLocalRecurringDetails] = useState<IRecurringDetails | undefined>(undefined);
@@ -298,7 +298,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                 const setProofOfPayment = (
                   value: IPaymentRequired,
                   action?: ISetProofOfPaymentAction,
-                  deleted?: boolean,
+                  // deleted?: boolean,
                   setActiveInfo?: (activeIndex: number) => void,
                 ) => {
                   let updatedProofOfPayments: IPaymentRequired[] = [...checkProofOfPayments];
@@ -345,7 +345,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           activeOrder={activeOrder}
                           applicationBalance={tempApplicationBalance}
                           deleteCount={deleteCount}
-                          deletedPayment={tempDeletedPayment}
+                          // deletedPayment={tempDeletedPayment}
                           localCtaDetails={localCtaDetails}
                           localRecurringDetails={localRecurringDetails}
                           parentIndex={index}
@@ -353,7 +353,7 @@ const PaymentComponent: FunctionComponent<PaymentProps> = ({
                           setActiveOrder={setActiveOrder}
                           setApplicationBalance={handleApplicationBalance}
                           setDeleteCount={setDeleteCount}
-                          setDeletedPayment={setTempDeletedPayment}
+                          // setDeletedPayment={setTempDeletedPayment}
                           setLocalCtaDetails={setLocalCtaDetails}
                           setLocalRecurringDetails={setLocalRecurringDetails}
                           setProofOfPayment={setProofOfPayment}

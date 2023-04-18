@@ -32,7 +32,7 @@ interface DashPaymentProps extends TransactionsStoreProps {
 const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: DashPaymentProps) => {
   const { currentOrder, navigation, setScreen, updateCurrentOrder, updatePill } = props;
   const [proofOfPayment, setProofOfPayment] = useState<IPaymentRequired | undefined>(undefined);
-  const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
+  // const [tempDeletedPayment, setTempDeletedPayment] = useState<IPaymentInfo[]>([]);
   const [grandTotal, setGrandTotal] = useState<IOrderAmount[]>([]);
   const [confirmPayment, setConfirmPayment] = useState<boolean>(false);
   const [savedChangesToast, setSavedChangesToast] = useState<boolean>(false);
@@ -125,13 +125,13 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
       } else {
         setButtonLoading(true);
       }
-      const paymentWithDeleted: IPaymentInfo[] = [];
-      if (tempDeletedPayment.length > 0) {
-        paymentWithDeleted.push(...tempDeletedPayment);
-      }
-      paymentWithDeleted.push(...proofOfPayment!.payments);
+      // const paymentWithDeleted: IPaymentInfo[] = [];
+      // if (tempDeletedPayment.length > 0) {
+      //   paymentWithDeleted.push(...tempDeletedPayment);
+      // }
+      // paymentWithDeleted.push(...proofOfPayment!.payments);
 
-      const updatedPayments: IPaymentInfo[] = handleEPFStructuring(paymentWithDeleted);
+      const updatedPayments: IPaymentInfo[] = handleEPFStructuring([...proofOfPayment!.payments]);
       const payment = await generatePaymentWithKeys(
         updatedPayments,
         proofOfPayment!.paymentType,
@@ -216,7 +216,7 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
   const handleSetPayment = (
     value: IPaymentRequired,
     action?: ISetProofOfPaymentAction,
-    deleted?: boolean,
+    // deleted?: boolean,
     setActiveInfo?: (index: number) => void,
   ) => {
     const updatedProofOfPayments: IPaymentRequired = { ...proofOfPayment, ...value };
@@ -271,7 +271,9 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
 
   const continueDisabled =
     proofOfPayment !== undefined
-      ? proofOfPayment.payments.some((findPayment) => findPayment.saved === true) === false && tempDeletedPayment.length === 0
+      ? proofOfPayment.payments.some((findPayment) => findPayment.saved === true) === false &&
+        tempData !== undefined &&
+        tempData.length === 0
       : false;
 
   const checkRerouted = proofOfPayment !== undefined && proofOfPayment.status.toLowerCase().includes("rerouted");
@@ -335,13 +337,13 @@ const DashboardPaymentComponent: FunctionComponent<DashPaymentProps> = (props: D
                     activeOrder={activeOrder}
                     applicationBalance={tempApplicationBalance}
                     deleteCount={deleteCount}
-                    deletedPayment={tempDeletedPayment}
+                    // deletedPayment={tempDeletedPayment}
                     localCtaDetails={localCtaDetails}
                     proofOfPayment={proofOfPayment}
                     setActiveOrder={setActiveOrder}
                     setApplicationBalance={handleApplicationBalance}
                     setDeleteCount={setDeleteCount}
-                    setDeletedPayment={setTempDeletedPayment}
+                    // setDeletedPayment={setTempDeletedPayment}
                     setLocalCtaDetails={setLocalCtaDetails}
                     setProofOfPayment={handleSetPayment}
                     setSavedChangesToast={setSavedChangesToast}

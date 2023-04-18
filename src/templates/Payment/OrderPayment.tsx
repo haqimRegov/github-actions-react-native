@@ -44,7 +44,7 @@ import {
 import { AnimationUtils, formatAmount, isEmpty, isNotEmpty, isObjectEqual, parseAmount } from "../../utils";
 import { FundOverview } from "../Onboarding";
 import { AddedInfo } from "./AddedInfo";
-import { filterDeletedSavedChild, generateNewInfo, handleAvailableBalance, handleReduceAmount, updateCtaUsedBy } from "./helpers";
+import { generateNewInfo, handleAvailableBalance, handleReduceAmount, updateCtaUsedBy } from "./helpers";
 import { PaymentInfo } from "./PaymentInfo";
 
 const { PAYMENT } = Language.PAGE;
@@ -54,7 +54,7 @@ export interface OrderPaymentProps {
   activeOrder: { order: string; fund: string };
   applicationBalance: IPaymentInfo[];
   deleteCount: number;
-  deletedPayment: IPaymentInfo[];
+  // deletedPayment: IPaymentInfo[];
   localCtaDetails: TypeCTADetails[];
   localRecurringDetails?: IRecurringDetails;
   parentIndex?: number;
@@ -62,13 +62,13 @@ export interface OrderPaymentProps {
   setActiveOrder: (value: { order: string; fund: string }) => void;
   setApplicationBalance: (value: IPaymentInfo[], deleted?: boolean) => void;
   setDeleteCount: (count: number) => void;
-  setDeletedPayment: (value: IPaymentInfo[]) => void;
+  // setDeletedPayment: (value: IPaymentInfo[]) => void;
   setLocalCtaDetails: (value: TypeCTADetails[]) => void;
   setLocalRecurringDetails?: (value: IRecurringDetails | undefined) => void;
   setProofOfPayment: (
     value: IPaymentRequired,
     action?: ISetProofOfPaymentAction,
-    deleted?: boolean,
+    // deleted?: boolean,
     setActiveInfo?: (index: number) => void,
   ) => void;
   setSavedChangesToast: (toggle: boolean) => void;
@@ -89,7 +89,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   activeOrder,
   applicationBalance,
   deleteCount,
-  deletedPayment,
+  // deletedPayment,
   localCtaDetails,
   localRecurringDetails,
   parentIndex,
@@ -97,7 +97,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   setActiveOrder,
   setApplicationBalance,
   setDeleteCount,
-  setDeletedPayment,
+  // setDeletedPayment,
   setLocalCtaDetails,
   setLocalRecurringDetails,
   setProofOfPayment,
@@ -136,7 +136,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
   const balanceCurrencies = pendingBalance.length > 0 ? [...pendingBalance] : [...totalInvestment];
   const currencies = balanceCurrencies.map((value) => ({ label: value.currency, value: value.currency }));
 
-  const setPayments = (value: IPaymentInfo[], action?: ISetProofOfPaymentAction, deleted?: boolean) => {
+  const setPayments = (value: IPaymentInfo[], action?: ISetProofOfPaymentAction) => {
     // check if there is unsaved changes but overrode the prompt with noPrompt (this is possible if the user edits a saved info but decided to remove it)
     if (unsavedChanges !== -1) {
       setUnsavedChanges(-1);
@@ -152,7 +152,6 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
     setProofOfPayment(
       { ...proofOfPayment, payments: value, status: checkPendingBalance.length === 0 ? "Completed" : "Pending Payment" },
       action,
-      deleted,
       setActiveInfo,
     );
   };
@@ -182,7 +181,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
         recurringAmount,
       );
       updatedInfo.push(newInfo);
-      setPayments(updatedInfo, undefined, false);
+      setPayments(updatedInfo, undefined);
     }
 
     // show last payment info
@@ -222,7 +221,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
     if (findUnsaved !== -1) {
       updatedPayments.splice(findUnsaved, 1);
-      setPayments(updatedPayments, undefined, false);
+      setPayments(updatedPayments, undefined);
     }
 
     setUnsavedPrompt(false);
@@ -497,18 +496,16 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 // TODO check if current POP is being used as a parent by another CTA Child POP in the same order
                 // delete saved payment
                 if (updatedPayments[index].isEditable === true) {
-                  const updateDeleted = [...deletedPayment];
-                  updateDeleted.push({
-                    ...updatedPayments[index],
-                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
-                  });
-
-                  const savedChildToBeDeleted = filterDeletedSavedChild(updatedPayments, index);
-                  if (savedChildToBeDeleted.length > 0) {
-                    updateDeleted.push(...savedChildToBeDeleted);
-                  }
-
-                  setDeletedPayment(updateDeleted);
+                  // const updateDeleted = [...deletedPayment];
+                  // updateDeleted.push({
+                  //   ...updatedPayments[index],
+                  //   action: { id: updatedPayments[index].paymentId!, option: "delete" },
+                  // });
+                  // const savedChildToBeDeleted = filterDeletedSavedChild(updatedPayments, index);
+                  // if (savedChildToBeDeleted.length > 0) {
+                  //   updateDeleted.push(...savedChildToBeDeleted);
+                  // }
+                  // setDeletedPayment(updateDeleted);
                 }
                 // let getPaymentId;
                 let getPaymentId =
@@ -524,7 +521,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 updatedPayments.splice(index, 1);
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined ? { paymentId: getPaymentId, option: "delete", mode: mode } : undefined;
-                setPayments(updatedPayments, action, true);
+                setPayments(updatedPayments, action);
                 setDeleteCount(deleteCount + 1);
                 setActiveInfo(updatedPayments.length - 1);
                 handleExpandPayment(updatedPayments, true);
@@ -542,7 +539,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     : undefined;
                 // current payment before updating to draftPayment
                 const oldSavedPayment = cloneDeep(updatedPayments[index]);
-                const updatedDeletedPayments = [...deletedPayment];
+                // const updatedDeletedPayments = [...deletedPayment];
 
                 if (
                   (isPaymentEqual === false &&
@@ -733,10 +730,10 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 }
 
                 if (value.action !== undefined && value.action.option === "update" && checkCondition) {
-                  updatedDeletedPayments.push({
-                    ...updatedPayments[index],
-                    action: { id: updatedPayments[index].paymentId!, option: "delete" },
-                  });
+                  // updatedDeletedPayments.push({
+                  //   ...updatedPayments[index],
+                  //   action: { id: updatedPayments[index].paymentId!, option: "delete" },
+                  // });
                   const newPaymentId = uuidv1();
                   checkEditNewPayment = {
                     action: undefined,
@@ -778,10 +775,10 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                 if (checkIfCtaParent !== undefined) {
                   getPaymentId = checkIfCtaParent;
                   mode = "cta";
-                  const savedChildToBeDeleted = filterDeletedSavedChild(updatedPayments, index);
-                  if (savedChildToBeDeleted.length > 0) {
-                    updatedDeletedPayments.push(...savedChildToBeDeleted);
-                  }
+                  // const savedChildToBeDeleted = filterDeletedSavedChild(updatedPayments, index);
+                  // if (savedChildToBeDeleted.length > 0) {
+                  //   updatedDeletedPayments.push(...savedChildToBeDeleted);
+                  // }
                 }
                 const action: ISetProofOfPaymentAction | undefined =
                   getPaymentId !== undefined && isPaymentEqual === false
@@ -807,8 +804,8 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
                     updatedPayments.splice(updatedPayments.length - 1, 0, newPayment);
                   }
                 }
-                setPayments(updatedPayments, action, false);
-                setDeletedPayment(updatedDeletedPayments);
+                setPayments(updatedPayments, action);
+                // setDeletedPayment(updatedDeletedPayments);
                 if (checkDuplicateSurplus.length > 1) {
                   setMergeSurplusPrompt(true);
                 } else if (additional !== true) {
@@ -826,7 +823,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
                 if (payments.some((pay) => pay.new === true)) {
                   const updatedPayments = payments.filter((pay) => pay.new === undefined);
-                  setPayments(updatedPayments, undefined, false);
+                  setPayments(updatedPayments, undefined);
                 }
 
                 return setActiveInfo(index);
@@ -834,7 +831,7 @@ export const OrderPayment: FunctionComponent<OrderPaymentProps> = ({
 
               const handleContinueEdit = () => {
                 const updatedPayments = payments.map((info) => info).filter((unsavedInfo) => unsavedInfo.saved === true);
-                setPayments(updatedPayments, undefined, false);
+                setPayments(updatedPayments, undefined);
                 setActiveInfo(editPrompt);
                 setEditPrompt(-1);
                 setUnsavedChanges(-1);

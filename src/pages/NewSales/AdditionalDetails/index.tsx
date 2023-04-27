@@ -29,7 +29,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
   const { editMode, epfInvestment, epfShariah, isAllEpf, incomeDistribution, principal, signatory } = personalInfo;
   const { accountDetails, disabledSteps, finishedSteps, transactionType } = newSales;
   const [epfNumberValidation, setEpfNumberValidation] = useState<string | undefined>(undefined);
-  const { bankDetails: existingBankDetails, isEpf } = accountDetails;
+  const { bankDetails: existingBankDetails, isEpf: isAccountEpf } = accountDetails;
   const { bankSummary, epfDetails, personalDetails } = principal!;
   const { localBank, foreignBank } = bankSummary!;
   const { enableBankDetails, otherRelationship, relationship } = personalDetails!;
@@ -42,6 +42,23 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
 
   const handleCancel = () => {
     handleNextStep("IdentityVerification");
+  };
+
+  const handleSkip = () => {
+    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
+    updatedFinishedSteps.push("Summary", "AccountInformation", "AdditionalDetails");
+    const newDisabledStep: TypeNewSalesKey[] = [
+      "RiskSummary",
+      "Products",
+      "AccountInformation",
+      "AdditionalDetails",
+      "Summary",
+      "Signatures",
+      "TermsAndConditions",
+      "Payment",
+    ];
+    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
+    handleNextStep("OrderPreview");
   };
 
   const handleContinue = () => {
@@ -70,7 +87,11 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
       finishedSteps: updatedFinishedSteps,
     });
 
-    handleNextStep("Summary");
+    if (isAccountEpf === true && checkLocalBankPartial(localBank!) === false) {
+      handleSkip();
+    } else {
+      handleNextStep("Summary");
+    }
   };
 
   const handleBankSummary = (updatedBankSummary: IBankSummaryState) => {
@@ -184,23 +205,6 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     });
   };
 
-  const handleSkip = () => {
-    const updatedFinishedSteps: TypeNewSalesKey[] = [...finishedSteps];
-    updatedFinishedSteps.push("Summary", "AccountInformation", "AdditionalDetails");
-    const newDisabledStep: TypeNewSalesKey[] = [
-      "RiskSummary",
-      "Products",
-      "AccountInformation",
-      "AdditionalDetails",
-      "Summary",
-      "Signatures",
-      "TermsAndConditions",
-      "Payment",
-    ];
-    updateNewSales({ ...newSales, finishedSteps: updatedFinishedSteps, disabledSteps: newDisabledStep });
-    handleNextStep("OrderPreview");
-  };
-
   const handleToast = (value?: string) => {
     updateNewSales({
       ...newSales,
@@ -248,7 +252,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
     checkCurrencyRemaining.length !== 0 ||
     checkTransactionType ||
     checkJoint;
-  const checkSales = isEpf === true ? undefined : PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS_SALES;
+  const checkSales = isAccountEpf === true ? undefined : PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS_SALES;
   const checkSubHeading = transactionType === "Sales-AO" ? PERSONAL_DETAILS.SUBTITLE_ADDITIONAL_DETAILS : checkSales;
 
   return (
@@ -259,7 +263,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
         handleCancel={editMode === true ? undefined : handleCancel}
         handleContinue={handleContinue}
         handleSkip={handleSkip}
-        skippable={isEpf === true}
+        skippable={isAccountEpf === true}
         subheading={PERSONAL_DETAILS.HEADING_ADD_ADDITIONAL}
         subtitle={checkSubHeading}>
         <CustomSpacer space={sh24} />
@@ -306,7 +310,7 @@ const AdditionalInfoComponent: FunctionComponent<AdditionalDetailsProps> = ({
             existingBankSummary={existingBankDetails}
             foreignBankDetails={foreignBank!}
             investmentCurrencies={investmentCurrencies}
-            isAllEpf={isAllEpf || (transactionType === "Sales" && isEpf === true) || false}
+            isAllEpf={isAllEpf || (transactionType === "Sales" && isAccountEpf === true) || false}
             handleBankSummary={handleBankSummary}
             handleEnableLocalBank={handleEnableLocalBank}
             localBankDetails={localBank!}

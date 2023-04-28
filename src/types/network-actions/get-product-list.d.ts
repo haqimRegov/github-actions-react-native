@@ -41,10 +41,10 @@ declare type TypePrs = "selfSelect" | "prsDefault";
 
 declare interface IProduct {
   // performanceOverview: IProductPerformance;
-  annualTrusteeFee: string;
   ampCategory: string;
   ampFee: string;
   annualManagementFee: string;
+  annualTrusteeFee: string;
   docs: IProductDocument[];
   fundAbbr: string;
   fundCategory: string;
@@ -55,13 +55,14 @@ declare interface IProduct {
   fundName: string;
   fundObjective: string;
   fundType: string;
+  isEpf: string;
   isEpfOnly: string;
-  prsType: TypePrs;
   isScheduled: string;
   issuingHouse: string;
   isSyariah: string;
   isWholesale: string;
   landingFund: string;
+  prsType: TypePrs;
   performance: {
     benchmark: {
       fiveYears: number[];

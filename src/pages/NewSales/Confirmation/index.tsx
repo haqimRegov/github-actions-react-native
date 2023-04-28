@@ -107,7 +107,7 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
 }: ProductConfirmationProps) => {
   const { agent: agentCategory, isMultiUtmc: multiUtmc } = global;
   const { disabledSteps, finishedSteps, transactionType } = newSales;
-  const { accountNo, ampDetails, isEpf } = accountDetails;
+  const { accountNo, ampDetails, isEpf: isAccountEpf } = accountDetails;
   const { details } = client;
   const principalClientAge = moment().diff(moment(details!.principalHolder!.dateOfBirth, DEFAULT_DATE_FORMAT), "months");
   const withEpf = accountType === "Individual" && principalClientAge < DICTIONARY_EPF_AGE;
@@ -531,8 +531,8 @@ export const ProductConfirmationComponent: FunctionComponent<ProductConfirmation
       const checkData =
         findEpfIndex !== -1 ? eachDetails.fundDetails.issuingHouse === investmentDetails![findEpfIndex].fundDetails.issuingHouse : true;
       const checkMultipleUtmc = multiUtmc === true && eachDetails.fundDetails.isEpf ? true : checkData;
-      const checkEpf = isEpf === true ? "EPF" : "Cash";
-      const checkNewFundPurchase = isEpf !== undefined ? checkEpf : eachDetails.investment.fundPaymentMethod;
+      const checkEpf = isAccountEpf === true ? "EPF" : "Cash";
+      const checkNewFundPurchase = isAccountEpf !== undefined ? checkEpf : eachDetails.investment.fundPaymentMethod;
       const checkFundPaymentMethod = checkMultipleUtmc === false ? "Cash" : checkNewFundPurchase;
       return {
         ...eachDetails,

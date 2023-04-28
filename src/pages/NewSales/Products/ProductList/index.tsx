@@ -32,7 +32,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
   updateProductType,
 }: ProductListProps) => {
   const previousType = usePrevious<ProductType>(productType, true);
-  const { accountNo } = accountDetails;
+  const { accountNo, isEpf: isAccountEpf } = accountDetails;
 
   const handleProductType = (type: ProductType) => {
     setScrollEnabled(true);
@@ -63,7 +63,7 @@ const ProductListComponent: FunctionComponent<ProductListProps> = ({
     switch (productType) {
       case "ut":
         if (accountNo !== "") {
-          const epfFilterArray: string[] = accountDetails.isEpf === true ? ["Yes"] : [];
+          const epfFilterArray: string[] = isAccountEpf === true ? ["Yes"] : [];
           addUtFilters({
             fundCurrency: [],
             fundType: [],
